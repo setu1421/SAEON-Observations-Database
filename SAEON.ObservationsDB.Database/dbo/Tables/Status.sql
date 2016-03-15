@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[Status] (
+    [ID]          UNIQUEIDENTIFIER CONSTRAINT [DF_Status_ID] DEFAULT (newid()) NOT NULL,
+    [Code]        VARCHAR (50)     NOT NULL,
+    [Name]        VARCHAR (150)    NOT NULL,
+    [Description] VARCHAR (500)    NOT NULL,
+    CONSTRAINT [PK_Status] PRIMARY KEY CLUSTERED ([ID] ASC) WITH (FILLFACTOR = 80),
+    CONSTRAINT [IX_Status_Code] UNIQUE NONCLUSTERED ([Code] ASC) WITH (FILLFACTOR = 80),
+    CONSTRAINT [IX_Status_Name] UNIQUE NONCLUSTERED ([Name] ASC) WITH (FILLFACTOR = 80)
+);
+
