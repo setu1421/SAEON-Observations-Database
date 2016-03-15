@@ -8,6 +8,19 @@ BEGIN
     DECLARE @action varchar(60)
     DECLARE @grantee sysname
     DECLARE @cmd nvarchar(500)
+    IF(OBJECT_ID('tempdb.#aspnet_Permissions') IS NULL)
+       BEGIN
+          CREATE TABLE #aspnet_Permissions
+           (
+             Owner     sysname,
+         Object    sysname,  
+         Grantee   sysname,  
+         Grantor   sysname,  
+         ProtectType char(10),  
+         [Action]    varchar(60),  
+         [Column]    sysname
+          )
+       END
     DECLARE c1 cursor FORWARD_ONLY FOR
         SELECT Object, ProtectType, [Action], Grantee FROM #aspnet_Permissions where Object = @name
 
