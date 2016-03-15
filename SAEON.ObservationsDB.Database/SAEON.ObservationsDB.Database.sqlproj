@@ -539,6 +539,9 @@
     <Build Include="Security\aspnet_WebEvent_FullAccess_1.sql" />
     <Build Include="dbo\Tables\Project.sql" />
     <Build Include="dbo\Tables\Site.sql" />
+    <Build Include="dbo\Tables\OrganisationRole.sql" />
+    <Build Include="dbo\Tables\Project_Site.sql" />
+    <Build Include="dbo\Tables\Site_Organisation.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Snapshots\SAEON.ObservationsDB.Database_20160315_08-53-38.dacpac" />
@@ -548,11 +551,6 @@
       <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\master.dacpac</HintPath>
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
-    </ArtifactReference>
-    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\msdb.dacpac">
-      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\msdb.dacpac</HintPath>
-      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
-      <DatabaseVariableLiteralValue>msdb</DatabaseVariableLiteralValue>
     </ArtifactReference>
   </ItemGroup>
 </Project>
