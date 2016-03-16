@@ -10,9 +10,9 @@ using System.Web;
 [Serializable]
 public class FieldDefinition
 {
-	public FieldDefinition()
-	{
-	}
+    public FieldDefinition()
+    {
+    }
     public string id { get; set; }
     public string Name { get; set; }
     public Boolean Datefield { get; set; }
