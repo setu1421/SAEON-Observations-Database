@@ -12,11 +12,11 @@ using Observations.Data;
 public class OfferingRepository:BaseRepository
 {
     public OfferingRepository()
-	{
-		//
-		// TODO: Add constructor logic here
-		//
-	}
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
 
     public static List<object> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix)
     {
