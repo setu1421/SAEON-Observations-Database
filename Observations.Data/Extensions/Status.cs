@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAEON.ObservationsDB.Data
+namespace Observations.Data
 {
     public partial class Status : ActiveRecord<Status>, IActiveRecord, IRecordBase
     {

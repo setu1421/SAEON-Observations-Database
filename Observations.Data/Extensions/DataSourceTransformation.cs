@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
-namespace SAEON.ObservationsDB.Data
+namespace Observations.Data
 {
     public partial class DataSourceTransformation : ActiveRecord<DataSourceTransformation>, IActiveRecord
     {
