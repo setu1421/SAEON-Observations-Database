@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAEON.ObservationsDB.Data.Extensions
+namespace SAEON.ObservationsDB.Data
 {
-    [Serializable]
-    public partial class StatusCollection : ActiveList<Status, StatusCollection>
+    public partial class Status : ActiveRecord<Status>, IActiveRecord, IRecordBase
     {
         public const string DateInvalid = "3ccec392-e437-4b45-a2b2-dba4d92a1db5";
         public const string TimeInvalid = "30c1bef8-37a7-4e2f-8930-48a5cdb9a9af";
