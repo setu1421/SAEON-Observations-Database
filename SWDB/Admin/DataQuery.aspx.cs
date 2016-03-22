@@ -116,9 +116,9 @@ public partial class _DataQuery : System.Web.UI.Page
 
                         foreach (PhenomenonOffering phenomenonOffering in phenomenonOfferingCollection)
                         {
-                            Ext.Net.TreeNode phenomenonOfferingNode = new Ext.Net.TreeNode(phenomenonOffering.Offering().Name, Icon.ResultsetNext);
+                            Ext.Net.TreeNode phenomenonOfferingNode = new Ext.Net.TreeNode(phenomenonOffering.Offering.Name, Icon.ResultsetNext);
                             phenomenonOfferingNode.Checked = Ext.Net.ThreeStateBool.False;
-                            phenomenonOfferingNode.NodeID = phenomenonOffering.Offering().Id.ToString() + "_Offering#" + sensorProcedure.Id;
+                            phenomenonOfferingNode.NodeID = phenomenonOffering.Offering.Id.ToString() + "_Offering#" + sensorProcedure.Id;
                             phenomenonNode.Nodes.Add(phenomenonOfferingNode);
                         }
                     }

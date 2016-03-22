@@ -414,7 +414,7 @@ public partial class _ImportBatch : System.Web.UI.Page
                 {
                     DataFileUpload.PostedFile.InputStream.Seek(0, SeekOrigin.Begin);
 
-                    DataSchema schema = sp.DataSchema();
+                    DataSchema schema = sp.DataSchema;
 
                     Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
 
@@ -437,7 +437,7 @@ public partial class _ImportBatch : System.Web.UI.Page
             }
             else
             {
-                DataSchema schema = ds.DataSchema();
+                DataSchema schema = ds.DataSchema;
 
                 Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
 

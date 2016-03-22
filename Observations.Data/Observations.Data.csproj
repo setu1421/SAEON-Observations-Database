@@ -68,6 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\DataSourceTransformation.cs" />
+    <Compile Include="Extensions\DataSourceType.cs" />
+    <Compile Include="Extensions\ImportBatchStatus.cs" />
     <Compile Include="Extensions\Status.cs" />
     <Compile Include="Extensions\TransformationType.cs" />
     <Compile Include="Generated\AllStructs.cs" />
