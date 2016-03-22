@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using SAEON.ObservationsDB.Data;
+using Observations.Data;
 using Ext.Net;
 using FileHelpers.Dynamic;
 using FileHelpers;
@@ -80,16 +80,16 @@ public partial class _UnitofMeasure : System.Web.UI.Page
         this.DetailWindow.Hide();
     }
 
-	protected void UnitOfMeasureStore_Submit(object sender, StoreSubmitDataEventArgs e)
-	{
-		string type = FormatType.Text;
-		string visCols = VisCols.Value.ToString();
-		string gridData = GridData.Text;
-		string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
-		string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
+    protected void UnitOfMeasureStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    {
+        string type = FormatType.Text;
+        string visCols = VisCols.Value.ToString();
+        string gridData = GridData.Text;
+        string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
+        string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-		string js = BaseRepository.BuildExportQ("UnitOfMeasure", gridData, visCols, sortCol, sortDir);
+        string js = BaseRepository.BuildExportQ("UnitOfMeasure", gridData, visCols, sortCol, sortDir);
 
-		BaseRepository.doExport(type, js);
-	}
+        BaseRepository.doExport(type, js);
+    }
 }

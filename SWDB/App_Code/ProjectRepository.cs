@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Ext.Net;
 using SubSonic;
-using SAEON.ObservationsDB.Data;
+using Observations.Data;
 
 /// <summary>
 /// Summary description for ProjectRepository

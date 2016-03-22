@@ -1,4 +1,4 @@
-﻿using SAEON.ObservationsDB.Data;
+﻿using Observations.Data;
 using System;
 using System.Collections.Generic;
 using System.Web;
@@ -73,14 +73,14 @@ public class listHelper
             int ival = (int)val;
 
             switch (ival)
-	        {
+            {
                 case 0:
                     list.Add(ival, "Ad-Hoc");
                     break;
-		        default:
+                default:
                     list.Add(ival, Enum.GetName(typeof(UpdateFrequency), ival)); 
                     break;
-	        }
+            }
         } 
 
          return list;

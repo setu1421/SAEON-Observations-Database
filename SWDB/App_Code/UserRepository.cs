@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using SAEON.ObservationsDB.Data;
+using Observations.Data;
 using SubSonic;
 using Ext.Net;
 
@@ -20,10 +20,10 @@ public class UserRepository
 
         SqlQuery q = new Select().From(VUserInfo.Schema);
 
-		q.Where(VUserInfo.Columns.UserId).IsNotNull();
+        q.Where(VUserInfo.Columns.UserId).IsNotNull();
 
         //string s = e.Parameters[paramPrefix];
-		string s = paramPrefix;
+        string s = paramPrefix;
 
         if (!string.IsNullOrEmpty(s))
         {

@@ -6,7 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Ext.Net;
 using System.Web.Security;
-using SAEON.ObservationsDB.Data;
+using Observations.Data;
 using SubSonic;
 
 public partial class _Default : System.Web.UI.Page

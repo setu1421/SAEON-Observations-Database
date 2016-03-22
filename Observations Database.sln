@@ -16,7 +16,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SWDB", "SWDB", "{14D35A28-9
 		SccLocalPath = "SAK"
 		SccProvider = "SAK"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		ProjectReferences = "{b18eedf1-dd87-4162-8860-c092f40862fd}|SAEON.ObservationsDB.Data.dll;"
+		ProjectReferences = "{7fd7ca47-e8f3-4e20-b7aa-0752902298f5}|Observations.Data.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_64516"
 		Debug.AspNetCompiler.PhysicalPath = "SWDB\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64516\"
@@ -38,8 +38,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.WebSite", "SAEON.ObservationsDB.WebSite\SAEON.ObservationsDB.WebSite.csproj", "{D4C98D56-3263-463E-A38F-6D25D3CAD5A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.WebSite.Tests", "SAEON.ObservationsDB.WebSite.Tests\SAEON.ObservationsDB.WebSite.Tests.csproj", "{E7044D03-5430-4EBA-B163-10CC3C62B7A9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.Data", "SAEON.ObservationsDB.Data\SAEON.ObservationsDB.Data.csproj", "{B18EEDF1-DD87-4162-8860-C092F40862FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Observations.Data", "Observations.Data\Observations.Data.csproj", "{7FD7CA47-E8F3-4E20-B7AA-0752902298F5}"
 EndProject
@@ -75,10 +73,6 @@ Global
 		{E7044D03-5430-4EBA-B163-10CC3C62B7A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7044D03-5430-4EBA-B163-10CC3C62B7A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7044D03-5430-4EBA-B163-10CC3C62B7A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B18EEDF1-DD87-4162-8860-C092F40862FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B18EEDF1-DD87-4162-8860-C092F40862FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B18EEDF1-DD87-4162-8860-C092F40862FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B18EEDF1-DD87-4162-8860-C092F40862FD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7FD7CA47-E8F3-4E20-B7AA-0752902298F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7FD7CA47-E8F3-4E20-B7AA-0752902298F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FD7CA47-E8F3-4E20-B7AA-0752902298F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -88,7 +82,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 8
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://nimbusservices.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -112,11 +106,8 @@ Global
 		SccProjectUniqueName6 = SAEON.ObservationsDB.WebSite.Tests\\SAEON.ObservationsDB.WebSite.Tests.csproj
 		SccProjectName6 = SAEON.ObservationsDB.WebSite.Tests
 		SccLocalPath6 = SAEON.ObservationsDB.WebSite.Tests
-		SccProjectUniqueName7 = SAEON.ObservationsDB.Data\\SAEON.ObservationsDB.Data.csproj
-		SccProjectName7 = SAEON.ObservationsDB.Data
-		SccLocalPath7 = SAEON.ObservationsDB.Data
-		SccProjectUniqueName8 = Observations.Data\\Observations.Data.csproj
-		SccProjectName8 = Observations.Data
-		SccLocalPath8 = Observations.Data
+		SccProjectUniqueName7 = Observations.Data\\Observations.Data.csproj
+		SccProjectName7 = Observations.Data
+		SccLocalPath7 = Observations.Data
 	EndGlobalSection
 EndGlobal

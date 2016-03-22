@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using SAEON.ObservationsDB.Data;
+using Observations.Data;
 using SubSonic;
 using Ext.Net;
 
@@ -11,7 +11,7 @@ using Ext.Net;
 /// </summary>
 public class RoleRepository
 {
-	public RoleRepository()
+    public RoleRepository()
     {
     }
 
@@ -20,10 +20,10 @@ public class RoleRepository
 
         SqlQuery q = new Select().From(AspnetRole.Schema);
 
-		q.Where(AspnetRole.Columns.RoleId).IsNotNull();
+        q.Where(AspnetRole.Columns.RoleId).IsNotNull();
 
         //string s = e.Parameters[paramPrefix];
-		string s = paramPrefix;
+        string s = paramPrefix;
 
         if (!string.IsNullOrEmpty(s))
         {
@@ -33,47 +33,47 @@ public class RoleRepository
             {
                 switch (condition.FilterType)
                 {
-					//case FilterType.Date:
-					//    switch (condition.Comparison.ToString())
-					//    {
-					//        case "Eq":
-					//            q.And(condition.Name).IsEqualTo(condition.Value);
+                    //case FilterType.Date:
+                    //    switch (condition.Comparison.ToString())
+                    //    {
+                    //        case "Eq":
+                    //            q.And(condition.Name).IsEqualTo(condition.Value);
 
-					//            break;
-					//        case "Gt":
-					//            q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+                    //            break;
+                    //        case "Gt":
+                    //            q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
 
-					//            break;
-					//        case "Lt":
-					//            q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+                    //            break;
+                    //        case "Lt":
+                    //            q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
 
-					//            break;
-					//        default:
-					//            break;
-					//    }
+                    //            break;
+                    //        default:
+                    //            break;
+                    //    }
 
-					//    break;
+                    //    break;
 
-					//case FilterType.Numeric:
-					//    switch (condition.Comparison.ToString())
-					//    {
-					//        case "Eq":
-					//            q.And(condition.Name).IsEqualTo(condition.Value);
+                    //case FilterType.Numeric:
+                    //    switch (condition.Comparison.ToString())
+                    //    {
+                    //        case "Eq":
+                    //            q.And(condition.Name).IsEqualTo(condition.Value);
 
-					//            break;
-					//        case "Gt":
-					//            q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+                    //            break;
+                    //        case "Gt":
+                    //            q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
 
-					//            break;
-					//        case "Lt":
-					//            q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+                    //            break;
+                    //        case "Lt":
+                    //            q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
 
-					//            break;
-					//        default:
-					//            break;
-					//    }
+                    //            break;
+                    //        default:
+                    //            break;
+                    //    }
 
-					//    break;
+                    //    break;
 
                     case FilterType.String:
                         q.And(condition.Name).Like("%" + condition.Value + "%");
@@ -113,7 +113,7 @@ public class RoleRepository
             q.Paged(currenPage, e.Limit);
 
 
-		AspnetRoleCollection userCol = q.ExecuteAsCollection<AspnetRoleCollection>();
+        AspnetRoleCollection userCol = q.ExecuteAsCollection<AspnetRoleCollection>();
 
         return userCol.ToList<object>();
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Ext.Net;
 using SubSonic;
-using SAEON.ObservationsDB.Data;
+using Observations.Data;
 
 /// <summary>
 /// Summary description for DatasourceRepository
@@ -12,11 +12,11 @@ using SAEON.ObservationsDB.Data;
 public class DataSourceRepository:BaseRepository
 {
     public DataSourceRepository()
-	{
-		//
-		// TODO: Add constructor logic here
-		//
-	}
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
 
     public static List<object> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix)
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Ext.Net;
-using SAEON.ObservationsDB.Data;
+using Observations.Data;
 using SubSonic;
 using System.Xml;
 using System.Xml.Xsl;
@@ -233,100 +233,100 @@ public partial class _Phenomenon : System.Web.UI.Page
         }
     }
 
-	protected void PhenomenonStore_Submit(object sender, StoreSubmitDataEventArgs e)
-	{
-		string type = FormatType.Text;
-		string visCols = VisCols.Value.ToString();
-		string gridData = GridData.Text;
-		string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
-		string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
+    protected void PhenomenonStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    {
+        string type = FormatType.Text;
+        string visCols = VisCols.Value.ToString();
+        string gridData = GridData.Text;
+        string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
+        string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-		string js = BaseRepository.BuildExportQ("Phenomenon", gridData, visCols, sortCol, sortDir);
+        string js = BaseRepository.BuildExportQ("Phenomenon", gridData, visCols, sortCol, sortDir);
 
-		BaseRepository.doExport(type, js);
-	}
+        BaseRepository.doExport(type, js);
+    }
 
-	protected void DoDelete(object sender, DirectEventArgs e)
-	{
-		string ActionType = e.ExtraParams["type"];
-		string recordID = e.ExtraParams["id"];	//offering id if ActionType = RemoveOffering || 
-		string phenomenonID = e.ExtraParams["PhenomenonID"];
+    protected void DoDelete(object sender, DirectEventArgs e)
+    {
+        string ActionType = e.ExtraParams["type"];
+        string recordID = e.ExtraParams["id"];	//offering id if ActionType = RemoveOffering || 
+        string phenomenonID = e.ExtraParams["PhenomenonID"];
 
-		if (ActionType == "RemoveOffering")	
-		{
-			PhenomenonOfferingCollection phenOffCol = new PhenomenonOfferingCollection().Where(PhenomenonOffering.Columns.OfferingID, recordID)
-				.Where(PhenomenonOffering.Columns.PhenomenonID, phenomenonID).Load();
-			if (phenOffCol.Count == 1)
-			{
-				ObservationCollection obsCol = new ObservationCollection().Where(Observation.Columns.PhenonmenonOfferingID, phenOffCol[0].Id).Load();
-				DataLogCollection dataLogCol = new DataLogCollection().Where(DataLog.Columns.PhenomenonOfferingID, phenOffCol[0].Id).Load();
-				if (obsCol.Count == 0 && dataLogCol.Count == 0)
-				{
-					PhenomenonOffering.Delete(phenOffCol[0].Id);
+        if (ActionType == "RemoveOffering")	
+        {
+            PhenomenonOfferingCollection phenOffCol = new PhenomenonOfferingCollection().Where(PhenomenonOffering.Columns.OfferingID, recordID)
+                .Where(PhenomenonOffering.Columns.PhenomenonID, phenomenonID).Load();
+            if (phenOffCol.Count == 1)
+            {
+                ObservationCollection obsCol = new ObservationCollection().Where(Observation.Columns.PhenonmenonOfferingID, phenOffCol[0].Id).Load();
+                DataLogCollection dataLogCol = new DataLogCollection().Where(DataLog.Columns.PhenomenonOfferingID, phenOffCol[0].Id).Load();
+                if (obsCol.Count == 0 && dataLogCol.Count == 0)
+                {
+                    PhenomenonOffering.Delete(phenOffCol[0].Id);
 
-					PhenomenonOfferingGrid.DataBind();
-				}
-				else
-				{
-					X.Msg.Show(new MessageBoxConfig
-					{
-						Title = "Error",
-						Message = "Offerings cant be deleted when they are connected to data in the data log or observations.",
-						Buttons = MessageBox.Button.OK,
-						Icon = MessageBox.Icon.ERROR
-					});
-				}
-				
-			}
-		}
-		else if (ActionType == "RemoveUOM")	
-		{
-			PhenomenonUOMCollection phenUOMCol = new PhenomenonUOMCollection().Where(PhenomenonUOM.Columns.UnitOfMeasureID, recordID)
-				.Where(PhenomenonUOM.Columns.PhenomenonID, phenomenonID).Load();
-			if (phenUOMCol.Count == 1)
-			{
-				ObservationCollection obsCol = new ObservationCollection().Where(Observation.Columns.PhenonmenonUOMID, phenUOMCol[0].Id).Load();
-				DataLogCollection dataLogCol = new DataLogCollection().Where(DataLog.Columns.PhenonmenonUOMID, phenUOMCol[0].Id).Load();
-				if (obsCol.Count == 0 && dataLogCol.Count == 0)
-				{
-					PhenomenonUOM.Delete(phenUOMCol[0].Id);
+                    PhenomenonOfferingGrid.DataBind();
+                }
+                else
+                {
+                    X.Msg.Show(new MessageBoxConfig
+                    {
+                        Title = "Error",
+                        Message = "Offerings cant be deleted when they are connected to data in the data log or observations.",
+                        Buttons = MessageBox.Button.OK,
+                        Icon = MessageBox.Icon.ERROR
+                    });
+                }
+                
+            }
+        }
+        else if (ActionType == "RemoveUOM")	
+        {
+            PhenomenonUOMCollection phenUOMCol = new PhenomenonUOMCollection().Where(PhenomenonUOM.Columns.UnitOfMeasureID, recordID)
+                .Where(PhenomenonUOM.Columns.PhenomenonID, phenomenonID).Load();
+            if (phenUOMCol.Count == 1)
+            {
+                ObservationCollection obsCol = new ObservationCollection().Where(Observation.Columns.PhenonmenonUOMID, phenUOMCol[0].Id).Load();
+                DataLogCollection dataLogCol = new DataLogCollection().Where(DataLog.Columns.PhenonmenonUOMID, phenUOMCol[0].Id).Load();
+                if (obsCol.Count == 0 && dataLogCol.Count == 0)
+                {
+                    PhenomenonUOM.Delete(phenUOMCol[0].Id);
 
-					PhenomenonUOMGrid.DataBind();
-				}
-				else
-				{
-					X.Msg.Show(new MessageBoxConfig
-					{
-						Title = "Error",
-						Message = "Unit of measurements cant be deleted when they are connected to data in the data log or observations.",
-						Buttons = MessageBox.Button.OK,
-						Icon = MessageBox.Icon.ERROR
-					});
-				}
+                    PhenomenonUOMGrid.DataBind();
+                }
+                else
+                {
+                    X.Msg.Show(new MessageBoxConfig
+                    {
+                        Title = "Error",
+                        Message = "Unit of measurements cant be deleted when they are connected to data in the data log or observations.",
+                        Buttons = MessageBox.Button.OK,
+                        Icon = MessageBox.Icon.ERROR
+                    });
+                }
 
-			}
-		}
-		else if (ActionType == "RemovePhenomenon")
-		{
-			Phenomenon phen = new Phenomenon(recordID);
-			PhenomenonUOMCollection phenUOMCol = new PhenomenonUOMCollection().Where(PhenomenonUOM.Columns.PhenomenonID, recordID).Load();
-			PhenomenonOfferingCollection phenOffCol = new PhenomenonOfferingCollection().Where(PhenomenonOffering.Columns.PhenomenonID, recordID).Load();
-			SensorProcedureCollection sensorProcedureCol = new SensorProcedureCollection().Where(SensorProcedure.Columns.PhenomenonID, recordID).Load();
+            }
+        }
+        else if (ActionType == "RemovePhenomenon")
+        {
+            Phenomenon phen = new Phenomenon(recordID);
+            PhenomenonUOMCollection phenUOMCol = new PhenomenonUOMCollection().Where(PhenomenonUOM.Columns.PhenomenonID, recordID).Load();
+            PhenomenonOfferingCollection phenOffCol = new PhenomenonOfferingCollection().Where(PhenomenonOffering.Columns.PhenomenonID, recordID).Load();
+            SensorProcedureCollection sensorProcedureCol = new SensorProcedureCollection().Where(SensorProcedure.Columns.PhenomenonID, recordID).Load();
 
-			if (phenOffCol.Count != 0 || phenUOMCol.Count != 0 || sensorProcedureCol.Count != 0)
-			{
-				X.Msg.Show(new MessageBoxConfig
-					{
-						Title = "Error",
-						Message = "Phenomenon's cant be deleted when they have unit of measurements, offerings or sensor procedures connected to them.",
-						Buttons = MessageBox.Button.OK,
-						Icon = MessageBox.Icon.ERROR
-					});
-			}
-			else 
-			{
-				Phenomenon.Delete(phen.Id);
-			}
-		}
-	}
+            if (phenOffCol.Count != 0 || phenUOMCol.Count != 0 || sensorProcedureCol.Count != 0)
+            {
+                X.Msg.Show(new MessageBoxConfig
+                    {
+                        Title = "Error",
+                        Message = "Phenomenon's cant be deleted when they have unit of measurements, offerings or sensor procedures connected to them.",
+                        Buttons = MessageBox.Button.OK,
+                        Icon = MessageBox.Icon.ERROR
+                    });
+            }
+            else 
+            {
+                Phenomenon.Delete(phen.Id);
+            }
+        }
+    }
 }
