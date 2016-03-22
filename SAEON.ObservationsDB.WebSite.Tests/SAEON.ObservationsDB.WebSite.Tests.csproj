@@ -56,12 +56,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SAEON.ObservationsDB.WebSite\SAEON.ObservationsDB.WebSite.csproj">
-      <Project>{D4C98D56-3263-463E-A38F-6D25D3CAD5A9}</Project>
-      <Name>SAEON.ObservationsDB.WebSite</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
