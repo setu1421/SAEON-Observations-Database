@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.WebSit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.Data", "SAEON.ObservationsDB.Data\SAEON.ObservationsDB.Data.csproj", "{B18EEDF1-DD87-4162-8860-C092F40862FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.DataAccess", "SAEON.ObservationsDB.DataAccess\SAEON.ObservationsDB.DataAccess.csproj", "{C81375CC-EAA0-4971-9026-DDE03BC1E234}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,12 +78,16 @@ Global
 		{B18EEDF1-DD87-4162-8860-C092F40862FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B18EEDF1-DD87-4162-8860-C092F40862FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B18EEDF1-DD87-4162-8860-C092F40862FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C81375CC-EAA0-4971-9026-DDE03BC1E234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81375CC-EAA0-4971-9026-DDE03BC1E234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C81375CC-EAA0-4971-9026-DDE03BC1E234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C81375CC-EAA0-4971-9026-DDE03BC1E234}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://nimbusservices.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -108,5 +114,8 @@ Global
 		SccProjectUniqueName7 = SAEON.ObservationsDB.Data\\SAEON.ObservationsDB.Data.csproj
 		SccProjectName7 = SAEON.ObservationsDB.Data
 		SccLocalPath7 = SAEON.ObservationsDB.Data
+		SccProjectUniqueName8 = SAEON.ObservationsDB.DataAccess\\SAEON.ObservationsDB.DataAccess.csproj
+		SccProjectName8 = SAEON.ObservationsDB.DataAccess
+		SccLocalPath8 = SAEON.ObservationsDB.DataAccess
 	EndGlobalSection
 EndGlobal
