@@ -51,7 +51,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,6 +62,98 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AllStructs.cs" />
+    <Compile Include="Models\AspnetApplication.cs" />
+    <Compile Include="Models\AspnetApplicationController.cs" />
+    <Compile Include="Models\AspnetMembership.cs" />
+    <Compile Include="Models\AspnetMembershipController.cs" />
+    <Compile Include="Models\AspnetPath.cs" />
+    <Compile Include="Models\AspnetPathController.cs" />
+    <Compile Include="Models\AspnetPersonalizationAllUser.cs" />
+    <Compile Include="Models\AspnetPersonalizationAllUserController.cs" />
+    <Compile Include="Models\AspnetPersonalizationPerUser.cs" />
+    <Compile Include="Models\AspnetPersonalizationPerUserController.cs" />
+    <Compile Include="Models\AspnetProfile.cs" />
+    <Compile Include="Models\AspnetProfileController.cs" />
+    <Compile Include="Models\AspnetRole.cs" />
+    <Compile Include="Models\AspnetRoleController.cs" />
+    <Compile Include="Models\AspnetSchemaVersion.cs" />
+    <Compile Include="Models\AspnetSchemaVersionController.cs" />
+    <Compile Include="Models\AspnetUser.cs" />
+    <Compile Include="Models\AspnetUserController.cs" />
+    <Compile Include="Models\AspnetUsersInRole.cs" />
+    <Compile Include="Models\AspnetUsersInRoleController.cs" />
+    <Compile Include="Models\AspnetWebEventEvent.cs" />
+    <Compile Include="Models\AspnetWebEventEventController.cs" />
+    <Compile Include="Models\DataLog.cs" />
+    <Compile Include="Models\DataLogController.cs" />
+    <Compile Include="Models\DataSchema.cs" />
+    <Compile Include="Models\DataSchemaController.cs" />
+    <Compile Include="Models\DataSource.cs" />
+    <Compile Include="Models\DataSourceController.cs" />
+    <Compile Include="Models\DataSourceRole.cs" />
+    <Compile Include="Models\DataSourceRoleController.cs" />
+    <Compile Include="Models\DataSourceTransformation.cs" />
+    <Compile Include="Models\DataSourceTransformationController.cs" />
+    <Compile Include="Models\DataSourceType.cs" />
+    <Compile Include="Models\DataSourceTypeController.cs" />
+    <Compile Include="Models\ImportBatch.cs" />
+    <Compile Include="Models\ImportBatchController.cs" />
+    <Compile Include="Models\ModuleX.cs" />
+    <Compile Include="Models\ModuleXController.cs" />
+    <Compile Include="Models\Observation.cs" />
+    <Compile Include="Models\ObservationController.cs" />
+    <Compile Include="Models\Offering.cs" />
+    <Compile Include="Models\OfferingController.cs" />
+    <Compile Include="Models\Organisation.cs" />
+    <Compile Include="Models\OrganisationController.cs" />
+    <Compile Include="Models\Phenomenon.cs" />
+    <Compile Include="Models\PhenomenonController.cs" />
+    <Compile Include="Models\PhenomenonOffering.cs" />
+    <Compile Include="Models\PhenomenonOfferingController.cs" />
+    <Compile Include="Models\PhenomenonUOM.cs" />
+    <Compile Include="Models\PhenomenonUOMController.cs" />
+    <Compile Include="Models\Progress.cs" />
+    <Compile Include="Models\ProgressController.cs" />
+    <Compile Include="Models\ProgressProgressResolved.cs" />
+    <Compile Include="Models\ProjectSite.cs" />
+    <Compile Include="Models\ProjectSiteController.cs" />
+    <Compile Include="Models\RoleModule.cs" />
+    <Compile Include="Models\RoleModuleController.cs" />
+    <Compile Include="Models\SensorProcedure.cs" />
+    <Compile Include="Models\SensorProcedureController.cs" />
+    <Compile Include="Models\Station.cs" />
+    <Compile Include="Models\StationController.cs" />
+    <Compile Include="Models\Status.cs" />
+    <Compile Include="Models\StatusController.cs" />
+    <Compile Include="Models\StoredProcedures.cs" />
+    <Compile Include="Models\TransformationType.cs" />
+    <Compile Include="Models\TransformationTypeController.cs" />
+    <Compile Include="Models\UnitOfMeasure.cs" />
+    <Compile Include="Models\UnitOfMeasureController.cs" />
+    <Compile Include="Models\VDataLog.cs" />
+    <Compile Include="Models\VDataQuery.cs" />
+    <Compile Include="Models\VDataSchema.cs" />
+    <Compile Include="Models\VDataSource.cs" />
+    <Compile Include="Models\VDataSourceTransformation.cs" />
+    <Compile Include="Models\VImportBatch.cs" />
+    <Compile Include="Models\VInventory.cs" />
+    <Compile Include="Models\VModuleRoleModule.cs" />
+    <Compile Include="Models\VObservation.cs" />
+    <Compile Include="Models\VObservationRole.cs" />
+    <Compile Include="Models\VProjectSite.cs" />
+    <Compile Include="Models\VSensorProcedure.cs" />
+    <Compile Include="Models\VStation.cs" />
+    <Compile Include="Models\VUserInfo.cs" />
+    <Compile Include="Models\VwAspnetApplication.cs" />
+    <Compile Include="Models\VwAspnetMembershipUser.cs" />
+    <Compile Include="Models\VwAspnetProfile.cs" />
+    <Compile Include="Models\VwAspnetRole.cs" />
+    <Compile Include="Models\VwAspnetUser.cs" />
+    <Compile Include="Models\VwAspnetUsersInRole.cs" />
+    <Compile Include="Models\VwAspnetWebPartStatePath.cs" />
+    <Compile Include="Models\VwAspnetWebPartStateShared.cs" />
+    <Compile Include="Models\VwAspnetWebPartStateUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,7 +166,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Code\" />
+    <Folder Include="Generated\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
