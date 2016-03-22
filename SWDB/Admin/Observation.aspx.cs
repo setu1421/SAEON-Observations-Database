@@ -9,7 +9,7 @@ using System.Xml;
 using System.Xml.Xsl;
 using SubSonic;
 using Newtonsoft.Json;
-using Observations.Data;
+using SAEON.ObservationsDB.Data;
 using System.Web.Script.Serialization;
 
 public partial class _Observation : System.Web.UI.Page

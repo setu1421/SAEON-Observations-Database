@@ -1,10 +1,7 @@
-﻿using System;
+﻿using SAEON.ObservationsDB.Data;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
-using System.Runtime.Remoting.Contexts;
-using Observations.Data;
-using System.Web.Security;
 
 /// <summary>
 /// Summary description for AuthHelper

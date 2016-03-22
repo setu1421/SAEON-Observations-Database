@@ -16,6 +16,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SWDB", "SWDB", "{14D35A28-9
 		SccLocalPath = "SAK"
 		SccProvider = "SAK"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = "{b18eedf1-dd87-4162-8860-c092f40862fd}|SAEON.ObservationsDB.Data.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_64516"
 		Debug.AspNetCompiler.PhysicalPath = "SWDB\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_64516\"

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Ext.Net;
 using SubSonic;
-using Observations.Data;
+using SAEON.ObservationsDB.Data;
 
 /// <summary>
 /// Summary description for ImportBatchRepository

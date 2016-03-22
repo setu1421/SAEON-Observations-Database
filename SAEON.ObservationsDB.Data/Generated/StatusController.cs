@@ -27,18 +27,18 @@ namespace SAEON.ObservationsDB.Data
         {
             get
             {
-				if (userName.Length == 0) 
-				{
-    				if (System.Web.HttpContext.Current != null)
-    				{
-						userName=System.Web.HttpContext.Current.User.Identity.Name;
-					}
-					else
-					{
-						userName=System.Threading.Thread.CurrentPrincipal.Identity.Name;
-					}
-				}
-				return userName;
+                if (userName.Length == 0) 
+                {
+                    if (System.Web.HttpContext.Current != null)
+                    {
+                        userName=System.Web.HttpContext.Current.User.Identity.Name;
+                    }
+                    else
+                    {
+                        userName=System.Threading.Thread.CurrentPrincipal.Identity.Name;
+                    }
+                }
+                return userName;
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
@@ -55,8 +55,8 @@ namespace SAEON.ObservationsDB.Data
             StatusCollection coll = new StatusCollection().Where("ID", Id).Load();
             return coll;
         }
-		
-		[DataObjectMethod(DataObjectMethodType.Select, false)]
+        
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
         public StatusCollection FetchByQuery(Query qry)
         {
             StatusCollection coll = new StatusCollection();
@@ -75,15 +75,15 @@ namespace SAEON.ObservationsDB.Data
         }
         
         
-    	
-	    /// <summary>
-	    /// Inserts a record, can be used with the Object Data Source
-	    /// </summary>
+        
+        /// <summary>
+        /// Inserts a record, can be used with the Object Data Source
+        /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description)
-	    {
-		    Status item = new Status();
-		    
+        public void Insert(Guid Id,string Code,string Name,string Description)
+        {
+            Status item = new Status();
+            
             item.Id = Id;
             
             item.Code = Code;
@@ -92,29 +92,29 @@ namespace SAEON.ObservationsDB.Data
             
             item.Description = Description;
             
-	    
-		    item.Save(UserName);
-	    }
-    	
-	    /// <summary>
-	    /// Updates a record, can be used with the Object Data Source
-	    /// </summary>
+        
+            item.Save(UserName);
+        }
+        
+        /// <summary>
+        /// Updates a record, can be used with the Object Data Source
+        /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description)
-	    {
-		    Status item = new Status();
-	        item.MarkOld();
-	        item.IsLoaded = true;
-		    
-			item.Id = Id;
-				
-			item.Code = Code;
-				
-			item.Name = Name;
-				
-			item.Description = Description;
-				
-	        item.Save(UserName);
-	    }
+        public void Update(Guid Id,string Code,string Name,string Description)
+        {
+            Status item = new Status();
+            item.MarkOld();
+            item.IsLoaded = true;
+            
+            item.Id = Id;
+                
+            item.Code = Code;
+                
+            item.Name = Name;
+                
+            item.Description = Description;
+                
+            item.Save(UserName);
+        }
     }
 }
