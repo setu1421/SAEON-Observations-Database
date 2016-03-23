@@ -14,7 +14,6 @@ namespace Observations.Data
         private IEnumerable<double> ratingTableValues;
         private Dictionary<string, double> qualityValues;
         private Dictionary<string, string> correctionValues;
-        private DataLogCollection colDataLogRecords;
 
         public IEnumerable<double> RatingTableValues
         {
