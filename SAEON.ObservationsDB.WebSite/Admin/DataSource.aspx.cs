@@ -6,10 +6,10 @@ using Observations.Data;
 using Ext.Net;
 using SubSonic;
 using System.Transactions;
-using Evaluant.Calculator;
 using System.Xml;
 using System.Xml.Xsl;
 using Newtonsoft.Json;
+using NCalc;
 
 /// <summary>
 /// Summary description for DataSource
