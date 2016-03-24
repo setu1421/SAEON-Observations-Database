@@ -18,6 +18,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.ObservationsDB.WebSit
 		SccLocalPath = "SAK"
 		SccProvider = "SAK"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		ProjectReferences = "{7fd7ca47-e8f3-4e20-b7aa-0752902298f5}|Observations.Data.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_55157"
 		Debug.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.WebSite\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55157\"
@@ -33,6 +34,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.ObservationsDB.WebSit
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "55157"
+		SlnRelativePath = "SAEON.ObservationsDB.WebSite\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
