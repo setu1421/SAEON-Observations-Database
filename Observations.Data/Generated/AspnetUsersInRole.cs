@@ -121,7 +121,7 @@ namespace Observations.Data
 			if(!IsSchemaInitialized)
 			{
 				//Schema declaration
-				TableSchema.Table schema = new TableSchema.Table("aspnet_UsersInRoles", TableType.Table, DataService.GetInstance("SqlDataProvider"));
+				TableSchema.Table schema = new TableSchema.Table("aspnet_UsersInRoles", TableType.Table, DataService.GetInstance("ObservationsDB"));
 				schema.Columns = new TableSchema.TableColumnCollection();
 				schema.SchemaName = @"dbo";
 				//columns
@@ -157,7 +157,7 @@ namespace Observations.Data
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
-				DataService.Providers["SqlDataProvider"].AddSchema("aspnet_UsersInRoles",schema);
+				DataService.Providers["ObservationsDB"].AddSchema("aspnet_UsersInRoles",schema);
 			}
 		}
 		#endregion
