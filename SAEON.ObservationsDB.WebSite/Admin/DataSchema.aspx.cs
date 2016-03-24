@@ -718,17 +718,17 @@ public partial class _DataSchema : System.Web.UI.Page
         }
     }
 
-	protected void DataSchemaStore_Submit(object sender, StoreSubmitDataEventArgs e)
-	{
-		string type = FormatType.Text;
-		string visCols = VisCols.Value.ToString();
-		string gridData = GridData.Text;
-		string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
-		string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
+    protected void DataSchemaStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    {
+        string type = FormatType.Text;
+        string visCols = VisCols.Value.ToString();
+        string gridData = GridData.Text;
+        string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
+        string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-		string js = BaseRepository.BuildExportQ("VDataSchema", gridData, visCols, sortCol, sortDir);
+        string js = BaseRepository.BuildExportQ("VDataSchema", gridData, visCols, sortCol, sortDir);
 
-		BaseRepository.doExport(type, js);
-	}
+        BaseRepository.doExport(type, js);
+    }
 
 }

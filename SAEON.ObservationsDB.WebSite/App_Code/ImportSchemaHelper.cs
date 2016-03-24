@@ -9,8 +9,8 @@ using System.IO;
 using System.Data;
 using SubSonic;
 using System.Globalization;
-using Evaluant.Calculator;
 using System.Text;
+using NCalc;
 
 /// <summary>
 /// Summary description for ImportSchema
@@ -533,7 +533,7 @@ public class ImportSchemaHelper : IDisposable
 				}
 
 			}
-			catch (Exception Ex)
+			catch (Exception)
 			{
 				rec.DataValue = rec.RawValue;
 			}
