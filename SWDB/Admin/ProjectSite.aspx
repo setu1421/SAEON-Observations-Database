@@ -2,20 +2,20 @@
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript" src="../JS/ProjectSite.js"></script>
-	<script type="text/javascript" src="../JS/generic.js"></script>
-	<script type="text/javascript">
-		var submitValue = function (format)
-		{
-			GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
-			//VisCols.setValue(Ext.encode(ProjectSiteGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-			var viscolsNew = makenewJsonForExport(ProjectSiteGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
-			VisCols.setValue(viscolsNew);
-			FormatType.setValue(format);
-			SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
+    <script type="text/javascript" src="../JS/generic.js"></script>
+    <script type="text/javascript">
+        var submitValue = function (format)
+        {
+            GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
+            //VisCols.setValue(Ext.encode(ProjectSiteGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
+            var viscolsNew = makenewJsonForExport(ProjectSiteGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            VisCols.setValue(viscolsNew);
+            FormatType.setValue(format);
+            SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
 
-			ProjectSiteGrid.submitData(false);
-		};
-	</script>
+            ProjectSiteGrid.submitData(false);
+        };
+    </script>
 </asp:Content>
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="ContentPlaceHolder1">
     <ext:Store ID="Store1" runat="server">
@@ -28,10 +28,10 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
-	<ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
-	<ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
-	<ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
-	<ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="Viewport1" runat="server" Layout="Fit">
         <Items>
             <ext:Panel ID="Panel1" runat="server" Title="Project / Sites" Layout="FitLayout" Hidden="false">
@@ -46,13 +46,13 @@
                                     <Click Fn="New" />
                                 </Listeners>
                             </ext:Button>
-							<ext:ToolbarFill ID="ToolbarFill1" runat="server" />
+                            <ext:ToolbarFill ID="ToolbarFill1" runat="server" />
                             <ext:Button ID="Button2" runat="server" Text="To Excel"
                                 Icon="PageExcel">
                                 <Listeners>
                                     <Click Handler="submitValue('exc');" />
                                 </Listeners>
-										
+                                        
                             </ext:Button>
                             <ext:Button ID="Button3" runat="server" Text="To CSV"  
                                 Icon="PageAttach">
@@ -89,7 +89,7 @@
                                     <ext:Parameter Name="dir" Value="" />
                                 </BaseParams>
                                 <SortInfo Field="Name" Direction="ASC" />
-								<DirectEventConfig IsUpload="true" />
+                                <DirectEventConfig IsUpload="true" />
                             </ext:Store>
                         </Store>
                         <ColumnModel ID="ColumnModel1" runat="server">
