@@ -533,7 +533,7 @@ public class ImportSchemaHelper : IDisposable
 				}
 
 			}
-			catch (Exception Ex)
+			catch (Exception)
 			{
 				rec.DataValue = rec.RawValue;
 			}
