@@ -5,9 +5,18 @@
     [Description] VARCHAR (5000)   NULL,
     [Url]         VARCHAR (250)    NULL,
     [UserId]      UNIQUEIDENTIFIER NOT NULL,
-    CONSTRAINT [PK_Phenomenon] PRIMARY KEY CLUSTERED ([ID] ASC) WITH (FILLFACTOR = 80),
+    CONSTRAINT [PK_Phenomenon] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Phenomenon_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
-    CONSTRAINT [IX_Phenomenon_Code] UNIQUE NONCLUSTERED ([Code] ASC) WITH (FILLFACTOR = 80),
-    CONSTRAINT [IX_Phenomenon_Name] UNIQUE NONCLUSTERED ([Name] ASC) WITH (FILLFACTOR = 80)
+--> Changed 20160329 TimPN
+--    CONSTRAINT [IX_Phenomenon_Code] UNIQUE ([Code]),
+    CONSTRAINT [UX_Phenomenon_Code] UNIQUE ([Code]),
+--< Changed 20160329 TimPN
+--> Changed 20160329 TimPN
+--    CONSTRAINT [IX_Phenomenon_Name] UNIQUE ([Name])
+    CONSTRAINT [UX_Phenomenon_Name] UNIQUE ([Name])
+--< Changed 20160329 TimPN
 );
-
+--> Added 20160329 TimPN
+GO
+CREATE INDEX [IX_Phenomenon_UserId] ON [dbo].[Phenomenon] ([UserId])
+--< Added 20160329 TimPN

@@ -12,7 +12,17 @@
     [Delimiter]        VARCHAR (3)      NULL,
     [SplitSelector]    VARCHAR (50)     NULL,
     [SplitIndex]       INT              NULL,
-    CONSTRAINT [PK_DataSchema] PRIMARY KEY CLUSTERED ([ID] ASC) WITH (FILLFACTOR = 80),
-    CONSTRAINT [FK_DataSchema_DataSourceType] FOREIGN KEY ([DataSourceTypeID]) REFERENCES [dbo].[DataSourceType] ([ID])
+    CONSTRAINT [PK_DataSchema] PRIMARY KEY CLUSTERED ([ID]),
+    CONSTRAINT [FK_DataSchema_DataSourceType] FOREIGN KEY ([DataSourceTypeID]) REFERENCES [dbo].[DataSourceType] ([ID]),
+--> Added 20160329 TimPN
+    CONSTRAINT [UX_DataSchema_Code] Unique ([Code]),
+    CONSTRAINT [UX_DataSchema_Name] Unique ([Name])
+--< Added 20160329 TimPN
 );
 
+--> Added 20160329 TimPN
+GO
+CREATE INDEX [IX_DataSchema_DataSourceTypeID] ON [dbo].[DataSchema] ([DataSourceTypeID])
+GO
+CREATE INDEX [IX_DataSchema_UserId] ON [dbo].[DataSchema] ([UserId])
+--< Added 20160329 TimPN

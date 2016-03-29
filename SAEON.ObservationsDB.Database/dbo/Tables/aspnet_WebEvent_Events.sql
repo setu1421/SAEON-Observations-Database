@@ -14,6 +14,6 @@
     [RequestUrl]             NVARCHAR (1024) NULL,
     [ExceptionType]          NVARCHAR (256)  NULL,
     [Details]                NTEXT           NULL,
-    PRIMARY KEY CLUSTERED ([EventId] ASC) WITH (FILLFACTOR = 80)
+    PRIMARY KEY CLUSTERED ([EventId])
 );
 

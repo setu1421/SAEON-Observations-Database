@@ -2,7 +2,7 @@
     [PathId]          UNIQUEIDENTIFIER NOT NULL,
     [PageSettings]    IMAGE            NOT NULL,
     [LastUpdatedDate] DATETIME         NOT NULL,
-    PRIMARY KEY CLUSTERED ([PathId] ASC) WITH (FILLFACTOR = 80),
+    PRIMARY KEY CLUSTERED ([PathId]),
     FOREIGN KEY ([PathId]) REFERENCES [dbo].[aspnet_Paths] ([PathId])
 );
 

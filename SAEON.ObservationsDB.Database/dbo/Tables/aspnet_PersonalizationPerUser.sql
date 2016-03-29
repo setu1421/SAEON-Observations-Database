@@ -4,7 +4,7 @@
     [UserId]          UNIQUEIDENTIFIER NULL,
     [PageSettings]    IMAGE            NOT NULL,
     [LastUpdatedDate] DATETIME         NOT NULL,
-    PRIMARY KEY NONCLUSTERED ([Id] ASC) WITH (FILLFACTOR = 80),
+    PRIMARY KEY NONCLUSTERED ([Id]),
     FOREIGN KEY ([PathId]) REFERENCES [dbo].[aspnet_Paths] ([PathId]),
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 );
@@ -16,10 +16,10 @@ EXECUTE sp_tableoption @TableNamePattern = N'[dbo].[aspnet_PersonalizationPerUse
 
 GO
 CREATE UNIQUE CLUSTERED INDEX [aspnet_PersonalizationPerUser_index1]
-    ON [dbo].[aspnet_PersonalizationPerUser]([PathId] ASC, [UserId] ASC) WITH (FILLFACTOR = 80);
+    ON [dbo].[aspnet_PersonalizationPerUser]([PathId] ASC, [UserId]);
 
 
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [aspnet_PersonalizationPerUser_ncindex2]
-    ON [dbo].[aspnet_PersonalizationPerUser]([UserId] ASC, [PathId] ASC) WITH (FILLFACTOR = 80);
+CREATE UNIQUE INDEX [aspnet_PersonalizationPerUser_ncindex2]
+    ON [dbo].[aspnet_PersonalizationPerUser]([UserId] ASC, [PathId]);
 

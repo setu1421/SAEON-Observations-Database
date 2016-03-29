@@ -20,7 +20,7 @@
     [FailedPasswordAnswerAttemptCount]       INT              NOT NULL,
     [FailedPasswordAnswerAttemptWindowStart] DATETIME         NOT NULL,
     [Comment]                                NTEXT            NULL,
-    PRIMARY KEY NONCLUSTERED ([UserId] ASC) WITH (FILLFACTOR = 80),
+    PRIMARY KEY NONCLUSTERED ([UserId]),
     FOREIGN KEY ([ApplicationId]) REFERENCES [dbo].[aspnet_Applications] ([ApplicationId]),
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 );
@@ -32,5 +32,5 @@ EXECUTE sp_tableoption @TableNamePattern = N'[dbo].[aspnet_Membership]', @Option
 
 GO
 CREATE CLUSTERED INDEX [aspnet_Membership_index]
-    ON [dbo].[aspnet_Membership]([ApplicationId] ASC, [LoweredEmail] ASC) WITH (FILLFACTOR = 80);
+    ON [dbo].[aspnet_Membership]([ApplicationId] ASC, [LoweredEmail]);
 

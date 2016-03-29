@@ -4,7 +4,7 @@
     [PropertyValuesString] NTEXT            NOT NULL,
     [PropertyValuesBinary] IMAGE            NOT NULL,
     [LastUpdatedDate]      DATETIME         NOT NULL,
-    PRIMARY KEY CLUSTERED ([UserId] ASC) WITH (FILLFACTOR = 80),
+    PRIMARY KEY CLUSTERED ([UserId]),
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 );
 

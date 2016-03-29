@@ -2,6 +2,6 @@
     [Feature]                 NVARCHAR (128) NOT NULL,
     [CompatibleSchemaVersion] NVARCHAR (128) NOT NULL,
     [IsCurrentVersion]        BIT            NOT NULL,
-    PRIMARY KEY CLUSTERED ([Feature] ASC, [CompatibleSchemaVersion] ASC) WITH (FILLFACTOR = 80)
+    PRIMARY KEY CLUSTERED ([Feature] ASC, [CompatibleSchemaVersion])
 );
 

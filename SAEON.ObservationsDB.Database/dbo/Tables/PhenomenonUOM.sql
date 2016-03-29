@@ -3,9 +3,23 @@
     [PhenomenonID]    UNIQUEIDENTIFIER NOT NULL,
     [UnitOfMeasureID] UNIQUEIDENTIFIER NOT NULL,
     [IsDefault]       BIT              CONSTRAINT [DF_PhenomenonUOM_IsDefault] DEFAULT ((0)) NOT NULL,
-    CONSTRAINT [PK_PhenomenonUOM] PRIMARY KEY CLUSTERED ([ID] ASC) WITH (FILLFACTOR = 80),
+    [UserId] UNIQUEIDENTIFIER NOT NULL, 
+    CONSTRAINT [PK_PhenomenonUOM] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_PhenomenonUOM_PhenomenonUOM] FOREIGN KEY ([PhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]),
     CONSTRAINT [FK_PhenomenonUOM_UnitOfMeasure] FOREIGN KEY ([UnitOfMeasureID]) REFERENCES [dbo].[UnitOfMeasure] ([ID]),
-    CONSTRAINT [IX_PhenomenonUOM] UNIQUE NONCLUSTERED ([PhenomenonID] ASC, [UnitOfMeasureID] ASC) WITH (FILLFACTOR = 80)
+--> Changed 20160329 TimPN
+--    CONSTRAINT [IX_PhenomenonUOM] UNIQUE ([PhenomenonID] ASC, [UnitOfMeasureID])
+    CONSTRAINT [UX_PhenomenonUOM] UNIQUE ([PhenomenonID], [UnitOfMeasureID]),
+--< Changed 20160329 TimPN
+--> Added 20160329 TimPN
+    CONSTRAINT [FK_PhenomenonUOM_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
+--< Added 20160329 TimPN
 );
-
+--> Added 20160329 TimPN
+GO
+CREATE INDEX [IX_PhenomenonUOM_PhenomenonID] ON [dbo].[PhenomenonUOM] ([PhenomenonID])
+GO
+CREATE INDEX [IX_PhenomenonUOM_UnitOfMeasureID] ON [dbo].[PhenomenonUOM] ([UnitOfMeasureID])
+GO
+CREATE INDEX [IX_PhenomenonUOM_UserId] ON [dbo].[PhenomenonUOM] ([UserId])
+--> Added 20160329 TimPN

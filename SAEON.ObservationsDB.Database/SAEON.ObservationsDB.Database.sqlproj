@@ -540,7 +540,7 @@
     <Build Include="dbo\Tables\Project.sql" />
     <Build Include="dbo\Tables\Project_Site.sql" />
     <Build Include="dbo\Tables\Site.sql" />
-    <Build Include="dbo\Tables\Site_Organisation.sql" />
+    <Build Include="dbo\Tables\SiteOrganisation.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
@@ -548,5 +548,8 @@
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SAEON.ObservationsDB.Database.refactorlog" />
   </ItemGroup>
 </Project>

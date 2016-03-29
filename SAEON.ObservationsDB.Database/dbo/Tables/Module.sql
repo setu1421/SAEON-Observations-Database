@@ -6,7 +6,10 @@
     [Icon]        INT              NOT NULL,
     [ModuleID]    UNIQUEIDENTIFIER NULL,
     [iOrder]      INT              NULL,
-    CONSTRAINT [PK_Module] PRIMARY KEY CLUSTERED ([ID] ASC) WITH (FILLFACTOR = 80),
+    CONSTRAINT [PK_Module] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Module_Module] FOREIGN KEY ([ModuleID]) REFERENCES [dbo].[Module] ([ID])
 );
-
+--> Added 20160329 TimPN
+GO
+CREATE INDEX [IX_Module_ModuleID] ON [dbo].[Module] ([ModuleID])
+--< Added 20160329 TimPN
