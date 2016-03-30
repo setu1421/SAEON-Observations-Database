@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[DataLog] (
     [ID]                         INT              IDENTITY (1, 1) NOT NULL,
-    [SensorProcedureID]          UNIQUEIDENTIFIER NOT NULL,
+    [SensorProcedureID]          UNIQUEIDENTIFIER NULL,
     [ImportDate]                 DATETIME         CONSTRAINT [DF_DataLog_ImportDate] DEFAULT (getdate()) NOT NULL,
     [ValueDate]                  DATETIME         NULL,
     [ValueTime]                  DATETIME         NULL,
@@ -16,7 +16,7 @@
     [DataSourceTransformationID] UNIQUEIDENTIFIER NULL,
     [StatusID]                   UNIQUEIDENTIFIER NOT NULL,
     [ImportStatus]               VARCHAR (500)    NOT NULL,
-    [UserId]                     UNIQUEIDENTIFIER NOT NULL,
+    [UserId]                     UNIQUEIDENTIFIER NULL,
     [PhenomenonOfferingID]       UNIQUEIDENTIFIER NULL,
     [PhenonmenonUOMID]           UNIQUEIDENTIFIER NULL,
     [ImportBatchID]              INT              NOT NULL,

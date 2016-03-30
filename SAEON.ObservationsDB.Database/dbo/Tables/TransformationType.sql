@@ -5,7 +5,7 @@
     [Description] VARCHAR (500)    NOT NULL,
     [iorder]      INT              NULL,
 --> Added 20160329 TimPN
-    [UserId] UNIQUEIDENTIFIER NOT NULL, 
+    [UserId] UNIQUEIDENTIFIER NULL, 
 --< Added 20160329 TimPN
     CONSTRAINT [PK_TransformationType] PRIMARY KEY CLUSTERED ([ID]),
 --> Added 20160329 TimPN

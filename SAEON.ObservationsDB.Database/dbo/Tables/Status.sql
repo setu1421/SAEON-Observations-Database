@@ -4,7 +4,7 @@
     [Name]        VARCHAR (150)    NOT NULL,
     [Description] VARCHAR (500)    NOT NULL,
 --> Added 20160329 TimPN
-    [UserId] UNIQUEIDENTIFIER NOT NULL, 
+    [UserId] UNIQUEIDENTIFIER NULL, 
 --< Added 20160329 TimPN
     CONSTRAINT [PK_Status] PRIMARY KEY CLUSTERED ([ID]),
 --> Changed 20160329 TimPN

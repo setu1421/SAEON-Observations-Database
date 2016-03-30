@@ -7,7 +7,7 @@
     [RoleName]       VARCHAR (256)    NULL,
     [IsRoleReadOnly] BIT              NULL,
 --> Added 20160329 TimPN
-    [UserId] UNIQUEIDENTIFIER NOT NULL, 
+    [UserId] UNIQUEIDENTIFIER NULL, 
 --< Added 20160329 TimPN
     CONSTRAINT [PK_DataSourceRole] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSourceRole_aspnet_Roles] FOREIGN KEY ([RoleId]) REFERENCES [dbo].[aspnet_Roles] ([RoleId]),

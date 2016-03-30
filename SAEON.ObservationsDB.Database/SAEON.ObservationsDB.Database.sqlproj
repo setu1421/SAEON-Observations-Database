@@ -536,11 +536,6 @@
     <Build Include="Security\aspnet_Roles_FullAccess_1.sql" />
     <Build Include="Security\aspnet_Roles_ReportingAccess_1.sql" />
     <Build Include="Security\aspnet_WebEvent_FullAccess_1.sql" />
-    <Build Include="dbo\Tables\OrganisationRole.sql" />
-    <Build Include="dbo\Tables\Project.sql" />
-    <Build Include="dbo\Tables\Project_Site.sql" />
-    <Build Include="dbo\Tables\Site.sql" />
-    <Build Include="dbo\Tables\SiteOrganisation.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
@@ -548,8 +543,5 @@
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
-  </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="SAEON.ObservationsDB.Database.refactorlog" />
   </ItemGroup>
 </Project>

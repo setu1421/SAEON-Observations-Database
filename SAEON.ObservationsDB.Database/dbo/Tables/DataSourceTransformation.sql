@@ -12,7 +12,7 @@
     [NewPhenomenonUOMID]      UNIQUEIDENTIFIER NULL,
     [Rank]                    INT              CONSTRAINT [DF_DataSourceTransformation_Rank] DEFAULT ((0)) NOT NULL,
 --> Added 20160329 TimPN
-    [UserId] UNIQUEIDENTIFIER NOT NULL, 
+    [UserId] UNIQUEIDENTIFIER NULL, 
 --< Added 20160329 TimPN
     CONSTRAINT [PK_DataSourceTransformation] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSourceTransformation_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]),

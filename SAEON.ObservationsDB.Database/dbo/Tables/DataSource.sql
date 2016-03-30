@@ -9,7 +9,7 @@
     [UpdateFreq]       INT              NOT NULL,
     [StartDate]        DATETIME         NULL,
     [LastUpdate]       DATETIME         NOT NULL,
-    [DataSchemaID]     UNIQUEIDENTIFIER NOT NULL,
+    [DataSchemaID]     UNIQUEIDENTIFIER NULL,
     [UserId]           UNIQUEIDENTIFIER NOT NULL,
     CONSTRAINT [PK_DataSource] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSource_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
