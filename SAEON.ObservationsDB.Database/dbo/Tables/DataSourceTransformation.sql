@@ -10,7 +10,7 @@
     [Definition]              TEXT             NOT NULL,
     [NewPhenomenonOfferingID] UNIQUEIDENTIFIER NULL,
     [NewPhenomenonUOMID]      UNIQUEIDENTIFIER NULL,
-    [Rank]                    INT              CONSTRAINT [DF_DataSourceTransformation_Rank] DEFAULT ((0)) NOT NULL,
+    [Rank]                    INT              CONSTRAINT [DF_DataSourceTransformation_Rank] DEFAULT ((0)) NULL,
 --> Added 20160329 TimPN
     [UserId] UNIQUEIDENTIFIER NULL, 
 --< Added 20160329 TimPN
