@@ -1,5 +1,4 @@
-﻿
-  CREATE VIEW [dbo].[vw_aspnet_MembershipUsers]
+﻿  CREATE VIEW [dbo].[vw_aspnet_MembershipUsers]
   AS SELECT [dbo].[aspnet_Membership].[UserId],
             [dbo].[aspnet_Membership].[PasswordFormat],
             [dbo].[aspnet_Membership].[MobilePIN],

@@ -1,5 +1,4 @@
-﻿
-CREATE VIEW [dbo].[vDataQuery]
+﻿CREATE VIEW [dbo].[vDataQuery]
 AS
 SELECT     TOP (100) PERCENT NEWID() AS ID, dbo.Organisation.ID AS OrganisationID, dbo.Organisation.Name AS Organisation, 
                       dbo.Organisation.Description AS OrganisationDesc, dbo.ProjectSite.ID AS ProjectSiteID, dbo.ProjectSite.Name AS ProjectSite, 

@@ -9,9 +9,9 @@ FROM         dbo.vObservation AS vo
 INNER JOIN 
 (
  SELECT dr.DataSourceID,
-	    ur.UserId,
-		MIN(dr.DateStart) DateStart,
-		MAX(dr.DateEnd) DateEnd
+        ur.UserId,
+        MIN(dr.DateStart) DateStart,
+        MAX(dr.DateEnd) DateEnd
  FROM DataSourceRole dr
  INNER JOIN    dbo.aspnet_Roles AS ar ON dr.RoleId = ar.RoleId INNER JOIN
                dbo.aspnet_UsersInRoles AS ur ON ar.RoleId = ur.RoleId

@@ -1,9 +1,4 @@
-﻿
-
-
-
-
-CREATE VIEW [dbo].[vDataSchema]
+﻿CREATE VIEW [dbo].[vDataSchema]
 AS 
 
 Select d.ID,

@@ -1,8 +1,4 @@
-﻿
-
-
-
-CREATE VIEW [dbo].[vDataLog]
+﻿CREATE VIEW [dbo].[vDataLog]
 AS
 
 SELECT 
@@ -15,53 +11,53 @@ st.Name StationName,
 d.SensorProcedureID,
 sp.Name SensorName,
 CASE 
-	WHEN SensorProcedureID is null then 1
-	ELSE 0
+    WHEN SensorProcedureID is null then 1
+    ELSE 0
 END SensorInvalid,
 
 d.ValueDate,
 d.InvalidDateValue, 
 CASE 
-	WHEN ValueDate is null then 1
-	ELSE 0
+    WHEN ValueDate is null then 1
+    ELSE 0
 END DateValueInvalid,
 
 d.InvalidTimeValue, 
 CASE 
-	WHEN InvalidTimeValue is not null then 1
-	ELSE 0
+    WHEN InvalidTimeValue is not null then 1
+    ELSE 0
 END TimeValueInvalid,
 
 CASE 
-	WHEN InvalidDateValue is null AND InvalidTimeValue IS NULL Then ValueDate
-	WHEN ValueTime is not null then ValueTime 
+    WHEN InvalidDateValue is null AND InvalidTimeValue IS NULL Then ValueDate
+    WHEN ValueTime is not null then ValueTime 
 END ValueTime,
 
 
 d.RawValue,
 d.ValueText,
 CASE
-	WHEN d.RawValue is null then 1
-	ELSE 0
+    WHEN d.RawValue is null then 1
+    ELSE 0
 END RawValueInvalid,	
 
 d.DataValue,
 d.TransformValueText, 
 CASE
-	WHEN d.DataValue is null then 1
-	ELSE 0
+    WHEN d.DataValue is null then 1
+    ELSE 0
 END DataValueInvalid,
 
 d.PhenomenonOfferingID, 
 CASE
-	WHEN d.PhenomenonOfferingID is null then 1
-	ELSE 0
+    WHEN d.PhenomenonOfferingID is null then 1
+    ELSE 0
 END OfferingInvalid,
 
 d.PhenonmenonUOMID, 
 CASE
-	WHEN d.PhenonmenonUOMID is null then 1
-	ELSE 0
+    WHEN d.PhenonmenonUOMID is null then 1
+    ELSE 0
 END UOMInvalid,
 
 p.Name PhenomenonName,
@@ -78,31 +74,31 @@ d.Comment
 
 FROM DataLog d
 LEFT JOIN SensorProcedure sp
-	on d.SensorProcedureID = sp.ID
+    on d.SensorProcedureID = sp.ID
 LEFT JOIN Station st
-	on sp.StationID = st.ID
+    on sp.StationID = st.ID
 LEFT JOIN ProjectSite ps
-	on st.ProjectSiteID = ps.ID
+    on st.ProjectSiteID = ps.ID
 LEFT JOIN Organisation org
-	on ps.OrganisationID = org.ID
+    on ps.OrganisationID = org.ID
 LEFT JOIN PhenomenonOffering po
  ON d.PhenomenonOfferingID = po.ID
 LEFT JOIN Phenomenon p
-	on po.PhenomenonID = p.ID
+    on po.PhenomenonID = p.ID
 LEFT JOIN Offering o
-	on po.OfferingID = o.ID
+    on po.OfferingID = o.ID
 LEFT JOIN PhenomenonUOM pu
-	on d.PhenonmenonUOMID = pu.ID
+    on d.PhenonmenonUOMID = pu.ID
 LEFT JOIN UnitOfMeasure uom
-	on pu.UnitOfMeasureID = uom.ID
+    on pu.UnitOfMeasureID = uom.ID
 LEFT JOIN DataSourceTransformation ds
-	on d.DataSourceTransformationID = ds.ID
+    on d.DataSourceTransformationID = ds.ID
 LEFT JOIN TransformationType tt
     on ds.TransformationTypeID = tt.ID
 INNER JOIN [Status] s
-	on d.StatusID = s.ID
+    on d.StatusID = s.ID
 
-	
+    
 
 
 

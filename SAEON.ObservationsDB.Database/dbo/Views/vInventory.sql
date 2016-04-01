@@ -1,6 +1,4 @@
-﻿
-
-CREATE VIEW [dbo].[vInventory]
+﻿CREATE VIEW [dbo].[vInventory]
 AS
 Select 
  ps.Name Site,
