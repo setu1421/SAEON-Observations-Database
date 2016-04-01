@@ -8,14 +8,14 @@
 --    [UserId]                UNIQUEIDENTIFIER NULL,
 --    [SensorProcedureID]     UNIQUEIDENTIFIER NULL,
 --    [PhenonmenonOfferingID] UNIQUEIDENTIFIER NULL
-    [ImportBatchID]         INT              NOT NULL,
+    [ImportBatchID]         INT              NULL,
     [StartDate]             DATETIME         NULL,
     [EndDate]               DATETIME         NULL,
     [DateUploaded]          DATETIME         NULL,
     [Observations]          BIGINT           NULL,
-    [UserId]                UNIQUEIDENTIFIER NOT NULL,
-    [SensorProcedureID]     UNIQUEIDENTIFIER NOT NULL,
-    [PhenonmenonOfferingID] UNIQUEIDENTIFIER NOT NULL,
+    [UserId]                UNIQUEIDENTIFIER NULL,
+    [SensorProcedureID]     UNIQUEIDENTIFIER NULL,
+    [PhenonmenonOfferingID] UNIQUEIDENTIFIER NULL,
 --< Changed 20160329 TimPN
 --> Added 20160329 TimPN
     CONSTRAINT [FK_Progress_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [ImportBatch]([ID]),
