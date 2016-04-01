@@ -11,7 +11,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SAEON.ObservationsDB.Databa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Observations.Data", "Observations.Data\Observations.Data.csproj", "{7FD7CA47-E8F3-4E20-B7AA-0752902298F5}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.ObservationsDB.WebSite", "SAEON.ObservationsDB.WebSite", "{B7D92E87-136B-45B5-8883-FCBCA639B47F}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.ObservationsDB.Admin.WebSite", "SAEON.ObservationsDB.Admin.WebSite", "{B7D92E87-136B-45B5-8883-FCBCA639B47F}"
 	ProjectSection(WebsiteProperties) = preProject
 		SccProjectName = "SAK"
 		SccAuxPath = "SAK"
@@ -20,21 +20,21 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.ObservationsDB.WebSit
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
 		ProjectReferences = "{7fd7ca47-e8f3-4e20-b7aa-0752902298f5}|Observations.Data.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_55157"
-		Debug.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.WebSite\"
+		Debug.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.Admin.WebSite\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55157\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_55157"
-		Release.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.WebSite\"
+		Release.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.Admin.WebSite\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55157\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "55157"
-		SlnRelativePath = "SAEON.ObservationsDB.WebSite\"
+		SlnRelativePath = "SAEON.ObservationsDB.Admin.WebSite\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
@@ -88,9 +88,9 @@ Global
 		SccProjectName4 = Observations.Data
 		SccLocalPath4 = Observations.Data
 		SccWebProject5 = true
-		SccProjectUniqueName5 = SAEON.ObservationsDB.WebSite
-		SccProjectName5 = SAEON.ObservationsDB.WebSite
-		SccLocalPath5 = SAEON.ObservationsDB.WebSite
+		SccProjectUniqueName5 = SAEON.ObservationsDB.Admin.WebSite
+		SccProjectName5 = SAEON.ObservationsDB.Admin.WebSite
+		SccLocalPath5 = SAEON.ObservationsDB.Admin.WebSite
 		SccProjectEnlistmentChoice5 = 2
 	EndGlobalSection
 EndGlobal
