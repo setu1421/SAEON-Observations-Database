@@ -546,5 +546,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Lab2-NimbusServices ObservationsDBv2Test.publish.xml" />
+    <None Include="Lab2-SAEON ObservationDB_Test.publish.xml" />
   </ItemGroup>
 </Project>
