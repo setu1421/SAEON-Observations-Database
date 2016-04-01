@@ -9,6 +9,7 @@ BEGIN
         WHERE   LOWER(@ApplicationName) = a.LoweredApplicationName AND
                 u.ApplicationId = a.ApplicationId    AND
                 u.UserId = m.UserId AND
+                m.ApplicationId = a.ApplicationId AND
                 m.LoweredEmail IS NULL
     ELSE
         SELECT  u.UserName
@@ -16,6 +17,7 @@ BEGIN
         WHERE   LOWER(@ApplicationName) = a.LoweredApplicationName AND
                 u.ApplicationId = a.ApplicationId    AND
                 u.UserId = m.UserId AND
+                m.ApplicationId = a.ApplicationId AND
                 LOWER(@Email) = m.LoweredEmail
 
     IF (@@rowcount = 0)
