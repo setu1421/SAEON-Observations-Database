@@ -545,8 +545,6 @@
     </ArtifactReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SAEON.ObservationsDB.Database.%28Lab2-SAEON)publish.xml" />
-    <None Include="SAEON.ObservationsDB.Database%28Lab2-SAEON).publish.xml" />
     <None Include="Lab2-NimbusServices ObservationsDBv2Test.publish.xml" />
   </ItemGroup>
 </Project>
