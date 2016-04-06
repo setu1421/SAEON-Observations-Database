@@ -11,6 +11,6 @@ namespace SAEON.ObservationsDB.Data
         DatalogWithErrors,
         NoLogErrors,
         MovedToLog,
-        Deleted,
+        Deleted
     }
 }

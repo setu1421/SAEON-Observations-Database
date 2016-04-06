@@ -67,11 +67,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\DataSourceTransformation.cs" />
-    <Compile Include="Extensions\DataSourceType.cs" />
-    <Compile Include="Extensions\ImportBatchStatus.cs" />
-    <Compile Include="Extensions\Status.cs" />
-    <Compile Include="Extensions\TransformationType.cs" />
     <Compile Include="Generated\AllStructs.cs" />
     <Compile Include="Generated\AspnetApplication.cs" />
     <Compile Include="Generated\AspnetApplicationController.cs" />
@@ -164,6 +159,13 @@
     <Compile Include="Generated\VwAspnetWebPartStatePath.cs" />
     <Compile Include="Generated\VwAspnetWebPartStateShared.cs" />
     <Compile Include="Generated\VwAspnetWebPartStateUser.cs" />
+    <Compile Include="Partials\DataSourceTransformation.cs" />
+    <Compile Include="Partials\DataSourceType.cs" />
+    <Compile Include="Partials\ImportBatch.cs" />
+    <Compile Include="Partials\ProjectSite.cs" />
+    <Compile Include="Partials\Station.cs" />
+    <Compile Include="Partials\Status.cs" />
+    <Compile Include="Partials\TransformationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
