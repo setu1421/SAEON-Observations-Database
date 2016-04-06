@@ -9,34 +9,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.API.Te
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SAEON.ObservationsDB.Database", "SAEON.ObservationsDB.Database\SAEON.ObservationsDB.Database.sqlproj", "{AC68EB6A-31BD-407E-9B65-558E900AEF61}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.ObservationsDB.Admin.WebSite", "SAEON.ObservationsDB.Admin.WebSite", "{B7D92E87-136B-45B5-8883-FCBCA639B47F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.Data", "SAEON.ObservationsDB.Data\SAEON.ObservationsDB.Data.csproj", "{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.ObservationsDB.WebSite.Admin", "SAEON.ObservationsDB.WebSite.Admin", "{EEC81A5F-AC32-43B1-941B-E10496D83287}"
 	ProjectSection(WebsiteProperties) = preProject
 		SccProjectName = "SAK"
 		SccAuxPath = "SAK"
 		SccLocalPath = "SAK"
 		SccProvider = "SAK"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
-		ProjectReferences = ""
-		Debug.AspNetCompiler.VirtualPath = "/localhost_55157"
-		Debug.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.Admin.WebSite\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55157\"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_54378"
+		Debug.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.WebSite.Admin\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54378\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_55157"
-		Release.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.Admin.WebSite\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55157\"
+		Release.AspNetCompiler.VirtualPath = "/localhost_54378"
+		Release.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.WebSite.Admin\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54378\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "55157"
-		SlnRelativePath = "SAEON.ObservationsDB.Admin.WebSite\"
+		VWDPort = "54378"
+		SlnRelativePath = "SAEON.ObservationsDB.WebSite.Admin\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.Data", "SAEON.ObservationsDB.Data\SAEON.ObservationsDB.Data.csproj", "{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,14 +57,14 @@ Global
 		{AC68EB6A-31BD-407E-9B65-558E900AEF61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC68EB6A-31BD-407E-9B65-558E900AEF61}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC68EB6A-31BD-407E-9B65-558E900AEF61}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{B7D92E87-136B-45B5-8883-FCBCA639B47F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7D92E87-136B-45B5-8883-FCBCA639B47F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7D92E87-136B-45B5-8883-FCBCA639B47F}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7D92E87-136B-45B5-8883-FCBCA639B47F}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEC81A5F-AC32-43B1-941B-E10496D83287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEC81A5F-AC32-43B1-941B-E10496D83287}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEC81A5F-AC32-43B1-941B-E10496D83287}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEC81A5F-AC32-43B1-941B-E10496D83287}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,13 +83,13 @@ Global
 		SccProjectUniqueName3 = SAEON.ObservationsDB.Database\\SAEON.ObservationsDB.Database.sqlproj
 		SccProjectName3 = SAEON.ObservationsDB.Database
 		SccLocalPath3 = SAEON.ObservationsDB.Database
-		SccWebProject4 = true
-		SccProjectUniqueName4 = SAEON.ObservationsDB.Admin.WebSite
-		SccProjectName4 = SAEON.ObservationsDB.Admin.WebSite
-		SccLocalPath4 = SAEON.ObservationsDB.Admin.WebSite
-		SccProjectEnlistmentChoice4 = 2
-		SccProjectUniqueName5 = SAEON.ObservationsDB.Data\\SAEON.ObservationsDB.Data.csproj
-		SccProjectName5 = SAEON.ObservationsDB.Data
-		SccLocalPath5 = SAEON.ObservationsDB.Data
+		SccProjectUniqueName4 = SAEON.ObservationsDB.Data\\SAEON.ObservationsDB.Data.csproj
+		SccProjectName4 = SAEON.ObservationsDB.Data
+		SccLocalPath4 = SAEON.ObservationsDB.Data
+		SccWebProject5 = true
+		SccProjectUniqueName5 = SAEON.ObservationsDB.WebSite.Admin
+		SccProjectName5 = SAEON.ObservationsDB.WebSite.Admin
+		SccLocalPath5 = SAEON.ObservationsDB.WebSite.Admin
+		SccProjectEnlistmentChoice5 = 2
 	EndGlobalSection
 EndGlobal

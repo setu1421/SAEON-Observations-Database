@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Observations.Data
+namespace SAEON.ObservationsDB.Data
 {
     public partial class TransformationType : ActiveRecord<TransformationType>, IActiveRecord, IRecordBase
     {
