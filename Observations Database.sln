@@ -18,6 +18,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.ObservationsDB.WebSit
 		SccLocalPath = "SAK"
 		SccProvider = "SAK"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		ProjectReferences = ""
 		Debug.AspNetCompiler.VirtualPath = "/localhost_54378"
 		Debug.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.WebSite.Admin\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54378\"
