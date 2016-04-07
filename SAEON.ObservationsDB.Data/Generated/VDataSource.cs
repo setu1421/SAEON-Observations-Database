@@ -96,9 +96,9 @@ namespace SAEON.ObservationsDB.Data{
                 TableSchema.TableColumn colvarDescription = new TableSchema.TableColumn(schema);
                 colvarDescription.ColumnName = "Description";
                 colvarDescription.DataType = DbType.AnsiString;
-                colvarDescription.MaxLength = 5000;
+                colvarDescription.MaxLength = 500;
                 colvarDescription.AutoIncrement = false;
-                colvarDescription.IsNullable = true;
+                colvarDescription.IsNullable = false;
                 colvarDescription.IsPrimaryKey = false;
                 colvarDescription.IsForeignKey = false;
                 colvarDescription.IsReadOnly = false;
@@ -122,7 +122,7 @@ namespace SAEON.ObservationsDB.Data{
                 colvarDefaultNullValue.DataType = DbType.Double;
                 colvarDefaultNullValue.MaxLength = 0;
                 colvarDefaultNullValue.AutoIncrement = false;
-                colvarDefaultNullValue.IsNullable = true;
+                colvarDefaultNullValue.IsNullable = false;
                 colvarDefaultNullValue.IsPrimaryKey = false;
                 colvarDefaultNullValue.IsForeignKey = false;
                 colvarDefaultNullValue.IsReadOnly = false;
@@ -335,11 +335,11 @@ namespace SAEON.ObservationsDB.Data{
 	      
         [XmlAttribute("DefaultNullValue")]
         [Bindable(true)]
-        public double? DefaultNullValue 
+        public double DefaultNullValue 
 	    {
 		    get
 		    {
-			    return GetColumnValue<double?>("DefaultNullValue");
+			    return GetColumnValue<double>("DefaultNullValue");
 		    }
             set 
 		    {

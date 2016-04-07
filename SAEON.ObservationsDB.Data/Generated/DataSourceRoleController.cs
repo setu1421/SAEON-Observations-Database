@@ -80,7 +80,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid DataSourceID,Guid RoleId,DateTime? DateStart,DateTime? DateEnd,string RoleName,bool? IsRoleReadOnly)
+	    public void Insert(Guid Id,Guid DataSourceID,Guid RoleId,DateTime? DateStart,DateTime? DateEnd,string RoleName,bool? IsRoleReadOnly,Guid? UserId)
 	    {
 		    DataSourceRole item = new DataSourceRole();
 		    
@@ -98,6 +98,8 @@ namespace SAEON.ObservationsDB.Data
             
             item.IsRoleReadOnly = IsRoleReadOnly;
             
+            item.UserId = UserId;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -106,7 +108,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid DataSourceID,Guid RoleId,DateTime? DateStart,DateTime? DateEnd,string RoleName,bool? IsRoleReadOnly)
+	    public void Update(Guid Id,Guid DataSourceID,Guid RoleId,DateTime? DateStart,DateTime? DateEnd,string RoleName,bool? IsRoleReadOnly,Guid? UserId)
 	    {
 		    DataSourceRole item = new DataSourceRole();
 	        item.MarkOld();
@@ -125,6 +127,8 @@ namespace SAEON.ObservationsDB.Data
 			item.RoleName = RoleName;
 				
 			item.IsRoleReadOnly = IsRoleReadOnly;
+				
+			item.UserId = UserId;
 				
 	        item.Save(UserName);
 	    }

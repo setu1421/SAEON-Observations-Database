@@ -127,6 +127,8 @@
     <Compile Include="Generated\RoleModuleController.cs" />
     <Compile Include="Generated\SensorProcedure.cs" />
     <Compile Include="Generated\SensorProcedureController.cs" />
+    <Compile Include="Generated\Site.cs" />
+    <Compile Include="Generated\SiteController.cs" />
     <Compile Include="Generated\Station.cs" />
     <Compile Include="Generated\StationController.cs" />
     <Compile Include="Generated\Status.cs" />

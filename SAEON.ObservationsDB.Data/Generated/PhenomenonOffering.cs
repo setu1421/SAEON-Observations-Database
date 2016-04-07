@@ -168,6 +168,20 @@ namespace SAEON.ObservationsDB.Data
 					colvarOfferingID.ForeignKeyTableName = "Offering";
 				schema.Columns.Add(colvarOfferingID);
 				
+				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
+				colvarUserId.ColumnName = "UserId";
+				colvarUserId.DataType = DbType.Guid;
+				colvarUserId.MaxLength = 0;
+				colvarUserId.AutoIncrement = false;
+				colvarUserId.IsNullable = true;
+				colvarUserId.IsPrimaryKey = false;
+				colvarUserId.IsForeignKey = true;
+				colvarUserId.IsReadOnly = false;
+				colvarUserId.DefaultSetting = @"";
+				
+					colvarUserId.ForeignKeyTableName = "aspnet_Users";
+				schema.Columns.Add(colvarUserId);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -201,6 +215,14 @@ namespace SAEON.ObservationsDB.Data
 			get { return GetColumnValue<Guid>(Columns.OfferingID); }
 			set { SetColumnValue(Columns.OfferingID, value); }
 		}
+		  
+		[XmlAttribute("UserId")]
+		[Bindable(true)]
+		public Guid? UserId 
+		{
+			get { return GetColumnValue<Guid?>(Columns.UserId); }
+			set { SetColumnValue(Columns.UserId, value); }
+		}
 		
 		#endregion
 		
@@ -232,6 +254,17 @@ namespace SAEON.ObservationsDB.Data
 			
 		
 		#region ForeignKey Properties
+		
+		/// <summary>
+		/// Returns a AspnetUser ActiveRecord object related to this PhenomenonOffering
+		/// 
+		/// </summary>
+		public SAEON.ObservationsDB.Data.AspnetUser AspnetUser
+		{
+			get { return SAEON.ObservationsDB.Data.AspnetUser.FetchByID(this.UserId); }
+			set { SetColumnValue("UserId", value.UserId); }
+		}
+		
 		
 		/// <summary>
 		/// Returns a Offering ActiveRecord object related to this PhenomenonOffering
@@ -269,7 +302,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varPhenomenonID,Guid varOfferingID)
+		public static void Insert(Guid varId,Guid varPhenomenonID,Guid varOfferingID,Guid? varUserId)
 		{
 			PhenomenonOffering item = new PhenomenonOffering();
 			
@@ -278,6 +311,8 @@ namespace SAEON.ObservationsDB.Data
 			item.PhenomenonID = varPhenomenonID;
 			
 			item.OfferingID = varOfferingID;
+			
+			item.UserId = varUserId;
 			
 		
 			if (System.Web.HttpContext.Current != null)
@@ -289,7 +324,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varPhenomenonID,Guid varOfferingID)
+		public static void Update(Guid varId,Guid varPhenomenonID,Guid varOfferingID,Guid? varUserId)
 		{
 			PhenomenonOffering item = new PhenomenonOffering();
 			
@@ -298,6 +333,8 @@ namespace SAEON.ObservationsDB.Data
 				item.PhenomenonID = varPhenomenonID;
 			
 				item.OfferingID = varOfferingID;
+			
+				item.UserId = varUserId;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -333,6 +370,13 @@ namespace SAEON.ObservationsDB.Data
         
         
         
+        public static TableSchema.TableColumn UserIdColumn
+        {
+            get { return Schema.Columns[3]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -340,6 +384,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string Id = @"ID";
 			 public static string PhenomenonID = @"PhenomenonID";
 			 public static string OfferingID = @"OfferingID";
+			 public static string UserId = @"UserId";
 						
 		}
 		#endregion

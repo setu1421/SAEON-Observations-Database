@@ -280,7 +280,7 @@ namespace SAEON.ObservationsDB.Data
 				colvarRank.DataType = DbType.Int32;
 				colvarRank.MaxLength = 0;
 				colvarRank.AutoIncrement = false;
-				colvarRank.IsNullable = false;
+				colvarRank.IsNullable = true;
 				colvarRank.IsPrimaryKey = false;
 				colvarRank.IsForeignKey = false;
 				colvarRank.IsReadOnly = false;
@@ -288,6 +288,20 @@ namespace SAEON.ObservationsDB.Data
 						colvarRank.DefaultSetting = @"((0))";
 				colvarRank.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRank);
+				
+				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
+				colvarUserId.ColumnName = "UserId";
+				colvarUserId.DataType = DbType.Guid;
+				colvarUserId.MaxLength = 0;
+				colvarUserId.AutoIncrement = false;
+				colvarUserId.IsNullable = true;
+				colvarUserId.IsPrimaryKey = false;
+				colvarUserId.IsForeignKey = true;
+				colvarUserId.IsReadOnly = false;
+				colvarUserId.DefaultSetting = @"";
+				
+					colvarUserId.ForeignKeyTableName = "aspnet_Users";
+				schema.Columns.Add(colvarUserId);
 				
 				BaseSchema = schema;
 				//add this schema to the provider
@@ -389,10 +403,18 @@ namespace SAEON.ObservationsDB.Data
 		  
 		[XmlAttribute("Rank")]
 		[Bindable(true)]
-		public int Rank 
+		public int? Rank 
 		{
-			get { return GetColumnValue<int>(Columns.Rank); }
+			get { return GetColumnValue<int?>(Columns.Rank); }
 			set { SetColumnValue(Columns.Rank, value); }
+		}
+		  
+		[XmlAttribute("UserId")]
+		[Bindable(true)]
+		public Guid? UserId 
+		{
+			get { return GetColumnValue<Guid?>(Columns.UserId); }
+			set { SetColumnValue(Columns.UserId, value); }
 		}
 		
 		#endregion
@@ -417,6 +439,17 @@ namespace SAEON.ObservationsDB.Data
 			
 		
 		#region ForeignKey Properties
+		
+		/// <summary>
+		/// Returns a AspnetUser ActiveRecord object related to this DataSourceTransformation
+		/// 
+		/// </summary>
+		public SAEON.ObservationsDB.Data.AspnetUser AspnetUser
+		{
+			get { return SAEON.ObservationsDB.Data.AspnetUser.FetchByID(this.UserId); }
+			set { SetColumnValue("UserId", value.UserId); }
+		}
+		
 		
 		/// <summary>
 		/// Returns a DataSource ActiveRecord object related to this DataSourceTransformation
@@ -487,7 +520,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int varRank)
+		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varUserId)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -515,6 +548,8 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.Rank = varRank;
 			
+			item.UserId = varUserId;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -525,7 +560,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int varRank)
+		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varUserId)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -552,6 +587,8 @@ namespace SAEON.ObservationsDB.Data
 				item.NewPhenomenonUOMID = varNewPhenomenonUOMID;
 			
 				item.Rank = varRank;
+			
+				item.UserId = varUserId;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -650,6 +687,13 @@ namespace SAEON.ObservationsDB.Data
         
         
         
+        public static TableSchema.TableColumn UserIdColumn
+        {
+            get { return Schema.Columns[12]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -666,6 +710,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string NewPhenomenonOfferingID = @"NewPhenomenonOfferingID";
 			 public static string NewPhenomenonUOMID = @"NewPhenomenonUOMID";
 			 public static string Rank = @"Rank";
+			 public static string UserId = @"UserId";
 						
 		}
 		#endregion

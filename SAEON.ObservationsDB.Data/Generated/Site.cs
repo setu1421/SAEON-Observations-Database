@@ -15,23 +15,23 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
     /// <summary>
-    /// Strongly-typed collection for the UnitOfMeasure class.
+    /// Strongly-typed collection for the Site class.
     /// </summary>
     [Serializable]
-    public partial class UnitOfMeasureCollection : ActiveList<UnitOfMeasure, UnitOfMeasureCollection>
+    public partial class SiteCollection : ActiveList<Site, SiteCollection>
     {	   
-        public UnitOfMeasureCollection() {}
+        public SiteCollection() {}
         
         /// <summary>
         /// Filters an existing collection based on the set criteria. This is an in-memory filter
         /// Thanks to developingchris for this!
         /// </summary>
-        /// <returns>UnitOfMeasureCollection</returns>
-        public UnitOfMeasureCollection Filter()
+        /// <returns>SiteCollection</returns>
+        public SiteCollection Filter()
         {
             for (int i = this.Count - 1; i > -1; i--)
             {
-                UnitOfMeasure o = this[i];
+                Site o = this[i];
                 foreach (SubSonic.Where w in this.wheres)
                 {
                     bool remove = false;
@@ -62,14 +62,14 @@ namespace SAEON.ObservationsDB.Data
         
     }
     /// <summary>
-    /// This is an ActiveRecord class which wraps the UnitOfMeasure table.
+    /// This is an ActiveRecord class which wraps the Site table.
     /// </summary>
     [Serializable]
-    public partial class UnitOfMeasure : ActiveRecord<UnitOfMeasure>, IActiveRecord
+    public partial class Site : ActiveRecord<Site>, IActiveRecord
     {
         #region .ctors and Default Settings
         
-        public UnitOfMeasure()
+        public Site()
         {
           SetSQLProps();
           InitSetDefaults();
@@ -78,7 +78,7 @@ namespace SAEON.ObservationsDB.Data
         
         private void InitSetDefaults() { SetDefaults(); }
         
-        public UnitOfMeasure(bool useDatabaseDefaults)
+        public Site(bool useDatabaseDefaults)
         {
             SetSQLProps();
             if(useDatabaseDefaults)
@@ -86,14 +86,14 @@ namespace SAEON.ObservationsDB.Data
             MarkNew();
         }
         
-        public UnitOfMeasure(object keyID)
+        public Site(object keyID)
         {
             SetSQLProps();
             InitSetDefaults();
             LoadByKey(keyID);
         }
          
-        public UnitOfMeasure(string columnName, object columnValue)
+        public Site(string columnName, object columnValue)
         {
             SetSQLProps();
             InitSetDefaults();
@@ -121,7 +121,7 @@ namespace SAEON.ObservationsDB.Data
             if(!IsSchemaInitialized)
             {
                 //Schema declaration
-                TableSchema.Table schema = new TableSchema.Table("UnitOfMeasure", TableType.Table, DataService.GetInstance("ObservationsDB"));
+                TableSchema.Table schema = new TableSchema.Table("Site", TableType.Table, DataService.GetInstance("ObservationsDB"));
                 schema.Columns = new TableSchema.TableColumnCollection();
                 schema.SchemaName = @"dbo";
                 //columns
@@ -153,31 +153,31 @@ namespace SAEON.ObservationsDB.Data
                 colvarCode.ForeignKeyTableName = "";
                 schema.Columns.Add(colvarCode);
                 
-                TableSchema.TableColumn colvarUnit = new TableSchema.TableColumn(schema);
-                colvarUnit.ColumnName = "Unit";
-                colvarUnit.DataType = DbType.AnsiString;
-                colvarUnit.MaxLength = 100;
-                colvarUnit.AutoIncrement = false;
-                colvarUnit.IsNullable = false;
-                colvarUnit.IsPrimaryKey = false;
-                colvarUnit.IsForeignKey = false;
-                colvarUnit.IsReadOnly = false;
-                colvarUnit.DefaultSetting = @"";
-                colvarUnit.ForeignKeyTableName = "";
-                schema.Columns.Add(colvarUnit);
+                TableSchema.TableColumn colvarName = new TableSchema.TableColumn(schema);
+                colvarName.ColumnName = "Name";
+                colvarName.DataType = DbType.AnsiString;
+                colvarName.MaxLength = 150;
+                colvarName.AutoIncrement = false;
+                colvarName.IsNullable = false;
+                colvarName.IsPrimaryKey = false;
+                colvarName.IsForeignKey = false;
+                colvarName.IsReadOnly = false;
+                colvarName.DefaultSetting = @"";
+                colvarName.ForeignKeyTableName = "";
+                schema.Columns.Add(colvarName);
                 
-                TableSchema.TableColumn colvarUnitSymbol = new TableSchema.TableColumn(schema);
-                colvarUnitSymbol.ColumnName = "UnitSymbol";
-                colvarUnitSymbol.DataType = DbType.AnsiString;
-                colvarUnitSymbol.MaxLength = 20;
-                colvarUnitSymbol.AutoIncrement = false;
-                colvarUnitSymbol.IsNullable = false;
-                colvarUnitSymbol.IsPrimaryKey = false;
-                colvarUnitSymbol.IsForeignKey = false;
-                colvarUnitSymbol.IsReadOnly = false;
-                colvarUnitSymbol.DefaultSetting = @"";
-                colvarUnitSymbol.ForeignKeyTableName = "";
-                schema.Columns.Add(colvarUnitSymbol);
+                TableSchema.TableColumn colvarDescription = new TableSchema.TableColumn(schema);
+                colvarDescription.ColumnName = "Description";
+                colvarDescription.DataType = DbType.AnsiString;
+                colvarDescription.MaxLength = 5000;
+                colvarDescription.AutoIncrement = false;
+                colvarDescription.IsNullable = true;
+                colvarDescription.IsPrimaryKey = false;
+                colvarDescription.IsForeignKey = false;
+                colvarDescription.IsReadOnly = false;
+                colvarDescription.DefaultSetting = @"";
+                colvarDescription.ForeignKeyTableName = "";
+                schema.Columns.Add(colvarDescription);
                 
                 TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
                 colvarUserId.ColumnName = "UserId";
@@ -196,7 +196,7 @@ namespace SAEON.ObservationsDB.Data
                 BaseSchema = schema;
                 //add this schema to the provider
                 //so we can query it later
-                DataService.Providers["ObservationsDB"].AddSchema("UnitOfMeasure",schema);
+                DataService.Providers["ObservationsDB"].AddSchema("Site",schema);
             }
         }
         #endregion
@@ -219,20 +219,20 @@ namespace SAEON.ObservationsDB.Data
             set { SetColumnValue(Columns.Code, value); }
         }
           
-        [XmlAttribute("Unit")]
+        [XmlAttribute("Name")]
         [Bindable(true)]
-        public string Unit 
+        public string Name 
         {
-            get { return GetColumnValue<string>(Columns.Unit); }
-            set { SetColumnValue(Columns.Unit, value); }
+            get { return GetColumnValue<string>(Columns.Name); }
+            set { SetColumnValue(Columns.Name, value); }
         }
           
-        [XmlAttribute("UnitSymbol")]
+        [XmlAttribute("Description")]
         [Bindable(true)]
-        public string UnitSymbol 
+        public string Description 
         {
-            get { return GetColumnValue<string>(Columns.UnitSymbol); }
-            set { SetColumnValue(Columns.UnitSymbol, value); }
+            get { return GetColumnValue<string>(Columns.Description); }
+            set { SetColumnValue(Columns.Description, value); }
         }
           
         [XmlAttribute("UserId")]
@@ -246,28 +246,12 @@ namespace SAEON.ObservationsDB.Data
         #endregion
         
         
-        #region PrimaryKey Methods		
-        
-        protected override void SetPrimaryKey(object oValue)
-        {
-            base.SetPrimaryKey(oValue);
-            
-            SetPKValues();
-        }
-        
-        
-        public SAEON.ObservationsDB.Data.PhenomenonUOMCollection PhenomenonUOMRecords()
-        {
-            return new SAEON.ObservationsDB.Data.PhenomenonUOMCollection().Where(PhenomenonUOM.Columns.UnitOfMeasureID, Id).Load();
-        }
-        #endregion
-        
             
         
         #region ForeignKey Properties
         
         /// <summary>
-        /// Returns a AspnetUser ActiveRecord object related to this UnitOfMeasure
+        /// Returns a AspnetUser ActiveRecord object related to this Site
         /// 
         /// </summary>
         public SAEON.ObservationsDB.Data.AspnetUser AspnetUser
@@ -291,17 +275,17 @@ namespace SAEON.ObservationsDB.Data
         /// <summary>
         /// Inserts a record, can be used with the Object Data Source
         /// </summary>
-        public static void Insert(Guid varId,string varCode,string varUnit,string varUnitSymbol,Guid varUserId)
+        public static void Insert(Guid varId,string varCode,string varName,string varDescription,Guid varUserId)
         {
-            UnitOfMeasure item = new UnitOfMeasure();
+            Site item = new Site();
             
             item.Id = varId;
             
             item.Code = varCode;
             
-            item.Unit = varUnit;
+            item.Name = varName;
             
-            item.UnitSymbol = varUnitSymbol;
+            item.Description = varDescription;
             
             item.UserId = varUserId;
             
@@ -315,17 +299,17 @@ namespace SAEON.ObservationsDB.Data
         /// <summary>
         /// Updates a record, can be used with the Object Data Source
         /// </summary>
-        public static void Update(Guid varId,string varCode,string varUnit,string varUnitSymbol,Guid varUserId)
+        public static void Update(Guid varId,string varCode,string varName,string varDescription,Guid varUserId)
         {
-            UnitOfMeasure item = new UnitOfMeasure();
+            Site item = new Site();
             
                 item.Id = varId;
             
                 item.Code = varCode;
             
-                item.Unit = varUnit;
+                item.Name = varName;
             
-                item.UnitSymbol = varUnitSymbol;
+                item.Description = varDescription;
             
                 item.UserId = varUserId;
             
@@ -356,14 +340,14 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn UnitColumn
+        public static TableSchema.TableColumn NameColumn
         {
             get { return Schema.Columns[2]; }
         }
         
         
         
-        public static TableSchema.TableColumn UnitSymbolColumn
+        public static TableSchema.TableColumn DescriptionColumn
         {
             get { return Schema.Columns[3]; }
         }
@@ -383,8 +367,8 @@ namespace SAEON.ObservationsDB.Data
         {
              public static string Id = @"ID";
              public static string Code = @"Code";
-             public static string Unit = @"Unit";
-             public static string UnitSymbol = @"UnitSymbol";
+             public static string Name = @"Name";
+             public static string Description = @"Description";
              public static string UserId = @"UserId";
                         
         }
@@ -392,18 +376,10 @@ namespace SAEON.ObservationsDB.Data
         
         #region Update PK Collections
         
-        public void SetPKValues()
-        {
-}
         #endregion
     
         #region Deep Save
         
-        public void DeepSave()
-        {
-            Save();
-            
-}
         #endregion
     }
 }

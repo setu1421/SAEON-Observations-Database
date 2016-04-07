@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
     /// <summary>
-    /// Controller class for PhenomenonUOM
+    /// Controller class for Site
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class PhenomenonUOMController
+    public partial class SiteController
     {
         // Preload our schema..
-        PhenomenonUOM thisSchemaLoad = new PhenomenonUOM();
+        Site thisSchemaLoad = new Site();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.ObservationsDB.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public PhenomenonUOMCollection FetchAll()
+        public SiteCollection FetchAll()
         {
-            PhenomenonUOMCollection coll = new PhenomenonUOMCollection();
-            Query qry = new Query(PhenomenonUOM.Schema);
+            SiteCollection coll = new SiteCollection();
+            Query qry = new Query(Site.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public PhenomenonUOMCollection FetchByID(object Id)
+        public SiteCollection FetchByID(object Id)
         {
-            PhenomenonUOMCollection coll = new PhenomenonUOMCollection().Where("ID", Id).Load();
+            SiteCollection coll = new SiteCollection().Where("ID", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public PhenomenonUOMCollection FetchByQuery(Query qry)
+        public SiteCollection FetchByQuery(Query qry)
         {
-            PhenomenonUOMCollection coll = new PhenomenonUOMCollection();
+            SiteCollection coll = new SiteCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
         public bool Delete(object Id)
         {
-            return (PhenomenonUOM.Delete(Id) == 1);
+            return (Site.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
         public bool Destroy(object Id)
         {
-            return (PhenomenonUOM.Destroy(Id) == 1);
+            return (Site.Destroy(Id) == 1);
         }
         
         
@@ -80,17 +80,17 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid PhenomenonID,Guid UnitOfMeasureID,bool IsDefault,Guid? UserId)
+	    public void Insert(Guid Id,string Code,string Name,string Description,Guid UserId)
 	    {
-		    PhenomenonUOM item = new PhenomenonUOM();
+		    Site item = new Site();
 		    
             item.Id = Id;
             
-            item.PhenomenonID = PhenomenonID;
+            item.Code = Code;
             
-            item.UnitOfMeasureID = UnitOfMeasureID;
+            item.Name = Name;
             
-            item.IsDefault = IsDefault;
+            item.Description = Description;
             
             item.UserId = UserId;
             
@@ -102,19 +102,19 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid PhenomenonID,Guid UnitOfMeasureID,bool IsDefault,Guid? UserId)
+	    public void Update(Guid Id,string Code,string Name,string Description,Guid UserId)
 	    {
-		    PhenomenonUOM item = new PhenomenonUOM();
+		    Site item = new Site();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
 			item.Id = Id;
 				
-			item.PhenomenonID = PhenomenonID;
+			item.Code = Code;
 				
-			item.UnitOfMeasureID = UnitOfMeasureID;
+			item.Name = Name;
 				
-			item.IsDefault = IsDefault;
+			item.Description = Description;
 				
 			item.UserId = UserId;
 				

@@ -80,7 +80,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,int? Iorder)
+	    public void Insert(Guid Id,string Code,string Name,string Description,int? Iorder,Guid? UserId)
 	    {
 		    TransformationType item = new TransformationType();
 		    
@@ -94,6 +94,8 @@ namespace SAEON.ObservationsDB.Data
             
             item.Iorder = Iorder;
             
+            item.UserId = UserId;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -102,7 +104,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,int? Iorder)
+	    public void Update(Guid Id,string Code,string Name,string Description,int? Iorder,Guid? UserId)
 	    {
 		    TransformationType item = new TransformationType();
 	        item.MarkOld();
@@ -117,6 +119,8 @@ namespace SAEON.ObservationsDB.Data
 			item.Description = Description;
 				
 			item.Iorder = Iorder;
+				
+			item.UserId = UserId;
 				
 	        item.Save(UserName);
 	    }

@@ -80,7 +80,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int Rank)
+	    public void Insert(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int? Rank,Guid? UserId)
 	    {
 		    DataSourceTransformation item = new DataSourceTransformation();
 		    
@@ -108,6 +108,8 @@ namespace SAEON.ObservationsDB.Data
             
             item.Rank = Rank;
             
+            item.UserId = UserId;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -116,7 +118,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int Rank)
+	    public void Update(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int? Rank,Guid? UserId)
 	    {
 		    DataSourceTransformation item = new DataSourceTransformation();
 	        item.MarkOld();
@@ -145,6 +147,8 @@ namespace SAEON.ObservationsDB.Data
 			item.NewPhenomenonUOMID = NewPhenomenonUOMID;
 				
 			item.Rank = Rank;
+				
+			item.UserId = UserId;
 				
 	        item.Save(UserName);
 	    }

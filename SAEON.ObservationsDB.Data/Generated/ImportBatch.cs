@@ -148,7 +148,8 @@ namespace SAEON.ObservationsDB.Data
 				colvarGuid.IsPrimaryKey = false;
 				colvarGuid.IsForeignKey = false;
 				colvarGuid.IsReadOnly = false;
-				colvarGuid.DefaultSetting = @"";
+				
+						colvarGuid.DefaultSetting = @"(newid())";
 				colvarGuid.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarGuid);
 				
@@ -320,13 +321,13 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.DataLogCollection DataLogRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataLogCollection().Where(DataLog.Columns.ImportBatchID, Id).Load();
-		}
 		public SAEON.ObservationsDB.Data.ObservationCollection ObservationRecords()
 		{
 			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.ImportBatchID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.DataLogCollection DataLogRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataLogCollection().Where(DataLog.Columns.ImportBatchID, Id).Load();
 		}
 		#endregion
 		

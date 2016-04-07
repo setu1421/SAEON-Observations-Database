@@ -9,9 +9,9 @@ using SAEON.ObservationsDB.Data;
 /// <summary>
 /// Summary description for OrginasationRepository
 /// </summary>
-public class ProjectSiteRepository:BaseRepository
+public class SiteRepository:BaseRepository
 {
-    public ProjectSiteRepository()
+    public SiteRepository()
     {
         //
         // TODO: Add constructor logic here
@@ -21,12 +21,12 @@ public class ProjectSiteRepository:BaseRepository
     public static List<object> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix)
     {
 
-        SqlQuery q = new Select().From(VProjectSite.Schema);
-        q.Where(VProjectSite.Columns.UserId).IsNotNull();
+        SqlQuery q = new Select().From(Site.Schema);
+        q.Where(Site.Columns.UserId).IsNotNull();
 
         GetPagedQuery(ref q, e, paramPrefix);
 
-        VProjectSiteCollection col = q.ExecuteAsCollection<VProjectSiteCollection>();
+        SiteCollection col = q.ExecuteAsCollection<SiteCollection>();
 
         return col.ToList<object>();
     }

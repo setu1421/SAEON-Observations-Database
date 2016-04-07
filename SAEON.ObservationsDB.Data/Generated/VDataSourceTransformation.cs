@@ -254,7 +254,7 @@ namespace SAEON.ObservationsDB.Data{
                 colvarRank.DataType = DbType.Int32;
                 colvarRank.MaxLength = 0;
                 colvarRank.AutoIncrement = false;
-                colvarRank.IsNullable = false;
+                colvarRank.IsNullable = true;
                 colvarRank.IsPrimaryKey = false;
                 colvarRank.IsForeignKey = false;
                 colvarRank.IsReadOnly = false;
@@ -537,11 +537,11 @@ namespace SAEON.ObservationsDB.Data{
 	      
         [XmlAttribute("Rank")]
         [Bindable(true)]
-        public int Rank 
+        public int? Rank 
 	    {
 		    get
 		    {
-			    return GetColumnValue<int>("Rank");
+			    return GetColumnValue<int?>("Rank");
 		    }
             set 
 		    {

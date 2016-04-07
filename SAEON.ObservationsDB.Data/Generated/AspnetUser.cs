@@ -300,6 +300,26 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
+		public SAEON.ObservationsDB.Data.DataSourceRoleCollection DataSourceRoleRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceRoleCollection().Where(DataSourceRole.Columns.UserId, UserId).Load();
+		}
+		public SAEON.ObservationsDB.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.UserId, UserId).Load();
+		}
+		public SAEON.ObservationsDB.Data.DataSourceTypeCollection DataSourceTypeRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceTypeCollection().Where(DataSourceType.Columns.UserId, UserId).Load();
+		}
+		public SAEON.ObservationsDB.Data.PhenomenonOfferingCollection PhenomenonOfferingRecords()
+		{
+			return new SAEON.ObservationsDB.Data.PhenomenonOfferingCollection().Where(PhenomenonOffering.Columns.UserId, UserId).Load();
+		}
+		public SAEON.ObservationsDB.Data.PhenomenonUOMCollection PhenomenonUOMRecords()
+		{
+			return new SAEON.ObservationsDB.Data.PhenomenonUOMCollection().Where(PhenomenonUOM.Columns.UserId, UserId).Load();
+		}
 		public SAEON.ObservationsDB.Data.PhenomenonCollection PhenomenonRecords()
 		{
 			return new SAEON.ObservationsDB.Data.PhenomenonCollection().Where(Phenomenon.Columns.UserId, UserId).Load();
@@ -308,9 +328,21 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.ImportBatchCollection().Where(ImportBatch.Columns.UserId, UserId).Load();
 		}
+		public SAEON.ObservationsDB.Data.StatusCollection StatusRecords()
+		{
+			return new SAEON.ObservationsDB.Data.StatusCollection().Where(Status.Columns.UserId, UserId).Load();
+		}
+		public SAEON.ObservationsDB.Data.TransformationTypeCollection TransformationTypeRecords()
+		{
+			return new SAEON.ObservationsDB.Data.TransformationTypeCollection().Where(TransformationType.Columns.UserId, UserId).Load();
+		}
 		public SAEON.ObservationsDB.Data.OfferingCollection OfferingRecords()
 		{
 			return new SAEON.ObservationsDB.Data.OfferingCollection().Where(Offering.Columns.UserId, UserId).Load();
+		}
+		public SAEON.ObservationsDB.Data.SiteCollection SiteRecords()
+		{
+			return new SAEON.ObservationsDB.Data.SiteCollection().Where(Site.Columns.UserId, UserId).Load();
 		}
 		public SAEON.ObservationsDB.Data.UnitOfMeasureCollection UnitOfMeasureRecords()
 		{

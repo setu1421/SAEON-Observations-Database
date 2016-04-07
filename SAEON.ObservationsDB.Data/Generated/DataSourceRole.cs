@@ -220,6 +220,20 @@ namespace SAEON.ObservationsDB.Data
 				colvarIsRoleReadOnly.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarIsRoleReadOnly);
 				
+				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
+				colvarUserId.ColumnName = "UserId";
+				colvarUserId.DataType = DbType.Guid;
+				colvarUserId.MaxLength = 0;
+				colvarUserId.AutoIncrement = false;
+				colvarUserId.IsNullable = true;
+				colvarUserId.IsPrimaryKey = false;
+				colvarUserId.IsForeignKey = true;
+				colvarUserId.IsReadOnly = false;
+				colvarUserId.DefaultSetting = @"";
+				
+					colvarUserId.ForeignKeyTableName = "aspnet_Users";
+				schema.Columns.Add(colvarUserId);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -285,6 +299,14 @@ namespace SAEON.ObservationsDB.Data
 			get { return GetColumnValue<bool?>(Columns.IsRoleReadOnly); }
 			set { SetColumnValue(Columns.IsRoleReadOnly, value); }
 		}
+		  
+		[XmlAttribute("UserId")]
+		[Bindable(true)]
+		public Guid? UserId 
+		{
+			get { return GetColumnValue<Guid?>(Columns.UserId); }
+			set { SetColumnValue(Columns.UserId, value); }
+		}
 		
 		#endregion
 		
@@ -301,6 +323,17 @@ namespace SAEON.ObservationsDB.Data
 		{
 			get { return SAEON.ObservationsDB.Data.AspnetRole.FetchByID(this.RoleId); }
 			set { SetColumnValue("RoleId", value.RoleId); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a AspnetUser ActiveRecord object related to this DataSourceRole
+		/// 
+		/// </summary>
+		public SAEON.ObservationsDB.Data.AspnetUser AspnetUser
+		{
+			get { return SAEON.ObservationsDB.Data.AspnetUser.FetchByID(this.UserId); }
+			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
@@ -329,7 +362,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varDataSourceID,Guid varRoleId,DateTime? varDateStart,DateTime? varDateEnd,string varRoleName,bool? varIsRoleReadOnly)
+		public static void Insert(Guid varId,Guid varDataSourceID,Guid varRoleId,DateTime? varDateStart,DateTime? varDateEnd,string varRoleName,bool? varIsRoleReadOnly,Guid? varUserId)
 		{
 			DataSourceRole item = new DataSourceRole();
 			
@@ -347,6 +380,8 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.IsRoleReadOnly = varIsRoleReadOnly;
 			
+			item.UserId = varUserId;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -357,7 +392,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varDataSourceID,Guid varRoleId,DateTime? varDateStart,DateTime? varDateEnd,string varRoleName,bool? varIsRoleReadOnly)
+		public static void Update(Guid varId,Guid varDataSourceID,Guid varRoleId,DateTime? varDateStart,DateTime? varDateEnd,string varRoleName,bool? varIsRoleReadOnly,Guid? varUserId)
 		{
 			DataSourceRole item = new DataSourceRole();
 			
@@ -374,6 +409,8 @@ namespace SAEON.ObservationsDB.Data
 				item.RoleName = varRoleName;
 			
 				item.IsRoleReadOnly = varIsRoleReadOnly;
+			
+				item.UserId = varUserId;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -437,6 +474,13 @@ namespace SAEON.ObservationsDB.Data
         
         
         
+        public static TableSchema.TableColumn UserIdColumn
+        {
+            get { return Schema.Columns[7]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -448,6 +492,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string DateEnd = @"DateEnd";
 			 public static string RoleName = @"RoleName";
 			 public static string IsRoleReadOnly = @"IsRoleReadOnly";
+			 public static string UserId = @"UserId";
 						
 		}
 		#endregion

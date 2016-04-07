@@ -182,6 +182,20 @@ namespace SAEON.ObservationsDB.Data
 				colvarIsDefault.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarIsDefault);
 				
+				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
+				colvarUserId.ColumnName = "UserId";
+				colvarUserId.DataType = DbType.Guid;
+				colvarUserId.MaxLength = 0;
+				colvarUserId.AutoIncrement = false;
+				colvarUserId.IsNullable = true;
+				colvarUserId.IsPrimaryKey = false;
+				colvarUserId.IsForeignKey = true;
+				colvarUserId.IsReadOnly = false;
+				colvarUserId.DefaultSetting = @"";
+				
+					colvarUserId.ForeignKeyTableName = "aspnet_Users";
+				schema.Columns.Add(colvarUserId);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -223,6 +237,14 @@ namespace SAEON.ObservationsDB.Data
 			get { return GetColumnValue<bool>(Columns.IsDefault); }
 			set { SetColumnValue(Columns.IsDefault, value); }
 		}
+		  
+		[XmlAttribute("UserId")]
+		[Bindable(true)]
+		public Guid? UserId 
+		{
+			get { return GetColumnValue<Guid?>(Columns.UserId); }
+			set { SetColumnValue(Columns.UserId, value); }
+		}
 		
 		#endregion
 		
@@ -254,6 +276,17 @@ namespace SAEON.ObservationsDB.Data
 			
 		
 		#region ForeignKey Properties
+		
+		/// <summary>
+		/// Returns a AspnetUser ActiveRecord object related to this PhenomenonUOM
+		/// 
+		/// </summary>
+		public SAEON.ObservationsDB.Data.AspnetUser AspnetUser
+		{
+			get { return SAEON.ObservationsDB.Data.AspnetUser.FetchByID(this.UserId); }
+			set { SetColumnValue("UserId", value.UserId); }
+		}
+		
 		
 		/// <summary>
 		/// Returns a Phenomenon ActiveRecord object related to this PhenomenonUOM
@@ -291,7 +324,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varPhenomenonID,Guid varUnitOfMeasureID,bool varIsDefault)
+		public static void Insert(Guid varId,Guid varPhenomenonID,Guid varUnitOfMeasureID,bool varIsDefault,Guid? varUserId)
 		{
 			PhenomenonUOM item = new PhenomenonUOM();
 			
@@ -303,6 +336,8 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.IsDefault = varIsDefault;
 			
+			item.UserId = varUserId;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -313,7 +348,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varPhenomenonID,Guid varUnitOfMeasureID,bool varIsDefault)
+		public static void Update(Guid varId,Guid varPhenomenonID,Guid varUnitOfMeasureID,bool varIsDefault,Guid? varUserId)
 		{
 			PhenomenonUOM item = new PhenomenonUOM();
 			
@@ -324,6 +359,8 @@ namespace SAEON.ObservationsDB.Data
 				item.UnitOfMeasureID = varUnitOfMeasureID;
 			
 				item.IsDefault = varIsDefault;
+			
+				item.UserId = varUserId;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -366,6 +403,13 @@ namespace SAEON.ObservationsDB.Data
         
         
         
+        public static TableSchema.TableColumn UserIdColumn
+        {
+            get { return Schema.Columns[4]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -374,6 +418,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string PhenomenonID = @"PhenomenonID";
 			 public static string UnitOfMeasureID = @"UnitOfMeasureID";
 			 public static string IsDefault = @"IsDefault";
+			 public static string UserId = @"UserId";
 						
 		}
 		#endregion

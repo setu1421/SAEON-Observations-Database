@@ -179,6 +179,20 @@ namespace SAEON.ObservationsDB.Data
 				colvarDescription.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarDescription);
 				
+				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
+				colvarUserId.ColumnName = "UserId";
+				colvarUserId.DataType = DbType.Guid;
+				colvarUserId.MaxLength = 0;
+				colvarUserId.AutoIncrement = false;
+				colvarUserId.IsNullable = true;
+				colvarUserId.IsPrimaryKey = false;
+				colvarUserId.IsForeignKey = true;
+				colvarUserId.IsReadOnly = false;
+				colvarUserId.DefaultSetting = @"";
+				
+					colvarUserId.ForeignKeyTableName = "aspnet_Users";
+				schema.Columns.Add(colvarUserId);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -220,6 +234,14 @@ namespace SAEON.ObservationsDB.Data
 			get { return GetColumnValue<string>(Columns.Description); }
 			set { SetColumnValue(Columns.Description, value); }
 		}
+		  
+		[XmlAttribute("UserId")]
+		[Bindable(true)]
+		public Guid? UserId 
+		{
+			get { return GetColumnValue<Guid?>(Columns.UserId); }
+			set { SetColumnValue(Columns.UserId, value); }
+		}
 		
 		#endregion
 		
@@ -242,7 +264,20 @@ namespace SAEON.ObservationsDB.Data
 		
 			
 		
-		//no foreign key tables defined (0)
+		#region ForeignKey Properties
+		
+		/// <summary>
+		/// Returns a AspnetUser ActiveRecord object related to this Status
+		/// 
+		/// </summary>
+		public SAEON.ObservationsDB.Data.AspnetUser AspnetUser
+		{
+			get { return SAEON.ObservationsDB.Data.AspnetUser.FetchByID(this.UserId); }
+			set { SetColumnValue("UserId", value.UserId); }
+		}
+		
+		
+		#endregion
 		
 		
 		
@@ -256,7 +291,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,Guid? varUserId)
 		{
 			Status item = new Status();
 			
@@ -268,6 +303,8 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.Description = varDescription;
 			
+			item.UserId = varUserId;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -278,7 +315,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,Guid? varUserId)
 		{
 			Status item = new Status();
 			
@@ -289,6 +326,8 @@ namespace SAEON.ObservationsDB.Data
 				item.Name = varName;
 			
 				item.Description = varDescription;
+			
+				item.UserId = varUserId;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -331,6 +370,13 @@ namespace SAEON.ObservationsDB.Data
         
         
         
+        public static TableSchema.TableColumn UserIdColumn
+        {
+            get { return Schema.Columns[4]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -339,6 +385,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string Code = @"Code";
 			 public static string Name = @"Name";
 			 public static string Description = @"Description";
+			 public static string UserId = @"UserId";
 						
 		}
 		#endregion

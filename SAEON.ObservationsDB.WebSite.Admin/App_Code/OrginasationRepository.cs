@@ -11,12 +11,12 @@ using SAEON.ObservationsDB.Data;
 /// </summary>
 public class OrginasationRepository:BaseRepository
 {
-	public OrginasationRepository()
-	{
-		//
-		// TODO: Add constructor logic here
-		//
-	}
+    public OrginasationRepository()
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
 
     public static List<object> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix)
     {

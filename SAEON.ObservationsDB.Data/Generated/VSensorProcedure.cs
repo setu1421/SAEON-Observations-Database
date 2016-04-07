@@ -96,9 +96,9 @@ namespace SAEON.ObservationsDB.Data{
                 TableSchema.TableColumn colvarDescription = new TableSchema.TableColumn(schema);
                 colvarDescription.ColumnName = "Description";
                 colvarDescription.DataType = DbType.AnsiString;
-                colvarDescription.MaxLength = 5000;
+                colvarDescription.MaxLength = 500;
                 colvarDescription.AutoIncrement = false;
-                colvarDescription.IsNullable = true;
+                colvarDescription.IsNullable = false;
                 colvarDescription.IsPrimaryKey = false;
                 colvarDescription.IsForeignKey = false;
                 colvarDescription.IsReadOnly = false;
@@ -204,7 +204,7 @@ namespace SAEON.ObservationsDB.Data{
                 TableSchema.TableColumn colvarDataSchemaName = new TableSchema.TableColumn(schema);
                 colvarDataSchemaName.ColumnName = "DataSchemaName";
                 colvarDataSchemaName.DataType = DbType.AnsiString;
-                colvarDataSchemaName.MaxLength = 5000;
+                colvarDataSchemaName.MaxLength = 500;
                 colvarDataSchemaName.AutoIncrement = false;
                 colvarDataSchemaName.IsNullable = true;
                 colvarDataSchemaName.IsPrimaryKey = false;
