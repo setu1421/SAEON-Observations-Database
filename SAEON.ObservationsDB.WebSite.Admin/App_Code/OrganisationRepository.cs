@@ -7,11 +7,11 @@ using SubSonic;
 using SAEON.ObservationsDB.Data;
 
 /// <summary>
-/// Summary description for OrginasationRepository
+/// Summary description for OrganisationRepository
 /// </summary>
-public class OrginasationRepository:BaseRepository
+public class OrganisationRepository:BaseRepository
 {
-    public OrginasationRepository()
+    public OrganisationRepository()
     {
         //
         // TODO: Add constructor logic here

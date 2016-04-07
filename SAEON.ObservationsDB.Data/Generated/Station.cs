@@ -259,6 +259,20 @@ namespace SAEON.ObservationsDB.Data
 					colvarUserId.ForeignKeyTableName = "aspnet_Users";
 				schema.Columns.Add(colvarUserId);
 				
+				TableSchema.TableColumn colvarSiteID = new TableSchema.TableColumn(schema);
+				colvarSiteID.ColumnName = "SiteID";
+				colvarSiteID.DataType = DbType.Guid;
+				colvarSiteID.MaxLength = 0;
+				colvarSiteID.AutoIncrement = false;
+				colvarSiteID.IsNullable = true;
+				colvarSiteID.IsPrimaryKey = false;
+				colvarSiteID.IsForeignKey = true;
+				colvarSiteID.IsReadOnly = false;
+				colvarSiteID.DefaultSetting = @"";
+				
+					colvarSiteID.ForeignKeyTableName = "Site";
+				schema.Columns.Add(colvarSiteID);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -348,6 +362,14 @@ namespace SAEON.ObservationsDB.Data
 			get { return GetColumnValue<Guid>(Columns.UserId); }
 			set { SetColumnValue(Columns.UserId, value); }
 		}
+		  
+		[XmlAttribute("SiteID")]
+		[Bindable(true)]
+		public Guid? SiteID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.SiteID); }
+			set { SetColumnValue(Columns.SiteID, value); }
+		}
 		
 		#endregion
 		
@@ -394,6 +416,17 @@ namespace SAEON.ObservationsDB.Data
 		}
 		
 		
+		/// <summary>
+		/// Returns a Site ActiveRecord object related to this Station
+		/// 
+		/// </summary>
+		public SAEON.ObservationsDB.Data.Site Site
+		{
+			get { return SAEON.ObservationsDB.Data.Site.FetchByID(this.SiteID); }
+			set { SetColumnValue("SiteID", value.Id); }
+		}
+		
+		
 		#endregion
 		
 		
@@ -408,7 +441,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid varProjectSiteID,Guid varUserId)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid varProjectSiteID,Guid varUserId,Guid? varSiteID)
 		{
 			Station item = new Station();
 			
@@ -432,6 +465,8 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.UserId = varUserId;
 			
+			item.SiteID = varSiteID;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -442,7 +477,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid varProjectSiteID,Guid varUserId)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid varProjectSiteID,Guid varUserId,Guid? varSiteID)
 		{
 			Station item = new Station();
 			
@@ -465,6 +500,8 @@ namespace SAEON.ObservationsDB.Data
 				item.ProjectSiteID = varProjectSiteID;
 			
 				item.UserId = varUserId;
+			
+				item.SiteID = varSiteID;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -549,6 +586,13 @@ namespace SAEON.ObservationsDB.Data
         
         
         
+        public static TableSchema.TableColumn SiteIDColumn
+        {
+            get { return Schema.Columns[10]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -563,6 +607,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string Elevation = @"Elevation";
 			 public static string ProjectSiteID = @"ProjectSiteID";
 			 public static string UserId = @"UserId";
+			 public static string SiteID = @"SiteID";
 						
 		}
 		#endregion

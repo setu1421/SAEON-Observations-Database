@@ -16,7 +16,7 @@ public partial class _Organisation : System.Web.UI.Page
 
     protected void OrganisationStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.OrganisationGrid.GetStore().DataSource = OrginasationRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        this.OrganisationGrid.GetStore().DataSource = OrganisationRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -77,16 +77,16 @@ public partial class _Organisation : System.Web.UI.Page
         this.DetailWindow.Hide();
     }
 
-	protected void OrganisationStore_Submit(object sender, StoreSubmitDataEventArgs e)
-	{
-		string type = FormatType.Text;
-		string visCols = VisCols.Value.ToString();
-		string gridData = GridData.Text;
-		string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
-		string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
+    protected void OrganisationStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    {
+        string type = FormatType.Text;
+        string visCols = VisCols.Value.ToString();
+        string gridData = GridData.Text;
+        string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
+        string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-		string js = BaseRepository.BuildExportQ("Organisation", gridData, visCols, sortCol, sortDir);
+        string js = BaseRepository.BuildExportQ("Organisation", gridData, visCols, sortCol, sortDir);
 
-		BaseRepository.doExport(type, js);
-	}
+        BaseRepository.doExport(type, js);
+    }
 }

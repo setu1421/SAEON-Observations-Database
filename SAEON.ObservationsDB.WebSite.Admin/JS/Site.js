@@ -1,4 +1,5 @@
 ﻿function onCommand(e, record) {
+
     DetailsFormPanel.getForm().reset();
     DetailsFormPanel.getForm().loadRecord(record);
     DetailsFormPanel.getForm().clearInvalid();
@@ -11,7 +12,6 @@
 
     tfCode.markAsValid();
     tfName.markAsValid();
-    cbOrg.markAsValid();
     DetailWindow.show()
 }
 
@@ -27,4 +27,3 @@ function New() {
     DetailWindow.show();
 
 }
-

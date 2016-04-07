@@ -1,28 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Ext.Net;
+using da = SAEON.ObservationsDB.Data;
+using System;
 using System.Linq;
-using System.Web;
-using SAEON.ObservationsDB.Data;
-using Ext.Net;
-using SubSonic;
-using System.Xml;
-using System.Xml.Xsl;
 
-/// <summary>
-/// Summary description for Site
-/// </summary>
-public partial class _Site : System.Web.UI.Page
+public partial class Admin_Site : System.Web.UI.Page
 {
-
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        //if (!X.IsAjaxRequest)
-        //{
-        //    this.Store1.DataSource = new OrganisationCollection().OrderByAsc(Organisation.Columns.Name).Load();
-        //    this.Store1.DataBind();
-        //}
-    }
-
     protected void SiteStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         this.SiteGrid.GetStore().DataSource = SiteRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
@@ -31,27 +13,27 @@ public partial class _Site : System.Web.UI.Page
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
 
-        SiteCollection col = new SiteCollection();
+        da.SiteCollection col = new da.SiteCollection();
 
         string checkColumn = String.Empty,
                errorMessage = String.Empty;
 
         if (e.ID == "tfCode")
         {
-            checkColumn = Site.Columns.Code;
+            checkColumn = da.Site.Columns.Code;
             errorMessage = "The specified Site Code already exists";
         }
         else if (e.ID == "tfName")
         {
-            checkColumn = Site.Columns.Name;
+            checkColumn = da.Site.Columns.Name;
             errorMessage = "The specified Site Name already exists";
 
         }
 
         if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            col = new da.SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
         else
-            col = new SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Site.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+            col = new da.SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(da.Site.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
         if (col.Count > 0)
         {
@@ -60,26 +42,26 @@ public partial class _Site : System.Web.UI.Page
         }
         else
             e.Success = true;
+
     }
 
     protected void Save(object sender, DirectEventArgs e)
     {
 
-        Site prosite = new Site();
+        da.Site org = new da.Site();
 
         if (String.IsNullOrEmpty(tfID.Text))
-            prosite.Id = Guid.NewGuid();
+            org.Id = Guid.NewGuid();
         else
-            prosite = new Site(tfID.Text.Trim());
+            org = new da.Site(tfID.Text.Trim());
 
-        prosite.Code = tfCode.Text.Trim();
-        prosite.Name = tfName.Text.Trim();
-        prosite.Description = tfDescription.Text.Trim();
-        //prosite.OrganisationID = new Guid(cbOrg.SelectedItem.Value.Trim());
+        org.Code = tfCode.Text.Trim();
+        org.Name = tfName.Text.Trim();
+        org.Description = tfDescription.Text.Trim();
 
-        prosite.UserId = AuthHelper.GetLoggedInUserId;
+        org.UserId = AuthHelper.GetLoggedInUserId;
 
-        prosite.Save();
+        org.Save();
 
         SiteGrid.DataBind();
 
