@@ -57,7 +57,7 @@ function NewTransform()
 	else
 	{
 
-		Ext.Msg.alert('Invalid Selection', 'Select a Data Source.')
+	    Ext.Msg.alert('Invalid Selection', 'Select a Data Source.');
 	}
 }
 
@@ -126,7 +126,7 @@ function CloseAvailableRole()
 function FrequencyUpdate()
 {
 
-	if (cbUpdateFrequency.getValue() == '0')
+	if (cbUpdateFrequency.getValue() === '0')
 	{
 		tfUrl.allowBlank = true;
 		tfUrl.markAsValid();
@@ -144,18 +144,18 @@ function FrequencyUpdate()
 
 function onRoleCommand(e, record)
 {
-	if (e == 'Delete')
+	if (e === 'Delete')
 	{
 		DirectCall.ConfirmDeleteRole(record.get('Id'), { eventMask: { showMask: true} });
 	}
-	if (e == 'Edit')
+	if (e === 'Edit')
 	{
 		RoleDetailFormPanel.getForm().reset();
 		RoleDetailFormPanel.getForm().loadRecord(record);
 		RoleDetailFormPanel.getForm().clearInvalid();
 		//$('#hiddenRoleDetail').val(record.id);
 
-		RoleDetailWindow.show()
+		RoleDetailWindow.show();
 	}
 
 }

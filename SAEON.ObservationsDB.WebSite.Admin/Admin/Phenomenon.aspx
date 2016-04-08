@@ -367,8 +367,7 @@
         </Content>
     </ext:Window>
     <ext:Window ID="AvailableUnitsWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available Units" Width="620" Height="300" X="50" Y="50" CenterOnLoad="false"
-        Layout="Fit" Hidden="true" ClientIDMode="Static">
+        Title="Available Units" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="CloseAvailableUnit" />
         </Listeners>
@@ -420,8 +419,8 @@
         </Items>
     </ext:Window>
     <ext:Window ID="AvailableOfferingsWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available Offerings" Width="620" Height="300" X="50" Y="50" CenterOnLoad="false"
-        Layout="Fit" Hidden="true" ClientIDMode="Static">
+        Title="Available Offerings" Width="620" Height="300" X="50" Y="50" 
+        Layout="FitLayout" Hidden="true" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="CloseAvailableOffering" />
         </Listeners>

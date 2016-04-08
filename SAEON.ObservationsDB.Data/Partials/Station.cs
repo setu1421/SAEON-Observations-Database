@@ -22,5 +22,19 @@ namespace SAEON.ObservationsDB.Data
                 return result;
             }
         }
+
+        public string SiteName
+        {
+            get
+            {
+                String result = String.Empty;
+                Site s = this.Site;
+
+                if (s != null)
+                    result = String.Concat(s.Code, " - ", s.Name);
+
+                return result;
+            }
+        }
     }
 }

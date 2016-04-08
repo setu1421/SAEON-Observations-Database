@@ -526,7 +526,7 @@
                     <ext:Container ID="Container9" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                         <Items>
                             <ext:DateField ID="dfTransStart" DataIndex="StartDate" runat="server" FieldLabel="Effective Date"
-                                AnchorHorizontal="95%"  AllowBlank="false" BlankText="Effective Date is required" In>
+                                AnchorHorizontal="95%"  AllowBlank="false" BlankText="Effective Date is required">
                             </ext:DateField>
                         </Items>
                     </ext:Container><%--Format="dd/MM/yyyy"--%>

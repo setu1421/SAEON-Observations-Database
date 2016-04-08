@@ -2,14 +2,26 @@
 using da = SAEON.ObservationsDB.Data;
 using System;
 using System.Linq;
+using SubSonic;
 
 public partial class Admin_Site : System.Web.UI.Page
 {
-    protected void SiteStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!X.IsAjaxRequest)
+        {
+            //this.StationStore.DataSource = new da.StationCollection().OrderByAsc(da.Station.Columns.Name).Load();
+            //this.StationStore.DataBind();
+        }
+    }
+
+    #region Sites
+    protected void SiteGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         this.SiteGrid.GetStore().DataSource = SiteRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
     }
 
+ 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
 
@@ -80,4 +92,124 @@ public partial class Admin_Site : System.Web.UI.Page
 
         BaseRepository.doExport(type, js);
     }
+
+    protected void DoDelete(object sender, DirectEventArgs e)
+    {
+        string ActionType = e.ExtraParams["type"];
+        string recordID = e.ExtraParams["id"];
+
+        if (ActionType == "RemoveStation")
+        {
+            da.Station station = new da.StationCollection().Where(da.Station.Columns.Id, recordID).Load().FirstOrDefault();
+            if (station != null)
+            {
+                station.SiteID = null;
+                station.Save();
+                StationGrid.DataBind();
+            }
+        }
+        else if (ActionType == "RemoveOrganisation")
+        {
+        }
+    }
+    #endregion
+
+    #region Stations
+
+    protected void StationGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
+            da.StationCollection stationCol = new da.StationCollection()
+                .Where(da.Station.Columns.SiteID, Id)
+                .OrderByAsc(da.Station.Columns.Code)
+                .Load();
+            this.StationGrid.GetStore().DataSource = stationCol;
+            this.StationGrid.GetStore().DataBind();
+        }
+    }
+
+    protected void AvailableStationsStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
+            da.StationCollection stationCol = new Select()
+                .From(da.Station.Schema)
+                .Where(da.Station.IdColumn)
+                .NotIn(new Select(new string[] {da.Station.Columns.Id}).From(da.Station.Schema).Where(da.Station.IdColumn).IsEqualTo(Id))
+                .Where(da.Station.SiteIDColumn)
+                .IsNull()
+                .OrderAsc(da.Station.Columns.Code)
+                .ExecuteAsCollection<da.StationCollection>();
+            this.AvailableStationsGrid.GetStore().DataSource = stationCol;
+            this.AvailableStationsGrid.GetStore().DataBind();
+        }
+    }
+
+    protected void AcceptStations_Click(object sender, DirectEventArgs e)
+    {
+        RowSelectionModel sm = this.AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel siteRow = this.SiteGrid.SelectionModel.Primary as RowSelectionModel;
+
+        var siteID = siteRow.SelectedRecordID;
+        if (sm.SelectedRows.Count > 0)
+        {
+            foreach (SelectedRow row in sm.SelectedRows)
+            {
+                da.Station station = new da.StationCollection().Where(da.Station.Columns.Id, row.RecordID).FirstOrDefault();
+                if (station != null)
+                {
+                    station.SiteID = new Guid(siteID);
+                    station.Save();
+                }
+            }
+            AvailableStationsWindow.Hide();
+        }
+        else
+        {
+            X.Msg.Show(new MessageBoxConfig
+            {
+                Title = "Invalid Selection",
+                Message = "Select at least one Station",
+                Buttons = MessageBox.Button.OK,
+                Icon = MessageBox.Icon.INFO
+            });
+        }
+        //if (UnitOfMeasureGrid.GetStore().co.Items.Count > 0)
+        //{
+        //RowSelectionModel sm = this.UnitOfMeasureGrid.SelectionModel.Primary as RowSelectionModel;
+        //RowSelectionModel phenomenonrow = this.PhenomenonGrid.SelectionModel.Primary as RowSelectionModel;
+
+        //string PhenomenonID = phenomenonrow.SelectedRecordID;
+
+        //if (sm.SelectedRows.Count > 0)
+        //{
+        //    foreach (SelectedRow row in sm.SelectedRows)
+        //    {
+        //        PhenomenonUOM unit = new PhenomenonUOM();
+        //        unit.UnitOfMeasureID = new Guid(row.RecordID);
+        //        unit.PhenomenonID = new Guid(PhenomenonID);
+
+        //        unit.Save();
+        //    }
+
+        //    Store4.DataBind();
+        //    AvailableUnitsWindow.Hide();
+        //}
+        //else
+        //{
+        //    X.Msg.Show(new MessageBoxConfig
+        //    {
+        //        Title = "Invalid Selection",
+        //        Message = "Select at least one Unit",
+        //        Buttons = MessageBox.Button.OK,
+        //        Icon = MessageBox.Icon.INFO
+        //    });
+        //}
+        ////}
+    }
+    #endregion
+
 }

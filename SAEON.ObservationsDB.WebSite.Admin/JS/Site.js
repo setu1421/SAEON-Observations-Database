@@ -1,5 +1,4 @@
 ﻿function onCommand(e, record) {
-
     DetailsFormPanel.getForm().reset();
     DetailsFormPanel.getForm().loadRecord(record);
     DetailsFormPanel.getForm().clearInvalid();
@@ -12,7 +11,7 @@
 
     tfCode.markAsValid();
     tfName.markAsValid();
-    DetailWindow.show()
+    DetailWindow.show();
 }
 
 function New() {
@@ -27,3 +26,15 @@ function New() {
     DetailWindow.show();
 
 }
+
+function SiteRowSelect(e, record) {
+    if (pnlSouth.isVisible())
+        StationGrid.getStore().reload();
+    //if (pnlEast.isVisible())
+    //    OrganisationGrid.getStore().reload();
+}
+
+function CloseAvailableStations() {
+    AvailableStationsGrid.selModel.clearSelections();
+}
+

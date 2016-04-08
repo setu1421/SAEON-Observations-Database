@@ -3,27 +3,36 @@
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript" src="../JS/Station.js"></script>
-	<script type="text/javascript" src="../JS/generic.js"></script>
-	<script type="text/javascript">
-		var submitValue = function (format)
-		{
-			GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
-			//VisCols.setValue(Ext.encode(StationGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-			var viscolsNew = makenewJsonForExport(StationGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
-			VisCols.setValue(viscolsNew);
-			FormatType.setValue(format);
-			SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
+    <script type="text/javascript" src="../JS/generic.js"></script>
+    <script type="text/javascript">
+        var submitValue = function (format) {
+            GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
+            //VisCols.setValue(Ext.encode(StationGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
+            var viscolsNew = makenewJsonForExport(StationGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            VisCols.setValue(viscolsNew);
+            FormatType.setValue(format);
+            SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
 
-			StationGrid.submitData(false);
-		};
-	</script>
+            StationGrid.submitData(false);
+        };
+    </script>
 </asp:Content>
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="ContentPlaceHolder1">
-	<ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
-	<ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
-	<ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
-	<ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
-    <ext:Store ID="Store1" runat="server">
+    <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
+    <ext:Store ID="ProjectSiteStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
+    <ext:Store ID="SiteStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
@@ -35,118 +44,129 @@
     </ext:Store>
     <ext:Viewport ID="Viewport1" runat="server" Layout="Fit">
         <Items>
-            <ext:Panel ID="Panel1" runat="server" Title="Stations" Layout="FitLayout" Hidden="false">
-                <TopBar>
-                    <ext:Toolbar ID="Toolbar1" runat="server">
+            <ext:BorderLayout ID="BorderLayout1" runat="server">
+                <Center MarginsSummary="5 0 0 5">
+                    <ext:Panel ID="Panel1" runat="server" Title="Stations" Layout="FitLayout" Hidden="false">
+                        <TopBar>
+                            <ext:Toolbar ID="Toolbar1" runat="server">
+                                <Items>
+                                    <ext:Button ID="Button1" runat="server" Icon="Add" Text="Add Station">
+                                        <ToolTips>
+                                            <ext:ToolTip ID="ToolTip1" runat="server" Html="Add" />
+                                        </ToolTips>
+                                        <Listeners>
+                                            <Click Fn="New" />
+                                        </Listeners>
+                                    </ext:Button>
+                                    <ext:ToolbarFill ID="ToolbarFill1" runat="server" />
+                                    <ext:Button ID="Button2" runat="server" Text="To Excel"
+                                        Icon="PageExcel">
+                                        <Listeners>
+                                            <Click Handler="submitValue('exc');" />
+                                        </Listeners>
+
+                                    </ext:Button>
+                                    <ext:Button ID="Button3" runat="server" Text="To CSV"
+                                        Icon="PageAttach">
+                                        <Listeners>
+                                            <Click Handler="submitValue('csv');" />
+                                        </Listeners>
+                                    </ext:Button>
+                                </Items>
+                            </ext:Toolbar>
+                        </TopBar>
                         <Items>
-                            <ext:Button ID="Button1" runat="server" Icon="Add" Text="Add Station">
-                                <ToolTips>
-                                    <ext:ToolTip ID="ToolTip1" runat="server" Html="Add" />
-                                </ToolTips>
+                            <ext:GridPanel ID="StationGrid" runat="server" Border="false" ClientIDMode="Static">
+                                <Store>
+                                    <ext:Store ID="Store2" runat="server" RemoteSort="true" OnRefreshData="StationStore_RefreshData" OnSubmitData="StationStore_Submit">
+                                        <Proxy>
+                                            <ext:PageProxy />
+                                        </Proxy>
+                                        <Reader>
+                                            <ext:JsonReader IDProperty="Id">
+                                                <Fields>
+                                                    <ext:RecordField Name="Id" Type="Auto" />
+                                                    <ext:RecordField Name="Code" Type="String" />
+                                                    <ext:RecordField Name="Name" Type="String" />
+                                                    <ext:RecordField Name="ProjectSiteID" Type="Auto" />
+                                                    <ext:RecordField Name="ProjectSiteName" Type="String" />
+                                                    <ext:RecordField Name="SiteID" Type="Auto" />
+                                                    <ext:RecordField Name="SiteName" Type="String" />
+                                                    <ext:RecordField Name="Description" Type="String" />
+                                                    <ext:RecordField Name="Url" Type="String" />
+                                                    <ext:RecordField Name="Latitude" Type="Auto" />
+                                                    <ext:RecordField Name="Longitude" Type="Auto" />
+                                                    <ext:RecordField Name="Elevation" Type="Auto" />
+                                                </Fields>
+                                            </ext:JsonReader>
+                                        </Reader>
+                                        <BaseParams>
+                                            <ext:Parameter Name="start" Value="0" Mode="Raw" />
+                                            <ext:Parameter Name="limit" Value="25" Mode="Raw" />
+                                            <ext:Parameter Name="sort" Value="" />
+                                            <ext:Parameter Name="dir" Value="" />
+                                        </BaseParams>
+                                        <SortInfo Field="Name" Direction="ASC" />
+                                        <DirectEventConfig IsUpload="true" />
+                                    </ext:Store>
+                                </Store>
+                                <ColumnModel ID="ColumnModel1" runat="server">
+                                    <Columns>
+                                        <ext:Column Header="Code" DataIndex="Code" Width="200" Groupable="false" />
+                                        <ext:Column Header="Name" DataIndex="Name" Width="200" Groupable="false" />
+                                        <ext:Column Header="Project / Site" DataIndex="ProjectSiteName" Width="100" />
+                                        <ext:Column Header="Site" DataIndex="SiteName" Width="100" />
+                                        <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
+                                        <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
+                                        <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="100" Groupable="false" />
+                                        <ext:CommandColumn Width="50" Groupable="false">
+                                            <Commands>
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                            </Commands>
+                                        </ext:CommandColumn>
+                                    </Columns>
+                                </ColumnModel>
+                                <SelectionModel>
+                                    <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" />
+                                </SelectionModel>
+                                <View>
+                                    <ext:GroupingView ID="GroupingView1" HideGroupedColumn="false" runat="server" ForceFit="true"
+                                        StartCollapsed="true" GroupTextTpl='<span id="Project / Site-{[values.rs[0].data.OrganisationName]}"></span>{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
+                                        EnableRowBody="true">
+                                    </ext:GroupingView>
+                                </View>
+                                <LoadMask ShowMask="true" />
+                                <Plugins>
+                                    <ext:GridFilters runat="server" ID="GridFilters1">
+                                        <Filters>
+                                            <ext:StringFilter DataIndex="ID" />
+                                            <ext:StringFilter DataIndex="Code" />
+                                            <ext:StringFilter DataIndex="Name" />
+                                            <ext:StringFilter DataIndex="Description" />
+                                            <ext:StringFilter DataIndex="Url" />
+                                            <ext:NumericFilter DataIndex="Latitude" />
+                                            <ext:NumericFilter DataIndex="Longitude" />
+                                            <ext:NumericFilter DataIndex="Elevation" />
+                                        </Filters>
+                                    </ext:GridFilters>
+                                </Plugins>
+                                <BottomBar>
+                                    <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="25" EmptyMsg="No data found" />
+                                </BottomBar>
                                 <Listeners>
-                                    <Click Fn="New" />
+                                    <%--<Command Handler="#{DetailsFormPanel}.getForm().reset();#{DetailsFormPanel}.getForm().loadRecord(record);#{DetailsFormPanel}.clearInvalid();#{DetailWindow}.show()" />--%>
+                                    <Command Fn="onCommand" />
                                 </Listeners>
-                            </ext:Button>
-							<ext:ToolbarFill ID="ToolbarFill1" runat="server" />
-                            <ext:Button ID="Button2" runat="server" Text="To Excel"
-                                Icon="PageExcel">
-                                <Listeners>
-                                    <Click Handler="submitValue('exc');" />
-                                </Listeners>
-										
-                            </ext:Button>
-                            <ext:Button ID="Button3" runat="server" Text="To CSV"  
-                                Icon="PageAttach">
-                                <Listeners>
-                                    <Click Handler="submitValue('csv');" />
-                                </Listeners>
-                            </ext:Button>
+                            </ext:GridPanel>
                         </Items>
-                    </ext:Toolbar>
-                </TopBar>
-                <Items>
-                    <ext:GridPanel ID="StationGrid" runat="server" Border="false" ClientIDMode="Static">
-                        <Store>
-                            <ext:Store ID="Store2" runat="server" RemoteSort="true" OnRefreshData="StationStore_RefreshData" OnSubmitData="StationStore_Submit">
-                                <Proxy>
-                                    <ext:PageProxy />
-                                </Proxy>
-                                <Reader>
-                                    <ext:JsonReader IDProperty="Id">
-                                        <Fields>
-                                            <ext:RecordField Name="Id" Type="Auto" />
-                                            <ext:RecordField Name="Code" Type="String" />
-                                            <ext:RecordField Name="Name" Type="String" />
-                                            <ext:RecordField Name="ProjectSiteID" Type="Auto" />
-                                            <ext:RecordField Name="ProjectSiteName" Type="String" />
-                                            <ext:RecordField Name="Description" Type="String" />
-                                            <ext:RecordField Name="Url" Type="String" />
-                                            <ext:RecordField Name="Latitude" Type="Auto" />
-                                            <ext:RecordField Name="Longitude" Type="Auto" />
-                                            <ext:RecordField Name="Elevation" Type="Auto" />
-                                        </Fields>
-                                    </ext:JsonReader>
-                                </Reader>
-                                <BaseParams>
-                                    <ext:Parameter Name="start" Value="0" Mode="Raw" />
-                                    <ext:Parameter Name="limit" Value="25" Mode="Raw" />
-                                    <ext:Parameter Name="sort" Value="" />
-                                    <ext:Parameter Name="dir" Value="" />
-                                </BaseParams>
-                                <SortInfo Field="Name" Direction="ASC" />
-								<DirectEventConfig IsUpload="true" />
-                            </ext:Store>
-                        </Store>
-                        <ColumnModel ID="ColumnModel1" runat="server">
-                            <Columns>
-                                <ext:Column Header="Code" DataIndex="Code" Width="200" Groupable="false" />
-                                <ext:Column Header="Name" DataIndex="Name" Width="200" Groupable="false" />
-                                <ext:Column Header="Project / Site" DataIndex="ProjectSiteName" Width="100" />
-                                <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
-                                <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
-                                <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" />
-                                <ext:Column Header="Description" DataIndex="Description" Width="100" Groupable="false" />
-                                <ext:CommandColumn Width="50" Groupable="false">
-                                    <Commands>
-                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
-                                    </Commands>
-                                </ext:CommandColumn>
-                            </Columns>
-                        </ColumnModel>
-                        <SelectionModel>
-                            <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" />
-                        </SelectionModel>
-                        <View>
-                            <ext:GroupingView ID="GroupingView1" HideGroupedColumn="false" runat="server" ForceFit="true"
-                                StartCollapsed="true" GroupTextTpl='<span id="Project / Site-{[values.rs[0].data.OrganisationName]}"></span>{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
-                                EnableRowBody="true">
-                            </ext:GroupingView>
-                        </View>
-                        <LoadMask ShowMask="true" />
-                        <Plugins>
-                            <ext:GridFilters runat="server" ID="GridFilters1">
-                                <Filters>
-                                    <ext:StringFilter DataIndex="ID" />
-                                    <ext:StringFilter DataIndex="Code" />
-                                    <ext:StringFilter DataIndex="Name" />
-                                    <ext:StringFilter DataIndex="Description" />
-                                    <ext:StringFilter DataIndex="Url" />
-                                    <ext:NumericFilter DataIndex="Latitude" />
-                                    <ext:NumericFilter DataIndex="Longitude" />
-                                    <ext:NumericFilter DataIndex="Elevation" />
-                                </Filters>
-                            </ext:GridFilters>
-                        </Plugins>
-                        <BottomBar>
-                            <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="25" EmptyMsg="No data found" />
-                        </BottomBar>
-                        <Listeners>
-                            <%--<Command Handler="#{DetailsFormPanel}.getForm().reset();#{DetailsFormPanel}.getForm().loadRecord(record);#{DetailsFormPanel}.clearInvalid();#{DetailWindow}.show()" />--%>
-                            <Command Fn="onCommand" />
-                        </Listeners>
-                    </ext:GridPanel>
-                </Items>
-            </ext:Panel>
+                    </ext:Panel>
+                </Center>
+                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
+                </East>
+                <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
+                </South>
+            </ext:BorderLayout>
         </Items>
     </ext:Viewport>
     <ext:Window ID="DetailWindow" runat="server" Width="700" Height="400" Closable="true"
@@ -159,7 +179,7 @@
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server">
                     </ext:Hidden>
-                    <ext:Container ID="Container1" runat="server" Layout="Column" Height="100">
+                    <ext:Container ID="Container1" runat="server" Layout="Column" Height="150">
                         <Items>
                             <ext:Container ID="Container2" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                                 <Items>
@@ -168,11 +188,17 @@
                                         MsgTarget="Side" AnchorHorizontal="93%" ClientIDMode="Static">
                                         <RemoteValidation OnValidation="ValidateField" />
                                     </ext:TextField>
-                                    <ext:ComboBox ID="cbProjectSite" runat="server" StoreID="Store1" Editable="true"
+                                    <ext:ComboBox ID="cbProjectSite" runat="server" StoreID="ProjectSiteStore" Editable="true"
                                         BlankText="Project / Site is required" MsgTarget="Side" DisplayField="Name" ValueField="Id"
                                         TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
                                         DataIndex="ProjectSiteID" EmptyText="Select Project / site" SelectOnFocus="true"
                                         FieldLabel="Project / Site" AnchorHorizontal="93%" ClientIDMode="Static">
+                                    </ext:ComboBox>
+                                    <ext:ComboBox ID="cbSite" runat="server" StoreID="SiteStore" Editable="true"
+                                        BlankText="Site is required" MsgTarget="Side" DisplayField="Name" ValueField="Id"
+                                        TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
+                                        DataIndex="SiteID" EmptyText="Select Site" SelectOnFocus="true"
+                                        FieldLabel="Site" AnchorHorizontal="93%" ClientIDMode="Static">
                                     </ext:ComboBox>
                                 </Items>
                             </ext:Container>
@@ -190,7 +216,7 @@
                             </ext:Container>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Panel4" runat="server" Border="false" Header="false" Layout="Form"
+                    <ext:Container ID="Panel4" runat="server" Layout="Form"
                         LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />

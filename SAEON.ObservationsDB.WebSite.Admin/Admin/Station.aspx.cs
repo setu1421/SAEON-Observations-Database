@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Ext.Net;
-using SAEON.ObservationsDB.Data;
+using da=SAEON.ObservationsDB.Data;
 using System.Xml;
 using System.Xml.Xsl;
 
@@ -15,8 +15,10 @@ public partial class _Station : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
-            this.Store1.DataSource = new ProjectSiteCollection().OrderByAsc(ProjectSite.Columns.Name).Load();
-            this.Store1.DataBind();
+            this.ProjectSiteStore.DataSource = new da.ProjectSiteCollection().OrderByAsc(da.ProjectSite.Columns.Name).Load();
+            this.ProjectSiteStore.DataBind();
+            this.SiteStore.DataSource = new da.SiteCollection().OrderByAsc(da.Site.Columns.Name).Load();
+            this.SiteStore.DataBind();
         }
     }
 
@@ -28,27 +30,27 @@ public partial class _Station : System.Web.UI.Page
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
 
-        StationCollection col = new StationCollection();
+        da.StationCollection col = new da.StationCollection();
 
         string checkColumn = String.Empty,
                errorMessage = String.Empty;
 
         if (e.ID == "tfCode")
         {
-            checkColumn = Station.Columns.Code;
+            checkColumn = da.Station.Columns.Code;
             errorMessage = "The specified Station Code already exists";
         }
         else if (e.ID == "tfName")
         {
-            checkColumn = Station.Columns.Name;
+            checkColumn = da.Station.Columns.Name;
             errorMessage = "The specified Station Name already exists";
 
         }
 
         if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            col = new da.StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
         else
-            col = new StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Station.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+            col = new da.StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(da.Station.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
         if (col.Count > 0)
         {
@@ -62,17 +64,18 @@ public partial class _Station : System.Web.UI.Page
     protected void Save(object sender, DirectEventArgs e)
     {
 
-        Station stat = new Station();
+        da.Station stat = new da.Station();
 
         if (String.IsNullOrEmpty(tfID.Text))
             stat.Id = Guid.NewGuid();
         else
-            stat = new Station(tfID.Text.Trim());
+            stat = new da.Station(tfID.Text.Trim());
 
         stat.Code = tfCode.Text.Trim();
         stat.Name = tfName.Text.Trim();
         stat.Description = tfDescription.Text.Trim();
         stat.ProjectSiteID = new Guid(cbProjectSite.SelectedItem.Value.Trim());
+        stat.SiteID = new Guid(cbSite.SelectedItem.Value.Trim());
 
         if (!string.IsNullOrEmpty(nfLatitude.Text))
             stat.Latitude = Double.Parse(nfLatitude.Text);
@@ -95,16 +98,16 @@ public partial class _Station : System.Web.UI.Page
         this.DetailWindow.Hide();
     }
 
-	protected void StationStore_Submit(object sender, StoreSubmitDataEventArgs e)
-	{
-		string type = FormatType.Text;
-		string visCols = VisCols.Value.ToString();
-		string gridData = GridData.Text;
-		string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
-		string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
+    protected void StationStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    {
+        string type = FormatType.Text;
+        string visCols = VisCols.Value.ToString();
+        string gridData = GridData.Text;
+        string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
+        string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-		string js = BaseRepository.BuildExportQ("VStation", gridData, visCols, sortCol, sortDir);
+        string js = BaseRepository.BuildExportQ("VStation", gridData, visCols, sortCol, sortDir);
 
-		BaseRepository.doExport(type, js);
-	}
+        BaseRepository.doExport(type, js);
+    }
 }
