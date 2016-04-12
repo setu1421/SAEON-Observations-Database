@@ -186,18 +186,21 @@ public partial class Admin_Site : System.Web.UI.Page
     #endregion
 
     #region Organisations
+
     protected void OrganisationGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        //if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
-        //{
-        //    Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
-        //    da.OrganisationCollection OrganisationCol = new da.OrganisationCollection()
-        //        .Where(da.Organisation.Columns.SiteID, Id)
-        //        .OrderByAsc(da.Organisation.Columns.Code)
-        //        .Load();
-        //    this.OrganisationGrid.GetStore().DataSource = OrganisationCol;
-        //    this.OrganisationGrid.GetStore().DataBind();
-        //}
+        if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
+            da.VSiteOrganisationCollection SiteOrganisationCol = new da.VSiteOrganisationCollection()
+                .Where(da.VSiteOrganisation.Columns.SiteID, Id)
+                .OrderByAsc(da.VSiteOrganisation.Columns.StartDate)
+                .OrderByAsc(da.VSiteOrganisation.Columns.Organisation)
+                .OrderByAsc(da.VSiteOrganisation.Columns.Role)
+                .Load();
+            this.OrganisationGrid.GetStore().DataSource = SiteOrganisationCol;
+            this.OrganisationGrid.GetStore().DataBind();
+        }
     }
 
     #endregion

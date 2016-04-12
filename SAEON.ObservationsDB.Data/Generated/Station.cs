@@ -426,6 +426,10 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
+		public SAEON.ObservationsDB.Data.StationOrganisationCollection StationOrganisationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.StationOrganisationCollection().Where(StationOrganisation.Columns.StationID, Id).Load();
+		}
 		public SAEON.ObservationsDB.Data.SensorProcedureCollection SensorProcedureRecords()
 		{
 			return new SAEON.ObservationsDB.Data.SensorProcedureCollection().Where(SensorProcedure.Columns.StationID, Id).Load();

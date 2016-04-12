@@ -319,6 +319,10 @@ namespace SAEON.ObservationsDB.Data
         }
         
         
+        public SAEON.ObservationsDB.Data.SiteOrganisationCollection SiteOrganisationRecords()
+        {
+            return new SAEON.ObservationsDB.Data.SiteOrganisationCollection().Where(SiteOrganisation.Columns.SiteID, Id).Load();
+        }
         public SAEON.ObservationsDB.Data.StationCollection StationRecords()
         {
             return new SAEON.ObservationsDB.Data.StationCollection().Where(Station.Columns.SiteID, Id).Load();

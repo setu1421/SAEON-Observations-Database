@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
     /// <summary>
-    /// Controller class for Organisation
+    /// Controller class for OrganisationRole
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class OrganisationController
+    public partial class OrganisationRoleController
     {
         // Preload our schema..
-        Organisation thisSchemaLoad = new Organisation();
+        OrganisationRole thisSchemaLoad = new OrganisationRole();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.ObservationsDB.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public OrganisationCollection FetchAll()
+        public OrganisationRoleCollection FetchAll()
         {
-            OrganisationCollection coll = new OrganisationCollection();
-            Query qry = new Query(Organisation.Schema);
+            OrganisationRoleCollection coll = new OrganisationRoleCollection();
+            Query qry = new Query(OrganisationRole.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public OrganisationCollection FetchByID(object Id)
+        public OrganisationRoleCollection FetchByID(object Id)
         {
-            OrganisationCollection coll = new OrganisationCollection().Where("ID", Id).Load();
+            OrganisationRoleCollection coll = new OrganisationRoleCollection().Where("ID", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public OrganisationCollection FetchByQuery(Query qry)
+        public OrganisationRoleCollection FetchByQuery(Query qry)
         {
-            OrganisationCollection coll = new OrganisationCollection();
+            OrganisationRoleCollection coll = new OrganisationRoleCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
         public bool Delete(object Id)
         {
-            return (Organisation.Delete(Id) == 1);
+            return (OrganisationRole.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
         public bool Destroy(object Id)
         {
-            return (Organisation.Destroy(Id) == 1);
+            return (OrganisationRole.Destroy(Id) == 1);
         }
         
         
@@ -80,9 +80,9 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,Guid UserId)
+	    public void Insert(Guid Id,string Code,string Name,string Description,Guid UserId)
 	    {
-		    Organisation item = new Organisation();
+		    OrganisationRole item = new OrganisationRole();
 		    
             item.Id = Id;
             
@@ -91,8 +91,6 @@ namespace SAEON.ObservationsDB.Data
             item.Name = Name;
             
             item.Description = Description;
-            
-            item.Url = Url;
             
             item.UserId = UserId;
             
@@ -104,9 +102,9 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,Guid UserId)
+	    public void Update(Guid Id,string Code,string Name,string Description,Guid UserId)
 	    {
-		    Organisation item = new Organisation();
+		    OrganisationRole item = new OrganisationRole();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
@@ -117,8 +115,6 @@ namespace SAEON.ObservationsDB.Data
 			item.Name = Name;
 				
 			item.Description = Description;
-				
-			item.Url = Url;
 				
 			item.UserId = UserId;
 				

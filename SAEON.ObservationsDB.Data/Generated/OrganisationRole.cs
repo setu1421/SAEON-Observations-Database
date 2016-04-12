@@ -15,23 +15,23 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
 	/// <summary>
-	/// Strongly-typed collection for the Organisation class.
+	/// Strongly-typed collection for the OrganisationRole class.
 	/// </summary>
     [Serializable]
-	public partial class OrganisationCollection : ActiveList<Organisation, OrganisationCollection>
+	public partial class OrganisationRoleCollection : ActiveList<OrganisationRole, OrganisationRoleCollection>
 	{	   
-		public OrganisationCollection() {}
+		public OrganisationRoleCollection() {}
         
         /// <summary>
 		/// Filters an existing collection based on the set criteria. This is an in-memory filter
 		/// Thanks to developingchris for this!
         /// </summary>
-        /// <returns>OrganisationCollection</returns>
-		public OrganisationCollection Filter()
+        /// <returns>OrganisationRoleCollection</returns>
+		public OrganisationRoleCollection Filter()
         {
             for (int i = this.Count - 1; i > -1; i--)
             {
-                Organisation o = this[i];
+                OrganisationRole o = this[i];
                 foreach (SubSonic.Where w in this.wheres)
                 {
                     bool remove = false;
@@ -62,14 +62,14 @@ namespace SAEON.ObservationsDB.Data
 		
 	}
 	/// <summary>
-	/// This is an ActiveRecord class which wraps the Organisation table.
+	/// This is an ActiveRecord class which wraps the OrganisationRole table.
 	/// </summary>
 	[Serializable]
-	public partial class Organisation : ActiveRecord<Organisation>, IActiveRecord
+	public partial class OrganisationRole : ActiveRecord<OrganisationRole>, IActiveRecord
 	{
 		#region .ctors and Default Settings
 		
-		public Organisation()
+		public OrganisationRole()
 		{
 		  SetSQLProps();
 		  InitSetDefaults();
@@ -78,7 +78,7 @@ namespace SAEON.ObservationsDB.Data
 		
 		private void InitSetDefaults() { SetDefaults(); }
 		
-		public Organisation(bool useDatabaseDefaults)
+		public OrganisationRole(bool useDatabaseDefaults)
 		{
 			SetSQLProps();
 			if(useDatabaseDefaults)
@@ -86,14 +86,14 @@ namespace SAEON.ObservationsDB.Data
 			MarkNew();
 		}
         
-		public Organisation(object keyID)
+		public OrganisationRole(object keyID)
 		{
 			SetSQLProps();
 			InitSetDefaults();
 			LoadByKey(keyID);
 		}
 		 
-		public Organisation(string columnName, object columnValue)
+		public OrganisationRole(string columnName, object columnValue)
 		{
 			SetSQLProps();
 			InitSetDefaults();
@@ -121,7 +121,7 @@ namespace SAEON.ObservationsDB.Data
 			if(!IsSchemaInitialized)
 			{
 				//Schema declaration
-				TableSchema.Table schema = new TableSchema.Table("Organisation", TableType.Table, DataService.GetInstance("ObservationsDB"));
+				TableSchema.Table schema = new TableSchema.Table("OrganisationRole", TableType.Table, DataService.GetInstance("ObservationsDB"));
 				schema.Columns = new TableSchema.TableColumnCollection();
 				schema.SchemaName = @"dbo";
 				//columns
@@ -179,19 +179,6 @@ namespace SAEON.ObservationsDB.Data
 				colvarDescription.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarDescription);
 				
-				TableSchema.TableColumn colvarUrl = new TableSchema.TableColumn(schema);
-				colvarUrl.ColumnName = "Url";
-				colvarUrl.DataType = DbType.AnsiString;
-				colvarUrl.MaxLength = 250;
-				colvarUrl.AutoIncrement = false;
-				colvarUrl.IsNullable = true;
-				colvarUrl.IsPrimaryKey = false;
-				colvarUrl.IsForeignKey = false;
-				colvarUrl.IsReadOnly = false;
-				colvarUrl.DefaultSetting = @"";
-				colvarUrl.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarUrl);
-				
 				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
 				colvarUserId.ColumnName = "UserId";
 				colvarUserId.DataType = DbType.Guid;
@@ -209,7 +196,7 @@ namespace SAEON.ObservationsDB.Data
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
-				DataService.Providers["ObservationsDB"].AddSchema("Organisation",schema);
+				DataService.Providers["ObservationsDB"].AddSchema("OrganisationRole",schema);
 			}
 		}
 		#endregion
@@ -248,14 +235,6 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.Description, value); }
 		}
 		  
-		[XmlAttribute("Url")]
-		[Bindable(true)]
-		public string Url 
-		{
-			get { return GetColumnValue<string>(Columns.Url); }
-			set { SetColumnValue(Columns.Url, value); }
-		}
-		  
 		[XmlAttribute("UserId")]
 		[Bindable(true)]
 		public Guid UserId 
@@ -277,17 +256,13 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.ProjectSiteCollection ProjectSiteRecords()
-		{
-			return new SAEON.ObservationsDB.Data.ProjectSiteCollection().Where(ProjectSite.Columns.OrganisationID, Id).Load();
-		}
 		public SAEON.ObservationsDB.Data.SiteOrganisationCollection SiteOrganisationRecords()
 		{
-			return new SAEON.ObservationsDB.Data.SiteOrganisationCollection().Where(SiteOrganisation.Columns.OrganisationID, Id).Load();
+			return new SAEON.ObservationsDB.Data.SiteOrganisationCollection().Where(SiteOrganisation.Columns.OrganisationRoleID, Id).Load();
 		}
 		public SAEON.ObservationsDB.Data.StationOrganisationCollection StationOrganisationRecords()
 		{
-			return new SAEON.ObservationsDB.Data.StationOrganisationCollection().Where(StationOrganisation.Columns.OrganisationID, Id).Load();
+			return new SAEON.ObservationsDB.Data.StationOrganisationCollection().Where(StationOrganisation.Columns.OrganisationRoleID, Id).Load();
 		}
 		#endregion
 		
@@ -296,7 +271,7 @@ namespace SAEON.ObservationsDB.Data
 		#region ForeignKey Properties
 		
 		/// <summary>
-		/// Returns a AspnetUser ActiveRecord object related to this Organisation
+		/// Returns a AspnetUser ActiveRecord object related to this OrganisationRole
 		/// 
 		/// </summary>
 		public SAEON.ObservationsDB.Data.AspnetUser AspnetUser
@@ -320,9 +295,9 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varUserId)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,Guid varUserId)
 		{
-			Organisation item = new Organisation();
+			OrganisationRole item = new OrganisationRole();
 			
 			item.Id = varId;
 			
@@ -331,8 +306,6 @@ namespace SAEON.ObservationsDB.Data
 			item.Name = varName;
 			
 			item.Description = varDescription;
-			
-			item.Url = varUrl;
 			
 			item.UserId = varUserId;
 			
@@ -346,9 +319,9 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varUserId)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,Guid varUserId)
 		{
-			Organisation item = new Organisation();
+			OrganisationRole item = new OrganisationRole();
 			
 				item.Id = varId;
 			
@@ -357,8 +330,6 @@ namespace SAEON.ObservationsDB.Data
 				item.Name = varName;
 			
 				item.Description = varDescription;
-			
-				item.Url = varUrl;
 			
 				item.UserId = varUserId;
 			
@@ -403,16 +374,9 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn UrlColumn
-        {
-            get { return Schema.Columns[4]; }
-        }
-        
-        
-        
         public static TableSchema.TableColumn UserIdColumn
         {
-            get { return Schema.Columns[5]; }
+            get { return Schema.Columns[4]; }
         }
         
         
@@ -425,7 +389,6 @@ namespace SAEON.ObservationsDB.Data
 			 public static string Code = @"Code";
 			 public static string Name = @"Name";
 			 public static string Description = @"Description";
-			 public static string Url = @"Url";
 			 public static string UserId = @"UserId";
 						
 		}

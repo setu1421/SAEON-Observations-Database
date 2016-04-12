@@ -62,6 +62,8 @@ namespace SAEON.ObservationsDB.Data
         
 		public static readonly string Organisation = @"Organisation";
         
+		public static readonly string OrganisationRole = @"OrganisationRole";
+        
 		public static readonly string Phenomenon = @"Phenomenon";
         
 		public static readonly string PhenomenonOffering = @"PhenomenonOffering";
@@ -78,7 +80,11 @@ namespace SAEON.ObservationsDB.Data
         
 		public static readonly string Site = @"Site";
         
+		public static readonly string SiteOrganisation = @"Site_Organisation";
+        
 		public static readonly string Station = @"Station";
+        
+		public static readonly string StationOrganisation = @"Station_Organisation";
         
 		public static readonly string Status = @"Status";
         
@@ -201,6 +207,11 @@ namespace SAEON.ObservationsDB.Data
             get { return DataService.GetSchema("Organisation", "ObservationsDB"); }
 		}
         
+		public static TableSchema.Table OrganisationRole
+		{
+            get { return DataService.GetSchema("OrganisationRole", "ObservationsDB"); }
+		}
+        
 		public static TableSchema.Table Phenomenon
 		{
             get { return DataService.GetSchema("Phenomenon", "ObservationsDB"); }
@@ -241,9 +252,19 @@ namespace SAEON.ObservationsDB.Data
             get { return DataService.GetSchema("Site", "ObservationsDB"); }
 		}
         
+		public static TableSchema.Table SiteOrganisation
+		{
+            get { return DataService.GetSchema("Site_Organisation", "ObservationsDB"); }
+		}
+        
 		public static TableSchema.Table Station
 		{
             get { return DataService.GetSchema("Station", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table StationOrganisation
+		{
+            get { return DataService.GetSchema("Station_Organisation", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table Status
@@ -293,6 +314,8 @@ namespace SAEON.ObservationsDB.Data
 		public static readonly string VProjectSite = @"vProjectSite";
         
 		public static readonly string VSensorProcedure = @"vSensorProcedure";
+        
+		public static readonly string VSiteOrganisation = @"vSiteOrganisation";
         
 		public static readonly string VStation = @"vStation";
         

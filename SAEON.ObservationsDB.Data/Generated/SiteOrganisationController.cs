@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
     /// <summary>
-    /// Controller class for Organisation
+    /// Controller class for Site_Organisation
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class OrganisationController
+    public partial class SiteOrganisationController
     {
         // Preload our schema..
-        Organisation thisSchemaLoad = new Organisation();
+        SiteOrganisation thisSchemaLoad = new SiteOrganisation();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.ObservationsDB.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public OrganisationCollection FetchAll()
+        public SiteOrganisationCollection FetchAll()
         {
-            OrganisationCollection coll = new OrganisationCollection();
-            Query qry = new Query(Organisation.Schema);
+            SiteOrganisationCollection coll = new SiteOrganisationCollection();
+            Query qry = new Query(SiteOrganisation.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public OrganisationCollection FetchByID(object Id)
+        public SiteOrganisationCollection FetchByID(object Id)
         {
-            OrganisationCollection coll = new OrganisationCollection().Where("ID", Id).Load();
+            SiteOrganisationCollection coll = new SiteOrganisationCollection().Where("ID", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public OrganisationCollection FetchByQuery(Query qry)
+        public SiteOrganisationCollection FetchByQuery(Query qry)
         {
-            OrganisationCollection coll = new OrganisationCollection();
+            SiteOrganisationCollection coll = new SiteOrganisationCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
         public bool Delete(object Id)
         {
-            return (Organisation.Delete(Id) == 1);
+            return (SiteOrganisation.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
         public bool Destroy(object Id)
         {
-            return (Organisation.Destroy(Id) == 1);
+            return (SiteOrganisation.Destroy(Id) == 1);
         }
         
         
@@ -80,19 +80,21 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,Guid UserId)
+	    public void Insert(Guid Id,Guid SiteID,Guid OrganisationID,Guid OrganisationRoleID,DateTime? StartDate,DateTime? EndDate,Guid UserId)
 	    {
-		    Organisation item = new Organisation();
+		    SiteOrganisation item = new SiteOrganisation();
 		    
             item.Id = Id;
             
-            item.Code = Code;
+            item.SiteID = SiteID;
             
-            item.Name = Name;
+            item.OrganisationID = OrganisationID;
             
-            item.Description = Description;
+            item.OrganisationRoleID = OrganisationRoleID;
             
-            item.Url = Url;
+            item.StartDate = StartDate;
+            
+            item.EndDate = EndDate;
             
             item.UserId = UserId;
             
@@ -104,21 +106,23 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,Guid UserId)
+	    public void Update(Guid Id,Guid SiteID,Guid OrganisationID,Guid OrganisationRoleID,DateTime? StartDate,DateTime? EndDate,Guid UserId)
 	    {
-		    Organisation item = new Organisation();
+		    SiteOrganisation item = new SiteOrganisation();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
 			item.Id = Id;
 				
-			item.Code = Code;
+			item.SiteID = SiteID;
 				
-			item.Name = Name;
+			item.OrganisationID = OrganisationID;
 				
-			item.Description = Description;
+			item.OrganisationRoleID = OrganisationRoleID;
 				
-			item.Url = Url;
+			item.StartDate = StartDate;
+				
+			item.EndDate = EndDate;
 				
 			item.UserId = UserId;
 				

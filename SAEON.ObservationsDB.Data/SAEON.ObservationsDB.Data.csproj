@@ -112,6 +112,8 @@
     <Compile Include="Generated\OfferingController.cs" />
     <Compile Include="Generated\Organisation.cs" />
     <Compile Include="Generated\OrganisationController.cs" />
+    <Compile Include="Generated\OrganisationRole.cs" />
+    <Compile Include="Generated\OrganisationRoleController.cs" />
     <Compile Include="Generated\Phenomenon.cs" />
     <Compile Include="Generated\PhenomenonController.cs" />
     <Compile Include="Generated\PhenomenonOffering.cs" />
@@ -129,8 +131,12 @@
     <Compile Include="Generated\SensorProcedureController.cs" />
     <Compile Include="Generated\Site.cs" />
     <Compile Include="Generated\SiteController.cs" />
+    <Compile Include="Generated\SiteOrganisation.cs" />
+    <Compile Include="Generated\SiteOrganisationController.cs" />
     <Compile Include="Generated\Station.cs" />
     <Compile Include="Generated\StationController.cs" />
+    <Compile Include="Generated\StationOrganisation.cs" />
+    <Compile Include="Generated\StationOrganisationController.cs" />
     <Compile Include="Generated\Status.cs" />
     <Compile Include="Generated\StatusController.cs" />
     <Compile Include="Generated\StoredProcedures.cs" />
@@ -150,6 +156,7 @@
     <Compile Include="Generated\VObservationRole.cs" />
     <Compile Include="Generated\VProjectSite.cs" />
     <Compile Include="Generated\VSensorProcedure.cs" />
+    <Compile Include="Generated\VSiteOrganisation.cs" />
     <Compile Include="Generated\VStation.cs" />
     <Compile Include="Generated\VUserInfo.cs" />
     <Compile Include="Generated\VwAspnetApplication.cs" />
