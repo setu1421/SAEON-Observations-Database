@@ -540,6 +540,7 @@
     <Build Include="dbo\Tables\Site.sql" />
     <Build Include="dbo\Tables\OrganisationRole.sql" />
     <Build Include="dbo\Tables\Site_Organisation.sql" />
+    <Build Include="dbo\Tables\Station_Organisation.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
