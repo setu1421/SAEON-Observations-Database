@@ -30,11 +30,14 @@ function New() {
 function SiteRowSelect(e, record) {
     if (pnlSouth.isVisible())
         StationGrid.getStore().reload();
-    //if (pnlEast.isVisible())
-    //    OrganisationGrid.getStore().reload();
+    if (pnlEast.isVisible())
+        OrganisationGrid.getStore().reload();
 }
 
 function CloseAvailableStations() {
     AvailableStationsGrid.selModel.clearSelections();
 }
 
+function CloseAvailableOrganisations() {
+    AvailableStationsGrid.selModel.clearSelections();
+}

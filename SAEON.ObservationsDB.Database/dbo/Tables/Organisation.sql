@@ -3,6 +3,9 @@
     [Code]        VARCHAR (50)     NOT NULL,
     [Name]        VARCHAR (150)    NOT NULL,
     [Description] VARCHAR (5000)   NULL,
+--> Added 20160406 TimPN
+    [Url] VARCHAR(250) NULL, 
+--< Added 20160406 TimPN
     [UserId]      UNIQUEIDENTIFIER NOT NULL,
     CONSTRAINT [PK_Organisation] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Organisation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),

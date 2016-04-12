@@ -12,7 +12,9 @@
 --> Added 20160407 TimPN
 --    [SiteID] UNIQUEIDENTIFIER NOT NULL, -- Must be NOT NULL once all Stations have Sites
     [SiteID] UNIQUEIDENTIFIER NULL, 
---< Added 20160407 TimPN
+    [StartDate] DATETIME NULL, 
+    [EndDate] DATETIME NULL, 
+    --< Added 20160407 TimPN
     CONSTRAINT [PKStation] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Station_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_Station_ProjectSite] FOREIGN KEY ([ProjectSiteID]) REFERENCES [dbo].[ProjectSite] ([ID]),

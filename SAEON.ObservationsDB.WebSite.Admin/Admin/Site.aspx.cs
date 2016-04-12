@@ -60,20 +60,24 @@ public partial class Admin_Site : System.Web.UI.Page
     protected void Save(object sender, DirectEventArgs e)
     {
 
-        da.Site org = new da.Site();
+        da.Site site = new da.Site();
 
         if (String.IsNullOrEmpty(tfID.Text))
-            org.Id = Guid.NewGuid();
+            site.Id = Guid.NewGuid();
         else
-            org = new da.Site(tfID.Text.Trim());
+            site = new da.Site(tfID.Text.Trim());
 
-        org.Code = tfCode.Text.Trim();
-        org.Name = tfName.Text.Trim();
-        org.Description = tfDescription.Text.Trim();
+        site.Code = tfCode.Text.Trim();
+        site.Name = tfName.Text.Trim();
+        site.Description = tfDescription.Text.Trim();
+        site.Url = tfUrl.Text.Trim();
+        if (!String.IsNullOrEmpty(tfStartDate.Text) && (tfStartDate.SelectedDate.Year >= 1900))
+            site.StartDate = tfStartDate.SelectedDate;
+        if (!String.IsNullOrEmpty(tfEndDate.Text) && (tfEndDate.SelectedDate.Year >= 1900))
+            site.EndDate = tfEndDate.SelectedDate;
+        site.UserId = AuthHelper.GetLoggedInUserId;
 
-        org.UserId = AuthHelper.GetLoggedInUserId;
-
-        org.Save();
+        site.Save();
 
         SiteGrid.DataBind();
 
@@ -139,7 +143,7 @@ public partial class Admin_Site : System.Web.UI.Page
                 .From(da.Station.Schema)
                 .Where(da.Station.IdColumn)
                 .NotIn(new Select(new string[] {da.Station.Columns.Id}).From(da.Station.Schema).Where(da.Station.IdColumn).IsEqualTo(Id))
-                .Where(da.Station.SiteIDColumn)
+                .And(da.Station.SiteIDColumn)
                 .IsNull()
                 .OrderAsc(da.Station.Columns.Code)
                 .ExecuteAsCollection<da.StationCollection>();
@@ -158,13 +162,14 @@ public partial class Admin_Site : System.Web.UI.Page
         {
             foreach (SelectedRow row in sm.SelectedRows)
             {
-                da.Station station = new da.StationCollection().Where(da.Station.Columns.Id, row.RecordID).FirstOrDefault();
+                da.Station station = new da.Station(row.RecordID);
                 if (station != null)
                 {
                     station.SiteID = new Guid(siteID);
                     station.Save();
                 }
             }
+            StationGrid.DataBind();
             AvailableStationsWindow.Hide();
         }
         else
@@ -177,39 +182,23 @@ public partial class Admin_Site : System.Web.UI.Page
                 Icon = MessageBox.Icon.INFO
             });
         }
-        //if (UnitOfMeasureGrid.GetStore().co.Items.Count > 0)
-        //{
-        //RowSelectionModel sm = this.UnitOfMeasureGrid.SelectionModel.Primary as RowSelectionModel;
-        //RowSelectionModel phenomenonrow = this.PhenomenonGrid.SelectionModel.Primary as RowSelectionModel;
-
-        //string PhenomenonID = phenomenonrow.SelectedRecordID;
-
-        //if (sm.SelectedRows.Count > 0)
-        //{
-        //    foreach (SelectedRow row in sm.SelectedRows)
-        //    {
-        //        PhenomenonUOM unit = new PhenomenonUOM();
-        //        unit.UnitOfMeasureID = new Guid(row.RecordID);
-        //        unit.PhenomenonID = new Guid(PhenomenonID);
-
-        //        unit.Save();
-        //    }
-
-        //    Store4.DataBind();
-        //    AvailableUnitsWindow.Hide();
-        //}
-        //else
-        //{
-        //    X.Msg.Show(new MessageBoxConfig
-        //    {
-        //        Title = "Invalid Selection",
-        //        Message = "Select at least one Unit",
-        //        Buttons = MessageBox.Button.OK,
-        //        Icon = MessageBox.Icon.INFO
-        //    });
-        //}
-        ////}
     }
     #endregion
 
+    #region Organisations
+    protected void OrganisationGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        //if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
+        //{
+        //    Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
+        //    da.OrganisationCollection OrganisationCol = new da.OrganisationCollection()
+        //        .Where(da.Organisation.Columns.SiteID, Id)
+        //        .OrderByAsc(da.Organisation.Columns.Code)
+        //        .Load();
+        //    this.OrganisationGrid.GetStore().DataSource = OrganisationCol;
+        //    this.OrganisationGrid.GetStore().DataBind();
+        //}
+    }
+
+    #endregion
 }

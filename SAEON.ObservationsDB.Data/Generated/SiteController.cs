@@ -80,7 +80,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,Guid UserId)
+	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,DateTime? StartDate,DateTime? EndDate,Guid UserId)
 	    {
 		    Site item = new Site();
 		    
@@ -92,6 +92,12 @@ namespace SAEON.ObservationsDB.Data
             
             item.Description = Description;
             
+            item.Url = Url;
+            
+            item.StartDate = StartDate;
+            
+            item.EndDate = EndDate;
+            
             item.UserId = UserId;
             
 	    
@@ -102,7 +108,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,Guid UserId)
+	    public void Update(Guid Id,string Code,string Name,string Description,string Url,DateTime? StartDate,DateTime? EndDate,Guid UserId)
 	    {
 		    Site item = new Site();
 	        item.MarkOld();
@@ -115,6 +121,12 @@ namespace SAEON.ObservationsDB.Data
 			item.Name = Name;
 				
 			item.Description = Description;
+				
+			item.Url = Url;
+				
+			item.StartDate = StartDate;
+				
+			item.EndDate = EndDate;
 				
 			item.UserId = UserId;
 				

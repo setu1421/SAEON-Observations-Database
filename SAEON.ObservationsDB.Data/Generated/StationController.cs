@@ -80,7 +80,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,double? Latitude,double? Longitude,int? Elevation,Guid ProjectSiteID,Guid UserId,Guid? SiteID)
+	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,double? Latitude,double? Longitude,int? Elevation,Guid ProjectSiteID,Guid UserId,Guid? SiteID,DateTime? StartDate,DateTime? EndDate)
 	    {
 		    Station item = new Station();
 		    
@@ -106,6 +106,10 @@ namespace SAEON.ObservationsDB.Data
             
             item.SiteID = SiteID;
             
+            item.StartDate = StartDate;
+            
+            item.EndDate = EndDate;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -114,7 +118,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,double? Latitude,double? Longitude,int? Elevation,Guid ProjectSiteID,Guid UserId,Guid? SiteID)
+	    public void Update(Guid Id,string Code,string Name,string Description,string Url,double? Latitude,double? Longitude,int? Elevation,Guid ProjectSiteID,Guid UserId,Guid? SiteID,DateTime? StartDate,DateTime? EndDate)
 	    {
 		    Station item = new Station();
 	        item.MarkOld();
@@ -141,6 +145,10 @@ namespace SAEON.ObservationsDB.Data
 			item.UserId = UserId;
 				
 			item.SiteID = SiteID;
+				
+			item.StartDate = StartDate;
+				
+			item.EndDate = EndDate;
 				
 	        item.Save(UserName);
 	    }

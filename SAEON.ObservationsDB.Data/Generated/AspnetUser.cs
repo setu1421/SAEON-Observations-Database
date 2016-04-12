@@ -340,10 +340,6 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.OfferingCollection().Where(Offering.Columns.UserId, UserId).Load();
 		}
-		public SAEON.ObservationsDB.Data.SiteCollection SiteRecords()
-		{
-			return new SAEON.ObservationsDB.Data.SiteCollection().Where(Site.Columns.UserId, UserId).Load();
-		}
 		public SAEON.ObservationsDB.Data.UnitOfMeasureCollection UnitOfMeasureRecords()
 		{
 			return new SAEON.ObservationsDB.Data.UnitOfMeasureCollection().Where(UnitOfMeasure.Columns.UserId, UserId).Load();
@@ -351,6 +347,10 @@ namespace SAEON.ObservationsDB.Data
 		public SAEON.ObservationsDB.Data.SensorProcedureCollection SensorProcedureRecords()
 		{
 			return new SAEON.ObservationsDB.Data.SensorProcedureCollection().Where(SensorProcedure.Columns.UserId, UserId).Load();
+		}
+		public SAEON.ObservationsDB.Data.SiteCollection SiteRecords()
+		{
+			return new SAEON.ObservationsDB.Data.SiteCollection().Where(Site.Columns.UserId, UserId).Load();
 		}
 		public SAEON.ObservationsDB.Data.OrganisationCollection OrganisationRecords()
 		{

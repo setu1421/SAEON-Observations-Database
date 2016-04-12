@@ -69,6 +69,9 @@
                                                     <ext:RecordField Name="Code" Type="String" />
                                                     <ext:RecordField Name="Name" Type="String" />
                                                     <ext:RecordField Name="Description" Type="String" />
+                                                    <ext:RecordField Name="Url" Type="String" />
+                                                    <ext:RecordField Name="StartDate" Type="Date" />
+                                                    <ext:RecordField Name="EndDtae" Type="Date" />
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>
@@ -87,6 +90,9 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="200" />
+                                        <ext:Column Header="Start" DataIndex="StartDate" Width="100" />
+                                        <ext:Column Header="End" DataIndex="EndDate" Width="100" />
+                                        <ext:Column Header="Url" DataIndex="Url" Width="200" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
@@ -123,12 +129,12 @@
                     </ext:Panel>
                 </Center>
                 <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
-                    <ext:Panel ID="pnlSouth" runat="server" Title="Add Station" Layout="FitLayout"
+                    <ext:Panel ID="pnlSouth" runat="server" Title="Stations" Layout="FitLayout"
                         Height="200" ClientIDMode="Static">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar2" runat="server">
                                 <Items>
-                                    <ext:Button ID="btnAddStation" runat="server" Icon="Add" Text="Add Station">
+                                    <ext:Button ID="btnAddStation" runat="server" Icon="Add" Text="Add Stations">
                                         <ToolTips>
                                             <ext:ToolTip ID="ToolTip2" runat="server" Html="Add" />
                                         </ToolTips>
@@ -187,7 +193,7 @@
                                         <ExtraParams>
                                             <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
                                             <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
-<%--                                            <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection() ? #{SiteGrid}.getSelectionModel().getSelected().id : -1"
+                                            <%--                                            <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection() ? #{SiteGrid}.getSelectionModel().getSelected().id : -1"
                                                 Mode="Raw" />--%>
                                         </ExtraParams>
                                     </Command>
@@ -197,16 +203,16 @@
                     </ext:Panel>
                 </South>
                 <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
-                    <ext:Panel ID="pnlEast" runat="server" Title="Organisation" Layout="FitLayout" Width="425" ClientIDMode="Static">
+                    <ext:Panel ID="pnlEast" runat="server" Title="Organisations" Layout="FitLayout" Width="425" ClientIDMode="Static">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar3" runat="server">
                                 <Items>
-                                    <ext:Button ID="AddOrganisation" runat="server" Icon="Add" Text="Add Organisation">
+                                    <ext:Button ID="AddOrganisation" runat="server" Icon="Add" Text="Add Organisations">
                                         <ToolTips>
                                             <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
                                         </ToolTips>
                                         <Listeners>
-<%--                                            <Click Handler="if(Ext.getCmp('#{DataSourceGrid}') && #{DataSourceGrid}.getSelectionModel().hasSelection()){#{RoleGridStore}.reload();#{AvailableRoleWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Data Source.')}" />--%>
+                                            <%--                                            <Click Handler="if(Ext.getCmp('#{DataSourceGrid}') && #{DataSourceGrid}.getSelectionModel().hasSelection()){#{RoleGridStore}.reload();#{AvailableRoleWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Data Source.')}" />--%>
                                             <%--<Click Fn="NewOrganisation" />--%>
                                         </Listeners>
                                     </ext:Button>
@@ -214,10 +220,10 @@
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-<%--                            <ext:GridPanel ID="OrganisationGrid" runat="server" Border="false" Layout="FitLayout"
+                            <ext:GridPanel ID="OrganisationGrid" runat="server" Border="false" Layout="FitLayout"
                                 ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="OrganisationStore" runat="server" OnRefreshData="OrganisationGrid_RefreshData">
+                                    <ext:Store ID="OrganisationGridStore" runat="server" OnRefreshData="OrganisationGridStore_RefreshData">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -264,14 +270,14 @@
                                 <Listeners>
                                     <Command Fn="onOrganisationCommand" />
                                 </Listeners>
-                            </ext:GridPanel>--%>
+                            </ext:GridPanel>
                         </Items>
                     </ext:Panel>
                 </East>
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="450" Height="400" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="450" Height="600" Closable="true"
         Hidden="true" Collapsible="false" Title="Site Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
@@ -282,7 +288,7 @@
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
-                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form"
+                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
@@ -300,7 +306,7 @@
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="Form"
+                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
@@ -314,8 +320,7 @@
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
+                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
                             <ext:Parameter Name="blankText" Value="Description is required" Mode="Value" />
@@ -325,6 +330,42 @@
                             <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server"
                                 FieldLabel="Description" AnchorHorizontal="95%">
                             </ext:TextArea>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="Url is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="150" runat="server"
+                                FieldLabel="Url" AnchorHorizontal="95%">
+                            </ext:TextField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="Start Date is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:DateField ID="tfStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
+                                FieldLabel="Start Date" AnchorHorizontal="95%">
+                            </ext:DateField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel7" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="End Date is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:DateField ID="tfEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
+                                FieldLabel="End Date" AnchorHorizontal="95%">
+                            </ext:DateField>
                         </Items>
                     </ext:Panel>
                 </Items>

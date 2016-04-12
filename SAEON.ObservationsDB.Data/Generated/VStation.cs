@@ -28,14 +28,14 @@ namespace SAEON.ObservationsDB.Data{
     public partial class VStation : ReadOnlyRecord<VStation>, IReadOnlyRecord
     {
     
-        #region Default Settings
-        protected static void SetSQLProps() 
-        {
-            GetTableSchema();
-        }
-        #endregion
+	    #region Default Settings
+	    protected static void SetSQLProps() 
+	    {
+		    GetTableSchema();
+	    }
+	    #endregion
         #region Schema Accessor
-        public static TableSchema.Table Schema
+	    public static TableSchema.Table Schema
         {
             get
             {
@@ -46,7 +46,7 @@ namespace SAEON.ObservationsDB.Data{
                 return BaseSchema;
             }
         }
-        
+    	
         private static void GetTableSchema() 
         {
             if(!IsSchemaInitialized)
@@ -189,6 +189,30 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarSiteID);
                 
+                TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
+                colvarStartDate.ColumnName = "StartDate";
+                colvarStartDate.DataType = DbType.DateTime;
+                colvarStartDate.MaxLength = 0;
+                colvarStartDate.AutoIncrement = false;
+                colvarStartDate.IsNullable = true;
+                colvarStartDate.IsPrimaryKey = false;
+                colvarStartDate.IsForeignKey = false;
+                colvarStartDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarStartDate);
+                
+                TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
+                colvarEndDate.ColumnName = "EndDate";
+                colvarEndDate.DataType = DbType.DateTime;
+                colvarEndDate.MaxLength = 0;
+                colvarEndDate.AutoIncrement = false;
+                colvarEndDate.IsNullable = true;
+                colvarEndDate.IsPrimaryKey = false;
+                colvarEndDate.IsForeignKey = false;
+                colvarEndDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarEndDate);
+                
                 TableSchema.TableColumn colvarProjectSiteName = new TableSchema.TableColumn(schema);
                 colvarProjectSiteName.ColumnName = "ProjectSiteName";
                 colvarProjectSiteName.DataType = DbType.AnsiString;
@@ -223,235 +247,263 @@ namespace SAEON.ObservationsDB.Data{
         #endregion
         
         #region Query Accessor
-        public static Query CreateQuery()
-        {
-            return new Query(Schema);
-        }
-        #endregion
-        
-        #region .ctors
-        public VStation()
-        {
+	    public static Query CreateQuery()
+	    {
+		    return new Query(Schema);
+	    }
+	    #endregion
+	    
+	    #region .ctors
+	    public VStation()
+	    {
             SetSQLProps();
             SetDefaults();
             MarkNew();
         }
         public VStation(bool useDatabaseDefaults)
-        {
-            SetSQLProps();
-            if(useDatabaseDefaults)
-            {
-                ForceDefaults();
-            }
-            MarkNew();
-        }
-        
-        public VStation(object keyID)
-        {
-            SetSQLProps();
-            LoadByKey(keyID);
-        }
-         
-        public VStation(string columnName, object columnValue)
+	    {
+		    SetSQLProps();
+		    if(useDatabaseDefaults)
+		    {
+				ForceDefaults();
+			}
+			MarkNew();
+	    }
+	    
+	    public VStation(object keyID)
+	    {
+		    SetSQLProps();
+		    LoadByKey(keyID);
+	    }
+    	 
+	    public VStation(string columnName, object columnValue)
         {
             SetSQLProps();
             LoadByParam(columnName,columnValue);
         }
         
-        #endregion
-        
-        #region Props
-        
+	    #endregion
+	    
+	    #region Props
+	    
           
         [XmlAttribute("Id")]
         [Bindable(true)]
         public Guid Id 
-        {
-            get
-            {
-                return GetColumnValue<Guid>("ID");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("ID");
+		    }
             set 
-            {
-                SetColumnValue("ID", value);
+		    {
+			    SetColumnValue("ID", value);
             }
         }
-          
+	      
         [XmlAttribute("Code")]
         [Bindable(true)]
         public string Code 
-        {
-            get
-            {
-                return GetColumnValue<string>("Code");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Code");
+		    }
             set 
-            {
-                SetColumnValue("Code", value);
+		    {
+			    SetColumnValue("Code", value);
             }
         }
-          
+	      
         [XmlAttribute("Name")]
         [Bindable(true)]
         public string Name 
-        {
-            get
-            {
-                return GetColumnValue<string>("Name");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Name");
+		    }
             set 
-            {
-                SetColumnValue("Name", value);
+		    {
+			    SetColumnValue("Name", value);
             }
         }
-          
+	      
         [XmlAttribute("Description")]
         [Bindable(true)]
         public string Description 
-        {
-            get
-            {
-                return GetColumnValue<string>("Description");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Description");
+		    }
             set 
-            {
-                SetColumnValue("Description", value);
+		    {
+			    SetColumnValue("Description", value);
             }
         }
-          
+	      
         [XmlAttribute("Url")]
         [Bindable(true)]
         public string Url 
-        {
-            get
-            {
-                return GetColumnValue<string>("Url");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Url");
+		    }
             set 
-            {
-                SetColumnValue("Url", value);
+		    {
+			    SetColumnValue("Url", value);
             }
         }
-          
+	      
         [XmlAttribute("Latitude")]
         [Bindable(true)]
         public double? Latitude 
-        {
-            get
-            {
-                return GetColumnValue<double?>("Latitude");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("Latitude");
+		    }
             set 
-            {
-                SetColumnValue("Latitude", value);
+		    {
+			    SetColumnValue("Latitude", value);
             }
         }
-          
+	      
         [XmlAttribute("Longitude")]
         [Bindable(true)]
         public double? Longitude 
-        {
-            get
-            {
-                return GetColumnValue<double?>("Longitude");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("Longitude");
+		    }
             set 
-            {
-                SetColumnValue("Longitude", value);
+		    {
+			    SetColumnValue("Longitude", value);
             }
         }
-          
+	      
         [XmlAttribute("Elevation")]
         [Bindable(true)]
         public int? Elevation 
-        {
-            get
-            {
-                return GetColumnValue<int?>("Elevation");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<int?>("Elevation");
+		    }
             set 
-            {
-                SetColumnValue("Elevation", value);
+		    {
+			    SetColumnValue("Elevation", value);
             }
         }
-          
+	      
         [XmlAttribute("ProjectSiteID")]
         [Bindable(true)]
         public Guid ProjectSiteID 
-        {
-            get
-            {
-                return GetColumnValue<Guid>("ProjectSiteID");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("ProjectSiteID");
+		    }
             set 
-            {
-                SetColumnValue("ProjectSiteID", value);
+		    {
+			    SetColumnValue("ProjectSiteID", value);
             }
         }
-          
+	      
         [XmlAttribute("UserId")]
         [Bindable(true)]
         public Guid UserId 
-        {
-            get
-            {
-                return GetColumnValue<Guid>("UserId");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("UserId");
+		    }
             set 
-            {
-                SetColumnValue("UserId", value);
+		    {
+			    SetColumnValue("UserId", value);
             }
         }
-          
+	      
         [XmlAttribute("SiteID")]
         [Bindable(true)]
         public Guid? SiteID 
-        {
-            get
-            {
-                return GetColumnValue<Guid?>("SiteID");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid?>("SiteID");
+		    }
             set 
-            {
-                SetColumnValue("SiteID", value);
+		    {
+			    SetColumnValue("SiteID", value);
             }
         }
-          
+	      
+        [XmlAttribute("StartDate")]
+        [Bindable(true)]
+        public DateTime? StartDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("StartDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("StartDate", value);
+            }
+        }
+	      
+        [XmlAttribute("EndDate")]
+        [Bindable(true)]
+        public DateTime? EndDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("EndDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("EndDate", value);
+            }
+        }
+	      
         [XmlAttribute("ProjectSiteName")]
         [Bindable(true)]
         public string ProjectSiteName 
-        {
-            get
-            {
-                return GetColumnValue<string>("ProjectSiteName");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProjectSiteName");
+		    }
             set 
-            {
-                SetColumnValue("ProjectSiteName", value);
+		    {
+			    SetColumnValue("ProjectSiteName", value);
             }
         }
-          
+	      
         [XmlAttribute("SiteName")]
         [Bindable(true)]
         public string SiteName 
-        {
-            get
-            {
-                return GetColumnValue<string>("SiteName");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("SiteName");
+		    }
             set 
-            {
-                SetColumnValue("SiteName", value);
+		    {
+			    SetColumnValue("SiteName", value);
             }
         }
-        
-        #endregion
+	    
+	    #endregion
     
-        #region Columns Struct
-        public struct Columns
-        {
-            
-            
+	    #region Columns Struct
+	    public struct Columns
+	    {
+		    
+		    
             public static string Id = @"ID";
             
             public static string Code = @"Code";
@@ -474,15 +526,19 @@ namespace SAEON.ObservationsDB.Data{
             
             public static string SiteID = @"SiteID";
             
+            public static string StartDate = @"StartDate";
+            
+            public static string EndDate = @"EndDate";
+            
             public static string ProjectSiteName = @"ProjectSiteName";
             
             public static string SiteName = @"SiteName";
             
-        }
-        #endregion
-        
-        
-        #region IAbstractRecord Members
+	    }
+	    #endregion
+	    
+	    
+	    #region IAbstractRecord Members
         public new CT GetColumnValue<CT>(string columnName) {
             return base.GetColumnValue<CT>(columnName);
         }
@@ -490,6 +546,6 @@ namespace SAEON.ObservationsDB.Data{
             return base.GetColumnValue<object>(columnName);
         }
         #endregion
-        
+	    
     }
 }
