@@ -13,7 +13,7 @@ CREATE TABLE [dbo].[Site_Organisation]
     CONSTRAINT [FK_Site_Organisation_Organisation] FOREIGN KEY ([OrganisationID]) REFERENCES [dbo].[Organisation] ([ID]),
     CONSTRAINT [FK_Site_Organisation_OrganisationRole] FOREIGN KEY ([OrganisationRoleID]) REFERENCES [dbo].[OrganisationRole] ([ID]),
     CONSTRAINT [FK_Site_Organisation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
-    CONSTRAINT [UX_Site_Organisation_SiteIDOrganisationIDOOrganisationRoleID] UNIQUE ([SiteID],[OrganisationID],[OrganisationRoleID])
+    CONSTRAINT [UX_Site_Organisation] UNIQUE ([SiteID],[OrganisationID],[OrganisationRoleID],[StartDate],[EndDate])
 )
 GO
 CREATE INDEX [IX_Site_Organisation_SiteID] ON [dbo].[Site_Organisation] ([SiteID])
@@ -21,6 +21,10 @@ GO
 CREATE INDEX [IX_Site_Organisation_OrganisationID] ON [dbo].[Site_Organisation] ([OrganisationID])
 GO
 CREATE INDEX [IX_Site_Organisation_OrganisationRoleID] ON [dbo].[Site_Organisation] ([OrganisationRoleID])
+GO
+CREATE INDEX [IX_Site_Organisation_StartDate] ON [dbo].[Site_Organisation] ([StartDate])
+GO
+CREATE INDEX [IX_Site_Organisation_EndDate] ON [dbo].[Site_Organisation] ([EndDate])
 GO
 CREATE INDEX [IX_Site_Organisation_UserId] ON [dbo].[Site_Organisation] ([UserId])
 --< Added 20160406 TimPN

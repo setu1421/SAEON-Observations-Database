@@ -3,6 +3,7 @@ using da = SAEON.ObservationsDB.Data;
 using System;
 using System.Linq;
 using SubSonic;
+using Serilog;
 
 public partial class Admin_Site : System.Web.UI.Page
 {
@@ -10,8 +11,10 @@ public partial class Admin_Site : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
-            //this.StationStore.DataSource = new da.StationCollection().OrderByAsc(da.Station.Columns.Name).Load();
-            //this.StationStore.DataBind();
+            OrganisationStore.DataSource = new da.OrganisationCollection().OrderByAsc(da.Organisation.Columns.Name).Load();
+            OrganisationStore.DataBind();
+            OrganisationRoleStore.DataSource = new da.OrganisationRoleCollection().OrderByAsc(da.OrganisationRole.Columns.Name).Load();
+            OrganisationRoleStore.DataBind();
         }
     }
 
@@ -21,7 +24,7 @@ public partial class Admin_Site : System.Web.UI.Page
         this.SiteGrid.GetStore().DataSource = SiteRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
     }
 
- 
+
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
 
@@ -59,29 +62,35 @@ public partial class Admin_Site : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
+        try
+        {
+            da.Site site = new da.Site();
+            if (String.IsNullOrEmpty(tfID.Text))
+                site.Id = Guid.NewGuid();
+            else
+                site = new da.Site(tfID.Text.Trim());
+            site.Code = tfCode.Text.Trim();
+            if (string.IsNullOrEmpty(site.Code)) site.Code = null;
+            site.Name = tfName.Text.Trim();
+            if (string.IsNullOrEmpty(site.Name)) site.Name = null;
+            site.Description = tfDescription.Text.Trim();
+            site.Url = tfUrl.Text.Trim();
+            if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+                site.StartDate = dfStartDate.SelectedDate;
+            if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+                site.EndDate = dfEndDate.SelectedDate;
+            site.UserId = AuthHelper.GetLoggedInUserId;
 
-        da.Site site = new da.Site();
+            site.Save();
 
-        if (String.IsNullOrEmpty(tfID.Text))
-            site.Id = Guid.NewGuid();
-        else
-            site = new da.Site(tfID.Text.Trim());
+            SiteGrid.DataBind();
 
-        site.Code = tfCode.Text.Trim();
-        site.Name = tfName.Text.Trim();
-        site.Description = tfDescription.Text.Trim();
-        site.Url = tfUrl.Text.Trim();
-        if (!String.IsNullOrEmpty(tfStartDate.Text) && (tfStartDate.SelectedDate.Year >= 1900))
-            site.StartDate = tfStartDate.SelectedDate;
-        if (!String.IsNullOrEmpty(tfEndDate.Text) && (tfEndDate.SelectedDate.Year >= 1900))
-            site.EndDate = tfEndDate.SelectedDate;
-        site.UserId = AuthHelper.GetLoggedInUserId;
-
-        site.Save();
-
-        SiteGrid.DataBind();
-
-        this.DetailWindow.Hide();
+            this.DetailWindow.Hide();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Save");
+        }
     }
 
     protected void SiteStore_Submit(object sender, StoreSubmitDataEventArgs e)
@@ -101,19 +110,28 @@ public partial class Admin_Site : System.Web.UI.Page
     {
         string ActionType = e.ExtraParams["type"];
         string recordID = e.ExtraParams["id"];
-
-        if (ActionType == "RemoveStation")
+        try
         {
-            da.Station station = new da.StationCollection().Where(da.Station.Columns.Id, recordID).Load().FirstOrDefault();
-            if (station != null)
+            if (ActionType == "RemoveStation")
             {
-                station.SiteID = null;
-                station.Save();
-                StationGrid.DataBind();
+                da.Station station = new da.Station(recordID);
+                if (station != null)
+                {
+                    station.SiteID = null;
+                    station.UserId = AuthHelper.GetLoggedInUserId;
+                    station.Save();
+                    StationGrid.DataBind();
+                }
+            }
+            else if (ActionType == "RemoveOrganisation")
+            {
+                new da.SiteOrganisationController().Delete(recordID);
+                OrganisationGrid.DataBind();
             }
         }
-        else if (ActionType == "RemoveOrganisation")
+        catch (Exception ex)
         {
+            Log.Error(ex, "DoDelete({ActionType},{RecordID})", ActionType, recordID);
         }
     }
     #endregion
@@ -142,7 +160,7 @@ public partial class Admin_Site : System.Web.UI.Page
             da.StationCollection stationCol = new Select()
                 .From(da.Station.Schema)
                 .Where(da.Station.IdColumn)
-                .NotIn(new Select(new string[] {da.Station.Columns.Id}).From(da.Station.Schema).Where(da.Station.IdColumn).IsEqualTo(Id))
+                .NotIn(new Select(new string[] { da.Station.Columns.Id }).From(da.Station.Schema).Where(da.Station.IdColumn).IsEqualTo(Id))
                 .And(da.Station.SiteIDColumn)
                 .IsNull()
                 .OrderAsc(da.Station.Columns.Code)
@@ -154,33 +172,42 @@ public partial class Admin_Site : System.Web.UI.Page
 
     protected void AcceptStations_Click(object sender, DirectEventArgs e)
     {
-        RowSelectionModel sm = this.AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
-        RowSelectionModel siteRow = this.SiteGrid.SelectionModel.Primary as RowSelectionModel;
+        try
+        {
+            RowSelectionModel sm = this.AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel siteRow = this.SiteGrid.SelectionModel.Primary as RowSelectionModel;
 
-        var siteID = siteRow.SelectedRecordID;
-        if (sm.SelectedRows.Count > 0)
-        {
-            foreach (SelectedRow row in sm.SelectedRows)
+            var siteID = siteRow.SelectedRecordID;
+            if (sm.SelectedRows.Count > 0)
             {
-                da.Station station = new da.Station(row.RecordID);
-                if (station != null)
+                foreach (SelectedRow row in sm.SelectedRows)
                 {
-                    station.SiteID = new Guid(siteID);
-                    station.Save();
+                    da.Station station = new da.Station(row.RecordID);
+                    if (station != null)
+                    {
+                        station.SiteID = new Guid(siteID);
+                        station.UserId = AuthHelper.GetLoggedInUserId;
+                        station.Save();
+                    }
                 }
+                StationGrid.DataBind();
+                AvailableStationsWindow.Hide();
             }
-            StationGrid.DataBind();
-            AvailableStationsWindow.Hide();
-        }
-        else
-        {
-            X.Msg.Show(new MessageBoxConfig
+            else
             {
-                Title = "Invalid Selection",
-                Message = "Select at least one Station",
-                Buttons = MessageBox.Button.OK,
-                Icon = MessageBox.Icon.INFO
-            });
+                X.Msg.Show(new MessageBoxConfig
+                {
+                    Title = "Invalid Selection",
+                    Message = "Select at least one Station",
+                    Buttons = MessageBox.Button.OK,
+                    Icon = MessageBox.Icon.INFO
+                });
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "AcceptStations_Click");
         }
     }
     #endregion
@@ -195,13 +222,38 @@ public partial class Admin_Site : System.Web.UI.Page
             da.VSiteOrganisationCollection SiteOrganisationCol = new da.VSiteOrganisationCollection()
                 .Where(da.VSiteOrganisation.Columns.SiteID, Id)
                 .OrderByAsc(da.VSiteOrganisation.Columns.StartDate)
-                .OrderByAsc(da.VSiteOrganisation.Columns.Organisation)
-                .OrderByAsc(da.VSiteOrganisation.Columns.Role)
+                .OrderByAsc(da.VSiteOrganisation.Columns.EndDate)
+                .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationName)
+                .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationRoleName)
                 .Load();
             this.OrganisationGrid.GetStore().DataSource = SiteOrganisationCol;
             this.OrganisationGrid.GetStore().DataBind();
         }
     }
 
+    protected void AcceptOrganisation_Click(object sender, DirectEventArgs e)
+    {
+        try
+        {
+            RowSelectionModel siteRow = this.SiteGrid.SelectionModel.Primary as RowSelectionModel;
+            var siteID = siteRow.SelectedRecordID;
+            da.SiteOrganisation siteOrganisation = new da.SiteOrganisation();
+            siteOrganisation.SiteID = new Guid(siteID);
+            siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
+            siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+            if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
+                siteOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
+            if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
+                siteOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
+            siteOrganisation.UserId = AuthHelper.GetLoggedInUserId;
+            siteOrganisation.Save();
+            OrganisationGrid.DataBind();
+            OrganisationWindow.Hide();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "AcceptOrganisation_Click");
+        }
+    }
     #endregion
 }

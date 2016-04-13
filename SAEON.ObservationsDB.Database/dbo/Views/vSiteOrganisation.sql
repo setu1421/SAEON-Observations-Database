@@ -1,6 +1,6 @@
 ﻿CREATE VIEW [dbo].[vSiteOrganisation] AS 
 SELECT 
-  so.*, o.Code + ' - ' + o.Name Organisation, r.Code + ' - ' + r.Name [Role]
+  so.*, o.Name OrganisationName, r.Name [OrganisationRoleName]
 FROM 
   [Site_Organisation] so
   inner join [Organisation] o

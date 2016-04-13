@@ -1,32 +1,36 @@
 ﻿<%@ Application Language="C#" %>
+<%@ Import Namespace="Serilog" %>
 
-<script runat="server">
+<script RunAt="server">
 
-    void Application_Start(object sender, EventArgs e) 
+    void Application_Start(object sender, EventArgs e)
     {
         // Code that runs on application startup
-
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.ColoredConsole()
+            .WriteTo.RollingFile(Server.MapPath(@"~/App_Data/Logs/Log-{Date}.txt"))
+            .CreateLogger();
     }
-    
-    void Application_End(object sender, EventArgs e) 
+
+    void Application_End(object sender, EventArgs e)
     {
         //  Code that runs on application shutdown
 
     }
-        
-    void Application_Error(object sender, EventArgs e) 
-    { 
+
+    void Application_Error(object sender, EventArgs e)
+    {
         // Code that runs when an unhandled error occurs
 
     }
 
-    void Session_Start(object sender, EventArgs e) 
+    void Session_Start(object sender, EventArgs e)
     {
         // Code that runs when a new session is started
-
     }
 
-    void Session_End(object sender, EventArgs e) 
+    void Session_End(object sender, EventArgs e)
     {
         // Code that runs when a session ends. 
         // Note: The Session_End event is raised only when the sessionstate mode
@@ -34,5 +38,5 @@
         // or SQLServer, the event is not raised.
 
     }
-       
+
 </script>

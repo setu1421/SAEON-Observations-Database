@@ -22,7 +22,27 @@
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
-    <ext:Viewport ID="Viewport1" runat="server" Layout="Fit">
+    <ext:Store ID="OrganisationStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
+    <ext:Store ID="OrganisationRoleStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
+    <ext:Viewport ID="Viewport1" runat="server" Layout="FitLayout">
         <Items>
             <ext:BorderLayout ID="BorderLayout1" runat="server">
                 <Center MarginsSummary="5 0 0 5">
@@ -204,12 +224,12 @@
                         <TopBar>
                             <ext:Toolbar ID="Toolbar3" runat="server">
                                 <Items>
-                                    <ext:Button ID="AddOrganisation" runat="server" Icon="Add" Text="Add Organisations">
+                                    <ext:Button ID="AddOrganisation" runat="server" Icon="Add" Text="Add Organisation">
                                         <ToolTips>
                                             <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection()){#{OrganisationStore}.reload();#{OrganisationWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Site.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection()){#{OrganisationWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Site.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
@@ -227,8 +247,10 @@
                                             <ext:JsonReader IDProperty="Id">
                                                 <Fields>
                                                     <ext:RecordField Name="Id" Type="Auto" />
-                                                    <ext:RecordField Name="Organisation" Type="String" />
-                                                    <ext:RecordField Name="Role" Type="String" />
+                                                    <ext:RecordField Name="OrganisationID" Type="Auto" />
+                                                    <ext:RecordField Name="OrganisationName" Type="Auto" />
+                                                    <ext:RecordField Name="OrganisationRoleID" Type="Auto" />
+                                                    <ext:RecordField Name="OrganisationRoleName" Type="Auto" />
                                                     <ext:RecordField Name="StartDate" Type="Date" />
                                                     <ext:RecordField Name="EndDate" Type="Date" />
                                                 </Fields>
@@ -242,8 +264,8 @@
                                 </Store>
                                 <ColumnModel ID="ColumnModel5" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Organisation" DataIndex="Organisation" Width="100" />
-                                        <ext:Column Header="Role" DataIndex="Role" Width="100" />
+                                        <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
+                                        <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="75" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDatet" Width="75" Format="yyyy/MM/dd" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="yyyy/MM/dd" />
                                         <ext:CommandColumn Width="50">
@@ -350,7 +372,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="tfStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
                                 FieldLabel="Start Date" AnchorHorizontal="95%">
                             </ext:DateField>
                         </Items>
@@ -362,7 +384,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="tfEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
                                 FieldLabel="End Date" AnchorHorizontal="95%">
                             </ext:DateField>
                         </Items>
@@ -438,8 +460,8 @@
             </ext:GridPanel>
         </Items>
     </ext:Window>
-    <ext:Window ID="OrganisationWindow" runat="server" Width="450" Height="600" Closable="true"
-        Hidden="true" Collapsible="false" Title="Site Detail"
+    <ext:Window ID="OrganisationWindow" runat="server" Width="450" Height="400" Closable="true"
+        Hidden="true" Collapsible="false" Title="Organisation Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="OrganisationFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
@@ -457,52 +479,26 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:TextField ID="cbOrganisation" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
-                                runat="server" FieldLabel="Code" AnchorHorizontal="95%" ClientIDMode="Static">
-                                <RemoteValidation OnValidation="ValidateField">
-                                    <ExtraParams>
-                                        <ext:Parameter Name="id" Value="1" Mode="Raw" />
-                                    </ExtraParams>
-                                </RemoteValidation>
-                            </ext:TextField>
+                            <ext:ComboBox ID="cbOrganisation" runat="server" StoreID="OrganisationStore" Editable="true" DisplayField="Name"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                AllowBlank="false" DataIndex="OrganisationID" EmptyText="Select Organisation"
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                            </ext:ComboBox>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel9" runat="server" Border="false" Header="false" Layout="FormLayout"
+                    <ext:Panel ID="Panel14" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">
                         <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Start Date is a required" Mode="Value" />
+                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
+                            <ext:Parameter Name="blankText" Value="Role is a required" Mode="Value" />
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:TextField ID="dfStartDate" DataIndex="StartDate" MaxLength="150" IsRemoteValidation="true"
-                                runat="server" FieldLabel="Start Date" AnchorHorizontal="95%" ClientIDMode="Static">
-                                <RemoteValidation OnValidation="ValidateField" />
-                            </ext:TextField>
-                        </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel10" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Description is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:TextArea ID="TextArea1" DataIndex="Description" MaxLength="150" runat="server"
-                                FieldLabel="Description" AnchorHorizontal="95%">
-                            </ext:TextArea>
-                        </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel11" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Url is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:TextField ID="TextField3" DataIndex="Url" MaxLength="150" runat="server"
-                                FieldLabel="Url" AnchorHorizontal="95%">
-                            </ext:TextField>
+                            <ext:ComboBox ID="cbOrganisationRole" runat="server" StoreID="OrganisationRoleStore" Editable="true" DisplayField="Name"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                AllowBlank="false" DataIndex="OrganisationRoleID" EmptyText="Select Role"
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                            </ext:ComboBox>
                         </Items>
                     </ext:Panel>
                     <ext:Panel ID="Panel12" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
@@ -512,7 +508,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="DateField1" DataIndex="StartDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfOrganisationStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
                                 FieldLabel="Start Date" AnchorHorizontal="95%">
                             </ext:DateField>
                         </Items>
@@ -524,7 +520,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="DateField2" DataIndex="EndDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfOrganisationEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
                                 FieldLabel="End Date" AnchorHorizontal="95%">
                             </ext:DateField>
                         </Items>
@@ -533,7 +529,7 @@
                 <Buttons>
                     <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
-                            <Click OnEvent="Save" Method="POST">
+                            <Click OnEvent="AcceptOrganisation_Click">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>

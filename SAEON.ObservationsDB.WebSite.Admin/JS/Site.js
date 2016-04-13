@@ -39,5 +39,5 @@ function CloseAvailableStations() {
 }
 
 function CloseAvailableOrganisations() {
-    AvailableStationsGrid.selModel.clearSelections();
+    AvailableOrganisationsGrid.selModel.clearSelections();
 }

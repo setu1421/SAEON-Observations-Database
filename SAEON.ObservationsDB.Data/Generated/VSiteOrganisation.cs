@@ -141,29 +141,29 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarUserId);
                 
-                TableSchema.TableColumn colvarOrganisation = new TableSchema.TableColumn(schema);
-                colvarOrganisation.ColumnName = "Organisation";
-                colvarOrganisation.DataType = DbType.AnsiString;
-                colvarOrganisation.MaxLength = 203;
-                colvarOrganisation.AutoIncrement = false;
-                colvarOrganisation.IsNullable = false;
-                colvarOrganisation.IsPrimaryKey = false;
-                colvarOrganisation.IsForeignKey = false;
-                colvarOrganisation.IsReadOnly = false;
+                TableSchema.TableColumn colvarOrganisationName = new TableSchema.TableColumn(schema);
+                colvarOrganisationName.ColumnName = "OrganisationName";
+                colvarOrganisationName.DataType = DbType.AnsiString;
+                colvarOrganisationName.MaxLength = 150;
+                colvarOrganisationName.AutoIncrement = false;
+                colvarOrganisationName.IsNullable = false;
+                colvarOrganisationName.IsPrimaryKey = false;
+                colvarOrganisationName.IsForeignKey = false;
+                colvarOrganisationName.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarOrganisation);
+                schema.Columns.Add(colvarOrganisationName);
                 
-                TableSchema.TableColumn colvarRole = new TableSchema.TableColumn(schema);
-                colvarRole.ColumnName = "Role";
-                colvarRole.DataType = DbType.AnsiString;
-                colvarRole.MaxLength = 203;
-                colvarRole.AutoIncrement = false;
-                colvarRole.IsNullable = false;
-                colvarRole.IsPrimaryKey = false;
-                colvarRole.IsForeignKey = false;
-                colvarRole.IsReadOnly = false;
+                TableSchema.TableColumn colvarOrganisationRoleName = new TableSchema.TableColumn(schema);
+                colvarOrganisationRoleName.ColumnName = "OrganisationRoleName";
+                colvarOrganisationRoleName.DataType = DbType.AnsiString;
+                colvarOrganisationRoleName.MaxLength = 150;
+                colvarOrganisationRoleName.AutoIncrement = false;
+                colvarOrganisationRoleName.IsNullable = false;
+                colvarOrganisationRoleName.IsPrimaryKey = false;
+                colvarOrganisationRoleName.IsForeignKey = false;
+                colvarOrganisationRoleName.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarRole);
+                schema.Columns.Add(colvarOrganisationRoleName);
                 
                 
                 BaseSchema = schema;
@@ -313,31 +313,31 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
-        [XmlAttribute("Organisation")]
+        [XmlAttribute("OrganisationName")]
         [Bindable(true)]
-        public string Organisation 
+        public string OrganisationName 
 	    {
 		    get
 		    {
-			    return GetColumnValue<string>("Organisation");
+			    return GetColumnValue<string>("OrganisationName");
 		    }
             set 
 		    {
-			    SetColumnValue("Organisation", value);
+			    SetColumnValue("OrganisationName", value);
             }
         }
 	      
-        [XmlAttribute("Role")]
+        [XmlAttribute("OrganisationRoleName")]
         [Bindable(true)]
-        public string Role 
+        public string OrganisationRoleName 
 	    {
 		    get
 		    {
-			    return GetColumnValue<string>("Role");
+			    return GetColumnValue<string>("OrganisationRoleName");
 		    }
             set 
 		    {
-			    SetColumnValue("Role", value);
+			    SetColumnValue("OrganisationRoleName", value);
             }
         }
 	    
@@ -362,9 +362,9 @@ namespace SAEON.ObservationsDB.Data{
             
             public static string UserId = @"UserId";
             
-            public static string Organisation = @"Organisation";
+            public static string OrganisationName = @"OrganisationName";
             
-            public static string Role = @"Role";
+            public static string OrganisationRoleName = @"OrganisationRoleName";
             
 	    }
 	    #endregion
