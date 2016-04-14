@@ -23,8 +23,9 @@
         <a href="http://www.ext.net/"><img src="http://speed.ext.net/identity/extnet-logo-small.png" /></a>
 
         <ext:Window 
+            ID="Window1"
             runat="server" 
-            Title="Example"
+            Title="Welcome to Ext.NET 1"
             Padding="5"
             Height="215"
             Width="350"
@@ -34,7 +35,7 @@
                 <ext:TextField ID="TextField1" runat="server" FieldLabel="Message" />
             </Items>
             <Buttons>
-                <ext:Button runat="server" Text="Submit" OnDirectClick="Button1_Click" />
+                <ext:Button ID="Button1" runat="server" Text="Submit" OnDirectClick="Button1_Click" />
             </Buttons>
         </ext:Window>
     </form>
