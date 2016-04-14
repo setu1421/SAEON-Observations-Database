@@ -11,6 +11,13 @@
             <param name="s">A String</param>
             <returns>A String correctly formatted for insertion in a JSON message.</returns>
         </member>
+        <member name="M:Ext.Net.Utilities.CompressionUtils.Send(System.Byte[],System.String,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="instance"></param>
+            <param name="responseType"></param>
+        </member>
         <member name="M:Ext.Net.Utilities.Inflatr.Base.Inflate(System.String)">
             <summary>
             Inflate the string
