@@ -463,6 +463,9 @@
     <ext:Window ID="OrganisationWindow" runat="server" Width="450" Height="400" Closable="true"
         Hidden="true" Collapsible="false" Title="Organisation Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
+        <Listeners>
+            <Hide Fn="ClearOrganisationForm" />
+        </Listeners>
         <Content>
             <ext:FormPanel ID="OrganisationFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
                 MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"

@@ -38,6 +38,6 @@ function CloseAvailableStations() {
     AvailableStationsGrid.selModel.clearSelections();
 }
 
-function CloseAvailableOrganisations() {
-    AvailableOrganisationsGrid.selModel.clearSelections();
+function ClearOrganisationForm() {
+    OrganisationFormPanel.getForm().reset();
 }
