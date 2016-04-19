@@ -1,17 +1,14 @@
 ﻿CREATE View [dbo].[vDataSource]
 AS
-
-Select d.ID,  d.Code,  d.Name,
- d.[Description],
- d.[Url],d.DefaultNullValue, 
- d.ErrorEstimate, 
- d.UpdateFreq, 
- d.StartDate, 
- d.LastUpdate,
- d.DataSchemaID, 
- d.UserId,
- t.[Name] DataSchemaName from DataSource d
-	LEFT JOIN DataSchema t
-	ON d.DataSchemaID = t.ID
+Select 
+  d.*,
+  t.[Name] DataSchemaName,
+  s.Code + ' - ' + s.Name StationName
+from 
+  DataSource d
+  inner join Station s
+    on (d.StationID = s.ID)
+  LEFT JOIN DataSchema t  -- Must be inner join once all datasources have stations
+    ON d.DataSchemaID = t.ID
 
 
