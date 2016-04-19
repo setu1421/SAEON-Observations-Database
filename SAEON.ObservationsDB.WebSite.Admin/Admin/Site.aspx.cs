@@ -21,7 +21,7 @@ public partial class Admin_Site : System.Web.UI.Page
     #region Sites
     protected void SiteGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.SiteGrid.GetStore().DataSource = SiteRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        SiteGrid.GetStore().DataSource = SiteRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
 
@@ -85,7 +85,7 @@ public partial class Admin_Site : System.Web.UI.Page
 
             SiteGrid.DataBind();
 
-            this.DetailWindow.Hide();
+            DetailWindow.Hide();
         }
         catch (Exception ex)
         {
@@ -147,8 +147,8 @@ public partial class Admin_Site : System.Web.UI.Page
                 .Where(da.Station.Columns.SiteID, Id)
                 .OrderByAsc(da.Station.Columns.Code)
                 .Load();
-            this.StationGrid.GetStore().DataSource = stationCol;
-            this.StationGrid.GetStore().DataBind();
+            StationGrid.GetStore().DataSource = stationCol;
+            StationGrid.GetStore().DataBind();
         }
     }
 
@@ -165,8 +165,8 @@ public partial class Admin_Site : System.Web.UI.Page
                 .IsNull()
                 .OrderAsc(da.Station.Columns.Code)
                 .ExecuteAsCollection<da.StationCollection>();
-            this.AvailableStationsGrid.GetStore().DataSource = stationCol;
-            this.AvailableStationsGrid.GetStore().DataBind();
+            AvailableStationsGrid.GetStore().DataSource = stationCol;
+            AvailableStationsGrid.GetStore().DataBind();
         }
     }
 
@@ -174,8 +174,8 @@ public partial class Admin_Site : System.Web.UI.Page
     {
         try
         {
-            RowSelectionModel sm = this.AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
-            RowSelectionModel siteRow = this.SiteGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel sm = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel siteRow = SiteGrid.SelectionModel.Primary as RowSelectionModel;
 
             var siteID = siteRow.SelectedRecordID;
             if (sm.SelectedRows.Count > 0)
@@ -226,8 +226,8 @@ public partial class Admin_Site : System.Web.UI.Page
                 .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationName)
                 .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationRoleName)
                 .Load();
-            this.OrganisationGrid.GetStore().DataSource = SiteOrganisationCol;
-            this.OrganisationGrid.GetStore().DataBind();
+            OrganisationGrid.GetStore().DataSource = SiteOrganisationCol;
+            OrganisationGrid.GetStore().DataBind();
         }
     }
 
@@ -235,7 +235,7 @@ public partial class Admin_Site : System.Web.UI.Page
     {
         try
         {
-            RowSelectionModel siteRow = this.SiteGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel siteRow = SiteGrid.SelectionModel.Primary as RowSelectionModel;
             var siteID = siteRow.SelectedRecordID;
             da.SiteOrganisation siteOrganisation = new da.SiteOrganisation();
             siteOrganisation.SiteID = new Guid(siteID);

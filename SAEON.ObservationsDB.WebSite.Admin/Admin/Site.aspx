@@ -440,8 +440,8 @@
                 <ColumnModel ID="ColumnModel3" runat="server">
                     <Columns>
                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
-                        <ext:Column Header="Name" DataIndex="Unit" Width="200" />
-                        <ext:Column Header="Description" DataIndex="UnitSymbol" Width="200" />
+                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
                     </Columns>
                 </ColumnModel>
                 <LoadMask ShowMask="true" />
