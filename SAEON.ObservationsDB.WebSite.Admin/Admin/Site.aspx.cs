@@ -143,11 +143,11 @@ public partial class Admin_Site : System.Web.UI.Page
         if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
-            da.StationCollection stationCol = new da.StationCollection()
+            da.StationCollection col = new da.StationCollection()
                 .Where(da.Station.Columns.SiteID, Id)
                 .OrderByAsc(da.Station.Columns.Code)
                 .Load();
-            StationGrid.GetStore().DataSource = stationCol;
+            StationGrid.GetStore().DataSource = col;
             StationGrid.GetStore().DataBind();
         }
     }
@@ -157,7 +157,7 @@ public partial class Admin_Site : System.Web.UI.Page
         if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
-            da.StationCollection stationCol = new Select()
+            da.StationCollection col = new Select()
                 .From(da.Station.Schema)
                 .Where(da.Station.IdColumn)
                 .NotIn(new Select(new string[] { da.Station.Columns.Id }).From(da.Station.Schema).Where(da.Station.IdColumn).IsEqualTo(Id))
@@ -165,7 +165,7 @@ public partial class Admin_Site : System.Web.UI.Page
                 .IsNull()
                 .OrderAsc(da.Station.Columns.Code)
                 .ExecuteAsCollection<da.StationCollection>();
-            AvailableStationsGrid.GetStore().DataSource = stationCol;
+            AvailableStationsGrid.GetStore().DataSource = col;
             AvailableStationsGrid.GetStore().DataBind();
         }
     }
@@ -219,14 +219,14 @@ public partial class Admin_Site : System.Web.UI.Page
         if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
-            da.VSiteOrganisationCollection SiteOrganisationCol = new da.VSiteOrganisationCollection()
+            da.VSiteOrganisationCollection col = new da.VSiteOrganisationCollection()
                 .Where(da.VSiteOrganisation.Columns.SiteID, Id)
                 .OrderByAsc(da.VSiteOrganisation.Columns.StartDate)
                 .OrderByAsc(da.VSiteOrganisation.Columns.EndDate)
                 .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationName)
                 .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationRoleName)
                 .Load();
-            OrganisationGrid.GetStore().DataSource = SiteOrganisationCol;
+            OrganisationGrid.GetStore().DataSource = col;
             OrganisationGrid.GetStore().DataBind();
         }
     }

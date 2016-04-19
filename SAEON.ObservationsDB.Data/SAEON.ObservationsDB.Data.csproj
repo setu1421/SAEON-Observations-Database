@@ -158,6 +158,7 @@
     <Compile Include="Generated\VSensorProcedure.cs" />
     <Compile Include="Generated\VSiteOrganisation.cs" />
     <Compile Include="Generated\VStation.cs" />
+    <Compile Include="Generated\VStationOrganisation.cs" />
     <Compile Include="Generated\VUserInfo.cs" />
     <Compile Include="Generated\VwAspnetApplication.cs" />
     <Compile Include="Generated\VwAspnetMembershipUser.cs" />

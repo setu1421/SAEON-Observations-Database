@@ -285,6 +285,20 @@ namespace SAEON.ObservationsDB.Data
 					colvarUserId.ForeignKeyTableName = "aspnet_Users";
 				schema.Columns.Add(colvarUserId);
 				
+				TableSchema.TableColumn colvarStationID = new TableSchema.TableColumn(schema);
+				colvarStationID.ColumnName = "StationID";
+				colvarStationID.DataType = DbType.Guid;
+				colvarStationID.MaxLength = 0;
+				colvarStationID.AutoIncrement = false;
+				colvarStationID.IsNullable = true;
+				colvarStationID.IsPrimaryKey = false;
+				colvarStationID.IsForeignKey = true;
+				colvarStationID.IsReadOnly = false;
+				colvarStationID.DefaultSetting = @"";
+				
+					colvarStationID.ForeignKeyTableName = "Station";
+				schema.Columns.Add(colvarStationID);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -390,6 +404,14 @@ namespace SAEON.ObservationsDB.Data
 			get { return GetColumnValue<Guid>(Columns.UserId); }
 			set { SetColumnValue(Columns.UserId, value); }
 		}
+		  
+		[XmlAttribute("StationID")]
+		[Bindable(true)]
+		public Guid? StationID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.StationID); }
+			set { SetColumnValue(Columns.StationID, value); }
+		}
 		
 		#endregion
 		
@@ -448,6 +470,17 @@ namespace SAEON.ObservationsDB.Data
 		}
 		
 		
+		/// <summary>
+		/// Returns a Station ActiveRecord object related to this DataSource
+		/// 
+		/// </summary>
+		public SAEON.ObservationsDB.Data.Station Station
+		{
+			get { return SAEON.ObservationsDB.Data.Station.FetchByID(this.StationID); }
+			set { SetColumnValue("StationID", value.Id); }
+		}
+		
+		
 		#endregion
 		
 		
@@ -462,7 +495,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId,Guid? varStationID)
 		{
 			DataSource item = new DataSource();
 			
@@ -490,6 +523,8 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.UserId = varUserId;
 			
+			item.StationID = varStationID;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -500,7 +535,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId,Guid? varStationID)
 		{
 			DataSource item = new DataSource();
 			
@@ -527,6 +562,8 @@ namespace SAEON.ObservationsDB.Data
 				item.DataSchemaID = varDataSchemaID;
 			
 				item.UserId = varUserId;
+			
+				item.StationID = varStationID;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -625,6 +662,13 @@ namespace SAEON.ObservationsDB.Data
         
         
         
+        public static TableSchema.TableColumn StationIDColumn
+        {
+            get { return Schema.Columns[12]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -641,6 +685,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string LastUpdate = @"LastUpdate";
 			 public static string DataSchemaID = @"DataSchemaID";
 			 public static string UserId = @"UserId";
+			 public static string StationID = @"StationID";
 						
 		}
 		#endregion

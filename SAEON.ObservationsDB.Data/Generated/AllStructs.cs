@@ -319,6 +319,8 @@ namespace SAEON.ObservationsDB.Data
         
 		public static readonly string VStation = @"vStation";
         
+		public static readonly string VStationOrganisation = @"vStationOrganisation";
+        
 		public static readonly string VUserInfo = @"vUserInfo";
         
 		public static readonly string VwAspnetApplication = @"vw_aspnet_Applications";
