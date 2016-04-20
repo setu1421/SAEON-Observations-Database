@@ -50,7 +50,7 @@ public static class Auditing
         try
         {
             AuditLog auditLog = new AuditLog();
-            auditLog.DateAndTime = DateTime.Now;
+            auditLog.AddedAt = DateTime.Now;
             auditLog.Description = Auditing.MethodCall(methodName, methodParameters);
             auditLog.UserId = AuthHelper.GetLoggedInUserId;
             auditLog.Save();

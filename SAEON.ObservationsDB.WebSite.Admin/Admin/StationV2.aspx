@@ -187,7 +187,7 @@
                     </ext:Panel>
                 </Center>
                 <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
-                    <ext:Panel ID="pnlSouth" runat="server" Title="Instruments" Layout="FitLayout"
+                    <ext:Panel ID="pnlSouth" runat="server" Title="Instruments (DataSources)" Layout="FitLayout"
                         Height="200" ClientIDMode="Static">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar2" runat="server">

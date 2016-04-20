@@ -140,19 +140,19 @@ namespace SAEON.ObservationsDB.Data
 				colvarId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarId);
 				
-				TableSchema.TableColumn colvarDateAndTime = new TableSchema.TableColumn(schema);
-				colvarDateAndTime.ColumnName = "DateAndTime";
-				colvarDateAndTime.DataType = DbType.DateTime;
-				colvarDateAndTime.MaxLength = 0;
-				colvarDateAndTime.AutoIncrement = false;
-				colvarDateAndTime.IsNullable = false;
-				colvarDateAndTime.IsPrimaryKey = false;
-				colvarDateAndTime.IsForeignKey = false;
-				colvarDateAndTime.IsReadOnly = false;
+				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+				colvarAddedAt.ColumnName = "AddedAt";
+				colvarAddedAt.DataType = DbType.DateTime;
+				colvarAddedAt.MaxLength = 0;
+				colvarAddedAt.AutoIncrement = false;
+				colvarAddedAt.IsNullable = false;
+				colvarAddedAt.IsPrimaryKey = false;
+				colvarAddedAt.IsForeignKey = false;
+				colvarAddedAt.IsReadOnly = false;
 				
-						colvarDateAndTime.DefaultSetting = @"(getdate())";
-				colvarDateAndTime.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarDateAndTime);
+						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedAt);
 				
 				TableSchema.TableColumn colvarDescription = new TableSchema.TableColumn(schema);
 				colvarDescription.ColumnName = "Description";
@@ -199,12 +199,12 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.Id, value); }
 		}
 		  
-		[XmlAttribute("DateAndTime")]
+		[XmlAttribute("AddedAt")]
 		[Bindable(true)]
-		public DateTime DateAndTime 
+		public DateTime AddedAt 
 		{
-			get { return GetColumnValue<DateTime>(Columns.DateAndTime); }
-			set { SetColumnValue(Columns.DateAndTime, value); }
+			get { return GetColumnValue<DateTime>(Columns.AddedAt); }
+			set { SetColumnValue(Columns.AddedAt, value); }
 		}
 		  
 		[XmlAttribute("Description")]
@@ -255,13 +255,13 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,DateTime varDateAndTime,string varDescription,Guid varUserId)
+		public static void Insert(Guid varId,DateTime varAddedAt,string varDescription,Guid varUserId)
 		{
 			AuditLog item = new AuditLog();
 			
 			item.Id = varId;
 			
-			item.DateAndTime = varDateAndTime;
+			item.AddedAt = varAddedAt;
 			
 			item.Description = varDescription;
 			
@@ -277,13 +277,13 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,DateTime varDateAndTime,string varDescription,Guid varUserId)
+		public static void Update(Guid varId,DateTime varAddedAt,string varDescription,Guid varUserId)
 		{
 			AuditLog item = new AuditLog();
 			
 				item.Id = varId;
 			
-				item.DateAndTime = varDateAndTime;
+				item.AddedAt = varAddedAt;
 			
 				item.Description = varDescription;
 			
@@ -309,7 +309,7 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn DateAndTimeColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[1]; }
         }
@@ -335,7 +335,7 @@ namespace SAEON.ObservationsDB.Data
 		public struct Columns
 		{
 			 public static string Id = @"ID";
-			 public static string DateAndTime = @"DateAndTime";
+			 public static string AddedAt = @"AddedAt";
 			 public static string Description = @"Description";
 			 public static string UserId = @"UserId";
 						
