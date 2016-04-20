@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="StationV2.aspx.cs" Inherits="Admin_StationV2" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/Site.js"></script>
+    <script type="text/javascript" src="../JS/StationV2.js"></script>
     <script type="text/javascript" src="../JS/generic.js"></script>
     <script type="text/javascript">
         var submitValue = function (format) {
@@ -22,6 +22,16 @@
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
+    <ext:Store ID="ProjectSiteStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
     <ext:Store ID="SiteStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
@@ -98,6 +108,8 @@
                                                     <ext:RecordField Name="Id" Type="Auto" />
                                                     <ext:RecordField Name="Code" Type="String" />
                                                     <ext:RecordField Name="Name" Type="String" />
+                                                    <ext:RecordField Name="ProjectSiteID" Type="Auto" />
+                                                    <ext:RecordField Name="ProjectSiteName" Type="String" />
                                                     <ext:RecordField Name="SiteID" Type="Auto" />
                                                     <ext:RecordField Name="SiteName" Type="String" />
                                                     <ext:RecordField Name="Description" Type="String" />
@@ -122,6 +134,7 @@
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" Groupable="false" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" Groupable="false" />
+                                        <ext:Column Header="Project / Site" DataIndex="ProjectSiteName" Width="100" />
                                         <ext:Column Header="Site" DataIndex="SiteName" Width="100" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
                                         <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
@@ -135,9 +148,13 @@
                                     </Columns>
                                 </ColumnModel>
                                 <SelectionModel>
-                                    <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" />
+                                    <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" SingleSelect="true">
+                                        <Listeners>
+                                            <RowSelect Fn="MasterRowSelect" Buffer="250" />
+                                        </Listeners>
+                                    </ext:RowSelectionModel>
                                 </SelectionModel>
-<%--                                <View>
+                                <%--                                <View>
                                     <ext:GroupingView ID="GroupingView1" HideGroupedColumn="false" runat="server" ForceFit="true"
                                         StartCollapsed="true" GroupTextTpl='<span id="Project / Site-{[values.rs[0].data.OrganisationName]}"></span>{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
                                         EnableRowBody="true">
@@ -169,7 +186,7 @@
                         </Items>
                     </ext:Panel>
                 </Center>
-<%--                <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
+                <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
                     <ext:Panel ID="pnlSouth" runat="server" Title="Instruments" Layout="FitLayout"
                         Height="200" ClientIDMode="Static">
                         <TopBar>
@@ -180,7 +197,7 @@
                                             <ext:ToolTip ID="ToolTip2" runat="server" Html="Add" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection()){#{AvailableInstrumentsStore}.reload();#{AvailableInstrumentsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Station.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection()){#{AvailableInstrumentsStore}.reload();#{AvailableInstrumentsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
@@ -250,7 +267,7 @@
                                             <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection()){#{OrganisationWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Site.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection()){#{OrganisationWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
@@ -278,7 +295,7 @@
                                             </ext:JsonReader>
                                         </Reader>
                                         <BaseParams>
-                                            <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection() ? #{SiteGrid}.getSelectionModel().getSelected().id : -1"
+                                            <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection() ? #{StationGrid}.getSelectionModel().getSelected().id : -1"
                                                 Mode="Raw" />
                                         </BaseParams>
                                     </ext:Store>
@@ -315,13 +332,13 @@
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
-                </East>--%>
+                </East>
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
     <ext:Window ID="DetailWindow" runat="server" Width="700" Height="400" Closable="true"
         Hidden="true" Collapsible="false" Title="Station Detail" Maximizable="false"
-        Layout="Fit" ClientIDMode="Static">
+        Layout="FitLayout" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
                 Padding="10" Width="490" ButtonAlign="Right" MonitorResize="true" Layout="FitLayout" ClientIDMode="Static">
@@ -338,6 +355,12 @@
                                         MsgTarget="Side" AnchorHorizontal="93%" ClientIDMode="Static">
                                         <RemoteValidation OnValidation="ValidateField" />
                                     </ext:TextField>
+                                    <ext:ComboBox ID="cbProjectSite" runat="server" StoreID="ProjectSiteStore" Editable="true"
+                                        BlankText="Project / Site is required" MsgTarget="Side" DisplayField="Name" ValueField="Id"
+                                        TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
+                                        DataIndex="ProjectSiteID" EmptyText="Select Project / site" SelectOnFocus="true"
+                                        FieldLabel="Project / Site" AnchorHorizontal="93%" ClientIDMode="Static">
+                                    </ext:ComboBox>
                                     <ext:ComboBox ID="cbSite" runat="server" StoreID="SiteStore" Editable="true"
                                         BlankText="Site is required" MsgTarget="Side" DisplayField="Name" ValueField="Id"
                                         TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
@@ -418,7 +441,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-<%--    <ext:Window ID="AvailableInstrumentsWindow" runat="server" Collapsible="false" Maximizable="false"
+        <ext:Window ID="AvailableInstrumentsWindow" runat="server" Collapsible="false" Maximizable="false"
         Title="Available Instruments" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="CloseAvailableInstruments" />
@@ -442,7 +465,7 @@
                             </ext:JsonReader>
                         </Reader>
                         <BaseParams>
-                            <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection() ? #{SiteGrid}.getSelectionModel().getSelected().id : -1"
+                            <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection() ? #{StationGrid}.getSelectionModel().getSelected().id : -1"
                                 Mode="Raw" />
                         </BaseParams>
                     </ext:Store>
@@ -556,6 +579,6 @@
                 </Listeners>
             </ext:FormPanel>
         </Content>
-    </ext:Window>--%>
+    </ext:Window>
 </asp:Content>
 

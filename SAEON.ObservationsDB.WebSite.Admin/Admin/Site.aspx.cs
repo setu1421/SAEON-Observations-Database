@@ -69,9 +69,10 @@ public partial class Admin_Site : System.Web.UI.Page
                 site.Id = Guid.NewGuid();
             else
                 site = new da.Site(tfID.Text.Trim());
-            site.Code = tfCode.Text.Trim();
-            if (string.IsNullOrEmpty(site.Code)) site.Code = null;
-            site.Name = tfName.Text.Trim();
+            if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
+                site.Code = tfCode.Text.Trim();
+            if (!string.IsNullOrEmpty(tfName.Text.Trim()))
+                site.Name = tfName.Text.Trim();
             if (string.IsNullOrEmpty(site.Name)) site.Name = null;
             site.Description = tfDescription.Text.Trim();
             site.Url = tfUrl.Text.Trim();
@@ -90,6 +91,7 @@ public partial class Admin_Site : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Save");
+            MessageBoxes.Error(ex, "Unable to save site");
         }
     }
 
@@ -132,6 +134,7 @@ public partial class Admin_Site : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "DoDelete({ActionType},{RecordID})", ActionType, recordID);
+            MessageBoxes.Error(ex, "Unable to delete {0}", ActionType == "RemoveStation" ? "station" : "organisation");
         }
     }
     #endregion
@@ -175,9 +178,9 @@ public partial class Admin_Site : System.Web.UI.Page
         try
         {
             RowSelectionModel sm = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
-            RowSelectionModel siteRow = SiteGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel masteRow = SiteGrid.SelectionModel.Primary as RowSelectionModel;
 
-            var siteID = siteRow.SelectedRecordID;
+            var masterID = masteRow.SelectedRecordID;
             if (sm.SelectedRows.Count > 0)
             {
                 foreach (SelectedRow row in sm.SelectedRows)
@@ -185,7 +188,7 @@ public partial class Admin_Site : System.Web.UI.Page
                     da.Station station = new da.Station(row.RecordID);
                     if (station != null)
                     {
-                        station.SiteID = new Guid(siteID);
+                        station.SiteID = new Guid(masterID);
                         station.UserId = AuthHelper.GetLoggedInUserId;
                         station.Save();
                     }
@@ -195,19 +198,13 @@ public partial class Admin_Site : System.Web.UI.Page
             }
             else
             {
-                X.Msg.Show(new MessageBoxConfig
-                {
-                    Title = "Invalid Selection",
-                    Message = "Select at least one Station",
-                    Buttons = MessageBox.Button.OK,
-                    Icon = MessageBox.Icon.INFO
-                });
+                MessageBoxes.Info("Invalid Selection", "Select at least one station");
             }
-
         }
         catch (Exception ex)
         {
             Log.Error(ex, "AcceptStations_Click");
+            MessageBoxes.Error(ex, "Unable to save stations");
         }
     }
     #endregion
@@ -235,10 +232,10 @@ public partial class Admin_Site : System.Web.UI.Page
     {
         try
         {
-            RowSelectionModel siteRow = SiteGrid.SelectionModel.Primary as RowSelectionModel;
-            var siteID = siteRow.SelectedRecordID;
+            RowSelectionModel masterRow = SiteGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = masterRow.SelectedRecordID;
             da.SiteOrganisation siteOrganisation = new da.SiteOrganisation();
-            siteOrganisation.SiteID = new Guid(siteID);
+            siteOrganisation.SiteID = new Guid(masterID);
             siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
             siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
@@ -253,6 +250,7 @@ public partial class Admin_Site : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "AcceptOrganisation_Click");
+            MessageBoxes.Error(ex, "Unable to save organisation");
         }
     }
     #endregion

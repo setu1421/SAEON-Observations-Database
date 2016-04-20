@@ -15,16 +15,16 @@ public partial class _Station : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
-            this.ProjectSiteStore.DataSource = new da.ProjectSiteCollection().OrderByAsc(da.ProjectSite.Columns.Name).Load();
-            this.ProjectSiteStore.DataBind();
-            this.SiteStore.DataSource = new da.SiteCollection().OrderByAsc(da.Site.Columns.Name).Load();
-            this.SiteStore.DataBind();
+            ProjectSiteStore.DataSource = new da.ProjectSiteCollection().OrderByAsc(da.ProjectSite.Columns.Name).Load();
+            ProjectSiteStore.DataBind();
+            SiteStore.DataSource = new da.SiteCollection().OrderByAsc(da.Site.Columns.Name).Load();
+            SiteStore.DataBind();
         }
     }
 
     protected void StationStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.StationGrid.GetStore().DataSource = StationRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        StationGrid.GetStore().DataSource = StationRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -95,7 +95,7 @@ public partial class _Station : System.Web.UI.Page
 
         StationGrid.DataBind();
 
-        this.DetailWindow.Hide();
+        DetailWindow.Hide();
     }
 
     protected void StationStore_Submit(object sender, StoreSubmitDataEventArgs e)

@@ -11,7 +11,6 @@
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
-
             ContentPlaceHolder1_SiteGrid.submitData(false);
         };
     </script>
@@ -123,7 +122,7 @@
                                 <SelectionModel>
                                     <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" SingleSelect="true">
                                         <Listeners>
-                                            <RowSelect Fn="SiteRowSelect" Buffer="250" />
+                                            <RowSelect Fn="MasterRowSelect" Buffer="250" />
                                         </Listeners>
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
@@ -159,7 +158,7 @@
                                             <ext:ToolTip ID="ToolTip2" runat="server" Html="Add" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection()){#{AvailableStationsStore}.reload();#{AvailableStationsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Site.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection()){#{AvailableStationsStore}.reload();#{AvailableStationsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
@@ -229,7 +228,7 @@
                                             <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection()){#{OrganisationWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Site.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection()){#{OrganisationWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>

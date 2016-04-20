@@ -27,17 +27,17 @@ function New() {
 
 }
 
-//function StationRowSelect(e, record) {
-//    if (pnlSouth.isVisible())
-//        InstrumentGrid.getStore().reload();
-//    if (pnlEast.isVisible())
-//        OrganisationGrid.getStore().reload();
-//}
+function MasterRowSelect(e, record) {
+    if (pnlSouth.isVisible())
+        InstrumentGrid.getStore().reload();
+    if (pnlEast.isVisible())
+        OrganisationGrid.getStore().reload();
+}
 
-//function CloseAvailableInstruments() {
-//    AvailableInstrumentsGrid.selModel.clearSelections();
-//}
+function CloseAvailableInstruments() {
+    AvailableInstrumentsGrid.selModel.clearSelections();
+}
 
-//function ClearOrganisationForm() {
-//    OrganisationFormPanel.getForm().reset();
-//}
+function ClearOrganisationForm() {
+    OrganisationFormPanel.getForm().reset();
+}

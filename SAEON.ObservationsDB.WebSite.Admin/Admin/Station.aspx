@@ -42,7 +42,7 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
-    <ext:Viewport ID="Viewport1" runat="server" Layout="Fit">
+    <ext:Viewport ID="Viewport1" runat="server" Layout="FitLayout">
         <Items>
             <ext:BorderLayout ID="BorderLayout1" runat="server">
                 <Center MarginsSummary="5 0 0 5">
@@ -171,7 +171,7 @@
     </ext:Viewport>
     <ext:Window ID="DetailWindow" runat="server" Width="700" Height="400" Closable="true"
         Hidden="true" Collapsible="false" Title="Station Detail" Maximizable="false"
-        Layout="Fit" ClientIDMode="Static">
+        Layout="FitLayout" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
                 Padding="10" Width="490" ButtonAlign="Right" MonitorResize="true" Layout="FitLayout" ClientIDMode="Static">

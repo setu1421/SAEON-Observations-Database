@@ -27,7 +27,7 @@ function New() {
 
 }
 
-function SiteRowSelect(e, record) {
+function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible())
         StationGrid.getStore().reload();
     if (pnlEast.isVisible())
