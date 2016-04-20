@@ -90,6 +90,8 @@
     <Compile Include="Generated\AspnetUsersInRoleController.cs" />
     <Compile Include="Generated\AspnetWebEventEvent.cs" />
     <Compile Include="Generated\AspnetWebEventEventController.cs" />
+    <Compile Include="Generated\AuditLog.cs" />
+    <Compile Include="Generated\AuditLogController.cs" />
     <Compile Include="Generated\DataLog.cs" />
     <Compile Include="Generated\DataLogController.cs" />
     <Compile Include="Generated\DataSchema.cs" />

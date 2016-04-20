@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using SubSonic;
 using Serilog;
+using System.Collections.Generic;
 
 public partial class Admin_StationV2 : System.Web.UI.Page
 {
@@ -66,36 +67,38 @@ public partial class Admin_StationV2 : System.Web.UI.Page
     {
         try
         {
-            da.Station stat = new da.Station();
+            da.Station station = new da.Station();
 
             if (String.IsNullOrEmpty(tfID.Text))
-                stat.Id = Guid.NewGuid();
+                station.Id = Guid.NewGuid();
             else
-                stat = new da.Station(tfID.Text.Trim());
+                station = new da.Station(tfID.Text.Trim());
 
             if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                stat.Code = tfCode.Text.Trim();
+                station.Code = tfCode.Text.Trim();
             if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                stat.Name = tfName.Text.Trim();
-            stat.Description = tfDescription.Text.Trim();
-            stat.ProjectSiteID = new Guid(cbProjectSite.SelectedItem.Value.Trim());
-            stat.SiteID = new Guid(cbSite.SelectedItem.Value.Trim());
+                station.Name = tfName.Text.Trim();
+            station.Description = tfDescription.Text.Trim();
+            station.ProjectSiteID = new Guid(cbProjectSite.SelectedItem.Value.Trim());
+            station.SiteID = new Guid(cbSite.SelectedItem.Value.Trim());
 
             if (!string.IsNullOrEmpty(nfLatitude.Text))
-                stat.Latitude = Double.Parse(nfLatitude.Text);
+                station.Latitude = Double.Parse(nfLatitude.Text);
 
             if (!string.IsNullOrEmpty(nfLongitude.Text))
-                stat.Longitude = Double.Parse(nfLongitude.Text);
+                station.Longitude = Double.Parse(nfLongitude.Text);
 
             if (!string.IsNullOrEmpty(nfElevation.Text))
-                stat.Elevation = Int32.Parse(nfElevation.Text);
+                station.Elevation = Int32.Parse(nfElevation.Text);
 
             if (!string.IsNullOrEmpty(tfUrl.Text))
-                stat.Url = tfUrl.Text;
+                station.Url = tfUrl.Text;
 
-            stat.UserId = AuthHelper.GetLoggedInUserId;
+            station.UserId = AuthHelper.GetLoggedInUserId;
 
-            stat.Save();
+            station.Save();
+            Auditing.Log("Station.Save", new Dictionary<string, object> {
+                { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
 
             StationGrid.DataBind();
 
@@ -135,12 +138,15 @@ public partial class Admin_StationV2 : System.Web.UI.Page
                     dataSource.StationID = null;
                     dataSource.UserId = AuthHelper.GetLoggedInUserId;
                     dataSource.Save();
-                    StationGrid.DataBind();
+                    Auditing.Log("Station.DeleteInstrument", new Dictionary<string, object> {
+                        { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
+                    InstrumentGrid.DataBind();
                 }
             }
             else if (ActionType == "RemoveOrganisation")
             {
                 new da.StationOrganisationController().Delete(recordID);
+                Auditing.Log("Station.DeleteOrganisation", new Dictionary<string, object> { { "ID", recordID } });
                 OrganisationGrid.DataBind();
             }
         }
@@ -191,9 +197,9 @@ public partial class Admin_StationV2 : System.Web.UI.Page
         try
         {
             RowSelectionModel sm = AvailableInstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
-            RowSelectionModel masterRow = InstrumentGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel masterRow = StationGrid.SelectionModel.Primary as RowSelectionModel;
 
-            var masterID = masterRow.SelectedRecordID;
+            var masterID = new Guid(masterRow.SelectedRecordID);
             if (sm.SelectedRows.Count > 0)
             {
                 foreach (SelectedRow row in sm.SelectedRows)
@@ -201,9 +207,11 @@ public partial class Admin_StationV2 : System.Web.UI.Page
                     da.DataSource dataSource = new da.DataSource(row.RecordID);
                     if (dataSource != null)
                     {
-                        dataSource.StationID = new Guid(masterID);
+                        dataSource.StationID = masterID;
                         dataSource.UserId = AuthHelper.GetLoggedInUserId;
                         dataSource.Save();
+                        Auditing.Log("Station.AddInstrument", new Dictionary<string, object> {
+                            { "StationID", masterID }, { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
                     }
                 }
                 InstrumentGrid.DataBind();
@@ -247,9 +255,9 @@ public partial class Admin_StationV2 : System.Web.UI.Page
         try
         {
             RowSelectionModel masterRow = StationGrid.SelectionModel.Primary as RowSelectionModel;
-            var stationID = masterRow.SelectedRecordID;
+            var masterID = new Guid(masterRow.SelectedRecordID);
             da.StationOrganisation stationOrganisation = new da.StationOrganisation();
-            stationOrganisation.StationID = new Guid(stationID);
+            stationOrganisation.StationID = masterID;
             stationOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
             stationOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
@@ -258,6 +266,13 @@ public partial class Admin_StationV2 : System.Web.UI.Page
                 stationOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
             stationOrganisation.UserId = AuthHelper.GetLoggedInUserId;
             stationOrganisation.Save();
+            Auditing.Log("Station.AddOrganisation", new Dictionary<string, object> {
+                { "StationID", masterID },
+                { "OrganisationID", stationOrganisation.OrganisationID},
+                { "OrganisationCode", stationOrganisation.Organisation.Code},
+                { "RoleID", stationOrganisation.OrganisationRoleID },
+                { "RoleCode", stationOrganisation.OrganisationRole.Code},
+            });
             OrganisationGrid.DataBind();
             OrganisationWindow.Hide();
         }

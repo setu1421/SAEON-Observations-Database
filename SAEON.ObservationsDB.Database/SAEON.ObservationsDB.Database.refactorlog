@@ -7,4 +7,81 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="fee5307d-8a4a-429b-9921-bf8139f25a56" ChangeDateTime="04/20/2016 10:20:27">
+    <Property Name="ElementName" Value="[dbo].[AuditLog].[When]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AuditLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="WhenHappened" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="231c3cc6-48ee-4187-bb05-d713c8d495c3" ChangeDateTime="04/20/2016 10:20:30">
+    <Property Name="ElementName" Value="[dbo].[AuditLog].[Where]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AuditLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="WhereHappened" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="47ddd230-8ddf-458a-bd1c-014f3805a4a8" ChangeDateTime="04/20/2016 10:20:33">
+    <Property Name="ElementName" Value="[dbo].[AuditLog].[What]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AuditLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="WhatHappened" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="96fcdfa7-cde1-4b86-aa45-f7389ce65f94" ChangeDateTime="04/20/2016 10:21:42">
+    <Property Name="ElementName" Value="[dbo].[AuditLog].[WhereHappened]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AuditLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Location" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2486a920-cb37-4d6e-9bc6-b1a7bb9d3f87" ChangeDateTime="04/20/2016 10:21:52">
+    <Property Name="ElementName" Value="[dbo].[AuditLog].[WhatHappened]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AuditLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="What" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="276a2e24-039a-4bf7-a9ce-cce5ceb4e50c" ChangeDateTime="04/20/2016 10:24:45">
+    <Property Name="ElementName" Value="[dbo].[AuditLog].[WhenHappened]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AuditLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Happened" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="256144d4-2f99-4700-b150-0c257126c337" ChangeDateTime="04/20/2016 10:25:26">
+    <Property Name="ElementName" Value="[dbo].[AuditLog].[Happened]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AuditLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Started" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="43448c07-d402-400f-bf6d-9d87395cfab3" ChangeDateTime="04/20/2016 10:25:38">
+    <Property Name="ElementName" Value="[dbo].[AuditLog].[Started]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AuditLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StartedAt" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="049cdc54-9501-4b6d-a846-45c27db04a39" ChangeDateTime="04/20/2016 10:26:45">
+    <Property Name="ElementName" Value="[dbo].[AuditLog].[StartedAt]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AuditLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LoggedAt" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4ebff796-fe28-4feb-906f-bcee8e078946" ChangeDateTime="04/20/2016 10:30:46">
+    <Property Name="ElementName" Value="[dbo].[AuditLog].[LoggedAt]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AuditLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DateAndTime" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a80503a6-5c20-478a-b2eb-a1fc057457c6" ChangeDateTime="04/20/2016 10:31:16">
+    <Property Name="ElementName" Value="[dbo].[AuditLog].[What]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AuditLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Description" />
+  </Operation>
 </Operations>

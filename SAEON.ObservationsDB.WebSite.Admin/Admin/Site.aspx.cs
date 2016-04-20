@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using SubSonic;
 using Serilog;
+using System.Collections.Generic;
 
 public partial class Admin_Site : System.Web.UI.Page
 {
@@ -83,6 +84,7 @@ public partial class Admin_Site : System.Web.UI.Page
             site.UserId = AuthHelper.GetLoggedInUserId;
 
             site.Save();
+            Auditing.Log("Site.Save", new Dictionary<string, object> { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
 
             SiteGrid.DataBind();
 
@@ -122,12 +124,15 @@ public partial class Admin_Site : System.Web.UI.Page
                     station.SiteID = null;
                     station.UserId = AuthHelper.GetLoggedInUserId;
                     station.Save();
+                    Auditing.Log("Site.DeleteStation", new Dictionary<string, object> {
+                        { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
                     StationGrid.DataBind();
                 }
             }
             else if (ActionType == "RemoveOrganisation")
             {
                 new da.SiteOrganisationController().Delete(recordID);
+                Auditing.Log("Site.DeleteOrganisation", new Dictionary<string, object> { { "ID", recordID } });
                 OrganisationGrid.DataBind();
             }
         }
@@ -180,7 +185,7 @@ public partial class Admin_Site : System.Web.UI.Page
             RowSelectionModel sm = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
             RowSelectionModel masteRow = SiteGrid.SelectionModel.Primary as RowSelectionModel;
 
-            var masterID = masteRow.SelectedRecordID;
+            var masterID = new Guid(masteRow.SelectedRecordID);
             if (sm.SelectedRows.Count > 0)
             {
                 foreach (SelectedRow row in sm.SelectedRows)
@@ -188,9 +193,11 @@ public partial class Admin_Site : System.Web.UI.Page
                     da.Station station = new da.Station(row.RecordID);
                     if (station != null)
                     {
-                        station.SiteID = new Guid(masterID);
+                        station.SiteID = masterID;
                         station.UserId = AuthHelper.GetLoggedInUserId;
                         station.Save();
+                        Auditing.Log("Site.AddStation", new Dictionary<string, object> {
+                            { "SiteID", masterID }, { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
                     }
                 }
                 StationGrid.DataBind();
@@ -233,9 +240,9 @@ public partial class Admin_Site : System.Web.UI.Page
         try
         {
             RowSelectionModel masterRow = SiteGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = masterRow.SelectedRecordID;
+            var masterID = new Guid(masterRow.SelectedRecordID);
             da.SiteOrganisation siteOrganisation = new da.SiteOrganisation();
-            siteOrganisation.SiteID = new Guid(masterID);
+            siteOrganisation.SiteID = masterID;
             siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
             siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
@@ -244,6 +251,13 @@ public partial class Admin_Site : System.Web.UI.Page
                 siteOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
             siteOrganisation.UserId = AuthHelper.GetLoggedInUserId;
             siteOrganisation.Save();
+            Auditing.Log("Site.AddOrganisation", new Dictionary<string, object> {
+                { "SiteID", masterID },
+                { "OrganisationID", siteOrganisation.OrganisationID},
+                { "OrganisationCode", siteOrganisation.Organisation.Code},
+                { "RoleID", siteOrganisation.OrganisationRoleID },
+                { "RoleCode", siteOrganisation.OrganisationRole.Code},
+            });
             OrganisationGrid.DataBind();
             OrganisationWindow.Hide();
         }

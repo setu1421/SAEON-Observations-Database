@@ -18,6 +18,8 @@ namespace SAEON.ObservationsDB.Data
 	public partial struct Tables
 	{
 		
+		public static readonly string RefactorLog = @"__RefactorLog";
+        
 		public static readonly string AspnetApplication = @"aspnet_Applications";
         
 		public static readonly string AspnetMembership = @"aspnet_Membership";
@@ -39,6 +41,8 @@ namespace SAEON.ObservationsDB.Data
 		public static readonly string AspnetUsersInRole = @"aspnet_UsersInRoles";
         
 		public static readonly string AspnetWebEventEvent = @"aspnet_WebEvent_Events";
+        
+		public static readonly string AuditLog = @"AuditLog";
         
 		public static readonly string DataLog = @"DataLog";
         
@@ -97,6 +101,11 @@ namespace SAEON.ObservationsDB.Data
     #region Schemas
     public partial class Schemas {
 		
+		public static TableSchema.Table RefactorLog
+		{
+            get { return DataService.GetSchema("__RefactorLog", "ObservationsDB"); }
+		}
+        
 		public static TableSchema.Table AspnetApplication
 		{
             get { return DataService.GetSchema("aspnet_Applications", "ObservationsDB"); }
@@ -150,6 +159,11 @@ namespace SAEON.ObservationsDB.Data
 		public static TableSchema.Table AspnetWebEventEvent
 		{
             get { return DataService.GetSchema("aspnet_WebEvent_Events", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table AuditLog
+		{
+            get { return DataService.GetSchema("AuditLog", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table DataLog
@@ -290,6 +304,8 @@ namespace SAEON.ObservationsDB.Data
     {
 		
 		public static readonly string ProgressProgressResolved = @"progress_Progress_Resolved";
+        
+		public static readonly string VAuditLog = @"vAuditLog";
         
 		public static readonly string VDataLog = @"vDataLog";
         
