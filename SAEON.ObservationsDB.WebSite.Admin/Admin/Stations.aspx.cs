@@ -6,7 +6,7 @@ using SubSonic;
 using Serilog;
 using System.Collections.Generic;
 
-public partial class Admin_StationV2 : System.Web.UI.Page
+public partial class Admin_Stations : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {

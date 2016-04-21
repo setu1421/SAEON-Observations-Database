@@ -1,8 +1,7 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="DataSource.aspx.cs" Inherits="_DataSource"
-    MasterPageFile="~/Site.master" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="DataSource.aspx.cs" Inherits="_DataSource"   MasterPageFile="~/Site.master" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/DataSource.js?i=1"></script>
+    <script type="text/javascript" src="../JS/DataSource.js"></script>
     <script type="text/javascript" src="../JS/generic.js"></script>
     <script type="text/javascript">
         var submitValue = function (format)
@@ -389,13 +388,7 @@
                             </ext:Container>
                         </Items>
                     </ext:Container>
-                    <%--    <ext:Container ID="Container8" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
-                        <Items>
-                           
-                        </Items>
-                    </ext:Container>--%>
-                    <ext:Container ID="Container4" runat="server" Border="false" Header="false" Layout="Form"
+                    <ext:Container ID="Container4" runat="server" Layout="Form"
                         LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
@@ -530,7 +523,7 @@
                             </ext:DateField>
                         </Items>
                     </ext:Container><%--Format="dd/MM/yyyy"--%>
-                    <ext:Container ID="Container10" runat="server" Border="false" Header="false" Layout="Form"
+                    <ext:Container ID="Container10" runat="server" Layout="Form"
                         LabelAlign="Top">
                         <Items>
                             <ext:TextArea ID="tfDefinition" DataIndex="Definition" runat="server" AllowBlank="false"
@@ -542,7 +535,7 @@
                         </Items>
                     </ext:Container>
                     <%--=============--%>
-                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form"
+                    <ext:Panel ID="Panel2" runat="server" Layout="Form"
                         LabelAlign="Top">
                         <Items>
                             <ext:SelectBox ID="sbNewOffering" runat="server" DataIndex="NewPhenomenonOfferingID" DisplayField="Name"

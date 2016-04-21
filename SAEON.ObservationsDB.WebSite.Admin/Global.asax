@@ -1,5 +1,6 @@
 ﻿<%@ Application Language="C#" %>
 <%@ Import Namespace="Serilog" %>
+<%@ Import Namespace="System.Web.Routing" %>
 
 <script RunAt="server">
 
@@ -11,6 +12,7 @@
             .WriteTo.ColoredConsole()
             .WriteTo.RollingFile(Server.MapPath(@"~/App_Data/Logs/Log-{Date}.txt"))
             .CreateLogger();
+        RouteConfig.RegisterRoutes(RouteTable.Routes);
     }
 
     void Application_End(object sender, EventArgs e)
