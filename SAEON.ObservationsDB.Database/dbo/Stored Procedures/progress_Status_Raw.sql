@@ -22,7 +22,10 @@ BEGIN
     [Observations] [bigint],
     [UserId] [uniqueidentifier],
     [SensorProcedureID] [uniqueidentifier],
-    [PhenonmenonOfferingID] [uniqueidentifier]
+--> Changed 2.0.0.3 20160421 TimPN
+--    [PhenonmenonOfferingID] [uniqueidentifier]
+    [PhenomenonOfferingID] [uniqueidentifier]
+--< Changed 2.0.0.3 20160421 TimPN
     )
 
     -- Insert statements for procedure here
@@ -35,7 +38,10 @@ BEGIN
     [Observations],
     [UserId],
     [SensorProcedureID],
-    [PhenonmenonOfferingID]
+--> Changed 2.0.0.3 20160421 TimPN
+--    [PhenonmenonOfferingID]
+    [PhenomenonOfferingID]
+--< Changed 2.0.0.3 20160421 TimPN
     )
    
     SELECT     
