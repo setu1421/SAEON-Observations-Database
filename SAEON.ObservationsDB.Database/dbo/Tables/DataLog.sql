@@ -18,7 +18,10 @@
     [ImportStatus]               VARCHAR (500)    NOT NULL,
     [UserId]                     UNIQUEIDENTIFIER NULL,
     [PhenomenonOfferingID]       UNIQUEIDENTIFIER NULL,
-    [PhenonmenonUOMID]           UNIQUEIDENTIFIER NULL,
+--> Changed 2.0.0.3 20160421 TimPN
+--    [PhenonmenonUOMID]           UNIQUEIDENTIFIER NULL,
+    [PhenomenonUOMID]           UNIQUEIDENTIFIER NULL,
+--< Changed 2.0.0.3 20160421 TimPN
     [ImportBatchID]              INT              NOT NULL,
     [RawRecordData]              VARCHAR (500)    NULL,
     [RawFieldValue]              VARCHAR (50)     NOT NULL,
@@ -27,7 +30,7 @@
     CONSTRAINT [FK_DataLog_DataSourceTransformation] FOREIGN KEY ([DataSourceTransformationID]) REFERENCES [dbo].[DataSourceTransformation] ([ID]),
     CONSTRAINT [FK_DataLog_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]),
     CONSTRAINT [FK_DataLog_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
-    CONSTRAINT [FK_DataLog_PhenomenonUOM] FOREIGN KEY ([PhenonmenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
+    CONSTRAINT [FK_DataLog_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
     CONSTRAINT [FK_DataLog_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID]),
     CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID])
 );
@@ -41,7 +44,7 @@ CREATE INDEX [IX_DataLog_DataSourceTransformationID] ON [dbo].[DataLog] ([DataSo
 GO
 CREATE INDEX [IX_DataLog_PhenomenonOfferingID] ON [dbo].[DataLog] ([PhenomenonOfferingID])
 GO
-CREATE INDEX [IX_DataLog_PhenomenonUOMID] ON [dbo].[DataLog] ([PhenonmenonUOMID])
+CREATE INDEX [IX_DataLog_PhenomenonUOMID] ON [dbo].[DataLog] ([PhenomenonUOMID])
 GO
 CREATE INDEX [IX_DataLog_StatusID] ON [dbo].[DataLog] ([StatusID])
 GO

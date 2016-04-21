@@ -5,7 +5,10 @@
     [RawValue]              FLOAT (53)       NULL,
     [DataValue]             FLOAT (53)       NULL,
     [Comment]               VARCHAR (250)    NULL,
-    [PhenonmenonOfferingID] UNIQUEIDENTIFIER NOT NULL,
+--> Changed 2.0.0.3 20160421 TimPN
+--    [PhenonmenonOfferingID] UNIQUEIDENTIFIER NOT NULL,
+    [PhenomenonOfferingID] UNIQUEIDENTIFIER NOT NULL,
+--< Changed 2.0.0.3 20160421 TimPN
     [PhenonmenonUOMID]      UNIQUEIDENTIFIER NOT NULL,
     [ImportBatchID]         INT              NOT NULL,
     [UserId]                UNIQUEIDENTIFIER NOT NULL,
@@ -13,7 +16,7 @@
     CONSTRAINT [PK_Observation] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Observation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_Observation_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]),
-    CONSTRAINT [FK_Observation_PhenomenonOffering] FOREIGN KEY ([PhenonmenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
+    CONSTRAINT [FK_Observation_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
     CONSTRAINT [FK_Observation_PhenomenonUOM] FOREIGN KEY ([PhenonmenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
     CONSTRAINT [FK_Observation_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID])
 );
@@ -28,7 +31,7 @@ CREATE INDEX [IX_Observation_ImportBatchID] ON [dbo].[Observation]([ImportBatchI
 GO
 CREATE INDEX [IX_Observation_SensorProcedureID] ON [dbo].[Observation] ([SensorProcedureID])
 GO
-CREATE INDEX [IX_Observation_PhenomenonOfferingID] ON [dbo].[Observation] ([PhenonmenonOfferingID])
+CREATE INDEX [IX_Observation_PhenomenonOfferingID] ON [dbo].[Observation] ([PhenomenonOfferingID])
 GO
 CREATE INDEX [IX_Observation_PhenomenonUOMID] ON [dbo].[Observation] ([PhenonmenonUOMID])
 GO

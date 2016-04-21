@@ -9,8 +9,10 @@ CREATE TABLE [dbo].[Site]
     [StartDate] DATETIME NULL, 
     [EndDate] DATETIME NULL, 
     [UserId] UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt] DATETIME NULL DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL DEFAULT GetDate(), 
+--> Added 2.0.0.3 20160421 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_Site_AddedAt] DEFAULT GetDate(), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Site_UpdatedAt] DEFAULT GetDate(), 
+--< Added 2.0.0.3 20160421 TimPN
     CONSTRAINT [PK_Site] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_Site_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_Site_Name] UNIQUE ([Name]),
@@ -21,20 +23,35 @@ GO
 CREATE INDEX [IX_Site_UserId] ON [dbo].[Site] ([UserId])
 --< Added 2.0.0.1 20160406 TimPN
 
-GO
 --> Added 2.0.0.3 20160421 TimPN
-
+GO
 CREATE TRIGGER [dbo].[TR_Site_Insert] ON [dbo].[Site]
 FOR INSERT
 AS
 BEGIN
     SET NoCount ON
-	Update 
-		Site 
-	set 
-		AddedAt = GETDATE()
-	from
-		inserted i 
-		inner join Site s
-			on (i.ID = s.ID)
+    Update 
+        src 
+    set 
+        AddedAt = GETDATE()
+    from
+        inserted ins 
+        inner join Site src
+            on (ins.ID = src.ID)
 END
+GO
+CREATE TRIGGER [dbo].[TR_Site_Update] ON [dbo].[Site]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        UpdatedAt = GETDATE()
+    from
+        inserted ins 
+        inner join Site src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.0.3 20160421 TimPN

@@ -1,6 +1,9 @@
 ﻿CREATE VIEW [dbo].[vObservationRoles]
 AS
-SELECT     vo.ID, vo.SensorProcedureID, vo.PhenonmenonOfferingID, vo.PhenonmenonUOMID, vo.UserId, vo.RawValue, vo.DataValue, vo.ImportBatchID, vo.ValueDate, 
+--> Changed 2.0.0.3 20160421 TimPN
+--SELECT     vo.ID, vo.SensorProcedureID, vo.PhenonmenonOfferingID, vo.PhenonmenonUOMID, vo.UserId, vo.RawValue, vo.DataValue, vo.ImportBatchID, vo.ValueDate, 
+SELECT     vo.ID, vo.SensorProcedureID, vo.PhenomenonOfferingID, vo.PhenonmenonUOMID, vo.UserId, vo.RawValue, vo.DataValue, vo.ImportBatchID, vo.ValueDate, 
+--> Changed 2.0.0.3 20160421 TimPN
                       vo.spCode, vo.spDesc, vo.spName, vo.spURL, vo.DataSchemaID, vo.DataSourceID, vo.PhenomenonID, vo.StationID, vo.phName, vo.stName, vo.dsName, 
                       vo.dschemaName, vo.offName, vo.offID, vo.psName, vo.psID, vo.orgName, vo.orgID, vo.uomUnit, vo.uomSymbol, vo.UserName,
                       dr.DataSourceID AS Expr2, dr.DateStart, dr.DateEnd,
