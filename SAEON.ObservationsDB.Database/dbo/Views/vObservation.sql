@@ -2,7 +2,7 @@
 AS
 --> Changed 2.0.0.3 20160421 TimPN
 --SELECT     o.ID, o.SensorProcedureID, o.PhenonmenonOfferingID, o.PhenonmenonUOMID, o.UserId, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, 
-SELECT     o.ID, o.SensorProcedureID, o.PhenomenonOfferingID, o.PhenonmenonUOMID, o.UserId, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, 
+SELECT     o.ID, o.SensorProcedureID, o.PhenomenonOfferingID, o.PhenomenonUOMID, o.UserId, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, 
 --< Changed 2.0.0.3 20160421 TimPN
                       sp.Code AS spCode, sp.Description AS spDesc, sp.Name AS spName, sp.Url AS spURL, sp.DataSchemaID, sp.DataSourceID, sp.PhenomenonID, sp.StationID, 
                       ph.Name AS phName, st.Name AS stName, ds.Name AS dsName, ISNULL(dschema.Name,dschema1.Name) AS dschemaName, offer.Name AS offName, offer.ID AS offID, ps.Name AS psName, 
@@ -16,7 +16,10 @@ FROM         dbo.Observation AS o INNER JOIN
                       dbo.PhenomenonOffering AS phOff ON phOff.ID = o.PhenomenonOfferingID INNER JOIN  
 --< Changed 2.0.0.3 20160421 TimPN
                       dbo.Offering AS offer ON offer.ID = phOff.OfferingID INNER JOIN
-                      dbo.PhenomenonUOM AS puom ON puom.ID = o.PhenonmenonUOMID INNER JOIN
+--> Changed 2.0.0.3 20160421 TimPN
+--                      dbo.PhenomenonUOM AS puom ON puom.ID = o.PhenonmenonUOMID INNER JOIN
+                      dbo.PhenomenonUOM AS puom ON puom.ID = o.PhenomenonUOMID INNER JOIN
+--< Changed 2.0.0.3 20160421 TimPN
                       dbo.Station AS st ON st.ID = sp.StationID INNER JOIN
                       dbo.DataSource AS ds ON ds.ID = sp.DataSourceID LEFT JOIN
                       dbo.DataSchema AS dschema1 ON dschema1.ID = ds.DataSchemaID LEFT JOIN

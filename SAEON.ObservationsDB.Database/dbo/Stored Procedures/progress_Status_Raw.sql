@@ -53,6 +53,6 @@ BEGIN
 FROM    dbo.Observation
 --> Changed 2.0.0.3 20160421 TimPN
 --GROUP BY PhenonmenonOfferingID, PhenonmenonUOMID, ImportBatchID, UserId, SensorProcedureID
-GROUP BY PhenomenonOfferingID, PhenonmenonUOMID, ImportBatchID, UserId, SensorProcedureID
+GROUP BY PhenomenonOfferingID, PhenomenonUOMID, ImportBatchID, UserId, SensorProcedureID
 --< Changed 2.0.0.3 20160421 TimPN
 END
