@@ -7,13 +7,12 @@
         var submitValue = function (format)
         {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
-            //VisCols.setValue(Ext.encode(DataSourceGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-            var viscolsNew = makenewJsonForExport(DataSourceGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            //VisCols.setValue(Ext.encode(InstrumentGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
+            var viscolsNew = makenewJsonForExport(InstrumentGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
-
-            DataSourceGrid.submitData(false);
+            InstrumentGrid.submitData(false);
         };
     </script>
 </asp:Content>
@@ -114,7 +113,7 @@
                                 <SelectionModel>
                                     <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" SingleSelect="true">
                                         <Listeners>
-                                            <RowSelect Fn="DataSourceRowSelect" Buffer="250" />
+                                            <RowSelect Fn="MasterRowSelect" Buffer="250" />
                                         </Listeners>
                                     </ext:RowSelectionModel>
                                 </SelectionModel>

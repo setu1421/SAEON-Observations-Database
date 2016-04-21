@@ -56,7 +56,8 @@ BEGIN
     Update 
         src 
     set 
-        AddedAt = GETDATE()
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
     from
         inserted ins 
         inner join Site src
@@ -68,13 +69,16 @@ FOR UPDATE
 AS
 BEGIN
     SET NoCount ON
-    Update 
-        src 
-    set 
-        UpdatedAt = GETDATE()
-    from
-        inserted ins 
-        inner join Station src
-            on (ins.ID = src.ID)
+    if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    if UPDATE(UpdatedAt) RAISERROR ('Cannot update UpdatedAt.', 16, 1)
+    if not UPDATE(AddedAt) and not UPDATE(UpdatedAt)
+        Update 
+            src 
+        set 
+            UpdatedAt = GETDATE()
+        from
+            inserted ins 
+            inner join Station src
+                on (ins.ID = src.ID)
 END
 --< Added 2.0.0.3 20160421 TimPN
