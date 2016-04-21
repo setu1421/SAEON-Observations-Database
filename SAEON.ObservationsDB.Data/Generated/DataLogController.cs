@@ -80,7 +80,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid? SensorProcedureID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenonmenonUOMID,int ImportBatchID,string RawRecordData,string RawFieldValue)
+	    public void Insert(Guid? SensorProcedureID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,int ImportBatchID,string RawRecordData,string RawFieldValue)
 	    {
 		    DataLog item = new DataLog();
 		    
@@ -120,7 +120,7 @@ namespace SAEON.ObservationsDB.Data
             
             item.PhenomenonOfferingID = PhenomenonOfferingID;
             
-            item.PhenonmenonUOMID = PhenonmenonUOMID;
+            item.PhenomenonUOMID = PhenomenonUOMID;
             
             item.ImportBatchID = ImportBatchID;
             
@@ -136,7 +136,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(int Id,Guid? SensorProcedureID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenonmenonUOMID,int ImportBatchID,string RawRecordData,string RawFieldValue)
+	    public void Update(int Id,Guid? SensorProcedureID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,int ImportBatchID,string RawRecordData,string RawFieldValue)
 	    {
 		    DataLog item = new DataLog();
 	        item.MarkOld();
@@ -180,7 +180,7 @@ namespace SAEON.ObservationsDB.Data
 				
 			item.PhenomenonOfferingID = PhenomenonOfferingID;
 				
-			item.PhenonmenonUOMID = PhenonmenonUOMID;
+			item.PhenomenonUOMID = PhenomenonUOMID;
 				
 			item.ImportBatchID = ImportBatchID;
 				

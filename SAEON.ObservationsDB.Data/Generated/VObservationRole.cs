@@ -81,29 +81,29 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarSensorProcedureID);
                 
-                TableSchema.TableColumn colvarPhenonmenonOfferingID = new TableSchema.TableColumn(schema);
-                colvarPhenonmenonOfferingID.ColumnName = "PhenonmenonOfferingID";
-                colvarPhenonmenonOfferingID.DataType = DbType.Guid;
-                colvarPhenonmenonOfferingID.MaxLength = 0;
-                colvarPhenonmenonOfferingID.AutoIncrement = false;
-                colvarPhenonmenonOfferingID.IsNullable = false;
-                colvarPhenonmenonOfferingID.IsPrimaryKey = false;
-                colvarPhenonmenonOfferingID.IsForeignKey = false;
-                colvarPhenonmenonOfferingID.IsReadOnly = false;
+                TableSchema.TableColumn colvarPhenomenonOfferingID = new TableSchema.TableColumn(schema);
+                colvarPhenomenonOfferingID.ColumnName = "PhenomenonOfferingID";
+                colvarPhenomenonOfferingID.DataType = DbType.Guid;
+                colvarPhenomenonOfferingID.MaxLength = 0;
+                colvarPhenomenonOfferingID.AutoIncrement = false;
+                colvarPhenomenonOfferingID.IsNullable = false;
+                colvarPhenomenonOfferingID.IsPrimaryKey = false;
+                colvarPhenomenonOfferingID.IsForeignKey = false;
+                colvarPhenomenonOfferingID.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarPhenonmenonOfferingID);
+                schema.Columns.Add(colvarPhenomenonOfferingID);
                 
-                TableSchema.TableColumn colvarPhenonmenonUOMID = new TableSchema.TableColumn(schema);
-                colvarPhenonmenonUOMID.ColumnName = "PhenonmenonUOMID";
-                colvarPhenonmenonUOMID.DataType = DbType.Guid;
-                colvarPhenonmenonUOMID.MaxLength = 0;
-                colvarPhenonmenonUOMID.AutoIncrement = false;
-                colvarPhenonmenonUOMID.IsNullable = false;
-                colvarPhenonmenonUOMID.IsPrimaryKey = false;
-                colvarPhenonmenonUOMID.IsForeignKey = false;
-                colvarPhenonmenonUOMID.IsReadOnly = false;
+                TableSchema.TableColumn colvarPhenomenonUOMID = new TableSchema.TableColumn(schema);
+                colvarPhenomenonUOMID.ColumnName = "PhenomenonUOMID";
+                colvarPhenomenonUOMID.DataType = DbType.Guid;
+                colvarPhenomenonUOMID.MaxLength = 0;
+                colvarPhenomenonUOMID.AutoIncrement = false;
+                colvarPhenomenonUOMID.IsNullable = false;
+                colvarPhenomenonUOMID.IsPrimaryKey = false;
+                colvarPhenomenonUOMID.IsForeignKey = false;
+                colvarPhenomenonUOMID.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarPhenonmenonUOMID);
+                schema.Columns.Add(colvarPhenomenonUOMID);
                 
                 TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
                 colvarUserId.ColumnName = "UserId";
@@ -555,31 +555,31 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
-        [XmlAttribute("PhenonmenonOfferingID")]
+        [XmlAttribute("PhenomenonOfferingID")]
         [Bindable(true)]
-        public Guid PhenonmenonOfferingID 
+        public Guid PhenomenonOfferingID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid>("PhenonmenonOfferingID");
+			    return GetColumnValue<Guid>("PhenomenonOfferingID");
 		    }
             set 
 		    {
-			    SetColumnValue("PhenonmenonOfferingID", value);
+			    SetColumnValue("PhenomenonOfferingID", value);
             }
         }
 	      
-        [XmlAttribute("PhenonmenonUOMID")]
+        [XmlAttribute("PhenomenonUOMID")]
         [Bindable(true)]
-        public Guid PhenonmenonUOMID 
+        public Guid PhenomenonUOMID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid>("PhenonmenonUOMID");
+			    return GetColumnValue<Guid>("PhenomenonUOMID");
 		    }
             set 
 		    {
-			    SetColumnValue("PhenonmenonUOMID", value);
+			    SetColumnValue("PhenomenonUOMID", value);
             }
         }
 	      
@@ -1028,9 +1028,9 @@ namespace SAEON.ObservationsDB.Data{
             
             public static string SensorProcedureID = @"SensorProcedureID";
             
-            public static string PhenonmenonOfferingID = @"PhenonmenonOfferingID";
+            public static string PhenomenonOfferingID = @"PhenomenonOfferingID";
             
-            public static string PhenonmenonUOMID = @"PhenonmenonUOMID";
+            public static string PhenomenonUOMID = @"PhenomenonUOMID";
             
             public static string UserId = @"UserId";
             

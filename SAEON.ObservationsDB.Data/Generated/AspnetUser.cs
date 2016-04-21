@@ -376,13 +376,13 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.AspnetMembershipCollection().Where(AspnetMembership.Columns.UserId, UserId).Load();
 		}
-		public SAEON.ObservationsDB.Data.AuditLogCollection AuditLogRecords()
-		{
-			return new SAEON.ObservationsDB.Data.AuditLogCollection().Where(AuditLog.Columns.UserId, UserId).Load();
-		}
 		public SAEON.ObservationsDB.Data.ProjectSiteCollection ProjectSiteRecords()
 		{
 			return new SAEON.ObservationsDB.Data.ProjectSiteCollection().Where(ProjectSite.Columns.UserId, UserId).Load();
+		}
+		public SAEON.ObservationsDB.Data.AuditLogCollection AuditLogRecords()
+		{
+			return new SAEON.ObservationsDB.Data.AuditLogCollection().Where(AuditLog.Columns.UserId, UserId).Load();
 		}
 		public SAEON.ObservationsDB.Data.AspnetProfileCollection AspnetProfileRecords()
 		{

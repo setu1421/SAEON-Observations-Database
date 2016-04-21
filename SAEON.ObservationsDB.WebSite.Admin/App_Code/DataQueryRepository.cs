@@ -58,7 +58,7 @@ public class DataQueryRepository:BaseRepository
 		//    q.Or(VObservation.Columns.PhenomenonID).In(phenomenon);
 
 		//if (offerings.Count > 0)
-		//    q.Or(VObservation.Columns.PhenonmenonOfferingID).In(offerings);
+		//    q.Or(VObservation.Columns.PhenomenonOfferingID).In(offerings);
 
         //GetPagedQuery(ref q, e, paramPrefix);
 		

@@ -247,7 +247,7 @@ namespace SAEON.ObservationsDB.Data
 		}
 		public SAEON.ObservationsDB.Data.ObservationCollection ObservationRecords()
 		{
-			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.PhenonmenonOfferingID, Id).Load();
+			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.PhenomenonOfferingID, Id).Load();
 		}
 		#endregion
 		

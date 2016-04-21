@@ -172,7 +172,7 @@
                                                     <ext:RecordField Name="Unit" Type="String" />
                                                     <ext:RecordField Name="PhenomenonOfferingID" Type="Auto" />
                                                     <ext:RecordField Name="OfferingInvalid" Type="Boolean" />
-                                                    <ext:RecordField Name="PhenonmenonUOMID" Type="Auto" />
+                                                    <ext:RecordField Name="PhenomenonUOMID" Type="Auto" />
                                                     <ext:RecordField Name="UOMInvalid" Type="Boolean" />
                                                     <ext:RecordField Name="RawFieldValue" Type="String" />
                                                     <ext:RecordField Name="Status" Type="String" />
@@ -265,7 +265,7 @@
                                             </Commands>
                                             <PrepareCommand Fn="prepareCommand" />
                                         </ext:Column>
-                                        <ext:Column Header="UOM ID" DataIndex="PhenonmenonUOMID" Width="150" Hidden="true" />
+                                        <ext:Column Header="UOM ID" DataIndex="PhenomenonUOMID" Width="150" Hidden="true" />
                                         <ext:CheckColumn Locked="true" Header="UOM Invalid" DataIndex="UOMInvalid" Width="30"
                                             Hidden="true" />
                                         <ext:Column Header="Unit" DataIndex="Unit" Width="150">
@@ -524,7 +524,7 @@
                     <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="RowLayout"
                         LabelAlign="Top">
                         <Items>
-                            <ext:ComboBox ID="cbUnitofMeasure" runat="server" DataIndex="PhenonmenonUOMID" DisplayField="Unit"
+                            <ext:ComboBox ID="cbUnitofMeasure" runat="server" DataIndex="PhenomenonUOMID" DisplayField="Unit"
                                 AllowBlank="false" BlankText="Offering is required" MsgTarget="Side" ForceSelection="true"
                                 ValueField="ID" FieldLabel="Unit of Measure" EmptyText="Please select" ValueNotFoundText="Please select"
                                 AnchorHorizontal="95%" ClientIDMode="Static">

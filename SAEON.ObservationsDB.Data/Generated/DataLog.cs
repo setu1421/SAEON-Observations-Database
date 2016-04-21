@@ -379,19 +379,19 @@ namespace SAEON.ObservationsDB.Data
 					colvarPhenomenonOfferingID.ForeignKeyTableName = "PhenomenonOffering";
 				schema.Columns.Add(colvarPhenomenonOfferingID);
 				
-				TableSchema.TableColumn colvarPhenonmenonUOMID = new TableSchema.TableColumn(schema);
-				colvarPhenonmenonUOMID.ColumnName = "PhenonmenonUOMID";
-				colvarPhenonmenonUOMID.DataType = DbType.Guid;
-				colvarPhenonmenonUOMID.MaxLength = 0;
-				colvarPhenonmenonUOMID.AutoIncrement = false;
-				colvarPhenonmenonUOMID.IsNullable = true;
-				colvarPhenonmenonUOMID.IsPrimaryKey = false;
-				colvarPhenonmenonUOMID.IsForeignKey = true;
-				colvarPhenonmenonUOMID.IsReadOnly = false;
-				colvarPhenonmenonUOMID.DefaultSetting = @"";
+				TableSchema.TableColumn colvarPhenomenonUOMID = new TableSchema.TableColumn(schema);
+				colvarPhenomenonUOMID.ColumnName = "PhenomenonUOMID";
+				colvarPhenomenonUOMID.DataType = DbType.Guid;
+				colvarPhenomenonUOMID.MaxLength = 0;
+				colvarPhenomenonUOMID.AutoIncrement = false;
+				colvarPhenomenonUOMID.IsNullable = true;
+				colvarPhenomenonUOMID.IsPrimaryKey = false;
+				colvarPhenomenonUOMID.IsForeignKey = true;
+				colvarPhenomenonUOMID.IsReadOnly = false;
+				colvarPhenomenonUOMID.DefaultSetting = @"";
 				
-					colvarPhenonmenonUOMID.ForeignKeyTableName = "PhenomenonUOM";
-				schema.Columns.Add(colvarPhenonmenonUOMID);
+					colvarPhenomenonUOMID.ForeignKeyTableName = "PhenomenonUOM";
+				schema.Columns.Add(colvarPhenomenonUOMID);
 				
 				TableSchema.TableColumn colvarImportBatchID = new TableSchema.TableColumn(schema);
 				colvarImportBatchID.ColumnName = "ImportBatchID";
@@ -595,12 +595,12 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.PhenomenonOfferingID, value); }
 		}
 		  
-		[XmlAttribute("PhenonmenonUOMID")]
+		[XmlAttribute("PhenomenonUOMID")]
 		[Bindable(true)]
-		public Guid? PhenonmenonUOMID 
+		public Guid? PhenomenonUOMID 
 		{
-			get { return GetColumnValue<Guid?>(Columns.PhenonmenonUOMID); }
-			set { SetColumnValue(Columns.PhenonmenonUOMID, value); }
+			get { return GetColumnValue<Guid?>(Columns.PhenomenonUOMID); }
+			set { SetColumnValue(Columns.PhenomenonUOMID, value); }
 		}
 		  
 		[XmlAttribute("ImportBatchID")]
@@ -684,8 +684,8 @@ namespace SAEON.ObservationsDB.Data
 		/// </summary>
 		public SAEON.ObservationsDB.Data.PhenomenonUOM PhenomenonUOM
 		{
-			get { return SAEON.ObservationsDB.Data.PhenomenonUOM.FetchByID(this.PhenonmenonUOMID); }
-			set { SetColumnValue("PhenonmenonUOMID", value.Id); }
+			get { return SAEON.ObservationsDB.Data.PhenomenonUOM.FetchByID(this.PhenomenonUOMID); }
+			set { SetColumnValue("PhenomenonUOMID", value.Id); }
 		}
 		
 		
@@ -725,7 +725,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid? varSensorProcedureID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenonmenonUOMID,int varImportBatchID,string varRawRecordData,string varRawFieldValue)
+		public static void Insert(Guid? varSensorProcedureID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,int varImportBatchID,string varRawRecordData,string varRawFieldValue)
 		{
 			DataLog item = new DataLog();
 			
@@ -765,7 +765,7 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.PhenomenonOfferingID = varPhenomenonOfferingID;
 			
-			item.PhenonmenonUOMID = varPhenonmenonUOMID;
+			item.PhenomenonUOMID = varPhenomenonUOMID;
 			
 			item.ImportBatchID = varImportBatchID;
 			
@@ -783,7 +783,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(int varId,Guid? varSensorProcedureID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenonmenonUOMID,int varImportBatchID,string varRawRecordData,string varRawFieldValue)
+		public static void Update(int varId,Guid? varSensorProcedureID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,int varImportBatchID,string varRawRecordData,string varRawFieldValue)
 		{
 			DataLog item = new DataLog();
 			
@@ -825,7 +825,7 @@ namespace SAEON.ObservationsDB.Data
 			
 				item.PhenomenonOfferingID = varPhenomenonOfferingID;
 			
-				item.PhenonmenonUOMID = varPhenonmenonUOMID;
+				item.PhenomenonUOMID = varPhenomenonUOMID;
 			
 				item.ImportBatchID = varImportBatchID;
 			
@@ -979,7 +979,7 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn PhenonmenonUOMIDColumn
+        public static TableSchema.TableColumn PhenomenonUOMIDColumn
         {
             get { return Schema.Columns[19]; }
         }
@@ -1030,7 +1030,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string ImportStatus = @"ImportStatus";
 			 public static string UserId = @"UserId";
 			 public static string PhenomenonOfferingID = @"PhenomenonOfferingID";
-			 public static string PhenonmenonUOMID = @"PhenonmenonUOMID";
+			 public static string PhenomenonUOMID = @"PhenomenonUOMID";
 			 public static string ImportBatchID = @"ImportBatchID";
 			 public static string RawRecordData = @"RawRecordData";
 			 public static string RawFieldValue = @"RawFieldValue";

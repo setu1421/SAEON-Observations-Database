@@ -321,17 +321,17 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarOfferingInvalid);
                 
-                TableSchema.TableColumn colvarPhenonmenonUOMID = new TableSchema.TableColumn(schema);
-                colvarPhenonmenonUOMID.ColumnName = "PhenonmenonUOMID";
-                colvarPhenonmenonUOMID.DataType = DbType.Guid;
-                colvarPhenonmenonUOMID.MaxLength = 0;
-                colvarPhenonmenonUOMID.AutoIncrement = false;
-                colvarPhenonmenonUOMID.IsNullable = true;
-                colvarPhenonmenonUOMID.IsPrimaryKey = false;
-                colvarPhenonmenonUOMID.IsForeignKey = false;
-                colvarPhenonmenonUOMID.IsReadOnly = false;
+                TableSchema.TableColumn colvarPhenomenonUOMID = new TableSchema.TableColumn(schema);
+                colvarPhenomenonUOMID.ColumnName = "PhenomenonUOMID";
+                colvarPhenomenonUOMID.DataType = DbType.Guid;
+                colvarPhenomenonUOMID.MaxLength = 0;
+                colvarPhenomenonUOMID.AutoIncrement = false;
+                colvarPhenomenonUOMID.IsNullable = true;
+                colvarPhenomenonUOMID.IsPrimaryKey = false;
+                colvarPhenomenonUOMID.IsForeignKey = false;
+                colvarPhenomenonUOMID.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarPhenonmenonUOMID);
+                schema.Columns.Add(colvarPhenomenonUOMID);
                 
                 TableSchema.TableColumn colvarUOMInvalid = new TableSchema.TableColumn(schema);
                 colvarUOMInvalid.ColumnName = "UOMInvalid";
@@ -823,17 +823,17 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
-        [XmlAttribute("PhenonmenonUOMID")]
+        [XmlAttribute("PhenomenonUOMID")]
         [Bindable(true)]
-        public Guid? PhenonmenonUOMID 
+        public Guid? PhenomenonUOMID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid?>("PhenonmenonUOMID");
+			    return GetColumnValue<Guid?>("PhenomenonUOMID");
 		    }
             set 
 		    {
-			    SetColumnValue("PhenonmenonUOMID", value);
+			    SetColumnValue("PhenomenonUOMID", value);
             }
         }
 	      
@@ -1042,7 +1042,7 @@ namespace SAEON.ObservationsDB.Data{
             
             public static string OfferingInvalid = @"OfferingInvalid";
             
-            public static string PhenonmenonUOMID = @"PhenonmenonUOMID";
+            public static string PhenomenonUOMID = @"PhenomenonUOMID";
             
             public static string UOMInvalid = @"UOMInvalid";
             

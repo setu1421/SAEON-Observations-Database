@@ -258,7 +258,7 @@ public partial class _Phenomenon : System.Web.UI.Page
                 .Where(PhenomenonOffering.Columns.PhenomenonID, phenomenonID).Load();
             if (phenOffCol.Count == 1)
             {
-                ObservationCollection obsCol = new ObservationCollection().Where(Observation.Columns.PhenonmenonOfferingID, phenOffCol[0].Id).Load();
+                ObservationCollection obsCol = new ObservationCollection().Where(Observation.Columns.PhenomenonOfferingID, phenOffCol[0].Id).Load();
                 DataLogCollection dataLogCol = new DataLogCollection().Where(DataLog.Columns.PhenomenonOfferingID, phenOffCol[0].Id).Load();
                 if (obsCol.Count == 0 && dataLogCol.Count == 0)
                 {
@@ -285,8 +285,8 @@ public partial class _Phenomenon : System.Web.UI.Page
                 .Where(PhenomenonUOM.Columns.PhenomenonID, phenomenonID).Load();
             if (phenUOMCol.Count == 1)
             {
-                ObservationCollection obsCol = new ObservationCollection().Where(Observation.Columns.PhenonmenonUOMID, phenUOMCol[0].Id).Load();
-                DataLogCollection dataLogCol = new DataLogCollection().Where(DataLog.Columns.PhenonmenonUOMID, phenUOMCol[0].Id).Load();
+                ObservationCollection obsCol = new ObservationCollection().Where(Observation.Columns.PhenomenonUOMID, phenUOMCol[0].Id).Load();
+                DataLogCollection dataLogCol = new DataLogCollection().Where(DataLog.Columns.PhenomenonUOMID, phenUOMCol[0].Id).Load();
                 if (obsCol.Count == 0 && dataLogCol.Count == 0)
                 {
                     PhenomenonUOM.Delete(phenUOMCol[0].Id);

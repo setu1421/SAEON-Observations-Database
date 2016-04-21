@@ -140,20 +140,6 @@ namespace SAEON.ObservationsDB.Data
 				colvarId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarId);
 				
-				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
-				colvarAddedAt.ColumnName = "AddedAt";
-				colvarAddedAt.DataType = DbType.DateTime;
-				colvarAddedAt.MaxLength = 0;
-				colvarAddedAt.AutoIncrement = false;
-				colvarAddedAt.IsNullable = false;
-				colvarAddedAt.IsPrimaryKey = false;
-				colvarAddedAt.IsForeignKey = false;
-				colvarAddedAt.IsReadOnly = false;
-				
-						colvarAddedAt.DefaultSetting = @"(getdate())";
-				colvarAddedAt.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarAddedAt);
-				
 				TableSchema.TableColumn colvarDescription = new TableSchema.TableColumn(schema);
 				colvarDescription.ColumnName = "Description";
 				colvarDescription.DataType = DbType.AnsiString;
@@ -181,6 +167,34 @@ namespace SAEON.ObservationsDB.Data
 					colvarUserId.ForeignKeyTableName = "aspnet_Users";
 				schema.Columns.Add(colvarUserId);
 				
+				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+				colvarAddedAt.ColumnName = "AddedAt";
+				colvarAddedAt.DataType = DbType.DateTime;
+				colvarAddedAt.MaxLength = 0;
+				colvarAddedAt.AutoIncrement = false;
+				colvarAddedAt.IsNullable = true;
+				colvarAddedAt.IsPrimaryKey = false;
+				colvarAddedAt.IsForeignKey = false;
+				colvarAddedAt.IsReadOnly = false;
+				
+						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedAt);
+				
+				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+				colvarUpdatedAt.ColumnName = "UpdatedAt";
+				colvarUpdatedAt.DataType = DbType.DateTime;
+				colvarUpdatedAt.MaxLength = 0;
+				colvarUpdatedAt.AutoIncrement = false;
+				colvarUpdatedAt.IsNullable = true;
+				colvarUpdatedAt.IsPrimaryKey = false;
+				colvarUpdatedAt.IsForeignKey = false;
+				colvarUpdatedAt.IsReadOnly = false;
+				
+						colvarUpdatedAt.DefaultSetting = @"(getdate())";
+				colvarUpdatedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUpdatedAt);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -199,14 +213,6 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.Id, value); }
 		}
 		  
-		[XmlAttribute("AddedAt")]
-		[Bindable(true)]
-		public DateTime AddedAt 
-		{
-			get { return GetColumnValue<DateTime>(Columns.AddedAt); }
-			set { SetColumnValue(Columns.AddedAt, value); }
-		}
-		  
 		[XmlAttribute("Description")]
 		[Bindable(true)]
 		public string Description 
@@ -221,6 +227,22 @@ namespace SAEON.ObservationsDB.Data
 		{
 			get { return GetColumnValue<Guid>(Columns.UserId); }
 			set { SetColumnValue(Columns.UserId, value); }
+		}
+		  
+		[XmlAttribute("AddedAt")]
+		[Bindable(true)]
+		public DateTime? AddedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
+			set { SetColumnValue(Columns.AddedAt, value); }
+		}
+		  
+		[XmlAttribute("UpdatedAt")]
+		[Bindable(true)]
+		public DateTime? UpdatedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.UpdatedAt); }
+			set { SetColumnValue(Columns.UpdatedAt, value); }
 		}
 		
 		#endregion
@@ -255,17 +277,19 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,DateTime varAddedAt,string varDescription,Guid varUserId)
+		public static void Insert(Guid varId,string varDescription,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			AuditLog item = new AuditLog();
 			
 			item.Id = varId;
 			
-			item.AddedAt = varAddedAt;
-			
 			item.Description = varDescription;
 			
 			item.UserId = varUserId;
+			
+			item.AddedAt = varAddedAt;
+			
+			item.UpdatedAt = varUpdatedAt;
 			
 		
 			if (System.Web.HttpContext.Current != null)
@@ -277,17 +301,19 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,DateTime varAddedAt,string varDescription,Guid varUserId)
+		public static void Update(Guid varId,string varDescription,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			AuditLog item = new AuditLog();
 			
 				item.Id = varId;
 			
-				item.AddedAt = varAddedAt;
-			
 				item.Description = varDescription;
 			
 				item.UserId = varUserId;
+			
+				item.AddedAt = varAddedAt;
+			
+				item.UpdatedAt = varUpdatedAt;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -309,23 +335,30 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn DescriptionColumn
         {
             get { return Schema.Columns[1]; }
         }
         
         
         
-        public static TableSchema.TableColumn DescriptionColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[2]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[3]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[4]; }
         }
         
         
@@ -335,9 +368,10 @@ namespace SAEON.ObservationsDB.Data
 		public struct Columns
 		{
 			 public static string Id = @"ID";
-			 public static string AddedAt = @"AddedAt";
 			 public static string Description = @"Description";
 			 public static string UserId = @"UserId";
+			 public static string AddedAt = @"AddedAt";
+			 public static string UpdatedAt = @"UpdatedAt";
 						
 		}
 		#endregion

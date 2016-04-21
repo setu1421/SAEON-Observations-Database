@@ -80,7 +80,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid SensorProcedureID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenonmenonOfferingID,Guid PhenonmenonUOMID,int ImportBatchID,Guid UserId,DateTime AddedDate)
+	    public void Insert(Guid SensorProcedureID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int ImportBatchID,Guid UserId,DateTime AddedDate)
 	    {
 		    Observation item = new Observation();
 		    
@@ -94,9 +94,9 @@ namespace SAEON.ObservationsDB.Data
             
             item.Comment = Comment;
             
-            item.PhenonmenonOfferingID = PhenonmenonOfferingID;
+            item.PhenomenonOfferingID = PhenomenonOfferingID;
             
-            item.PhenonmenonUOMID = PhenonmenonUOMID;
+            item.PhenomenonUOMID = PhenomenonUOMID;
             
             item.ImportBatchID = ImportBatchID;
             
@@ -112,7 +112,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(int Id,Guid SensorProcedureID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenonmenonOfferingID,Guid PhenonmenonUOMID,int ImportBatchID,Guid UserId,DateTime AddedDate)
+	    public void Update(int Id,Guid SensorProcedureID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int ImportBatchID,Guid UserId,DateTime AddedDate)
 	    {
 		    Observation item = new Observation();
 	        item.MarkOld();
@@ -130,9 +130,9 @@ namespace SAEON.ObservationsDB.Data
 				
 			item.Comment = Comment;
 				
-			item.PhenonmenonOfferingID = PhenonmenonOfferingID;
+			item.PhenomenonOfferingID = PhenomenonOfferingID;
 				
-			item.PhenonmenonUOMID = PhenonmenonUOMID;
+			item.PhenomenonUOMID = PhenomenonUOMID;
 				
 			item.ImportBatchID = ImportBatchID;
 				

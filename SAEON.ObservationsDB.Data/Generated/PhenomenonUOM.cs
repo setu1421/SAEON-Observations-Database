@@ -265,11 +265,11 @@ namespace SAEON.ObservationsDB.Data
 		}
 		public SAEON.ObservationsDB.Data.DataLogCollection DataLogRecords()
 		{
-			return new SAEON.ObservationsDB.Data.DataLogCollection().Where(DataLog.Columns.PhenonmenonUOMID, Id).Load();
+			return new SAEON.ObservationsDB.Data.DataLogCollection().Where(DataLog.Columns.PhenomenonUOMID, Id).Load();
 		}
 		public SAEON.ObservationsDB.Data.ObservationCollection ObservationRecords()
 		{
-			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.PhenonmenonUOMID, Id).Load();
+			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.PhenomenonUOMID, Id).Load();
 		}
 		#endregion
 		

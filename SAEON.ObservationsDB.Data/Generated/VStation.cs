@@ -213,6 +213,30 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarEndDate);
                 
+                TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+                colvarAddedAt.ColumnName = "AddedAt";
+                colvarAddedAt.DataType = DbType.DateTime;
+                colvarAddedAt.MaxLength = 0;
+                colvarAddedAt.AutoIncrement = false;
+                colvarAddedAt.IsNullable = true;
+                colvarAddedAt.IsPrimaryKey = false;
+                colvarAddedAt.IsForeignKey = false;
+                colvarAddedAt.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarAddedAt);
+                
+                TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+                colvarUpdatedAt.ColumnName = "UpdatedAt";
+                colvarUpdatedAt.DataType = DbType.DateTime;
+                colvarUpdatedAt.MaxLength = 0;
+                colvarUpdatedAt.AutoIncrement = false;
+                colvarUpdatedAt.IsNullable = true;
+                colvarUpdatedAt.IsPrimaryKey = false;
+                colvarUpdatedAt.IsForeignKey = false;
+                colvarUpdatedAt.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUpdatedAt);
+                
                 TableSchema.TableColumn colvarProjectSiteName = new TableSchema.TableColumn(schema);
                 colvarProjectSiteName.ColumnName = "ProjectSiteName";
                 colvarProjectSiteName.DataType = DbType.AnsiString;
@@ -469,6 +493,34 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
+        [XmlAttribute("AddedAt")]
+        [Bindable(true)]
+        public DateTime? AddedAt 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("AddedAt");
+		    }
+            set 
+		    {
+			    SetColumnValue("AddedAt", value);
+            }
+        }
+	      
+        [XmlAttribute("UpdatedAt")]
+        [Bindable(true)]
+        public DateTime? UpdatedAt 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("UpdatedAt");
+		    }
+            set 
+		    {
+			    SetColumnValue("UpdatedAt", value);
+            }
+        }
+	      
         [XmlAttribute("ProjectSiteName")]
         [Bindable(true)]
         public string ProjectSiteName 
@@ -529,6 +581,10 @@ namespace SAEON.ObservationsDB.Data{
             public static string StartDate = @"StartDate";
             
             public static string EndDate = @"EndDate";
+            
+            public static string AddedAt = @"AddedAt";
+            
+            public static string UpdatedAt = @"UpdatedAt";
             
             public static string ProjectSiteName = @"ProjectSiteName";
             

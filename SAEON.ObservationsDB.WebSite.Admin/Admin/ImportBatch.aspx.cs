@@ -164,8 +164,8 @@ public partial class _ImportBatch : System.Web.UI.Page
                                     .Where(Observation.Columns.SensorProcedureID).IsEqualTo(schval.SensorProcedureID)
                                     .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
                                     .And(Observation.Columns.RawValue).IsEqualTo(schval.RawValue)
-                                    .And(Observation.Columns.PhenonmenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
-                                    .And(Observation.Columns.PhenonmenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
+                                    .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
+                                    .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
                                 //add offering
 
                                 int totalDuplicate = q.ExecuteScalar<int>();
@@ -181,8 +181,8 @@ public partial class _ImportBatch : System.Web.UI.Page
                                         Obrecord.ValueDate = schval.DateValue;
                                         Obrecord.RawValue = schval.RawValue;
                                         Obrecord.DataValue = schval.DataValue;
-                                        Obrecord.PhenonmenonOfferingID = schval.PhenomenonOfferingID.Value;
-                                        Obrecord.PhenonmenonUOMID = schval.PhenomenonUOMID.Value;
+                                        Obrecord.PhenomenonOfferingID = schval.PhenomenonOfferingID.Value;
+                                        Obrecord.PhenomenonUOMID = schval.PhenomenonUOMID.Value;
                                         Obrecord.ImportBatchID = batch.Id;
                                         Obrecord.UserId = AuthHelper.GetLoggedInUserId;
 
@@ -235,7 +235,7 @@ public partial class _ImportBatch : System.Web.UI.Page
                                     if (schval.InValidUOM)
                                         logrecord.InvalidUOM = schval.PhenomenonUOMID.Value.ToString();
                                     else
-                                        logrecord.PhenonmenonUOMID = schval.PhenomenonUOMID.Value;
+                                        logrecord.PhenomenonUOMID = schval.PhenomenonUOMID.Value;
 
                                     logrecord.RawFieldValue = String.IsNullOrEmpty(schval.FieldRawValue) ? "" : schval.FieldRawValue;
                                     logrecord.ImportDate = DateTime.Now;
@@ -311,8 +311,8 @@ public partial class _ImportBatch : System.Web.UI.Page
             .Where(Observation.Columns.SensorProcedureID).IsEqualTo(schval.SensorProcedureID)
             .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
             .And(Observation.Columns.RawValue).IsNull()
-            .And(Observation.Columns.PhenonmenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
-            .And(Observation.Columns.PhenonmenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
+            .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
+            .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
 
         ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
 
@@ -330,8 +330,8 @@ public partial class _ImportBatch : System.Web.UI.Page
 
             d.DataValue = schval.DataValue;
             d.Comment = oCol[0].Comment;
-            d.PhenomenonOfferingID = oCol[0].PhenonmenonOfferingID;
-            d.PhenonmenonUOMID = oCol[0].PhenonmenonUOMID;
+            d.PhenomenonOfferingID = oCol[0].PhenomenonOfferingID;
+            d.PhenomenonUOMID = oCol[0].PhenomenonUOMID;
             d.ImportBatchID = batchid;
             d.UserId = oCol[0].UserId;
 
@@ -487,8 +487,8 @@ public partial class _ImportBatch : System.Web.UI.Page
         obs.RawValue = Double.Parse(RawValue.Value.ToString());
         obs.DataValue = Double.Parse(DataValue.Value.ToString());
 
-        obs.PhenonmenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
-        obs.PhenonmenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);
+        obs.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
+        obs.PhenomenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);
 
         obs.ImportBatchID = batch.Id;
         obs.UserId = AuthHelper.GetLoggedInUserId;
@@ -638,8 +638,8 @@ public partial class _ImportBatch : System.Web.UI.Page
                     log.ValueDate = ob.ValueDate;
                     log.ValueTime = ob.ValueDate;
                     log.SensorProcedureID = ob.SensorProcedureID;
-                    log.PhenomenonOfferingID = ob.PhenonmenonOfferingID;
-                    log.PhenonmenonUOMID = ob.PhenonmenonUOMID;
+                    log.PhenomenonOfferingID = ob.PhenomenonOfferingID;
+                    log.PhenomenonUOMID = ob.PhenomenonUOMID;
                     log.ImportBatchID = ob.ImportBatchID;
                     log.RawValue = ob.RawValue;
                     log.DataValue = ob.DataValue;
@@ -750,8 +750,8 @@ public partial class _ImportBatch : System.Web.UI.Page
                 Obrecord.ValueDate = d.ValueDate.Value;
                 Obrecord.RawValue = d.RawValue;
                 Obrecord.DataValue = d.DataValue;
-                Obrecord.PhenonmenonOfferingID = d.PhenomenonOfferingID.Value;
-                Obrecord.PhenonmenonUOMID = d.PhenonmenonUOMID.Value;
+                Obrecord.PhenomenonOfferingID = d.PhenomenonOfferingID.Value;
+                Obrecord.PhenomenonUOMID = d.PhenomenonUOMID.Value;
                 Obrecord.ImportBatchID = d.ImportBatchID;
                 Obrecord.UserId = AuthHelper.GetLoggedInUserId;
                 Obrecord.AddedDate = d.ImportDate;

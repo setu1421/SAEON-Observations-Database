@@ -21,8 +21,8 @@ public partial class _DataSource : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
-            this.DataSchemaStore.DataSource = new DataSchemaCollection().OrderByAsc(DataSchema.Columns.Name).Load();
-            this.DataSchemaStore.DataBind();
+            DataSchemaStore.DataSource = new DataSchemaCollection().OrderByAsc(DataSchema.Columns.Name).Load();
+            DataSchemaStore.DataBind();
 
             Dictionary<int, string> frequencylist = listHelper.GetUpdateFrequencyList();
 
@@ -31,18 +31,18 @@ public partial class _DataSource : System.Web.UI.Page
                 cbUpdateFrequency.Items.Insert(cbUpdateFrequency.Items.ToArray().Length, new Ext.Net.ListItem(item.Value, item.Key.ToString()));
             }
 
-            this.TransformationTypeStore.DataSource = new TransformationTypeCollection().OrderByAsc(TransformationType.Columns.Name).Load();
-            this.TransformationTypeStore.DataBind();
+            TransformationTypeStore.DataSource = new TransformationTypeCollection().OrderByAsc(TransformationType.Columns.Name).Load();
+            TransformationTypeStore.DataBind();
 
-            this.PhenomenonStore.DataSource = new PhenomenonCollection().OrderByAsc(Phenomenon.Columns.Name).Load();
-            this.PhenomenonStore.DataBind();
+            PhenomenonStore.DataSource = new PhenomenonCollection().OrderByAsc(Phenomenon.Columns.Name).Load();
+            PhenomenonStore.DataBind();
 
         }
     }
 
     protected void DataSourceStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.DataSourceGrid.GetStore().DataSource = DataSourceRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        DataSourceGrid.GetStore().DataSource = DataSourceRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -231,7 +231,7 @@ public partial class _DataSource : System.Web.UI.Page
 
         DataSourceGrid.DataBind();
 
-        this.DetailWindow.Hide();
+        DetailWindow.Hide();
     }
 
     protected void DSTransformGrid_RefreshData(object sender, StoreRefreshDataEventArgs e)
@@ -243,15 +243,15 @@ public partial class _DataSource : System.Web.UI.Page
 
             VDataSourceTransformationCollection trCol = new VDataSourceTransformationCollection().Where(VDataSourceTransformation.Columns.DataSourceID, Id).Load();
 
-            this.DSTransformGrid.GetStore().DataSource = trCol;
-            this.DSTransformGrid.GetStore().DataBind();
+            DSTransformGrid.GetStore().DataSource = trCol;
+            DSTransformGrid.GetStore().DataBind();
         }
     }
 
     protected void SaveTransformation(object sender, DirectEventArgs e)
     {
 
-        RowSelectionModel datasourceRow = this.DataSourceGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel datasourceRow = DataSourceGrid.SelectionModel.Primary as RowSelectionModel;
 
         DataSourceTransformation dstransform = new DataSourceTransformation();
 
@@ -328,9 +328,9 @@ public partial class _DataSource : System.Web.UI.Page
             ts.Complete();
         }
 
-        this.DSTransformGrid.GetStore().DataBind();
+        DSTransformGrid.GetStore().DataBind();
 
-        this.TransformationDetailWindow.Hide();
+        TransformationDetailWindow.Hide();
     }
 
     protected void SaveRoleDetail(object sender, DirectEventArgs e)
@@ -343,9 +343,9 @@ public partial class _DataSource : System.Web.UI.Page
 
         dsRole.Save();
 
-        this.DataSourceRoleGrid.GetStore().DataBind();
+        DataSourceRoleGrid.GetStore().DataBind();
 
-        this.RoleDetailWindow.Hide();
+        RoleDetailWindow.Hide();
     }
 
     protected void OnDefinitionValidation(object sender, RemoteValidationEventArgs e)
@@ -442,8 +442,8 @@ public partial class _DataSource : System.Web.UI.Page
                      .Where(DataSourceRole.Columns.DataSourceID).IsEqualTo(Id)
                      .ExecuteAsCollection<DataSourceRoleCollection>();
 
-            this.DataSourceRoleGrid.GetStore().DataSource = RoleCol;
-            this.DataSourceRoleGrid.GetStore().DataBind();
+            DataSourceRoleGrid.GetStore().DataSource = RoleCol;
+            DataSourceRoleGrid.GetStore().DataBind();
         }
     }
 
@@ -492,8 +492,8 @@ public partial class _DataSource : System.Web.UI.Page
     protected void AcceptRoleButton_Click(object sender, DirectEventArgs e)
     {
 
-        RowSelectionModel sm = this.RoleGrid.SelectionModel.Primary as RowSelectionModel;
-        RowSelectionModel DataSourcerow = this.DataSourceGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel sm = RoleGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel DataSourcerow = DataSourceGrid.SelectionModel.Primary as RowSelectionModel;
 
         string DataSourceID = DataSourcerow.SelectedRecordID;
 
@@ -585,50 +585,50 @@ public partial class _DataSource : System.Web.UI.Page
 
     protected void cbOffering_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        var Id = this.cbPhenomenon.SelectedItem.Value;
+        var Id = cbPhenomenon.SelectedItem.Value;
 
-        this.cbOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.NameColumn)
+        cbOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.NameColumn)
                  .From(Offering.Schema)
                  .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
                  .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
                  .ExecuteDataSet().Tables[0];
-        this.cbOffering.GetStore().DataBind();
+        cbOffering.GetStore().DataBind();
     }
 
     protected void cbUnitofMeasure_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        var Id = this.cbPhenomenon.SelectedItem.Value;
+        var Id = cbPhenomenon.SelectedItem.Value;
 
-        this.cbUnitofMeasure.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
+        cbUnitofMeasure.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
                .From(UnitOfMeasure.Schema)
                .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
                .Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(Id)
                .ExecuteDataSet().Tables[0];
-        this.cbUnitofMeasure.GetStore().DataBind();
+        cbUnitofMeasure.GetStore().DataBind();
     }
 
     //////////////
     protected void cbNewOffering_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        var Id = this.cbPhenomenon.SelectedItem.Value;
+        var Id = cbPhenomenon.SelectedItem.Value;
 
-        this.sbNewOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.NameColumn)
+        sbNewOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.NameColumn)
                  .From(Offering.Schema)
                  .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
                  .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
                  .ExecuteDataSet().Tables[0];
-        this.sbNewOffering.GetStore().DataBind();
+        sbNewOffering.GetStore().DataBind();
     }
 
     protected void cbNewUnitofMeasure_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        var Id = this.cbPhenomenon.SelectedItem.Value;
+        var Id = cbPhenomenon.SelectedItem.Value;
 
-        this.sbNewUoM.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
+        sbNewUoM.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
                .From(UnitOfMeasure.Schema)
                .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
                .Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(Id)
                .ExecuteDataSet().Tables[0];
-        this.sbNewUoM.GetStore().DataBind();
+        sbNewUoM.GetStore().DataBind();
     }
 }

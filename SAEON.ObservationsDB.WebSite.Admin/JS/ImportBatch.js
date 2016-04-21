@@ -152,7 +152,7 @@ function onLogCommand(e, record)
 		{
 			cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
 
-			var val = DetailsFormPanel.getForm()._record.get('PhenonmenonUOMID')
+			var val = DetailsFormPanel.getForm()._record.get('PhenomenonUOMID')
 			var rd = cbUnitofMeasure.findRecord(cbUnitofMeasure.valueField, val);
 			if (rd != null)
 			{
@@ -212,7 +212,7 @@ function SelectSensor() {
     var uomloadcallback = function () {
         cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
 
-        var val = DetailsFormPanel.getForm()._record.get('PhenonmenonUOMID')
+        var val = DetailsFormPanel.getForm()._record.get('PhenomenonUOMID')
         var rd = cbUnitofMeasure.findRecord(cbUnitofMeasure.valueField, val);
         if (rd != null) {
             cbUnitofMeasure.setValue(val);
