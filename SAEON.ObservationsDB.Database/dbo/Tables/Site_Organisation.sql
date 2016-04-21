@@ -1,4 +1,4 @@
-﻿--> Added 20160406 TimPN
+﻿--> Added 2.0.0.1 20160406 TimPN
 CREATE TABLE [dbo].[Site_Organisation]
 (
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Site_Organisation_ID] DEFAULT newid(), 
@@ -27,4 +27,4 @@ GO
 CREATE INDEX [IX_Site_Organisation_EndDate] ON [dbo].[Site_Organisation] ([EndDate])
 GO
 CREATE INDEX [IX_Site_Organisation_UserId] ON [dbo].[Site_Organisation] ([UserId])
---< Added 20160406 TimPN
+--< Added 2.0.0.1 20160406 TimPN

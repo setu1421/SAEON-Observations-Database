@@ -14,10 +14,10 @@
     CONSTRAINT [FK_ImportBatch_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_ImportBatch_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID])
 );
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_ImportBatch_DataSourceID] ON [dbo].[ImportBatch] ([DataSourceID])
 GO
 CREATE INDEX [IX_ImportBatch_UserId] ON [dbo].[ImportBatch] ([UserId])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN
 

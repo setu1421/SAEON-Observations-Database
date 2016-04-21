@@ -19,15 +19,15 @@
 --    CONSTRAINT [IX_SensorProcedure_Code] UNIQUE ([Code])
     CONSTRAINT [UX_SensorProcedure_Code] UNIQUE ([Code]),
 --< Changed 20160329 TimPN
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
     CONSTRAINT [UX_SensorProcedure_Name] UNIQUE ([Name])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN
 );
 --> Removed 20160329 TimPN
 --GO
 --CREATE UNIQUE INDEX [IX_SensorProcedure_Name] ON [dbo].[SensorProcedure]([Name]);
 --< Removed 20160329 TimPN
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_SensorProcedure_StationID] ON [dbo].[SensorProcedure] ([StationID])
 GO
@@ -38,4 +38,4 @@ GO
 CREATE INDEX [IX_SensorProcedure_DataSchemaID] ON [dbo].[SensorProcedure] ([DataSchemaID])
 GO
 CREATE INDEX [IX_SensorProcedure_UserId] ON [dbo].[SensorProcedure] ([UserId])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN

@@ -23,18 +23,18 @@
 --    CONSTRAINT [UX_DataSource_StationID_Code] UNIQUE ([StationID],[Code]), -- Must be added once all DataSources have Stations
 --    CONSTRAINT [UX_DataSource_StationID_Name] UNIQUE ([StationID],[Name]), -- Must be added once all DataSources have Stations
 --< Added 20160419 TimPN
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
     CONSTRAINT [UX_DataSource_Code] Unique ([Code]),
     CONSTRAINT [UX_DataSource_Name] Unique ([Name])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN
 );
 GO
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
 CREATE INDEX [IX_DataSource_DataSchemaID] ON [dbo].[DataSource] ([DataSchemaID])
 GO
 CREATE INDEX [IX_DataSource_UserId] ON [dbo].[DataSource] ([UserId])
---< Added 20160329 TimPN
---> Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN
+--> Added 2.0.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_DataSource_StationID] ON [dbo].Station ([ID])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN

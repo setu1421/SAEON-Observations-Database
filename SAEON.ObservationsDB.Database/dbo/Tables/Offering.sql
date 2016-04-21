@@ -15,7 +15,7 @@
     CONSTRAINT [UX_Offering_Code] UNIQUE ([Code])
 --< Changed 20160329 TimPN
 );
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Offering_UserId] ON [dbo].[Offering] ([UserId])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN

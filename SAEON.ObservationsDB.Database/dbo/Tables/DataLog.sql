@@ -33,7 +33,7 @@
 );
 GO
 CREATE INDEX [IX_DataLog] ON [dbo].[DataLog]([ImportBatchID]);
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_DataLog_SensorProcedureID] ON [dbo].[DataLog] ([SensorProcedureID]);
 GO
@@ -46,5 +46,5 @@ GO
 CREATE INDEX [IX_DataLog_StatusID] ON [dbo].[DataLog] ([StatusID])
 GO
 CREATE INDEX [IX_DataLog_UserId] ON [dbo].[DataLog] ([UserId])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN
 

@@ -14,15 +14,15 @@
     [SplitIndex]       INT              NULL,
     CONSTRAINT [PK_DataSchema] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSchema_DataSourceType] FOREIGN KEY ([DataSourceTypeID]) REFERENCES [dbo].[DataSourceType] ([ID]),
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
     CONSTRAINT [UX_DataSchema_Code] Unique ([Code]),
     CONSTRAINT [UX_DataSchema_Name] Unique ([Name])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN
 );
 
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_DataSchema_DataSourceTypeID] ON [dbo].[DataSchema] ([DataSourceTypeID])
 GO
 CREATE INDEX [IX_DataSchema_UserId] ON [dbo].[DataSchema] ([UserId])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN

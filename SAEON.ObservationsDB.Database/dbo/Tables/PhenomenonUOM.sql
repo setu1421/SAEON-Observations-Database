@@ -11,15 +11,15 @@
 --    CONSTRAINT [IX_PhenomenonUOM] UNIQUE ([PhenomenonID] ASC, [UnitOfMeasureID])
     CONSTRAINT [UX_PhenomenonUOM] UNIQUE ([PhenomenonID], [UnitOfMeasureID]),
 --< Changed 20160329 TimPN
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
     CONSTRAINT [FK_PhenomenonUOM_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN
 );
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_PhenomenonUOM_PhenomenonID] ON [dbo].[PhenomenonUOM] ([PhenomenonID])
 GO
 CREATE INDEX [IX_PhenomenonUOM_UnitOfMeasureID] ON [dbo].[PhenomenonUOM] ([UnitOfMeasureID])
 GO
 CREATE INDEX [IX_PhenomenonUOM_UserId] ON [dbo].[PhenomenonUOM] ([UserId])
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN

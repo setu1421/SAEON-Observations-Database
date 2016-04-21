@@ -17,14 +17,14 @@
     [SensorProcedureID]     UNIQUEIDENTIFIER NULL,
     [PhenonmenonOfferingID] UNIQUEIDENTIFIER NULL,
 --< Changed 20160329 TimPN
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
     CONSTRAINT [FK_Progress_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [ImportBatch]([ID]),
     CONSTRAINT [FK_Progress_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [SensorProcedure]([ID]),
     CONSTRAINT [FK_Progress_PhenomenonOffering] FOREIGN KEY ([PhenonmenonOfferingID]) REFERENCES [PhenomenonOffering]([ID]),
     CONSTRAINT [FK_Progress_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN
 );
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Progress_ImportBatchID] ON [dbo].[Progress] ([ImportBatchID])
 GO
@@ -33,4 +33,4 @@ GO
 CREATE INDEX [IX_Progress_PhenomenonOfferingID] ON [dbo].[Progress] ([PhenonmenonOfferingID])
 GO
 CREATE INDEX [IX_Progress_UserId] ON [dbo].[Progress] ([UserId])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN

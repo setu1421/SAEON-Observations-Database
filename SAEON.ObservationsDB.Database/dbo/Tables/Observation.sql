@@ -24,7 +24,7 @@ GO
 --CREATE INDEX [IX_Observation_BatchID] ON [dbo].[Observation]([ImportBatchID])
 CREATE INDEX [IX_Observation_ImportBatchID] ON [dbo].[Observation]([ImportBatchID])
 --< Changed 20160329 TimPN
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Observation_SensorProcedureID] ON [dbo].[Observation] ([SensorProcedureID])
 GO
@@ -33,4 +33,4 @@ GO
 CREATE INDEX [IX_Observation_PhenomenonUOMID] ON [dbo].[Observation] ([PhenonmenonUOMID])
 GO
 CREATE INDEX [IX_Observation_UserId] ON [dbo].[Observation] ([UserId])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN

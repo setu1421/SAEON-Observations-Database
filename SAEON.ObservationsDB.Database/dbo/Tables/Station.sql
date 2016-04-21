@@ -32,12 +32,12 @@
     CONSTRAINT [UX_Station_Name] UNIQUE ([Name])
 --< Changed 20160329 TimPN
 );
---> Added 20160329 TimPN
+--> Added 2.0.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Station_ProjectSiteID] ON [dbo].[Station] ([ProjectSiteID])
 GO
 CREATE INDEX [IX_Station_UserId] ON [dbo].[Station] ([UserId])
---< Added 20160329 TimPN
+--< Added 2.0.0.0 20160406 TimPN
 --> Added 20160407 TimPN
 GO
 CREATE INDEX [IX_Station_SiteID] ON [dbo].[Station] ([SiteID])
