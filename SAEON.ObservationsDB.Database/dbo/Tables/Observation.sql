@@ -9,7 +9,10 @@
 --    [PhenonmenonOfferingID] UNIQUEIDENTIFIER NOT NULL,
     [PhenomenonOfferingID] UNIQUEIDENTIFIER NOT NULL,
 --< Changed 2.0.0.3 20160421 TimPN
-    [PhenonmenonUOMID]      UNIQUEIDENTIFIER NOT NULL,
+--> Changed 2.0.0.3 20160421 TimPN
+--    [PhenonmenonUOMID]      UNIQUEIDENTIFIER NOT NULL,
+    [PhenomenonUOMID]      UNIQUEIDENTIFIER NOT NULL,
+--< Changed 2.0.0.3 20160421 TimPN
     [ImportBatchID]         INT              NOT NULL,
     [UserId]                UNIQUEIDENTIFIER NOT NULL,
     [AddedDate]             DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT (getdate()) NOT NULL,
@@ -17,7 +20,7 @@
     CONSTRAINT [FK_Observation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_Observation_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]),
     CONSTRAINT [FK_Observation_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
-    CONSTRAINT [FK_Observation_PhenomenonUOM] FOREIGN KEY ([PhenonmenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
+    CONSTRAINT [FK_Observation_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
     CONSTRAINT [FK_Observation_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID])
 );
 GO
@@ -33,7 +36,7 @@ CREATE INDEX [IX_Observation_SensorProcedureID] ON [dbo].[Observation] ([SensorP
 GO
 CREATE INDEX [IX_Observation_PhenomenonOfferingID] ON [dbo].[Observation] ([PhenomenonOfferingID])
 GO
-CREATE INDEX [IX_Observation_PhenomenonUOMID] ON [dbo].[Observation] ([PhenonmenonUOMID])
+CREATE INDEX [IX_Observation_PhenomenonUOMID] ON [dbo].[Observation] ([PhenomenonUOMID])
 GO
 CREATE INDEX [IX_Observation_UserId] ON [dbo].[Observation] ([UserId])
 --< Added 2.0.0.0 20160406 TimPN
