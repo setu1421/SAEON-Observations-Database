@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class Admin_Instruments : System.Web.UI.Page
+public partial class Admin_DataSources : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -24,13 +24,18 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 cbUpdateFrequency.Items.Insert(cbUpdateFrequency.Items.ToArray().Length, new Ext.Net.ListItem(item.Value, item.Key.ToString()));
             }
 
+            OrganisationStore.DataSource = new OrganisationCollection().OrderByAsc(Organisation.Columns.Name).Load();
+            OrganisationStore.DataBind();
+            OrganisationRoleStore.DataSource = new OrganisationRoleCollection().OrderByAsc(OrganisationRole.Columns.Name).Load();
+            OrganisationRoleStore.DataBind();
+
         }
     }
 
-    #region Instruments
-    protected void InstrumentStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    #region DataSource
+    protected void DataSourceStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        InstrumentGrid.GetStore().DataSource = DataSourceRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
+        DataSourceGrid.GetStore().DataSource = DataSourceRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -220,7 +225,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
             ds.Save();
             Auditing.Log("Instrument.Save", new Dictionary<string, object> { { "ID", ds.Id }, { "Code", ds.Code }, { "Name", ds.Name } });
 
-            InstrumentGrid.DataBind();
+            DataSourceGrid.DataBind();
 
             DetailWindow.Hide();
         }
@@ -231,7 +236,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
         }
     }
 
-    protected void InstrumentStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    protected void DataSourceStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {
         string type = FormatType.Text;
         string visCols = VisCols.Value.ToString();
@@ -244,6 +249,91 @@ public partial class Admin_Instruments : System.Web.UI.Page
         BaseRepository.doExport(type, js);
     }
 
+    protected void DoDelete(object sender, DirectEventArgs e)
+    {
+        string ActionType = e.ExtraParams["type"];
+        string recordID = e.ExtraParams["id"];
+        try
+        {
+            if (ActionType == "Sensor")
+            {
+                //DataSource dataSource = new DataSource(recordID);
+                //if (dataSource != null)
+                //{
+                //    dataSource.StationID = null;
+                //    dataSource.UserId = AuthHelper.GetLoggedInUserId;
+                //    dataSource.Save();
+                //    Auditing.Log("Station.UnlinkSensor", new Dictionary<string, object> {
+                //        { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
+                //    DataSourceGrid.DataBind();
+                //}
+            }
+            else if (ActionType == "Organisation")
+            {
+                new StationOrganisationController().Delete(recordID);
+                Auditing.Log("DataSource.UnlinkOrganisation", new Dictionary<string, object> { { "ID", recordID } });
+                OrganisationGrid.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DoUnlink({ActionType},{RecordID})", ActionType, recordID);
+            MessageBoxes.Error(ex, "Unable to unlink {0}", ActionType == "Organisation" ? "organisation" : "sensor");
+        }
+    }
+
     #endregion
 
+    #region Organisations
+
+    protected void OrganisationGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
+            //VDataSourceOrganisationCollection DataSourceOrganisationCol = new VDataSourceOrganisationCollection()
+            //    .Where(VDataSourceOrganisation.Columns.StationID, Id)
+            //    .OrderByAsc(VDataSourceOrganisation.Columns.StartDate)
+            //    .OrderByAsc(VDataSourceOrganisation.Columns.EndDate)
+            //    .OrderByAsc(VDataSourceOrganisation.Columns.OrganisationName)
+            //    .OrderByAsc(VDataSourceOrganisation.Columns.OrganisationRoleName)
+            //    .Load();
+            //OrganisationGrid.GetStore().DataSource = DataSourceOrganisationCol;
+            OrganisationGrid.GetStore().DataBind();
+        }
+    }
+
+    protected void AcceptOrganisation_Click(object sender, DirectEventArgs e)
+    {
+        try
+        {
+            RowSelectionModel masterRow = DataSourceGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            //DataSourceOrganisation dataSourceOrganisation = new DataSourceOrganisation();
+            //dataSourceOrganisation.StationID = masterID;
+            //dataSourceOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
+            //dataSourceOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+            //if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
+            //    dataSourceOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
+            //if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
+            //    dataSourceOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
+            //dataSourceOrganisation.UserId = AuthHelper.GetLoggedInUserId;
+            //dataSourceOrganisation.Save();
+            //Auditing.Log("Station.AddOrganisation", new Dictionary<string, object> {
+            //    { "StationID", masterID },
+            //    { "OrganisationID", dataSourceOrganisation.OrganisationID},
+            //    { "OrganisationCode", dataSourceOrganisation.Organisation.Code},
+            //    { "RoleID", dataSourceOrganisation.OrganisationRoleID },
+            //    { "RoleCode", dataSourceOrganisation.OrganisationRole.Code},
+            //});
+            OrganisationGrid.DataBind();
+            OrganisationWindow.Hide();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "AcceptOrganisation_Click");
+            MessageBoxes.Error(ex, "Unable to save organisation");
+        }
+    }
+    #endregion
 }

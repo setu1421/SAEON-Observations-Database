@@ -110,38 +110,6 @@ public partial class Admin_Sites : System.Web.UI.Page
         BaseRepository.doExport(type, js);
     }
 
-    protected void DoDelete(object sender, DirectEventArgs e)
-    {
-        string ActionType = e.ExtraParams["type"];
-        string recordID = e.ExtraParams["id"];
-        try
-        {
-            if (ActionType == "RemoveStation")
-            {
-                da.Station station = new da.Station(recordID);
-                if (station != null)
-                {
-                    station.SiteID = null;
-                    station.UserId = AuthHelper.GetLoggedInUserId;
-                    station.Save();
-                    Auditing.Log("Site.DeleteStation", new Dictionary<string, object> {
-                        { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
-                    StationGrid.DataBind();
-                }
-            }
-            else if (ActionType == "RemoveOrganisation")
-            {
-                new da.SiteOrganisationController().Delete(recordID);
-                Auditing.Log("Site.DeleteOrganisation", new Dictionary<string, object> { { "ID", recordID } });
-                OrganisationGrid.DataBind();
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DoDelete({ActionType},{RecordID})", ActionType, recordID);
-            MessageBoxes.Error(ex, "Unable to delete {0}", ActionType == "RemoveStation" ? "station" : "organisation");
-        }
-    }
     #endregion
 
     #region Stations
@@ -214,6 +182,29 @@ public partial class Admin_Sites : System.Web.UI.Page
             MessageBoxes.Error(ex, "Unable to save stations");
         }
     }
+
+    protected void DoDeleteStationLink(object sender, DirectEventArgs e)
+    {
+        string recordID = e.ExtraParams["id"];
+        try
+        {
+            da.Station station = new da.Station(recordID);
+            if (station != null)
+            {
+                station.SiteID = null;
+                station.UserId = AuthHelper.GetLoggedInUserId;
+                station.Save();
+                Auditing.Log("Site.UnlinkStation", new Dictionary<string, object> {
+                        { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
+                StationGrid.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DoUnlinkStation({RecordID})", recordID);
+            MessageBoxes.Error(ex, "Unable to unlink station");
+        }
+    }
     #endregion
 
     #region Organisations
@@ -267,5 +258,36 @@ public partial class Admin_Sites : System.Web.UI.Page
             MessageBoxes.Error(ex, "Unable to save organisation");
         }
     }
+
+    protected void DoEditOrganisationLink(object sender, DirectEventArgs e)
+    {
+        string recordID = e.ExtraParams["id"];
+        try
+        {
+            OrganisationWindow.Show();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DoEditOrganisationLink({RecordID})", recordID);
+            MessageBoxes.Error(ex, "Unable to edit organisation link");
+        }
+    }
+
+    protected void DoDeleteOrganisationLink(object sender, DirectEventArgs e)
+    {
+        string recordID = e.ExtraParams["id"];
+        try
+        {
+            new da.SiteOrganisationController().Delete(recordID);
+            Auditing.Log("Site.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
+            OrganisationGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DoDeleteOrganisationLink({RecordID})", recordID);
+            MessageBoxes.Error(ex, "Unable to delete organisation link");
+        }
+    }
+
     #endregion
 }

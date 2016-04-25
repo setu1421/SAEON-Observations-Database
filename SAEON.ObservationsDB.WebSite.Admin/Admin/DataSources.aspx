@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Instruments.aspx.cs" Inherits="Admin_Instruments" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="DataSources.aspx.cs" Inherits="Admin_DataSources" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript" src="../JS/Instruments.js"></script>
@@ -27,6 +27,26 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
+    <ext:Store ID="OrganisationStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
+    <ext:Store ID="OrganisationRoleStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
     <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
@@ -35,7 +55,7 @@
         <Items>
             <ext:BorderLayout ID="BorderLayout1" runat="server">
                 <Center MarginsSummary="5 0 0 5">
-                    <ext:Panel ID="Panel1" runat="server" Title="Instruments" Layout="FitLayout" Hidden="false">
+                    <ext:Panel ID="Panel1" runat="server" Title="Data Sources" Layout="FitLayout" Hidden="false">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
@@ -62,10 +82,10 @@
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="InstrumentGrid" runat="server" Border="false" ClientIDMode="Static">
+                            <ext:GridPanel ID="DataSourceGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="InstrumentStore" runat="server" RemoteSort="true" OnRefreshData="InstrumentStore_RefreshData"
-                                        OnSubmitData="InstrumentStore_Submit">
+                                    <ext:Store ID="DataSourceStore" runat="server" RemoteSort="true" OnRefreshData="DataSourceStore_RefreshData"
+                                        OnSubmitData="DataSourceStore_Submit">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -143,6 +163,80 @@
                     </ext:Panel>
                 </Center>
                 <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
+                    <ext:Panel ID="pnlEast" runat="server" Title="Organisations" Layout="FitLayout" Width="425" ClientIDMode="Static">
+                        <TopBar>
+                            <ext:Toolbar ID="Toolbar3" runat="server">
+                                <Items>
+                                    <ext:Button ID="AddOrganisation" runat="server" Icon="Add" Text="Add Organisation">
+                                        <ToolTips>
+                                            <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
+                                        </ToolTips>
+                                        <Listeners>
+                                            <Click Handler="if(Ext.getCmp('#{DataSourceGrid}') && #{DataSourceGrid}.getSelectionModel().hasSelection()){#{OrganisationWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a data source.')}" />
+                                        </Listeners>
+                                    </ext:Button>
+                                </Items>
+                            </ext:Toolbar>
+                        </TopBar>
+                        <Items>
+                            <ext:GridPanel ID="OrganisationGrid" runat="server" Border="false" Layout="FitLayout"
+                                ClientIDMode="Static">
+                                <Store>
+                                    <ext:Store ID="OrganisationGridStore" runat="server" OnRefreshData="OrganisationGridStore_RefreshData">
+                                        <Proxy>
+                                            <ext:PageProxy />
+                                        </Proxy>
+                                        <Reader>
+                                            <ext:JsonReader IDProperty="Id">
+                                                <Fields>
+                                                    <ext:RecordField Name="Id" Type="Auto" />
+                                                    <ext:RecordField Name="OrganisationID" Type="Auto" />
+                                                    <ext:RecordField Name="OrganisationName" Type="Auto" />
+                                                    <ext:RecordField Name="OrganisationRoleID" Type="Auto" />
+                                                    <ext:RecordField Name="OrganisationRoleName" Type="Auto" />
+                                                    <ext:RecordField Name="StartDate" Type="Date" />
+                                                    <ext:RecordField Name="EndDate" Type="Date" />
+                                                </Fields>
+                                            </ext:JsonReader>
+                                        </Reader>
+                                        <BaseParams>
+                                            <ext:Parameter Name="DataSourceID" Value="Ext.getCmp('#{DataSourceGrid}') && #{DataSourceGrid}.getSelectionModel().hasSelection() ? #{DataSourceGrid}.getSelectionModel().getSelected().id : -1"
+                                                Mode="Raw" />
+                                        </BaseParams>
+                                    </ext:Store>
+                                </Store>
+                                <ColumnModel ID="ColumnModel5" runat="server">
+                                    <Columns>
+                                        <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
+                                        <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="75" />
+                                        <ext:DateColumn Header="Start Date" DataIndex="StartDatet" Width="75" Format="yyyy/MM/dd" />
+                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="yyyy/MM/dd" />
+                                        <ext:CommandColumn Width="50">
+                                            <Commands>
+                                                <ext:GridCommand Icon="NoteDelete" CommandName="RemoveOrganisation" Text="" ToolTip-Text="Delete">
+                                                </ext:GridCommand>
+                                            </Commands>
+                                        </ext:CommandColumn>
+                                    </Columns>
+                                </ColumnModel>
+                                <SelectionModel>
+                                    <ext:RowSelectionModel ID="RowSelectionModelOrganisation" runat="server" SingleSelect="true">
+                                    </ext:RowSelectionModel>
+                                </SelectionModel>
+                                <LoadMask ShowMask="true" />
+                                <Listeners>
+                                </Listeners>
+                                <DirectEvents>
+                                    <Command OnEvent="DoDelete">
+                                        <ExtraParams>
+                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
+                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
+                                        </ExtraParams>
+                                    </Command>
+                                </DirectEvents>
+                            </ext:GridPanel>
+                        </Items>
+                    </ext:Panel>
                 </East>
                 <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
                 </South>
@@ -247,6 +341,93 @@
                 </Buttons>
                 <BottomBar>
                     <ext:StatusBar ID="StatusBar1" runat="server" Height="25" />
+                </BottomBar>
+                <Listeners>
+                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                </Listeners>
+            </ext:FormPanel>
+        </Content>
+    </ext:Window>
+    <ext:Window ID="OrganisationWindow" runat="server" Width="450" Height="400" Closable="true"
+        Hidden="true" Collapsible="false" Title="Organisation Detail"
+        Maximizable="false" Layout="Fit" ClientIDMode="Static">
+        <Listeners>
+            <Hide Fn="ClearOrganisationForm" />
+        </Listeners>
+        <Content>
+            <ext:FormPanel ID="OrganisationFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
+                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
+                Layout="RowLayout" ClientIDMode="Static">
+                <LoadMask ShowMask="true" />
+                <Items>
+                    <ext:Hidden ID="Hidden1" DataIndex="Id" runat="server" ClientIDMode="Static">
+                    </ext:Hidden>
+                    <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout"
+                        LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
+                            <ext:Parameter Name="blankText" Value="Organisation is a required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:ComboBox ID="cbOrganisation" runat="server" StoreID="OrganisationStore" Editable="true" DisplayField="Name"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                AllowBlank="false" DataIndex="OrganisationID" EmptyText="Select Organisation"
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                            </ext:ComboBox>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel14" runat="server" Border="false" Header="false" Layout="FormLayout"
+                        LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
+                            <ext:Parameter Name="blankText" Value="Role is a required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:ComboBox ID="cbOrganisationRole" runat="server" StoreID="OrganisationRoleStore" Editable="true" DisplayField="Name"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                AllowBlank="false" DataIndex="OrganisationRoleID" EmptyText="Select Role"
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                            </ext:ComboBox>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel12" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="Start Date is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:DateField ID="dfOrganisationStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
+                                FieldLabel="Start Date" AnchorHorizontal="95%">
+                            </ext:DateField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel13" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="End Date is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:DateField ID="dfOrganisationEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
+                                FieldLabel="End Date" AnchorHorizontal="95%">
+                            </ext:DateField>
+                        </Items>
+                    </ext:Panel>
+                </Items>
+                <Buttons>
+                    <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true">
+                        <DirectEvents>
+                            <Click OnEvent="AcceptOrganisation_Click">
+                                <EventMask ShowMask="true" />
+                            </Click>
+                        </DirectEvents>
+                    </ext:Button>
+                </Buttons>
+                <BottomBar>
+                    <ext:StatusBar ID="StatusBar2" runat="server" Height="25" />
                 </BottomBar>
                 <Listeners>
                     <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />

@@ -90,7 +90,7 @@
                                                     <ext:RecordField Name="Description" Type="String" />
                                                     <ext:RecordField Name="Url" Type="String" />
                                                     <ext:RecordField Name="StartDate" Type="Date" />
-                                                    <ext:RecordField Name="EndDtae" Type="Date" />
+                                                    <ext:RecordField Name="EndDate" Type="Date" />
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>
@@ -109,14 +109,19 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="200" />
-                                        <ext:Column Header="Start" DataIndex="StartDate" Width="100" />
-                                        <ext:Column Header="End" DataIndex="EndDate" Width="100" />
+                                        <ext:DateColumn Header="Start" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="End" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="200" />
-                                        <ext:CommandColumn Width="50">
+                                        <ext:CommandColumn Width="25">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
                                             </Commands>
                                         </ext:CommandColumn>
+                                        <%--                                        <ext:CommandColumn Width="25">
+                                            <Commands>
+                                                <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />
+                                            </Commands>
+                                        </ext:CommandColumn>--%>
                                     </Columns>
                                 </ColumnModel>
                                 <SelectionModel>
@@ -153,9 +158,9 @@
                         <TopBar>
                             <ext:Toolbar ID="Toolbar2" runat="server">
                                 <Items>
-                                    <ext:Button ID="btnAddStation" runat="server" Icon="Add" Text="Add Stations">
+                                    <ext:Button ID="btnLinkStation" runat="server" Icon="LinkAdd" Text="Link Stations">
                                         <ToolTips>
-                                            <ext:ToolTip ID="ToolTip2" runat="server" Html="Add" />
+                                            <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
                                             <Click Handler="if(Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection()){#{AvailableStationsStore}.reload();#{AvailableStationsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
@@ -178,6 +183,8 @@
                                                     <ext:RecordField Name="Code" Type="Auto" />
                                                     <ext:RecordField Name="Name" Type="Auto" />
                                                     <ext:RecordField Name="Description" Type="Auto" />
+                                                    <ext:RecordField Name="StartDate" Type="Date" />
+                                                    <ext:RecordField Name="EndDate" Type="Date" />
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>
@@ -192,9 +199,18 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="150" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="150" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="150" />
-                                        <ext:CommandColumn Width="50">
+                                        <ext:DateColumn Header="Start" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="End" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+                                        <ext:CommandColumn Width="25">
                                             <Commands>
-                                                <ext:GridCommand Icon="NoteDelete" CommandName="RemoveStation" Text="" ToolTip-Text="Delete" />
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="EditStationLink" Text="" ToolTip-Text="Edit">
+                                                </ext:GridCommand>
+                                            </Commands>
+                                        </ext:CommandColumn>
+                                        <ext:CommandColumn Width="25">
+                                            <Commands>
+                                                <ext:GridCommand Icon="LinkDelete" CommandName="DeleteStationLink" Text="" ToolTip-Text="Unlink">
+                                                </ext:GridCommand>
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -207,9 +223,13 @@
                                 <Listeners>
                                 </Listeners>
                                 <DirectEvents>
-                                    <Command OnEvent="DoDelete">
+                                    <%--                                    <Command OnEvent="DoEditStationLink">
                                         <ExtraParams>
-                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
+                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
+                                        </ExtraParams>
+                                    </Command>--%>
+                                    <Command OnEvent="DoDeleteStationLink">
+                                        <ExtraParams>
                                             <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
                                         </ExtraParams>
                                     </Command>
@@ -223,9 +243,9 @@
                         <TopBar>
                             <ext:Toolbar ID="Toolbar3" runat="server">
                                 <Items>
-                                    <ext:Button ID="AddOrganisation" runat="server" Icon="Add" Text="Add Organisation">
+                                    <ext:Button ID="LinkOrganisation" runat="server" Icon="LinkAdd" Text="Link Organisation">
                                         <ToolTips>
-                                            <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
+                                            <ext:ToolTip ID="ToolTip3" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
                                             <Click Handler="if(Ext.getCmp('#{SiteGrid}') && #{SiteGrid}.getSelectionModel().hasSelection()){#{OrganisationWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
@@ -265,11 +285,15 @@
                                     <Columns>
                                         <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
                                         <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="75" />
-                                        <ext:DateColumn Header="Start Date" DataIndex="StartDatet" Width="75" Format="yyyy/MM/dd" />
-                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="yyyy/MM/dd" />
+                                        <ext:DateColumn Header="Start" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="End" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
-                                                <ext:GridCommand Icon="NoteDelete" CommandName="RemoveOrganisation" Text="" ToolTip-Text="Delete">
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="EditOrganisationLink" Text="" ToolTip-Text="Edit">
+                                                </ext:GridCommand>
+                                            </Commands>
+                                            <Commands>
+                                                <ext:GridCommand Icon="LinkDelete" CommandName="DeleteOrganisationLink" Text="" ToolTip-Text="Unlink">
                                                 </ext:GridCommand>
                                             </Commands>
                                         </ext:CommandColumn>
@@ -280,12 +304,14 @@
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
-                                <Listeners>
-                                </Listeners>
                                 <DirectEvents>
-                                    <Command OnEvent="DoDelete">
+                                    <Command OnEvent="DoEditOrganisationLink">
                                         <ExtraParams>
-                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
+                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
+                                        </ExtraParams>
+                                    </Command>
+                                    <Command OnEvent="DoDeleteOrganisationLink">
+                                        <ExtraParams>
                                             <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
                                         </ExtraParams>
                                     </Command>
@@ -372,7 +398,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
-                                FieldLabel="Start Date" AnchorHorizontal="95%">
+                                FieldLabel="Start" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -384,7 +410,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
-                                FieldLabel="End Date" AnchorHorizontal="95%">
+                                FieldLabel="End" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -511,7 +537,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
-                                FieldLabel="Start Date" AnchorHorizontal="95%">
+                                FieldLabel="Start" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -523,7 +549,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
-                                FieldLabel="End Date" AnchorHorizontal="95%">
+                                FieldLabel="End" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>

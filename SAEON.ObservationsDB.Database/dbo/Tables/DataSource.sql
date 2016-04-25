@@ -42,3 +42,39 @@ CREATE INDEX [IX_DataSource_UserId] ON [dbo].[DataSource] ([UserId])
 GO
 CREATE INDEX [IX_DataSource_StationID] ON [dbo].Station ([ID])
 --< Added 2.0.0.0 20160406 TimPN
+--> Added 2.0.0.3 20160421 TimPN
+GO
+CREATE TRIGGER [dbo].[TR_DataSource_Insert] ON [dbo].[DataSource]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = GETDATE(),
+              UpdatedAt = NULL
+    from
+        inserted ins
+        inner join DataSource src
+            on (ins.ID = src.ID)
+END
+GO
+CREATE TRIGGER [dbo].[TR_DataSource_Update] ON [dbo].[DataSource]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    if UPDATE(UpdatedAt) RAISERROR ('Cannot update UpdatedAt.', 16, 1)
+    if not UPDATE(AddedAt) and not UPDATE(UpdatedAt)
+        Update
+            src
+        set
+            UpdatedAt = GETDATE()
+        from
+            inserted ins
+            inner join DataSource src
+                on (ins.ID = src.ID)
+END
+--< Added 2.0.0.3 20160421 TimPN
