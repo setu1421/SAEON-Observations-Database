@@ -222,6 +222,20 @@ namespace SAEON.ObservationsDB.Data
 					colvarUserId.ForeignKeyTableName = "aspnet_Users";
 				schema.Columns.Add(colvarUserId);
 				
+				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+				colvarUpdatedAt.ColumnName = "UpdatedAt";
+				colvarUpdatedAt.DataType = DbType.DateTime;
+				colvarUpdatedAt.MaxLength = 0;
+				colvarUpdatedAt.AutoIncrement = false;
+				colvarUpdatedAt.IsNullable = true;
+				colvarUpdatedAt.IsPrimaryKey = false;
+				colvarUpdatedAt.IsForeignKey = false;
+				colvarUpdatedAt.IsReadOnly = false;
+				
+						colvarUpdatedAt.DefaultSetting = @"(getdate())";
+				colvarUpdatedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUpdatedAt);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -286,6 +300,14 @@ namespace SAEON.ObservationsDB.Data
 		{
 			get { return GetColumnValue<Guid>(Columns.UserId); }
 			set { SetColumnValue(Columns.UserId, value); }
+		}
+		  
+		[XmlAttribute("UpdatedAt")]
+		[Bindable(true)]
+		public DateTime? UpdatedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.UpdatedAt); }
+			set { SetColumnValue(Columns.UpdatedAt, value); }
 		}
 		
 		#endregion
@@ -353,7 +375,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varStationID,Guid varOrganisationID,Guid varOrganisationRoleID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId)
+		public static void Insert(Guid varId,Guid varStationID,Guid varOrganisationID,Guid varOrganisationRoleID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varUpdatedAt)
 		{
 			StationOrganisation item = new StationOrganisation();
 			
@@ -371,6 +393,8 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.UserId = varUserId;
 			
+			item.UpdatedAt = varUpdatedAt;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -381,7 +405,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varStationID,Guid varOrganisationID,Guid varOrganisationRoleID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId)
+		public static void Update(Guid varId,Guid varStationID,Guid varOrganisationID,Guid varOrganisationRoleID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varUpdatedAt)
 		{
 			StationOrganisation item = new StationOrganisation();
 			
@@ -398,6 +422,8 @@ namespace SAEON.ObservationsDB.Data
 				item.EndDate = varEndDate;
 			
 				item.UserId = varUserId;
+			
+				item.UpdatedAt = varUpdatedAt;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -461,6 +487,13 @@ namespace SAEON.ObservationsDB.Data
         
         
         
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[7]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -472,6 +505,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string StartDate = @"StartDate";
 			 public static string EndDate = @"EndDate";
 			 public static string UserId = @"UserId";
+			 public static string UpdatedAt = @"UpdatedAt";
 						
 		}
 		#endregion

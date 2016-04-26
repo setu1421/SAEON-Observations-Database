@@ -8,6 +8,7 @@ CREATE TABLE [dbo].[DataSource_Organisation]
     [StartDate] DATETIME NULL,
     [EndDate] DATETIME NULL,
     [UserId] UNIQUEIDENTIFIER NOT NULL,
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSource_Organisation_UpdatedAt] DEFAULT GetDate(), 
     CONSTRAINT [PK_DataSource_Organisation] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSource_Organisation_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]),
     CONSTRAINT [FK_DataSource_Organisation_Organisation] FOREIGN KEY ([OrganisationID]) REFERENCES [dbo].[Organisation] ([ID]),
@@ -27,4 +28,19 @@ GO
 CREATE INDEX [IX_DataSource_Organisation_EndDate] ON [dbo].[DataSource_Organisation] ([EndDate])
 GO
 CREATE INDEX [IX_DataSource_Organisation_UserId] ON [dbo].[DataSource_Organisation] ([UserId])
+GO
+CREATE TRIGGER [dbo].[TR_DataSource_Organisation_InsertUpdate] ON [dbo].[DataSource_Organisation]
+FOR INSERT, UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        UpdatedAt = GETDATE()
+    from
+        inserted ins 
+        inner join DataSource_Organisation src
+            on (ins.ID = src.ID)
+END
 --< Added 2.0.0.1 20160406 TimPN

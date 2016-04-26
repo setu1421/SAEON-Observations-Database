@@ -80,7 +80,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,double? DefaultNullValue,double? ErrorEstimate,int UpdateFreq,DateTime? StartDate,DateTime? EndDate,DateTime LastUpdate,Guid? DataSchemaID,Guid UserId,Guid? StationID,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,double? DefaultNullValue,double? ErrorEstimate,int UpdateFreq,DateTime? StartDate,DateTime? EndDate,DateTime LastUpdate,Guid? DataSchemaID,Guid UserId,Guid? StationID,DateTime? UpdatedAt)
 	    {
 		    DataSource item = new DataSource();
 		    
@@ -112,8 +112,6 @@ namespace SAEON.ObservationsDB.Data
             
             item.StationID = StationID;
             
-            item.AddedAt = AddedAt;
-            
             item.UpdatedAt = UpdatedAt;
             
 	    
@@ -124,7 +122,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,double? DefaultNullValue,double? ErrorEstimate,int UpdateFreq,DateTime? StartDate,DateTime? EndDate,DateTime LastUpdate,Guid? DataSchemaID,Guid UserId,Guid? StationID,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,string Code,string Name,string Description,string Url,double? DefaultNullValue,double? ErrorEstimate,int UpdateFreq,DateTime? StartDate,DateTime? EndDate,DateTime LastUpdate,Guid? DataSchemaID,Guid UserId,Guid? StationID,DateTime? UpdatedAt)
 	    {
 		    DataSource item = new DataSource();
 	        item.MarkOld();
@@ -157,8 +155,6 @@ namespace SAEON.ObservationsDB.Data
 			item.UserId = UserId;
 				
 			item.StationID = StationID;
-				
-			item.AddedAt = AddedAt;
 				
 			item.UpdatedAt = UpdatedAt;
 				

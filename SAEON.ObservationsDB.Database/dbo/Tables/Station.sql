@@ -19,7 +19,6 @@
     [EndDate] DATETIME NULL, 
     --< Added 2.0.0.2 20160407 TimPN
 --> Added 2.0.0.3 20160421 TimPN
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_Station_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Station_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.0.3 20160421 TimPN
     CONSTRAINT [PKStation] PRIMARY KEY CLUSTERED ([ID]),
@@ -51,37 +50,18 @@ CREATE INDEX [IX_Station_SiteID] ON [dbo].[Station] ([SiteID])
 --< Added 2.0.0.2 20160407 TimPN
 --> Added 2.0.0.3 20160421 TimPN
 GO
-CREATE TRIGGER [dbo].[TR_Station_Insert] ON [dbo].[Station]
-FOR INSERT
+CREATE TRIGGER [dbo].[TR_Station_InsertUpdate] ON [dbo].[Station]
+FOR INSERT, UPDATE
 AS
 BEGIN
     SET NoCount ON
     Update 
         src 
     set 
-        AddedAt = GETDATE(),
-        UpdatedAt = NULL
+        UpdatedAt = GETDATE()
     from
         inserted ins 
         inner join Site src
             on (ins.ID = src.ID)
-END
-GO
-CREATE TRIGGER [dbo].[TR_Station_Update] ON [dbo].[Station]
-FOR UPDATE
-AS
-BEGIN
-    SET NoCount ON
-    if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
-    if UPDATE(UpdatedAt) RAISERROR ('Cannot update UpdatedAt.', 16, 1)
-    if not UPDATE(AddedAt) and not UPDATE(UpdatedAt)
-        Update 
-            src 
-        set 
-            UpdatedAt = GETDATE()
-        from
-            inserted ins 
-            inner join Station src
-                on (ins.ID = src.ID)
 END
 --< Added 2.0.0.3 20160421 TimPN

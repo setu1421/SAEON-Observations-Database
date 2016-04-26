@@ -141,6 +141,18 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarUserId);
                 
+                TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+                colvarUpdatedAt.ColumnName = "UpdatedAt";
+                colvarUpdatedAt.DataType = DbType.DateTime;
+                colvarUpdatedAt.MaxLength = 0;
+                colvarUpdatedAt.AutoIncrement = false;
+                colvarUpdatedAt.IsNullable = true;
+                colvarUpdatedAt.IsPrimaryKey = false;
+                colvarUpdatedAt.IsForeignKey = false;
+                colvarUpdatedAt.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUpdatedAt);
+                
                 TableSchema.TableColumn colvarOrganisationName = new TableSchema.TableColumn(schema);
                 colvarOrganisationName.ColumnName = "OrganisationName";
                 colvarOrganisationName.DataType = DbType.AnsiString;
@@ -313,6 +325,20 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
+        [XmlAttribute("UpdatedAt")]
+        [Bindable(true)]
+        public DateTime? UpdatedAt 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("UpdatedAt");
+		    }
+            set 
+		    {
+			    SetColumnValue("UpdatedAt", value);
+            }
+        }
+	      
         [XmlAttribute("OrganisationName")]
         [Bindable(true)]
         public string OrganisationName 
@@ -361,6 +387,8 @@ namespace SAEON.ObservationsDB.Data{
             public static string EndDate = @"EndDate";
             
             public static string UserId = @"UserId";
+            
+            public static string UpdatedAt = @"UpdatedAt";
             
             public static string OrganisationName = @"OrganisationName";
             

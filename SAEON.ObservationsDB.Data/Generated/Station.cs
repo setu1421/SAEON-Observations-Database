@@ -299,20 +299,6 @@ namespace SAEON.ObservationsDB.Data
 				colvarEndDate.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarEndDate);
 				
-				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
-				colvarAddedAt.ColumnName = "AddedAt";
-				colvarAddedAt.DataType = DbType.DateTime;
-				colvarAddedAt.MaxLength = 0;
-				colvarAddedAt.AutoIncrement = false;
-				colvarAddedAt.IsNullable = true;
-				colvarAddedAt.IsPrimaryKey = false;
-				colvarAddedAt.IsForeignKey = false;
-				colvarAddedAt.IsReadOnly = false;
-				
-						colvarAddedAt.DefaultSetting = @"(getdate())";
-				colvarAddedAt.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarAddedAt);
-				
 				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
 				colvarUpdatedAt.ColumnName = "UpdatedAt";
 				colvarUpdatedAt.DataType = DbType.DateTime;
@@ -441,14 +427,6 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.EndDate, value); }
 		}
 		  
-		[XmlAttribute("AddedAt")]
-		[Bindable(true)]
-		public DateTime? AddedAt 
-		{
-			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
-			set { SetColumnValue(Columns.AddedAt, value); }
-		}
-		  
 		[XmlAttribute("UpdatedAt")]
 		[Bindable(true)]
 		public DateTime? UpdatedAt 
@@ -535,7 +513,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varUpdatedAt)
 		{
 			Station item = new Station();
 			
@@ -565,8 +543,6 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.EndDate = varEndDate;
 			
-			item.AddedAt = varAddedAt;
-			
 			item.UpdatedAt = varUpdatedAt;
 			
 		
@@ -579,7 +555,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varUpdatedAt)
 		{
 			Station item = new Station();
 			
@@ -608,8 +584,6 @@ namespace SAEON.ObservationsDB.Data
 				item.StartDate = varStartDate;
 			
 				item.EndDate = varEndDate;
-			
-				item.AddedAt = varAddedAt;
 			
 				item.UpdatedAt = varUpdatedAt;
 			
@@ -717,16 +691,9 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
-        {
-            get { return Schema.Columns[13]; }
-        }
-        
-        
-        
         public static TableSchema.TableColumn UpdatedAtColumn
         {
-            get { return Schema.Columns[14]; }
+            get { return Schema.Columns[13]; }
         }
         
         
@@ -748,7 +715,6 @@ namespace SAEON.ObservationsDB.Data
 			 public static string SiteID = @"SiteID";
 			 public static string StartDate = @"StartDate";
 			 public static string EndDate = @"EndDate";
-			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
 						
 		}

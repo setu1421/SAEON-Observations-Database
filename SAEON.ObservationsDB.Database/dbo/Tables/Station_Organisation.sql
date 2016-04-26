@@ -8,6 +8,9 @@ CREATE TABLE [dbo].[Station_Organisation]
     [StartDate] DATETIME NULL,
     [EndDate] DATETIME NULL,
     [UserId] UNIQUEIDENTIFIER NOT NULL,
+--> Added 2.0.0.3 20160426 TimPN
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Station_Organisation_UpdatedAt] DEFAULT GetDate(), 
+--< Added 2.0.0.3 20160426 TimPN
     CONSTRAINT [PK_Station_Organisation] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Station_Organisation_Station] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]),
     CONSTRAINT [FK_Station_Organisation_Organisation] FOREIGN KEY ([OrganisationID]) REFERENCES [dbo].[Organisation] ([ID]),
@@ -28,3 +31,20 @@ CREATE INDEX [IX_Station_Organisation_EndDate] ON [dbo].[Station_Organisation] (
 GO
 CREATE INDEX [IX_Station_Organisation_UserId] ON [dbo].[Station_Organisation] ([UserId])
 --< Added 2.0.0.1 20160406 TimPN
+--> Added 2.0.0.3 20160426 TimPN
+GO
+CREATE TRIGGER [dbo].[TR_Station_Organisation_InsertUpdate] ON [dbo].[Station_Organisation]
+FOR INSERT, UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        UpdatedAt = GETDATE()
+    from
+        inserted ins 
+        inner join Station_Organisation src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.0.3 20160426 TimPN
