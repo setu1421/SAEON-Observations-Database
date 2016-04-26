@@ -6,7 +6,7 @@ SELECT
   s.Code + ' - ' + s.Name SiteName
 FROM 
   Station
-  INNER JOIN ProjectSite p
+  LEFT JOIN ProjectSite p -- Must be removed once all stations have sites
     on (Station.ProjectSiteID = p.ID)
   LEFT JOIN [Site] s -- Must be inner join once all stations have sites
     on (Station.SiteID = s.ID)

@@ -213,18 +213,6 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarEndDate);
                 
-                TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
-                colvarAddedAt.ColumnName = "AddedAt";
-                colvarAddedAt.DataType = DbType.DateTime;
-                colvarAddedAt.MaxLength = 0;
-                colvarAddedAt.AutoIncrement = false;
-                colvarAddedAt.IsNullable = true;
-                colvarAddedAt.IsPrimaryKey = false;
-                colvarAddedAt.IsForeignKey = false;
-                colvarAddedAt.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarAddedAt);
-                
                 TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
                 colvarUpdatedAt.ColumnName = "UpdatedAt";
                 colvarUpdatedAt.DataType = DbType.DateTime;
@@ -242,7 +230,7 @@ namespace SAEON.ObservationsDB.Data{
                 colvarProjectSiteName.DataType = DbType.AnsiString;
                 colvarProjectSiteName.MaxLength = 203;
                 colvarProjectSiteName.AutoIncrement = false;
-                colvarProjectSiteName.IsNullable = false;
+                colvarProjectSiteName.IsNullable = true;
                 colvarProjectSiteName.IsPrimaryKey = false;
                 colvarProjectSiteName.IsForeignKey = false;
                 colvarProjectSiteName.IsReadOnly = false;
@@ -493,20 +481,6 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
-        [XmlAttribute("AddedAt")]
-        [Bindable(true)]
-        public DateTime? AddedAt 
-	    {
-		    get
-		    {
-			    return GetColumnValue<DateTime?>("AddedAt");
-		    }
-            set 
-		    {
-			    SetColumnValue("AddedAt", value);
-            }
-        }
-	      
         [XmlAttribute("UpdatedAt")]
         [Bindable(true)]
         public DateTime? UpdatedAt 
@@ -581,8 +555,6 @@ namespace SAEON.ObservationsDB.Data{
             public static string StartDate = @"StartDate";
             
             public static string EndDate = @"EndDate";
-            
-            public static string AddedAt = @"AddedAt";
             
             public static string UpdatedAt = @"UpdatedAt";
             

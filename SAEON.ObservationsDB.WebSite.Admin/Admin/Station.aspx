@@ -166,7 +166,7 @@
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server">
                     </ext:Hidden>
-                    <ext:Container ID="Container1" runat="server" Layout="Column" Height="150">
+                    <ext:Container ID="Container1" runat="server" Layout="Column" Height="100">
                         <Items>
                             <ext:Container ID="Container2" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                                 <Items>
