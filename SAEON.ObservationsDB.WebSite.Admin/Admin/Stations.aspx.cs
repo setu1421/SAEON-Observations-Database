@@ -12,8 +12,6 @@ public partial class Admin_Stations : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
-            ProjectSiteStore.DataSource = new da.ProjectSiteCollection().OrderByAsc(da.ProjectSite.Columns.Name).Load();
-            ProjectSiteStore.DataBind();
             SiteStore.DataSource = new da.SiteCollection().OrderByAsc(da.Site.Columns.Name).Load();
             SiteStore.DataBind();
             OrganisationStore.DataSource = new da.OrganisationCollection().OrderByAsc(da.Organisation.Columns.Name).Load();
@@ -79,7 +77,6 @@ public partial class Admin_Stations : System.Web.UI.Page
             if (!string.IsNullOrEmpty(tfName.Text.Trim()))
                 station.Name = tfName.Text.Trim();
             station.Description = tfDescription.Text.Trim();
-            station.ProjectSiteID = new Guid(cbProjectSite.SelectedItem.Value.Trim());
             station.SiteID = new Guid(cbSite.SelectedItem.Value.Trim());
 
             if (!string.IsNullOrEmpty(nfLatitude.Text))
@@ -97,7 +94,7 @@ public partial class Admin_Stations : System.Web.UI.Page
             station.UserId = AuthHelper.GetLoggedInUserId;
 
             station.Save();
-            Auditing.Log("Station.Save", new Dictionary<string, object> {
+            Auditing.Log("Stations.Save", new Dictionary<string, object> {
                 { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
 
             StationGrid.DataBind();
@@ -106,7 +103,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Save");
+            Log.Error(ex, "Stations.Save");
             MessageBoxes.Error(ex, "Unable to save station");
         }
     }
@@ -124,43 +121,11 @@ public partial class Admin_Stations : System.Web.UI.Page
         BaseRepository.doExport(type, js);
     }
 
-    protected void DoDelete(object sender, DirectEventArgs e)
-    {
-        string ActionType = e.ExtraParams["type"];
-        string recordID = e.ExtraParams["id"];
-        try
-        {
-            if (ActionType == "RemoveInstrument")
-            {
-                da.DataSource dataSource = new da.DataSource(recordID);
-                if (dataSource != null)
-                {
-                    dataSource.StationID = null;
-                    dataSource.UserId = AuthHelper.GetLoggedInUserId;
-                    dataSource.Save();
-                    Auditing.Log("Station.DeleteInstrument", new Dictionary<string, object> {
-                        { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
-                    InstrumentGrid.DataBind();
-                }
-            }
-            else if (ActionType == "RemoveOrganisation")
-            {
-                new da.StationOrganisationController().Delete(recordID);
-                Auditing.Log("Station.DeleteOrganisation", new Dictionary<string, object> { { "ID", recordID } });
-                OrganisationGrid.DataBind();
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DoDelete({ActionType},{RecordID})", ActionType, recordID);
-            MessageBoxes.Error(ex, "Unable to delete {0}", ActionType == "RemoveInstrument" ? "instrument" : "organisation");
-        }
-    }
     #endregion
 
-    #region Instruments
+    #region DataSources
 
-    protected void InstrumentGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void DataSourceGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
         {
@@ -169,12 +134,12 @@ public partial class Admin_Stations : System.Web.UI.Page
                 .Where(da.DataSource.Columns.StationID, Id)
                 .OrderByAsc(da.DataSource.Columns.Code)
                 .Load();
-            InstrumentGrid.GetStore().DataSource = col;
-            InstrumentGrid.GetStore().DataBind();
+            DataSourceGrid.GetStore().DataSource = col;
+            DataSourceGrid.GetStore().DataBind();
         }
     }
 
-    protected void AvailableInstrumentsStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void AvailableDataSourcesStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
         {
@@ -187,16 +152,16 @@ public partial class Admin_Stations : System.Web.UI.Page
                 .IsNull()
                 .OrderAsc(da.DataSource.Columns.Code)
                 .ExecuteAsCollection<da.DataSourceCollection>();
-            AvailableInstrumentsGrid.GetStore().DataSource = col;
-            AvailableInstrumentsGrid.GetStore().DataBind();
+            AvailableDataSourcesGrid.GetStore().DataSource = col;
+            AvailableDataSourcesGrid.GetStore().DataBind();
         }
     }
 
-    protected void AcceptInstruments_Click(object sender, DirectEventArgs e)
+    protected void LinkDataSources_Click(object sender, DirectEventArgs e)
     {
         try
         {
-            RowSelectionModel sm = AvailableInstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel sm = AvailableDataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
             RowSelectionModel masterRow = StationGrid.SelectionModel.Primary as RowSelectionModel;
 
             var masterID = new Guid(masterRow.SelectedRecordID);
@@ -210,12 +175,12 @@ public partial class Admin_Stations : System.Web.UI.Page
                         dataSource.StationID = masterID;
                         dataSource.UserId = AuthHelper.GetLoggedInUserId;
                         dataSource.Save();
-                        Auditing.Log("Station.AddInstrument", new Dictionary<string, object> {
+                        Auditing.Log("Stations.AddDataSourceLink", new Dictionary<string, object> {
                             { "StationID", masterID }, { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
                     }
                 }
-                InstrumentGrid.DataBind();
-                AvailableInstrumentsWindow.Hide();
+                DataSourceGrid.DataBind();
+                AvailableDataSourcesWindow.Hide();
             }
             else
             {
@@ -225,8 +190,38 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "AcceptInstruments_Click");
-            MessageBoxes.Error(ex, "Unable to save instruments");
+            Log.Error(ex, "Stations.LinkDataSources_Click");
+            MessageBoxes.Error(ex, "Unable to link data sources");
+        }
+    }
+
+    protected void DataSourceLink(object sender, DirectEventArgs e)
+    {
+        string actionType = e.ExtraParams["type"];
+        string recordID = e.ExtraParams["id"];
+        try
+        {
+            if (actionType == "Edit")
+            {
+            }
+            else if (actionType == "Delete")
+            {
+                da.DataSource dataSource = new da.DataSource(recordID);
+                if (dataSource != null)
+                {
+                    dataSource.StationID = null;
+                    dataSource.UserId = AuthHelper.GetLoggedInUserId;
+                    dataSource.Save();
+                    Auditing.Log("Stations.DeleteDataSourceLink", new Dictionary<string, object> {
+                        { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
+                    DataSourceGrid.DataBind();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Stations.DataSourceLink({ActionType},{RecordID})", actionType, recordID);
+            MessageBoxes.Error(ex, "Unable to {0} data source link", actionType);
         }
     }
     #endregion
@@ -250,7 +245,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
-    protected void AcceptOrganisation_Click(object sender, DirectEventArgs e)
+    protected void LinkOrganisation_Click(object sender, DirectEventArgs e)
     {
         try
         {
@@ -266,7 +261,7 @@ public partial class Admin_Stations : System.Web.UI.Page
                 stationOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
             stationOrganisation.UserId = AuthHelper.GetLoggedInUserId;
             stationOrganisation.Save();
-            Auditing.Log("Station.AddOrganisation", new Dictionary<string, object> {
+            Auditing.Log("Stations.AddOrganisationLink", new Dictionary<string, object> {
                 { "StationID", masterID },
                 { "OrganisationID", stationOrganisation.OrganisationID},
                 { "OrganisationCode", stationOrganisation.Organisation.Code},
@@ -278,9 +273,35 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "AcceptOrganisation_Click");
-            MessageBoxes.Error(ex, "Unable to save organisation");
+            Log.Error(ex, "Stations.LinkOrganisation_Click");
+            MessageBoxes.Error(ex, "Unable to link organisation");
         }
     }
+
+    protected void OrganisationLink(object sender, DirectEventArgs e)
+    {
+        string actionType = e.ExtraParams["type"];
+        string recordID = e.ExtraParams["id"];
+        try
+        {
+            if (actionType == "Edit")
+            {
+                OrganisationFormPanel.SetValues(new da.StationOrganisation(recordID));
+                OrganisationWindow.Show();
+            }
+            else if (actionType == "Delete")
+            {
+                new da.StationOrganisationController().Delete(recordID);
+                Auditing.Log("Station.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
+                OrganisationGrid.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Stations.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
+            MessageBoxes.Error(ex, "Unable to {0} organisation link", actionType);
+        }
+    }
+
     #endregion
 }

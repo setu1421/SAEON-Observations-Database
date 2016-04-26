@@ -244,6 +244,19 @@ namespace SAEON.ObservationsDB.Data
 				colvarStartDate.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarStartDate);
 				
+				TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
+				colvarEndDate.ColumnName = "EndDate";
+				colvarEndDate.DataType = DbType.DateTime;
+				colvarEndDate.MaxLength = 0;
+				colvarEndDate.AutoIncrement = false;
+				colvarEndDate.IsNullable = true;
+				colvarEndDate.IsPrimaryKey = false;
+				colvarEndDate.IsForeignKey = false;
+				colvarEndDate.IsReadOnly = false;
+				colvarEndDate.DefaultSetting = @"";
+				colvarEndDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarEndDate);
+				
 				TableSchema.TableColumn colvarLastUpdate = new TableSchema.TableColumn(schema);
 				colvarLastUpdate.ColumnName = "LastUpdate";
 				colvarLastUpdate.DataType = DbType.DateTime;
@@ -409,6 +422,14 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.StartDate, value); }
 		}
 		  
+		[XmlAttribute("EndDate")]
+		[Bindable(true)]
+		public DateTime? EndDate 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
+			set { SetColumnValue(Columns.EndDate, value); }
+		}
+		  
 		[XmlAttribute("LastUpdate")]
 		[Bindable(true)]
 		public DateTime LastUpdate 
@@ -470,10 +491,6 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.DataSourceRoleCollection DataSourceRoleRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataSourceRoleCollection().Where(DataSourceRole.Columns.DataSourceID, Id).Load();
-		}
 		public SAEON.ObservationsDB.Data.ImportBatchCollection ImportBatchRecords()
 		{
 			return new SAEON.ObservationsDB.Data.ImportBatchCollection().Where(ImportBatch.Columns.DataSourceID, Id).Load();
@@ -485,6 +502,14 @@ namespace SAEON.ObservationsDB.Data
 		public SAEON.ObservationsDB.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
 		{
 			return new SAEON.ObservationsDB.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.DataSourceID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.DataSourceRoleCollection DataSourceRoleRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceRoleCollection().Where(DataSourceRole.Columns.DataSourceID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.DataSourceOrganisationCollection DataSourceOrganisationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceOrganisationCollection().Where(DataSourceOrganisation.Columns.DataSourceID, Id).Load();
 		}
 		#endregion
 		
@@ -539,7 +564,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId,Guid? varStationID,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime? varEndDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId,Guid? varStationID,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSource item = new DataSource();
 			
@@ -560,6 +585,8 @@ namespace SAEON.ObservationsDB.Data
 			item.UpdateFreq = varUpdateFreq;
 			
 			item.StartDate = varStartDate;
+			
+			item.EndDate = varEndDate;
 			
 			item.LastUpdate = varLastUpdate;
 			
@@ -583,7 +610,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId,Guid? varStationID,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime? varEndDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId,Guid? varStationID,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSource item = new DataSource();
 			
@@ -604,6 +631,8 @@ namespace SAEON.ObservationsDB.Data
 				item.UpdateFreq = varUpdateFreq;
 			
 				item.StartDate = varStartDate;
+			
+				item.EndDate = varEndDate;
 			
 				item.LastUpdate = varLastUpdate;
 			
@@ -693,44 +722,51 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn LastUpdateColumn
+        public static TableSchema.TableColumn EndDateColumn
         {
             get { return Schema.Columns[9]; }
         }
         
         
         
-        public static TableSchema.TableColumn DataSchemaIDColumn
+        public static TableSchema.TableColumn LastUpdateColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn DataSchemaIDColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn StationIDColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn StationIDColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[14]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[15]; }
         }
         
         
@@ -748,6 +784,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string ErrorEstimate = @"ErrorEstimate";
 			 public static string UpdateFreq = @"UpdateFreq";
 			 public static string StartDate = @"StartDate";
+			 public static string EndDate = @"EndDate";
 			 public static string LastUpdate = @"LastUpdate";
 			 public static string DataSchemaID = @"DataSchemaID";
 			 public static string UserId = @"UserId";

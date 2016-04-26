@@ -264,6 +264,10 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.StationOrganisationCollection().Where(StationOrganisation.Columns.OrganisationRoleID, Id).Load();
 		}
+		public SAEON.ObservationsDB.Data.DataSourceOrganisationCollection DataSourceOrganisationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceOrganisationCollection().Where(DataSourceOrganisation.Columns.OrganisationRoleID, Id).Load();
+		}
 		#endregion
 		
 			

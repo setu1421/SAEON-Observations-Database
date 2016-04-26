@@ -396,6 +396,10 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.DataLogCollection().Where(DataLog.Columns.UserId, UserId).Load();
 		}
+		public SAEON.ObservationsDB.Data.DataSourceOrganisationCollection DataSourceOrganisationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceOrganisationCollection().Where(DataSourceOrganisation.Columns.UserId, UserId).Load();
+		}
 		public SAEON.ObservationsDB.Data.ObservationCollection ObservationRecords()
 		{
 			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.UserId, UserId).Load();

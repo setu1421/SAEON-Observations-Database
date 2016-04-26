@@ -32,16 +32,6 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
-    <ext:Store ID="SiteStore" runat="server">
-        <Reader>
-            <ext:JsonReader IDProperty="Id">
-                <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
-                    <ext:RecordField Name="Name" Type="String" />
-                </Fields>
-            </ext:JsonReader>
-        </Reader>
-    </ext:Store>
     <ext:Viewport ID="Viewport1" runat="server" Layout="FitLayout">
         <Items>
             <ext:BorderLayout ID="BorderLayout1" runat="server">
@@ -90,8 +80,6 @@
                                                     <ext:RecordField Name="Name" Type="String" />
                                                     <ext:RecordField Name="ProjectSiteID" Type="Auto" />
                                                     <ext:RecordField Name="ProjectSiteName" Type="String" />
-                                                    <ext:RecordField Name="SiteID" Type="Auto" />
-                                                    <ext:RecordField Name="SiteName" Type="String" />
                                                     <ext:RecordField Name="Description" Type="String" />
                                                     <ext:RecordField Name="Url" Type="String" />
                                                     <ext:RecordField Name="Latitude" Type="Auto" />
@@ -115,7 +103,6 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" Groupable="false" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" Groupable="false" />
                                         <ext:Column Header="Project / Site" DataIndex="ProjectSiteName" Width="100" />
-                                        <ext:Column Header="Site" DataIndex="SiteName" Width="100" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
                                         <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
                                         <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" />
@@ -193,12 +180,6 @@
                                         TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
                                         DataIndex="ProjectSiteID" EmptyText="Select Project / site" SelectOnFocus="true"
                                         FieldLabel="Project / Site" AnchorHorizontal="93%" ClientIDMode="Static">
-                                    </ext:ComboBox>
-                                    <ext:ComboBox ID="cbSite" runat="server" StoreID="SiteStore" Editable="true"
-                                        BlankText="Site is required" MsgTarget="Side" DisplayField="Name" ValueField="Id"
-                                        TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
-                                        DataIndex="SiteID" EmptyText="Select Site" SelectOnFocus="true"
-                                        FieldLabel="Site" AnchorHorizontal="93%" ClientIDMode="Static">
                                     </ext:ComboBox>
                                 </Items>
                             </ext:Container>

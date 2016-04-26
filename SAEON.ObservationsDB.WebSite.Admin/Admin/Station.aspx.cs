@@ -17,8 +17,6 @@ public partial class _Station : System.Web.UI.Page
         {
             ProjectSiteStore.DataSource = new da.ProjectSiteCollection().OrderByAsc(da.ProjectSite.Columns.Name).Load();
             ProjectSiteStore.DataBind();
-            SiteStore.DataSource = new da.SiteCollection().OrderByAsc(da.Site.Columns.Name).Load();
-            SiteStore.DataBind();
         }
     }
 
@@ -75,7 +73,6 @@ public partial class _Station : System.Web.UI.Page
         stat.Name = tfName.Text.Trim();
         stat.Description = tfDescription.Text.Trim();
         stat.ProjectSiteID = new Guid(cbProjectSite.SelectedItem.Value.Trim());
-        stat.SiteID = new Guid(cbSite.SelectedItem.Value.Trim());
 
         if (!string.IsNullOrEmpty(nfLatitude.Text))
             stat.Latitude = Double.Parse(nfLatitude.Text);

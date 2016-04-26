@@ -236,7 +236,7 @@ namespace SAEON.ObservationsDB.Data
 				colvarProjectSiteID.DataType = DbType.Guid;
 				colvarProjectSiteID.MaxLength = 0;
 				colvarProjectSiteID.AutoIncrement = false;
-				colvarProjectSiteID.IsNullable = false;
+				colvarProjectSiteID.IsNullable = true;
 				colvarProjectSiteID.IsPrimaryKey = false;
 				colvarProjectSiteID.IsForeignKey = true;
 				colvarProjectSiteID.IsReadOnly = false;
@@ -403,9 +403,9 @@ namespace SAEON.ObservationsDB.Data
 		  
 		[XmlAttribute("ProjectSiteID")]
 		[Bindable(true)]
-		public Guid ProjectSiteID 
+		public Guid? ProjectSiteID 
 		{
-			get { return GetColumnValue<Guid>(Columns.ProjectSiteID); }
+			get { return GetColumnValue<Guid?>(Columns.ProjectSiteID); }
 			set { SetColumnValue(Columns.ProjectSiteID, value); }
 		}
 		  
@@ -535,7 +535,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Station item = new Station();
 			
@@ -579,7 +579,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Station item = new Station();
 			

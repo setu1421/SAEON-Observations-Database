@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
     /// <summary>
-    /// Controller class for DataSource
+    /// Controller class for DataSource_Organisation
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class DataSourceController
+    public partial class DataSourceOrganisationController
     {
         // Preload our schema..
-        DataSource thisSchemaLoad = new DataSource();
+        DataSourceOrganisation thisSchemaLoad = new DataSourceOrganisation();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.ObservationsDB.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public DataSourceCollection FetchAll()
+        public DataSourceOrganisationCollection FetchAll()
         {
-            DataSourceCollection coll = new DataSourceCollection();
-            Query qry = new Query(DataSource.Schema);
+            DataSourceOrganisationCollection coll = new DataSourceOrganisationCollection();
+            Query qry = new Query(DataSourceOrganisation.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public DataSourceCollection FetchByID(object Id)
+        public DataSourceOrganisationCollection FetchByID(object Id)
         {
-            DataSourceCollection coll = new DataSourceCollection().Where("ID", Id).Load();
+            DataSourceOrganisationCollection coll = new DataSourceOrganisationCollection().Where("ID", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public DataSourceCollection FetchByQuery(Query qry)
+        public DataSourceOrganisationCollection FetchByQuery(Query qry)
         {
-            DataSourceCollection coll = new DataSourceCollection();
+            DataSourceOrganisationCollection coll = new DataSourceOrganisationCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
         public bool Delete(object Id)
         {
-            return (DataSource.Delete(Id) == 1);
+            return (DataSourceOrganisation.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
         public bool Destroy(object Id)
         {
-            return (DataSource.Destroy(Id) == 1);
+            return (DataSourceOrganisation.Destroy(Id) == 1);
         }
         
         
@@ -80,41 +80,23 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,double? DefaultNullValue,double? ErrorEstimate,int UpdateFreq,DateTime? StartDate,DateTime? EndDate,DateTime LastUpdate,Guid? DataSchemaID,Guid UserId,Guid? StationID,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,Guid DataSourceID,Guid OrganisationID,Guid OrganisationRoleID,DateTime? StartDate,DateTime? EndDate,Guid UserId)
 	    {
-		    DataSource item = new DataSource();
+		    DataSourceOrganisation item = new DataSourceOrganisation();
 		    
             item.Id = Id;
             
-            item.Code = Code;
+            item.DataSourceID = DataSourceID;
             
-            item.Name = Name;
+            item.OrganisationID = OrganisationID;
             
-            item.Description = Description;
-            
-            item.Url = Url;
-            
-            item.DefaultNullValue = DefaultNullValue;
-            
-            item.ErrorEstimate = ErrorEstimate;
-            
-            item.UpdateFreq = UpdateFreq;
+            item.OrganisationRoleID = OrganisationRoleID;
             
             item.StartDate = StartDate;
             
             item.EndDate = EndDate;
             
-            item.LastUpdate = LastUpdate;
-            
-            item.DataSchemaID = DataSchemaID;
-            
             item.UserId = UserId;
-            
-            item.StationID = StationID;
-            
-            item.AddedAt = AddedAt;
-            
-            item.UpdatedAt = UpdatedAt;
             
 	    
 		    item.Save(UserName);
@@ -124,43 +106,25 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,double? DefaultNullValue,double? ErrorEstimate,int UpdateFreq,DateTime? StartDate,DateTime? EndDate,DateTime LastUpdate,Guid? DataSchemaID,Guid UserId,Guid? StationID,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,Guid DataSourceID,Guid OrganisationID,Guid OrganisationRoleID,DateTime? StartDate,DateTime? EndDate,Guid UserId)
 	    {
-		    DataSource item = new DataSource();
+		    DataSourceOrganisation item = new DataSourceOrganisation();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
 			item.Id = Id;
 				
-			item.Code = Code;
+			item.DataSourceID = DataSourceID;
 				
-			item.Name = Name;
+			item.OrganisationID = OrganisationID;
 				
-			item.Description = Description;
-				
-			item.Url = Url;
-				
-			item.DefaultNullValue = DefaultNullValue;
-				
-			item.ErrorEstimate = ErrorEstimate;
-				
-			item.UpdateFreq = UpdateFreq;
+			item.OrganisationRoleID = OrganisationRoleID;
 				
 			item.StartDate = StartDate;
 				
 			item.EndDate = EndDate;
 				
-			item.LastUpdate = LastUpdate;
-				
-			item.DataSchemaID = DataSchemaID;
-				
 			item.UserId = UserId;
-				
-			item.StationID = StationID;
-				
-			item.AddedAt = AddedAt;
-				
-			item.UpdatedAt = UpdatedAt;
 				
 	        item.Save(UserName);
 	    }

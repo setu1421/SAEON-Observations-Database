@@ -165,6 +165,18 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarStartDate);
                 
+                TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
+                colvarEndDate.ColumnName = "EndDate";
+                colvarEndDate.DataType = DbType.DateTime;
+                colvarEndDate.MaxLength = 0;
+                colvarEndDate.AutoIncrement = false;
+                colvarEndDate.IsNullable = true;
+                colvarEndDate.IsPrimaryKey = false;
+                colvarEndDate.IsForeignKey = false;
+                colvarEndDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarEndDate);
+                
                 TableSchema.TableColumn colvarLastUpdate = new TableSchema.TableColumn(schema);
                 colvarLastUpdate.ColumnName = "LastUpdate";
                 colvarLastUpdate.DataType = DbType.DateTime;
@@ -437,6 +449,20 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
+        [XmlAttribute("EndDate")]
+        [Bindable(true)]
+        public DateTime? EndDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("EndDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("EndDate", value);
+            }
+        }
+	      
         [XmlAttribute("LastUpdate")]
         [Bindable(true)]
         public DateTime LastUpdate 
@@ -573,6 +599,8 @@ namespace SAEON.ObservationsDB.Data{
             public static string UpdateFreq = @"UpdateFreq";
             
             public static string StartDate = @"StartDate";
+            
+            public static string EndDate = @"EndDate";
             
             public static string LastUpdate = @"LastUpdate";
             

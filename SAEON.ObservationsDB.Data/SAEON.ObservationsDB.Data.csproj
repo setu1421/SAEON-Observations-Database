@@ -98,6 +98,8 @@
     <Compile Include="Generated\DataSchemaController.cs" />
     <Compile Include="Generated\DataSource.cs" />
     <Compile Include="Generated\DataSourceController.cs" />
+    <Compile Include="Generated\DataSourceOrganisation.cs" />
+    <Compile Include="Generated\DataSourceOrganisationController.cs" />
     <Compile Include="Generated\DataSourceRole.cs" />
     <Compile Include="Generated\DataSourceRoleController.cs" />
     <Compile Include="Generated\DataSourceTransformation.cs" />

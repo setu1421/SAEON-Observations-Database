@@ -22,16 +22,6 @@
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
-    <ext:Store ID="ProjectSiteStore" runat="server">
-        <Reader>
-            <ext:JsonReader IDProperty="Id">
-                <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
-                    <ext:RecordField Name="Name" Type="String" />
-                </Fields>
-            </ext:JsonReader>
-        </Reader>
-    </ext:Store>
     <ext:Store ID="SiteStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
@@ -108,8 +98,6 @@
                                                     <ext:RecordField Name="Id" Type="Auto" />
                                                     <ext:RecordField Name="Code" Type="String" />
                                                     <ext:RecordField Name="Name" Type="String" />
-                                                    <ext:RecordField Name="ProjectSiteID" Type="Auto" />
-                                                    <ext:RecordField Name="ProjectSiteName" Type="String" />
                                                     <ext:RecordField Name="SiteID" Type="Auto" />
                                                     <ext:RecordField Name="SiteName" Type="String" />
                                                     <ext:RecordField Name="Description" Type="String" />
@@ -117,6 +105,8 @@
                                                     <ext:RecordField Name="Latitude" Type="Auto" />
                                                     <ext:RecordField Name="Longitude" Type="Auto" />
                                                     <ext:RecordField Name="Elevation" Type="Auto" />
+                                                    <ext:RecordField Name="StartDate" Type="Date" />
+                                                    <ext:RecordField Name="EndDate" Type="Date" />
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>
@@ -140,9 +130,12 @@
                                         <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
                                         <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="100" Groupable="false" />
+                                        <ext:DateColumn Header="Start" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="End" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:CommandColumn Width="50" Groupable="false">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                                <%--                                                <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />--%>
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -187,26 +180,26 @@
                     </ext:Panel>
                 </Center>
                 <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
-                    <ext:Panel ID="pnlSouth" runat="server" Title="Instruments (DataSources)" Layout="FitLayout"
+                    <ext:Panel ID="pnlSouth" runat="server" Title="Data Sources" Layout="FitLayout"
                         Height="200" ClientIDMode="Static">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar2" runat="server">
                                 <Items>
-                                    <ext:Button ID="btnAddInstrument" runat="server" Icon="Add" Text="Add Instruments">
+                                    <ext:Button ID="btnLinkDataSource" runat="server" Icon="LinkAdd" Text="Link Data Source">
                                         <ToolTips>
-                                            <ext:ToolTip ID="ToolTip2" runat="server" Html="Add" />
+                                            <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection()){#{AvailableInstrumentsStore}.reload();#{AvailableInstrumentsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection()){#{AvailableDataSourcesStore}.reload();#{AvailableDataSourcesWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="InstrumentGrid" runat="server" Border="false" ClientIDMode="Static">
+                            <ext:GridPanel ID="DataSourceGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="InstrumentGridStore" runat="server" OnRefreshData="InstrumentGridStore_RefreshData">
+                                    <ext:Store ID="DataSourceGridStore" runat="server" OnRefreshData="DataSourceGridStore_RefreshData">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -217,6 +210,8 @@
                                                     <ext:RecordField Name="Code" Type="Auto" />
                                                     <ext:RecordField Name="Name" Type="Auto" />
                                                     <ext:RecordField Name="Description" Type="Auto" />
+                                                    <ext:RecordField Name="StartDate" Type="Date" />
+                                                    <ext:RecordField Name="EndDate" Type="Date" />
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>
@@ -231,9 +226,12 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="150" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="150" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="150" />
+                                        <ext:DateColumn Header="Start" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="End" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
-                                                <ext:GridCommand Icon="NoteDelete" CommandName="RemoveInstrument" Text="" ToolTip-Text="Delete" />
+                                                <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>--%>
+                                                <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -246,7 +244,7 @@
                                 <Listeners>
                                 </Listeners>
                                 <DirectEvents>
-                                    <Command OnEvent="DoDelete">
+                                    <Command OnEvent="DataSourceLink">
                                         <ExtraParams>
                                             <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
                                             <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
@@ -262,9 +260,9 @@
                         <TopBar>
                             <ext:Toolbar ID="Toolbar3" runat="server">
                                 <Items>
-                                    <ext:Button ID="AddOrganisation" runat="server" Icon="Add" Text="Add Organisation">
+                                    <ext:Button ID="LinkOrganisation" runat="server" Icon="LinkAdd" Text="Link Organisation">
                                         <ToolTips>
-                                            <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
+                                            <ext:ToolTip ID="ToolTip3" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
                                             <Click Handler="if(Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection()){#{OrganisationWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
@@ -308,8 +306,8 @@
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="yyyy/MM/dd" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
-                                                <ext:GridCommand Icon="NoteDelete" CommandName="RemoveOrganisation" Text="" ToolTip-Text="Delete">
-                                                </ext:GridCommand>
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
+                                                <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink"/>
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -322,7 +320,7 @@
                                 <Listeners>
                                 </Listeners>
                                 <DirectEvents>
-                                    <Command OnEvent="DoDelete">
+                                    <Command OnEvent="OrganisationLink">
                                         <ExtraParams>
                                             <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
                                             <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
@@ -355,12 +353,6 @@
                                         MsgTarget="Side" AnchorHorizontal="93%" ClientIDMode="Static">
                                         <RemoteValidation OnValidation="ValidateField" />
                                     </ext:TextField>
-                                    <ext:ComboBox ID="cbProjectSite" runat="server" StoreID="ProjectSiteStore" Editable="true"
-                                        BlankText="Project / Site is required" MsgTarget="Side" DisplayField="Name" ValueField="Id"
-                                        TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
-                                        DataIndex="ProjectSiteID" EmptyText="Select Project / site" SelectOnFocus="true"
-                                        FieldLabel="Project / Site" AnchorHorizontal="93%" ClientIDMode="Static">
-                                    </ext:ComboBox>
                                     <ext:ComboBox ID="cbSite" runat="server" StoreID="SiteStore" Editable="true"
                                         BlankText="Site is required" MsgTarget="Side" DisplayField="Name" ValueField="Id"
                                         TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
@@ -441,16 +433,16 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-        <ext:Window ID="AvailableInstrumentsWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available Instruments" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
+    <ext:Window ID="AvailableDataSourcesWindow" runat="server" Collapsible="false" Maximizable="false"
+        Title="Available DataSources" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
         <Listeners>
-            <Hide Fn="CloseAvailableInstruments" />
+            <Hide Fn="CloseAvailableDataSources" />
         </Listeners>
         <Items>
-            <ext:GridPanel ID="AvailableInstrumentsGrid" runat="server" Header="false" Border="false"
+            <ext:GridPanel ID="AvailableDataSourcesGrid" runat="server" Header="false" Border="false"
                 ClientIDMode="Static">
                 <Store>
-                    <ext:Store ID="AvailableInstrumentsStore" runat="server" OnRefreshData="AvailableInstrumentsStore_RefreshData">
+                    <ext:Store ID="AvailableDataSourcesStore" runat="server" OnRefreshData="AvailableDataSourcesStore_RefreshData">
                         <Proxy>
                             <ext:PageProxy />
                         </Proxy>
@@ -482,9 +474,9 @@
                     <ext:CheckboxSelectionModel ID="CheckboxSelectionModel1" runat="server" />
                 </SelectionModel>
                 <Buttons>
-                    <ext:Button ID="AcceptInstruments" runat="server" Text="Save" Icon="Accept">
+                    <ext:Button ID="LinkDataSources" runat="server" Text="Save" Icon="Accept">
                         <DirectEvents>
-                            <Click OnEvent="AcceptInstruments_Click">
+                            <Click OnEvent="LinkDataSources_Click">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
@@ -494,7 +486,7 @@
         </Items>
     </ext:Window>
     <ext:Window ID="OrganisationWindow" runat="server" Width="450" Height="400" Closable="true"
-        Hidden="true" Collapsible="false" Title="Organisation Detail"
+        Hidden="true" Collapsible="false" Title="Link Organisation"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="ClearOrganisationForm" />
@@ -505,7 +497,7 @@
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
-                    <ext:Hidden ID="Hidden1" DataIndex="Id" runat="server" ClientIDMode="Static">
+                    <ext:Hidden ID="hID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
                     <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">
@@ -545,7 +537,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
-                                FieldLabel="Start Date" AnchorHorizontal="95%">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -557,15 +549,15 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
-                                FieldLabel="End Date" AnchorHorizontal="95%">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true">
+                    <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true" Icon="Accept">
                         <DirectEvents>
-                            <Click OnEvent="AcceptOrganisation_Click">
+                            <Click OnEvent="LinkOrganisation_Click">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>

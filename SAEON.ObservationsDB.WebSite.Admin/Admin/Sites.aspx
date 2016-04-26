@@ -112,16 +112,12 @@
                                         <ext:DateColumn Header="Start" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="200" />
-                                        <ext:CommandColumn Width="25">
+                                        <ext:CommandColumn Width="50">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+<%--                                                <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />--%>
                                             </Commands>
                                         </ext:CommandColumn>
-                                        <%--                                        <ext:CommandColumn Width="25">
-                                            <Commands>
-                                                <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />
-                                            </Commands>
-                                        </ext:CommandColumn>--%>
                                     </Columns>
                                 </ColumnModel>
                                 <SelectionModel>
@@ -201,16 +197,10 @@
                                         <ext:Column Header="Description" DataIndex="Description" Width="150" />
                                         <ext:DateColumn Header="Start" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-                                        <ext:CommandColumn Width="25">
+                                        <ext:CommandColumn Width="50">
                                             <Commands>
-                                                <ext:GridCommand Icon="NoteEdit" CommandName="EditStationLink" Text="" ToolTip-Text="Edit">
-                                                </ext:GridCommand>
-                                            </Commands>
-                                        </ext:CommandColumn>
-                                        <ext:CommandColumn Width="25">
-                                            <Commands>
-                                                <ext:GridCommand Icon="LinkDelete" CommandName="DeleteStationLink" Text="" ToolTip-Text="Unlink">
-                                                </ext:GridCommand>
+                                                <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>--%>
+                                                <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink"/>
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -223,13 +213,9 @@
                                 <Listeners>
                                 </Listeners>
                                 <DirectEvents>
-                                    <%--                                    <Command OnEvent="DoEditStationLink">
+                                    <Command OnEvent="StationLink">
                                         <ExtraParams>
-                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
-                                        </ExtraParams>
-                                    </Command>--%>
-                                    <Command OnEvent="DoDeleteStationLink">
-                                        <ExtraParams>
+                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
                                             <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
                                         </ExtraParams>
                                     </Command>
@@ -289,12 +275,8 @@
                                         <ext:DateColumn Header="End" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
-                                                <ext:GridCommand Icon="NoteEdit" CommandName="EditOrganisationLink" Text="" ToolTip-Text="Edit">
-                                                </ext:GridCommand>
-                                            </Commands>
-                                            <Commands>
-                                                <ext:GridCommand Icon="LinkDelete" CommandName="DeleteOrganisationLink" Text="" ToolTip-Text="Unlink">
-                                                </ext:GridCommand>
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
+                                                <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink"/>
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -305,13 +287,9 @@
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
                                 <DirectEvents>
-                                    <Command OnEvent="DoEditOrganisationLink">
+                                    <Command OnEvent="OrganisationLink">
                                         <ExtraParams>
-                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
-                                        </ExtraParams>
-                                    </Command>
-                                    <Command OnEvent="DoDeleteOrganisationLink">
-                                        <ExtraParams>
+                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
                                             <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
                                         </ExtraParams>
                                     </Command>
@@ -474,9 +452,9 @@
                     <ext:CheckboxSelectionModel ID="CheckboxSelectionModel1" runat="server" />
                 </SelectionModel>
                 <Buttons>
-                    <ext:Button ID="AcceptStations" runat="server" Text="Save" Icon="Accept">
+                    <ext:Button ID="LinkStations" runat="server" Text="Save" Icon="Accept">
                         <DirectEvents>
-                            <Click OnEvent="AcceptStations_Click">
+                            <Click OnEvent="LinkStations_Click">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
@@ -486,7 +464,7 @@
         </Items>
     </ext:Window>
     <ext:Window ID="OrganisationWindow" runat="server" Width="450" Height="400" Closable="true"
-        Hidden="true" Collapsible="false" Title="Organisation Detail"
+        Hidden="true" Collapsible="false" Title="Link Organisation"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="ClearOrganisationForm" />
@@ -497,7 +475,7 @@
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
-                    <ext:Hidden ID="Hidden1" DataIndex="Id" runat="server" ClientIDMode="Static">
+                    <ext:Hidden ID="hID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
                     <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">
@@ -555,9 +533,9 @@
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true">
+                    <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true" Icon="Accept">
                         <DirectEvents>
-                            <Click OnEvent="AcceptOrganisation_Click">
+                            <Click OnEvent="LinkOrganisation_Click">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>

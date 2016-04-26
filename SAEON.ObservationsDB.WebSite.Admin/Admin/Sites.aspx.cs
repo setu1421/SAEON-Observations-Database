@@ -84,7 +84,7 @@ public partial class Admin_Sites : System.Web.UI.Page
             site.UserId = AuthHelper.GetLoggedInUserId;
 
             site.Save();
-            Auditing.Log("Site.Save", new Dictionary<string, object> { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
+            Auditing.Log("Sites.Save", new Dictionary<string, object> { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
 
             SiteGrid.DataBind();
 
@@ -92,7 +92,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Save");
+            Log.Error(ex, "Sites.Save");
             MessageBoxes.Error(ex, "Unable to save site");
         }
     }
@@ -146,7 +146,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         }
     }
 
-    protected void AcceptStations_Click(object sender, DirectEventArgs e)
+    protected void LinkStations_Click(object sender, DirectEventArgs e)
     {
         try
         {
@@ -164,7 +164,7 @@ public partial class Admin_Sites : System.Web.UI.Page
                         station.SiteID = masterID;
                         station.UserId = AuthHelper.GetLoggedInUserId;
                         station.Save();
-                        Auditing.Log("Site.AddStation", new Dictionary<string, object> {
+                        Auditing.Log("Sites.AddStationLink", new Dictionary<string, object> {
                             { "SiteID", masterID }, { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
                     }
                 }
@@ -178,31 +178,38 @@ public partial class Admin_Sites : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "AcceptStations_Click");
-            MessageBoxes.Error(ex, "Unable to save stations");
+            Log.Error(ex, "Sites.LinkStations_Click");
+            MessageBoxes.Error(ex, "Unable to link stations");
         }
     }
 
-    protected void DoDeleteStationLink(object sender, DirectEventArgs e)
+    protected void StationLink(object sender, DirectEventArgs e)
     {
+        string actionType = e.ExtraParams["type"];
         string recordID = e.ExtraParams["id"];
         try
         {
-            da.Station station = new da.Station(recordID);
-            if (station != null)
+            if (actionType == "Edit")
             {
-                station.SiteID = null;
-                station.UserId = AuthHelper.GetLoggedInUserId;
-                station.Save();
-                Auditing.Log("Site.UnlinkStation", new Dictionary<string, object> {
+            }
+            else if (actionType == "Delete")
+            {
+                da.Station station = new da.Station(recordID);
+                if (station != null)
+                {
+                    station.SiteID = null;
+                    station.UserId = AuthHelper.GetLoggedInUserId;
+                    station.Save();
+                    Auditing.Log("Sites.DeleteStationLink", new Dictionary<string, object> {
                         { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
-                StationGrid.DataBind();
+                    StationGrid.DataBind();
+                }
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "DoUnlinkStation({RecordID})", recordID);
-            MessageBoxes.Error(ex, "Unable to unlink station");
+            Log.Error(ex, "Sites.StationLink({ActionType},{RecordID})", actionType, recordID);
+            MessageBoxes.Error(ex, "Unable to {0} station link", actionType);
         }
     }
     #endregion
@@ -226,13 +233,13 @@ public partial class Admin_Sites : System.Web.UI.Page
         }
     }
 
-    protected void AcceptOrganisation_Click(object sender, DirectEventArgs e)
+    protected void LinkOrganisation_Click(object sender, DirectEventArgs e)
     {
         try
         {
             RowSelectionModel masterRow = SiteGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            da.SiteOrganisation siteOrganisation = new da.SiteOrganisation();
+            da.SiteOrganisation siteOrganisation = new da.SiteOrganisation(hID.Value);
             siteOrganisation.SiteID = masterID;
             siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
             siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
@@ -242,7 +249,7 @@ public partial class Admin_Sites : System.Web.UI.Page
                 siteOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
             siteOrganisation.UserId = AuthHelper.GetLoggedInUserId;
             siteOrganisation.Save();
-            Auditing.Log("Site.AddOrganisation", new Dictionary<string, object> {
+            Auditing.Log("Sites.AddOrganisationLink", new Dictionary<string, object> {
                 { "SiteID", masterID },
                 { "OrganisationID", siteOrganisation.OrganisationID},
                 { "OrganisationCode", siteOrganisation.Organisation.Code},
@@ -254,38 +261,33 @@ public partial class Admin_Sites : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "AcceptOrganisation_Click");
-            MessageBoxes.Error(ex, "Unable to save organisation");
+            Log.Error(ex, "Sites.LinkOrganisation_Click");
+            MessageBoxes.Error(ex, "Unable to link organisation");
         }
     }
 
-    protected void DoEditOrganisationLink(object sender, DirectEventArgs e)
+    protected void OrganisationLink(object sender, DirectEventArgs e)
     {
+        string actionType = e.ExtraParams["type"];
         string recordID = e.ExtraParams["id"];
         try
         {
-            OrganisationWindow.Show();
+            if (actionType == "Edit")
+            {
+                OrganisationFormPanel.SetValues(new da.SiteOrganisation(recordID));
+                OrganisationWindow.Show();
+            }
+            else if (actionType == "Delete")
+            {
+                new da.SiteOrganisationController().Delete(recordID);
+                Auditing.Log("Sites.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
+                OrganisationGrid.DataBind();
+            }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "DoEditOrganisationLink({RecordID})", recordID);
-            MessageBoxes.Error(ex, "Unable to edit organisation link");
-        }
-    }
-
-    protected void DoDeleteOrganisationLink(object sender, DirectEventArgs e)
-    {
-        string recordID = e.ExtraParams["id"];
-        try
-        {
-            new da.SiteOrganisationController().Delete(recordID);
-            Auditing.Log("Site.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
-            OrganisationGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DoDeleteOrganisationLink({RecordID})", recordID);
-            MessageBoxes.Error(ex, "Unable to delete organisation link");
+            Log.Error(ex, "Sites.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
+            MessageBoxes.Error(ex, "Unable to {0} organisation link", actionType);
         }
     }
 

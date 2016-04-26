@@ -545,6 +545,7 @@
     <Build Include="dbo\Views\vStationOrganisation.sql" />
     <Build Include="dbo\Tables\AuditLog.sql" />
     <Build Include="dbo\Views\vAuditLog.sql" />
+    <Build Include="dbo\Tables\DataSource_Organisation.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

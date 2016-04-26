@@ -25,6 +25,10 @@ CREATE INDEX [IX_Site_UserId] ON [dbo].[Site] ([UserId])
 
 --> Added 2.0.0.3 20160421 TimPN
 GO
+CREATE INDEX [IX_Site_StartDate] ON [dbo].[Site] ([StartDate])
+GO
+CREATE INDEX [IX_Site_EndDate] ON [dbo].[Site] ([EndDate])
+GO
 CREATE TRIGGER [dbo].[TR_Site_Insert] ON [dbo].[Site]
 FOR INSERT
 AS

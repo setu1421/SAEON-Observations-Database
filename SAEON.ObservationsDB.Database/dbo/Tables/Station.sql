@@ -7,7 +7,10 @@
     [Latitude]      FLOAT (53)       NULL,
     [Longitude]     FLOAT (53)       NULL,
     [Elevation]     INT              NULL,
-    [ProjectSiteID] UNIQUEIDENTIFIER NOT NULL,
+--> Changed 2.0.0.3 20160426 TimPN
+--    [ProjectSiteID] UNIQUEIDENTIFIER NOT NULL,
+    [ProjectSiteID] UNIQUEIDENTIFIER NULL,
+--< Changed 2.0.0.3 20160426 TimPN
     [UserId]        UNIQUEIDENTIFIER NOT NULL,
 --> Added 2.0.0.2 20160407 TimPN
 --    [SiteID] UNIQUEIDENTIFIER NOT NULL, -- Must be NOT NULL once all Stations have Sites

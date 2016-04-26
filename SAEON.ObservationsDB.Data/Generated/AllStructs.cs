@@ -50,6 +50,8 @@ namespace SAEON.ObservationsDB.Data
         
 		public static readonly string DataSource = @"DataSource";
         
+		public static readonly string DataSourceOrganisation = @"DataSource_Organisation";
+        
 		public static readonly string DataSourceRole = @"DataSourceRole";
         
 		public static readonly string DataSourceTransformation = @"DataSourceTransformation";
@@ -179,6 +181,11 @@ namespace SAEON.ObservationsDB.Data
 		public static TableSchema.Table DataSource
 		{
             get { return DataService.GetSchema("DataSource", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table DataSourceOrganisation
+		{
+            get { return DataService.GetSchema("DataSource_Organisation", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table DataSourceRole

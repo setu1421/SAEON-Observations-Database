@@ -158,7 +158,7 @@ namespace SAEON.ObservationsDB.Data{
                 colvarProjectSiteID.DataType = DbType.Guid;
                 colvarProjectSiteID.MaxLength = 0;
                 colvarProjectSiteID.AutoIncrement = false;
-                colvarProjectSiteID.IsNullable = false;
+                colvarProjectSiteID.IsNullable = true;
                 colvarProjectSiteID.IsPrimaryKey = false;
                 colvarProjectSiteID.IsForeignKey = false;
                 colvarProjectSiteID.IsReadOnly = false;
@@ -425,11 +425,11 @@ namespace SAEON.ObservationsDB.Data{
 	      
         [XmlAttribute("ProjectSiteID")]
         [Bindable(true)]
-        public Guid ProjectSiteID 
+        public Guid? ProjectSiteID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid>("ProjectSiteID");
+			    return GetColumnValue<Guid?>("ProjectSiteID");
 		    }
             set 
 		    {

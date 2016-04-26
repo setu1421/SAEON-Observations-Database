@@ -8,6 +8,9 @@
     [ErrorEstimate]    FLOAT (53)       NULL,
     [UpdateFreq]       INT              NOT NULL,
     [StartDate]        DATETIME         NULL,
+--> Added 2.0.0.2 20160419 TimPN
+    [EndDate]        DATETIME         NULL,
+--< Added 2.0.0.2 20160419 TimPN
     [LastUpdate]       DATETIME         NOT NULL,
     [DataSchemaID]     UNIQUEIDENTIFIER NULL,
     [UserId]           UNIQUEIDENTIFIER NOT NULL,
@@ -40,9 +43,13 @@ CREATE INDEX [IX_DataSource_UserId] ON [dbo].[DataSource] ([UserId])
 --< Added 2.0.0.0 20160406 TimPN
 --> Added 2.0.0.0 20160406 TimPN
 GO
-CREATE INDEX [IX_DataSource_StationID] ON [dbo].Station ([ID])
+CREATE INDEX [IX_DataSource_StationID] ON [dbo].DataSource ([StationID])
 --< Added 2.0.0.0 20160406 TimPN
 --> Added 2.0.0.3 20160421 TimPN
+GO
+CREATE INDEX [IX_DataSource_StartDate] ON [dbo].DataSource ([StartDate])
+GO
+CREATE INDEX [IX_DataSource_EndDate] ON [dbo].DataSource ([EndDate])
 GO
 CREATE TRIGGER [dbo].[TR_DataSource_Insert] ON [dbo].[DataSource]
 FOR INSERT
