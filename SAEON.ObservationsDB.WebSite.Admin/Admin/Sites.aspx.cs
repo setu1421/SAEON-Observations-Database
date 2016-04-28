@@ -93,7 +93,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Sites.Save");
-            MessageBoxes.Error(ex, "Unable to save site");
+            MessageBoxes.Error(ex, "Error", "Unable to save site");
         }
     }
 
@@ -179,7 +179,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Sites.LinkStations_Click");
-            MessageBoxes.Error(ex, "Unable to link stations");
+            MessageBoxes.Error(ex, "Error", "Unable to link stations");
         }
     }
 
@@ -262,7 +262,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Sites.LinkOrganisation_Click");
-            MessageBoxes.Error(ex, "Unable to link organisation");
+            MessageBoxes.Error(ex, "Error", "Unable to link organisation");
         }
     }
 
@@ -287,7 +287,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Sites.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
-            MessageBoxes.Error(ex, "Unable to {0} organisation link", actionType);
+            MessageBoxes.Error(ex, "Error", "Unable to {0} organisation link", actionType);
         }
     }
 

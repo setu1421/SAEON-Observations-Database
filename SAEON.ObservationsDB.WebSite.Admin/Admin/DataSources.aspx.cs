@@ -33,9 +33,9 @@ public partial class Admin_DataSources : System.Web.UI.Page
     }
 
     #region DataSource
-    protected void DataSourceStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void DataSourcesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        DataSourceGrid.GetStore().DataSource = DataSourceRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
+        DataSourcesGrid.GetStore().DataSource = DataSourceRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -197,6 +197,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 }
                 else
                 {
+                    MessageBoxes.Error("This data source cant have a data schema because one of the sensors linked to it ({0}) is already linked to a data schema", sensorName);
                     X.Msg.Show(new MessageBoxConfig
                     {
                         Title = "Invalid Data Source",
@@ -223,20 +224,20 @@ public partial class Admin_DataSources : System.Web.UI.Page
             ds.UserId = AuthHelper.GetLoggedInUserId;
 
             ds.Save();
-            Auditing.Log("Instrument.Save", new Dictionary<string, object> { { "ID", ds.Id }, { "Code", ds.Code }, { "Name", ds.Name } });
+            Auditing.Log("DataSources.Save", new Dictionary<string, object> { { "ID", ds.Id }, { "Code", ds.Code }, { "Name", ds.Name } });
 
-            DataSourceGrid.DataBind();
+            DataSourcesGrid.DataBind();
 
             DetailWindow.Hide();
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Save");
-            MessageBoxes.Error(ex, "Unable to save site");
+            Log.Error(ex, "DataSources.Save");
+            MessageBoxes.Error(ex, "Error", "Unable to save data source");
         }
     }
 
-    protected void DataSourceStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    protected void DataSourcesGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {
         string type = FormatType.Text;
         string visCols = VisCols.Value.ToString();
@@ -249,90 +250,82 @@ public partial class Admin_DataSources : System.Web.UI.Page
         BaseRepository.doExport(type, js);
     }
 
-    protected void DoDelete(object sender, DirectEventArgs e)
-    {
-        string ActionType = e.ExtraParams["type"];
-        string recordID = e.ExtraParams["id"];
-        try
-        {
-            if (ActionType == "Sensor")
-            {
-                //DataSource dataSource = new DataSource(recordID);
-                //if (dataSource != null)
-                //{
-                //    dataSource.StationID = null;
-                //    dataSource.UserId = AuthHelper.GetLoggedInUserId;
-                //    dataSource.Save();
-                //    Auditing.Log("Station.UnlinkSensor", new Dictionary<string, object> {
-                //        { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
-                //    DataSourceGrid.DataBind();
-                //}
-            }
-            else if (ActionType == "Organisation")
-            {
-                new StationOrganisationController().Delete(recordID);
-                Auditing.Log("DataSource.UnlinkOrganisation", new Dictionary<string, object> { { "ID", recordID } });
-                OrganisationGrid.DataBind();
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DoUnlink({ActionType},{RecordID})", ActionType, recordID);
-            MessageBoxes.Error(ex, "Unable to unlink {0}", ActionType == "Organisation" ? "organisation" : "sensor");
-        }
-    }
-
     #endregion
 
     #region Organisations
 
-    protected void OrganisationGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void OrganisationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
+        if (e.Parameters["DatasourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
-            //VDataSourceOrganisationCollection DataSourceOrganisationCol = new VDataSourceOrganisationCollection()
-            //    .Where(VDataSourceOrganisation.Columns.StationID, Id)
-            //    .OrderByAsc(VDataSourceOrganisation.Columns.StartDate)
-            //    .OrderByAsc(VDataSourceOrganisation.Columns.EndDate)
-            //    .OrderByAsc(VDataSourceOrganisation.Columns.OrganisationName)
-            //    .OrderByAsc(VDataSourceOrganisation.Columns.OrganisationRoleName)
-            //    .Load();
-            //OrganisationGrid.GetStore().DataSource = DataSourceOrganisationCol;
-            OrganisationGrid.GetStore().DataBind();
+            VDataSourceOrganisationCollection col = new VDataSourceOrganisationCollection()
+                .Where(VDataSourceOrganisation.Columns.DataSourceID, Id)
+                .OrderByAsc(VDataSourceOrganisation.Columns.StartDate)
+                .OrderByAsc(VDataSourceOrganisation.Columns.EndDate)
+                .OrderByAsc(VDataSourceOrganisation.Columns.OrganisationName)
+                .OrderByAsc(VDataSourceOrganisation.Columns.OrganisationRoleName)
+                .Load();
+            OrganisationLinksGrid.GetStore().DataSource = col;
+            OrganisationLinksGrid.GetStore().DataBind();
         }
     }
 
-    protected void AcceptOrganisation_Click(object sender, DirectEventArgs e)
+    protected void LinkOrganisation_Click(object sender, DirectEventArgs e)
     {
         try
         {
-            RowSelectionModel masterRow = DataSourceGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel masterRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            //DataSourceOrganisation dataSourceOrganisation = new DataSourceOrganisation();
-            //dataSourceOrganisation.StationID = masterID;
-            //dataSourceOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
-            //dataSourceOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
-            //if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
-            //    dataSourceOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
-            //if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
-            //    dataSourceOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
-            //dataSourceOrganisation.UserId = AuthHelper.GetLoggedInUserId;
-            //dataSourceOrganisation.Save();
-            //Auditing.Log("Station.AddOrganisation", new Dictionary<string, object> {
-            //    { "StationID", masterID },
-            //    { "OrganisationID", dataSourceOrganisation.OrganisationID},
-            //    { "OrganisationCode", dataSourceOrganisation.Organisation.Code},
-            //    { "RoleID", dataSourceOrganisation.OrganisationRoleID },
-            //    { "RoleCode", dataSourceOrganisation.OrganisationRole.Code},
-            //});
-            OrganisationGrid.DataBind();
-            OrganisationWindow.Hide();
+            DataSourceOrganisation dataSourceOrganisation = new DataSourceOrganisation(hID.Value);
+            dataSourceOrganisation.DataSourceID = masterID;
+            dataSourceOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
+            dataSourceOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+            if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
+                dataSourceOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
+            if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
+                dataSourceOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
+            dataSourceOrganisation.UserId = AuthHelper.GetLoggedInUserId;
+            dataSourceOrganisation.Save();
+            Auditing.Log("DataSources.AddOrganisationLink", new Dictionary<string, object> {
+                { "DataSourceID", masterID },
+                { "OrganisationID", dataSourceOrganisation.OrganisationID},
+                { "OrganisationCode", dataSourceOrganisation.Organisation.Code},
+                { "RoleID", dataSourceOrganisation.OrganisationRoleID },
+                { "RoleCode", dataSourceOrganisation.OrganisationRole.Code},
+            });
+            OrganisationLinksGrid.DataBind();
+            OrganisationLinkWindow.Hide();
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "AcceptOrganisation_Click");
-            MessageBoxes.Error(ex, "Unable to save organisation");
+            Log.Error(ex, "DataSources.LinkOrganisation_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link organisation");
+        }
+    }
+
+    protected void OrganisationLink(object sender, DirectEventArgs e)
+    {
+        string actionType = e.ExtraParams["type"];
+        string recordID = e.ExtraParams["id"];
+        try
+        {
+            if (actionType == "Edit")
+            {
+                OrganisationLinkFormPanel.SetValues(new DataSourceOrganisation(recordID));
+                OrganisationLinkWindow.Show();
+            }
+            else if (actionType == "Delete")
+            {
+                new DataSourceOrganisationController().Delete(recordID);
+                Auditing.Log("DataSources.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
+                OrganisationLinksGrid.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DataSources.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
+            MessageBoxes.Error(ex, "Unable to {0} organisation link", actionType);
         }
     }
     #endregion

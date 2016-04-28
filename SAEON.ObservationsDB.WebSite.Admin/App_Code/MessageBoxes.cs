@@ -6,23 +6,23 @@ using System;
 /// </summary>
 public static class MessageBoxes
 {
-    public static void Error(string message, params object[] values)
+    public static void Error(string title, string message, params object[] values)
     {
         X.Msg.Show(new MessageBoxConfig
         {
-            Title = "Error",
+            Title = title,
             Message = string.Format(message, values),
             Buttons = MessageBox.Button.OK,
             Icon = MessageBox.Icon.ERROR
         });
     }
 
-    public static void Error(Exception ex, string message, params object[] values)
+    public static void Error(Exception ex, string title, string message, params object[] values)
     {
         if ((ex == null) || string.IsNullOrEmpty(ex.Message))
-            Error(message, values);
+            Error(title, message, values);
         else
-            Error(string.Format(message, values) + Environment.NewLine + "Exception: " + ex.Message);
+            Error(title, string.Format(message, values) + Environment.NewLine + "Exception: " + ex.Message);
     }
 
     public static void Info(string title, string message, params object[] values)

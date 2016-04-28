@@ -148,6 +148,80 @@
                         </Items>
                     </ext:Panel>
                 </Center>
+                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
+                    <ext:Panel ID="pnlEast" runat="server" Title="Organisations" Layout="FitLayout" Width="425" ClientIDMode="Static">
+                        <TopBar>
+                            <ext:Toolbar ID="Toolbar3" runat="server">
+                                <Items>
+                                    <ext:Button ID="LinkOrganisation" runat="server" Icon="LinkAdd" Text="Link Organisation">
+                                        <ToolTips>
+                                            <ext:ToolTip ID="ToolTip3" runat="server" Html="Link" />
+                                        </ToolTips>
+                                        <Listeners>
+                                            <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{OrganisationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
+                                        </Listeners>
+                                    </ext:Button>
+                                </Items>
+                            </ext:Toolbar>
+                        </TopBar>
+                        <Items>
+                            <ext:GridPanel ID="OrganisationLinksGrid" runat="server" Border="false" Layout="FitLayout"
+                                ClientIDMode="Static">
+                                <Store>
+                                    <ext:Store ID="OrganisationLinksGridStore" runat="server" OnRefreshData="OrganisationLinksGridStore_RefreshData">
+                                        <Proxy>
+                                            <ext:PageProxy />
+                                        </Proxy>
+                                        <Reader>
+                                            <ext:JsonReader IDProperty="Id">
+                                                <Fields>
+                                                    <ext:RecordField Name="Id" Type="Auto" />
+                                                    <ext:RecordField Name="OrganisationID" Type="Auto" />
+                                                    <ext:RecordField Name="OrganisationName" Type="Auto" />
+                                                    <ext:RecordField Name="OrganisationRoleID" Type="Auto" />
+                                                    <ext:RecordField Name="OrganisationRoleName" Type="Auto" />
+                                                    <ext:RecordField Name="StartDate" Type="Date" />
+                                                    <ext:RecordField Name="EndDate" Type="Date" />
+                                                </Fields>
+                                            </ext:JsonReader>
+                                        </Reader>
+                                        <BaseParams>
+                                            <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection() ? #{SitesGrid}.getSelectionModel().getSelected().id : -1"
+                                                Mode="Raw" />
+                                        </BaseParams>
+                                    </ext:Store>
+                                </Store>
+                                <ColumnModel ID="ColumnModel5" runat="server">
+                                    <Columns>
+                                        <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
+                                        <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="75" />
+                                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+                                        <ext:CommandColumn Width="50">
+                                            <Commands>
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
+                                                <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink"/>
+                                            </Commands>
+                                        </ext:CommandColumn>
+                                    </Columns>
+                                </ColumnModel>
+                                <SelectionModel>
+                                    <ext:RowSelectionModel ID="RowSelectionModel3" runat="server" SingleSelect="true">
+                                    </ext:RowSelectionModel>
+                                </SelectionModel>
+                                <LoadMask ShowMask="true" />
+                                <DirectEvents>
+                                    <Command OnEvent="OrganisationLink">
+                                        <ExtraParams>
+                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
+                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
+                                        </ExtraParams>
+                                    </Command>
+                                </DirectEvents>
+                            </ext:GridPanel>
+                        </Items>
+                    </ext:Panel>
+                </East>
                 <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
                     <ext:Panel ID="pnlSouth" runat="server" Title="Stations" Layout="FitLayout"
                         Height="200" ClientIDMode="Static">
@@ -224,80 +298,6 @@
                         </Items>
                     </ext:Panel>
                 </South>
-                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
-                    <ext:Panel ID="pnlEast" runat="server" Title="Organisations" Layout="FitLayout" Width="425" ClientIDMode="Static">
-                        <TopBar>
-                            <ext:Toolbar ID="Toolbar3" runat="server">
-                                <Items>
-                                    <ext:Button ID="LinkOrganisation" runat="server" Icon="LinkAdd" Text="Link Organisation">
-                                        <ToolTips>
-                                            <ext:ToolTip ID="ToolTip3" runat="server" Html="Link" />
-                                        </ToolTips>
-                                        <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{OrganisationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
-                                        </Listeners>
-                                    </ext:Button>
-                                </Items>
-                            </ext:Toolbar>
-                        </TopBar>
-                        <Items>
-                            <ext:GridPanel ID="OrganisationLinksGrid" runat="server" Border="false" Layout="FitLayout"
-                                ClientIDMode="Static">
-                                <Store>
-                                    <ext:Store ID="OrganisationLinksGridStore" runat="server" OnRefreshData="OrganisationLinksGridStore_RefreshData">
-                                        <Proxy>
-                                            <ext:PageProxy />
-                                        </Proxy>
-                                        <Reader>
-                                            <ext:JsonReader IDProperty="Id">
-                                                <Fields>
-                                                    <ext:RecordField Name="Id" Type="Auto" />
-                                                    <ext:RecordField Name="OrganisationID" Type="Auto" />
-                                                    <ext:RecordField Name="OrganisationName" Type="Auto" />
-                                                    <ext:RecordField Name="OrganisationRoleID" Type="Auto" />
-                                                    <ext:RecordField Name="OrganisationRoleName" Type="Auto" />
-                                                    <ext:RecordField Name="StartDate" Type="Date" />
-                                                    <ext:RecordField Name="EndDate" Type="Date" />
-                                                </Fields>
-                                            </ext:JsonReader>
-                                        </Reader>
-                                        <BaseParams>
-                                            <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection() ? #{SitesGrid}.getSelectionModel().getSelected().id : -1"
-                                                Mode="Raw" />
-                                        </BaseParams>
-                                    </ext:Store>
-                                </Store>
-                                <ColumnModel ID="ColumnModel5" runat="server">
-                                    <Columns>
-                                        <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
-                                        <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="75" />
-                                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
-                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-                                        <ext:CommandColumn Width="50">
-                                            <Commands>
-                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
-                                                <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink"/>
-                                            </Commands>
-                                        </ext:CommandColumn>
-                                    </Columns>
-                                </ColumnModel>
-                                <SelectionModel>
-                                    <ext:RowSelectionModel ID="RowSelectionModel3" runat="server" SingleSelect="true">
-                                    </ext:RowSelectionModel>
-                                </SelectionModel>
-                                <LoadMask ShowMask="true" />
-                                <DirectEvents>
-                                    <Command OnEvent="OrganisationLink">
-                                        <ExtraParams>
-                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
-                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
-                                        </ExtraParams>
-                                    </Command>
-                                </DirectEvents>
-                            </ext:GridPanel>
-                        </Items>
-                    </ext:Panel>
-                </East>
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
@@ -411,58 +411,6 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="AvailableStationsWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available Stations" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
-        <Listeners>
-            <Hide Fn="CloseAvailableStations" />
-        </Listeners>
-        <Items>
-            <ext:GridPanel ID="AvailableStationsGrid" runat="server" Header="false" Border="false"
-                ClientIDMode="Static">
-                <Store>
-                    <ext:Store ID="AvailableStationsStore" runat="server" OnRefreshData="AvailableStationsStore_RefreshData">
-                        <Proxy>
-                            <ext:PageProxy />
-                        </Proxy>
-                        <Reader>
-                            <ext:JsonReader IDProperty="Id">
-                                <Fields>
-                                    <ext:RecordField Name="Id" Type="Auto" />
-                                    <ext:RecordField Name="Code" Type="String" />
-                                    <ext:RecordField Name="Name" Type="String" />
-                                    <ext:RecordField Name="Description" Type="String" />
-                                </Fields>
-                            </ext:JsonReader>
-                        </Reader>
-                        <BaseParams>
-                            <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection() ? #{SitesGrid}.getSelectionModel().getSelected().id : -1"
-                                Mode="Raw" />
-                        </BaseParams>
-                    </ext:Store>
-                </Store>
-                <ColumnModel ID="ColumnModel3" runat="server">
-                    <Columns>
-                        <ext:Column Header="Code" DataIndex="Code" Width="200" />
-                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
-                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
-                    </Columns>
-                </ColumnModel>
-                <LoadMask ShowMask="true" />
-                <SelectionModel>
-                    <ext:CheckboxSelectionModel ID="CheckboxSelectionModel1" runat="server" />
-                </SelectionModel>
-                <Buttons>
-                    <ext:Button ID="LinkStations" runat="server" Text="Save" Icon="Accept">
-                        <DirectEvents>
-                            <Click OnEvent="LinkStations_Click">
-                                <EventMask ShowMask="true" />
-                            </Click>
-                        </DirectEvents>
-                    </ext:Button>
-                </Buttons>
-            </ext:GridPanel>
-        </Items>
-    </ext:Window>
     <ext:Window ID="OrganisationLinkWindow" runat="server" Width="450" Height="300" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Organisation"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
@@ -549,6 +497,58 @@
                 </Listeners>
             </ext:FormPanel>
         </Content>
+    </ext:Window>
+    <ext:Window ID="AvailableStationsWindow" runat="server" Collapsible="false" Maximizable="false"
+        Title="Available Stations" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
+        <Listeners>
+            <Hide Fn="CloseAvailableStations" />
+        </Listeners>
+        <Items>
+            <ext:GridPanel ID="AvailableStationsGrid" runat="server" Header="false" Border="false"
+                ClientIDMode="Static">
+                <Store>
+                    <ext:Store ID="AvailableStationsStore" runat="server" OnRefreshData="AvailableStationsStore_RefreshData">
+                        <Proxy>
+                            <ext:PageProxy />
+                        </Proxy>
+                        <Reader>
+                            <ext:JsonReader IDProperty="Id">
+                                <Fields>
+                                    <ext:RecordField Name="Id" Type="Auto" />
+                                    <ext:RecordField Name="Code" Type="String" />
+                                    <ext:RecordField Name="Name" Type="String" />
+                                    <ext:RecordField Name="Description" Type="String" />
+                                </Fields>
+                            </ext:JsonReader>
+                        </Reader>
+                        <BaseParams>
+                            <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection() ? #{SitesGrid}.getSelectionModel().getSelected().id : -1"
+                                Mode="Raw" />
+                        </BaseParams>
+                    </ext:Store>
+                </Store>
+                <ColumnModel ID="ColumnModel3" runat="server">
+                    <Columns>
+                        <ext:Column Header="Code" DataIndex="Code" Width="200" />
+                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
+                    </Columns>
+                </ColumnModel>
+                <LoadMask ShowMask="true" />
+                <SelectionModel>
+                    <ext:CheckboxSelectionModel ID="CheckboxSelectionModel1" runat="server" />
+                </SelectionModel>
+                <Buttons>
+                    <ext:Button ID="LinkStations" runat="server" Text="Save" Icon="Accept">
+                        <DirectEvents>
+                            <Click OnEvent="LinkStations_Click">
+                                <EventMask ShowMask="true" />
+                            </Click>
+                        </DirectEvents>
+                    </ext:Button>
+                </Buttons>
+            </ext:GridPanel>
+        </Items>
     </ext:Window>
 </asp:Content>
 

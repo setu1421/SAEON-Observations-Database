@@ -109,7 +109,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Stations.Save");
-            MessageBoxes.Error(ex, "Unable to save station");
+            MessageBoxes.Error(ex, "Error", "Unable to save station");
         }
     }
 
@@ -196,7 +196,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Stations.LinkDataSources_Click");
-            MessageBoxes.Error(ex, "Unable to link data sources");
+            MessageBoxes.Error(ex, "Error", "Unable to link data sources");
         }
     }
 
@@ -279,7 +279,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Stations.LinkOrganisation_Click");
-            MessageBoxes.Error(ex, "Unable to link organisation");
+            MessageBoxes.Error(ex, "Error", "Unable to link organisation");
         }
     }
 
