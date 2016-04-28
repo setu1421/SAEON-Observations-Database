@@ -380,17 +380,21 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.ProjectSiteCollection().Where(ProjectSite.Columns.UserId, UserId).Load();
 		}
-		public SAEON.ObservationsDB.Data.AuditLogCollection AuditLogRecords()
-		{
-			return new SAEON.ObservationsDB.Data.AuditLogCollection().Where(AuditLog.Columns.UserId, UserId).Load();
-		}
 		public SAEON.ObservationsDB.Data.AspnetProfileCollection AspnetProfileRecords()
 		{
 			return new SAEON.ObservationsDB.Data.AspnetProfileCollection().Where(AspnetProfile.Columns.UserId, UserId).Load();
 		}
+		public SAEON.ObservationsDB.Data.AuditLogCollection AuditLogRecords()
+		{
+			return new SAEON.ObservationsDB.Data.AuditLogCollection().Where(AuditLog.Columns.UserId, UserId).Load();
+		}
 		public SAEON.ObservationsDB.Data.AspnetUsersInRoleCollection AspnetUsersInRoles()
 		{
 			return new SAEON.ObservationsDB.Data.AspnetUsersInRoleCollection().Where(AspnetUsersInRole.Columns.UserId, UserId).Load();
+		}
+		public SAEON.ObservationsDB.Data.DataSourceCollection DataSourceRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceCollection().Where(DataSource.Columns.UserId, UserId).Load();
 		}
 		public SAEON.ObservationsDB.Data.DataLogCollection DataLogRecords()
 		{
@@ -403,10 +407,6 @@ namespace SAEON.ObservationsDB.Data
 		public SAEON.ObservationsDB.Data.ObservationCollection ObservationRecords()
 		{
 			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.UserId, UserId).Load();
-		}
-		public SAEON.ObservationsDB.Data.DataSourceCollection DataSourceRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataSourceCollection().Where(DataSource.Columns.UserId, UserId).Load();
 		}
 		public SAEON.ObservationsDB.Data.AspnetPersonalizationPerUserCollection AspnetPersonalizationPerUserRecords()
 		{
