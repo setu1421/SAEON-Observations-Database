@@ -6,13 +6,13 @@
     <script type="text/javascript">
         var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
-            //VisCols.setValue(Ext.encode(ContentPlaceHolder1_StationGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-            var viscolsNew = makenewJsonForExport(ContentPlaceHolder1_StationGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            //VisCols.setValue(Ext.encode(ContentPlaceHolder1_StationsGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
+            var viscolsNew = makenewJsonForExport(ContentPlaceHolder1_StationsGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
 
-            ContentPlaceHolder1_StationGrid.submitData(false);
+            ContentPlaceHolder1_StationsGrid.submitData(false);
         };
     </script>
 </asp:Content>
@@ -86,9 +86,9 @@
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="StationGrid" runat="server" Border="false" ClientIDMode="Static">
+                            <ext:GridPanel ID="StationsGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="StationGridStore" runat="server" RemoteSort="true" OnRefreshData="StationGridStore_RefreshData" OnSubmitData="StationStore_Submit">
+                                    <ext:Store ID="StationsGridStore" runat="server" RemoteSort="true" OnRefreshData="StationsGridStore_RefreshData" OnSubmitData="StationsGridStore_Submit">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -124,14 +124,13 @@
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" Groupable="false" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" Groupable="false" />
-                                        <ext:Column Header="Project / Site" DataIndex="ProjectSiteName" Width="100" />
                                         <ext:Column Header="Site" DataIndex="SiteName" Width="100" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
                                         <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
                                         <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="100" Groupable="false" />
-                                        <ext:DateColumn Header="Start" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                        <ext:DateColumn Header="End" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:CommandColumn Width="50" Groupable="false">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
@@ -190,16 +189,16 @@
                                             <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection()){#{AvailableDataSourcesStore}.reload();#{AvailableDataSourcesWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{AvailableDataSourcesStore}.reload();#{AvailableDataSourcesWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="DataSourceGrid" runat="server" Border="false" ClientIDMode="Static">
+                            <ext:GridPanel ID="DataSourcesGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="DataSourceGridStore" runat="server" OnRefreshData="DataSourceGridStore_RefreshData">
+                                    <ext:Store ID="DataSourcesGridStore" runat="server" OnRefreshData="DataSourcesGridStore_RefreshData">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -216,7 +215,7 @@
                                             </ext:JsonReader>
                                         </Reader>
                                         <BaseParams>
-                                            <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection() ? #{StationGrid}.getSelectionModel().getSelected().id : -1"
+                                            <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection() ? #{StationsGrid}.getSelectionModel().getSelected().id : -1"
                                                 Mode="Raw" />
                                         </BaseParams>
                                     </ext:Store>
@@ -226,8 +225,8 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="150" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="150" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="150" />
-                                        <ext:DateColumn Header="Start" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
-                                        <ext:DateColumn Header="End" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
                                                 <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>--%>
@@ -265,17 +264,17 @@
                                             <ext:ToolTip ID="ToolTip3" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection()){#{OrganisationWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{OrganisationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="OrganisationGrid" runat="server" Border="false" Layout="FitLayout"
+                            <ext:GridPanel ID="OrganisationLinksGrid" runat="server" Border="false" Layout="FitLayout"
                                 ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="OrganisationGridStore" runat="server" OnRefreshData="OrganisationGridStore_RefreshData">
+                                    <ext:Store ID="OrganisationLinksGridStore" runat="server" OnRefreshData="OrganisationLinksGridStore_RefreshData">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -293,7 +292,7 @@
                                             </ext:JsonReader>
                                         </Reader>
                                         <BaseParams>
-                                            <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection() ? #{StationGrid}.getSelectionModel().getSelected().id : -1"
+                                            <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection() ? #{StationsGrid}.getSelectionModel().getSelected().id : -1"
                                                 Mode="Raw" />
                                         </BaseParams>
                                     </ext:Store>
@@ -302,7 +301,7 @@
                                     <Columns>
                                         <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
                                         <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="75" />
-                                        <ext:DateColumn Header="Start Date" DataIndex="StartDatet" Width="75" Format="yyyy/MM/dd" />
+                                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="yyyy/MM/dd" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="yyyy/MM/dd" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
@@ -313,7 +312,7 @@
                                     </Columns>
                                 </ColumnModel>
                                 <SelectionModel>
-                                    <ext:RowSelectionModel ID="RowSelectionModelOrganisation" runat="server" SingleSelect="true">
+                                    <ext:RowSelectionModel ID="RowSelectionModel3" runat="server" SingleSelect="true">
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
@@ -334,7 +333,7 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="700" Height="400" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="700" Height="450" Closable="true"
         Hidden="true" Collapsible="false" Title="Station Detail" Maximizable="false"
         Layout="FitLayout" ClientIDMode="Static">
         <Content>
@@ -344,7 +343,7 @@
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server">
                     </ext:Hidden>
-                    <ext:Container ID="Container1" runat="server" Layout="Column" Height="150">
+                    <ext:Container ID="Container1" runat="server" Layout="Column" Height="100">
                         <Items>
                             <ext:Container ID="Container2" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                                 <Items>
@@ -375,8 +374,7 @@
                             </ext:Container>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Panel4" runat="server" Layout="Form"
-                        LabelAlign="Top">
+                    <ext:Container ID="Panel4" runat="server" Layout="Form" LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
                             <ext:Parameter Name="blankText" Value="Description is required" Mode="Value" />
@@ -414,6 +412,30 @@
                             </ext:Container>
                         </Items>
                     </ext:Container>
+                    <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="Start Date is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:DateField ID="dfStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                            </ext:DateField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel7" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="End Date is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:DateField ID="dfEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                            </ext:DateField>
+                        </Items>
+                    </ext:Panel>
                 </Items>
                 <Buttons>
                     <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
@@ -457,7 +479,7 @@
                             </ext:JsonReader>
                         </Reader>
                         <BaseParams>
-                            <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationGrid}') && #{StationGrid}.getSelectionModel().hasSelection() ? #{StationGrid}.getSelectionModel().getSelected().id : -1"
+                            <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection() ? #{StationsGrid}.getSelectionModel().getSelected().id : -1"
                                 Mode="Raw" />
                         </BaseParams>
                     </ext:Store>
@@ -485,14 +507,14 @@
             </ext:GridPanel>
         </Items>
     </ext:Window>
-    <ext:Window ID="OrganisationWindow" runat="server" Width="450" Height="400" Closable="true"
+    <ext:Window ID="OrganisationLinkWindow" runat="server" Width="450" Height="300" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Organisation"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
-            <Hide Fn="ClearOrganisationForm" />
+            <Hide Fn="ClearOrganisationLinkForm" />
         </Listeners>
         <Content>
-            <ext:FormPanel ID="OrganisationFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
+            <ext:FormPanel ID="OrganisationLinkFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
                 MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />

@@ -20,9 +20,9 @@ public partial class Admin_Sites : System.Web.UI.Page
     }
 
     #region Sites
-    protected void SiteGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void SitesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        SiteGrid.GetStore().DataSource = SiteRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
+        SitesGrid.GetStore().DataSource = SiteRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
 
@@ -86,7 +86,7 @@ public partial class Admin_Sites : System.Web.UI.Page
             site.Save();
             Auditing.Log("Sites.Save", new Dictionary<string, object> { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
 
-            SiteGrid.DataBind();
+            SitesGrid.DataBind();
 
             DetailWindow.Hide();
         }
@@ -97,7 +97,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         }
     }
 
-    protected void SiteStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    protected void SitesGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {
         string type = FormatType.Text;
         string visCols = VisCols.Value.ToString();
@@ -114,7 +114,7 @@ public partial class Admin_Sites : System.Web.UI.Page
 
     #region Stations
 
-    protected void StationGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void StationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
         {
@@ -123,8 +123,8 @@ public partial class Admin_Sites : System.Web.UI.Page
                 .Where(da.Station.Columns.SiteID, Id)
                 .OrderByAsc(da.Station.Columns.Code)
                 .Load();
-            StationGrid.GetStore().DataSource = col;
-            StationGrid.GetStore().DataBind();
+            StationsGrid.GetStore().DataSource = col;
+            StationsGrid.GetStore().DataBind();
         }
     }
 
@@ -151,7 +151,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         try
         {
             RowSelectionModel sm = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
-            RowSelectionModel masteRow = SiteGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel masteRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
 
             var masterID = new Guid(masteRow.SelectedRecordID);
             if (sm.SelectedRows.Count > 0)
@@ -168,7 +168,7 @@ public partial class Admin_Sites : System.Web.UI.Page
                             { "SiteID", masterID }, { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
                     }
                 }
-                StationGrid.DataBind();
+                StationsGrid.DataBind();
                 AvailableStationsWindow.Hide();
             }
             else
@@ -202,7 +202,7 @@ public partial class Admin_Sites : System.Web.UI.Page
                     station.Save();
                     Auditing.Log("Sites.DeleteStationLink", new Dictionary<string, object> {
                         { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
-                    StationGrid.DataBind();
+                    StationsGrid.DataBind();
                 }
             }
         }
@@ -216,7 +216,7 @@ public partial class Admin_Sites : System.Web.UI.Page
 
     #region Organisations
 
-    protected void OrganisationGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void OrganisationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
         {
@@ -228,8 +228,8 @@ public partial class Admin_Sites : System.Web.UI.Page
                 .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationName)
                 .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationRoleName)
                 .Load();
-            OrganisationGrid.GetStore().DataSource = col;
-            OrganisationGrid.GetStore().DataBind();
+            OrganisationLinksGrid.GetStore().DataSource = col;
+            OrganisationLinksGrid.GetStore().DataBind();
         }
     }
 
@@ -237,7 +237,7 @@ public partial class Admin_Sites : System.Web.UI.Page
     {
         try
         {
-            RowSelectionModel masterRow = SiteGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             da.SiteOrganisation siteOrganisation = new da.SiteOrganisation(hID.Value);
             siteOrganisation.SiteID = masterID;
@@ -256,8 +256,8 @@ public partial class Admin_Sites : System.Web.UI.Page
                 { "RoleID", siteOrganisation.OrganisationRoleID },
                 { "RoleCode", siteOrganisation.OrganisationRole.Code},
             });
-            OrganisationGrid.DataBind();
-            OrganisationWindow.Hide();
+            OrganisationLinksGrid.DataBind();
+            OrganisationLinkWindow.Hide();
         }
         catch (Exception ex)
         {
@@ -274,14 +274,14 @@ public partial class Admin_Sites : System.Web.UI.Page
         {
             if (actionType == "Edit")
             {
-                OrganisationFormPanel.SetValues(new da.SiteOrganisation(recordID));
-                OrganisationWindow.Show();
+                OrganisationLinkFormPanel.SetValues(new da.SiteOrganisation(recordID));
+                OrganisationLinkWindow.Show();
             }
             else if (actionType == "Delete")
             {
                 new da.SiteOrganisationController().Delete(recordID);
                 Auditing.Log("Sites.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
-                OrganisationGrid.DataBind();
+                OrganisationLinksGrid.DataBind();
             }
         }
         catch (Exception ex)

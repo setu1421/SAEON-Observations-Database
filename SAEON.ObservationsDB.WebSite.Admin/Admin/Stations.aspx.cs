@@ -22,9 +22,9 @@ public partial class Admin_Stations : System.Web.UI.Page
     }
 
     #region Stations
-    protected void StationGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void StationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        StationGrid.GetStore().DataSource = StationRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
+        StationsGrid.GetStore().DataSource = StationRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
 
@@ -91,13 +91,18 @@ public partial class Admin_Stations : System.Web.UI.Page
             if (!string.IsNullOrEmpty(tfUrl.Text))
                 station.Url = tfUrl.Text;
 
+            if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+                station.StartDate = dfStartDate.SelectedDate;
+            if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+                station.EndDate = dfEndDate.SelectedDate;
+
             station.UserId = AuthHelper.GetLoggedInUserId;
 
             station.Save();
             Auditing.Log("Stations.Save", new Dictionary<string, object> {
                 { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
 
-            StationGrid.DataBind();
+            StationsGrid.DataBind();
 
             DetailWindow.Hide();
         }
@@ -108,7 +113,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
-    protected void StationStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    protected void StationsGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {
         string type = FormatType.Text;
         string visCols = VisCols.Value.ToString();
@@ -125,7 +130,7 @@ public partial class Admin_Stations : System.Web.UI.Page
 
     #region DataSources
 
-    protected void DataSourceGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void DataSourcesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
         {
@@ -134,8 +139,8 @@ public partial class Admin_Stations : System.Web.UI.Page
                 .Where(da.DataSource.Columns.StationID, Id)
                 .OrderByAsc(da.DataSource.Columns.Code)
                 .Load();
-            DataSourceGrid.GetStore().DataSource = col;
-            DataSourceGrid.GetStore().DataBind();
+            DataSourcesGrid.GetStore().DataSource = col;
+            DataSourcesGrid.GetStore().DataBind();
         }
     }
 
@@ -162,7 +167,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         try
         {
             RowSelectionModel sm = AvailableDataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
-            RowSelectionModel masterRow = StationGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
 
             var masterID = new Guid(masterRow.SelectedRecordID);
             if (sm.SelectedRows.Count > 0)
@@ -179,7 +184,7 @@ public partial class Admin_Stations : System.Web.UI.Page
                             { "StationID", masterID }, { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
                     }
                 }
-                DataSourceGrid.DataBind();
+                DataSourcesGrid.DataBind();
                 AvailableDataSourcesWindow.Hide();
             }
             else
@@ -214,7 +219,7 @@ public partial class Admin_Stations : System.Web.UI.Page
                     dataSource.Save();
                     Auditing.Log("Stations.DeleteDataSourceLink", new Dictionary<string, object> {
                         { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
-                    DataSourceGrid.DataBind();
+                    DataSourcesGrid.DataBind();
                 }
             }
         }
@@ -228,7 +233,7 @@ public partial class Admin_Stations : System.Web.UI.Page
 
     #region Organisations
 
-    protected void OrganisationGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void OrganisationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
         {
@@ -240,8 +245,8 @@ public partial class Admin_Stations : System.Web.UI.Page
                 .OrderByAsc(da.VStationOrganisation.Columns.OrganisationName)
                 .OrderByAsc(da.VStationOrganisation.Columns.OrganisationRoleName)
                 .Load();
-            OrganisationGrid.GetStore().DataSource = StationOrganisationCol;
-            OrganisationGrid.GetStore().DataBind();
+            OrganisationLinksGrid.GetStore().DataSource = StationOrganisationCol;
+            OrganisationLinksGrid.GetStore().DataBind();
         }
     }
 
@@ -249,7 +254,7 @@ public partial class Admin_Stations : System.Web.UI.Page
     {
         try
         {
-            RowSelectionModel masterRow = StationGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             da.StationOrganisation stationOrganisation = new da.StationOrganisation();
             stationOrganisation.StationID = masterID;
@@ -268,8 +273,8 @@ public partial class Admin_Stations : System.Web.UI.Page
                 { "RoleID", stationOrganisation.OrganisationRoleID },
                 { "RoleCode", stationOrganisation.OrganisationRole.Code},
             });
-            OrganisationGrid.DataBind();
-            OrganisationWindow.Hide();
+            OrganisationLinksGrid.DataBind();
+            OrganisationLinkWindow.Hide();
         }
         catch (Exception ex)
         {
@@ -286,14 +291,14 @@ public partial class Admin_Stations : System.Web.UI.Page
         {
             if (actionType == "Edit")
             {
-                OrganisationFormPanel.SetValues(new da.StationOrganisation(recordID));
-                OrganisationWindow.Show();
+                OrganisationLinkFormPanel.SetValues(new da.StationOrganisation(recordID));
+                OrganisationLinkWindow.Show();
             }
             else if (actionType == "Delete")
             {
                 new da.StationOrganisationController().Delete(recordID);
                 Auditing.Log("Station.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
-                OrganisationGrid.DataBind();
+                OrganisationLinksGrid.DataBind();
             }
         }
         catch (Exception ex)
