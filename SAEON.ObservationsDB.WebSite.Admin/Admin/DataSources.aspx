@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="DataSources.aspx.cs" Inherits="Admin_DataSources" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/Instruments.js"></script>
+    <script type="text/javascript" src="../JS/DataSources.js"></script>
     <script type="text/javascript" src="../JS/generic.js"></script>
     <script type="text/javascript">
         var submitValue = function (format)

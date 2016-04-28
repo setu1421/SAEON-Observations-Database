@@ -29,15 +29,15 @@ function New() {
 
 function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible())
-        InstrumentGrid.getStore().reload();
+        DataSourcesGrid.getStore().reload();
     if (pnlEast.isVisible())
-        OrganisationGrid.getStore().reload();
+        OrganisationLinksGrid.getStore().reload();
 }
 
 function CloseAvailableSensors() {
-    AvailableSensorsGrid.selModel.clearSelections();
+    //AvailableSensorsGrid.selModel.clearSelections();
 }
 
 function ClearOrganisationForm() {
-    OrganisationFormPanel.getForm().reset();
+    OrganisationLinkFormPanel.getForm().reset();
 }
