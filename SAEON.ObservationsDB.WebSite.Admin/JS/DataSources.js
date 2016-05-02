@@ -29,15 +29,53 @@ function New() {
 
 function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible())
-        DataSourcesGrid.getStore().reload();
+        SensorsGrid.getStore().reload();
     if (pnlEast.isVisible())
         OrganisationLinksGrid.getStore().reload();
 }
 
-function CloseAvailableSensors() {
-    //AvailableSensorsGrid.selModel.clearSelections();
+function FrequencyUpdate() {
+
+    if (cbUpdateFrequency.getValue() === '0') {
+        tfUrl.allowBlank = true;
+        tfUrl.markAsValid();
+
+        StartDate.allowBlank = true;
+        StartDate.markAsValid();
+    }
+    else {
+        tfUrl.allowBlank = false;
+        StartDate.allowBlank = false;
+    }
 }
 
-function ClearOrganisationForm() {
+function ClearOrganisationLinkForm() {
     OrganisationLinkFormPanel.getForm().reset();
 }
+
+function CloseAvailableSensors() {
+    AvailableSensorsGrid.selModel.clearSelections();
+}
+
+function onOrganisationLinkCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteOrganisationLink(record.get('Id'), { eventMask: { showMask: true } });
+    } else if (e === 'Edit') {
+        OrganisationLinkFormPanel.getForm().reset();
+        OrganisationLinkFormPanel.getForm().loadRecord(record);
+        OrganisationLinkFormPanel.getForm().clearInvalid();
+        OrganisationLinkWindow.show();
+    }
+}
+
+function onSensorLinkCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteSensorLink(record.get('Id'), { eventMask: { showMask: true } });
+    } else if (e === 'Edit') {
+        SensorLinkFormPanel.getForm().reset();
+        SensorLinkFormPanel.getForm().loadRecord(record);
+        SensorLinkFormPanel.getForm().clearInvalid();
+        SensorLinkWindow.show();
+    }
+}
+

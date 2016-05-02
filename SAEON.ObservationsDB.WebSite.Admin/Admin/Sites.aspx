@@ -210,14 +210,9 @@
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
-                                <DirectEvents>
-                                    <Command OnEvent="OrganisationLink">
-                                        <ExtraParams>
-                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
-                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
-                                        </ExtraParams>
-                                    </Command>
-                                </DirectEvents>
+                                <Listeners>
+                                    <Command Fn="onOrganisationLinkCommand" />
+                                </Listeners>
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
@@ -285,15 +280,8 @@
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
                                 <Listeners>
+                                    <Command Fn="onStationLinkCommand" />
                                 </Listeners>
-                                <DirectEvents>
-                                    <Command OnEvent="StationLink">
-                                        <ExtraParams>
-                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
-                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
-                                        </ExtraParams>
-                                    </Command>
-                                </DirectEvents>
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>

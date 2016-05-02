@@ -41,3 +41,26 @@ function CloseAvailableStations() {
 function ClearOrganisationLinkForm() {
     OrganisationLinkFormPanel.getForm().reset();
 }
+
+function onOrganisationLinkCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteOrganisationLink(record.get('Id'), { eventMask: { showMask: true } });
+    } else if (e === 'Edit') {
+        OrganisationLinkFormPanel.getForm().reset();
+        OrganisationLinkFormPanel.getForm().loadRecord(record);
+        OrganisationLinkFormPanel.getForm().clearInvalid();
+        OrganisationLinkWindow.show();
+    }
+}
+
+function onStationLinkCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteStationLink(record.get('Id'), { eventMask: { showMask: true } });
+    } else if (e === 'Edit') {
+        StationLinkFormPanel.getForm().reset();
+        StationLinkFormPanel.getForm().loadRecord(record);
+        StationLinkFormPanel.getForm().clearInvalid();
+        StationLinkWindow.show();
+    }
+}
+

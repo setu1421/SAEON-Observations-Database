@@ -1,6 +1,7 @@
 ﻿using Ext.Net;
 using SAEON.ObservationsDB.Data;
 using Serilog;
+using SubSonic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -214,13 +215,10 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 ds.DataSchemaID = null;
 
 
-            if (!String.IsNullOrEmpty(StartDate.Text))
-                ds.StartDate = StartDate.SelectedDate;
-            if (StartDate.SelectedDate.Date.Year < 1900)
-            {
-                ds.StartDate = null;
-            }
-
+            if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+                ds.StartDate = dfStartDate.SelectedDate;
+            if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+                ds.EndDate = dfEndDate.SelectedDate;
             ds.UserId = AuthHelper.GetLoggedInUserId;
 
             ds.Save();
@@ -256,7 +254,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void OrganisationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["DatasourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
+        if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
             VDataSourceOrganisationCollection col = new VDataSourceOrganisationCollection()
@@ -304,29 +302,159 @@ public partial class Admin_DataSources : System.Web.UI.Page
         }
     }
 
-    protected void OrganisationLink(object sender, DirectEventArgs e)
+    [DirectMethod]
+    public void ConfirmDeleteOrganisationLink(Guid aID)
     {
-        string actionType = e.ExtraParams["type"];
-        string recordID = e.ExtraParams["id"];
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteOrganisationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this organisation link?");
+    }
+
+    [DirectMethod]
+    public void DeleteOrganisationLink(Guid aID)
+    {
         try
         {
-            if (actionType == "Edit")
+            new DataSourceOrganisationController().Delete(aID);
+            Auditing.Log("DataSources.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", aID } });
+            OrganisationLinksGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DataSources.DeleteOrganisationLink({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
+        }
+    }
+
+    //protected void OrganisationLink(object sender, DirectEventArgs e)
+    //{
+    //    string actionType = e.ExtraParams["type"];
+    //    string recordID = e.ExtraParams["id"];
+    //        try
+    //        {
+    //            if (actionType == "Edit")
+    //            {
+    //                OrganisationLinkFormPanel.SetValues(new DataSourceOrganisation(recordID));
+    //                OrganisationLinkWindow.Show();
+    //            }
+    //            else if (actionType == "Delete") 
+    //            {
+    //                new DataSourceOrganisationController().Delete(recordID);
+    //                Auditing.Log("DataSources.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
+    //                OrganisationLinksGrid.DataBind();
+    //            }
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Log.Error(ex, "DataSources.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
+    //            MessageBoxes.Error(ex, "Unable to {0} organisation link", actionType);
+    //        }
+    //}
+    #endregion
+
+    #region Sensors
+    protected void SensorsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
+            SensorProcedureCollection col = new SensorProcedureCollection()
+                .Where(SensorProcedure.Columns.DataSourceID, Id)
+                .OrderByAsc(SensorProcedure.Columns.Code)
+                .Load();
+            SensorsGrid.GetStore().DataSource = col;
+            SensorsGrid.GetStore().DataBind();
+        }
+    }
+
+    protected void AvailableSensorsStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["DataSourcenID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
+            SensorProcedureCollection col = new Select()
+                .From(SensorProcedure.Schema)
+                .Where(SensorProcedure.IdColumn)
+                .NotIn(new Select(new string[] { SensorProcedure.Columns.Id }).From(SensorProcedure.Schema).Where(SensorProcedure.IdColumn).IsEqualTo(Id))
+                .And(SensorProcedure.DataSourceIDColumn)
+                .IsNull()
+                .OrderAsc(SensorProcedure.Columns.Code)
+                .ExecuteAsCollection<SensorProcedureCollection>();
+            AvailableSensorsGrid.GetStore().DataSource = col;
+            AvailableSensorsGrid.GetStore().DataBind();
+        }
+    }
+
+    protected void LinkSensors_Click(object sender, DirectEventArgs e)
+    {
+        try
+        {
+            RowSelectionModel sm = AvailableSensorsGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel masterRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
+
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            if (sm.SelectedRows.Count > 0)
             {
-                OrganisationLinkFormPanel.SetValues(new DataSourceOrganisation(recordID));
-                OrganisationLinkWindow.Show();
+                foreach (SelectedRow row in sm.SelectedRows)
+                {
+                    SensorProcedure sensor = new SensorProcedure(row.RecordID);
+                    if (sensor != null)
+                    {
+                        sensor.DataSourceID = masterID;
+                        sensor.UserId = AuthHelper.GetLoggedInUserId;
+                        sensor.Save();
+                        Auditing.Log("DataSources.AddSensorLink", new Dictionary<string, object> {
+                            { "DataSourceID", masterID }, { "ID", sensor.Id }, { "Code", sensor.Code }, { "Name", sensor.Name } });
+                    }
+                }
+                SensorsGrid.DataBind();
+                AvailableSensorsWindow.Hide();
             }
-            else if (actionType == "Delete")
+            else
             {
-                new DataSourceOrganisationController().Delete(recordID);
-                Auditing.Log("DataSources.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
-                OrganisationLinksGrid.DataBind();
+                MessageBoxes.Info("Invalid Selection", "Select at least one data source");
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DataSources.LinkSensors_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link sensors");
+        }
+    }
+
+    [DirectMethod]
+    public void ConfirmDeleteSensorLink(Guid aID)
+    {
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteSensorLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this sensor link?");
+    }
+
+    [DirectMethod]
+    public void DeleteSensorLink(Guid aID)
+    {
+        try
+        {
+            SensorProcedure sensor = new SensorProcedure(aID);
+            if (sensor != null)
+            {
+                //sensor.DataSourceID = null;
+                sensor.UserId = AuthHelper.GetLoggedInUserId;
+                sensor.Save();
+                Auditing.Log("DataSources.DeleteSensorLink", new Dictionary<string, object> {
+                        { "ID", sensor.Id }, { "Code", sensor.Code }, { "Name", sensor.Name } });
+                SensorsGrid.DataBind();
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "DataSources.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
-            MessageBoxes.Error(ex, "Unable to {0} organisation link", actionType);
+            Log.Error(ex, "DataSources.DeleteSensorLink({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete data source link");
         }
     }
+
     #endregion
 }

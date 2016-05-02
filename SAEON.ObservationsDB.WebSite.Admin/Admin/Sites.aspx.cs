@@ -112,6 +112,110 @@ public partial class Admin_Sites : System.Web.UI.Page
 
     #endregion
 
+    #region Organisations
+
+    protected void OrganisationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
+            da.VSiteOrganisationCollection col = new da.VSiteOrganisationCollection()
+                .Where(da.VSiteOrganisation.Columns.SiteID, Id)
+                .OrderByAsc(da.VSiteOrganisation.Columns.StartDate)
+                .OrderByAsc(da.VSiteOrganisation.Columns.EndDate)
+                .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationName)
+                .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationRoleName)
+                .Load();
+            OrganisationLinksGrid.GetStore().DataSource = col;
+            OrganisationLinksGrid.GetStore().DataBind();
+        }
+    }
+
+    protected void LinkOrganisation_Click(object sender, DirectEventArgs e)
+    {
+        try
+        {
+            RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            da.SiteOrganisation siteOrganisation = new da.SiteOrganisation(hID.Value);
+            siteOrganisation.SiteID = masterID;
+            siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
+            siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+            if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
+                siteOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
+            if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
+                siteOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
+            siteOrganisation.UserId = AuthHelper.GetLoggedInUserId;
+            siteOrganisation.Save();
+            Auditing.Log("Sites.AddOrganisationLink", new Dictionary<string, object> {
+                { "SiteID", masterID },
+                { "OrganisationID", siteOrganisation.OrganisationID},
+                { "OrganisationCode", siteOrganisation.Organisation.Code},
+                { "RoleID", siteOrganisation.OrganisationRoleID },
+                { "RoleCode", siteOrganisation.OrganisationRole.Code},
+            });
+            OrganisationLinksGrid.DataBind();
+            OrganisationLinkWindow.Hide();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Sites.LinkOrganisation_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link organisation");
+        }
+    }
+
+    [DirectMethod]
+    public void ConfirmDeleteOrganisationLink(Guid aID)
+    {
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteOrganisationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this organisation link?");
+    }
+
+    [DirectMethod]
+    public void DeleteOrganisationLink(Guid aID)
+    {
+        try
+        {
+            new da.SiteOrganisationController().Delete(aID);
+            Auditing.Log("Sites.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", aID } });
+            OrganisationLinksGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Sites.DeleteOrganisationLink({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
+        }
+    }
+
+    //protected void OrganisationLink(object sender, DirectEventArgs e)
+    //{
+    //    string actionType = e.ExtraParams["type"];
+    //    string recordID = e.ExtraParams["id"];
+    //    try
+    //    {
+    //        if (actionType == "Edit")
+    //        {
+    //            OrganisationLinkFormPanel.SetValues(new da.SiteOrganisation(recordID));
+    //            OrganisationLinkWindow.Show();
+    //        }
+    //        else if (actionType == "Delete")
+    //        {
+    //            new da.SiteOrganisationController().Delete(recordID);
+    //            Auditing.Log("Sites.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
+    //            OrganisationLinksGrid.DataBind();
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Log.Error(ex, "Sites.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
+    //        MessageBoxes.Error(ex, "Error", "Unable to {0} organisation link", actionType);
+    //    }
+    //}
+
+    #endregion
+
     #region Stations
 
     protected void StationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
@@ -183,113 +287,67 @@ public partial class Admin_Sites : System.Web.UI.Page
         }
     }
 
-    protected void StationLink(object sender, DirectEventArgs e)
+    [DirectMethod]
+    public void ConfirmDeleteStationLink(Guid aID)
     {
-        string actionType = e.ExtraParams["type"];
-        string recordID = e.ExtraParams["id"];
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteStationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this station link?");
+    }
+
+    [DirectMethod]
+    public void DeleteStationLink(Guid aID)
+    {
         try
         {
-            if (actionType == "Edit")
+            da.Station station = new da.Station(aID);
+            if (station != null)
             {
-            }
-            else if (actionType == "Delete")
-            {
-                da.Station station = new da.Station(recordID);
-                if (station != null)
-                {
-                    station.SiteID = null;
-                    station.UserId = AuthHelper.GetLoggedInUserId;
-                    station.Save();
-                    Auditing.Log("Sites.DeleteStationLink", new Dictionary<string, object> {
+                station.SiteID = null;
+                station.UserId = AuthHelper.GetLoggedInUserId;
+                station.Save();
+                Auditing.Log("Sites.DeleteStationLink", new Dictionary<string, object> {
                         { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
-                    StationsGrid.DataBind();
-                }
+                StationsGrid.DataBind();
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Sites.StationLink({ActionType},{RecordID})", actionType, recordID);
-            MessageBoxes.Error(ex, "Unable to {0} station link", actionType);
+            Log.Error(ex, "Sites.DeleteStationLink({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete station link");
         }
     }
+
+    //protected void StationLink(object sender, DirectEventArgs e)
+    //{
+    //    string actionType = e.ExtraParams["type"];
+    //    string recordID = e.ExtraParams["id"];
+    //    try
+    //    {
+    //        if (actionType == "Edit")
+    //        {
+    //        }
+    //        else if (actionType == "Delete")
+    //        {
+    //            da.Station station = new da.Station(recordID);
+    //            if (station != null)
+    //            {
+    //                station.SiteID = null;
+    //                station.UserId = AuthHelper.GetLoggedInUserId;
+    //                station.Save();
+    //                Auditing.Log("Sites.DeleteStationLink", new Dictionary<string, object> {
+    //                    { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
+    //                StationsGrid.DataBind();
+    //            }
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Log.Error(ex, "Sites.StationLink({ActionType},{RecordID})", actionType, recordID);
+    //        MessageBoxes.Error(ex, "Unable to {0} station link", actionType);
+    //    }
+    //}
     #endregion
 
-    #region Organisations
-
-    protected void OrganisationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
-    {
-        if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
-        {
-            Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
-            da.VSiteOrganisationCollection col = new da.VSiteOrganisationCollection()
-                .Where(da.VSiteOrganisation.Columns.SiteID, Id)
-                .OrderByAsc(da.VSiteOrganisation.Columns.StartDate)
-                .OrderByAsc(da.VSiteOrganisation.Columns.EndDate)
-                .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationName)
-                .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationRoleName)
-                .Load();
-            OrganisationLinksGrid.GetStore().DataSource = col;
-            OrganisationLinksGrid.GetStore().DataBind();
-        }
-    }
-
-    protected void LinkOrganisation_Click(object sender, DirectEventArgs e)
-    {
-        try
-        {
-            RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            da.SiteOrganisation siteOrganisation = new da.SiteOrganisation(hID.Value);
-            siteOrganisation.SiteID = masterID;
-            siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
-            siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
-                siteOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
-            if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
-                siteOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
-            siteOrganisation.UserId = AuthHelper.GetLoggedInUserId;
-            siteOrganisation.Save();
-            Auditing.Log("Sites.AddOrganisationLink", new Dictionary<string, object> {
-                { "SiteID", masterID },
-                { "OrganisationID", siteOrganisation.OrganisationID},
-                { "OrganisationCode", siteOrganisation.Organisation.Code},
-                { "RoleID", siteOrganisation.OrganisationRoleID },
-                { "RoleCode", siteOrganisation.OrganisationRole.Code},
-            });
-            OrganisationLinksGrid.DataBind();
-            OrganisationLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Sites.LinkOrganisation_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link organisation");
-        }
-    }
-
-    protected void OrganisationLink(object sender, DirectEventArgs e)
-    {
-        string actionType = e.ExtraParams["type"];
-        string recordID = e.ExtraParams["id"];
-        try
-        {
-            if (actionType == "Edit")
-            {
-                OrganisationLinkFormPanel.SetValues(new da.SiteOrganisation(recordID));
-                OrganisationLinkWindow.Show();
-            }
-            else if (actionType == "Delete")
-            {
-                new da.SiteOrganisationController().Delete(recordID);
-                Auditing.Log("Sites.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
-                OrganisationLinksGrid.DataBind();
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Sites.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
-            MessageBoxes.Error(ex, "Error", "Unable to {0} organisation link", actionType);
-        }
-    }
-
-    #endregion
 }

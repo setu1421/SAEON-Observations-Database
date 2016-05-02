@@ -56,7 +56,6 @@ function NewTransform()
 	}
 	else
 	{
-
 	    Ext.Msg.alert('Invalid Selection', 'Select a Data Source.');
 	}
 }

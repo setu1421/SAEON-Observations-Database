@@ -241,21 +241,14 @@
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
                                 <Listeners>
+                                    <Command Fn="onOrganisationLinkCommand" />
                                 </Listeners>
-                                <DirectEvents>
-                                    <Command OnEvent="OrganisationLink">
-                                        <ExtraParams>
-                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
-                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
-                                        </ExtraParams>
-                                    </Command>
-                                </DirectEvents>
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
                 </East>
                 <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
-                    <ext:Panel ID="pnlSouth" runat="server" Title="Data Sources" Layout="FitLayout"
+                    <ext:Panel ID="pnlSouth" runat="server" Title="Data Sources (Instruments)" Layout="FitLayout"
                         Height="200" ClientIDMode="Static">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar2" runat="server">
@@ -317,15 +310,8 @@
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
                                 <Listeners>
+                                    <Command Fn="onDataSourceLinkCommand" />
                                 </Listeners>
-                                <DirectEvents>
-                                    <Command OnEvent="DataSourceLink">
-                                        <ExtraParams>
-                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
-                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
-                                        </ExtraParams>
-                                    </Command>
-                                </DirectEvents>
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
@@ -543,7 +529,7 @@
         </Content>
     </ext:Window>
     <ext:Window ID="AvailableDataSourcesWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available DataSources" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
+        Title="Available DataSources (Instruments)" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="CloseAvailableDataSources" />
         </Listeners>

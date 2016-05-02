@@ -1,5 +1,5 @@
 ﻿using Ext.Net;
-using da = SAEON.ObservationsDB.Data;
+using SAEON.ObservationsDB.Data;
 using System;
 using System.Linq;
 using SubSonic;
@@ -12,11 +12,11 @@ public partial class Admin_Stations : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
-            SiteStore.DataSource = new da.SiteCollection().OrderByAsc(da.Site.Columns.Name).Load();
+            SiteStore.DataSource = new SiteCollection().OrderByAsc(SAEON.ObservationsDB.Data.Site.Columns.Name).Load();
             SiteStore.DataBind();
-            OrganisationStore.DataSource = new da.OrganisationCollection().OrderByAsc(da.Organisation.Columns.Name).Load();
+            OrganisationStore.DataSource = new OrganisationCollection().OrderByAsc(Organisation.Columns.Name).Load();
             OrganisationStore.DataBind();
-            OrganisationRoleStore.DataSource = new da.OrganisationRoleCollection().OrderByAsc(da.OrganisationRole.Columns.Name).Load();
+            OrganisationRoleStore.DataSource = new OrganisationRoleCollection().OrderByAsc(OrganisationRole.Columns.Name).Load();
             OrganisationRoleStore.DataBind();
         }
     }
@@ -30,27 +30,27 @@ public partial class Admin_Stations : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
-        da.StationCollection col = new da.StationCollection();
+        StationCollection col = new StationCollection();
 
         string checkColumn = String.Empty,
                errorMessage = String.Empty;
 
         if (e.ID == "tfCode")
         {
-            checkColumn = da.Station.Columns.Code;
+            checkColumn = Station.Columns.Code;
             errorMessage = "The specified Station Code already exists";
         }
         else if (e.ID == "tfName")
         {
-            checkColumn = da.Station.Columns.Name;
+            checkColumn = Station.Columns.Name;
             errorMessage = "The specified Station Name already exists";
 
         }
 
         if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new da.StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            col = new StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
         else
-            col = new da.StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(da.Station.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+            col = new StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Station.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
         if (col.Count > 0)
         {
@@ -65,12 +65,12 @@ public partial class Admin_Stations : System.Web.UI.Page
     {
         try
         {
-            da.Station station = new da.Station();
+            Station station = new Station();
 
             if (String.IsNullOrEmpty(tfID.Text))
                 station.Id = Guid.NewGuid();
             else
-                station = new da.Station(tfID.Text.Trim());
+                station = new Station(tfID.Text.Trim());
 
             if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
                 station.Code = tfCode.Text.Trim();
@@ -128,109 +128,6 @@ public partial class Admin_Stations : System.Web.UI.Page
 
     #endregion
 
-    #region DataSources
-
-    protected void DataSourcesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
-    {
-        if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
-        {
-            Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
-            da.DataSourceCollection col = new da.DataSourceCollection()
-                .Where(da.DataSource.Columns.StationID, Id)
-                .OrderByAsc(da.DataSource.Columns.Code)
-                .Load();
-            DataSourcesGrid.GetStore().DataSource = col;
-            DataSourcesGrid.GetStore().DataBind();
-        }
-    }
-
-    protected void AvailableDataSourcesStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
-    {
-        if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
-        {
-            Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
-            da.DataSourceCollection col = new Select()
-                .From(da.DataSource.Schema)
-                .Where(da.DataSource.IdColumn)
-                .NotIn(new Select(new string[] { da.DataSource.Columns.Id }).From(da.DataSource.Schema).Where(da.DataSource.IdColumn).IsEqualTo(Id))
-                .And(da.DataSource.StationIDColumn)
-                .IsNull()
-                .OrderAsc(da.DataSource.Columns.Code)
-                .ExecuteAsCollection<da.DataSourceCollection>();
-            AvailableDataSourcesGrid.GetStore().DataSource = col;
-            AvailableDataSourcesGrid.GetStore().DataBind();
-        }
-    }
-
-    protected void LinkDataSources_Click(object sender, DirectEventArgs e)
-    {
-        try
-        {
-            RowSelectionModel sm = AvailableDataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
-            RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
-
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            if (sm.SelectedRows.Count > 0)
-            {
-                foreach (SelectedRow row in sm.SelectedRows)
-                {
-                    da.DataSource dataSource = new da.DataSource(row.RecordID);
-                    if (dataSource != null)
-                    {
-                        dataSource.StationID = masterID;
-                        dataSource.UserId = AuthHelper.GetLoggedInUserId;
-                        dataSource.Save();
-                        Auditing.Log("Stations.AddDataSourceLink", new Dictionary<string, object> {
-                            { "StationID", masterID }, { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
-                    }
-                }
-                DataSourcesGrid.DataBind();
-                AvailableDataSourcesWindow.Hide();
-            }
-            else
-            {
-                MessageBoxes.Info("Invalid Selection", "Select at least one instrument");
-            }
-
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Stations.LinkDataSources_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link data sources");
-        }
-    }
-
-    protected void DataSourceLink(object sender, DirectEventArgs e)
-    {
-        string actionType = e.ExtraParams["type"];
-        string recordID = e.ExtraParams["id"];
-        try
-        {
-            if (actionType == "Edit")
-            {
-            }
-            else if (actionType == "Delete")
-            {
-                da.DataSource dataSource = new da.DataSource(recordID);
-                if (dataSource != null)
-                {
-                    dataSource.StationID = null;
-                    dataSource.UserId = AuthHelper.GetLoggedInUserId;
-                    dataSource.Save();
-                    Auditing.Log("Stations.DeleteDataSourceLink", new Dictionary<string, object> {
-                        { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
-                    DataSourcesGrid.DataBind();
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Stations.DataSourceLink({ActionType},{RecordID})", actionType, recordID);
-            MessageBoxes.Error(ex, "Unable to {0} data source link", actionType);
-        }
-    }
-    #endregion
-
     #region Organisations
 
     protected void OrganisationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
@@ -238,12 +135,12 @@ public partial class Admin_Stations : System.Web.UI.Page
         if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
-            da.VStationOrganisationCollection StationOrganisationCol = new da.VStationOrganisationCollection()
-                .Where(da.VStationOrganisation.Columns.StationID, Id)
-                .OrderByAsc(da.VStationOrganisation.Columns.StartDate)
-                .OrderByAsc(da.VStationOrganisation.Columns.EndDate)
-                .OrderByAsc(da.VStationOrganisation.Columns.OrganisationName)
-                .OrderByAsc(da.VStationOrganisation.Columns.OrganisationRoleName)
+            VStationOrganisationCollection StationOrganisationCol = new VStationOrganisationCollection()
+                .Where(VStationOrganisation.Columns.StationID, Id)
+                .OrderByAsc(VStationOrganisation.Columns.StartDate)
+                .OrderByAsc(VStationOrganisation.Columns.EndDate)
+                .OrderByAsc(VStationOrganisation.Columns.OrganisationName)
+                .OrderByAsc(VStationOrganisation.Columns.OrganisationRoleName)
                 .Load();
             OrganisationLinksGrid.GetStore().DataSource = StationOrganisationCol;
             OrganisationLinksGrid.GetStore().DataBind();
@@ -256,7 +153,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         {
             RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            da.StationOrganisation stationOrganisation = new da.StationOrganisation();
+            StationOrganisation stationOrganisation = new StationOrganisation();
             stationOrganisation.StationID = masterID;
             stationOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
             stationOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
@@ -283,30 +180,191 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
-    protected void OrganisationLink(object sender, DirectEventArgs e)
+    [DirectMethod]
+    public void ConfirmDeleteOrganisationLink(Guid aID)
     {
-        string actionType = e.ExtraParams["type"];
-        string recordID = e.ExtraParams["id"];
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteOrganisationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this organisation link?");
+    }
+
+    [DirectMethod]
+    public void DeleteOrganisationLink(Guid aID)
+    {
         try
         {
-            if (actionType == "Edit")
+            new StationOrganisationController().Delete(aID);
+            Auditing.Log("Stations.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", aID } });
+            OrganisationLinksGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Stations.DeleteOrganisationLink({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
+        }
+    }
+
+    //protected void OrganisationLink(object sender, DirectEventArgs e)
+    //{
+    //    string actionType = e.ExtraParams["type"];
+    //    string recordID = e.ExtraParams["id"];
+    //    try
+    //    {
+    //        if (actionType == "Edit")
+    //        {
+    //            OrganisationLinkFormPanel.SetValues(new StationOrganisation(recordID));
+    //            OrganisationLinkWindow.Show();
+    //        }
+    //        else if (actionType == "Delete")
+    //        {
+    //            new StationOrganisationController().Delete(recordID);
+    //            Auditing.Log("Station.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
+    //            OrganisationLinksGrid.DataBind();
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Log.Error(ex, "Stations.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
+    //        MessageBoxes.Error(ex, "Unable to {0} organisation link", actionType);
+    //    }
+    //}
+
+    #endregion
+
+    #region DataSources
+
+    protected void DataSourcesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
+            DataSourceCollection col = new DataSourceCollection()
+                .Where(DataSource.Columns.StationID, Id)
+                .OrderByAsc(DataSource.Columns.Code)
+                .Load();
+            DataSourcesGrid.GetStore().DataSource = col;
+            DataSourcesGrid.GetStore().DataBind();
+        }
+    }
+
+    protected void AvailableDataSourcesStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
+            DataSourceCollection col = new Select()
+                .From(DataSource.Schema)
+                .Where(DataSource.IdColumn)
+                .NotIn(new Select(new string[] { DataSource.Columns.Id }).From(DataSource.Schema).Where(DataSource.IdColumn).IsEqualTo(Id))
+                .And(DataSource.StationIDColumn)
+                .IsNull()
+                .OrderAsc(DataSource.Columns.Code)
+                .ExecuteAsCollection<DataSourceCollection>();
+            AvailableDataSourcesGrid.GetStore().DataSource = col;
+            AvailableDataSourcesGrid.GetStore().DataBind();
+        }
+    }
+
+    protected void LinkDataSources_Click(object sender, DirectEventArgs e)
+    {
+        try
+        {
+            RowSelectionModel sm = AvailableDataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
+
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            if (sm.SelectedRows.Count > 0)
             {
-                OrganisationLinkFormPanel.SetValues(new da.StationOrganisation(recordID));
-                OrganisationLinkWindow.Show();
+                foreach (SelectedRow row in sm.SelectedRows)
+                {
+                    DataSource dataSource = new DataSource(row.RecordID);
+                    if (dataSource != null)
+                    {
+                        dataSource.StationID = masterID;
+                        dataSource.UserId = AuthHelper.GetLoggedInUserId;
+                        dataSource.Save();
+                        Auditing.Log("Stations.AddDataSourceLink", new Dictionary<string, object> {
+                            { "StationID", masterID }, { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
+                    }
+                }
+                DataSourcesGrid.DataBind();
+                AvailableDataSourcesWindow.Hide();
             }
-            else if (actionType == "Delete")
+            else
             {
-                new da.StationOrganisationController().Delete(recordID);
-                Auditing.Log("Station.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
-                OrganisationLinksGrid.DataBind();
+                MessageBoxes.Info("Invalid Selection", "Select at least one instrument");
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Stations.LinkDataSources_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link data sources");
+        }
+    }
+
+    [DirectMethod]
+    public void ConfirmDeleteDataSourceLink(Guid aID)
+    {
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteDataSourceLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this data source link?");
+    }
+
+    [DirectMethod]
+    public void DeleteDataSourceLink(Guid aID)
+    {
+        try
+        {
+            DataSource dataSource = new DataSource(aID);
+            if (dataSource != null)
+            {
+                dataSource.StationID = null;
+                dataSource.UserId = AuthHelper.GetLoggedInUserId;
+                dataSource.Save();
+                Auditing.Log("Stations.DeleteDataSourceLink", new Dictionary<string, object> {
+                        { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
+                DataSourcesGrid.DataBind();
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Stations.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
-            MessageBoxes.Error(ex, "Unable to {0} organisation link", actionType);
+            Log.Error(ex, "Stations.DeleteDataSourceLink({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete data source link");
         }
     }
 
+    //protected void DataSourceLink(object sender, DirectEventArgs e)
+    //{
+    //    string actionType = e.ExtraParams["type"];
+    //    string recordID = e.ExtraParams["id"];
+    //    try
+    //    {
+    //        if (actionType == "Edit")
+    //        {
+    //        }
+    //        else if (actionType == "Delete")
+    //        {
+    //            DataSource dataSource = new DataSource(recordID);
+    //            if (dataSource != null)
+    //            {
+    //                dataSource.StationID = null;
+    //                dataSource.UserId = AuthHelper.GetLoggedInUserId;
+    //                dataSource.Save();
+    //                Auditing.Log("Stations.DeleteDataSourceLink", new Dictionary<string, object> {
+    //                    { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
+    //                DataSourcesGrid.DataBind();
+    //            }
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Log.Error(ex, "Stations.DataSourceLink({ActionType},{RecordID})", actionType, recordID);
+    //        MessageBoxes.Error(ex, "Unable to {0} data source link", actionType);
+    //    }
+    //}
     #endregion
+
 }

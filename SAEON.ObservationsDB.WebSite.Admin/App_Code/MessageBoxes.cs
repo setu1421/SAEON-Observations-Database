@@ -6,6 +6,15 @@ using System;
 /// </summary>
 public static class MessageBoxes
 {
+    public static void Confirm(string title, string handler, string message, params object[] values)
+    {
+        X.Msg.Confirm(title, string.Format(message, values), new MessageBoxButtonsConfig
+        {
+            Yes = new MessageBoxButtonConfig { Handler = handler, Text = "Yes" },
+            No = new MessageBoxButtonConfig { Text = "No" }
+        }).Show(); 
+    }
+
     public static void Error(string title, string message, params object[] values)
     {
         X.Msg.Show(new MessageBoxConfig

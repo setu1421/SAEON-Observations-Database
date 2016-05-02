@@ -41,3 +41,26 @@ function CloseAvailableDataSources() {
 function ClearOrganisationLinkForm() {
     OrganisationLinkFormPanel.getForm().reset();
 }
+
+function onOrganisationLinkCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteOrganisationLink(record.get('Id'), { eventMask: { showMask: true } });
+    } else if (e === 'Edit') {
+        OrganisationLinkFormPanel.getForm().reset();
+        OrganisationLinkFormPanel.getForm().loadRecord(record);
+        OrganisationLinkFormPanel.getForm().clearInvalid();
+        OrganisationLinkWindow.show();
+    }
+}
+
+function onDataSourceLinkCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteDataSourceLink(record.get('Id'), { eventMask: { showMask: true } });
+    } else if (e === 'Edit') {
+        DataSourceLinkFormPanel.getForm().reset();
+        DataSourceLinkFormPanel.getForm().loadRecord(record);
+        DataSourceLinkFormPanel.getForm().clearInvalid();
+        DataSourceLinkWindow.show();
+    }
+}
+
