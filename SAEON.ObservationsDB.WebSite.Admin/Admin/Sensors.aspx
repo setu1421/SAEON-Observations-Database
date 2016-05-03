@@ -3,35 +3,35 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <script runat="server">
 
-    protected void SensorProcedureStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void SensorStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.SensorProcedureGrid.GetStore().DataSource = SensorRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        this.SensorGrid.GetStore().DataSource = SensorRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
 
-        SensorProcedureCollection col = new SensorProcedureCollection();
+        SensorCollection col = new SensorCollection();
 
         string checkColumn = String.Empty,
                errorMessage = String.Empty;
 
         if (e.ID == "tfCode")
         {
-            checkColumn = SensorProcedure.Columns.Code;
+            checkColumn = Sensor.Columns.Code;
             errorMessage = "The specified Sensor Procedure Code already exists";
         }
         else if (e.ID == "tfName")
         {
-            checkColumn = SensorProcedure.Columns.Name;
+            checkColumn = Sensor.Columns.Name;
             errorMessage = "The specified Sensor Procedure Name already exists";
 
         }
 
         if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new SensorProcedureCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
         else
-            col = new SensorProcedureCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Offering.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+            col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Offering.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
         if (col.Count > 0)
         {
@@ -46,12 +46,12 @@
     protected void Save(object sender, DirectEventArgs e)
     {
 
-        SensorProcedure org = new SensorProcedure();
+        Sensor org = new Sensor();
 
         if (String.IsNullOrEmpty(tfID.Text))
             org.Id = Guid.NewGuid();
         else
-            org = new SensorProcedure(tfID.Text.Trim());
+            org = new Sensor(tfID.Text.Trim());
 
         org.Code = tfCode.Text.Trim();
         org.Name = tfName.Text.Trim();
@@ -63,7 +63,7 @@
         org.DataSourceID = Guid.Parse(sbDataSource.SelectedItem.Value);
         org.Save();
 
-        SensorProcedureGrid.DataBind();
+        SensorGrid.DataBind();
 
         this.DetailWindow.Hide();
     }
@@ -167,9 +167,9 @@
                     </ext:Toolbar>
                 </TopBar>
                 <Items>
-                    <ext:GridPanel ID="SensorProcedureGrid" runat="server" Border="false">
+                    <ext:GridPanel ID="SensorGrid" runat="server" Border="false">
                         <Store>
-                            <ext:Store ID="Store2" runat="server" RemoteSort="true" OnRefreshData="SensorProcedureStore_RefreshData">
+                            <ext:Store ID="Store2" runat="server" RemoteSort="true" OnRefreshData="SensorStore_RefreshData">
                                 <Proxy>
                                     <ext:PageProxy />
                                 </Proxy>

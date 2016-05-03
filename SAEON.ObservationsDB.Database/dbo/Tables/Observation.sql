@@ -1,6 +1,9 @@
 ﻿CREATE TABLE [dbo].[Observation] (
     [ID]                    INT              IDENTITY (1, 1) NOT NULL,
-    [SensorProcedureID]     UNIQUEIDENTIFIER NOT NULL,
+--> Changed 2.0.0.3 20160503 TimPN
+--    [SensorProcedureID]     UNIQUEIDENTIFIER NOT NULL,
+    [SensorID]     UNIQUEIDENTIFIER NOT NULL,
+--< Changed 2.0.0.3 20160503 TimPN
     [ValueDate]             DATETIME         NOT NULL,
     [RawValue]              FLOAT (53)       NULL,
     [DataValue]             FLOAT (53)       NULL,
@@ -21,10 +24,16 @@
     CONSTRAINT [FK_Observation_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]),
     CONSTRAINT [FK_Observation_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
     CONSTRAINT [FK_Observation_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
-    CONSTRAINT [FK_Observation_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID])
+--> Changed 2.0.0.3 20160503 TimPN
+--    CONSTRAINT [FK_Observation_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID])
+    CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID])
+--< Changed 2.0.0.3 20160503 TimPN
 );
 GO
-CREATE INDEX [IX_Observation] ON [dbo].[Observation]([SensorProcedureID] ASC, [ValueDate] ASC, [RawValue])
+--> Changed 2.0.0.3 20160503 TimPN
+--CREATE INDEX [IX_Observation] ON [dbo].[Observation]([SensorProcedureID] ASC, [ValueDate] ASC, [RawValue])
+CREATE INDEX [IX_Observation] ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC, [RawValue])
+--< Changed 2.0.0.3 20160503 TimPN
 GO
 --> Changed 20160329 TimPN
 --CREATE INDEX [IX_Observation_BatchID] ON [dbo].[Observation]([ImportBatchID])
@@ -32,7 +41,10 @@ CREATE INDEX [IX_Observation_ImportBatchID] ON [dbo].[Observation]([ImportBatchI
 --< Changed 20160329 TimPN
 --> Added 2.0.0.0 20160406 TimPN
 GO
-CREATE INDEX [IX_Observation_SensorProcedureID] ON [dbo].[Observation] ([SensorProcedureID])
+--> Changed 2.0.0.3 20160503 TimPN
+--CREATE INDEX [IX_Observation_SensorProcedureID] ON [dbo].[Observation] ([SensorProcedureID])
+CREATE INDEX [IX_Observation_SensorID] ON [dbo].[Observation] ([SensorID])
+--< Changed 2.0.0.3 20160503 TimPN
 GO
 CREATE INDEX [IX_Observation_PhenomenonOfferingID] ON [dbo].[Observation] ([PhenomenonOfferingID])
 GO

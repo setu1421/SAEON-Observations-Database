@@ -91,4 +91,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="AddedAt" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="512e36e1-6b21-47b7-b7db-82e6cf040e34" ChangeDateTime="05/03/2016 09:03:13">
+    <Property Name="ElementName" Value="[dbo].[Progress].[SensorProcedureID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Progress]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SensorID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e29eb5f4-8a30-4346-b3bc-c84664baf1b8" ChangeDateTime="05/03/2016 09:03:27">
+    <Property Name="ElementName" Value="[dbo].[FK_Progress_SensorProcedure]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[Progress]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_Progress_Sensor]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f214d16e-5d6e-4329-a8ea-6f7d561778ec" ChangeDateTime="05/03/2016 09:03:37">
+    <Property Name="ElementName" Value="[dbo].[Progress].[IX_Progress_SensorProcedureID]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[dbo].[Progress]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IX_Progress_SensorID]" />
+  </Operation>
 </Operations>

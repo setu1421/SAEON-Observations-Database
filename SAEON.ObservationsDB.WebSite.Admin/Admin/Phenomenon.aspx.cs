@@ -311,9 +311,9 @@ public partial class _Phenomenon : System.Web.UI.Page
             Phenomenon phen = new Phenomenon(recordID);
             PhenomenonUOMCollection phenUOMCol = new PhenomenonUOMCollection().Where(PhenomenonUOM.Columns.PhenomenonID, recordID).Load();
             PhenomenonOfferingCollection phenOffCol = new PhenomenonOfferingCollection().Where(PhenomenonOffering.Columns.PhenomenonID, recordID).Load();
-            SensorProcedureCollection sensorProcedureCol = new SensorProcedureCollection().Where(SensorProcedure.Columns.PhenomenonID, recordID).Load();
+            SensorCollection SensorCol = new SensorCollection().Where(Sensor.Columns.PhenomenonID, recordID).Load();
 
-            if (phenOffCol.Count != 0 || phenUOMCol.Count != 0 || sensorProcedureCol.Count != 0)
+            if (phenOffCol.Count != 0 || phenUOMCol.Count != 0 || SensorCol.Count != 0)
             {
                 X.Msg.Show(new MessageBoxConfig
                     {

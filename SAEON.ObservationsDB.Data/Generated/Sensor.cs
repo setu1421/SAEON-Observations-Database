@@ -15,23 +15,23 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
 	/// <summary>
-	/// Strongly-typed collection for the SensorProcedure class.
+	/// Strongly-typed collection for the Sensor class.
 	/// </summary>
     [Serializable]
-	public partial class SensorProcedureCollection : ActiveList<SensorProcedure, SensorProcedureCollection>
+	public partial class SensorCollection : ActiveList<Sensor, SensorCollection>
 	{	   
-		public SensorProcedureCollection() {}
+		public SensorCollection() {}
         
         /// <summary>
 		/// Filters an existing collection based on the set criteria. This is an in-memory filter
 		/// Thanks to developingchris for this!
         /// </summary>
-        /// <returns>SensorProcedureCollection</returns>
-		public SensorProcedureCollection Filter()
+        /// <returns>SensorCollection</returns>
+		public SensorCollection Filter()
         {
             for (int i = this.Count - 1; i > -1; i--)
             {
-                SensorProcedure o = this[i];
+                Sensor o = this[i];
                 foreach (SubSonic.Where w in this.wheres)
                 {
                     bool remove = false;
@@ -62,14 +62,14 @@ namespace SAEON.ObservationsDB.Data
 		
 	}
 	/// <summary>
-	/// This is an ActiveRecord class which wraps the SensorProcedure table.
+	/// This is an ActiveRecord class which wraps the Sensor table.
 	/// </summary>
 	[Serializable]
-	public partial class SensorProcedure : ActiveRecord<SensorProcedure>, IActiveRecord
+	public partial class Sensor : ActiveRecord<Sensor>, IActiveRecord
 	{
 		#region .ctors and Default Settings
 		
-		public SensorProcedure()
+		public Sensor()
 		{
 		  SetSQLProps();
 		  InitSetDefaults();
@@ -78,7 +78,7 @@ namespace SAEON.ObservationsDB.Data
 		
 		private void InitSetDefaults() { SetDefaults(); }
 		
-		public SensorProcedure(bool useDatabaseDefaults)
+		public Sensor(bool useDatabaseDefaults)
 		{
 			SetSQLProps();
 			if(useDatabaseDefaults)
@@ -86,14 +86,14 @@ namespace SAEON.ObservationsDB.Data
 			MarkNew();
 		}
         
-		public SensorProcedure(object keyID)
+		public Sensor(object keyID)
 		{
 			SetSQLProps();
 			InitSetDefaults();
 			LoadByKey(keyID);
 		}
 		 
-		public SensorProcedure(string columnName, object columnValue)
+		public Sensor(string columnName, object columnValue)
 		{
 			SetSQLProps();
 			InitSetDefaults();
@@ -121,7 +121,7 @@ namespace SAEON.ObservationsDB.Data
 			if(!IsSchemaInitialized)
 			{
 				//Schema declaration
-				TableSchema.Table schema = new TableSchema.Table("SensorProcedure", TableType.Table, DataService.GetInstance("ObservationsDB"));
+				TableSchema.Table schema = new TableSchema.Table("Sensor", TableType.Table, DataService.GetInstance("ObservationsDB"));
 				schema.Columns = new TableSchema.TableColumnCollection();
 				schema.SchemaName = @"dbo";
 				//columns
@@ -265,7 +265,7 @@ namespace SAEON.ObservationsDB.Data
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
-				DataService.Providers["ObservationsDB"].AddSchema("SensorProcedure",schema);
+				DataService.Providers["ObservationsDB"].AddSchema("Sensor",schema);
 			}
 		}
 		#endregion
@@ -365,13 +365,13 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.ObservationCollection ObservationRecords()
-		{
-			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.SensorProcedureID, Id).Load();
-		}
 		public SAEON.ObservationsDB.Data.DataLogCollection DataLogRecords()
 		{
-			return new SAEON.ObservationsDB.Data.DataLogCollection().Where(DataLog.Columns.SensorProcedureID, Id).Load();
+			return new SAEON.ObservationsDB.Data.DataLogCollection().Where(DataLog.Columns.SensorID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.ObservationCollection ObservationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.SensorID, Id).Load();
 		}
 		#endregion
 		
@@ -380,7 +380,7 @@ namespace SAEON.ObservationsDB.Data
 		#region ForeignKey Properties
 		
 		/// <summary>
-		/// Returns a AspnetUser ActiveRecord object related to this SensorProcedure
+		/// Returns a AspnetUser ActiveRecord object related to this Sensor
 		/// 
 		/// </summary>
 		public SAEON.ObservationsDB.Data.AspnetUser AspnetUser
@@ -391,7 +391,7 @@ namespace SAEON.ObservationsDB.Data
 		
 		
 		/// <summary>
-		/// Returns a DataSchema ActiveRecord object related to this SensorProcedure
+		/// Returns a DataSchema ActiveRecord object related to this Sensor
 		/// 
 		/// </summary>
 		public SAEON.ObservationsDB.Data.DataSchema DataSchema
@@ -402,7 +402,7 @@ namespace SAEON.ObservationsDB.Data
 		
 		
 		/// <summary>
-		/// Returns a DataSource ActiveRecord object related to this SensorProcedure
+		/// Returns a DataSource ActiveRecord object related to this Sensor
 		/// 
 		/// </summary>
 		public SAEON.ObservationsDB.Data.DataSource DataSource
@@ -413,7 +413,7 @@ namespace SAEON.ObservationsDB.Data
 		
 		
 		/// <summary>
-		/// Returns a Phenomenon ActiveRecord object related to this SensorProcedure
+		/// Returns a Phenomenon ActiveRecord object related to this Sensor
 		/// 
 		/// </summary>
 		public SAEON.ObservationsDB.Data.Phenomenon Phenomenon
@@ -424,7 +424,7 @@ namespace SAEON.ObservationsDB.Data
 		
 		
 		/// <summary>
-		/// Returns a Station ActiveRecord object related to this SensorProcedure
+		/// Returns a Station ActiveRecord object related to this Sensor
 		/// 
 		/// </summary>
 		public SAEON.ObservationsDB.Data.Station Station
@@ -450,7 +450,7 @@ namespace SAEON.ObservationsDB.Data
 		/// </summary>
 		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid varDataSourceID,Guid? varDataSchemaID,Guid varUserId)
 		{
-			SensorProcedure item = new SensorProcedure();
+			Sensor item = new Sensor();
 			
 			item.Id = varId;
 			
@@ -484,7 +484,7 @@ namespace SAEON.ObservationsDB.Data
 		/// </summary>
 		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid varDataSourceID,Guid? varDataSchemaID,Guid varUserId)
 		{
-			SensorProcedure item = new SensorProcedure();
+			Sensor item = new Sensor();
 			
 				item.Id = varId;
 			

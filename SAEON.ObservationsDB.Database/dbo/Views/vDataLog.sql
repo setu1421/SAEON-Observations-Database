@@ -1,4 +1,7 @@
-﻿CREATE VIEW [dbo].[vDataLog]
+﻿--> Changed 2.0.0.3 20160503 TimPN
+--Renamed SensorProcedure to Sensor
+--< Changed 2.0.0.3 20160503 TimPN
+CREATE VIEW [dbo].[vDataLog]
 AS
 
 SELECT 
@@ -8,10 +11,10 @@ d.ImportDate,
 org.Name Organisation,
 ps.[Description] ProjectSite,
 st.Name StationName,
-d.SensorProcedureID,
+d.SensorID,
 sp.Name SensorName,
 CASE 
-    WHEN SensorProcedureID is null then 1
+    WHEN SensorID is null then 1
     ELSE 0
 END SensorInvalid,
 
@@ -79,8 +82,8 @@ d.RawFieldValue,
 d.Comment
 
 FROM DataLog d
-LEFT JOIN SensorProcedure sp
-    on d.SensorProcedureID = sp.ID
+LEFT JOIN Sensor sp
+    on d.SensorID = sp.ID
 LEFT JOIN Station st
     on sp.StationID = st.ID
 LEFT JOIN ProjectSite ps

@@ -24,7 +24,7 @@ public partial class _ImportBatch : System.Web.UI.Page
         {
             Store store = cbDataSource.GetStore();
             SqlQuery q = new Select(DataSource.IdColumn).From(DataSource.Schema).Distinct()
-                            .InnerJoin(SensorProcedure.DataSourceIDColumn, DataSource.IdColumn);
+                            .InnerJoin(Sensor.DataSourceIDColumn, DataSource.IdColumn);
 
             SqlQuery q1 = new Select(DataSourceRole.DataSourceIDColumn).From(DataSourceRole.Schema).Distinct()
                 .Where(DataSourceRole.RoleNameColumn).In(System.Web.Security.Roles.GetRolesForUser())
@@ -41,10 +41,10 @@ public partial class _ImportBatch : System.Web.UI.Page
 
             store.DataBind();
 
-            cbSensorProcedure.GetStore().DataSource = new Select(SensorProcedure.IdColumn, SensorProcedure.NameColumn)
-                    .From(SensorProcedure.Schema).ExecuteDataSet().Tables[0];
+            cbSensor.GetStore().DataSource = new Select(Sensor.IdColumn, Sensor.NameColumn)
+                    .From(Sensor.Schema).ExecuteDataSet().Tables[0];
 
-            cbSensorProcedure.GetStore().DataBind();
+            cbSensor.GetStore().DataBind();
 
             cbOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.NameColumn)
                .From(Offering.Schema)
@@ -95,9 +95,9 @@ public partial class _ImportBatch : System.Web.UI.Page
             }
             else
             {
-                SensorProcedureCollection tempSPCol = new SensorProcedureCollection()
-                    .Where(SensorProcedure.Columns.DataSourceID, DataSourceId)
-                    .Where(SensorProcedure.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null)
+                SensorCollection tempSPCol = new SensorCollection()
+                    .Where(Sensor.Columns.DataSourceID, DataSourceId)
+                    .Where(Sensor.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null)
                     .Load();
 
                 if (tempSPCol.Count != 0)
@@ -161,7 +161,7 @@ public partial class _ImportBatch : System.Web.UI.Page
                                 SchemaValue schval = values[i];
 
                                 SqlQuery q = new Select(Aggregate.Count(Observation.IdColumn)).From(Observation.Schema)
-                                    .Where(Observation.Columns.SensorProcedureID).IsEqualTo(schval.SensorProcedureID)
+                                    .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
                                     .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
                                     .And(Observation.Columns.RawValue).IsEqualTo(schval.RawValue)
                                     .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
@@ -177,7 +177,7 @@ public partial class _ImportBatch : System.Web.UI.Page
                                     if (!isDuplicateOfNull(schval, batch.Id))
                                     {
                                         Observation Obrecord = new Observation();
-                                        Obrecord.SensorProcedureID = schval.SensorProcedureID.Value;
+                                        Obrecord.SensorID = schval.SensorID.Value;
                                         Obrecord.ValueDate = schval.DateValue;
                                         Obrecord.RawValue = schval.RawValue;
                                         Obrecord.DataValue = schval.DataValue;
@@ -204,7 +204,7 @@ public partial class _ImportBatch : System.Web.UI.Page
 
                                     DataLog logrecord = new DataLog();
 
-                                    logrecord.SensorProcedureID = schval.SensorProcedureID;
+                                    logrecord.SensorID = schval.SensorID;
 
                                     if (schval.DateValueInvalid)
                                         logrecord.InvalidDateValue = schval.InvalidDateValue;
@@ -308,7 +308,7 @@ public partial class _ImportBatch : System.Web.UI.Page
     protected bool isDuplicateOfNull(SchemaValue schval, int batchid)
     {
         SqlQuery q = new Select().From(Observation.Schema)
-            .Where(Observation.Columns.SensorProcedureID).IsEqualTo(schval.SensorProcedureID)
+            .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
             .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
             .And(Observation.Columns.RawValue).IsNull()
             .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
@@ -321,7 +321,7 @@ public partial class _ImportBatch : System.Web.UI.Page
             //delete this observation and move it do the datalog with the new value in and a status saying its a duplicate of a null that now has a value. 
             //check if this works with transformations 
             DataLog d = new DataLog();
-            d.SensorProcedureID = oCol[0].SensorProcedureID;
+            d.SensorID = oCol[0].SensorID;
             d.ImportDate = oCol[0].AddedDate;
             d.ValueDate = oCol[0].ValueDate;
             d.RawValue = schval.DataValue;
@@ -352,26 +352,26 @@ public partial class _ImportBatch : System.Web.UI.Page
 
     protected void cbOffering_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        var Id = this.cbSensorProcedure.SelectedItem.Value;
+        var Id = this.cbSensor.SelectedItem.Value;
 
         this.cbOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.DescriptionColumn)
                  .From(Offering.Schema)
                  .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
-                 .InnerJoin(SensorProcedure.PhenomenonIDColumn, PhenomenonOffering.PhenomenonIDColumn)
-                 .Where(SensorProcedure.IdColumn.QualifiedName).IsEqualTo(Id)
+                 .InnerJoin(Sensor.PhenomenonIDColumn, PhenomenonOffering.PhenomenonIDColumn)
+                 .Where(Sensor.IdColumn.QualifiedName).IsEqualTo(Id)
                  .ExecuteDataSet().Tables[0];
         this.cbOffering.GetStore().DataBind();
     }
 
     protected void cbUnitofMeasure_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        var Id = this.cbSensorProcedure.SelectedItem.Value;
+        var Id = this.cbSensor.SelectedItem.Value;
 
         this.cbUnitofMeasure.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
                .From(UnitOfMeasure.Schema)
                .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
-               .InnerJoin(SensorProcedure.PhenomenonIDColumn, PhenomenonUOM.PhenomenonIDColumn)
-               .Where(SensorProcedure.IdColumn.QualifiedName).IsEqualTo(Id)
+               .InnerJoin(Sensor.PhenomenonIDColumn, PhenomenonUOM.PhenomenonIDColumn)
+               .Where(Sensor.IdColumn.QualifiedName).IsEqualTo(Id)
                .ExecuteDataSet().Tables[0];
         this.cbUnitofMeasure.GetStore().DataBind();
     }
@@ -392,8 +392,8 @@ public partial class _ImportBatch : System.Web.UI.Page
         //if (!ds.DataSchemaID.HasValue)
         //{
 
-        SensorProcedureCollection col = new SensorProcedureCollection().Where(SensorProcedure.Columns.DataSourceID, DataSourceId)
-                                                                       .Where(SensorProcedure.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null).Load();
+        SensorCollection col = new SensorCollection().Where(Sensor.Columns.DataSourceID, DataSourceId)
+                                                                       .Where(Sensor.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null).Load();
 
         ImportLogHelper logHelper = new ImportLogHelper();
 
@@ -476,7 +476,7 @@ public partial class _ImportBatch : System.Web.UI.Page
 
         Observation obs = new Observation();
 
-        obs.SensorProcedureID = new Guid(cbSensorProcedure.SelectedItem.Value);
+        obs.SensorID = new Guid(cbSensor.SelectedItem.Value);
 
         DateTime datevalue = (DateTime)ValueDate.Value;
 
@@ -505,7 +505,7 @@ public partial class _ImportBatch : System.Web.UI.Page
         //{
 
         q = new Select("ID").From(Observation.Schema)
-            .Where(Observation.Columns.SensorProcedureID).IsEqualTo(obs.SensorProcedureID)
+            .Where(Observation.Columns.SensorID).IsEqualTo(obs.SensorID)
             .And(Observation.Columns.ValueDate).IsEqualTo(obs.ValueDate)
             .And(Observation.Columns.RawValue).IsEqualTo(obs.RawValue);
 
@@ -637,7 +637,7 @@ public partial class _ImportBatch : System.Web.UI.Page
                     DataLog log = new DataLog();
                     log.ValueDate = ob.ValueDate;
                     log.ValueTime = ob.ValueDate;
-                    log.SensorProcedureID = ob.SensorProcedureID;
+                    log.SensorID = ob.SensorID;
                     log.PhenomenonOfferingID = ob.PhenomenonOfferingID;
                     log.PhenomenonUOMID = ob.PhenomenonUOMID;
                     log.ImportBatchID = ob.ImportBatchID;
@@ -746,7 +746,7 @@ public partial class _ImportBatch : System.Web.UI.Page
                 DataLog d = new DataLog(Id);
 
                 Observation Obrecord = new Observation();
-                Obrecord.SensorProcedureID = d.SensorProcedureID.Value;
+                Obrecord.SensorID = d.SensorID.Value;
                 Obrecord.ValueDate = d.ValueDate.Value;
                 Obrecord.RawValue = d.RawValue;
                 Obrecord.DataValue = d.DataValue;

@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
     /// <summary>
-    /// Controller class for SensorProcedure
+    /// Controller class for Sensor
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class SensorProcedureController
+    public partial class SensorController
     {
         // Preload our schema..
-        SensorProcedure thisSchemaLoad = new SensorProcedure();
+        Sensor thisSchemaLoad = new Sensor();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.ObservationsDB.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public SensorProcedureCollection FetchAll()
+        public SensorCollection FetchAll()
         {
-            SensorProcedureCollection coll = new SensorProcedureCollection();
-            Query qry = new Query(SensorProcedure.Schema);
+            SensorCollection coll = new SensorCollection();
+            Query qry = new Query(Sensor.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public SensorProcedureCollection FetchByID(object Id)
+        public SensorCollection FetchByID(object Id)
         {
-            SensorProcedureCollection coll = new SensorProcedureCollection().Where("ID", Id).Load();
+            SensorCollection coll = new SensorCollection().Where("ID", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public SensorProcedureCollection FetchByQuery(Query qry)
+        public SensorCollection FetchByQuery(Query qry)
         {
-            SensorProcedureCollection coll = new SensorProcedureCollection();
+            SensorCollection coll = new SensorCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
         public bool Delete(object Id)
         {
-            return (SensorProcedure.Delete(Id) == 1);
+            return (Sensor.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
         public bool Destroy(object Id)
         {
-            return (SensorProcedure.Destroy(Id) == 1);
+            return (Sensor.Destroy(Id) == 1);
         }
         
         
@@ -82,7 +82,7 @@ namespace SAEON.ObservationsDB.Data
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
 	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,Guid StationID,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid UserId)
 	    {
-		    SensorProcedure item = new SensorProcedure();
+		    Sensor item = new Sensor();
 		    
             item.Id = Id;
             
@@ -114,7 +114,7 @@ namespace SAEON.ObservationsDB.Data
         [DataObjectMethod(DataObjectMethodType.Update, true)]
 	    public void Update(Guid Id,string Code,string Name,string Description,string Url,Guid StationID,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid UserId)
 	    {
-		    SensorProcedure item = new SensorProcedure();
+		    Sensor item = new Sensor();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    

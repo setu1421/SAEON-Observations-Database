@@ -153,7 +153,7 @@
                                                     <ext:RecordField Name="StationName" Type="String" />
                                                     <ext:RecordField Name="ImportDate" Type="Date" />
                                                     <ext:RecordField Name="SensorName" Type="String" />
-                                                    <ext:RecordField Name="SensorProcedureID" Type="Auto" />
+                                                    <ext:RecordField Name="SensorID" Type="Auto" />
                                                     <ext:RecordField Name="SensorInvalid" Type="Boolean" />
                                                     <ext:RecordField Name="ValueDate" Type="Date" />
                                                     <ext:RecordField Name="InvalidDateValue" Type="String" />
@@ -203,7 +203,7 @@
                                         <ext:Column Header="Station" DataIndex="StationName" Width="100" Hidden="true" />
                                         <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="100" Format="dd-MM-yyyy HH:mm:ss"
                                             Hidden="true" />
-                                        <ext:Column Header="Sensor ID" DataIndex="SensorProcedureID" Width="40" Hidden="true">
+                                        <ext:Column Header="Sensor ID" DataIndex="SensorID" Width="40" Hidden="true">
                                             <Commands>
                                                 <ext:ImageCommand Icon="Delete" CommandName="InvalidSensor" Hidden="true" HideMode="Display">
                                                     <ToolTip Text="Invalid Sensor" />
@@ -448,7 +448,7 @@
                     </ext:Hidden>
                     <ext:Container ID="Container2" runat="server" LabelAlign="Top" Layout="FitLayout">
                         <Items>
-                            <ext:ComboBox ID="cbSensorProcedure" runat="server" DataIndex="SensorProcedureID"
+                            <ext:ComboBox ID="cbSensor" runat="server" DataIndex="SensorID"
                                 DisplayField="Name" ValueField="ID" FieldLabel="Sensor" EmptyText="Please select"
                                 AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false" BlankText="Station is required"
                                 ClientIDMode="Static">

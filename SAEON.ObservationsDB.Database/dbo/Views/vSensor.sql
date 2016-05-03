@@ -1,4 +1,7 @@
-﻿CREATE VIEW [dbo].[vSensorProcedure]
+﻿--> Changed 2.0.0.3 20160503 TimPN
+--Renamed SensorProcedure to Sensor
+--< Changed 2.0.0.3 20160503 TimPN
+CREATE VIEW [dbo].[vSensor]
 AS
 
 SELECT 
@@ -15,7 +18,7 @@ st.Name AS StationName,
 d.Name AS DataSourceName,
 s.DataSchemaID,
 ds.[Description] DataSchemaName
-FROM SensorProcedure s
+FROM Sensor s
 INNER JOIN DataSource d
 	on s.DataSourceID = d.ID
 INNER JOIN Station st

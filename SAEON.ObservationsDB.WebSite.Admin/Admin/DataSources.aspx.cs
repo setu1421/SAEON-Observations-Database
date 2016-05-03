@@ -178,11 +178,11 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 bool isValid = true;
                 string sensorName = "";
 
-                SensorProcedureCollection spCol = new SensorProcedureCollection()
-                    .Where(SensorProcedure.Columns.DataSourceID, ds.Id)
+                SensorCollection spCol = new SensorCollection()
+                    .Where(Sensor.Columns.DataSourceID, ds.Id)
                     .Load();
 
-                foreach (SensorProcedure sp in spCol)
+                foreach (Sensor sp in spCol)
                 {
                     if (sp.DataSchemaID != null)
                     {
@@ -359,9 +359,9 @@ public partial class Admin_DataSources : System.Web.UI.Page
         if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
-            SensorProcedureCollection col = new SensorProcedureCollection()
-                .Where(SensorProcedure.Columns.DataSourceID, Id)
-                .OrderByAsc(SensorProcedure.Columns.Code)
+            SensorCollection col = new SensorCollection()
+                .Where(Sensor.Columns.DataSourceID, Id)
+                .OrderByAsc(Sensor.Columns.Code)
                 .Load();
             SensorsGrid.GetStore().DataSource = col;
             SensorsGrid.GetStore().DataBind();
@@ -373,14 +373,14 @@ public partial class Admin_DataSources : System.Web.UI.Page
         if (e.Parameters["DataSourcenID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
-            SensorProcedureCollection col = new Select()
-                .From(SensorProcedure.Schema)
-                .Where(SensorProcedure.IdColumn)
-                .NotIn(new Select(new string[] { SensorProcedure.Columns.Id }).From(SensorProcedure.Schema).Where(SensorProcedure.IdColumn).IsEqualTo(Id))
-                .And(SensorProcedure.DataSourceIDColumn)
+            SensorCollection col = new Select()
+                .From(Sensor.Schema)
+                .Where(Sensor.IdColumn)
+                .NotIn(new Select(new string[] { Sensor.Columns.Id }).From(Sensor.Schema).Where(Sensor.IdColumn).IsEqualTo(Id))
+                .And(Sensor.DataSourceIDColumn)
                 .IsNull()
-                .OrderAsc(SensorProcedure.Columns.Code)
-                .ExecuteAsCollection<SensorProcedureCollection>();
+                .OrderAsc(Sensor.Columns.Code)
+                .ExecuteAsCollection<SensorCollection>();
             AvailableSensorsGrid.GetStore().DataSource = col;
             AvailableSensorsGrid.GetStore().DataBind();
         }
@@ -398,7 +398,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
             {
                 foreach (SelectedRow row in sm.SelectedRows)
                 {
-                    SensorProcedure sensor = new SensorProcedure(row.RecordID);
+                    Sensor sensor = new Sensor(row.RecordID);
                     if (sensor != null)
                     {
                         sensor.DataSourceID = masterID;
@@ -438,7 +438,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     {
         try
         {
-            SensorProcedure sensor = new SensorProcedure(aID);
+            Sensor sensor = new Sensor(aID);
             if (sensor != null)
             {
                 //sensor.DataSourceID = null;

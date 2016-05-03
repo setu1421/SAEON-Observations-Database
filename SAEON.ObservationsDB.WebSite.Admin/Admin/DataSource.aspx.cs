@@ -182,11 +182,11 @@ public partial class _DataSource : System.Web.UI.Page
             bool isValid = true;
             string sensorName = "";
 
-            SensorProcedureCollection spCol = new SensorProcedureCollection()
-                .Where(SensorProcedure.Columns.DataSourceID, ds.Id)
+            SensorCollection spCol = new SensorCollection()
+                .Where(Sensor.Columns.DataSourceID, ds.Id)
                 .Load();
 
-            foreach (SensorProcedure sp in spCol)
+            foreach (Sensor sp in spCol)
             {
                 if (sp.DataSchemaID != null)
                 {

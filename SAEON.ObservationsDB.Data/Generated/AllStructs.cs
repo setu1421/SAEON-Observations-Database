@@ -82,7 +82,7 @@ namespace SAEON.ObservationsDB.Data
         
 		public static readonly string RoleModule = @"RoleModule";
         
-		public static readonly string SensorProcedure = @"SensorProcedure";
+		public static readonly string Sensor = @"Sensor";
         
 		public static readonly string Site = @"Site";
         
@@ -263,9 +263,9 @@ namespace SAEON.ObservationsDB.Data
             get { return DataService.GetSchema("RoleModule", "ObservationsDB"); }
 		}
         
-		public static TableSchema.Table SensorProcedure
+		public static TableSchema.Table Sensor
 		{
-            get { return DataService.GetSchema("SensorProcedure", "ObservationsDB"); }
+            get { return DataService.GetSchema("Sensor", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table Site
@@ -337,6 +337,8 @@ namespace SAEON.ObservationsDB.Data
 		public static readonly string VObservationRole = @"vObservationRoles";
         
 		public static readonly string VProjectSite = @"vProjectSite";
+        
+		public static readonly string VSensor = @"vSensor";
         
 		public static readonly string VSensorProcedure = @"vSensorProcedure";
         

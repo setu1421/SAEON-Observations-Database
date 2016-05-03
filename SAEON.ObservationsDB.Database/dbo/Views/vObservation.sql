@@ -1,15 +1,18 @@
-﻿CREATE VIEW [dbo].[vObservation]
+﻿--> Changed 2.0.0.3 20160503 TimPN
+--Renamed SensorProcedure to Sensor
+--< Changed 2.0.0.3 20160503 TimPN
+CREATE VIEW [dbo].[vObservation]
 AS
 --> Changed 2.0.0.3 20160421 TimPN
---SELECT     o.ID, o.SensorProcedureID, o.PhenonmenonOfferingID, o.PhenonmenonUOMID, o.UserId, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, 
-SELECT     o.ID, o.SensorProcedureID, o.PhenomenonOfferingID, o.PhenomenonUOMID, o.UserId, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, 
+--SELECT     o.ID, o.SensorID, o.PhenonmenonOfferingID, o.PhenonmenonUOMID, o.UserId, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, 
+SELECT     o.ID, o.SensorID, o.PhenomenonOfferingID, o.PhenomenonUOMID, o.UserId, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, 
 --< Changed 2.0.0.3 20160421 TimPN
                       sp.Code AS spCode, sp.Description AS spDesc, sp.Name AS spName, sp.Url AS spURL, sp.DataSchemaID, sp.DataSourceID, sp.PhenomenonID, sp.StationID, 
                       ph.Name AS phName, st.Name AS stName, ds.Name AS dsName, ISNULL(dschema.Name,dschema1.Name) AS dschemaName, offer.Name AS offName, offer.ID AS offID, ps.Name AS psName, 
                       ps.ID AS psID, org.Name AS orgName, org.ID AS orgID, uom.Unit AS uomUnit, uom.UnitSymbol AS uomSymbol, users.UserName,
                       o.Comment
 FROM         dbo.Observation AS o INNER JOIN
-                      dbo.SensorProcedure AS sp ON sp.ID = o.SensorProcedureID INNER JOIN
+                      dbo.Sensor AS sp ON sp.ID = o.SensorID INNER JOIN
                       dbo.Phenomenon AS ph ON ph.ID = sp.PhenomenonID INNER JOIN
 --> Changed 2.0.0.3 20160421 TimPN
 --                      dbo.PhenomenonOffering AS phOff ON phOff.ID = o.PhenonmenonOfferingID INNER JOIN  

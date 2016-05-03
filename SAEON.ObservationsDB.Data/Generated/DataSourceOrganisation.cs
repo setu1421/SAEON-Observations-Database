@@ -222,6 +222,20 @@ namespace SAEON.ObservationsDB.Data
 					colvarUserId.ForeignKeyTableName = "aspnet_Users";
 				schema.Columns.Add(colvarUserId);
 				
+				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+				colvarAddedAt.ColumnName = "AddedAt";
+				colvarAddedAt.DataType = DbType.DateTime;
+				colvarAddedAt.MaxLength = 0;
+				colvarAddedAt.AutoIncrement = false;
+				colvarAddedAt.IsNullable = true;
+				colvarAddedAt.IsPrimaryKey = false;
+				colvarAddedAt.IsForeignKey = false;
+				colvarAddedAt.IsReadOnly = false;
+				
+						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedAt);
+				
 				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
 				colvarUpdatedAt.ColumnName = "UpdatedAt";
 				colvarUpdatedAt.DataType = DbType.DateTime;
@@ -302,6 +316,14 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.UserId, value); }
 		}
 		  
+		[XmlAttribute("AddedAt")]
+		[Bindable(true)]
+		public DateTime? AddedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
+			set { SetColumnValue(Columns.AddedAt, value); }
+		}
+		  
 		[XmlAttribute("UpdatedAt")]
 		[Bindable(true)]
 		public DateTime? UpdatedAt 
@@ -375,7 +397,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varDataSourceID,Guid varOrganisationID,Guid varOrganisationRoleID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varDataSourceID,Guid varOrganisationID,Guid varOrganisationRoleID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSourceOrganisation item = new DataSourceOrganisation();
 			
@@ -393,6 +415,8 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.UserId = varUserId;
 			
+			item.AddedAt = varAddedAt;
+			
 			item.UpdatedAt = varUpdatedAt;
 			
 		
@@ -405,7 +429,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varDataSourceID,Guid varOrganisationID,Guid varOrganisationRoleID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varDataSourceID,Guid varOrganisationID,Guid varOrganisationRoleID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSourceOrganisation item = new DataSourceOrganisation();
 			
@@ -422,6 +446,8 @@ namespace SAEON.ObservationsDB.Data
 				item.EndDate = varEndDate;
 			
 				item.UserId = varUserId;
+			
+				item.AddedAt = varAddedAt;
 			
 				item.UpdatedAt = varUpdatedAt;
 			
@@ -487,9 +513,16 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[7]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[8]; }
         }
         
         
@@ -505,6 +538,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string StartDate = @"StartDate";
 			 public static string EndDate = @"EndDate";
 			 public static string UserId = @"UserId";
+			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
 						
 		}

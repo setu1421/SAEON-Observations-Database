@@ -3,6 +3,11 @@
 -- Create date: 20-06-2014
 -- Description:	Create Progress Table - Raw Data
 -- =============================================
+
+--> Changed 2.0.0.3 20160503 TimPN
+--Renamed SensorProcedure to Sensor
+--< Changed 2.0.0.3 20160503 TimPN
+
 CREATE PROCEDURE progress_Status_Raw 
     -- Add the parameters for the stored procedure here
 
@@ -21,7 +26,7 @@ BEGIN
     [DateUploaded] [datetime],
     [Observations] [bigint],
     [UserId] [uniqueidentifier],
-    [SensorProcedureID] [uniqueidentifier],
+    [SensorID] [uniqueidentifier],
 --> Changed 2.0.0.3 20160421 TimPN
 --    [PhenonmenonOfferingID] [uniqueidentifier]
     [PhenomenonOfferingID] [uniqueidentifier]
@@ -37,7 +42,7 @@ BEGIN
     [DateUploaded],
     [Observations],
     [UserId],
-    [SensorProcedureID],
+    [SensorID],
 --> Changed 2.0.0.3 20160421 TimPN
 --    [PhenonmenonOfferingID]
     [PhenomenonOfferingID]
@@ -51,14 +56,14 @@ BEGIN
         MIN(AddedDate) AS DateUploaded, 
         COUNT(ID) AS Observations, 
         UserId, 
-        SensorProcedureID, 
+        SensorID, 
 --> Changed 2.0.0.3 20160421 TimPN
 --        PhenonmenonOfferingID
         PhenomenonOfferingID
 --< Changed 2.0.0.3 20160421 TimPN
 FROM    dbo.Observation
 --> Changed 2.0.0.3 20160421 TimPN
---GROUP BY PhenonmenonOfferingID, PhenonmenonUOMID, ImportBatchID, UserId, SensorProcedureID
-GROUP BY PhenomenonOfferingID, PhenomenonUOMID, ImportBatchID, UserId, SensorProcedureID
+--GROUP BY PhenonmenonOfferingID, PhenonmenonUOMID, ImportBatchID, UserId, SensorID
+GROUP BY PhenomenonOfferingID, PhenomenonUOMID, ImportBatchID, UserId, SensorID
 --< Changed 2.0.0.3 20160421 TimPN
 END

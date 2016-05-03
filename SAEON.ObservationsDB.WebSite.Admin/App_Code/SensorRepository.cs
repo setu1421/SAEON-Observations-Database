@@ -21,12 +21,12 @@ public class SensorRepository:BaseRepository
     public static List<object> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix)
     {
 
-		SqlQuery q = new Select().From(VSensorProcedure.Schema);
-        q.Where(VSensorProcedure.Columns.Id).IsNotNull();
+		SqlQuery q = new Select().From(VSensor.Schema);
+        q.Where(VSensor.Columns.Id).IsNotNull();
 
         GetPagedQuery(ref q, e, paramPrefix);
 
-		VSensorProcedureCollection col = q.ExecuteAsCollection<VSensorProcedureCollection>();
+		VSensorCollection col = q.ExecuteAsCollection<VSensorCollection>();
 
         return col.ToList<object>();
 

@@ -9,6 +9,7 @@ CREATE TABLE [dbo].[Station_Organisation]
     [EndDate] DATETIME NULL,
     [UserId] UNIQUEIDENTIFIER NOT NULL,
 --> Added 2.0.0.3 20160426 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_Station_Organisation_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Station_Organisation_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.0.3 20160426 TimPN
     CONSTRAINT [PK_Station_Organisation] PRIMARY KEY CLUSTERED ([ID]),
@@ -33,18 +34,37 @@ CREATE INDEX [IX_Station_Organisation_UserId] ON [dbo].[Station_Organisation] ([
 --< Added 2.0.0.1 20160406 TimPN
 --> Added 2.0.0.3 20160426 TimPN
 GO
-CREATE TRIGGER [dbo].[TR_Station_Organisation_InsertUpdate] ON [dbo].[Station_Organisation]
-FOR INSERT, UPDATE
+CREATE TRIGGER [dbo].[TR_Station_Organisation_Insert] ON [dbo].[Station_Organisation]
+FOR INSERT
 AS
 BEGIN
     SET NoCount ON
-    Update 
-        src 
-    set 
-        UpdatedAt = GETDATE()
+    Update
+        src
+    set
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
     from
-        inserted ins 
+        inserted ins
         inner join Station_Organisation src
             on (ins.ID = src.ID)
+END
+GO
+CREATE TRIGGER [dbo].[TR_Station_Organisation_Update] ON [dbo].[Station_Organisation]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    if UPDATE(UpdatedAt) RAISERROR ('Cannot update UpdatedAt.', 16, 1)
+    if not UPDATE(AddedAt) and not UPDATE(UpdatedAt)
+        Update
+            src
+        set
+            UpdatedAt = GETDATE()
+        from
+            inserted ins
+            inner join Station_Organisation src
+                on (ins.ID = src.ID)
 END
 --< Added 2.0.0.3 20160426 TimPN

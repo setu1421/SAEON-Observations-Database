@@ -25,7 +25,7 @@ public class ImportSchemaHelper : IDisposable
 	List<SchemaDefinition> schemaDefs;
 	public List<SchemaValue> SchemaValues;
 
-	SensorProcedure Sensor = null;
+	Sensor Sensor = null;
 
 	/// <summary>
 	/// Gap Record Helper
@@ -41,7 +41,7 @@ public class ImportSchemaHelper : IDisposable
 	/// </summary>
 	/// <param name="schema"></param>
 	/// <param name="InputStream"></param>
-	public ImportSchemaHelper(DataSource ds, DataSchema schema, string Data, SensorProcedure obj = null, ImportLogHelper loghelper = null)
+	public ImportSchemaHelper(DataSource ds, DataSchema schema, string Data, Sensor obj = null, ImportLogHelper loghelper = null)
 	{
 		dataSource = ds;
 
@@ -112,19 +112,19 @@ public class ImportSchemaHelper : IDisposable
 
 				if (Sensor == null)
 				{
-					SensorProcedureCollection colsens = new Select()
-														  .From(SensorProcedure.Schema)
-														  .Where(SensorProcedure.PhenomenonIDColumn).IsEqualTo(off.PhenomenonID)
-														  .And(SensorProcedure.DataSourceIDColumn).IsEqualTo(this.dataSource.Id)
-														  .ExecuteAsCollection<SensorProcedureCollection>();
+					SensorCollection colsens = new Select()
+														  .From(Sensor.Schema)
+														  .Where(Sensor.PhenomenonIDColumn).IsEqualTo(off.PhenomenonID)
+														  .And(Sensor.DataSourceIDColumn).IsEqualTo(this.dataSource.Id)
+														  .ExecuteAsCollection<SensorCollection>();
 
 					if (colsens.Count() == 0)
-						def.SensorProcedureNotFound = true;
+						def.SensorNotFound = true;
 					else
-						def.SensorProcedureID = colsens[0].Id;
+						def.SensorID = colsens[0].Id;
 				}
 				else
-					def.SensorProcedureID = Sensor.Id;
+					def.SensorID = Sensor.Id;
 
 
 				if (recordType.GetField(dtcol.ColumnName).IsDefined(typeof(PhenomenonUOMAttribute), true))
@@ -226,11 +226,11 @@ public class ImportSchemaHelper : IDisposable
 						SchemaValue rec = new SchemaValue();
 
 						rec.DateValue = unprocesseddt[b];
-						rec.SensorProcedureNotFound = def.SensorProcedureNotFound;
-						rec.SensorProcedureID = def.SensorProcedureID;
+						rec.SensorNotFound = def.SensorNotFound;
+						rec.SensorID = def.SensorID;
 
-						if (rec.SensorProcedureNotFound)
-							rec.InvalidStatuses.Add(Status.SensorProcedureNotFound);
+						if (rec.SensorNotFound)
+							rec.InvalidStatuses.Add(Status.SensorNotFound);
 
 						rec.InValidOffering = def.InValidOffering;
 						rec.PhenomenonOfferingID = def.PhenomenonOfferingID;
@@ -329,11 +329,11 @@ public class ImportSchemaHelper : IDisposable
 			{
 				SchemaValue rec = new SchemaValue();
 
-				rec.SensorProcedureNotFound = def.SensorProcedureNotFound;
-				rec.SensorProcedureID = def.SensorProcedureID;
+				rec.SensorNotFound = def.SensorNotFound;
+				rec.SensorID = def.SensorID;
 
-				if (rec.SensorProcedureNotFound)
-					rec.InvalidStatuses.Add(Status.SensorProcedureNotFound);
+				if (rec.SensorNotFound)
+					rec.InvalidStatuses.Add(Status.SensorNotFound);
 
 				rec.InValidOffering = def.InValidOffering;
 				rec.PhenomenonOfferingID = def.PhenomenonOfferingID;
@@ -669,8 +669,8 @@ public class SchemaDefinition
 	public Boolean IsOffering { get; set; }
 
 	public bool IsComment { get; set; }
-	public Guid? SensorProcedureID { get; set; }
-	public bool SensorProcedureNotFound { get; set; }
+	public Guid? SensorID { get; set; }
+	public bool SensorNotFound { get; set; }
 }
 
 /// <summary>
@@ -703,8 +703,8 @@ public class SchemaValue
 	public string InvalidDataValue { get; set; }
 	public List<string> InvalidStatuses { get; set; }
 	public Guid? DataSourceTransformationID { get; set; }
-	public Guid? SensorProcedureID { get; set; }
-	public bool SensorProcedureNotFound { get; set; }
+	public Guid? SensorID { get; set; }
+	public bool SensorNotFound { get; set; }
 	public string FieldRawValue { get; set; }
 	public string Comment { get; set; }
 
@@ -722,7 +722,7 @@ public class SchemaValue
 				   !InValidUOM &&
 				   !RawValueInvalid &&
 				   !DataValueInvalid &&
-				   !SensorProcedureNotFound;
+				   !SensorNotFound;
 		}
 	}
 }

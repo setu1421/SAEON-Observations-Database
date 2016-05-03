@@ -426,9 +426,9 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.SensorProcedureCollection SensorProcedureRecords()
+		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
 		{
-			return new SAEON.ObservationsDB.Data.SensorProcedureCollection().Where(SensorProcedure.Columns.DataSchemaID, Id).Load();
+			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.DataSchemaID, Id).Load();
 		}
 		public SAEON.ObservationsDB.Data.DataSourceCollection DataSourceRecords()
 		{

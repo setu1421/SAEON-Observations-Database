@@ -52,15 +52,15 @@ public partial class _Sensor : System.Web.UI.Page
         }
     }
 
-    protected void SensorProcedureStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void SensorStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.SensorProcedureGrid.GetStore().DataSource = SensorRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        this.SensorGrid.GetStore().DataSource = SensorRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
 
-        SensorProcedureCollection col = new SensorProcedureCollection();
+        SensorCollection col = new SensorCollection();
 
         string checkColumn = String.Empty,
                errorMessage = String.Empty;
@@ -69,20 +69,20 @@ public partial class _Sensor : System.Web.UI.Page
         {
             if (e.ID == "tfCode")
             {
-                checkColumn = SensorProcedure.Columns.Code;
+                checkColumn = Sensor.Columns.Code;
                 errorMessage = "The specified Sensor Procedure Code already exists";
             }
             else if (e.ID == "tfName")
             {
-                checkColumn = SensorProcedure.Columns.Name;
+                checkColumn = Sensor.Columns.Name;
                 errorMessage = "The specified Sensor Procedure Name already exists";
 
             }
 
             if (String.IsNullOrEmpty(tfID.Text.ToString()))
-                col = new SensorProcedureCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+                col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
             else
-                col = new SensorProcedureCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Offering.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+                col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Offering.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
             if (col.Count > 0)
             {
@@ -97,12 +97,12 @@ public partial class _Sensor : System.Web.UI.Page
     protected void Save(object sender, DirectEventArgs e)
     {
 
-        SensorProcedure sens = new SensorProcedure();
+        Sensor sens = new Sensor();
 
         if (String.IsNullOrEmpty(tfID.Text))
             sens.Id = Guid.NewGuid();
         else
-            sens = new SensorProcedure(tfID.Text.Trim());
+            sens = new Sensor(tfID.Text.Trim());
 
         sens.Code = tfCode.Text.Trim();
         sens.Name = tfName.Text.Trim();
@@ -149,12 +149,12 @@ public partial class _Sensor : System.Web.UI.Page
 
         sens.Save();
 
-        SensorProcedureGrid.DataBind();
+        SensorGrid.DataBind();
 
         this.DetailWindow.Hide();
     }
 
-    protected void SensorProcedureStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    protected void SensorStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {
         string type = FormatType.Text;
         string visCols = VisCols.Value.ToString();
@@ -162,7 +162,7 @@ public partial class _Sensor : System.Web.UI.Page
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
         string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-        string js = BaseRepository.BuildExportQ("VSensorProcedure", gridData, visCols, sortCol, sortDir);
+        string js = BaseRepository.BuildExportQ("VSensor", gridData, visCols, sortCol, sortDir);
 
         BaseRepository.doExport(type, js);
     }

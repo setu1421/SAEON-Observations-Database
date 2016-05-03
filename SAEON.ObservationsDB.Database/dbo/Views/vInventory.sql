@@ -1,4 +1,7 @@
-﻿CREATE VIEW [dbo].[vInventory]
+﻿--> Changed 2.0.0.3 20160503 TimPN
+--Renamed SensorProcedure to Sensor
+--< Changed 2.0.0.3 20160503 TimPN
+CREATE VIEW [dbo].[vInventory]
 AS
 Select 
  ps.Name Site,
@@ -10,15 +13,15 @@ Select
 FROM Station s with (nolock)
  INNER Join ProjectSite ps with (nolock)
  on  ps.ID=  s.ProjectSiteID
-INNER Join SensorProcedure sp with (nolock)
+INNER Join Sensor sp with (nolock)
  on s.ID = sp.StationID
 INNER Join Phenomenon p with (nolock)
  on  sp.PhenomenonID = p.ID 
 
 INNER JOIN 
 (
- SELECT SensorProcedureID,MIN(ValueDate) StartDate,MAX(ValueDate) EndDate
+ SELECT SensorID,MIN(ValueDate) StartDate,MAX(ValueDate) EndDate
   FROM Observation with (nolock)
- Group By SensorProcedureID
+ Group By SensorID
 )d
-ON sp.ID = d.SensorProcedureID
+ON sp.ID = d.SensorID

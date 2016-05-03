@@ -1,6 +1,9 @@
 ﻿CREATE TABLE [dbo].[DataLog] (
     [ID]                         INT              IDENTITY (1, 1) NOT NULL,
-    [SensorProcedureID]          UNIQUEIDENTIFIER NULL,
+--> Changed 2.0.0.3 20160503 TimPN
+--    [SensorProcedureID]          UNIQUEIDENTIFIER NULL,
+    [SensorID]          UNIQUEIDENTIFIER NULL,
+--< Changed 2.0.0.3 20160503 TimPN
     [ImportDate]                 DATETIME         CONSTRAINT [DF_DataLog_ImportDate] DEFAULT (getdate()) NOT NULL,
     [ValueDate]                  DATETIME         NULL,
     [ValueTime]                  DATETIME         NULL,
@@ -31,14 +34,20 @@
     CONSTRAINT [FK_DataLog_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]),
     CONSTRAINT [FK_DataLog_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
     CONSTRAINT [FK_DataLog_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
-    CONSTRAINT [FK_DataLog_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID]),
+--> Changed 2.0.0.3 20160503 TimPN
+--    CONSTRAINT [FK_DataLog_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID]),
+    CONSTRAINT [FK_DataLog_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
+--< Changed 2.0.0.3 20160503 TimPN
     CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID])
 );
 GO
 CREATE INDEX [IX_DataLog] ON [dbo].[DataLog]([ImportBatchID]);
 --> Added 2.0.0.0 20160406 TimPN
 GO
-CREATE INDEX [IX_DataLog_SensorProcedureID] ON [dbo].[DataLog] ([SensorProcedureID]);
+--> Changed 2.0.0.3 20160503 TimPN
+--CREATE INDEX [IX_DataLog_SensorProcedureID] ON [dbo].[DataLog] ([SensorProcedureID]);
+CREATE INDEX [IX_DataLog_SensorID] ON [dbo].[DataLog] ([SensorID]);
+--< Changed 2.0.0.3 20160503 TimPN
 GO
 CREATE INDEX [IX_DataLog_DataSourceTransformationID] ON [dbo].[DataLog] ([DataSourceTransformationID])
 GO

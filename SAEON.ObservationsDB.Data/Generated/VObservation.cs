@@ -69,17 +69,17 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarId);
                 
-                TableSchema.TableColumn colvarSensorProcedureID = new TableSchema.TableColumn(schema);
-                colvarSensorProcedureID.ColumnName = "SensorProcedureID";
-                colvarSensorProcedureID.DataType = DbType.Guid;
-                colvarSensorProcedureID.MaxLength = 0;
-                colvarSensorProcedureID.AutoIncrement = false;
-                colvarSensorProcedureID.IsNullable = false;
-                colvarSensorProcedureID.IsPrimaryKey = false;
-                colvarSensorProcedureID.IsForeignKey = false;
-                colvarSensorProcedureID.IsReadOnly = false;
+                TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
+                colvarSensorID.ColumnName = "SensorID";
+                colvarSensorID.DataType = DbType.Guid;
+                colvarSensorID.MaxLength = 0;
+                colvarSensorID.AutoIncrement = false;
+                colvarSensorID.IsNullable = false;
+                colvarSensorID.IsPrimaryKey = false;
+                colvarSensorID.IsForeignKey = false;
+                colvarSensorID.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarSensorProcedureID);
+                schema.Columns.Add(colvarSensorID);
                 
                 TableSchema.TableColumn colvarPhenomenonOfferingID = new TableSchema.TableColumn(schema);
                 colvarPhenomenonOfferingID.ColumnName = "PhenomenonOfferingID";
@@ -493,17 +493,17 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
-        [XmlAttribute("SensorProcedureID")]
+        [XmlAttribute("SensorID")]
         [Bindable(true)]
-        public Guid SensorProcedureID 
+        public Guid SensorID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid>("SensorProcedureID");
+			    return GetColumnValue<Guid>("SensorID");
 		    }
             set 
 		    {
-			    SetColumnValue("SensorProcedureID", value);
+			    SetColumnValue("SensorID", value);
             }
         }
 	      
@@ -922,7 +922,7 @@ namespace SAEON.ObservationsDB.Data{
 		    
             public static string Id = @"ID";
             
-            public static string SensorProcedureID = @"SensorProcedureID";
+            public static string SensorID = @"SensorID";
             
             public static string PhenomenonOfferingID = @"PhenomenonOfferingID";
             

@@ -285,9 +285,9 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.PhenomenonOfferingCollection().Where(PhenomenonOffering.Columns.PhenomenonID, Id).Load();
 		}
-		public SAEON.ObservationsDB.Data.SensorProcedureCollection SensorProcedureRecords()
+		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
 		{
-			return new SAEON.ObservationsDB.Data.SensorProcedureCollection().Where(SensorProcedure.Columns.PhenomenonID, Id).Load();
+			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.PhenomenonID, Id).Load();
 		}
 		public SAEON.ObservationsDB.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
 		{

@@ -177,41 +177,41 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarStationDesc);
                 
-                TableSchema.TableColumn colvarSensorProcedureID = new TableSchema.TableColumn(schema);
-                colvarSensorProcedureID.ColumnName = "SensorProcedureID";
-                colvarSensorProcedureID.DataType = DbType.Guid;
-                colvarSensorProcedureID.MaxLength = 0;
-                colvarSensorProcedureID.AutoIncrement = false;
-                colvarSensorProcedureID.IsNullable = false;
-                colvarSensorProcedureID.IsPrimaryKey = false;
-                colvarSensorProcedureID.IsForeignKey = false;
-                colvarSensorProcedureID.IsReadOnly = false;
+                TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
+                colvarSensorID.ColumnName = "SensorID";
+                colvarSensorID.DataType = DbType.Guid;
+                colvarSensorID.MaxLength = 0;
+                colvarSensorID.AutoIncrement = false;
+                colvarSensorID.IsNullable = false;
+                colvarSensorID.IsPrimaryKey = false;
+                colvarSensorID.IsForeignKey = false;
+                colvarSensorID.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarSensorProcedureID);
+                schema.Columns.Add(colvarSensorID);
                 
-                TableSchema.TableColumn colvarSensorProcedure = new TableSchema.TableColumn(schema);
-                colvarSensorProcedure.ColumnName = "SensorProcedure";
-                colvarSensorProcedure.DataType = DbType.AnsiString;
-                colvarSensorProcedure.MaxLength = 150;
-                colvarSensorProcedure.AutoIncrement = false;
-                colvarSensorProcedure.IsNullable = false;
-                colvarSensorProcedure.IsPrimaryKey = false;
-                colvarSensorProcedure.IsForeignKey = false;
-                colvarSensorProcedure.IsReadOnly = false;
+                TableSchema.TableColumn colvarSensor = new TableSchema.TableColumn(schema);
+                colvarSensor.ColumnName = "Sensor";
+                colvarSensor.DataType = DbType.AnsiString;
+                colvarSensor.MaxLength = 150;
+                colvarSensor.AutoIncrement = false;
+                colvarSensor.IsNullable = false;
+                colvarSensor.IsPrimaryKey = false;
+                colvarSensor.IsForeignKey = false;
+                colvarSensor.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarSensorProcedure);
+                schema.Columns.Add(colvarSensor);
                 
-                TableSchema.TableColumn colvarSensorProcedureDesc = new TableSchema.TableColumn(schema);
-                colvarSensorProcedureDesc.ColumnName = "SensorProcedureDesc";
-                colvarSensorProcedureDesc.DataType = DbType.AnsiString;
-                colvarSensorProcedureDesc.MaxLength = 5000;
-                colvarSensorProcedureDesc.AutoIncrement = false;
-                colvarSensorProcedureDesc.IsNullable = true;
-                colvarSensorProcedureDesc.IsPrimaryKey = false;
-                colvarSensorProcedureDesc.IsForeignKey = false;
-                colvarSensorProcedureDesc.IsReadOnly = false;
+                TableSchema.TableColumn colvarSensorDesc = new TableSchema.TableColumn(schema);
+                colvarSensorDesc.ColumnName = "SensorDesc";
+                colvarSensorDesc.DataType = DbType.AnsiString;
+                colvarSensorDesc.MaxLength = 5000;
+                colvarSensorDesc.AutoIncrement = false;
+                colvarSensorDesc.IsNullable = true;
+                colvarSensorDesc.IsPrimaryKey = false;
+                colvarSensorDesc.IsForeignKey = false;
+                colvarSensorDesc.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarSensorProcedureDesc);
+                schema.Columns.Add(colvarSensorDesc);
                 
                 TableSchema.TableColumn colvarPhenomenonID = new TableSchema.TableColumn(schema);
                 colvarPhenomenonID.ColumnName = "PhenomenonID";
@@ -475,45 +475,45 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
-        [XmlAttribute("SensorProcedureID")]
+        [XmlAttribute("SensorID")]
         [Bindable(true)]
-        public Guid SensorProcedureID 
+        public Guid SensorID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid>("SensorProcedureID");
+			    return GetColumnValue<Guid>("SensorID");
 		    }
             set 
 		    {
-			    SetColumnValue("SensorProcedureID", value);
+			    SetColumnValue("SensorID", value);
             }
         }
 	      
-        [XmlAttribute("SensorProcedure")]
+        [XmlAttribute("Sensor")]
         [Bindable(true)]
-        public string SensorProcedure 
+        public string Sensor 
 	    {
 		    get
 		    {
-			    return GetColumnValue<string>("SensorProcedure");
+			    return GetColumnValue<string>("Sensor");
 		    }
             set 
 		    {
-			    SetColumnValue("SensorProcedure", value);
+			    SetColumnValue("Sensor", value);
             }
         }
 	      
-        [XmlAttribute("SensorProcedureDesc")]
+        [XmlAttribute("SensorDesc")]
         [Bindable(true)]
-        public string SensorProcedureDesc 
+        public string SensorDesc 
 	    {
 		    get
 		    {
-			    return GetColumnValue<string>("SensorProcedureDesc");
+			    return GetColumnValue<string>("SensorDesc");
 		    }
             set 
 		    {
-			    SetColumnValue("SensorProcedureDesc", value);
+			    SetColumnValue("SensorDesc", value);
             }
         }
 	      
@@ -628,11 +628,11 @@ namespace SAEON.ObservationsDB.Data{
             
             public static string StationDesc = @"StationDesc";
             
-            public static string SensorProcedureID = @"SensorProcedureID";
+            public static string SensorID = @"SensorID";
             
-            public static string SensorProcedure = @"SensorProcedure";
+            public static string Sensor = @"Sensor";
             
-            public static string SensorProcedureDesc = @"SensorProcedureDesc";
+            public static string SensorDesc = @"SensorDesc";
             
             public static string PhenomenonID = @"PhenomenonID";
             

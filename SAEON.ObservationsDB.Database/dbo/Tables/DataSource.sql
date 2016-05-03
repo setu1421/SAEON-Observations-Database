@@ -19,6 +19,7 @@
     [StationID] UNIQUEIDENTIFIER NULL, -- Must be NOT NULL once all Stations have Sites
 --< Added 2.0.0.2 20160419 TimPN
 --> Added 2.0.0.3 20160421 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_DataSource_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSource_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.0.3 20160421 TimPN
     CONSTRAINT [PK_DataSource] PRIMARY KEY CLUSTERED ([ID]),
@@ -50,18 +51,37 @@ CREATE INDEX [IX_DataSource_StartDate] ON [dbo].DataSource ([StartDate])
 GO
 CREATE INDEX [IX_DataSource_EndDate] ON [dbo].DataSource ([EndDate])
 GO
-CREATE TRIGGER [dbo].[TR_DataSource_InsertUpdate] ON [dbo].[DataSource]
-FOR INSERT, UPDATE
+CREATE TRIGGER [dbo].[TR_DataSource_Insert] ON [dbo].[DataSource]
+FOR INSERT
 AS
 BEGIN
     SET NoCount ON
     Update
         src
     set
-        UpdatedAt = GETDATE()
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
     from
         inserted ins
         inner join DataSource src
             on (ins.ID = src.ID)
+END
+GO
+CREATE TRIGGER [dbo].[TR_DataSource_Update] ON [dbo].[DataSource]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    if UPDATE(UpdatedAt) RAISERROR ('Cannot update UpdatedAt.', 16, 1)
+    if not UPDATE(AddedAt) and not UPDATE(UpdatedAt)
+        Update
+            src
+        set
+            UpdatedAt = GETDATE()
+        from
+            inserted ins
+            inner join DataSource src
+                on (ins.ID = src.ID)
 END
 --< Added 2.0.0.3 20160421 TimPN

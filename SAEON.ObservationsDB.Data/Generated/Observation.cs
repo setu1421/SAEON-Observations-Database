@@ -139,19 +139,19 @@ namespace SAEON.ObservationsDB.Data
 				colvarId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarId);
 				
-				TableSchema.TableColumn colvarSensorProcedureID = new TableSchema.TableColumn(schema);
-				colvarSensorProcedureID.ColumnName = "SensorProcedureID";
-				colvarSensorProcedureID.DataType = DbType.Guid;
-				colvarSensorProcedureID.MaxLength = 0;
-				colvarSensorProcedureID.AutoIncrement = false;
-				colvarSensorProcedureID.IsNullable = false;
-				colvarSensorProcedureID.IsPrimaryKey = false;
-				colvarSensorProcedureID.IsForeignKey = true;
-				colvarSensorProcedureID.IsReadOnly = false;
-				colvarSensorProcedureID.DefaultSetting = @"";
+				TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
+				colvarSensorID.ColumnName = "SensorID";
+				colvarSensorID.DataType = DbType.Guid;
+				colvarSensorID.MaxLength = 0;
+				colvarSensorID.AutoIncrement = false;
+				colvarSensorID.IsNullable = false;
+				colvarSensorID.IsPrimaryKey = false;
+				colvarSensorID.IsForeignKey = true;
+				colvarSensorID.IsReadOnly = false;
+				colvarSensorID.DefaultSetting = @"";
 				
-					colvarSensorProcedureID.ForeignKeyTableName = "SensorProcedure";
-				schema.Columns.Add(colvarSensorProcedureID);
+					colvarSensorID.ForeignKeyTableName = "Sensor";
+				schema.Columns.Add(colvarSensorID);
 				
 				TableSchema.TableColumn colvarValueDate = new TableSchema.TableColumn(schema);
 				colvarValueDate.ColumnName = "ValueDate";
@@ -293,12 +293,12 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.Id, value); }
 		}
 		  
-		[XmlAttribute("SensorProcedureID")]
+		[XmlAttribute("SensorID")]
 		[Bindable(true)]
-		public Guid SensorProcedureID 
+		public Guid SensorID 
 		{
-			get { return GetColumnValue<Guid>(Columns.SensorProcedureID); }
-			set { SetColumnValue(Columns.SensorProcedureID, value); }
+			get { return GetColumnValue<Guid>(Columns.SensorID); }
+			set { SetColumnValue(Columns.SensorID, value); }
 		}
 		  
 		[XmlAttribute("ValueDate")]
@@ -425,13 +425,13 @@ namespace SAEON.ObservationsDB.Data
 		
 		
 		/// <summary>
-		/// Returns a SensorProcedure ActiveRecord object related to this Observation
+		/// Returns a Sensor ActiveRecord object related to this Observation
 		/// 
 		/// </summary>
-		public SAEON.ObservationsDB.Data.SensorProcedure SensorProcedure
+		public SAEON.ObservationsDB.Data.Sensor Sensor
 		{
-			get { return SAEON.ObservationsDB.Data.SensorProcedure.FetchByID(this.SensorProcedureID); }
-			set { SetColumnValue("SensorProcedureID", value.Id); }
+			get { return SAEON.ObservationsDB.Data.Sensor.FetchByID(this.SensorID); }
+			set { SetColumnValue("SensorID", value.Id); }
 		}
 		
 		
@@ -449,11 +449,11 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varSensorProcedureID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varImportBatchID,Guid varUserId,DateTime varAddedDate)
+		public static void Insert(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varImportBatchID,Guid varUserId,DateTime varAddedDate)
 		{
 			Observation item = new Observation();
 			
-			item.SensorProcedureID = varSensorProcedureID;
+			item.SensorID = varSensorID;
 			
 			item.ValueDate = varValueDate;
 			
@@ -483,13 +483,13 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(int varId,Guid varSensorProcedureID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varImportBatchID,Guid varUserId,DateTime varAddedDate)
+		public static void Update(int varId,Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varImportBatchID,Guid varUserId,DateTime varAddedDate)
 		{
 			Observation item = new Observation();
 			
 				item.Id = varId;
 			
-				item.SensorProcedureID = varSensorProcedureID;
+				item.SensorID = varSensorID;
 			
 				item.ValueDate = varValueDate;
 			
@@ -529,7 +529,7 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn SensorProcedureIDColumn
+        public static TableSchema.TableColumn SensorIDColumn
         {
             get { return Schema.Columns[1]; }
         }
@@ -604,7 +604,7 @@ namespace SAEON.ObservationsDB.Data
 		public struct Columns
 		{
 			 public static string Id = @"ID";
-			 public static string SensorProcedureID = @"SensorProcedureID";
+			 public static string SensorID = @"SensorID";
 			 public static string ValueDate = @"ValueDate";
 			 public static string RawValue = @"RawValue";
 			 public static string DataValue = @"DataValue";

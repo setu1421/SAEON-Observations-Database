@@ -139,19 +139,19 @@ namespace SAEON.ObservationsDB.Data
 				colvarId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarId);
 				
-				TableSchema.TableColumn colvarSensorProcedureID = new TableSchema.TableColumn(schema);
-				colvarSensorProcedureID.ColumnName = "SensorProcedureID";
-				colvarSensorProcedureID.DataType = DbType.Guid;
-				colvarSensorProcedureID.MaxLength = 0;
-				colvarSensorProcedureID.AutoIncrement = false;
-				colvarSensorProcedureID.IsNullable = true;
-				colvarSensorProcedureID.IsPrimaryKey = false;
-				colvarSensorProcedureID.IsForeignKey = true;
-				colvarSensorProcedureID.IsReadOnly = false;
-				colvarSensorProcedureID.DefaultSetting = @"";
+				TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
+				colvarSensorID.ColumnName = "SensorID";
+				colvarSensorID.DataType = DbType.Guid;
+				colvarSensorID.MaxLength = 0;
+				colvarSensorID.AutoIncrement = false;
+				colvarSensorID.IsNullable = true;
+				colvarSensorID.IsPrimaryKey = false;
+				colvarSensorID.IsForeignKey = true;
+				colvarSensorID.IsReadOnly = false;
+				colvarSensorID.DefaultSetting = @"";
 				
-					colvarSensorProcedureID.ForeignKeyTableName = "SensorProcedure";
-				schema.Columns.Add(colvarSensorProcedureID);
+					colvarSensorID.ForeignKeyTableName = "Sensor";
+				schema.Columns.Add(colvarSensorID);
 				
 				TableSchema.TableColumn colvarImportDate = new TableSchema.TableColumn(schema);
 				colvarImportDate.ColumnName = "ImportDate";
@@ -451,12 +451,12 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.Id, value); }
 		}
 		  
-		[XmlAttribute("SensorProcedureID")]
+		[XmlAttribute("SensorID")]
 		[Bindable(true)]
-		public Guid? SensorProcedureID 
+		public Guid? SensorID 
 		{
-			get { return GetColumnValue<Guid?>(Columns.SensorProcedureID); }
-			set { SetColumnValue(Columns.SensorProcedureID, value); }
+			get { return GetColumnValue<Guid?>(Columns.SensorID); }
+			set { SetColumnValue(Columns.SensorID, value); }
 		}
 		  
 		[XmlAttribute("ImportDate")]
@@ -690,13 +690,13 @@ namespace SAEON.ObservationsDB.Data
 		
 		
 		/// <summary>
-		/// Returns a SensorProcedure ActiveRecord object related to this DataLog
+		/// Returns a Sensor ActiveRecord object related to this DataLog
 		/// 
 		/// </summary>
-		public SAEON.ObservationsDB.Data.SensorProcedure SensorProcedure
+		public SAEON.ObservationsDB.Data.Sensor Sensor
 		{
-			get { return SAEON.ObservationsDB.Data.SensorProcedure.FetchByID(this.SensorProcedureID); }
-			set { SetColumnValue("SensorProcedureID", value.Id); }
+			get { return SAEON.ObservationsDB.Data.Sensor.FetchByID(this.SensorID); }
+			set { SetColumnValue("SensorID", value.Id); }
 		}
 		
 		
@@ -725,11 +725,11 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid? varSensorProcedureID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,int varImportBatchID,string varRawRecordData,string varRawFieldValue)
+		public static void Insert(Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,int varImportBatchID,string varRawRecordData,string varRawFieldValue)
 		{
 			DataLog item = new DataLog();
 			
-			item.SensorProcedureID = varSensorProcedureID;
+			item.SensorID = varSensorID;
 			
 			item.ImportDate = varImportDate;
 			
@@ -783,13 +783,13 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(int varId,Guid? varSensorProcedureID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,int varImportBatchID,string varRawRecordData,string varRawFieldValue)
+		public static void Update(int varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,int varImportBatchID,string varRawRecordData,string varRawFieldValue)
 		{
 			DataLog item = new DataLog();
 			
 				item.Id = varId;
 			
-				item.SensorProcedureID = varSensorProcedureID;
+				item.SensorID = varSensorID;
 			
 				item.ImportDate = varImportDate;
 			
@@ -853,7 +853,7 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn SensorProcedureIDColumn
+        public static TableSchema.TableColumn SensorIDColumn
         {
             get { return Schema.Columns[1]; }
         }
@@ -1012,7 +1012,7 @@ namespace SAEON.ObservationsDB.Data
 		public struct Columns
 		{
 			 public static string Id = @"ID";
-			 public static string SensorProcedureID = @"SensorProcedureID";
+			 public static string SensorID = @"SensorID";
 			 public static string ImportDate = @"ImportDate";
 			 public static string ValueDate = @"ValueDate";
 			 public static string ValueTime = @"ValueTime";

@@ -117,17 +117,17 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarStationName);
                 
-                TableSchema.TableColumn colvarSensorProcedureID = new TableSchema.TableColumn(schema);
-                colvarSensorProcedureID.ColumnName = "SensorProcedureID";
-                colvarSensorProcedureID.DataType = DbType.Guid;
-                colvarSensorProcedureID.MaxLength = 0;
-                colvarSensorProcedureID.AutoIncrement = false;
-                colvarSensorProcedureID.IsNullable = true;
-                colvarSensorProcedureID.IsPrimaryKey = false;
-                colvarSensorProcedureID.IsForeignKey = false;
-                colvarSensorProcedureID.IsReadOnly = false;
+                TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
+                colvarSensorID.ColumnName = "SensorID";
+                colvarSensorID.DataType = DbType.Guid;
+                colvarSensorID.MaxLength = 0;
+                colvarSensorID.AutoIncrement = false;
+                colvarSensorID.IsNullable = true;
+                colvarSensorID.IsPrimaryKey = false;
+                colvarSensorID.IsForeignKey = false;
+                colvarSensorID.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarSensorProcedureID);
+                schema.Columns.Add(colvarSensorID);
                 
                 TableSchema.TableColumn colvarSensorName = new TableSchema.TableColumn(schema);
                 colvarSensorName.ColumnName = "SensorName";
@@ -585,17 +585,17 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
-        [XmlAttribute("SensorProcedureID")]
+        [XmlAttribute("SensorID")]
         [Bindable(true)]
-        public Guid? SensorProcedureID 
+        public Guid? SensorID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid?>("SensorProcedureID");
+			    return GetColumnValue<Guid?>("SensorID");
 		    }
             set 
 		    {
-			    SetColumnValue("SensorProcedureID", value);
+			    SetColumnValue("SensorID", value);
             }
         }
 	      
@@ -1008,7 +1008,7 @@ namespace SAEON.ObservationsDB.Data{
             
             public static string StationName = @"StationName";
             
-            public static string SensorProcedureID = @"SensorProcedureID";
+            public static string SensorID = @"SensorID";
             
             public static string SensorName = @"SensorName";
             

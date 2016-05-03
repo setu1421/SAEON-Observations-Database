@@ -75,28 +75,28 @@ public partial class _DataQuery : System.Web.UI.Page
                     stationNode.NodeID = station.Id.ToString() + "_Station";
                     stationroot.Nodes.Add(stationNode);
 
-                    SensorProcedureCollection sensorProcedureCol = new SensorProcedureCollection().Where("ID", SubSonic.Comparison.IsNot, null)
+                    SensorCollection SensorCol = new SensorCollection().Where("ID", SubSonic.Comparison.IsNot, null)
                         .Where("StationID", SubSonic.Comparison.Equals, station.Id)
-                        .OrderByAsc(SensorProcedure.Columns.Name).Load();
+                        .OrderByAsc(Sensor.Columns.Name).Load();
 
                     modx = new ModuleX("9992ba10-cb0c-4a22-841c-1d695e8293d5");
-                    Ext.Net.TreeNode sensorProcedureroot = new Ext.Net.TreeNode("Sensor Procedure", (Icon)modx.Icon);
-                    stationNode.Nodes.Add(sensorProcedureroot);
+                    Ext.Net.TreeNode Sensorroot = new Ext.Net.TreeNode("Sensor Procedure", (Icon)modx.Icon);
+                    stationNode.Nodes.Add(Sensorroot);
 
-                    foreach (SensorProcedure sensorProcedure in sensorProcedureCol)
+                    foreach (Sensor sensor in SensorCol)
                     {
-                        Ext.Net.TreeNode sensorProcedureNode = new Ext.Net.TreeNode(sensorProcedure.Name, Icon.ResultsetNext);
-                        sensorProcedureNode.Checked = Ext.Net.ThreeStateBool.False;
-                        sensorProcedureNode.NodeID = sensorProcedure.Id.ToString() + "_SensorProcedure";
-                        sensorProcedureroot.Nodes.Add(sensorProcedureNode);
-                        Phenomenon phenomenon = new Phenomenon(sensorProcedure.PhenomenonID);
+                        Ext.Net.TreeNode SensorNode = new Ext.Net.TreeNode(sensor.Name, Icon.ResultsetNext);
+                        SensorNode.Checked = Ext.Net.ThreeStateBool.False;
+                        SensorNode.NodeID = sensor.Id.ToString() + "_Sensor";
+                        Sensorroot.Nodes.Add(SensorNode);
+                        Phenomenon phenomenon = new Phenomenon(sensor.PhenomenonID);
 
 
                         Ext.Net.TreeNode phenomenonNode = new Ext.Net.TreeNode(phenomenon.Name, Icon.ResultsetNext);
                         phenomenonNode.Checked = Ext.Net.ThreeStateBool.False;
 
-                        phenomenonNode.NodeID = sensorProcedure.Id.ToString() + "_Phenomenon";
-                        sensorProcedureNode.Nodes.Add(phenomenonNode);
+                        phenomenonNode.NodeID = sensor.Id.ToString() + "_Phenomenon";
+                        SensorNode.Nodes.Add(phenomenonNode);
 
                         //PhenomenonOfferingCollection phenomenonOfferingCollection = new PhenomenonOfferingCollection().Where("ID", SubSonic.Comparison.IsNot, null)
                         //    .Where("PhenomenonID", SubSonic.Comparison.Equals, phenomenon.Id).Load();
@@ -118,7 +118,7 @@ public partial class _DataQuery : System.Web.UI.Page
                         {
                             Ext.Net.TreeNode phenomenonOfferingNode = new Ext.Net.TreeNode(phenomenonOffering.Offering.Name, Icon.ResultsetNext);
                             phenomenonOfferingNode.Checked = Ext.Net.ThreeStateBool.False;
-                            phenomenonOfferingNode.NodeID = phenomenonOffering.Offering.Id.ToString() + "_Offering#" + sensorProcedure.Id;
+                            phenomenonOfferingNode.NodeID = phenomenonOffering.Offering.Id.ToString() + "_Offering#" + sensor.Id;
                             phenomenonNode.Nodes.Add(phenomenonOfferingNode);
                         }
                     }
@@ -178,7 +178,7 @@ public partial class _DataQuery : System.Web.UI.Page
                 int count = 0;
                 Offering offering = new Offering();
                 Phenomenon Phenomenon = new Phenomenon();
-                SensorProcedure sensorProcedure = new SensorProcedure();
+                Sensor Sensor = new Sensor();
                 Station station = new Station();
 
                 if (item.Type.Length > 20)
@@ -187,12 +187,12 @@ public partial class _DataQuery : System.Web.UI.Page
                     {
                         count++;
                         Offering off = new Offering(item.ID);
-                        SensorProcedure sp = new SensorProcedure(item.Type.Substring(item.Type.IndexOf("#") + 1, item.Type.Substring(item.Type.IndexOf("#") + 1, 36).Length));
+                        Sensor sp = new Sensor(item.Type.Substring(item.Type.IndexOf("#") + 1, item.Type.Substring(item.Type.IndexOf("#") + 1, 36).Length));
 
 
                         q.OrExpression(VObservation.Columns.OffID).IsEqualTo(off.Id)
                        .And(VObservation.Columns.PhenomenonID).IsEqualTo(sp.PhenomenonID)
-                       .And(VObservation.Columns.SensorProcedureID).IsEqualTo(sp.Id)
+                       .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
                        .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
                     }
                 }
@@ -200,22 +200,22 @@ public partial class _DataQuery : System.Web.UI.Page
                 if (item.Type == "Phenomenon")
                 {
                     count++;
-                    SensorProcedure sp = new SensorProcedure(item.ID);
+                    Sensor sp = new Sensor(item.ID);
                     Phenomenon phenomenon = new Phenomenon(sp.PhenomenonID);
 
                     q.OrExpression(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
-                    .And(VObservation.Columns.SensorProcedureID).IsEqualTo(sp.Id)
+                    .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
                     .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
 
                 }
 
-                if (item.Type == "SensorProcedure")
+                if (item.Type == "Sensor")
                 {
                     count++;
-                    sensorProcedure = new SensorProcedure(item.ID);
+                    Sensor = new Sensor(item.ID);
 
-                    q.OrExpression(VObservation.Columns.SensorProcedureID).IsEqualTo(item.ID)
-                    .And(VObservation.Columns.StationID).IsEqualTo(sensorProcedure.StationID);
+                    q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(item.ID)
+                    .And(VObservation.Columns.StationID).IsEqualTo(Sensor.StationID);
 
                 }
 
@@ -312,7 +312,7 @@ public partial class _DataQuery : System.Web.UI.Page
                 int count = 0;
                 Offering offering = new Offering();
                 Phenomenon Phenomenon = new Phenomenon();
-                SensorProcedure sensorProcedure = new SensorProcedure();
+                Sensor Sensor = new Sensor();
                 Station station = new Station();
 
                 if (item.Type.Length > 20)
@@ -321,12 +321,12 @@ public partial class _DataQuery : System.Web.UI.Page
                     {
                         count++;
                         Offering off = new Offering(item.ID);
-                        SensorProcedure sp = new SensorProcedure(item.Type.Substring(item.Type.IndexOf("#") + 1, item.Type.Substring(item.Type.IndexOf("#") + 1, 36).Length));
+                        Sensor sp = new Sensor(item.Type.Substring(item.Type.IndexOf("#") + 1, item.Type.Substring(item.Type.IndexOf("#") + 1, 36).Length));
 
 
                         q.OrExpression(VObservation.Columns.OffID).IsEqualTo(off.Id)
                        .And(VObservation.Columns.PhenomenonID).IsEqualTo(sp.PhenomenonID)
-                       .And(VObservation.Columns.SensorProcedureID).IsEqualTo(sp.Id)
+                       .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
                        .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
                     }
                 }
@@ -334,22 +334,22 @@ public partial class _DataQuery : System.Web.UI.Page
                 if (item.Type == "Phenomenon")
                 {
                     count++;
-                    SensorProcedure sp = new SensorProcedure(item.ID);
+                    Sensor sp = new Sensor(item.ID);
                     Phenomenon phenomenon = new Phenomenon(sp.PhenomenonID);
 
                     q.OrExpression(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
-                    .And(VObservation.Columns.SensorProcedureID).IsEqualTo(sp.Id)
+                    .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
                     .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
 
                 }
 
-                if (item.Type == "SensorProcedure")
+                if (item.Type == "Sensor")
                 {
                     count++;
-                    sensorProcedure = new SensorProcedure(item.ID);
+                    Sensor = new Sensor(item.ID);
 
-                    q.OrExpression(VObservation.Columns.SensorProcedureID).IsEqualTo(item.ID)
-                    .And(VObservation.Columns.StationID).IsEqualTo(sensorProcedure.StationID);
+                    q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(item.ID)
+                    .And(VObservation.Columns.StationID).IsEqualTo(Sensor.StationID);
 
                 }
 

@@ -6,12 +6,12 @@
     <script type="text/javascript">
         var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
-            //VisCols.setValue(Ext.encode(InstrumentGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-            var viscolsNew = makenewJsonForExport(InstrumentGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            //VisCols.setValue(Ext.encode(DataSourceGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
+            var viscolsNew = makenewJsonForExport(DataSourceGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
-            InstrumentGrid.submitData(false);
+            DataSourceGrid.submitData(false);
         };
     </script>
 </asp:Content>
