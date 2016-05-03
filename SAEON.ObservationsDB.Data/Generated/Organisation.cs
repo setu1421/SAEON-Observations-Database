@@ -281,10 +281,6 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.ProjectSiteCollection().Where(ProjectSite.Columns.OrganisationID, Id).Load();
 		}
-		public SAEON.ObservationsDB.Data.DataSourceOrganisationCollection DataSourceOrganisationRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataSourceOrganisationCollection().Where(DataSourceOrganisation.Columns.OrganisationID, Id).Load();
-		}
 		public SAEON.ObservationsDB.Data.SiteOrganisationCollection SiteOrganisationRecords()
 		{
 			return new SAEON.ObservationsDB.Data.SiteOrganisationCollection().Where(SiteOrganisation.Columns.OrganisationID, Id).Load();
@@ -292,6 +288,10 @@ namespace SAEON.ObservationsDB.Data
 		public SAEON.ObservationsDB.Data.StationOrganisationCollection StationOrganisationRecords()
 		{
 			return new SAEON.ObservationsDB.Data.StationOrganisationCollection().Where(StationOrganisation.Columns.OrganisationID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.DataSourceOrganisationCollection DataSourceOrganisationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceOrganisationCollection().Where(DataSourceOrganisation.Columns.OrganisationID, Id).Load();
 		}
 		#endregion
 		

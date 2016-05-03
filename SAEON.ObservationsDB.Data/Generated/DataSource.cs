@@ -499,10 +499,6 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.DataSourceID, Id).Load();
 		}
-		public SAEON.ObservationsDB.Data.DataSourceOrganisationCollection DataSourceOrganisationRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataSourceOrganisationCollection().Where(DataSourceOrganisation.Columns.DataSourceID, Id).Load();
-		}
 		public SAEON.ObservationsDB.Data.DataSourceRoleCollection DataSourceRoleRecords()
 		{
 			return new SAEON.ObservationsDB.Data.DataSourceRoleCollection().Where(DataSourceRole.Columns.DataSourceID, Id).Load();
@@ -510,6 +506,10 @@ namespace SAEON.ObservationsDB.Data
 		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
 		{
 			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.DataSourceID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.DataSourceOrganisationCollection DataSourceOrganisationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceOrganisationCollection().Where(DataSourceOrganisation.Columns.DataSourceID, Id).Load();
 		}
 		#endregion
 		

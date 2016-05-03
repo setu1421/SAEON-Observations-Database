@@ -359,12 +359,20 @@ public partial class Admin_DataSources : System.Web.UI.Page
         if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
-            VSensorCollection col = new VSensorCollection()
-                .Where(VSensor.Columns.DataSourceID, Id)
-                .OrderByAsc(VSensor.Columns.Code)
-                .Load();
-            SensorsGrid.GetStore().DataSource = col;
-            SensorsGrid.GetStore().DataBind();
+            try
+            {
+                VSensorCollection col = new VSensorCollection()
+                    .Where(VSensor.Columns.DataSourceID, Id)
+                    .OrderByAsc(VSensor.Columns.Code)
+                    .Load();
+                SensorsGrid.GetStore().DataSource = col;
+                SensorsGrid.GetStore().DataBind();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "DataSources.SensorsGridStore_RefreshData");
+                MessageBoxes.Error(ex, "Error", "Unable to refresh sensors grid");
+            }
         }
     }
 
