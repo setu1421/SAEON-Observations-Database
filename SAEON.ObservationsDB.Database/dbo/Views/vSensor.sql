@@ -16,7 +16,6 @@ s.PhenomenonID,
 s.UserId,
 st.Name AS StationName,
 d.Name AS DataSourceName,
-s.DataSchemaID,
 ds.[Description] DataSchemaName
 FROM Sensor s
 INNER JOIN DataSource d

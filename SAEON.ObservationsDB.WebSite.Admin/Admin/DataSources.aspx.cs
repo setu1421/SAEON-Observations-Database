@@ -50,12 +50,12 @@ public partial class Admin_DataSources : System.Web.UI.Page
         if (e.ID == "tfCode")
         {
             checkColumn = DataSource.Columns.Code;
-            errorMessage = "The specified DataSource Code already exists";
+            errorMessage = "The specified Data Source Code already exists";
         }
         else if (e.ID == "tfName")
         {
             checkColumn = DataSource.Columns.Name;
-            errorMessage = "The specified DataSource Name already exists";
+            errorMessage = "The specified Data Source Name already exists";
 
         }
         //else if (e.ID == "ContentPlaceHolder1_tfUrl")
@@ -359,9 +359,9 @@ public partial class Admin_DataSources : System.Web.UI.Page
         if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
-            SensorCollection col = new SensorCollection()
-                .Where(Sensor.Columns.DataSourceID, Id)
-                .OrderByAsc(Sensor.Columns.Code)
+            VSensorCollection col = new VSensorCollection()
+                .Where(VSensor.Columns.DataSourceID, Id)
+                .OrderByAsc(VSensor.Columns.Code)
                 .Load();
             SensorsGrid.GetStore().DataSource = col;
             SensorsGrid.GetStore().DataBind();
@@ -370,7 +370,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void AvailableSensorsStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["DataSourcenID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
+        if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
             SensorCollection col = new Select()
@@ -441,7 +441,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
             Sensor sensor = new Sensor(aID);
             if (sensor != null)
             {
-                //sensor.DataSourceID = null;
+                sensor.DataSourceID = null;
                 sensor.UserId = AuthHelper.GetLoggedInUserId;
                 sensor.Save();
                 Auditing.Log("DataSources.DeleteSensorLink", new Dictionary<string, object> {

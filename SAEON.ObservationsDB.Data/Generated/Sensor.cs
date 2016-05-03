@@ -225,7 +225,7 @@ namespace SAEON.ObservationsDB.Data
 				colvarDataSourceID.DataType = DbType.Guid;
 				colvarDataSourceID.MaxLength = 0;
 				colvarDataSourceID.AutoIncrement = false;
-				colvarDataSourceID.IsNullable = false;
+				colvarDataSourceID.IsNullable = true;
 				colvarDataSourceID.IsPrimaryKey = false;
 				colvarDataSourceID.IsForeignKey = true;
 				colvarDataSourceID.IsReadOnly = false;
@@ -330,9 +330,9 @@ namespace SAEON.ObservationsDB.Data
 		  
 		[XmlAttribute("DataSourceID")]
 		[Bindable(true)]
-		public Guid DataSourceID 
+		public Guid? DataSourceID 
 		{
-			get { return GetColumnValue<Guid>(Columns.DataSourceID); }
+			get { return GetColumnValue<Guid?>(Columns.DataSourceID); }
 			set { SetColumnValue(Columns.DataSourceID, value); }
 		}
 		  
@@ -448,7 +448,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid varDataSourceID,Guid? varDataSchemaID,Guid varUserId)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid? varDataSourceID,Guid? varDataSchemaID,Guid varUserId)
 		{
 			Sensor item = new Sensor();
 			
@@ -482,7 +482,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid varDataSourceID,Guid? varDataSchemaID,Guid varUserId)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid? varDataSourceID,Guid? varDataSchemaID,Guid varUserId)
 		{
 			Sensor item = new Sensor();
 			

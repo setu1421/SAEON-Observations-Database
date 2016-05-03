@@ -266,6 +266,7 @@
                                                     <ext:RecordField Name="Description" Type="Auto" />
                                                     <ext:RecordField Name="StartDate" Type="Date" />
                                                     <ext:RecordField Name="EndDate" Type="Date" />
+                                                    <ext:RecordField Name="DataSchemaName" Type="Auto" />
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>
@@ -282,6 +283,7 @@
                                         <ext:Column Header="Description" DataIndex="Description" Width="150" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+                                        <ext:Column Header="Schema Name" DataIndex="DataSchemaName" Width="150" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
                                                 <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>--%>
