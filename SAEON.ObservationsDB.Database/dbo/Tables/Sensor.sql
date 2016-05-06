@@ -26,7 +26,9 @@ CREATE TABLE [dbo].[Sensor] (
     CONSTRAINT [UX_Sensor_Code] UNIQUE ([Code]),
 --< Changed 2.0.0.0 20160329 TimPN
 --> Added 2.0.0.1 20160406 TimPN
-    CONSTRAINT [UX_Sensor_Name] UNIQUE ([Name])
+--> Removed 2.0.0.4 20160506 TimPN, readd once duplicate names fixed
+--    CONSTRAINT [UX_Sensor_Name] UNIQUE ([Name])
+--< Removed 2.0.0.4 20160506 TimPN
 --< Added 2.0.0.1 20160406 TimPN
 );
 --> Removed 2.0.0.0 20160329 TimPN

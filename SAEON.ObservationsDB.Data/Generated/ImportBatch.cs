@@ -234,6 +234,19 @@ namespace SAEON.ObservationsDB.Data
 				colvarLogFileName.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarLogFileName);
 				
+				TableSchema.TableColumn colvarComment = new TableSchema.TableColumn(schema);
+				colvarComment.ColumnName = "Comment";
+				colvarComment.DataType = DbType.AnsiString;
+				colvarComment.MaxLength = 8000;
+				colvarComment.AutoIncrement = false;
+				colvarComment.IsNullable = true;
+				colvarComment.IsPrimaryKey = false;
+				colvarComment.IsForeignKey = false;
+				colvarComment.IsReadOnly = false;
+				colvarComment.DefaultSetting = @"";
+				colvarComment.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarComment);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -307,6 +320,14 @@ namespace SAEON.ObservationsDB.Data
 			get { return GetColumnValue<string>(Columns.LogFileName); }
 			set { SetColumnValue(Columns.LogFileName, value); }
 		}
+		  
+		[XmlAttribute("Comment")]
+		[Bindable(true)]
+		public string Comment 
+		{
+			get { return GetColumnValue<string>(Columns.Comment); }
+			set { SetColumnValue(Columns.Comment, value); }
+		}
 		
 		#endregion
 		
@@ -371,7 +392,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varGuid,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName)
+		public static void Insert(Guid varGuid,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -389,6 +410,8 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.LogFileName = varLogFileName;
 			
+			item.Comment = varComment;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -399,7 +422,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(int varId,Guid varGuid,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName)
+		public static void Update(int varId,Guid varGuid,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -418,6 +441,8 @@ namespace SAEON.ObservationsDB.Data
 				item.FileName = varFileName;
 			
 				item.LogFileName = varLogFileName;
+			
+				item.Comment = varComment;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -488,6 +513,13 @@ namespace SAEON.ObservationsDB.Data
         
         
         
+        public static TableSchema.TableColumn CommentColumn
+        {
+            get { return Schema.Columns[8]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -500,6 +532,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string UserId = @"UserId";
 			 public static string FileName = @"FileName";
 			 public static string LogFileName = @"LogFileName";
+			 public static string Comment = @"Comment";
 						
 		}
 		#endregion

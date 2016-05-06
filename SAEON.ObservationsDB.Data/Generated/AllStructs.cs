@@ -340,8 +340,6 @@ namespace SAEON.ObservationsDB.Data
         
 		public static readonly string VSensor = @"vSensor";
         
-		public static readonly string VSensorProcedure = @"vSensorProcedure";
-        
 		public static readonly string VSiteOrganisation = @"vSiteOrganisation";
         
 		public static readonly string VStation = @"vStation";

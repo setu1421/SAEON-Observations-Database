@@ -80,7 +80,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Guid,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName)
+	    public void Insert(Guid Guid,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment)
 	    {
 		    ImportBatch item = new ImportBatch();
 		    
@@ -98,6 +98,8 @@ namespace SAEON.ObservationsDB.Data
             
             item.LogFileName = LogFileName;
             
+            item.Comment = Comment;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -106,7 +108,7 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(int Id,Guid Guid,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName)
+	    public void Update(int Id,Guid Guid,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment)
 	    {
 		    ImportBatch item = new ImportBatch();
 	        item.MarkOld();
@@ -127,6 +129,8 @@ namespace SAEON.ObservationsDB.Data
 			item.FileName = FileName;
 				
 			item.LogFileName = LogFileName;
+				
+			item.Comment = Comment;
 				
 	        item.Save(UserName);
 	    }

@@ -560,6 +560,7 @@
     <None Include="Lab2-SAEON ObservationDB_Test.publish.xml" />
     <None Include="Lab2-SAEON ObservationDB_Imp.publish.xml" />
     <None Include="Lab2-SAEON ObservationDB.publish.xml" />
+    <None Include="Lab2-SAEON Observations.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SAEON.ObservationsDB.Database.refactorlog" />

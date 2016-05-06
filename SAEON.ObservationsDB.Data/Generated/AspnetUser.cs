@@ -328,6 +328,10 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.SiteCollection().Where(Site.Columns.UserId, UserId).Load();
 		}
+		public SAEON.ObservationsDB.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.UserId, UserId).Load();
+		}
 		public SAEON.ObservationsDB.Data.SiteOrganisationCollection SiteOrganisationRecords()
 		{
 			return new SAEON.ObservationsDB.Data.SiteOrganisationCollection().Where(SiteOrganisation.Columns.UserId, UserId).Load();
@@ -339,10 +343,6 @@ namespace SAEON.ObservationsDB.Data
 		public SAEON.ObservationsDB.Data.DataSourceRoleCollection DataSourceRoleRecords()
 		{
 			return new SAEON.ObservationsDB.Data.DataSourceRoleCollection().Where(DataSourceRole.Columns.UserId, UserId).Load();
-		}
-		public SAEON.ObservationsDB.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.UserId, UserId).Load();
 		}
 		public SAEON.ObservationsDB.Data.DataSourceTypeCollection DataSourceTypeRecords()
 		{

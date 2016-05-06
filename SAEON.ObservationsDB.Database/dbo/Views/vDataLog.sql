@@ -14,7 +14,7 @@ st.Name StationName,
 d.SensorID,
 sp.Name SensorName,
 CASE 
-    WHEN SensorID is null then 1
+    WHEN d.SensorID is null then 1
     ELSE 0
 END SensorInvalid,
 

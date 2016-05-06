@@ -491,13 +491,13 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.ImportBatchCollection ImportBatchRecords()
-		{
-			return new SAEON.ObservationsDB.Data.ImportBatchCollection().Where(ImportBatch.Columns.DataSourceID, Id).Load();
-		}
 		public SAEON.ObservationsDB.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
 		{
 			return new SAEON.ObservationsDB.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.DataSourceID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.ImportBatchCollection ImportBatchRecords()
+		{
+			return new SAEON.ObservationsDB.Data.ImportBatchCollection().Where(ImportBatch.Columns.DataSourceID, Id).Load();
 		}
 		public SAEON.ObservationsDB.Data.DataSourceRoleCollection DataSourceRoleRecords()
 		{
