@@ -1,8 +1,8 @@
-﻿CREATE VIEW [dbo].[vDataSourceOrganisation] AS 
+﻿CREATE VIEW [dbo].[vInstrumentOrganisation] AS 
 SELECT 
   so.*, o.Name OrganisationName, r.Name [OrganisationRoleName]
 FROM 
-  [DataSource_Organisation] so
+  [Instrument_Organisation] so
   inner join [Organisation] o
     on (so.OrganisationID = o.ID)
   inner join [OrganisationRole] r
