@@ -426,13 +426,13 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.DataSourceCollection DataSourceRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataSourceCollection().Where(DataSource.Columns.DataSchemaID, Id).Load();
-		}
 		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
 		{
 			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.DataSchemaID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.DataSourceCollection DataSourceRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceCollection().Where(DataSource.Columns.DataSchemaID, Id).Load();
 		}
 		#endregion
 		

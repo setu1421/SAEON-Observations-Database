@@ -134,7 +134,7 @@ namespace SAEON.ObservationsDB.Data{
                 colvarDataSourceID.DataType = DbType.Guid;
                 colvarDataSourceID.MaxLength = 0;
                 colvarDataSourceID.AutoIncrement = false;
-                colvarDataSourceID.IsNullable = true;
+                colvarDataSourceID.IsNullable = false;
                 colvarDataSourceID.IsPrimaryKey = false;
                 colvarDataSourceID.IsForeignKey = false;
                 colvarDataSourceID.IsReadOnly = false;
@@ -337,11 +337,11 @@ namespace SAEON.ObservationsDB.Data{
 	      
         [XmlAttribute("DataSourceID")]
         [Bindable(true)]
-        public Guid? DataSourceID 
+        public Guid DataSourceID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid?>("DataSourceID");
+			    return GetColumnValue<Guid>("DataSourceID");
 		    }
             set 
 		    {

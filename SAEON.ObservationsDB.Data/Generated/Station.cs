@@ -474,13 +474,13 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.StationOrganisationCollection().Where(StationOrganisation.Columns.StationID, Id).Load();
 		}
-		public SAEON.ObservationsDB.Data.DataSourceCollection DataSourceRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataSourceCollection().Where(DataSource.Columns.StationID, Id).Load();
-		}
 		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
 		{
 			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.StationID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.InstrumentCollection InstrumentRecords()
+		{
+			return new SAEON.ObservationsDB.Data.InstrumentCollection().Where(Instrument.Columns.StationID, Id).Load();
 		}
 		#endregion
 		

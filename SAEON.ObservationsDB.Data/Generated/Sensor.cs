@@ -225,7 +225,7 @@ namespace SAEON.ObservationsDB.Data
 				colvarDataSourceID.DataType = DbType.Guid;
 				colvarDataSourceID.MaxLength = 0;
 				colvarDataSourceID.AutoIncrement = false;
-				colvarDataSourceID.IsNullable = true;
+				colvarDataSourceID.IsNullable = false;
 				colvarDataSourceID.IsPrimaryKey = false;
 				colvarDataSourceID.IsForeignKey = true;
 				colvarDataSourceID.IsReadOnly = false;
@@ -247,6 +247,20 @@ namespace SAEON.ObservationsDB.Data
 				
 					colvarDataSchemaID.ForeignKeyTableName = "DataSchema";
 				schema.Columns.Add(colvarDataSchemaID);
+				
+				TableSchema.TableColumn colvarInstrumentID = new TableSchema.TableColumn(schema);
+				colvarInstrumentID.ColumnName = "InstrumentID";
+				colvarInstrumentID.DataType = DbType.Guid;
+				colvarInstrumentID.MaxLength = 0;
+				colvarInstrumentID.AutoIncrement = false;
+				colvarInstrumentID.IsNullable = true;
+				colvarInstrumentID.IsPrimaryKey = false;
+				colvarInstrumentID.IsForeignKey = true;
+				colvarInstrumentID.IsReadOnly = false;
+				colvarInstrumentID.DefaultSetting = @"";
+				
+					colvarInstrumentID.ForeignKeyTableName = "Instrument";
+				schema.Columns.Add(colvarInstrumentID);
 				
 				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
 				colvarUserId.ColumnName = "UserId";
@@ -330,9 +344,9 @@ namespace SAEON.ObservationsDB.Data
 		  
 		[XmlAttribute("DataSourceID")]
 		[Bindable(true)]
-		public Guid? DataSourceID 
+		public Guid DataSourceID 
 		{
-			get { return GetColumnValue<Guid?>(Columns.DataSourceID); }
+			get { return GetColumnValue<Guid>(Columns.DataSourceID); }
 			set { SetColumnValue(Columns.DataSourceID, value); }
 		}
 		  
@@ -342,6 +356,14 @@ namespace SAEON.ObservationsDB.Data
 		{
 			get { return GetColumnValue<Guid?>(Columns.DataSchemaID); }
 			set { SetColumnValue(Columns.DataSchemaID, value); }
+		}
+		  
+		[XmlAttribute("InstrumentID")]
+		[Bindable(true)]
+		public Guid? InstrumentID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.InstrumentID); }
+			set { SetColumnValue(Columns.InstrumentID, value); }
 		}
 		  
 		[XmlAttribute("UserId")]
@@ -417,6 +439,17 @@ namespace SAEON.ObservationsDB.Data
 		
 		
 		/// <summary>
+		/// Returns a Instrument ActiveRecord object related to this Sensor
+		/// 
+		/// </summary>
+		public SAEON.ObservationsDB.Data.Instrument Instrument
+		{
+			get { return SAEON.ObservationsDB.Data.Instrument.FetchByID(this.InstrumentID); }
+			set { SetColumnValue("InstrumentID", value.Id); }
+		}
+		
+		
+		/// <summary>
 		/// Returns a Phenomenon ActiveRecord object related to this Sensor
 		/// 
 		/// </summary>
@@ -452,7 +485,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid? varDataSourceID,Guid? varDataSchemaID,Guid varUserId)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid varDataSourceID,Guid? varDataSchemaID,Guid? varInstrumentID,Guid varUserId)
 		{
 			Sensor item = new Sensor();
 			
@@ -474,6 +507,8 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.DataSchemaID = varDataSchemaID;
 			
+			item.InstrumentID = varInstrumentID;
+			
 			item.UserId = varUserId;
 			
 		
@@ -486,7 +521,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid? varDataSourceID,Guid? varDataSchemaID,Guid varUserId)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid varDataSourceID,Guid? varDataSchemaID,Guid? varInstrumentID,Guid varUserId)
 		{
 			Sensor item = new Sensor();
 			
@@ -507,6 +542,8 @@ namespace SAEON.ObservationsDB.Data
 				item.DataSourceID = varDataSourceID;
 			
 				item.DataSchemaID = varDataSchemaID;
+			
+				item.InstrumentID = varInstrumentID;
 			
 				item.UserId = varUserId;
 			
@@ -586,9 +623,16 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn InstrumentIDColumn
         {
             get { return Schema.Columns[9]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UserIdColumn
+        {
+            get { return Schema.Columns[10]; }
         }
         
         
@@ -606,6 +650,7 @@ namespace SAEON.ObservationsDB.Data
 			 public static string PhenomenonID = @"PhenomenonID";
 			 public static string DataSourceID = @"DataSourceID";
 			 public static string DataSchemaID = @"DataSchemaID";
+			 public static string InstrumentID = @"InstrumentID";
 			 public static string UserId = @"UserId";
 						
 		}

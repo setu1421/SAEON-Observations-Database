@@ -50,8 +50,6 @@ namespace SAEON.ObservationsDB.Data
         
 		public static readonly string DataSource = @"DataSource";
         
-		public static readonly string DataSourceOrganisation = @"DataSource_Organisation";
-        
 		public static readonly string DataSourceRole = @"DataSourceRole";
         
 		public static readonly string DataSourceTransformation = @"DataSourceTransformation";
@@ -59,6 +57,10 @@ namespace SAEON.ObservationsDB.Data
 		public static readonly string DataSourceType = @"DataSourceType";
         
 		public static readonly string ImportBatch = @"ImportBatch";
+        
+		public static readonly string Instrument = @"Instrument";
+        
+		public static readonly string InstrumentOrganisation = @"Instrument_Organisation";
         
 		public static readonly string ModuleX = @"Module";
         
@@ -183,11 +185,6 @@ namespace SAEON.ObservationsDB.Data
             get { return DataService.GetSchema("DataSource", "ObservationsDB"); }
 		}
         
-		public static TableSchema.Table DataSourceOrganisation
-		{
-            get { return DataService.GetSchema("DataSource_Organisation", "ObservationsDB"); }
-		}
-        
 		public static TableSchema.Table DataSourceRole
 		{
             get { return DataService.GetSchema("DataSourceRole", "ObservationsDB"); }
@@ -206,6 +203,16 @@ namespace SAEON.ObservationsDB.Data
 		public static TableSchema.Table ImportBatch
 		{
             get { return DataService.GetSchema("ImportBatch", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table Instrument
+		{
+            get { return DataService.GetSchema("Instrument", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table InstrumentOrganisation
+		{
+            get { return DataService.GetSchema("Instrument_Organisation", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table ModuleX
@@ -327,6 +334,8 @@ namespace SAEON.ObservationsDB.Data
 		public static readonly string VDataSourceTransformation = @"vDataSourceTransformation";
         
 		public static readonly string VImportBatch = @"vImportBatch";
+        
+		public static readonly string VInstrumentOrganisation = @"vInstrumentOrganisation";
         
 		public static readonly string VInventory = @"vInventory";
         

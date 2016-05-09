@@ -213,18 +213,6 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarUserId);
                 
-                TableSchema.TableColumn colvarStationID = new TableSchema.TableColumn(schema);
-                colvarStationID.ColumnName = "StationID";
-                colvarStationID.DataType = DbType.Guid;
-                colvarStationID.MaxLength = 0;
-                colvarStationID.AutoIncrement = false;
-                colvarStationID.IsNullable = true;
-                colvarStationID.IsPrimaryKey = false;
-                colvarStationID.IsForeignKey = false;
-                colvarStationID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarStationID);
-                
                 TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
                 colvarAddedAt.ColumnName = "AddedAt";
                 colvarAddedAt.DataType = DbType.DateTime;
@@ -260,18 +248,6 @@ namespace SAEON.ObservationsDB.Data{
                 colvarDataSchemaName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarDataSchemaName);
-                
-                TableSchema.TableColumn colvarStationName = new TableSchema.TableColumn(schema);
-                colvarStationName.ColumnName = "StationName";
-                colvarStationName.DataType = DbType.AnsiString;
-                colvarStationName.MaxLength = 203;
-                colvarStationName.AutoIncrement = false;
-                colvarStationName.IsNullable = false;
-                colvarStationName.IsPrimaryKey = false;
-                colvarStationName.IsForeignKey = false;
-                colvarStationName.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarStationName);
                 
                 
                 BaseSchema = schema;
@@ -505,20 +481,6 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
-        [XmlAttribute("StationID")]
-        [Bindable(true)]
-        public Guid? StationID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid?>("StationID");
-		    }
-            set 
-		    {
-			    SetColumnValue("StationID", value);
-            }
-        }
-	      
         [XmlAttribute("AddedAt")]
         [Bindable(true)]
         public DateTime? AddedAt 
@@ -560,20 +522,6 @@ namespace SAEON.ObservationsDB.Data{
 			    SetColumnValue("DataSchemaName", value);
             }
         }
-	      
-        [XmlAttribute("StationName")]
-        [Bindable(true)]
-        public string StationName 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("StationName");
-		    }
-            set 
-		    {
-			    SetColumnValue("StationName", value);
-            }
-        }
 	    
 	    #endregion
     
@@ -608,15 +556,11 @@ namespace SAEON.ObservationsDB.Data{
             
             public static string UserId = @"UserId";
             
-            public static string StationID = @"StationID";
-            
             public static string AddedAt = @"AddedAt";
             
             public static string UpdatedAt = @"UpdatedAt";
             
             public static string DataSchemaName = @"DataSchemaName";
-            
-            public static string StationName = @"StationName";
             
 	    }
 	    #endregion

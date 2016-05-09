@@ -372,9 +372,21 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.AspnetMembershipCollection().Where(AspnetMembership.Columns.UserId, UserId).Load();
 		}
+		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
+		{
+			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.UserId, UserId).Load();
+		}
+		public SAEON.ObservationsDB.Data.InstrumentCollection InstrumentRecords()
+		{
+			return new SAEON.ObservationsDB.Data.InstrumentCollection().Where(Instrument.Columns.UserId, UserId).Load();
+		}
 		public SAEON.ObservationsDB.Data.ProjectSiteCollection ProjectSiteRecords()
 		{
 			return new SAEON.ObservationsDB.Data.ProjectSiteCollection().Where(ProjectSite.Columns.UserId, UserId).Load();
+		}
+		public SAEON.ObservationsDB.Data.InstrumentOrganisationCollection InstrumentOrganisationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.InstrumentOrganisationCollection().Where(InstrumentOrganisation.Columns.UserId, UserId).Load();
 		}
 		public SAEON.ObservationsDB.Data.AspnetProfileCollection AspnetProfileRecords()
 		{
@@ -396,17 +408,9 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.DataSourceCollection().Where(DataSource.Columns.UserId, UserId).Load();
 		}
-		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
-		{
-			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.UserId, UserId).Load();
-		}
 		public SAEON.ObservationsDB.Data.ObservationCollection ObservationRecords()
 		{
 			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.UserId, UserId).Load();
-		}
-		public SAEON.ObservationsDB.Data.DataSourceOrganisationCollection DataSourceOrganisationRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataSourceOrganisationCollection().Where(DataSourceOrganisation.Columns.UserId, UserId).Load();
 		}
 		public SAEON.ObservationsDB.Data.AspnetPersonalizationPerUserCollection AspnetPersonalizationPerUserRecords()
 		{

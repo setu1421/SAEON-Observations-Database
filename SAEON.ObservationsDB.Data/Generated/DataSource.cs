@@ -298,20 +298,6 @@ namespace SAEON.ObservationsDB.Data
 					colvarUserId.ForeignKeyTableName = "aspnet_Users";
 				schema.Columns.Add(colvarUserId);
 				
-				TableSchema.TableColumn colvarStationID = new TableSchema.TableColumn(schema);
-				colvarStationID.ColumnName = "StationID";
-				colvarStationID.DataType = DbType.Guid;
-				colvarStationID.MaxLength = 0;
-				colvarStationID.AutoIncrement = false;
-				colvarStationID.IsNullable = true;
-				colvarStationID.IsPrimaryKey = false;
-				colvarStationID.IsForeignKey = true;
-				colvarStationID.IsReadOnly = false;
-				colvarStationID.DefaultSetting = @"";
-				
-					colvarStationID.ForeignKeyTableName = "Station";
-				schema.Columns.Add(colvarStationID);
-				
 				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
 				colvarAddedAt.ColumnName = "AddedAt";
 				colvarAddedAt.DataType = DbType.DateTime;
@@ -454,14 +440,6 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.UserId, value); }
 		}
 		  
-		[XmlAttribute("StationID")]
-		[Bindable(true)]
-		public Guid? StationID 
-		{
-			get { return GetColumnValue<Guid?>(Columns.StationID); }
-			set { SetColumnValue(Columns.StationID, value); }
-		}
-		  
 		[XmlAttribute("AddedAt")]
 		[Bindable(true)]
 		public DateTime? AddedAt 
@@ -495,6 +473,10 @@ namespace SAEON.ObservationsDB.Data
 		{
 			return new SAEON.ObservationsDB.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.DataSourceID, Id).Load();
 		}
+		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
+		{
+			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.DataSourceID, Id).Load();
+		}
 		public SAEON.ObservationsDB.Data.ImportBatchCollection ImportBatchRecords()
 		{
 			return new SAEON.ObservationsDB.Data.ImportBatchCollection().Where(ImportBatch.Columns.DataSourceID, Id).Load();
@@ -502,14 +484,6 @@ namespace SAEON.ObservationsDB.Data
 		public SAEON.ObservationsDB.Data.DataSourceRoleCollection DataSourceRoleRecords()
 		{
 			return new SAEON.ObservationsDB.Data.DataSourceRoleCollection().Where(DataSourceRole.Columns.DataSourceID, Id).Load();
-		}
-		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
-		{
-			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.DataSourceID, Id).Load();
-		}
-		public SAEON.ObservationsDB.Data.DataSourceOrganisationCollection DataSourceOrganisationRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataSourceOrganisationCollection().Where(DataSourceOrganisation.Columns.DataSourceID, Id).Load();
 		}
 		#endregion
 		
@@ -539,17 +513,6 @@ namespace SAEON.ObservationsDB.Data
 		}
 		
 		
-		/// <summary>
-		/// Returns a Station ActiveRecord object related to this DataSource
-		/// 
-		/// </summary>
-		public SAEON.ObservationsDB.Data.Station Station
-		{
-			get { return SAEON.ObservationsDB.Data.Station.FetchByID(this.StationID); }
-			set { SetColumnValue("StationID", value.Id); }
-		}
-		
-		
 		#endregion
 		
 		
@@ -564,7 +527,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime? varEndDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId,Guid? varStationID,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime? varEndDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSource item = new DataSource();
 			
@@ -594,8 +557,6 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.UserId = varUserId;
 			
-			item.StationID = varStationID;
-			
 			item.AddedAt = varAddedAt;
 			
 			item.UpdatedAt = varUpdatedAt;
@@ -610,7 +571,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime? varEndDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId,Guid? varStationID,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varDefaultNullValue,double? varErrorEstimate,int varUpdateFreq,DateTime? varStartDate,DateTime? varEndDate,DateTime varLastUpdate,Guid? varDataSchemaID,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSource item = new DataSource();
 			
@@ -639,8 +600,6 @@ namespace SAEON.ObservationsDB.Data
 				item.DataSchemaID = varDataSchemaID;
 			
 				item.UserId = varUserId;
-			
-				item.StationID = varStationID;
 			
 				item.AddedAt = varAddedAt;
 			
@@ -750,23 +709,16 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn StationIDColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
-        {
-            get { return Schema.Columns[14]; }
-        }
-        
-        
-        
         public static TableSchema.TableColumn UpdatedAtColumn
         {
-            get { return Schema.Columns[15]; }
+            get { return Schema.Columns[14]; }
         }
         
         
@@ -788,7 +740,6 @@ namespace SAEON.ObservationsDB.Data
 			 public static string LastUpdate = @"LastUpdate";
 			 public static string DataSchemaID = @"DataSchemaID";
 			 public static string UserId = @"UserId";
-			 public static string StationID = @"StationID";
 			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
 						
