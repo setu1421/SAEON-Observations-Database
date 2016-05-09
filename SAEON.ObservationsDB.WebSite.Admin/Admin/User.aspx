@@ -57,7 +57,7 @@
                                         </Reader>
                                         <BaseParams>
                                             <ext:Parameter Name="start" Value="0" Mode="Raw" />
-                                            <ext:Parameter Name="limit" Value="10" Mode="Raw" />
+                                            <ext:Parameter Name="limit" Value="15" Mode="Raw" />
                                             <ext:Parameter Name="sort" Value="" />
                                             <ext:Parameter Name="dir" Value="" />
                                         </BaseParams>
@@ -87,7 +87,7 @@
                                 <LoadMask ShowMask="true" />
                                 <SaveMask ShowMask="true" />
                                 <Plugins>
-                                    <ext:GridFilters runat="server" ID="GridFilters1">
+                                    <ext:GridFilters runat="server" ID="GridFilters1" >
                                         <Filters>
                                             <ext:StringFilter DataIndex="UserId" />
                                             <ext:StringFilter DataIndex="UserName" />
@@ -97,7 +97,7 @@
                                     </ext:GridFilters>
                                 </Plugins>
                                 <BottomBar>
-                                    <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="10" EmptyMsg="No data found" />
+                                    <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="15" EmptyMsg="No data found" />
                                 </BottomBar>
                                 <DirectEvents>
                                     <Command OnEvent="DoDelete">
@@ -306,7 +306,7 @@
         </Content>
     </ext:Window>
     <ext:Window ID="AvailableRolesWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available Roles" Width="620" Height="300" X="50" Y="50" CenterOnLoad="false"
+        Title="Available Roles" Width="620" Height="300" X="50" Y="50" 
         Icon="GroupGear" Layout="Fit" Hidden="true">
         <Items>
             <ext:GridPanel ID="ARolesGrid" runat="server" Header="false" Border="false">

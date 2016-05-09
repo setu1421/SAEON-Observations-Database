@@ -317,7 +317,7 @@
         var DoDelete = function (grid, rowIndex, columnIndex, e) {
             var 
                 record = rowIndex.id,  // Get the Record
-				columnId = rowIndex.id; // Get column id
+                columnId = rowIndex.id; // Get column id
             //			Ext.Msg.confirm('Confirm', 'Are you sure?', function (btn)
             //			{
             //				//console.log(this, arguments);
@@ -350,7 +350,7 @@
         //			//forbidden
         //			return false;
         //		};
-	
+    
     </script>
 </head>
 <body>
@@ -416,9 +416,9 @@
                                                     <%--DateFormat="yyyy/MM/dd"--%>
                                                     <ext:RecordField Name="Comment" Type="String" />
                                                     <%--<ext:RecordField Name="StateProvince" Type="String" />
-									<ext:RecordField Name="City" Type="String" />
-									<ext:RecordField Name="PostalCode" Type="String" />
-									<ext:RecordField Name="LastActivityDate" Type="Date" DateFormat="yyyy/MM/dd" />--%>
+                                    <ext:RecordField Name="City" Type="String" />
+                                    <ext:RecordField Name="PostalCode" Type="String" />
+                                    <ext:RecordField Name="LastActivityDate" Type="Date" DateFormat="yyyy/MM/dd" />--%>
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>
@@ -434,27 +434,27 @@
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
                                         <%--<ext:Column Header="AddressID" DataIndex="AddressID" />
-						
-						<ext:Column Header="UserId" DataIndex="UserId" />--%>
+                        
+                        <ext:Column Header="UserId" DataIndex="UserId" />--%>
                                         <ext:Column Header="User Name" DataIndex="UserName" Width="200" />
                                         <ext:Column Header="Email" DataIndex="Email" Width="200" />
                                         <ext:DateColumn Header="Date Created" DataIndex="CreateDate" Width="100" Format="yyyy-MM-dd" />
                                         <%--<Renderer Handler="return '<b>' + record.data['LastName'] + '</b>,' + record.data['FirstName']" />  
-						<ext:Column Header="StateProvince" DataIndex="StateProvince">
-							<Renderer Format="UsMoney" />
-						</ext:Column>                        
-						<ext:Column Header="City" DataIndex="City" />
-						<ext:Column Header="PostalCode" DataIndex="PostalCode" Align="Center">
-							<Renderer Handler="return (value) ? 'Yes':'No';" />
-						</ext:Column>
-						<ext:DateColumn Header="ModifiedDate" DataIndex="ModifiedDate" Align="Center" Format="yyyy-MM-dd" />
+                        <ext:Column Header="StateProvince" DataIndex="StateProvince">
+                            <Renderer Format="UsMoney" />
+                        </ext:Column>                        
+                        <ext:Column Header="City" DataIndex="City" />
+                        <ext:Column Header="PostalCode" DataIndex="PostalCode" Align="Center">
+                            <Renderer Handler="return (value) ? 'Yes':'No';" />
+                        </ext:Column>
+                        <ext:DateColumn Header="ModifiedDate" DataIndex="ModifiedDate" Align="Center" Format="yyyy-MM-dd" />
 
-						<ext:Column ColumnID="Details" 	Header="Details" Width="50" Align="Center" Fixed="true" MenuDisabled="true" Resizable="false">
-							<Renderer Fn="employeeDetailsRender" />                    
-						</ext:Column>
-						<ext:Column ColumnID="Delete" 	Header="Delete" Width="50" Align="Center" Fixed="true" MenuDisabled="true" Resizable="false">
-							<Renderer Fn="employeeDetailsDelete" />                    
-						</ext:Column>--%>
+                        <ext:Column ColumnID="Details" 	Header="Details" Width="50" Align="Center" Fixed="true" MenuDisabled="true" Resizable="false">
+                            <Renderer Fn="employeeDetailsRender" />                    
+                        </ext:Column>
+                        <ext:Column ColumnID="Delete" 	Header="Delete" Width="50" Align="Center" Fixed="true" MenuDisabled="true" Resizable="false">
+                            <Renderer Fn="employeeDetailsDelete" />                    
+                        </ext:Column>--%>
                                         <ext:CommandColumn Width="50" Header="Options">
                                             <Commands>
                                                 <ext:GridCommand Icon="UserDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />
@@ -482,13 +482,13 @@
                                             <ext:StringFilter DataIndex="Email" />
                                             <ext:DateFilter DataIndex="CreateDate" />
                                             <%--<ext:StringFilter DataIndex="StateProvince" />
-							
-							<ext:ListFilter DataIndex="City" Options="Austin,Montreal,Toronto,Phoenix,Mesa"/>
-							<ext:StringFilter DataIndex="City" />
-							<ext:StringFilter DataIndex="PostalCode" />
-							<ext:DateFilter DataIndex="ModifiedDate">
-								<DatePickerOptions runat="server" TodayText="Now" />
-							</ext:DateFilter>--%>
+                            
+                            <ext:ListFilter DataIndex="City" Options="Austin,Montreal,Toronto,Phoenix,Mesa"/>
+                            <ext:StringFilter DataIndex="City" />
+                            <ext:StringFilter DataIndex="PostalCode" />
+                            <ext:DateFilter DataIndex="ModifiedDate">
+                                <DatePickerOptions runat="server" TodayText="Now" />
+                            </ext:DateFilter>--%>
                                         </Filters>
                                     </ext:GridFilters>
                                 </Plugins>
@@ -502,13 +502,13 @@
                                 </Listeners>
                                 <DirectEvents>
                                     <%--<CellClick 
-						OnEvent="ShowDetails" 
-						Failure="Ext.MessageBox.alert('Load failed', 'Error during ajax event!');">
-						<EventMask ShowMask="true" Target="CustomTarget" CustomTarget="={#{GridPanel1}.body}" />
-						<ExtraParams>
-							<ext:Parameter Name="id" Value="params[0].getStore().getAt(params[1]).id" Mode="Raw" />
-						</ExtraParams>
-					</CellClick>--%>
+                        OnEvent="ShowDetails" 
+                        Failure="Ext.MessageBox.alert('Load failed', 'Error during ajax event!');">
+                        <EventMask ShowMask="true" Target="CustomTarget" CustomTarget="={#{GridPanel1}.body}" />
+                        <ExtraParams>
+                            <ext:Parameter Name="id" Value="params[0].getStore().getAt(params[1]).id" Mode="Raw" />
+                        </ExtraParams>
+                    </CellClick>--%>
                                     <Command OnEvent="DoDelete">
                                         <ExtraParams>
                                             <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
@@ -606,7 +606,7 @@
                         LabelAlign="Top">
                         <%--ColumnWidth=".5"--%>
                         <%--<ext:Label ID="Label2" runat="server" Text="UserName">
-						</ext:Label>--%>
+                        </ext:Label>--%>
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
                             <ext:Parameter Name="MsgTarget" Value="side" />
@@ -621,9 +621,9 @@
                         LabelAlign="Top">
                         <%--ColumnWidth=".5"--%>
                         <%--<Defaults>
-							<ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
-							<ext:Parameter Name="MsgTarget" Value="side" />
-						</Defaults>--%>
+                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>--%>
                         <Items>
                             <ext:TextField ID="tfPassword" runat="server" FieldLabel="Password" AnchorHorizontal="90%"
                                 Hidden="true" InputType="Password">
@@ -634,12 +634,12 @@
                         LabelAlign="Top">
                         <%--ColumnWidth=".5"--%>
                         <%--<Defaults>
-							<ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
-							<ext:Parameter Name="MsgTarget" Value="side" />
-						</Defaults>--%>
+                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>--%>
                         <Items>
                             <%--<ext:Label ID="Label3" runat="server" Text="Date Created">
-							</ext:Label>--%>
+                            </ext:Label>--%>
                             <ext:TextField ID="tfCreateDate" runat="server" Disabled="true" FieldLabel="Date Created"
                                 AnchorHorizontal="90%">
                             </ext:TextField>
@@ -654,7 +654,7 @@
                         </Defaults>
                         <Items>
                             <%--<ext:Label ID="Label1" runat="server" Text="Email">
-							</ext:Label>--%>
+                            </ext:Label>--%>
                             <ext:TextField ID="tfEmail" runat="server" FieldLabel="Email" Vtype="email" AnchorHorizontal="90%">
                             </ext:TextField>
                         </Items>
@@ -663,12 +663,12 @@
                         LabelAlign="Top">
                         <%--ColumnWidth=".5"--%>
                         <%--<Defaults>
-							<ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
-							<ext:Parameter Name="MsgTarget" Value="side" />
-						</Defaults>--%>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>--%>
                         <Items>
                             <%--<ext:Label ID="Label4" runat="server" Text="Comment">
-							</ext:Label>--%>
+                            </ext:Label>--%>
                             <ext:TextArea ID="tfComment" runat="server" Height="50" FieldLabel="Comment" AnchorHorizontal="90%">
                             </ext:TextArea>
                         </Items>
@@ -679,8 +679,8 @@
                 <Buttons>
                     <ext:Button ID="btnSave" runat="server" Text="Save">
                         <%--<Listeners>
-							<Click Handler="if (#{FormPanel1}.getForm().isValid()) {Ext.Msg.alert('Submit', 'Saved!');}else{Ext.Msg.show({icon: Ext.MessageBox.ERROR, msg: 'FormPanel is incorrect', buttons:Ext.Msg.OK});}" />
-						</Listeners>--%>
+                            <Click Handler="if (#{FormPanel1}.getForm().isValid()) {Ext.Msg.alert('Submit', 'Saved!');}else{Ext.Msg.show({icon: Ext.MessageBox.ERROR, msg: 'FormPanel is incorrect', buttons:Ext.Msg.OK});}" />
+                        </Listeners>--%>
                         <DirectEvents>
                             <Click OnEvent="SaveUser" Method="POST" />
                         </DirectEvents>
@@ -716,7 +716,7 @@
                         LabelAlign="Top">
                         <%--ColumnWidth=".5"--%>
                         <%--<ext:Label ID="Label2" runat="server" Text="UserName">
-						</ext:Label>--%>
+                        </ext:Label>--%>
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
                             <ext:Parameter Name="MsgTarget" Value="side" />
@@ -733,8 +733,8 @@
                 <Buttons>
                     <ext:Button ID="BtnPassNew" runat="server" Text="Save">
                         <%--<Listeners>
-							<Click Handler="if (#{FormPanel1}.getForm().isValid()) {Ext.Msg.alert('Submit', 'Saved!');}else{Ext.Msg.show({icon: Ext.MessageBox.ERROR, msg: 'FormPanel is incorrect', buttons:Ext.Msg.OK});}" />
-						</Listeners>--%>
+                            <Click Handler="if (#{FormPanel1}.getForm().isValid()) {Ext.Msg.alert('Submit', 'Saved!');}else{Ext.Msg.show({icon: Ext.MessageBox.ERROR, msg: 'FormPanel is incorrect', buttons:Ext.Msg.OK});}" />
+                        </Listeners>--%>
                         <DirectEvents>
                             <Click OnEvent="SavePass" Method="POST" />
                         </DirectEvents>

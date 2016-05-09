@@ -612,7 +612,7 @@
         </Content>
     </ext:Window>
     <ext:Window ID="AvailableRoleWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available Roles" Width="750" Height="300" X="50" Y="50" CenterOnLoad="false"
+        Title="Available Roles" Width="750" Height="300" X="50" Y="50" 
         Layout="Fit" Hidden="true" ClientIDMode="Static">
         <Items>
             <ext:GridPanel ID="RoleGrid" runat="server" Header="false" Border="false" ClientIDMode="Static">
