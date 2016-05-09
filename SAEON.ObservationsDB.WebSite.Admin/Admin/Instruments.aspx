@@ -352,31 +352,6 @@
                             </ext:TextArea>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container4" runat="server" Layout="Column" Height="50" Margins="10px 0px 0px 0px">
-                        <Items>
-                            <ext:Container ID="Container8" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
-                                <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLatitude" DataIndex="Latitude"
-                                        MaxLength="150" runat="server" FieldLabel="Latitude" AnchorHorizontal="90%">
-                                    </ext:NumberField>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container9" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
-                                <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLongitude" DataIndex="Longitude"
-                                        MaxLength="150" runat="server" FieldLabel="Longitude" AnchorHorizontal="90%">
-                                    </ext:NumberField>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container10" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
-                                <Items>
-                                    <ext:NumberField AllowDecimals="false" ID="nfElevation" DataIndex="Elevation" MaxLength="7"
-                                        runat="server" FieldLabel="Elevation" AnchorHorizontal="90%">
-                                    </ext:NumberField>
-                                </Items>
-                            </ext:Container>
-                        </Items>
-                    </ext:Container>
                     <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />

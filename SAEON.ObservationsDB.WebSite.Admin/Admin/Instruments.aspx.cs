@@ -1,6 +1,7 @@
 ﻿using Ext.Net;
 using SAEON.ObservationsDB.Data;
 using Serilog;
+using SubSonic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,15 +84,6 @@ public partial class Admin_Instruments : System.Web.UI.Page
             instrument.Description = tfDescription.Text.Trim();
             instrument.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
 
-            if (!string.IsNullOrEmpty(nfLatitude.Text))
-                instrument.Latitude = Double.Parse(nfLatitude.Text);
-
-            if (!string.IsNullOrEmpty(nfLongitude.Text))
-                instrument.Longitude = Double.Parse(nfLongitude.Text);
-
-            if (!string.IsNullOrEmpty(nfElevation.Text))
-                instrument.Elevation = Int32.Parse(nfElevation.Text);
-
             if (!string.IsNullOrEmpty(tfUrl.Text))
                 instrument.Url = tfUrl.Text;
 
@@ -146,7 +138,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 .OrderByAsc(VInstrumentOrganisation.Columns.OrganisationName)
                 .OrderByAsc(VInstrumentOrganisation.Columns.OrganisationRoleName)
                 .Load();
-            OrganisationLinksGrid.GetStore().Instrument = col;
+            OrganisationLinksGrid.GetStore().DataSource = col;
             OrganisationLinksGrid.GetStore().DataBind();
         }
     }
@@ -243,11 +235,11 @@ public partial class Admin_Instruments : System.Web.UI.Page
             Guid Id = Guid.Parse(e.Parameters["InstrumentID"].ToString());
             try
             {
-                VSensorCollection col = new VSensorCollection()
-                    .Where(VSensor.Columns.InstrumentID, Id)
-                    .OrderByAsc(VSensor.Columns.Code)
+                SensorCollection col = new SensorCollection()
+                    .Where(Sensor.Columns.InstrumentID, Id)
+                    .OrderByAsc(Sensor.Columns.Code)
                     .Load();
-                SensorsGrid.GetStore().Instrument = col;
+                SensorsGrid.GetStore().DataSource = col;
                 SensorsGrid.GetStore().DataBind();
             }
             catch (Exception ex)
@@ -271,7 +263,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 .IsNull()
                 .OrderAsc(Sensor.Columns.Code)
                 .ExecuteAsCollection<SensorCollection>();
-            AvailableSensorsGrid.GetStore().Instrument = col;
+            AvailableSensorsGrid.GetStore().DataSource = col;
             AvailableSensorsGrid.GetStore().DataBind();
         }
     }

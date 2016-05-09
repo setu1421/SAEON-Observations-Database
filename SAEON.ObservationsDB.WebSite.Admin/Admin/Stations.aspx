@@ -248,26 +248,26 @@
                     </ext:Panel>
                 </East>
                 <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
-                    <ext:Panel ID="pnlSouth" runat="server" Title="Data Sources (Instruments)" Layout="FitLayout"
+                    <ext:Panel ID="pnlSouth" runat="server" Title="Instruments" Layout="FitLayout"
                         Height="200" ClientIDMode="Static">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar2" runat="server">
                                 <Items>
-                                    <ext:Button ID="btnLinkDataSource" runat="server" Icon="LinkAdd" Text="Link Data Source">
+                                    <ext:Button ID="btnLinkInstrument" runat="server" Icon="LinkAdd" Text="Link Instrument">
                                         <ToolTips>
                                             <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{AvailableDataSourcesStore}.reload();#{AvailableDataSourcesWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{AvailableInstrumentsStore}.reload();#{AvailableInstrumentsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="DataSourcesGrid" runat="server" Border="false" ClientIDMode="Static">
+                            <ext:GridPanel ID="InstrumentsGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="DataSourcesGridStore" runat="server" OnRefreshData="DataSourcesGridStore_RefreshData">
+                                    <ext:Store ID="InstrumentsGridStore" runat="server" OnRefreshData="InstrumentsGridStore_RefreshData">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -310,7 +310,7 @@
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
                                 <Listeners>
-                                    <Command Fn="onDataSourceLinkCommand" />
+                                    <Command Fn="onInstrumentLinkCommand" />
                                 </Listeners>
                             </ext:GridPanel>
                         </Items>
@@ -528,16 +528,16 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="AvailableDataSourcesWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available DataSources (Instruments)" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
+    <ext:Window ID="AvailableInstrumentsWindow" runat="server" Collapsible="false" Maximizable="false"
+        Title="Available Instruments" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
         <Listeners>
-            <Hide Fn="CloseAvailableDataSources" />
+            <Hide Fn="CloseAvailableInstruments" />
         </Listeners>
         <Items>
-            <ext:GridPanel ID="AvailableDataSourcesGrid" runat="server" Header="false" Border="false"
+            <ext:GridPanel ID="AvailableInstrumentsGrid" runat="server" Header="false" Border="false"
                 ClientIDMode="Static">
                 <Store>
-                    <ext:Store ID="AvailableDataSourcesStore" runat="server" OnRefreshData="AvailableDataSourcesStore_RefreshData">
+                    <ext:Store ID="AvailableInstrumentsStore" runat="server" OnRefreshData="AvailableInstrumentsStore_RefreshData">
                         <Proxy>
                             <ext:PageProxy />
                         </Proxy>
@@ -569,9 +569,9 @@
                     <ext:CheckboxSelectionModel ID="CheckboxSelectionModel1" runat="server" />
                 </SelectionModel>
                 <Buttons>
-                    <ext:Button ID="LinkDataSources" runat="server" Text="Save" Icon="Accept">
+                    <ext:Button ID="LinkInstruments" runat="server" Text="Save" Icon="Accept">
                         <DirectEvents>
-                            <Click OnEvent="LinkDataSources_Click">
+                            <Click OnEvent="LinkInstruments_Click">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>

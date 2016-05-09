@@ -232,45 +232,45 @@ public partial class Admin_Stations : System.Web.UI.Page
 
     #endregion
 
-    #region DataSources
+    #region Instruments
 
-    protected void DataSourcesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void InstrumentsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
-            DataSourceCollection col = new DataSourceCollection()
-                .Where(DataSource.Columns.StationID, Id)
-                .OrderByAsc(DataSource.Columns.Code)
+            InstrumentCollection col = new InstrumentCollection()
+                .Where(Instrument.Columns.StationID, Id)
+                .OrderByAsc(Instrument.Columns.Code)
                 .Load();
-            DataSourcesGrid.GetStore().DataSource = col;
-            DataSourcesGrid.GetStore().DataBind();
+            InstrumentsGrid.GetStore().DataSource = col;
+            InstrumentsGrid.GetStore().DataBind();
         }
     }
 
-    protected void AvailableDataSourcesStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void AvailableInstrumentsStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
-            DataSourceCollection col = new Select()
-                .From(DataSource.Schema)
-                .Where(DataSource.IdColumn)
-                .NotIn(new Select(new string[] { DataSource.Columns.Id }).From(DataSource.Schema).Where(DataSource.IdColumn).IsEqualTo(Id))
-                .And(DataSource.StationIDColumn)
+            InstrumentCollection col = new Select()
+                .From(Instrument.Schema)
+                .Where(Instrument.IdColumn)
+                .NotIn(new Select(new string[] { Instrument.Columns.Id }).From(Instrument.Schema).Where(Instrument.IdColumn).IsEqualTo(Id))
+                .And(Instrument.StationIDColumn)
                 .IsNull()
-                .OrderAsc(DataSource.Columns.Code)
-                .ExecuteAsCollection<DataSourceCollection>();
-            AvailableDataSourcesGrid.GetStore().DataSource = col;
-            AvailableDataSourcesGrid.GetStore().DataBind();
+                .OrderAsc(Instrument.Columns.Code)
+                .ExecuteAsCollection<InstrumentCollection>();
+            AvailableInstrumentsGrid.GetStore().DataSource = col;
+            AvailableInstrumentsGrid.GetStore().DataBind();
         }
     }
 
-    protected void LinkDataSources_Click(object sender, DirectEventArgs e)
+    protected void LinkInstruments_Click(object sender, DirectEventArgs e)
     {
         try
         {
-            RowSelectionModel sm = AvailableDataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel sm = AvailableInstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
             RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
 
             var masterID = new Guid(masterRow.SelectedRecordID);
@@ -278,18 +278,18 @@ public partial class Admin_Stations : System.Web.UI.Page
             {
                 foreach (SelectedRow row in sm.SelectedRows)
                 {
-                    DataSource dataSource = new DataSource(row.RecordID);
-                    if (dataSource != null)
+                    Instrument instrument = new Instrument(row.RecordID);
+                    if (instrument != null)
                     {
-                        dataSource.StationID = masterID;
-                        dataSource.UserId = AuthHelper.GetLoggedInUserId;
-                        dataSource.Save();
-                        Auditing.Log("Stations.AddDataSourceLink", new Dictionary<string, object> {
-                            { "StationID", masterID }, { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
+                        instrument.StationID = masterID;
+                        instrument.UserId = AuthHelper.GetLoggedInUserId;
+                        instrument.Save();
+                        Auditing.Log("Stations.AddInstrumentLink", new Dictionary<string, object> {
+                            { "StationID", masterID }, { "ID", instrument.Id }, { "Code", instrument.Code }, { "Name", instrument.Name } });
                     }
                 }
-                DataSourcesGrid.DataBind();
-                AvailableDataSourcesWindow.Hide();
+                InstrumentsGrid.DataBind();
+                AvailableInstrumentsWindow.Hide();
             }
             else
             {
@@ -299,44 +299,44 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Stations.LinkDataSources_Click");
+            Log.Error(ex, "Stations.LinkInstruments_Click");
             MessageBoxes.Error(ex, "Error", "Unable to link data sources");
         }
     }
 
     [DirectMethod]
-    public void ConfirmDeleteDataSourceLink(Guid aID)
+    public void ConfirmDeleteInstrumentLink(Guid aID)
     {
         MessageBoxes.Confirm(
             "Confirm Delete",
-            String.Format("DirectCall.DeleteDataSourceLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            String.Format("DirectCall.DeleteInstrumentLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
             "Are you sure you want to delete this data source link?");
     }
 
     [DirectMethod]
-    public void DeleteDataSourceLink(Guid aID)
+    public void DeleteInstrumentLink(Guid aID)
     {
         try
         {
-            DataSource dataSource = new DataSource(aID);
-            if (dataSource != null)
+            Instrument instrument = new Instrument(aID);
+            if (instrument != null)
             {
-                dataSource.StationID = null;
-                dataSource.UserId = AuthHelper.GetLoggedInUserId;
-                dataSource.Save();
-                Auditing.Log("Stations.DeleteDataSourceLink", new Dictionary<string, object> {
-                        { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
-                DataSourcesGrid.DataBind();
+                instrument.StationID = null;
+                instrument.UserId = AuthHelper.GetLoggedInUserId;
+                instrument.Save();
+                Auditing.Log("Stations.DeleteInstrumentLink", new Dictionary<string, object> {
+                        { "ID", instrument.Id }, { "Code", instrument.Code }, { "Name", instrument.Name } });
+                InstrumentsGrid.DataBind();
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Stations.DeleteDataSourceLink({aID})", aID);
+            Log.Error(ex, "Stations.DeleteInstrumentLink({aID})", aID);
             MessageBoxes.Error(ex, "Error", "Unable to delete data source link");
         }
     }
 
-    //protected void DataSourceLink(object sender, DirectEventArgs e)
+    //protected void InstrumentLink(object sender, DirectEventArgs e)
     //{
     //    string actionType = e.ExtraParams["type"];
     //    string recordID = e.ExtraParams["id"];
@@ -347,21 +347,21 @@ public partial class Admin_Stations : System.Web.UI.Page
     //        }
     //        else if (actionType == "Delete")
     //        {
-    //            DataSource dataSource = new DataSource(recordID);
-    //            if (dataSource != null)
+    //            Instrument instrument = new Instrument(recordID);
+    //            if (instrument != null)
     //            {
-    //                dataSource.StationID = null;
-    //                dataSource.UserId = AuthHelper.GetLoggedInUserId;
-    //                dataSource.Save();
-    //                Auditing.Log("Stations.DeleteDataSourceLink", new Dictionary<string, object> {
-    //                    { "ID", dataSource.Id }, { "Code", dataSource.Code }, { "Name", dataSource.Name } });
-    //                DataSourcesGrid.DataBind();
+    //                instrument.StationID = null;
+    //                instrument.UserId = AuthHelper.GetLoggedInUserId;
+    //                instrument.Save();
+    //                Auditing.Log("Stations.DeleteInstrumentLink", new Dictionary<string, object> {
+    //                    { "ID", instrument.Id }, { "Code", instrument.Code }, { "Name", instrument.Name } });
+    //                InstrumentsGrid.DataBind();
     //            }
     //        }
     //    }
     //    catch (Exception ex)
     //    {
-    //        Log.Error(ex, "Stations.DataSourceLink({ActionType},{RecordID})", actionType, recordID);
+    //        Log.Error(ex, "Stations.InstrumentLink({ActionType},{RecordID})", actionType, recordID);
     //        MessageBoxes.Error(ex, "Unable to {0} data source link", actionType);
     //    }
     //}

@@ -154,9 +154,9 @@
     <Compile Include="Generated\VDataQuery.cs" />
     <Compile Include="Generated\VDataSchema.cs" />
     <Compile Include="Generated\VDataSource.cs" />
-    <Compile Include="Generated\VDataSourceOrganisation.cs" />
     <Compile Include="Generated\VDataSourceTransformation.cs" />
     <Compile Include="Generated\VImportBatch.cs" />
+    <Compile Include="Generated\VInstrumentOrganisation.cs" />
     <Compile Include="Generated\VInventory.cs" />
     <Compile Include="Generated\VModuleRoleModule.cs" />
     <Compile Include="Generated\VObservation.cs" />

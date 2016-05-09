@@ -29,13 +29,13 @@ function New() {
 
 function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible())
-        DataSourcesGrid.getStore().reload();
+        InstrumentsGrid.getStore().reload();
     if (pnlEast.isVisible())
         OrganisationLinksGrid.getStore().reload();
 }
 
-function CloseAvailableDataSources() {
-    AvailableDataSourcesGrid.selModel.clearSelections();
+function CloseAvailableInstruments() {
+    AvailableInstrumentsGrid.selModel.clearSelections();
 }
 
 function ClearOrganisationLinkForm() {
@@ -53,14 +53,14 @@ function onOrganisationLinkCommand(e, record) {
     }
 }
 
-function onDataSourceLinkCommand(e, record) {
+function onInstrumentLinkCommand(e, record) {
     if (e === 'Delete') {
-        DirectCall.ConfirmDeleteDataSourceLink(record.get('Id'), { eventMask: { showMask: true } });
+        DirectCall.ConfirmDeleteInstrumentLink(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {
-        DataSourceLinkFormPanel.getForm().reset();
-        DataSourceLinkFormPanel.getForm().loadRecord(record);
-        DataSourceLinkFormPanel.getForm().clearInvalid();
-        DataSourceLinkWindow.show();
+        InstrumentLinkFormPanel.getForm().reset();
+        InstrumentLinkFormPanel.getForm().loadRecord(record);
+        InstrumentLinkFormPanel.getForm().clearInvalid();
+        InstrumentLinkWindow.show();
     }
 }
 

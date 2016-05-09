@@ -145,7 +145,7 @@ namespace SAEON.ObservationsDB.Data
 				colvarStationID.DataType = DbType.Guid;
 				colvarStationID.MaxLength = 0;
 				colvarStationID.AutoIncrement = false;
-				colvarStationID.IsNullable = false;
+				colvarStationID.IsNullable = true;
 				colvarStationID.IsPrimaryKey = false;
 				colvarStationID.IsForeignKey = true;
 				colvarStationID.IsReadOnly = false;
@@ -294,9 +294,9 @@ namespace SAEON.ObservationsDB.Data
 		  
 		[XmlAttribute("StationID")]
 		[Bindable(true)]
-		public Guid StationID 
+		public Guid? StationID 
 		{
-			get { return GetColumnValue<Guid>(Columns.StationID); }
+			get { return GetColumnValue<Guid?>(Columns.StationID); }
 			set { SetColumnValue(Columns.StationID, value); }
 		}
 		  
@@ -435,7 +435,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varStationID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid? varStationID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Instrument item = new Instrument();
 			
@@ -471,7 +471,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varStationID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid? varStationID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Instrument item = new Instrument();
 			

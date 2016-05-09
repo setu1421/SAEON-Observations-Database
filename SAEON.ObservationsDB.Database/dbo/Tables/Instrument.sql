@@ -2,7 +2,7 @@
 CREATE TABLE [dbo].[Instrument]
 (
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Instrument_ID] DEFAULT newid(), 
-    [StationID] UNIQUEIDENTIFIER NOT NULL,
+    [StationID] UNIQUEIDENTIFIER NULL,
     [Code] VARCHAR(50) NOT NULL, 
     [Name] VARCHAR(150) NOT NULL, 
     [Description] VARCHAR(5000) NULL,
@@ -48,16 +48,14 @@ FOR UPDATE
 AS
 BEGIN
     SET NoCount ON
-    if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
-    if UPDATE(UpdatedAt) RAISERROR ('Cannot update UpdatedAt.', 16, 1)
-    if not UPDATE(AddedAt) and not UPDATE(UpdatedAt)
-        Update 
-            src 
-        set 
-            UpdatedAt = GETDATE()
-        from
-            inserted ins 
-            inner join Instrument src
-                on (ins.ID = src.ID)
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update 
+        src 
+    set 
+        UpdatedAt = GETDATE()
+    from
+        inserted ins 
+        inner join Instrument src
+            on (ins.ID = src.ID)
 END
 --< Added 2.0.0.4 20160508 TimPN

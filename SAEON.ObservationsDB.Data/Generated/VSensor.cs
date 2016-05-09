@@ -201,6 +201,18 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarDataSchemaName);
                 
+                TableSchema.TableColumn colvarInstrumentName = new TableSchema.TableColumn(schema);
+                colvarInstrumentName.ColumnName = "InstrumentName";
+                colvarInstrumentName.DataType = DbType.AnsiString;
+                colvarInstrumentName.MaxLength = 150;
+                colvarInstrumentName.AutoIncrement = false;
+                colvarInstrumentName.IsNullable = true;
+                colvarInstrumentName.IsPrimaryKey = false;
+                colvarInstrumentName.IsForeignKey = false;
+                colvarInstrumentName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarInstrumentName);
+                
                 
                 BaseSchema = schema;
                 //add this schema to the provider
@@ -418,6 +430,20 @@ namespace SAEON.ObservationsDB.Data{
 			    SetColumnValue("DataSchemaName", value);
             }
         }
+	      
+        [XmlAttribute("InstrumentName")]
+        [Bindable(true)]
+        public string InstrumentName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("InstrumentName");
+		    }
+            set 
+		    {
+			    SetColumnValue("InstrumentName", value);
+            }
+        }
 	    
 	    #endregion
     
@@ -449,6 +475,8 @@ namespace SAEON.ObservationsDB.Data{
             public static string DataSourceName = @"DataSourceName";
             
             public static string DataSchemaName = @"DataSchemaName";
+            
+            public static string InstrumentName = @"InstrumentName";
             
 	    }
 	    #endregion
