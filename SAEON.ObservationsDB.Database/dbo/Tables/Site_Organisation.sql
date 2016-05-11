@@ -12,13 +12,20 @@ CREATE TABLE [dbo].[Site_Organisation]
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Site_Organisation_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Site_Organisation_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.0.3 20160426 TimPN
-    CONSTRAINT [PK_Site_Organisation] PRIMARY KEY CLUSTERED ([ID]),
+--> Changed 2.0.0.5 20160411 TimPN
+--    CONSTRAINT [PK_Site_Organisation] PRIMARY KEY CLUSTERED ([ID]),
+    CONSTRAINT [PK_Site_Organisation] PRIMARY KEY NONCLUSTERED ([ID]),
+--< Changed 2.0.0.5 20160411 TimPN
     CONSTRAINT [FK_Site_Organisation_Site] FOREIGN KEY ([SiteID]) REFERENCES [dbo].[Site] ([ID]),
     CONSTRAINT [FK_Site_Organisation_Organisation] FOREIGN KEY ([OrganisationID]) REFERENCES [dbo].[Organisation] ([ID]),
     CONSTRAINT [FK_Site_Organisation_OrganisationRole] FOREIGN KEY ([OrganisationRoleID]) REFERENCES [dbo].[OrganisationRole] ([ID]),
     CONSTRAINT [FK_Site_Organisation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [UX_Site_Organisation] UNIQUE ([SiteID],[OrganisationID],[OrganisationRoleID],[StartDate],[EndDate])
 )
+--> Added 2.0.0.5 20160411 TimPN
+GO
+CREATE CLUSTERED INDEX [CX_Site_Organisation] ON [dbo].[Site_Organisation] ([AddedAt])
+--< Added 2.0.0.5 20160411 TimPN
 GO
 CREATE INDEX [IX_Site_Organisation_SiteID] ON [dbo].[Site_Organisation] ([SiteID])
 GO

@@ -78,7 +78,11 @@ namespace SAEON.ObservationsDB.Data
         
 		public static readonly string PhenomenonUOM = @"PhenomenonUOM";
         
+		public static readonly string Programme = @"Programme";
+        
 		public static readonly string Progress = @"Progress";
+        
+		public static readonly string Project = @"Project";
         
 		public static readonly string ProjectSite = @"ProjectSite";
         
@@ -255,9 +259,19 @@ namespace SAEON.ObservationsDB.Data
             get { return DataService.GetSchema("PhenomenonUOM", "ObservationsDB"); }
 		}
         
+		public static TableSchema.Table Programme
+		{
+            get { return DataService.GetSchema("Programme", "ObservationsDB"); }
+		}
+        
 		public static TableSchema.Table Progress
 		{
             get { return DataService.GetSchema("Progress", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table Project
+		{
+            get { return DataService.GetSchema("Project", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table ProjectSite
@@ -328,8 +342,6 @@ namespace SAEON.ObservationsDB.Data
 		public static readonly string VDataSchema = @"vDataSchema";
         
 		public static readonly string VDataSource = @"vDataSource";
-        
-		public static readonly string VDataSourceOrganisation = @"vDataSourceOrganisation";
         
 		public static readonly string VDataSourceTransformation = @"vDataSourceTransformation";
         

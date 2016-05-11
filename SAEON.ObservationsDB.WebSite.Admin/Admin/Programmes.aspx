@@ -1,17 +1,17 @@
-﻿<%@ Page Title="Sites" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Sites.aspx.cs" Inherits="Admin_Sites" %>
+﻿<%@ Page Title="Programmes" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Programmes.aspx.cs" Inherits="Admin_Programmes" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/Sites.js"></script>
+    <script type="text/javascript" src="../JS/Programmes.js"></script>
     <script type="text/javascript" src="../JS/generic.js"></script>
     <script type="text/javascript">
         var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
-            //VisCols.setValue(Ext.encode(ContentPlaceHolder1_SitesGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-            var viscolsNew = makenewJsonForExport(ContentPlaceHolder1_SitesGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            //VisCols.setValue(Ext.encode(ContentPlaceHolder1_ProgrammesGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
+            var viscolsNew = makenewJsonForExport(ContentPlaceHolder1_ProgrammesGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
-            ContentPlaceHolder1_SitesGrid.submitData(false);
+            ContentPlaceHolder1_ProgrammesGrid.submitData(false);
         };
     </script>
 </asp:Content>
@@ -21,35 +21,15 @@
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
-    <ext:Store ID="OrganisationStore" runat="server">
-        <Reader>
-            <ext:JsonReader IDProperty="Id">
-                <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
-                    <ext:RecordField Name="Name" Type="String" />
-                </Fields>
-            </ext:JsonReader>
-        </Reader>
-    </ext:Store>
-    <ext:Store ID="OrganisationRoleStore" runat="server">
-        <Reader>
-            <ext:JsonReader IDProperty="Id">
-                <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
-                    <ext:RecordField Name="Name" Type="String" />
-                </Fields>
-            </ext:JsonReader>
-        </Reader>
-    </ext:Store>
     <ext:Viewport ID="Viewport1" runat="server" Layout="FitLayout">
         <Items>
             <ext:BorderLayout ID="BorderLayout1" runat="server">
                 <Center MarginsSummary="5 0 0 5">
-                    <ext:Panel ID="Panel1" runat="server" Title="Sites" Layout="FitLayout" Hidden="false">
+                    <ext:Panel ID="Panel1" runat="server" Title="Programmes" Layout="FitLayout" Hidden="false">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
-                                    <ext:Button ID="Button1" runat="server" Icon="Add" Text="Add Site">
+                                    <ext:Button ID="Button1" runat="server" Icon="Add" Text="Add Programme">
                                         <ToolTips>
                                             <ext:ToolTip ID="ToolTip1" runat="server" Html="Add" />
                                         </ToolTips>
@@ -75,9 +55,9 @@
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="SitesGrid" runat="server" Border="false">
+                            <ext:GridPanel ID="ProgrammesGrid" runat="server" Border="false">
                                 <Store>
-                                    <ext:Store ID="SitesGridStore" runat="server" RemoteSort="true" OnRefreshData="SitesGridStore_RefreshData" OnSubmitData="SitesGridStore_Submit">
+                                    <ext:Store ID="ProgrammesGridStore" runat="server" RemoteSort="true" OnRefreshData="ProgrammesGridStore_RefreshData" OnSubmitData="ProgrammesGridStore_Submit">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -148,7 +128,7 @@
                         </Items>
                     </ext:Panel>
                 </Center>
-                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
+<%--                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
                     <ext:Panel ID="pnlEast" runat="server" Title="Organisations" Layout="FitLayout" Width="425" ClientIDMode="Static">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar3" runat="server">
@@ -158,7 +138,7 @@
                                             <ext:ToolTip ID="ToolTip3" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{OrganisationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection()){#{OrganisationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
@@ -186,7 +166,7 @@
                                             </ext:JsonReader>
                                         </Reader>
                                         <BaseParams>
-                                            <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection() ? #{SitesGrid}.getSelectionModel().getSelected().id : -1"
+                                            <ext:Parameter Name="ProgrammeID" Value="Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection() ? #{ProgrammesGrid}.getSelectionModel().getSelected().id : -1"
                                                 Mode="Raw" />
                                         </BaseParams>
                                     </ext:Store>
@@ -216,28 +196,28 @@
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
-                </East>
+                </East>--%>
                 <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
-                    <ext:Panel ID="pnlSouth" runat="server" Title="Stations" Layout="FitLayout"
-                        Height="200" ClientIDMode="Static">
+                    <ext:Panel ID="pnlSouth" runat="server" Title="Projects" Layout="FitLayout"
+                        Height="300" ClientIDMode="Static">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar2" runat="server">
                                 <Items>
-                                    <ext:Button ID="btnLinkStation" runat="server" Icon="LinkAdd" Text="Link Stations">
+                                    <ext:Button ID="btnLinkProject" runat="server" Icon="LinkAdd" Text="Link Projects">
                                         <ToolTips>
                                             <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{AvailableStationsStore}.reload();#{AvailableStationsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection()){#{AvailableProjectsStore}.reload();#{AvailableProjectsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="StationsGrid" runat="server" Border="false" ClientIDMode="Static">
+                            <ext:GridPanel ID="ProjectsGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="StationsGridStore" runat="server" OnRefreshData="StationsGridStore_RefreshData">
+                                    <ext:Store ID="ProjectsGridStore" runat="server" OnRefreshData="ProjectsGridStore_RefreshData">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -254,7 +234,7 @@
                                             </ext:JsonReader>
                                         </Reader>
                                         <BaseParams>
-                                            <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection() ? #{SitesGrid}.getSelectionModel().getSelected().id : -1"
+                                            <ext:Parameter Name="ProgrammeID" Value="Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection() ? #{ProgrammesGrid}.getSelectionModel().getSelected().id : -1"
                                                 Mode="Raw" />
                                         </BaseParams>
                                     </ext:Store>
@@ -280,7 +260,7 @@
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
                                 <Listeners>
-                                    <Command Fn="onStationLinkCommand" />
+                                    <Command Fn="onProjectLinkCommand" />
                                 </Listeners>
                             </ext:GridPanel>
                         </Items>
@@ -290,7 +270,7 @@
         </Items>
     </ext:Viewport>
     <ext:Window ID="DetailWindow" runat="server" Width="450" Height="450" Closable="true"
-        Hidden="true" Collapsible="false" Title="Site Detail"
+        Hidden="true" Collapsible="false" Title="Programme Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
@@ -399,7 +379,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="OrganisationLinkWindow" runat="server" Width="450" Height="300" Closable="true"
+<%--    <ext:Window ID="OrganisationLinkWindow" runat="server" Width="450" Height="300" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Organisation"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
@@ -485,17 +465,17 @@
                 </Listeners>
             </ext:FormPanel>
         </Content>
-    </ext:Window>
-    <ext:Window ID="AvailableStationsWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available Stations" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
+    </ext:Window>--%>
+    <ext:Window ID="AvailableProjectsWindow" runat="server" Collapsible="false" Maximizable="false"
+        Title="Available Projects" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
         <Listeners>
-            <Hide Fn="CloseAvailableStations" />
+            <Hide Fn="CloseAvailableProjects" />
         </Listeners>
         <Items>
-            <ext:GridPanel ID="AvailableStationsGrid" runat="server" Header="false" Border="false"
+            <ext:GridPanel ID="AvailableProjectsGrid" runat="server" Header="false" Border="false"
                 ClientIDMode="Static">
                 <Store>
-                    <ext:Store ID="AvailableStationsStore" runat="server" OnRefreshData="AvailableStationsStore_RefreshData">
+                    <ext:Store ID="AvailableProjectsStore" runat="server" OnRefreshData="AvailableProjectsStore_RefreshData">
                         <Proxy>
                             <ext:PageProxy />
                         </Proxy>
@@ -510,7 +490,7 @@
                             </ext:JsonReader>
                         </Reader>
                         <BaseParams>
-                            <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection() ? #{SitesGrid}.getSelectionModel().getSelected().id : -1"
+                            <ext:Parameter Name="ProgrammeID" Value="Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection() ? #{ProgrammesGrid}.getSelectionModel().getSelected().id : -1"
                                 Mode="Raw" />
                         </BaseParams>
                     </ext:Store>
@@ -527,9 +507,9 @@
                     <ext:CheckboxSelectionModel ID="CheckboxSelectionModel1" runat="server" />
                 </SelectionModel>
                 <Buttons>
-                    <ext:Button ID="LinkStations" runat="server" Text="Save" Icon="Accept">
+                    <ext:Button ID="LinkProjects" runat="server" Text="Save" Icon="Accept">
                         <DirectEvents>
-                            <Click OnEvent="LinkStations_Click">
+                            <Click OnEvent="LinkProjects_Click">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>

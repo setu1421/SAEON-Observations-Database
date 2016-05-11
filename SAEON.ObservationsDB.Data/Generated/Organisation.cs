@@ -321,6 +321,10 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
+		public SAEON.ObservationsDB.Data.InstrumentOrganisationCollection InstrumentOrganisationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.InstrumentOrganisationCollection().Where(InstrumentOrganisation.Columns.OrganisationID, Id).Load();
+		}
 		public SAEON.ObservationsDB.Data.ProjectSiteCollection ProjectSiteRecords()
 		{
 			return new SAEON.ObservationsDB.Data.ProjectSiteCollection().Where(ProjectSite.Columns.OrganisationID, Id).Load();
@@ -332,10 +336,6 @@ namespace SAEON.ObservationsDB.Data
 		public SAEON.ObservationsDB.Data.StationOrganisationCollection StationOrganisationRecords()
 		{
 			return new SAEON.ObservationsDB.Data.StationOrganisationCollection().Where(StationOrganisation.Columns.OrganisationID, Id).Load();
-		}
-		public SAEON.ObservationsDB.Data.InstrumentOrganisationCollection InstrumentOrganisationRecords()
-		{
-			return new SAEON.ObservationsDB.Data.InstrumentOrganisationCollection().Where(InstrumentOrganisation.Columns.OrganisationID, Id).Load();
 		}
 		#endregion
 		

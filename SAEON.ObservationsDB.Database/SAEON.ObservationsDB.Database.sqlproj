@@ -548,6 +548,10 @@
     <Build Include="dbo\Tables\Instrument.sql" />
     <Build Include="dbo\Tables\Instrument_Organisation.sql" />
     <Build Include="dbo\Views\vInstrumentOrganisation.sql" />
+    <Build Include="dbo\Tables\Programme.sql" />
+    <Build Include="dbo\Tables\Project.sql" />
+    <Build Include="dbo\Tables\Site_Project.sql" />
+    <Build Include="dbo\Views\vSiteProject.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
@@ -562,6 +566,7 @@
     <None Include="Lab2-SAEON ObservationDB_Imp.publish.xml" />
     <None Include="Lab2-SAEON ObservationDB.publish.xml" />
     <None Include="Lab2-SAEON Observations.publish.xml" />
+    <None Include="Lab2-SAEON ObservationsTest.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SAEON.ObservationsDB.Database.refactorlog" />

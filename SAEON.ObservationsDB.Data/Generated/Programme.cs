@@ -15,23 +15,23 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
 	/// <summary>
-	/// Strongly-typed collection for the OrganisationRole class.
+	/// Strongly-typed collection for the Programme class.
 	/// </summary>
     [Serializable]
-	public partial class OrganisationRoleCollection : ActiveList<OrganisationRole, OrganisationRoleCollection>
+	public partial class ProgrammeCollection : ActiveList<Programme, ProgrammeCollection>
 	{	   
-		public OrganisationRoleCollection() {}
+		public ProgrammeCollection() {}
         
         /// <summary>
 		/// Filters an existing collection based on the set criteria. This is an in-memory filter
 		/// Thanks to developingchris for this!
         /// </summary>
-        /// <returns>OrganisationRoleCollection</returns>
-		public OrganisationRoleCollection Filter()
+        /// <returns>ProgrammeCollection</returns>
+		public ProgrammeCollection Filter()
         {
             for (int i = this.Count - 1; i > -1; i--)
             {
-                OrganisationRole o = this[i];
+                Programme o = this[i];
                 foreach (SubSonic.Where w in this.wheres)
                 {
                     bool remove = false;
@@ -62,14 +62,14 @@ namespace SAEON.ObservationsDB.Data
 		
 	}
 	/// <summary>
-	/// This is an ActiveRecord class which wraps the OrganisationRole table.
+	/// This is an ActiveRecord class which wraps the Programme table.
 	/// </summary>
 	[Serializable]
-	public partial class OrganisationRole : ActiveRecord<OrganisationRole>, IActiveRecord
+	public partial class Programme : ActiveRecord<Programme>, IActiveRecord
 	{
 		#region .ctors and Default Settings
 		
-		public OrganisationRole()
+		public Programme()
 		{
 		  SetSQLProps();
 		  InitSetDefaults();
@@ -78,7 +78,7 @@ namespace SAEON.ObservationsDB.Data
 		
 		private void InitSetDefaults() { SetDefaults(); }
 		
-		public OrganisationRole(bool useDatabaseDefaults)
+		public Programme(bool useDatabaseDefaults)
 		{
 			SetSQLProps();
 			if(useDatabaseDefaults)
@@ -86,14 +86,14 @@ namespace SAEON.ObservationsDB.Data
 			MarkNew();
 		}
         
-		public OrganisationRole(object keyID)
+		public Programme(object keyID)
 		{
 			SetSQLProps();
 			InitSetDefaults();
 			LoadByKey(keyID);
 		}
 		 
-		public OrganisationRole(string columnName, object columnValue)
+		public Programme(string columnName, object columnValue)
 		{
 			SetSQLProps();
 			InitSetDefaults();
@@ -121,7 +121,7 @@ namespace SAEON.ObservationsDB.Data
 			if(!IsSchemaInitialized)
 			{
 				//Schema declaration
-				TableSchema.Table schema = new TableSchema.Table("OrganisationRole", TableType.Table, DataService.GetInstance("ObservationsDB"));
+				TableSchema.Table schema = new TableSchema.Table("Programme", TableType.Table, DataService.GetInstance("ObservationsDB"));
 				schema.Columns = new TableSchema.TableColumnCollection();
 				schema.SchemaName = @"dbo";
 				//columns
@@ -179,6 +179,45 @@ namespace SAEON.ObservationsDB.Data
 				colvarDescription.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarDescription);
 				
+				TableSchema.TableColumn colvarUrl = new TableSchema.TableColumn(schema);
+				colvarUrl.ColumnName = "Url";
+				colvarUrl.DataType = DbType.AnsiString;
+				colvarUrl.MaxLength = 250;
+				colvarUrl.AutoIncrement = false;
+				colvarUrl.IsNullable = true;
+				colvarUrl.IsPrimaryKey = false;
+				colvarUrl.IsForeignKey = false;
+				colvarUrl.IsReadOnly = false;
+				colvarUrl.DefaultSetting = @"";
+				colvarUrl.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUrl);
+				
+				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
+				colvarStartDate.ColumnName = "StartDate";
+				colvarStartDate.DataType = DbType.DateTime;
+				colvarStartDate.MaxLength = 0;
+				colvarStartDate.AutoIncrement = false;
+				colvarStartDate.IsNullable = true;
+				colvarStartDate.IsPrimaryKey = false;
+				colvarStartDate.IsForeignKey = false;
+				colvarStartDate.IsReadOnly = false;
+				colvarStartDate.DefaultSetting = @"";
+				colvarStartDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarStartDate);
+				
+				TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
+				colvarEndDate.ColumnName = "EndDate";
+				colvarEndDate.DataType = DbType.DateTime;
+				colvarEndDate.MaxLength = 0;
+				colvarEndDate.AutoIncrement = false;
+				colvarEndDate.IsNullable = true;
+				colvarEndDate.IsPrimaryKey = false;
+				colvarEndDate.IsForeignKey = false;
+				colvarEndDate.IsReadOnly = false;
+				colvarEndDate.DefaultSetting = @"";
+				colvarEndDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarEndDate);
+				
 				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
 				colvarUserId.ColumnName = "UserId";
 				colvarUserId.DataType = DbType.Guid;
@@ -193,10 +232,38 @@ namespace SAEON.ObservationsDB.Data
 					colvarUserId.ForeignKeyTableName = "aspnet_Users";
 				schema.Columns.Add(colvarUserId);
 				
+				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+				colvarAddedAt.ColumnName = "AddedAt";
+				colvarAddedAt.DataType = DbType.DateTime;
+				colvarAddedAt.MaxLength = 0;
+				colvarAddedAt.AutoIncrement = false;
+				colvarAddedAt.IsNullable = true;
+				colvarAddedAt.IsPrimaryKey = false;
+				colvarAddedAt.IsForeignKey = false;
+				colvarAddedAt.IsReadOnly = false;
+				
+						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedAt);
+				
+				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+				colvarUpdatedAt.ColumnName = "UpdatedAt";
+				colvarUpdatedAt.DataType = DbType.DateTime;
+				colvarUpdatedAt.MaxLength = 0;
+				colvarUpdatedAt.AutoIncrement = false;
+				colvarUpdatedAt.IsNullable = true;
+				colvarUpdatedAt.IsPrimaryKey = false;
+				colvarUpdatedAt.IsForeignKey = false;
+				colvarUpdatedAt.IsReadOnly = false;
+				
+						colvarUpdatedAt.DefaultSetting = @"(getdate())";
+				colvarUpdatedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUpdatedAt);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
-				DataService.Providers["ObservationsDB"].AddSchema("OrganisationRole",schema);
+				DataService.Providers["ObservationsDB"].AddSchema("Programme",schema);
 			}
 		}
 		#endregion
@@ -235,12 +302,52 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.Description, value); }
 		}
 		  
+		[XmlAttribute("Url")]
+		[Bindable(true)]
+		public string Url 
+		{
+			get { return GetColumnValue<string>(Columns.Url); }
+			set { SetColumnValue(Columns.Url, value); }
+		}
+		  
+		[XmlAttribute("StartDate")]
+		[Bindable(true)]
+		public DateTime? StartDate 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.StartDate); }
+			set { SetColumnValue(Columns.StartDate, value); }
+		}
+		  
+		[XmlAttribute("EndDate")]
+		[Bindable(true)]
+		public DateTime? EndDate 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
+			set { SetColumnValue(Columns.EndDate, value); }
+		}
+		  
 		[XmlAttribute("UserId")]
 		[Bindable(true)]
 		public Guid UserId 
 		{
 			get { return GetColumnValue<Guid>(Columns.UserId); }
 			set { SetColumnValue(Columns.UserId, value); }
+		}
+		  
+		[XmlAttribute("AddedAt")]
+		[Bindable(true)]
+		public DateTime? AddedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
+			set { SetColumnValue(Columns.AddedAt, value); }
+		}
+		  
+		[XmlAttribute("UpdatedAt")]
+		[Bindable(true)]
+		public DateTime? UpdatedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.UpdatedAt); }
+			set { SetColumnValue(Columns.UpdatedAt, value); }
 		}
 		
 		#endregion
@@ -256,17 +363,9 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.InstrumentOrganisationCollection InstrumentOrganisationRecords()
+		public SAEON.ObservationsDB.Data.ProjectCollection ProjectRecords()
 		{
-			return new SAEON.ObservationsDB.Data.InstrumentOrganisationCollection().Where(InstrumentOrganisation.Columns.OrganisationRoleID, Id).Load();
-		}
-		public SAEON.ObservationsDB.Data.SiteOrganisationCollection SiteOrganisationRecords()
-		{
-			return new SAEON.ObservationsDB.Data.SiteOrganisationCollection().Where(SiteOrganisation.Columns.OrganisationRoleID, Id).Load();
-		}
-		public SAEON.ObservationsDB.Data.StationOrganisationCollection StationOrganisationRecords()
-		{
-			return new SAEON.ObservationsDB.Data.StationOrganisationCollection().Where(StationOrganisation.Columns.OrganisationRoleID, Id).Load();
+			return new SAEON.ObservationsDB.Data.ProjectCollection().Where(Project.Columns.ProgrammeID, Id).Load();
 		}
 		#endregion
 		
@@ -275,7 +374,7 @@ namespace SAEON.ObservationsDB.Data
 		#region ForeignKey Properties
 		
 		/// <summary>
-		/// Returns a AspnetUser ActiveRecord object related to this OrganisationRole
+		/// Returns a AspnetUser ActiveRecord object related to this Programme
 		/// 
 		/// </summary>
 		public SAEON.ObservationsDB.Data.AspnetUser AspnetUser
@@ -299,9 +398,9 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,Guid varUserId)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
-			OrganisationRole item = new OrganisationRole();
+			Programme item = new Programme();
 			
 			item.Id = varId;
 			
@@ -311,7 +410,17 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.Description = varDescription;
 			
+			item.Url = varUrl;
+			
+			item.StartDate = varStartDate;
+			
+			item.EndDate = varEndDate;
+			
 			item.UserId = varUserId;
+			
+			item.AddedAt = varAddedAt;
+			
+			item.UpdatedAt = varUpdatedAt;
 			
 		
 			if (System.Web.HttpContext.Current != null)
@@ -323,9 +432,9 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,Guid varUserId)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
-			OrganisationRole item = new OrganisationRole();
+			Programme item = new Programme();
 			
 				item.Id = varId;
 			
@@ -335,7 +444,17 @@ namespace SAEON.ObservationsDB.Data
 			
 				item.Description = varDescription;
 			
+				item.Url = varUrl;
+			
+				item.StartDate = varStartDate;
+			
+				item.EndDate = varEndDate;
+			
 				item.UserId = varUserId;
+			
+				item.AddedAt = varAddedAt;
+			
+				item.UpdatedAt = varUpdatedAt;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -378,9 +497,44 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn UrlColumn
         {
             get { return Schema.Columns[4]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn StartDateColumn
+        {
+            get { return Schema.Columns[5]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn EndDateColumn
+        {
+            get { return Schema.Columns[6]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UserIdColumn
+        {
+            get { return Schema.Columns[7]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn AddedAtColumn
+        {
+            get { return Schema.Columns[8]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[9]; }
         }
         
         
@@ -393,7 +547,12 @@ namespace SAEON.ObservationsDB.Data
 			 public static string Code = @"Code";
 			 public static string Name = @"Name";
 			 public static string Description = @"Description";
+			 public static string Url = @"Url";
+			 public static string StartDate = @"StartDate";
+			 public static string EndDate = @"EndDate";
 			 public static string UserId = @"UserId";
+			 public static string AddedAt = @"AddedAt";
+			 public static string UpdatedAt = @"UpdatedAt";
 						
 		}
 		#endregion

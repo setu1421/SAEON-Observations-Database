@@ -126,9 +126,13 @@
     <Compile Include="Generated\PhenomenonOfferingController.cs" />
     <Compile Include="Generated\PhenomenonUOM.cs" />
     <Compile Include="Generated\PhenomenonUOMController.cs" />
+    <Compile Include="Generated\Programme.cs" />
+    <Compile Include="Generated\ProgrammeController.cs" />
     <Compile Include="Generated\Progress.cs" />
     <Compile Include="Generated\ProgressController.cs" />
     <Compile Include="Generated\ProgressProgressResolved.cs" />
+    <Compile Include="Generated\Project.cs" />
+    <Compile Include="Generated\ProjectController.cs" />
     <Compile Include="Generated\ProjectSite.cs" />
     <Compile Include="Generated\ProjectSiteController.cs" />
     <Compile Include="Generated\RoleModule.cs" />

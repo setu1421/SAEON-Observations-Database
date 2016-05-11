@@ -277,6 +277,10 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
+		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
+		{
+			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.PhenomenonID, Id).Load();
+		}
 		public SAEON.ObservationsDB.Data.PhenomenonUOMCollection PhenomenonUOMRecords()
 		{
 			return new SAEON.ObservationsDB.Data.PhenomenonUOMCollection().Where(PhenomenonUOM.Columns.PhenomenonID, Id).Load();
@@ -288,10 +292,6 @@ namespace SAEON.ObservationsDB.Data
 		public SAEON.ObservationsDB.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
 		{
 			return new SAEON.ObservationsDB.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.PhenomenonID, Id).Load();
-		}
-		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
-		{
-			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.PhenomenonID, Id).Load();
 		}
 		#endregion
 		

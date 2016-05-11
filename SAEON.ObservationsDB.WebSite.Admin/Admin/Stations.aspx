@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Stations.aspx.cs" Inherits="Admin_Stations" %>
+﻿<%@ Page Title="Stations" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Stations.aspx.cs" Inherits="Admin_Stations" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript" src="../JS/Stations.js"></script>

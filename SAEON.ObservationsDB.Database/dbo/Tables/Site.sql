@@ -13,12 +13,18 @@ CREATE TABLE [dbo].[Site]
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Site_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Site_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.0.3 20160421 TimPN
-    CONSTRAINT [PK_Site] PRIMARY KEY CLUSTERED ([ID]),
+--> Changed 2.0.0.5 20160411 TimPN
+--    CONSTRAINT [PK_Site] PRIMARY KEY CLUSTERED ([ID]),
+    CONSTRAINT [PK_Site] PRIMARY KEY NONCLUSTERED ([ID]),
+--< Changed 2.0.0.5 20160411 TimPN
     CONSTRAINT [UX_Site_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_Site_Name] UNIQUE ([Name]),
     CONSTRAINT [FK_Site_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
-
+--> Added 2.0.0.5 20160411 TimPN
+GO
+CREATE CLUSTERED INDEX [CX_Site] ON [dbo].[Site] ([AddedAt])
+--< Added 2.0.0.5 20160411 TimPN
 GO
 CREATE INDEX [IX_Site_UserId] ON [dbo].[Site] ([UserId])
 --< Added 2.0.0.1 20160406 TimPN
