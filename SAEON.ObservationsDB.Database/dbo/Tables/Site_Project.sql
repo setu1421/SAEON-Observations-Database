@@ -2,25 +2,25 @@
 CREATE TABLE [dbo].[Site_Project]
 (
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Site_Project_ID] DEFAULT newid(), 
-    [ProjectID] UNIQUEIDENTIFIER NOT NULL,
     [SiteID] UNIQUEIDENTIFIER NOT NULL,
+    [ProjectID] UNIQUEIDENTIFIER NOT NULL,
     [StartDate] DATETIME NULL,
     [EndDate] DATETIME NULL,
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Site_Project_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Site_Project__UpdatedAt] DEFAULT GetDate(), 
     CONSTRAINT [PK_Site_Project] PRIMARY KEY NONCLUSTERED ([ID]),
-    CONSTRAINT [UX_Site_Project] UNIQUE ([ProjectID],[SiteID],[StartDate],[EndDate]),
-    CONSTRAINT [FK_Site_Project_ProjectID] FOREIGN KEY ([ProjectID]) REFERENCES [dbo].[Project] ([ID]),
+    CONSTRAINT [UX_Site_Project] UNIQUE ([SiteID],[ProjectID],[StartDate],[EndDate]),
     CONSTRAINT [FK_Site_Project_SiteID] FOREIGN KEY ([SiteID]) REFERENCES [dbo].[Site] ([ID]),
+    CONSTRAINT [FK_Site_Project_ProjectID] FOREIGN KEY ([ProjectID]) REFERENCES [dbo].[Project] ([ID]),
     CONSTRAINT [FK_Site_Project_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
 CREATE CLUSTERED INDEX [CX_Site_Project] ON [dbo].[Site_Project] ([AddedAt])
 GO
-CREATE INDEX [IX_Site_Project_ProjectID] ON [dbo].[Site_Project] ([ProjectID])
-GO
 CREATE INDEX [IX_Site_Project_SiteID] ON [dbo].[Site_Project] ([SiteID])
+GO
+CREATE INDEX [IX_Site_Project_ProjectID] ON [dbo].[Site_Project] ([ProjectID])
 GO
 CREATE INDEX [IX_Site_Project_UserId] ON [dbo].[Site_Project] ([UserId])
 GO

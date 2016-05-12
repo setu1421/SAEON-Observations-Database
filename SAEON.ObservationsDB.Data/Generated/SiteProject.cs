@@ -140,20 +140,6 @@ namespace SAEON.ObservationsDB.Data
 				colvarId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarId);
 				
-				TableSchema.TableColumn colvarProjectID = new TableSchema.TableColumn(schema);
-				colvarProjectID.ColumnName = "ProjectID";
-				colvarProjectID.DataType = DbType.Guid;
-				colvarProjectID.MaxLength = 0;
-				colvarProjectID.AutoIncrement = false;
-				colvarProjectID.IsNullable = false;
-				colvarProjectID.IsPrimaryKey = false;
-				colvarProjectID.IsForeignKey = true;
-				colvarProjectID.IsReadOnly = false;
-				colvarProjectID.DefaultSetting = @"";
-				
-					colvarProjectID.ForeignKeyTableName = "Project";
-				schema.Columns.Add(colvarProjectID);
-				
 				TableSchema.TableColumn colvarSiteID = new TableSchema.TableColumn(schema);
 				colvarSiteID.ColumnName = "SiteID";
 				colvarSiteID.DataType = DbType.Guid;
@@ -167,6 +153,20 @@ namespace SAEON.ObservationsDB.Data
 				
 					colvarSiteID.ForeignKeyTableName = "Site";
 				schema.Columns.Add(colvarSiteID);
+				
+				TableSchema.TableColumn colvarProjectID = new TableSchema.TableColumn(schema);
+				colvarProjectID.ColumnName = "ProjectID";
+				colvarProjectID.DataType = DbType.Guid;
+				colvarProjectID.MaxLength = 0;
+				colvarProjectID.AutoIncrement = false;
+				colvarProjectID.IsNullable = false;
+				colvarProjectID.IsPrimaryKey = false;
+				colvarProjectID.IsForeignKey = true;
+				colvarProjectID.IsReadOnly = false;
+				colvarProjectID.DefaultSetting = @"";
+				
+					colvarProjectID.ForeignKeyTableName = "Project";
+				schema.Columns.Add(colvarProjectID);
 				
 				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
 				colvarStartDate.ColumnName = "StartDate";
@@ -254,20 +254,20 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.Id, value); }
 		}
 		  
-		[XmlAttribute("ProjectID")]
-		[Bindable(true)]
-		public Guid ProjectID 
-		{
-			get { return GetColumnValue<Guid>(Columns.ProjectID); }
-			set { SetColumnValue(Columns.ProjectID, value); }
-		}
-		  
 		[XmlAttribute("SiteID")]
 		[Bindable(true)]
 		public Guid SiteID 
 		{
 			get { return GetColumnValue<Guid>(Columns.SiteID); }
 			set { SetColumnValue(Columns.SiteID, value); }
+		}
+		  
+		[XmlAttribute("ProjectID")]
+		[Bindable(true)]
+		public Guid ProjectID 
+		{
+			get { return GetColumnValue<Guid>(Columns.ProjectID); }
+			set { SetColumnValue(Columns.ProjectID, value); }
 		}
 		  
 		[XmlAttribute("StartDate")]
@@ -364,15 +364,15 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varProjectID,Guid varSiteID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varSiteID,Guid varProjectID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			SiteProject item = new SiteProject();
 			
 			item.Id = varId;
 			
-			item.ProjectID = varProjectID;
-			
 			item.SiteID = varSiteID;
+			
+			item.ProjectID = varProjectID;
 			
 			item.StartDate = varStartDate;
 			
@@ -394,15 +394,15 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varProjectID,Guid varSiteID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varSiteID,Guid varProjectID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			SiteProject item = new SiteProject();
 			
 				item.Id = varId;
 			
-				item.ProjectID = varProjectID;
-			
 				item.SiteID = varSiteID;
+			
+				item.ProjectID = varProjectID;
 			
 				item.StartDate = varStartDate;
 			
@@ -434,14 +434,14 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn ProjectIDColumn
+        public static TableSchema.TableColumn SiteIDColumn
         {
             get { return Schema.Columns[1]; }
         }
         
         
         
-        public static TableSchema.TableColumn SiteIDColumn
+        public static TableSchema.TableColumn ProjectIDColumn
         {
             get { return Schema.Columns[2]; }
         }
@@ -488,8 +488,8 @@ namespace SAEON.ObservationsDB.Data
 		public struct Columns
 		{
 			 public static string Id = @"ID";
-			 public static string ProjectID = @"ProjectID";
 			 public static string SiteID = @"SiteID";
+			 public static string ProjectID = @"ProjectID";
 			 public static string StartDate = @"StartDate";
 			 public static string EndDate = @"EndDate";
 			 public static string UserId = @"UserId";

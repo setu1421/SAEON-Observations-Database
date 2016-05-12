@@ -128,6 +128,8 @@
     <Compile Include="Generated\PhenomenonUOMController.cs" />
     <Compile Include="Generated\Programme.cs" />
     <Compile Include="Generated\ProgrammeController.cs" />
+    <Compile Include="Generated\ProgrammeProject.cs" />
+    <Compile Include="Generated\ProgrammeProjectController.cs" />
     <Compile Include="Generated\Progress.cs" />
     <Compile Include="Generated\ProgressController.cs" />
     <Compile Include="Generated\ProgressProgressResolved.cs" />
@@ -171,6 +173,7 @@
     <Compile Include="Generated\VModuleRoleModule.cs" />
     <Compile Include="Generated\VObservation.cs" />
     <Compile Include="Generated\VObservationRole.cs" />
+    <Compile Include="Generated\VProgrammeProject.cs" />
     <Compile Include="Generated\VProjectSite.cs" />
     <Compile Include="Generated\VSensor.cs" />
     <Compile Include="Generated\VSiteOrganisation.cs" />

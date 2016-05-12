@@ -15,6 +15,8 @@ public partial class Admin_Programmes : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
+            ProjectStore.DataSource = new ProjectCollection().OrderByAsc(Project.Columns.Name).Load();
+            ProjectStore.DataBind();
         }
     }
 
@@ -119,7 +121,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
         if (e.Parameters["ProgrammeID"] != null && e.Parameters["ProgrammeID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["ProgrammeID"].ToString());
-            ProjectCollection col = new ProjectCollection()
+            VProjectCollection col = new ProjectCollection()
                 .Where(Project.Columns.ProgrammeID, Id)
                 .OrderByAsc(Project.Columns.Code)
                 .Load();

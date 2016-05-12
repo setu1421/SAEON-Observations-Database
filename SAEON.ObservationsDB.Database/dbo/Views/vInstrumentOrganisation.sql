@@ -1,10 +1,14 @@
-﻿CREATE VIEW [dbo].[vInstrumentOrganisation] AS 
+﻿--> Added 2.0.0.5 20160512 TimPN
+CREATE VIEW [dbo].[vInstrumentOrganisation] AS 
 SELECT 
-  so.*, o.Name OrganisationName, r.Name [OrganisationRoleName]
+  src.*,
+  [Organisation].Name OrganisationName, 
+  [OrganisationRole].Name [OrganisationRoleName]
 FROM 
-  [Instrument_Organisation] so
-  inner join [Organisation] o
-    on (so.OrganisationID = o.ID)
-  inner join [OrganisationRole] r
-    on (so.OrganisationRoleID = r.ID)
+  [Instrument_Organisation] src
+  inner join [Organisation]
+    on (src.OrganisationID = [Organisation].ID)
+  inner join [OrganisationRole]
+    on (src.OrganisationRoleID = [OrganisationRole].ID)
+--< Added 2.0.0.5 20160512 TimPN
 

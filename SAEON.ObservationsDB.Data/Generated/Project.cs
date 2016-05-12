@@ -385,6 +385,10 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
+		public SAEON.ObservationsDB.Data.ProgrammeProjectCollection ProgrammeProjectRecords()
+		{
+			return new SAEON.ObservationsDB.Data.ProgrammeProjectCollection().Where(ProgrammeProject.Columns.ProjectID, Id).Load();
+		}
 		public SAEON.ObservationsDB.Data.SiteProjectCollection SiteProjectRecords()
 		{
 			return new SAEON.ObservationsDB.Data.SiteProjectCollection().Where(SiteProject.Columns.ProjectID, Id).Load();

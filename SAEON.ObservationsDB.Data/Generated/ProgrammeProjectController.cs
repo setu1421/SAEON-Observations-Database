@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
     /// <summary>
-    /// Controller class for Site_Project
+    /// Controller class for Programme_Project
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class SiteProjectController
+    public partial class ProgrammeProjectController
     {
         // Preload our schema..
-        SiteProject thisSchemaLoad = new SiteProject();
+        ProgrammeProject thisSchemaLoad = new ProgrammeProject();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.ObservationsDB.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public SiteProjectCollection FetchAll()
+        public ProgrammeProjectCollection FetchAll()
         {
-            SiteProjectCollection coll = new SiteProjectCollection();
-            Query qry = new Query(SiteProject.Schema);
+            ProgrammeProjectCollection coll = new ProgrammeProjectCollection();
+            Query qry = new Query(ProgrammeProject.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public SiteProjectCollection FetchByID(object Id)
+        public ProgrammeProjectCollection FetchByID(object Id)
         {
-            SiteProjectCollection coll = new SiteProjectCollection().Where("ID", Id).Load();
+            ProgrammeProjectCollection coll = new ProgrammeProjectCollection().Where("ID", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public SiteProjectCollection FetchByQuery(Query qry)
+        public ProgrammeProjectCollection FetchByQuery(Query qry)
         {
-            SiteProjectCollection coll = new SiteProjectCollection();
+            ProgrammeProjectCollection coll = new ProgrammeProjectCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
         public bool Delete(object Id)
         {
-            return (SiteProject.Delete(Id) == 1);
+            return (ProgrammeProject.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
         public bool Destroy(object Id)
         {
-            return (SiteProject.Destroy(Id) == 1);
+            return (ProgrammeProject.Destroy(Id) == 1);
         }
         
         
@@ -80,13 +80,13 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid SiteID,Guid ProjectID,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,Guid ProgrammeID,Guid ProjectID,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
-		    SiteProject item = new SiteProject();
+		    ProgrammeProject item = new ProgrammeProject();
 		    
             item.Id = Id;
             
-            item.SiteID = SiteID;
+            item.ProgrammeID = ProgrammeID;
             
             item.ProjectID = ProjectID;
             
@@ -108,15 +108,15 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid SiteID,Guid ProjectID,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,Guid ProgrammeID,Guid ProjectID,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
-		    SiteProject item = new SiteProject();
+		    ProgrammeProject item = new ProgrammeProject();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
 			item.Id = Id;
 				
-			item.SiteID = SiteID;
+			item.ProgrammeID = ProgrammeID;
 				
 			item.ProjectID = ProjectID;
 				

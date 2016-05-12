@@ -3,12 +3,12 @@ CREATE VIEW [dbo].[vSiteProject]
 AS
 SELECT 
   src.*, 
-  p.Name ProjectName,
-  s.Name SiteName
+  [Project].Name ProjectName,
+  [Site].Name SiteName
 FROM 
   [Site_Project] src
-  inner join [Project] p
-    on (src.ProjectID = p.ID)
-  inner join [Site] s
-    on (src.SiteID = s.ID)
+  inner join [Project]
+    on (src.ProjectID = [Project].ID)
+  inner join [Site]
+    on (src.SiteID = [Site].ID)
 --< Added 2.0.0.5 20160512 TimPN

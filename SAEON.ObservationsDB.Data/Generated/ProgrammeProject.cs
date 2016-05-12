@@ -15,23 +15,23 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
 	/// <summary>
-	/// Strongly-typed collection for the Programme class.
+	/// Strongly-typed collection for the ProgrammeProject class.
 	/// </summary>
     [Serializable]
-	public partial class ProgrammeCollection : ActiveList<Programme, ProgrammeCollection>
+	public partial class ProgrammeProjectCollection : ActiveList<ProgrammeProject, ProgrammeProjectCollection>
 	{	   
-		public ProgrammeCollection() {}
+		public ProgrammeProjectCollection() {}
         
         /// <summary>
 		/// Filters an existing collection based on the set criteria. This is an in-memory filter
 		/// Thanks to developingchris for this!
         /// </summary>
-        /// <returns>ProgrammeCollection</returns>
-		public ProgrammeCollection Filter()
+        /// <returns>ProgrammeProjectCollection</returns>
+		public ProgrammeProjectCollection Filter()
         {
             for (int i = this.Count - 1; i > -1; i--)
             {
-                Programme o = this[i];
+                ProgrammeProject o = this[i];
                 foreach (SubSonic.Where w in this.wheres)
                 {
                     bool remove = false;
@@ -62,14 +62,14 @@ namespace SAEON.ObservationsDB.Data
 		
 	}
 	/// <summary>
-	/// This is an ActiveRecord class which wraps the Programme table.
+	/// This is an ActiveRecord class which wraps the Programme_Project table.
 	/// </summary>
 	[Serializable]
-	public partial class Programme : ActiveRecord<Programme>, IActiveRecord
+	public partial class ProgrammeProject : ActiveRecord<ProgrammeProject>, IActiveRecord
 	{
 		#region .ctors and Default Settings
 		
-		public Programme()
+		public ProgrammeProject()
 		{
 		  SetSQLProps();
 		  InitSetDefaults();
@@ -78,7 +78,7 @@ namespace SAEON.ObservationsDB.Data
 		
 		private void InitSetDefaults() { SetDefaults(); }
 		
-		public Programme(bool useDatabaseDefaults)
+		public ProgrammeProject(bool useDatabaseDefaults)
 		{
 			SetSQLProps();
 			if(useDatabaseDefaults)
@@ -86,14 +86,14 @@ namespace SAEON.ObservationsDB.Data
 			MarkNew();
 		}
         
-		public Programme(object keyID)
+		public ProgrammeProject(object keyID)
 		{
 			SetSQLProps();
 			InitSetDefaults();
 			LoadByKey(keyID);
 		}
 		 
-		public Programme(string columnName, object columnValue)
+		public ProgrammeProject(string columnName, object columnValue)
 		{
 			SetSQLProps();
 			InitSetDefaults();
@@ -121,7 +121,7 @@ namespace SAEON.ObservationsDB.Data
 			if(!IsSchemaInitialized)
 			{
 				//Schema declaration
-				TableSchema.Table schema = new TableSchema.Table("Programme", TableType.Table, DataService.GetInstance("ObservationsDB"));
+				TableSchema.Table schema = new TableSchema.Table("Programme_Project", TableType.Table, DataService.GetInstance("ObservationsDB"));
 				schema.Columns = new TableSchema.TableColumnCollection();
 				schema.SchemaName = @"dbo";
 				//columns
@@ -140,57 +140,33 @@ namespace SAEON.ObservationsDB.Data
 				colvarId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarId);
 				
-				TableSchema.TableColumn colvarCode = new TableSchema.TableColumn(schema);
-				colvarCode.ColumnName = "Code";
-				colvarCode.DataType = DbType.AnsiString;
-				colvarCode.MaxLength = 50;
-				colvarCode.AutoIncrement = false;
-				colvarCode.IsNullable = false;
-				colvarCode.IsPrimaryKey = false;
-				colvarCode.IsForeignKey = false;
-				colvarCode.IsReadOnly = false;
-				colvarCode.DefaultSetting = @"";
-				colvarCode.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarCode);
+				TableSchema.TableColumn colvarProgrammeID = new TableSchema.TableColumn(schema);
+				colvarProgrammeID.ColumnName = "ProgrammeID";
+				colvarProgrammeID.DataType = DbType.Guid;
+				colvarProgrammeID.MaxLength = 0;
+				colvarProgrammeID.AutoIncrement = false;
+				colvarProgrammeID.IsNullable = false;
+				colvarProgrammeID.IsPrimaryKey = false;
+				colvarProgrammeID.IsForeignKey = true;
+				colvarProgrammeID.IsReadOnly = false;
+				colvarProgrammeID.DefaultSetting = @"";
 				
-				TableSchema.TableColumn colvarName = new TableSchema.TableColumn(schema);
-				colvarName.ColumnName = "Name";
-				colvarName.DataType = DbType.AnsiString;
-				colvarName.MaxLength = 150;
-				colvarName.AutoIncrement = false;
-				colvarName.IsNullable = false;
-				colvarName.IsPrimaryKey = false;
-				colvarName.IsForeignKey = false;
-				colvarName.IsReadOnly = false;
-				colvarName.DefaultSetting = @"";
-				colvarName.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarName);
+					colvarProgrammeID.ForeignKeyTableName = "Programme";
+				schema.Columns.Add(colvarProgrammeID);
 				
-				TableSchema.TableColumn colvarDescription = new TableSchema.TableColumn(schema);
-				colvarDescription.ColumnName = "Description";
-				colvarDescription.DataType = DbType.AnsiString;
-				colvarDescription.MaxLength = 5000;
-				colvarDescription.AutoIncrement = false;
-				colvarDescription.IsNullable = true;
-				colvarDescription.IsPrimaryKey = false;
-				colvarDescription.IsForeignKey = false;
-				colvarDescription.IsReadOnly = false;
-				colvarDescription.DefaultSetting = @"";
-				colvarDescription.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarDescription);
+				TableSchema.TableColumn colvarProjectID = new TableSchema.TableColumn(schema);
+				colvarProjectID.ColumnName = "ProjectID";
+				colvarProjectID.DataType = DbType.Guid;
+				colvarProjectID.MaxLength = 0;
+				colvarProjectID.AutoIncrement = false;
+				colvarProjectID.IsNullable = false;
+				colvarProjectID.IsPrimaryKey = false;
+				colvarProjectID.IsForeignKey = true;
+				colvarProjectID.IsReadOnly = false;
+				colvarProjectID.DefaultSetting = @"";
 				
-				TableSchema.TableColumn colvarUrl = new TableSchema.TableColumn(schema);
-				colvarUrl.ColumnName = "Url";
-				colvarUrl.DataType = DbType.AnsiString;
-				colvarUrl.MaxLength = 250;
-				colvarUrl.AutoIncrement = false;
-				colvarUrl.IsNullable = true;
-				colvarUrl.IsPrimaryKey = false;
-				colvarUrl.IsForeignKey = false;
-				colvarUrl.IsReadOnly = false;
-				colvarUrl.DefaultSetting = @"";
-				colvarUrl.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarUrl);
+					colvarProjectID.ForeignKeyTableName = "Project";
+				schema.Columns.Add(colvarProjectID);
 				
 				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
 				colvarStartDate.ColumnName = "StartDate";
@@ -263,7 +239,7 @@ namespace SAEON.ObservationsDB.Data
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
-				DataService.Providers["ObservationsDB"].AddSchema("Programme",schema);
+				DataService.Providers["ObservationsDB"].AddSchema("Programme_Project",schema);
 			}
 		}
 		#endregion
@@ -278,36 +254,20 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.Id, value); }
 		}
 		  
-		[XmlAttribute("Code")]
+		[XmlAttribute("ProgrammeID")]
 		[Bindable(true)]
-		public string Code 
+		public Guid ProgrammeID 
 		{
-			get { return GetColumnValue<string>(Columns.Code); }
-			set { SetColumnValue(Columns.Code, value); }
+			get { return GetColumnValue<Guid>(Columns.ProgrammeID); }
+			set { SetColumnValue(Columns.ProgrammeID, value); }
 		}
 		  
-		[XmlAttribute("Name")]
+		[XmlAttribute("ProjectID")]
 		[Bindable(true)]
-		public string Name 
+		public Guid ProjectID 
 		{
-			get { return GetColumnValue<string>(Columns.Name); }
-			set { SetColumnValue(Columns.Name, value); }
-		}
-		  
-		[XmlAttribute("Description")]
-		[Bindable(true)]
-		public string Description 
-		{
-			get { return GetColumnValue<string>(Columns.Description); }
-			set { SetColumnValue(Columns.Description, value); }
-		}
-		  
-		[XmlAttribute("Url")]
-		[Bindable(true)]
-		public string Url 
-		{
-			get { return GetColumnValue<string>(Columns.Url); }
-			set { SetColumnValue(Columns.Url, value); }
+			get { return GetColumnValue<Guid>(Columns.ProjectID); }
+			set { SetColumnValue(Columns.ProjectID, value); }
 		}
 		  
 		[XmlAttribute("StartDate")]
@@ -353,38 +313,40 @@ namespace SAEON.ObservationsDB.Data
 		#endregion
 		
 		
-		#region PrimaryKey Methods		
-		
-        protected override void SetPrimaryKey(object oValue)
-        {
-            base.SetPrimaryKey(oValue);
-            
-            SetPKValues();
-        }
-        
-		
-		public SAEON.ObservationsDB.Data.ProgrammeProjectCollection ProgrammeProjectRecords()
-		{
-			return new SAEON.ObservationsDB.Data.ProgrammeProjectCollection().Where(ProgrammeProject.Columns.ProgrammeID, Id).Load();
-		}
-		public SAEON.ObservationsDB.Data.ProjectCollection ProjectRecords()
-		{
-			return new SAEON.ObservationsDB.Data.ProjectCollection().Where(Project.Columns.ProgrammeID, Id).Load();
-		}
-		#endregion
-		
 			
 		
 		#region ForeignKey Properties
 		
 		/// <summary>
-		/// Returns a AspnetUser ActiveRecord object related to this Programme
+		/// Returns a AspnetUser ActiveRecord object related to this ProgrammeProject
 		/// 
 		/// </summary>
 		public SAEON.ObservationsDB.Data.AspnetUser AspnetUser
 		{
 			get { return SAEON.ObservationsDB.Data.AspnetUser.FetchByID(this.UserId); }
 			set { SetColumnValue("UserId", value.UserId); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a Programme ActiveRecord object related to this ProgrammeProject
+		/// 
+		/// </summary>
+		public SAEON.ObservationsDB.Data.Programme Programme
+		{
+			get { return SAEON.ObservationsDB.Data.Programme.FetchByID(this.ProgrammeID); }
+			set { SetColumnValue("ProgrammeID", value.Id); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a Project ActiveRecord object related to this ProgrammeProject
+		/// 
+		/// </summary>
+		public SAEON.ObservationsDB.Data.Project Project
+		{
+			get { return SAEON.ObservationsDB.Data.Project.FetchByID(this.ProjectID); }
+			set { SetColumnValue("ProjectID", value.Id); }
 		}
 		
 		
@@ -402,19 +364,15 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varProgrammeID,Guid varProjectID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
-			Programme item = new Programme();
+			ProgrammeProject item = new ProgrammeProject();
 			
 			item.Id = varId;
 			
-			item.Code = varCode;
+			item.ProgrammeID = varProgrammeID;
 			
-			item.Name = varName;
-			
-			item.Description = varDescription;
-			
-			item.Url = varUrl;
+			item.ProjectID = varProjectID;
 			
 			item.StartDate = varStartDate;
 			
@@ -436,19 +394,15 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varProgrammeID,Guid varProjectID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
-			Programme item = new Programme();
+			ProgrammeProject item = new ProgrammeProject();
 			
 				item.Id = varId;
 			
-				item.Code = varCode;
+				item.ProgrammeID = varProgrammeID;
 			
-				item.Name = varName;
-			
-				item.Description = varDescription;
-			
-				item.Url = varUrl;
+				item.ProjectID = varProjectID;
 			
 				item.StartDate = varStartDate;
 			
@@ -480,65 +434,51 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn CodeColumn
+        public static TableSchema.TableColumn ProgrammeIDColumn
         {
             get { return Schema.Columns[1]; }
         }
         
         
         
-        public static TableSchema.TableColumn NameColumn
+        public static TableSchema.TableColumn ProjectIDColumn
         {
             get { return Schema.Columns[2]; }
         }
         
         
         
-        public static TableSchema.TableColumn DescriptionColumn
+        public static TableSchema.TableColumn StartDateColumn
         {
             get { return Schema.Columns[3]; }
         }
         
         
         
-        public static TableSchema.TableColumn UrlColumn
+        public static TableSchema.TableColumn EndDateColumn
         {
             get { return Schema.Columns[4]; }
         }
         
         
         
-        public static TableSchema.TableColumn StartDateColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[5]; }
         }
         
         
         
-        public static TableSchema.TableColumn EndDateColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[6]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
-        {
-            get { return Schema.Columns[7]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn AddedAtColumn
-        {
-            get { return Schema.Columns[8]; }
-        }
-        
-        
-        
         public static TableSchema.TableColumn UpdatedAtColumn
         {
-            get { return Schema.Columns[9]; }
+            get { return Schema.Columns[7]; }
         }
         
         
@@ -548,10 +488,8 @@ namespace SAEON.ObservationsDB.Data
 		public struct Columns
 		{
 			 public static string Id = @"ID";
-			 public static string Code = @"Code";
-			 public static string Name = @"Name";
-			 public static string Description = @"Description";
-			 public static string Url = @"Url";
+			 public static string ProgrammeID = @"ProgrammeID";
+			 public static string ProjectID = @"ProjectID";
 			 public static string StartDate = @"StartDate";
 			 public static string EndDate = @"EndDate";
 			 public static string UserId = @"UserId";
@@ -563,18 +501,10 @@ namespace SAEON.ObservationsDB.Data
 		
 		#region Update PK Collections
 		
-        public void SetPKValues()
-        {
-}
         #endregion
     
         #region Deep Save
 		
-        public void DeepSave()
-        {
-            Save();
-            
-}
         #endregion
 	}
 }

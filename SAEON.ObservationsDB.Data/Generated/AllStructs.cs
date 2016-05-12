@@ -80,6 +80,8 @@ namespace SAEON.ObservationsDB.Data
         
 		public static readonly string Programme = @"Programme";
         
+		public static readonly string ProgrammeProject = @"Programme_Project";
+        
 		public static readonly string Progress = @"Progress";
         
 		public static readonly string Project = @"Project";
@@ -288,6 +290,11 @@ namespace SAEON.ObservationsDB.Data
             get { return DataService.GetSchema("Programme", "ObservationsDB"); }
 		}
         
+		public static TableSchema.Table ProgrammeProject
+		{
+            get { return DataService.GetSchema("Programme_Project", "ObservationsDB"); }
+		}
+        
 		public static TableSchema.Table Progress
 		{
             get { return DataService.GetSchema("Progress", "ObservationsDB"); }
@@ -440,6 +447,8 @@ namespace SAEON.ObservationsDB.Data
 		public static readonly string VObservation = @"vObservation";
         
 		public static readonly string VObservationRole = @"vObservationRoles";
+        
+		public static readonly string VProgrammeProject = @"vProgrammeProject";
         
 		public static readonly string VProjectSite = @"vProjectSite";
         
