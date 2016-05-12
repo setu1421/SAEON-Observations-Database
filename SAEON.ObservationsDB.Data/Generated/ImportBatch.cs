@@ -342,13 +342,13 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.ObservationCollection ObservationRecords()
-		{
-			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.ImportBatchID, Id).Load();
-		}
 		public SAEON.ObservationsDB.Data.DataLogCollection DataLogRecords()
 		{
 			return new SAEON.ObservationsDB.Data.DataLogCollection().Where(DataLog.Columns.ImportBatchID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.ObservationCollection ObservationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.ObservationCollection().Where(Observation.Columns.ImportBatchID, Id).Load();
 		}
 		#endregion
 		

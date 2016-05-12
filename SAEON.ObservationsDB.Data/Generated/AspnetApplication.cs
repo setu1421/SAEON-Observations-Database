@@ -234,21 +234,21 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.AspnetUserCollection AspnetUsers()
-		{
-			return new SAEON.ObservationsDB.Data.AspnetUserCollection().Where(AspnetUser.Columns.ApplicationId, ApplicationId).Load();
-		}
 		public SAEON.ObservationsDB.Data.AspnetMembershipCollection AspnetMembershipRecords()
 		{
 			return new SAEON.ObservationsDB.Data.AspnetMembershipCollection().Where(AspnetMembership.Columns.ApplicationId, ApplicationId).Load();
+		}
+		public SAEON.ObservationsDB.Data.AspnetPathCollection AspnetPaths()
+		{
+			return new SAEON.ObservationsDB.Data.AspnetPathCollection().Where(AspnetPath.Columns.ApplicationId, ApplicationId).Load();
 		}
 		public SAEON.ObservationsDB.Data.AspnetRoleCollection AspnetRoles()
 		{
 			return new SAEON.ObservationsDB.Data.AspnetRoleCollection().Where(AspnetRole.Columns.ApplicationId, ApplicationId).Load();
 		}
-		public SAEON.ObservationsDB.Data.AspnetPathCollection AspnetPaths()
+		public SAEON.ObservationsDB.Data.AspnetUserCollection AspnetUsers()
 		{
-			return new SAEON.ObservationsDB.Data.AspnetPathCollection().Where(AspnetPath.Columns.ApplicationId, ApplicationId).Load();
+			return new SAEON.ObservationsDB.Data.AspnetUserCollection().Where(AspnetUser.Columns.ApplicationId, ApplicationId).Load();
 		}
 		#endregion
 		

@@ -15,6 +15,8 @@ public partial class Admin_Projects : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
+            SiteStore.DataSource = new da.SiteCollection().OrderByAsc(da.Site.Columns.Name).Load();
+            SiteStore.DataBind();
         }
     }
 
@@ -114,72 +116,50 @@ public partial class Admin_Projects : System.Web.UI.Page
 
     #region Sites
 
-    protected void SitesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void SiteLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["ProjectID"] != null && e.Parameters["ProjectID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["ProjectID"].ToString());
-            da.SiteCollection col = new da.SiteCollection()
-                .Where(da.Site.Columns.ProjectID, Id)
-                .OrderByAsc(da.Site.Columns.Code)
+            da.VSiteProjectCollection col = new da.VSiteProjectCollection()
+                .Where(da.VSiteProject.Columns.ProjectID, Id)
+                .OrderByAsc(da.VSiteProject.Columns.SiteName)
                 .Load();
-            SitesGrid.GetStore().DataSource = col;
-            SitesGrid.GetStore().DataBind();
+            SiteLinksGrid.GetStore().DataSource = col;
+            SiteLinksGrid.GetStore().DataBind();
         }
     }
 
-    protected void AvailableSitesStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
-    {
-        if (e.Parameters["ProjectID"] != null && e.Parameters["ProjectID"].ToString() != "-1")
-        {
-            Guid Id = Guid.Parse(e.Parameters["ProjectID"].ToString());
-            da.SiteCollection col = new Select()
-                .From(da.Site.Schema)
-                .Where(da.Site.IdColumn)
-                .NotIn(new Select(new string[] { da.Site.Columns.Id }).From(da.Site.Schema).Where(da.Site.IdColumn).IsEqualTo(Id))
-                .And(da.Site.ProjectIDColumn)
-                .IsNull()
-                .OrderAsc(da.Site.Columns.Code)
-                .ExecuteAsCollection<da.SiteCollection>();
-            AvailableSitesGrid.GetStore().DataSource = col;
-            AvailableSitesGrid.GetStore().DataBind();
-        }
-    }
-
-    protected void LinkSites_Click(object sender, DirectEventArgs e)
+    protected void LinkSite_Click(object sender, DirectEventArgs e)
     {
         try
         {
-            RowSelectionModel sm = AvailableSitesGrid.SelectionModel.Primary as RowSelectionModel;
-            RowSelectionModel masteRow = ProjectsGrid.SelectionModel.Primary as RowSelectionModel;
-
-            var masterID = new Guid(masteRow.SelectedRecordID);
-            if (sm.SelectedRows.Count > 0)
-            {
-                foreach (SelectedRow row in sm.SelectedRows)
-                {
-                    da.Site site = new da.Site(row.RecordID);
-                    if (site != null)
-                    {
-                        site.ProjectID = masterID;
-                        site.UserId = AuthHelper.GetLoggedInUserId;
-                        site.Save();
-                        Auditing.Log("Projects.AddSiteLink", new Dictionary<string, object> {
-                            { "ProjectID", masterID }, { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
-                    }
-                }
-                SitesGrid.DataBind();
-                AvailableSitesWindow.Hide();
-            }
-            else
-            {
-                MessageBoxes.Info("Invalid Selection", "Select at least one site");
-            }
+            RowSelectionModel masterRow = SiteLinksGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            da.SiteProject siteProject = new da.SiteProject();
+            siteProject.ProjectID = masterID;
+            siteProject.SiteID = new Guid(cbSite.SelectedItem.Value.Trim());
+            if (!String.IsNullOrEmpty(dfSiteStartDate.Text) && (dfSiteStartDate.SelectedDate.Year >= 1900))
+                siteProject.StartDate = dfSiteStartDate.SelectedDate;
+            if (!String.IsNullOrEmpty(dfSiteEndDate.Text) && (dfSiteEndDate.SelectedDate.Year >= 1900))
+                siteProject.EndDate = dfSiteEndDate.SelectedDate;
+            siteProject.UserId = AuthHelper.GetLoggedInUserId;
+            siteProject.Save();
+            Auditing.Log("Projects.AddSiteLink", new Dictionary<string, object> {
+                { "ProjectID", siteProject.ProjectID },
+                { "ProjectCode", siteProject.Project.Name },
+                { "SiteID", siteProject.SiteID},
+                { "SiteCode", siteProject.Site.Code},
+                { "StartDate", siteProject.StartDate },
+                { "EndDate", siteProject.EndDate}
+            });
+            SiteLinksGrid.DataBind();
+            SiteLinkWindow.Hide();
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Projects.LinkSites_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link sites");
+            Log.Error(ex, "Projects.LinkSite_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link site");
         }
     }
 
@@ -197,16 +177,9 @@ public partial class Admin_Projects : System.Web.UI.Page
     {
         try
         {
-            da.Site site = new da.Site(aID);
-            if (site != null)
-            {
-                site.ProjectID = null;
-                site.UserId = AuthHelper.GetLoggedInUserId;
-                site.Save();
-                Auditing.Log("Projects.DeleteSiteLink", new Dictionary<string, object> {
-                        { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
-                SitesGrid.DataBind();
-            }
+            new da.SiteProjectController().Delete(aID);
+            Auditing.Log("Projects.DeleteSiteLink", new Dictionary<string, object> { { "ID", aID } });
+            SiteLinksGrid.DataBind();
         }
         catch (Exception ex)
         {
@@ -214,6 +187,5 @@ public partial class Admin_Projects : System.Web.UI.Page
             MessageBoxes.Error(ex, "Error", "Unable to delete site link");
         }
     }
-
     #endregion
 }

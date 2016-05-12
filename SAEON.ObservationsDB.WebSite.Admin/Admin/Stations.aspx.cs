@@ -12,12 +12,12 @@ public partial class Admin_Stations : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
-            SiteStore.DataSource = new SiteCollection().OrderByAsc(SAEON.ObservationsDB.Data.Site.Columns.Name).Load();
-            SiteStore.DataBind();
             OrganisationStore.DataSource = new OrganisationCollection().OrderByAsc(Organisation.Columns.Name).Load();
             OrganisationStore.DataBind();
             OrganisationRoleStore.DataSource = new OrganisationRoleCollection().OrderByAsc(OrganisationRole.Columns.Name).Load();
             OrganisationRoleStore.DataBind();
+            InstrumentStore.DataSource = new InstrumentCollection().OrderByAsc(Instrument.Columns.Name).Load();
+            InstrumentStore.DataBind();
         }
     }
 
@@ -77,7 +77,6 @@ public partial class Admin_Stations : System.Web.UI.Page
             if (!string.IsNullOrEmpty(tfName.Text.Trim()))
                 station.Name = tfName.Text.Trim();
             station.Description = tfDescription.Text.Trim();
-            station.SiteID = new Guid(cbSite.SelectedItem.Value.Trim());
 
             if (!string.IsNullOrEmpty(nfLatitude.Text))
                 station.Latitude = Double.Parse(nfLatitude.Text);
@@ -164,11 +163,14 @@ public partial class Admin_Stations : System.Web.UI.Page
             stationOrganisation.UserId = AuthHelper.GetLoggedInUserId;
             stationOrganisation.Save();
             Auditing.Log("Stations.AddOrganisationLink", new Dictionary<string, object> {
-                { "StationID", masterID },
+                { "StationID", stationOrganisation.StationID },
+                { "StationCode", stationOrganisation.Station.Code },
                 { "OrganisationID", stationOrganisation.OrganisationID},
                 { "OrganisationCode", stationOrganisation.Organisation.Code},
                 { "RoleID", stationOrganisation.OrganisationRoleID },
                 { "RoleCode", stationOrganisation.OrganisationRole.Code},
+                { "StartDate", stationOrganisation.StartDate },
+                { "EndDate", stationOrganisation.EndDate}
             });
             OrganisationLinksGrid.DataBind();
             OrganisationLinkWindow.Hide();
@@ -205,102 +207,54 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
-    //protected void OrganisationLink(object sender, DirectEventArgs e)
-    //{
-    //    string actionType = e.ExtraParams["type"];
-    //    string recordID = e.ExtraParams["id"];
-    //    try
-    //    {
-    //        if (actionType == "Edit")
-    //        {
-    //            OrganisationLinkFormPanel.SetValues(new StationOrganisation(recordID));
-    //            OrganisationLinkWindow.Show();
-    //        }
-    //        else if (actionType == "Delete")
-    //        {
-    //            new StationOrganisationController().Delete(recordID);
-    //            Auditing.Log("Station.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
-    //            OrganisationLinksGrid.DataBind();
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Log.Error(ex, "Stations.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
-    //        MessageBoxes.Error(ex, "Unable to {0} organisation link", actionType);
-    //    }
-    //}
-
     #endregion
 
     #region Instruments
 
-    protected void InstrumentsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void InstrumentLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
-            InstrumentCollection col = new InstrumentCollection()
-                .Where(Instrument.Columns.StationID, Id)
-                .OrderByAsc(Instrument.Columns.Code)
+            VStationInstrumentCollection col = new VStationInstrumentCollection()
+                .Where(VStationInstrument.Columns.StationID, Id)
+                .OrderByAsc(VStationInstrument.Columns.InstrumentName)
                 .Load();
-            InstrumentsGrid.GetStore().DataSource = col;
-            InstrumentsGrid.GetStore().DataBind();
+            InstrumentLinksGrid.GetStore().DataSource = col;
+            InstrumentLinksGrid.GetStore().DataBind();
         }
     }
 
-    protected void AvailableInstrumentsStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
-    {
-        if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
-        {
-            Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
-            InstrumentCollection col = new Select()
-                .From(Instrument.Schema)
-                .Where(Instrument.IdColumn)
-                .NotIn(new Select(new string[] { Instrument.Columns.Id }).From(Instrument.Schema).Where(Instrument.IdColumn).IsEqualTo(Id))
-                .And(Instrument.StationIDColumn)
-                .IsNull()
-                .OrderAsc(Instrument.Columns.Code)
-                .ExecuteAsCollection<InstrumentCollection>();
-            AvailableInstrumentsGrid.GetStore().DataSource = col;
-            AvailableInstrumentsGrid.GetStore().DataBind();
-        }
-    }
-
-    protected void LinkInstruments_Click(object sender, DirectEventArgs e)
+    protected void LinkInstrument_Click(object sender, DirectEventArgs e)
     {
         try
         {
-            RowSelectionModel sm = AvailableInstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
             RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
-
             var masterID = new Guid(masterRow.SelectedRecordID);
-            if (sm.SelectedRows.Count > 0)
-            {
-                foreach (SelectedRow row in sm.SelectedRows)
-                {
-                    Instrument instrument = new Instrument(row.RecordID);
-                    if (instrument != null)
-                    {
-                        instrument.StationID = masterID;
-                        instrument.UserId = AuthHelper.GetLoggedInUserId;
-                        instrument.Save();
-                        Auditing.Log("Stations.AddInstrumentLink", new Dictionary<string, object> {
-                            { "StationID", masterID }, { "ID", instrument.Id }, { "Code", instrument.Code }, { "Name", instrument.Name } });
-                    }
-                }
-                InstrumentsGrid.DataBind();
-                AvailableInstrumentsWindow.Hide();
-            }
-            else
-            {
-                MessageBoxes.Info("Invalid Selection", "Select at least one instrument");
-            }
-
+            StationInstrument stationInstrument = new StationInstrument();
+            stationInstrument.StationID = masterID;
+            stationInstrument.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
+            if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
+                stationInstrument.StartDate = dfInstrumentStartDate.SelectedDate;
+            if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
+                stationInstrument.EndDate = dfInstrumentEndDate.SelectedDate;
+            stationInstrument.UserId = AuthHelper.GetLoggedInUserId;
+            stationInstrument.Save();
+            Auditing.Log("Stations.AddInstrumentLink", new Dictionary<string, object> {
+                { "StationID", stationInstrument.StationID },
+                { "StationCode", stationInstrument.Station.Code },
+                { "InstrumentID", stationInstrument.InstrumentID},
+                { "InstrumentCode", stationInstrument.Instrument.Code},
+                { "StartDate", stationInstrument.StartDate },
+                { "EndDate", stationInstrument.EndDate}
+            });
+            InstrumentLinksGrid.DataBind();
+            InstrumentLinkWindow.Hide();
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Stations.LinkInstruments_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link data sources");
+            Log.Error(ex, "Stations.LinkInstrument_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link instrument");
         }
     }
 
@@ -310,7 +264,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         MessageBoxes.Confirm(
             "Confirm Delete",
             String.Format("DirectCall.DeleteInstrumentLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
-            "Are you sure you want to delete this data source link?");
+            "Are you sure you want to delete this instrument link?");
     }
 
     [DirectMethod]
@@ -318,53 +272,17 @@ public partial class Admin_Stations : System.Web.UI.Page
     {
         try
         {
-            Instrument instrument = new Instrument(aID);
-            if (instrument != null)
-            {
-                instrument.StationID = null;
-                instrument.UserId = AuthHelper.GetLoggedInUserId;
-                instrument.Save();
-                Auditing.Log("Stations.DeleteInstrumentLink", new Dictionary<string, object> {
-                        { "ID", instrument.Id }, { "Code", instrument.Code }, { "Name", instrument.Name } });
-                InstrumentsGrid.DataBind();
-            }
+            new StationInstrumentController().Delete(aID);
+            Auditing.Log("Stations.DeleteInstrumentLink", new Dictionary<string, object> { { "ID", aID } });
+            InstrumentLinksGrid.DataBind();
         }
         catch (Exception ex)
         {
             Log.Error(ex, "Stations.DeleteInstrumentLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete data source link");
+            MessageBoxes.Error(ex, "Error", "Unable to delete instrument link");
         }
     }
 
-    //protected void InstrumentLink(object sender, DirectEventArgs e)
-    //{
-    //    string actionType = e.ExtraParams["type"];
-    //    string recordID = e.ExtraParams["id"];
-    //    try
-    //    {
-    //        if (actionType == "Edit")
-    //        {
-    //        }
-    //        else if (actionType == "Delete")
-    //        {
-    //            Instrument instrument = new Instrument(recordID);
-    //            if (instrument != null)
-    //            {
-    //                instrument.StationID = null;
-    //                instrument.UserId = AuthHelper.GetLoggedInUserId;
-    //                instrument.Save();
-    //                Auditing.Log("Stations.DeleteInstrumentLink", new Dictionary<string, object> {
-    //                    { "ID", instrument.Id }, { "Code", instrument.Code }, { "Name", instrument.Name } });
-    //                InstrumentsGrid.DataBind();
-    //            }
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Log.Error(ex, "Stations.InstrumentLink({ActionType},{RecordID})", actionType, recordID);
-    //        MessageBoxes.Error(ex, "Unable to {0} data source link", actionType);
-    //    }
-    //}
     #endregion
 
 }

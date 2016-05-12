@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.ObservationsDB.Data
 {
     /// <summary>
-    /// Controller class for Station
+    /// Controller class for Site_Station
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class StationController
+    public partial class SiteStationController
     {
         // Preload our schema..
-        Station thisSchemaLoad = new Station();
+        SiteStation thisSchemaLoad = new SiteStation();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.ObservationsDB.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public StationCollection FetchAll()
+        public SiteStationCollection FetchAll()
         {
-            StationCollection coll = new StationCollection();
-            Query qry = new Query(Station.Schema);
+            SiteStationCollection coll = new SiteStationCollection();
+            Query qry = new Query(SiteStation.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public StationCollection FetchByID(object Id)
+        public SiteStationCollection FetchByID(object Id)
         {
-            StationCollection coll = new StationCollection().Where("ID", Id).Load();
+            SiteStationCollection coll = new SiteStationCollection().Where("ID", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public StationCollection FetchByQuery(Query qry)
+        public SiteStationCollection FetchByQuery(Query qry)
         {
-            StationCollection coll = new StationCollection();
+            SiteStationCollection coll = new SiteStationCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
         public bool Delete(object Id)
         {
-            return (Station.Delete(Id) == 1);
+            return (SiteStation.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
         public bool Destroy(object Id)
         {
-            return (Station.Destroy(Id) == 1);
+            return (SiteStation.Destroy(Id) == 1);
         }
         
         
@@ -80,33 +80,21 @@ namespace SAEON.ObservationsDB.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,double? Latitude,double? Longitude,int? Elevation,Guid? ProjectSiteID,Guid UserId,DateTime? StartDate,DateTime? EndDate,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,Guid SiteID,Guid StationID,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
-		    Station item = new Station();
+		    SiteStation item = new SiteStation();
 		    
             item.Id = Id;
             
-            item.Code = Code;
+            item.SiteID = SiteID;
             
-            item.Name = Name;
-            
-            item.Description = Description;
-            
-            item.Url = Url;
-            
-            item.Latitude = Latitude;
-            
-            item.Longitude = Longitude;
-            
-            item.Elevation = Elevation;
-            
-            item.ProjectSiteID = ProjectSiteID;
-            
-            item.UserId = UserId;
+            item.StationID = StationID;
             
             item.StartDate = StartDate;
             
             item.EndDate = EndDate;
+            
+            item.UserId = UserId;
             
             item.AddedAt = AddedAt;
             
@@ -120,35 +108,23 @@ namespace SAEON.ObservationsDB.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,double? Latitude,double? Longitude,int? Elevation,Guid? ProjectSiteID,Guid UserId,DateTime? StartDate,DateTime? EndDate,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,Guid SiteID,Guid StationID,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
-		    Station item = new Station();
+		    SiteStation item = new SiteStation();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
 			item.Id = Id;
 				
-			item.Code = Code;
+			item.SiteID = SiteID;
 				
-			item.Name = Name;
-				
-			item.Description = Description;
-				
-			item.Url = Url;
-				
-			item.Latitude = Latitude;
-				
-			item.Longitude = Longitude;
-				
-			item.Elevation = Elevation;
-				
-			item.ProjectSiteID = ProjectSiteID;
-				
-			item.UserId = UserId;
+			item.StationID = StationID;
 				
 			item.StartDate = StartDate;
 				
 			item.EndDate = EndDate;
+				
+			item.UserId = UserId;
 				
 			item.AddedAt = AddedAt;
 				

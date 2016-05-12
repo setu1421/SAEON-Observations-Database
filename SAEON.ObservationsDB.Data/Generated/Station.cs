@@ -259,20 +259,6 @@ namespace SAEON.ObservationsDB.Data
 					colvarUserId.ForeignKeyTableName = "aspnet_Users";
 				schema.Columns.Add(colvarUserId);
 				
-				TableSchema.TableColumn colvarSiteID = new TableSchema.TableColumn(schema);
-				colvarSiteID.ColumnName = "SiteID";
-				colvarSiteID.DataType = DbType.Guid;
-				colvarSiteID.MaxLength = 0;
-				colvarSiteID.AutoIncrement = false;
-				colvarSiteID.IsNullable = true;
-				colvarSiteID.IsPrimaryKey = false;
-				colvarSiteID.IsForeignKey = true;
-				colvarSiteID.IsReadOnly = false;
-				colvarSiteID.DefaultSetting = @"";
-				
-					colvarSiteID.ForeignKeyTableName = "Site";
-				schema.Columns.Add(colvarSiteID);
-				
 				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
 				colvarStartDate.ColumnName = "StartDate";
 				colvarStartDate.DataType = DbType.DateTime;
@@ -417,14 +403,6 @@ namespace SAEON.ObservationsDB.Data
 			set { SetColumnValue(Columns.UserId, value); }
 		}
 		  
-		[XmlAttribute("SiteID")]
-		[Bindable(true)]
-		public Guid? SiteID 
-		{
-			get { return GetColumnValue<Guid?>(Columns.SiteID); }
-			set { SetColumnValue(Columns.SiteID, value); }
-		}
-		  
 		[XmlAttribute("StartDate")]
 		[Bindable(true)]
 		public DateTime? StartDate 
@@ -470,13 +448,21 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
+		public SAEON.ObservationsDB.Data.InstrumentCollection InstrumentRecords()
+		{
+			return new SAEON.ObservationsDB.Data.InstrumentCollection().Where(Instrument.Columns.StationID, Id).Load();
+		}
 		public SAEON.ObservationsDB.Data.SensorCollection SensorRecords()
 		{
 			return new SAEON.ObservationsDB.Data.SensorCollection().Where(Sensor.Columns.StationID, Id).Load();
 		}
-		public SAEON.ObservationsDB.Data.InstrumentCollection InstrumentRecords()
+		public SAEON.ObservationsDB.Data.SiteStationCollection SiteStationRecords()
 		{
-			return new SAEON.ObservationsDB.Data.InstrumentCollection().Where(Instrument.Columns.StationID, Id).Load();
+			return new SAEON.ObservationsDB.Data.SiteStationCollection().Where(SiteStation.Columns.StationID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.StationInstrumentCollection StationInstrumentRecords()
+		{
+			return new SAEON.ObservationsDB.Data.StationInstrumentCollection().Where(StationInstrument.Columns.StationID, Id).Load();
 		}
 		public SAEON.ObservationsDB.Data.StationOrganisationCollection StationOrganisationRecords()
 		{
@@ -510,17 +496,6 @@ namespace SAEON.ObservationsDB.Data
 		}
 		
 		
-		/// <summary>
-		/// Returns a Site ActiveRecord object related to this Station
-		/// 
-		/// </summary>
-		public SAEON.ObservationsDB.Data.Site Site
-		{
-			get { return SAEON.ObservationsDB.Data.Site.FetchByID(this.SiteID); }
-			set { SetColumnValue("SiteID", value.Id); }
-		}
-		
-		
 		#endregion
 		
 		
@@ -535,7 +510,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Station item = new Station();
 			
@@ -559,8 +534,6 @@ namespace SAEON.ObservationsDB.Data
 			
 			item.UserId = varUserId;
 			
-			item.SiteID = varSiteID;
-			
 			item.StartDate = varStartDate;
 			
 			item.EndDate = varEndDate;
@@ -579,7 +552,7 @@ namespace SAEON.ObservationsDB.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Station item = new Station();
 			
@@ -602,8 +575,6 @@ namespace SAEON.ObservationsDB.Data
 				item.ProjectSiteID = varProjectSiteID;
 			
 				item.UserId = varUserId;
-			
-				item.SiteID = varSiteID;
 			
 				item.StartDate = varStartDate;
 			
@@ -696,37 +667,30 @@ namespace SAEON.ObservationsDB.Data
         
         
         
-        public static TableSchema.TableColumn SiteIDColumn
+        public static TableSchema.TableColumn StartDateColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn StartDateColumn
+        public static TableSchema.TableColumn EndDateColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn EndDateColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
-        {
-            get { return Schema.Columns[13]; }
-        }
-        
-        
-        
         public static TableSchema.TableColumn UpdatedAtColumn
         {
-            get { return Schema.Columns[14]; }
+            get { return Schema.Columns[13]; }
         }
         
         
@@ -745,7 +709,6 @@ namespace SAEON.ObservationsDB.Data
 			 public static string Elevation = @"Elevation";
 			 public static string ProjectSiteID = @"ProjectSiteID";
 			 public static string UserId = @"UserId";
-			 public static string SiteID = @"SiteID";
 			 public static string StartDate = @"StartDate";
 			 public static string EndDate = @"EndDate";
 			 public static string AddedAt = @"AddedAt";

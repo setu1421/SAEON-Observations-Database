@@ -387,13 +387,13 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.SensorID, Id).Load();
-		}
 		public SAEON.ObservationsDB.Data.DataLogCollection DataLogRecords()
 		{
 			return new SAEON.ObservationsDB.Data.DataLogCollection().Where(DataLog.Columns.SensorID, Id).Load();
+		}
+		public SAEON.ObservationsDB.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.SensorID, Id).Load();
 		}
 		public SAEON.ObservationsDB.Data.ObservationCollection ObservationRecords()
 		{

@@ -21,6 +21,16 @@
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
+    <ext:Store ID="SiteStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
     <ext:Viewport ID="Viewport1" runat="server" Layout="FitLayout">
         <Items>
             <ext:BorderLayout ID="BorderLayout1" runat="server">
@@ -208,16 +218,16 @@
                                             <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{ProjectsGrid}') && #{ProjectsGrid}.getSelectionModel().hasSelection()){#{AvailableSitesStore}.reload();#{AvailableSitesWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{ProjectsGrid}') && #{ProjectsGrid}.getSelectionModel().hasSelection()){#{SiteLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a project.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="SitesGrid" runat="server" Border="false" ClientIDMode="Static">
+                            <ext:GridPanel ID="SiteLinksGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="SitesGridStore" runat="server" OnRefreshData="SitesGridStore_RefreshData">
+                                    <ext:Store ID="SiteLinksGridStore" runat="server" OnRefreshData="SiteLinksGridStore_RefreshData">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -248,7 +258,7 @@
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
-                                                <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>--%>
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
                                                 <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink"/>
                                             </Commands>
                                         </ext:CommandColumn>
@@ -466,57 +476,77 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>--%>
-    <ext:Window ID="AvailableSitesWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available Sites" Width="620" Height="300" X="50" Y="50" Layout="FitLayout" Hidden="true" ClientIDMode="Static">
+    <ext:Window ID="SiteLinkWindow" runat="server" Width="450" Height="300" Closable="true"
+        Hidden="true" Collapsible="false" Title="Link Site"
+        Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
-            <Hide Fn="CloseAvailableSites" />
+            <Hide Fn="ClearSiteLinkForm" />
         </Listeners>
-        <Items>
-            <ext:GridPanel ID="AvailableSitesGrid" runat="server" Header="false" Border="false"
-                ClientIDMode="Static">
-                <Store>
-                    <ext:Store ID="AvailableSitesStore" runat="server" OnRefreshData="AvailableSitesStore_RefreshData">
-                        <Proxy>
-                            <ext:PageProxy />
-                        </Proxy>
-                        <Reader>
-                            <ext:JsonReader IDProperty="Id">
-                                <Fields>
-                                    <ext:RecordField Name="Id" Type="Auto" />
-                                    <ext:RecordField Name="Code" Type="String" />
-                                    <ext:RecordField Name="Name" Type="String" />
-                                    <ext:RecordField Name="Description" Type="String" />
-                                </Fields>
-                            </ext:JsonReader>
-                        </Reader>
-                        <BaseParams>
-                            <ext:Parameter Name="ProjectID" Value="Ext.getCmp('#{ProjectsGrid}') && #{ProjectsGrid}.getSelectionModel().hasSelection() ? #{ProjectsGrid}.getSelectionModel().getSelected().id : -1"
-                                Mode="Raw" />
-                        </BaseParams>
-                    </ext:Store>
-                </Store>
-                <ColumnModel ID="ColumnModel3" runat="server">
-                    <Columns>
-                        <ext:Column Header="Code" DataIndex="Code" Width="200" />
-                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
-                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
-                    </Columns>
-                </ColumnModel>
+        <Content>
+            <ext:FormPanel ID="SiteLinkFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
+                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
+                Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
-                <SelectionModel>
-                    <ext:CheckboxSelectionModel ID="CheckboxSelectionModel1" runat="server" />
-                </SelectionModel>
+                <Items>
+                    <ext:Hidden ID="hID" DataIndex="Id" runat="server" ClientIDMode="Static">
+                    </ext:Hidden>
+                    <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout"
+                        LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
+                            <ext:Parameter Name="blankText" Value="Site is a required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:ComboBox ID="cbSite" runat="server" StoreID="SiteStore" Editable="true" DisplayField="Name"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                AllowBlank="false" DataIndex="SiteID" EmptyText="Select Site"
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                            </ext:ComboBox>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel12" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="Start Date is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:DateField ID="dfSiteStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                            </ext:DateField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel13" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="End Date is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:DateField ID="dfSiteEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                            </ext:DateField>
+                        </Items>
+                    </ext:Panel>
+                </Items>
                 <Buttons>
-                    <ext:Button ID="LinkSites" runat="server" Text="Save" Icon="Accept">
+                    <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true" Icon="Accept">
                         <DirectEvents>
-                            <Click OnEvent="LinkSites_Click">
+                            <Click OnEvent="LinkSite_Click">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
                     </ext:Button>
                 </Buttons>
-            </ext:GridPanel>
-        </Items>
+                <BottomBar>
+                    <ext:StatusBar ID="StatusBar2" runat="server" Height="25" />
+                </BottomBar>
+                <Listeners>
+                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                </Listeners>
+            </ext:FormPanel>
+        </Content>
     </ext:Window>
 </asp:Content>
 

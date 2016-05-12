@@ -256,13 +256,13 @@ namespace SAEON.ObservationsDB.Data
         }
         
 		
-		public SAEON.ObservationsDB.Data.DataSourceRoleCollection DataSourceRoleRecords()
-		{
-			return new SAEON.ObservationsDB.Data.DataSourceRoleCollection().Where(DataSourceRole.Columns.RoleId, RoleId).Load();
-		}
 		public SAEON.ObservationsDB.Data.AspnetUsersInRoleCollection AspnetUsersInRoles()
 		{
 			return new SAEON.ObservationsDB.Data.AspnetUsersInRoleCollection().Where(AspnetUsersInRole.Columns.RoleId, RoleId).Load();
+		}
+		public SAEON.ObservationsDB.Data.DataSourceRoleCollection DataSourceRoleRecords()
+		{
+			return new SAEON.ObservationsDB.Data.DataSourceRoleCollection().Where(DataSourceRole.Columns.RoleId, RoleId).Load();
 		}
 		public SAEON.ObservationsDB.Data.RoleModuleCollection RoleModuleRecords()
 		{

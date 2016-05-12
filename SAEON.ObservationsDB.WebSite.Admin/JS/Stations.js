@@ -34,10 +34,6 @@ function MasterRowSelect(e, record) {
         OrganisationLinksGrid.getStore().reload();
 }
 
-function CloseAvailableInstruments() {
-    AvailableInstrumentsGrid.selModel.clearSelections();
-}
-
 function ClearOrganisationLinkForm() {
     OrganisationLinkFormPanel.getForm().reset();
 }
@@ -53,6 +49,10 @@ function onOrganisationLinkCommand(e, record) {
     }
 }
 
+function ClearInstrumentLinkForm() {
+    InstrumentLinkFormPanel.getForm().reset();
+}
+
 function onInstrumentLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteInstrumentLink(record.get('Id'), { eventMask: { showMask: true } });
@@ -63,4 +63,3 @@ function onInstrumentLinkCommand(e, record) {
         InstrumentLinkWindow.show();
     }
 }
-

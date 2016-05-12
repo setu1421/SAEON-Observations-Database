@@ -16,6 +16,7 @@ public partial class Admin_Sites : System.Web.UI.Page
             OrganisationStore.DataBind();
             OrganisationRoleStore.DataSource = new da.OrganisationRoleCollection().OrderByAsc(da.OrganisationRole.Columns.Name).Load();
             OrganisationRoleStore.DataBind();
+            StationStore.DataSource = new da.StationCollection().OrderByAsc(da.Station.Columns.Name).Load();
         }
     }
 
@@ -137,7 +138,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         {
             RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            da.SiteOrganisation siteOrganisation = new da.SiteOrganisation(hID.Value);
+            da.SiteOrganisation siteOrganisation = new da.SiteOrganisation();
             siteOrganisation.SiteID = masterID;
             siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
             siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
@@ -148,11 +149,14 @@ public partial class Admin_Sites : System.Web.UI.Page
             siteOrganisation.UserId = AuthHelper.GetLoggedInUserId;
             siteOrganisation.Save();
             Auditing.Log("Sites.AddOrganisationLink", new Dictionary<string, object> {
-                { "SiteID", masterID },
+                { "SiteID", siteOrganisation.SiteID },
+                { "SiteCode", siteOrganisation.Site.Code },
                 { "OrganisationID", siteOrganisation.OrganisationID},
                 { "OrganisationCode", siteOrganisation.Organisation.Code},
                 { "RoleID", siteOrganisation.OrganisationRoleID },
                 { "RoleCode", siteOrganisation.OrganisationRole.Code},
+                { "StartDate", siteOrganisation.StartDate },
+                { "EndDate", siteOrganisation.EndDate}
             });
             OrganisationLinksGrid.DataBind();
             OrganisationLinkWindow.Hide();
@@ -188,102 +192,54 @@ public partial class Admin_Sites : System.Web.UI.Page
             MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
         }
     }
-
-    //protected void OrganisationLink(object sender, DirectEventArgs e)
-    //{
-    //    string actionType = e.ExtraParams["type"];
-    //    string recordID = e.ExtraParams["id"];
-    //    try
-    //    {
-    //        if (actionType == "Edit")
-    //        {
-    //            OrganisationLinkFormPanel.SetValues(new da.SiteOrganisation(recordID));
-    //            OrganisationLinkWindow.Show();
-    //        }
-    //        else if (actionType == "Delete")
-    //        {
-    //            new da.SiteOrganisationController().Delete(recordID);
-    //            Auditing.Log("Sites.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
-    //            OrganisationLinksGrid.DataBind();
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Log.Error(ex, "Sites.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
-    //        MessageBoxes.Error(ex, "Error", "Unable to {0} organisation link", actionType);
-    //    }
-    //}
-
     #endregion
 
     #region Stations
 
-    protected void StationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void StationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
-            da.StationCollection col = new da.StationCollection()
-                .Where(da.Station.Columns.SiteID, Id)
-                .OrderByAsc(da.Station.Columns.Code)
+            da.VSiteStationCollection col = new da.VSiteStationCollection()
+                .Where(da.VSiteStation.Columns.SiteID, Id)
+                .OrderByAsc(da.VSiteStation.Columns.SiteName)
                 .Load();
-            StationsGrid.GetStore().DataSource = col;
-            StationsGrid.GetStore().DataBind();
+            StationLinksGrid.GetStore().DataSource = col;
+            StationLinksGrid.GetStore().DataBind();
         }
     }
 
-    protected void AvailableStationsStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
-    {
-        if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
-        {
-            Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
-            da.StationCollection col = new Select()
-                .From(da.Station.Schema)
-                .Where(da.Station.IdColumn)
-                .NotIn(new Select(new string[] { da.Station.Columns.Id }).From(da.Station.Schema).Where(da.Station.IdColumn).IsEqualTo(Id))
-                .And(da.Station.SiteIDColumn)
-                .IsNull()
-                .OrderAsc(da.Station.Columns.Code)
-                .ExecuteAsCollection<da.StationCollection>();
-            AvailableStationsGrid.GetStore().DataSource = col;
-            AvailableStationsGrid.GetStore().DataBind();
-        }
-    }
-
-    protected void LinkStations_Click(object sender, DirectEventArgs e)
+    protected void LinkStation_Click(object sender, DirectEventArgs e)
     {
         try
         {
-            RowSelectionModel sm = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
-            RowSelectionModel masteRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
-
-            var masterID = new Guid(masteRow.SelectedRecordID);
-            if (sm.SelectedRows.Count > 0)
-            {
-                foreach (SelectedRow row in sm.SelectedRows)
-                {
-                    da.Station station = new da.Station(row.RecordID);
-                    if (station != null)
-                    {
-                        station.SiteID = masterID;
-                        station.UserId = AuthHelper.GetLoggedInUserId;
-                        station.Save();
-                        Auditing.Log("Sites.AddStationLink", new Dictionary<string, object> {
-                            { "SiteID", masterID }, { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
-                    }
-                }
-                StationsGrid.DataBind();
-                AvailableStationsWindow.Hide();
-            }
-            else
-            {
-                MessageBoxes.Info("Invalid Selection", "Select at least one station");
-            }
+            RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            da.SiteStation siteStation = new da.SiteStation();
+            siteStation.SiteID = masterID;
+            siteStation.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
+            if (!String.IsNullOrEmpty(dfStationStartDate.Text) && (dfStationStartDate.SelectedDate.Year >= 1900))
+                siteStation.StartDate = dfStationStartDate.SelectedDate;
+            if (!String.IsNullOrEmpty(dfStationEndDate.Text) && (dfStationEndDate.SelectedDate.Year >= 1900))
+                siteStation.EndDate = dfStationEndDate.SelectedDate;
+            siteStation.UserId = AuthHelper.GetLoggedInUserId;
+            siteStation.Save();
+            Auditing.Log("Sites.AddStationLink", new Dictionary<string, object> {
+                { "SiteID", siteStation.SiteID},
+                { "SiteCode", siteStation.Site.Code},
+                { "StationID", siteStation.StationID },
+                { "StationCode", siteStation.Station.Name },
+                { "StartDate", siteStation.StartDate },
+                { "EndDate", siteStation.EndDate}
+            });
+            OrganisationLinksGrid.DataBind();
+            OrganisationLinkWindow.Hide();
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Sites.LinkStations_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link stations");
+            Log.Error(ex, "Sites.LinkStation_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link station");
         }
     }
 
@@ -292,7 +248,7 @@ public partial class Admin_Sites : System.Web.UI.Page
     {
         MessageBoxes.Confirm(
             "Confirm Delete",
-            String.Format("DirectCall.DeleteStationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            String.Format("DirectCall.DeleteOrganisationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
             "Are you sure you want to delete this station link?");
     }
 
@@ -301,16 +257,9 @@ public partial class Admin_Sites : System.Web.UI.Page
     {
         try
         {
-            da.Station station = new da.Station(aID);
-            if (station != null)
-            {
-                station.SiteID = null;
-                station.UserId = AuthHelper.GetLoggedInUserId;
-                station.Save();
-                Auditing.Log("Sites.DeleteStationLink", new Dictionary<string, object> {
-                        { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
-                StationsGrid.DataBind();
-            }
+            new da.SiteOrganisationController().Delete(aID);
+            Auditing.Log("Sites.DeleteStationLink", new Dictionary<string, object> { { "ID", aID } });
+            OrganisationLinksGrid.DataBind();
         }
         catch (Exception ex)
         {
@@ -318,36 +267,6 @@ public partial class Admin_Sites : System.Web.UI.Page
             MessageBoxes.Error(ex, "Error", "Unable to delete station link");
         }
     }
-
-    //protected void StationLink(object sender, DirectEventArgs e)
-    //{
-    //    string actionType = e.ExtraParams["type"];
-    //    string recordID = e.ExtraParams["id"];
-    //    try
-    //    {
-    //        if (actionType == "Edit")
-    //        {
-    //        }
-    //        else if (actionType == "Delete")
-    //        {
-    //            da.Station station = new da.Station(recordID);
-    //            if (station != null)
-    //            {
-    //                station.SiteID = null;
-    //                station.UserId = AuthHelper.GetLoggedInUserId;
-    //                station.Save();
-    //                Auditing.Log("Sites.DeleteStationLink", new Dictionary<string, object> {
-    //                    { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
-    //                StationsGrid.DataBind();
-    //            }
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Log.Error(ex, "Sites.StationLink({ActionType},{RecordID})", actionType, recordID);
-    //        MessageBoxes.Error(ex, "Unable to {0} station link", actionType);
-    //    }
-    //}
     #endregion
 
 }

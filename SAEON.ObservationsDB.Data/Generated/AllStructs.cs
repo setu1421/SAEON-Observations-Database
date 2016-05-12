@@ -94,7 +94,13 @@ namespace SAEON.ObservationsDB.Data
         
 		public static readonly string SiteOrganisation = @"Site_Organisation";
         
+		public static readonly string SiteProject = @"Site_Project";
+        
+		public static readonly string SiteStation = @"Site_Station";
+        
 		public static readonly string Station = @"Station";
+        
+		public static readonly string StationInstrument = @"Station_Instrument";
         
 		public static readonly string StationOrganisation = @"Station_Organisation";
         
@@ -103,6 +109,24 @@ namespace SAEON.ObservationsDB.Data
 		public static readonly string TransformationType = @"TransformationType";
         
 		public static readonly string UnitOfMeasure = @"UnitOfMeasure";
+        
+		public static readonly string VwAspnetApplication = @"vw_aspnet_Applications";
+        
+		public static readonly string VwAspnetMembershipUser = @"vw_aspnet_MembershipUsers";
+        
+		public static readonly string VwAspnetProfile = @"vw_aspnet_Profiles";
+        
+		public static readonly string VwAspnetRole = @"vw_aspnet_Roles";
+        
+		public static readonly string VwAspnetUser = @"vw_aspnet_Users";
+        
+		public static readonly string VwAspnetUsersInRole = @"vw_aspnet_UsersInRoles";
+        
+		public static readonly string VwAspnetWebPartStatePath = @"vw_aspnet_WebPartState_Paths";
+        
+		public static readonly string VwAspnetWebPartStateShared = @"vw_aspnet_WebPartState_Shared";
+        
+		public static readonly string VwAspnetWebPartStateUser = @"vw_aspnet_WebPartState_User";
         
 	}
 	#endregion
@@ -299,9 +323,24 @@ namespace SAEON.ObservationsDB.Data
             get { return DataService.GetSchema("Site_Organisation", "ObservationsDB"); }
 		}
         
+		public static TableSchema.Table SiteProject
+		{
+            get { return DataService.GetSchema("Site_Project", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table SiteStation
+		{
+            get { return DataService.GetSchema("Site_Station", "ObservationsDB"); }
+		}
+        
 		public static TableSchema.Table Station
 		{
             get { return DataService.GetSchema("Station", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table StationInstrument
+		{
+            get { return DataService.GetSchema("Station_Instrument", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table StationOrganisation
@@ -322,6 +361,51 @@ namespace SAEON.ObservationsDB.Data
 		public static TableSchema.Table UnitOfMeasure
 		{
             get { return DataService.GetSchema("UnitOfMeasure", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table VwAspnetApplication
+		{
+            get { return DataService.GetSchema("vw_aspnet_Applications", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table VwAspnetMembershipUser
+		{
+            get { return DataService.GetSchema("vw_aspnet_MembershipUsers", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table VwAspnetProfile
+		{
+            get { return DataService.GetSchema("vw_aspnet_Profiles", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table VwAspnetRole
+		{
+            get { return DataService.GetSchema("vw_aspnet_Roles", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table VwAspnetUser
+		{
+            get { return DataService.GetSchema("vw_aspnet_Users", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table VwAspnetUsersInRole
+		{
+            get { return DataService.GetSchema("vw_aspnet_UsersInRoles", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table VwAspnetWebPartStatePath
+		{
+            get { return DataService.GetSchema("vw_aspnet_WebPartState_Paths", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table VwAspnetWebPartStateShared
+		{
+            get { return DataService.GetSchema("vw_aspnet_WebPartState_Shared", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table VwAspnetWebPartStateUser
+		{
+            get { return DataService.GetSchema("vw_aspnet_WebPartState_User", "ObservationsDB"); }
 		}
         
 	
@@ -363,29 +447,17 @@ namespace SAEON.ObservationsDB.Data
         
 		public static readonly string VSiteOrganisation = @"vSiteOrganisation";
         
+		public static readonly string VSiteProject = @"vSiteProject";
+        
+		public static readonly string VSiteStation = @"vSiteStation";
+        
 		public static readonly string VStation = @"vStation";
+        
+		public static readonly string VStationInstrument = @"vStationInstrument";
         
 		public static readonly string VStationOrganisation = @"vStationOrganisation";
         
 		public static readonly string VUserInfo = @"vUserInfo";
-        
-		public static readonly string VwAspnetApplication = @"vw_aspnet_Applications";
-        
-		public static readonly string VwAspnetMembershipUser = @"vw_aspnet_MembershipUsers";
-        
-		public static readonly string VwAspnetProfile = @"vw_aspnet_Profiles";
-        
-		public static readonly string VwAspnetRole = @"vw_aspnet_Roles";
-        
-		public static readonly string VwAspnetUser = @"vw_aspnet_Users";
-        
-		public static readonly string VwAspnetUsersInRole = @"vw_aspnet_UsersInRoles";
-        
-		public static readonly string VwAspnetWebPartStatePath = @"vw_aspnet_WebPartState_Paths";
-        
-		public static readonly string VwAspnetWebPartStateShared = @"vw_aspnet_WebPartState_Shared";
-        
-		public static readonly string VwAspnetWebPartStateUser = @"vw_aspnet_WebPartState_User";
         
     }
     #endregion

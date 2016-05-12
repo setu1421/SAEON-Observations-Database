@@ -375,6 +375,22 @@ namespace SAEON.ObservationsDB.Data
 		#endregion
 		
 		
+		#region PrimaryKey Methods		
+		
+        protected override void SetPrimaryKey(object oValue)
+        {
+            base.SetPrimaryKey(oValue);
+            
+            SetPKValues();
+        }
+        
+		
+		public SAEON.ObservationsDB.Data.SiteProjectCollection SiteProjectRecords()
+		{
+			return new SAEON.ObservationsDB.Data.SiteProjectCollection().Where(SiteProject.Columns.ProjectID, Id).Load();
+		}
+		#endregion
+		
 			
 		
 		#region ForeignKey Properties
@@ -588,10 +604,18 @@ namespace SAEON.ObservationsDB.Data
 		
 		#region Update PK Collections
 		
+        public void SetPKValues()
+        {
+}
         #endregion
     
         #region Deep Save
 		
+        public void DeepSave()
+        {
+            Save();
+            
+}
         #endregion
 	}
 }

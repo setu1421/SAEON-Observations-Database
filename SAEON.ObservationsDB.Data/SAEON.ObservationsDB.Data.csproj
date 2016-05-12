@@ -143,8 +143,14 @@
     <Compile Include="Generated\SiteController.cs" />
     <Compile Include="Generated\SiteOrganisation.cs" />
     <Compile Include="Generated\SiteOrganisationController.cs" />
+    <Compile Include="Generated\SiteProject.cs" />
+    <Compile Include="Generated\SiteProjectController.cs" />
+    <Compile Include="Generated\SiteStation.cs" />
+    <Compile Include="Generated\SiteStationController.cs" />
     <Compile Include="Generated\Station.cs" />
     <Compile Include="Generated\StationController.cs" />
+    <Compile Include="Generated\StationInstrument.cs" />
+    <Compile Include="Generated\StationInstrumentController.cs" />
     <Compile Include="Generated\StationOrganisation.cs" />
     <Compile Include="Generated\StationOrganisationController.cs" />
     <Compile Include="Generated\Status.cs" />
@@ -168,7 +174,10 @@
     <Compile Include="Generated\VProjectSite.cs" />
     <Compile Include="Generated\VSensor.cs" />
     <Compile Include="Generated\VSiteOrganisation.cs" />
+    <Compile Include="Generated\VSiteProject.cs" />
+    <Compile Include="Generated\VSiteStation.cs" />
     <Compile Include="Generated\VStation.cs" />
+    <Compile Include="Generated\VStationInstrument.cs" />
     <Compile Include="Generated\VStationOrganisation.cs" />
     <Compile Include="Generated\VUserInfo.cs" />
     <Compile Include="Generated\VwAspnetApplication.cs" />

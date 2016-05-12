@@ -34,10 +34,6 @@ function MasterRowSelect(e, record) {
         OrganisationLinksGrid.getStore().reload();
 }
 
-function CloseAvailableStations() {
-    AvailableStationsGrid.selModel.clearSelections();
-}
-
 function ClearOrganisationLinkForm() {
     OrganisationLinkFormPanel.getForm().reset();
 }
@@ -53,6 +49,10 @@ function onOrganisationLinkCommand(e, record) {
     }
 }
 
+function ClearStationLinkForm() {
+    StationLinkFormPanel.getForm().reset();
+}
+
 function onStationLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteStationLink(record.get('Id'), { eventMask: { showMask: true } });
@@ -63,4 +63,5 @@ function onStationLinkCommand(e, record) {
         StationLinkWindow.show();
     }
 }
+
 
