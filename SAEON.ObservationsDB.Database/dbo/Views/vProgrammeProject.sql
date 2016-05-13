@@ -3,7 +3,9 @@ CREATE VIEW [dbo].[vProgrammeProject]
 AS
 SELECT 
   src.*, 
+  [Programme].Code ProgrammeCode,
   [Programme].Name ProgrammeName,
+  [Project].Code ProjectCode,
   [Project].Name ProjectName
 FROM 
   [Programme_Project] src

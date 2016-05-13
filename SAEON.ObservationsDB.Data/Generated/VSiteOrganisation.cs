@@ -165,6 +165,18 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarUpdatedAt);
                 
+                TableSchema.TableColumn colvarOrganisationCode = new TableSchema.TableColumn(schema);
+                colvarOrganisationCode.ColumnName = "OrganisationCode";
+                colvarOrganisationCode.DataType = DbType.AnsiString;
+                colvarOrganisationCode.MaxLength = 50;
+                colvarOrganisationCode.AutoIncrement = false;
+                colvarOrganisationCode.IsNullable = false;
+                colvarOrganisationCode.IsPrimaryKey = false;
+                colvarOrganisationCode.IsForeignKey = false;
+                colvarOrganisationCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOrganisationCode);
+                
                 TableSchema.TableColumn colvarOrganisationName = new TableSchema.TableColumn(schema);
                 colvarOrganisationName.ColumnName = "OrganisationName";
                 colvarOrganisationName.DataType = DbType.AnsiString;
@@ -176,6 +188,18 @@ namespace SAEON.ObservationsDB.Data{
                 colvarOrganisationName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarOrganisationName);
+                
+                TableSchema.TableColumn colvarOrganisationRoleCode = new TableSchema.TableColumn(schema);
+                colvarOrganisationRoleCode.ColumnName = "OrganisationRoleCode";
+                colvarOrganisationRoleCode.DataType = DbType.AnsiString;
+                colvarOrganisationRoleCode.MaxLength = 50;
+                colvarOrganisationRoleCode.AutoIncrement = false;
+                colvarOrganisationRoleCode.IsNullable = false;
+                colvarOrganisationRoleCode.IsPrimaryKey = false;
+                colvarOrganisationRoleCode.IsForeignKey = false;
+                colvarOrganisationRoleCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOrganisationRoleCode);
                 
                 TableSchema.TableColumn colvarOrganisationRoleName = new TableSchema.TableColumn(schema);
                 colvarOrganisationRoleName.ColumnName = "OrganisationRoleName";
@@ -365,6 +389,20 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
+        [XmlAttribute("OrganisationCode")]
+        [Bindable(true)]
+        public string OrganisationCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("OrganisationCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("OrganisationCode", value);
+            }
+        }
+	      
         [XmlAttribute("OrganisationName")]
         [Bindable(true)]
         public string OrganisationName 
@@ -376,6 +414,20 @@ namespace SAEON.ObservationsDB.Data{
             set 
 		    {
 			    SetColumnValue("OrganisationName", value);
+            }
+        }
+	      
+        [XmlAttribute("OrganisationRoleCode")]
+        [Bindable(true)]
+        public string OrganisationRoleCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("OrganisationRoleCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("OrganisationRoleCode", value);
             }
         }
 	      
@@ -418,7 +470,11 @@ namespace SAEON.ObservationsDB.Data{
             
             public static string UpdatedAt = @"UpdatedAt";
             
+            public static string OrganisationCode = @"OrganisationCode";
+            
             public static string OrganisationName = @"OrganisationName";
+            
+            public static string OrganisationRoleCode = @"OrganisationRoleCode";
             
             public static string OrganisationRoleName = @"OrganisationRoleName";
             

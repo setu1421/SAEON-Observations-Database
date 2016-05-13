@@ -2,10 +2,16 @@
 CREATE VIEW [dbo].[vStationOrganisation] AS 
 SELECT 
   src.*, 
+  [Station].Code StationCode,
+  [Station].Name StationName,
+  [Organisation].Code OrganisationCode, 
   [Organisation].Name OrganisationName, 
+  [OrganisationRole].Code [OrganisationRoleCode],
   [OrganisationRole].Name [OrganisationRoleName]
 FROM 
   [Station_Organisation] src
+  inner join [Station]
+    on (src.StationID = [Station].ID)
   inner join [Organisation]
     on (src.OrganisationID = [Organisation].ID)
   inner join [OrganisationRole]

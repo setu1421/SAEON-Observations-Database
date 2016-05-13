@@ -153,6 +153,18 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarUpdatedAt);
                 
+                TableSchema.TableColumn colvarProgrammeCode = new TableSchema.TableColumn(schema);
+                colvarProgrammeCode.ColumnName = "ProgrammeCode";
+                colvarProgrammeCode.DataType = DbType.AnsiString;
+                colvarProgrammeCode.MaxLength = 50;
+                colvarProgrammeCode.AutoIncrement = false;
+                colvarProgrammeCode.IsNullable = false;
+                colvarProgrammeCode.IsPrimaryKey = false;
+                colvarProgrammeCode.IsForeignKey = false;
+                colvarProgrammeCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProgrammeCode);
+                
                 TableSchema.TableColumn colvarProgrammeName = new TableSchema.TableColumn(schema);
                 colvarProgrammeName.ColumnName = "ProgrammeName";
                 colvarProgrammeName.DataType = DbType.AnsiString;
@@ -164,6 +176,18 @@ namespace SAEON.ObservationsDB.Data{
                 colvarProgrammeName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarProgrammeName);
+                
+                TableSchema.TableColumn colvarProjectCode = new TableSchema.TableColumn(schema);
+                colvarProjectCode.ColumnName = "ProjectCode";
+                colvarProjectCode.DataType = DbType.AnsiString;
+                colvarProjectCode.MaxLength = 50;
+                colvarProjectCode.AutoIncrement = false;
+                colvarProjectCode.IsNullable = false;
+                colvarProjectCode.IsPrimaryKey = false;
+                colvarProjectCode.IsForeignKey = false;
+                colvarProjectCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProjectCode);
                 
                 TableSchema.TableColumn colvarProjectName = new TableSchema.TableColumn(schema);
                 colvarProjectName.ColumnName = "ProjectName";
@@ -339,6 +363,20 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
+        [XmlAttribute("ProgrammeCode")]
+        [Bindable(true)]
+        public string ProgrammeCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProgrammeCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProgrammeCode", value);
+            }
+        }
+	      
         [XmlAttribute("ProgrammeName")]
         [Bindable(true)]
         public string ProgrammeName 
@@ -350,6 +388,20 @@ namespace SAEON.ObservationsDB.Data{
             set 
 		    {
 			    SetColumnValue("ProgrammeName", value);
+            }
+        }
+	      
+        [XmlAttribute("ProjectCode")]
+        [Bindable(true)]
+        public string ProjectCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProjectCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProjectCode", value);
             }
         }
 	      
@@ -390,7 +442,11 @@ namespace SAEON.ObservationsDB.Data{
             
             public static string UpdatedAt = @"UpdatedAt";
             
+            public static string ProgrammeCode = @"ProgrammeCode";
+            
             public static string ProgrammeName = @"ProgrammeName";
+            
+            public static string ProjectCode = @"ProjectCode";
             
             public static string ProjectName = @"ProjectName";
             

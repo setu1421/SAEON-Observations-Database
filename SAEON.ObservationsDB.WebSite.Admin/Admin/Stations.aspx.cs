@@ -16,6 +16,8 @@ public partial class Admin_Stations : System.Web.UI.Page
             OrganisationStore.DataBind();
             OrganisationRoleStore.DataSource = new OrganisationRoleCollection().OrderByAsc(OrganisationRole.Columns.Name).Load();
             OrganisationRoleStore.DataBind();
+            SiteStore.DataSource = new SiteCollection().OrderByAsc(SAEON.ObservationsDB.Data.Site.Columns.Name).Load();
+            SiteStore.DataBind();
             InstrumentStore.DataSource = new InstrumentCollection().OrderByAsc(Instrument.Columns.Name).Load();
             InstrumentStore.DataBind();
         }
@@ -92,9 +94,12 @@ public partial class Admin_Stations : System.Web.UI.Page
 
             if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
                 station.StartDate = dfStartDate.SelectedDate;
+            else
+                station.StartDate = null;
             if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
                 station.EndDate = dfEndDate.SelectedDate;
-
+            else
+                station.EndDate = null;
             station.UserId = AuthHelper.GetLoggedInUserId;
 
             station.Save();
@@ -152,7 +157,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         {
             RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            StationOrganisation stationOrganisation = new StationOrganisation();
+            StationOrganisation stationOrganisation = new StationOrganisation(Utilities.MakeGuid(OrganisationLinkID.Value));
             stationOrganisation.StationID = masterID;
             stationOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
             stationOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
@@ -207,6 +212,11 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
+    [DirectMethod]
+    public void AddOrganisationClick(object sender, DirectEventArgs e)
+    {
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
+    }
     #endregion
 
     #region Instruments
@@ -218,6 +228,8 @@ public partial class Admin_Stations : System.Web.UI.Page
             Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
             VStationInstrumentCollection col = new VStationInstrumentCollection()
                 .Where(VStationInstrument.Columns.StationID, Id)
+                .OrderByAsc(VStationInstrument.Columns.StartDate)
+                .OrderByAsc(VStationInstrument.Columns.EndDate)
                 .OrderByAsc(VStationInstrument.Columns.InstrumentName)
                 .Load();
             InstrumentLinksGrid.GetStore().DataSource = col;
@@ -231,13 +243,17 @@ public partial class Admin_Stations : System.Web.UI.Page
         {
             RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            StationInstrument stationInstrument = new StationInstrument();
+            StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(InstrumentLinkID.Value));
             stationInstrument.StationID = masterID;
             stationInstrument.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
                 stationInstrument.StartDate = dfInstrumentStartDate.SelectedDate;
+            else
+                stationInstrument.StartDate = null;
             if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
                 stationInstrument.EndDate = dfInstrumentEndDate.SelectedDate;
+            else
+                stationInstrument.EndDate = null;
             stationInstrument.UserId = AuthHelper.GetLoggedInUserId;
             stationInstrument.Save();
             Auditing.Log("Stations.AddInstrumentLink", new Dictionary<string, object> {
@@ -283,6 +299,11 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
+    [DirectMethod]
+    public void AddInstrumentClick(object sender, DirectEventArgs e)
+    {
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
+    }
     #endregion
 
 }

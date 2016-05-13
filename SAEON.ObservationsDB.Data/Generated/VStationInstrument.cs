@@ -153,6 +153,18 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarUpdatedAt);
                 
+                TableSchema.TableColumn colvarInstrumentCode = new TableSchema.TableColumn(schema);
+                colvarInstrumentCode.ColumnName = "InstrumentCode";
+                colvarInstrumentCode.DataType = DbType.AnsiString;
+                colvarInstrumentCode.MaxLength = 50;
+                colvarInstrumentCode.AutoIncrement = false;
+                colvarInstrumentCode.IsNullable = false;
+                colvarInstrumentCode.IsPrimaryKey = false;
+                colvarInstrumentCode.IsForeignKey = false;
+                colvarInstrumentCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarInstrumentCode);
+                
                 TableSchema.TableColumn colvarInstrumentName = new TableSchema.TableColumn(schema);
                 colvarInstrumentName.ColumnName = "InstrumentName";
                 colvarInstrumentName.DataType = DbType.AnsiString;
@@ -327,6 +339,20 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
+        [XmlAttribute("InstrumentCode")]
+        [Bindable(true)]
+        public string InstrumentCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("InstrumentCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("InstrumentCode", value);
+            }
+        }
+	      
         [XmlAttribute("InstrumentName")]
         [Bindable(true)]
         public string InstrumentName 
@@ -363,6 +389,8 @@ namespace SAEON.ObservationsDB.Data{
             public static string AddedAt = @"AddedAt";
             
             public static string UpdatedAt = @"UpdatedAt";
+            
+            public static string InstrumentCode = @"InstrumentCode";
             
             public static string InstrumentName = @"InstrumentName";
             

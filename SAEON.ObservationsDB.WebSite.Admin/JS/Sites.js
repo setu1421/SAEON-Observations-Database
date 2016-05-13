@@ -29,9 +29,12 @@ function New() {
 
 function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible())
-        StationsGrid.getStore().reload();
-    if (pnlEast.isVisible())
+    {
         OrganisationLinksGrid.getStore().reload();
+        ProjectLinksGrid.getStore().reload();
+        StationLinksGrid.getStore().reload();
+
+    }
 }
 
 function ClearOrganisationLinkForm() {
@@ -46,6 +49,21 @@ function onOrganisationLinkCommand(e, record) {
         OrganisationLinkFormPanel.getForm().loadRecord(record);
         OrganisationLinkFormPanel.getForm().clearInvalid();
         OrganisationLinkWindow.show();
+    }
+}
+
+function ClearProjectLinkForm() {
+    ProjectLinkFormPanel.getForm().reset();
+}
+
+function onProjectLinkCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteProjectLink(record.get('Id'), { eventMask: { showMask: true } });
+    } else if (e === 'Edit') {
+        ProjectLinkFormPanel.getForm().reset();
+        ProjectLinkFormPanel.getForm().loadRecord(record);
+        ProjectLinkFormPanel.getForm().clearInvalid();
+        ProjectLinkWindow.show();
     }
 }
 

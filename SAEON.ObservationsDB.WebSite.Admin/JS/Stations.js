@@ -29,7 +29,7 @@ function New() {
 
 function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible())
-        InstrumentsGrid.getStore().reload();
+        InstrumentLinksGrid.getStore().reload();
     if (pnlEast.isVisible())
         OrganisationLinksGrid.getStore().reload();
 }

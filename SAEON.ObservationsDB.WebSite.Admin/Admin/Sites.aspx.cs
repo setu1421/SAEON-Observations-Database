@@ -16,7 +16,10 @@ public partial class Admin_Sites : System.Web.UI.Page
             OrganisationStore.DataBind();
             OrganisationRoleStore.DataSource = new da.OrganisationRoleCollection().OrderByAsc(da.OrganisationRole.Columns.Name).Load();
             OrganisationRoleStore.DataBind();
+            ProjectStore.DataSource = new da.ProjectCollection().OrderByAsc(da.Project.Columns.Name).Load();
+            ProjectStore.DataBind();
             StationStore.DataSource = new da.StationCollection().OrderByAsc(da.Station.Columns.Name).Load();
+            StationStore.DataBind();
         }
     }
 
@@ -80,8 +83,12 @@ public partial class Admin_Sites : System.Web.UI.Page
             site.Url = tfUrl.Text.Trim();
             if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
                 site.StartDate = dfStartDate.SelectedDate;
+            else
+                site.StartDate = null;
             if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
                 site.EndDate = dfEndDate.SelectedDate;
+            else
+                site.EndDate = null;
             site.UserId = AuthHelper.GetLoggedInUserId;
 
             site.Save();
@@ -138,14 +145,18 @@ public partial class Admin_Sites : System.Web.UI.Page
         {
             RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            da.SiteOrganisation siteOrganisation = new da.SiteOrganisation();
+            da.SiteOrganisation siteOrganisation = new da.SiteOrganisation(Utilities.MakeGuid(OrganisationLinkID.Value));
             siteOrganisation.SiteID = masterID;
             siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
             siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
                 siteOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
+            else
+                siteOrganisation.StartDate = null;
             if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
                 siteOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
+            else
+                siteOrganisation.EndDate = null;
             siteOrganisation.UserId = AuthHelper.GetLoggedInUserId;
             siteOrganisation.Save();
             Auditing.Log("Sites.AddOrganisationLink", new Dictionary<string, object> {
@@ -192,6 +203,99 @@ public partial class Admin_Sites : System.Web.UI.Page
             MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
         }
     }
+
+    [DirectMethod]
+    public void AddOrganisationClick(object sender, DirectEventArgs e)
+    {
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
+    }
+    #endregion
+
+    #region Projects
+
+    protected void ProjectLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
+            da.VSiteProjectCollection col = new da.VSiteProjectCollection()
+                .Where(da.VSiteProject.Columns.SiteID, Id)
+                .OrderByAsc(da.VSiteProject.Columns.StartDate)
+                .OrderByAsc(da.VSiteProject.Columns.EndDate)
+                .OrderByAsc(da.VSiteProject.Columns.ProjectName)
+                .Load();
+            ProjectLinksGrid.GetStore().DataSource = col;
+            ProjectLinksGrid.GetStore().DataBind();
+        }
+    }
+
+    protected void LinkProject_Click(object sender, DirectEventArgs e)
+    {
+        try
+        {
+            RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            da.SiteProject siteProject = new da.SiteProject(Utilities.MakeGuid(ProjectLinkID.Value));
+            siteProject.SiteID = masterID;
+            siteProject.ProjectID = new Guid(cbProject.SelectedItem.Value.Trim());
+            if (!String.IsNullOrEmpty(dfProjectStartDate.Text) && (dfProjectStartDate.SelectedDate.Year >= 1900))
+                siteProject.StartDate = dfProjectStartDate.SelectedDate;
+            else
+                siteProject.StartDate = null;
+            if (!String.IsNullOrEmpty(dfProjectEndDate.Text) && (dfProjectEndDate.SelectedDate.Year >= 1900))
+                siteProject.EndDate = dfProjectEndDate.SelectedDate;
+            else
+                siteProject.EndDate = null;
+            siteProject.UserId = AuthHelper.GetLoggedInUserId;
+            siteProject.Save();
+            Auditing.Log("Sites.AddProjectLink", new Dictionary<string, object> {
+                { "SiteID", siteProject.SiteID },
+                { "SiteCode", siteProject.Site.Code },
+                { "ProjectID", siteProject.ProjectID},
+                { "ProjectCode", siteProject.Project.Code},
+                { "StartDate", siteProject.StartDate },
+                { "EndDate", siteProject.EndDate}
+            });
+            ProjectLinksGrid.DataBind();
+            ProjectLinkWindow.Hide();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Sites.LinkProject_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link Project");
+        }
+    }
+
+    [DirectMethod]
+    public void ConfirmDeleteProjectLink(Guid aID)
+    {
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteProjectLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this Project link?");
+    }
+
+    [DirectMethod]
+    public void DeleteProjectLink(Guid aID)
+    {
+        try
+        {
+            new da.SiteProjectController().Delete(aID);
+            Auditing.Log("Sites.DeleteProjectLink", new Dictionary<string, object> { { "ID", aID } });
+            ProjectLinksGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Sites.DeleteProjectLink({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete Project link");
+        }
+    }
+
+    [DirectMethod]
+    public void AddProjectClick(object sender, DirectEventArgs e)
+    {
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
+    }
     #endregion
 
     #region Stations
@@ -203,6 +307,8 @@ public partial class Admin_Sites : System.Web.UI.Page
             Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
             da.VSiteStationCollection col = new da.VSiteStationCollection()
                 .Where(da.VSiteStation.Columns.SiteID, Id)
+                .OrderByAsc(da.VSiteStation.Columns.StartDate)
+                .OrderByAsc(da.VSiteStation.Columns.EndDate)
                 .OrderByAsc(da.VSiteStation.Columns.SiteName)
                 .Load();
             StationLinksGrid.GetStore().DataSource = col;
@@ -216,13 +322,17 @@ public partial class Admin_Sites : System.Web.UI.Page
         {
             RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            da.SiteStation siteStation = new da.SiteStation();
+            da.SiteStation siteStation = new da.SiteStation(Utilities.MakeGuid(StationLinkID.Value));
             siteStation.SiteID = masterID;
             siteStation.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfStationStartDate.Text) && (dfStationStartDate.SelectedDate.Year >= 1900))
                 siteStation.StartDate = dfStationStartDate.SelectedDate;
+            else
+                siteStation.StartDate = null;
             if (!String.IsNullOrEmpty(dfStationEndDate.Text) && (dfStationEndDate.SelectedDate.Year >= 1900))
                 siteStation.EndDate = dfStationEndDate.SelectedDate;
+            else
+                siteStation.EndDate = null;
             siteStation.UserId = AuthHelper.GetLoggedInUserId;
             siteStation.Save();
             Auditing.Log("Sites.AddStationLink", new Dictionary<string, object> {
@@ -233,8 +343,8 @@ public partial class Admin_Sites : System.Web.UI.Page
                 { "StartDate", siteStation.StartDate },
                 { "EndDate", siteStation.EndDate}
             });
-            OrganisationLinksGrid.DataBind();
-            OrganisationLinkWindow.Hide();
+            StationLinksGrid.DataBind();
+            StationLinkWindow.Hide();
         }
         catch (Exception ex)
         {
@@ -257,9 +367,9 @@ public partial class Admin_Sites : System.Web.UI.Page
     {
         try
         {
-            new da.SiteOrganisationController().Delete(aID);
+            new da.SiteStationController().Delete(aID);
             Auditing.Log("Sites.DeleteStationLink", new Dictionary<string, object> { { "ID", aID } });
-            OrganisationLinksGrid.DataBind();
+            StationLinksGrid.DataBind();
         }
         catch (Exception ex)
         {
@@ -267,6 +377,13 @@ public partial class Admin_Sites : System.Web.UI.Page
             MessageBoxes.Error(ex, "Error", "Unable to delete station link");
         }
     }
+
+    [DirectMethod]
+    public void AddStationClick(object sender, DirectEventArgs e)
+    {
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
+    }
+
     #endregion
 
 }

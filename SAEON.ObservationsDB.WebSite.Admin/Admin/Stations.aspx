@@ -41,6 +41,16 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
+    <ext:Store ID="SiteStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
     <ext:Store ID="InstrumentStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
@@ -184,6 +194,14 @@
                                             <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{OrganisationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
                                         </Listeners>
                                     </ext:Button>
+                                    <ext:Button ID="btnAddOrganisation" runat="server" Icon="Add" Text="Add Organisation">
+                                        <ToolTips>
+                                            <ext:ToolTip ID="ToolTip4" runat="server" Html="Add" />
+                                        </ToolTips>
+                                        <DirectEvents>
+                                            <Click OnEvent="AddOrganisationClick" />
+                                        </DirectEvents>
+                                    </ext:Button>
                                 </Items>
                             </ext:Toolbar>
                         </TopBar>
@@ -251,8 +269,16 @@
                                             <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{LinkInstrumentWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{InstrumentLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
                                         </Listeners>
+                                    </ext:Button>
+                                    <ext:Button ID="btnAddInstrument" runat="server" Icon="Add" Text="Add Instrument">
+                                        <ToolTips>
+                                            <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
+                                        </ToolTips>
+                                        <DirectEvents>
+                                            <Click OnEvent="AddInstrumentClick" />
+                                        </DirectEvents>
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
@@ -268,9 +294,9 @@
                                             <ext:JsonReader IDProperty="Id">
                                                 <Fields>
                                                     <ext:RecordField Name="Id" Type="Auto" />
-                                                    <ext:RecordField Name="Code" Type="Auto" />
-                                                    <ext:RecordField Name="Name" Type="Auto" />
-                                                    <ext:RecordField Name="Description" Type="Auto" />
+                                                    <ext:RecordField Name="InstrumentID" Type="Auto" />
+                                                    <ext:RecordField Name="InstrumentCode" Type="Auto" />
+                                                    <ext:RecordField Name="InstrumentName" Type="Auto" />
                                                     <ext:RecordField Name="StartDate" Type="Date" />
                                                     <ext:RecordField Name="EndDate" Type="Date" />
                                                 </Fields>
@@ -284,9 +310,8 @@
                                 </Store>
                                 <ColumnModel ID="ColumnModel2" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Code" DataIndex="Code" Width="150" />
-                                        <ext:Column Header="Name" DataIndex="Name" Width="150" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="150" />
+                                        <ext:Column Header="Code" DataIndex="InstrumentCode" Width="150" />
+                                        <ext:Column Header="Name" DataIndex="InstrumentName" Width="150" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:CommandColumn Width="50">
@@ -446,7 +471,7 @@
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
-                    <ext:Hidden ID="hID" DataIndex="Id" runat="server" ClientIDMode="Static">
+                    <ext:Hidden ID="OrganisationLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
                     <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">
@@ -533,7 +558,7 @@
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
-                    <ext:Hidden ID="Hidden1" DataIndex="Id" runat="server" ClientIDMode="Static">
+                    <ext:Hidden ID="InstrumentLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
                     <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">

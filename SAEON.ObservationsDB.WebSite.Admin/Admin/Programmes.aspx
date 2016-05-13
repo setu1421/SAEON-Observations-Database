@@ -98,14 +98,13 @@
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="200" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
-<%--                                                <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />--%>
+                                                <%--                                                <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />--%>
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -138,7 +137,7 @@
                         </Items>
                     </ext:Panel>
                 </Center>
-<%--                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
+                <%--                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
                     <ext:Panel ID="pnlEast" runat="server" Title="Projects" Layout="FitLayout" Width="425" ClientIDMode="Static">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar3" runat="server">
@@ -213,13 +212,21 @@
                         <TopBar>
                             <ext:Toolbar ID="Toolbar2" runat="server">
                                 <Items>
-                                    <ext:Button ID="btnLinkProject" runat="server" Icon="LinkAdd" Text="Link Projects">
+                                    <ext:Button ID="btnLinkProject" runat="server" Icon="LinkAdd" Text="Link Project">
                                         <ToolTips>
                                             <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection()){#{ProjectLinksWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a program.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection()){#{ProjectLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a programme.')}" />
                                         </Listeners>
+                                    </ext:Button>
+                                    <ext:Button ID="btnAddProject" runat="server" Icon="Add" Text="Add Project">
+                                        <ToolTips>
+                                            <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
+                                        </ToolTips>
+                                        <DirectEvents>
+                                            <Click OnEvent="AddProjectClick" />
+                                        </DirectEvents>
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
@@ -235,9 +242,9 @@
                                             <ext:JsonReader IDProperty="Id">
                                                 <Fields>
                                                     <ext:RecordField Name="Id" Type="Auto" />
-                                                    <ext:RecordField Name="Code" Type="Auto" />
-                                                    <ext:RecordField Name="Name" Type="Auto" />
-                                                    <ext:RecordField Name="Description" Type="Auto" />
+                                                    <ext:RecordField Name="ProjectID" Type="Auto" />
+                                                    <ext:RecordField Name="ProjectCode" Type="Auto" />
+                                                    <ext:RecordField Name="ProjectName" Type="Auto" />
                                                     <ext:RecordField Name="StartDate" Type="Date" />
                                                     <ext:RecordField Name="EndDate" Type="Date" />
                                                 </Fields>
@@ -251,15 +258,14 @@
                                 </Store>
                                 <ColumnModel ID="ColumnModel2" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Code" DataIndex="Code" Width="150" />
-                                        <ext:Column Header="Name" DataIndex="Name" Width="150" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="150" />
+                                        <ext:Column Header="Code" DataIndex="ProjectCode" Width="150" />
+                                        <ext:Column Header="Name" DataIndex="ProjectName" Width="150" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
-                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
-                                                <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink"/>
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                                <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -389,93 +395,6 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-<%--    <ext:Window ID="ProjectLinkWindow" runat="server" Width="450" Height="300" Closable="true"
-        Hidden="true" Collapsible="false" Title="Link Project"
-        Maximizable="false" Layout="Fit" ClientIDMode="Static">
-        <Listeners>
-            <Hide Fn="ClearProjectLinkForm" />
-        </Listeners>
-        <Content>
-            <ext:FormPanel ID="ProjectLinkFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
-                Layout="RowLayout" ClientIDMode="Static">
-                <LoadMask ShowMask="true" />
-                <Items>
-                    <ext:Hidden ID="hID" DataIndex="Id" runat="server" ClientIDMode="Static">
-                    </ext:Hidden>
-                    <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout"
-                        LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
-                            <ext:Parameter Name="blankText" Value="Project is a required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:ComboBox ID="cbProject" runat="server" StoreID="ProjectStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
-                                AllowBlank="false" DataIndex="ProjectID" EmptyText="Select Project"
-                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
-                            </ext:ComboBox>
-                        </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel14" runat="server" Border="false" Header="false" Layout="FormLayout"
-                        LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
-                            <ext:Parameter Name="blankText" Value="Role is a required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:ComboBox ID="cbProjectRole" runat="server" StoreID="ProjectRoleStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
-                                AllowBlank="false" DataIndex="ProjectRoleID" EmptyText="Select Role"
-                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
-                            </ext:ComboBox>
-                        </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel12" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Start Date is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:DateField ID="dfProjectStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
-                            </ext:DateField>
-                        </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel13" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="End Date is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:DateField ID="dfProjectEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
-                            </ext:DateField>
-                        </Items>
-                    </ext:Panel>
-                </Items>
-                <Buttons>
-                    <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true" Icon="Accept">
-                        <DirectEvents>
-                            <Click OnEvent="LinkProject_Click">
-                                <EventMask ShowMask="true" />
-                            </Click>
-                        </DirectEvents>
-                    </ext:Button>
-                </Buttons>
-                <BottomBar>
-                    <ext:StatusBar ID="StatusBar2" runat="server" Height="25" />
-                </BottomBar>
-                <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
-                </Listeners>
-            </ext:FormPanel>
-        </Content>
-    </ext:Window>--%>
     <ext:Window ID="ProjectLinkWindow" runat="server" Width="450" Height="300" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Project"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
@@ -488,7 +407,7 @@
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
-                    <ext:Hidden ID="hID" DataIndex="Id" runat="server" ClientIDMode="Static">
+                    <ext:Hidden ID="ProjectLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
                     <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">

@@ -165,8 +165,16 @@
                                             <ext:ToolTip ID="ToolTip3" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{InstrumentsGrid}') && #{InstrumentsGrid}.getSelectionModel().hasSelection()){#{OrganisationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{InstrumentsGrid}') && #{InstrumentsGrid}.getSelectionModel().hasSelection()){#{OrganisationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select an instrument.')}" />
                                         </Listeners>
+                                    </ext:Button>
+                                    <ext:Button ID="btnAddOrganisation" runat="server" Icon="Add" Text="Add Organisation">
+                                        <ToolTips>
+                                            <ext:ToolTip ID="ToolTip4" runat="server" Html="Add" />
+                                        </ToolTips>
+                                        <DirectEvents>
+                                            <Click OnEvent="AddOrganisationClick" />
+                                        </DirectEvents>
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
@@ -235,8 +243,16 @@
                                             <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{InstrumentsGrid}') && #{InstrumentsGrid}.getSelectionModel().hasSelection()){#{AvailableSensorsStore}.reload();#{AvailableSensorsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a data source.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{InstrumentsGrid}') && #{InstrumentsGrid}.getSelectionModel().hasSelection()){#{AvailableSensorsStore}.reload();#{AvailableSensorsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select an instrument.')}" />
                                         </Listeners>
+                                    </ext:Button>
+                                    <ext:Button ID="btnAddSensor" runat="server" Icon="Add" Text="Add Sensor">
+                                        <ToolTips>
+                                            <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
+                                        </ToolTips>
+                                        <DirectEvents>
+                                            <Click OnEvent="AddSensorClick" />
+                                        </DirectEvents>
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
@@ -407,7 +423,7 @@
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
-                    <ext:Hidden ID="hID" DataIndex="Id" runat="server" ClientIDMode="Static">
+                    <ext:Hidden ID="OrganisationLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
                     <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">

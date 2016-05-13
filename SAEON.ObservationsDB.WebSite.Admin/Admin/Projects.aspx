@@ -98,7 +98,6 @@
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="200" />
@@ -221,6 +220,14 @@
                                             <Click Handler="if(Ext.getCmp('#{ProjectsGrid}') && #{ProjectsGrid}.getSelectionModel().hasSelection()){#{SiteLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a project.')}" />
                                         </Listeners>
                                     </ext:Button>
+                                    <ext:Button ID="btnAddSite" runat="server" Icon="Add" Text="Add Site">
+                                        <ToolTips>
+                                            <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
+                                        </ToolTips>
+                                        <DirectEvents>
+                                            <Click OnEvent="AddSiteClick" />
+                                        </DirectEvents>
+                                    </ext:Button>
                                 </Items>
                             </ext:Toolbar>
                         </TopBar>
@@ -235,9 +242,9 @@
                                             <ext:JsonReader IDProperty="Id">
                                                 <Fields>
                                                     <ext:RecordField Name="Id" Type="Auto" />
-                                                    <ext:RecordField Name="Code" Type="Auto" />
-                                                    <ext:RecordField Name="Name" Type="Auto" />
-                                                    <ext:RecordField Name="Description" Type="Auto" />
+                                                    <ext:RecordField Name="SiteID" Type="Auto" />
+                                                    <ext:RecordField Name="SiteCode" Type="Auto" />
+                                                    <ext:RecordField Name="SiteName" Type="Auto" />
                                                     <ext:RecordField Name="StartDate" Type="Date" />
                                                     <ext:RecordField Name="EndDate" Type="Date" />
                                                 </Fields>
@@ -251,8 +258,8 @@
                                 </Store>
                                 <ColumnModel ID="ColumnModel2" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Code" DataIndex="Code" Width="150" />
-                                        <ext:Column Header="Name" DataIndex="Name" Width="150" />
+                                        <ext:Column Header="Code" DataIndex="SiteCode" Width="150" />
+                                        <ext:Column Header="Name" DataIndex="SiteName" Width="150" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="150" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
@@ -488,7 +495,7 @@
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
-                    <ext:Hidden ID="hID" DataIndex="Id" runat="server" ClientIDMode="Static">
+                    <ext:Hidden ID="SiteLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
                     <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">

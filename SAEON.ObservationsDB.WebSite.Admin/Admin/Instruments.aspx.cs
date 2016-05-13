@@ -22,7 +22,6 @@ public partial class Admin_Instruments : System.Web.UI.Page
             OrganisationStore.DataBind();
             OrganisationRoleStore.DataSource = new OrganisationRoleCollection().OrderByAsc(OrganisationRole.Columns.Name).Load();
             OrganisationRoleStore.DataBind();
-
         }
     }
 
@@ -89,8 +88,12 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
             if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
                 instrument.StartDate = dfStartDate.SelectedDate;
+            else
+                instrument.StartDate = null;
             if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
                 instrument.EndDate = dfEndDate.SelectedDate;
+            else
+                instrument.EndDate = null;
 
             instrument.UserId = AuthHelper.GetLoggedInUserId;
 
@@ -149,22 +152,29 @@ public partial class Admin_Instruments : System.Web.UI.Page
         {
             RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            InstrumentOrganisation InstrumentOrganisation = new InstrumentOrganisation(hID.Value);
-            InstrumentOrganisation.InstrumentID = masterID;
-            InstrumentOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
-            InstrumentOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+            InstrumentOrganisation instrumentOrganisation = new InstrumentOrganisation(Utilities.MakeGuid(OrganisationLinkID.Value));
+            instrumentOrganisation.InstrumentID = masterID;
+            instrumentOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
+            instrumentOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
-                InstrumentOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
+                instrumentOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
+            else
+                instrumentOrganisation.StartDate = null;
             if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
-                InstrumentOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
-            InstrumentOrganisation.UserId = AuthHelper.GetLoggedInUserId;
-            InstrumentOrganisation.Save();
+                instrumentOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
+            else
+                instrumentOrganisation.EndDate = null;
+            instrumentOrganisation.UserId = AuthHelper.GetLoggedInUserId;
+            instrumentOrganisation.Save();
             Auditing.Log("Instruments.AddOrganisationLink", new Dictionary<string, object> {
-                { "InstrumentID", masterID },
-                { "OrganisationID", InstrumentOrganisation.OrganisationID},
-                { "OrganisationCode", InstrumentOrganisation.Organisation.Code},
-                { "RoleID", InstrumentOrganisation.OrganisationRoleID },
-                { "RoleCode", InstrumentOrganisation.OrganisationRole.Code},
+                { "InstrumentID", instrumentOrganisation.InstrumentID },
+                { "InstrumentCode", instrumentOrganisation.Instrument.Code },
+                { "OrganisationID", instrumentOrganisation.OrganisationID},
+                { "OrganisationCode", instrumentOrganisation.Organisation.Code},
+                { "RoleID", instrumentOrganisation.OrganisationRoleID },
+                { "RoleCode", instrumentOrganisation.OrganisationRole.Code},
+                { "StartDate", instrumentOrganisation.StartDate },
+                { "EndDate", instrumentOrganisation.EndDate}
             });
             OrganisationLinksGrid.DataBind();
             OrganisationLinkWindow.Hide();
@@ -201,30 +211,11 @@ public partial class Admin_Instruments : System.Web.UI.Page
         }
     }
 
-    //protected void OrganisationLink(object sender, DirectEventArgs e)
-    //{
-    //    string actionType = e.ExtraParams["type"];
-    //    string recordID = e.ExtraParams["id"];
-    //        try
-    //        {
-    //            if (actionType == "Edit")
-    //            {
-    //                OrganisationLinkFormPanel.SetValues(new InstrumentOrganisation(recordID));
-    //                OrganisationLinkWindow.Show();
-    //            }
-    //            else if (actionType == "Delete") 
-    //            {
-    //                new InstrumentOrganisationController().Delete(recordID);
-    //                Auditing.Log("Instruments.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", recordID } });
-    //                OrganisationLinksGrid.DataBind();
-    //            }
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            Log.Error(ex, "Instruments.OrganisationLink({ActionType},{RecordID})", actionType, recordID);
-    //            MessageBoxes.Error(ex, "Unable to {0} organisation link", actionType);
-    //        }
-    //}
+    [DirectMethod]
+    public void AddOrganisationClick(object sender, DirectEventArgs e)
+    {
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
+    }
     #endregion
 
     #region Sensors
@@ -237,7 +228,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
             {
                 SensorCollection col = new SensorCollection()
                     .Where(Sensor.Columns.InstrumentID, Id)
-                    .OrderByAsc(Sensor.Columns.Code)
+                    .OrderByAsc(Sensor.Columns.Name)
                     .Load();
                 SensorsGrid.GetStore().DataSource = col;
                 SensorsGrid.GetStore().DataBind();
@@ -338,5 +329,10 @@ public partial class Admin_Instruments : System.Web.UI.Page
         }
     }
 
+    [DirectMethod]
+    public void AddSensorClick(object sender, DirectEventArgs e)
+    {
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
+    }
     #endregion
 }

@@ -3,7 +3,9 @@ CREATE VIEW [dbo].[vSiteStation]
 AS
 SELECT 
   src.*, 
+  [Site].Code SiteCode,
   [Site].Name SiteName,
+  [Station].Code StationCode,
   [Station].Name StationName
 FROM 
   [Site_Station] src

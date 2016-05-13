@@ -153,6 +153,18 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarUpdatedAt);
                 
+                TableSchema.TableColumn colvarSiteCode = new TableSchema.TableColumn(schema);
+                colvarSiteCode.ColumnName = "SiteCode";
+                colvarSiteCode.DataType = DbType.AnsiString;
+                colvarSiteCode.MaxLength = 50;
+                colvarSiteCode.AutoIncrement = false;
+                colvarSiteCode.IsNullable = false;
+                colvarSiteCode.IsPrimaryKey = false;
+                colvarSiteCode.IsForeignKey = false;
+                colvarSiteCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSiteCode);
+                
                 TableSchema.TableColumn colvarSiteName = new TableSchema.TableColumn(schema);
                 colvarSiteName.ColumnName = "SiteName";
                 colvarSiteName.DataType = DbType.AnsiString;
@@ -164,6 +176,18 @@ namespace SAEON.ObservationsDB.Data{
                 colvarSiteName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarSiteName);
+                
+                TableSchema.TableColumn colvarStationCode = new TableSchema.TableColumn(schema);
+                colvarStationCode.ColumnName = "StationCode";
+                colvarStationCode.DataType = DbType.AnsiString;
+                colvarStationCode.MaxLength = 50;
+                colvarStationCode.AutoIncrement = false;
+                colvarStationCode.IsNullable = false;
+                colvarStationCode.IsPrimaryKey = false;
+                colvarStationCode.IsForeignKey = false;
+                colvarStationCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarStationCode);
                 
                 TableSchema.TableColumn colvarStationName = new TableSchema.TableColumn(schema);
                 colvarStationName.ColumnName = "StationName";
@@ -339,6 +363,20 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
+        [XmlAttribute("SiteCode")]
+        [Bindable(true)]
+        public string SiteCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("SiteCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("SiteCode", value);
+            }
+        }
+	      
         [XmlAttribute("SiteName")]
         [Bindable(true)]
         public string SiteName 
@@ -350,6 +388,20 @@ namespace SAEON.ObservationsDB.Data{
             set 
 		    {
 			    SetColumnValue("SiteName", value);
+            }
+        }
+	      
+        [XmlAttribute("StationCode")]
+        [Bindable(true)]
+        public string StationCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("StationCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("StationCode", value);
             }
         }
 	      
@@ -390,7 +442,11 @@ namespace SAEON.ObservationsDB.Data{
             
             public static string UpdatedAt = @"UpdatedAt";
             
+            public static string SiteCode = @"SiteCode";
+            
             public static string SiteName = @"SiteName";
+            
+            public static string StationCode = @"StationCode";
             
             public static string StationName = @"StationName";
             

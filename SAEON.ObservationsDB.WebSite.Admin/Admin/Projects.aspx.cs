@@ -80,8 +80,12 @@ public partial class Admin_Projects : System.Web.UI.Page
             site.Url = tfUrl.Text.Trim();
             if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
                 site.StartDate = dfStartDate.SelectedDate;
+            else
+                site.StartDate = null;
             if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
                 site.EndDate = dfEndDate.SelectedDate;
+            else
+                site.EndDate = null;
             site.UserId = AuthHelper.GetLoggedInUserId;
 
             site.Save();
@@ -123,6 +127,8 @@ public partial class Admin_Projects : System.Web.UI.Page
             Guid Id = Guid.Parse(e.Parameters["ProjectID"].ToString());
             da.VSiteProjectCollection col = new da.VSiteProjectCollection()
                 .Where(da.VSiteProject.Columns.ProjectID, Id)
+                .OrderByAsc(da.VSiteProject.Columns.StartDate)
+                .OrderByAsc(da.VSiteProject.Columns.EndDate)
                 .OrderByAsc(da.VSiteProject.Columns.SiteName)
                 .Load();
             SiteLinksGrid.GetStore().DataSource = col;
@@ -134,9 +140,9 @@ public partial class Admin_Projects : System.Web.UI.Page
     {
         try
         {
-            RowSelectionModel masterRow = SiteLinksGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel masterRow = ProjectsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            da.SiteProject siteProject = new da.SiteProject();
+            da.SiteProject siteProject = new da.SiteProject(Utilities.MakeGuid(SiteLinkID.Value));
             siteProject.ProjectID = masterID;
             siteProject.SiteID = new Guid(cbSite.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfSiteStartDate.Text) && (dfSiteStartDate.SelectedDate.Year >= 1900))
@@ -186,6 +192,12 @@ public partial class Admin_Projects : System.Web.UI.Page
             Log.Error(ex, "Projects.DeleteSiteLink({aID})", aID);
             MessageBoxes.Error(ex, "Error", "Unable to delete site link");
         }
+    }
+
+    [DirectMethod]
+    public void AddSiteClick(object sender, DirectEventArgs e)
+    {
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
     }
     #endregion
 }
