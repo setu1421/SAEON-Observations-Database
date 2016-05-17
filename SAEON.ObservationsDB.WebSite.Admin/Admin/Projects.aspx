@@ -222,6 +222,7 @@
                                                     <Click Handler="if(Ext.getCmp('#{ProjectsGrid}') && #{ProjectsGrid}.getSelectionModel().hasSelection()){#{SiteLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a project.')}" />
                                                 </Listeners>
                                             </ext:Button>
+                                            <%--
                                             <ext:Button ID="btnAddSite" runat="server" Icon="Add" Text="Add Site">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
@@ -230,6 +231,7 @@
                                                     <Click OnEvent="AddSiteClick" />
                                                 </DirectEvents>
                                             </ext:Button>
+                                            --%>
                                         </Items>
                                     </ext:Toolbar>
                                 </TopBar>

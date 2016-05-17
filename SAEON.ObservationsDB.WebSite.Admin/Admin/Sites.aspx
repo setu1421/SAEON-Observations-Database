@@ -185,6 +185,8 @@
                                                     <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{OrganisationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                                 </Listeners>
                                             </ext:Button>
+                                            <%--
+
                                             <ext:Button ID="btnAddOrganisation" runat="server" Icon="Add" Text="Add Organisation">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip4" runat="server" Html="Add" />
@@ -193,6 +195,7 @@
                                                     <Click OnEvent="AddOrganisationClick" />
                                                 </DirectEvents>
                                             </ext:Button>
+                                            --%>
                                         </Items>
                                     </ext:Toolbar>
                                 </TopBar>
@@ -224,8 +227,8 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel5" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150"/>
-                                                <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150"/>
+                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
+                                                <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="50">
@@ -259,6 +262,7 @@
                                                     <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{ProjectLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                                 </Listeners>
                                             </ext:Button>
+                                            <%-- 
                                             <ext:Button ID="btnAddProject" runat="server" Icon="Add" Text="Add Project">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip7" runat="server" Html="Add" />
@@ -267,6 +271,7 @@
                                                     <Click OnEvent="AddProjectClick" />
                                                 </DirectEvents>
                                             </ext:Button>
+                                            --%>
                                         </Items>
                                     </ext:Toolbar>
                                 </TopBar>
@@ -332,6 +337,7 @@
                                                     <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{StationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                                 </Listeners>
                                             </ext:Button>
+                                            <%-- 
                                             <ext:Button ID="btnAddStation" runat="server" Icon="Add" Text="Add Station">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
@@ -340,6 +346,7 @@
                                                     <Click OnEvent="AddStationClick" />
                                                 </DirectEvents>
                                             </ext:Button>
+                                            --%>
                                         </Items>
                                     </ext:Toolbar>
                                 </TopBar>

@@ -172,6 +172,7 @@
                                                     <Click Handler="if(Ext.getCmp('#{InstrumentsGrid}') && #{InstrumentsGrid}.getSelectionModel().hasSelection()){#{OrganisationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select an instrument.')}" />
                                                 </Listeners>
                                             </ext:Button>
+                                            <%-- 
                                             <ext:Button ID="btnAddOrganisation" runat="server" Icon="Add" Text="Add Organisation">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip4" runat="server" Html="Add" />
@@ -180,6 +181,7 @@
                                                     <Click OnEvent="AddOrganisationClick" />
                                                 </DirectEvents>
                                             </ext:Button>
+                                            --%>
                                         </Items>
                                     </ext:Toolbar>
                                 </TopBar>
@@ -248,6 +250,7 @@
                                                     <Click Handler="if(Ext.getCmp('#{InstrumentsGrid}') && #{InstrumentsGrid}.getSelectionModel().hasSelection()){#{AvailableSensorsStore}.reload();#{AvailableSensorsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select an instrument.')}" />
                                                 </Listeners>
                                             </ext:Button>
+                                            <%-- 
                                             <ext:Button ID="btnAddSensor" runat="server" Icon="Add" Text="Add Sensor">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
@@ -256,6 +259,7 @@
                                                     <Click OnEvent="AddSensorClick" />
                                                 </DirectEvents>
                                             </ext:Button>
+                                            --%>
                                         </Items>
                                     </ext:Toolbar>
                                 </TopBar>

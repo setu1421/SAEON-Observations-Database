@@ -198,6 +198,7 @@
                                                     <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{OrganisationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
                                                 </Listeners>
                                             </ext:Button>
+                                            <%-- 
                                             <ext:Button ID="btnAddOrganisation" runat="server" Icon="Add" Text="Add Organisation">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip4" runat="server" Html="Add" />
@@ -206,6 +207,7 @@
                                                     <Click OnEvent="AddOrganisationClick" />
                                                 </DirectEvents>
                                             </ext:Button>
+                                            --%>
                                         </Items>
                                     </ext:Toolbar>
                                 </TopBar>
@@ -274,6 +276,7 @@
                                                     <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{InstrumentLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
                                                 </Listeners>
                                             </ext:Button>
+                                            <%-- 
                                             <ext:Button ID="btnAddInstrument" runat="server" Icon="Add" Text="Add Instrument">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
@@ -282,6 +285,7 @@
                                                     <Click OnEvent="AddInstrumentClick" />
                                                 </DirectEvents>
                                             </ext:Button>
+                                            --%>
                                         </Items>
                                     </ext:Toolbar>
                                 </TopBar>
