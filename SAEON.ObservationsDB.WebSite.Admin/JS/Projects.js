@@ -28,8 +28,6 @@ function New() {
 }
 
 function MasterRowSelect(e, record) {
-    //if (pnlEast.isVisible())
-    //    OrganisationLinksGrid.getStore().reload();
     if (pnlSouth.isVisible())
         SiteLinksGrid.getStore().reload();
 }

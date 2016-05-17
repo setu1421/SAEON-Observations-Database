@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Sites" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Projects.aspx.cs" Inherits="Admin_Projects" %>
+﻿<%@ Page Title="Projects" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Projects.aspx.cs" Inherits="Admin_Projects" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript" src="../JS/Projects.js"></script>
@@ -104,7 +104,7 @@
                                         <ext:CommandColumn Width="50">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
-<%--                                                <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />--%>
+                                                <%--                                                <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />--%>
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -137,7 +137,7 @@
                         </Items>
                     </ext:Panel>
                 </Center>
-<%--                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
+                <%--                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
                     <ext:Panel ID="pnlEast" runat="server" Title="Organisations" Layout="FitLayout" Width="425" ClientIDMode="Static">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar3" runat="server">
@@ -206,82 +206,86 @@
                         </Items>
                     </ext:Panel>
                 </East>--%>
-                <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
-                    <ext:Panel ID="pnlSouth" runat="server" Title="Sites" Layout="FitLayout"
-                        Height="300" ClientIDMode="Static">
-                        <TopBar>
-                            <ext:Toolbar ID="Toolbar2" runat="server">
-                                <Items>
-                                    <ext:Button ID="btnLinkSite" runat="server" Icon="LinkAdd" Text="Link Sites">
-                                        <ToolTips>
-                                            <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
-                                        </ToolTips>
-                                        <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{ProjectsGrid}') && #{ProjectsGrid}.getSelectionModel().hasSelection()){#{SiteLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a project.')}" />
-                                        </Listeners>
-                                    </ext:Button>
-                                    <ext:Button ID="btnAddSite" runat="server" Icon="Add" Text="Add Site">
-                                        <ToolTips>
-                                            <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
-                                        </ToolTips>
-                                        <DirectEvents>
-                                            <Click OnEvent="AddSiteClick" />
-                                        </DirectEvents>
-                                    </ext:Button>
-                                </Items>
-                            </ext:Toolbar>
-                        </TopBar>
+                <South Collapsible="true" Split="true" MinHeight="250">
+                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" ActiveTabIndex="0" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:GridPanel ID="SiteLinksGrid" runat="server" Border="false" ClientIDMode="Static">
-                                <Store>
-                                    <ext:Store ID="SiteLinksGridStore" runat="server" OnRefreshData="SiteLinksGridStore_RefreshData">
-                                        <Proxy>
-                                            <ext:PageProxy />
-                                        </Proxy>
-                                        <Reader>
-                                            <ext:JsonReader IDProperty="Id">
-                                                <Fields>
-                                                    <ext:RecordField Name="Id" Type="Auto" />
-                                                    <ext:RecordField Name="SiteID" Type="Auto" />
-                                                    <ext:RecordField Name="SiteCode" Type="Auto" />
-                                                    <ext:RecordField Name="SiteName" Type="Auto" />
-                                                    <ext:RecordField Name="StartDate" Type="Date" />
-                                                    <ext:RecordField Name="EndDate" Type="Date" />
-                                                </Fields>
-                                            </ext:JsonReader>
-                                        </Reader>
-                                        <BaseParams>
-                                            <ext:Parameter Name="ProjectID" Value="Ext.getCmp('#{ProjectsGrid}') && #{ProjectsGrid}.getSelectionModel().hasSelection() ? #{ProjectsGrid}.getSelectionModel().getSelected().id : -1"
-                                                Mode="Raw" />
-                                        </BaseParams>
-                                    </ext:Store>
-                                </Store>
-                                <ColumnModel ID="ColumnModel2" runat="server">
-                                    <Columns>
-                                        <ext:Column Header="Code" DataIndex="SiteCode" Width="150" />
-                                        <ext:Column Header="Name" DataIndex="SiteName" Width="150" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="150" />
-                                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
-                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-                                        <ext:CommandColumn Width="50">
-                                            <Commands>
-                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
-                                                <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink"/>
-                                            </Commands>
-                                        </ext:CommandColumn>
-                                    </Columns>
-                                </ColumnModel>
-                                <SelectionModel>
-                                    <ext:RowSelectionModel ID="RowSelectionModel2" runat="server" SingleSelect="true">
-                                    </ext:RowSelectionModel>
-                                </SelectionModel>
-                                <LoadMask ShowMask="true" />
-                                <Listeners>
-                                    <Command Fn="onSiteLinkCommand" />
-                                </Listeners>
-                            </ext:GridPanel>
+                            <ext:Panel ID="pnlSites" runat="server" Title="Sites" Layout="FitLayout"
+                                Height="300" ClientIDMode="Static">
+                                <TopBar>
+                                    <ext:Toolbar ID="Toolbar2" runat="server">
+                                        <Items>
+                                            <ext:Button ID="btnLinkSite" runat="server" Icon="LinkAdd" Text="Link Sites">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
+                                                </ToolTips>
+                                                <Listeners>
+                                                    <Click Handler="if(Ext.getCmp('#{ProjectsGrid}') && #{ProjectsGrid}.getSelectionModel().hasSelection()){#{SiteLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a project.')}" />
+                                                </Listeners>
+                                            </ext:Button>
+                                            <ext:Button ID="btnAddSite" runat="server" Icon="Add" Text="Add Site">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="AddSiteClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                        </Items>
+                                    </ext:Toolbar>
+                                </TopBar>
+                                <Items>
+                                    <ext:GridPanel ID="SiteLinksGrid" runat="server" Border="false" ClientIDMode="Static">
+                                        <Store>
+                                            <ext:Store ID="SiteLinksGridStore" runat="server" OnRefreshData="SiteLinksGridStore_RefreshData">
+                                                <Proxy>
+                                                    <ext:PageProxy />
+                                                </Proxy>
+                                                <Reader>
+                                                    <ext:JsonReader IDProperty="Id">
+                                                        <Fields>
+                                                            <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="SiteID" Type="Auto" />
+                                                            <ext:RecordField Name="SiteCode" Type="Auto" />
+                                                            <ext:RecordField Name="SiteName" Type="Auto" />
+                                                            <ext:RecordField Name="StartDate" Type="Date" />
+                                                            <ext:RecordField Name="EndDate" Type="Date" />
+                                                        </Fields>
+                                                    </ext:JsonReader>
+                                                </Reader>
+                                                <BaseParams>
+                                                    <ext:Parameter Name="ProjectID" Value="Ext.getCmp('#{ProjectsGrid}') && #{ProjectsGrid}.getSelectionModel().hasSelection() ? #{ProjectsGrid}.getSelectionModel().getSelected().id : -1"
+                                                        Mode="Raw" />
+                                                </BaseParams>
+                                            </ext:Store>
+                                        </Store>
+                                        <ColumnModel ID="ColumnModel2" runat="server">
+                                            <Columns>
+                                                <ext:Column Header="Code" DataIndex="SiteCode" Width="150" />
+                                                <ext:Column Header="Name" DataIndex="SiteName" Width="150" />
+                                                <ext:Column Header="Description" DataIndex="Description" Width="150" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+                                                <ext:CommandColumn Width="50">
+                                                    <Commands>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
+                                                    </Commands>
+                                                </ext:CommandColumn>
+                                            </Columns>
+                                        </ColumnModel>
+                                        <SelectionModel>
+                                            <ext:RowSelectionModel ID="RowSelectionModel2" runat="server" SingleSelect="true">
+                                            </ext:RowSelectionModel>
+                                        </SelectionModel>
+                                        <LoadMask ShowMask="true" />
+                                        <Listeners>
+                                            <Command Fn="onSiteLinkCommand" />
+                                        </Listeners>
+                                    </ext:GridPanel>
+                                </Items>
+                            </ext:Panel>
                         </Items>
-                    </ext:Panel>
+                    </ext:TabPanel>
                 </South>
             </ext:BorderLayout>
         </Items>
@@ -396,7 +400,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-<%--    <ext:Window ID="OrganisationLinkWindow" runat="server" Width="450" Height="300" Closable="true"
+    <%--    <ext:Window ID="OrganisationLinkWindow" runat="server" Width="450" Height="300" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Organisation"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>

@@ -6,6 +6,10 @@ using Ext.Net;
 using SubSonic;
 using SAEON.ObservationsDB.Data;
 using Newtonsoft.Json;
+using System.Web.Script.Serialization;
+using System.Web;
+using System.Xml.Xsl;
+using System.Xml;
 
 /// <summary>
 /// Summary description for BaseRepository

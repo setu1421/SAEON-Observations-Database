@@ -153,6 +153,30 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarUpdatedAt);
                 
+                TableSchema.TableColumn colvarStationCode = new TableSchema.TableColumn(schema);
+                colvarStationCode.ColumnName = "StationCode";
+                colvarStationCode.DataType = DbType.AnsiString;
+                colvarStationCode.MaxLength = 50;
+                colvarStationCode.AutoIncrement = false;
+                colvarStationCode.IsNullable = false;
+                colvarStationCode.IsPrimaryKey = false;
+                colvarStationCode.IsForeignKey = false;
+                colvarStationCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarStationCode);
+                
+                TableSchema.TableColumn colvarStationName = new TableSchema.TableColumn(schema);
+                colvarStationName.ColumnName = "StationName";
+                colvarStationName.DataType = DbType.AnsiString;
+                colvarStationName.MaxLength = 150;
+                colvarStationName.AutoIncrement = false;
+                colvarStationName.IsNullable = false;
+                colvarStationName.IsPrimaryKey = false;
+                colvarStationName.IsForeignKey = false;
+                colvarStationName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarStationName);
+                
                 TableSchema.TableColumn colvarInstrumentCode = new TableSchema.TableColumn(schema);
                 colvarInstrumentCode.ColumnName = "InstrumentCode";
                 colvarInstrumentCode.DataType = DbType.AnsiString;
@@ -339,6 +363,34 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
+        [XmlAttribute("StationCode")]
+        [Bindable(true)]
+        public string StationCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("StationCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("StationCode", value);
+            }
+        }
+	      
+        [XmlAttribute("StationName")]
+        [Bindable(true)]
+        public string StationName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("StationName");
+		    }
+            set 
+		    {
+			    SetColumnValue("StationName", value);
+            }
+        }
+	      
         [XmlAttribute("InstrumentCode")]
         [Bindable(true)]
         public string InstrumentCode 
@@ -389,6 +441,10 @@ namespace SAEON.ObservationsDB.Data{
             public static string AddedAt = @"AddedAt";
             
             public static string UpdatedAt = @"UpdatedAt";
+            
+            public static string StationCode = @"StationCode";
+            
+            public static string StationName = @"StationName";
             
             public static string InstrumentCode = @"InstrumentCode";
             

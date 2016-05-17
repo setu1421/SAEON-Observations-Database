@@ -165,6 +165,30 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarUpdatedAt);
                 
+                TableSchema.TableColumn colvarSiteCode = new TableSchema.TableColumn(schema);
+                colvarSiteCode.ColumnName = "SiteCode";
+                colvarSiteCode.DataType = DbType.AnsiString;
+                colvarSiteCode.MaxLength = 50;
+                colvarSiteCode.AutoIncrement = false;
+                colvarSiteCode.IsNullable = false;
+                colvarSiteCode.IsPrimaryKey = false;
+                colvarSiteCode.IsForeignKey = false;
+                colvarSiteCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSiteCode);
+                
+                TableSchema.TableColumn colvarSiteName = new TableSchema.TableColumn(schema);
+                colvarSiteName.ColumnName = "SiteName";
+                colvarSiteName.DataType = DbType.AnsiString;
+                colvarSiteName.MaxLength = 150;
+                colvarSiteName.AutoIncrement = false;
+                colvarSiteName.IsNullable = false;
+                colvarSiteName.IsPrimaryKey = false;
+                colvarSiteName.IsForeignKey = false;
+                colvarSiteName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSiteName);
+                
                 TableSchema.TableColumn colvarOrganisationCode = new TableSchema.TableColumn(schema);
                 colvarOrganisationCode.ColumnName = "OrganisationCode";
                 colvarOrganisationCode.DataType = DbType.AnsiString;
@@ -389,6 +413,34 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
+        [XmlAttribute("SiteCode")]
+        [Bindable(true)]
+        public string SiteCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("SiteCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("SiteCode", value);
+            }
+        }
+	      
+        [XmlAttribute("SiteName")]
+        [Bindable(true)]
+        public string SiteName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("SiteName");
+		    }
+            set 
+		    {
+			    SetColumnValue("SiteName", value);
+            }
+        }
+	      
         [XmlAttribute("OrganisationCode")]
         [Bindable(true)]
         public string OrganisationCode 
@@ -469,6 +521,10 @@ namespace SAEON.ObservationsDB.Data{
             public static string AddedAt = @"AddedAt";
             
             public static string UpdatedAt = @"UpdatedAt";
+            
+            public static string SiteCode = @"SiteCode";
+            
+            public static string SiteName = @"SiteName";
             
             public static string OrganisationCode = @"OrganisationCode";
             

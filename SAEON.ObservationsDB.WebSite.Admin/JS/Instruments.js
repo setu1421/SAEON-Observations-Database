@@ -29,9 +29,10 @@ function New() {
 
 function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible())
-        SensorsGrid.getStore().reload();
-    if (pnlEast.isVisible())
+    {
         OrganisationLinksGrid.getStore().reload();
+        SensorsGrid.getStore().reload();
+    }
 }
 
 function ClearOrganisationLinkForm() {

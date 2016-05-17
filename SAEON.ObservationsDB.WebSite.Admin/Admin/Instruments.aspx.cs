@@ -81,7 +81,6 @@ public partial class Admin_Instruments : System.Web.UI.Page
             if (!string.IsNullOrEmpty(tfName.Text.Trim()))
                 instrument.Name = tfName.Text.Trim();
             instrument.Description = tfDescription.Text.Trim();
-            instrument.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
 
             if (!string.IsNullOrEmpty(tfUrl.Text))
                 instrument.Url = tfUrl.Text;

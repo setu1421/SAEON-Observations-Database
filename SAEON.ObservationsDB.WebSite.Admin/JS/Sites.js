@@ -33,7 +33,6 @@ function MasterRowSelect(e, record) {
         OrganisationLinksGrid.getStore().reload();
         ProjectLinksGrid.getStore().reload();
         StationLinksGrid.getStore().reload();
-
     }
 }
 

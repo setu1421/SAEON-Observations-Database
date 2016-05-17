@@ -153,30 +153,6 @@ namespace SAEON.ObservationsDB.Data{
                 
                 schema.Columns.Add(colvarUpdatedAt);
                 
-                TableSchema.TableColumn colvarProjectCode = new TableSchema.TableColumn(schema);
-                colvarProjectCode.ColumnName = "ProjectCode";
-                colvarProjectCode.DataType = DbType.AnsiString;
-                colvarProjectCode.MaxLength = 50;
-                colvarProjectCode.AutoIncrement = false;
-                colvarProjectCode.IsNullable = false;
-                colvarProjectCode.IsPrimaryKey = false;
-                colvarProjectCode.IsForeignKey = false;
-                colvarProjectCode.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarProjectCode);
-                
-                TableSchema.TableColumn colvarProjectName = new TableSchema.TableColumn(schema);
-                colvarProjectName.ColumnName = "ProjectName";
-                colvarProjectName.DataType = DbType.AnsiString;
-                colvarProjectName.MaxLength = 150;
-                colvarProjectName.AutoIncrement = false;
-                colvarProjectName.IsNullable = false;
-                colvarProjectName.IsPrimaryKey = false;
-                colvarProjectName.IsForeignKey = false;
-                colvarProjectName.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarProjectName);
-                
                 TableSchema.TableColumn colvarSiteCode = new TableSchema.TableColumn(schema);
                 colvarSiteCode.ColumnName = "SiteCode";
                 colvarSiteCode.DataType = DbType.AnsiString;
@@ -200,6 +176,30 @@ namespace SAEON.ObservationsDB.Data{
                 colvarSiteName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarSiteName);
+                
+                TableSchema.TableColumn colvarProjectCode = new TableSchema.TableColumn(schema);
+                colvarProjectCode.ColumnName = "ProjectCode";
+                colvarProjectCode.DataType = DbType.AnsiString;
+                colvarProjectCode.MaxLength = 50;
+                colvarProjectCode.AutoIncrement = false;
+                colvarProjectCode.IsNullable = false;
+                colvarProjectCode.IsPrimaryKey = false;
+                colvarProjectCode.IsForeignKey = false;
+                colvarProjectCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProjectCode);
+                
+                TableSchema.TableColumn colvarProjectName = new TableSchema.TableColumn(schema);
+                colvarProjectName.ColumnName = "ProjectName";
+                colvarProjectName.DataType = DbType.AnsiString;
+                colvarProjectName.MaxLength = 150;
+                colvarProjectName.AutoIncrement = false;
+                colvarProjectName.IsNullable = false;
+                colvarProjectName.IsPrimaryKey = false;
+                colvarProjectName.IsForeignKey = false;
+                colvarProjectName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarProjectName);
                 
                 
                 BaseSchema = schema;
@@ -363,34 +363,6 @@ namespace SAEON.ObservationsDB.Data{
             }
         }
 	      
-        [XmlAttribute("ProjectCode")]
-        [Bindable(true)]
-        public string ProjectCode 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("ProjectCode");
-		    }
-            set 
-		    {
-			    SetColumnValue("ProjectCode", value);
-            }
-        }
-	      
-        [XmlAttribute("ProjectName")]
-        [Bindable(true)]
-        public string ProjectName 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("ProjectName");
-		    }
-            set 
-		    {
-			    SetColumnValue("ProjectName", value);
-            }
-        }
-	      
         [XmlAttribute("SiteCode")]
         [Bindable(true)]
         public string SiteCode 
@@ -418,6 +390,34 @@ namespace SAEON.ObservationsDB.Data{
 			    SetColumnValue("SiteName", value);
             }
         }
+	      
+        [XmlAttribute("ProjectCode")]
+        [Bindable(true)]
+        public string ProjectCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProjectCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProjectCode", value);
+            }
+        }
+	      
+        [XmlAttribute("ProjectName")]
+        [Bindable(true)]
+        public string ProjectName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ProjectName");
+		    }
+            set 
+		    {
+			    SetColumnValue("ProjectName", value);
+            }
+        }
 	    
 	    #endregion
     
@@ -442,13 +442,13 @@ namespace SAEON.ObservationsDB.Data{
             
             public static string UpdatedAt = @"UpdatedAt";
             
-            public static string ProjectCode = @"ProjectCode";
-            
-            public static string ProjectName = @"ProjectName";
-            
             public static string SiteCode = @"SiteCode";
             
             public static string SiteName = @"SiteName";
+            
+            public static string ProjectCode = @"ProjectCode";
+            
+            public static string ProjectName = @"ProjectName";
             
 	    }
 	    #endregion

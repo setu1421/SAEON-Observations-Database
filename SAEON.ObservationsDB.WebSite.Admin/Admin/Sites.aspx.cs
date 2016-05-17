@@ -358,7 +358,7 @@ public partial class Admin_Sites : System.Web.UI.Page
     {
         MessageBoxes.Confirm(
             "Confirm Delete",
-            String.Format("DirectCall.DeleteOrganisationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            String.Format("DirectCall.DeleteStationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
             "Are you sure you want to delete this station link?");
     }
 
