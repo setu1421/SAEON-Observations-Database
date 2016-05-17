@@ -569,9 +569,6 @@
     <None Include="Lab2-SAEON ObservationsTest.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="SAEON.ObservationsDB.Database.refactorlog" />
-  </ItemGroup>
-  <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\master.dacpac">
       <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\master.dacpac</HintPath>
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
