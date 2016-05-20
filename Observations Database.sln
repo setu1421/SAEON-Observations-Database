@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.API", "SAEON.ObservationsDB.API\SAEON.ObservationsDB.API.csproj", "{D62286A6-1BC7-4A54-A6CD-82DBC687DFBF}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SAEON.Observations.Database", "SAEON.ObservationsDB.Database\SAEON.Observations.Database.sqlproj", "{AC68EB6A-31BD-407E-9B65-558E900AEF61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.API.Tests", "SAEON.ObservationsDB.API.Tests\SAEON.ObservationsDB.API.Tests.csproj", "{8FB44ECE-DE53-4ECA-8A8F-0FA0EF7821C9}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SAEON.ObservationsDB.Database", "SAEON.ObservationsDB.Database\SAEON.ObservationsDB.Database.sqlproj", "{AC68EB6A-31BD-407E-9B65-558E900AEF61}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.ObservationsDB.Data", "SAEON.ObservationsDB.Data\SAEON.ObservationsDB.Data.csproj", "{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Data", "SAEON.ObservationsDB.Data\SAEON.Observations.Data.csproj", "{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.ObservationsDB.WebSite.Admin", "SAEON.ObservationsDB.WebSite.Admin", "{EEC81A5F-AC32-43B1-941B-E10496D83287}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -44,14 +40,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D62286A6-1BC7-4A54-A6CD-82DBC687DFBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D62286A6-1BC7-4A54-A6CD-82DBC687DFBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D62286A6-1BC7-4A54-A6CD-82DBC687DFBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D62286A6-1BC7-4A54-A6CD-82DBC687DFBF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FB44ECE-DE53-4ECA-8A8F-0FA0EF7821C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FB44ECE-DE53-4ECA-8A8F-0FA0EF7821C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FB44ECE-DE53-4ECA-8A8F-0FA0EF7821C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FB44ECE-DE53-4ECA-8A8F-0FA0EF7821C9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC68EB6A-31BD-407E-9B65-558E900AEF61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC68EB6A-31BD-407E-9B65-558E900AEF61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC68EB6A-31BD-407E-9B65-558E900AEF61}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -71,26 +59,20 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://nimbusservices.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = SAEON.ObservationsDB.API.Tests\\SAEON.ObservationsDB.API.Tests.csproj
-		SccProjectName1 = SAEON.ObservationsDB.API.Tests
-		SccLocalPath1 = SAEON.ObservationsDB.API.Tests
-		SccProjectUniqueName2 = SAEON.ObservationsDB.API\\SAEON.ObservationsDB.API.csproj
-		SccProjectName2 = SAEON.ObservationsDB.API
-		SccLocalPath2 = SAEON.ObservationsDB.API
-		SccProjectUniqueName3 = SAEON.ObservationsDB.Database\\SAEON.ObservationsDB.Database.sqlproj
+		SccWebProject1 = true
+		SccProjectUniqueName1 = SAEON.ObservationsDB.WebSite.Admin
+		SccProjectName1 = SAEON.ObservationsDB.WebSite.Admin
+		SccLocalPath1 = SAEON.ObservationsDB.WebSite.Admin
+		SccProjectEnlistmentChoice1 = 2
+		SccProjectUniqueName2 = SAEON.ObservationsDB.Data\\SAEON.Observations.Data.csproj
+		SccProjectName2 = SAEON.ObservationsDB.Data
+		SccLocalPath2 = SAEON.ObservationsDB.Data
+		SccProjectUniqueName3 = SAEON.ObservationsDB.Database\\SAEON.Observations.Database.sqlproj
 		SccProjectName3 = SAEON.ObservationsDB.Database
 		SccLocalPath3 = SAEON.ObservationsDB.Database
-		SccProjectUniqueName4 = SAEON.ObservationsDB.Data\\SAEON.ObservationsDB.Data.csproj
-		SccProjectName4 = SAEON.ObservationsDB.Data
-		SccLocalPath4 = SAEON.ObservationsDB.Data
-		SccWebProject5 = true
-		SccProjectUniqueName5 = SAEON.ObservationsDB.WebSite.Admin
-		SccProjectName5 = SAEON.ObservationsDB.WebSite.Admin
-		SccLocalPath5 = SAEON.ObservationsDB.WebSite.Admin
-		SccProjectEnlistmentChoice5 = 2
 	EndGlobalSection
 EndGlobal

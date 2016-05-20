@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>SAEON.ObservationsDB.Database</Name>
+    <Name>SAEON.Observations.Database</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{ac68eb6a-31bd-407e-9b65-558e900aef61}</ProjectGuid>

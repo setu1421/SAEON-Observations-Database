@@ -107,12 +107,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SAEON.ObservationsDB.API\SAEON.ObservationsDB.API.csproj">
-      <Project>{D62286A6-1BC7-4A54-A6CD-82DBC687DFBF}</Project>
-      <Name>SAEON.ObservationsDB.API</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
