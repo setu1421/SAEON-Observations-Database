@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using SAEON.ObservationsDB.Data;
+using SAEON.Observations.Data;
 using SubSonic;
 using Ext.Net;
 

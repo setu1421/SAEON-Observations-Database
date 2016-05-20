@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Ext.Net;
-using SAEON.ObservationsDB.Data;
+using SAEON.Observations.Data;
 using SubSonic;
 using System.Xml;
 using System.Xml.Xsl;

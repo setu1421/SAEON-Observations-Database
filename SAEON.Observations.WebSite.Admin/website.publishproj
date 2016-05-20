@@ -44,9 +44,9 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     </AssemblyAttributes>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SAEON.ObservationsDB.Data\SAEON.ObservationsDB.Data.csproj">
+    <ProjectReference Include="..\SAEON.Observations.Data\SAEON.Observations.Data.csproj">
       <Project>{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}</Project>
-      <Name>SAEON.ObservationsDB.Data</Name>
+      <Name>SAEON.Observations.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(_WebPublishTargetsPath)\Web\Microsoft.WebSite.Publishing.targets" />

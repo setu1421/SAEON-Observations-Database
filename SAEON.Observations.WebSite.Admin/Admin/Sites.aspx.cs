@@ -1,5 +1,5 @@
 ﻿using Ext.Net;
-using da = SAEON.ObservationsDB.Data;
+using da = SAEON.Observations.Data;
 using System;
 using System.Linq;
 using SubSonic;

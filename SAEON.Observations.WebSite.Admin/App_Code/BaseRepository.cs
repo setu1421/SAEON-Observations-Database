@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using Ext.Net;
 using SubSonic;
-using SAEON.ObservationsDB.Data;
+using SAEON.Observations.Data;
 using Newtonsoft.Json;
 using System.Web.Script.Serialization;
 using System.Web;

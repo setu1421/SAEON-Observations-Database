@@ -10,7 +10,7 @@ using SubSonic;
 using System.Globalization;
 using System.Text;
 using NCalc;
-using SAEON.ObservationsDB.Data;
+using SAEON.Observations.Data;
 
 /// <summary>
 /// Summary description for ImportSchema

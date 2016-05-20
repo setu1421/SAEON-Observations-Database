@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Runtime.Remoting.Contexts;
-using SAEON.ObservationsDB.Data;
+using SAEON.Observations.Data;
 using System.Web.Security;
 
 /// <summary>

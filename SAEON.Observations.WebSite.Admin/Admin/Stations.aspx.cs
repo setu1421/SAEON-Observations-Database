@@ -1,5 +1,5 @@
 ﻿using Ext.Net;
-using SAEON.ObservationsDB.Data;
+using SAEON.Observations.Data;
 using System;
 using System.Linq;
 using SubSonic;
@@ -16,7 +16,7 @@ public partial class Admin_Stations : System.Web.UI.Page
             OrganisationStore.DataBind();
             OrganisationRoleStore.DataSource = new OrganisationRoleCollection().OrderByAsc(OrganisationRole.Columns.Name).Load();
             OrganisationRoleStore.DataBind();
-            SiteStore.DataSource = new SiteCollection().OrderByAsc(SAEON.ObservationsDB.Data.Site.Columns.Name).Load();
+            SiteStore.DataSource = new SiteCollection().OrderByAsc(SAEON.Observations.Data.Site.Columns.Name).Load();
             SiteStore.DataBind();
             InstrumentStore.DataSource = new InstrumentCollection().OrderByAsc(Instrument.Columns.Name).Load();
             InstrumentStore.DataBind();
