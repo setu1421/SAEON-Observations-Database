@@ -3,34 +3,34 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SAEON.Observations.Database", "SAEON.ObservationsDB.Database\SAEON.Observations.Database.sqlproj", "{AC68EB6A-31BD-407E-9B65-558E900AEF61}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SAEON.Observations.Database", "SAEON.Observations.Database\SAEON.Observations.Database.sqlproj", "{AC68EB6A-31BD-407E-9B65-558E900AEF61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Data", "SAEON.ObservationsDB.Data\SAEON.Observations.Data.csproj", "{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Data", "SAEON.Observations.Data\SAEON.Observations.Data.csproj", "{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.ObservationsDB.WebSite.Admin", "SAEON.ObservationsDB.WebSite.Admin", "{EEC81A5F-AC32-43B1-941B-E10496D83287}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.Observations.WebSite.Admin", "SAEON.Observations.WebSite.Admin", "{EEC81A5F-AC32-43B1-941B-E10496D83287}"
 	ProjectSection(WebsiteProperties) = preProject
 		SccProjectName = "SAK"
 		SccAuxPath = "SAK"
 		SccLocalPath = "SAK"
 		SccProvider = "SAK"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
-		ProjectReferences = "{5e1c5955-ee32-4fc2-9b18-a3e505dd278d}|SAEON.ObservationsDB.Data.dll;"
+		ProjectReferences = "{5e1c5955-ee32-4fc2-9b18-a3e505dd278d}|SAEON.Observations.Data.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_54378"
-		Debug.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.WebSite.Admin\"
+		Debug.AspNetCompiler.PhysicalPath = "SAEON.Observations.WebSite.Admin\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54378\"
 		Debug.AspNetCompiler.Updateable = "false"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_54378"
-		Release.AspNetCompiler.PhysicalPath = "SAEON.ObservationsDB.WebSite.Admin\"
+		Release.AspNetCompiler.PhysicalPath = "SAEON.Observations.WebSite.Admin\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54378\"
 		Release.AspNetCompiler.Updateable = "false"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "54378"
-		SlnRelativePath = "SAEON.ObservationsDB.WebSite.Admin\"
+		SlnRelativePath = "SAEON.Observations.WebSite.Admin\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
@@ -64,15 +64,15 @@ Global
 		SccTeamFoundationServer = https://nimbusservices.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
 		SccWebProject1 = true
-		SccProjectUniqueName1 = SAEON.ObservationsDB.WebSite.Admin
-		SccProjectName1 = SAEON.ObservationsDB.WebSite.Admin
-		SccLocalPath1 = SAEON.ObservationsDB.WebSite.Admin
+		SccProjectUniqueName1 = SAEON.Observations.WebSite.Admin
+		SccProjectName1 = SAEON.Observations.WebSite.Admin
+		SccLocalPath1 = SAEON.Observations.WebSite.Admin
 		SccProjectEnlistmentChoice1 = 2
-		SccProjectUniqueName2 = SAEON.ObservationsDB.Data\\SAEON.Observations.Data.csproj
-		SccProjectName2 = SAEON.ObservationsDB.Data
-		SccLocalPath2 = SAEON.ObservationsDB.Data
-		SccProjectUniqueName3 = SAEON.ObservationsDB.Database\\SAEON.Observations.Database.sqlproj
-		SccProjectName3 = SAEON.ObservationsDB.Database
-		SccLocalPath3 = SAEON.ObservationsDB.Database
+		SccProjectUniqueName2 = SAEON.Observations.Data\\SAEON.Observations.Data.csproj
+		SccProjectName2 = SAEON.Observations.Data
+		SccLocalPath2 = SAEON.Observations.Data
+		SccProjectUniqueName3 = SAEON.Observations.Database\\SAEON.Observations.Database.sqlproj
+		SccProjectName3 = SAEON.Observations.Database
+		SccLocalPath3 = SAEON.Observations.Database
 	EndGlobalSection
 EndGlobal
