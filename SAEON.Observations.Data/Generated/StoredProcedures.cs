@@ -16,6 +16,18 @@ namespace SAEON.Observations.Data{
     public partial class SPs{
         
         /// <summary>
+        /// Creates an object wrapper for the aspnet_AnyDataInTables Procedure
+        /// </summary>
+        public static StoredProcedure AspnetAnyDataInTables(int? TablesToCheck)
+        {
+            SubSonic.StoredProcedure sp = new SubSonic.StoredProcedure("aspnet_AnyDataInTables", DataService.GetInstance("ObservationsDB"), "dbo");
+        	
+            sp.Command.AddParameter("@TablesToCheck", TablesToCheck, DbType.Int32, 0, 10);
+        	
+            return sp;
+        }
+        
+        /// <summary>
         /// Creates an object wrapper for the aspnet_Applications_CreateApplication Procedure
         /// </summary>
         public static StoredProcedure AspnetApplicationsCreateApplication(string ApplicationName, Guid? ApplicationId)

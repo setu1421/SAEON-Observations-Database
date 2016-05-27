@@ -106,6 +106,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string StationOrganisation = @"Station_Organisation";
         
+		public static readonly string StationProject = @"Station_Project";
+        
 		public static readonly string Status = @"Status";
         
 		public static readonly string TransformationType = @"TransformationType";
@@ -355,6 +357,11 @@ namespace SAEON.Observations.Data
             get { return DataService.GetSchema("Station_Organisation", "ObservationsDB"); }
 		}
         
+		public static TableSchema.Table StationProject
+		{
+            get { return DataService.GetSchema("Station_Project", "ObservationsDB"); }
+		}
+        
 		public static TableSchema.Table Status
 		{
             get { return DataService.GetSchema("Status", "ObservationsDB"); }
@@ -448,6 +455,12 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VObservationRole = @"vObservationRoles";
         
+		public static readonly string VOrganisationInstrument = @"vOrganisationInstrument";
+        
+		public static readonly string VOrganisationSite = @"vOrganisationSite";
+        
+		public static readonly string VOrganisationStation = @"vOrganisationStation";
+        
 		public static readonly string VProgrammeProject = @"vProgrammeProject";
         
 		public static readonly string VProjectSite = @"vProjectSite";
@@ -465,6 +478,8 @@ namespace SAEON.Observations.Data
 		public static readonly string VStationInstrument = @"vStationInstrument";
         
 		public static readonly string VStationOrganisation = @"vStationOrganisation";
+        
+		public static readonly string VStationProject = @"vStationProject";
         
 		public static readonly string VUserInfo = @"vUserInfo";
         

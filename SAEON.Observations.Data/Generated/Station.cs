@@ -464,6 +464,10 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.StationOrganisationCollection().Where(StationOrganisation.Columns.StationID, Id).Load();
 		}
+		public SAEON.Observations.Data.StationProjectCollection StationProjectRecords()
+		{
+			return new SAEON.Observations.Data.StationProjectCollection().Where(StationProject.Columns.StationID, Id).Load();
+		}
 		#endregion
 		
 			

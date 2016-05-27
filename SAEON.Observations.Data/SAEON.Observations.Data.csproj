@@ -156,6 +156,8 @@
     <Compile Include="Generated\StationInstrumentController.cs" />
     <Compile Include="Generated\StationOrganisation.cs" />
     <Compile Include="Generated\StationOrganisationController.cs" />
+    <Compile Include="Generated\StationProject.cs" />
+    <Compile Include="Generated\StationProjectController.cs" />
     <Compile Include="Generated\Status.cs" />
     <Compile Include="Generated\StatusController.cs" />
     <Compile Include="Generated\StoredProcedures.cs" />
@@ -174,6 +176,9 @@
     <Compile Include="Generated\VModuleRoleModule.cs" />
     <Compile Include="Generated\VObservation.cs" />
     <Compile Include="Generated\VObservationRole.cs" />
+    <Compile Include="Generated\VOrganisationInstrument.cs" />
+    <Compile Include="Generated\VOrganisationSite.cs" />
+    <Compile Include="Generated\VOrganisationStation.cs" />
     <Compile Include="Generated\VProgrammeProject.cs" />
     <Compile Include="Generated\VProjectSite.cs" />
     <Compile Include="Generated\VSensor.cs" />
@@ -183,6 +188,7 @@
     <Compile Include="Generated\VStation.cs" />
     <Compile Include="Generated\VStationInstrument.cs" />
     <Compile Include="Generated\VStationOrganisation.cs" />
+    <Compile Include="Generated\VStationProject.cs" />
     <Compile Include="Generated\VUserInfo.cs" />
     <Compile Include="Generated\VwAspnetApplication.cs" />
     <Compile Include="Generated\VwAspnetMembershipUser.cs" />
