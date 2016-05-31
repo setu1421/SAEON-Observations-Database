@@ -513,30 +513,23 @@
     <Build Include="Security\aspnet_WebEvent_FullAccess_1.sql" />
     <Build Include="dbo\Tables\Site.sql" />
     <Build Include="dbo\Tables\OrganisationRole.sql" />
-    <Build Include="dbo\Tables\Site_Organisation.sql" />
-    <Build Include="dbo\Tables\Station_Organisation.sql" />
-    <Build Include="dbo\Views\vSiteOrganisation.sql" />
-    <Build Include="dbo\Views\vStationOrganisation.sql" />
+    <Build Include="dbo\Tables\Organisation_Site.sql" />
+    <Build Include="dbo\Tables\Organisation_Station.sql" />
     <Build Include="dbo\Tables\AuditLog.sql" />
     <Build Include="dbo\Views\vAuditLog.sql" />
     <Build Include="dbo\Tables\Instrument.sql" />
-    <Build Include="dbo\Tables\Instrument_Organisation.sql" />
-    <Build Include="dbo\Views\vInstrumentOrganisation.sql" />
+    <Build Include="dbo\Tables\Organisation_Instrument.sql" />
     <Build Include="dbo\Tables\Programme.sql" />
     <Build Include="dbo\Tables\Project.sql" />
-    <Build Include="dbo\Tables\Site_Project.sql" />
-    <Build Include="dbo\Views\vSiteProject.sql" />
-    <Build Include="dbo\Tables\Site_Station.sql" />
-    <Build Include="dbo\Views\vSiteStation.sql" />
     <Build Include="dbo\Views\vStationInstrument.sql" />
     <Build Include="dbo\Tables\Station_Instrument.sql" />
-    <Build Include="dbo\Tables\Programme_Project.sql" />
-    <Build Include="dbo\Views\vProgrammeProject.sql" />
-    <Build Include="dbo\Tables\Station_Project.sql" />
-    <Build Include="dbo\Views\vStationProject.sql" />
+    <Build Include="dbo\Views\vProject.sql" />
+    <Build Include="dbo\Views\vProjectStation.sql" />
     <Build Include="dbo\Views\vOrganisationSite.sql" />
     <Build Include="dbo\Views\vOrganisationStation.sql" />
     <Build Include="dbo\Views\vOrganisationInstrument.sql" />
+    <Build Include="dbo\Tables\Project_Station.sql" />
+    <Build Include="dbo\Tables\Instrument_Sensor.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Lab2-NimbusServices ObservationsDBv2Test.publish.xml" />

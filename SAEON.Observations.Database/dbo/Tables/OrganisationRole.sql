@@ -1,4 +1,4 @@
-﻿--> Added 2.0.0.1 20160406 TimPN
+﻿--> Added 2.0.1 20160406 TimPN
 CREATE TABLE [dbo].[OrganisationRole]
 (
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_OrganisationRole_ID] DEFAULT newid(), 
@@ -14,4 +14,4 @@ CREATE TABLE [dbo].[OrganisationRole]
 
 GO
 CREATE INDEX [IX_OrganisationRole_UserId] ON [dbo].[OrganisationRole] ([UserId])
---< Added 2.0.0.1 20160406 TimPN
+--< Added 2.0.1 20160406 TimPN

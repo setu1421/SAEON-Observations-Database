@@ -60,7 +60,7 @@ namespace SAEON.Observations.Data
         
 		public static readonly string Instrument = @"Instrument";
         
-		public static readonly string InstrumentOrganisation = @"Instrument_Organisation";
+		public static readonly string InstrumentSensor = @"Instrument_Sensor";
         
 		public static readonly string ModuleX = @"Module";
         
@@ -69,6 +69,12 @@ namespace SAEON.Observations.Data
 		public static readonly string Offering = @"Offering";
         
 		public static readonly string Organisation = @"Organisation";
+        
+		public static readonly string OrganisationInstrument = @"Organisation_Instrument";
+        
+		public static readonly string OrganisationSite = @"Organisation_Site";
+        
+		public static readonly string OrganisationStation = @"Organisation_Station";
         
 		public static readonly string OrganisationRole = @"OrganisationRole";
         
@@ -80,11 +86,11 @@ namespace SAEON.Observations.Data
         
 		public static readonly string Programme = @"Programme";
         
-		public static readonly string ProgrammeProject = @"Programme_Project";
-        
 		public static readonly string Progress = @"Progress";
         
 		public static readonly string Project = @"Project";
+        
+		public static readonly string ProjectStation = @"Project_Station";
         
 		public static readonly string ProjectSite = @"ProjectSite";
         
@@ -94,19 +100,9 @@ namespace SAEON.Observations.Data
         
 		public static readonly string Site = @"Site";
         
-		public static readonly string SiteOrganisation = @"Site_Organisation";
-        
-		public static readonly string SiteProject = @"Site_Project";
-        
-		public static readonly string SiteStation = @"Site_Station";
-        
 		public static readonly string Station = @"Station";
         
 		public static readonly string StationInstrument = @"Station_Instrument";
-        
-		public static readonly string StationOrganisation = @"Station_Organisation";
-        
-		public static readonly string StationProject = @"Station_Project";
         
 		public static readonly string Status = @"Status";
         
@@ -242,9 +238,9 @@ namespace SAEON.Observations.Data
             get { return DataService.GetSchema("Instrument", "ObservationsDB"); }
 		}
         
-		public static TableSchema.Table InstrumentOrganisation
+		public static TableSchema.Table InstrumentSensor
 		{
-            get { return DataService.GetSchema("Instrument_Organisation", "ObservationsDB"); }
+            get { return DataService.GetSchema("Instrument_Sensor", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table ModuleX
@@ -265,6 +261,21 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table Organisation
 		{
             get { return DataService.GetSchema("Organisation", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table OrganisationInstrument
+		{
+            get { return DataService.GetSchema("Organisation_Instrument", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table OrganisationSite
+		{
+            get { return DataService.GetSchema("Organisation_Site", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table OrganisationStation
+		{
+            get { return DataService.GetSchema("Organisation_Station", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table OrganisationRole
@@ -292,11 +303,6 @@ namespace SAEON.Observations.Data
             get { return DataService.GetSchema("Programme", "ObservationsDB"); }
 		}
         
-		public static TableSchema.Table ProgrammeProject
-		{
-            get { return DataService.GetSchema("Programme_Project", "ObservationsDB"); }
-		}
-        
 		public static TableSchema.Table Progress
 		{
             get { return DataService.GetSchema("Progress", "ObservationsDB"); }
@@ -305,6 +311,11 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table Project
 		{
             get { return DataService.GetSchema("Project", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table ProjectStation
+		{
+            get { return DataService.GetSchema("Project_Station", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table ProjectSite
@@ -327,21 +338,6 @@ namespace SAEON.Observations.Data
             get { return DataService.GetSchema("Site", "ObservationsDB"); }
 		}
         
-		public static TableSchema.Table SiteOrganisation
-		{
-            get { return DataService.GetSchema("Site_Organisation", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table SiteProject
-		{
-            get { return DataService.GetSchema("Site_Project", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table SiteStation
-		{
-            get { return DataService.GetSchema("Site_Station", "ObservationsDB"); }
-		}
-        
 		public static TableSchema.Table Station
 		{
             get { return DataService.GetSchema("Station", "ObservationsDB"); }
@@ -350,16 +346,6 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table StationInstrument
 		{
             get { return DataService.GetSchema("Station_Instrument", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table StationOrganisation
-		{
-            get { return DataService.GetSchema("Station_Organisation", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table StationProject
-		{
-            get { return DataService.GetSchema("Station_Project", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table Status
@@ -463,7 +449,11 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VProgrammeProject = @"vProgrammeProject";
         
+		public static readonly string VProject = @"vProject";
+        
 		public static readonly string VProjectSite = @"vProjectSite";
+        
+		public static readonly string VProjectStation = @"vProjectStation";
         
 		public static readonly string VSensor = @"vSensor";
         
@@ -478,8 +468,6 @@ namespace SAEON.Observations.Data
 		public static readonly string VStationInstrument = @"vStationInstrument";
         
 		public static readonly string VStationOrganisation = @"vStationOrganisation";
-        
-		public static readonly string VStationProject = @"vStationProject";
         
 		public static readonly string VUserInfo = @"vUserInfo";
         

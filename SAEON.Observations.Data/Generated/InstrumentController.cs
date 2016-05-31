@@ -80,11 +80,13 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,Guid? StationID,string Code,string Name,string Description,string Url,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    Instrument item = new Instrument();
 		    
             item.Id = Id;
+            
+            item.StationID = StationID;
             
             item.Code = Code;
             
@@ -112,13 +114,15 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,Guid? StationID,string Code,string Name,string Description,string Url,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    Instrument item = new Instrument();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
 			item.Id = Id;
+				
+			item.StationID = StationID;
 				
 			item.Code = Code;
 				

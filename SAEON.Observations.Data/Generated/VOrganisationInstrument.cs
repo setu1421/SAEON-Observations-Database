@@ -69,18 +69,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarId);
                 
-                TableSchema.TableColumn colvarInstrumentID = new TableSchema.TableColumn(schema);
-                colvarInstrumentID.ColumnName = "InstrumentID";
-                colvarInstrumentID.DataType = DbType.Guid;
-                colvarInstrumentID.MaxLength = 0;
-                colvarInstrumentID.AutoIncrement = false;
-                colvarInstrumentID.IsNullable = false;
-                colvarInstrumentID.IsPrimaryKey = false;
-                colvarInstrumentID.IsForeignKey = false;
-                colvarInstrumentID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarInstrumentID);
-                
                 TableSchema.TableColumn colvarOrganisationID = new TableSchema.TableColumn(schema);
                 colvarOrganisationID.ColumnName = "OrganisationID";
                 colvarOrganisationID.DataType = DbType.Guid;
@@ -92,6 +80,18 @@ namespace SAEON.Observations.Data{
                 colvarOrganisationID.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarOrganisationID);
+                
+                TableSchema.TableColumn colvarInstrumentID = new TableSchema.TableColumn(schema);
+                colvarInstrumentID.ColumnName = "InstrumentID";
+                colvarInstrumentID.DataType = DbType.Guid;
+                colvarInstrumentID.MaxLength = 0;
+                colvarInstrumentID.AutoIncrement = false;
+                colvarInstrumentID.IsNullable = false;
+                colvarInstrumentID.IsPrimaryKey = false;
+                colvarInstrumentID.IsForeignKey = false;
+                colvarInstrumentID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarInstrumentID);
                 
                 TableSchema.TableColumn colvarOrganisationRoleID = new TableSchema.TableColumn(schema);
                 colvarOrganisationRoleID.ColumnName = "OrganisationRoleID";
@@ -277,20 +277,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("InstrumentID")]
-        [Bindable(true)]
-        public Guid InstrumentID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("InstrumentID");
-		    }
-            set 
-		    {
-			    SetColumnValue("InstrumentID", value);
-            }
-        }
-	      
         [XmlAttribute("OrganisationID")]
         [Bindable(true)]
         public Guid OrganisationID 
@@ -302,6 +288,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("OrganisationID", value);
+            }
+        }
+	      
+        [XmlAttribute("InstrumentID")]
+        [Bindable(true)]
+        public Guid InstrumentID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("InstrumentID");
+		    }
+            set 
+		    {
+			    SetColumnValue("InstrumentID", value);
             }
         }
 	      
@@ -454,9 +454,9 @@ namespace SAEON.Observations.Data{
 		    
             public static string Id = @"ID";
             
-            public static string InstrumentID = @"InstrumentID";
-            
             public static string OrganisationID = @"OrganisationID";
+            
+            public static string InstrumentID = @"InstrumentID";
             
             public static string OrganisationRoleID = @"OrganisationRoleID";
             

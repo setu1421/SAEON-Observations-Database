@@ -1,6 +1,6 @@
-﻿--> Changed 2.0.0.3 20160503 TimPN
+﻿--> Changed 2.0.3 20160503 TimPN
 --Renamed SensorProcedure to Sensor
---< Changed 2.0.0.3 20160503 TimPN
+--< Changed 2.0.3 20160503 TimPN
 CREATE VIEW [dbo].[vInventory]
 AS
 Select 

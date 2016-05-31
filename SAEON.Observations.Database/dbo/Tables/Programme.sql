@@ -1,4 +1,4 @@
-﻿--> Added 2.0.0.5 20160511 TimPN
+﻿--> Added 2.0.5 20160511 TimPN
 CREATE TABLE [dbo].[Programme]
 (
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Programme_ID] DEFAULT newid(), 
@@ -56,4 +56,4 @@ BEGIN
         inner join Programme src
             on (ins.ID = src.ID)
 END
---< Added 2.0.0.5 20160511 TimPN
+--< Added 2.0.5 20160511 TimPN

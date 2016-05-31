@@ -363,17 +363,13 @@ namespace SAEON.Observations.Data
         }
         
 		
-		public SAEON.Observations.Data.SiteOrganisationCollection SiteOrganisationRecords()
+		public SAEON.Observations.Data.OrganisationSiteCollection OrganisationSiteRecords()
 		{
-			return new SAEON.Observations.Data.SiteOrganisationCollection().Where(SiteOrganisation.Columns.SiteID, Id).Load();
+			return new SAEON.Observations.Data.OrganisationSiteCollection().Where(OrganisationSite.Columns.SiteID, Id).Load();
 		}
-		public SAEON.Observations.Data.SiteProjectCollection SiteProjectRecords()
+		public SAEON.Observations.Data.StationCollection StationRecords()
 		{
-			return new SAEON.Observations.Data.SiteProjectCollection().Where(SiteProject.Columns.SiteID, Id).Load();
-		}
-		public SAEON.Observations.Data.SiteStationCollection SiteStationRecords()
-		{
-			return new SAEON.Observations.Data.SiteStationCollection().Where(SiteStation.Columns.SiteID, Id).Load();
+			return new SAEON.Observations.Data.StationCollection().Where(Station.Columns.SiteID, Id).Load();
 		}
 		#endregion
 		

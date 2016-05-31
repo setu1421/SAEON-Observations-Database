@@ -15,7 +15,7 @@
     CONSTRAINT [UX_UnitOfMeasure_Unit] UNIQUE ([Unit])
 --< Changed 20160329 TimPN
 );
---> Added 2.0.0.0 20160406 TimPN
+--> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_UnitOfMeasure_UserId] ON [dbo].[UnitOfMeasure] ([UserId])
---< Added 2.0.0.0 20160406 TimPN
+--< Added 2.0.0 20160406 TimPN

@@ -256,17 +256,17 @@ namespace SAEON.Observations.Data
         }
         
 		
-		public SAEON.Observations.Data.InstrumentOrganisationCollection InstrumentOrganisationRecords()
+		public SAEON.Observations.Data.OrganisationInstrumentCollection OrganisationInstrumentRecords()
 		{
-			return new SAEON.Observations.Data.InstrumentOrganisationCollection().Where(InstrumentOrganisation.Columns.OrganisationRoleID, Id).Load();
+			return new SAEON.Observations.Data.OrganisationInstrumentCollection().Where(OrganisationInstrument.Columns.OrganisationRoleID, Id).Load();
 		}
-		public SAEON.Observations.Data.SiteOrganisationCollection SiteOrganisationRecords()
+		public SAEON.Observations.Data.OrganisationSiteCollection OrganisationSiteRecords()
 		{
-			return new SAEON.Observations.Data.SiteOrganisationCollection().Where(SiteOrganisation.Columns.OrganisationRoleID, Id).Load();
+			return new SAEON.Observations.Data.OrganisationSiteCollection().Where(OrganisationSite.Columns.OrganisationRoleID, Id).Load();
 		}
-		public SAEON.Observations.Data.StationOrganisationCollection StationOrganisationRecords()
+		public SAEON.Observations.Data.OrganisationStationCollection OrganisationStationRecords()
 		{
-			return new SAEON.Observations.Data.StationOrganisationCollection().Where(StationOrganisation.Columns.OrganisationRoleID, Id).Load();
+			return new SAEON.Observations.Data.OrganisationStationCollection().Where(OrganisationStation.Columns.OrganisationRoleID, Id).Load();
 		}
 		#endregion
 		

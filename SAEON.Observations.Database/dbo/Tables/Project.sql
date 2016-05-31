@@ -1,4 +1,4 @@
-﻿--> Added 2.0.0.5 20160511 TimPN
+﻿--> Added 2.0.5 20160511 TimPN
 CREATE TABLE [dbo].[Project]
 (
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Project_ID] DEFAULT newid(), 
@@ -13,8 +13,8 @@ CREATE TABLE [dbo].[Project]
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Project_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Project_UpdatedAt] DEFAULT GetDate(), 
     CONSTRAINT [PK_Project] PRIMARY KEY NONCLUSTERED ([ID]),
-    CONSTRAINT [UX_Project_Code] UNIQUE ([ProgrammeID],[Code]),
-    CONSTRAINT [UX_Project_Name] UNIQUE ([ProgrammeID],[Name]),
+    CONSTRAINT [UX_Project_ProgramID_Code] UNIQUE ([ProgrammeID],[Code]),
+    CONSTRAINT [UX_Project_ProgramID_Name] UNIQUE ([ProgrammeID],[Name]),
     CONSTRAINT [FK_Project_Programme] FOREIGN KEY ([ProgrammeID]) REFERENCES [dbo].[Programme] ([ID]),
     CONSTRAINT [FK_Project_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
@@ -60,4 +60,4 @@ BEGIN
         inner join Project src
             on (ins.ID = src.ID)
 END
---< Added 2.0.0.5 20160511 TimPN
+--< Added 2.0.5 20160511 TimPN

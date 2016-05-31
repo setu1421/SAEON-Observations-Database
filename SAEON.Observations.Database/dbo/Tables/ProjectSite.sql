@@ -17,10 +17,10 @@
     CONSTRAINT [UX_ProjectSite_Name] UNIQUE ([Name])
 --< Changed 20160329 TimPN
 );
---> Added 2.0.0.0 20160406 TimPN
+--> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_ProjectSite_OrganisationID] ON [dbo].[ProjectSite] ([OrganisationID])
 GO
 CREATE INDEX [IX_ProjectSite_UserID] ON [dbo].[ProjectSite] ([UserId])
---< Added 2.0.0.0 20160406 TimPN
+--< Added 2.0.0 20160406 TimPN
 

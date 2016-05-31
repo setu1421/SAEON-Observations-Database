@@ -177,6 +177,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarUserId);
                 
+                TableSchema.TableColumn colvarSiteID = new TableSchema.TableColumn(schema);
+                colvarSiteID.ColumnName = "SiteID";
+                colvarSiteID.DataType = DbType.Guid;
+                colvarSiteID.MaxLength = 0;
+                colvarSiteID.AutoIncrement = false;
+                colvarSiteID.IsNullable = true;
+                colvarSiteID.IsPrimaryKey = false;
+                colvarSiteID.IsForeignKey = false;
+                colvarSiteID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSiteID);
+                
                 TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
                 colvarStartDate.ColumnName = "StartDate";
                 colvarStartDate.DataType = DbType.DateTime;
@@ -236,6 +248,18 @@ namespace SAEON.Observations.Data{
                 colvarProjectSiteName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarProjectSiteName);
+                
+                TableSchema.TableColumn colvarSiteName = new TableSchema.TableColumn(schema);
+                colvarSiteName.ColumnName = "SiteName";
+                colvarSiteName.DataType = DbType.AnsiString;
+                colvarSiteName.MaxLength = 203;
+                colvarSiteName.AutoIncrement = false;
+                colvarSiteName.IsNullable = true;
+                colvarSiteName.IsPrimaryKey = false;
+                colvarSiteName.IsForeignKey = false;
+                colvarSiteName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSiteName);
                 
                 
                 BaseSchema = schema;
@@ -427,6 +451,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("SiteID")]
+        [Bindable(true)]
+        public Guid? SiteID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid?>("SiteID");
+		    }
+            set 
+		    {
+			    SetColumnValue("SiteID", value);
+            }
+        }
+	      
         [XmlAttribute("StartDate")]
         [Bindable(true)]
         public DateTime? StartDate 
@@ -496,6 +534,20 @@ namespace SAEON.Observations.Data{
 			    SetColumnValue("ProjectSiteName", value);
             }
         }
+	      
+        [XmlAttribute("SiteName")]
+        [Bindable(true)]
+        public string SiteName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("SiteName");
+		    }
+            set 
+		    {
+			    SetColumnValue("SiteName", value);
+            }
+        }
 	    
 	    #endregion
     
@@ -524,6 +576,8 @@ namespace SAEON.Observations.Data{
             
             public static string UserId = @"UserId";
             
+            public static string SiteID = @"SiteID";
+            
             public static string StartDate = @"StartDate";
             
             public static string EndDate = @"EndDate";
@@ -533,6 +587,8 @@ namespace SAEON.Observations.Data{
             public static string UpdatedAt = @"UpdatedAt";
             
             public static string ProjectSiteName = @"ProjectSiteName";
+            
+            public static string SiteName = @"SiteName";
             
 	    }
 	    #endregion

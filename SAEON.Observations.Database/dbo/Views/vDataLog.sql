@@ -1,6 +1,6 @@
-﻿--> Changed 2.0.0.3 20160503 TimPN
+﻿--> Changed 2.0.3 20160503 TimPN
 --Renamed SensorProcedure to Sensor
---< Changed 2.0.0.3 20160503 TimPN
+--< Changed 2.0.3 20160503 TimPN
 CREATE VIEW [dbo].[vDataLog]
 AS
 
@@ -57,15 +57,15 @@ CASE
     ELSE 0
 END OfferingInvalid,
 
---> Changed 2.0.0.3 20160421 TimPN
+--> Changed 2.0.3 20160421 TimPN
 --d.PhenonmenonUOMID, 
 d.PhenomenonUOMID, 
---< Changed 2.0.0.3 20160421 TimPN
+--< Changed 2.0.3 20160421 TimPN
 CASE
---> Changed 2.0.0.3 20160421 TimPN
+--> Changed 2.0.3 20160421 TimPN
 --    WHEN d.PhenonmenonUOMID is null then 1
     WHEN d.PhenomenonUOMID is null then 1
---< Changed 2.0.0.3 20160421 TimPN
+--< Changed 2.0.3 20160421 TimPN
     ELSE 0
 END UOMInvalid,
 
@@ -97,10 +97,10 @@ LEFT JOIN Phenomenon p
 LEFT JOIN Offering o
     on po.OfferingID = o.ID
 LEFT JOIN PhenomenonUOM pu
---> Changed 2.0.0.3 20160421 TimPN
+--> Changed 2.0.3 20160421 TimPN
 --    on d.PhenonmenonUOMID = pu.ID
     on d.PhenomenonUOMID = pu.ID
---< Changed 2.0.0.3 20160421 TimPN
+--< Changed 2.0.3 20160421 TimPN
 LEFT JOIN UnitOfMeasure uom
     on pu.UnitOfMeasureID = uom.ID
 LEFT JOIN DataSourceTransformation ds

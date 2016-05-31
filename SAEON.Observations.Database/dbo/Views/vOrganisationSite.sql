@@ -1,4 +1,4 @@
-﻿--> Added 2.0.0.5 20160527 TimPN
+﻿--> Added 2.0.5 20160527 TimPN
 CREATE VIEW [dbo].[vOrganisationSite]
 AS 
 SELECT 
@@ -8,9 +8,9 @@ SELECT
   [OrganisationRole].Code OrganisationRoleCode,
   [OrganisationRole].Name OrganisationRoleName
 FROM 
-  [Site_Organisation] src
+  [Organisation_Site] src
   inner join [Site]
     on (src.SiteID = [Site].ID)
   inner join [OrganisationRole]
     on (src.OrganisationRoleID = [OrganisationRole].ID)
---< Added 2.0.0.5 20160527 TimPN
+--< Added 2.0.5 20160527 TimPN

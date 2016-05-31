@@ -1,4 +1,4 @@
-﻿--> Added 2.0.0.5 20160512 TimPN
+﻿--> Added 2.0.5 20160512 TimPN
 CREATE TABLE [dbo].[Station_Instrument]
 (
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Station_Instrument_ID] DEFAULT newid(), 
@@ -59,4 +59,4 @@ BEGIN
         inner join Station_Instrument src
             on (ins.ID = src.ID)
 END
---< Added 2.0.0.5 20160512 TimPN
+--< Added 2.0.5 20160512 TimPN

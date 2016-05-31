@@ -9,9 +9,10 @@ using System.Web.UI.WebControls;
 
 public partial class Admin_Organisations : System.Web.UI.Page
 {
+    #region Organisations
     protected void OrganisationStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.OrganisationGrid.GetStore().DataSource = OrganisationRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        this.OrganisationsGrid.GetStore().DataSource = OrganisationRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -67,7 +68,7 @@ public partial class Admin_Organisations : System.Web.UI.Page
 
         org.Save();
 
-        OrganisationGrid.DataBind();
+        OrganisationsGrid.DataBind();
 
         this.DetailWindow.Hide();
     }
@@ -84,4 +85,62 @@ public partial class Admin_Organisations : System.Web.UI.Page
 
         BaseRepository.doExport(type, js);
     }
+    #endregion
+
+    #region Sites
+    protected void SiteLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["OrganisationID"] != null && e.Parameters["OrganisationID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["OrganisationID"].ToString());
+            VOrganisationSiteCollection col = new VOrganisationSiteCollection()
+                .Where(VOrganisationSite.Columns.OrganisationID, Id)
+                .OrderByAsc(VOrganisationSite.Columns.StartDate)
+                .OrderByAsc(VOrganisationSite.Columns.EndDate)
+                .OrderByAsc(VOrganisationSite.Columns.SiteName)
+                .OrderByAsc(VOrganisationSite.Columns.OrganisationRoleName)
+                .Load();
+            SiteLinksGrid.GetStore().DataSource = col;
+            SiteLinksGrid.GetStore().DataBind();
+        }
+    }
+    #endregion
+
+    #region Stations
+    protected void StationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["OrganisationID"] != null && e.Parameters["OrganisationID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["OrganisationID"].ToString());
+            VOrganisationStationCollection col = new VOrganisationStationCollection()
+                .Where(VOrganisationStation.Columns.OrganisationID, Id)
+                .OrderByAsc(VOrganisationStation.Columns.StartDate)
+                .OrderByAsc(VOrganisationStation.Columns.EndDate)
+                .OrderByAsc(VOrganisationStation.Columns.StationName)
+                .OrderByAsc(VOrganisationStation.Columns.OrganisationRoleName)
+                .Load();
+            StationLinksGrid.GetStore().DataSource = col;
+            StationLinksGrid.GetStore().DataBind();
+        }
+    }
+    #endregion
+
+    #region Instruments
+    protected void InstrumentLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["OrganisationID"] != null && e.Parameters["OrganisationID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["OrganisationID"].ToString());
+            VOrganisationInstrumentCollection col = new VOrganisationInstrumentCollection()
+                .Where(VOrganisationInstrument.Columns.OrganisationID, Id)
+                .OrderByAsc(VOrganisationInstrument.Columns.StartDate)
+                .OrderByAsc(VOrganisationInstrument.Columns.EndDate)
+                .OrderByAsc(VOrganisationInstrument.Columns.InstrumentName)
+                .OrderByAsc(VOrganisationInstrument.Columns.OrganisationRoleName)
+                .Load();
+            InstrumentLinksGrid.GetStore().DataSource = col;
+            InstrumentLinksGrid.GetStore().DataBind();
+        }
+    }
+    #endregion
 }

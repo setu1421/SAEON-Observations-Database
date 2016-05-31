@@ -385,17 +385,9 @@ namespace SAEON.Observations.Data
         }
         
 		
-		public SAEON.Observations.Data.ProgrammeProjectCollection ProgrammeProjectRecords()
+		public SAEON.Observations.Data.ProjectStationCollection ProjectStationRecords()
 		{
-			return new SAEON.Observations.Data.ProgrammeProjectCollection().Where(ProgrammeProject.Columns.ProjectID, Id).Load();
-		}
-		public SAEON.Observations.Data.SiteProjectCollection SiteProjectRecords()
-		{
-			return new SAEON.Observations.Data.SiteProjectCollection().Where(SiteProject.Columns.ProjectID, Id).Load();
-		}
-		public SAEON.Observations.Data.StationProjectCollection StationProjectRecords()
-		{
-			return new SAEON.Observations.Data.StationProjectCollection().Where(StationProject.Columns.ProjectID, Id).Load();
+			return new SAEON.Observations.Data.ProjectStationCollection().Where(ProjectStation.Columns.ProjectID, Id).Load();
 		}
 		#endregion
 		

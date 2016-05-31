@@ -8,31 +8,31 @@
     [ErrorEstimate]    FLOAT (53)       NULL,
     [UpdateFreq]       INT              NOT NULL,
     [StartDate]        DATETIME         NULL,
---> Added 2.0.0.2 20160419 TimPN
+--> Added 2.0.2 20160419 TimPN
     [EndDate]        DATETIME         NULL,
---< Added 2.0.0.2 20160419 TimPN
+--< Added 2.0.2 20160419 TimPN
     [LastUpdate]       DATETIME         NOT NULL,
     [DataSchemaID]     UNIQUEIDENTIFIER NULL,
     [UserId]           UNIQUEIDENTIFIER NOT NULL,
---> Added 2.0.0.3 20160421 TimPN
+--> Added 2.0.3 20160421 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataSource_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSource_UpdatedAt] DEFAULT GetDate(), 
---< Added 2.0.0.3 20160421 TimPN
+--< Added 2.0.3 20160421 TimPN
     CONSTRAINT [PK_DataSource] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSource_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_DataSource_DataSchema] FOREIGN KEY ([DataSchemaID]) REFERENCES [dbo].[DataSchema] ([ID]),
---> Added 2.0.0.0 20160406 TimPN
+--> Added 2.0.0 20160406 TimPN
     CONSTRAINT [UX_DataSource_Code] Unique ([Code]),
     CONSTRAINT [UX_DataSource_Name] Unique ([Name])
---< Added 2.0.0.0 20160406 TimPN
+--< Added 2.0.0 20160406 TimPN
 );
 GO
---> Added 2.0.0.0 20160406 TimPN
+--> Added 2.0.0 20160406 TimPN
 CREATE INDEX [IX_DataSource_DataSchemaID] ON [dbo].[DataSource] ([DataSchemaID])
 GO
 CREATE INDEX [IX_DataSource_UserId] ON [dbo].[DataSource] ([UserId])
---< Added 2.0.0.0 20160406 TimPN
---> Added 2.0.0.3 20160421 TimPN
+--< Added 2.0.0 20160406 TimPN
+--> Added 2.0.3 20160421 TimPN
 GO
 CREATE INDEX [IX_DataSource_StartDate] ON [dbo].DataSource ([StartDate])
 GO
@@ -69,4 +69,4 @@ BEGIN
         inner join DataSource src
             on (ins.ID = src.ID)
 END
---< Added 2.0.0.3 20160421 TimPN
+--< Added 2.0.3 20160421 TimPN

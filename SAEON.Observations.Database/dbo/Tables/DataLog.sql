@@ -1,9 +1,9 @@
 ﻿CREATE TABLE [dbo].[DataLog] (
     [ID]                         INT              IDENTITY (1, 1) NOT NULL,
---> Changed 2.0.0.3 20160503 TimPN
+--> Changed 2.0.3 20160503 TimPN
 --    [SensorProcedureID]          UNIQUEIDENTIFIER NULL,
     [SensorID]          UNIQUEIDENTIFIER NULL,
---< Changed 2.0.0.3 20160503 TimPN
+--< Changed 2.0.3 20160503 TimPN
     [ImportDate]                 DATETIME         CONSTRAINT [DF_DataLog_ImportDate] DEFAULT (getdate()) NOT NULL,
     [ValueDate]                  DATETIME         NULL,
     [ValueTime]                  DATETIME         NULL,
@@ -21,10 +21,10 @@
     [ImportStatus]               VARCHAR (500)    NOT NULL,
     [UserId]                     UNIQUEIDENTIFIER NULL,
     [PhenomenonOfferingID]       UNIQUEIDENTIFIER NULL,
---> Changed 2.0.0.3 20160421 TimPN
+--> Changed 2.0.3 20160421 TimPN
 --    [PhenonmenonUOMID]           UNIQUEIDENTIFIER NULL,
     [PhenomenonUOMID]           UNIQUEIDENTIFIER NULL,
---< Changed 2.0.0.3 20160421 TimPN
+--< Changed 2.0.3 20160421 TimPN
     [ImportBatchID]              INT              NOT NULL,
     [RawRecordData]              VARCHAR (500)    NULL,
     [RawFieldValue]              VARCHAR (50)     NOT NULL,
@@ -34,20 +34,20 @@
     CONSTRAINT [FK_DataLog_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]),
     CONSTRAINT [FK_DataLog_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
     CONSTRAINT [FK_DataLog_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
---> Changed 2.0.0.3 20160503 TimPN
+--> Changed 2.0.3 20160503 TimPN
 --    CONSTRAINT [FK_DataLog_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID]),
     CONSTRAINT [FK_DataLog_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
---< Changed 2.0.0.3 20160503 TimPN
+--< Changed 2.0.3 20160503 TimPN
     CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID])
 );
 GO
 CREATE INDEX [IX_DataLog] ON [dbo].[DataLog]([ImportBatchID]);
---> Added 2.0.0.0 20160406 TimPN
+--> Added 2.0.0 20160406 TimPN
 GO
---> Changed 2.0.0.3 20160503 TimPN
+--> Changed 2.0.3 20160503 TimPN
 --CREATE INDEX [IX_DataLog_SensorProcedureID] ON [dbo].[DataLog] ([SensorProcedureID]);
 CREATE INDEX [IX_DataLog_SensorID] ON [dbo].[DataLog] ([SensorID]);
---< Changed 2.0.0.3 20160503 TimPN
+--< Changed 2.0.3 20160503 TimPN
 GO
 CREATE INDEX [IX_DataLog_DataSourceTransformationID] ON [dbo].[DataLog] ([DataSourceTransformationID])
 GO
@@ -58,5 +58,5 @@ GO
 CREATE INDEX [IX_DataLog_StatusID] ON [dbo].[DataLog] ([StatusID])
 GO
 CREATE INDEX [IX_DataLog_UserId] ON [dbo].[DataLog] ([UserId])
---< Added 2.0.0.0 20160406 TimPN
+--< Added 2.0.0 20160406 TimPN
 

@@ -259,6 +259,20 @@ namespace SAEON.Observations.Data
 					colvarUserId.ForeignKeyTableName = "aspnet_Users";
 				schema.Columns.Add(colvarUserId);
 				
+				TableSchema.TableColumn colvarSiteID = new TableSchema.TableColumn(schema);
+				colvarSiteID.ColumnName = "SiteID";
+				colvarSiteID.DataType = DbType.Guid;
+				colvarSiteID.MaxLength = 0;
+				colvarSiteID.AutoIncrement = false;
+				colvarSiteID.IsNullable = true;
+				colvarSiteID.IsPrimaryKey = false;
+				colvarSiteID.IsForeignKey = true;
+				colvarSiteID.IsReadOnly = false;
+				colvarSiteID.DefaultSetting = @"";
+				
+					colvarSiteID.ForeignKeyTableName = "Site";
+				schema.Columns.Add(colvarSiteID);
+				
 				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
 				colvarStartDate.ColumnName = "StartDate";
 				colvarStartDate.DataType = DbType.DateTime;
@@ -403,6 +417,14 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.UserId, value); }
 		}
 		  
+		[XmlAttribute("SiteID")]
+		[Bindable(true)]
+		public Guid? SiteID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.SiteID); }
+			set { SetColumnValue(Columns.SiteID, value); }
+		}
+		  
 		[XmlAttribute("StartDate")]
 		[Bindable(true)]
 		public DateTime? StartDate 
@@ -448,25 +470,25 @@ namespace SAEON.Observations.Data
         }
         
 		
+		public SAEON.Observations.Data.InstrumentCollection InstrumentRecords()
+		{
+			return new SAEON.Observations.Data.InstrumentCollection().Where(Instrument.Columns.StationID, Id).Load();
+		}
+		public SAEON.Observations.Data.OrganisationStationCollection OrganisationStationRecords()
+		{
+			return new SAEON.Observations.Data.OrganisationStationCollection().Where(OrganisationStation.Columns.StationID, Id).Load();
+		}
+		public SAEON.Observations.Data.ProjectStationCollection ProjectStationRecords()
+		{
+			return new SAEON.Observations.Data.ProjectStationCollection().Where(ProjectStation.Columns.StationID, Id).Load();
+		}
 		public SAEON.Observations.Data.SensorCollection SensorRecords()
 		{
 			return new SAEON.Observations.Data.SensorCollection().Where(Sensor.Columns.StationID, Id).Load();
 		}
-		public SAEON.Observations.Data.SiteStationCollection SiteStationRecords()
-		{
-			return new SAEON.Observations.Data.SiteStationCollection().Where(SiteStation.Columns.StationID, Id).Load();
-		}
 		public SAEON.Observations.Data.StationInstrumentCollection StationInstrumentRecords()
 		{
 			return new SAEON.Observations.Data.StationInstrumentCollection().Where(StationInstrument.Columns.StationID, Id).Load();
-		}
-		public SAEON.Observations.Data.StationOrganisationCollection StationOrganisationRecords()
-		{
-			return new SAEON.Observations.Data.StationOrganisationCollection().Where(StationOrganisation.Columns.StationID, Id).Load();
-		}
-		public SAEON.Observations.Data.StationProjectCollection StationProjectRecords()
-		{
-			return new SAEON.Observations.Data.StationProjectCollection().Where(StationProject.Columns.StationID, Id).Load();
 		}
 		#endregion
 		
@@ -496,6 +518,17 @@ namespace SAEON.Observations.Data
 		}
 		
 		
+		/// <summary>
+		/// Returns a Site ActiveRecord object related to this Station
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.Site Site
+		{
+			get { return SAEON.Observations.Data.Site.FetchByID(this.SiteID); }
+			set { SetColumnValue("SiteID", value.Id); }
+		}
+		
+		
 		#endregion
 		
 		
@@ -510,7 +543,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Station item = new Station();
 			
@@ -534,6 +567,8 @@ namespace SAEON.Observations.Data
 			
 			item.UserId = varUserId;
 			
+			item.SiteID = varSiteID;
+			
 			item.StartDate = varStartDate;
 			
 			item.EndDate = varEndDate;
@@ -552,7 +587,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Station item = new Station();
 			
@@ -575,6 +610,8 @@ namespace SAEON.Observations.Data
 				item.ProjectSiteID = varProjectSiteID;
 			
 				item.UserId = varUserId;
+			
+				item.SiteID = varSiteID;
 			
 				item.StartDate = varStartDate;
 			
@@ -667,30 +704,37 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn StartDateColumn
+        public static TableSchema.TableColumn SiteIDColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn EndDateColumn
+        public static TableSchema.TableColumn StartDateColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn EndDateColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[13]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[14]; }
         }
         
         
@@ -709,6 +753,7 @@ namespace SAEON.Observations.Data
 			 public static string Elevation = @"Elevation";
 			 public static string ProjectSiteID = @"ProjectSiteID";
 			 public static string UserId = @"UserId";
+			 public static string SiteID = @"SiteID";
 			 public static string StartDate = @"StartDate";
 			 public static string EndDate = @"EndDate";
 			 public static string AddedAt = @"AddedAt";

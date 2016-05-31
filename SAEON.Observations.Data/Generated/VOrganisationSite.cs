@@ -69,18 +69,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarId);
                 
-                TableSchema.TableColumn colvarSiteID = new TableSchema.TableColumn(schema);
-                colvarSiteID.ColumnName = "SiteID";
-                colvarSiteID.DataType = DbType.Guid;
-                colvarSiteID.MaxLength = 0;
-                colvarSiteID.AutoIncrement = false;
-                colvarSiteID.IsNullable = false;
-                colvarSiteID.IsPrimaryKey = false;
-                colvarSiteID.IsForeignKey = false;
-                colvarSiteID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarSiteID);
-                
                 TableSchema.TableColumn colvarOrganisationID = new TableSchema.TableColumn(schema);
                 colvarOrganisationID.ColumnName = "OrganisationID";
                 colvarOrganisationID.DataType = DbType.Guid;
@@ -92,6 +80,18 @@ namespace SAEON.Observations.Data{
                 colvarOrganisationID.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarOrganisationID);
+                
+                TableSchema.TableColumn colvarSiteID = new TableSchema.TableColumn(schema);
+                colvarSiteID.ColumnName = "SiteID";
+                colvarSiteID.DataType = DbType.Guid;
+                colvarSiteID.MaxLength = 0;
+                colvarSiteID.AutoIncrement = false;
+                colvarSiteID.IsNullable = false;
+                colvarSiteID.IsPrimaryKey = false;
+                colvarSiteID.IsForeignKey = false;
+                colvarSiteID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSiteID);
                 
                 TableSchema.TableColumn colvarOrganisationRoleID = new TableSchema.TableColumn(schema);
                 colvarOrganisationRoleID.ColumnName = "OrganisationRoleID";
@@ -277,20 +277,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("SiteID")]
-        [Bindable(true)]
-        public Guid SiteID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("SiteID");
-		    }
-            set 
-		    {
-			    SetColumnValue("SiteID", value);
-            }
-        }
-	      
         [XmlAttribute("OrganisationID")]
         [Bindable(true)]
         public Guid OrganisationID 
@@ -302,6 +288,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("OrganisationID", value);
+            }
+        }
+	      
+        [XmlAttribute("SiteID")]
+        [Bindable(true)]
+        public Guid SiteID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("SiteID");
+		    }
+            set 
+		    {
+			    SetColumnValue("SiteID", value);
             }
         }
 	      
@@ -454,9 +454,9 @@ namespace SAEON.Observations.Data{
 		    
             public static string Id = @"ID";
             
-            public static string SiteID = @"SiteID";
-            
             public static string OrganisationID = @"OrganisationID";
+            
+            public static string SiteID = @"SiteID";
             
             public static string OrganisationRoleID = @"OrganisationRoleID";
             
