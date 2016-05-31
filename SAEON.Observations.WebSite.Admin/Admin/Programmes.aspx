@@ -25,7 +25,7 @@
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -137,75 +137,6 @@
                         </Items>
                     </ext:Panel>
                 </Center>
-                <%--                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
-                    <ext:Panel ID="pnlEast" runat="server" Title="Projects" Layout="FitLayout" Width="425" ClientIDMode="Static">
-                        <TopBar>
-                            <ext:Toolbar ID="Toolbar3" runat="server">
-                                <Items>
-                                    <ext:Button ID="LinkProject" runat="server" Icon="LinkAdd" Text="Link Project">
-                                        <ToolTips>
-                                            <ext:ToolTip ID="ToolTip3" runat="server" Html="Link" />
-                                        </ToolTips>
-                                        <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection()){#{ProjectLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
-                                        </Listeners>
-                                    </ext:Button>
-                                </Items>
-                            </ext:Toolbar>
-                        </TopBar>
-                        <Items>
-                            <ext:GridPanel ID="ProjectLinksGrid" runat="server" Border="false" Layout="FitLayout"
-                                ClientIDMode="Static">
-                                <Store>
-                                    <ext:Store ID="ProjectLinksGridStore" runat="server" OnRefreshData="ProjectLinksGridStore_RefreshData">
-                                        <Proxy>
-                                            <ext:PageProxy />
-                                        </Proxy>
-                                        <Reader>
-                                            <ext:JsonReader IDProperty="Id">
-                                                <Fields>
-                                                    <ext:RecordField Name="Id" Type="Auto" />
-                                                    <ext:RecordField Name="ProjectID" Type="Auto" />
-                                                    <ext:RecordField Name="ProjectName" Type="Auto" />
-                                                    <ext:RecordField Name="ProjectRoleID" Type="Auto" />
-                                                    <ext:RecordField Name="ProjectRoleName" Type="Auto" />
-                                                    <ext:RecordField Name="StartDate" Type="Date" />
-                                                    <ext:RecordField Name="EndDate" Type="Date" />
-                                                </Fields>
-                                            </ext:JsonReader>
-                                        </Reader>
-                                        <BaseParams>
-                                            <ext:Parameter Name="ProgrammeID" Value="Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection() ? #{ProgrammesGrid}.getSelectionModel().getSelected().id : -1"
-                                                Mode="Raw" />
-                                        </BaseParams>
-                                    </ext:Store>
-                                </Store>
-                                <ColumnModel ID="ColumnModel5" runat="server">
-                                    <Columns>
-                                        <ext:Column Header="Project" DataIndex="ProjectName" Width="150" />
-                                        <ext:Column Header="Role" DataIndex="ProjectRoleName" Width="75" />
-                                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
-                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-                                        <ext:CommandColumn Width="50">
-                                            <Commands>
-                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
-                                                <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink"/>
-                                            </Commands>
-                                        </ext:CommandColumn>
-                                    </Columns>
-                                </ColumnModel>
-                                <SelectionModel>
-                                    <ext:RowSelectionModel ID="RowSelectionModel3" runat="server" SingleSelect="true">
-                                    </ext:RowSelectionModel>
-                                </SelectionModel>
-                                <LoadMask ShowMask="true" />
-                                <Listeners>
-                                    <Command Fn="onProjectLinkCommand" />
-                                </Listeners>
-                            </ext:GridPanel>
-                        </Items>
-                    </ext:Panel>
-                </East>--%>
                 <South Collapsible="true" Split="true" MinHeight="250">
                     <ext:TabPanel ID="pnlSouth" runat="server" Height="250" ActiveTabIndex="0" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
@@ -218,7 +149,8 @@
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>
                                                 <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection()){#{ProjectLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a programme.')}" />
+                                                    <%--<Click Handler="if(Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection()){#{ProjectLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a programme.')}" />--%>
+                                                    <Click Handler="if(Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection()){#{AvailableProjectsGridStore}.reload();#{AvailableProjectsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a programme.')}" />
                                                 </Listeners>
                                             </ext:Button>
                                             <%--
@@ -245,9 +177,8 @@
                                                     <ext:JsonReader IDProperty="Id">
                                                         <Fields>
                                                             <ext:RecordField Name="Id" Type="Auto" />
-                                                            <ext:RecordField Name="ProjectID" Type="Auto" />
-                                                            <ext:RecordField Name="ProjectCode" Type="Auto" />
-                                                            <ext:RecordField Name="ProjectName" Type="Auto" />
+                                                            <ext:RecordField Name="Code" Type="Auto" />
+                                                            <ext:RecordField Name="Name" Type="Auto" />
                                                             <ext:RecordField Name="StartDate" Type="Date" />
                                                             <ext:RecordField Name="EndDate" Type="Date" />
                                                         </Fields>
@@ -261,13 +192,13 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel2" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Code" DataIndex="ProjectCode" Width="150" />
-                                                <ext:Column Header="Name" DataIndex="ProjectName" Width="150" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+                                                <ext:Column Header="Code" DataIndex="Code" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="50">
                                                     <Commands>
-                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                                        <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />--%>
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
                                                     </Commands>
                                                 </ext:CommandColumn>
@@ -377,7 +308,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
-                                FieldLabel="End" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -419,7 +350,6 @@
                                     <ext:RecordField Name="Id" Type="Auto" />
                                     <ext:RecordField Name="Code" Type="String" />
                                     <ext:RecordField Name="Name" Type="String" />
-                                    <ext:RecordField Name="Description" Type="String" />
                                     <ext:RecordField Name="StartDate" Type="Date" />
                                     <ext:RecordField Name="EndDate" Type="Date" />
                                 </Fields>
@@ -433,12 +363,11 @@
                 </Store>
                 <ColumnModel ID="ColumnModel4" runat="server">
                     <Columns>
-                        <ext:Column Header="Code" DataIndex="Code" Width="150" />
-                        <ext:Column Header="Name" DataIndex="Name" Width="150" />
-                        <ext:Column Header="Description" DataIndex="Description" Width="150" />
-                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy">
+                        <ext:Column Header="Code" DataIndex="Code" Width="200" />
+                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy">
                         </ext:DateColumn>
-                        <ext:DateColumn Header="Date End" DataIndex="DateEnd" Width="150" Format="dd MMM yyyy">
+                        <ext:DateColumn Header="Date End" DataIndex="DateEnd" Width="100" Format="dd MMM yyyy">
                         </ext:DateColumn>
                     </Columns>
                 </ColumnModel>

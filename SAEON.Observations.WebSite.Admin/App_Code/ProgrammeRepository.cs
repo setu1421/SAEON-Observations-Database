@@ -22,7 +22,7 @@ public class ProgrammeRepository:BaseRepository
     {
 
         SqlQuery q = new Select().From(Programme.Schema);
-        q.Where(Programme.Columns.UserId).IsNotNull();
+        //q.Where(Programme.Columns.UserId).IsNotNull();
 
         GetPagedQuery(ref q, e, paramPrefix);
 

@@ -12,12 +12,14 @@ public partial class Admin_Stations : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
+            SiteStore.DataSource = new SiteCollection().OrderByAsc(SAEON.Observations.Data.Site.Columns.Name).Load();
+            SiteStore.DataBind();
             OrganisationStore.DataSource = new OrganisationCollection().OrderByAsc(Organisation.Columns.Name).Load();
             OrganisationStore.DataBind();
             OrganisationRoleStore.DataSource = new OrganisationRoleCollection().OrderByAsc(OrganisationRole.Columns.Name).Load();
             OrganisationRoleStore.DataBind();
-            SiteStore.DataSource = new SiteCollection().OrderByAsc(SAEON.Observations.Data.Site.Columns.Name).Load();
-            SiteStore.DataBind();
+            ProjectStore.DataSource = new ProjectCollection().OrderByAsc(Project.Columns.Name).Load();
+            ProjectStore.DataBind();
             InstrumentStore.DataSource = new InstrumentCollection().OrderByAsc(Instrument.Columns.Name).Load();
             InstrumentStore.DataBind();
         }
@@ -78,6 +80,10 @@ public partial class Admin_Stations : System.Web.UI.Page
                 station.Code = tfCode.Text.Trim();
             if (!string.IsNullOrEmpty(tfName.Text.Trim()))
                 station.Name = tfName.Text.Trim();
+            if (cbSite.SelectedItem.Value == null)
+                station.SiteID = null;
+            else
+                station.SiteID = Utilities.MakeGuid(cbSite.SelectedItem.Value.Trim());
             station.Description = tfDescription.Text.Trim();
 
             if (!string.IsNullOrEmpty(nfLatitude.Text))

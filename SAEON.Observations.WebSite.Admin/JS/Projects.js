@@ -29,21 +29,21 @@ function New() {
 
 function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible())
-        SiteLinksGrid.getStore().reload();
+        StationLinksGrid.getStore().reload();
 }
 
-function ClearSiteLinkForm() {
-    SiteLinkFormPanel.getForm().reset();
+function ClearStationLinkForm() {
+    StationLinkFormPanel.getForm().reset();
 }
 
-function onSiteLinkCommand(e, record) {
+function onStationLinkCommand(e, record) {
     if (e === 'Delete') {
-        DirectCall.ConfirmDeleteSiteLink(record.get('Id'), { eventMask: { showMask: true } });
+        DirectCall.ConfirmDeleteStationLink(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {
-        SiteLinkFormPanel.getForm().reset();
-        SiteLinkFormPanel.getForm().loadRecord(record);
-        SiteLinkFormPanel.getForm().clearInvalid();
-        SiteLinkWindow.show();
+        StationLinkFormPanel.getForm().reset();
+        StationLinkFormPanel.getForm().loadRecord(record);
+        StationLinkFormPanel.getForm().clearInvalid();
+        StationLinkWindow.show();
     }
 }
 

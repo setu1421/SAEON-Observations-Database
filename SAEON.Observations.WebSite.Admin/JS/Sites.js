@@ -31,7 +31,6 @@ function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible())
     {
         OrganisationLinksGrid.getStore().reload();
-        ProjectLinksGrid.getStore().reload();
         StationLinksGrid.getStore().reload();
     }
 }
@@ -51,23 +50,12 @@ function onOrganisationLinkCommand(e, record) {
     }
 }
 
-function ClearProjectLinkForm() {
-    ProjectLinkFormPanel.getForm().reset();
-}
-
-function onProjectLinkCommand(e, record) {
-    if (e === 'Delete') {
-        DirectCall.ConfirmDeleteProjectLink(record.get('Id'), { eventMask: { showMask: true } });
-    } else if (e === 'Edit') {
-        ProjectLinkFormPanel.getForm().reset();
-        ProjectLinkFormPanel.getForm().loadRecord(record);
-        ProjectLinkFormPanel.getForm().clearInvalid();
-        ProjectLinkWindow.show();
-    }
-}
-
 function ClearStationLinkForm() {
     StationLinkFormPanel.getForm().reset();
+}
+
+function CloseAvailableStations() {
+    AvailableStationsGrid.selModel.clearSelections();
 }
 
 function onStationLinkCommand(e, record) {

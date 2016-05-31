@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,Guid StationID,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid? InstrumentID,Guid UserId)
+	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,Guid StationID,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid UserId)
 	    {
 		    Sensor item = new Sensor();
 		    
@@ -102,8 +102,6 @@ namespace SAEON.Observations.Data
             
             item.DataSchemaID = DataSchemaID;
             
-            item.InstrumentID = InstrumentID;
-            
             item.UserId = UserId;
             
 	    
@@ -114,7 +112,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,Guid StationID,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid? InstrumentID,Guid UserId)
+	    public void Update(Guid Id,string Code,string Name,string Description,string Url,Guid StationID,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid UserId)
 	    {
 		    Sensor item = new Sensor();
 	        item.MarkOld();
@@ -137,8 +135,6 @@ namespace SAEON.Observations.Data
 			item.DataSourceID = DataSourceID;
 				
 			item.DataSchemaID = DataSchemaID;
-				
-			item.InstrumentID = InstrumentID;
 				
 			item.UserId = UserId;
 				

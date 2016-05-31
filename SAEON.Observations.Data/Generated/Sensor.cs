@@ -248,20 +248,6 @@ namespace SAEON.Observations.Data
 					colvarDataSchemaID.ForeignKeyTableName = "DataSchema";
 				schema.Columns.Add(colvarDataSchemaID);
 				
-				TableSchema.TableColumn colvarInstrumentID = new TableSchema.TableColumn(schema);
-				colvarInstrumentID.ColumnName = "InstrumentID";
-				colvarInstrumentID.DataType = DbType.Guid;
-				colvarInstrumentID.MaxLength = 0;
-				colvarInstrumentID.AutoIncrement = false;
-				colvarInstrumentID.IsNullable = true;
-				colvarInstrumentID.IsPrimaryKey = false;
-				colvarInstrumentID.IsForeignKey = true;
-				colvarInstrumentID.IsReadOnly = false;
-				colvarInstrumentID.DefaultSetting = @"";
-				
-					colvarInstrumentID.ForeignKeyTableName = "Instrument";
-				schema.Columns.Add(colvarInstrumentID);
-				
 				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
 				colvarUserId.ColumnName = "UserId";
 				colvarUserId.DataType = DbType.Guid;
@@ -358,14 +344,6 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.DataSchemaID, value); }
 		}
 		  
-		[XmlAttribute("InstrumentID")]
-		[Bindable(true)]
-		public Guid? InstrumentID 
-		{
-			get { return GetColumnValue<Guid?>(Columns.InstrumentID); }
-			set { SetColumnValue(Columns.InstrumentID, value); }
-		}
-		  
 		[XmlAttribute("UserId")]
 		[Bindable(true)]
 		public Guid UserId 
@@ -443,17 +421,6 @@ namespace SAEON.Observations.Data
 		
 		
 		/// <summary>
-		/// Returns a Instrument ActiveRecord object related to this Sensor
-		/// 
-		/// </summary>
-		public SAEON.Observations.Data.Instrument Instrument
-		{
-			get { return SAEON.Observations.Data.Instrument.FetchByID(this.InstrumentID); }
-			set { SetColumnValue("InstrumentID", value.Id); }
-		}
-		
-		
-		/// <summary>
 		/// Returns a Phenomenon ActiveRecord object related to this Sensor
 		/// 
 		/// </summary>
@@ -489,7 +456,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid varDataSourceID,Guid? varDataSchemaID,Guid? varInstrumentID,Guid varUserId)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid varDataSourceID,Guid? varDataSchemaID,Guid varUserId)
 		{
 			Sensor item = new Sensor();
 			
@@ -511,8 +478,6 @@ namespace SAEON.Observations.Data
 			
 			item.DataSchemaID = varDataSchemaID;
 			
-			item.InstrumentID = varInstrumentID;
-			
 			item.UserId = varUserId;
 			
 		
@@ -525,7 +490,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid varDataSourceID,Guid? varDataSchemaID,Guid? varInstrumentID,Guid varUserId)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varStationID,Guid varPhenomenonID,Guid varDataSourceID,Guid? varDataSchemaID,Guid varUserId)
 		{
 			Sensor item = new Sensor();
 			
@@ -546,8 +511,6 @@ namespace SAEON.Observations.Data
 				item.DataSourceID = varDataSourceID;
 			
 				item.DataSchemaID = varDataSchemaID;
-			
-				item.InstrumentID = varInstrumentID;
 			
 				item.UserId = varUserId;
 			
@@ -627,16 +590,9 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn InstrumentIDColumn
-        {
-            get { return Schema.Columns[9]; }
-        }
-        
-        
-        
         public static TableSchema.TableColumn UserIdColumn
         {
-            get { return Schema.Columns[10]; }
+            get { return Schema.Columns[9]; }
         }
         
         
@@ -654,7 +610,6 @@ namespace SAEON.Observations.Data
 			 public static string PhenomenonID = @"PhenomenonID";
 			 public static string DataSourceID = @"DataSourceID";
 			 public static string DataSchemaID = @"DataSchemaID";
-			 public static string InstrumentID = @"InstrumentID";
 			 public static string UserId = @"UserId";
 						
 		}

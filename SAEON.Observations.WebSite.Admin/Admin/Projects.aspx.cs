@@ -15,6 +15,8 @@ public partial class Admin_Projects : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
+            ProgrammeStore.DataSource = new ProgrammeCollection().OrderByAsc(Programme.Columns.Name).Load();
+            ProgrammeStore.DataBind();
             StationStore.DataSource = new StationCollection().OrderByAsc(Station.Columns.Name).Load();
             StationStore.DataBind();
         }
@@ -66,30 +68,33 @@ public partial class Admin_Projects : System.Web.UI.Page
     {
         try
         {
-            Project site = new Project();
+            Project project = new Project();
             if (String.IsNullOrEmpty(tfID.Text))
-                site.Id = Guid.NewGuid();
+                project.Id = Guid.NewGuid();
             else
-                site = new Project(tfID.Text.Trim());
+                project = new Project(tfID.Text.Trim());
             if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                site.Code = tfCode.Text.Trim();
+                project.Code = tfCode.Text.Trim();
             if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                site.Name = tfName.Text.Trim();
-            if (string.IsNullOrEmpty(site.Name)) site.Name = null;
-            site.Description = tfDescription.Text.Trim();
-            site.Url = tfUrl.Text.Trim();
+                project.Name = tfName.Text.Trim();
+            if (cbProgramme.SelectedItem.Value == null)
+                project.ProgrammeID = null;
+            else
+                project.ProgrammeID = Utilities.MakeGuid(cbProgramme.SelectedItem.Value.Trim());
+            project.Description = tfDescription.Text.Trim();
+            project.Url = tfUrl.Text.Trim();
             if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
-                site.StartDate = dfStartDate.SelectedDate;
+                project.StartDate = dfStartDate.SelectedDate;
             else
-                site.StartDate = null;
+                project.StartDate = null;
             if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
-                site.EndDate = dfEndDate.SelectedDate;
+                project.EndDate = dfEndDate.SelectedDate;
             else
-                site.EndDate = null;
-            site.UserId = AuthHelper.GetLoggedInUserId;
+                project.EndDate = null;
+            project.UserId = AuthHelper.GetLoggedInUserId;
 
-            site.Save();
-            Auditing.Log("Projects.Save", new Dictionary<string, object> { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
+            project.Save();
+            Auditing.Log("Projects.Save", new Dictionary<string, object> { { "ID", project.Id }, { "Code", project.Code }, { "Name", project.Name } });
 
             ProjectsGrid.DataBind();
 
@@ -98,7 +103,7 @@ public partial class Admin_Projects : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Projects.Save");
-            MessageBoxes.Error(ex, "Error", "Unable to save site");
+            MessageBoxes.Error(ex, "Error", "Unable to save project");
         }
     }
 
@@ -142,22 +147,22 @@ public partial class Admin_Projects : System.Web.UI.Page
         {
             RowSelectionModel masterRow = ProjectsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            ProjectStation siteProject = new ProjectStation(Utilities.MakeGuid(StationLinkID.Value));
-            siteProject.ProjectID = masterID;
-            siteProject.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
+            ProjectStation projectStation = new ProjectStation(Utilities.MakeGuid(ProjectStationLinkID.Value));
+            projectStation.ProjectID = masterID;
+            projectStation.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfStationStartDate.Text) && (dfStationStartDate.SelectedDate.Year >= 1900))
-                siteProject.StartDate = dfStationStartDate.SelectedDate;
+                projectStation.StartDate = dfStationStartDate.SelectedDate;
             if (!String.IsNullOrEmpty(dfStationEndDate.Text) && (dfStationEndDate.SelectedDate.Year >= 1900))
-                siteProject.EndDate = dfStationEndDate.SelectedDate;
-            siteProject.UserId = AuthHelper.GetLoggedInUserId;
-            siteProject.Save();
+                projectStation.EndDate = dfStationEndDate.SelectedDate;
+            projectStation.UserId = AuthHelper.GetLoggedInUserId;
+            projectStation.Save();
             Auditing.Log("Projects.AddStationLink", new Dictionary<string, object> {
-                { "ProjectID", siteProject.ProjectID },
-                { "ProjectCode", siteProject.Project.Name },
-                { "StationID", siteProject.StationID},
-                { "StationCode", siteProject.Station.Code},
-                { "StartDate", siteProject.StartDate },
-                { "EndDate", siteProject.EndDate}
+                { "ProjectID", projectStation.ProjectID },
+                { "ProjectCode", projectStation.Project.Name },
+                { "StationID", projectStation.StationID},
+                { "StationCode", projectStation.Station.Code},
+                { "StartDate", projectStation.StartDate },
+                { "EndDate", projectStation.EndDate}
             });
             StationLinksGrid.DataBind();
             StationLinkWindow.Hide();
@@ -165,7 +170,7 @@ public partial class Admin_Projects : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Projects.LinkStation_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link site");
+            MessageBoxes.Error(ex, "Error", "Unable to link station");
         }
     }
 
@@ -175,7 +180,7 @@ public partial class Admin_Projects : System.Web.UI.Page
         MessageBoxes.Confirm(
             "Confirm Delete",
             String.Format("DirectCall.DeleteStationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
-            "Are you sure you want to delete this site link?");
+            "Are you sure you want to delete this station link?");
     }
 
     [DirectMethod]
@@ -190,7 +195,7 @@ public partial class Admin_Projects : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Projects.DeleteStationLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete site link");
+            MessageBoxes.Error(ex, "Error", "Unable to delete station link");
         }
     }
 

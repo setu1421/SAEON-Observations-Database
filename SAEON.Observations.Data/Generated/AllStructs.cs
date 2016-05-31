@@ -433,6 +433,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VInstrumentOrganisation = @"vInstrumentOrganisation";
         
+		public static readonly string VInstrumentSensor = @"vInstrumentSensor";
+        
 		public static readonly string VInventory = @"vInventory";
         
 		public static readonly string VModuleRoleModule = @"vModuleRoleModule";

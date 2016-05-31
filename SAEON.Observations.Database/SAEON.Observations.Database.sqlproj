@@ -530,6 +530,7 @@
     <Build Include="dbo\Views\vOrganisationInstrument.sql" />
     <Build Include="dbo\Tables\Project_Station.sql" />
     <Build Include="dbo\Tables\Instrument_Sensor.sql" />
+    <Build Include="dbo\Views\vInstrumentSensor.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Lab2-NimbusServices ObservationsDBv2Test.publish.xml" />

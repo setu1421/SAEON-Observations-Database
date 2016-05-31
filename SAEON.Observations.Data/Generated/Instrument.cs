@@ -393,10 +393,6 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.OrganisationInstrumentCollection().Where(OrganisationInstrument.Columns.InstrumentID, Id).Load();
 		}
-		public SAEON.Observations.Data.SensorCollection SensorRecords()
-		{
-			return new SAEON.Observations.Data.SensorCollection().Where(Sensor.Columns.InstrumentID, Id).Load();
-		}
 		public SAEON.Observations.Data.StationInstrumentCollection StationInstrumentRecords()
 		{
 			return new SAEON.Observations.Data.StationInstrumentCollection().Where(StationInstrument.Columns.InstrumentID, Id).Load();

@@ -21,12 +21,12 @@ public class ProjectRepository:BaseRepository
     public static List<object> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix)
     {
 
-        SqlQuery q = new Select().From(Project.Schema);
-        q.Where(Project.Columns.UserId).IsNotNull();
+        SqlQuery q = new Select().From(VProject.Schema);
+        //q.Where(Project.Columns.UserId).IsNotNull();
 
         GetPagedQuery(ref q, e, paramPrefix);
 
-        ProjectCollection col = q.ExecuteAsCollection<ProjectCollection>();
+        VProjectCollection col = q.ExecuteAsCollection<VProjectCollection>();
 
         return col.ToList<object>();
     }

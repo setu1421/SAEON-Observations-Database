@@ -66,30 +66,29 @@ public partial class Admin_Programmes : System.Web.UI.Page
     {
         try
         {
-            Programme site = new Programme();
+            Programme programme = new Programme();
             if (String.IsNullOrEmpty(tfID.Text))
-                site.Id = Guid.NewGuid();
+                programme.Id = Guid.NewGuid();
             else
-                site = new Programme(tfID.Text.Trim());
+                programme = new Programme(tfID.Text.Trim());
             if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                site.Code = tfCode.Text.Trim();
+                programme.Code = tfCode.Text.Trim();
             if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                site.Name = tfName.Text.Trim();
-            if (string.IsNullOrEmpty(site.Name)) site.Name = null;
-            site.Description = tfDescription.Text.Trim();
-            site.Url = tfUrl.Text.Trim();
+                programme.Name = tfName.Text.Trim();
+            programme.Description = tfDescription.Text.Trim();
+            programme.Url = tfUrl.Text.Trim();
             if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
-                site.StartDate = dfStartDate.SelectedDate;
+                programme.StartDate = dfStartDate.SelectedDate;
             else
-                site.StartDate = null;
+                programme.StartDate = null;
             if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
-                site.EndDate = dfEndDate.SelectedDate;
+                programme.EndDate = dfEndDate.SelectedDate;
             else
-                site.EndDate = null;
-            site.UserId = AuthHelper.GetLoggedInUserId;
+                programme.EndDate = null;
+            programme.UserId = AuthHelper.GetLoggedInUserId;
 
-            site.Save();
-            Auditing.Log("Programmes.Save", new Dictionary<string, object> { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
+            programme.Save();
+            Auditing.Log("Programmes.Save", new Dictionary<string, object> { { "ID", programme.Id }, { "Code", programme.Code }, { "Name", programme.Name } });
 
             ProgrammesGrid.DataBind();
 
@@ -98,7 +97,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Programmes.Save");
-            MessageBoxes.Error(ex, "Error", "Unable to save site");
+            MessageBoxes.Error(ex, "Error", "Unable to save programme");
         }
     }
 
@@ -138,13 +137,13 @@ public partial class Admin_Programmes : System.Web.UI.Page
 
     protected void AvailableProjectsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
+        if (e.Parameters["ProgrammeID"] != null && e.Parameters["ProgrammeID"].ToString() != "-1")
         {
-            Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
+            Guid Id = Guid.Parse(e.Parameters["ProgrammeID"].ToString());
             ProjectCollection col = new Select()
                 .From(Project.Schema)
                 .Where(Project.IdColumn)
-                .NotIn(new Select(new string[] { Project.Columns.Id }).From(Project.Schema).Where(Project.IdColumn).IsEqualTo(Id))
+                .NotIn(new Select(new string[] { Project.Columns.Id }).From(Project.Schema).Where(Project.ProgrammeIDColumn).IsEqualTo(Id))
                 .And(Project.ProgrammeIDColumn)
                 .IsNull()
                 .OrderAsc(Project.Columns.StartDate)
@@ -159,7 +158,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
     protected void AcceptProjectsButton_Click(object sender, DirectEventArgs e)
     {
         RowSelectionModel sm = AvailableProjectsGrid.SelectionModel.Primary as RowSelectionModel;
-        RowSelectionModel programmeRow = AvailableProjectsGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel programmeRow = ProgrammesGrid.SelectionModel.Primary as RowSelectionModel;
 
         string programmeID = programmeRow.SelectedRecordID;
         if (sm.SelectedRows.Count > 0)

@@ -36,6 +36,10 @@ function ClearProjectLinkForm() {
     ProjectLinkFormPanel.getForm().reset();
 }
 
+function CloseAvailableProjects() {
+    AvailableProjectsGrid.selModel.clearSelections();
+}
+
 function onProjectLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteProjectLink(record.get('Id'), { eventMask: { showMask: true } });

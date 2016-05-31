@@ -20,7 +20,7 @@
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -30,7 +30,7 @@
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -40,7 +40,7 @@
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -247,7 +247,7 @@
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>
                                                 <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{InstrumentsGrid}') && #{InstrumentsGrid}.getSelectionModel().hasSelection()){#{AvailableSensorsStore}.reload();#{AvailableSensorsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select an instrument.')}" />
+                                                    <Click Handler="if(Ext.getCmp('#{InstrumentsGrid}') && #{InstrumentsGrid}.getSelectionModel().hasSelection()){#{SesnorLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select an instrument.')}" />
                                                 </Listeners>
                                             </ext:Button>
                                             <%-- 
@@ -276,10 +276,8 @@
                                                             <ext:RecordField Name="Id" Type="Auto" />
                                                             <ext:RecordField Name="Code" Type="Auto" />
                                                             <ext:RecordField Name="Name" Type="Auto" />
-                                                            <ext:RecordField Name="Description" Type="Auto" />
                                                             <ext:RecordField Name="StartDate" Type="Date" />
                                                             <ext:RecordField Name="EndDate" Type="Date" />
-                                                            <ext:RecordField Name="DataSchemaName" Type="Auto" />
                                                         </Fields>
                                                     </ext:JsonReader>
                                                 </Reader>
@@ -291,15 +289,13 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel2" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Code" DataIndex="Code" Width="150" />
-                                                <ext:Column Header="Name" DataIndex="Name" Width="150" />
-                                                <ext:Column Header="Description" DataIndex="Description" Width="150" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:Column Header="Schema Name" DataIndex="DataSchemaName" Width="150" />
+                                                <ext:Column Header="Code" DataIndex="Code" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="50">
                                                     <Commands>
-                                                        <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>--%>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
                                                     </Commands>
                                                 </ext:CommandColumn>

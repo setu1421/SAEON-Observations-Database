@@ -12,7 +12,7 @@ public partial class Admin_Organisations : System.Web.UI.Page
     #region Organisations
     protected void OrganisationStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.OrganisationsGrid.GetStore().DataSource = OrganisationRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        OrganisationsGrid.GetStore().DataSource = OrganisationRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)

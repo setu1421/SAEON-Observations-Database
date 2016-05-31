@@ -16,8 +16,6 @@ public partial class Admin_Sites : System.Web.UI.Page
             OrganisationStore.DataBind();
             OrganisationRoleStore.DataSource = new da.OrganisationRoleCollection().OrderByAsc(da.OrganisationRole.Columns.Name).Load();
             OrganisationRoleStore.DataBind();
-            ProjectStore.DataSource = new da.ProjectCollection().OrderByAsc(da.Project.Columns.Name).Load();
-            ProjectStore.DataBind();
             StationStore.DataSource = new da.StationCollection().OrderByAsc(da.Station.Columns.Name).Load();
             StationStore.DataBind();
         }
@@ -238,7 +236,7 @@ public partial class Admin_Sites : System.Web.UI.Page
             da.StationCollection col = new Select()
                 .From(da.Station.Schema)
                 .Where(da.Station.IdColumn)
-                .NotIn(new Select(new string[] { da.Station.Columns.Id }).From(da.Station.Schema).Where(da.Station.IdColumn).IsEqualTo(Id))
+                .NotIn(new Select(new string[] { da.Station.Columns.Id }).From(da.Station.Schema).Where(da.Station.SiteIDColumn).IsEqualTo(Id))
                 .And(da.Station.SiteIDColumn)
                 .IsNull()
                 .OrderAsc(da.Station.Columns.StartDate)
@@ -253,7 +251,7 @@ public partial class Admin_Sites : System.Web.UI.Page
     protected void AcceptStationsButton_Click(object sender, DirectEventArgs e)
     {
         RowSelectionModel sm = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
-        RowSelectionModel siteRow = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel siteRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
 
         string siteID = siteRow.SelectedRecordID;
         if (sm.SelectedRows.Count > 0)

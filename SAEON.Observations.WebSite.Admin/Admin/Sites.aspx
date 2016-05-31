@@ -25,7 +25,7 @@
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -35,17 +35,7 @@
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
-                    <ext:RecordField Name="Name" Type="String" />
-                </Fields>
-            </ext:JsonReader>
-        </Reader>
-    </ext:Store>
-    <ext:Store ID="ProjectStore" runat="server">
-        <Reader>
-            <ext:JsonReader IDProperty="Id">
-                <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -55,7 +45,7 @@
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -171,7 +161,7 @@
                 <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
                 </East>
                 <South Collapsible="true" Split="true" MinHeight="250">
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" ActiveTabIndex="2" TabPosition="Top" Border="false" ClientIDMode="Static">
+                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" ActiveTabIndex="1" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
                             <ext:Panel ID="pnlOrganisations" runat="server" Title="Organisations" Layout="FitLayout" ClientIDMode="Static">
                                 <TopBar>
@@ -227,10 +217,10 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel5" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
-                                                <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="200" />
+                                                <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="200" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="50">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
@@ -259,7 +249,8 @@
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>
                                                 <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{StationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
+                                                    <%--<Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{StationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />--%>
+                                                    <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{AvailableStationsGridStore}.reload();#{AvailableStationsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                                 </Listeners>
                                             </ext:Button>
                                             <%-- 
@@ -286,9 +277,8 @@
                                                     <ext:JsonReader IDProperty="Id">
                                                         <Fields>
                                                             <ext:RecordField Name="Id" Type="Auto" />
-                                                            <ext:RecordField Name="StationID" Type="Auto" />
-                                                            <ext:RecordField Name="StationCode" Type="Auto" />
-                                                            <ext:RecordField Name="StationName" Type="Auto" />
+                                                            <ext:RecordField Name="Code" Type="Auto" />
+                                                            <ext:RecordField Name="Name" Type="Auto" />
                                                             <ext:RecordField Name="StartDate" Type="Date" />
                                                             <ext:RecordField Name="EndDate" Type="Date" />
                                                         </Fields>
@@ -302,13 +292,13 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel2" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Code" DataIndex="StationCode" Width="150" />
-                                                <ext:Column Header="Name" DataIndex="StationName" Width="150" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+                                                <ext:Column Header="Code" DataIndex="Code" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="50">
                                                     <Commands>
-                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                                        <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />--%>
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
                                                     </Commands>
                                                 </ext:CommandColumn>
@@ -529,7 +519,7 @@
         </Content>
     </ext:Window>
     <ext:Window ID="AvailableStationsWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available Stations" Width="750" Height="300" X="50" Y="50" 
+        Title="Available Stations" Width="750" Height="300" X="50" Y="50"
         Layout="Fit" Hidden="true" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="CloseAvailableStations" />
@@ -547,7 +537,6 @@
                                     <ext:RecordField Name="Id" Type="Auto" />
                                     <ext:RecordField Name="Code" Type="String" />
                                     <ext:RecordField Name="Name" Type="String" />
-                                    <ext:RecordField Name="Description" Type="String" />
                                     <ext:RecordField Name="StartDate" Type="Date" />
                                     <ext:RecordField Name="EndDate" Type="Date" />
                                 </Fields>
@@ -561,13 +550,10 @@
                 </Store>
                 <ColumnModel ID="ColumnModel4" runat="server">
                     <Columns>
-                        <ext:Column Header="Code" DataIndex="Code" Width="150" />
-                        <ext:Column Header="Name" DataIndex="Name" Width="150" />
-                        <ext:Column Header="Description" DataIndex="Description" Width="150" />
-                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy">
-                        </ext:DateColumn>
-                        <ext:DateColumn Header="Date End" DataIndex="DateEnd" Width="150" Format="dd MMM yyyy">
-                        </ext:DateColumn>
+                        <ext:Column Header="Code" DataIndex="Code" Width="200" />
+                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                        <ext:DateColumn Header="Date End" DataIndex="DateEnd" Width="100" Format="dd MMM yyyy" />
                     </Columns>
                 </ColumnModel>
                 <LoadMask ShowMask="true" />
@@ -586,79 +572,5 @@
             </ext:GridPanel>
         </Items>
     </ext:Window>
-<%--    
-    <ext:Window ID="StationLinkWindow" runat="server" Width="450" Height="300" Closable="true"
-        Hidden="true" Collapsible="false" Title="Link Station"
-        Maximizable="false" Layout="Fit" ClientIDMode="Static">
-        <Listeners>
-            <Hide Fn="ClearStationLinkForm" />
-        </Listeners>
-        <Content>
-            <ext:FormPanel ID="StationLinkFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
-                Layout="RowLayout" ClientIDMode="Static">
-                <LoadMask ShowMask="true" />
-                <Items>
-                    <ext:Hidden ID="StationLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
-                    </ext:Hidden>
-                    <ext:Panel ID="Panel9" runat="server" Border="false" Header="false" Layout="FormLayout"
-                        LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
-                            <ext:Parameter Name="blankText" Value="Station is a required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:ComboBox ID="cbStation" runat="server" StoreID="StationStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
-                                AllowBlank="false" DataIndex="StationID" EmptyText="Select Station"
-                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
-                            </ext:ComboBox>
-                        </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel11" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Start Date is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:DateField ID="dfStationStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
-                            </ext:DateField>
-                        </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel15" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="End Date is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:DateField ID="dfStationEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
-                            </ext:DateField>
-                        </Items>
-                    </ext:Panel>
-                </Items>
-                <Buttons>
-                    <ext:Button ID="Button5" runat="server" Text="Save" FormBind="true" Icon="Accept">
-                        <DirectEvents>
-                            <Click OnEvent="LinkStation_Click">
-                                <EventMask ShowMask="true" />
-                            </Click>
-                        </DirectEvents>
-                    </ext:Button>
-                </Buttons>
-                <BottomBar>
-                    <ext:StatusBar ID="StatusBar3" runat="server" Height="25" />
-                </BottomBar>
-                <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
-                </Listeners>
-            </ext:FormPanel>
-        </Content>
-    </ext:Window>
---%>
 </asp:Content>
 

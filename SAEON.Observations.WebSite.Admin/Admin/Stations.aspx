@@ -21,11 +21,21 @@
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
+    <ext:Store ID="SiteStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="Auto" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
     <ext:Store ID="OrganisationStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -35,17 +45,17 @@
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
         </Reader>
     </ext:Store>
-    <ext:Store ID="SiteStore" runat="server">
+    <ext:Store ID="ProjectStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -55,7 +65,7 @@
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -181,10 +191,8 @@
                         </Items>
                     </ext:Panel>
                 </Center>
-                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
-                </East>
                 <South Collapsible="true" Split="true" MinHeight="250">
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" ActiveTabIndex="1" TabPosition="Top" Border="false" ClientIDMode="Static">
+                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" ActiveTabIndex="2" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
                             <ext:Panel ID="pnlOrganisations" runat="server" Title="Organisations" Layout="FitLayout" Width="425" ClientIDMode="Static">
                                 <TopBar>
@@ -240,10 +248,10 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel5" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
-                                                <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="75" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="yyyy/MM/dd" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="yyyy/MM/dd" />
+                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="200" />
+                                                <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="200" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="yyyy/MM/dd" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="yyyy/MM/dd" />
                                                 <ext:CommandColumn Width="50">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
@@ -272,7 +280,7 @@
                                                     <ext:ToolTip ID="ToolTip6" runat="server" Html="Link" />
                                                 </ToolTips>
                                                 <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{ProjectLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
+                                                    <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{ProjectLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
                                                 </Listeners>
                                             </ext:Button>
                                             <%-- 
@@ -308,17 +316,17 @@
                                                     </ext:JsonReader>
                                                 </Reader>
                                                 <BaseParams>
-                                                    <ext:Parameter Name="SiteID" Value="Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection() ? #{SitesGrid}.getSelectionModel().getSelected().id : -1"
+                                                    <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection() ? #{StationsGrid}.getSelectionModel().getSelected().id : -1"
                                                         Mode="Raw" />
                                                 </BaseParams>
                                             </ext:Store>
                                         </Store>
                                         <ColumnModel ID="ColumnModel3" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Code" DataIndex="ProjectCode" Width="150" />
-                                                <ext:Column Header="Name" DataIndex="ProjectName" Width="150" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+                                                <ext:Column Header="Code" DataIndex="ProjectCode" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="ProjectName" Width="200" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="50">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
@@ -391,10 +399,10 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel2" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Code" DataIndex="InstrumentCode" Width="150" />
-                                                <ext:Column Header="Name" DataIndex="InstrumentName" Width="150" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+                                                <ext:Column Header="Code" DataIndex="InstrumentCode" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="InstrumentName" Width="200" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="50">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
