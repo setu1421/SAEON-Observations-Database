@@ -31,7 +31,8 @@ function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible())
     {
         OrganisationLinksGrid.getStore().reload();
-        SensorsGrid.getStore().reload();
+        StationLinksGrid.getStore().reload();
+        SensorLinksGrid.getStore().reload();
     }
 }
 
@@ -39,8 +40,12 @@ function ClearOrganisationLinkForm() {
     OrganisationLinkFormPanel.getForm().reset();
 }
 
-function CloseAvailableSensors() {
-    AvailableSensorsGrid.selModel.clearSelections();
+function ClearStationLinkForm() {
+    StationLinkFormPanel.getForm().reset();
+}
+
+function ClearSensorLinkForm() {
+    SensorLinkFormPanel.getForm().reset();
 }
 
 function onOrganisationLinkCommand(e, record) {
@@ -51,6 +56,17 @@ function onOrganisationLinkCommand(e, record) {
         OrganisationLinkFormPanel.getForm().loadRecord(record);
         OrganisationLinkFormPanel.getForm().clearInvalid();
         OrganisationLinkWindow.show();
+    }
+}
+
+function onStationLinkCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteStationLink(record.get('Id'), { eventMask: { showMask: true } });
+    } else if (e === 'Edit') {
+        StationLinkFormPanel.getForm().reset();
+        StationLinkFormPanel.getForm().loadRecord(record);
+        StationLinkFormPanel.getForm().clearInvalid();
+        StationLinkWindow.show();
     }
 }
 
