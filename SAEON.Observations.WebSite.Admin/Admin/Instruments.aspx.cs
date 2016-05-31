@@ -133,12 +133,12 @@ public partial class Admin_Instruments : System.Web.UI.Page
         if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["InstrumentID"].ToString());
-            VInstrumentOrganisationCollection col = new VInstrumentOrganisationCollection()
-                .Where(VInstrumentOrganisation.Columns.InstrumentID, Id)
-                .OrderByAsc(VInstrumentOrganisation.Columns.StartDate)
-                .OrderByAsc(VInstrumentOrganisation.Columns.EndDate)
-                .OrderByAsc(VInstrumentOrganisation.Columns.OrganisationName)
-                .OrderByAsc(VInstrumentOrganisation.Columns.OrganisationRoleName)
+            VOrganisationInstrumentCollection col = new VOrganisationInstrumentCollection()
+                .Where(VOrganisationInstrument.Columns.InstrumentID, Id)
+                .OrderByAsc(VOrganisationInstrument.Columns.StartDate)
+                .OrderByAsc(VOrganisationInstrument.Columns.EndDate)
+                .OrderByAsc(VOrganisationInstrument.Columns.OrganisationName)
+                .OrderByAsc(VOrganisationInstrument.Columns.OrganisationRoleName)
                 .Load();
             OrganisationLinksGrid.GetStore().DataSource = col;
             OrganisationLinksGrid.GetStore().DataBind();
@@ -151,29 +151,29 @@ public partial class Admin_Instruments : System.Web.UI.Page
         {
             RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            InstrumentOrganisation instrumentOrganisation = new InstrumentOrganisation(Utilities.MakeGuid(OrganisationLinkID.Value));
-            instrumentOrganisation.InstrumentID = masterID;
-            instrumentOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
-            instrumentOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+            OrganisationInstrument organisationInstrument = new OrganisationInstrument(Utilities.MakeGuid(OrganisationLinkID.Value));
+            organisationInstrument.InstrumentID = masterID;
+            organisationInstrument.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
+            organisationInstrument.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
-                instrumentOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
+                organisationInstrument.StartDate = dfOrganisationStartDate.SelectedDate;
             else
-                instrumentOrganisation.StartDate = null;
+                organisationInstrument.StartDate = null;
             if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
-                instrumentOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
+                organisationInstrument.EndDate = dfOrganisationEndDate.SelectedDate;
             else
-                instrumentOrganisation.EndDate = null;
-            instrumentOrganisation.UserId = AuthHelper.GetLoggedInUserId;
-            instrumentOrganisation.Save();
+                organisationInstrument.EndDate = null;
+            organisationInstrument.UserId = AuthHelper.GetLoggedInUserId;
+            organisationInstrument.Save();
             Auditing.Log("Instruments.AddOrganisationLink", new Dictionary<string, object> {
-                { "InstrumentID", instrumentOrganisation.InstrumentID },
-                { "InstrumentCode", instrumentOrganisation.Instrument.Code },
-                { "OrganisationID", instrumentOrganisation.OrganisationID},
-                { "OrganisationCode", instrumentOrganisation.Organisation.Code},
-                { "RoleID", instrumentOrganisation.OrganisationRoleID },
-                { "RoleCode", instrumentOrganisation.OrganisationRole.Code},
-                { "StartDate", instrumentOrganisation.StartDate },
-                { "EndDate", instrumentOrganisation.EndDate}
+                { "InstrumentID", organisationInstrument.InstrumentID },
+                { "InstrumentCode", organisationInstrument.Instrument.Code },
+                { "OrganisationID", organisationInstrument.OrganisationID},
+                { "OrganisationCode", organisationInstrument.Organisation.Code},
+                { "RoleID", organisationInstrument.OrganisationRoleID },
+                { "RoleCode", organisationInstrument.OrganisationRole.Code},
+                { "StartDate", organisationInstrument.StartDate },
+                { "EndDate", organisationInstrument.EndDate}
             });
             OrganisationLinksGrid.DataBind();
             OrganisationLinkWindow.Hide();
@@ -199,7 +199,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     {
         try
         {
-            new InstrumentOrganisationController().Delete(aID);
+            new OrganisationInstrumentController().Delete(aID);
             Auditing.Log("Instruments.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", aID } });
             OrganisationLinksGrid.DataBind();
         }

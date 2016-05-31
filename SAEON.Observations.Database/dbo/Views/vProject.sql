@@ -7,6 +7,6 @@ SELECT
   [Programme].Name ProgrammeName
 FROM 
   [Project] src
-  inner join [Programme]
+  left join [Programme]
     on (src.ProgrammeID = [Programme].ID)
 --< Added 2.0.5 20160512 TimPN

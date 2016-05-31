@@ -165,6 +165,30 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarUpdatedAt);
                 
+                TableSchema.TableColumn colvarOrganisationCode = new TableSchema.TableColumn(schema);
+                colvarOrganisationCode.ColumnName = "OrganisationCode";
+                colvarOrganisationCode.DataType = DbType.AnsiString;
+                colvarOrganisationCode.MaxLength = 50;
+                colvarOrganisationCode.AutoIncrement = false;
+                colvarOrganisationCode.IsNullable = false;
+                colvarOrganisationCode.IsPrimaryKey = false;
+                colvarOrganisationCode.IsForeignKey = false;
+                colvarOrganisationCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOrganisationCode);
+                
+                TableSchema.TableColumn colvarOrganisationName = new TableSchema.TableColumn(schema);
+                colvarOrganisationName.ColumnName = "OrganisationName";
+                colvarOrganisationName.DataType = DbType.AnsiString;
+                colvarOrganisationName.MaxLength = 150;
+                colvarOrganisationName.AutoIncrement = false;
+                colvarOrganisationName.IsNullable = false;
+                colvarOrganisationName.IsPrimaryKey = false;
+                colvarOrganisationName.IsForeignKey = false;
+                colvarOrganisationName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOrganisationName);
+                
                 TableSchema.TableColumn colvarInstrumentCode = new TableSchema.TableColumn(schema);
                 colvarInstrumentCode.ColumnName = "InstrumentCode";
                 colvarInstrumentCode.DataType = DbType.AnsiString;
@@ -389,6 +413,34 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("OrganisationCode")]
+        [Bindable(true)]
+        public string OrganisationCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("OrganisationCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("OrganisationCode", value);
+            }
+        }
+	      
+        [XmlAttribute("OrganisationName")]
+        [Bindable(true)]
+        public string OrganisationName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("OrganisationName");
+		    }
+            set 
+		    {
+			    SetColumnValue("OrganisationName", value);
+            }
+        }
+	      
         [XmlAttribute("InstrumentCode")]
         [Bindable(true)]
         public string InstrumentCode 
@@ -469,6 +521,10 @@ namespace SAEON.Observations.Data{
             public static string AddedAt = @"AddedAt";
             
             public static string UpdatedAt = @"UpdatedAt";
+            
+            public static string OrganisationCode = @"OrganisationCode";
+            
+            public static string OrganisationName = @"OrganisationName";
             
             public static string InstrumentCode = @"InstrumentCode";
             

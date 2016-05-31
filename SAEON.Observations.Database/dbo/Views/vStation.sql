@@ -3,7 +3,8 @@ AS
 SELECT 
   Station.*,
   p.Code + ' - ' + p.Name ProjectSiteName,
-  s.Code + ' - ' + s.Name SiteName
+  s.Code SiteCode,
+  s.Name SiteName
 FROM 
   Station
   LEFT JOIN ProjectSite p -- Must be removed once all stations have sites

@@ -400,6 +400,65 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
+    <ext:Window ID="AvailableProjectsWindow" runat="server" Collapsible="false" Maximizable="false"
+        Title="Available Projects" Width="750" Height="300" X="50" Y="50" 
+        Layout="Fit" Hidden="true" ClientIDMode="Static">
+        <Listeners>
+            <Hide Fn="CloseAvailableProjects" />
+        </Listeners>
+        <Items>
+            <ext:GridPanel ID="AvailableProjectsGrid" runat="server" Header="false" Border="false" ClientIDMode="Static">
+                <Store>
+                    <ext:Store ID="AvailableProjectsGridStore" runat="server" OnRefreshData="AvailableProjectsGridStore_RefreshData">
+                        <Proxy>
+                            <ext:PageProxy />
+                        </Proxy>
+                        <Reader>
+                            <ext:JsonReader IDProperty="Id">
+                                <Fields>
+                                    <ext:RecordField Name="Id" Type="Auto" />
+                                    <ext:RecordField Name="Code" Type="String" />
+                                    <ext:RecordField Name="Name" Type="String" />
+                                    <ext:RecordField Name="Description" Type="String" />
+                                    <ext:RecordField Name="StartDate" Type="Date" />
+                                    <ext:RecordField Name="EndDate" Type="Date" />
+                                </Fields>
+                            </ext:JsonReader>
+                        </Reader>
+                        <BaseParams>
+                            <ext:Parameter Name="ProgrammeID" Value="Ext.getCmp('#{ProgrammesGrid}') && #{ProgrammesGrid}.getSelectionModel().hasSelection() ? #{ProgrammesGrid}.getSelectionModel().getSelected().id : -1"
+                                Mode="Raw" />
+                        </BaseParams>
+                    </ext:Store>
+                </Store>
+                <ColumnModel ID="ColumnModel4" runat="server">
+                    <Columns>
+                        <ext:Column Header="Code" DataIndex="Code" Width="150" />
+                        <ext:Column Header="Name" DataIndex="Name" Width="150" />
+                        <ext:Column Header="Description" DataIndex="Description" Width="150" />
+                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy">
+                        </ext:DateColumn>
+                        <ext:DateColumn Header="Date End" DataIndex="DateEnd" Width="150" Format="dd MMM yyyy">
+                        </ext:DateColumn>
+                    </Columns>
+                </ColumnModel>
+                <LoadMask ShowMask="true" />
+                <SelectionModel>
+                    <ext:CheckboxSelectionModel ID="CheckboxSelectionModel2" runat="server" />
+                </SelectionModel>
+                <Buttons>
+                    <ext:Button ID="AcceptProjectsButton" runat="server" Text="Save" Icon="Accept">
+                        <DirectEvents>
+                            <Click OnEvent="AcceptProjectsButton_Click">
+                                <EventMask ShowMask="true" />
+                            </Click>
+                        </DirectEvents>
+                    </ext:Button>
+                </Buttons>
+            </ext:GridPanel>
+        </Items>
+    </ext:Window>
+<%-- 
     <ext:Window ID="ProjectLinkWindow" runat="server" Width="450" Height="300" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Project"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
@@ -472,5 +531,6 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
+--%>
 </asp:Content>
 

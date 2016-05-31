@@ -125,49 +125,108 @@ public partial class Admin_Programmes : System.Web.UI.Page
         if (e.Parameters["ProgrammeID"] != null && e.Parameters["ProgrammeID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["ProgrammeID"].ToString());
-            VProgrammeProjectCollection col = new VProgrammeProjectCollection()
-                .Where(VProgrammeProject.Columns.ProgrammeID, Id)
-                .OrderByAsc(VProgrammeProject.Columns.StartDate)
-                .OrderByAsc(VProgrammeProject.Columns.EndDate)
-                .OrderByAsc(VProgrammeProject.Columns.ProjectName)
+            ProjectCollection col = new ProjectCollection()
+                .Where(Project.Columns.ProgrammeID, Id)
+                .OrderByAsc(Project.Columns.StartDate)
+                .OrderByAsc(Project.Columns.EndDate)
+                .OrderByAsc(Project.Columns.Name)
                 .Load();
             ProjectLinksGrid.GetStore().DataSource = col;
             ProjectLinksGrid.GetStore().DataBind();
         }
     }
 
-    protected void LinkProject_Click(object sender, DirectEventArgs e)
+    protected void AvailableProjectsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        try
+        if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
         {
-            RowSelectionModel masterRow = ProgrammesGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            ProgrammeProject programmeProject = new ProgrammeProject(Utilities.MakeGuid(ProjectLinkID.Value));
-            programmeProject.ProgrammeID = masterID;
-            programmeProject.ProjectID = new Guid(cbProject.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfProjectStartDate.Text) && (dfProjectStartDate.SelectedDate.Year >= 1900))
-                programmeProject.StartDate = dfProjectStartDate.SelectedDate;
-            if (!String.IsNullOrEmpty(dfProjectEndDate.Text) && (dfProjectEndDate.SelectedDate.Year >= 1900))
-                programmeProject.EndDate = dfProjectEndDate.SelectedDate;
-            programmeProject.UserId = AuthHelper.GetLoggedInUserId;
-            programmeProject.Save();
-            Auditing.Log("Programmes.AddProjectLink", new Dictionary<string, object> {
-                { "ProgrammeID", programmeProject.ProgrammeID },
-                { "ProgrammeCode", programmeProject.Programme.Code },
-                { "ProjectID", programmeProject.ProjectID},
-                { "ProjectCode", programmeProject.Project.Code},
-                { "StartDate", programmeProject.StartDate },
-                { "EndDate", programmeProject.EndDate}
-            });
-            ProjectLinksGrid.DataBind();
-            ProjectLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Programmes.LinkProject_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link project");
+            Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
+            ProjectCollection col = new Select()
+                .From(Project.Schema)
+                .Where(Project.IdColumn)
+                .NotIn(new Select(new string[] { Project.Columns.Id }).From(Project.Schema).Where(Project.IdColumn).IsEqualTo(Id))
+                .And(Project.ProgrammeIDColumn)
+                .IsNull()
+                .OrderAsc(Project.Columns.StartDate)
+                .OrderAsc(Project.Columns.EndDate)
+                .OrderAsc(Project.Columns.Name)
+                .ExecuteAsCollection<ProjectCollection>();
+            AvailableProjectsGrid.GetStore().DataSource = col;
+            AvailableProjectsGrid.GetStore().DataBind();
         }
     }
+
+    protected void AcceptProjectsButton_Click(object sender, DirectEventArgs e)
+    {
+        RowSelectionModel sm = AvailableProjectsGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel programmeRow = AvailableProjectsGrid.SelectionModel.Primary as RowSelectionModel;
+
+        string programmeID = programmeRow.SelectedRecordID;
+        if (sm.SelectedRows.Count > 0)
+        {
+            foreach (SelectedRow row in sm.SelectedRows)
+            {
+                Project project = new Project(row.RecordID);
+                if (project != null)
+                    try
+                    {
+                        project.ProgrammeID = new Guid(programmeID);
+                        project.UserId = AuthHelper.GetLoggedInUserId;
+                        project.Save();
+                        Auditing.Log("Programmes.AddProjectLink", new Dictionary<string, object> {
+                                { "ProgrammeID", project.ProgrammeID},
+                                { "ProgrammeCode", project.Programme.Code},
+                                { "ProjectID", project.Id },
+                                { "ProjectCode", project.Code }
+                            });
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Programme.LinkProject_Click");
+                        MessageBoxes.Error(ex, "Error", "Unable to link programme");
+                    }
+            }
+            ProjectLinksGridStore.DataBind();
+            AvailableProjectsWindow.Hide();
+        }
+        else
+        {
+            MessageBoxes.Error("Invalid Selection", "Select at least one project");
+        }
+    }
+
+    //protected void LinkProject_Click(object sender, DirectEventArgs e)
+    //{
+    //    try
+    //    {
+    //        RowSelectionModel masterRow = ProgrammesGrid.SelectionModel.Primary as RowSelectionModel;
+    //        var masterID = new Guid(masterRow.SelectedRecordID);
+    //        ProgrammeProject programmeProject = new ProgrammeProject(Utilities.MakeGuid(ProjectLinkID.Value));
+    //        programmeProject.ProgrammeID = masterID;
+    //        programmeProject.ProjectID = new Guid(cbProject.SelectedItem.Value.Trim());
+    //        if (!String.IsNullOrEmpty(dfProjectStartDate.Text) && (dfProjectStartDate.SelectedDate.Year >= 1900))
+    //            programmeProject.StartDate = dfProjectStartDate.SelectedDate;
+    //        if (!String.IsNullOrEmpty(dfProjectEndDate.Text) && (dfProjectEndDate.SelectedDate.Year >= 1900))
+    //            programmeProject.EndDate = dfProjectEndDate.SelectedDate;
+    //        programmeProject.UserId = AuthHelper.GetLoggedInUserId;
+    //        programmeProject.Save();
+    //        Auditing.Log("Programmes.AddProjectLink", new Dictionary<string, object> {
+    //            { "ProgrammeID", programmeProject.ProgrammeID },
+    //            { "ProgrammeCode", programmeProject.Programme.Code },
+    //            { "ProjectID", programmeProject.ProjectID},
+    //            { "ProjectCode", programmeProject.Project.Code},
+    //            { "StartDate", programmeProject.StartDate },
+    //            { "EndDate", programmeProject.EndDate}
+    //        });
+    //        ProjectLinksGrid.DataBind();
+    //        ProjectLinkWindow.Hide();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Log.Error(ex, "Programmes.LinkProject_Click");
+    //        MessageBoxes.Error(ex, "Error", "Unable to link project");
+    //    }
+    //}
 
     [DirectMethod]
     public void ConfirmDeleteProjectLink(Guid aID)
@@ -183,8 +242,9 @@ public partial class Admin_Programmes : System.Web.UI.Page
     {
         try
         {
-            new ProgrammeProjectController().Delete(aID);
-            Auditing.Log("Programmes.DeleteProjectLink", new Dictionary<string, object> { { "ID", aID } });
+            Project project = new Project(aID);
+            project.ProgrammeID = null;
+            project.Save();
             ProjectLinksGrid.DataBind();
         }
         catch (Exception ex)

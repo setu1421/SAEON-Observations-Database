@@ -109,6 +109,8 @@
     <Compile Include="Generated\ImportBatchController.cs" />
     <Compile Include="Generated\Instrument.cs" />
     <Compile Include="Generated\InstrumentController.cs" />
+    <Compile Include="Generated\InstrumentSensor.cs" />
+    <Compile Include="Generated\InstrumentSensorController.cs" />
     <Compile Include="Generated\ModuleX.cs" />
     <Compile Include="Generated\ModuleXController.cs" />
     <Compile Include="Generated\Observation.cs" />
@@ -117,8 +119,14 @@
     <Compile Include="Generated\OfferingController.cs" />
     <Compile Include="Generated\Organisation.cs" />
     <Compile Include="Generated\OrganisationController.cs" />
+    <Compile Include="Generated\OrganisationInstrument.cs" />
+    <Compile Include="Generated\OrganisationInstrumentController.cs" />
     <Compile Include="Generated\OrganisationRole.cs" />
     <Compile Include="Generated\OrganisationRoleController.cs" />
+    <Compile Include="Generated\OrganisationSite.cs" />
+    <Compile Include="Generated\OrganisationSiteController.cs" />
+    <Compile Include="Generated\OrganisationStation.cs" />
+    <Compile Include="Generated\OrganisationStationController.cs" />
     <Compile Include="Generated\Phenomenon.cs" />
     <Compile Include="Generated\PhenomenonController.cs" />
     <Compile Include="Generated\PhenomenonOffering.cs" />
@@ -132,6 +140,10 @@
     <Compile Include="Generated\ProgressProgressResolved.cs" />
     <Compile Include="Generated\Project.cs" />
     <Compile Include="Generated\ProjectController.cs" />
+    <Compile Include="Generated\ProjectSite.cs" />
+    <Compile Include="Generated\ProjectSiteController.cs" />
+    <Compile Include="Generated\ProjectStation.cs" />
+    <Compile Include="Generated\ProjectStationController.cs" />
     <Compile Include="Generated\RoleModule.cs" />
     <Compile Include="Generated\RoleModuleController.cs" />
     <Compile Include="Generated\Sensor.cs" />
@@ -164,6 +176,7 @@
     <Compile Include="Generated\VOrganisationSite.cs" />
     <Compile Include="Generated\VOrganisationStation.cs" />
     <Compile Include="Generated\VProjectSite.cs" />
+    <Compile Include="Generated\VProjectStation.cs" />
     <Compile Include="Generated\VSensor.cs" />
     <Compile Include="Generated\VStation.cs" />
     <Compile Include="Generated\VStationInstrument.cs" />

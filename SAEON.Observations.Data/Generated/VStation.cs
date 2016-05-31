@@ -249,10 +249,22 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarProjectSiteName);
                 
+                TableSchema.TableColumn colvarSiteCode = new TableSchema.TableColumn(schema);
+                colvarSiteCode.ColumnName = "SiteCode";
+                colvarSiteCode.DataType = DbType.AnsiString;
+                colvarSiteCode.MaxLength = 50;
+                colvarSiteCode.AutoIncrement = false;
+                colvarSiteCode.IsNullable = true;
+                colvarSiteCode.IsPrimaryKey = false;
+                colvarSiteCode.IsForeignKey = false;
+                colvarSiteCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSiteCode);
+                
                 TableSchema.TableColumn colvarSiteName = new TableSchema.TableColumn(schema);
                 colvarSiteName.ColumnName = "SiteName";
                 colvarSiteName.DataType = DbType.AnsiString;
-                colvarSiteName.MaxLength = 203;
+                colvarSiteName.MaxLength = 150;
                 colvarSiteName.AutoIncrement = false;
                 colvarSiteName.IsNullable = true;
                 colvarSiteName.IsPrimaryKey = false;
@@ -535,6 +547,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("SiteCode")]
+        [Bindable(true)]
+        public string SiteCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("SiteCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("SiteCode", value);
+            }
+        }
+	      
         [XmlAttribute("SiteName")]
         [Bindable(true)]
         public string SiteName 
@@ -587,6 +613,8 @@ namespace SAEON.Observations.Data{
             public static string UpdatedAt = @"UpdatedAt";
             
             public static string ProjectSiteName = @"ProjectSiteName";
+            
+            public static string SiteCode = @"SiteCode";
             
             public static string SiteName = @"SiteName";
             

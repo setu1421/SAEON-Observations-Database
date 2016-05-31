@@ -1,5 +1,5 @@
 ﻿using Ext.Net;
-using da = SAEON.Observations.Data;
+using SAEON.Observations.Data;
 using Serilog;
 using SubSonic;
 using System;
@@ -15,8 +15,8 @@ public partial class Admin_Projects : System.Web.UI.Page
     {
         if (!X.IsAjaxRequest)
         {
-            SiteStore.DataSource = new da.SiteCollection().OrderByAsc(da.Site.Columns.Name).Load();
-            SiteStore.DataBind();
+            StationStore.DataSource = new StationCollection().OrderByAsc(Station.Columns.Name).Load();
+            StationStore.DataBind();
         }
     }
 
@@ -30,27 +30,27 @@ public partial class Admin_Projects : System.Web.UI.Page
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
 
-        da.ProjectCollection col = new da.ProjectCollection();
+        ProjectCollection col = new ProjectCollection();
 
         string checkColumn = String.Empty,
                errorMessage = String.Empty;
 
         if (e.ID == "tfCode")
         {
-            checkColumn = da.Project.Columns.Code;
+            checkColumn = Project.Columns.Code;
             errorMessage = "The specified Project Code already exists";
         }
         else if (e.ID == "tfName")
         {
-            checkColumn = da.Project.Columns.Name;
+            checkColumn = Project.Columns.Name;
             errorMessage = "The specified Project Name already exists";
 
         }
 
         if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new da.ProjectCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            col = new ProjectCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
         else
-            col = new da.ProjectCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(da.Project.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+            col = new ProjectCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Project.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
         if (col.Count > 0)
         {
@@ -66,11 +66,11 @@ public partial class Admin_Projects : System.Web.UI.Page
     {
         try
         {
-            da.Project site = new da.Project();
+            Project site = new Project();
             if (String.IsNullOrEmpty(tfID.Text))
                 site.Id = Guid.NewGuid();
             else
-                site = new da.Project(tfID.Text.Trim());
+                site = new Project(tfID.Text.Trim());
             if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
                 site.Code = tfCode.Text.Trim();
             if (!string.IsNullOrEmpty(tfName.Text.Trim()))
@@ -118,86 +118,86 @@ public partial class Admin_Projects : System.Web.UI.Page
     #endregion
 
 
-    #region Sites
+    #region Stations
 
-    protected void SiteLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void StationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["ProjectID"] != null && e.Parameters["ProjectID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["ProjectID"].ToString());
-            da.VSiteProjectCollection col = new da.VSiteProjectCollection()
-                .Where(da.VSiteProject.Columns.ProjectID, Id)
-                .OrderByAsc(da.VSiteProject.Columns.StartDate)
-                .OrderByAsc(da.VSiteProject.Columns.EndDate)
-                .OrderByAsc(da.VSiteProject.Columns.SiteName)
+            VProjectStationCollection col = new VProjectStationCollection()
+                .Where(VProjectStation.Columns.ProjectID, Id)
+                .OrderByAsc(VProjectStation.Columns.StartDate)
+                .OrderByAsc(VProjectStation.Columns.EndDate)
+                .OrderByAsc(VProjectStation.Columns.StationName)
                 .Load();
-            SiteLinksGrid.GetStore().DataSource = col;
-            SiteLinksGrid.GetStore().DataBind();
+            StationLinksGrid.GetStore().DataSource = col;
+            StationLinksGrid.GetStore().DataBind();
         }
     }
 
-    protected void LinkSite_Click(object sender, DirectEventArgs e)
+    protected void LinkStation_Click(object sender, DirectEventArgs e)
     {
         try
         {
             RowSelectionModel masterRow = ProjectsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            da.SiteProject siteProject = new da.SiteProject(Utilities.MakeGuid(SiteLinkID.Value));
+            ProjectStation siteProject = new ProjectStation(Utilities.MakeGuid(StationLinkID.Value));
             siteProject.ProjectID = masterID;
-            siteProject.SiteID = new Guid(cbSite.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfSiteStartDate.Text) && (dfSiteStartDate.SelectedDate.Year >= 1900))
-                siteProject.StartDate = dfSiteStartDate.SelectedDate;
-            if (!String.IsNullOrEmpty(dfSiteEndDate.Text) && (dfSiteEndDate.SelectedDate.Year >= 1900))
-                siteProject.EndDate = dfSiteEndDate.SelectedDate;
+            siteProject.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
+            if (!String.IsNullOrEmpty(dfStationStartDate.Text) && (dfStationStartDate.SelectedDate.Year >= 1900))
+                siteProject.StartDate = dfStationStartDate.SelectedDate;
+            if (!String.IsNullOrEmpty(dfStationEndDate.Text) && (dfStationEndDate.SelectedDate.Year >= 1900))
+                siteProject.EndDate = dfStationEndDate.SelectedDate;
             siteProject.UserId = AuthHelper.GetLoggedInUserId;
             siteProject.Save();
-            Auditing.Log("Projects.AddSiteLink", new Dictionary<string, object> {
+            Auditing.Log("Projects.AddStationLink", new Dictionary<string, object> {
                 { "ProjectID", siteProject.ProjectID },
                 { "ProjectCode", siteProject.Project.Name },
-                { "SiteID", siteProject.SiteID},
-                { "SiteCode", siteProject.Site.Code},
+                { "StationID", siteProject.StationID},
+                { "StationCode", siteProject.Station.Code},
                 { "StartDate", siteProject.StartDate },
                 { "EndDate", siteProject.EndDate}
             });
-            SiteLinksGrid.DataBind();
-            SiteLinkWindow.Hide();
+            StationLinksGrid.DataBind();
+            StationLinkWindow.Hide();
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Projects.LinkSite_Click");
+            Log.Error(ex, "Projects.LinkStation_Click");
             MessageBoxes.Error(ex, "Error", "Unable to link site");
         }
     }
 
     [DirectMethod]
-    public void ConfirmDeleteSiteLink(Guid aID)
+    public void ConfirmDeleteStationLink(Guid aID)
     {
         MessageBoxes.Confirm(
             "Confirm Delete",
-            String.Format("DirectCall.DeleteSiteLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            String.Format("DirectCall.DeleteStationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
             "Are you sure you want to delete this site link?");
     }
 
     [DirectMethod]
-    public void DeleteSiteLink(Guid aID)
+    public void DeleteStationLink(Guid aID)
     {
         try
         {
-            new da.SiteProjectController().Delete(aID);
-            Auditing.Log("Projects.DeleteSiteLink", new Dictionary<string, object> { { "ID", aID } });
-            SiteLinksGrid.DataBind();
+            new ProjectStationController().Delete(aID);
+            Auditing.Log("Projects.DeleteStationLink", new Dictionary<string, object> { { "ID", aID } });
+            StationLinksGrid.DataBind();
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Projects.DeleteSiteLink({aID})", aID);
+            Log.Error(ex, "Projects.DeleteStationLink({aID})", aID);
             MessageBoxes.Error(ex, "Error", "Unable to delete site link");
         }
     }
 
     [DirectMethod]
-    public void AddSiteClick(object sender, DirectEventArgs e)
+    public void AddStationClick(object sender, DirectEventArgs e)
     {
-        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Stations"));
     }
     #endregion
 }

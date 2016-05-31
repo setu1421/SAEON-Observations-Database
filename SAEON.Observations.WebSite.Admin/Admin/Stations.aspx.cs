@@ -139,14 +139,14 @@ public partial class Admin_Stations : System.Web.UI.Page
         if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
-            VStationOrganisationCollection StationOrganisationCol = new VStationOrganisationCollection()
-                .Where(VStationOrganisation.Columns.StationID, Id)
-                .OrderByAsc(VStationOrganisation.Columns.StartDate)
-                .OrderByAsc(VStationOrganisation.Columns.EndDate)
-                .OrderByAsc(VStationOrganisation.Columns.OrganisationName)
-                .OrderByAsc(VStationOrganisation.Columns.OrganisationRoleName)
+            VOrganisationStationCollection OrganisationStationCol = new VOrganisationStationCollection()
+                .Where(VOrganisationStation.Columns.StationID, Id)
+                .OrderByAsc(VOrganisationStation.Columns.StartDate)
+                .OrderByAsc(VOrganisationStation.Columns.EndDate)
+                .OrderByAsc(VOrganisationStation.Columns.OrganisationName)
+                .OrderByAsc(VOrganisationStation.Columns.OrganisationRoleName)
                 .Load();
-            OrganisationLinksGrid.GetStore().DataSource = StationOrganisationCol;
+            OrganisationLinksGrid.GetStore().DataSource = OrganisationStationCol;
             OrganisationLinksGrid.GetStore().DataBind();
         }
     }
@@ -157,7 +157,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         {
             RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            StationOrganisation stationOrganisation = new StationOrganisation(Utilities.MakeGuid(OrganisationLinkID.Value));
+            OrganisationStation stationOrganisation = new OrganisationStation(Utilities.MakeGuid(OrganisationLinkID.Value));
             stationOrganisation.StationID = masterID;
             stationOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
             stationOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
@@ -201,7 +201,7 @@ public partial class Admin_Stations : System.Web.UI.Page
     {
         try
         {
-            new StationOrganisationController().Delete(aID);
+            new OrganisationStationController().Delete(aID);
             Auditing.Log("Stations.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", aID } });
             OrganisationLinksGrid.DataBind();
         }
@@ -216,6 +216,93 @@ public partial class Admin_Stations : System.Web.UI.Page
     public void AddOrganisationClick(object sender, DirectEventArgs e)
     {
         //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
+    }
+    #endregion
+
+    #region Projects
+
+    protected void ProjectLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
+            VProjectStationCollection col = new VProjectStationCollection()
+                .Where(VProjectStation.Columns.StationID, Id)
+                .OrderByAsc(VProjectStation.Columns.StartDate)
+                .OrderByAsc(VProjectStation.Columns.EndDate)
+                .OrderByAsc(VProjectStation.Columns.ProjectName)
+                .Load();
+            ProjectLinksGrid.GetStore().DataSource = col;
+            ProjectLinksGrid.GetStore().DataBind();
+        }
+    }
+
+    protected void LinkProject_Click(object sender, DirectEventArgs e)
+    {
+        try
+        {
+            RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            ProjectStation projectStation = new ProjectStation(Utilities.MakeGuid(ProjectLinkID.Value));
+            projectStation.StationID = masterID;
+            projectStation.ProjectID = new Guid(cbProject.SelectedItem.Value.Trim());
+            if (!String.IsNullOrEmpty(dfProjectStartDate.Text) && (dfProjectStartDate.SelectedDate.Year >= 1900))
+                projectStation.StartDate = dfProjectStartDate.SelectedDate;
+            else
+                projectStation.StartDate = null;
+            if (!String.IsNullOrEmpty(dfProjectEndDate.Text) && (dfProjectEndDate.SelectedDate.Year >= 1900))
+                projectStation.EndDate = dfProjectEndDate.SelectedDate;
+            else
+                projectStation.EndDate = null;
+            projectStation.UserId = AuthHelper.GetLoggedInUserId;
+            projectStation.Save();
+            Auditing.Log("Stations.AddProjectLink", new Dictionary<string, object> {
+                { "StationID", projectStation.StationID },
+                { "StationCode", projectStation.Station.Code },
+                { "ProjectID", projectStation.ProjectID},
+                { "ProjectCode", projectStation.Project.Code},
+                { "StartDate", projectStation.StartDate },
+                { "EndDate", projectStation.EndDate}
+            });
+            ProjectLinksGrid.DataBind();
+            ProjectLinkWindow.Hide();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Stations.LinkProject_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link Project");
+        }
+    }
+
+    [DirectMethod]
+    public void ConfirmDeleteProjectLink(Guid aID)
+    {
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteProjectLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this Project link?");
+    }
+
+    [DirectMethod]
+    public void DeleteProjectLink(Guid aID)
+    {
+        try
+        {
+            new ProjectStationController().Delete(aID);
+            Auditing.Log("Stations.DeleteProjectLink", new Dictionary<string, object> { { "ID", aID } });
+            ProjectLinksGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Stations.DeleteProjectLink({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete Project link");
+        }
+    }
+
+    [DirectMethod]
+    public void AddProjectClick(object sender, DirectEventArgs e)
+    {
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Stations"));
     }
     #endregion
 
