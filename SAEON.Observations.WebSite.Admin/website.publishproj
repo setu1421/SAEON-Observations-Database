@@ -18,7 +18,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{e9dd68ad-35cf-49c5-9c22-5b50dd5ffe4c}</ProjectGuid>
     <SourceWebPhysicalPath>$(MSBuildThisFileDirectory)</SourceWebPhysicalPath>
-    <SourceWebVirtualPath>/SAEON.ObservationsDB.WebSite.Admin</SourceWebVirtualPath>
+    <SourceWebVirtualPath>/SAEON.Observations.WebSite.Admin</SourceWebVirtualPath>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <SourceWebProject>
     </SourceWebProject>
