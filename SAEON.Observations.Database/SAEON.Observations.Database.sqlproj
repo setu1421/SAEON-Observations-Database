@@ -534,13 +534,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Lab2-NimbusServices ObservationsDBv2Test.publish.xml" />
-    <None Include="Lab2-SAEON ObservationDB_Test.publish.xml" />
-    <None Include="Lab2-SAEON ObservationDB_Imp.publish.xml" />
-    <None Include="Lab2-SAEON ObservationDB.publish.xml" />
-    <None Include="Lab2-SAEON Observations.publish.xml" />
-    <None Include="Lab2-SAEON ObservationsTest.publish.xml" />
-    <None Include="SAEON ObservationsTest.publish.xml" />
+    <None Include="ObservationDB_Test.publish.xml" />
+    <None Include="ObservationDB_Imp.publish.xml" />
+    <None Include="ObservationDB.publish.xml" />
     <None Include="Observations.publish.xml" />
+    <None Include="ObservationsTest.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\master.dacpac">
