@@ -192,6 +192,7 @@
                                                     <ext:JsonReader IDProperty="Id">
                                                         <Fields>
                                                             <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="StationID" Type="Auto" />
                                                             <ext:RecordField Name="StationCode" Type="Auto" />
                                                             <ext:RecordField Name="StationName" Type="Auto" />
                                                             <ext:RecordField Name="StartDate" Type="Date" />
