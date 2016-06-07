@@ -232,6 +232,7 @@
                                                         <Fields>
                                                             <ext:RecordField Name="Id" Type="Auto" />
                                                             <ext:RecordField Name="Level" Type="Auto" />
+                                                            <ext:RecordField Name="IsReadOnly" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationID" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationName" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationRoleID" Type="Auto" />
@@ -254,14 +255,14 @@
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="200" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="yyyy/MM/dd" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="yyyy/MM/dd" />
-<%-- 
                                                 <ext:CommandColumn Width="50">
+                                                    <PrepareToolbar Fn="PrepareOrganisationLinkToolbar" />
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
                                                     </Commands>
                                                 </ext:CommandColumn>
---%>
+
                                             </Columns>
                                         </ColumnModel>
                                         <SelectionModel>
@@ -270,7 +271,7 @@
                                         </SelectionModel>
                                         <LoadMask ShowMask="true" />
                                         <Listeners>
-                                            <Command Fn="onOrganisationLinkCommand" />
+                                            <Command Fn="OnOrganisationLinkCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>
@@ -345,7 +346,7 @@
                                         </SelectionModel>
                                         <LoadMask ShowMask="true" />
                                         <Listeners>
-                                            <Command Fn="onProjectLinkCommand" />
+                                            <Command Fn="OnProjectLinkCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>
@@ -421,7 +422,7 @@
                                         </SelectionModel>
                                         <LoadMask ShowMask="true" />
                                         <Listeners>
-                                            <Command Fn="onInstrumentLinkCommand" />
+                                            <Command Fn="OnInstrumentLinkCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>

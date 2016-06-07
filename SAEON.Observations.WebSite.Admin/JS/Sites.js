@@ -39,7 +39,14 @@ function ClearOrganisationLinkForm() {
     OrganisationLinkFormPanel.getForm().reset();
 }
 
-function onOrganisationLinkCommand(e, record) {
+function PrepareOrganisationLinkToolbar(grid, toolbar, rowIndex, record) {
+    if (record.data.IsReadOnly) {
+        toolbar.items.get(0).setDisabled(true);
+        toolbar.items.get(1).setDisabled(true);
+    }
+}
+
+function OnOrganisationLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteOrganisationLink(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {
@@ -58,7 +65,7 @@ function CloseAvailableStations() {
     AvailableStationsGrid.selModel.clearSelections();
 }
 
-function onStationLinkCommand(e, record) {
+function OnStationLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteStationLink(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {

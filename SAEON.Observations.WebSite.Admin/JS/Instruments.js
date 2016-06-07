@@ -28,8 +28,7 @@ function New() {
 }
 
 function MasterRowSelect(e, record) {
-    if (pnlSouth.isVisible())
-    {
+    if (pnlSouth.isVisible()) {
         OrganisationLinksGrid.getStore().reload();
         StationLinksGrid.getStore().reload();
         SensorLinksGrid.getStore().reload();
@@ -40,15 +39,14 @@ function ClearOrganisationLinkForm() {
     OrganisationLinkFormPanel.getForm().reset();
 }
 
-function ClearStationLinkForm() {
-    StationLinkFormPanel.getForm().reset();
+function PrepareOrganisationLinkToolbar(grid, toolbar, rowIndex, record) {
+    if (record.data.IsReadOnly) {
+        toolbar.items.get(0).setDisabled(true);
+        toolbar.items.get(1).setDisabled(true);
+    }
 }
 
-function ClearSensorLinkForm() {
-    SensorLinkFormPanel.getForm().reset();
-}
-
-function onOrganisationLinkCommand(e, record) {
+function OnOrganisationLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteOrganisationLink(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {
@@ -59,7 +57,11 @@ function onOrganisationLinkCommand(e, record) {
     }
 }
 
-function onStationLinkCommand(e, record) {
+function ClearStationLinkForm() {
+    StationLinkFormPanel.getForm().reset();
+}
+
+function OnStationLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteStationLink(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {
@@ -70,7 +72,11 @@ function onStationLinkCommand(e, record) {
     }
 }
 
-function onSensorLinkCommand(e, record) {
+function ClearSensorLinkForm() {
+    SensorLinkFormPanel.getForm().reset();
+}
+
+function OnSensorLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteSensorLink(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {

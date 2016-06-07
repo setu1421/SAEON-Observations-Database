@@ -225,17 +225,17 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarWeight);
                 
-                TableSchema.TableColumn colvarReadOnlyX = new TableSchema.TableColumn(schema);
-                colvarReadOnlyX.ColumnName = "ReadOnly";
-                colvarReadOnlyX.DataType = DbType.Int32;
-                colvarReadOnlyX.MaxLength = 0;
-                colvarReadOnlyX.AutoIncrement = false;
-                colvarReadOnlyX.IsNullable = false;
-                colvarReadOnlyX.IsPrimaryKey = false;
-                colvarReadOnlyX.IsForeignKey = false;
-                colvarReadOnlyX.IsReadOnly = false;
+                TableSchema.TableColumn colvarIsReadOnly = new TableSchema.TableColumn(schema);
+                colvarIsReadOnly.ColumnName = "IsReadOnly";
+                colvarIsReadOnly.DataType = DbType.Boolean;
+                colvarIsReadOnly.MaxLength = 0;
+                colvarIsReadOnly.AutoIncrement = false;
+                colvarIsReadOnly.IsNullable = true;
+                colvarIsReadOnly.IsPrimaryKey = false;
+                colvarIsReadOnly.IsForeignKey = false;
+                colvarIsReadOnly.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarReadOnlyX);
+                schema.Columns.Add(colvarIsReadOnly);
                 
                 
                 BaseSchema = schema;
@@ -483,17 +483,17 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("ReadOnlyX")]
+        [XmlAttribute("IsReadOnly")]
         [Bindable(true)]
-        public int ReadOnlyX 
+        public bool? IsReadOnly 
 	    {
 		    get
 		    {
-			    return GetColumnValue<int>("ReadOnly");
+			    return GetColumnValue<bool?>("IsReadOnly");
 		    }
             set 
 		    {
-			    SetColumnValue("ReadOnly", value);
+			    SetColumnValue("IsReadOnly", value);
             }
         }
 	    
@@ -532,7 +532,7 @@ namespace SAEON.Observations.Data{
             
             public static string Weight = @"Weight";
             
-            public static string ReadOnlyX = @"ReadOnly";
+            public static string IsReadOnly = @"IsReadOnly";
             
 	    }
 	    #endregion

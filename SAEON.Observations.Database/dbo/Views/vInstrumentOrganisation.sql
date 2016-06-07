@@ -16,7 +16,7 @@ Select
   [Organisation_Site].EndDate,
   'Site' [Level],
   0 [Weight],
-  1 [ReadOnly]
+  CAST(1 as bit) [IsReadOnly]
 from
   [Organisation_Site]
   inner join [Organisation]
@@ -45,7 +45,7 @@ Select
   [Organisation_Station].EndDate,
   'Station' [Level],
   1 [Weight],
-  1 [ReadOnly]
+  CAST(1 as bit) [IsReadOnly]
 from 
   [Organisation_Station]
   inner join [Station_Instrument]
@@ -74,7 +74,7 @@ Select
   [Organisation_Instrument].EndDate,
   'Instrument' [Level],
   2 [Weight],
-  0 [ReadOnly]
+  CAST(0 as bit) [IsReadOnly]
 from
   [Organisation_Instrument]
   inner join [Organisation]

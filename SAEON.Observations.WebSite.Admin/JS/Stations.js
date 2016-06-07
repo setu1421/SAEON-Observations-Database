@@ -40,7 +40,14 @@ function ClearOrganisationLinkForm() {
     OrganisationLinkFormPanel.getForm().reset();
 }
 
-function onOrganisationLinkCommand(e, record) {
+function PrepareOrganisationLinkToolbar(grid, toolbar, rowIndex, record) {
+    if (record.data.IsReadOnly) {
+        toolbar.items.get(0).setDisabled(true);
+        toolbar.items.get(1).setDisabled(true);
+    }
+}
+
+function OnOrganisationLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteOrganisationLink(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {
@@ -55,7 +62,7 @@ function ClearProjectLinkForm() {
     ProjectLinkFormPanel.getForm().reset();
 }
 
-function onProjectLinkCommand(e, record) {
+function OnProjectLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteProjectLink(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {
@@ -70,7 +77,7 @@ function ClearInstrumentLinkForm() {
     InstrumentLinkFormPanel.getForm().reset();
 }
 
-function onInstrumentLinkCommand(e, record) {
+function OnInstrumentLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteInstrumentLink(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {

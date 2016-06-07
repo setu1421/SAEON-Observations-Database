@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseName>ObservationsTest</TargetDatabaseName>
-    <DeployScriptFileName>SAEON ObservationsTest.sql</DeployScriptFileName>
+    <DeployScriptFileName>ObservationsTest.sql</DeployScriptFileName>
     <TargetConnectionString>Data Source=.\SAEON;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True</TargetConnectionString>
     <BlockWhenDriftDetected>True</BlockWhenDriftDetected>
     <RegisterDataTierApplication>True</RegisterDataTierApplication>
