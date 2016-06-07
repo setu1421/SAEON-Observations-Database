@@ -1,0 +1,266 @@
+﻿2016-06-01 11:01:23.677 +02:00 [Error] Log("Programmes.Save")
+System.Data.SqlClient.SqlException (0x80131904): Cannot update AddedAt.
+Cannot update UpdatedAt.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at SubSonic.SqlDataProvider.ExecuteScalar(QueryCommand qry)
+   at SubSonic.DataService.ExecuteScalar(QueryCommand cmd)
+   at SubSonic.ActiveRecord`1.Save(String userName)
+   at SubSonic.ActiveRecord`1.Save()
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 56
+ClientConnectionId:2790ad85-a20b-4691-b947-20d4864842ed
+Error Number:50000,State:1,Class:16
+2016-06-01 11:02:01.991 +02:00 [Error] Log("Projects.Save")
+System.Data.SqlClient.SqlException (0x80131904): Cannot update AddedAt.
+Cannot update UpdatedAt.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at SubSonic.SqlDataProvider.ExecuteScalar(QueryCommand qry)
+   at SubSonic.DataService.ExecuteScalar(QueryCommand cmd)
+   at SubSonic.ActiveRecord`1.Save(String userName)
+   at SubSonic.ActiveRecord`1.Save()
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 56
+ClientConnectionId:2790ad85-a20b-4691-b947-20d4864842ed
+Error Number:50000,State:1,Class:16
+2016-06-01 11:02:24.222 +02:00 [Error] Log("Projects.Save")
+System.Data.SqlClient.SqlException (0x80131904): Cannot update AddedAt.
+Cannot update UpdatedAt.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at SubSonic.SqlDataProvider.ExecuteScalar(QueryCommand qry)
+   at SubSonic.DataService.ExecuteScalar(QueryCommand cmd)
+   at SubSonic.ActiveRecord`1.Save(String userName)
+   at SubSonic.ActiveRecord`1.Save()
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 56
+ClientConnectionId:2790ad85-a20b-4691-b947-20d4864842ed
+Error Number:50000,State:1,Class:16
+2016-06-01 11:03:43.449 +02:00 [Error] Log("Projects.AddStationLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 11:04:27.247 +02:00 [Error] Log("Projects.AddStationLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 11:04:34.291 +02:00 [Error] Log("Projects.AddStationLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 11:05:09.688 +02:00 [Error] Log("Sites.AddOrganisationLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 11:05:34.691 +02:00 [Error] Log("Sites.AddStationLink")
+System.Data.SqlClient.SqlException (0x80131904): Cannot update AddedAt.
+Cannot update UpdatedAt.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at SubSonic.SqlDataProvider.ExecuteScalar(QueryCommand qry)
+   at SubSonic.DataService.ExecuteScalar(QueryCommand cmd)
+   at SubSonic.ActiveRecord`1.Save(String userName)
+   at SubSonic.ActiveRecord`1.Save()
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 56
+ClientConnectionId:2790ad85-a20b-4691-b947-20d4864842ed
+Error Number:50000,State:1,Class:16
+2016-06-01 11:05:34.707 +02:00 [Error] Log("Sites.AddStationLink")
+System.Data.SqlClient.SqlException (0x80131904): Cannot update AddedAt.
+Cannot update UpdatedAt.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at SubSonic.SqlDataProvider.ExecuteScalar(QueryCommand qry)
+   at SubSonic.DataService.ExecuteScalar(QueryCommand cmd)
+   at SubSonic.ActiveRecord`1.Save(String userName)
+   at SubSonic.ActiveRecord`1.Save()
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 56
+ClientConnectionId:2790ad85-a20b-4691-b947-20d4864842ed
+Error Number:50000,State:1,Class:16
+2016-06-01 11:05:55.641 +02:00 [Error] Log("Sites.AddStationLink")
+System.Data.SqlClient.SqlException (0x80131904): Cannot update AddedAt.
+Cannot update UpdatedAt.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at SubSonic.SqlDataProvider.ExecuteScalar(QueryCommand qry)
+   at SubSonic.DataService.ExecuteScalar(QueryCommand cmd)
+   at SubSonic.ActiveRecord`1.Save(String userName)
+   at SubSonic.ActiveRecord`1.Save()
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 56
+ClientConnectionId:2790ad85-a20b-4691-b947-20d4864842ed
+Error Number:50000,State:1,Class:16
+2016-06-01 11:05:55.647 +02:00 [Error] Log("Sites.AddStationLink")
+System.Data.SqlClient.SqlException (0x80131904): Cannot update AddedAt.
+Cannot update UpdatedAt.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at SubSonic.SqlDataProvider.ExecuteScalar(QueryCommand qry)
+   at SubSonic.DataService.ExecuteScalar(QueryCommand cmd)
+   at SubSonic.ActiveRecord`1.Save(String userName)
+   at SubSonic.ActiveRecord`1.Save()
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 56
+ClientConnectionId:2790ad85-a20b-4691-b947-20d4864842ed
+Error Number:50000,State:1,Class:16
+2016-06-01 11:05:55.655 +02:00 [Error] Log("Sites.AddStationLink")
+System.Data.SqlClient.SqlException (0x80131904): Cannot update AddedAt.
+Cannot update UpdatedAt.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at SubSonic.SqlDataProvider.ExecuteScalar(QueryCommand qry)
+   at SubSonic.DataService.ExecuteScalar(QueryCommand cmd)
+   at SubSonic.ActiveRecord`1.Save(String userName)
+   at SubSonic.ActiveRecord`1.Save()
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 56
+ClientConnectionId:2790ad85-a20b-4691-b947-20d4864842ed
+Error Number:50000,State:1,Class:16
+2016-06-01 11:05:55.661 +02:00 [Error] Log("Sites.AddStationLink")
+System.Data.SqlClient.SqlException (0x80131904): Cannot update AddedAt.
+Cannot update UpdatedAt.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at SubSonic.SqlDataProvider.ExecuteScalar(QueryCommand qry)
+   at SubSonic.DataService.ExecuteScalar(QueryCommand cmd)
+   at SubSonic.ActiveRecord`1.Save(String userName)
+   at SubSonic.ActiveRecord`1.Save()
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 56
+ClientConnectionId:2790ad85-a20b-4691-b947-20d4864842ed
+Error Number:50000,State:1,Class:16
+2016-06-01 11:09:01.093 +02:00 [Error] Log("Stations.AddInstrumentLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 11:09:08.865 +02:00 [Error] Log("Stations.AddInstrumentLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 11:09:15.632 +02:00 [Error] Log("Stations.AddInstrumentLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 12:30:46.119 +02:00 [Error] Log("Instruments.AddStationLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 13:12:53.824 +02:00 [Error] Log("Instruments.AddSensorLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 13:13:03.236 +02:00 [Error] Log("Instruments.AddSensorLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 13:31:57.396 +02:00 [Error] Log("Instruments.AddSensorLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 13:32:09.734 +02:00 [Error] Log("Instruments.AddSensorLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 13:32:22.710 +02:00 [Error] Log("Instruments.AddSensorLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 13:32:42.198 +02:00 [Error] Log("Instruments.AddSensorLink")
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at Auditing.MethodCall(String name, Dictionary`2 parameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 27
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 54
+2016-06-01 13:32:47.618 +02:00 [Error] Log("Instruments.DeleteSensorLink")
+System.Data.SqlClient.SqlException (0x80131904): Cannot update AddedAt.
+Cannot update UpdatedAt.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteScalar()
+   at SubSonic.SqlDataProvider.ExecuteScalar(QueryCommand qry)
+   at SubSonic.DataService.ExecuteScalar(QueryCommand cmd)
+   at SubSonic.ActiveRecord`1.Save(String userName)
+   at SubSonic.ActiveRecord`1.Save()
+   at Auditing.Log(String methodName, Dictionary`2 methodParameters) in s:\Development.Net\SAEON\Observations Database\SAEON.Observations.WebSite.Admin\App_Code\Auditing.cs:line 56
+ClientConnectionId:d8488b35-150a-4a1e-b9e1-d4ee60a616c8
+Error Number:50000,State:1,Class:16

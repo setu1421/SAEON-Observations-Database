@@ -449,8 +449,6 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VOrganisationStation = @"vOrganisationStation";
         
-		public static readonly string VProgrammeProject = @"vProgrammeProject";
-        
 		public static readonly string VProject = @"vProject";
         
 		public static readonly string VProjectSite = @"vProjectSite";
@@ -460,10 +458,6 @@ namespace SAEON.Observations.Data
 		public static readonly string VSensor = @"vSensor";
         
 		public static readonly string VSiteOrganisation = @"vSiteOrganisation";
-        
-		public static readonly string VSiteProject = @"vSiteProject";
-        
-		public static readonly string VSiteStation = @"vSiteStation";
         
 		public static readonly string VStation = @"vStation";
         

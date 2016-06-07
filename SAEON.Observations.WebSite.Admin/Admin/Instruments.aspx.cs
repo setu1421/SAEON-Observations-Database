@@ -48,7 +48,6 @@ public partial class Admin_Instruments : System.Web.UI.Page
             .OrderAsc(Sensor.Columns.Name)
             .ExecuteAsCollection<SensorCollection>();
         SensorStore.DataSource = sensors;
-        MessageBoxes.Info("Info","{0} - {1}", masterID, sensors.Count);
         SensorStore.DataBind();
     }
 
@@ -155,13 +154,21 @@ public partial class Admin_Instruments : System.Web.UI.Page
         if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["InstrumentID"].ToString());
-            VOrganisationInstrumentCollection col = new VOrganisationInstrumentCollection()
-                .Where(VOrganisationInstrument.Columns.InstrumentID, Id)
-                .OrderByAsc(VOrganisationInstrument.Columns.StartDate)
-                .OrderByAsc(VOrganisationInstrument.Columns.EndDate)
-                .OrderByAsc(VOrganisationInstrument.Columns.OrganisationName)
-                .OrderByAsc(VOrganisationInstrument.Columns.OrganisationRoleName)
+            VInstrumentOrganisationCollection col = new VInstrumentOrganisationCollection()
+                .Where(VInstrumentOrganisation.Columns.InstrumentID, Id)
+                .OrderByAsc(VStationOrganisation.Columns.Weight)
+                .OrderByAsc(VInstrumentOrganisation.Columns.StartDate)
+                .OrderByAsc(VInstrumentOrganisation.Columns.EndDate)
+                .OrderByAsc(VInstrumentOrganisation.Columns.OrganisationName)
+                .OrderByAsc(VInstrumentOrganisation.Columns.OrganisationRoleName)
                 .Load();
+            //VOrganisationInstrumentCollection col = new VOrganisationInstrumentCollection()
+            //    .Where(VOrganisationInstrument.Columns.InstrumentID, Id)
+            //    .OrderByAsc(VOrganisationInstrument.Columns.StartDate)
+            //    .OrderByAsc(VOrganisationInstrument.Columns.EndDate)
+            //    .OrderByAsc(VOrganisationInstrument.Columns.OrganisationName)
+            //    .OrderByAsc(VOrganisationInstrument.Columns.OrganisationRoleName)
+            //    .Load();
             OrganisationLinksGrid.GetStore().DataSource = col;
             OrganisationLinksGrid.GetStore().DataBind();
         }

@@ -125,13 +125,21 @@ public partial class Admin_Sites : System.Web.UI.Page
         if (e.Parameters["SiteID"] != null && e.Parameters["SiteID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["SiteID"].ToString());
-            da.VOrganisationSiteCollection col = new da.VOrganisationSiteCollection()
-                .Where(da.VOrganisationSite.Columns.SiteID, Id)
-                .OrderByAsc(da.VOrganisationSite.Columns.StartDate)
-                .OrderByAsc(da.VOrganisationSite.Columns.EndDate)
-                .OrderByAsc(da.VOrganisationSite.Columns.OrganisationName)
-                .OrderByAsc(da.VOrganisationSite.Columns.OrganisationRoleName)
+            da.VSiteOrganisationCollection col = new da.VSiteOrganisationCollection()
+                .Where(da.VSiteOrganisation.Columns.SiteID, Id)
+                .OrderByAsc(da.VSiteOrganisation.Columns.Weight)
+                .OrderByAsc(da.VSiteOrganisation.Columns.StartDate)
+                .OrderByAsc(da.VSiteOrganisation.Columns.EndDate)
+                .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationName)
+                .OrderByAsc(da.VSiteOrganisation.Columns.OrganisationRoleName)
                 .Load();
+            //da.VOrganisationSiteCollection col = new da.VOrganisationSiteCollection()
+            //    .Where(da.VOrganisationSite.Columns.SiteID, Id)
+            //    .OrderByAsc(da.VOrganisationSite.Columns.StartDate)
+            //    .OrderByAsc(da.VOrganisationSite.Columns.EndDate)
+            //    .OrderByAsc(da.VOrganisationSite.Columns.OrganisationName)
+            //    .OrderByAsc(da.VOrganisationSite.Columns.OrganisationRoleName)
+            //    .Load();
             OrganisationLinksGrid.GetStore().DataSource = col;
             OrganisationLinksGrid.GetStore().DataBind();
         }

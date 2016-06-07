@@ -210,6 +210,7 @@
                                                     <ext:JsonReader IDProperty="Id">
                                                         <Fields>
                                                             <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="Level" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationID" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationName" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationRoleID" Type="Auto" />
@@ -227,16 +228,20 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel5" runat="server">
                                             <Columns>
+                                                <ext:Column Header="Level" DataIndex="Level" Width="100" />
                                                 <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="75" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+<%--
                                                 <ext:CommandColumn Width="50">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
                                                     </Commands>
                                                 </ext:CommandColumn>
+--%>
+
                                             </Columns>
                                         </ColumnModel>
                                         <SelectionModel>

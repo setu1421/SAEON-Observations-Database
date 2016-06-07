@@ -145,14 +145,22 @@ public partial class Admin_Stations : System.Web.UI.Page
         if (e.Parameters["StationID"] != null && e.Parameters["StationID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["StationID"].ToString());
-            VOrganisationStationCollection OrganisationStationCol = new VOrganisationStationCollection()
-                .Where(VOrganisationStation.Columns.StationID, Id)
-                .OrderByAsc(VOrganisationStation.Columns.StartDate)
-                .OrderByAsc(VOrganisationStation.Columns.EndDate)
-                .OrderByAsc(VOrganisationStation.Columns.OrganisationName)
-                .OrderByAsc(VOrganisationStation.Columns.OrganisationRoleName)
+            VStationOrganisationCollection col = new VStationOrganisationCollection()
+                .Where(VStationOrganisation.Columns.StationID, Id)
+                .OrderByAsc(VStationOrganisation.Columns.Weight)
+                .OrderByAsc(VStationOrganisation.Columns.StartDate)
+                .OrderByAsc(VStationOrganisation.Columns.EndDate)
+                .OrderByAsc(VStationOrganisation.Columns.OrganisationName)
+                .OrderByAsc(VStationOrganisation.Columns.OrganisationRoleName)
                 .Load();
-            OrganisationLinksGrid.GetStore().DataSource = OrganisationStationCol;
+            //VOrganisationStationCollection OrganisationStationCol = new VOrganisationStationCollection()
+            //    .Where(VOrganisationStation.Columns.StationID, Id)
+            //    .OrderByAsc(VOrganisationStation.Columns.StartDate)
+            //    .OrderByAsc(VOrganisationStation.Columns.EndDate)
+            //    .OrderByAsc(VOrganisationStation.Columns.OrganisationName)
+            //    .OrderByAsc(VOrganisationStation.Columns.OrganisationRoleName)
+            //    .Load();
+            OrganisationLinksGrid.GetStore().DataSource = col;
             OrganisationLinksGrid.GetStore().DataBind();
         }
     }
