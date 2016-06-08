@@ -160,7 +160,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnLinkStation" runat="server" Icon="LinkAdd" Text="Link Stations">
+                                            <ext:Button ID="btnLinkStation" runat="server" Icon="LinkAdd" Text="Link Station">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>

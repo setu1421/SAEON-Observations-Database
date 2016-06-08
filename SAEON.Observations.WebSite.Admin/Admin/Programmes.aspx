@@ -144,7 +144,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnLinkProject" runat="server" Icon="LinkAdd" Text="Link Project">
+                                            <ext:Button ID="btnLinkProject" runat="server" Icon="LinkAdd" Text="Link Projects">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>
