@@ -114,7 +114,7 @@
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="200" />
-                                        <ext:CommandColumn Width="50">
+                                        <ext:CommandColumn Width="60">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
                                                 <%--                                                
@@ -212,7 +212,7 @@
                                                 <ext:Column Header="Name" DataIndex="StationName" Width="200" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="50">
+                                                <ext:CommandColumn Width="60">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
@@ -226,7 +226,7 @@
                                         </SelectionModel>
                                         <LoadMask ShowMask="true" />
                                         <Listeners>
-                                            <Command Fn="onStationLinkCommand" />
+                                            <Command Fn="OnStationLinkCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>

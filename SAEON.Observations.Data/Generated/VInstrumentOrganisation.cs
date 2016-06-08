@@ -213,6 +213,30 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarLevel);
                 
+                TableSchema.TableColumn colvarLevelCode = new TableSchema.TableColumn(schema);
+                colvarLevelCode.ColumnName = "LevelCode";
+                colvarLevelCode.DataType = DbType.AnsiString;
+                colvarLevelCode.MaxLength = 50;
+                colvarLevelCode.AutoIncrement = false;
+                colvarLevelCode.IsNullable = false;
+                colvarLevelCode.IsPrimaryKey = false;
+                colvarLevelCode.IsForeignKey = false;
+                colvarLevelCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarLevelCode);
+                
+                TableSchema.TableColumn colvarLevelName = new TableSchema.TableColumn(schema);
+                colvarLevelName.ColumnName = "LevelName";
+                colvarLevelName.DataType = DbType.AnsiString;
+                colvarLevelName.MaxLength = 150;
+                colvarLevelName.AutoIncrement = false;
+                colvarLevelName.IsNullable = false;
+                colvarLevelName.IsPrimaryKey = false;
+                colvarLevelName.IsForeignKey = false;
+                colvarLevelName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarLevelName);
+                
                 TableSchema.TableColumn colvarWeight = new TableSchema.TableColumn(schema);
                 colvarWeight.ColumnName = "Weight";
                 colvarWeight.DataType = DbType.Int32;
@@ -469,6 +493,34 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("LevelCode")]
+        [Bindable(true)]
+        public string LevelCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("LevelCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("LevelCode", value);
+            }
+        }
+	      
+        [XmlAttribute("LevelName")]
+        [Bindable(true)]
+        public string LevelName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("LevelName");
+		    }
+            set 
+		    {
+			    SetColumnValue("LevelName", value);
+            }
+        }
+	      
         [XmlAttribute("Weight")]
         [Bindable(true)]
         public int Weight 
@@ -529,6 +581,10 @@ namespace SAEON.Observations.Data{
             public static string EndDate = @"EndDate";
             
             public static string Level = @"Level";
+            
+            public static string LevelCode = @"LevelCode";
+            
+            public static string LevelName = @"LevelName";
             
             public static string Weight = @"Weight";
             

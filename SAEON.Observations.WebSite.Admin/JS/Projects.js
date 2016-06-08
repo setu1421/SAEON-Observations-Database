@@ -36,7 +36,7 @@ function ClearStationLinkForm() {
     StationLinkFormPanel.getForm().reset();
 }
 
-function onStationLinkCommand(e, record) {
+function OnStationLinkCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteStationLink(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {

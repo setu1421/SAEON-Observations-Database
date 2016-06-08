@@ -15,10 +15,14 @@ Select
   [Organisation_Site].StartDate,
   [Organisation_Site].EndDate,
   'Site' [Level],
+  [Site].Code LevelCode,
+  [Site].Name LevelName,
   0 [Weight],
   CAST(1 as bit) [IsReadOnly]
 from
   [Organisation_Site]
+  inner join [Site]
+    on ([Organisation_Site].SiteID = [Site].ID)
   inner join [Organisation]
     on ([Organisation_Site].OrganisationID = [Organisation].ID)
   inner join [Station] 
@@ -40,14 +44,16 @@ Select
   [Organisation_Station].StartDate,
   [Organisation_Station].EndDate,
   'Station' [Level],
+  [Station].Code LevelCode,
+  [Station].Name LevelName,
   1 [Weight],
   CAST(0 as bit) [IsReadOnly]
 from 
   [Organisation_Station]
-  inner join [Organisation]
-    on ([Organisation_Station].OrganisationID = [Organisation].ID)
   inner join [Station] 
     on ([Organisation_Station].StationID = [Station].ID)
+  inner join [Organisation]
+    on ([Organisation_Station].OrganisationID = [Organisation].ID)
   inner join [OrganisationRole]
     on ([Organisation_Station].OrganisationRoleID = [OrganisationRole].ID)
 union
@@ -56,7 +62,7 @@ Select
   OrganisationID,
   [Organisation].Code OrganisationCode,
   [Organisation].Name OrganisationName,
-  StationID,
+  [Station].ID StationID,
   [Station].Code StationCode,
   [Station].Name StationName,
   OrganisationRoleID,
@@ -65,10 +71,14 @@ Select
   [Organisation_Instrument].StartDate,
   [Organisation_Instrument].EndDate,
   'Instrument' [Level],
+  [Instrument].Code LevelCode,
+  [Instrument].Name LevelName,
   2 [Weight],
   CAST(1 as bit) [IsReadOnly]
 from
   [Organisation_Instrument]
+  inner join [Instrument]
+    on ([Organisation_Instrument].InstrumentID = [Instrument].ID)
   inner join [Organisation]
     on ( [Organisation_Instrument].OrganisationID = [Organisation].ID)
   inner join [Station_Instrument]

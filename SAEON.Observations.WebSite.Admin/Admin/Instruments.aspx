@@ -130,7 +130,7 @@
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="200" />
-                                        <ext:CommandColumn Width="50">
+                                        <ext:CommandColumn Width="60">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
                                             </Commands>
@@ -211,6 +211,8 @@
                                                         <Fields>
                                                             <ext:RecordField Name="Id" Type="Auto" />
                                                             <ext:RecordField Name="Level" Type="Auto" />
+                                                            <ext:RecordField Name="LevelCode" Type="Auto" />
+                                                            <ext:RecordField Name="LevelName" Type="Auto" />
                                                             <ext:RecordField Name="IsReadOnly" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationID" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationName" Type="Auto" />
@@ -230,11 +232,13 @@
                                         <ColumnModel ID="ColumnModel5" runat="server">
                                             <Columns>
                                                 <ext:Column Header="Level" DataIndex="Level" Width="100" />
+                                                <ext:Column Header="Code" DataIndex="LevelCode" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="LevelName" Width="200" />
                                                 <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="75" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="50">
+                                                <ext:CommandColumn Width="60">
                                                     <PrepareToolbar Fn="PrepareOrganisationLinkToolbar" />
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
@@ -311,7 +315,7 @@
                                                 <ext:Column Header="Name" DataIndex="StationName" Width="200" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="50">
+                                                <ext:CommandColumn Width="60">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
@@ -387,7 +391,7 @@
                                                 <ext:Column Header="Name" DataIndex="SensorName" Width="200" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="50">
+                                                <ext:CommandColumn Width="60">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
