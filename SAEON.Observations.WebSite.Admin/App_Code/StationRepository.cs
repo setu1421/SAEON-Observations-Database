@@ -12,11 +12,11 @@ using SAEON.Observations.Data;
 public class StationRepository:BaseRepository
 {
     public StationRepository()
-	{
-		//
-		// TODO: Add constructor logic here
-		//
-	}
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
 
     public static List<object> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix)
     {

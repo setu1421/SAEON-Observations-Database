@@ -153,6 +153,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarPhenomenonID);
                 
+                TableSchema.TableColumn colvarPhenomenonName = new TableSchema.TableColumn(schema);
+                colvarPhenomenonName.ColumnName = "PhenomenonName";
+                colvarPhenomenonName.DataType = DbType.AnsiString;
+                colvarPhenomenonName.MaxLength = 150;
+                colvarPhenomenonName.AutoIncrement = false;
+                colvarPhenomenonName.IsNullable = false;
+                colvarPhenomenonName.IsPrimaryKey = false;
+                colvarPhenomenonName.IsForeignKey = false;
+                colvarPhenomenonName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarPhenomenonName);
+                
                 TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
                 colvarUserId.ColumnName = "UserId";
                 colvarUserId.DataType = DbType.Guid;
@@ -363,6 +375,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("PhenomenonName")]
+        [Bindable(true)]
+        public string PhenomenonName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("PhenomenonName");
+		    }
+            set 
+		    {
+			    SetColumnValue("PhenomenonName", value);
+            }
+        }
+	      
         [XmlAttribute("UserId")]
         [Bindable(true)]
         public Guid UserId 
@@ -441,6 +467,8 @@ namespace SAEON.Observations.Data{
             public static string DataSourceID = @"DataSourceID";
             
             public static string PhenomenonID = @"PhenomenonID";
+            
+            public static string PhenomenonName = @"PhenomenonName";
             
             public static string UserId = @"UserId";
             

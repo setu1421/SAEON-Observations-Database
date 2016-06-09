@@ -34,6 +34,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.Observations.WebSite.
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Merge", "SAEON.Observations.Merge\SAEON.Observations.Merge.csproj", "{39684614-5928-44B3-8F28-9259A749F358}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,12 +56,16 @@ Global
 		{EEC81A5F-AC32-43B1-941B-E10496D83287}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEC81A5F-AC32-43B1-941B-E10496D83287}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{EEC81A5F-AC32-43B1-941B-E10496D83287}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{39684614-5928-44B3-8F28-9259A749F358}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39684614-5928-44B3-8F28-9259A749F358}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39684614-5928-44B3-8F28-9259A749F358}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39684614-5928-44B3-8F28-9259A749F358}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://nimbusservices.visualstudio.com/
 		SccLocalPath0 = .
@@ -74,5 +80,8 @@ Global
 		SccProjectUniqueName3 = SAEON.Observations.Database\\SAEON.Observations.Database.sqlproj
 		SccProjectName3 = SAEON.Observations.Database
 		SccLocalPath3 = SAEON.Observations.Database
+		SccProjectUniqueName4 = SAEON.Observations.Merge\\SAEON.Observations.Merge.csproj
+		SccProjectName4 = SAEON.Observations.Merge
+		SccLocalPath4 = SAEON.Observations.Merge
 	EndGlobalSection
 EndGlobal
