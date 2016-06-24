@@ -507,14 +507,14 @@
                         <Items>
                             <ext:Container ID="Container8" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
                                 <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLatitude" DataIndex="Latitude"
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" DecimalSeparator="." ID="nfLatitude" DataIndex="Latitude"
                                         MaxLength="150" runat="server" FieldLabel="Latitude" AnchorHorizontal="90%">
                                     </ext:NumberField>
                                 </Items>
                             </ext:Container>
                             <ext:Container ID="Container9" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
                                 <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLongitude" DataIndex="Longitude"
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" DecimalSeparator="." ID="nfLongitude" DataIndex="Longitude"
                                         MaxLength="150" runat="server" FieldLabel="Longitude" AnchorHorizontal="90%">
                                     </ext:NumberField>
                                 </Items>
