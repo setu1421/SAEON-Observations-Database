@@ -86,6 +86,9 @@
                                         <Listeners>
                                             <Click Fn="New" />
                                         </Listeners>
+                                        <DirectEvents>
+                                            <Click OnEvent="AddStationClick" />
+                                        </DirectEvents>
                                     </ext:Button>
                                     <ext:ToolbarFill ID="ToolbarFill1" runat="server" />
                                     <ext:Button ID="Button2" runat="server" Text="To Excel"
@@ -187,6 +190,9 @@
                                     <%--<Command Handler="#{DetailsFormPanel}.getForm().reset();#{DetailsFormPanel}.getForm().loadRecord(record);#{DetailsFormPanel}.clearInvalid();#{DetailWindow}.show()" />--%>
                                     <Command Fn="onCommand" />
                                 </Listeners>
+                                <DirectEvents>
+                                    <Command OnEvent="StationGridCommand" />
+                                </DirectEvents>
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
@@ -461,6 +467,12 @@
                                         TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
                                         DataIndex="SiteID" EmptyText="Select Site" SelectOnFocus="true"
                                         FieldLabel="Site" AnchorHorizontal="93%" ClientIDMode="Static">
+                                        <Triggers>
+                                            <ext:FieldTrigger Icon="Clear" />
+                                        </Triggers>
+                                        <Listeners>
+                                            <TriggerClick Handler="this.clearValue();this.focus();" />
+                                        </Listeners>
                                     </ext:ComboBox>
                                 </Items>
                             </ext:Container>
@@ -585,6 +597,12 @@
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="OrganisationID" EmptyText="Select Organisation"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
@@ -600,6 +618,12 @@
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="OrganisationRoleID" EmptyText="Select Role"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
@@ -672,6 +696,12 @@
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="ProjectID" EmptyText="Select Project"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
@@ -744,6 +774,12 @@
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="InstrumentID" EmptyText="Select Instrument"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>

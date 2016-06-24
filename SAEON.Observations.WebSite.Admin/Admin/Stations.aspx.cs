@@ -31,7 +31,6 @@ public partial class Admin_Stations : System.Web.UI.Page
         StationsGrid.GetStore().DataSource = StationRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
-
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
         StationCollection col = new StationCollection();
@@ -64,7 +63,6 @@ public partial class Admin_Stations : System.Web.UI.Page
         else
             e.Success = true;
     }
-
     protected void Save(object sender, DirectEventArgs e)
     {
         try
@@ -136,6 +134,16 @@ public partial class Admin_Stations : System.Web.UI.Page
         BaseRepository.doExport(type, js);
     }
 
+    public void AddStationClick(object sender, DirectEventArgs e)
+    {
+        SiteStore.DataSource = new SiteCollection().OrderByAsc(SAEON.Observations.Data.Site.Columns.Name).Load();
+        SiteStore.DataBind();
+    }
+    public void StationGridCommand(object sender, DirectEventArgs e)
+    {
+        SiteStore.DataSource = new SiteCollection().OrderByAsc(SAEON.Observations.Data.Site.Columns.Name).Load();
+        SiteStore.DataBind();
+    }
     #endregion
 
     #region Organisations

@@ -289,9 +289,15 @@
                         <Items>
                             <ext:ComboBox ID="cbProgramme" runat="server" StoreID="ProgrammeStore" Editable="true"
                                 BlankText="Programme is required" MsgTarget="Side" DisplayField="Name" ValueField="Id"
-                                TypeAhead="true" Mode="Local" ForceSelection="false" TriggerAction="All" AllowBlank="true"
+                                TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="true"
                                 DataIndex="ProgrammeID" EmptyText="Select Programme" SelectOnFocus="true"
                                 FieldLabel="Programme" AnchorHorizontal="93%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
@@ -388,6 +394,12 @@
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="StationID" EmptyText="Select Station"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>

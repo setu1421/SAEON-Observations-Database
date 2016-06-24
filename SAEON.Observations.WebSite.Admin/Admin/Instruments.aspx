@@ -143,7 +143,7 @@
                                             <RowSelect Fn="MasterRowSelect" Buffer="250" />
                                         </Listeners>
                                         <DirectEvents>
-                                            <RowSelect OnEvent="MasterRowSelect" /> 
+                                            <RowSelect OnEvent="MasterRowSelect" />
                                         </DirectEvents>
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
@@ -317,7 +317,7 @@
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="60">
                                                     <Commands>
-                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
                                                     </Commands>
                                                 </ext:CommandColumn>
@@ -393,7 +393,7 @@
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="60">
                                                     <Commands>
-                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
                                                     </Commands>
                                                 </ext:CommandColumn>
@@ -417,7 +417,7 @@
         </Items>
     </ext:Viewport>
     <ext:Window ID="DetailWindow" runat="server" Width="700" Height="400" Closable="true"
-        Hidden="true" Collapsible="false" Title="Data Source Detail" Maximizable="false"
+        Hidden="true" Collapsible="false" Title="Instrument Detail" Maximizable="false"
         Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
@@ -440,6 +440,12 @@
                                         TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
                                         DataIndex="StationID" EmptyText="Select Station" SelectOnFocus="true"
                                         FieldLabel="Station" AnchorHorizontal="93%" ClientIDMode="Static">
+                                        <Triggers>
+                                            <ext:FieldTrigger Icon="Clear" />
+                                        </Triggers>
+                                        <Listeners>
+                                            <TriggerClick Handler="this.clearValue();this.focus();" />
+                                        </Listeners>
                                     </ext:ComboBox>
                                 </Items>
                             </ext:Container>
@@ -539,6 +545,12 @@
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="OrganisationID" EmptyText="Select Organisation"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
@@ -554,6 +566,12 @@
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="OrganisationRoleID" EmptyText="Select Role"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
@@ -626,6 +644,12 @@
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="StationID" EmptyText="Select Station"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
@@ -698,6 +722,12 @@
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="SensorID" EmptyText="Select Sensor"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>

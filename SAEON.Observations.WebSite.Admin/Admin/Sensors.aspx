@@ -290,9 +290,9 @@
                     <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="Form"
                         LabelAlign="Top">
                         <Items>
-                            <ext:SelectBox ID="sbStation" runat="server" DataIndex="StationID" DisplayField="Name"
-                                ValueField="ID" FieldLabel="Station" EmptyText="Please select" AnchorHorizontal="95%"
-                                MsgTarget="Side" AllowBlank="false" BlankText="Station is required">
+                            <ext:ComboBox ID="sbStation" runat="server" DataIndex="StationID" DisplayField="Name"
+                                TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="Station" EmptyText="Please select" AnchorHorizontal="95%"
+                                TriggerAction="All" MsgTarget="Side" AllowBlank="false" BlankText="Station is required">
                                 <Store>
                                     <ext:Store ID="storeStation" runat="server">
                                         <Reader>
@@ -305,15 +305,21 @@
                                         </Reader>
                                     </ext:Store>
                                 </Store>
-                            </ext:SelectBox>
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
+                            </ext:ComboBox>
                         </Items>
                     </ext:Panel>
                     <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="Form"
                         LabelAlign="Top">
                         <Items>
-                            <ext:SelectBox ID="sbPhenomenon" runat="server" DataIndex="PhenomenonID" DisplayField="Name"
-                                ValueField="ID" FieldLabel="Phenomenon" EmptyText="Please select" AnchorHorizontal="95%"
-                                MsgTarget="Side" AllowBlank="false" BlankText="Phenomenon is required">
+                            <ext:ComboBox ID="sbPhenomenon" runat="server" DataIndex="PhenomenonID" DisplayField="Name"
+                                TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="Phenomenon" EmptyText="Please select" AnchorHorizontal="95%"
+                                TriggerAction="All" MsgTarget="Side" AllowBlank="false" BlankText="Phenomenon is required">
                                 <Store>
                                     <ext:Store ID="storePhenomenon" runat="server">
                                         <Reader>
@@ -326,15 +332,21 @@
                                         </Reader>
                                     </ext:Store>
                                 </Store>
-                            </ext:SelectBox>
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
+                            </ext:ComboBox>
                         </Items>
                     </ext:Panel>
                     <ext:Panel ID="Panel7" runat="server" Border="false" Header="false" Layout="Form"
                         LabelAlign="Top">
                         <Items>
                             <ext:ComboBox ID="cbDataSource" runat="server" DataIndex="DataSourceID" DisplayField="Name"
-                                ValueField="ID" FieldLabel="DataSource" EmptyText="Please select" AnchorHorizontal="95%"
-                                MsgTarget="Side" AllowBlank="false" BlankText="DataSource is required" ClientIDMode="Static">
+                                TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="DataSource" EmptyText="Please select" AnchorHorizontal="95%"
+                                TriggerAction="All" MsgTarget="Side" AllowBlank="false" BlankText="DataSource is required" ClientIDMode="Static">
                                 <Store>
                                     <ext:Store ID="storeDataSource" runat="server">
                                         <Reader>
@@ -350,6 +362,12 @@
                                 </Store>
                                 <Listeners>
                                     <Select Fn="SelectDataSource" />
+                                </Listeners>
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
                                 </Listeners>
                             </ext:ComboBox>
                         </Items>
@@ -377,7 +395,7 @@
                                     <ext:FieldTrigger Icon="Clear" />
                                 </Triggers>
                                 <Listeners>
-                                    <TriggerClick Handler="this.clearValue();" />
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
                                 </Listeners>
                             </ext:ComboBox>
                         </Items>

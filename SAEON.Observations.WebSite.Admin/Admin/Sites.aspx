@@ -465,6 +465,12 @@
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="OrganisationID" EmptyText="Select Organisation"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
@@ -480,6 +486,12 @@
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="OrganisationRoleID" EmptyText="Select Role"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>

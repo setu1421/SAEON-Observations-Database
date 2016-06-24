@@ -3,7 +3,7 @@
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript" src="../JS/DataSchema.js"></script>
-	<script type="text/javascript" src="../JS/generic.js"></script>
+    <script type="text/javascript" src="../JS/generic.js"></script>
 </asp:Content>
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="ContentPlaceHolder1">
     <script type="text/javascript">
@@ -32,7 +32,7 @@
 
             ContentPlaceHolder1_DataSchemaGrid.submitData(false);
         };
-	
+    
     </script>
     <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
@@ -113,8 +113,8 @@
                                 <ext:CommandColumn Width="100">
                                     <Commands>
                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
-                                        <ext:GridCommand Icon="NoteGo" CommandName="Fields" Text="" ToolTip-Text="Edit" />
-                                        <ext:GridCommand Icon="Zoom" CommandName="Preview" Text="" ToolTip-Text="Edit" />
+                                        <ext:GridCommand Icon="NoteGo" CommandName="Fields" Text="" ToolTip-Text="Fields" />
+                                        <ext:GridCommand Icon="Zoom" CommandName="Preview" Text="" ToolTip-Text="Test" />
                                     </Commands>
                                 </ext:CommandColumn>
                             </Columns>
