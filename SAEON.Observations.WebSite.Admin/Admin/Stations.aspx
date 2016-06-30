@@ -147,10 +147,10 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" Groupable="false" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" Groupable="false" />
                                         <ext:Column Header="Site" DataIndex="SiteName" Width="100" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="200" Groupable="false" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
                                         <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
                                         <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="100" Groupable="false" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:CommandColumn Width="50" Groupable="false">
@@ -443,12 +443,12 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="700" Height="450" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="450" Closable="true"
         Hidden="true" Collapsible="false" Title="Station Detail" Maximizable="false"
         Layout="FitLayout" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                Padding="10" Width="490" ButtonAlign="Right" MonitorResize="true" Layout="FitLayout" ClientIDMode="Static">
+                Padding="10" Width="550" ButtonAlign="Right" MonitorResize="true" Layout="FitLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server">
@@ -497,9 +497,10 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server"
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" IsRemoteValidation="true"
                                 AllowBlank="false" BlankText="Description is required" MsgTarget="Side" FieldLabel="Description"
-                                AnchorHorizontal="95%">
+                                AnchorHorizontal="95%" ClientIDMode="Static">
+                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Container>
@@ -507,14 +508,14 @@
                         <Items>
                             <ext:Container ID="Container8" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
                                 <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" DecimalSeparator="." ID="nfLatitude" DataIndex="Latitude"
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLatitude" DataIndex="Latitude"
                                         MaxLength="150" runat="server" FieldLabel="Latitude" AnchorHorizontal="90%">
                                     </ext:NumberField>
                                 </Items>
                             </ext:Container>
                             <ext:Container ID="Container9" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
                                 <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" DecimalSeparator="." ID="nfLongitude" DataIndex="Longitude"
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLongitude" DataIndex="Longitude"
                                         MaxLength="150" runat="server" FieldLabel="Longitude" AnchorHorizontal="90%">
                                     </ext:NumberField>
                                 </Items>
@@ -554,7 +555,7 @@
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
+                    <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">
                                 <EventMask ShowMask="true" />
@@ -571,7 +572,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="OrganisationLinkWindow" runat="server" Width="450" Height="300" Closable="true"
+    <ext:Window ID="OrganisationLinkWindow" runat="server" Width="800" Height="300" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Organisation"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
@@ -579,7 +580,7 @@
         </Listeners>
         <Content>
             <ext:FormPanel ID="OrganisationLinkFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
+                MonitorResize="true" Padding="10" Width="800" Height="370" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>

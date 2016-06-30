@@ -50,10 +50,11 @@ public partial class Admin_Stations : System.Web.UI.Page
 
         }
 
-        if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
-        else
-            col = new StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Station.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+        if (!string.IsNullOrEmpty(checkColumn))
+            if (String.IsNullOrEmpty(tfID.Text.ToString()))
+                col = new StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            else
+                col = new StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Station.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
         if (col.Count > 0)
         {

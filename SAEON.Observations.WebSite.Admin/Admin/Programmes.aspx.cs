@@ -47,10 +47,11 @@ public partial class Admin_Programmes : System.Web.UI.Page
 
         }
 
-        if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new ProgrammeCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
-        else
-            col = new ProgrammeCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Programme.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+        if (!string.IsNullOrEmpty(checkColumn))
+            if (String.IsNullOrEmpty(tfID.Text.ToString()))
+                col = new ProgrammeCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            else
+                col = new ProgrammeCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Programme.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
         if (col.Count > 0)
         {
@@ -116,7 +117,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
 
     #endregion
 
-    
+
     #region Projects
 
     protected void ProjectLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)

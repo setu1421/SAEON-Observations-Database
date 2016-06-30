@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Instruments.aspx.cs" Inherits="Admin_Instruments" %>
+﻿<%@ Page Title="Instruments" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Instruments.aspx.cs" Inherits="Admin_Instruments" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript" src="../JS/Instruments.js"></script>
@@ -416,12 +416,12 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="700" Height="400" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="400" Closable="true"
         Hidden="true" Collapsible="false" Title="Instrument Detail" Maximizable="false"
         Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                Padding="10" Width="490" ButtonAlign="Right" MonitorResize="true" Layout="FitLayout" ClientIDMode="Static">
+                Padding="10" Width="800" ButtonAlign="Right" MonitorResize="true" Layout="FitLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server">
@@ -470,9 +470,10 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server"
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" IsRemoteValidation="true"
                                 AllowBlank="false" BlankText="Description is required" MsgTarget="Side" FieldLabel="Description"
-                                AnchorHorizontal="95%">
+                                AnchorHorizontal="95%" ClientIDMode="Static">
+                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Container>
@@ -502,7 +503,7 @@
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
+                    <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">
                                 <EventMask ShowMask="true" />

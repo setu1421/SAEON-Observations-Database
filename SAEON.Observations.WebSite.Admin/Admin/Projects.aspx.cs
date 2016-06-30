@@ -49,10 +49,11 @@ public partial class Admin_Projects : System.Web.UI.Page
 
         }
 
-        if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new ProjectCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
-        else
-            col = new ProjectCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Project.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+        if (!string.IsNullOrEmpty(checkColumn))
+            if (String.IsNullOrEmpty(tfID.Text.ToString()))
+                col = new ProjectCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            else
+                col = new ProjectCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Project.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
         if (col.Count > 0)
         {

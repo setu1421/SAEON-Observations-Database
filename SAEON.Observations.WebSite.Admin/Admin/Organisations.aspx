@@ -18,7 +18,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
-    <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" /> 
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="Viewport1" runat="server" Layout="Fit">
         <Items>
@@ -60,7 +60,7 @@
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="OrganisationsGrid" runat="server" Border="false">
+                            <ext:GridPanel ID="OrganisationsGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
                                     <ext:Store ID="Store2" runat="server" RemoteSort="true" OnRefreshData="OrganisationStore_RefreshData" OnSubmitData="OrganisationStore_Submit">
                                         <Proxy>
@@ -196,7 +196,7 @@
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
-                            <ext:Panel ID="pnlStations" runat="server" ClientIDMode="Static" Title="Stations"  AnchorHorizontal="100%" AnchorVertical="33%">
+                            <ext:Panel ID="pnlStations" runat="server" ClientIDMode="Static" Title="Stations" AnchorHorizontal="100%" AnchorVertical="33%">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
@@ -263,7 +263,7 @@
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
-                            <ext:Panel ID="pnlInstruments" runat="server" ClientIDMode="Static" Title="Instruments"  AnchorHorizontal="100%" AnchorVertical="33%">
+                            <ext:Panel ID="pnlInstruments" runat="server" ClientIDMode="Static" Title="Instruments" AnchorHorizontal="100%" AnchorVertical="33%">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
@@ -344,12 +344,12 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="450" Height="400" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="400" Closable="true"
         Icon="ChartOrganisation" Hidden="true" Collapsible="false" Title="Organisation Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
+                MonitorResize="true" Padding="10" Width="800" Height="370" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
@@ -395,14 +395,15 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server"
-                                FieldLabel="Description" AnchorHorizontal="95%">
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
+                                FieldLabel="Description" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
+                    <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">
                                 <EventMask ShowMask="true" />

@@ -48,7 +48,8 @@ public partial class Admin_Sites : System.Web.UI.Page
 
         }
 
-        if (String.IsNullOrEmpty(tfID.Text.ToString()))
+        if (!string.IsNullOrEmpty(checkColumn))
+            if (String.IsNullOrEmpty(tfID.Text.ToString()))
             col = new da.SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
         else
             col = new da.SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(da.Site.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();

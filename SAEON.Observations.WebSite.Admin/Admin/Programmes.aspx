@@ -18,7 +18,7 @@
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="ContentPlaceHolder1">
     <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
-    <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" /> 
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Store ID="ProjectStore" runat="server">
@@ -65,7 +65,7 @@
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="ProgrammesGrid" runat="server" Border="false">
+                            <ext:GridPanel ID="ProgrammesGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
                                     <ext:Store ID="ProgrammesGridStore" runat="server" RemoteSort="true" OnRefreshData="ProgrammesGridStore_RefreshData" OnSubmitData="ProgrammesGridStore_Submit">
                                         <Proxy>
@@ -98,6 +98,7 @@
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="200" />
@@ -221,12 +222,12 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="450" Height="450" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="450" Closable="true"
         Hidden="true" Collapsible="false" Title="Programme Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="400" ButtonAlign="Right"
+                MonitorResize="true" Padding="10" Width="800" Height="400" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
@@ -271,8 +272,9 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server"
-                                FieldLabel="Description" AnchorHorizontal="95%">
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
+                                FieldLabel="Description" AnchorHorizontal="95%"  ClientIDMode="Static">
+                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>
@@ -314,7 +316,7 @@
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
+                    <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">
                                 <EventMask ShowMask="true" />

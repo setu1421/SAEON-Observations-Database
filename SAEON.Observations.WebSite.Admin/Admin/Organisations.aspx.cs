@@ -12,7 +12,7 @@ public partial class Admin_Organisations : System.Web.UI.Page
     #region Organisations
     protected void OrganisationStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        OrganisationsGrid.GetStore().DataSource = OrganisationRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        OrganisationsGrid.GetStore().DataSource = OrganisationRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -35,10 +35,11 @@ public partial class Admin_Organisations : System.Web.UI.Page
 
         }
 
-        if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new OrganisationCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
-        else
-            col = new OrganisationCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Organisation.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+        if (!string.IsNullOrEmpty(checkColumn))
+            if (String.IsNullOrEmpty(tfID.Text.ToString()))
+                col = new OrganisationCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            else
+                col = new OrganisationCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Organisation.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
         if (col.Count > 0)
         {
@@ -70,7 +71,7 @@ public partial class Admin_Organisations : System.Web.UI.Page
 
         OrganisationsGrid.DataBind();
 
-        this.DetailWindow.Hide();
+        DetailWindow.Hide();
     }
 
     protected void OrganisationStore_Submit(object sender, StoreSubmitDataEventArgs e)
