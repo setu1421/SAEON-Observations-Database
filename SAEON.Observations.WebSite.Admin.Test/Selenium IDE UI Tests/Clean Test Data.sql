@@ -1,0 +1,7 @@
+Delete from [Sensor] where Code like '_Test_%'
+Delete from [Instrument] where Code like '_Test_%'
+Delete from [Station] where Code like '_Test_%'
+Delete from [Site] where Code like '_Test_%'
+Delete from [Project] where Code like '_Test_%'
+Delete from [Programme] where Code like '_Test_%'
+Delete from [Organisation] where Code like '_Test_%'
