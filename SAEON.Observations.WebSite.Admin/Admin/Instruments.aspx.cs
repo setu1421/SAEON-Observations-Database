@@ -129,7 +129,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "Instruments.Save");
-            MessageBoxes.Error(ex, "Error", "Unable to save station");
+            MessageBoxes.Error(ex, "Error", "Unable to save instrument");
         }
     }
 

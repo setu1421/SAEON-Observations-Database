@@ -67,7 +67,7 @@
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="SensorsGrid" runat="server" Border="false">
+                            <ext:GridPanel ID="SensorsGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
                                     <ext:Store ID="SensorsGridStore" runat="server" RemoteSort="true" OnRefreshData="SensorsGridStore_RefreshData" OnSubmitData="SensorsGridStore_Submit">
                                         <Proxy>
@@ -151,7 +151,7 @@
                     </ext:Panel>
                 </Center>
                 <South Collapsible="true" Split="true" MinHeight="250">
-<%--                    <ext:TabPanel ID="TabPanel1" runat="server" Height="250" ActiveTabIndex="0" TabPosition="Top" Border="false" ClientIDMode="Static">--%>
+                    <%--                    <ext:TabPanel ID="TabPanel1" runat="server" Height="250" ActiveTabIndex="0" TabPosition="Top" Border="false" ClientIDMode="Static">--%>
                     <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
                             <ext:Panel ID="pnlInstruments" runat="server" Title="Instruments" Layout="FitLayout"
@@ -213,7 +213,7 @@
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="60">
                                                     <Commands>
-                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit"/>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="" ToolTip-Text="Unlink" />
                                                     </Commands>
                                                 </ext:CommandColumn>
@@ -272,7 +272,7 @@
                     <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="Form"
                         LabelAlign="Top">
                         <Items>
-                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="250" IsRemoteValidation="false"
+                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="250" IsRemoteValidation="false" ClientIDMode="Static"
                                 runat="server" FieldLabel="URL" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false"
                                 BlankText="Url is a required">
                             </ext:TextField>
@@ -281,16 +281,17 @@
                     <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form"
                         LabelAlign="Top">
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server"
-                                FieldLabel="Description" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false"
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="false"
+                                FieldLabel="Description" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false" ClientIDMode="Static"
                                 BlankText="Description is a required">
+                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>
                     <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="Form"
                         LabelAlign="Top">
                         <Items>
-                            <ext:ComboBox ID="sbStation" runat="server" DataIndex="StationID" DisplayField="Name"
+                            <ext:ComboBox ID="cbStation" runat="server" DataIndex="StationID" DisplayField="Name" ClientIDMode="Static"
                                 TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="Station" EmptyText="Please select" AnchorHorizontal="95%"
                                 TriggerAction="All" MsgTarget="Side" AllowBlank="false" BlankText="Station is required">
                                 <Store>
@@ -317,7 +318,7 @@
                     <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="Form"
                         LabelAlign="Top">
                         <Items>
-                            <ext:ComboBox ID="sbPhenomenon" runat="server" DataIndex="PhenomenonID" DisplayField="Name"
+                            <ext:ComboBox ID="cbPhenomenon" runat="server" DataIndex="PhenomenonID" DisplayField="Name" ClientIDMode="Static"
                                 TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="Phenomenon" EmptyText="Please select" AnchorHorizontal="95%"
                                 TriggerAction="All" MsgTarget="Side" AllowBlank="false" BlankText="Phenomenon is required">
                                 <Store>

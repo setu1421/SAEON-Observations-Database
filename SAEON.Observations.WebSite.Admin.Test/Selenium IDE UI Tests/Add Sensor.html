@@ -12,7 +12,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/admin/sensors</td>
+	<td>${BaseURL}/admin/sensors</td>
 	<td></td>
 </tr>
 <tr>
@@ -32,7 +32,12 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=ext-gen27</td>
+	<td>id=ext-gen25</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>id=DetailWindow</td>
 	<td></td>
 </tr>
 <tr>
@@ -57,16 +62,6 @@
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=cbStation</td>
-	<td></td>
-</tr>
-<tr>
-	<td>runScript</td>
-	<td>cbInstrument.selectByIndex(0)</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
 	<td>id=tfDescription</td>
 	<td></td>
 </tr>
@@ -74,6 +69,46 @@
 	<td>sendKeys</td>
 	<td>id=tfDescription</td>
 	<td>Test Sensor 1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=tfUrl</td>
+	<td></td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>id=tfUrl</td>
+	<td>http://saeon.ac.za</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=cbStation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>cbStation.selectByIndex(0)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=cbPhenomenon</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>cbPhenomenon.selectByIndex(0)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=cbDataSource</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>cbDataSource.selectByIndex(0)</td>
+	<td></td>
 </tr>
 <tr>
 	<td>pause</td>
@@ -87,7 +122,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=ext-gen131</td>
+	<td>id=ext-gen125</td>
 	<td></td>
 </tr>
 </tbody></table>

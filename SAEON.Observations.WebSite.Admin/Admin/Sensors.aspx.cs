@@ -4,6 +4,7 @@ using Serilog;
 using SubSonic;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -19,16 +20,16 @@ public partial class Admin_Sensors : System.Web.UI.Page
             InstrumentStore.DataSource = new InstrumentCollection().OrderByAsc(Instrument.Columns.Name).Load();
             InstrumentStore.DataBind();
 
-            var store = sbStation.GetStore();
+            var store = cbStation.GetStore();
             SubSonic.SqlQuery q = new Select(Station.Columns.Id, Station.Columns.Name)
                                     .From(Station.Schema)
                                     .Where(Station.Columns.Id).IsNotNull()
                                     .OrderAsc(DataSchema.Columns.Name);
-            System.Data.DataSet ds = q.ExecuteDataSet();
+            DataSet ds = q.ExecuteDataSet();
             store.DataSource = ds.Tables[0];
             store.DataBind();
 
-            store = sbPhenomenon.GetStore();
+            store = cbPhenomenon.GetStore();
             q = new Select(Phenomenon.Columns.Id, Phenomenon.Columns.Name)
                        .From(Phenomenon.Schema)
                        .Where(Phenomenon.Columns.Id).IsNotNull()
@@ -97,62 +98,73 @@ public partial class Admin_Sensors : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-
-        Sensor sens = new Sensor();
-
-        if (String.IsNullOrEmpty(tfID.Text))
-            sens.Id = Guid.NewGuid();
-        else
-            sens = new Sensor(tfID.Text.Trim());
-
-        sens.Code = tfCode.Text.Trim();
-        sens.Name = tfName.Text.Trim();
-        sens.Description = tfDescription.Text.Trim();
-        sens.UserId = AuthHelper.GetLoggedInUserId;
-        sens.Url = tfUrl.Text.Trim();
-        sens.StationID = Guid.Parse(sbStation.SelectedItem.Value);
-        sens.PhenomenonID = Guid.Parse(sbPhenomenon.SelectedItem.Value);
-        sens.DataSourceID = Guid.Parse(cbDataSource.SelectedItem.Value);
-
-        if (cbDataSchema.SelectedItem.Value != null)
+        try
         {
-            //test if dataschema is valid (linked to test in datasource files)
-            bool isValid = true;
-            string dataSourceName = "";
 
-            if (sens.DataSource.DataSchemaID != null)
-            {
-                isValid = false;
-                dataSourceName = sens.DataSource.Name;
-            }
+            Sensor sens = new Sensor();
 
-            //
-            if (isValid)
+            if (String.IsNullOrEmpty(tfID.Text))
+                sens.Id = Guid.NewGuid();
+            else
+                sens = new Sensor(tfID.Text.Trim());
+
+            sens.Code = tfCode.Text.Trim();
+            sens.Name = tfName.Text.Trim();
+            sens.Description = tfDescription.Text.Trim();
+            sens.UserId = AuthHelper.GetLoggedInUserId;
+            sens.Url = tfUrl.Text.Trim();
+            sens.StationID = Guid.Parse(cbStation.SelectedItem.Value);
+            sens.PhenomenonID = Guid.Parse(cbPhenomenon.SelectedItem.Value);
+            sens.DataSourceID = Guid.Parse(cbDataSource.SelectedItem.Value);
+
+            if (cbDataSchema.SelectedItem.Value != null)
             {
-                sens.DataSchemaID = Guid.Parse(cbDataSchema.SelectedItem.Value);
+                //test if dataschema is valid (linked to test in datasource files)
+                bool isValid = true;
+                string dataSourceName = "";
+
+                if (sens.DataSource.DataSchemaID != null)
+                {
+                    isValid = false;
+                    dataSourceName = sens.DataSource.Name;
+                }
+
+                //
+                if (isValid)
+                {
+                    sens.DataSchemaID = Guid.Parse(cbDataSchema.SelectedItem.Value);
+                }
+                else
+                {
+                    X.Msg.Show(new MessageBoxConfig
+                    {
+                        Title = "Invalid Data Source",
+                        //Message = "The selected data schema is already linked to a sensor that is linked to this data source.",
+                        Message = "This sensor procedure cant have a data schema because its data source (" + dataSourceName + ") is already linked to a data schema",
+                        Buttons = MessageBox.Button.OK,
+                        Icon = MessageBox.Icon.ERROR
+                    });
+
+                    return;
+                }
             }
             else
-            {
-                X.Msg.Show(new MessageBoxConfig
-                {
-                    Title = "Invalid Data Source",
-                    //Message = "The selected data schema is already linked to a sensor that is linked to this data source.",
-                    Message = "This sensor procedure cant have a data schema because its data source (" + dataSourceName + ") is already linked to a data schema",
-                    Buttons = MessageBox.Button.OK,
-                    Icon = MessageBox.Icon.ERROR
-                });
+                sens.DataSchemaID = null;
 
-                return;
-            }
+            sens.Save();
+            Auditing.Log("Sensors.Save", new Dictionary<string, object> {
+                { "ID", sens.Id }, { "Code", sens.Code }, { "Name", sens.Name } });
+
+
+            SensorsGrid.DataBind();
+
+            DetailWindow.Hide();
         }
-        else
-            sens.DataSchemaID = null;
-
-        sens.Save();
-
-        SensorsGrid.DataBind();
-
-        DetailWindow.Hide();
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Sensors.Save");
+            MessageBoxes.Error(ex, "Error", "Unable to save sensor");
+        }
     }
 
     protected void SensorsGridStore_Submit(object sender, StoreSubmitDataEventArgs e)

@@ -16,7 +16,7 @@
     tfName.markAsValid();
     tfDescription.markAsValid();
 
-    DetailWindow.show()
+    DetailWindow.show();
 }
 
 function New() {

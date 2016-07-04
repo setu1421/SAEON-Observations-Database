@@ -416,7 +416,7 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="400" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="500" Closable="true"
         Hidden="true" Collapsible="false" Title="Instrument Detail" Maximizable="false"
         Layout="Fit" ClientIDMode="Static">
         <Content>
@@ -426,57 +426,63 @@
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server">
                     </ext:Hidden>
-                    <ext:Container ID="Container1" runat="server" Layout="Column" Height="100">
+                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="FormLayout"
+                        LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
+                            <ext:Parameter Name="blankText" Value="Code is a required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
                         <Items>
-                            <ext:Container ID="Container2" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
-                                <Items>
-                                    <ext:TextField ID="tfCode" AllowBlank="false" DataIndex="Code" IsRemoteValidation="true"
-                                        MaxLength="50" runat="server" FieldLabel="Code" BlankText="Code is a required"
-                                        MsgTarget="Side" AnchorHorizontal="93%" ClientIDMode="Static">
-                                        <RemoteValidation OnValidation="ValidateField" />
-                                    </ext:TextField>
-                                    <ext:ComboBox ID="cbStation" runat="server" StoreID="StationStore" Editable="true"
-                                        BlankText="Station is required" MsgTarget="Side" DisplayField="Name" ValueField="Id"
-                                        TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
-                                        DataIndex="StationID" EmptyText="Select Station" SelectOnFocus="true"
-                                        FieldLabel="Station" AnchorHorizontal="93%" ClientIDMode="Static">
-                                        <Triggers>
-                                            <ext:FieldTrigger Icon="Clear" />
-                                        </Triggers>
-                                        <Listeners>
-                                            <TriggerClick Handler="this.clearValue();this.focus();" />
-                                        </Listeners>
-                                    </ext:ComboBox>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container3" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
-                                <Items>
-                                    <ext:TextField ID="tfName" AllowBlank="false" DataIndex="Name" IsRemoteValidation="true"
-                                        MaxLength="150" runat="server" FieldLabel="Name" AnchorHorizontal="95%" MsgTarget="Side"
-                                        BlankText="Name is a required" ClientIDMode="Static">
-                                        <RemoteValidation OnValidation="ValidateField" />
-                                    </ext:TextField>
-                                    <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="150" runat="server" FieldLabel="Url"
-                                        AnchorHorizontal="95%" MsgTarget="Side" ClientIDMode="Static">
-                                    </ext:TextField>
-                                </Items>
-                            </ext:Container>
+                            <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
+                                runat="server" FieldLabel="Code" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <RemoteValidation OnValidation="ValidateField">
+                                    <ExtraParams>
+                                        <ext:Parameter Name="id" Value="1" Mode="Raw" />
+                                    </ExtraParams>
+                                </RemoteValidation>
+                            </ext:TextField>
                         </Items>
-                    </ext:Container>
-                    <ext:Container ID="Panel4" runat="server" Layout="Form" LabelAlign="Top">
+                    </ext:Panel>
+                    <ext:Panel ID="Panel15" runat="server" Border="false" Header="false" Layout="FormLayout"
+                        LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="Name is a required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
+                                runat="server" FieldLabel="Name" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <RemoteValidation OnValidation="ValidateField" />
+                            </ext:TextField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel16" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
                             <ext:Parameter Name="blankText" Value="Description is required" Mode="Value" />
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" IsRemoteValidation="true"
-                                AllowBlank="false" BlankText="Description is required" MsgTarget="Side" FieldLabel="Description"
-                                AnchorHorizontal="95%" ClientIDMode="Static">
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
+                                FieldLabel="Description" AnchorHorizontal="95%" ClientIDMode="Static">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
-                    </ext:Container>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel17" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="Url is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="150" runat="server"
+                                FieldLabel="Url" AnchorHorizontal="95%">
+                            </ext:TextField>
+                        </Items>
+                    </ext:Panel>
                     <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />

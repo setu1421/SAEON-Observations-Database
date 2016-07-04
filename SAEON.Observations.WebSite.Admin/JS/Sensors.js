@@ -9,8 +9,12 @@
     tfName.rvConfig.remoteValidated = false;
     tfName.rvConfig.remoteValid = false;
 
+    tfDescription.rvConfig.remoteValidated = false;
+    tfDescription.rvConfig.remoteValid = false;
+
     tfCode.markAsValid();
     tfName.markAsValid();
+    tfDescription.markAsValid();
 
     var rd = cbDataSource.findRecord(cbDataSource.valueField, record.data.DataSourceID);
 
@@ -25,11 +29,20 @@
 function New() {
 
     DetailsFormPanel.getForm().reset();
+    DetailsFormPanel.getForm().clearInvalid();
+
     tfCode.rvConfig.remoteValidated = false;
     tfCode.rvConfig.remoteValid = false;
 
     tfName.rvConfig.remoteValidated = false;
     tfName.rvConfig.remoteValid = false;
+
+    tfDescription.rvConfig.remoteValidated = false;
+    tfDescription.rvConfig.remoteValid = false;
+
+    tfCode.markAsValid();
+    tfName.markAsValid();
+    tfDescription.markAsValid();
 
     cbDataSchema.markAsValid();
 
