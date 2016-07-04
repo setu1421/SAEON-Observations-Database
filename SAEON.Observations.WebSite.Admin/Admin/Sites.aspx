@@ -329,12 +329,12 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="450" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="350" Closable="true"
         Hidden="true" Collapsible="false" Title="Site Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="800" Height="400" ButtonAlign="Right"
+                MonitorResize="true" Padding="10" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
@@ -440,7 +440,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="OrganisationLinkWindow" runat="server" Width="450" Height="300" Closable="true"
+    <ext:Window ID="OrganisationLinkWindow" runat="server" Width="400" Height="310" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Organisation"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
@@ -448,7 +448,7 @@
         </Listeners>
         <Content>
             <ext:FormPanel ID="OrganisationLinkFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
+                MonitorResize="true" Padding="10" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>

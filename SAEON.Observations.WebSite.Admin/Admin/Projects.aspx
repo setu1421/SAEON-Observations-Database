@@ -238,12 +238,12 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="500" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="450" Closable="true"
         Hidden="true" Collapsible="false" Title="Project Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="800" Height="400" ButtonAlign="Right"
+                MonitorResize="true" Padding="10" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
@@ -290,7 +290,7 @@
                         <Items>
                             <ext:ComboBox ID="cbProgramme" runat="server" StoreID="ProgrammeStore" Editable="true"
                                 BlankText="Programme is required" MsgTarget="Side" DisplayField="Name" ValueField="Id"
-                                TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="true"
+                                TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
                                 DataIndex="ProgrammeID" EmptyText="Select Programme" SelectOnFocus="true"
                                 FieldLabel="Programme" AnchorHorizontal="93%" ClientIDMode="Static">
                                 <Triggers>

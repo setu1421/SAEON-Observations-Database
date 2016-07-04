@@ -37,27 +37,32 @@
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>var Code = SitesGrid.getSelectionModel().getSelected().data.Code</td>
-	<td>Code</td>
+	<td>var Result = SitesGrid.getSelectionModel().getSelected().data.Code</td>
+	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().Code</td>
+	<td>this.browserbot.getUserWindow().Result</td>
 	<td>_Test_Site_1</td>
 </tr>
 <tr>
+	<td>click</td>
+	<td>css=span.x-tab-strip-text.</td>
+	<td></td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>id=ext-gen290</td>
+	<td>id=ext-gen316</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=ext-gen290</td>
+	<td>id=ext-gen316</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertVisible</td>
-	<td>id=DetailWindow</td>
+	<td>id=OrganisationLinkWindow</td>
 	<td></td>
 </tr>
 <tr>
@@ -87,13 +92,53 @@
 </tr>
 <tr>
 	<td>waitForCondition</td>
-	<td>selenium.browserbot.getCurrentWindow().DetailsFormPanel.getForm().isValid() == true</td>
+	<td>selenium.browserbot.getCurrentWindow().OrganisationLinkFormPanel.getForm().isValid() == true</td>
 	<td>2000</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=ext-gen128</td>
+	<td>id=ext-gen194</td>
 	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>id=OrganisationLinkWindow</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForCondition</td>
+	<td>selenium.browserbot.getCurrentWindow().Ext.getBody().hasClass(&quot;x-body-masked&quot;) == false</td>
+	<td>2000</td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>OrganisationLinksGrid.getSelectionModel().selectRow(0);</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>var Result = OrganisationLinksGrid.getSelectionModel().getSelected().data.LevelCode</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>this.browserbot.getUserWindow().Result</td>
+	<td>_Test_Site_1</td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>var Result = OrganisationLinksGrid.getSelectionModel().getSelected().data.OrganisationCode</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>this.browserbot.getUserWindow().Result</td>
+	<td>_Test_Org_1</td>
 </tr>
 </tbody></table>
 </body>

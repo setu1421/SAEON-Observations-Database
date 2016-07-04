@@ -125,6 +125,36 @@
 	<td>id=ext-gen125</td>
 	<td></td>
 </tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>id=DetailWindow</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForCondition</td>
+	<td>selenium.browserbot.getCurrentWindow().Ext.getBody().hasClass(&quot;x-body-masked&quot;) == false</td>
+	<td>2000</td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>SensorsGrid.getSelectionModel().selectRow(0);</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>var Result = SensorsGrid.getSelectionModel().getSelected().data.Code</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>this.browserbot.getUserWindow().Result</td>
+	<td>_Test_Sens_1</td>
+</tr>
 </tbody></table>
 </body>
 </html>

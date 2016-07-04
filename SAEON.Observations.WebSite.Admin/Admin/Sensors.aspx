@@ -236,12 +236,12 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="500" Height="500" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="500" Closable="true"
         Hidden="true" Collapsible="false" Title="Sensor Detail" Maximizable="false"
         Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="500" Height="500" ButtonAlign="Right"
+                MonitorResize="true" Padding="10" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
@@ -281,7 +281,7 @@
                     <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form"
                         LabelAlign="Top">
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="false"
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
                                 FieldLabel="Description" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false" ClientIDMode="Static"
                                 BlankText="Description is a required">
                                 <RemoteValidation OnValidation="ValidateField" />

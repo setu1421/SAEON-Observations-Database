@@ -37,12 +37,12 @@
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>var Code = ProjectsGrid.getSelectionModel().getSelected().data.Code</td>
-	<td>Code</td>
+	<td>var Result = ProjectsGrid.getSelectionModel().getSelected().data.Code</td>
+	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().Code</td>
+	<td>this.browserbot.getUserWindow().Result</td>
 	<td>_Test_Proj_1</td>
 </tr>
 <tr>
@@ -82,8 +82,38 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=ext-gen125</td>
+	<td>id=ext-gen126</td>
 	<td></td>
+</tr>
+<tr>
+	<td>waitForNotVisible</td>
+	<td>id=DetailWindow</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForCondition</td>
+	<td>selenium.browserbot.getCurrentWindow().Ext.getBody().hasClass(&quot;x-body-masked&quot;) == false</td>
+	<td>2000</td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>ProjectsGrid.getSelectionModel().selectRow(0);</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>var Result = ProjectsGrid.getSelectionModel().getSelected().data.Description</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>this.browserbot.getUserWindow().Result</td>
+	<td>Test Project One</td>
 </tr>
 </tbody></table>
 </body>
