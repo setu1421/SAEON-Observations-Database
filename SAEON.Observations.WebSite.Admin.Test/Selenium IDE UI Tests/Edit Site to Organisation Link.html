@@ -3,12 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Link Site to Organisation</title>
+<link rel="selenium.base" href="http://localhost:54378/admin/" />
+<title>Edit Site to Organisation Link</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Link Site to Organisation</td></tr>
+<tr><td rowspan="1" colspan="3">Edit Site to Organisation Link</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -47,12 +48,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>id=ext-gen316</td>
+	<td>id=ext-gen343</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=ext-gen316</td>
+	<td>id=ext-gen343</td>
 	<td></td>
 </tr>
 <tr>
@@ -62,23 +63,18 @@
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=cbOrganisation</td>
+	<td>id=dfOrganisationStartDate</td>
 	<td></td>
 </tr>
 <tr>
-	<td>runScript</td>
-	<td>cbOrganisation.selectByIndex(0)</td>
-	<td></td>
+	<td>sendKeys</td>
+	<td>id=dfOrganisationStartDate</td>
+	<td>2016-06-01</td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>id=cbOrganisationRole</td>
-	<td></td>
-</tr>
-<tr>
-	<td>runScript</td>
-	<td>cbOrganisationRole.selectByIndex(0)</td>
-	<td></td>
+	<td>sendKeys</td>
+	<td>id=dfOrganisationStartDate</td>
+	<td>${KEY_TAB}</td>
 </tr>
 <tr>
 	<td>pause</td>
@@ -129,6 +125,11 @@
 	<td>assertEval</td>
 	<td>this.browserbot.getUserWindow().OrganisationLinksGrid.getSelectionModel().getSelected().data.OrganisationRoleName</td>
 	<td>Data provider</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>this.browserbot.getUserWindow().OrganisationLinksGrid.getSelectionModel().getSelected().data.StartDate.toDateString()</td>
+	<td>Wed Jun 01 2016</td>
 </tr>
 </tbody></table>
 </body>

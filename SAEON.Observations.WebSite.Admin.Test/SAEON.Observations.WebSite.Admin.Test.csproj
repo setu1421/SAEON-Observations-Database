@@ -87,27 +87,17 @@
     <Content Include="Selenium IDE UI Tests\Edit Programme.html" />
     <Content Include="Selenium IDE UI Tests\Edit Project.html" />
     <Content Include="Selenium IDE UI Tests\Edit Sensor.html" />
+    <Content Include="Selenium IDE UI Tests\Edit Site to Organisation Link.html" />
     <Content Include="Selenium IDE UI Tests\Edit Site.html" />
+    <Content Include="Selenium IDE UI Tests\Edit Station to Organisation Link.html" />
     <Content Include="Selenium IDE UI Tests\Edit Station.html" />
-    <Content Include="Selenium IDE UI Tests\Link Instrument to Organisation.html" />
-    <Content Include="Selenium IDE UI Tests\Link Instrument to Sensor.html" />
-    <Content Include="Selenium IDE UI Tests\Link Instrument to Station.html" />
-    <Content Include="Selenium IDE UI Tests\Link Project to Station.html" />
-    <Content Include="Selenium IDE UI Tests\Link Sensor to Instrument.html" />
     <Content Include="Selenium IDE UI Tests\Link Site to Organisation.html" />
-    <Content Include="Selenium IDE UI Tests\Link Station to Instrument.html" />
+    <Content Include="Selenium IDE UI Tests\Link Site to Station.html" />
     <Content Include="Selenium IDE UI Tests\Link Station to Organisation.html" />
-    <Content Include="Selenium IDE UI Tests\Link Station to Project.html" />
     <Content Include="Selenium IDE UI Tests\SAEON.Observations.WebSite.Admin Test Suite.html" />
-    <Content Include="Selenium IDE UI Tests\Unlink Instrument from Organisation.html" />
-    <Content Include="Selenium IDE UI Tests\Unlink Instrument from Sensor.html" />
-    <Content Include="Selenium IDE UI Tests\Unlink Instrument from Station.html" />
-    <Content Include="Selenium IDE UI Tests\Unlink Project from Station.html" />
-    <Content Include="Selenium IDE UI Tests\Unlink Sensor from Instrument.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Site from Organisation.html" />
-    <Content Include="Selenium IDE UI Tests\Unlink Station from Instrument.html" />
+    <Content Include="Selenium IDE UI Tests\Unlink Site from Station.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Station from Organisation.html" />
-    <Content Include="Selenium IDE UI Tests\Unlink Station from Project.html" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -222,7 +222,7 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="450" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="455" Closable="true"
         Hidden="true" Collapsible="false" Title="Programme Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>

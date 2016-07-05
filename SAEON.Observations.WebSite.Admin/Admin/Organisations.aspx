@@ -344,7 +344,7 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="400" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="305" Closable="true"
         Icon="ChartOrganisation" Hidden="true" Collapsible="false" Title="Organisation Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>

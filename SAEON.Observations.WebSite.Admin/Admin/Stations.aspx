@@ -443,7 +443,7 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="500" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="450" Closable="true"
         Hidden="true" Collapsible="false" Title="Station Detail" Maximizable="false"
         Layout="FitLayout" ClientIDMode="Static">
         <Content>
@@ -493,7 +493,7 @@
                     <ext:Container ID="Panel4" runat="server" Layout="Form" LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Description is required" Mode="Value" />
+                            <ext:Parameter Name="BlankText" Value="Description is required" Mode="Value" />
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>

@@ -81,10 +81,10 @@ public partial class Admin_Sensors : System.Web.UI.Page
 
             }
 
-            if (String.IsNullOrEmpty(tfID.Text.ToString()))
-                col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
-            else
-                col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Offering.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+                if (String.IsNullOrEmpty(tfID.Text.ToString()))
+                    col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+                else
+                    col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Offering.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
             if (col.Count > 0)
             {
@@ -94,6 +94,8 @@ public partial class Admin_Sensors : System.Web.UI.Page
             else
                 e.Success = true;
         }
+        else
+            e.Success = true;
     }
 
     protected void Save(object sender, DirectEventArgs e)

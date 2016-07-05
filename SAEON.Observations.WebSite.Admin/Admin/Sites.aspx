@@ -205,8 +205,10 @@
                                                             <ext:RecordField Name="LevelName" Type="Auto" />
                                                             <ext:RecordField Name="IsReadOnly" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationID" Type="Auto" />
+                                                            <ext:RecordField Name="OrganisationCode" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationName" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationRoleID" Type="Auto" />
+                                                            <ext:RecordField Name="OrganisationRoleCode" Type="Auto" />
                                                             <ext:RecordField Name="OrganisationRoleName" Type="Auto" />
                                                             <ext:RecordField Name="StartDate" Type="Date" />
                                                             <ext:RecordField Name="EndDate" Type="Date" />
@@ -329,7 +331,7 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="350" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="355" Closable="true"
         Hidden="true" Collapsible="false" Title="Site Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
@@ -504,7 +506,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy" ClientIDMode="Static">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -516,13 +518,13 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy" ClientIDMode="Static">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true" Icon="Accept">
+                    <ext:Button ID="btnLinkOrganisation" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="LinkOrganisation_Click">
                                 <EventMask ShowMask="true" />
