@@ -156,7 +156,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
         }
     }
 
-    protected void AcceptProjectsButton_Click(object sender, DirectEventArgs e)
+    protected void LinkProjectsSave(object sender, DirectEventArgs e)
     {
         RowSelectionModel sm = AvailableProjectsGrid.SelectionModel.Primary as RowSelectionModel;
         RowSelectionModel programmeRow = ProgrammesGrid.SelectionModel.Primary as RowSelectionModel;

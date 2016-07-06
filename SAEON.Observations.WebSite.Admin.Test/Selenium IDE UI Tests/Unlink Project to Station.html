@@ -3,16 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Edit Sensor</title>
+<link rel="selenium.base" href="http://localhost:54378/admin/" />
+<title>Unlink Site from Organisation</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Edit Sensor</td></tr>
+<tr><td rowspan="1" colspan="3">Unlink Site from Organisation</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>${BaseURL}/admin/sensors</td>
+	<td>${BaseURL}/admin/projects</td>
 	<td></td>
 </tr>
 <tr>
@@ -27,62 +28,47 @@
 </tr>
 <tr>
 	<td>assertTitle</td>
-	<td>Sensors</td>
+	<td>Projects</td>
 	<td></td>
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>SensorsGrid.getSelectionModel().selectRow(0);</td>
+	<td>ProjectsGrid.getSelectionModel().selectRow(0);</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().SensorsGrid.getSelectionModel().getSelected().data.Code</td>
-	<td>_Test_Sens_1</td>
+	<td>this.browserbot.getUserWindow().ProjectsGrid.getSelectionModel().getSelected().data.Code</td>
+	<td>_Test_Proj_1</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#pnlSouth__pnlStations .x-tab-strip-text</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>id=ext-gen259</td>
+	<td>id=ext-gen262</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=ext-gen259</td>
+	<td>id=ext-gen262</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertVisible</td>
-	<td>id=DetailWindow</td>
+	<td>waitForElementPresent</td>
+	<td>css=button:contains(&quot;Yes&quot;)</td>
 	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=tfDescription</td>
-	<td></td>
-</tr>
-<tr>
-	<td>sendKeys</td>
-	<td>id=tfDescription</td>
-	<td>Test Sensor One</td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>2000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForCondition</td>
-	<td>selenium.browserbot.getCurrentWindow().DetailsFormPanel.getForm().isValid() == true</td>
-	<td>2000</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=table#btnSave</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForNotVisible</td>
-	<td>id=DetailWindow</td>
+	<td>css=button:contains(&quot;Yes&quot;)</td>
 	<td></td>
 </tr>
 <tr>
@@ -96,14 +82,9 @@
 	<td>2000</td>
 </tr>
 <tr>
-	<td>runScript</td>
-	<td>SensorsGrid.getSelectionModel().selectRow(0);</td>
-	<td></td>
-</tr>
-<tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().SensorsGrid.getSelectionModel().getSelected().data.Description</td>
-	<td>Test Sensor One</td>
+	<td>this.browserbot.getUserWindow().StationLinksGrid.getStore().getCount()</td>
+	<td>0</td>
 </tr>
 </tbody></table>
 </body>

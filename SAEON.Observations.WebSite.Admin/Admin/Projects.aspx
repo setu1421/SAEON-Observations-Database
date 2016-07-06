@@ -161,7 +161,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnLinkStation" runat="server" Icon="LinkAdd" Text="Link Station">
+                                            <ext:Button ID="btnStationLinkAdd" runat="server" Icon="LinkAdd" Text="Link Station" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>
@@ -322,7 +322,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="150" runat="server"
+                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="150" runat="server" ClientIDMode="Static"
                                 FieldLabel="Url" AnchorHorizontal="95%">
                             </ext:TextField>
                         </Items>
@@ -335,7 +335,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy" ClientIDMode="Static">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -347,7 +347,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy" ClientIDMode="Static">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -412,7 +412,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfStationStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfStationStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
@@ -424,16 +424,16 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfStationEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfStationEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true" Icon="Accept">
+                    <ext:Button ID="btnStationLinkSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="LinkStation_Click">
+                            <Click OnEvent="StationLinkSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>

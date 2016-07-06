@@ -526,7 +526,7 @@
                 <Buttons>
                     <ext:Button ID="btnLinkOrganisationSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="LinkOrganisation_Click">
+                            <Click OnEvent="LinkOrganisationSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
@@ -586,7 +586,7 @@
                 <Buttons>
                     <ext:Button ID="btnLinkStationsSave" runat="server" Text="Save" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="btnLinkStationsSave_Click">
+                            <Click OnEvent="LinkStationsSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>

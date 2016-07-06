@@ -142,7 +142,7 @@ public partial class Admin_Projects : System.Web.UI.Page
         }
     }
 
-    protected void LinkStation_Click(object sender, DirectEventArgs e)
+    protected void StationLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
