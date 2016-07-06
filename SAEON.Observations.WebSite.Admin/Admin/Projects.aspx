@@ -49,7 +49,7 @@
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
-                                    <ext:Button ID="Button1" runat="server" Icon="Add" Text="Add Project">
+                                    <ext:Button ID="btnAdd" runat="server" Icon="Add" Text="Add Project" ClientIDMode="Static">
                                         <ToolTips>
                                             <ext:ToolTip ID="ToolTip1" runat="server" Html="Add" />
                                         </ToolTips>

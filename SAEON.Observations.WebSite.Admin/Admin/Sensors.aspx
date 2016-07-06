@@ -41,7 +41,7 @@
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
-                                    <ext:Button ID="Button1" runat="server" Icon="Add" Text="Add Sensor">
+                                    <ext:Button ID="btnAdd" runat="server" Icon="Add" Text="Add Sensor" ClientIDMode="Static">
                                         <ToolTips>
                                             <ext:ToolTip ID="ToolTip1" runat="server" Html="Add" />
                                         </ToolTips>
@@ -406,7 +406,7 @@
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
+                    <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">
                                 <EventMask ShowMask="true" />

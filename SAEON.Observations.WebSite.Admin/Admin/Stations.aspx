@@ -79,7 +79,7 @@
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
-                                    <ext:Button ID="Button1" runat="server" Icon="Add" Text="Add Station">
+                                    <ext:Button ID="btnAdd" runat="server" Icon="Add" Text="Add Station" ClientIDMode="Static">
                                         <ToolTips>
                                             <ext:ToolTip ID="ToolTip1" runat="server" Html="Add" />
                                         </ToolTips>
@@ -636,7 +636,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy" ClientIDMode="Static">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -648,13 +648,13 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy" ClientIDMode="Static">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true" Icon="Accept">
+                    <ext:Button ID="Button4" runat="server" Text="Save Organisation Link" FormBind="true" Icon="Accept">
                         <DirectEvents>
                             <Click OnEvent="LinkOrganisation_Click">
                                 <EventMask ShowMask="true" />

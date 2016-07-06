@@ -257,7 +257,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         }
     }
 
-    protected void AcceptStationsButton_Click(object sender, DirectEventArgs e)
+    protected void btnLinkStationsSave_Click(object sender, DirectEventArgs e)
     {
         RowSelectionModel sm = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
         RowSelectionModel siteRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;

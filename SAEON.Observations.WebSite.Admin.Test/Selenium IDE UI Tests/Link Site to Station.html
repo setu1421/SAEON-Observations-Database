@@ -47,37 +47,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>id=ext-gen316</td>
+	<td>id=ext-gen50</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=ext-gen316</td>
+	<td>id=ext-gen50</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertVisible</td>
-	<td>id=StationLinkWindow</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=cbOrganisation</td>
-	<td></td>
-</tr>
-<tr>
-	<td>runScript</td>
-	<td>cbOrganisation.selectByIndex(0)</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=cbOrganisationRole</td>
-	<td></td>
-</tr>
-<tr>
-	<td>runScript</td>
-	<td>cbOrganisationRole.selectByIndex(0)</td>
+	<td>id=AvailableStationsWindow</td>
 	<td></td>
 </tr>
 <tr>
@@ -86,18 +66,23 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForCondition</td>
-	<td>selenium.browserbot.getCurrentWindow().OrganisationLinkFormPanel.getForm().isValid() == true</td>
+	<td>runScript</td>
+	<td>AvailableStationsGrid.selModel.selectFirstRow()</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
 	<td>2000</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=ext-gen194</td>
+	<td>id=ext-gen269</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForNotVisible</td>
-	<td>id=OrganisationLinkWindow</td>
+	<td>id=AvailableStationsWindow</td>
 	<td></td>
 </tr>
 <tr>
@@ -112,23 +97,13 @@
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>OrganisationLinksGrid.getSelectionModel().selectRow(0);</td>
+	<td>StationLinksGrid.getSelectionModel().selectRow(0);</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().OrganisationLinksGrid.getSelectionModel().getSelected().data.LevelCode</td>
-	<td>_Test_Site_1</td>
-</tr>
-<tr>
-	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().OrganisationLinksGrid.getSelectionModel().getSelected().data.OrganisationName</td>
-	<td>_Test Org 1</td>
-</tr>
-<tr>
-	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().OrganisationLinksGrid.getSelectionModel().getSelected().data.OrganisationRoleName</td>
-	<td>Data provider</td>
+	<td>this.browserbot.getUserWindow().StationLinksGrid.getSelectionModel().getSelected().data.Code</td>
+	<td>_Test_Stat_1</td>
 </tr>
 </tbody></table>
 </body>
