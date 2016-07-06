@@ -3,16 +3,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Edit Programme</title>
+<title>Link Station to Project</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Edit Programme</td></tr>
+<tr><td rowspan="1" colspan="3">Link Station to Project</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>${BaseURL}/admin/programmes</td>
+	<td>${BaseURL}/admin/stations</td>
 	<td></td>
 </tr>
 <tr>
@@ -27,43 +27,48 @@
 </tr>
 <tr>
 	<td>assertTitle</td>
-	<td>Programmes</td>
+	<td>Stations</td>
 	<td></td>
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>ProgrammesGrid.getSelectionModel().selectRow(0);</td>
+	<td>StationsGrid.getSelectionModel().selectRow(0);</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().ProgrammesGrid.getSelectionModel().getSelected().data.Code</td>
-	<td>_Test_Prog_1</td>
+	<td>this.browserbot.getUserWindow().StationsGrid.getSelectionModel().getSelected().data.Code</td>
+	<td>_Test_Stat_1</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#pnlSouth__pnlProjects .x-tab-strip-text</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>css=button#ext-gen222</td>
+	<td>css=table#btnProjectLinkAdd</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=button#ext-gen222</td>
+	<td>css=table#btnProjectLinkAdd</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertVisible</td>
-	<td>id=DetailWindow</td>
+	<td>id=ProjectLinkWindow</td>
 	<td></td>
 </tr>
 <tr>
-	<td>type</td>
-	<td>id=tfDescription</td>
+	<td>runScript</td>
+	<td>cbProject.selectByIndex(0)</td>
 	<td></td>
 </tr>
 <tr>
-	<td>sendKeys</td>
-	<td>id=tfDescription</td>
-	<td>Test Programme One</td>
+	<td>runScript</td>
+	<td>cbProjectRole.selectByIndex(0)</td>
+	<td></td>
 </tr>
 <tr>
 	<td>pause</td>
@@ -72,17 +77,17 @@
 </tr>
 <tr>
 	<td>waitForCondition</td>
-	<td>selenium.browserbot.getCurrentWindow().DetailsFormPanel.getForm().isValid() == true</td>
+	<td>selenium.browserbot.getCurrentWindow().ProjectLinkFormPanel.getForm().isValid() == true</td>
 	<td>2000</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=table#btnSave</td>
+	<td>css=table#btnProjectLinkSave</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForNotVisible</td>
-	<td>id=DetailWindow</td>
+	<td>id=ProjectLinkWindow</td>
 	<td></td>
 </tr>
 <tr>
@@ -97,13 +102,23 @@
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>ProgrammesGrid.getSelectionModel().selectRow(0);</td>
+	<td>ProjectLinksGrid.getSelectionModel().selectRow(0);</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().ProgrammesGrid.getSelectionModel().getSelected().data.Description</td>
-	<td>Test Programme One</td>
+	<td>this.browserbot.getUserWindow().ProjectLinksGrid.getSelectionModel().getSelected().data.LevelCode</td>
+	<td>_Test_Stat_1</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>this.browserbot.getUserWindow().ProjectLinksGrid.getSelectionModel().getSelected().data.ProjectName</td>
+	<td>_Test Org 1</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>this.browserbot.getUserWindow().ProjectLinksGrid.getSelectionModel().getSelected().data.ProjectRoleName</td>
+	<td>Data provider</td>
 </tr>
 </tbody></table>
 </body>

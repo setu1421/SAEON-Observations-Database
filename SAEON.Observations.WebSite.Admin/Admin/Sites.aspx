@@ -167,7 +167,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar3" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnLinkOrganisationAdd" runat="server" Icon="LinkAdd" Text="Link Organisation" ClientIDMode="Static">
+                                            <ext:Button ID="btnOrganisationLinkAdd" runat="server" Icon="LinkAdd" Text="Link Organisation" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip3" runat="server" Html="Link" />
                                                 </ToolTips>
@@ -254,7 +254,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnLinkStationsAdd" runat="server" Icon="LinkAdd" Text="Link Stations" ClientIDMode="Static">
+                                            <ext:Button ID="btnStationLinksAdd" runat="server" Icon="LinkAdd" Text="Link Stations" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>
@@ -524,9 +524,9 @@
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="btnLinkOrganisationSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
+                    <ext:Button ID="btnOrganisationLinkSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="LinkOrganisationSave">
+                            <Click OnEvent="OrganisationLinkSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
@@ -584,9 +584,9 @@
                     <ext:CheckboxSelectionModel ID="CheckboxSelectionModel2" runat="server" />
                 </SelectionModel>
                 <Buttons>
-                    <ext:Button ID="btnLinkStationsSave" runat="server" Text="Save" Icon="Accept" ClientIDMode="Static">
+                    <ext:Button ID="btnStationLinksSave" runat="server" Text="Save" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="LinkStationsSave">
+                            <Click OnEvent="StationLinksSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>

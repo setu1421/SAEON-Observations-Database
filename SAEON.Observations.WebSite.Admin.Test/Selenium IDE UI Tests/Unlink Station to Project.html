@@ -4,16 +4,16 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://localhost:54378/admin/" />
-<title>Unlink Site from Organisation</title>
+<title>Unlink Station from Project</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Unlink Site from Organisation</td></tr>
+<tr><td rowspan="1" colspan="3">Unlink Station from Project</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>${BaseURL}/admin/sites</td>
+	<td>${BaseURL}/admin/stations</td>
 	<td></td>
 </tr>
 <tr>
@@ -28,32 +28,32 @@
 </tr>
 <tr>
 	<td>assertTitle</td>
-	<td>Sites</td>
+	<td>Stations</td>
 	<td></td>
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>SitesGrid.getSelectionModel().selectRow(0);</td>
+	<td>StationsGrid.getSelectionModel().selectRow(0);</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().SitesGrid.getSelectionModel().getSelected().data.Code</td>
-	<td>_Test_Site_1</td>
+	<td>this.browserbot.getUserWindow().StationsGrid.getSelectionModel().getSelected().data.Code</td>
+	<td>_Test_Stat_1</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=#pnlSouth__pnlOrganisations .x-tab-strip-text</td>
+	<td>css=#pnlSouth__pnlProjects .x-tab-strip-text</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>css=button#ext-gen343</td>
+	<td>css=button#ext-gen504</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=button#ext-gen343</td>
+	<td>css=button#ext-gen504</td>
 	<td></td>
 </tr>
 <tr>
@@ -78,7 +78,7 @@
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().OrganisationLinksGrid.getStore().getCount()</td>
+	<td>this.browserbot.getUserWindow().ProjectLinksGrid.getStore().getCount()</td>
 	<td>0</td>
 </tr>
 </tbody></table>

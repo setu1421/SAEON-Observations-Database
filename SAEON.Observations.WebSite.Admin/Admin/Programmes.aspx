@@ -145,7 +145,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnLinkProjectsAdd" runat="server" Icon="LinkAdd" Text="Link Projects" ClientIDMode="Static">
+                                            <ext:Button ID="btnProjectLinksAdd" runat="server" Icon="LinkAdd" Text="Link Projects" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>
@@ -378,9 +378,9 @@
                     <ext:CheckboxSelectionModel ID="CheckboxSelectionModel2" runat="server" />
                 </SelectionModel>
                 <Buttons>
-                    <ext:Button ID="btnLinkProjectsSave" runat="server" Text="Save" Icon="Accept" ClientIDMode="Static">
+                    <ext:Button ID="btnProjectLinksSave" runat="server" Text="Save" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="LinkProjectsSave">
+                            <Click OnEvent="ProjectLinksSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>

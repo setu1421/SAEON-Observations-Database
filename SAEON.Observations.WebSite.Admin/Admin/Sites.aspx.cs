@@ -146,7 +146,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         }
     }
 
-    protected void LinkOrganisationSave(object sender, DirectEventArgs e)
+    protected void OrganisationLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
@@ -257,7 +257,7 @@ public partial class Admin_Sites : System.Web.UI.Page
         }
     }
 
-    protected void LinkStationsSave(object sender, DirectEventArgs e)
+    protected void StationLinksSave(object sender, DirectEventArgs e)
     {
         RowSelectionModel sm = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
         RowSelectionModel siteRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;

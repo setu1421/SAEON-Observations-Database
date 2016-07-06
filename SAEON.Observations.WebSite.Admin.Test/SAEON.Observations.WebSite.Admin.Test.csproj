@@ -90,16 +90,22 @@
     <Content Include="Selenium IDE UI Tests\Edit Sensor.html" />
     <Content Include="Selenium IDE UI Tests\Edit Site to Organisation Link.html" />
     <Content Include="Selenium IDE UI Tests\Edit Site.html" />
+    <Content Include="Selenium IDE UI Tests\Edit Station to Organisation Link.html" />
+    <Content Include="Selenium IDE UI Tests\Edit Station to Project Link.html" />
     <Content Include="Selenium IDE UI Tests\Edit Station.html" />
     <Content Include="Selenium IDE UI Tests\Link Programme to Project.html" />
     <Content Include="Selenium IDE UI Tests\Link Project to Station.html" />
     <Content Include="Selenium IDE UI Tests\Link Site to Organisation.html" />
     <Content Include="Selenium IDE UI Tests\Link Site to Station.html" />
+    <Content Include="Selenium IDE UI Tests\Link Station to Organisation.html" />
+    <Content Include="Selenium IDE UI Tests\Link Station to Project.html" />
     <Content Include="Selenium IDE UI Tests\SAEON.Observations.WebSite.Admin Test Suite.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Programme to Project.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Project to Station.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Site to Organisation.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Site to Station.html" />
+    <Content Include="Selenium IDE UI Tests\Unlink Station to Organisation.html" />
+    <Content Include="Selenium IDE UI Tests\Unlink Station to Project.html" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

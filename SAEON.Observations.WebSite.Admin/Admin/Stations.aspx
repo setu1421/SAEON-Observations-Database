@@ -204,7 +204,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar3" runat="server">
                                         <Items>
-                                            <ext:Button ID="LinkOrganisation" runat="server" Icon="LinkAdd" Text="Link Organisation">
+                                            <ext:Button ID="btnOrganisationLinkAdd" runat="server" Icon="LinkAdd" Text="Link Organisation" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip3" runat="server" Html="Link" />
                                                 </ToolTips>
@@ -290,7 +290,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
-                                            <ext:Button ID="LinkProject" runat="server" Icon="LinkAdd" Text="Link Project">
+                                            <ext:Button ID="btnProjectLinkAdd" runat="server" Icon="LinkAdd" Text="Link Project" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip6" runat="server" Html="Link" />
                                                 </ToolTips>
@@ -366,7 +366,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnLinkInstrument" runat="server" Icon="LinkAdd" Text="Link Instrument">
+                                            <ext:Button ID="btnInstrumentLinkAdd" runat="server" Icon="LinkAdd" Text="Link Instrument" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>
@@ -654,9 +654,9 @@
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="Button4" runat="server" Text="Save Organisation Link" FormBind="true" Icon="Accept">
+                    <ext:Button ID="btnOrganisationLinkSave" runat="server" Text="Save Organisation Link" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="LinkOrganisation_Click">
+                            <Click OnEvent="OrganisationLinkSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
@@ -713,7 +713,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfProjectStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfProjectStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
@@ -725,16 +725,16 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfProjectEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfProjectEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="Button6" runat="server" Text="Save" FormBind="true" Icon="Accept">
+                    <ext:Button ID="btnProjectLinkSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="LinkProject_Click">
+                            <Click OnEvent="ProjectLinkSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
@@ -791,7 +791,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfInstrumentStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfInstrumentStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
@@ -803,16 +803,16 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfInstrumentEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfInstrumentEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="Button5" runat="server" Text="Save" FormBind="true" Icon="Accept">
+                    <ext:Button ID="btnInstrumentLinkSave" runat="server" Text="Save" FormBind="true" Icon="Accept">
                         <DirectEvents>
-                            <Click OnEvent="LinkInstrument_Click">
+                            <Click OnEvent="InstrumentLinkSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>

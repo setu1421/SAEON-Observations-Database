@@ -174,7 +174,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
-    protected void LinkOrganisation_Click(object sender, DirectEventArgs e)
+    protected void OrganisationLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
@@ -260,7 +260,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
-    protected void LinkProject_Click(object sender, DirectEventArgs e)
+    protected void ProjectLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
@@ -347,7 +347,7 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
-    protected void LinkInstrument_Click(object sender, DirectEventArgs e)
+    protected void InstrumentLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
