@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://localhost:54378/admin/" />
-<title>Edit Link Instrument to Sensor</title>
+<title>Unlink Instrument to Sensor</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Edit Link Instrument to Sensor</td></tr>
+<tr><td rowspan="1" colspan="3">Unlink Instrument to Sensor</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -48,52 +48,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>css=button#ext-gen405</td>
+	<td>css=button#ext-gen407</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=button#ext-gen405</td>
+	<td>css=button#ext-gen407</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertVisible</td>
-	<td>id=SensorLinkWindow</td>
+	<td>waitForElementPresent</td>
+	<td>css=button:contains(&quot;Yes&quot;)</td>
 	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=dfSensorStartDate</td>
-	<td></td>
-</tr>
-<tr>
-	<td>sendKeys</td>
-	<td>id=dfSensorStartDate</td>
-	<td>2016-06-01</td>
-</tr>
-<tr>
-	<td>sendKeys</td>
-	<td>id=dfSensorStartDate</td>
-	<td>${KEY_TAB}</td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>2000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForCondition</td>
-	<td>selenium.browserbot.getCurrentWindow().SensorLinkFormPanel.getForm().isValid() == true</td>
-	<td>2000</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=table#btnSensorLinkSave</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForNotVisible</td>
-	<td>id=SensorLinkWindow</td>
+	<td>css=button:contains(&quot;Yes&quot;)</td>
 	<td></td>
 </tr>
 <tr>
@@ -107,19 +77,9 @@
 	<td>2000</td>
 </tr>
 <tr>
-	<td>runScript</td>
-	<td>SensorLinksGrid.getSelectionModel().selectRow(0);</td>
-	<td></td>
-</tr>
-<tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().SensorLinksGrid.getSelectionModel().getSelected().data.SensorCode</td>
-	<td>_Test_Stat_1</td>
-</tr>
-<tr>
-	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().SensorLinksGrid.getSelectionModel().getSelected().data.StartDate.toDateString()</td>
-	<td>Wed Jun 01 2016</td>
+	<td>this.browserbot.getUserWindow().SensorLinksGrid.getStore().getCount()</td>
+	<td>0</td>
 </tr>
 </tbody></table>
 </body>

@@ -1,15 +1,15 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://localhost:54378/admin/" />
-<title>Edit Link Instrument to Sensor</title>
+<title>Edit Link Instrument to Station</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Edit Link Instrument to Sensor</td></tr>
+<tr><td rowspan="1" colspan="3">Edit Link Instrument to Station</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -43,7 +43,7 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=#pnlSouth__pnlSensors .x-tab-strip-text</td>
+	<td>css=#pnlSouth__pnlStations .x-tab-strip-text</td>
 	<td></td>
 </tr>
 <tr>
@@ -58,22 +58,22 @@
 </tr>
 <tr>
 	<td>assertVisible</td>
-	<td>id=SensorLinkWindow</td>
+	<td>id=StationLinkWindow</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=dfSensorStartDate</td>
+	<td>id=dfStationStartDate</td>
 	<td></td>
 </tr>
 <tr>
 	<td>sendKeys</td>
-	<td>id=dfSensorStartDate</td>
+	<td>id=dfStationStartDate</td>
 	<td>2016-06-01</td>
 </tr>
 <tr>
 	<td>sendKeys</td>
-	<td>id=dfSensorStartDate</td>
+	<td>id=dfStationStartDate</td>
 	<td>${KEY_TAB}</td>
 </tr>
 <tr>
@@ -83,17 +83,17 @@
 </tr>
 <tr>
 	<td>waitForCondition</td>
-	<td>selenium.browserbot.getCurrentWindow().SensorLinkFormPanel.getForm().isValid() == true</td>
+	<td>selenium.browserbot.getCurrentWindow().StationLinkFormPanel.getForm().isValid() == true</td>
 	<td>2000</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=table#btnSensorLinkSave</td>
+	<td>css=table#btnStationLinkSave</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForNotVisible</td>
-	<td>id=SensorLinkWindow</td>
+	<td>id=StationLinkWindow</td>
 	<td></td>
 </tr>
 <tr>
@@ -108,17 +108,17 @@
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>SensorLinksGrid.getSelectionModel().selectRow(0);</td>
+	<td>StationLinksGrid.getSelectionModel().selectRow(0);</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().SensorLinksGrid.getSelectionModel().getSelected().data.SensorCode</td>
+	<td>this.browserbot.getUserWindow().StationLinksGrid.getSelectionModel().getSelected().data.StationCode</td>
 	<td>_Test_Stat_1</td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().SensorLinksGrid.getSelectionModel().getSelected().data.StartDate.toDateString()</td>
+	<td>this.browserbot.getUserWindow().StationLinksGrid.getSelectionModel().getSelected().data.StartDate.toDateString()</td>
 	<td>Wed Jun 01 2016</td>
 </tr>
 </tbody></table>

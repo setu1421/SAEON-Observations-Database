@@ -280,7 +280,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
             var masterID = new Guid(masterRow.SelectedRecordID);
             StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(StationLinkID.Value));
             stationInstrument.InstrumentID = masterID;
-            stationInstrument.StationID = new Guid(cbStationLink.SelectedItem.Value.Trim());
+            stationInstrument.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfStationStartDate.Text) && (dfStationStartDate.SelectedDate.Year >= 1900))
                 stationInstrument.StartDate = dfStationStartDate.SelectedDate;
             else

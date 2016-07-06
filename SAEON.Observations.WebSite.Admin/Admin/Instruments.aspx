@@ -647,7 +647,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:ComboBox ID="cbStationLink" runat="server" StoreID="StationStore" Editable="true" DisplayField="Name"
+                            <ext:ComboBox ID="cbStation" runat="server" StoreID="StationStore" Editable="true" DisplayField="Name"
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="StationID" EmptyText="Select Station"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
