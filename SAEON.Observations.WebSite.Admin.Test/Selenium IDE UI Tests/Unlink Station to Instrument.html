@@ -3,12 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Link Station to Project</title>
+<link rel="selenium.base" href="http://localhost:54378/admin/" />
+<title>Unlink Station from Instrument</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Link Station to Project</td></tr>
+<tr><td rowspan="1" colspan="3">Unlink Station from Instrument</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -42,52 +43,27 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=#pnlSouth__pnlProjects .x-tab-strip-text</td>
+	<td>css=#pnlSouth__pnlInstruments .x-tab-strip-text</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>css=table#btnProjectLinkAdd</td>
+	<td>css=button#ext-gen477</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=table#btnProjectLinkAdd</td>
+	<td>css=button#ext-gen477</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertVisible</td>
-	<td>id=ProjectLinkWindow</td>
+	<td>waitForElementPresent</td>
+	<td>css=button:contains(&quot;Yes&quot;)</td>
 	<td></td>
-</tr>
-<tr>
-	<td>runScript</td>
-	<td>cbProject.selectByIndex(0)</td>
-	<td></td>
-</tr>
-<tr>
-	<td>runScript</td>
-	<td>cbProjectRole.selectByIndex(0)</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>2000</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForCondition</td>
-	<td>selenium.browserbot.getCurrentWindow().ProjectLinkFormPanel.getForm().isValid() == true</td>
-	<td>2000</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=table#btnProjectLinkSave</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForNotVisible</td>
-	<td>id=ProjectLinkWindow</td>
+	<td>css=button:contains(&quot;Yes&quot;)</td>
 	<td></td>
 </tr>
 <tr>
@@ -101,14 +77,9 @@
 	<td>2000</td>
 </tr>
 <tr>
-	<td>runScript</td>
-	<td>ProjectLinksGrid.getSelectionModel().selectRow(0);</td>
-	<td></td>
-</tr>
-<tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().ProjectLinksGrid.getSelectionModel().getSelected().data.ProjectCode</td>
-	<td>_Test_Proj_1</td>
+	<td>this.browserbot.getUserWindow().InstrumentLinksGrid.getStore().getCount()</td>
+	<td>0</td>
 </tr>
 </tbody></table>
 </body>

@@ -1,18 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Link Station to Project</title>
+<link rel="selenium.base" href="http://localhost:54378/admin/" />
+<title>Edit Link Site to Organisation</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Link Station to Project</td></tr>
+<tr><td rowspan="1" colspan="3">Edit Link Site to Organisation</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>${BaseURL}/admin/stations</td>
+	<td>${BaseURL}/admin/projects</td>
 	<td></td>
 </tr>
 <tr>
@@ -27,48 +28,53 @@
 </tr>
 <tr>
 	<td>assertTitle</td>
-	<td>Stations</td>
+	<td>Projects</td>
 	<td></td>
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>StationsGrid.getSelectionModel().selectRow(0);</td>
+	<td>ProjectsGrid.getSelectionModel().selectRow(0);</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().StationsGrid.getSelectionModel().getSelected().data.Code</td>
-	<td>_Test_Stat_1</td>
+	<td>this.browserbot.getUserWindow().ProjectsGrid.getSelectionModel().getSelected().data.Code</td>
+	<td>_Test_Proj_1</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=#pnlSouth__pnlProjects .x-tab-strip-text</td>
+	<td>css=#pnlSouth__pnlStations .x-tab-strip-text</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>css=table#btnProjectLinkAdd</td>
+	<td>css=button#ext-gen260</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=table#btnProjectLinkAdd</td>
+	<td>css=button#ext-gen260</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertVisible</td>
-	<td>id=ProjectLinkWindow</td>
+	<td>id=StationLinkWindow</td>
 	<td></td>
 </tr>
 <tr>
-	<td>runScript</td>
-	<td>cbProject.selectByIndex(0)</td>
+	<td>type</td>
+	<td>id=dfStationStartDate</td>
 	<td></td>
 </tr>
 <tr>
-	<td>runScript</td>
-	<td>cbProjectRole.selectByIndex(0)</td>
-	<td></td>
+	<td>sendKeys</td>
+	<td>id=dfStationStartDate</td>
+	<td>2016-06-01</td>
+</tr>
+<tr>
+	<td>sendKeys</td>
+	<td>id=dfStationStartDate</td>
+	<td>${KEY_TAB}</td>
 </tr>
 <tr>
 	<td>pause</td>
@@ -77,17 +83,17 @@
 </tr>
 <tr>
 	<td>waitForCondition</td>
-	<td>selenium.browserbot.getCurrentWindow().ProjectLinkFormPanel.getForm().isValid() == true</td>
+	<td>selenium.browserbot.getCurrentWindow().StationLinkFormPanel.getForm().isValid() == true</td>
 	<td>2000</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=table#btnProjectLinkSave</td>
+	<td>css=table#btnStationLinkSave</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForNotVisible</td>
-	<td>id=ProjectLinkWindow</td>
+	<td>id=StationLinkWindow</td>
 	<td></td>
 </tr>
 <tr>
@@ -102,13 +108,18 @@
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>ProjectLinksGrid.getSelectionModel().selectRow(0);</td>
+	<td>StationLinksGrid.getSelectionModel().selectRow(0);</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().ProjectLinksGrid.getSelectionModel().getSelected().data.ProjectCode</td>
-	<td>_Test_Proj_1</td>
+	<td>this.browserbot.getUserWindow().StationLinksGrid.getSelectionModel().getSelected().data.StationCode</td>
+	<td>_Test_Stat_1</td>
+</tr>
+<tr>
+	<td>assertEval</td>
+	<td>this.browserbot.getUserWindow().StationLinksGrid.getSelectionModel().getSelected().data.StartDate.toDateString()</td>
+	<td>Wed Jun 01 2016</td>
 </tr>
 </tbody></table>
 </body>

@@ -3,12 +3,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Link Station to Project</title>
+<title>Link Station to Instrument</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Link Station to Project</td></tr>
+<tr><td rowspan="1" colspan="3">Link Station to Instrument</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -42,32 +42,32 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=#pnlSouth__pnlProjects .x-tab-strip-text</td>
+	<td>css=#pnlSouth__pnlInstruments .x-tab-strip-text</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>css=table#btnProjectLinkAdd</td>
+	<td>css=table#btnInstrumentLinkAdd</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=table#btnProjectLinkAdd</td>
+	<td>css=table#btnInstrumentLinkAdd</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertVisible</td>
-	<td>id=ProjectLinkWindow</td>
+	<td>id=InstrumentLinkWindow</td>
 	<td></td>
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>cbProject.selectByIndex(0)</td>
+	<td>cbInstrument.selectByIndex(0)</td>
 	<td></td>
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>cbProjectRole.selectByIndex(0)</td>
+	<td>cbInstrumentRole.selectByIndex(0)</td>
 	<td></td>
 </tr>
 <tr>
@@ -77,17 +77,17 @@
 </tr>
 <tr>
 	<td>waitForCondition</td>
-	<td>selenium.browserbot.getCurrentWindow().ProjectLinkFormPanel.getForm().isValid() == true</td>
+	<td>selenium.browserbot.getCurrentWindow().InstrumentLinkFormPanel.getForm().isValid() == true</td>
 	<td>2000</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=table#btnProjectLinkSave</td>
+	<td>css=table#btnInstrumentLinkSave</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForNotVisible</td>
-	<td>id=ProjectLinkWindow</td>
+	<td>id=InstrumentLinkWindow</td>
 	<td></td>
 </tr>
 <tr>
@@ -102,13 +102,13 @@
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>ProjectLinksGrid.getSelectionModel().selectRow(0);</td>
+	<td>InstrumentLinksGrid.getSelectionModel().selectRow(0);</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().ProjectLinksGrid.getSelectionModel().getSelected().data.ProjectCode</td>
-	<td>_Test_Proj_1</td>
+	<td>this.browserbot.getUserWindow().InstrumentLinksGrid.getSelectionModel().getSelected().data.InstrumentCode</td>
+	<td>_Test_Inst_1</td>
 </tr>
 </tbody></table>
 </body>

@@ -175,7 +175,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
         }
     }
 
-    protected void LinkOrganisation_Click(object sender, DirectEventArgs e)
+    protected void OrganisationLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
@@ -272,7 +272,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
         }
     }
 
-    protected void LinkStation_Click(object sender, DirectEventArgs e)
+    protected void StationLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
@@ -366,7 +366,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
         }
     }
 
-    protected void LinkSensor_Click(object sender, DirectEventArgs e)
+    protected void SensorLinkSave(object sender, DirectEventArgs e)
     {
         try
         {

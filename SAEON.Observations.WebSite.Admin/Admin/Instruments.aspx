@@ -177,7 +177,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar3" runat="server">
                                         <Items>
-                                            <ext:Button ID="LinkOrganisation" runat="server" Icon="LinkAdd" Text="Link Organisation">
+                                            <ext:Button ID="btnOrganisationLinkAdd" runat="server" Icon="LinkAdd" Text="Link Organisation" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip3" runat="server" Html="Link" />
                                                 </ToolTips>
@@ -263,7 +263,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnLinkStation" runat="server" Icon="LinkAdd" Text="Link Station">
+                                            <ext:Button ID="btnStationLinkAdd" runat="server" Icon="LinkAdd" Text="Link Station" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip4" runat="server" Html="Link" />
                                                 </ToolTips>
@@ -339,7 +339,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnLinkSensor" runat="server" Icon="LinkAdd" Text="Link Sensor">
+                                            <ext:Button ID="btnSensorLinkAdd" runat="server" Icon="LinkAdd" Text="Link Sensor" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>
@@ -589,7 +589,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfOrganisationStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfOrganisationStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
@@ -601,16 +601,16 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfOrganisationEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfOrganisationEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="Button4" runat="server" Text="Save" FormBind="true" Icon="Accept">
+                    <ext:Button ID="btnOrganisationLinkSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="LinkOrganisation_Click">
+                            <Click OnEvent="OrganisationLinkSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
@@ -667,7 +667,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfStationStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfStationStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
@@ -679,16 +679,16 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfStationEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfStationEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="Button5" runat="server" Text="Save" FormBind="true" Icon="Accept">
+                    <ext:Button ID="btnStationLinkSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="LinkStation_Click">
+                            <Click OnEvent="StationLinkSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
@@ -745,7 +745,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfSensorStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfSensorStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
@@ -757,16 +757,16 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:DateField ID="dfSensorEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
+                            <ext:DateField ID="dfSensorEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
                                 FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="Button6" runat="server" Text="Save" FormBind="true" Icon="Accept">
+                    <ext:Button ID="btnSensorLinkSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="LinkSensor_Click">
+                            <Click OnEvent="SensorLinkSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
