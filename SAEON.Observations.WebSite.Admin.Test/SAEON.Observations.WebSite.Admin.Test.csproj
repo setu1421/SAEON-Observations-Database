@@ -86,6 +86,7 @@
     <Content Include="Selenium IDE UI Tests\Edit Link Instrument to Organisation.html" />
     <Content Include="Selenium IDE UI Tests\Edit Link Instrument to Station.html" />
     <Content Include="Selenium IDE UI Tests\Edit Link Instrument to Sensor.html" />
+    <Content Include="Selenium IDE UI Tests\Edit Link Sensor to Instrument.html" />
     <Content Include="Selenium IDE UI Tests\Edit Link Station to Instrument.html" />
     <Content Include="Selenium IDE UI Tests\Edit Organisation.html" />
     <Content Include="Selenium IDE UI Tests\Edit Programme.html" />
@@ -102,6 +103,7 @@
     <Content Include="Selenium IDE UI Tests\Link Instrument to Station.html" />
     <Content Include="Selenium IDE UI Tests\Link Programme to Project.html" />
     <Content Include="Selenium IDE UI Tests\Link Project to Station.html" />
+    <Content Include="Selenium IDE UI Tests\Link Sensor to Instrument.html" />
     <Content Include="Selenium IDE UI Tests\Link Site to Organisation.html" />
     <Content Include="Selenium IDE UI Tests\Link Site to Station.html" />
     <Content Include="Selenium IDE UI Tests\Link Station to Instrument.html" />
@@ -113,6 +115,7 @@
     <Content Include="Selenium IDE UI Tests\Unlink Instrument to Station.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Programme to Project.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Project to Station.html" />
+    <Content Include="Selenium IDE UI Tests\Unlink Sensor to Instrument.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Site to Organisation.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Site to Station.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Station to Instrument.html" />

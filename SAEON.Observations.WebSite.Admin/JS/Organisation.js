@@ -12,7 +12,7 @@
 
     tfCode.markAsValid();
     tfName.markAsValid();
-    DetailWindow.show()
+    DetailWindow.show();
 }
 
 function New() {

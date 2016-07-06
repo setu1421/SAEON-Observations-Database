@@ -374,7 +374,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
             var masterID = new Guid(masterRow.SelectedRecordID);
             InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(SensorLinkID.Value));
             instrumentSensor.InstrumentID = masterID;
-            instrumentSensor.SensorID = new Guid(cbSensorLink.SelectedItem.Value.Trim());
+            instrumentSensor.SensorID = new Guid(cbSensor.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfSensorStartDate.Text) && (dfSensorStartDate.SelectedDate.Year >= 1900))
                 instrumentSensor.StartDate = dfSensorStartDate.SelectedDate;
             else

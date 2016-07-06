@@ -725,7 +725,7 @@
                             <ext:Parameter Name="MsgTarget" Value="side" />
                         </Defaults>
                         <Items>
-                            <ext:ComboBox ID="cbSensorLink" runat="server" StoreID="SensorStore" Editable="true" DisplayField="Name"
+                            <ext:ComboBox ID="cbSensor" runat="server" StoreID="SensorStore" Editable="true" DisplayField="Name"
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="SensorID" EmptyText="Select Sensor"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">

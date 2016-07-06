@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://localhost:54378/admin/" />
-<title>Unlink Instrument to Sensor</title>
+<title>Unlink Sensor to Instrument</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Unlink Instrument to Sensor</td></tr>
+<tr><td rowspan="1" colspan="3">Unlink Sensor to Instrument</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>${BaseURL}/admin/instruments</td>
+	<td>${BaseURL}/admin/sensors</td>
 	<td></td>
 </tr>
 <tr>
@@ -28,32 +28,32 @@
 </tr>
 <tr>
 	<td>assertTitle</td>
-	<td>Instruments</td>
+	<td>Sensors</td>
 	<td></td>
 </tr>
 <tr>
 	<td>runScript</td>
-	<td>InstrumentsGrid.getSelectionModel().selectRow(0);</td>
+	<td>SensorsGrid.getSelectionModel().selectRow(0);</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().InstrumentsGrid.getSelectionModel().getSelected().data.Code</td>
-	<td>_Test_Inst_1</td>
+	<td>this.browserbot.getUserWindow().SensorsGrid.getSelectionModel().getSelected().data.Code</td>
+	<td>_Test_Stat_1</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=#pnlSouth__pnlSensors .x-tab-strip-text</td>
+	<td>css=#pnlSouth__pnlInstruments .x-tab-strip-text</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>css=button#ext-gen380</td>
+	<td>css=button#ext-gen477</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=button#ext-gen380</td>
+	<td>css=button#ext-gen477</td>
 	<td></td>
 </tr>
 <tr>
@@ -78,7 +78,7 @@
 </tr>
 <tr>
 	<td>assertEval</td>
-	<td>this.browserbot.getUserWindow().SensorLinksGrid.getStore().getCount()</td>
+	<td>this.browserbot.getUserWindow().InstrumentLinksGrid.getStore().getCount()</td>
 	<td>0</td>
 </tr>
 </tbody></table>
