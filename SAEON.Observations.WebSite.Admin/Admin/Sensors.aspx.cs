@@ -208,7 +208,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
         }
     }
 
-    protected void LinkInstrument_Click(object sender, DirectEventArgs e)
+    protected void InstrumentLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
@@ -216,7 +216,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
             var masterID = new Guid(masterRow.SelectedRecordID);
             InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(InstrumentLinkID.Value));
             instrumentSensor.SensorID = masterID;
-            instrumentSensor.InstrumentID = new Guid(cbInstrumentLink.SelectedItem.Value.Trim());
+            instrumentSensor.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
             if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
                 instrumentSensor.StartDate = dfInstrumentStartDate.SelectedDate;
             else

@@ -21,8 +21,8 @@ public partial class Admin_Instruments : System.Web.UI.Page
             OrganisationRoleStore.DataBind();
             StationStore.DataSource = new StationCollection().OrderByAsc(Station.Columns.Name).Load();
             StationStore.DataBind();
-            //SensorStore.DataSource = new SensorCollection().OrderByAsc(Sensor.Columns.Name).Load();
-            //SensorStore.DataBind();
+            SensorStore.DataSource = new SensorCollection().OrderByAsc(Sensor.Columns.Name).Load();
+            SensorStore.DataBind();
         }
     }
 
@@ -32,24 +32,24 @@ public partial class Admin_Instruments : System.Web.UI.Page
         InstrumentsGrid.GetStore().DataSource = InstrumentRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
-    protected void MasterRowSelect(object sender, DirectEventArgs e)
-    {
-        RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
-        var masterID = new Guid(masterRow.SelectedRecordID);
-        SensorCollection sensors = new Select()
-            .From(Sensor.Schema)
-            .Where(Sensor.StationIDColumn)
-            .In(new Select(new string[] { StationInstrument.Columns.StationID })
-                .From(StationInstrument.Schema)
-                .Where(StationInstrument.InstrumentIDColumn)
-                .IsEqualTo(masterID))
-            .Or(Sensor.StationIDColumn)
-            .IsNull()
-            .OrderAsc(Sensor.Columns.Name)
-            .ExecuteAsCollection<SensorCollection>();
-        SensorStore.DataSource = sensors;
-        SensorStore.DataBind();
-    }
+    //protected void MasterRowSelect(object sender, DirectEventArgs e)
+    //{
+    //    RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
+    //    var masterID = new Guid(masterRow.SelectedRecordID);
+    //    SensorCollection sensors = new Select()
+    //        .From(Sensor.Schema)
+    //        .Where(Sensor.StationIDColumn)
+    //        .In(new Select(new string[] { StationInstrument.Columns.StationID })
+    //            .From(StationInstrument.Schema)
+    //            .Where(StationInstrument.InstrumentIDColumn)
+    //            .IsEqualTo(masterID))
+    //        .Or(Sensor.StationIDColumn)
+    //        .IsNull()
+    //        .OrderAsc(Sensor.Columns.Name)
+    //        .ExecuteAsCollection<SensorCollection>();
+    //    SensorStore.DataSource = sensors;
+    //    SensorStore.DataBind();
+    //}
 
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)

@@ -142,9 +142,11 @@
                                         <Listeners>
                                             <RowSelect Fn="MasterRowSelect" Buffer="250" />
                                         </Listeners>
+                                        <%--                                        
                                         <DirectEvents>
                                             <RowSelect OnEvent="MasterRowSelect" />
                                         </DirectEvents>
+                                        --%>
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
