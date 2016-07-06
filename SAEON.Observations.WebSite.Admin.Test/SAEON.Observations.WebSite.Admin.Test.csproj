@@ -84,6 +84,7 @@
     <Content Include="Selenium IDE UI Tests\Clean Test Data.sql" />
     <Content Include="Selenium IDE UI Tests\Edit Instrument.html" />
     <Content Include="Selenium IDE UI Tests\Edit Link Instrument to Organisation.html" />
+    <Content Include="Selenium IDE UI Tests\Edit Link Instrument to Station.html" />
     <Content Include="Selenium IDE UI Tests\Edit Link Station to Instrument.html" />
     <Content Include="Selenium IDE UI Tests\Edit Organisation.html" />
     <Content Include="Selenium IDE UI Tests\Edit Programme.html" />
@@ -96,6 +97,7 @@
     <Content Include="Selenium IDE UI Tests\Edit Link Station to Project.html" />
     <Content Include="Selenium IDE UI Tests\Edit Station.html" />
     <Content Include="Selenium IDE UI Tests\Link Instrument to Organisation.html" />
+    <Content Include="Selenium IDE UI Tests\Link Instrument to Station.html" />
     <Content Include="Selenium IDE UI Tests\Link Programme to Project.html" />
     <Content Include="Selenium IDE UI Tests\Link Project to Station.html" />
     <Content Include="Selenium IDE UI Tests\Link Site to Organisation.html" />
@@ -105,6 +107,7 @@
     <Content Include="Selenium IDE UI Tests\Link Station to Project.html" />
     <Content Include="Selenium IDE UI Tests\SAEON.Observations.WebSite.Admin Test Suite.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Instrument to Organisation.html" />
+    <Content Include="Selenium IDE UI Tests\Unlink Instrument to Station.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Programme to Project.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Project to Station.html" />
     <Content Include="Selenium IDE UI Tests\Unlink Site to Organisation.html" />
