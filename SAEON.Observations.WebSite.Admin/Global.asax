@@ -9,7 +9,6 @@
         // Code that runs on application startup
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
-            .WriteTo.ColoredConsole()
             .WriteTo.RollingFile(Server.MapPath(@"~/App_Data/Logs/Log-{Date}.txt"))
             .CreateLogger();
         RouteConfig.RegisterRoutes(RouteTable.Routes);

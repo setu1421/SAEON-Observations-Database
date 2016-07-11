@@ -1,3 +1,4 @@
+use [ObservationsTest]
 Delete from [Sensor] where Code like '_Test_%'
 Delete [Organisation_Instrument] from [Organisation_Instrument] inner join [Instrument] on ([Organisation_Instrument].InstrumentID = [Instrument].ID) where [Instrument].Code like '_Test_%'
 Delete [Station_Instrument] from [Station_Instrument] inner join [Instrument] on ([Station_Instrument].InstrumentID = [Instrument].ID) where [Instrument].Code like '_Test_%'

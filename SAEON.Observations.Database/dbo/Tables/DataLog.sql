@@ -28,7 +28,14 @@
     [ImportBatchID]              INT              NOT NULL,
     [RawRecordData]              VARCHAR (500)    NULL,
     [RawFieldValue]              VARCHAR (50)     NOT NULL,
-    CONSTRAINT [PK_DataLog] PRIMARY KEY CLUSTERED ([ID]),
+--> Added 2.0.8 20160708 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_DataLog_AddedAt] DEFAULT GetDate(), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataLog_UpdatedAt] DEFAULT GetDate(), 
+--< Added 2.0.8 20160708 TimPN
+--> Changed 2.0.8 20160708 TimPN
+--    CONSTRAINT [PK_DataLog] PRIMARY KEY CLUSTERED ([ID]),
+    CONSTRAINT [PK_DataLog] PRIMARY KEY NONCLUSTERED ([ID]),
+--< Changed 2.0.8 20160708 TimPN
     CONSTRAINT [FK_DataLog_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_DataLog_DataSourceTransformation] FOREIGN KEY ([DataSourceTransformationID]) REFERENCES [dbo].[DataSourceTransformation] ([ID]),
     CONSTRAINT [FK_DataLog_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]),
@@ -40,6 +47,10 @@
 --< Changed 2.0.3 20160503 TimPN
     CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID])
 );
+--> Added 2.0.8 20160708 TimPN
+GO
+CREATE CLUSTERED INDEX [CX_DataLog] ON [dbo].[DataLog] ([AddedAt])
+--< Added 2.0.8 20160708 TimPN
 GO
 CREATE INDEX [IX_DataLog] ON [dbo].[DataLog]([ImportBatchID]);
 --> Added 2.0.0 20160406 TimPN
@@ -59,4 +70,38 @@ CREATE INDEX [IX_DataLog_StatusID] ON [dbo].[DataLog] ([StatusID])
 GO
 CREATE INDEX [IX_DataLog_UserId] ON [dbo].[DataLog] ([UserId])
 --< Added 2.0.0 20160406 TimPN
+--> Added 2.0.8 20160708 TimPN
+GO
+CREATE TRIGGER [dbo].[TR_DataLog_Insert] ON [dbo].[DataLog]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        inserted ins 
+        inner join DataLog src
+            on (ins.ID = src.ID)
+END
+GO
+CREATE TRIGGER [dbo].[TR_DataLog_Update] ON [dbo].[DataLog]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update 
+        src 
+    set 
+        UpdatedAt = GETDATE()
+    from
+        inserted ins 
+        inner join DataLog src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.8 20160708 TimPN
 
