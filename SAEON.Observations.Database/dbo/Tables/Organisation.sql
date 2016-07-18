@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[Organisation] (
-    [ID]          UNIQUEIDENTIFIER CONSTRAINT [DF_Table_1_Organisation] DEFAULT (newid()) NOT NULL,
+    [ID]          UNIQUEIDENTIFIER CONSTRAINT [DF_Organisation_ID] DEFAULT (newid()) NOT NULL,
     [Code]        VARCHAR (50)     NOT NULL,
     [Name]        VARCHAR (150)    NOT NULL,
     [Description] VARCHAR (5000)   NULL,

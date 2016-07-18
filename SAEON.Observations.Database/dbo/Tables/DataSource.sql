@@ -18,7 +18,10 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataSource_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSource_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.3 20160421 TimPN
-    CONSTRAINT [PK_DataSource] PRIMARY KEY CLUSTERED ([ID]),
+--> Changed 2.0.8 20160715 TimPN
+--    CONSTRAINT [PK_DataSource] PRIMARY KEY CLUSTERED ([ID]),
+    CONSTRAINT [PK_DataSource] PRIMARY KEY NONCLUSTERED ([ID]),
+--< Changed 2.0.8 20160715 TimPN
     CONSTRAINT [FK_DataSource_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_DataSource_DataSchema] FOREIGN KEY ([DataSchemaID]) REFERENCES [dbo].[DataSchema] ([ID]),
 --> Added 2.0.0 20160406 TimPN
@@ -26,8 +29,12 @@
     CONSTRAINT [UX_DataSource_Name] Unique ([Name])
 --< Added 2.0.0 20160406 TimPN
 );
+--> Added 2.0.8 20160715 TimPN
 GO
+CREATE CLUSTERED INDEX [CX_DataSource] ON [dbo].[DataSource] ([AddedAt])
+--< Added 2.0.8 20160715 TimPN
 --> Added 2.0.0 20160406 TimPN
+GO
 CREATE INDEX [IX_DataSource_DataSchemaID] ON [dbo].[DataSource] ([DataSchemaID])
 GO
 CREATE INDEX [IX_DataSource_UserId] ON [dbo].[DataSource] ([UserId])

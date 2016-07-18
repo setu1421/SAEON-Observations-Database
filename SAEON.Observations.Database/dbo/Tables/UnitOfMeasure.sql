@@ -4,7 +4,14 @@
     [Unit]       VARCHAR (100)    NOT NULL,
     [UnitSymbol] VARCHAR (20)     NOT NULL,
     [UserId]     UNIQUEIDENTIFIER NOT NULL,
-    CONSTRAINT [PK_UnitOfMeasure] PRIMARY KEY CLUSTERED ([ID]),
+--> Added 2.0.8 20160718 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_UnitOfMeasure_AddedAt] DEFAULT GetDate(), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_UnitOfMeasure_UpdatedAt] DEFAULT GetDate(), 
+--< Added 2.0.8 20160718 TimPN
+--> Changed 2.0.8 20160718 TimPN
+--    CONSTRAINT [PK_UnitOfMeasure] PRIMARY KEY CLUSTERED ([ID]),
+    CONSTRAINT [PK_UnitOfMeasure] PRIMARY KEY NONCLUSTERED ([ID]),
+--> Changed 2.0.8 20160718 TimPN
     CONSTRAINT [FK_UnitOfMeasure_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --> Changed 20160329 TimPN
 --    CONSTRAINT [IX_UnitOfMeasure_Code] UNIQUE ([Code]),
@@ -15,7 +22,47 @@
     CONSTRAINT [UX_UnitOfMeasure_Unit] UNIQUE ([Unit])
 --< Changed 20160329 TimPN
 );
+--> Added 2.0.8 20160718 TimPN
+GO
+CREATE CLUSTERED INDEX [CX_UnitOfMeasure] ON [dbo].[UnitOfMeasure] ([AddedAt])
+--< Added 2.0.8 20160718 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_UnitOfMeasure_UserId] ON [dbo].[UnitOfMeasure] ([UserId])
 --< Added 2.0.0 20160406 TimPN
+--> Added 2.0.8 20160718 TimPN
+GO
+CREATE TRIGGER [dbo].[TR_UnitOfMeasure_Insert] ON [dbo].[UnitOfMeasure]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        inserted ins
+        inner join UnitOfMeasure src
+            on (ins.ID = src.ID)
+END
+GO
+CREATE TRIGGER [dbo].[TR_UnitOfMeasure_Update] ON [dbo].[UnitOfMeasure]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update
+        src
+    set
+        UpdatedAt = GETDATE()
+    from
+        inserted ins
+        inner join UnitOfMeasure src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.8 20160718 TimPN
+
+

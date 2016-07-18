@@ -4,7 +4,14 @@
     [UnitOfMeasureID] UNIQUEIDENTIFIER NOT NULL,
     [IsDefault]       BIT              CONSTRAINT [DF_PhenomenonUOM_IsDefault] DEFAULT ((0)) NOT NULL,
     [UserId] UNIQUEIDENTIFIER NULL, 
-    CONSTRAINT [PK_PhenomenonUOM] PRIMARY KEY CLUSTERED ([ID]),
+--> Added 2.0.8 20160718 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonUOM_AddedAt] DEFAULT GetDate(), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonUOM_UpdatedAt] DEFAULT GetDate(), 
+--< Added 2.0.8 20160718 TimPN
+--> Changed 2.0.8 20160718 TimPN
+--    CONSTRAINT [PK_PhenomenonUOM] PRIMARY KEY CLUSTERED ([ID]),
+    CONSTRAINT [PK_PhenomenonUOM] PRIMARY KEY NONCLUSTERED ([ID]),
+--< Changed 2.0.8 20160718 TimPN
     CONSTRAINT [FK_PhenomenonUOM_PhenomenonUOM] FOREIGN KEY ([PhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]),
     CONSTRAINT [FK_PhenomenonUOM_UnitOfMeasure] FOREIGN KEY ([UnitOfMeasureID]) REFERENCES [dbo].[UnitOfMeasure] ([ID]),
 --> Changed 20160329 TimPN
@@ -15,6 +22,10 @@
     CONSTRAINT [FK_PhenomenonUOM_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 --< Added 2.0.0 20160406 TimPN
 );
+--> Added 2.0.8 20160718 TimPN
+GO
+CREATE CLUSTERED INDEX [CX_PhenomenonUOM] ON [dbo].[PhenomenonUOM] ([AddedAt])
+--< Added 2.0.8 20160718 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_PhenomenonUOM_PhenomenonID] ON [dbo].[PhenomenonUOM] ([PhenomenonID])
@@ -23,3 +34,38 @@ CREATE INDEX [IX_PhenomenonUOM_UnitOfMeasureID] ON [dbo].[PhenomenonUOM] ([UnitO
 GO
 CREATE INDEX [IX_PhenomenonUOM_UserId] ON [dbo].[PhenomenonUOM] ([UserId])
 --> Added 2.0.0 20160406 TimPN
+--> Added 2.0.8 20160718 TimPN
+GO
+CREATE TRIGGER [dbo].[TR_PhenomenonUPM_Insert] ON [dbo].[PhenomenonUOM]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        inserted ins
+        inner join PhenomenonUOM src
+            on (ins.ID = src.ID)
+END
+GO
+CREATE TRIGGER [dbo].[TR_PhenomenonUOM_Update] ON [dbo].[PhenomenonUOM]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update
+        src
+    set
+        UpdatedAt = GETDATE()
+    from
+        inserted ins
+        inner join PhenomenonUOM src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.8 20160718 TimPN
+

@@ -3,8 +3,8 @@
   <PropertyGroup>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseName>ObservationDB_IMP</TargetDatabaseName>
-    <DeployScriptFileName>Lab2-SAEON ObservationDB_IMP.sql</DeployScriptFileName>
-    <TargetConnectionString>Data Source=LAB2\SAEON;Integrated Security=True;Pooling=False</TargetConnectionString>
+    <DeployScriptFileName>ObservationDB_IMP.sql</DeployScriptFileName>
+    <TargetConnectionString>Data Source=.\SAEON;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True</TargetConnectionString>
     <BlockWhenDriftDetected>True</BlockWhenDriftDetected>
     <RegisterDataTierApplication>True</RegisterDataTierApplication>
     <ProfileVersionNumber>1</ProfileVersionNumber>

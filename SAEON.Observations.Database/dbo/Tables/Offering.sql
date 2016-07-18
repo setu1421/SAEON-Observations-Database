@@ -4,7 +4,14 @@
     [Name]        VARCHAR (150)    NOT NULL,
     [Description] VARCHAR (5000)   NULL,
     [UserId]      UNIQUEIDENTIFIER NOT NULL,
-    CONSTRAINT [PK_Offering] PRIMARY KEY CLUSTERED ([ID]),
+--> Added 2.0.8 20160718 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_Offering_AddedAt] DEFAULT GetDate(), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Offering_UpdatedAt] DEFAULT GetDate(), 
+--< Added 2.0.8 20160718 TimPN
+--> Changed 2.0.8 20160718 TimPN
+--    CONSTRAINT [PK_Offering] PRIMARY KEY CLUSTERED ([ID]),
+    CONSTRAINT [PK_Offering] PRIMARY KEY NONCLUSTERED ([ID]),
+--< Changed 2.0.8 20160718 TimPN
     CONSTRAINT [FK_Offering_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --> Changed 20160329 TimPN
 --    CONSTRAINT [IX_Offering] UNIQUE ([Name]),
@@ -15,7 +22,46 @@
     CONSTRAINT [UX_Offering_Code] UNIQUE ([Code])
 --< Changed 20160329 TimPN
 );
+--> Added 2.0.8 20160718 TimPN
+GO
+CREATE CLUSTERED INDEX [CX_Offering] ON [dbo].[Offering] ([AddedAt])
+--< Added 2.0.8 20160718 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Offering_UserId] ON [dbo].[Offering] ([UserId])
 --< Added 2.0.0 20160406 TimPN
+--> Added 2.0.8 20160718 TimPN
+GO
+CREATE TRIGGER [dbo].[TR_Offering_Insert] ON [dbo].[Offering]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        inserted ins
+        inner join Offering src
+            on (ins.ID = src.ID)
+END
+GO
+CREATE TRIGGER [dbo].[TR_Offering_Update] ON [dbo].[Offering]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update
+        src
+    set
+        UpdatedAt = GETDATE()
+    from
+        inserted ins
+        inner join Offering src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.8 20160718 TimPN
+

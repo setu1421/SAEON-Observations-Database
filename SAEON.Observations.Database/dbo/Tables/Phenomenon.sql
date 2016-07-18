@@ -5,7 +5,14 @@
     [Description] VARCHAR (5000)   NULL,
     [Url]         VARCHAR (250)    NULL,
     [UserId]      UNIQUEIDENTIFIER NOT NULL,
-    CONSTRAINT [PK_Phenomenon] PRIMARY KEY CLUSTERED ([ID]),
+--> Added 2.0.8 20160718 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_Phenomenon_AddedAt] DEFAULT GetDate(), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Phenomenon_UpdatedAt] DEFAULT GetDate(), 
+--< Added 2.0.8 20160718 TimPN
+--> Changed 2.0.8 20160718 TimPN
+--    CONSTRAINT [PK_Phenomenon] PRIMARY KEY CLUSTERED ([ID]),
+    CONSTRAINT [PK_Phenomenon] PRIMARY KEY NONCLUSTERED ([ID]),
+--< Changed 2.0.8 20160718 TimPN
     CONSTRAINT [FK_Phenomenon_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --> Changed 20160329 TimPN
 --    CONSTRAINT [IX_Phenomenon_Code] UNIQUE ([Code]),
@@ -16,7 +23,46 @@
     CONSTRAINT [UX_Phenomenon_Name] UNIQUE ([Name])
 --< Changed 20160329 TimPN
 );
+--> Added 2.0.8 20160718 TimPN
+GO
+CREATE CLUSTERED INDEX [CX_Phenomenon] ON [dbo].[Phenomenon] ([AddedAt])
+--< Added 2.0.8 20160718 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Phenomenon_UserId] ON [dbo].[Phenomenon] ([UserId])
 --< Added 2.0.0 20160406 TimPN
+--> Added 2.0.8 20160718 TimPN
+GO
+CREATE TRIGGER [dbo].[TR_Phenomenon_Insert] ON [dbo].[Phenomenon]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        inserted ins
+        inner join Phenomenon src
+            on (ins.ID = src.ID)
+END
+GO
+CREATE TRIGGER [dbo].[TR_Phenomenon_Update] ON [dbo].[Phenomenon]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update
+        src
+    set
+        UpdatedAt = GETDATE()
+    from
+        inserted ins
+        inner join Phenomenon src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.8 20160718 TimPN
+
