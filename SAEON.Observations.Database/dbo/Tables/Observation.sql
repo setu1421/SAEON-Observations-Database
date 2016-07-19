@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Observation] (
     [ID]                    INT              IDENTITY (1, 1) NOT NULL,
 --> Added 2.0.8 20160708 TimPN
-    [Guid]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_Observation_Guid] DEFAULT (newid()),
+    [Guid]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_Observation_Guid] DEFAULT newid(),
 --< Added 2.0.8 20160708 TimPN
 --> Changed 2.0.3 20160503 TimPN
 --    [SensorProcedureID]     UNIQUEIDENTIFIER NOT NULL,
@@ -21,7 +21,7 @@
 --< Changed 2.0.3 20160421 TimPN
     [ImportBatchID]         INT              NOT NULL,
     [UserId]                UNIQUEIDENTIFIER NOT NULL,
-    [AddedDate]             DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT (getdate()) NOT NULL,
+    [AddedDate]             DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
 --> Added 2.0.8 20160718 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate(), 
@@ -36,8 +36,11 @@
     CONSTRAINT [FK_Observation_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
 --> Changed 2.0.3 20160503 TimPN
 --    CONSTRAINT [FK_Observation_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID])
-    CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID])
+    CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
 --< Changed 2.0.3 20160503 TimPN
+--> Added 2.0.8 20160719 TimPN
+    CONSTRAINT [UX_Observation_Guid] Unique ([Guid])
+--< Added 2.0.8 20160719 TimPN
 );
 --> Added 2.0.8 20160718 TimPN
 GO

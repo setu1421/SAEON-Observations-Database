@@ -29,6 +29,9 @@
     [PhenomenonUOMID]           UNIQUEIDENTIFIER NULL,
 --< Changed 2.0.3 20160421 TimPN
     [ImportBatchID]              INT              NOT NULL,
+--> Added 2.0.8 20160719 TimPN
+    [ImportBatchGuid]           UNIQUEIDENTIFIER NOT NULL,
+--< Added 2.0.8 20160719 TimPN
     [RawRecordData]              VARCHAR (500)    NULL,
     [RawFieldValue]              VARCHAR (50)     NOT NULL,
 --> Added 2.0.8 20160708 TimPN
@@ -42,13 +45,19 @@
     CONSTRAINT [FK_DataLog_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_DataLog_DataSourceTransformation] FOREIGN KEY ([DataSourceTransformationID]) REFERENCES [dbo].[DataSourceTransformation] ([ID]),
     CONSTRAINT [FK_DataLog_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]),
+--> Added 2.0.8 20160708 TimPN
+    CONSTRAINT [FK_DataLog_ImportBatchGuid] FOREIGN KEY ([ImportBatchGuid]) REFERENCES [dbo].[ImportBatch] ([Guid]),
+--< Added 2.0.8 20160708 TimPN
     CONSTRAINT [FK_DataLog_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
     CONSTRAINT [FK_DataLog_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
 --> Changed 2.0.3 20160503 TimPN
 --    CONSTRAINT [FK_DataLog_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID]),
     CONSTRAINT [FK_DataLog_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
 --< Changed 2.0.3 20160503 TimPN
-    CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID])
+    CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]),
+--> Added 2.0.8 20160719 TimPN
+    CONSTRAINT [UX_DataLog_Guid] Unique ([Guid])
+--< Added 2.0.8 20160719 TimPN
 );
 --> Added 2.0.8 20160708 TimPN
 GO
@@ -58,7 +67,11 @@ CREATE INDEX [IX_DataLog_Guid] ON [dbo].[DataLog]([Guid]);
 --< Added 2.0.8 20160708 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
-CREATE INDEX [IX_DataLog] ON [dbo].[DataLog]([ImportBatchID]);
+CREATE INDEX [IX_DataLog_ImportBatchID] ON [dbo].[DataLog]([ImportBatchID]);
+--> Added 2.0.8 20160708 TimPN
+GO
+CREATE INDEX [IX_DataLog_ImportBatchGuid] ON [dbo].[DataLog]([ImportBatchGuid]);
+--< Added 2.0.8 20160708 TimPN
 --> Changed 2.0.3 20160503 TimPN
 GO
 --CREATE INDEX [IX_DataLog_SensorProcedureID] ON [dbo].[DataLog] ([SensorProcedureID]);
