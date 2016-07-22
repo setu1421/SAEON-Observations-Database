@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [dbo].[Observation] (
-    [ID]                    INT              IDENTITY (1, 1) NOT NULL,
---> Added 2.0.8 20160708 TimPN
-    [Guid]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_Observation_Guid] DEFAULT newid(),
---< Added 2.0.8 20160708 TimPN
+--> Changed 2.0.8 20160720 TimPN
+--    [ID]                    INT              IDENTITY (1, 1) NOT NULL,
+    [ID]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_Observation_ID] DEFAULT newid(),
+--< Changed 2.0.8 20160720 TimPN
 --> Changed 2.0.3 20160503 TimPN
 --    [SensorProcedureID]     UNIQUEIDENTIFIER NOT NULL,
     [SensorID]     UNIQUEIDENTIFIER NOT NULL,
@@ -19,7 +19,10 @@
 --    [PhenonmenonUOMID]      UNIQUEIDENTIFIER NOT NULL,
     [PhenomenonUOMID]      UNIQUEIDENTIFIER NOT NULL,
 --< Changed 2.0.3 20160421 TimPN
-    [ImportBatchID]         INT              NOT NULL,
+--> Changed 2.0.8 20160720 TimPN
+--    [ImportBatchID]         INT              NOT NULL,
+    [ImportBatchID]         UNIQUEIDENTIFIER              NOT NULL,
+--< Changed 2.0.8 20160720 TimPN
     [UserId]                UNIQUEIDENTIFIER NOT NULL,
     [AddedDate]             DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
 --> Added 2.0.8 20160718 TimPN
@@ -38,15 +41,10 @@
 --    CONSTRAINT [FK_Observation_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID])
     CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
 --< Changed 2.0.3 20160503 TimPN
---> Added 2.0.8 20160719 TimPN
-    CONSTRAINT [UX_Observation_Guid] Unique ([Guid])
---< Added 2.0.8 20160719 TimPN
 );
 --> Added 2.0.8 20160718 TimPN
 GO
 CREATE CLUSTERED INDEX [CX_Observation] ON [dbo].[Observation] ([AddedAt])
-GO
-CREATE INDEX [IX_Observation_Guid] ON [dbo].[Observation]([Guid]);
 --< Added 2.0.8 20160718 TimPN
 --> Changed 2.0.3 20160503 TimPN
 GO

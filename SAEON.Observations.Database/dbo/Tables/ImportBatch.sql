@@ -1,9 +1,14 @@
 ﻿CREATE TABLE [dbo].[ImportBatch] (
-    [ID]           INT              IDENTITY (1, 1) NOT NULL,
+--> Changed 2.0.8 20160720 TimPN
+--    [ID]           INT              IDENTITY (1, 1) NOT NULL,
+    [ID]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_ImportBatch_ID] DEFAULT newid(),
+--< Changed 2.0.8 20160720 TimPN
+--> Removed 2.0.8 20160720 TimPN
 --> Changed 2.0.0 20160329 TimPN
 --    [Guid]         UNIQUEIDENTIFIER NOT NULL 
-    [Guid]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_ImportBatch_Guid] DEFAULT newid(),
+--    [Guid]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_ImportBatch_ID] DEFAULT newid(),
 --< Changed 2.0.0 20160329 TimPN
+--> Removed 2.0.8 20160720 TimPN
     [DataSourceID] UNIQUEIDENTIFIER NOT NULL,
     [ImportDate]   DATETIME         NOT NULL CONSTRAINT [DF_ImportBatch_ImportDate] DEFAULT getdate(),
     [Status]       INT              NOT NULL,
@@ -23,9 +28,6 @@
 --< Changed 2.0.8 20160715 TimPN
     CONSTRAINT [FK_ImportBatch_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_ImportBatch_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]),
---> Added 2.0.8 20160719 TimPN
-    CONSTRAINT [UX_ImportBatch_Guid] UNIQUE ([Guid])
---< Added 2.0.8 20160719 TimPN
 );
 --> Added 2.0.8 20160715 TimPN
 GO

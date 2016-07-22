@@ -1,5 +1,8 @@
 ﻿CREATE TABLE [dbo].[Progress] (
-    [ImportBatchID]         INT              NULL,
+--> Changed 2.0.8 20160721 TimPN
+--    [ImportBatchID]         INT              NULL,
+    [ImportBatchID]         UNIQUEIDENTIFIER NULL,
+--< Changed 2.0.8 20160721 TimPN
     [StartDate]             DATETIME         NULL,
     [EndDate]               DATETIME         NULL,
     [DateUploaded]          DATETIME         NULL,

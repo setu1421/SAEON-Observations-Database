@@ -20,7 +20,7 @@ BEGIN
     DROP Table dbo.Progress
     
     CREATE TABLE [dbo].Progress(
-    [ImportBatchID] [int],
+    [ImportBatchID] [uniqueidentifier],
     [StartDate] [datetime],
     [EndDate] [datetime],
     [DateUploaded] [datetime],

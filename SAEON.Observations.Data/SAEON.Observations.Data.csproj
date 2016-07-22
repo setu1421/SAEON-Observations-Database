@@ -135,9 +135,6 @@
     <Compile Include="Generated\PhenomenonUOMController.cs" />
     <Compile Include="Generated\Programme.cs" />
     <Compile Include="Generated\ProgrammeController.cs" />
-    <Compile Include="Generated\Progress.cs" />
-    <Compile Include="Generated\ProgressController.cs" />
-    <Compile Include="Generated\ProgressProgressResolved.cs" />
     <Compile Include="Generated\Project.cs" />
     <Compile Include="Generated\ProjectController.cs" />
     <Compile Include="Generated\ProjectSite.cs" />
