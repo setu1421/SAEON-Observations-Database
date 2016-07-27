@@ -40,6 +40,9 @@
 --> Added 2.0.0 20160406 TimPN
     CONSTRAINT [FK_DataSourceTransformation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --< Added 2.0.0 20160406 TimPN
+--> Added 2.0.8 20160726 TimPN
+    CONSTRAINT [UX_DataSourceTransformation] UNIQUE ([DataSourceID], [SensorID], [Rank], [TransformationTypeID], [PhenomenonID], [PhenomenonOfferingID], [PhenomenonUOMID], [NewPhenomenonOfferingID], [NewPhenomenonUOMID], [StartDate], [EndDate])
+--< Added 2.0.8 20160726 TimPN
 );
 --> Added 2.0.8 20160715 TimPN
 GO
@@ -67,6 +70,14 @@ CREATE INDEX [IX_DataSourceTransformation_UserId] ON [dbo].[DataSourceTransforma
 GO
 CREATE INDEX [IX_DataSourceTransformation_SensorID] ON [dbo].[DataSourceTransformation] ([SensorID])
 --< Added 2.0.4 20160506 TimPN
+GO
+CREATE INDEX [IX_DataSourceTransformation_Rank] ON [dbo].[DataSourceTransformation] ([DataSourceID], [Rank])
+GO
+CREATE INDEX [IX_DataSourceTransformation_StartDate] ON [dbo].[DataSourceTransformation] ([DataSourceID], [StartDate])
+GO
+CREATE INDEX [IX_DataSourceTransformation_EndDate] ON [dbo].[DataSourceTransformation] ([DataSourceID], [EndDate])
+--> Added 2.0.8 20160726 TimPN
+--< Added 2.0.8 20160726 TimPN
 --> Added 2.0.8 20160715 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_DataSourceTransformation_Insert] ON [dbo].[DataSourceTransformation]

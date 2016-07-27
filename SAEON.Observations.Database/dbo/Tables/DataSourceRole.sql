@@ -22,6 +22,9 @@
 --> Added 2.0.0 20160406 TimPN
     CONSTRAINT [FK_DataSourceRole_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --< Added 2.0.0 20160406 TimPN
+--> Added 2.0.8 20160726 TimPN
+    CONSTRAINT [UX_DataSourceRole] UNIQUE ([DataSourceID], [RoleId], [DateStart], [DateEnd])
+--< Added 2.0.8 20160726 TimPN
 );
 --> Added 2.0.8 20160715 TimPN
 GO

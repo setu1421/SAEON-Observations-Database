@@ -28,6 +28,9 @@
 --< Changed 2.0.8 20160715 TimPN
     CONSTRAINT [FK_ImportBatch_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_ImportBatch_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]),
+--> Added 2.0.8 20160726 TimPN
+    CONSTRAINT [UX_ImportBatch] UNIQUE ([DataSourceID], [ImportDate], [LogFileName])
+--< Added 2.0.8 20160726 TimPN
 );
 --> Added 2.0.8 20160715 TimPN
 GO
@@ -40,6 +43,12 @@ GO
 CREATE INDEX [IX_ImportBatch_UserId] ON [dbo].[ImportBatch] ([UserId])
 --< Added 2.0.0 20160406 TimPN
 --> Added 2.0.8 20160715 TimPN
+--> Added 2.0.8 20160726 TimPN
+GO
+CREATE INDEX [IX_ImportBatch_ImportDate] ON [dbo].[ImportBatch] ([DataSourceID], [ImportDate])
+GO
+CREATE INDEX [IX_ImportBatch_LogFileName] ON [dbo].[ImportBatch] ([DataSourceID], [LogFileName])
+--< Added 2.0.8 20160726 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_ImportBatch_Insert] ON [dbo].[ImportBatch]
 FOR INSERT

@@ -22,6 +22,9 @@
 --< Changed 2.0.8 20160715 TimPN
     CONSTRAINT [FK_DataSchema_DataSourceType] FOREIGN KEY ([DataSourceTypeID]) REFERENCES [dbo].[DataSourceType] ([ID]),
 --> Added 2.0.0 20160406 TimPN
+--> Added 2.0.9 20160727 TimPN
+    CONSTRAINT [FK_DataSchema_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
+--> Added 2.0.9 20160727 TimPN
     CONSTRAINT [UX_DataSchema_Code] Unique ([Code]),
     CONSTRAINT [UX_DataSchema_Name] Unique ([Name])
 --< Added 2.0.0 20160406 TimPN

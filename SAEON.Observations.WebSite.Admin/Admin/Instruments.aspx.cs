@@ -21,6 +21,8 @@ public partial class Admin_Instruments : System.Web.UI.Page
             OrganisationRoleStore.DataBind();
             StationStore.DataSource = new StationCollection().OrderByAsc(Station.Columns.Name).Load();
             StationStore.DataBind();
+            DataSourceStore.DataSource = new DataSourceCollection().OrderByAsc(DataSource.Columns.Name).Load();
+            DataSourceStore.DataBind();
             SensorStore.DataSource = new SensorCollection().OrderByAsc(Sensor.Columns.Name).Load();
             SensorStore.DataBind();
         }
@@ -149,8 +151,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     #endregion
 
     #region Organisations
-
-    protected void OrganisationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+        protected void OrganisationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
         {
@@ -336,6 +337,100 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
     [DirectMethod]
     public void AddStationClick(object sender, DirectEventArgs e)
+    {
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
+    }
+    #endregion
+
+    #region DataSources
+    protected void DataSourceLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["InstrumentID"].ToString());
+            try
+            {
+                VInstrumentDataSourceCollection col = new VInstrumentDataSourceCollection()
+                    .Where(VInstrumentDataSource.Columns.InstrumentID, Id)
+                    .OrderByAsc(VInstrumentDataSource.Columns.StartDate)
+                    .OrderByAsc(VInstrumentDataSource.Columns.EndDate)
+                    .OrderByAsc(VInstrumentDataSource.Columns.DataSourceName)
+                    .Load();
+                DataSourceLinksGrid.GetStore().DataSource = col;
+                DataSourceLinksGrid.GetStore().DataBind();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Instruments.DataSourceLinksGridStore_RefreshData");
+                MessageBoxes.Error(ex, "Error", "Unable to refresh DataSources grid");
+            }
+        }
+    }
+
+    protected void DataSourceLinkSave(object sender, DirectEventArgs e)
+    {
+        try
+        {
+            RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            InstrumentDataSource instrumentDataSource = new InstrumentDataSource(Utilities.MakeGuid(DataSourceLinkID.Value));
+            instrumentDataSource.InstrumentID = masterID;
+            instrumentDataSource.DataSourceID = new Guid(cbDataSource.SelectedItem.Value.Trim());
+            if (!String.IsNullOrEmpty(dfDataSourceStartDate.Text) && (dfDataSourceStartDate.SelectedDate.Year >= 1900))
+                instrumentDataSource.StartDate = dfDataSourceStartDate.SelectedDate;
+            else
+                instrumentDataSource.StartDate = null;
+            if (!String.IsNullOrEmpty(dfDataSourceEndDate.Text) && (dfDataSourceEndDate.SelectedDate.Year >= 1900))
+                instrumentDataSource.EndDate = dfDataSourceEndDate.SelectedDate;
+            else
+                instrumentDataSource.EndDate = null;
+            instrumentDataSource.UserId = AuthHelper.GetLoggedInUserId;
+            instrumentDataSource.Save();
+            Auditing.Log("Instruments.AddDataSourceLink", new Dictionary<string, object> {
+                { "InstrumentID", instrumentDataSource.InstrumentID },
+                { "InstrumentCode", instrumentDataSource.Instrument.Code },
+                { "DataSourceID", instrumentDataSource.DataSourceID},
+                { "DataSourceCode", instrumentDataSource.DataSource.Code},
+                { "StartDate", instrumentDataSource.StartDate },
+                { "EndDate", instrumentDataSource.EndDate}
+            });
+            DataSourceLinksGrid.DataBind();
+            DataSourceLinkWindow.Hide();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Instruments.LinkDataSource_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link DataSource");
+        }
+    }
+
+    [DirectMethod]
+    public void ConfirmDeleteDataSourceLink(Guid aID)
+    {
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteDataSourceLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this Data Source link?");
+    }
+
+    [DirectMethod]
+    public void DeleteDataSourceLink(Guid aID)
+    {
+        try
+        {
+            new InstrumentDataSourceController().Delete(aID);
+            Auditing.Log("Instruments.DeleteDataSourceLink", new Dictionary<string, object> { { "ID", aID } });
+            DataSourceLinksGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Instruments.DeleteDataSourceLink({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete DataSource link");
+        }
+    }
+
+    [DirectMethod]
+    public void AddDataSourceClick(object sender, DirectEventArgs e)
     {
         //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
     }

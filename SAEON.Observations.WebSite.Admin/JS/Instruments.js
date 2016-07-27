@@ -43,6 +43,7 @@ function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible()) {
         OrganisationLinksGrid.getStore().reload();
         StationLinksGrid.getStore().reload();
+        DataSourceLinksGrid.getStore().reload();
         SensorLinksGrid.getStore().reload();
     }
 }
@@ -81,6 +82,21 @@ function OnStationLinkCommand(e, record) {
         StationLinkFormPanel.getForm().loadRecord(record);
         StationLinkFormPanel.getForm().clearInvalid();
         StationLinkWindow.show();
+    }
+}
+
+function ClearDataSourceLinkForm() {
+    DataSourceLinkFormPanel.getForm().reset();
+}
+
+function OnDataSourceLinkCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteDataSourceLink(record.get('Id'), { eventMask: { showMask: true } });
+    } else if (e === 'Edit') {
+        DataSourceLinkFormPanel.getForm().reset();
+        DataSourceLinkFormPanel.getForm().loadRecord(record);
+        DataSourceLinkFormPanel.getForm().clearInvalid();
+        DataSourceLinkWindow.show();
     }
 }
 

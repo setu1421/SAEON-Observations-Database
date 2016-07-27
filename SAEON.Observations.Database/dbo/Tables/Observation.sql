@@ -41,6 +41,9 @@
 --    CONSTRAINT [FK_Observation_SensorProcedure] FOREIGN KEY ([SensorProcedureID]) REFERENCES [dbo].[SensorProcedure] ([ID])
     CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
 --< Changed 2.0.3 20160503 TimPN
+--> Added 2.0.8 20160726 TimPN
+    CONSTRAINT [UX_Observation] UNIQUE ([SensorID], [ImportBatchID], [ValueDate], [PhenomenonOfferingID], [PhenomenonUOMID])
+--< Added 2.0.8 20160726 TimPN
 );
 --> Added 2.0.8 20160718 TimPN
 GO
@@ -69,6 +72,12 @@ CREATE INDEX [IX_Observation_PhenomenonUOMID] ON [dbo].[Observation] ([Phenomeno
 GO
 CREATE INDEX [IX_Observation_UserId] ON [dbo].[Observation] ([UserId])
 --< Added 2.0.0 20160406 TimPN
+--> Added 2.0.8 20160726 TimPN
+--< Added 2.0.8 20160726 TimPN
+GO
+CREATE INDEX [IX_Observation_AddedDate] ON [dbo].[Observation] ([SensorID], [AddedDate])
+GO
+CREATE INDEX [IX_Observation_ValueDate] ON [dbo].[Observation] ([SensorID], [ValueDate])
 --> Added 2.0.8 20160718 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]
