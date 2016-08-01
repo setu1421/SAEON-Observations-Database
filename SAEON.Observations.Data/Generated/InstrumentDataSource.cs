@@ -15,23 +15,23 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
 	/// <summary>
-	/// Strongly-typed collection for the Phenomenon class.
+	/// Strongly-typed collection for the InstrumentDataSource class.
 	/// </summary>
     [Serializable]
-	public partial class PhenomenonCollection : ActiveList<Phenomenon, PhenomenonCollection>
+	public partial class InstrumentDataSourceCollection : ActiveList<InstrumentDataSource, InstrumentDataSourceCollection>
 	{	   
-		public PhenomenonCollection() {}
+		public InstrumentDataSourceCollection() {}
         
         /// <summary>
 		/// Filters an existing collection based on the set criteria. This is an in-memory filter
 		/// Thanks to developingchris for this!
         /// </summary>
-        /// <returns>PhenomenonCollection</returns>
-		public PhenomenonCollection Filter()
+        /// <returns>InstrumentDataSourceCollection</returns>
+		public InstrumentDataSourceCollection Filter()
         {
             for (int i = this.Count - 1; i > -1; i--)
             {
-                Phenomenon o = this[i];
+                InstrumentDataSource o = this[i];
                 foreach (SubSonic.Where w in this.wheres)
                 {
                     bool remove = false;
@@ -62,14 +62,14 @@ namespace SAEON.Observations.Data
 		
 	}
 	/// <summary>
-	/// This is an ActiveRecord class which wraps the Phenomenon table.
+	/// This is an ActiveRecord class which wraps the Instrument_DataSource table.
 	/// </summary>
 	[Serializable]
-	public partial class Phenomenon : ActiveRecord<Phenomenon>, IActiveRecord
+	public partial class InstrumentDataSource : ActiveRecord<InstrumentDataSource>, IActiveRecord
 	{
 		#region .ctors and Default Settings
 		
-		public Phenomenon()
+		public InstrumentDataSource()
 		{
 		  SetSQLProps();
 		  InitSetDefaults();
@@ -78,7 +78,7 @@ namespace SAEON.Observations.Data
 		
 		private void InitSetDefaults() { SetDefaults(); }
 		
-		public Phenomenon(bool useDatabaseDefaults)
+		public InstrumentDataSource(bool useDatabaseDefaults)
 		{
 			SetSQLProps();
 			if(useDatabaseDefaults)
@@ -86,14 +86,14 @@ namespace SAEON.Observations.Data
 			MarkNew();
 		}
         
-		public Phenomenon(object keyID)
+		public InstrumentDataSource(object keyID)
 		{
 			SetSQLProps();
 			InitSetDefaults();
 			LoadByKey(keyID);
 		}
 		 
-		public Phenomenon(string columnName, object columnValue)
+		public InstrumentDataSource(string columnName, object columnValue)
 		{
 			SetSQLProps();
 			InitSetDefaults();
@@ -121,7 +121,7 @@ namespace SAEON.Observations.Data
 			if(!IsSchemaInitialized)
 			{
 				//Schema declaration
-				TableSchema.Table schema = new TableSchema.Table("Phenomenon", TableType.Table, DataService.GetInstance("ObservationsDB"));
+				TableSchema.Table schema = new TableSchema.Table("Instrument_DataSource", TableType.Table, DataService.GetInstance("ObservationsDB"));
 				schema.Columns = new TableSchema.TableColumnCollection();
 				schema.SchemaName = @"dbo";
 				//columns
@@ -140,57 +140,59 @@ namespace SAEON.Observations.Data
 				colvarId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarId);
 				
-				TableSchema.TableColumn colvarCode = new TableSchema.TableColumn(schema);
-				colvarCode.ColumnName = "Code";
-				colvarCode.DataType = DbType.AnsiString;
-				colvarCode.MaxLength = 50;
-				colvarCode.AutoIncrement = false;
-				colvarCode.IsNullable = false;
-				colvarCode.IsPrimaryKey = false;
-				colvarCode.IsForeignKey = false;
-				colvarCode.IsReadOnly = false;
-				colvarCode.DefaultSetting = @"";
-				colvarCode.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarCode);
+				TableSchema.TableColumn colvarInstrumentID = new TableSchema.TableColumn(schema);
+				colvarInstrumentID.ColumnName = "InstrumentID";
+				colvarInstrumentID.DataType = DbType.Guid;
+				colvarInstrumentID.MaxLength = 0;
+				colvarInstrumentID.AutoIncrement = false;
+				colvarInstrumentID.IsNullable = false;
+				colvarInstrumentID.IsPrimaryKey = false;
+				colvarInstrumentID.IsForeignKey = true;
+				colvarInstrumentID.IsReadOnly = false;
+				colvarInstrumentID.DefaultSetting = @"";
 				
-				TableSchema.TableColumn colvarName = new TableSchema.TableColumn(schema);
-				colvarName.ColumnName = "Name";
-				colvarName.DataType = DbType.AnsiString;
-				colvarName.MaxLength = 150;
-				colvarName.AutoIncrement = false;
-				colvarName.IsNullable = false;
-				colvarName.IsPrimaryKey = false;
-				colvarName.IsForeignKey = false;
-				colvarName.IsReadOnly = false;
-				colvarName.DefaultSetting = @"";
-				colvarName.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarName);
+					colvarInstrumentID.ForeignKeyTableName = "Instrument";
+				schema.Columns.Add(colvarInstrumentID);
 				
-				TableSchema.TableColumn colvarDescription = new TableSchema.TableColumn(schema);
-				colvarDescription.ColumnName = "Description";
-				colvarDescription.DataType = DbType.AnsiString;
-				colvarDescription.MaxLength = 5000;
-				colvarDescription.AutoIncrement = false;
-				colvarDescription.IsNullable = true;
-				colvarDescription.IsPrimaryKey = false;
-				colvarDescription.IsForeignKey = false;
-				colvarDescription.IsReadOnly = false;
-				colvarDescription.DefaultSetting = @"";
-				colvarDescription.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarDescription);
+				TableSchema.TableColumn colvarDataSourceID = new TableSchema.TableColumn(schema);
+				colvarDataSourceID.ColumnName = "DataSourceID";
+				colvarDataSourceID.DataType = DbType.Guid;
+				colvarDataSourceID.MaxLength = 0;
+				colvarDataSourceID.AutoIncrement = false;
+				colvarDataSourceID.IsNullable = false;
+				colvarDataSourceID.IsPrimaryKey = false;
+				colvarDataSourceID.IsForeignKey = true;
+				colvarDataSourceID.IsReadOnly = false;
+				colvarDataSourceID.DefaultSetting = @"";
 				
-				TableSchema.TableColumn colvarUrl = new TableSchema.TableColumn(schema);
-				colvarUrl.ColumnName = "Url";
-				colvarUrl.DataType = DbType.AnsiString;
-				colvarUrl.MaxLength = 250;
-				colvarUrl.AutoIncrement = false;
-				colvarUrl.IsNullable = true;
-				colvarUrl.IsPrimaryKey = false;
-				colvarUrl.IsForeignKey = false;
-				colvarUrl.IsReadOnly = false;
-				colvarUrl.DefaultSetting = @"";
-				colvarUrl.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarUrl);
+					colvarDataSourceID.ForeignKeyTableName = "DataSource";
+				schema.Columns.Add(colvarDataSourceID);
+				
+				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
+				colvarStartDate.ColumnName = "StartDate";
+				colvarStartDate.DataType = DbType.DateTime;
+				colvarStartDate.MaxLength = 0;
+				colvarStartDate.AutoIncrement = false;
+				colvarStartDate.IsNullable = true;
+				colvarStartDate.IsPrimaryKey = false;
+				colvarStartDate.IsForeignKey = false;
+				colvarStartDate.IsReadOnly = false;
+				colvarStartDate.DefaultSetting = @"";
+				colvarStartDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarStartDate);
+				
+				TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
+				colvarEndDate.ColumnName = "EndDate";
+				colvarEndDate.DataType = DbType.DateTime;
+				colvarEndDate.MaxLength = 0;
+				colvarEndDate.AutoIncrement = false;
+				colvarEndDate.IsNullable = true;
+				colvarEndDate.IsPrimaryKey = false;
+				colvarEndDate.IsForeignKey = false;
+				colvarEndDate.IsReadOnly = false;
+				colvarEndDate.DefaultSetting = @"";
+				colvarEndDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarEndDate);
 				
 				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
 				colvarUserId.ColumnName = "UserId";
@@ -237,7 +239,7 @@ namespace SAEON.Observations.Data
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
-				DataService.Providers["ObservationsDB"].AddSchema("Phenomenon",schema);
+				DataService.Providers["ObservationsDB"].AddSchema("Instrument_DataSource",schema);
 			}
 		}
 		#endregion
@@ -252,36 +254,36 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.Id, value); }
 		}
 		  
-		[XmlAttribute("Code")]
+		[XmlAttribute("InstrumentID")]
 		[Bindable(true)]
-		public string Code 
+		public Guid InstrumentID 
 		{
-			get { return GetColumnValue<string>(Columns.Code); }
-			set { SetColumnValue(Columns.Code, value); }
+			get { return GetColumnValue<Guid>(Columns.InstrumentID); }
+			set { SetColumnValue(Columns.InstrumentID, value); }
 		}
 		  
-		[XmlAttribute("Name")]
+		[XmlAttribute("DataSourceID")]
 		[Bindable(true)]
-		public string Name 
+		public Guid DataSourceID 
 		{
-			get { return GetColumnValue<string>(Columns.Name); }
-			set { SetColumnValue(Columns.Name, value); }
+			get { return GetColumnValue<Guid>(Columns.DataSourceID); }
+			set { SetColumnValue(Columns.DataSourceID, value); }
 		}
 		  
-		[XmlAttribute("Description")]
+		[XmlAttribute("StartDate")]
 		[Bindable(true)]
-		public string Description 
+		public DateTime? StartDate 
 		{
-			get { return GetColumnValue<string>(Columns.Description); }
-			set { SetColumnValue(Columns.Description, value); }
+			get { return GetColumnValue<DateTime?>(Columns.StartDate); }
+			set { SetColumnValue(Columns.StartDate, value); }
 		}
 		  
-		[XmlAttribute("Url")]
+		[XmlAttribute("EndDate")]
 		[Bindable(true)]
-		public string Url 
+		public DateTime? EndDate 
 		{
-			get { return GetColumnValue<string>(Columns.Url); }
-			set { SetColumnValue(Columns.Url, value); }
+			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
+			set { SetColumnValue(Columns.EndDate, value); }
 		}
 		  
 		[XmlAttribute("UserId")]
@@ -311,46 +313,40 @@ namespace SAEON.Observations.Data
 		#endregion
 		
 		
-		#region PrimaryKey Methods		
-		
-        protected override void SetPrimaryKey(object oValue)
-        {
-            base.SetPrimaryKey(oValue);
-            
-            SetPKValues();
-        }
-        
-		
-		public SAEON.Observations.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
-		{
-			return new SAEON.Observations.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.PhenomenonID, Id).Load();
-		}
-		public SAEON.Observations.Data.PhenomenonOfferingCollection PhenomenonOfferingRecords()
-		{
-			return new SAEON.Observations.Data.PhenomenonOfferingCollection().Where(PhenomenonOffering.Columns.PhenomenonID, Id).Load();
-		}
-		public SAEON.Observations.Data.PhenomenonUOMCollection PhenomenonUOMRecords()
-		{
-			return new SAEON.Observations.Data.PhenomenonUOMCollection().Where(PhenomenonUOM.Columns.PhenomenonID, Id).Load();
-		}
-		public SAEON.Observations.Data.SensorCollection SensorRecords()
-		{
-			return new SAEON.Observations.Data.SensorCollection().Where(Sensor.Columns.PhenomenonID, Id).Load();
-		}
-		#endregion
-		
 			
 		
 		#region ForeignKey Properties
 		
 		/// <summary>
-		/// Returns a AspnetUser ActiveRecord object related to this Phenomenon
+		/// Returns a AspnetUser ActiveRecord object related to this InstrumentDataSource
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
 			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }
 			set { SetColumnValue("UserId", value.UserId); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a DataSource ActiveRecord object related to this InstrumentDataSource
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.DataSource DataSource
+		{
+			get { return SAEON.Observations.Data.DataSource.FetchByID(this.DataSourceID); }
+			set { SetColumnValue("DataSourceID", value.Id); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a Instrument ActiveRecord object related to this InstrumentDataSource
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.Instrument Instrument
+		{
+			get { return SAEON.Observations.Data.Instrument.FetchByID(this.InstrumentID); }
+			set { SetColumnValue("InstrumentID", value.Id); }
 		}
 		
 		
@@ -368,19 +364,19 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varInstrumentID,Guid varDataSourceID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
-			Phenomenon item = new Phenomenon();
+			InstrumentDataSource item = new InstrumentDataSource();
 			
 			item.Id = varId;
 			
-			item.Code = varCode;
+			item.InstrumentID = varInstrumentID;
 			
-			item.Name = varName;
+			item.DataSourceID = varDataSourceID;
 			
-			item.Description = varDescription;
+			item.StartDate = varStartDate;
 			
-			item.Url = varUrl;
+			item.EndDate = varEndDate;
 			
 			item.UserId = varUserId;
 			
@@ -398,19 +394,19 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varInstrumentID,Guid varDataSourceID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
-			Phenomenon item = new Phenomenon();
+			InstrumentDataSource item = new InstrumentDataSource();
 			
 				item.Id = varId;
 			
-				item.Code = varCode;
+				item.InstrumentID = varInstrumentID;
 			
-				item.Name = varName;
+				item.DataSourceID = varDataSourceID;
 			
-				item.Description = varDescription;
+				item.StartDate = varStartDate;
 			
-				item.Url = varUrl;
+				item.EndDate = varEndDate;
 			
 				item.UserId = varUserId;
 			
@@ -438,28 +434,28 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn CodeColumn
+        public static TableSchema.TableColumn InstrumentIDColumn
         {
             get { return Schema.Columns[1]; }
         }
         
         
         
-        public static TableSchema.TableColumn NameColumn
+        public static TableSchema.TableColumn DataSourceIDColumn
         {
             get { return Schema.Columns[2]; }
         }
         
         
         
-        public static TableSchema.TableColumn DescriptionColumn
+        public static TableSchema.TableColumn StartDateColumn
         {
             get { return Schema.Columns[3]; }
         }
         
         
         
-        public static TableSchema.TableColumn UrlColumn
+        public static TableSchema.TableColumn EndDateColumn
         {
             get { return Schema.Columns[4]; }
         }
@@ -492,10 +488,10 @@ namespace SAEON.Observations.Data
 		public struct Columns
 		{
 			 public static string Id = @"ID";
-			 public static string Code = @"Code";
-			 public static string Name = @"Name";
-			 public static string Description = @"Description";
-			 public static string Url = @"Url";
+			 public static string InstrumentID = @"InstrumentID";
+			 public static string DataSourceID = @"DataSourceID";
+			 public static string StartDate = @"StartDate";
+			 public static string EndDate = @"EndDate";
 			 public static string UserId = @"UserId";
 			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
@@ -505,18 +501,10 @@ namespace SAEON.Observations.Data
 		
 		#region Update PK Collections
 		
-        public void SetPKValues()
-        {
-}
         #endregion
     
         #region Deep Save
 		
-        public void DeepSave()
-        {
-            Save();
-            
-}
         #endregion
 	}
 }

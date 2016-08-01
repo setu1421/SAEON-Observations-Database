@@ -60,6 +60,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string Instrument = @"Instrument";
         
+		public static readonly string InstrumentDataSource = @"Instrument_DataSource";
+        
 		public static readonly string InstrumentSensor = @"Instrument_Sensor";
         
 		public static readonly string ModuleX = @"Module";
@@ -236,6 +238,11 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table Instrument
 		{
             get { return DataService.GetSchema("Instrument", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table InstrumentDataSource
+		{
+            get { return DataService.GetSchema("Instrument_DataSource", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table InstrumentSensor
@@ -430,6 +437,8 @@ namespace SAEON.Observations.Data
 		public static readonly string VDataSourceTransformation = @"vDataSourceTransformation";
         
 		public static readonly string VImportBatch = @"vImportBatch";
+        
+		public static readonly string VInstrumentDataSource = @"vInstrumentDataSource";
         
 		public static readonly string VInstrumentOrganisation = @"vInstrumentOrganisation";
         

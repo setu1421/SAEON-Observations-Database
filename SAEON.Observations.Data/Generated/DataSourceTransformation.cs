@@ -256,10 +256,11 @@ namespace SAEON.Observations.Data
 				colvarNewPhenomenonOfferingID.AutoIncrement = false;
 				colvarNewPhenomenonOfferingID.IsNullable = true;
 				colvarNewPhenomenonOfferingID.IsPrimaryKey = false;
-				colvarNewPhenomenonOfferingID.IsForeignKey = false;
+				colvarNewPhenomenonOfferingID.IsForeignKey = true;
 				colvarNewPhenomenonOfferingID.IsReadOnly = false;
 				colvarNewPhenomenonOfferingID.DefaultSetting = @"";
-				colvarNewPhenomenonOfferingID.ForeignKeyTableName = "";
+				
+					colvarNewPhenomenonOfferingID.ForeignKeyTableName = "PhenomenonOffering";
 				schema.Columns.Add(colvarNewPhenomenonOfferingID);
 				
 				TableSchema.TableColumn colvarNewPhenomenonUOMID = new TableSchema.TableColumn(schema);
@@ -269,10 +270,11 @@ namespace SAEON.Observations.Data
 				colvarNewPhenomenonUOMID.AutoIncrement = false;
 				colvarNewPhenomenonUOMID.IsNullable = true;
 				colvarNewPhenomenonUOMID.IsPrimaryKey = false;
-				colvarNewPhenomenonUOMID.IsForeignKey = false;
+				colvarNewPhenomenonUOMID.IsForeignKey = true;
 				colvarNewPhenomenonUOMID.IsReadOnly = false;
 				colvarNewPhenomenonUOMID.DefaultSetting = @"";
-				colvarNewPhenomenonUOMID.ForeignKeyTableName = "";
+				
+					colvarNewPhenomenonUOMID.ForeignKeyTableName = "PhenomenonUOM";
 				schema.Columns.Add(colvarNewPhenomenonUOMID);
 				
 				TableSchema.TableColumn colvarRank = new TableSchema.TableColumn(schema);
@@ -316,6 +318,34 @@ namespace SAEON.Observations.Data
 				
 					colvarUserId.ForeignKeyTableName = "aspnet_Users";
 				schema.Columns.Add(colvarUserId);
+				
+				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+				colvarAddedAt.ColumnName = "AddedAt";
+				colvarAddedAt.DataType = DbType.DateTime;
+				colvarAddedAt.MaxLength = 0;
+				colvarAddedAt.AutoIncrement = false;
+				colvarAddedAt.IsNullable = true;
+				colvarAddedAt.IsPrimaryKey = false;
+				colvarAddedAt.IsForeignKey = false;
+				colvarAddedAt.IsReadOnly = false;
+				
+						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedAt);
+				
+				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+				colvarUpdatedAt.ColumnName = "UpdatedAt";
+				colvarUpdatedAt.DataType = DbType.DateTime;
+				colvarUpdatedAt.MaxLength = 0;
+				colvarUpdatedAt.AutoIncrement = false;
+				colvarUpdatedAt.IsNullable = true;
+				colvarUpdatedAt.IsPrimaryKey = false;
+				colvarUpdatedAt.IsForeignKey = false;
+				colvarUpdatedAt.IsReadOnly = false;
+				
+						colvarUpdatedAt.DefaultSetting = @"(getdate())";
+				colvarUpdatedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUpdatedAt);
 				
 				BaseSchema = schema;
 				//add this schema to the provider
@@ -438,6 +468,22 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<Guid?>(Columns.UserId); }
 			set { SetColumnValue(Columns.UserId, value); }
 		}
+		  
+		[XmlAttribute("AddedAt")]
+		[Bindable(true)]
+		public DateTime? AddedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
+			set { SetColumnValue(Columns.AddedAt, value); }
+		}
+		  
+		[XmlAttribute("UpdatedAt")]
+		[Bindable(true)]
+		public DateTime? UpdatedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.UpdatedAt); }
+			set { SetColumnValue(Columns.UpdatedAt, value); }
+		}
 		
 		#endregion
 		
@@ -501,6 +547,17 @@ namespace SAEON.Observations.Data
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonOffering PhenomenonOffering
 		{
+			get { return SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.NewPhenomenonOfferingID); }
+			set { SetColumnValue("NewPhenomenonOfferingID", value.Id); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a PhenomenonOffering ActiveRecord object related to this DataSourceTransformation
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.PhenomenonOffering PhenomenonOfferingToPhenomenonOfferingID
+		{
 			get { return SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.PhenomenonOfferingID); }
 			set { SetColumnValue("PhenomenonOfferingID", value.Id); }
 		}
@@ -511,6 +568,17 @@ namespace SAEON.Observations.Data
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonUOM PhenomenonUOM
+		{
+			get { return SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.NewPhenomenonUOMID); }
+			set { SetColumnValue("NewPhenomenonUOMID", value.Id); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a PhenomenonUOM ActiveRecord object related to this DataSourceTransformation
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.PhenomenonUOM PhenomenonUOMToPhenomenonUOMID
 		{
 			get { return SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.PhenomenonUOMID); }
 			set { SetColumnValue("PhenomenonUOMID", value.Id); }
@@ -553,7 +621,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId)
+		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -585,6 +653,10 @@ namespace SAEON.Observations.Data
 			
 			item.UserId = varUserId;
 			
+			item.AddedAt = varAddedAt;
+			
+			item.UpdatedAt = varUpdatedAt;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -595,7 +667,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId)
+		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -626,6 +698,10 @@ namespace SAEON.Observations.Data
 				item.SensorID = varSensorID;
 			
 				item.UserId = varUserId;
+			
+				item.AddedAt = varAddedAt;
+			
+				item.UpdatedAt = varUpdatedAt;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -738,6 +814,20 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn AddedAtColumn
+        {
+            get { return Schema.Columns[14]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[15]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -756,6 +846,8 @@ namespace SAEON.Observations.Data
 			 public static string Rank = @"Rank";
 			 public static string SensorID = @"SensorID";
 			 public static string UserId = @"UserId";
+			 public static string AddedAt = @"AddedAt";
+			 public static string UpdatedAt = @"UpdatedAt";
 						
 		}
 		#endregion

@@ -128,30 +128,17 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
 				colvarId.ColumnName = "ID";
-				colvarId.DataType = DbType.Int32;
+				colvarId.DataType = DbType.Guid;
 				colvarId.MaxLength = 0;
-				colvarId.AutoIncrement = true;
+				colvarId.AutoIncrement = false;
 				colvarId.IsNullable = false;
 				colvarId.IsPrimaryKey = true;
 				colvarId.IsForeignKey = false;
 				colvarId.IsReadOnly = false;
-				colvarId.DefaultSetting = @"";
+				
+						colvarId.DefaultSetting = @"(newid())";
 				colvarId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarId);
-				
-				TableSchema.TableColumn colvarGuid = new TableSchema.TableColumn(schema);
-				colvarGuid.ColumnName = "Guid";
-				colvarGuid.DataType = DbType.Guid;
-				colvarGuid.MaxLength = 0;
-				colvarGuid.AutoIncrement = false;
-				colvarGuid.IsNullable = false;
-				colvarGuid.IsPrimaryKey = false;
-				colvarGuid.IsForeignKey = false;
-				colvarGuid.IsReadOnly = false;
-				
-						colvarGuid.DefaultSetting = @"(newid())";
-				colvarGuid.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarGuid);
 				
 				TableSchema.TableColumn colvarDataSourceID = new TableSchema.TableColumn(schema);
 				colvarDataSourceID.ColumnName = "DataSourceID";
@@ -247,6 +234,34 @@ namespace SAEON.Observations.Data
 				colvarComment.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarComment);
 				
+				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+				colvarAddedAt.ColumnName = "AddedAt";
+				colvarAddedAt.DataType = DbType.DateTime;
+				colvarAddedAt.MaxLength = 0;
+				colvarAddedAt.AutoIncrement = false;
+				colvarAddedAt.IsNullable = true;
+				colvarAddedAt.IsPrimaryKey = false;
+				colvarAddedAt.IsForeignKey = false;
+				colvarAddedAt.IsReadOnly = false;
+				
+						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedAt);
+				
+				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+				colvarUpdatedAt.ColumnName = "UpdatedAt";
+				colvarUpdatedAt.DataType = DbType.DateTime;
+				colvarUpdatedAt.MaxLength = 0;
+				colvarUpdatedAt.AutoIncrement = false;
+				colvarUpdatedAt.IsNullable = true;
+				colvarUpdatedAt.IsPrimaryKey = false;
+				colvarUpdatedAt.IsForeignKey = false;
+				colvarUpdatedAt.IsReadOnly = false;
+				
+						colvarUpdatedAt.DefaultSetting = @"(getdate())";
+				colvarUpdatedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUpdatedAt);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -259,18 +274,10 @@ namespace SAEON.Observations.Data
 		  
 		[XmlAttribute("Id")]
 		[Bindable(true)]
-		public int Id 
+		public Guid Id 
 		{
-			get { return GetColumnValue<int>(Columns.Id); }
+			get { return GetColumnValue<Guid>(Columns.Id); }
 			set { SetColumnValue(Columns.Id, value); }
-		}
-		  
-		[XmlAttribute("Guid")]
-		[Bindable(true)]
-		public Guid Guid 
-		{
-			get { return GetColumnValue<Guid>(Columns.Guid); }
-			set { SetColumnValue(Columns.Guid, value); }
 		}
 		  
 		[XmlAttribute("DataSourceID")]
@@ -327,6 +334,22 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<string>(Columns.Comment); }
 			set { SetColumnValue(Columns.Comment, value); }
+		}
+		  
+		[XmlAttribute("AddedAt")]
+		[Bindable(true)]
+		public DateTime? AddedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
+			set { SetColumnValue(Columns.AddedAt, value); }
+		}
+		  
+		[XmlAttribute("UpdatedAt")]
+		[Bindable(true)]
+		public DateTime? UpdatedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.UpdatedAt); }
+			set { SetColumnValue(Columns.UpdatedAt, value); }
 		}
 		
 		#endregion
@@ -392,11 +415,11 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varGuid,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment)
+		public static void Insert(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			ImportBatch item = new ImportBatch();
 			
-			item.Guid = varGuid;
+			item.Id = varId;
 			
 			item.DataSourceID = varDataSourceID;
 			
@@ -412,6 +435,10 @@ namespace SAEON.Observations.Data
 			
 			item.Comment = varComment;
 			
+			item.AddedAt = varAddedAt;
+			
+			item.UpdatedAt = varUpdatedAt;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -422,13 +449,11 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(int varId,Guid varGuid,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment)
+		public static void Update(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			ImportBatch item = new ImportBatch();
 			
 				item.Id = varId;
-			
-				item.Guid = varGuid;
 			
 				item.DataSourceID = varDataSourceID;
 			
@@ -443,6 +468,10 @@ namespace SAEON.Observations.Data
 				item.LogFileName = varLogFileName;
 			
 				item.Comment = varComment;
+			
+				item.AddedAt = varAddedAt;
+			
+				item.UpdatedAt = varUpdatedAt;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -464,58 +493,65 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn GuidColumn
+        public static TableSchema.TableColumn DataSourceIDColumn
         {
             get { return Schema.Columns[1]; }
         }
         
         
         
-        public static TableSchema.TableColumn DataSourceIDColumn
+        public static TableSchema.TableColumn ImportDateColumn
         {
             get { return Schema.Columns[2]; }
         }
         
         
         
-        public static TableSchema.TableColumn ImportDateColumn
+        public static TableSchema.TableColumn StatusColumn
         {
             get { return Schema.Columns[3]; }
         }
         
         
         
-        public static TableSchema.TableColumn StatusColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[4]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn FileNameColumn
         {
             get { return Schema.Columns[5]; }
         }
         
         
         
-        public static TableSchema.TableColumn FileNameColumn
+        public static TableSchema.TableColumn LogFileNameColumn
         {
             get { return Schema.Columns[6]; }
         }
         
         
         
-        public static TableSchema.TableColumn LogFileNameColumn
+        public static TableSchema.TableColumn CommentColumn
         {
             get { return Schema.Columns[7]; }
         }
         
         
         
-        public static TableSchema.TableColumn CommentColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[8]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[9]; }
         }
         
         
@@ -525,7 +561,6 @@ namespace SAEON.Observations.Data
 		public struct Columns
 		{
 			 public static string Id = @"ID";
-			 public static string Guid = @"Guid";
 			 public static string DataSourceID = @"DataSourceID";
 			 public static string ImportDate = @"ImportDate";
 			 public static string Status = @"Status";
@@ -533,6 +568,8 @@ namespace SAEON.Observations.Data
 			 public static string FileName = @"FileName";
 			 public static string LogFileName = @"LogFileName";
 			 public static string Comment = @"Comment";
+			 public static string AddedAt = @"AddedAt";
+			 public static string UpdatedAt = @"UpdatedAt";
 						
 		}
 		#endregion

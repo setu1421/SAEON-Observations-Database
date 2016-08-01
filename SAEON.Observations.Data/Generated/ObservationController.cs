@@ -80,10 +80,12 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int ImportBatchID,Guid UserId,DateTime AddedDate)
+	    public void Insert(Guid Id,Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    Observation item = new Observation();
 		    
+            item.Id = Id;
+            
             item.SensorID = SensorID;
             
             item.ValueDate = ValueDate;
@@ -104,6 +106,10 @@ namespace SAEON.Observations.Data
             
             item.AddedDate = AddedDate;
             
+            item.AddedAt = AddedAt;
+            
+            item.UpdatedAt = UpdatedAt;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -112,7 +118,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(int Id,Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int ImportBatchID,Guid UserId,DateTime AddedDate)
+	    public void Update(Guid Id,Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    Observation item = new Observation();
 	        item.MarkOld();
@@ -139,6 +145,10 @@ namespace SAEON.Observations.Data
 			item.UserId = UserId;
 				
 			item.AddedDate = AddedDate;
+				
+			item.AddedAt = AddedAt;
+				
+			item.UpdatedAt = UpdatedAt;
 				
 	        item.Save(UserName);
 	    }

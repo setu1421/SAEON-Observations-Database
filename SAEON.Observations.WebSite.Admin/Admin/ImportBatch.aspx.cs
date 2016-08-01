@@ -133,7 +133,8 @@ public partial class _ImportBatch : System.Web.UI.Page
                         using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                         {
                             ImportBatch batch = new ImportBatch();
-                            batch.Guid = Guid.NewGuid();
+                            //batch.Guid = Guid.NewGuid();
+                            batch.Id = Guid.NewGuid();
                             batch.DataSourceID = DataSourceId;
                             batch.ImportDate = DateTime.Now;
 
@@ -305,7 +306,7 @@ public partial class _ImportBatch : System.Web.UI.Page
         }
     }
 
-    protected bool isDuplicateOfNull(SchemaValue schval, int batchid)
+    protected bool isDuplicateOfNull(SchemaValue schval, Guid batchid)
     {
         SqlQuery q = new Select().From(Observation.Schema)
             .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
@@ -677,13 +678,13 @@ public partial class _ImportBatch : System.Web.UI.Page
     }
 
     [DirectMethod]
-    public void DeleteEntry(int Id)
+    public void DeleteEntry(Guid Id)
     {
         using (TransactionScope ts = new TransactionScope())
         {
             using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
             {
-                int BatchId = new DataLog("ID", Id).ImportBatchID;
+                Guid BatchId = new DataLog("ID", Id).ImportBatchID;
                 DataLog.Delete(DataLog.Columns.Id, Id);
 
                 SqlQuery q = new Select("ID").From(DataLog.Schema)

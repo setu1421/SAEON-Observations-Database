@@ -481,6 +481,10 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.ImportBatchCollection().Where(ImportBatch.Columns.DataSourceID, Id).Load();
 		}
+		public SAEON.Observations.Data.InstrumentDataSourceCollection InstrumentDataSourceRecords()
+		{
+			return new SAEON.Observations.Data.InstrumentDataSourceCollection().Where(InstrumentDataSource.Columns.DataSourceID, Id).Load();
+		}
 		public SAEON.Observations.Data.SensorCollection SensorRecords()
 		{
 			return new SAEON.Observations.Data.SensorCollection().Where(Sensor.Columns.DataSourceID, Id).Load();

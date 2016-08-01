@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Description,Guid? UserId)
+	    public void Insert(Guid Id,string Code,string Description,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    DataSourceType item = new DataSourceType();
 		    
@@ -92,6 +92,10 @@ namespace SAEON.Observations.Data
             
             item.UserId = UserId;
             
+            item.AddedAt = AddedAt;
+            
+            item.UpdatedAt = UpdatedAt;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -100,7 +104,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Description,Guid? UserId)
+	    public void Update(Guid Id,string Code,string Description,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    DataSourceType item = new DataSourceType();
 	        item.MarkOld();
@@ -113,6 +117,10 @@ namespace SAEON.Observations.Data
 			item.Description = Description;
 				
 			item.UserId = UserId;
+				
+			item.AddedAt = AddedAt;
+				
+			item.UpdatedAt = UpdatedAt;
 				
 	        item.Save(UserName);
 	    }

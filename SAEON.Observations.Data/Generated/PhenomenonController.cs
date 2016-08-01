@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,Guid UserId)
+	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    Phenomenon item = new Phenomenon();
 		    
@@ -96,6 +96,10 @@ namespace SAEON.Observations.Data
             
             item.UserId = UserId;
             
+            item.AddedAt = AddedAt;
+            
+            item.UpdatedAt = UpdatedAt;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -104,7 +108,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,Guid UserId)
+	    public void Update(Guid Id,string Code,string Name,string Description,string Url,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    Phenomenon item = new Phenomenon();
 	        item.MarkOld();
@@ -121,6 +125,10 @@ namespace SAEON.Observations.Data
 			item.Url = Url;
 				
 			item.UserId = UserId;
+				
+			item.AddedAt = AddedAt;
+				
+			item.UpdatedAt = UpdatedAt;
 				
 	        item.Save(UserName);
 	    }

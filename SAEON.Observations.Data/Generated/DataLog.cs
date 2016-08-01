@@ -128,14 +128,15 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
 				colvarId.ColumnName = "ID";
-				colvarId.DataType = DbType.Int32;
+				colvarId.DataType = DbType.Guid;
 				colvarId.MaxLength = 0;
-				colvarId.AutoIncrement = true;
+				colvarId.AutoIncrement = false;
 				colvarId.IsNullable = false;
 				colvarId.IsPrimaryKey = true;
 				colvarId.IsForeignKey = false;
 				colvarId.IsReadOnly = false;
-				colvarId.DefaultSetting = @"";
+				
+						colvarId.DefaultSetting = @"(newid())";
 				colvarId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarId);
 				
@@ -395,7 +396,7 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarImportBatchID = new TableSchema.TableColumn(schema);
 				colvarImportBatchID.ColumnName = "ImportBatchID";
-				colvarImportBatchID.DataType = DbType.Int32;
+				colvarImportBatchID.DataType = DbType.Guid;
 				colvarImportBatchID.MaxLength = 0;
 				colvarImportBatchID.AutoIncrement = false;
 				colvarImportBatchID.IsNullable = false;
@@ -433,6 +434,34 @@ namespace SAEON.Observations.Data
 				colvarRawFieldValue.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRawFieldValue);
 				
+				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+				colvarAddedAt.ColumnName = "AddedAt";
+				colvarAddedAt.DataType = DbType.DateTime;
+				colvarAddedAt.MaxLength = 0;
+				colvarAddedAt.AutoIncrement = false;
+				colvarAddedAt.IsNullable = true;
+				colvarAddedAt.IsPrimaryKey = false;
+				colvarAddedAt.IsForeignKey = false;
+				colvarAddedAt.IsReadOnly = false;
+				
+						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedAt);
+				
+				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+				colvarUpdatedAt.ColumnName = "UpdatedAt";
+				colvarUpdatedAt.DataType = DbType.DateTime;
+				colvarUpdatedAt.MaxLength = 0;
+				colvarUpdatedAt.AutoIncrement = false;
+				colvarUpdatedAt.IsNullable = true;
+				colvarUpdatedAt.IsPrimaryKey = false;
+				colvarUpdatedAt.IsForeignKey = false;
+				colvarUpdatedAt.IsReadOnly = false;
+				
+						colvarUpdatedAt.DefaultSetting = @"(getdate())";
+				colvarUpdatedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUpdatedAt);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -445,9 +474,9 @@ namespace SAEON.Observations.Data
 		  
 		[XmlAttribute("Id")]
 		[Bindable(true)]
-		public int Id 
+		public Guid Id 
 		{
-			get { return GetColumnValue<int>(Columns.Id); }
+			get { return GetColumnValue<Guid>(Columns.Id); }
 			set { SetColumnValue(Columns.Id, value); }
 		}
 		  
@@ -605,9 +634,9 @@ namespace SAEON.Observations.Data
 		  
 		[XmlAttribute("ImportBatchID")]
 		[Bindable(true)]
-		public int ImportBatchID 
+		public Guid ImportBatchID 
 		{
-			get { return GetColumnValue<int>(Columns.ImportBatchID); }
+			get { return GetColumnValue<Guid>(Columns.ImportBatchID); }
 			set { SetColumnValue(Columns.ImportBatchID, value); }
 		}
 		  
@@ -625,6 +654,22 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<string>(Columns.RawFieldValue); }
 			set { SetColumnValue(Columns.RawFieldValue, value); }
+		}
+		  
+		[XmlAttribute("AddedAt")]
+		[Bindable(true)]
+		public DateTime? AddedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
+			set { SetColumnValue(Columns.AddedAt, value); }
+		}
+		  
+		[XmlAttribute("UpdatedAt")]
+		[Bindable(true)]
+		public DateTime? UpdatedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.UpdatedAt); }
+			set { SetColumnValue(Columns.UpdatedAt, value); }
 		}
 		
 		#endregion
@@ -725,9 +770,11 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,int varImportBatchID,string varRawRecordData,string varRawFieldValue)
+		public static void Insert(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataLog item = new DataLog();
+			
+			item.Id = varId;
 			
 			item.SensorID = varSensorID;
 			
@@ -773,6 +820,10 @@ namespace SAEON.Observations.Data
 			
 			item.RawFieldValue = varRawFieldValue;
 			
+			item.AddedAt = varAddedAt;
+			
+			item.UpdatedAt = varUpdatedAt;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -783,7 +834,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(int varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,int varImportBatchID,string varRawRecordData,string varRawFieldValue)
+		public static void Update(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataLog item = new DataLog();
 			
@@ -832,6 +883,10 @@ namespace SAEON.Observations.Data
 				item.RawRecordData = varRawRecordData;
 			
 				item.RawFieldValue = varRawFieldValue;
+			
+				item.AddedAt = varAddedAt;
+			
+				item.UpdatedAt = varUpdatedAt;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -1007,6 +1062,20 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn AddedAtColumn
+        {
+            get { return Schema.Columns[23]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[24]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -1034,6 +1103,8 @@ namespace SAEON.Observations.Data
 			 public static string ImportBatchID = @"ImportBatchID";
 			 public static string RawRecordData = @"RawRecordData";
 			 public static string RawFieldValue = @"RawFieldValue";
+			 public static string AddedAt = @"AddedAt";
+			 public static string UpdatedAt = @"UpdatedAt";
 						
 		}
 		#endregion

@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex)
+	    public void Insert(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    DataSchema item = new DataSchema();
 		    
@@ -110,6 +110,10 @@ namespace SAEON.Observations.Data
             
             item.SplitIndex = SplitIndex;
             
+            item.AddedAt = AddedAt;
+            
+            item.UpdatedAt = UpdatedAt;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -118,7 +122,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex)
+	    public void Update(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    DataSchema item = new DataSchema();
 	        item.MarkOld();
@@ -149,6 +153,10 @@ namespace SAEON.Observations.Data
 			item.SplitSelector = SplitSelector;
 				
 			item.SplitIndex = SplitIndex;
+				
+			item.AddedAt = AddedAt;
+				
+			item.UpdatedAt = UpdatedAt;
 				
 	        item.Save(UserName);
 	    }

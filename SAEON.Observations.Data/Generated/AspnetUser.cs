@@ -324,6 +324,10 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.DataLogCollection().Where(DataLog.Columns.UserId, UserId).Load();
 		}
+		public SAEON.Observations.Data.DataSchemaCollection DataSchemaRecords()
+		{
+			return new SAEON.Observations.Data.DataSchemaCollection().Where(DataSchema.Columns.UserId, UserId).Load();
+		}
 		public SAEON.Observations.Data.DataSourceCollection DataSourceRecords()
 		{
 			return new SAEON.Observations.Data.DataSourceCollection().Where(DataSource.Columns.UserId, UserId).Load();
@@ -347,6 +351,10 @@ namespace SAEON.Observations.Data
 		public SAEON.Observations.Data.InstrumentCollection InstrumentRecords()
 		{
 			return new SAEON.Observations.Data.InstrumentCollection().Where(Instrument.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.InstrumentDataSourceCollection InstrumentDataSourceRecords()
+		{
+			return new SAEON.Observations.Data.InstrumentDataSourceCollection().Where(InstrumentDataSource.Columns.UserId, UserId).Load();
 		}
 		public SAEON.Observations.Data.InstrumentSensorCollection InstrumentSensorRecords()
 		{

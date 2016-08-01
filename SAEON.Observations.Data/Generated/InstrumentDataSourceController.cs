@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
     /// <summary>
-    /// Controller class for Status
+    /// Controller class for Instrument_DataSource
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class StatusController
+    public partial class InstrumentDataSourceController
     {
         // Preload our schema..
-        Status thisSchemaLoad = new Status();
+        InstrumentDataSource thisSchemaLoad = new InstrumentDataSource();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.Observations.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public StatusCollection FetchAll()
+        public InstrumentDataSourceCollection FetchAll()
         {
-            StatusCollection coll = new StatusCollection();
-            Query qry = new Query(Status.Schema);
+            InstrumentDataSourceCollection coll = new InstrumentDataSourceCollection();
+            Query qry = new Query(InstrumentDataSource.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public StatusCollection FetchByID(object Id)
+        public InstrumentDataSourceCollection FetchByID(object Id)
         {
-            StatusCollection coll = new StatusCollection().Where("ID", Id).Load();
+            InstrumentDataSourceCollection coll = new InstrumentDataSourceCollection().Where("ID", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public StatusCollection FetchByQuery(Query qry)
+        public InstrumentDataSourceCollection FetchByQuery(Query qry)
         {
-            StatusCollection coll = new StatusCollection();
+            InstrumentDataSourceCollection coll = new InstrumentDataSourceCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
         public bool Delete(object Id)
         {
-            return (Status.Delete(Id) == 1);
+            return (InstrumentDataSource.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
         public bool Destroy(object Id)
         {
-            return (Status.Destroy(Id) == 1);
+            return (InstrumentDataSource.Destroy(Id) == 1);
         }
         
         
@@ -80,17 +80,19 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,Guid InstrumentID,Guid DataSourceID,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
-		    Status item = new Status();
+		    InstrumentDataSource item = new InstrumentDataSource();
 		    
             item.Id = Id;
             
-            item.Code = Code;
+            item.InstrumentID = InstrumentID;
             
-            item.Name = Name;
+            item.DataSourceID = DataSourceID;
             
-            item.Description = Description;
+            item.StartDate = StartDate;
+            
+            item.EndDate = EndDate;
             
             item.UserId = UserId;
             
@@ -106,19 +108,21 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,Guid InstrumentID,Guid DataSourceID,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
-		    Status item = new Status();
+		    InstrumentDataSource item = new InstrumentDataSource();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
 			item.Id = Id;
 				
-			item.Code = Code;
+			item.InstrumentID = InstrumentID;
 				
-			item.Name = Name;
+			item.DataSourceID = DataSourceID;
 				
-			item.Description = Description;
+			item.StartDate = StartDate;
+				
+			item.EndDate = EndDate;
 				
 			item.UserId = UserId;
 				

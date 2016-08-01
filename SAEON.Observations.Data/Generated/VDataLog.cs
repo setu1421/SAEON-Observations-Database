@@ -59,7 +59,7 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
                 colvarId.ColumnName = "ID";
-                colvarId.DataType = DbType.Int32;
+                colvarId.DataType = DbType.Guid;
                 colvarId.MaxLength = 0;
                 colvarId.AutoIncrement = false;
                 colvarId.IsNullable = false;
@@ -431,7 +431,7 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarImportBatchID = new TableSchema.TableColumn(schema);
                 colvarImportBatchID.ColumnName = "ImportBatchID";
-                colvarImportBatchID.DataType = DbType.Int32;
+                colvarImportBatchID.DataType = DbType.Guid;
                 colvarImportBatchID.MaxLength = 0;
                 colvarImportBatchID.AutoIncrement = false;
                 colvarImportBatchID.IsNullable = false;
@@ -517,11 +517,11 @@ namespace SAEON.Observations.Data{
           
         [XmlAttribute("Id")]
         [Bindable(true)]
-        public int Id 
+        public Guid Id 
 	    {
 		    get
 		    {
-			    return GetColumnValue<int>("ID");
+			    return GetColumnValue<Guid>("ID");
 		    }
             set 
 		    {
@@ -951,11 +951,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("ImportBatchID")]
         [Bindable(true)]
-        public int ImportBatchID 
+        public Guid ImportBatchID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<int>("ImportBatchID");
+			    return GetColumnValue<Guid>("ImportBatchID");
 		    }
             set 
 		    {

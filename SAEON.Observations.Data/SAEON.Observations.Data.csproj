@@ -109,6 +109,8 @@
     <Compile Include="Generated\ImportBatchController.cs" />
     <Compile Include="Generated\Instrument.cs" />
     <Compile Include="Generated\InstrumentController.cs" />
+    <Compile Include="Generated\InstrumentDataSource.cs" />
+    <Compile Include="Generated\InstrumentDataSourceController.cs" />
     <Compile Include="Generated\InstrumentSensor.cs" />
     <Compile Include="Generated\InstrumentSensorController.cs" />
     <Compile Include="Generated\ModuleX.cs" />
@@ -164,6 +166,7 @@
     <Compile Include="Generated\VDataSource.cs" />
     <Compile Include="Generated\VDataSourceTransformation.cs" />
     <Compile Include="Generated\VImportBatch.cs" />
+    <Compile Include="Generated\VInstrumentDataSource.cs" />
     <Compile Include="Generated\VInstrumentOrganisation.cs" />
     <Compile Include="Generated\VInstrumentSensor.cs" />
     <Compile Include="Generated\VInventory.cs" />

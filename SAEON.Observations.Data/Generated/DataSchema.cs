@@ -254,10 +254,11 @@ namespace SAEON.Observations.Data
 				colvarUserId.AutoIncrement = false;
 				colvarUserId.IsNullable = false;
 				colvarUserId.IsPrimaryKey = false;
-				colvarUserId.IsForeignKey = false;
+				colvarUserId.IsForeignKey = true;
 				colvarUserId.IsReadOnly = false;
 				colvarUserId.DefaultSetting = @"";
-				colvarUserId.ForeignKeyTableName = "";
+				
+					colvarUserId.ForeignKeyTableName = "aspnet_Users";
 				schema.Columns.Add(colvarUserId);
 				
 				TableSchema.TableColumn colvarDelimiter = new TableSchema.TableColumn(schema);
@@ -298,6 +299,34 @@ namespace SAEON.Observations.Data
 				colvarSplitIndex.DefaultSetting = @"";
 				colvarSplitIndex.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarSplitIndex);
+				
+				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+				colvarAddedAt.ColumnName = "AddedAt";
+				colvarAddedAt.DataType = DbType.DateTime;
+				colvarAddedAt.MaxLength = 0;
+				colvarAddedAt.AutoIncrement = false;
+				colvarAddedAt.IsNullable = true;
+				colvarAddedAt.IsPrimaryKey = false;
+				colvarAddedAt.IsForeignKey = false;
+				colvarAddedAt.IsReadOnly = false;
+				
+						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedAt);
+				
+				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+				colvarUpdatedAt.ColumnName = "UpdatedAt";
+				colvarUpdatedAt.DataType = DbType.DateTime;
+				colvarUpdatedAt.MaxLength = 0;
+				colvarUpdatedAt.AutoIncrement = false;
+				colvarUpdatedAt.IsNullable = true;
+				colvarUpdatedAt.IsPrimaryKey = false;
+				colvarUpdatedAt.IsForeignKey = false;
+				colvarUpdatedAt.IsReadOnly = false;
+				
+						colvarUpdatedAt.DefaultSetting = @"(getdate())";
+				colvarUpdatedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUpdatedAt);
 				
 				BaseSchema = schema;
 				//add this schema to the provider
@@ -412,6 +441,22 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<int?>(Columns.SplitIndex); }
 			set { SetColumnValue(Columns.SplitIndex, value); }
 		}
+		  
+		[XmlAttribute("AddedAt")]
+		[Bindable(true)]
+		public DateTime? AddedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
+			set { SetColumnValue(Columns.AddedAt, value); }
+		}
+		  
+		[XmlAttribute("UpdatedAt")]
+		[Bindable(true)]
+		public DateTime? UpdatedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.UpdatedAt); }
+			set { SetColumnValue(Columns.UpdatedAt, value); }
+		}
 		
 		#endregion
 		
@@ -441,6 +486,17 @@ namespace SAEON.Observations.Data
 		#region ForeignKey Properties
 		
 		/// <summary>
+		/// Returns a AspnetUser ActiveRecord object related to this DataSchema
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.AspnetUser AspnetUser
+		{
+			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }
+			set { SetColumnValue("UserId", value.UserId); }
+		}
+		
+		
+		/// <summary>
 		/// Returns a DataSourceType ActiveRecord object related to this DataSchema
 		/// 
 		/// </summary>
@@ -465,7 +521,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSchema item = new DataSchema();
 			
@@ -495,6 +551,10 @@ namespace SAEON.Observations.Data
 			
 			item.SplitIndex = varSplitIndex;
 			
+			item.AddedAt = varAddedAt;
+			
+			item.UpdatedAt = varUpdatedAt;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -505,7 +565,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSchema item = new DataSchema();
 			
@@ -534,6 +594,10 @@ namespace SAEON.Observations.Data
 				item.SplitSelector = varSplitSelector;
 			
 				item.SplitIndex = varSplitIndex;
+			
+				item.AddedAt = varAddedAt;
+			
+				item.UpdatedAt = varUpdatedAt;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -639,6 +703,20 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn AddedAtColumn
+        {
+            get { return Schema.Columns[13]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[14]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -656,6 +734,8 @@ namespace SAEON.Observations.Data
 			 public static string Delimiter = @"Delimiter";
 			 public static string SplitSelector = @"SplitSelector";
 			 public static string SplitIndex = @"SplitIndex";
+			 public static string AddedAt = @"AddedAt";
+			 public static string UpdatedAt = @"UpdatedAt";
 						
 		}
 		#endregion
