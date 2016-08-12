@@ -73,27 +73,4 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://nimbusservices.visualstudio.com/
-		SccLocalPath0 = .
-		SccWebProject1 = true
-		SccProjectUniqueName1 = SAEON.Observations.WebSite.Admin
-		SccProjectName1 = SAEON.Observations.WebSite.Admin
-		SccLocalPath1 = SAEON.Observations.WebSite.Admin
-		SccProjectEnlistmentChoice1 = 2
-		SccProjectUniqueName2 = SAEON.Observations.Data\\SAEON.Observations.Data.csproj
-		SccProjectName2 = SAEON.Observations.Data
-		SccLocalPath2 = SAEON.Observations.Data
-		SccProjectUniqueName3 = SAEON.Observations.Database\\SAEON.Observations.Database.sqlproj
-		SccProjectName3 = SAEON.Observations.Database
-		SccLocalPath3 = SAEON.Observations.Database
-		SccProjectUniqueName4 = SAEON.Observations.Merge\\SAEON.Observations.Merge.csproj
-		SccProjectName4 = SAEON.Observations.Merge
-		SccLocalPath4 = SAEON.Observations.Merge
-		SccProjectUniqueName5 = SAEON.Observations.WebSite.Admin.Test\\SAEON.Observations.WebSite.Admin.Test.csproj
-		SccProjectName5 = SAEON.Observations.WebSite.Admin.Test
-		SccLocalPath5 = SAEON.Observations.WebSite.Admin.Test
-	EndGlobalSection
 EndGlobal
