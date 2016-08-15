@@ -7,7 +7,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SAEON.Observations.Database
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Data", "SAEON.Observations.Data\SAEON.Observations.Data.csproj", "{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.Observations.WebSite.Admin", "SAEON.Observations.WebSite.Admin", "{EEC81A5F-AC32-43B1-941B-E10496D83287}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.Observations.WebSite.Admin", "SAEON.Observations.WebSite.Admin\", "{EEC81A5F-AC32-43B1-941B-E10496D83287}"
 	ProjectSection(WebsiteProperties) = preProject
 		SccProjectName = "SAK"
 		SccAuxPath = "SAK"
@@ -39,6 +39,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.WebSite.Admin.Test", "SAEON.Observations.WebSite.Admin.Test\SAEON.Observations.WebSite.Admin.Test.csproj", "{6CD3F8B9-A021-4EBA-A5B3-6201134F6C74}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EEC81A5F-AC32-43B1-941B-E10496D83287} = {EEC81A5F-AC32-43B1-941B-E10496D83287}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E60445F4-F6B6-40A1-BD4A-46A122B068AF}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
 Global

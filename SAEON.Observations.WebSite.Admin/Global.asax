@@ -1,5 +1,6 @@
 ﻿<%@ Application Language="C#" %>
 <%@ Import Namespace="Serilog" %>
+<%@ Import Namespace="Serilog.Sinks.RollingFile" %>
 <%@ Import Namespace="System.Web.Routing" %>
 
 <script RunAt="server">
