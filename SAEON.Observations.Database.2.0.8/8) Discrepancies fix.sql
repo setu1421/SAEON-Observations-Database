@@ -9,6 +9,12 @@ Set
 where
   (Code = 'ACSYS_R')
 Update
+  DataSchema
+Set
+  UserId = (Select UserId from aspnet_Users where aspnet_Users.LoweredUserName = 'abri')
+where
+  (Code = 'DAV_PR2')
+Update
   Phenomenon
 set
   Url = 'http://data.saeon.ac.za'
@@ -28,12 +34,6 @@ Set
   Code = 'DAV_PR2'
 where
   (Code = 'DAV_FYN6')
-Update
-  DataSchema
-Set
-  UserId = (Select UserId from aspnet_Users where aspnet_Users.LoweredUserName = 'abri')
-where
-  (Code = 'DAV_PR2')
 Update
   Phenomenon
 set
