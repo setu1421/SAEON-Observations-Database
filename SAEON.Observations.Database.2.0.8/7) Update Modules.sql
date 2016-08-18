@@ -1,10 +1,10 @@
 ﻿-- 2.0.8
 Declare @UrlPrefix varchar(100)
 --set @UrlPrefix = '/ObservationsDBv1Live'
-set @UrlPrefix = '/ObservationsDBv1Staging'
+--set @UrlPrefix = '/ObservationsDBv1Staging'
 --set @UrlPrefix = '/Observations'
 --set @UrlPrefix = '/ObservationsTest' 
---set @UrlPrefix = ''
+set @UrlPrefix = ''
 -- New
 if not Exists(select * from Module where Name like 'Version 2') 
 begin
