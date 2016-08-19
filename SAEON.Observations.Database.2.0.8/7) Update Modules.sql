@@ -72,7 +72,9 @@ begin
 	  ('Sensors ','Sensors',@UrlPrefix+'/Admin/Sensors',(Select Icon from Module where Name like 'Sensors'),(Select ID from Module where Name like 'Version 2'),300)
 end
 -- Changed
-Update Module set Url = Replace(Url,'/PLATFORM_TEST/SWDB/Admin/',@UrlPrefix+'/Admin/') where Url like '/PLATFORM_TEST/SWDB/Admin/%'
+--Update Module set Url = Replace(Url,'/PLATFORM_TEST/SWDB/Admin/',@UrlPrefix+'/Admin/') where Url like '/PLATFORM_TEST/SWDB/Admin/%'
+--Update Module set Url = Replace(Url,'/ObservationsDBv1Live/Admin/',@UrlPrefix+'/Admin/') where Url like '/ObservationsDBv1Live/Admin/%'
+--Update Module set Url = Replace(Url,'/ObservationsDBv1Staging/Admin/',@UrlPrefix+'/Admin/') where Url like '/ObservationsDBv1Staging/Admin/%'
 Update Module set Url = Replace(Url,'/Admin/',@UrlPrefix+'/Admin/') where Url like '/Admin/%'
 Update Module set Url = Replace(Url,'Admin/',@UrlPrefix+'/Admin/') where Url like 'Admin/%'
 Update Module set Url = Replace(Replace(Url,'.aspx',''),'//','/')
