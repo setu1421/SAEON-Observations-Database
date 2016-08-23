@@ -16,9 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		6) ObservationDB 2.0.8.publish.sql = 6) ObservationDB 2.0.8.publish.sql
 		6) ObservationDB_IMP 2.0.8.publish.sql = 6) ObservationDB_IMP 2.0.8.publish.sql
 		6) ObservationsTest 2.0.8.publish.sql = 6) ObservationsTest 2.0.8.publish.sql
-		7) CreateOrganisationRoles.sql = 7) CreateOrganisationRoles.sql
-		7) Update Modules.sql = 7) Update Modules.sql
-		8) Discrepancies fix.sql = 8) Discrepancies fix.sql
+		7.1) CreateOrganisationRoles.sql = 7.1) CreateOrganisationRoles.sql
+		7.2) Update Modules.sql = 7.2) Update Modules.sql
+		7.3) Discrepancies fix.sql = 7.3) Discrepancies fix.sql
 	EndProjectSection
 EndProject
 Global
@@ -26,7 +26,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FD5DE916-1E10-46FB-9D81-E029F17DAF1B}.Default|Default.ActiveCfg = Default
+		{247A1480-F5F8-489A-AA9B-8FC2C87C80FF}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
