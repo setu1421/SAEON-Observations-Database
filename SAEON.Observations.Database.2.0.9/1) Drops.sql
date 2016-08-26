@@ -1,0 +1,4 @@
+﻿alter table Instrument drop constraint UX_Instrument_StationID_Code
+alter table Instrument drop constraint UX_Instrument_StationID_Name
+alter table Instrument drop constraint FK_Instrument_Station
+Alter table Instrument drop column StationID

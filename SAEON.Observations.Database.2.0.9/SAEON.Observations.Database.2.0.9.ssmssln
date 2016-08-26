@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 13.00
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{33AA070F-4C2B-4414-AD6E-A0CF760C7B5B}"
+	ProjectSection(SolutionItems) = preProject
+		1) Drops.sql = 1) Drops.sql
+		2) ObservationDB 2.0.9.publish.sql = 2) ObservationDB 2.0.9.publish.sql
+		2) ObservationDB 2.0.9.publish.txt = 2) ObservationDB 2.0.9.publish.txt
+		2) ObservationDB_IMP 2.0.9.publish.sql = 2) ObservationDB_IMP 2.0.9.publish.sql
+		2) ObservationDB_IMP 2.0.9.publish.txt = 2) ObservationDB_IMP 2.0.9.publish.txt
+		3.1) Discrepancies fix.sql = 3.1) Discrepancies fix.sql
+		3.2) Status Reasons.sql = 3.2) Status Reasons.sql
+		3.3) Staging - Mark all Unverified - Staging.sql = 3.3) Staging - Mark all Unverified - Staging.sql
+		3.4) Live - Mark historical Unverified.sql = 3.4) Live - Mark historical Unverified.sql
+		5) Do Merge.txt = 5) Do Merge.txt
+		6) Post merge creates.sql = 6) Post merge creates.sql
+		Stats.sql = Stats.sql
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6FFE39BE-2543-49E5-B3BD-3B71921A0577}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

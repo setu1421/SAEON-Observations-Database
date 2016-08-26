@@ -533,6 +533,7 @@
     <Build Include="dbo\Tables\Progress.sql" />
     <Build Include="dbo\Tables\Instrument_DataSource.sql" />
     <Build Include="dbo\Views\vInstrumentDataSource.sql" />
+    <Build Include="dbo\Tables\StatusReason.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Lab2-NimbusServices ObservationsDBv2Test.publish.xml" />

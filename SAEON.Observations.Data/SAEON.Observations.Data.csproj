@@ -155,6 +155,8 @@
     <Compile Include="Generated\StationInstrumentController.cs" />
     <Compile Include="Generated\Status.cs" />
     <Compile Include="Generated\StatusController.cs" />
+    <Compile Include="Generated\StatusReason.cs" />
+    <Compile Include="Generated\StatusReasonController.cs" />
     <Compile Include="Generated\StoredProcedures.cs" />
     <Compile Include="Generated\TransformationType.cs" />
     <Compile Include="Generated\TransformationTypeController.cs" />

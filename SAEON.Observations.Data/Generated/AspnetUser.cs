@@ -436,6 +436,10 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.StatusCollection().Where(Status.Columns.UserId, UserId).Load();
 		}
+		public SAEON.Observations.Data.StatusReasonCollection StatusReasonRecords()
+		{
+			return new SAEON.Observations.Data.StatusReasonCollection().Where(StatusReason.Columns.UserId, UserId).Load();
+		}
 		public SAEON.Observations.Data.TransformationTypeCollection TransformationTypeRecords()
 		{
 			return new SAEON.Observations.Data.TransformationTypeCollection().Where(TransformationType.Columns.UserId, UserId).Load();

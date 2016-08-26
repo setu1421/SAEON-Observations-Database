@@ -470,10 +470,6 @@ namespace SAEON.Observations.Data
         }
         
 		
-		public SAEON.Observations.Data.InstrumentCollection InstrumentRecords()
-		{
-			return new SAEON.Observations.Data.InstrumentCollection().Where(Instrument.Columns.StationID, Id).Load();
-		}
 		public SAEON.Observations.Data.OrganisationStationCollection OrganisationStationRecords()
 		{
 			return new SAEON.Observations.Data.OrganisationStationCollection().Where(OrganisationStation.Columns.StationID, Id).Load();

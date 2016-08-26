@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    ImportBatch item = new ImportBatch();
 		    
@@ -100,6 +100,10 @@ namespace SAEON.Observations.Data
             
             item.Comment = Comment;
             
+            item.StatusID = StatusID;
+            
+            item.StatusReasonID = StatusReasonID;
+            
             item.AddedAt = AddedAt;
             
             item.UpdatedAt = UpdatedAt;
@@ -112,7 +116,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    ImportBatch item = new ImportBatch();
 	        item.MarkOld();
@@ -133,6 +137,10 @@ namespace SAEON.Observations.Data
 			item.LogFileName = LogFileName;
 				
 			item.Comment = Comment;
+				
+			item.StatusID = StatusID;
+				
+			item.StatusReasonID = StatusReasonID;
 				
 			item.AddedAt = AddedAt;
 				

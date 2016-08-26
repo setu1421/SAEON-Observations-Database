@@ -140,20 +140,6 @@ namespace SAEON.Observations.Data
 				colvarId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarId);
 				
-				TableSchema.TableColumn colvarStationID = new TableSchema.TableColumn(schema);
-				colvarStationID.ColumnName = "StationID";
-				colvarStationID.DataType = DbType.Guid;
-				colvarStationID.MaxLength = 0;
-				colvarStationID.AutoIncrement = false;
-				colvarStationID.IsNullable = true;
-				colvarStationID.IsPrimaryKey = false;
-				colvarStationID.IsForeignKey = true;
-				colvarStationID.IsReadOnly = false;
-				colvarStationID.DefaultSetting = @"";
-				
-					colvarStationID.ForeignKeyTableName = "Station";
-				schema.Columns.Add(colvarStationID);
-				
 				TableSchema.TableColumn colvarCode = new TableSchema.TableColumn(schema);
 				colvarCode.ColumnName = "Code";
 				colvarCode.DataType = DbType.AnsiString;
@@ -292,14 +278,6 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.Id, value); }
 		}
 		  
-		[XmlAttribute("StationID")]
-		[Bindable(true)]
-		public Guid? StationID 
-		{
-			get { return GetColumnValue<Guid?>(Columns.StationID); }
-			set { SetColumnValue(Columns.StationID, value); }
-		}
-		  
 		[XmlAttribute("Code")]
 		[Bindable(true)]
 		public string Code 
@@ -418,17 +396,6 @@ namespace SAEON.Observations.Data
 		}
 		
 		
-		/// <summary>
-		/// Returns a Station ActiveRecord object related to this Instrument
-		/// 
-		/// </summary>
-		public SAEON.Observations.Data.Station Station
-		{
-			get { return SAEON.Observations.Data.Station.FetchByID(this.StationID); }
-			set { SetColumnValue("StationID", value.Id); }
-		}
-		
-		
 		#endregion
 		
 		
@@ -443,13 +410,11 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid? varStationID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Instrument item = new Instrument();
 			
 			item.Id = varId;
-			
-			item.StationID = varStationID;
 			
 			item.Code = varCode;
 			
@@ -479,13 +444,11 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid? varStationID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Instrument item = new Instrument();
 			
 				item.Id = varId;
-			
-				item.StationID = varStationID;
 			
 				item.Code = varCode;
 			
@@ -525,72 +488,65 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn StationIDColumn
+        public static TableSchema.TableColumn CodeColumn
         {
             get { return Schema.Columns[1]; }
         }
         
         
         
-        public static TableSchema.TableColumn CodeColumn
+        public static TableSchema.TableColumn NameColumn
         {
             get { return Schema.Columns[2]; }
         }
         
         
         
-        public static TableSchema.TableColumn NameColumn
+        public static TableSchema.TableColumn DescriptionColumn
         {
             get { return Schema.Columns[3]; }
         }
         
         
         
-        public static TableSchema.TableColumn DescriptionColumn
+        public static TableSchema.TableColumn UrlColumn
         {
             get { return Schema.Columns[4]; }
         }
         
         
         
-        public static TableSchema.TableColumn UrlColumn
+        public static TableSchema.TableColumn StartDateColumn
         {
             get { return Schema.Columns[5]; }
         }
         
         
         
-        public static TableSchema.TableColumn StartDateColumn
+        public static TableSchema.TableColumn EndDateColumn
         {
             get { return Schema.Columns[6]; }
         }
         
         
         
-        public static TableSchema.TableColumn EndDateColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[7]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[8]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
-        {
-            get { return Schema.Columns[9]; }
-        }
-        
-        
-        
         public static TableSchema.TableColumn UpdatedAtColumn
         {
-            get { return Schema.Columns[10]; }
+            get { return Schema.Columns[9]; }
         }
         
         
@@ -600,7 +556,6 @@ namespace SAEON.Observations.Data
 		public struct Columns
 		{
 			 public static string Id = @"ID";
-			 public static string StationID = @"StationID";
 			 public static string Code = @"Code";
 			 public static string Name = @"Name";
 			 public static string Description = @"Description";

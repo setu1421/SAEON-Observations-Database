@@ -23,6 +23,10 @@
 --    [ImportBatchID]         INT              NOT NULL,
     [ImportBatchID]         UNIQUEIDENTIFIER              NOT NULL,
 --< Changed 2.0.8 20160720 TimPN
+--> Added 2.0.9 20160823 TimPN
+    [StatusID] UNIQUEIDENTIFIER NULL,
+    [StatusReasonID] UNIQUEIDENTIFIER NULL,
+--< Added 2.0.9 20160823 TimPN
     [UserId]                UNIQUEIDENTIFIER NOT NULL,
     [AddedDate]             DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
 --> Added 2.0.8 20160718 TimPN
@@ -42,8 +46,12 @@
     CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
 --< Changed 2.0.3 20160503 TimPN
 --> Added 2.0.8 20160726 TimPN
-    CONSTRAINT [UX_Observation] UNIQUE ([SensorID], [ImportBatchID], [ValueDate], [PhenomenonOfferingID], [PhenomenonUOMID])
+    CONSTRAINT [UX_Observation] UNIQUE ([SensorID], [ImportBatchID], [ValueDate], [PhenomenonOfferingID], [PhenomenonUOMID]),
 --< Added 2.0.8 20160726 TimPN
+--> Added 2.0.9 20160823 TimPN
+    CONSTRAINT [FK_Observation_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]),
+    CONSTRAINT [FK_Observation_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]),
+--< Added 2.0.9 20160823 TimPN
 );
 --> Added 2.0.8 20160718 TimPN
 GO
@@ -73,11 +81,18 @@ GO
 CREATE INDEX [IX_Observation_UserId] ON [dbo].[Observation] ([UserId])
 --< Added 2.0.0 20160406 TimPN
 --> Added 2.0.8 20160726 TimPN
---< Added 2.0.8 20160726 TimPN
 GO
 CREATE INDEX [IX_Observation_AddedDate] ON [dbo].[Observation] ([SensorID], [AddedDate])
 GO
 CREATE INDEX [IX_Observation_ValueDate] ON [dbo].[Observation] ([SensorID], [ValueDate])
+--< Added 2.0.8 20160726 TimPN
+--> Added 2.0.9 20160823 TimPN
+GO
+CREATE INDEX [IX_Observation_StatusID] ON [dbo].[Observation] ([StatusID])
+GO
+CREATE INDEX [IX_Observation_StatusReasonID] ON [dbo].[Observation] ([StatusReasonID])
+--< Added 2.0.9 20160823 TimPN
+
 --> Added 2.0.8 20160718 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]

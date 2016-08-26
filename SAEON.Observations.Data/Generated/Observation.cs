@@ -248,6 +248,34 @@ namespace SAEON.Observations.Data
 					colvarImportBatchID.ForeignKeyTableName = "ImportBatch";
 				schema.Columns.Add(colvarImportBatchID);
 				
+				TableSchema.TableColumn colvarStatusID = new TableSchema.TableColumn(schema);
+				colvarStatusID.ColumnName = "StatusID";
+				colvarStatusID.DataType = DbType.Guid;
+				colvarStatusID.MaxLength = 0;
+				colvarStatusID.AutoIncrement = false;
+				colvarStatusID.IsNullable = true;
+				colvarStatusID.IsPrimaryKey = false;
+				colvarStatusID.IsForeignKey = true;
+				colvarStatusID.IsReadOnly = false;
+				colvarStatusID.DefaultSetting = @"";
+				
+					colvarStatusID.ForeignKeyTableName = "Status";
+				schema.Columns.Add(colvarStatusID);
+				
+				TableSchema.TableColumn colvarStatusReasonID = new TableSchema.TableColumn(schema);
+				colvarStatusReasonID.ColumnName = "StatusReasonID";
+				colvarStatusReasonID.DataType = DbType.Guid;
+				colvarStatusReasonID.MaxLength = 0;
+				colvarStatusReasonID.AutoIncrement = false;
+				colvarStatusReasonID.IsNullable = true;
+				colvarStatusReasonID.IsPrimaryKey = false;
+				colvarStatusReasonID.IsForeignKey = true;
+				colvarStatusReasonID.IsReadOnly = false;
+				colvarStatusReasonID.DefaultSetting = @"";
+				
+					colvarStatusReasonID.ForeignKeyTableName = "StatusReason";
+				schema.Columns.Add(colvarStatusReasonID);
+				
 				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
 				colvarUserId.ColumnName = "UserId";
 				colvarUserId.DataType = DbType.Guid;
@@ -386,6 +414,22 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.ImportBatchID, value); }
 		}
 		  
+		[XmlAttribute("StatusID")]
+		[Bindable(true)]
+		public Guid? StatusID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.StatusID); }
+			set { SetColumnValue(Columns.StatusID, value); }
+		}
+		  
+		[XmlAttribute("StatusReasonID")]
+		[Bindable(true)]
+		public Guid? StatusReasonID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.StatusReasonID); }
+			set { SetColumnValue(Columns.StatusReasonID, value); }
+		}
+		  
 		[XmlAttribute("UserId")]
 		[Bindable(true)]
 		public Guid UserId 
@@ -480,6 +524,28 @@ namespace SAEON.Observations.Data
 		}
 		
 		
+		/// <summary>
+		/// Returns a Status ActiveRecord object related to this Observation
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.Status Status
+		{
+			get { return SAEON.Observations.Data.Status.FetchByID(this.StatusID); }
+			set { SetColumnValue("StatusID", value.Id); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a StatusReason ActiveRecord object related to this Observation
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.StatusReason StatusReason
+		{
+			get { return SAEON.Observations.Data.StatusReason.FetchByID(this.StatusReasonID); }
+			set { SetColumnValue("StatusReasonID", value.Id); }
+		}
+		
+		
 		#endregion
 		
 		
@@ -494,7 +560,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Observation item = new Observation();
 			
@@ -516,6 +582,10 @@ namespace SAEON.Observations.Data
 			
 			item.ImportBatchID = varImportBatchID;
 			
+			item.StatusID = varStatusID;
+			
+			item.StatusReasonID = varStatusReasonID;
+			
 			item.UserId = varUserId;
 			
 			item.AddedDate = varAddedDate;
@@ -534,7 +604,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Observation item = new Observation();
 			
@@ -555,6 +625,10 @@ namespace SAEON.Observations.Data
 				item.PhenomenonUOMID = varPhenomenonUOMID;
 			
 				item.ImportBatchID = varImportBatchID;
+			
+				item.StatusID = varStatusID;
+			
+				item.StatusReasonID = varStatusReasonID;
 			
 				item.UserId = varUserId;
 			
@@ -640,30 +714,44 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn StatusIDColumn
         {
             get { return Schema.Columns[9]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedDateColumn
+        public static TableSchema.TableColumn StatusReasonIDColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn AddedDateColumn
         {
             get { return Schema.Columns[12]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn AddedAtColumn
+        {
+            get { return Schema.Columns[13]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[14]; }
         }
         
         
@@ -681,6 +769,8 @@ namespace SAEON.Observations.Data
 			 public static string PhenomenonOfferingID = @"PhenomenonOfferingID";
 			 public static string PhenomenonUOMID = @"PhenomenonUOMID";
 			 public static string ImportBatchID = @"ImportBatchID";
+			 public static string StatusID = @"StatusID";
+			 public static string StatusReasonID = @"StatusReasonID";
 			 public static string UserId = @"UserId";
 			 public static string AddedDate = @"AddedDate";
 			 public static string AddedAt = @"AddedAt";

@@ -18,6 +18,10 @@
 --> Added 2.0.4 20160426 TimPN
     [Comment] VARCHAR(8000) NULL, 
 --< Added 2.0.4 20160426 TimPN
+--> Added 2.0.9 20160823 TimPN
+	[StatusID] UNIQUEIDENTIFIER NULL,
+	[StatusReasonID] UNIQUEIDENTIFIER NULL,
+--< Added 2.0.9 20160823 TimPN
 --> Added 2.0.8 20160715 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_ImportBatch_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_ImportBatch_UpdatedAt] DEFAULT GetDate(), 
@@ -28,6 +32,10 @@
 --< Changed 2.0.8 20160715 TimPN
     CONSTRAINT [FK_ImportBatch_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_ImportBatch_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]),
+--> Added 2.0.9 20160823 TimPN
+    CONSTRAINT [FK_ImportBatch_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]),
+    CONSTRAINT [FK_ImportBatch_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]),
+--< Added 2.0.9 20160823 TimPN
 --> Added 2.0.8 20160726 TimPN
     CONSTRAINT [UX_ImportBatch] UNIQUE ([DataSourceID], [ImportDate], [LogFileName])
 --< Added 2.0.8 20160726 TimPN
@@ -49,6 +57,12 @@ CREATE INDEX [IX_ImportBatch_ImportDate] ON [dbo].[ImportBatch] ([DataSourceID],
 GO
 CREATE INDEX [IX_ImportBatch_LogFileName] ON [dbo].[ImportBatch] ([DataSourceID], [LogFileName])
 --< Added 2.0.8 20160726 TimPN
+--> Added 2.0.9 20160823 TimPN
+GO
+CREATE INDEX [IX_ImportBatch_StatusID] ON [dbo].[ImportBatch] ([StatusID])
+GO
+CREATE INDEX [IX_ImportBatch_StatusReasonID] ON [dbo].[ImportBatch] ([StatusReasonID])
+--< Added 2.0.9 20160823 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_ImportBatch_Insert] ON [dbo].[ImportBatch]
 FOR INSERT

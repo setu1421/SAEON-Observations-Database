@@ -304,6 +304,14 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.DataLogCollection().Where(DataLog.Columns.StatusID, Id).Load();
 		}
+		public SAEON.Observations.Data.ImportBatchCollection ImportBatchRecords()
+		{
+			return new SAEON.Observations.Data.ImportBatchCollection().Where(ImportBatch.Columns.StatusID, Id).Load();
+		}
+		public SAEON.Observations.Data.ObservationCollection ObservationRecords()
+		{
+			return new SAEON.Observations.Data.ObservationCollection().Where(Observation.Columns.StatusID, Id).Load();
+		}
 		#endregion
 		
 			

@@ -234,6 +234,34 @@ namespace SAEON.Observations.Data
 				colvarComment.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarComment);
 				
+				TableSchema.TableColumn colvarStatusID = new TableSchema.TableColumn(schema);
+				colvarStatusID.ColumnName = "StatusID";
+				colvarStatusID.DataType = DbType.Guid;
+				colvarStatusID.MaxLength = 0;
+				colvarStatusID.AutoIncrement = false;
+				colvarStatusID.IsNullable = true;
+				colvarStatusID.IsPrimaryKey = false;
+				colvarStatusID.IsForeignKey = true;
+				colvarStatusID.IsReadOnly = false;
+				colvarStatusID.DefaultSetting = @"";
+				
+					colvarStatusID.ForeignKeyTableName = "Status";
+				schema.Columns.Add(colvarStatusID);
+				
+				TableSchema.TableColumn colvarStatusReasonID = new TableSchema.TableColumn(schema);
+				colvarStatusReasonID.ColumnName = "StatusReasonID";
+				colvarStatusReasonID.DataType = DbType.Guid;
+				colvarStatusReasonID.MaxLength = 0;
+				colvarStatusReasonID.AutoIncrement = false;
+				colvarStatusReasonID.IsNullable = true;
+				colvarStatusReasonID.IsPrimaryKey = false;
+				colvarStatusReasonID.IsForeignKey = true;
+				colvarStatusReasonID.IsReadOnly = false;
+				colvarStatusReasonID.DefaultSetting = @"";
+				
+					colvarStatusReasonID.ForeignKeyTableName = "StatusReason";
+				schema.Columns.Add(colvarStatusReasonID);
+				
 				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
 				colvarAddedAt.ColumnName = "AddedAt";
 				colvarAddedAt.DataType = DbType.DateTime;
@@ -336,6 +364,22 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.Comment, value); }
 		}
 		  
+		[XmlAttribute("StatusID")]
+		[Bindable(true)]
+		public Guid? StatusID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.StatusID); }
+			set { SetColumnValue(Columns.StatusID, value); }
+		}
+		  
+		[XmlAttribute("StatusReasonID")]
+		[Bindable(true)]
+		public Guid? StatusReasonID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.StatusReasonID); }
+			set { SetColumnValue(Columns.StatusReasonID, value); }
+		}
+		  
 		[XmlAttribute("AddedAt")]
 		[Bindable(true)]
 		public DateTime? AddedAt 
@@ -401,6 +445,28 @@ namespace SAEON.Observations.Data
 		}
 		
 		
+		/// <summary>
+		/// Returns a Status ActiveRecord object related to this ImportBatch
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.Status StatusRecord
+		{
+			get { return SAEON.Observations.Data.Status.FetchByID(this.StatusID); }
+			set { SetColumnValue("StatusID", value.Id); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a StatusReason ActiveRecord object related to this ImportBatch
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.StatusReason StatusReason
+		{
+			get { return SAEON.Observations.Data.StatusReason.FetchByID(this.StatusReasonID); }
+			set { SetColumnValue("StatusReasonID", value.Id); }
+		}
+		
+		
 		#endregion
 		
 		
@@ -415,7 +481,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -435,6 +501,10 @@ namespace SAEON.Observations.Data
 			
 			item.Comment = varComment;
 			
+			item.StatusID = varStatusID;
+			
+			item.StatusReasonID = varStatusReasonID;
+			
 			item.AddedAt = varAddedAt;
 			
 			item.UpdatedAt = varUpdatedAt;
@@ -449,7 +519,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -468,6 +538,10 @@ namespace SAEON.Observations.Data
 				item.LogFileName = varLogFileName;
 			
 				item.Comment = varComment;
+			
+				item.StatusID = varStatusID;
+			
+				item.StatusReasonID = varStatusReasonID;
 			
 				item.AddedAt = varAddedAt;
 			
@@ -542,16 +616,30 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn StatusIDColumn
         {
             get { return Schema.Columns[8]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn StatusReasonIDColumn
         {
             get { return Schema.Columns[9]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn AddedAtColumn
+        {
+            get { return Schema.Columns[10]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[11]; }
         }
         
         
@@ -568,6 +656,8 @@ namespace SAEON.Observations.Data
 			 public static string FileName = @"FileName";
 			 public static string LogFileName = @"LogFileName";
 			 public static string Comment = @"Comment";
+			 public static string StatusID = @"StatusID";
+			 public static string StatusReasonID = @"StatusReasonID";
 			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
 						

@@ -21,6 +21,9 @@
     [InvalidUOM]                 VARCHAR (50)     NULL,
     [DataSourceTransformationID] UNIQUEIDENTIFIER NULL,
     [StatusID]                   UNIQUEIDENTIFIER NOT NULL,
+--> Added 2.0.9 20160823 TimPN
+	[StatusReasonID] UNIQUEIDENTIFIER NULL,
+--< Added 2.0.9 20160823 TimPN
     [ImportStatus]               VARCHAR (500)    NOT NULL,
     [UserId]                     UNIQUEIDENTIFIER NULL,
     [PhenomenonOfferingID]       UNIQUEIDENTIFIER NULL,
@@ -52,6 +55,9 @@
     CONSTRAINT [FK_DataLog_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
 --< Changed 2.0.3 20160503 TimPN
     CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]),
+--> Added 2.0.9 20160823 TimPN
+    CONSTRAINT [FK_DataLog_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID])
+--< Added 2.0.9 20160823 TimPN
 );
 --> Added 2.0.8 20160708 TimPN
 GO
@@ -76,6 +82,10 @@ CREATE INDEX [IX_DataLog_StatusID] ON [dbo].[DataLog] ([StatusID])
 GO
 CREATE INDEX [IX_DataLog_UserId] ON [dbo].[DataLog] ([UserId])
 --< Added 2.0.0 20160406 TimPN
+--> Added 2.0.9 20160823 TimPN
+GO
+CREATE INDEX [IX_DataLog_StatusReasonID] ON [dbo].[DataLog] ([StatusReasonID])
+--< Added 2.0.9 20160823 TimPN
 --> Added 2.0.8 20160708 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_DataLog_Insert] ON [dbo].[DataLog]

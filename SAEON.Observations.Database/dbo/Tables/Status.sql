@@ -23,7 +23,7 @@
     CONSTRAINT [UX_Status_Name] UNIQUE ([Name]),
 --< Changed 20160329 TimPN
 --> Added 2.0.0 20160406 TimPN
-    CONSTRAINT [FK_Status_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
+    CONSTRAINT [FK_Status_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 --< Added 2.0.0 20160406 TimPN
 );
 --> Added 2.0.8 20160718 TimPN

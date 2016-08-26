@@ -2,7 +2,9 @@
 CREATE TABLE [dbo].[Instrument]
 (
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Instrument_ID] DEFAULT newid(), 
-    [StationID] UNIQUEIDENTIFIER NULL,
+--> Removed 2.0.9 20160824 TimPN
+--    [StationID] UNIQUEIDENTIFIER NULL,
+--< Removed 2.0.9 20160824 TimPN
     [Code] VARCHAR(50) NOT NULL, 
     [Name] VARCHAR(150) NOT NULL, 
     [Description] VARCHAR(5000) NULL,
@@ -16,10 +18,18 @@ CREATE TABLE [dbo].[Instrument]
 --    CONSTRAINT [PK_Instrument] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [PK_Instrument] PRIMARY KEY NONCLUSTERED ([ID]),
 --< Changed 2.0.5 20160516 TimPN
-    CONSTRAINT [FK_Instrument_Station] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]),
+--> Removed 2.0.9 20160824 TimPN
+--    CONSTRAINT [FK_Instrument_Station] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]),
+--> Removed 2.0.9 20160824 TimPN
     CONSTRAINT [FK_Instrument_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
-    CONSTRAINT [UX_Instrument_StationID_Code] UNIQUE ([StationID],[Code]),
-    CONSTRAINT [UX_Instrument_StationID_Name] UNIQUE ([StationID],[Name]),
+--> Removed 2.0.9 20160824 TimPN
+--    CONSTRAINT [UX_Instrument_StationID_Code] UNIQUE ([StationID],[Code]),
+--    CONSTRAINT [UX_Instrument_StationID_Name] UNIQUE ([StationID],[Name]),
+--< Removed 2.0.9 20160824 TimPN
+--> Added 2.0.9 20160824 TimPN
+    CONSTRAINT [UX_Instrument_Code] UNIQUE ([Code]),
+    CONSTRAINT [UX_Instrument_Name] UNIQUE ([Name])
+--< Added 2.0.9 20160824 TimPN
 )
 --> Added 2.0.5 20160516 TimPN
 GO
