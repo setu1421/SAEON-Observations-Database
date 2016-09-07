@@ -293,7 +293,8 @@ CREATE TABLE [dbo].[tmp_ms_xx_DataLog] (
     [RawFieldValue]              VARCHAR (50)     NOT NULL,
     [AddedAt]                    DATETIME         CONSTRAINT [DF_DataLog_AddedAt] DEFAULT GetDate() NULL,
     [UpdatedAt]                  DATETIME         CONSTRAINT [DF_DataLog_UpdatedAt] DEFAULT GetDate() NULL,
-    CONSTRAINT [tmp_ms_xx_constraint_PK_DataLog1] PRIMARY KEY NONCLUSTERED ([ID] ASC)
+    CONSTRAINT [tmp_ms_xx_constraint_PK_DataLog1] PRIMARY KEY NONCLUSTERED ([ID] ASC),
+    CONSTRAINT [tmp_ms_xx_constraint_UX_DataLog1] UNIQUE NONCLUSTERED ([ImportBatchID] ASC, [SensorID] ASC, [ImportDate] ASC, [ValueDate] ASC, [ValueTime] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC)
 );
 
 CREATE CLUSTERED INDEX [tmp_ms_xx_index_CX_DataLog1]
@@ -339,6 +340,8 @@ EXECUTE sp_rename N'[dbo].[tmp_ms_xx_DataLog]', N'DataLog';
 EXECUTE sp_rename N'[dbo].[DataLog].[tmp_ms_xx_index_CX_DataLog1]', N'CX_DataLog', N'INDEX';
 
 EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_DataLog1]', N'PK_DataLog', N'OBJECT';
+
+EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_DataLog1]', N'UX_DataLog', N'OBJECT';
 
 COMMIT TRANSACTION;
 

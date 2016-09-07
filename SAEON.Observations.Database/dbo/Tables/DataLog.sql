@@ -22,7 +22,7 @@
     [DataSourceTransformationID] UNIQUEIDENTIFIER NULL,
     [StatusID]                   UNIQUEIDENTIFIER NOT NULL,
 --> Added 2.0.9 20160823 TimPN
-	[StatusReasonID] UNIQUEIDENTIFIER NULL,
+    [StatusReasonID] UNIQUEIDENTIFIER NULL,
 --< Added 2.0.9 20160823 TimPN
     [ImportStatus]               VARCHAR (500)    NOT NULL,
     [UserId]                     UNIQUEIDENTIFIER NULL,
@@ -56,8 +56,11 @@
 --< Changed 2.0.3 20160503 TimPN
     CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]),
 --> Added 2.0.9 20160823 TimPN
-    CONSTRAINT [FK_DataLog_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID])
+    CONSTRAINT [FK_DataLog_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]),
 --< Added 2.0.9 20160823 TimPN
+--> Added 2.0.9 20160905 TimPN
+    CONSTRAINT [UX_DataLog] Unique ([ImportBatchID], [SensorID], [ImportDate], [ValueDate], [ValueTime], [PhenomenonOfferingID], [PhenomenonUOMID])
+--> Added 2.0.9 20160905 TimPN
 );
 --> Added 2.0.8 20160708 TimPN
 GO
