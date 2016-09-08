@@ -3,12 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # SQL Server Management Studio Solution File, Format Version 13.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A9E9014D-57E5-4336-B35A-FBD1688F4632}"
+	ProjectSection(SolutionItems) = preProject
+		ObservationDB 2.0.10.publish.sql = ObservationDB 2.0.10.publish.sql
+		ObservationDB_IMP 2.0.10.publish.sql = ObservationDB_IMP 2.0.10.publish.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ECED1F2D-E895-4594-941D-5C6CBA697984}.Default|Default.ActiveCfg = Default
+		{C07DF56A-A93E-41C7-B5DD-FD4B2911762C}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
