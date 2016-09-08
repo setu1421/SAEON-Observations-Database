@@ -145,6 +145,10 @@
     <Compile Include="Generated\ProjectStationController.cs" />
     <Compile Include="Generated\RoleModule.cs" />
     <Compile Include="Generated\RoleModuleController.cs" />
+    <Compile Include="Generated\SchemaColumn.cs" />
+    <Compile Include="Generated\SchemaColumnController.cs" />
+    <Compile Include="Generated\SchemaColumnType.cs" />
+    <Compile Include="Generated\SchemaColumnTypeController.cs" />
     <Compile Include="Generated\Sensor.cs" />
     <Compile Include="Generated\SensorController.cs" />
     <Compile Include="Generated\Site.cs" />

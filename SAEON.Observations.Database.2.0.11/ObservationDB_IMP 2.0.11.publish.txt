@@ -1,0 +1,42 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Create
+       [dbo].[SchemaColumn] (Table)
+       [dbo].[SchemaColumn].[CX_SchemaColumn] (Index)
+       [dbo].[SchemaColumn].[IX_SchemaColumn_DataSchemaID] (Index)
+       [dbo].[SchemaColumn].[IX_SchemaColumn_SchemaColumnTypeID] (Index)
+       [dbo].[SchemaColumn].[IX_SchemaColumn_PhenomenonID] (Index)
+       [dbo].[SchemaColumn].[IX_SchemaColumn_PhenomenonOfferingID] (Index)
+       [dbo].[SchemaColumn].[IX_SchemaColumn_PhenomenonUOMID] (Index)
+       [dbo].[SchemaColumn].[IX_SchemaColumn_UserId] (Index)
+       [dbo].[SchemaColumnType] (Table)
+       [dbo].[SchemaColumnType].[CX_SchemaColumnType] (Index)
+       [dbo].[SchemaColumnType].[IX_SchemaColumnType_UserId] (Index)
+       [dbo].[DF_SchemaColumn_ID] (Default Constraint)
+       [dbo].[DF_SchemaColumn_AddedAt] (Default Constraint)
+       [dbo].[DF_SchemaColumn_UpdatedAt] (Default Constraint)
+       [dbo].[DF_SchemaColumnType_ID] (Default Constraint)
+       [dbo].[DF_SchemaColumnType_AddedAt] (Default Constraint)
+       [dbo].[DF_SchemaColumnType_UpdatedAt] (Default Constraint)
+       [dbo].[FK_SchemaColumn_DataSchema] (Foreign Key)
+       [dbo].[FK_SchemaColumn_SchemaColumnType] (Foreign Key)
+       [dbo].[FK_SchemaColumn_Phenomenon] (Foreign Key)
+       [dbo].[FK_SchemaColumn_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_SchemaColumn_PhenomenonUOM] (Foreign Key)
+       [dbo].[FK_SchemaColumn_aspnet_Users] (Foreign Key)
+       [dbo].[FK_SchemaColumnType_aspnet_Users] (Foreign Key)
+       [dbo].[TR_SchemaColumn_Insert] (Trigger)
+       [dbo].[TR_SchemaColumn_Update] (Trigger)
+       [dbo].[TR_SchemaColumnType_Insert] (Trigger)
+       [dbo].[TR_SchemaColumnType_Update] (Trigger)
+
+** Supporting actions

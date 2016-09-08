@@ -416,6 +416,14 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.ProjectSiteCollection().Where(ProjectSite.Columns.UserId, UserId).Load();
 		}
+		public SAEON.Observations.Data.SchemaColumnCollection SchemaColumnRecords()
+		{
+			return new SAEON.Observations.Data.SchemaColumnCollection().Where(SchemaColumn.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.SchemaColumnTypeCollection SchemaColumnTypeRecords()
+		{
+			return new SAEON.Observations.Data.SchemaColumnTypeCollection().Where(SchemaColumnType.Columns.UserId, UserId).Load();
+		}
 		public SAEON.Observations.Data.SensorCollection SensorRecords()
 		{
 			return new SAEON.Observations.Data.SensorCollection().Where(Sensor.Columns.UserId, UserId).Load();

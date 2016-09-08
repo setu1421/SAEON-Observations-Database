@@ -96,6 +96,10 @@ namespace SAEON.Observations.Data
         
 		public static readonly string RoleModule = @"RoleModule";
         
+		public static readonly string SchemaColumn = @"SchemaColumn";
+        
+		public static readonly string SchemaColumnType = @"SchemaColumnType";
+        
 		public static readonly string Sensor = @"Sensor";
         
 		public static readonly string Site = @"Site";
@@ -310,6 +314,16 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table RoleModule
 		{
             get { return DataService.GetSchema("RoleModule", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table SchemaColumn
+		{
+            get { return DataService.GetSchema("SchemaColumn", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table SchemaColumnType
+		{
+            get { return DataService.GetSchema("SchemaColumnType", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table Sensor

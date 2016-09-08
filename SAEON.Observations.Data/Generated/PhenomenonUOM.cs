@@ -319,6 +319,10 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.ObservationCollection().Where(Observation.Columns.PhenomenonUOMID, Id).Load();
 		}
+		public SAEON.Observations.Data.SchemaColumnCollection SchemaColumnRecords()
+		{
+			return new SAEON.Observations.Data.SchemaColumnCollection().Where(SchemaColumn.Columns.PhenomenonUOMID, Id).Load();
+		}
 		#endregion
 		
 			

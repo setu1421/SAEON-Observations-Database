@@ -475,6 +475,10 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.DataSourceCollection().Where(DataSource.Columns.DataSchemaID, Id).Load();
 		}
+		public SAEON.Observations.Data.SchemaColumnCollection SchemaColumnRecords()
+		{
+			return new SAEON.Observations.Data.SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, Id).Load();
+		}
 		public SAEON.Observations.Data.SensorCollection SensorRecords()
 		{
 			return new SAEON.Observations.Data.SensorCollection().Where(Sensor.Columns.DataSchemaID, Id).Load();
