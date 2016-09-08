@@ -14,10 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		3.2) Status Reasons.sql = 3.2) Status Reasons.sql
 		3.3) Staging - Mark all Unverified - Staging.sql = 3.3) Staging - Mark all Unverified - Staging.sql
 		3.4) Live - Mark historical Unverified.sql = 3.4) Live - Mark historical Unverified.sql
+		3.5) Status Reasons fix.sql = 3.5) Status Reasons fix.sql
 		5) Do Merge.txt = 5) Do Merge.txt
 		6) Post merge creates.sql = 6) Post merge creates.sql
 		Stats.sql = Stats.sql
-		Status Reasons fix.sql = Status Reasons fix.sql
 	EndProjectSection
 EndProject
 Global
@@ -25,7 +25,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F7197303-0F25-48CA-9F2B-0172DCF878C5}.Default|Default.ActiveCfg = Default
+		{045F439B-94C8-42FB-AC8E-542EE578E976}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

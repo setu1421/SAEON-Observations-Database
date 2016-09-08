@@ -59,6 +59,12 @@ from
     on (Station.UserId = aspnet_Users.UserId)
 where
   (aspnet_Users.LoweredUserName = '1')
+Update
+  DataSchema
+Set
+  UserId = (Select UserId from aspnet_Users where aspnet_Users.LoweredUserName = 'jp')
+where
+  (Code = 'CS_FYN7_FOG_D')
 Update 
   DataSchema
 set
@@ -204,10 +210,6 @@ set
   DataSourceID = (Select ID from DataSource where Code = 'CONSTB_CWS_CSAWS_D')
 where
   (Code = 'CONSTB_DWS_CSAWS_SM2_D')
---Delete from DataSourceTransformation where (DataSourceID = (Select ID from DataSource where code = 'JNHK_ALL_M_YR_WTotals'))
---Delete from DataSourceTransformation where (DataSourceID = (Select ID from DataSource where code = 'JNHK_ALL_M_WR'))
---Delete from DataSourceTransformation where (DataSourceID = (Select ID from DataSource where code = 'JNHK_BIES_MET_D'))
---Delete from DataSourceTransformation where (DataSourceID = (Select ID from DataSource where code = 'JNHK_SBK_MET_D_RAIN'))
 
 
 
