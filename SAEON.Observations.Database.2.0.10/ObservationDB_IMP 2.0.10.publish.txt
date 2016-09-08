@@ -1,0 +1,26 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[Observation] (Table)
+     Create
+       [dbo].[Observation].[IX_Observation_Comment] (Index)
+       [dbo].[Observation].[IX_Observation_Comment_Null] (Index)
+
+** Supporting actions
+     Refresh
+       [dbo].[vInventory] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationRoles] (View)
+       [dbo].[progress_Status_Raw] (Procedure)
+
+If this deployment is executed, changes to [dbo].[Observation] might introduce run-time errors in [dbo].[_Progress].
+

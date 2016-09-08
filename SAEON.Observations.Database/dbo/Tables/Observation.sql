@@ -10,7 +10,10 @@
     [ValueDate]             DATETIME         NOT NULL,
     [RawValue]              FLOAT (53)       NULL,
     [DataValue]             FLOAT (53)       NULL,
-    [Comment]               VARCHAR (250)    NULL,
+--> Changed 2.0.10 20160901 TimPN
+--    [Comment]               VARCHAR (250)    NULL,
+    [Comment]               VARCHAR (250)    SPARSE NULL,
+--> Changed 2.0.10 20160901 TimPN
 --> Changed 2.0.3 20160421 TimPN
 --    [PhenonmenonOfferingID] UNIQUEIDENTIFIER NOT NULL,
     [PhenomenonOfferingID] UNIQUEIDENTIFIER NOT NULL,
@@ -92,7 +95,12 @@ CREATE INDEX [IX_Observation_StatusID] ON [dbo].[Observation] ([StatusID])
 GO
 CREATE INDEX [IX_Observation_StatusReasonID] ON [dbo].[Observation] ([StatusReasonID])
 --< Added 2.0.9 20160823 TimPN
-
+--> Added 2.0.10 20160901 TimPN
+GO
+CREATE INDEX [IX_Observation_Comment] ON [dbo].[Observation] ([Comment]) WHERE Comment is not null
+GO
+CREATE INDEX [IX_Observation_Comment_Null] ON [dbo].[Observation] ([Comment]) WHERE Comment is null
+--< Added 2.0.10 20160901 TimPN
 --> Added 2.0.8 20160718 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]
