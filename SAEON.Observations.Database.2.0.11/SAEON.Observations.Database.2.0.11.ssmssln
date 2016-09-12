@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2F53A5A9-6347-4C3A-A67C-8C0E5017A4DC}"
 	ProjectSection(SolutionItems) = preProject
 		1) Creates.sql = 1) Creates.sql
+		2) Update Modules.sql = 2) Update Modules.sql
 		ObservationDB 2.0.11.publish.sql = ObservationDB 2.0.11.publish.sql
 		ObservationDB 2.0.11.publish.txt = ObservationDB 2.0.11.publish.txt
 		ObservationDB_IMP 2.0.11.publish.sql = ObservationDB_IMP 2.0.11.publish.sql
@@ -17,7 +18,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{133638B7-B6EC-47A9-A3C9-5706C91EAE34}.Default|Default.ActiveCfg = Default
+		{3C26119F-4FAF-400D-A009-628C29AC1B75}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

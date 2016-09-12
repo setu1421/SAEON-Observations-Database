@@ -28,14 +28,14 @@ namespace SAEON.Observations.Data{
     public partial class VDataSchema : ReadOnlyRecord<VDataSchema>, IReadOnlyRecord
     {
     
-	    #region Default Settings
-	    protected static void SetSQLProps() 
-	    {
-		    GetTableSchema();
-	    }
-	    #endregion
+        #region Default Settings
+        protected static void SetSQLProps() 
+        {
+            GetTableSchema();
+        }
+        #endregion
         #region Schema Accessor
-	    public static TableSchema.Table Schema
+        public static TableSchema.Table Schema
         {
             get
             {
@@ -46,7 +46,7 @@ namespace SAEON.Observations.Data{
                 return BaseSchema;
             }
         }
-    	
+        
         private static void GetTableSchema() 
         {
             if(!IsSchemaInitialized)
@@ -235,249 +235,249 @@ namespace SAEON.Observations.Data{
         #endregion
         
         #region Query Accessor
-	    public static Query CreateQuery()
-	    {
-		    return new Query(Schema);
-	    }
-	    #endregion
-	    
-	    #region .ctors
-	    public VDataSchema()
-	    {
+        public static Query CreateQuery()
+        {
+            return new Query(Schema);
+        }
+        #endregion
+        
+        #region .ctors
+        public VDataSchema()
+        {
             SetSQLProps();
             SetDefaults();
             MarkNew();
         }
         public VDataSchema(bool useDatabaseDefaults)
-	    {
-		    SetSQLProps();
-		    if(useDatabaseDefaults)
-		    {
-				ForceDefaults();
-			}
-			MarkNew();
-	    }
-	    
-	    public VDataSchema(object keyID)
-	    {
-		    SetSQLProps();
-		    LoadByKey(keyID);
-	    }
-    	 
-	    public VDataSchema(string columnName, object columnValue)
+        {
+            SetSQLProps();
+            if(useDatabaseDefaults)
+            {
+                ForceDefaults();
+            }
+            MarkNew();
+        }
+        
+        public VDataSchema(object keyID)
+        {
+            SetSQLProps();
+            LoadByKey(keyID);
+        }
+         
+        public VDataSchema(string columnName, object columnValue)
         {
             SetSQLProps();
             LoadByParam(columnName,columnValue);
         }
         
-	    #endregion
-	    
-	    #region Props
-	    
+        #endregion
+        
+        #region Props
+        
           
         [XmlAttribute("Id")]
         [Bindable(true)]
         public Guid Id 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("ID");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<Guid>("ID");
+            }
             set 
-		    {
-			    SetColumnValue("ID", value);
+            {
+                SetColumnValue("ID", value);
             }
         }
-	      
+          
         [XmlAttribute("Code")]
         [Bindable(true)]
         public string Code 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("Code");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<string>("Code");
+            }
             set 
-		    {
-			    SetColumnValue("Code", value);
+            {
+                SetColumnValue("Code", value);
             }
         }
-	      
+          
         [XmlAttribute("Name")]
         [Bindable(true)]
         public string Name 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("Name");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<string>("Name");
+            }
             set 
-		    {
-			    SetColumnValue("Name", value);
+            {
+                SetColumnValue("Name", value);
             }
         }
-	      
+          
         [XmlAttribute("Description")]
         [Bindable(true)]
         public string Description 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("Description");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<string>("Description");
+            }
             set 
-		    {
-			    SetColumnValue("Description", value);
+            {
+                SetColumnValue("Description", value);
             }
         }
-	      
+          
         [XmlAttribute("UserId")]
         [Bindable(true)]
         public Guid UserId 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("UserId");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<Guid>("UserId");
+            }
             set 
-		    {
-			    SetColumnValue("UserId", value);
+            {
+                SetColumnValue("UserId", value);
             }
         }
-	      
+          
         [XmlAttribute("DataSourceTypeID")]
         [Bindable(true)]
         public Guid DataSourceTypeID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("DataSourceTypeID");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<Guid>("DataSourceTypeID");
+            }
             set 
-		    {
-			    SetColumnValue("DataSourceTypeID", value);
+            {
+                SetColumnValue("DataSourceTypeID", value);
             }
         }
-	      
+          
         [XmlAttribute("IgnoreFirst")]
         [Bindable(true)]
         public int IgnoreFirst 
-	    {
-		    get
-		    {
-			    return GetColumnValue<int>("IgnoreFirst");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<int>("IgnoreFirst");
+            }
             set 
-		    {
-			    SetColumnValue("IgnoreFirst", value);
+            {
+                SetColumnValue("IgnoreFirst", value);
             }
         }
-	      
+          
         [XmlAttribute("IgnoreLast")]
         [Bindable(true)]
         public int IgnoreLast 
-	    {
-		    get
-		    {
-			    return GetColumnValue<int>("IgnoreLast");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<int>("IgnoreLast");
+            }
             set 
-		    {
-			    SetColumnValue("IgnoreLast", value);
+            {
+                SetColumnValue("IgnoreLast", value);
             }
         }
-	      
+          
         [XmlAttribute("Delimiter")]
         [Bindable(true)]
         public string Delimiter 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("Delimiter");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<string>("Delimiter");
+            }
             set 
-		    {
-			    SetColumnValue("Delimiter", value);
+            {
+                SetColumnValue("Delimiter", value);
             }
         }
-	      
+          
         [XmlAttribute("Condition")]
         [Bindable(true)]
         public string Condition 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("Condition");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<string>("Condition");
+            }
             set 
-		    {
-			    SetColumnValue("Condition", value);
+            {
+                SetColumnValue("Condition", value);
             }
         }
-	      
+          
         [XmlAttribute("SplitSelector")]
         [Bindable(true)]
         public string SplitSelector 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("SplitSelector");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<string>("SplitSelector");
+            }
             set 
-		    {
-			    SetColumnValue("SplitSelector", value);
+            {
+                SetColumnValue("SplitSelector", value);
             }
         }
-	      
+          
         [XmlAttribute("SplitIndex")]
         [Bindable(true)]
         public int? SplitIndex 
-	    {
-		    get
-		    {
-			    return GetColumnValue<int?>("SplitIndex");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<int?>("SplitIndex");
+            }
             set 
-		    {
-			    SetColumnValue("SplitIndex", value);
+            {
+                SetColumnValue("SplitIndex", value);
             }
         }
-	      
+          
         [XmlAttribute("DataSourceTypeCode")]
         [Bindable(true)]
         public string DataSourceTypeCode 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("DataSourceTypeCode");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<string>("DataSourceTypeCode");
+            }
             set 
-		    {
-			    SetColumnValue("DataSourceTypeCode", value);
+            {
+                SetColumnValue("DataSourceTypeCode", value);
             }
         }
-	      
+          
         [XmlAttribute("DataSourceTypeDesc")]
         [Bindable(true)]
         public string DataSourceTypeDesc 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("DataSourceTypeDesc");
-		    }
+        {
+            get
+            {
+                return GetColumnValue<string>("DataSourceTypeDesc");
+            }
             set 
-		    {
-			    SetColumnValue("DataSourceTypeDesc", value);
+            {
+                SetColumnValue("DataSourceTypeDesc", value);
             }
         }
-	    
-	    #endregion
+        
+        #endregion
     
-	    #region Columns Struct
-	    public struct Columns
-	    {
-		    
-		    
+        #region Columns Struct
+        public struct Columns
+        {
+            
+            
             public static string Id = @"ID";
             
             public static string Code = @"Code";
@@ -506,11 +506,11 @@ namespace SAEON.Observations.Data{
             
             public static string DataSourceTypeDesc = @"DataSourceTypeDesc";
             
-	    }
-	    #endregion
-	    
-	    
-	    #region IAbstractRecord Members
+        }
+        #endregion
+        
+        
+        #region IAbstractRecord Members
         public new CT GetColumnValue<CT>(string columnName) {
             return base.GetColumnValue<CT>(columnName);
         }
@@ -518,6 +518,6 @@ namespace SAEON.Observations.Data{
             return base.GetColumnValue<object>(columnName);
         }
         #endregion
-	    
+        
     }
 }

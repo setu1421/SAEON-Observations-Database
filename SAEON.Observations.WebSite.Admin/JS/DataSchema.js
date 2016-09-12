@@ -5,20 +5,20 @@ function LoadCustomValidators() {
         duplicateNameText: 'The Field Name already exists.',
         duplicateName: function (v, d, e) {
 
-            if (typeof (d.ownerCt.ownerCt.getForm()._record) != 'undefined' && d.ownerCt.ownerCt.getForm()._record.data.Name == v)
+            if (typeof d.ownerCt.ownerCt.getForm()._record !== 'undefined' && d.ownerCt.ownerCt.getForm()._record.data.Name === v)
                 return true;
 
             return DelimetedFieldsGrid.getStore().queryBy(function (record) {
-                if (v != '')
-                    return record.get('Name') == v;
-            }).getCount() == 0;
+                if (v !== '')
+                    return record.get('Name') === v;
+            }).getCount() === 0;
         }
     });
 }
 
 function onCommand(e, record) {
 
-    if (e != 'Edit')
+    if (e !== 'Edit')
         return;
 
     DetailsFormPanel.getForm().reset();
@@ -39,7 +39,7 @@ function onCommand(e, record) {
     tfCode.markAsValid();
     tfName.markAsValid();
 
-    if (record.data.DataSourceTypeID == '25839703-3cb3-4c23-aca3-4399cc52ecde')
+    if (record.data.DataSourceTypeID === '25839703-3cb3-4c23-aca3-4399cc52ecde')
         cbDelimiter.allowBlank = false;
     else
         cbDelimiter.allowBlank = true;
@@ -73,7 +73,7 @@ function New() {
 
 function onFieldsCommand(e, record, rowIndex, colIndex) {
 
-    if (e == 'Edit') {
+    if (e === 'Edit') {
 
         if (record.data.Datefield) {
             DateFieldEditor.getForm().reset();
@@ -144,7 +144,7 @@ function onFieldsCommand(e, record, rowIndex, colIndex) {
 
             CommentFieldWindow.show();
         }
-        else if (record.data.PhenomenonID != null) {
+        else if (record.data.PhenomenonID !== null) {
             OfferingFieldEditor.getForm().reset();
 
             DelimetedFieldsGrid.el.mask('Please wait', 'x-mask-loading');
@@ -158,14 +158,14 @@ function onFieldsCommand(e, record, rowIndex, colIndex) {
             var loadcallback = function () {
                 cbOffering.getStore().removeListener('load', loadcallback);
                 cbOffering.setValue(record.data.OfferingID);
-            }
+            };
 
             var uomloadcallback = function () {
                 cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
                 cbUnitofMeasure.setValue(record.data.UnitofMeasureID);
                 DelimetedFieldsGrid.el.unmask();
                 OfferingFieldWindow.show();
-            }
+            };
 
             if (record.data.FixedTimeField) {
                 FieldFixedTimeValue.allowBlank = false;
@@ -191,7 +191,7 @@ function onFieldsCommand(e, record, rowIndex, colIndex) {
 
         }
     }
-    else if (e == 'Delete') {
+    else if (e === 'Delete') {
         DelimetedFieldsGrid.deleteRecord(record);
     }
 }
@@ -233,7 +233,7 @@ function SaveDateField() {
 
     DateFieldEditor.getForm().updateRecord(record);
 
-    if (typeof record.store == 'undefined')
+    if (typeof record.store === 'undefined')
         DelimetedFieldsGrid.getStore().add(record);
 
     DelimetedFieldsGrid.getStore().commitChanges();
@@ -279,7 +279,7 @@ function SaveTimeField() {
 
     TimeFieldEditor.getForm().updateRecord(record);
 
-    if (typeof record.store == 'undefined')
+    if (typeof record.store === 'undefined')
         DelimetedFieldsGrid.getStore().add(record);
 
     DelimetedFieldsGrid.getStore().commitChanges();
@@ -312,7 +312,7 @@ function SaveIgnoreField() {
 
     IgnoreFieldEditor.getForm().updateRecord(record);
 
-    if (typeof record.store == 'undefined')
+    if (typeof record.store === 'undefined')
         DelimetedFieldsGrid.getStore().add(record);
 
     DelimetedFieldsGrid.getStore().commitChanges();
@@ -345,7 +345,7 @@ function SaveCommentField() {
 
     CommentFieldEditor.getForm().updateRecord(record);
 
-    if (typeof record.store == 'undefined')
+    if (typeof record.store === 'undefined')
         DelimetedFieldsGrid.getStore().add(record);
 
     DelimetedFieldsGrid.getStore().commitChanges();
@@ -400,7 +400,7 @@ function SaveOfferingField() {
 
     OfferingFieldEditor.getForm().updateRecord(record);
 
-    if (typeof record.store == 'undefined')
+    if (typeof record.store === 'undefined')
         DelimetedFieldsGrid.getStore().add(record);
 
     DelimetedFieldsGrid.getStore().commitChanges();

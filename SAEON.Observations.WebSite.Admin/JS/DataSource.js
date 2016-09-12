@@ -10,7 +10,7 @@
 
 	tfCode.markAsValid();
 	tfName.markAsValid();
-	DetailWindow.show()
+	DetailWindow.show();
 }
 
 function New()
@@ -68,34 +68,30 @@ function onTransformCommand(e, record)
 
 	DSTransformGrid.el.mask('Please wait', 'x-mask-loading');
 
-	var loadcallback = function ()
-	{
-		cbOffering.getStore().removeListener('load', loadcallback);
-		cbOffering.setValue(record.data.PhenomenonOfferingId);
-	}
+	var loadcallback = function () {
+	    cbOffering.getStore().removeListener('load', loadcallback);
+	    cbOffering.setValue(record.data.PhenomenonOfferingId);
+	};
 
-	var uomloadcallback = function ()
-	{
-		cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
-		cbUnitofMeasure.setValue(record.data.UnitOfMeasureId);
-//		DSTransformGrid.el.unmask();
-//		TransformationDetailWindow.show()
-	}
+	var uomloadcallback = function () {
+	    cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
+	    cbUnitofMeasure.setValue(record.data.UnitOfMeasureId);
+	    //		DSTransformGrid.el.unmask();
+	    //		TransformationDetailWindow.show()
+	};
 
 	//
-	var newOloadcallback = function ()
-	{
-		sbNewOffering.getStore().removeListener('load', newOloadcallback);
-		sbNewOffering.setValue(record.data.NewPhenomenonOfferingID);
-	}
+	var newOloadcallback = function () {
+	    sbNewOffering.getStore().removeListener('load', newOloadcallback);
+	    sbNewOffering.setValue(record.data.NewPhenomenonOfferingID);
+	};
 
-	var newUOMloadcallback = function ()
-	{
-		sbNewUoM.getStore().removeListener('load', newUOMloadcallback);
-		sbNewUoM.setValue(record.data.NewPhenomenonUOMID);
-		DSTransformGrid.el.unmask();
-		TransformationDetailWindow.show()
-	}
+	var newUOMloadcallback = function () {
+	    sbNewUoM.getStore().removeListener('load', newUOMloadcallback);
+	    sbNewUoM.setValue(record.data.NewPhenomenonUOMID);
+	    DSTransformGrid.el.unmask();
+	    TransformationDetailWindow.show();
+	};
 	//
 
 	tfDefinition.rvConfig.remoteValidated = false;
