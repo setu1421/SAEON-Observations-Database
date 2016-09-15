@@ -32,9 +32,9 @@ Select
 from
   ObservationDB.dbo.DataLog
   left join ObservationDB.dbo.ImportBatch /*1*/
-    on (ObservationDB.dbo.DataLog.ImportBatchID = ObservationDB.dbo.ImportBatch.ID)
+    on (DataLog.ImportBatchID = ImportBatch.ID)
   left join ObservationDB.dbo.DataSource ImportBatch__DataSource /*3*/
-    on (ObservationDB.dbo.ImportBatch.DataSourceID = ImportBatch__DataSource.ID)
+    on (ImportBatch.DataSourceID = ImportBatch__DataSource.ID)
   left join ObservationDB.dbo.Sensor /*1*/
     on (DataLog.SensorID = Sensor.ID)
   left join ObservationDB.dbo.PhenomenonOffering /*1*/
@@ -124,9 +124,9 @@ Select
 from
   ObservationDB_IMP.dbo.DataLog
   left join ObservationDB_IMP.dbo.ImportBatch /*1*/
-    on (ObservationDB_IMP.dbo.DataLog.ImportBatchID = ObservationDB_IMP.dbo.ImportBatch.ID)
+    on (DataLog.ImportBatchID = ImportBatch.ID)
   left join ObservationDB_IMP.dbo.DataSource ImportBatch__DataSource /*3*/
-    on (ObservationDB_IMP.dbo.ImportBatch.DataSourceID = ImportBatch__DataSource.ID)
+    on (ImportBatch.DataSourceID = ImportBatch__DataSource.ID)
   left join ObservationDB_IMP.dbo.Sensor /*1*/
     on (DataLog.SensorID = Sensor.ID)
   left join ObservationDB_IMP.dbo.PhenomenonOffering /*1*/
@@ -191,14 +191,14 @@ select
   (Select ID from ObservationDB.dbo.Sensor where (Code = Staging.Sensor__Code)),
   Staging.ImportDate,Staging.ValueDate,Staging.ValueTime,Staging.ValueText,Staging.TransformValueText,Staging.RawValue,
   Staging.DataValue,Staging.Comment,Staging.InvalidDateValue,Staging.InvalidTimeValue,Staging.InvalidOffering,Staging.InvalidUOM,
-  (Select ID from ObservationDB.dbo.DataSourceTransformation where true),
+  null/*(Select ID from ObservationDB.dbo.DataSourceTransformation where true)*/,
   (Select ID from ObservationDB.dbo.Status where (Code = Staging.Status__Code)),
   (Select ID from ObservationDB.dbo.StatusReason where (Code = Staging.Status__Code)),
   Staging.ImportStatus,
-  UserId,
-  PhenomenonOfferingID,
-  PhenomenonUOMID,
-  ImportBatchID,
+  null/*UserId*/,
+  null/*PhenomenonOfferingID*/,
+  null/*PhenomenonUOMID*/,
+  null/*ImportBatchID*/,
   Staging.RawRecordData,Staging.RawFieldValue
 from 
 	Staging
@@ -216,6 +216,8 @@ from
 		 (Staging.PhenomenonUOM__UnitOfMeasure__Code = Live.PhenomenonUOM__UnitOfMeasure__Code)
 where
 	(Live.ID is null)
+
+
   
 
 	
