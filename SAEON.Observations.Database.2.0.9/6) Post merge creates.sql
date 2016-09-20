@@ -1,4 +1,4 @@
-use [ObservationDB]
+--use [ObservationDB]
 Declare @TimUserId UniqueIdentifier = (Select UserId from aspnet_Users where LoweredUserName = 'tim')
 -- Programme
 print 'Programmes'

@@ -19,3 +19,10 @@ from
 		 (obs.ValueDate = bad.ValueDate)
 order by
   [SensorID], [ImportBatchID], [PhenomenonOfferingID], [PhenomenonUOMID], [ValueDate]
+
+Select
+  SensorID, ImportBatchID, PhenomenonOfferingID, PhenomenonUOMID, ValueDate, ROW_NUMBER() over(Partition By SensorID, ImportBatchID, PhenomenonOfferingID, PhenomenonUOMID, ValueDate order by ValueDate) RowNumber
+from
+  Observation
+order by
+  [SensorID], [ImportBatchID], [PhenomenonOfferingID], [PhenomenonUOMID], [ValueDate]

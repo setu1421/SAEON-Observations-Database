@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
     /// <summary>
-    /// Controller class for ImportBatch
+    /// Controller class for Site_Organisation
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class ImportBatchController
+    public partial class SiteOrganisationController
     {
         // Preload our schema..
-        ImportBatch thisSchemaLoad = new ImportBatch();
+        SiteOrganisation thisSchemaLoad = new SiteOrganisation();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.Observations.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public ImportBatchCollection FetchAll()
+        public SiteOrganisationCollection FetchAll()
         {
-            ImportBatchCollection coll = new ImportBatchCollection();
-            Query qry = new Query(ImportBatch.Schema);
+            SiteOrganisationCollection coll = new SiteOrganisationCollection();
+            Query qry = new Query(SiteOrganisation.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public ImportBatchCollection FetchByID(object Id)
+        public SiteOrganisationCollection FetchByID(object Id)
         {
-            ImportBatchCollection coll = new ImportBatchCollection().Where("ID", Id).Load();
+            SiteOrganisationCollection coll = new SiteOrganisationCollection().Where("ID", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public ImportBatchCollection FetchByQuery(Query qry)
+        public SiteOrganisationCollection FetchByQuery(Query qry)
         {
-            ImportBatchCollection coll = new ImportBatchCollection();
+            SiteOrganisationCollection coll = new SiteOrganisationCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
         public bool Delete(object Id)
         {
-            return (ImportBatch.Delete(Id) == 1);
+            return (SiteOrganisation.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
         public bool Destroy(object Id)
         {
-            return (ImportBatch.Destroy(Id) == 1);
+            return (SiteOrganisation.Destroy(Id) == 1);
         }
         
         
@@ -80,29 +80,23 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,Guid SiteID,Guid OrganisationID,Guid OrganisationRoleID,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
-		    ImportBatch item = new ImportBatch();
+		    SiteOrganisation item = new SiteOrganisation();
 		    
             item.Id = Id;
             
-            item.DataSourceID = DataSourceID;
+            item.SiteID = SiteID;
             
-            item.ImportDate = ImportDate;
+            item.OrganisationID = OrganisationID;
             
-            item.Status = Status;
+            item.OrganisationRoleID = OrganisationRoleID;
+            
+            item.StartDate = StartDate;
+            
+            item.EndDate = EndDate;
             
             item.UserId = UserId;
-            
-            item.FileName = FileName;
-            
-            item.LogFileName = LogFileName;
-            
-            item.Comment = Comment;
-            
-            item.StatusID = StatusID;
-            
-            item.StatusReasonID = StatusReasonID;
             
             item.AddedAt = AddedAt;
             
@@ -116,33 +110,25 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,int Code,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,Guid SiteID,Guid OrganisationID,Guid OrganisationRoleID,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
-		    ImportBatch item = new ImportBatch();
+		    SiteOrganisation item = new SiteOrganisation();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
 			item.Id = Id;
 				
-			item.Code = Code;
+			item.SiteID = SiteID;
 				
-			item.DataSourceID = DataSourceID;
+			item.OrganisationID = OrganisationID;
 				
-			item.ImportDate = ImportDate;
+			item.OrganisationRoleID = OrganisationRoleID;
 				
-			item.Status = Status;
+			item.StartDate = StartDate;
+				
+			item.EndDate = EndDate;
 				
 			item.UserId = UserId;
-				
-			item.FileName = FileName;
-				
-			item.LogFileName = LogFileName;
-				
-			item.Comment = Comment;
-				
-			item.StatusID = StatusID;
-				
-			item.StatusReasonID = StatusReasonID;
 				
 			item.AddedAt = AddedAt;
 				

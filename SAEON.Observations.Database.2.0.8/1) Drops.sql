@@ -35,6 +35,10 @@ drop table Progress
 drop table SensorImport
 drop table NewConfig
 
+alter table Instrument drop constraint FK_Instrument_Station
+alter table Instrument drop constraint UX_Instrument_StationID_Code
+alter table Instrument drop constraint UX_Instrument_StationID_Name
+alter table Instrument drop column StationID
 drop index Sensor.IX_Sensor_InstrumentID
 alter table Sensor drop constraint FK_Sensor_Instrument
 alter table Sensor drop column InstrumentID

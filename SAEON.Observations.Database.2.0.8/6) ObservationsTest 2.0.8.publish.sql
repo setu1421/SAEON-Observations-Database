@@ -40,15 +40,6 @@ USE [$(DatabaseName)];
 
 
 GO
-PRINT N'Dropping [dbo].[Programme].[IX_Project_ProgrammeID]...';
-
-
-GO
-DROP INDEX [IX_Project_ProgrammeID]
-    ON [dbo].[Programme];
-
-
-GO
 PRINT N'Dropping [dbo].[Site].[IX_Instrument_EndDate]...';
 
 
@@ -76,14 +67,6 @@ DROP INDEX [IX_Instrument_UserId]
 
 
 GO
-PRINT N'Dropping [dbo].[DF_DataLog_ID]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_ID];
-
-
-GO
 PRINT N'Dropping [dbo].[DF_DataLog_ImportDate]...';
 
 
@@ -92,11 +75,27 @@ ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_ImportDate];
 
 
 GO
-PRINT N'Dropping [dbo].[DF_Observation_ID]...';
+PRINT N'Dropping [dbo].[DF_DataLog_ID]...';
 
 
 GO
-ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [DF_Observation_ID];
+ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_ID];
+
+
+GO
+PRINT N'Dropping [dbo].[DF_ImportBatch_ImportDate]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatch] DROP CONSTRAINT [DF_ImportBatch_ImportDate];
+
+
+GO
+PRINT N'Dropping [dbo].[DF_ImportBatch_Guid]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatch] DROP CONSTRAINT [DF_ImportBatch_Guid];
 
 
 GO
@@ -105,6 +104,14 @@ PRINT N'Dropping [dbo].[DF_Observation_AddedDate]...';
 
 GO
 ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [DF_Observation_AddedDate];
+
+
+GO
+PRINT N'Dropping [dbo].[DF_Observation_ID]...';
+
+
+GO
+ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [DF_Observation_ID];
 
 
 GO
@@ -132,19 +139,19 @@ ALTER TABLE [dbo].[DataSchema] DROP CONSTRAINT [DF_DataSchema_IgnoreLast];
 
 
 GO
-PRINT N'Dropping [dbo].[DF_DataSource_AddedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[DataSource] DROP CONSTRAINT [DF_DataSource_AddedAt];
-
-
-GO
 PRINT N'Dropping [dbo].[DF_DataSource_ID]...';
 
 
 GO
 ALTER TABLE [dbo].[DataSource] DROP CONSTRAINT [DF_DataSource_ID];
+
+
+GO
+PRINT N'Dropping [dbo].[DF_DataSource_AddedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[DataSource] DROP CONSTRAINT [DF_DataSource_AddedAt];
 
 
 GO
@@ -188,19 +195,19 @@ ALTER TABLE [dbo].[DataSourceType] DROP CONSTRAINT [DF_DataSourceType_ID];
 
 
 GO
-PRINT N'Dropping [dbo].[DF_Instrument_AddedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[Instrument] DROP CONSTRAINT [DF_Instrument_AddedAt];
-
-
-GO
 PRINT N'Dropping [dbo].[DF_Instrument_ID]...';
 
 
 GO
 ALTER TABLE [dbo].[Instrument] DROP CONSTRAINT [DF_Instrument_ID];
+
+
+GO
+PRINT N'Dropping [dbo].[DF_Instrument_AddedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[Instrument] DROP CONSTRAINT [DF_Instrument_AddedAt];
 
 
 GO
@@ -260,67 +267,11 @@ ALTER TABLE [dbo].[PhenomenonUOM] DROP CONSTRAINT [DF_PhenomenonUOM_IsDefault];
 
 
 GO
-PRINT N'Dropping [dbo].[DF_Programme_AddedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[Programme] DROP CONSTRAINT [DF_Programme_AddedAt];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_Programme_ID]...';
-
-
-GO
-ALTER TABLE [dbo].[Programme] DROP CONSTRAINT [DF_Programme_ID];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_Programme_UpdatedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[Programme] DROP CONSTRAINT [DF_Programme_UpdatedAt];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_Project_AddedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[Project] DROP CONSTRAINT [DF_Project_AddedAt];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_Project_ID]...';
-
-
-GO
-ALTER TABLE [dbo].[Project] DROP CONSTRAINT [DF_Project_ID];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_Project_UpdatedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[Project] DROP CONSTRAINT [DF_Project_UpdatedAt];
-
-
-GO
 PRINT N'Dropping [dbo].[DF_Sensor_ID]...';
 
 
 GO
 ALTER TABLE [dbo].[Sensor] DROP CONSTRAINT [DF_Sensor_ID];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_Site_AddedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[Site] DROP CONSTRAINT [DF_Site_AddedAt];
 
 
 GO
@@ -332,11 +283,27 @@ ALTER TABLE [dbo].[Site] DROP CONSTRAINT [DF_Site_ID];
 
 
 GO
+PRINT N'Dropping [dbo].[DF_Site_AddedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[Site] DROP CONSTRAINT [DF_Site_AddedAt];
+
+
+GO
 PRINT N'Dropping [dbo].[DF_Site_UpdatedAt]...';
 
 
 GO
 ALTER TABLE [dbo].[Site] DROP CONSTRAINT [DF_Site_UpdatedAt];
+
+
+GO
+PRINT N'Dropping [dbo].[DF_Statuib_StationID]...';
+
+
+GO
+ALTER TABLE [dbo].[Station] DROP CONSTRAINT [DF_Statuib_StationID];
 
 
 GO
@@ -353,14 +320,6 @@ PRINT N'Dropping [dbo].[DF_Station_UpdatedAt]...';
 
 GO
 ALTER TABLE [dbo].[Station] DROP CONSTRAINT [DF_Station_UpdatedAt];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_Statuib_StationID]...';
-
-
-GO
-ALTER TABLE [dbo].[Station] DROP CONSTRAINT [DF_Statuib_StationID];
 
 
 GO
@@ -388,19 +347,27 @@ ALTER TABLE [dbo].[UnitOfMeasure] DROP CONSTRAINT [DF_UnitOfMeasure_ID];
 
 
 GO
-PRINT N'Dropping [dbo].[DF_ImportBatch_Guid]...';
-
-
-GO
-ALTER TABLE [dbo].[ImportBatch] DROP CONSTRAINT [DF_ImportBatch_Guid];
-
-
-GO
 PRINT N'Dropping [dbo].[DF_Table_1_Organisation]...';
 
 
 GO
 ALTER TABLE [dbo].[Organisation] DROP CONSTRAINT [DF_Table_1_Organisation];
+
+
+GO
+PRINT N'Dropping [dbo].[FK_DataLog_DataSourceTransformation]...';
+
+
+GO
+ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_DataSourceTransformation];
+
+
+GO
+PRINT N'Dropping [dbo].[FK_DataLog_Sensor]...';
+
+
+GO
+ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_Sensor];
 
 
 GO
@@ -420,11 +387,11 @@ ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_aspnet_Users];
 
 
 GO
-PRINT N'Dropping [dbo].[FK_DataLog_DataSourceTransformation]...';
+PRINT N'Dropping [dbo].[FK_DataLog_Status]...';
 
 
 GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_DataSourceTransformation];
+ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_Status];
 
 
 GO
@@ -444,19 +411,19 @@ ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_PhenomenonUOM];
 
 
 GO
-PRINT N'Dropping [dbo].[FK_DataLog_Sensor]...';
+PRINT N'Dropping [dbo].[FK_ImportBatch_aspnet_Users]...';
 
 
 GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_Sensor];
+ALTER TABLE [dbo].[ImportBatch] DROP CONSTRAINT [FK_ImportBatch_aspnet_Users];
 
 
 GO
-PRINT N'Dropping [dbo].[FK_DataLog_Status]...';
+PRINT N'Dropping [dbo].[FK_ImportBatch_DataSource]...';
 
 
 GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_Status];
+ALTER TABLE [dbo].[ImportBatch] DROP CONSTRAINT [FK_ImportBatch_DataSource];
 
 
 GO
@@ -468,11 +435,11 @@ ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_ImportBatchID];
 
 
 GO
-PRINT N'Dropping [dbo].[FK_Observation_aspnet_Users]...';
+PRINT N'Dropping [dbo].[FK_Observation_Sensor]...';
 
 
 GO
-ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_aspnet_Users];
+ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_Sensor];
 
 
 GO
@@ -492,11 +459,11 @@ ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_PhenomenonUOM];
 
 
 GO
-PRINT N'Dropping [dbo].[FK_Observation_Sensor]...';
+PRINT N'Dropping [dbo].[FK_Observation_aspnet_Users]...';
 
 
 GO
-ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_Sensor];
+ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_aspnet_Users];
 
 
 GO
@@ -524,14 +491,6 @@ ALTER TABLE [dbo].[DataSchema] DROP CONSTRAINT [FK_DataSchema_DataSourceType];
 
 
 GO
-PRINT N'Dropping [dbo].[FK_DataSourceRole_DataSource]...';
-
-
-GO
-ALTER TABLE [dbo].[DataSourceRole] DROP CONSTRAINT [FK_DataSourceRole_DataSource];
-
-
-GO
 PRINT N'Dropping [dbo].[FK_DataSourceTransformation_DataSource]...';
 
 
@@ -548,11 +507,11 @@ ALTER TABLE [dbo].[Sensor] DROP CONSTRAINT [FK_Sensor_DataSource];
 
 
 GO
-PRINT N'Dropping [dbo].[FK_ImportBatch_DataSource]...';
+PRINT N'Dropping [dbo].[FK_DataSourceRole_DataSource]...';
 
 
 GO
-ALTER TABLE [dbo].[ImportBatch] DROP CONSTRAINT [FK_ImportBatch_DataSource];
+ALTER TABLE [dbo].[DataSourceRole] DROP CONSTRAINT [FK_DataSourceRole_DataSource];
 
 
 GO
@@ -564,6 +523,14 @@ ALTER TABLE [dbo].[DataSource] DROP CONSTRAINT [FK_DataSource_aspnet_Users];
 
 
 GO
+PRINT N'Dropping [dbo].[FK_DataSourceRole_aspnet_Users]...';
+
+
+GO
+ALTER TABLE [dbo].[DataSourceRole] DROP CONSTRAINT [FK_DataSourceRole_aspnet_Users];
+
+
+GO
 PRINT N'Dropping [dbo].[FK_DataSourceRole_aspnet_Roles]...';
 
 
@@ -572,11 +539,11 @@ ALTER TABLE [dbo].[DataSourceRole] DROP CONSTRAINT [FK_DataSourceRole_aspnet_Rol
 
 
 GO
-PRINT N'Dropping [dbo].[FK_DataSourceRole_aspnet_Users]...';
+PRINT N'Dropping [dbo].[FK_DataSourceTransformation_Sensor]...';
 
 
 GO
-ALTER TABLE [dbo].[DataSourceRole] DROP CONSTRAINT [FK_DataSourceRole_aspnet_Users];
+ALTER TABLE [dbo].[DataSourceTransformation] DROP CONSTRAINT [FK_DataSourceTransformation_Sensor];
 
 
 GO
@@ -596,6 +563,14 @@ ALTER TABLE [dbo].[DataSourceTransformation] DROP CONSTRAINT [FK_DataSourceTrans
 
 
 GO
+PRINT N'Dropping [dbo].[FK_DataSourceTransformation_TransformationType]...';
+
+
+GO
+ALTER TABLE [dbo].[DataSourceTransformation] DROP CONSTRAINT [FK_DataSourceTransformation_TransformationType];
+
+
+GO
 PRINT N'Dropping [dbo].[FK_DataSourceTransformation_PhenomenonOffering]...';
 
 
@@ -609,22 +584,6 @@ PRINT N'Dropping [dbo].[FK_DataSourceTransformation_PhenomenonUOM]...';
 
 GO
 ALTER TABLE [dbo].[DataSourceTransformation] DROP CONSTRAINT [FK_DataSourceTransformation_PhenomenonUOM];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataSourceTransformation_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[DataSourceTransformation] DROP CONSTRAINT [FK_DataSourceTransformation_Sensor];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataSourceTransformation_TransformationType]...';
-
-
-GO
-ALTER TABLE [dbo].[DataSourceTransformation] DROP CONSTRAINT [FK_DataSourceTransformation_TransformationType];
 
 
 GO
@@ -649,14 +608,6 @@ PRINT N'Dropping [dbo].[FK_Instrument_aspnet_Users]...';
 
 GO
 ALTER TABLE [dbo].[Instrument] DROP CONSTRAINT [FK_Instrument_aspnet_Users];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Instrument_Station]...';
-
-
-GO
-ALTER TABLE [dbo].[Instrument] DROP CONSTRAINT [FK_Instrument_Station];
 
 
 GO
@@ -764,30 +715,6 @@ ALTER TABLE [dbo].[PhenomenonUOM] DROP CONSTRAINT [FK_PhenomenonUOM_UnitOfMeasur
 
 
 GO
-PRINT N'Dropping [dbo].[FK_Project_Programme]...';
-
-
-GO
-ALTER TABLE [dbo].[Project] DROP CONSTRAINT [FK_Project_Programme];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Programme_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[Programme] DROP CONSTRAINT [FK_Programme_aspnet_Users];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Project_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[Project] DROP CONSTRAINT [FK_Project_aspnet_Users];
-
-
-GO
 PRINT N'Dropping [dbo].[FK_Sensor_aspnet_Users]...';
 
 
@@ -804,19 +731,19 @@ ALTER TABLE [dbo].[Sensor] DROP CONSTRAINT [FK_Sensor_Station];
 
 
 GO
-PRINT N'Dropping [dbo].[FK_Site_Organisation_Site]...';
-
-
-GO
-ALTER TABLE [dbo].[Site_Organisation] DROP CONSTRAINT [FK_Site_Organisation_Site];
-
-
-GO
 PRINT N'Dropping [dbo].[FK_Station_Site]...';
 
 
 GO
 ALTER TABLE [dbo].[Station] DROP CONSTRAINT [FK_Station_Site];
+
+
+GO
+PRINT N'Dropping [dbo].[FK_Site_Organisation_Site]...';
+
+
+GO
+ALTER TABLE [dbo].[Site_Organisation] DROP CONSTRAINT [FK_Site_Organisation_Site];
 
 
 GO
@@ -836,19 +763,19 @@ ALTER TABLE [dbo].[Station_Organisation] DROP CONSTRAINT [FK_Station_Organisatio
 
 
 GO
-PRINT N'Dropping [dbo].[FK_Station_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[Station] DROP CONSTRAINT [FK_Station_aspnet_Users];
-
-
-GO
 PRINT N'Dropping [dbo].[FK_Station_ProjectSite]...';
 
 
 GO
 ALTER TABLE [dbo].[Station] DROP CONSTRAINT [FK_Station_ProjectSite];
+
+
+GO
+PRINT N'Dropping [dbo].[FK_Station_aspnet_Users]...';
+
+
+GO
+ALTER TABLE [dbo].[Station] DROP CONSTRAINT [FK_Station_aspnet_Users];
 
 
 GO
@@ -873,38 +800,6 @@ PRINT N'Dropping [dbo].[FK_UnitOfMeasure_aspnet_Users]...';
 
 GO
 ALTER TABLE [dbo].[UnitOfMeasure] DROP CONSTRAINT [FK_UnitOfMeasure_aspnet_Users];
-
-
-GO
-PRINT N'Dropping [dbo].[UX_Instrument_Code]...';
-
-
-GO
-ALTER TABLE [dbo].[Instrument] DROP CONSTRAINT [UX_Instrument_Code];
-
-
-GO
-PRINT N'Dropping [dbo].[UX_Instrument_Name]...';
-
-
-GO
-ALTER TABLE [dbo].[Instrument] DROP CONSTRAINT [UX_Instrument_Name];
-
-
-GO
-PRINT N'Dropping [dbo].[UX_Project_Code]...';
-
-
-GO
-ALTER TABLE [dbo].[Project] DROP CONSTRAINT [UX_Project_Code];
-
-
-GO
-PRINT N'Dropping [dbo].[UX_Project_Name]...';
-
-
-GO
-ALTER TABLE [dbo].[Project] DROP CONSTRAINT [UX_Project_Name];
 
 
 GO
@@ -951,6 +846,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_DataLog] (
     [InvalidUOM]                 VARCHAR (50)     NULL,
     [DataSourceTransformationID] UNIQUEIDENTIFIER NULL,
     [StatusID]                   UNIQUEIDENTIFIER NOT NULL,
+    [StatusReasonID]             UNIQUEIDENTIFIER NULL,
     [ImportStatus]               VARCHAR (500)    NOT NULL,
     [UserId]                     UNIQUEIDENTIFIER NULL,
     [PhenomenonOfferingID]       UNIQUEIDENTIFIER NULL,
@@ -960,7 +856,8 @@ CREATE TABLE [dbo].[tmp_ms_xx_DataLog] (
     [RawFieldValue]              VARCHAR (50)     NOT NULL,
     [AddedAt]                    DATETIME         CONSTRAINT [DF_DataLog_AddedAt] DEFAULT GetDate() NULL,
     [UpdatedAt]                  DATETIME         CONSTRAINT [DF_DataLog_UpdatedAt] DEFAULT GetDate() NULL,
-    CONSTRAINT [tmp_ms_xx_constraint_PK_DataLog1] PRIMARY KEY NONCLUSTERED ([ID] ASC)
+    CONSTRAINT [tmp_ms_xx_constraint_PK_DataLog1] PRIMARY KEY NONCLUSTERED ([ID] ASC),
+    CONSTRAINT [tmp_ms_xx_constraint_UX_DataLog1] UNIQUE NONCLUSTERED ([ImportBatchID] ASC, [SensorID] ASC, [ImportDate] ASC, [ValueDate] ASC, [ValueTime] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC)
 );
 
 CREATE CLUSTERED INDEX [tmp_ms_xx_index_CX_DataLog1]
@@ -1003,6 +900,8 @@ EXECUTE sp_rename N'[dbo].[tmp_ms_xx_DataLog]', N'DataLog';
 EXECUTE sp_rename N'[dbo].[DataLog].[tmp_ms_xx_index_CX_DataLog1]', N'CX_DataLog', N'INDEX';
 
 EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_DataLog1]', N'PK_DataLog', N'OBJECT';
+
+EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_DataLog1]', N'UX_DataLog', N'OBJECT';
 
 COMMIT TRANSACTION;
 
@@ -1070,6 +969,15 @@ PRINT N'Creating [dbo].[DataLog].[IX_DataLog_UserId]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_DataLog_UserId]
     ON [dbo].[DataLog]([UserId] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[DataLog].[IX_DataLog_StatusReasonID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_DataLog_StatusReasonID]
+    ON [dbo].[DataLog]([StatusReasonID] ASC);
 
 
 GO
@@ -1488,22 +1396,86 @@ CREATE NONCLUSTERED INDEX [IX_DataSourceType_UserId]
 
 
 GO
-PRINT N'Altering [dbo].[ImportBatch]...';
+PRINT N'Starting rebuilding table [dbo].[ImportBatch]...';
 
 
 GO
-ALTER TABLE [dbo].[ImportBatch]
-    ADD [AddedAt]   DATETIME CONSTRAINT [DF_ImportBatch_AddedAt] DEFAULT GetDate() NULL,
-        [UpdatedAt] DATETIME CONSTRAINT [DF_ImportBatch_UpdatedAt] DEFAULT GetDate() NULL;
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+SET XACT_ABORT ON;
+
+CREATE TABLE [dbo].[tmp_ms_xx_ImportBatch] (
+    [ID]             UNIQUEIDENTIFIER CONSTRAINT [DF_ImportBatch_ID] DEFAULT newid() NOT NULL,
+    [Code]           INT              IDENTITY (1, 1) NOT NULL,
+    [DataSourceID]   UNIQUEIDENTIFIER NOT NULL,
+    [ImportDate]     DATETIME         CONSTRAINT [DF_ImportBatch_ImportDate] DEFAULT getdate() NOT NULL,
+    [Status]         INT              NOT NULL,
+    [UserId]         UNIQUEIDENTIFIER NOT NULL,
+    [FileName]       VARCHAR (250)    NULL,
+    [LogFileName]    VARCHAR (250)    NULL,
+    [Comment]        VARCHAR (8000)   NULL,
+    [StatusID]       UNIQUEIDENTIFIER NULL,
+    [StatusReasonID] UNIQUEIDENTIFIER NULL,
+    [AddedAt]        DATETIME         CONSTRAINT [DF_ImportBatch_AddedAt] DEFAULT GetDate() NULL,
+    [UpdatedAt]      DATETIME         CONSTRAINT [DF_ImportBatch_UpdatedAt] DEFAULT GetDate() NULL,
+    CONSTRAINT [tmp_ms_xx_constraint_PK_ImportBatch1] PRIMARY KEY NONCLUSTERED ([ID] ASC),
+    CONSTRAINT [tmp_ms_xx_constraint_UX_ImportBatch_Code1] UNIQUE NONCLUSTERED ([Code] ASC),
+    CONSTRAINT [tmp_ms_xx_constraint_UX_ImportBatch1] UNIQUE NONCLUSTERED ([DataSourceID] ASC, [ImportDate] ASC, [LogFileName] ASC)
+);
+
+CREATE CLUSTERED INDEX [tmp_ms_xx_index_CX_ImportBatch1]
+    ON [dbo].[tmp_ms_xx_ImportBatch]([AddedAt] ASC);
+
+IF EXISTS (SELECT TOP 1 1 
+           FROM   [dbo].[ImportBatch])
+    BEGIN
+        INSERT INTO [dbo].[tmp_ms_xx_ImportBatch] ([ID], [DataSourceID], [ImportDate], [Status], [UserId], [FileName], [LogFileName], [Comment])
+        SELECT [ID],
+               [DataSourceID],
+               [ImportDate],
+               [Status],
+               [UserId],
+               [FileName],
+               [LogFileName],
+               [Comment]
+        FROM   [dbo].[ImportBatch];
+    END
+
+DROP TABLE [dbo].[ImportBatch];
+
+EXECUTE sp_rename N'[dbo].[tmp_ms_xx_ImportBatch]', N'ImportBatch';
+
+EXECUTE sp_rename N'[dbo].[ImportBatch].[tmp_ms_xx_index_CX_ImportBatch1]', N'CX_ImportBatch', N'INDEX';
+
+EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_ImportBatch1]', N'PK_ImportBatch', N'OBJECT';
+
+EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_ImportBatch_Code1]', N'UX_ImportBatch_Code', N'OBJECT';
+
+EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_ImportBatch1]', N'UX_ImportBatch', N'OBJECT';
+
+COMMIT TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 
 GO
-PRINT N'Creating [dbo].[ImportBatch].[CX_ImportBatch]...';
+PRINT N'Creating [dbo].[ImportBatch].[IX_ImportBatch_DataSourceID]...';
 
 
 GO
-CREATE CLUSTERED INDEX [CX_ImportBatch]
-    ON [dbo].[ImportBatch]([AddedAt] ASC);
+CREATE NONCLUSTERED INDEX [IX_ImportBatch_DataSourceID]
+    ON [dbo].[ImportBatch]([DataSourceID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatch].[IX_ImportBatch_UserId]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatch_UserId]
+    ON [dbo].[ImportBatch]([UserId] ASC);
 
 
 GO
@@ -1525,6 +1497,24 @@ CREATE NONCLUSTERED INDEX [IX_ImportBatch_LogFileName]
 
 
 GO
+PRINT N'Creating [dbo].[ImportBatch].[IX_ImportBatch_StatusID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatch_StatusID]
+    ON [dbo].[ImportBatch]([StatusID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatch].[IX_ImportBatch_StatusReasonID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatch_StatusReasonID]
+    ON [dbo].[ImportBatch]([StatusReasonID] ASC);
+
+
+GO
 PRINT N'Starting rebuilding table [dbo].[Observation]...';
 
 
@@ -1536,19 +1526,21 @@ SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 SET XACT_ABORT ON;
 
 CREATE TABLE [dbo].[tmp_ms_xx_Observation] (
-    [ID]                   UNIQUEIDENTIFIER CONSTRAINT [DF_Observation_ID] DEFAULT newid() NOT NULL,
-    [SensorID]             UNIQUEIDENTIFIER NOT NULL,
-    [ValueDate]            DATETIME         NOT NULL,
-    [RawValue]             FLOAT (53)       NULL,
-    [DataValue]            FLOAT (53)       NULL,
-    [Comment]              VARCHAR (250)    NULL,
-    [PhenomenonOfferingID] UNIQUEIDENTIFIER NOT NULL,
-    [PhenomenonUOMID]      UNIQUEIDENTIFIER NOT NULL,
-    [ImportBatchID]        UNIQUEIDENTIFIER NOT NULL,
-    [UserId]               UNIQUEIDENTIFIER NOT NULL,
-    [AddedDate]            DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
-    [AddedAt]              DATETIME         CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate() NULL,
-    [UpdatedAt]            DATETIME         CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate() NULL,
+    [ID]                   UNIQUEIDENTIFIER     CONSTRAINT [DF_Observation_ID] DEFAULT newid() NOT NULL,
+    [SensorID]             UNIQUEIDENTIFIER     NOT NULL,
+    [ValueDate]            DATETIME             NOT NULL,
+    [RawValue]             FLOAT (53)           NULL,
+    [DataValue]            FLOAT (53)           NULL,
+    [Comment]              VARCHAR (250) SPARSE NULL,
+    [PhenomenonOfferingID] UNIQUEIDENTIFIER     NOT NULL,
+    [PhenomenonUOMID]      UNIQUEIDENTIFIER     NOT NULL,
+    [ImportBatchID]        UNIQUEIDENTIFIER     NOT NULL,
+    [StatusID]             UNIQUEIDENTIFIER     NULL,
+    [StatusReasonID]       UNIQUEIDENTIFIER     NULL,
+    [UserId]               UNIQUEIDENTIFIER     NOT NULL,
+    [AddedDate]            DATETIME             CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
+    [AddedAt]              DATETIME             CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate() NULL,
+    [UpdatedAt]            DATETIME             CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate() NULL,
     CONSTRAINT [tmp_ms_xx_constraint_PK_Observation1] PRIMARY KEY NONCLUSTERED ([ID] ASC),
     CONSTRAINT [tmp_ms_xx_constraint_UX_Observation1] UNIQUE NONCLUSTERED ([SensorID] ASC, [ImportBatchID] ASC, [ValueDate] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC)
 );
@@ -1659,6 +1651,42 @@ PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDate]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Observation_ValueDate]
     ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_StatusID]
+    ON [dbo].[Observation]([StatusID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusReasonID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_StatusReasonID]
+    ON [dbo].[Observation]([StatusReasonID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_Comment]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_Comment]
+    ON [dbo].[Observation]([Comment] ASC) WHERE Comment is not null;
+
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_Comment_Null]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_Comment_Null]
+    ON [dbo].[Observation]([Comment] ASC) WHERE Comment is null;
 
 
 GO
@@ -2469,7 +2497,6 @@ SET XACT_ABORT ON;
 
 CREATE TABLE [dbo].[tmp_ms_xx_Instrument] (
     [ID]          UNIQUEIDENTIFIER CONSTRAINT [DF_Instrument_ID] DEFAULT newid() NOT NULL,
-    [StationID]   UNIQUEIDENTIFIER NULL,
     [Code]        VARCHAR (50)     NOT NULL,
     [Name]        VARCHAR (150)    NOT NULL,
     [Description] VARCHAR (5000)   NULL,
@@ -2480,8 +2507,8 @@ CREATE TABLE [dbo].[tmp_ms_xx_Instrument] (
     [AddedAt]     DATETIME         CONSTRAINT [DF_Instrument_AddedAt] DEFAULT GetDate() NULL,
     [UpdatedAt]   DATETIME         CONSTRAINT [DF_Instrument_UpdatedAt] DEFAULT GetDate() NULL,
     CONSTRAINT [tmp_ms_xx_constraint_PK_Instrument1] PRIMARY KEY NONCLUSTERED ([ID] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_Instrument_StationID_Code1] UNIQUE NONCLUSTERED ([StationID] ASC, [Code] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_Instrument_StationID_Name1] UNIQUE NONCLUSTERED ([StationID] ASC, [Name] ASC)
+    CONSTRAINT [tmp_ms_xx_constraint_UX_Instrument_Code1] UNIQUE NONCLUSTERED ([Code] ASC),
+    CONSTRAINT [tmp_ms_xx_constraint_UX_Instrument_Name1] UNIQUE NONCLUSTERED ([Name] ASC)
 );
 
 CREATE CLUSTERED INDEX [tmp_ms_xx_index_CX_Instrument1]
@@ -2490,10 +2517,9 @@ CREATE CLUSTERED INDEX [tmp_ms_xx_index_CX_Instrument1]
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Instrument])
     BEGIN
-        INSERT INTO [dbo].[tmp_ms_xx_Instrument] ([AddedAt], [ID], [StationID], [Code], [Name], [Description], [Url], [StartDate], [EndDate], [UserId], [UpdatedAt])
+        INSERT INTO [dbo].[tmp_ms_xx_Instrument] ([AddedAt], [ID], [Code], [Name], [Description], [Url], [StartDate], [EndDate], [UserId], [UpdatedAt])
         SELECT   [AddedAt],
                  [ID],
-                 [StationID],
                  [Code],
                  [Name],
                  [Description],
@@ -2514,9 +2540,9 @@ EXECUTE sp_rename N'[dbo].[Instrument].[tmp_ms_xx_index_CX_Instrument1]', N'CX_I
 
 EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_Instrument1]', N'PK_Instrument', N'OBJECT';
 
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Instrument_StationID_Code1]', N'UX_Instrument_StationID_Code', N'OBJECT';
+EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Instrument_Code1]', N'UX_Instrument_Code', N'OBJECT';
 
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Instrument_StationID_Name1]', N'UX_Instrument_StationID_Name', N'OBJECT';
+EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Instrument_Name1]', N'UX_Instrument_Name', N'OBJECT';
 
 COMMIT TRANSACTION;
 
@@ -2556,233 +2582,6 @@ PRINT N'Creating [dbo].[Instrument].[IX_Instrument_UserId]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Instrument_UserId]
     ON [dbo].[Instrument]([UserId] ASC);
-
-
-GO
-PRINT N'Starting rebuilding table [dbo].[Programme]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-BEGIN TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-
-SET XACT_ABORT ON;
-
-CREATE TABLE [dbo].[tmp_ms_xx_Programme] (
-    [ID]          UNIQUEIDENTIFIER CONSTRAINT [DF_Programme_ID] DEFAULT newid() NOT NULL,
-    [Code]        VARCHAR (50)     NOT NULL,
-    [Name]        VARCHAR (150)    NOT NULL,
-    [Description] VARCHAR (5000)   NULL,
-    [Url]         VARCHAR (250)    NULL,
-    [StartDate]   DATETIME         NULL,
-    [EndDate]     DATETIME         NULL,
-    [UserId]      UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt]     DATETIME         CONSTRAINT [DF_Programme_AddedAt] DEFAULT GetDate() NULL,
-    [UpdatedAt]   DATETIME         CONSTRAINT [DF_Programme_UpdatedAt] DEFAULT GetDate() NULL,
-    CONSTRAINT [tmp_ms_xx_constraint_PK_Programme1] PRIMARY KEY NONCLUSTERED ([ID] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_Programme_Code1] UNIQUE NONCLUSTERED ([Code] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_Programme_Name1] UNIQUE NONCLUSTERED ([Name] ASC)
-);
-
-CREATE CLUSTERED INDEX [tmp_ms_xx_index_CX_Programme1]
-    ON [dbo].[tmp_ms_xx_Programme]([AddedAt] ASC);
-
-IF EXISTS (SELECT TOP 1 1 
-           FROM   [dbo].[Programme])
-    BEGIN
-        INSERT INTO [dbo].[tmp_ms_xx_Programme] ([AddedAt], [ID], [Code], [Name], [Description], [Url], [StartDate], [EndDate], [UserId], [UpdatedAt])
-        SELECT   [AddedAt],
-                 [ID],
-                 [Code],
-                 [Name],
-                 [Description],
-                 [Url],
-                 [StartDate],
-                 [EndDate],
-                 [UserId],
-                 [UpdatedAt]
-        FROM     [dbo].[Programme]
-        ORDER BY [AddedAt] ASC;
-    END
-
-DROP TABLE [dbo].[Programme];
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_Programme]', N'Programme';
-
-EXECUTE sp_rename N'[dbo].[Programme].[tmp_ms_xx_index_CX_Programme1]', N'CX_Programme', N'INDEX';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_Programme1]', N'PK_Programme', N'OBJECT';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Programme_Code1]', N'UX_Programme_Code', N'OBJECT';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Programme_Name1]', N'UX_Programme_Name', N'OBJECT';
-
-COMMIT TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Creating [dbo].[Programme].[IX_Programme_UserId]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Programme_UserId]
-    ON [dbo].[Programme]([UserId] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Programme].[IX_Programme_StartDate]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Programme_StartDate]
-    ON [dbo].[Programme]([StartDate] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Programme].[IX_Programme_EndDate]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Programme_EndDate]
-    ON [dbo].[Programme]([EndDate] ASC);
-
-
-GO
-PRINT N'Starting rebuilding table [dbo].[Project]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-BEGIN TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-
-SET XACT_ABORT ON;
-
-CREATE TABLE [dbo].[tmp_ms_xx_Project] (
-    [ID]          UNIQUEIDENTIFIER CONSTRAINT [DF_Project_ID] DEFAULT newid() NOT NULL,
-    [ProgrammeID] UNIQUEIDENTIFIER NULL,
-    [Code]        VARCHAR (50)     NOT NULL,
-    [Name]        VARCHAR (150)    NOT NULL,
-    [Description] VARCHAR (5000)   NULL,
-    [Url]         VARCHAR (250)    NULL,
-    [StartDate]   DATETIME         NULL,
-    [EndDate]     DATETIME         NULL,
-    [UserId]      UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt]     DATETIME         CONSTRAINT [DF_Project_AddedAt] DEFAULT GetDate() NULL,
-    [UpdatedAt]   DATETIME         CONSTRAINT [DF_Project_UpdatedAt] DEFAULT GetDate() NULL,
-    CONSTRAINT [tmp_ms_xx_constraint_PK_Project1] PRIMARY KEY NONCLUSTERED ([ID] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_Project_ProgramID_Code1] UNIQUE NONCLUSTERED ([ProgrammeID] ASC, [Code] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_Project_ProgramID_Name1] UNIQUE NONCLUSTERED ([ProgrammeID] ASC, [Name] ASC)
-);
-
-CREATE CLUSTERED INDEX [tmp_ms_xx_index_CX_Project1]
-    ON [dbo].[tmp_ms_xx_Project]([AddedAt] ASC);
-
-IF EXISTS (SELECT TOP 1 1 
-           FROM   [dbo].[Project])
-    BEGIN
-        INSERT INTO [dbo].[tmp_ms_xx_Project] ([AddedAt], [ID], [ProgrammeID], [Code], [Name], [Description], [Url], [StartDate], [EndDate], [UserId], [UpdatedAt])
-        SELECT   [AddedAt],
-                 [ID],
-                 [ProgrammeID],
-                 [Code],
-                 [Name],
-                 [Description],
-                 [Url],
-                 [StartDate],
-                 [EndDate],
-                 [UserId],
-                 [UpdatedAt]
-        FROM     [dbo].[Project]
-        ORDER BY [AddedAt] ASC;
-    END
-
-DROP TABLE [dbo].[Project];
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_Project]', N'Project';
-
-EXECUTE sp_rename N'[dbo].[Project].[tmp_ms_xx_index_CX_Project1]', N'CX_Project', N'INDEX';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_Project1]', N'PK_Project', N'OBJECT';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Project_ProgramID_Code1]', N'UX_Project_ProgramID_Code', N'OBJECT';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Project_ProgramID_Name1]', N'UX_Project_ProgramID_Name', N'OBJECT';
-
-COMMIT TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Creating [dbo].[Project].[IX_Project_ProgrammeID]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Project_ProgrammeID]
-    ON [dbo].[Project]([ProgrammeID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Project].[IX_Project_UserId]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Project_UserId]
-    ON [dbo].[Project]([UserId] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Project].[IX_Project_StartDate]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Project_StartDate]
-    ON [dbo].[Project]([StartDate] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Project].[IX_Project_EndDate]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Project_EndDate]
-    ON [dbo].[Project]([EndDate] ASC);
 
 
 GO
@@ -3422,6 +3221,72 @@ CREATE NONCLUSTERED INDEX [IX_Organisation_Station_UserId]
 
 
 GO
+PRINT N'Creating [dbo].[Programme]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[Programme] (
+    [ID]          UNIQUEIDENTIFIER NOT NULL,
+    [Code]        VARCHAR (50)     NOT NULL,
+    [Name]        VARCHAR (150)    NOT NULL,
+    [Description] VARCHAR (5000)   NULL,
+    [Url]         VARCHAR (250)    NULL,
+    [StartDate]   DATETIME         NULL,
+    [EndDate]     DATETIME         NULL,
+    [UserId]      UNIQUEIDENTIFIER NOT NULL,
+    [AddedAt]     DATETIME         NULL,
+    [UpdatedAt]   DATETIME         NULL,
+    CONSTRAINT [PK_Programme] PRIMARY KEY NONCLUSTERED ([ID] ASC),
+    CONSTRAINT [UX_Programme_Code] UNIQUE NONCLUSTERED ([Code] ASC),
+    CONSTRAINT [UX_Programme_Name] UNIQUE NONCLUSTERED ([Name] ASC)
+);
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[Programme].[CX_Programme]...';
+
+
+GO
+CREATE CLUSTERED INDEX [CX_Programme]
+    ON [dbo].[Programme]([AddedAt] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Programme].[IX_Programme_UserId]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Programme_UserId]
+    ON [dbo].[Programme]([UserId] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Programme].[IX_Programme_StartDate]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Programme_StartDate]
+    ON [dbo].[Programme]([StartDate] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Programme].[IX_Programme_EndDate]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Programme_EndDate]
+    ON [dbo].[Programme]([EndDate] ASC);
+
+
+GO
 PRINT N'Creating [dbo].[Progress]...';
 
 
@@ -3480,6 +3345,82 @@ PRINT N'Creating [dbo].[Progress].[IX_Progress_UserId]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Progress_UserId]
     ON [dbo].[Progress]([UserId] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Project]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[Project] (
+    [ID]          UNIQUEIDENTIFIER NOT NULL,
+    [ProgrammeID] UNIQUEIDENTIFIER NULL,
+    [Code]        VARCHAR (50)     NOT NULL,
+    [Name]        VARCHAR (150)    NOT NULL,
+    [Description] VARCHAR (5000)   NULL,
+    [Url]         VARCHAR (250)    NULL,
+    [StartDate]   DATETIME         NULL,
+    [EndDate]     DATETIME         NULL,
+    [UserId]      UNIQUEIDENTIFIER NOT NULL,
+    [AddedAt]     DATETIME         NULL,
+    [UpdatedAt]   DATETIME         NULL,
+    CONSTRAINT [PK_Project] PRIMARY KEY NONCLUSTERED ([ID] ASC),
+    CONSTRAINT [UX_Project_ProgramID_Code] UNIQUE NONCLUSTERED ([ProgrammeID] ASC, [Code] ASC),
+    CONSTRAINT [UX_Project_ProgramID_Name] UNIQUE NONCLUSTERED ([ProgrammeID] ASC, [Name] ASC)
+);
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[Project].[CX_Project]...';
+
+
+GO
+CREATE CLUSTERED INDEX [CX_Project]
+    ON [dbo].[Project]([AddedAt] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Project].[IX_Project_ProgrammeID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Project_ProgrammeID]
+    ON [dbo].[Project]([ProgrammeID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Project].[IX_Project_UserId]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Project_UserId]
+    ON [dbo].[Project]([UserId] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Project].[IX_Project_StartDate]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Project_StartDate]
+    ON [dbo].[Project]([StartDate] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Project].[IX_Project_EndDate]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Project_EndDate]
+    ON [dbo].[Project]([EndDate] ASC);
 
 
 GO
@@ -3564,6 +3505,147 @@ CREATE NONCLUSTERED INDEX [IX_Project_Station_EndDate]
 
 
 GO
+PRINT N'Creating [dbo].[SchemaColumn]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[SchemaColumn] (
+    [ID]                   UNIQUEIDENTIFIER NOT NULL,
+    [DataSchemaID]         UNIQUEIDENTIFIER NOT NULL,
+    [Number]               INT              NOT NULL,
+    [Name]                 VARCHAR (100)    NOT NULL,
+    [SchemaColumnTypeID]   UNIQUEIDENTIFIER NOT NULL,
+    [Width]                INT              NULL,
+    [Format]               VARCHAR (50)     NULL,
+    [PhenomenonID]         UNIQUEIDENTIFIER NULL,
+    [PhenomenonOfferingID] UNIQUEIDENTIFIER NULL,
+    [PhenomenonUOMID]      UNIQUEIDENTIFIER NULL,
+    [FixedTime]            VARCHAR (50)     NULL,
+    [EmptyValue]           VARCHAR (50)     NULL,
+    [UserId]               UNIQUEIDENTIFIER NOT NULL,
+    [AddedAt]              DATETIME         NULL,
+    [UpdatedAt]            DATETIME         NULL,
+    CONSTRAINT [PK_SchemaColumn] PRIMARY KEY NONCLUSTERED ([ID] ASC),
+    CONSTRAINT [UX_SchemaColumn_Name] UNIQUE NONCLUSTERED ([DataSchemaID] ASC, [Name] ASC),
+    CONSTRAINT [UX_SchemaColumn_Number] UNIQUE NONCLUSTERED ([DataSchemaID] ASC, [Number] ASC)
+);
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[SchemaColumn].[CX_SchemaColumn]...';
+
+
+GO
+CREATE CLUSTERED INDEX [CX_SchemaColumn]
+    ON [dbo].[SchemaColumn]([AddedAt] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[SchemaColumn].[IX_SchemaColumn_DataSchemaID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SchemaColumn_DataSchemaID]
+    ON [dbo].[SchemaColumn]([DataSchemaID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[SchemaColumn].[IX_SchemaColumn_SchemaColumnTypeID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SchemaColumn_SchemaColumnTypeID]
+    ON [dbo].[SchemaColumn]([SchemaColumnTypeID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[SchemaColumn].[IX_SchemaColumn_PhenomenonID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SchemaColumn_PhenomenonID]
+    ON [dbo].[SchemaColumn]([PhenomenonID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[SchemaColumn].[IX_SchemaColumn_PhenomenonOfferingID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SchemaColumn_PhenomenonOfferingID]
+    ON [dbo].[SchemaColumn]([PhenomenonOfferingID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[SchemaColumn].[IX_SchemaColumn_PhenomenonUOMID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SchemaColumn_PhenomenonUOMID]
+    ON [dbo].[SchemaColumn]([PhenomenonUOMID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[SchemaColumn].[IX_SchemaColumn_UserId]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SchemaColumn_UserId]
+    ON [dbo].[SchemaColumn]([UserId] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[SchemaColumnType]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[SchemaColumnType] (
+    [ID]          UNIQUEIDENTIFIER NOT NULL,
+    [Name]        VARCHAR (50)     NOT NULL,
+    [Description] VARCHAR (250)    NOT NULL,
+    [UserId]      UNIQUEIDENTIFIER NOT NULL,
+    [AddedAt]     DATETIME         NULL,
+    [UpdatedAt]   DATETIME         NULL,
+    CONSTRAINT [PK_SchemaColumnType] PRIMARY KEY NONCLUSTERED ([ID] ASC),
+    CONSTRAINT [UX_SchemaColumnType] UNIQUE NONCLUSTERED ([Name] ASC)
+);
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[SchemaColumnType].[CX_SchemaColumnType]...';
+
+
+GO
+CREATE CLUSTERED INDEX [CX_SchemaColumnType]
+    ON [dbo].[SchemaColumnType]([AddedAt] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[SchemaColumnType].[IX_SchemaColumnType_UserId]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SchemaColumnType_UserId]
+    ON [dbo].[SchemaColumnType]([UserId] ASC);
+
+
+GO
 PRINT N'Creating [dbo].[Station_Instrument]...';
 
 
@@ -3642,6 +3724,51 @@ PRINT N'Creating [dbo].[Station_Instrument].[IX_Station_Instrument_UserId]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Station_Instrument_UserId]
     ON [dbo].[Station_Instrument]([UserId] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[StatusReason]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[StatusReason] (
+    [ID]          UNIQUEIDENTIFIER NOT NULL,
+    [Code]        VARCHAR (50)     NOT NULL,
+    [Name]        VARCHAR (150)    NOT NULL,
+    [Description] VARCHAR (500)    NOT NULL,
+    [UserId]      UNIQUEIDENTIFIER NOT NULL,
+    [AddedAt]     DATETIME         NULL,
+    [UpdatedAt]   DATETIME         NULL,
+    CONSTRAINT [PK_StatusReason] PRIMARY KEY NONCLUSTERED ([ID] ASC),
+    CONSTRAINT [UX_StatusReason_Code] UNIQUE NONCLUSTERED ([Code] ASC),
+    CONSTRAINT [UX_StatusReason_Name] UNIQUE NONCLUSTERED ([Name] ASC)
+);
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[StatusReason].[CX_StatusReason]...';
+
+
+GO
+CREATE CLUSTERED INDEX [CX_StatusReason]
+    ON [dbo].[StatusReason]([AddedAt] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[StatusReason].[IX_StatusReason_UserId]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_StatusReason_UserId]
+    ON [dbo].[StatusReason]([UserId] ASC);
 
 
 GO
@@ -3789,6 +3916,60 @@ ALTER TABLE [dbo].[Organisation_Station]
 
 
 GO
+PRINT N'Creating [dbo].[DF_Programme_ID]...';
+
+
+GO
+ALTER TABLE [dbo].[Programme]
+    ADD CONSTRAINT [DF_Programme_ID] DEFAULT newid() FOR [ID];
+
+
+GO
+PRINT N'Creating [dbo].[DF_Programme_AddedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[Programme]
+    ADD CONSTRAINT [DF_Programme_AddedAt] DEFAULT GetDate() FOR [AddedAt];
+
+
+GO
+PRINT N'Creating [dbo].[DF_Programme_UpdatedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[Programme]
+    ADD CONSTRAINT [DF_Programme_UpdatedAt] DEFAULT GetDate() FOR [UpdatedAt];
+
+
+GO
+PRINT N'Creating [dbo].[DF_Project_ID]...';
+
+
+GO
+ALTER TABLE [dbo].[Project]
+    ADD CONSTRAINT [DF_Project_ID] DEFAULT newid() FOR [ID];
+
+
+GO
+PRINT N'Creating [dbo].[DF_Project_AddedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[Project]
+    ADD CONSTRAINT [DF_Project_AddedAt] DEFAULT GetDate() FOR [AddedAt];
+
+
+GO
+PRINT N'Creating [dbo].[DF_Project_UpdatedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[Project]
+    ADD CONSTRAINT [DF_Project_UpdatedAt] DEFAULT GetDate() FOR [UpdatedAt];
+
+
+GO
 PRINT N'Creating [dbo].[DF_Project_Station_ID]...';
 
 
@@ -3813,6 +3994,60 @@ PRINT N'Creating [dbo].[DF_Project_Station__UpdatedAt]...';
 GO
 ALTER TABLE [dbo].[Project_Station]
     ADD CONSTRAINT [DF_Project_Station__UpdatedAt] DEFAULT GetDate() FOR [UpdatedAt];
+
+
+GO
+PRINT N'Creating [dbo].[DF_SchemaColumn_ID]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumn]
+    ADD CONSTRAINT [DF_SchemaColumn_ID] DEFAULT newid() FOR [ID];
+
+
+GO
+PRINT N'Creating [dbo].[DF_SchemaColumn_AddedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumn]
+    ADD CONSTRAINT [DF_SchemaColumn_AddedAt] DEFAULT GetDate() FOR [AddedAt];
+
+
+GO
+PRINT N'Creating [dbo].[DF_SchemaColumn_UpdatedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumn]
+    ADD CONSTRAINT [DF_SchemaColumn_UpdatedAt] DEFAULT GetDate() FOR [UpdatedAt];
+
+
+GO
+PRINT N'Creating [dbo].[DF_SchemaColumnType_ID]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumnType]
+    ADD CONSTRAINT [DF_SchemaColumnType_ID] DEFAULT newid() FOR [ID];
+
+
+GO
+PRINT N'Creating [dbo].[DF_SchemaColumnType_AddedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumnType]
+    ADD CONSTRAINT [DF_SchemaColumnType_AddedAt] DEFAULT GetDate() FOR [AddedAt];
+
+
+GO
+PRINT N'Creating [dbo].[DF_SchemaColumnType_UpdatedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumnType]
+    ADD CONSTRAINT [DF_SchemaColumnType_UpdatedAt] DEFAULT GetDate() FOR [UpdatedAt];
 
 
 GO
@@ -3843,12 +4078,30 @@ ALTER TABLE [dbo].[Station_Instrument]
 
 
 GO
-PRINT N'Creating [dbo].[DF_ImportBatch_ID]...';
+PRINT N'Creating [dbo].[DF_StatusReason_ID]...';
 
 
 GO
-ALTER TABLE [dbo].[ImportBatch]
-    ADD CONSTRAINT [DF_ImportBatch_ID] DEFAULT newid() FOR [ID];
+ALTER TABLE [dbo].[StatusReason]
+    ADD CONSTRAINT [DF_StatusReason_ID] DEFAULT (newid()) FOR [ID];
+
+
+GO
+PRINT N'Creating [dbo].[DF_StatusReason_AddedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[StatusReason]
+    ADD CONSTRAINT [DF_StatusReason_AddedAt] DEFAULT GetDate() FOR [AddedAt];
+
+
+GO
+PRINT N'Creating [dbo].[DF_StatusReason_UpdatedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[StatusReason]
+    ADD CONSTRAINT [DF_StatusReason_UpdatedAt] DEFAULT GetDate() FOR [UpdatedAt];
 
 
 GO
@@ -3861,6 +4114,24 @@ ALTER TABLE [dbo].[Organisation]
 
 
 GO
+PRINT N'Creating [dbo].[FK_DataLog_DataSourceTransformation]...';
+
+
+GO
+ALTER TABLE [dbo].[DataLog] WITH NOCHECK
+    ADD CONSTRAINT [FK_DataLog_DataSourceTransformation] FOREIGN KEY ([DataSourceTransformationID]) REFERENCES [dbo].[DataSourceTransformation] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_DataLog_Sensor]...';
+
+
+GO
+ALTER TABLE [dbo].[DataLog] WITH NOCHECK
+    ADD CONSTRAINT [FK_DataLog_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
+
+
+GO
 PRINT N'Creating [dbo].[FK_DataLog_aspnet_Users]...';
 
 
@@ -3870,12 +4141,12 @@ ALTER TABLE [dbo].[DataLog] WITH NOCHECK
 
 
 GO
-PRINT N'Creating [dbo].[FK_DataLog_DataSourceTransformation]...';
+PRINT N'Creating [dbo].[FK_DataLog_Status]...';
 
 
 GO
 ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_DataSourceTransformation] FOREIGN KEY ([DataSourceTransformationID]) REFERENCES [dbo].[DataSourceTransformation] ([ID]);
+    ADD CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]);
 
 
 GO
@@ -3897,24 +4168,6 @@ ALTER TABLE [dbo].[DataLog] WITH NOCHECK
 
 
 GO
-PRINT N'Creating [dbo].[FK_DataLog_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataLog_Status]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]);
-
-
-GO
 PRINT N'Creating [dbo].[FK_DataLog_ImportBatch]...';
 
 
@@ -3924,12 +4177,57 @@ ALTER TABLE [dbo].[DataLog] WITH NOCHECK
 
 
 GO
-PRINT N'Creating [dbo].[FK_Observation_aspnet_Users]...';
+PRINT N'Creating [dbo].[FK_DataLog_StatusReason]...';
+
+
+GO
+ALTER TABLE [dbo].[DataLog] WITH NOCHECK
+    ADD CONSTRAINT [FK_DataLog_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_ImportBatch_aspnet_Users]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatch] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatch_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_ImportBatch_DataSource]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatch] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatch_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_ImportBatch_Status]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatch] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatch_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_ImportBatch_StatusReason]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatch] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatch_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_Observation_Sensor]...';
 
 
 GO
 ALTER TABLE [dbo].[Observation] WITH NOCHECK
-    ADD CONSTRAINT [FK_Observation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
+    ADD CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
 
 
 GO
@@ -3951,12 +4249,12 @@ ALTER TABLE [dbo].[Observation] WITH NOCHECK
 
 
 GO
-PRINT N'Creating [dbo].[FK_Observation_Sensor]...';
+PRINT N'Creating [dbo].[FK_Observation_aspnet_Users]...';
 
 
 GO
 ALTER TABLE [dbo].[Observation] WITH NOCHECK
-    ADD CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
+    ADD CONSTRAINT [FK_Observation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
 
 
 GO
@@ -3966,6 +4264,24 @@ PRINT N'Creating [dbo].[FK_Observation_ImportBatch]...';
 GO
 ALTER TABLE [dbo].[Observation] WITH NOCHECK
     ADD CONSTRAINT [FK_Observation_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_Observation_Status]...';
+
+
+GO
+ALTER TABLE [dbo].[Observation] WITH NOCHECK
+    ADD CONSTRAINT [FK_Observation_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_Observation_StatusReason]...';
+
+
+GO
+ALTER TABLE [dbo].[Observation] WITH NOCHECK
+    ADD CONSTRAINT [FK_Observation_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]);
 
 
 GO
@@ -4005,15 +4321,6 @@ ALTER TABLE [dbo].[DataSchema] WITH NOCHECK
 
 
 GO
-PRINT N'Creating [dbo].[FK_DataSourceRole_DataSource]...';
-
-
-GO
-ALTER TABLE [dbo].[DataSourceRole] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataSourceRole_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]);
-
-
-GO
 PRINT N'Creating [dbo].[FK_DataSourceTransformation_DataSource]...';
 
 
@@ -4032,12 +4339,12 @@ ALTER TABLE [dbo].[Sensor] WITH NOCHECK
 
 
 GO
-PRINT N'Creating [dbo].[FK_ImportBatch_DataSource]...';
+PRINT N'Creating [dbo].[FK_DataSourceRole_DataSource]...';
 
 
 GO
-ALTER TABLE [dbo].[ImportBatch] WITH NOCHECK
-    ADD CONSTRAINT [FK_ImportBatch_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]);
+ALTER TABLE [dbo].[DataSourceRole] WITH NOCHECK
+    ADD CONSTRAINT [FK_DataSourceRole_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]);
 
 
 GO
@@ -4050,6 +4357,15 @@ ALTER TABLE [dbo].[DataSource] WITH NOCHECK
 
 
 GO
+PRINT N'Creating [dbo].[FK_DataSourceRole_aspnet_Users]...';
+
+
+GO
+ALTER TABLE [dbo].[DataSourceRole] WITH NOCHECK
+    ADD CONSTRAINT [FK_DataSourceRole_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
+
+
+GO
 PRINT N'Creating [dbo].[FK_DataSourceRole_aspnet_Roles]...';
 
 
@@ -4059,12 +4375,12 @@ ALTER TABLE [dbo].[DataSourceRole] WITH NOCHECK
 
 
 GO
-PRINT N'Creating [dbo].[FK_DataSourceRole_aspnet_Users]...';
+PRINT N'Creating [dbo].[FK_DataSourceTransformation_Sensor]...';
 
 
 GO
-ALTER TABLE [dbo].[DataSourceRole] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataSourceRole_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
+ALTER TABLE [dbo].[DataSourceTransformation] WITH NOCHECK
+    ADD CONSTRAINT [FK_DataSourceTransformation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
 
 
 GO
@@ -4086,6 +4402,15 @@ ALTER TABLE [dbo].[DataSourceTransformation] WITH NOCHECK
 
 
 GO
+PRINT N'Creating [dbo].[FK_DataSourceTransformation_TransformationType]...';
+
+
+GO
+ALTER TABLE [dbo].[DataSourceTransformation] WITH NOCHECK
+    ADD CONSTRAINT [FK_DataSourceTransformation_TransformationType] FOREIGN KEY ([TransformationTypeID]) REFERENCES [dbo].[TransformationType] ([ID]);
+
+
+GO
 PRINT N'Creating [dbo].[FK_DataSourceTransformation_PhenomenonOffering]...';
 
 
@@ -4101,24 +4426,6 @@ PRINT N'Creating [dbo].[FK_DataSourceTransformation_PhenomenonUOM]...';
 GO
 ALTER TABLE [dbo].[DataSourceTransformation] WITH NOCHECK
     ADD CONSTRAINT [FK_DataSourceTransformation_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataSourceTransformation_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[DataSourceTransformation] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataSourceTransformation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataSourceTransformation_TransformationType]...';
-
-
-GO
-ALTER TABLE [dbo].[DataSourceTransformation] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataSourceTransformation_TransformationType] FOREIGN KEY ([TransformationTypeID]) REFERENCES [dbo].[TransformationType] ([ID]);
 
 
 GO
@@ -4155,15 +4462,6 @@ PRINT N'Creating [dbo].[FK_Instrument_aspnet_Users]...';
 GO
 ALTER TABLE [dbo].[Instrument] WITH NOCHECK
     ADD CONSTRAINT [FK_Instrument_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Instrument_Station]...';
-
-
-GO
-ALTER TABLE [dbo].[Instrument] WITH NOCHECK
-    ADD CONSTRAINT [FK_Instrument_Station] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]);
 
 
 GO
@@ -4257,33 +4555,6 @@ ALTER TABLE [dbo].[PhenomenonUOM] WITH NOCHECK
 
 
 GO
-PRINT N'Creating [dbo].[FK_Project_Programme]...';
-
-
-GO
-ALTER TABLE [dbo].[Project] WITH NOCHECK
-    ADD CONSTRAINT [FK_Project_Programme] FOREIGN KEY ([ProgrammeID]) REFERENCES [dbo].[Programme] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Programme_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[Programme] WITH NOCHECK
-    ADD CONSTRAINT [FK_Programme_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Project_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[Project] WITH NOCHECK
-    ADD CONSTRAINT [FK_Project_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
-
-
-GO
 PRINT N'Creating [dbo].[FK_Sensor_aspnet_Users]...';
 
 
@@ -4320,21 +4591,21 @@ ALTER TABLE [dbo].[Site] WITH NOCHECK
 
 
 GO
-PRINT N'Creating [dbo].[FK_Station_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[Station] WITH NOCHECK
-    ADD CONSTRAINT [FK_Station_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
-
-
-GO
 PRINT N'Creating [dbo].[FK_Station_ProjectSite]...';
 
 
 GO
 ALTER TABLE [dbo].[Station] WITH NOCHECK
     ADD CONSTRAINT [FK_Station_ProjectSite] FOREIGN KEY ([ProjectSiteID]) REFERENCES [dbo].[ProjectSite] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_Station_aspnet_Users]...';
+
+
+GO
+ALTER TABLE [dbo].[Station] WITH NOCHECK
+    ADD CONSTRAINT [FK_Station_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
 
 
 GO
@@ -4527,6 +4798,15 @@ ALTER TABLE [dbo].[Organisation_Station] WITH NOCHECK
 
 
 GO
+PRINT N'Creating [dbo].[FK_Programme_aspnet_Users]...';
+
+
+GO
+ALTER TABLE [dbo].[Programme] WITH NOCHECK
+    ADD CONSTRAINT [FK_Programme_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
+
+
+GO
 PRINT N'Creating [dbo].[FK_Progress_ImportBatch]...';
 
 
@@ -4563,6 +4843,24 @@ ALTER TABLE [dbo].[Progress] WITH NOCHECK
 
 
 GO
+PRINT N'Creating [dbo].[FK_Project_Programme]...';
+
+
+GO
+ALTER TABLE [dbo].[Project] WITH NOCHECK
+    ADD CONSTRAINT [FK_Project_Programme] FOREIGN KEY ([ProgrammeID]) REFERENCES [dbo].[Programme] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_Project_aspnet_Users]...';
+
+
+GO
+ALTER TABLE [dbo].[Project] WITH NOCHECK
+    ADD CONSTRAINT [FK_Project_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
+
+
+GO
 PRINT N'Creating [dbo].[FK_Project_Station_ProjectID]...';
 
 
@@ -4590,6 +4888,69 @@ ALTER TABLE [dbo].[Project_Station] WITH NOCHECK
 
 
 GO
+PRINT N'Creating [dbo].[FK_SchemaColumn_DataSchema]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumn] WITH NOCHECK
+    ADD CONSTRAINT [FK_SchemaColumn_DataSchema] FOREIGN KEY ([DataSchemaID]) REFERENCES [dbo].[DataSchema] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_SchemaColumn_SchemaColumnType]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumn] WITH NOCHECK
+    ADD CONSTRAINT [FK_SchemaColumn_SchemaColumnType] FOREIGN KEY ([SchemaColumnTypeID]) REFERENCES [dbo].[SchemaColumnType] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_SchemaColumn_Phenomenon]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumn] WITH NOCHECK
+    ADD CONSTRAINT [FK_SchemaColumn_Phenomenon] FOREIGN KEY ([PhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_SchemaColumn_PhenomenonOffering]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumn] WITH NOCHECK
+    ADD CONSTRAINT [FK_SchemaColumn_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_SchemaColumn_PhenomenonUOM]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumn] WITH NOCHECK
+    ADD CONSTRAINT [FK_SchemaColumn_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_SchemaColumn_aspnet_Users]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumn] WITH NOCHECK
+    ADD CONSTRAINT [FK_SchemaColumn_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_SchemaColumnType_aspnet_Users]...';
+
+
+GO
+ALTER TABLE [dbo].[SchemaColumnType] WITH NOCHECK
+    ADD CONSTRAINT [FK_SchemaColumnType_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
+
+
+GO
 PRINT N'Creating [dbo].[FK_Station_Instrument_Station]...';
 
 
@@ -4614,6 +4975,15 @@ PRINT N'Creating [dbo].[FK_Station_Instrument_aspnet_Users]...';
 GO
 ALTER TABLE [dbo].[Station_Instrument] WITH NOCHECK
     ADD CONSTRAINT [FK_Station_Instrument_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_StatusReason_aspnet_Users]...';
+
+
+GO
+ALTER TABLE [dbo].[StatusReason] WITH NOCHECK
+    ADD CONSTRAINT [FK_StatusReason_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
 
 
 GO
@@ -4657,6 +5027,47 @@ BEGIN
             on (ins.ID = src.ID)
 END
 --< Added 2.0.8 20160708 TimPN
+GO
+PRINT N'Creating [dbo].[TR_ImportBatch_Insert]...';
+
+
+GO
+CREATE TRIGGER [dbo].[TR_ImportBatch_Insert] ON [dbo].[ImportBatch]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        inserted ins
+        inner join ImportBatch src
+            on (ins.ID = src.ID)
+END
+GO
+PRINT N'Creating [dbo].[TR_ImportBatch_Update]...';
+
+
+GO
+CREATE TRIGGER [dbo].[TR_ImportBatch_Update] ON [dbo].[ImportBatch]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update
+        src
+    set
+        UpdatedAt = GETDATE()
+    from
+        inserted ins
+        inner join ImportBatch src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.8 20160715 TimPN
 GO
 PRINT N'Creating [dbo].[TR_Observation_Insert]...';
 
@@ -5181,120 +5592,6 @@ BEGIN
             on (ins.ID = src.ID)
 END
 --< Added 2.0.8 20160718 TimPN
-GO
-PRINT N'Creating [dbo].[TR_Programme_Insert]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-CREATE TRIGGER [dbo].[TR_Programme_Insert] ON [dbo].[Programme]
-FOR INSERT
-AS
-BEGIN
-    SET NoCount ON
-    Update 
-        src 
-    set 
-        AddedAt = GETDATE(),
-        UpdatedAt = NULL
-    from
-        inserted ins 
-        inner join Programme src
-            on (ins.ID = src.ID)
-END
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Creating [dbo].[TR_Programme_Update]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-CREATE TRIGGER [dbo].[TR_Programme_Update] ON [dbo].[Programme]
-FOR UPDATE
-AS
-BEGIN
-    SET NoCount ON
-    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
-    Update 
-        src 
-    set 
-        UpdatedAt = GETDATE()
-    from
-        inserted ins 
-        inner join Programme src
-            on (ins.ID = src.ID)
-END
---< Added 2.0.5 20160511 TimPN
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Creating [dbo].[TR_Project_Insert]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-CREATE TRIGGER [dbo].[TR_Project_Insert] ON [dbo].[Project]
-FOR INSERT
-AS
-BEGIN
-    SET NoCount ON
-    Update 
-        src 
-    set 
-        AddedAt = GETDATE(),
-        UpdatedAt = NULL
-    from
-        inserted ins 
-        inner join Project src
-            on (ins.ID = src.ID)
-END
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Creating [dbo].[TR_Project_Update]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-CREATE TRIGGER [dbo].[TR_Project_Update] ON [dbo].[Project]
-FOR UPDATE
-AS
-BEGIN
-    SET NoCount ON
-    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
-    Update 
-        src 
-    set 
-        UpdatedAt = GETDATE()
-    from
-        inserted ins 
-        inner join Project src
-            on (ins.ID = src.ID)
-END
---< Added 2.0.5 20160511 TimPN
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
 GO
 PRINT N'Creating [dbo].[TR_Sensor_Insert]...';
 
@@ -5843,6 +6140,120 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
+PRINT N'Creating [dbo].[TR_Programme_Insert]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TRIGGER [dbo].[TR_Programme_Insert] ON [dbo].[Programme]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        inserted ins 
+        inner join Programme src
+            on (ins.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[TR_Programme_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TRIGGER [dbo].[TR_Programme_Update] ON [dbo].[Programme]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update 
+        src 
+    set 
+        UpdatedAt = GETDATE()
+    from
+        inserted ins 
+        inner join Programme src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.5 20160511 TimPN
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[TR_Project_Insert]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TRIGGER [dbo].[TR_Project_Insert] ON [dbo].[Project]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        inserted ins 
+        inner join Project src
+            on (ins.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[TR_Project_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TRIGGER [dbo].[TR_Project_Update] ON [dbo].[Project]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update 
+        src 
+    set 
+        UpdatedAt = GETDATE()
+    from
+        inserted ins 
+        inner join Project src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.5 20160511 TimPN
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Creating [dbo].[TR_Project_Station_Insert]...';
 
 
@@ -5900,6 +6311,120 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
+PRINT N'Creating [dbo].[TR_SchemaColumn_Insert]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TRIGGER [dbo].[TR_SchemaColumn_Insert] ON [dbo].[SchemaColumn]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        inserted ins
+        inner join SchemaColumn src
+            on (ins.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[TR_SchemaColumn_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TRIGGER [dbo].[TR_SchemaColumn_Update] ON [dbo].[SchemaColumn]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update
+        src
+    set
+        UpdatedAt = GETDATE()
+    from
+        inserted ins
+        inner join SchemaColumn src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.11 20160908 TimPN
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[TR_SchemaColumnType_Insert]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TRIGGER [dbo].[TR_SchemaColumnType_Insert] ON [dbo].[SchemaColumnType]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        inserted ins
+        inner join SchemaColumnType src
+            on (ins.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[TR_SchemaColumnType_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TRIGGER [dbo].[TR_SchemaColumnType_Update] ON [dbo].[SchemaColumnType]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update
+        src
+    set
+        UpdatedAt = GETDATE()
+    from
+        inserted ins
+        inner join SchemaColumnType src
+            on (ins.ID = src.ID)
+END
+--< Added 2.0.11 20160908 TimPN
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Creating [dbo].[TR_Station_Instrument_Insert]...';
 
 
@@ -5952,6 +6477,63 @@ BEGIN
             on (ins.ID = src.ID)
 END
 --< Added 2.0.5 20160512 TimPN
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[TR_StatusReason_Insert]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TRIGGER [dbo].[TR_StatusReason_Insert] ON [dbo].[StatusReason]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        inserted ins
+        inner join StatusReason src
+            on (ins.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[TR_StatusReason_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TRIGGER [dbo].[TR_StatusReason_Update] ON [dbo].[StatusReason]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
+    Update
+        src
+    set
+        UpdatedAt = GETDATE()
+    from
+        inserted ins
+        inner join StatusReason src
+            on (ins.ID = src.ID)
+END
+--> Added 2.0.9 20160823 TimPN
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
@@ -6015,47 +6597,6 @@ GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
-GO
-PRINT N'Creating [dbo].[TR_ImportBatch_Insert]...';
-
-
-GO
-CREATE TRIGGER [dbo].[TR_ImportBatch_Insert] ON [dbo].[ImportBatch]
-FOR INSERT
-AS
-BEGIN
-    SET NoCount ON
-    Update
-        src
-    set
-        AddedAt = GETDATE(),
-        UpdatedAt = NULL
-    from
-        inserted ins
-        inner join ImportBatch src
-            on (ins.ID = src.ID)
-END
-GO
-PRINT N'Creating [dbo].[TR_ImportBatch_Update]...';
-
-
-GO
-CREATE TRIGGER [dbo].[TR_ImportBatch_Update] ON [dbo].[ImportBatch]
-FOR UPDATE
-AS
-BEGIN
-    SET NoCount ON
-    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
-    Update
-        src
-    set
-        UpdatedAt = GETDATE()
-    from
-        inserted ins
-        inner join ImportBatch src
-            on (ins.ID = src.ID)
-END
---< Added 2.0.8 20160715 TimPN
 GO
 PRINT N'Creating [dbo].[TR_Organisation_Insert]...';
 
@@ -6970,6 +7511,41 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
+PRINT N'Creating [dbo].[vSchemaColumn]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vSchemaColumn]
+AS 
+SELECT 
+  SchemaColumn.*,
+  SchemaColumnType.Name ColumnType, 
+  Phenomenon.Name PhenomenonName,
+  Offering.Name OfferingName,
+  UnitOfMeasure.Unit UnitOfMeasureName
+FROM 
+  SchemaColumn
+  inner join SchemaColumnType 
+    on (SchemaColumn.SchemaColumnTypeID = SchemaColumnType.ID)
+  left join Phenomenon
+    on (SchemaColumn.PhenomenonID = Phenomenon.ID)
+  left join PhenomenonOffering
+    on (SchemaColumn.PhenomenonOfferingID = PhenomenonOffering.ID)
+  left join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  left join PhenomenonUOM 
+    on (SchemaColumn.PhenomenonUOMID = PhenomenonUOM.ID)
+  left join  UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Creating [dbo].[vStationInstrument]...';
 
 
@@ -7072,158 +7648,6 @@ GROUP BY PhenomenonOfferingID, PhenomenonUOMID, ImportBatchID, UserId, SensorID
 --< Changed 2.0.3 20160421 TimPN
 END
 GO
-PRINT N'Altering [dbo].[ExecuteView]...';
-
-
-GO
-
-ALTER PROCEDURE [dbo].[ExecuteView]
-    @View varchar(50),
-    @Schema bit = 0,
-    @Export bit = 0,
-    @SortColumn varchar(50), -- = 'Phenomenon',
-    @SortOrder varchar(4), -- = 'DESC',
-    @PageNumber int, --= 1,
-    @PageSize int, -- 20,
-    @Filter varchar(5000) = '' 
-AS
-
-DECLARE @sql NVARCHAR(MAX),
-        @paramlist nvarchar(4000);
-
- SET @sql = ' SET ANSI_WARNINGS OFF SET NOCOUNT ON; ' + CHAR(13)
- 
-  IF @Schema = 0
-   BEGIN
-   SET @sql = ' WITH Paging AS (SELECT * ,ROW_NUMBER() OVER (ORDER BY ['+@SortColumn+'] '+ @SortOrder +') AS RowNo FROM  '
-   END
-  ELSE
-   BEGIN
-    SET @sql = ' WITH Paging AS (SELECT TOP 1 *,2 As RowNo FROM  '
-   END
-  
- 
- SET @sql = @sql + @View  + ' WHERE 1 = 1 '
- 
-  IF LEN(@Filter) > 0
-  BEGIN
-    SET @Sql = @Sql +  @Filter
-  END
- 
-SET  @Sql = @Sql  + ')'  + CHAR(13)
- SET @sql = @sql + ' Select *,(select COUNT(*) from Paging) AS CNT from Paging ' + CHAR(13)
- IF @Export = 0
-   BEGIN
-    SET @sql = @sql + ' Where RowNo between @PageNumber and @PageNumber + @PageSize '
-   END
-   
-
-
-SELECT @paramlist = '@PageNumber int,
-                     @PageSize int';
-                
- 
-exec sp_executesql @Sql,@paramlist,
-                   @PageNumber,
-                   @PageSize
-GO
-PRINT N'Creating [dbo].[aspnet_AnyDataInTables]...';
-
-
-GO
-SET ANSI_NULLS ON;
-
-SET QUOTED_IDENTIFIER OFF;
-
-
-GO
-CREATE PROCEDURE [dbo].aspnet_AnyDataInTables
-    @TablesToCheck int
-AS
-BEGIN
-    -- Check Membership table if (@TablesToCheck & 1) is set
-    IF ((@TablesToCheck & 1) <> 0 AND
-        (EXISTS (SELECT name FROM sysobjects WHERE (name = N'vw_aspnet_MembershipUsers') AND (type = 'V'))))
-    BEGIN
-        IF (EXISTS(SELECT TOP 1 UserId FROM dbo.aspnet_Membership))
-        BEGIN
-            SELECT N'aspnet_Membership'
-            RETURN
-        END
-    END
-
-    -- Check aspnet_Roles table if (@TablesToCheck & 2) is set
-    IF ((@TablesToCheck & 2) <> 0  AND
-        (EXISTS (SELECT name FROM sysobjects WHERE (name = N'vw_aspnet_Roles') AND (type = 'V'))) )
-    BEGIN
-        IF (EXISTS(SELECT TOP 1 RoleId FROM dbo.aspnet_Roles))
-        BEGIN
-            SELECT N'aspnet_Roles'
-            RETURN
-        END
-    END
-
-    -- Check aspnet_Profile table if (@TablesToCheck & 4) is set
-    IF ((@TablesToCheck & 4) <> 0  AND
-        (EXISTS (SELECT name FROM sysobjects WHERE (name = N'vw_aspnet_Profiles') AND (type = 'V'))) )
-    BEGIN
-        IF (EXISTS(SELECT TOP 1 UserId FROM dbo.aspnet_Profile))
-        BEGIN
-            SELECT N'aspnet_Profile'
-            RETURN
-        END
-    END
-
-    -- Check aspnet_PersonalizationPerUser table if (@TablesToCheck & 8) is set
-    IF ((@TablesToCheck & 8) <> 0  AND
-        (EXISTS (SELECT name FROM sysobjects WHERE (name = N'vw_aspnet_WebPartState_User') AND (type = 'V'))) )
-    BEGIN
-        IF (EXISTS(SELECT TOP 1 UserId FROM dbo.aspnet_PersonalizationPerUser))
-        BEGIN
-            SELECT N'aspnet_PersonalizationPerUser'
-            RETURN
-        END
-    END
-
-    -- Check aspnet_PersonalizationPerUser table if (@TablesToCheck & 16) is set
-    IF ((@TablesToCheck & 16) <> 0  AND
-        (EXISTS (SELECT name FROM sysobjects WHERE (name = N'aspnet_WebEvent_LogEvent') AND (type = 'P'))) )
-    BEGIN
-        IF (EXISTS(SELECT TOP 1 * FROM dbo.aspnet_WebEvent_Events))
-        BEGIN
-            SELECT N'aspnet_WebEvent_Events'
-            RETURN
-        END
-    END
-
-    -- Check aspnet_Users table if (@TablesToCheck & 1,2,4 & 8) are all set
-    IF ((@TablesToCheck & 1) <> 0 AND
-        (@TablesToCheck & 2) <> 0 AND
-        (@TablesToCheck & 4) <> 0 AND
-        (@TablesToCheck & 8) <> 0 AND
-        (@TablesToCheck & 32) <> 0 AND
-        (@TablesToCheck & 128) <> 0 AND
-        (@TablesToCheck & 256) <> 0 AND
-        (@TablesToCheck & 512) <> 0 AND
-        (@TablesToCheck & 1024) <> 0)
-    BEGIN
-        IF (EXISTS(SELECT TOP 1 UserId FROM dbo.aspnet_Users))
-        BEGIN
-            SELECT N'aspnet_Users'
-            RETURN
-        END
-        IF (EXISTS(SELECT TOP 1 ApplicationId FROM dbo.aspnet_Applications))
-        BEGIN
-            SELECT N'aspnet_Applications'
-            RETURN
-        END
-    END
-END
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
 PRINT N'Checking existing data against newly created constraints';
 
 
@@ -7232,29 +7656,43 @@ USE [$(DatabaseName)];
 
 
 GO
+ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_DataSourceTransformation];
+
+ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_Sensor];
+
 ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_aspnet_Users];
 
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_DataSourceTransformation];
+ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_Status];
 
 ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_PhenomenonOffering];
 
 ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_PhenomenonUOM];
 
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_Sensor];
-
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_Status];
-
 ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_ImportBatch];
 
-ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_aspnet_Users];
+ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_StatusReason];
+
+ALTER TABLE [dbo].[ImportBatch] WITH CHECK CHECK CONSTRAINT [FK_ImportBatch_aspnet_Users];
+
+ALTER TABLE [dbo].[ImportBatch] WITH CHECK CHECK CONSTRAINT [FK_ImportBatch_DataSource];
+
+ALTER TABLE [dbo].[ImportBatch] WITH CHECK CHECK CONSTRAINT [FK_ImportBatch_Status];
+
+ALTER TABLE [dbo].[ImportBatch] WITH CHECK CHECK CONSTRAINT [FK_ImportBatch_StatusReason];
+
+ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_Sensor];
 
 ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_PhenomenonOffering];
 
 ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_PhenomenonUOM];
 
-ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_Sensor];
+ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_aspnet_Users];
 
 ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_ImportBatch];
+
+ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_Status];
+
+ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_StatusReason];
 
 ALTER TABLE [dbo].[DataSource] WITH CHECK CHECK CONSTRAINT [FK_DataSource_DataSchema];
 
@@ -7264,31 +7702,29 @@ ALTER TABLE [dbo].[DataSchema] WITH CHECK CHECK CONSTRAINT [FK_DataSchema_DataSo
 
 ALTER TABLE [dbo].[DataSchema] WITH CHECK CHECK CONSTRAINT [FK_DataSchema_aspnet_Users];
 
-ALTER TABLE [dbo].[DataSourceRole] WITH CHECK CHECK CONSTRAINT [FK_DataSourceRole_DataSource];
-
 ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_DataSource];
 
 ALTER TABLE [dbo].[Sensor] WITH CHECK CHECK CONSTRAINT [FK_Sensor_DataSource];
 
-ALTER TABLE [dbo].[ImportBatch] WITH CHECK CHECK CONSTRAINT [FK_ImportBatch_DataSource];
+ALTER TABLE [dbo].[DataSourceRole] WITH CHECK CHECK CONSTRAINT [FK_DataSourceRole_DataSource];
 
 ALTER TABLE [dbo].[DataSource] WITH CHECK CHECK CONSTRAINT [FK_DataSource_aspnet_Users];
 
+ALTER TABLE [dbo].[DataSourceRole] WITH CHECK CHECK CONSTRAINT [FK_DataSourceRole_aspnet_Users];
+
 ALTER TABLE [dbo].[DataSourceRole] WITH CHECK CHECK CONSTRAINT [FK_DataSourceRole_aspnet_Roles];
 
-ALTER TABLE [dbo].[DataSourceRole] WITH CHECK CHECK CONSTRAINT [FK_DataSourceRole_aspnet_Users];
+ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_Sensor];
 
 ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_aspnet_Users];
 
 ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_Phenomenon];
 
+ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_TransformationType];
+
 ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_PhenomenonOffering];
 
 ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_PhenomenonUOM];
-
-ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_Sensor];
-
-ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_TransformationType];
 
 ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_NewPhenomenonOffering];
 
@@ -7297,8 +7733,6 @@ ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_Dat
 ALTER TABLE [dbo].[DataSourceType] WITH CHECK CHECK CONSTRAINT [FK_DataSourceType_aspnet_Users];
 
 ALTER TABLE [dbo].[Instrument] WITH CHECK CHECK CONSTRAINT [FK_Instrument_aspnet_Users];
-
-ALTER TABLE [dbo].[Instrument] WITH CHECK CHECK CONSTRAINT [FK_Instrument_Station];
 
 ALTER TABLE [dbo].[PhenomenonOffering] WITH CHECK CHECK CONSTRAINT [FK_PhenomenonOffering_Offering];
 
@@ -7320,12 +7754,6 @@ ALTER TABLE [dbo].[PhenomenonUOM] WITH CHECK CHECK CONSTRAINT [FK_PhenomenonUOM_
 
 ALTER TABLE [dbo].[PhenomenonUOM] WITH CHECK CHECK CONSTRAINT [FK_PhenomenonUOM_UnitOfMeasure];
 
-ALTER TABLE [dbo].[Project] WITH CHECK CHECK CONSTRAINT [FK_Project_Programme];
-
-ALTER TABLE [dbo].[Programme] WITH CHECK CHECK CONSTRAINT [FK_Programme_aspnet_Users];
-
-ALTER TABLE [dbo].[Project] WITH CHECK CHECK CONSTRAINT [FK_Project_aspnet_Users];
-
 ALTER TABLE [dbo].[Sensor] WITH CHECK CHECK CONSTRAINT [FK_Sensor_aspnet_Users];
 
 ALTER TABLE [dbo].[Sensor] WITH CHECK CHECK CONSTRAINT [FK_Sensor_Station];
@@ -7334,9 +7762,9 @@ ALTER TABLE [dbo].[Station] WITH CHECK CHECK CONSTRAINT [FK_Station_Site];
 
 ALTER TABLE [dbo].[Site] WITH CHECK CHECK CONSTRAINT [FK_Site_aspnet_Users];
 
-ALTER TABLE [dbo].[Station] WITH CHECK CHECK CONSTRAINT [FK_Station_aspnet_Users];
-
 ALTER TABLE [dbo].[Station] WITH CHECK CHECK CONSTRAINT [FK_Station_ProjectSite];
+
+ALTER TABLE [dbo].[Station] WITH CHECK CHECK CONSTRAINT [FK_Station_aspnet_Users];
 
 ALTER TABLE [dbo].[Status] WITH CHECK CHECK CONSTRAINT [FK_Status_aspnet_Users];
 
@@ -7380,6 +7808,8 @@ ALTER TABLE [dbo].[Organisation_Station] WITH CHECK CHECK CONSTRAINT [FK_Organis
 
 ALTER TABLE [dbo].[Organisation_Station] WITH CHECK CHECK CONSTRAINT [FK_Organisation_Station_aspnet_Users];
 
+ALTER TABLE [dbo].[Programme] WITH CHECK CHECK CONSTRAINT [FK_Programme_aspnet_Users];
+
 ALTER TABLE [dbo].[Progress] WITH CHECK CHECK CONSTRAINT [FK_Progress_ImportBatch];
 
 ALTER TABLE [dbo].[Progress] WITH CHECK CHECK CONSTRAINT [FK_Progress_Sensor];
@@ -7388,17 +7818,37 @@ ALTER TABLE [dbo].[Progress] WITH CHECK CHECK CONSTRAINT [FK_Progress_Phenomenon
 
 ALTER TABLE [dbo].[Progress] WITH CHECK CHECK CONSTRAINT [FK_Progress_aspnet_Users];
 
+ALTER TABLE [dbo].[Project] WITH CHECK CHECK CONSTRAINT [FK_Project_Programme];
+
+ALTER TABLE [dbo].[Project] WITH CHECK CHECK CONSTRAINT [FK_Project_aspnet_Users];
+
 ALTER TABLE [dbo].[Project_Station] WITH CHECK CHECK CONSTRAINT [FK_Project_Station_ProjectID];
 
 ALTER TABLE [dbo].[Project_Station] WITH CHECK CHECK CONSTRAINT [FK_Project_Station_StationID];
 
 ALTER TABLE [dbo].[Project_Station] WITH CHECK CHECK CONSTRAINT [FK_Project_Station_aspnet_Users];
 
+ALTER TABLE [dbo].[SchemaColumn] WITH CHECK CHECK CONSTRAINT [FK_SchemaColumn_DataSchema];
+
+ALTER TABLE [dbo].[SchemaColumn] WITH CHECK CHECK CONSTRAINT [FK_SchemaColumn_SchemaColumnType];
+
+ALTER TABLE [dbo].[SchemaColumn] WITH CHECK CHECK CONSTRAINT [FK_SchemaColumn_Phenomenon];
+
+ALTER TABLE [dbo].[SchemaColumn] WITH CHECK CHECK CONSTRAINT [FK_SchemaColumn_PhenomenonOffering];
+
+ALTER TABLE [dbo].[SchemaColumn] WITH CHECK CHECK CONSTRAINT [FK_SchemaColumn_PhenomenonUOM];
+
+ALTER TABLE [dbo].[SchemaColumn] WITH CHECK CHECK CONSTRAINT [FK_SchemaColumn_aspnet_Users];
+
+ALTER TABLE [dbo].[SchemaColumnType] WITH CHECK CHECK CONSTRAINT [FK_SchemaColumnType_aspnet_Users];
+
 ALTER TABLE [dbo].[Station_Instrument] WITH CHECK CHECK CONSTRAINT [FK_Station_Instrument_Station];
 
 ALTER TABLE [dbo].[Station_Instrument] WITH CHECK CHECK CONSTRAINT [FK_Station_Instrument_Instrument];
 
 ALTER TABLE [dbo].[Station_Instrument] WITH CHECK CHECK CONSTRAINT [FK_Station_Instrument_aspnet_Users];
+
+ALTER TABLE [dbo].[StatusReason] WITH CHECK CHECK CONSTRAINT [FK_StatusReason_aspnet_Users];
 
 
 GO

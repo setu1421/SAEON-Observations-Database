@@ -18,6 +18,8 @@ namespace SAEON.Observations.Data
 	public partial struct Tables
 	{
 		
+		public static readonly string RefactorLog = @"__RefactorLog";
+        
 		public static readonly string AspnetApplication = @"aspnet_Applications";
         
 		public static readonly string AspnetMembership = @"aspnet_Membership";
@@ -121,6 +123,11 @@ namespace SAEON.Observations.Data
     #region Schemas
     public partial class Schemas {
 		
+		public static TableSchema.Table RefactorLog
+		{
+            get { return DataService.GetSchema("__RefactorLog", "ObservationsDB"); }
+		}
+        
 		public static TableSchema.Table AspnetApplication
 		{
             get { return DataService.GetSchema("aspnet_Applications", "ObservationsDB"); }
@@ -414,6 +421,8 @@ namespace SAEON.Observations.Data
 		public static readonly string VProjectSite = @"vProjectSite";
         
 		public static readonly string VProjectStation = @"vProjectStation";
+        
+		public static readonly string VSchemaColumn = @"vSchemaColumn";
         
 		public static readonly string VSensor = @"vSensor";
         

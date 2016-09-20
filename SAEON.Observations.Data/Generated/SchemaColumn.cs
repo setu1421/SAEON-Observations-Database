@@ -154,6 +154,19 @@ namespace SAEON.Observations.Data
 					colvarDataSchemaID.ForeignKeyTableName = "DataSchema";
 				schema.Columns.Add(colvarDataSchemaID);
 				
+				TableSchema.TableColumn colvarNumber = new TableSchema.TableColumn(schema);
+				colvarNumber.ColumnName = "Number";
+				colvarNumber.DataType = DbType.Int32;
+				colvarNumber.MaxLength = 0;
+				colvarNumber.AutoIncrement = false;
+				colvarNumber.IsNullable = false;
+				colvarNumber.IsPrimaryKey = false;
+				colvarNumber.IsForeignKey = false;
+				colvarNumber.IsReadOnly = false;
+				colvarNumber.DefaultSetting = @"";
+				colvarNumber.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarNumber);
+				
 				TableSchema.TableColumn colvarName = new TableSchema.TableColumn(schema);
 				colvarName.ColumnName = "Name";
 				colvarName.DataType = DbType.AnsiString;
@@ -343,6 +356,14 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.DataSchemaID, value); }
 		}
 		  
+		[XmlAttribute("Number")]
+		[Bindable(true)]
+		public int Number 
+		{
+			get { return GetColumnValue<int>(Columns.Number); }
+			set { SetColumnValue(Columns.Number, value); }
+		}
+		  
 		[XmlAttribute("Name")]
 		[Bindable(true)]
 		public string Name 
@@ -526,13 +547,15 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varDataSchemaID,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varFixedTime,string varEmptyValue,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varDataSchemaID,int varNumber,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varFixedTime,string varEmptyValue,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			SchemaColumn item = new SchemaColumn();
 			
 			item.Id = varId;
 			
 			item.DataSchemaID = varDataSchemaID;
+			
+			item.Number = varNumber;
 			
 			item.Name = varName;
 			
@@ -568,13 +591,15 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varDataSchemaID,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varFixedTime,string varEmptyValue,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varDataSchemaID,int varNumber,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varFixedTime,string varEmptyValue,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			SchemaColumn item = new SchemaColumn();
 			
 				item.Id = varId;
 			
 				item.DataSchemaID = varDataSchemaID;
+			
+				item.Number = varNumber;
 			
 				item.Name = varName;
 			
@@ -627,86 +652,93 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn NameColumn
+        public static TableSchema.TableColumn NumberColumn
         {
             get { return Schema.Columns[2]; }
         }
         
         
         
-        public static TableSchema.TableColumn SchemaColumnTypeIDColumn
+        public static TableSchema.TableColumn NameColumn
         {
             get { return Schema.Columns[3]; }
         }
         
         
         
-        public static TableSchema.TableColumn WidthColumn
+        public static TableSchema.TableColumn SchemaColumnTypeIDColumn
         {
             get { return Schema.Columns[4]; }
         }
         
         
         
-        public static TableSchema.TableColumn FormatColumn
+        public static TableSchema.TableColumn WidthColumn
         {
             get { return Schema.Columns[5]; }
         }
         
         
         
-        public static TableSchema.TableColumn PhenomenonIDColumn
+        public static TableSchema.TableColumn FormatColumn
         {
             get { return Schema.Columns[6]; }
         }
         
         
         
-        public static TableSchema.TableColumn PhenomenonOfferingIDColumn
+        public static TableSchema.TableColumn PhenomenonIDColumn
         {
             get { return Schema.Columns[7]; }
         }
         
         
         
-        public static TableSchema.TableColumn PhenomenonUOMIDColumn
+        public static TableSchema.TableColumn PhenomenonOfferingIDColumn
         {
             get { return Schema.Columns[8]; }
         }
         
         
         
-        public static TableSchema.TableColumn FixedTimeColumn
+        public static TableSchema.TableColumn PhenomenonUOMIDColumn
         {
             get { return Schema.Columns[9]; }
         }
         
         
         
-        public static TableSchema.TableColumn EmptyValueColumn
+        public static TableSchema.TableColumn FixedTimeColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn EmptyValueColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[13]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[14]; }
         }
         
         
@@ -717,6 +749,7 @@ namespace SAEON.Observations.Data
 		{
 			 public static string Id = @"ID";
 			 public static string DataSchemaID = @"DataSchemaID";
+			 public static string Number = @"Number";
 			 public static string Name = @"Name";
 			 public static string SchemaColumnTypeID = @"SchemaColumnTypeID";
 			 public static string Width = @"Width";

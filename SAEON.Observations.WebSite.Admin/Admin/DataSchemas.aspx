@@ -145,6 +145,86 @@
                 <South Collapsible="true" Split="true" MinHeight="250">
                     <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
+                            <ext:Panel ID="pnlSchemaColumns" runat="server" Title="Schema Columns" Layout="FitLayout"
+                                Height="200" ClientIDMode="Static">
+                                <TopBar>
+                                    <ext:Toolbar ID="Toolbar4" runat="server">
+                                        <Items>
+                                            <ext:Button ID="btnSchemaColumnLinkAdd" runat="server" Icon="LinkAdd" Text="Link Schema Column" ClientIDMode="Static">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip4" runat="server" Html="Link" />
+                                                </ToolTips>
+                                                <Listeners>
+                                                    <Click Handler="if(Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection()){#{SchemaColumnLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a DataSchema.')}" />
+                                                </Listeners>
+                                            </ext:Button>
+                                            <%-- 
+                                            <ext:Button ID="btnAddSchemaColumn" runat="server" Icon="Add" Text="Add SchemaColumn">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="AddSchemaColumnClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            --%>
+                                        </Items>
+                                    </ext:Toolbar>
+                                </TopBar>
+                                <Items>
+                                    <ext:GridPanel ID="SchemaColumnLinksGrid" runat="server" Border="false" ClientIDMode="Static">
+                                        <Store>
+                                            <ext:Store ID="SchemaColumnLinksGridStore" runat="server" OnRefreshData="SchemaColumnLinksGridStore_RefreshData">
+                                                <Proxy>
+                                                    <ext:PageProxy />
+                                                </Proxy>
+                                                <Reader>
+                                                    <ext:JsonReader IDProperty="Id">
+                                                        <Fields>
+                                                            <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="DataSchemaID" Type="Auto" />
+                                                            <ext:RecordField Name="Name" Type="Auto" />
+                                                            <ext:RecordField Name="Width" Type="Auto" />
+                                                            <ext:RecordField Name="ColumnType" Type="Auto" />
+                                                            <ext:RecordField Name="PhenomenonCode" Type="Auto" />
+                                                            <ext:RecordField Name="OfferingCode" Type="Auto" />
+                                                            <ext:RecordField Name="UnitOfMeasureCode" Type="Auto" />
+                                                            <ext:RecordField Name="EmptyValue" Type="Auto" />
+                                                            <ext:RecordField Name="FixedTime" Type="Auto" />
+                                                        </Fields>
+                                                    </ext:JsonReader>
+                                                </Reader>
+                                                <BaseParams>
+                                                    <ext:Parameter Name="DataSchemaID" Value="Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection() ? #{DataSchemasGrid}.getSelectionModel().getSelected().id : -1"
+                                                        Mode="Raw" />
+                                                </BaseParams>
+                                            </ext:Store>
+                                        </Store>
+                                        <ColumnModel ID="ColumnModel4" runat="server">
+                                            <Columns>
+                                                <ext:Column Header="Code" DataIndex="SchemaColumnCode" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="SchemaColumnName" Width="200" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:CommandColumn Width="150">
+                                                    <Commands>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
+                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
+                                                    </Commands>
+                                                </ext:CommandColumn>
+                                            </Columns>
+                                        </ColumnModel>
+                                        <SelectionModel>
+                                            <ext:RowSelectionModel ID="RowSelectionModel4" runat="server" SingleSelect="true">
+                                            </ext:RowSelectionModel>
+                                        </SelectionModel>
+                                        <LoadMask ShowMask="true" />
+                                        <Listeners>
+                                            <Command Fn="OnSchemaColumnLinkCommand" />
+                                        </Listeners>
+                                    </ext:GridPanel>
+                                </Items>
+                            </ext:Panel>
                         </Items>
                     </ext:TabPanel>
                 </South>

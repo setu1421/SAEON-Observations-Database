@@ -1,6 +1,7 @@
 ﻿using Ext.Net;
 using FileHelpers.Dynamic;
 using SAEON.Observations.Data;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -197,5 +198,99 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         this.DetailWindow.Hide();
     }
 
+    #endregion
+
+    #region Columns
+    protected void SchemaColumnLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["DataSchemaID"] != null && e.Parameters["DataSchemaID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["DataSchemaID"].ToString());
+            try
+            {
+                //VDataSchemaSchemaColumnCollection col = new VDataSchemaSchemaColumnCollection()
+                //    .Where(VDataSchemaSchemaColumn.Columns.DataSchemaID, Id)
+                //    .OrderByAsc(VDataSchemaSchemaColumn.Columns.StartDate)
+                //    .OrderByAsc(VDataSchemaSchemaColumn.Columns.EndDate)
+                //    .OrderByAsc(VDataSchemaSchemaColumn.Columns.SchemaColumnName)
+                //    .Load();
+                //SchemaColumnLinksGrid.GetStore().DataSource = col;
+                //SchemaColumnLinksGrid.GetStore().DataBind();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "DataSchemas.SchemaColumnLinksGridStore_RefreshData");
+                MessageBoxes.Error(ex, "Error", "Unable to refresh SchemaColumns grid");
+            }
+        }
+    }
+
+    protected void SchemaColumnLinkSave(object sender, DirectEventArgs e)
+    {
+        try
+        {
+            RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            //DataSchemaSchemaColumn DataSchemaSchemaColumn = new DataSchemaSchemaColumn(Utilities.MakeGuid(SchemaColumnLinkID.Value));
+            //DataSchemaSchemaColumn.DataSchemaID = masterID;
+            //DataSchemaSchemaColumn.SchemaColumnID = new Guid(cbSchemaColumn.SelectedItem.Value.Trim());
+            //if (!String.IsNullOrEmpty(dfSchemaColumnStartDate.Text) && (dfSchemaColumnStartDate.SelectedDate.Year >= 1900))
+            //    DataSchemaSchemaColumn.StartDate = dfSchemaColumnStartDate.SelectedDate;
+            //else
+            //    DataSchemaSchemaColumn.StartDate = null;
+            //if (!String.IsNullOrEmpty(dfSchemaColumnEndDate.Text) && (dfSchemaColumnEndDate.SelectedDate.Year >= 1900))
+            //    DataSchemaSchemaColumn.EndDate = dfSchemaColumnEndDate.SelectedDate;
+            //else
+            //    DataSchemaSchemaColumn.EndDate = null;
+            //DataSchemaSchemaColumn.UserId = AuthHelper.GetLoggedInUserId;
+            //DataSchemaSchemaColumn.Save();
+            //Auditing.Log("DataSchemas.AddSchemaColumnLink", new Dictionary<string, object> {
+            //    { "DataSchemaID", DataSchemaSchemaColumn.DataSchemaID },
+            //    { "DataSchemaCode", DataSchemaSchemaColumn.DataSchema.Code },
+            //    { "SchemaColumnID", DataSchemaSchemaColumn.SchemaColumnID},
+            //    { "SchemaColumnCode", DataSchemaSchemaColumn.SchemaColumn.Code},
+            //    { "StartDate", DataSchemaSchemaColumn.StartDate },
+            //    { "EndDate", DataSchemaSchemaColumn.EndDate}
+            //});
+            //SchemaColumnLinksGrid.DataBind();
+            //SchemaColumnLinkWindow.Hide();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DataSchemas.LinkSchemaColumn_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link SchemaColumn");
+        }
+    }
+
+    [DirectMethod]
+    public void ConfirmDeleteSchemaColumnLink(Guid aID)
+    {
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteSchemaColumnLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this SchemaColumn link?");
+    }
+
+    [DirectMethod]
+    public void DeleteSchemaColumnLink(Guid aID)
+    {
+        try
+        {
+            //new DataSchemaSchemaColumnController().Delete(aID);
+            Auditing.Log("DataSchemas.DeleteSchemaColumnLink", new Dictionary<string, object> { { "ID", aID } });
+            SchemaColumnLinksGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DataSchemas.DeleteSchemaColumnLink({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete SchemaColumn link");
+        }
+    }
+
+    [DirectMethod]
+    public void AddSchemaColumnClick(object sender, DirectEventArgs e)
+    {
+        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
+    }
     #endregion
 }

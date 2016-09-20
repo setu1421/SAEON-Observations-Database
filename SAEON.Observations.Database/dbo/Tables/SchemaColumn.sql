@@ -3,6 +3,7 @@ CREATE TABLE [dbo].[SchemaColumn]
 (
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_SchemaColumn_ID] DEFAULT newid(), 
     [DataSchemaID] UNIQUEIDENTIFIER NOT NULL, 
+	[Number] INT NOT NULL,
     [Name] VARCHAR(100) NOT NULL,
     [SchemaColumnTypeID] UNIQUEIDENTIFIER NOT NULL,
     [Width] INT NULL,
@@ -22,7 +23,8 @@ CREATE TABLE [dbo].[SchemaColumn]
     CONSTRAINT [FK_SchemaColumn_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
     CONSTRAINT [FK_SchemaColumn_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
     CONSTRAINT [FK_SchemaColumn_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
-    CONSTRAINT [UX_SchemaColumn] UNIQUE ([DataSchemaID],[Name])
+    CONSTRAINT [UX_SchemaColumn_Number] UNIQUE ([DataSchemaID],[Number]),
+    CONSTRAINT [UX_SchemaColumn_Name] UNIQUE ([DataSchemaID],[Name])
 )
 GO
 CREATE CLUSTERED INDEX [CX_SchemaColumn] ON [dbo].[SchemaColumn] ([AddedAt])

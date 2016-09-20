@@ -9,6 +9,9 @@
 --    [Guid]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_ImportBatch_ID] DEFAULT newid(),
 --< Changed 2.0.0 20160329 TimPN
 --> Removed 2.0.8 20160720 TimPN
+--> Added 2.0.8 20160920 TimPN
+    [Code]         INT              IDENTITY (1, 1) NOT NULL,
+--< Added 2.0.8 20160920 TimPN
     [DataSourceID] UNIQUEIDENTIFIER NOT NULL,
     [ImportDate]   DATETIME         NOT NULL CONSTRAINT [DF_ImportBatch_ImportDate] DEFAULT getdate(),
     [Status]       INT              NOT NULL,
@@ -19,8 +22,8 @@
     [Comment] VARCHAR(8000) NULL, 
 --< Added 2.0.4 20160426 TimPN
 --> Added 2.0.9 20160823 TimPN
-	[StatusID] UNIQUEIDENTIFIER NULL,
-	[StatusReasonID] UNIQUEIDENTIFIER NULL,
+    [StatusID] UNIQUEIDENTIFIER NULL,
+    [StatusReasonID] UNIQUEIDENTIFIER NULL,
 --< Added 2.0.9 20160823 TimPN
 --> Added 2.0.8 20160715 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_ImportBatch_AddedAt] DEFAULT GetDate(), 
@@ -36,6 +39,9 @@
     CONSTRAINT [FK_ImportBatch_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]),
     CONSTRAINT [FK_ImportBatch_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]),
 --< Added 2.0.9 20160823 TimPN
+--> Added 2.0.8 20160920 TimPN
+    CONSTRAINT [UX_ImportBatch_Code] UNIQUE ([Code]),
+--< Added 2.0.8 20160920 TimPN
 --> Added 2.0.8 20160726 TimPN
     CONSTRAINT [UX_ImportBatch] UNIQUE ([DataSourceID], [ImportDate], [LogFileName])
 --< Added 2.0.8 20160726 TimPN

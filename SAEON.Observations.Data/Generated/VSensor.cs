@@ -28,14 +28,14 @@ namespace SAEON.Observations.Data{
     public partial class VSensor : ReadOnlyRecord<VSensor>, IReadOnlyRecord
     {
     
-        #region Default Settings
-        protected static void SetSQLProps() 
-        {
-            GetTableSchema();
-        }
-        #endregion
+	    #region Default Settings
+	    protected static void SetSQLProps() 
+	    {
+		    GetTableSchema();
+	    }
+	    #endregion
         #region Schema Accessor
-        public static TableSchema.Table Schema
+	    public static TableSchema.Table Schema
         {
             get
             {
@@ -46,7 +46,7 @@ namespace SAEON.Observations.Data{
                 return BaseSchema;
             }
         }
-        
+    	
         private static void GetTableSchema() 
         {
             if(!IsSchemaInitialized)
@@ -223,235 +223,235 @@ namespace SAEON.Observations.Data{
         #endregion
         
         #region Query Accessor
-        public static Query CreateQuery()
-        {
-            return new Query(Schema);
-        }
-        #endregion
-        
-        #region .ctors
-        public VSensor()
-        {
+	    public static Query CreateQuery()
+	    {
+		    return new Query(Schema);
+	    }
+	    #endregion
+	    
+	    #region .ctors
+	    public VSensor()
+	    {
             SetSQLProps();
             SetDefaults();
             MarkNew();
         }
         public VSensor(bool useDatabaseDefaults)
-        {
-            SetSQLProps();
-            if(useDatabaseDefaults)
-            {
-                ForceDefaults();
-            }
-            MarkNew();
-        }
-        
-        public VSensor(object keyID)
-        {
-            SetSQLProps();
-            LoadByKey(keyID);
-        }
-         
-        public VSensor(string columnName, object columnValue)
+	    {
+		    SetSQLProps();
+		    if(useDatabaseDefaults)
+		    {
+				ForceDefaults();
+			}
+			MarkNew();
+	    }
+	    
+	    public VSensor(object keyID)
+	    {
+		    SetSQLProps();
+		    LoadByKey(keyID);
+	    }
+    	 
+	    public VSensor(string columnName, object columnValue)
         {
             SetSQLProps();
             LoadByParam(columnName,columnValue);
         }
         
-        #endregion
-        
-        #region Props
-        
+	    #endregion
+	    
+	    #region Props
+	    
           
         [XmlAttribute("Id")]
         [Bindable(true)]
         public Guid Id 
-        {
-            get
-            {
-                return GetColumnValue<Guid>("ID");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("ID");
+		    }
             set 
-            {
-                SetColumnValue("ID", value);
+		    {
+			    SetColumnValue("ID", value);
             }
         }
-          
+	      
         [XmlAttribute("Code")]
         [Bindable(true)]
         public string Code 
-        {
-            get
-            {
-                return GetColumnValue<string>("Code");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Code");
+		    }
             set 
-            {
-                SetColumnValue("Code", value);
+		    {
+			    SetColumnValue("Code", value);
             }
         }
-          
+	      
         [XmlAttribute("Name")]
         [Bindable(true)]
         public string Name 
-        {
-            get
-            {
-                return GetColumnValue<string>("Name");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Name");
+		    }
             set 
-            {
-                SetColumnValue("Name", value);
+		    {
+			    SetColumnValue("Name", value);
             }
         }
-          
+	      
         [XmlAttribute("Description")]
         [Bindable(true)]
         public string Description 
-        {
-            get
-            {
-                return GetColumnValue<string>("Description");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Description");
+		    }
             set 
-            {
-                SetColumnValue("Description", value);
+		    {
+			    SetColumnValue("Description", value);
             }
         }
-          
+	      
         [XmlAttribute("Url")]
         [Bindable(true)]
         public string Url 
-        {
-            get
-            {
-                return GetColumnValue<string>("Url");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Url");
+		    }
             set 
-            {
-                SetColumnValue("Url", value);
+		    {
+			    SetColumnValue("Url", value);
             }
         }
-          
+	      
         [XmlAttribute("StationID")]
         [Bindable(true)]
         public Guid StationID 
-        {
-            get
-            {
-                return GetColumnValue<Guid>("StationID");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("StationID");
+		    }
             set 
-            {
-                SetColumnValue("StationID", value);
+		    {
+			    SetColumnValue("StationID", value);
             }
         }
-          
+	      
         [XmlAttribute("DataSourceID")]
         [Bindable(true)]
         public Guid DataSourceID 
-        {
-            get
-            {
-                return GetColumnValue<Guid>("DataSourceID");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("DataSourceID");
+		    }
             set 
-            {
-                SetColumnValue("DataSourceID", value);
+		    {
+			    SetColumnValue("DataSourceID", value);
             }
         }
-          
+	      
         [XmlAttribute("PhenomenonID")]
         [Bindable(true)]
         public Guid PhenomenonID 
-        {
-            get
-            {
-                return GetColumnValue<Guid>("PhenomenonID");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("PhenomenonID");
+		    }
             set 
-            {
-                SetColumnValue("PhenomenonID", value);
+		    {
+			    SetColumnValue("PhenomenonID", value);
             }
         }
-          
+	      
         [XmlAttribute("PhenomenonName")]
         [Bindable(true)]
         public string PhenomenonName 
-        {
-            get
-            {
-                return GetColumnValue<string>("PhenomenonName");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("PhenomenonName");
+		    }
             set 
-            {
-                SetColumnValue("PhenomenonName", value);
+		    {
+			    SetColumnValue("PhenomenonName", value);
             }
         }
-          
+	      
         [XmlAttribute("UserId")]
         [Bindable(true)]
         public Guid UserId 
-        {
-            get
-            {
-                return GetColumnValue<Guid>("UserId");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("UserId");
+		    }
             set 
-            {
-                SetColumnValue("UserId", value);
+		    {
+			    SetColumnValue("UserId", value);
             }
         }
-          
+	      
         [XmlAttribute("StationName")]
         [Bindable(true)]
         public string StationName 
-        {
-            get
-            {
-                return GetColumnValue<string>("StationName");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("StationName");
+		    }
             set 
-            {
-                SetColumnValue("StationName", value);
+		    {
+			    SetColumnValue("StationName", value);
             }
         }
-          
+	      
         [XmlAttribute("DataSourceName")]
         [Bindable(true)]
         public string DataSourceName 
-        {
-            get
-            {
-                return GetColumnValue<string>("DataSourceName");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("DataSourceName");
+		    }
             set 
-            {
-                SetColumnValue("DataSourceName", value);
+		    {
+			    SetColumnValue("DataSourceName", value);
             }
         }
-          
+	      
         [XmlAttribute("DataSchemaName")]
         [Bindable(true)]
         public string DataSchemaName 
-        {
-            get
-            {
-                return GetColumnValue<string>("DataSchemaName");
-            }
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("DataSchemaName");
+		    }
             set 
-            {
-                SetColumnValue("DataSchemaName", value);
+		    {
+			    SetColumnValue("DataSchemaName", value);
             }
         }
-        
-        #endregion
+	    
+	    #endregion
     
-        #region Columns Struct
-        public struct Columns
-        {
-            
-            
+	    #region Columns Struct
+	    public struct Columns
+	    {
+		    
+		    
             public static string Id = @"ID";
             
             public static string Code = @"Code";
@@ -478,11 +478,11 @@ namespace SAEON.Observations.Data{
             
             public static string DataSchemaName = @"DataSchemaName";
             
-        }
-        #endregion
-        
-        
-        #region IAbstractRecord Members
+	    }
+	    #endregion
+	    
+	    
+	    #region IAbstractRecord Members
         public new CT GetColumnValue<CT>(string columnName) {
             return base.GetColumnValue<CT>(columnName);
         }
@@ -490,6 +490,6 @@ namespace SAEON.Observations.Data{
             return base.GetColumnValue<object>(columnName);
         }
         #endregion
-        
+	    
     }
 }

@@ -536,9 +536,9 @@
     <Build Include="dbo\Tables\StatusReason.sql" />
     <Build Include="dbo\Tables\SchemaColumn.sql" />
     <Build Include="dbo\Tables\SchemaColumnType.sql" />
+    <Build Include="dbo\Views\vSchemaColumn.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Lab2-NimbusServices ObservationsDBv2Test.publish.xml" />
     <None Include="ObservationDB_Test.publish.xml" />
     <None Include="ObservationDB_Imp.publish.xml" />
     <None Include="ObservationDB.publish.xml" />

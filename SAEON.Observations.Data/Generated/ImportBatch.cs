@@ -140,6 +140,19 @@ namespace SAEON.Observations.Data
 				colvarId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarId);
 				
+				TableSchema.TableColumn colvarCode = new TableSchema.TableColumn(schema);
+				colvarCode.ColumnName = "Code";
+				colvarCode.DataType = DbType.Int32;
+				colvarCode.MaxLength = 0;
+				colvarCode.AutoIncrement = true;
+				colvarCode.IsNullable = false;
+				colvarCode.IsPrimaryKey = false;
+				colvarCode.IsForeignKey = false;
+				colvarCode.IsReadOnly = false;
+				colvarCode.DefaultSetting = @"";
+				colvarCode.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarCode);
+				
 				TableSchema.TableColumn colvarDataSourceID = new TableSchema.TableColumn(schema);
 				colvarDataSourceID.ColumnName = "DataSourceID";
 				colvarDataSourceID.DataType = DbType.Guid;
@@ -306,6 +319,14 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<Guid>(Columns.Id); }
 			set { SetColumnValue(Columns.Id, value); }
+		}
+		  
+		[XmlAttribute("Code")]
+		[Bindable(true)]
+		public int Code 
+		{
+			get { return GetColumnValue<int>(Columns.Code); }
+			set { SetColumnValue(Columns.Code, value); }
 		}
 		  
 		[XmlAttribute("DataSourceID")]
@@ -519,11 +540,13 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,int varCode,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			ImportBatch item = new ImportBatch();
 			
 				item.Id = varId;
+			
+				item.Code = varCode;
 			
 				item.DataSourceID = varDataSourceID;
 			
@@ -567,79 +590,86 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn DataSourceIDColumn
+        public static TableSchema.TableColumn CodeColumn
         {
             get { return Schema.Columns[1]; }
         }
         
         
         
-        public static TableSchema.TableColumn ImportDateColumn
+        public static TableSchema.TableColumn DataSourceIDColumn
         {
             get { return Schema.Columns[2]; }
         }
         
         
         
-        public static TableSchema.TableColumn StatusColumn
+        public static TableSchema.TableColumn ImportDateColumn
         {
             get { return Schema.Columns[3]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn StatusColumn
         {
             get { return Schema.Columns[4]; }
         }
         
         
         
-        public static TableSchema.TableColumn FileNameColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[5]; }
         }
         
         
         
-        public static TableSchema.TableColumn LogFileNameColumn
+        public static TableSchema.TableColumn FileNameColumn
         {
             get { return Schema.Columns[6]; }
         }
         
         
         
-        public static TableSchema.TableColumn CommentColumn
+        public static TableSchema.TableColumn LogFileNameColumn
         {
             get { return Schema.Columns[7]; }
         }
         
         
         
-        public static TableSchema.TableColumn StatusIDColumn
+        public static TableSchema.TableColumn CommentColumn
         {
             get { return Schema.Columns[8]; }
         }
         
         
         
-        public static TableSchema.TableColumn StatusReasonIDColumn
+        public static TableSchema.TableColumn StatusIDColumn
         {
             get { return Schema.Columns[9]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn StatusReasonIDColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[11]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[12]; }
         }
         
         
@@ -649,6 +679,7 @@ namespace SAEON.Observations.Data
 		public struct Columns
 		{
 			 public static string Id = @"ID";
+			 public static string Code = @"Code";
 			 public static string DataSourceID = @"DataSourceID";
 			 public static string ImportDate = @"ImportDate";
 			 public static string Status = @"Status";
