@@ -18,6 +18,16 @@
         };
 
     </script>
+    <ext:Store ID="DataSourceTypeStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="Auto" />
+                    <ext:RecordField Name="Description" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
     <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
@@ -94,8 +104,8 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="200" />
-                                        <ext:Column Header="Source Type Code" Width="200" DataIndex="DataSourceTypeCode" />
-                                        <ext:Column Header="Source Type Description" Width="200" DataIndex="DataSourceTypeDesc" />
+                                        <ext:Column Header="Source Type Code" Width="100" DataIndex="DataSourceTypeCode" />
+                                        <ext:Column Header="Source Type Description" Width="150" DataIndex="DataSourceTypeDesc" />
                                         <ext:CommandColumn Width="75">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
@@ -129,15 +139,15 @@
                                 <Listeners>
                                     <Command Fn="onCommand" />
                                 </Listeners>
-                                <%--                        <DirectEvents>
-                            <Command OnEvent="onCommand">
-                                <ExtraParams>
-                                    <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
-                                    <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
-                                </ExtraParams>
-                                <EventMask ShowMask="true" />
-                            </Command>
-                        </DirectEvents>--%>
+<%--                                <DirectEvents>
+                                    <Command OnEvent="onCommand">
+                                        <ExtraParams>
+                                            <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
+                                            <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
+                                        </ExtraParams>
+                                        <EventMask ShowMask="true" />
+                                    </Command>
+                                </DirectEvents>--%>
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
@@ -150,12 +160,12 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnSchemaColumnLinkAdd" runat="server" Icon="LinkAdd" Text="Link Schema Column" ClientIDMode="Static">
+                                            <ext:Button ID="btnSchemaColumnAdd" runat="server" Icon="Add" Text="Add Schema Column" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip4" runat="server" Html="Link" />
                                                 </ToolTips>
                                                 <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection()){#{SchemaColumnLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a DataSchema.')}" />
+                                                    <Click Handler="if(Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection()){#{SchemaColumnAddWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a DataSchema.')}" />
                                                 </Listeners>
                                             </ext:Button>
                                             <%-- 
@@ -172,9 +182,9 @@
                                     </ext:Toolbar>
                                 </TopBar>
                                 <Items>
-                                    <ext:GridPanel ID="SchemaColumnLinksGrid" runat="server" Border="false" ClientIDMode="Static">
+                                    <ext:GridPanel ID="SchemaColumnsGrid" runat="server" Border="false" ClientIDMode="Static">
                                         <Store>
-                                            <ext:Store ID="SchemaColumnLinksGridStore" runat="server" OnRefreshData="SchemaColumnLinksGridStore_RefreshData">
+                                            <ext:Store ID="SchemaColumnsGridStore" runat="server" OnRefreshData="SchemaColumnsGridStore_RefreshData">
                                                 <Proxy>
                                                     <ext:PageProxy />
                                                 </Proxy>
@@ -184,11 +194,16 @@
                                                             <ext:RecordField Name="Id" Type="Auto" />
                                                             <ext:RecordField Name="DataSchemaID" Type="Auto" />
                                                             <ext:RecordField Name="Name" Type="Auto" />
+                                                            <ext:RecordField Name="Number" Type="Auto" />
                                                             <ext:RecordField Name="Width" Type="Auto" />
-                                                            <ext:RecordField Name="ColumnType" Type="Auto" />
-                                                            <ext:RecordField Name="PhenomenonCode" Type="Auto" />
-                                                            <ext:RecordField Name="OfferingCode" Type="Auto" />
-                                                            <ext:RecordField Name="UnitOfMeasureCode" Type="Auto" />
+                                                            <ext:RecordField Name="SchemaColumnTypeID" Type="Auto" />
+                                                            <ext:RecordField Name="SchemaColumnTypeName" Type="Auto" />
+                                                            <ext:RecordField Name="PhenomenonID" Type="Auto" />
+                                                            <ext:RecordField Name="PhenomenonName" Type="Auto" />
+                                                            <ext:RecordField Name="OfferingID" Type="Auto" />
+                                                            <ext:RecordField Name="OfferingName" Type="Auto" />
+                                                            <ext:RecordField Name="UnitOfMeasureID" Type="Auto" />
+                                                            <ext:RecordField Name="UnitOfMeasureName" Type="Auto" />
                                                             <ext:RecordField Name="EmptyValue" Type="Auto" />
                                                             <ext:RecordField Name="FixedTime" Type="Auto" />
                                                         </Fields>
@@ -202,10 +217,14 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel4" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Code" DataIndex="SchemaColumnCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="SchemaColumnName" Width="200" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                                                <ext:Column Header="Width" DataIndex="Width" Width="100" />
+                                                <ext:Column Header="Type" DataIndex="SchemaColumnTypeName" Width="100" />
+                                                <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
+                                                <ext:Column Header="Offering" DataIndex="OfferingName" Width="1500" />
+                                                <ext:Column Header="Unit of measure" DataIndex="UnitOfMeasureName" Width="150" />
+                                                <ext:Column Header="Empty value" DataIndex="EmptyValue" Width="100" />
+                                                <ext:Column Header="Fixed time" DataIndex="FixedTime" Width="100" />
                                                 <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
@@ -220,7 +239,7 @@
                                         </SelectionModel>
                                         <LoadMask ShowMask="true" />
                                         <Listeners>
-                                            <Command Fn="OnSchemaColumnLinkCommand" />
+                                            <Command Fn="OnSchemaColumnAddCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>
@@ -250,26 +269,14 @@
                                         MsgTarget="Side" ClientIDMode="Static">
                                         <RemoteValidation OnValidation="ValidateField" />
                                     </ext:TextField>
-                                    <ext:ComboBox ID="cbDataSourceType" runat="server" Editable="false" BlankText="Source Type is required"
+                                    <ext:ComboBox ID="cbDataSourceType" runat="server" StoreID="DataSourceTypeStore" Editable="false" BlankText="Source Type is required"
                                         MsgTarget="Side" DisplayField="Description" ValueField="Id" TypeAhead="true"
                                         Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false" DataIndex="DataSourceTypeID"
                                         EmptyText="Select Source Type" SelectOnFocus="true" FieldLabel="Source Type"
                                         AnchorHorizontal="93%">
-                                        <Store>
-                                            <ext:Store ID="DataSourceTypeStore" runat="server">
-                                                <Reader>
-                                                    <ext:JsonReader IDProperty="Id">
-                                                        <Fields>
-                                                            <ext:RecordField Name="Id" Type="String" />
-                                                            <ext:RecordField Name="Description" Type="String" />
-                                                        </Fields>
-                                                    </ext:JsonReader>
-                                                </Reader>
-                                            </ext:Store>
-                                        </Store>
-                                        <Listeners>
+<%--                                        <Listeners>
                                             <Select Handler="#{cbDataSourceType}.getValue() == '25839703-3cb3-4c23-aca3-4399cc52ecde'?#{cbDelimiter}.allowBlank=false:#{cbDelimiter}.allowBlank=true;#{cbDelimiter}.clearValue();#{cbDelimiter}.clearInvalid();#{cbDelimiter}.markAsValid();" />
-                                        </Listeners>
+                                        </Listeners>--%>
                                     </ext:ComboBox>
                                 </Items>
                             </ext:Container>
@@ -333,8 +340,8 @@
                             <ext:Container ID="Container12" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                                 <Items>
                                     <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server"
-                                        FieldLabel="Description" AnchorHorizontal="93%" AllowBlank="false" BlankText="Name is a required"
-                                        MsgTarget="Side">
+                                        FieldLabel="Description" AnchorHorizontal="93%" AllowBlank="true" BlankText="Description is a required"
+                                        MsgTarget="Side" ClientIDMode="Static">
                                     </ext:TextArea>
                                 </Items>
                             </ext:Container>
@@ -374,6 +381,84 @@
                 </Buttons>
                 <BottomBar>
                     <ext:StatusBar ID="StatusBar1" runat="server" Height="25" />
+                </BottomBar>
+                <Listeners>
+                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                </Listeners>
+            </ext:FormPanel>
+        </Content>
+    </ext:Window>
+    <ext:Window ID="SchemaColumnAddWindow" runat="server" Width="450" Height="300" Closable="true"
+        Hidden="true" Collapsible="false" Title="Link Sensor"
+        Maximizable="false" Layout="Fit" ClientIDMode="Static">
+        <Listeners>
+            <Hide Fn="ClearSchemaColumnAddForm" />
+        </Listeners>
+        <Content>
+            <ext:FormPanel ID="SchemaColumnAddFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
+                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
+                Layout="RowLayout" ClientIDMode="Static">
+                <LoadMask ShowMask="true" />
+                <Items>
+                    <ext:Hidden ID="SchemaColumnAddID" DataIndex="Id" runat="server" ClientIDMode="Static">
+                    </ext:Hidden>
+                    <%--                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="FormLayout"
+                        LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
+                            <ext:Parameter Name="blankText" Value="Sensor is a required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:ComboBox ID="cbSensor" runat="server" StoreID="SensorStore" Editable="true" DisplayField="Name"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                AllowBlank="false" DataIndex="SensorID" EmptyText="Select Sensor"
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
+                            </ext:ComboBox>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel10" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="Start Date is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:DateField ID="dfSensorStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                            </ext:DateField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel11" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                        <Defaults>
+                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
+                            <ext:Parameter Name="blankText" Value="End Date is required" Mode="Value" />
+                            <ext:Parameter Name="MsgTarget" Value="side" />
+                        </Defaults>
+                        <Items>
+                            <ext:DateField ID="dfSensorEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                            </ext:DateField>
+                        </Items>
+                    </ext:Panel>--%>
+                </Items>
+                <Buttons>
+                    <ext:Button ID="btnSchemaColumnAddSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
+                        <DirectEvents>
+                            <Click OnEvent="SchemaColumnAddSave">
+                                <EventMask ShowMask="true" />
+                            </Click>
+                        </DirectEvents>
+                    </ext:Button>
+                </Buttons>
+                <BottomBar>
+                    <ext:StatusBar ID="StatusBar4" runat="server" Height="25" />
                 </BottomBar>
                 <Listeners>
                     <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />

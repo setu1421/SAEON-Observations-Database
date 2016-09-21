@@ -5,16 +5,11 @@
 
     tfCode.rvConfig.remoteValidated = false;
     tfCode.rvConfig.remoteValid = false;
+    tfCode.markAsValid();
 
     tfName.rvConfig.remoteValidated = false;
     tfName.rvConfig.remoteValid = false;
-
-    tfDescription.rvConfig.remoteValidated = false;
-    tfDescription.rvConfig.remoteValid = false;
-
-    tfCode.markAsValid();
     tfName.markAsValid();
-    tfDescription.markAsValid();
 
     DetailWindow.show();
 }
@@ -25,38 +20,33 @@ function New() {
 
     tfCode.rvConfig.remoteValidated = false;
     tfCode.rvConfig.remoteValid = false;
+    tfCode.markAsValid();
 
     tfName.rvConfig.remoteValidated = false;
     tfName.rvConfig.remoteValid = false;
-
-    tfDescription.rvConfig.remoteValidated = false;
-    tfDescription.rvConfig.remoteValid = false;
-
-    tfCode.markAsValid();
     tfName.markAsValid();
-    tfDescription.markAsValid();
 
     DetailWindow.show();
 }
 
 function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible()) {
-        SchemaColumnLinksGrid.getStore().reload();
+        SchemaColumnsGrid.getStore().reload();
     }
 }
 
-function ClearSchemaColumnLinkForm() {
-    SchemaColumnLinkFormPanel.getForm().reset();
+function ClearSchemaColumnAddForm() {
+    SchemaColumnAddFormPanel.getForm().reset();
 }
 
-function OnSchemaColumnLinkCommand(e, record) {
+function OnSchemaColumnAddCommand(e, record) {
     if (e === 'Delete') {
-        DirectCall.ConfirmDeleteSchemaColumnLink(record.get('Id'), { eventMask: { showMask: true } });
+        DirectCall.ConfirmDeleteSchemaColumn(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {
-        SchemaColumnLinkFormPanel.getForm().reset();
-        SchemaColumnLinkFormPanel.getForm().loadRecord(record);
-        SchemaColumnLinkFormPanel.getForm().clearInvalid();
-        SchemaColumnLinkWindow.show();
+        SchemaColumnAddFormPanel.getForm().reset();
+        SchemaColumnAddFormPanel.getForm().loadRecord(record);
+        SchemaColumnAddFormPanel.getForm().clearInvalid();
+        SchemaColumnAddWindow.show();
     }
 }
 
