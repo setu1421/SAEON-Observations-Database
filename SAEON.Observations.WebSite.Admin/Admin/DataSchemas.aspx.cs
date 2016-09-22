@@ -16,10 +16,15 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         {
             DataSourceTypeStore.DataSource = new DataSourceTypeCollection().OrderByAsc(DataSourceType.Columns.Code).Load();
             DataSourceTypeStore.DataBind();
-            //this.cbPhenomenon.GetStore().DataSource = new PhenomenonCollection().OrderByAsc(Phenomenon.Columns.Name).Load();
-            //this.cbPhenomenon.DataBind();
+            SchemaColumnTypeStore.DataSource = new SchemaColumnTypeCollection().OrderByAsc(SchemaColumnType.Columns.Name).Load();
+            SchemaColumnTypeStore.DataBind();
+            PhenomenonStore.DataSource = new PhenomenonCollection().OrderByAsc(Phenomenon.Columns.Name).Load();
+            PhenomenonStore.DataBind();
+            OfferingStore.DataSource = new OfferingCollection().OrderByAsc(Offering.Columns.Name).Load();
+            OfferingStore.DataBind();
+            UnitOfMeasureStore.DataSource = new UnitOfMeasureCollection().OrderByAsc(UnitOfMeasure.Columns.Unit).Load();
+            UnitOfMeasureStore.DataBind();
         }
-
     }
 
     #region Data Schemas
@@ -127,9 +132,37 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         this.DetailWindow.Hide();
     }
 
+    protected void MasterRowSelect(object sender, DirectEventArgs e)
+    {
+        RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        DataSchema schema = new DataSchema(masterID);
+        if (schema.DataSourceTypeID == new Guid(DataSourceType.CSV))
+        {
+
+        }
+        else
+        {
+
+        }
+        //SensorCollection sensors = new Select()
+        //    .From(Sensor.Schema)
+        //    .Where(Sensor.StationIDColumn)
+        //    .In(new Select(new string[] { StationInstrument.Columns.StationID })
+        //        .From(StationInstrument.Schema)
+        //        .Where(StationInstrument.InstrumentIDColumn)
+        //        .IsEqualTo(masterID))
+        //    .Or(Sensor.StationIDColumn)
+        //    .IsNull()
+        //    .OrderAsc(Sensor.Columns.Name)
+        //    .ExecuteAsCollection<SensorCollection>();
+        //SensorStore.DataSource = sensors;
+        //SensorStore.DataBind();
+    }
+
     #endregion
 
-    #region Columns
+    #region Schema Columns
     protected void SchemaColumnsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["DataSchemaID"] != null && e.Parameters["DataSchemaID"].ToString() != "-1")

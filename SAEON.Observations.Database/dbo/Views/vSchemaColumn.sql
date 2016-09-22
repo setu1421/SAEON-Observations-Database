@@ -2,10 +2,10 @@
 AS 
 SELECT 
   SchemaColumn.*,
-  SchemaColumnType.Name ColumnType, 
+  SchemaColumnType.Name ColumnTypeName, 
   Phenomenon.Name PhenomenonName,
   Offering.Name OfferingName,
-  UnitOfMeasure.Unit UnitOfMeasureName
+  UnitOfMeasure.Unit UnitOfMeasureUnit
 FROM 
   SchemaColumn
   inner join SchemaColumnType 

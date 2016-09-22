@@ -28,6 +28,46 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
+    <ext:Store ID="SchemaColumnTypeStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="Auto" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
+    <ext:Store ID="PhenomenonStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="Auto" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
+    <ext:Store ID="OfferingStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="Auto" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
+    <ext:Store ID="UnitOfMeasureStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="Auto" />
+                    <ext:RecordField Name="Unit" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
     <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
@@ -118,6 +158,10 @@
                                         <Listeners>
                                             <RowSelect Fn="MasterRowSelect" Buffer="250" />
                                         </Listeners>
+                                        <DirectEvents>
+                                            <RowSelect OnEvent="MasterRowSelect" />
+                                        </DirectEvents>
+
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
@@ -139,7 +183,7 @@
                                 <Listeners>
                                     <Command Fn="onCommand" />
                                 </Listeners>
-<%--                                <DirectEvents>
+                                <%--                                <DirectEvents>
                                     <Command OnEvent="onCommand">
                                         <ExtraParams>
                                             <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
@@ -155,17 +199,17 @@
                 <South Collapsible="true" Split="true" MinHeight="250">
                     <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:Panel ID="pnlSchemaColumns" runat="server" Title="Schema Columns" Layout="FitLayout"
+                            <ext:Panel ID="pnlSchemaColumns" runat="server" Title="Columns" Layout="FitLayout"
                                 Height="200" ClientIDMode="Static">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnSchemaColumnAdd" runat="server" Icon="Add" Text="Add Schema Column" ClientIDMode="Static">
+                                            <ext:Button ID="btnSchemaColumnAdd" runat="server" Icon="Add" Text="Add Column" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip4" runat="server" Html="Link" />
                                                 </ToolTips>
                                                 <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection()){#{SchemaColumnAddWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a DataSchema.')}" />
+                                                    <Click Handler="if(Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection()){#{SchemaColumnAddWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Data Schema.')}" />
                                                 </Listeners>
                                             </ext:Button>
                                             <%-- 
@@ -203,7 +247,7 @@
                                                             <ext:RecordField Name="OfferingID" Type="Auto" />
                                                             <ext:RecordField Name="OfferingName" Type="Auto" />
                                                             <ext:RecordField Name="UnitOfMeasureID" Type="Auto" />
-                                                            <ext:RecordField Name="UnitOfMeasureName" Type="Auto" />
+                                                            <ext:RecordField Name="UnitOfMeasureUnit" Type="Auto" />
                                                             <ext:RecordField Name="EmptyValue" Type="Auto" />
                                                             <ext:RecordField Name="FixedTime" Type="Auto" />
                                                         </Fields>
@@ -269,14 +313,14 @@
                                         MsgTarget="Side" ClientIDMode="Static">
                                         <RemoteValidation OnValidation="ValidateField" />
                                     </ext:TextField>
-                                    <ext:ComboBox ID="cbDataSourceType" runat="server" StoreID="DataSourceTypeStore" Editable="false" BlankText="Source Type is required"
+                                    <ext:ComboBox ID="cbDataSourceType" runat="server" StoreID="DataSourceTypeStore" Editable="false" BlankText="Data Source Type is required"
                                         MsgTarget="Side" DisplayField="Description" ValueField="Id" TypeAhead="true"
                                         Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false" DataIndex="DataSourceTypeID"
-                                        EmptyText="Select Source Type" SelectOnFocus="true" FieldLabel="Source Type"
+                                        EmptyText="Select Data Source Type" SelectOnFocus="true" FieldLabel="Data Source Type"
                                         AnchorHorizontal="93%">
-<%--                                        <Listeners>
+                                        <Listeners>
                                             <Select Handler="#{cbDataSourceType}.getValue() == '25839703-3cb3-4c23-aca3-4399cc52ecde'?#{cbDelimiter}.allowBlank=false:#{cbDelimiter}.allowBlank=true;#{cbDelimiter}.clearValue();#{cbDelimiter}.clearInvalid();#{cbDelimiter}.markAsValid();" />
-                                        </Listeners>--%>
+                                        </Listeners>
                                     </ext:ComboBox>
                                 </Items>
                             </ext:Container>
@@ -388,8 +432,8 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="SchemaColumnAddWindow" runat="server" Width="450" Height="300" Closable="true"
-        Hidden="true" Collapsible="false" Title="Link Sensor"
+    <ext:Window ID="SchemaColumnAddWindow" runat="server" Width="800" Height="500" Closable="true"
+        Hidden="true" Collapsible="false" Title="Add Column"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="ClearSchemaColumnAddForm" />
@@ -402,6 +446,78 @@
                 <Items>
                     <ext:Hidden ID="SchemaColumnAddID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
+                    <ext:Container ID="Container13" runat="server" Layout="Column" Height="50">
+                        <Items>
+                            <ext:Container ID="Container14" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                                <Items>
+                                    <ext:TextField ID="tfColumnName" DataIndex="Name" MaxLength="50" runat="server"
+                                        FieldLabel="Name" AnchorHorizontal="93%" MsgTarget="Side"
+                                        Regex="^[A-Za-z]+\w*$" RegexText="Name must start with a character and can only contain characters, numbers and underscores">
+                                    </ext:TextField>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container ID="Container15" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                                <Items>
+                                    <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server"
+                                        FieldLabel="Width" AnchorHorizontal="93%" MsgTarget="Side" AllowDecimals="false">
+                                    </ext:NumberField>
+                                </Items>
+                            </ext:Container>
+                        </Items>
+                    </ext:Container>
+                    <ext:Container ID="Container16" runat="server" Layout="Column" Height="50">
+                        <Items>
+                            <ext:Container ID="Container17" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                                <Items>
+                                    <ext:ComboBox ID="cbSchemaColumType" runat="server" StoreID="SchemaColumnTypeStore" Editable="true" DisplayField="Name"
+                                        ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Column type" 
+                                        AllowBlank="false" DataIndex="SchemaColumTypeID" EmptyText="Select a column type"
+                                        SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                    </ext:ComboBox>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container ID="Container18" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                                <Items>
+                                    <ext:ComboBox ID="cbFormat" runat="server" Editable="true" 
+                                        TypeAhead="true" Mode="Local" ForceSelection="false" FieldLabel="Format" 
+                                        AllowBlank="false" DataIndex="Format" EmptyText="Select a format"
+                                        SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                    </ext:ComboBox>
+                                </Items>
+                            </ext:Container>
+                        </Items>
+                    </ext:Container>
+                    <ext:Container ID="Container19" runat="server" Layout="Column" Height="50">
+                        <Items>
+                            <ext:Container ID="Container20" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".333">
+                                <Items>
+                                    <ext:ComboBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore" Editable="true" DisplayField="Name"
+                                        ValueField="ID" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Phenomenon" 
+                                        AllowBlank="false" DataIndex="PhenomenonID" EmptyText="Select a phenomenon"
+                                        SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                    </ext:ComboBox>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container ID="Container21" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".333">
+                                <Items>
+                                    <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore" Editable="true" DisplayField="Name"
+                                        ValueField="ID" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Offering" 
+                                        AllowBlank="false" DataIndex="OfferingID" EmptyText="Select an offering"
+                                        SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                    </ext:ComboBox>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container ID="Container22" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".333">
+                                <Items>
+                                    <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="UnitOfMeasureStore" Editable="true" DisplayField="Unit"
+                                        ValueField="ID" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Unit of measure" 
+                                        AllowBlank="false" DataIndex="UnitOfMeasureID" EmptyText="Select a unit of measure"
+                                        SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                    </ext:ComboBox>
+                                </Items>
+                            </ext:Container>
+                        </Items>
+                    </ext:Container>
                     <%--                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">
                         <Defaults>
