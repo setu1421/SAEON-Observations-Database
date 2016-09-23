@@ -237,17 +237,17 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarUpdatedAt);
                 
-                TableSchema.TableColumn colvarColumnType = new TableSchema.TableColumn(schema);
-                colvarColumnType.ColumnName = "ColumnType";
-                colvarColumnType.DataType = DbType.AnsiString;
-                colvarColumnType.MaxLength = 50;
-                colvarColumnType.AutoIncrement = false;
-                colvarColumnType.IsNullable = false;
-                colvarColumnType.IsPrimaryKey = false;
-                colvarColumnType.IsForeignKey = false;
-                colvarColumnType.IsReadOnly = false;
+                TableSchema.TableColumn colvarColumnTypeName = new TableSchema.TableColumn(schema);
+                colvarColumnTypeName.ColumnName = "ColumnTypeName";
+                colvarColumnTypeName.DataType = DbType.AnsiString;
+                colvarColumnTypeName.MaxLength = 50;
+                colvarColumnTypeName.AutoIncrement = false;
+                colvarColumnTypeName.IsNullable = false;
+                colvarColumnTypeName.IsPrimaryKey = false;
+                colvarColumnTypeName.IsForeignKey = false;
+                colvarColumnTypeName.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarColumnType);
+                schema.Columns.Add(colvarColumnTypeName);
                 
                 TableSchema.TableColumn colvarPhenomenonName = new TableSchema.TableColumn(schema);
                 colvarPhenomenonName.ColumnName = "PhenomenonName";
@@ -273,17 +273,17 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarOfferingName);
                 
-                TableSchema.TableColumn colvarUnitOfMeasureName = new TableSchema.TableColumn(schema);
-                colvarUnitOfMeasureName.ColumnName = "UnitOfMeasureName";
-                colvarUnitOfMeasureName.DataType = DbType.AnsiString;
-                colvarUnitOfMeasureName.MaxLength = 100;
-                colvarUnitOfMeasureName.AutoIncrement = false;
-                colvarUnitOfMeasureName.IsNullable = true;
-                colvarUnitOfMeasureName.IsPrimaryKey = false;
-                colvarUnitOfMeasureName.IsForeignKey = false;
-                colvarUnitOfMeasureName.IsReadOnly = false;
+                TableSchema.TableColumn colvarUnitOfMeasureUnit = new TableSchema.TableColumn(schema);
+                colvarUnitOfMeasureUnit.ColumnName = "UnitOfMeasureUnit";
+                colvarUnitOfMeasureUnit.DataType = DbType.AnsiString;
+                colvarUnitOfMeasureUnit.MaxLength = 100;
+                colvarUnitOfMeasureUnit.AutoIncrement = false;
+                colvarUnitOfMeasureUnit.IsNullable = true;
+                colvarUnitOfMeasureUnit.IsPrimaryKey = false;
+                colvarUnitOfMeasureUnit.IsForeignKey = false;
+                colvarUnitOfMeasureUnit.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarUnitOfMeasureName);
+                schema.Columns.Add(colvarUnitOfMeasureUnit);
                 
                 
                 BaseSchema = schema;
@@ -545,17 +545,17 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("ColumnType")]
+        [XmlAttribute("ColumnTypeName")]
         [Bindable(true)]
-        public string ColumnType 
+        public string ColumnTypeName 
 	    {
 		    get
 		    {
-			    return GetColumnValue<string>("ColumnType");
+			    return GetColumnValue<string>("ColumnTypeName");
 		    }
             set 
 		    {
-			    SetColumnValue("ColumnType", value);
+			    SetColumnValue("ColumnTypeName", value);
             }
         }
 	      
@@ -587,17 +587,17 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("UnitOfMeasureName")]
+        [XmlAttribute("UnitOfMeasureUnit")]
         [Bindable(true)]
-        public string UnitOfMeasureName 
+        public string UnitOfMeasureUnit 
 	    {
 		    get
 		    {
-			    return GetColumnValue<string>("UnitOfMeasureName");
+			    return GetColumnValue<string>("UnitOfMeasureUnit");
 		    }
             set 
 		    {
-			    SetColumnValue("UnitOfMeasureName", value);
+			    SetColumnValue("UnitOfMeasureUnit", value);
             }
         }
 	    
@@ -638,13 +638,13 @@ namespace SAEON.Observations.Data{
             
             public static string UpdatedAt = @"UpdatedAt";
             
-            public static string ColumnType = @"ColumnType";
+            public static string ColumnTypeName = @"ColumnTypeName";
             
             public static string PhenomenonName = @"PhenomenonName";
             
             public static string OfferingName = @"OfferingName";
             
-            public static string UnitOfMeasureName = @"UnitOfMeasureName";
+            public static string UnitOfMeasureUnit = @"UnitOfMeasureUnit";
             
 	    }
 	    #endregion

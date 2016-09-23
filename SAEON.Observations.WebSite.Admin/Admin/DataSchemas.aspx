@@ -48,7 +48,7 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
-    <ext:Store ID="OfferingStore" runat="server">
+    <ext:Store ID="PhenomenonOfferingStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
@@ -58,7 +58,7 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
-    <ext:Store ID="UnitOfMeasureStore" runat="server">
+    <ext:Store ID="PhenomenonUnitOfMeasureStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
@@ -244,10 +244,10 @@
                                                             <ext:RecordField Name="SchemaColumnTypeName" Type="Auto" />
                                                             <ext:RecordField Name="PhenomenonID" Type="Auto" />
                                                             <ext:RecordField Name="PhenomenonName" Type="Auto" />
-                                                            <ext:RecordField Name="OfferingID" Type="Auto" />
-                                                            <ext:RecordField Name="OfferingName" Type="Auto" />
-                                                            <ext:RecordField Name="UnitOfMeasureID" Type="Auto" />
-                                                            <ext:RecordField Name="UnitOfMeasureUnit" Type="Auto" />
+                                                            <ext:RecordField Name="PhenomenonOfferingID" Type="Auto" />
+                                                            <ext:RecordField Name="PhenomenonOfferingName" Type="Auto" />
+                                                            <ext:RecordField Name="PhenomenonUOMID" Type="Auto" />
+                                                            <ext:RecordField Name="PhenomenonUOMUnit" Type="Auto" />
                                                             <ext:RecordField Name="EmptyValue" Type="Auto" />
                                                             <ext:RecordField Name="FixedTime" Type="Auto" />
                                                         </Fields>
@@ -266,7 +266,7 @@
                                                 <ext:Column Header="Type" DataIndex="SchemaColumnTypeName" Width="100" />
                                                 <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="1500" />
-                                                <ext:Column Header="Unit of measure" DataIndex="UnitOfMeasureName" Width="150" />
+                                                <ext:Column Header="Unit of measure" DataIndex="UnitOfMeasureUnit" Width="150" />
                                                 <ext:Column Header="Empty value" DataIndex="EmptyValue" Width="100" />
                                                 <ext:Column Header="Fixed time" DataIndex="FixedTime" Width="100" />
                                                 <ext:CommandColumn Width="150">
@@ -313,7 +313,7 @@
                                         MsgTarget="Side" ClientIDMode="Static">
                                         <RemoteValidation OnValidation="ValidateField" />
                                     </ext:TextField>
-                                    <ext:ComboBox ID="cbDataSourceType" runat="server" StoreID="DataSourceTypeStore" Editable="false" BlankText="Data Source Type is required"
+                                    <ext:ComboBox ID="cbDataSourceType" runat="server" StoreID="DataSourceTypeStore" BlankText="Data Source Type is required"
                                         MsgTarget="Side" DisplayField="Description" ValueField="Id" TypeAhead="true"
                                         Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false" DataIndex="DataSourceTypeID"
                                         EmptyText="Select Data Source Type" SelectOnFocus="true" FieldLabel="Data Source Type"
@@ -446,72 +446,70 @@
                 <Items>
                     <ext:Hidden ID="SchemaColumnAddID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
-                    <ext:Container ID="Container13" runat="server" Layout="Column" Height="50">
+                    <ext:Container ID="Container14" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:Container ID="Container14" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
-                                <Items>
-                                    <ext:TextField ID="tfColumnName" DataIndex="Name" MaxLength="50" runat="server"
-                                        FieldLabel="Name" AnchorHorizontal="93%" MsgTarget="Side"
-                                        Regex="^[A-Za-z]+\w*$" RegexText="Name must start with a character and can only contain characters, numbers and underscores">
-                                    </ext:TextField>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container15" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
-                                <Items>
-                                    <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server"
-                                        FieldLabel="Width" AnchorHorizontal="93%" MsgTarget="Side" AllowDecimals="false">
-                                    </ext:NumberField>
-                                </Items>
-                            </ext:Container>
+                            <ext:TextField ID="tfColumnName" DataIndex="Name" MaxLength="50" runat="server"
+                                FieldLabel="Name" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false"
+                                Regex="^[A-Za-z]+\w*$" RegexText="Name must start with a character and can only contain characters, numbers and underscores">
+                            </ext:TextField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container16" runat="server" Layout="Column" Height="50">
+                    <ext:Container ID="Container17" runat="server" LabelAlign="Top" Layout="Form"  >
                         <Items>
-                            <ext:Container ID="Container17" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
-                                <Items>
-                                    <ext:ComboBox ID="cbSchemaColumType" runat="server" StoreID="SchemaColumnTypeStore" Editable="true" DisplayField="Name"
-                                        ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Column type" 
-                                        AllowBlank="false" DataIndex="SchemaColumTypeID" EmptyText="Select a column type"
-                                        SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
-                                    </ext:ComboBox>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container18" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
-                                <Items>
-                                    <ext:ComboBox ID="cbFormat" runat="server" Editable="true" 
-                                        TypeAhead="true" Mode="Local" ForceSelection="false" FieldLabel="Format" 
-                                        AllowBlank="false" DataIndex="Format" EmptyText="Select a format"
-                                        SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
-                                    </ext:ComboBox>
-                                </Items>
-                            </ext:Container>
+                            <ext:ComboBox ID="cbSchemaColumType" runat="server" StoreID="SchemaColumnTypeStore" DisplayField="Name"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Column type"
+                                AllowBlank="false" DataIndex="SchemaColumTypeID" EmptyText="Select a column type"
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <DirectEvents>
+                                    <Select OnEvent="cbSchemaColumnTypeSelect" />
+                                </DirectEvents>
+                            </ext:ComboBox>
+                        </Items>
+                    </ext:Container>
+                    <ext:Container ID="ctWidth" runat="server" LabelAlign="Top" Layout="Form" ClientIDMode="Static">
+                        <Items>
+                            <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server"
+                                FieldLabel="Width" AnchorHorizontal="95%" MsgTarget="Side" AllowDecimals="false">
+                            </ext:NumberField>
+                        </Items>
+                    </ext:Container>
+                    <ext:Container ID="ctFormat" runat="server" LabelAlign="Top" Layout="Form" >
+                        <Items>
+                            <ext:ComboBox ID="cbFormat" runat="server" Editable="true"
+                                TypeAhead="true" Mode="Local" ForceSelection="false" FieldLabel="Format"
+                                AllowBlank="false" DataIndex="Format" EmptyText="Select a format"
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                            </ext:ComboBox>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container19" runat="server" Layout="Column" Height="50">
                         <Items>
                             <ext:Container ID="Container20" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".333">
                                 <Items>
-                                    <ext:ComboBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore" Editable="true" DisplayField="Name"
-                                        ValueField="ID" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Phenomenon" 
-                                        AllowBlank="false" DataIndex="PhenomenonID" EmptyText="Select a phenomenon"
+                                    <ext:ComboBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore" DisplayField="Name"
+                                        ValueField="Id" TypeAhead="true" ForceSelection="true" FieldLabel="Phenomenon" Mode="Local"
+                                        AllowBlank="false" DataIndex="PhenomenonID" EmptyText="Select a phenomenon" ValueNotFoundText="Select a phenomenon"
                                         SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                        <DirectEvents>
+                                            <Select OnEvent="cbPhenomenonSelect" />
+                                        </DirectEvents>
                                     </ext:ComboBox>
                                 </Items>
                             </ext:Container>
                             <ext:Container ID="Container21" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".333">
                                 <Items>
-                                    <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore" Editable="true" DisplayField="Name"
-                                        ValueField="ID" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Offering" 
-                                        AllowBlank="false" DataIndex="OfferingID" EmptyText="Select an offering"
+                                    <ext:ComboBox ID="cbOffering" runat="server" StoreID="PhenomenonOfferingStore" DisplayField="Name"
+                                        ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Offering"
+                                        AllowBlank="false" DataIndex="PhenomenonOfferingID" EmptyText="Select an offering" ValueNotFoundText="Select an offering"
                                         SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                                     </ext:ComboBox>
                                 </Items>
                             </ext:Container>
                             <ext:Container ID="Container22" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".333">
                                 <Items>
-                                    <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="UnitOfMeasureStore" Editable="true" DisplayField="Unit"
-                                        ValueField="ID" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Unit of measure" 
-                                        AllowBlank="false" DataIndex="UnitOfMeasureID" EmptyText="Select a unit of measure"
+                                    <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="PhenomenonUnitOfMeasureStore" Editable="true" DisplayField="Unit"
+                                        ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Unit of measure"
+                                        AllowBlank="false" DataIndex="PhenomenonUOMID" EmptyText="Select a unit of measure" ValueNotFoundText="Select a unit of measure"
                                         SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                                     </ext:ComboBox>
                                 </Items>

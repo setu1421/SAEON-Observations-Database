@@ -1,6 +1,7 @@
 ﻿using Ext.Net;
 using SAEON.Observations.Data;
 using Serilog;
+using SubSonic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +21,6 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             SchemaColumnTypeStore.DataBind();
             PhenomenonStore.DataSource = new PhenomenonCollection().OrderByAsc(Phenomenon.Columns.Name).Load();
             PhenomenonStore.DataBind();
-            OfferingStore.DataSource = new OfferingCollection().OrderByAsc(Offering.Columns.Name).Load();
-            OfferingStore.DataBind();
-            UnitOfMeasureStore.DataSource = new UnitOfMeasureCollection().OrderByAsc(UnitOfMeasure.Columns.Unit).Load();
-            UnitOfMeasureStore.DataBind();
         }
     }
 
@@ -139,25 +136,12 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         DataSchema schema = new DataSchema(masterID);
         if (schema.DataSourceTypeID == new Guid(DataSourceType.CSV))
         {
-
+            nfWidth.Visible = false;
         }
         else
         {
-
+            nfWidth.Visible = true;
         }
-        //SensorCollection sensors = new Select()
-        //    .From(Sensor.Schema)
-        //    .Where(Sensor.StationIDColumn)
-        //    .In(new Select(new string[] { StationInstrument.Columns.StationID })
-        //        .From(StationInstrument.Schema)
-        //        .Where(StationInstrument.InstrumentIDColumn)
-        //        .IsEqualTo(masterID))
-        //    .Or(Sensor.StationIDColumn)
-        //    .IsNull()
-        //    .OrderAsc(Sensor.Columns.Name)
-        //    .ExecuteAsCollection<SensorCollection>();
-        //SensorStore.DataSource = sensors;
-        //SensorStore.DataBind();
     }
 
     #endregion
@@ -252,5 +236,33 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     {
         //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
     }
+
+    [DirectMethod]
+    public void cbPhenomenonSelect(object sender, DirectEventArgs e)
+    {
+        var Id = cbPhenomenon.SelectedItem.Value;
+        cbOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.NameColumn)
+            .From(Offering.Schema)
+            .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
+            .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
+            .OrderAsc(Offering.Columns.Name)
+            .ExecuteDataSet().Tables[0];
+        cbOffering.GetStore().DataBind();
+        cbUnitOfMeasure.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
+            .From(UnitOfMeasure.Schema)
+            .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
+            .Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(Id)
+            .OrderAsc(UnitOfMeasure.Columns.Unit)
+            .ExecuteDataSet().Tables[0];
+        cbUnitOfMeasure.GetStore().DataBind();
+        cbOffering.Clear();
+        cbUnitOfMeasure.Clear();
+    }
+
+    [DirectMethod]
+    public void cbSchemaColumnTypeSelect(object sender, DirectEventArgs e)
+    {
+    }
+
     #endregion
 }
