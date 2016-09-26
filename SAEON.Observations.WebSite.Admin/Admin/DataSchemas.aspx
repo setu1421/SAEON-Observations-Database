@@ -440,7 +440,7 @@
         </Listeners>
         <Content>
             <ext:FormPanel ID="SchemaColumnAddFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
+                MonitorResize="true" Padding="10" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
@@ -454,9 +454,9 @@
                             </ext:TextField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container17" runat="server" LabelAlign="Top" Layout="Form"  >
+                    <ext:Container ID="Container17" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbSchemaColumType" runat="server" StoreID="SchemaColumnTypeStore" DisplayField="Name"
+                            <ext:ComboBox ID="cbSchemaColumnType" runat="server" StoreID="SchemaColumnTypeStore" DisplayField="Name"
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Column type"
                                 AllowBlank="false" DataIndex="SchemaColumTypeID" EmptyText="Select a column type"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
@@ -468,12 +468,12 @@
                     </ext:Container>
                     <ext:Container ID="ctWidth" runat="server" LabelAlign="Top" Layout="Form" ClientIDMode="Static">
                         <Items>
-                            <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server"
+                            <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server" AllowBlank="false" EmptyText="Enter a width"
                                 FieldLabel="Width" AnchorHorizontal="95%" MsgTarget="Side" AllowDecimals="false">
                             </ext:NumberField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="ctFormat" runat="server" LabelAlign="Top" Layout="Form" >
+                    <ext:Container ID="ctFormat" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbFormat" runat="server" Editable="true"
                                 TypeAhead="true" Mode="Local" ForceSelection="false" FieldLabel="Format"
@@ -482,85 +482,56 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container19" runat="server" Layout="Column" Height="50">
+                    <ext:Container ID="Container20" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:Container ID="Container20" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".333">
-                                <Items>
-                                    <ext:ComboBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore" DisplayField="Name"
-                                        ValueField="Id" TypeAhead="true" ForceSelection="true" FieldLabel="Phenomenon" Mode="Local"
-                                        AllowBlank="false" DataIndex="PhenomenonID" EmptyText="Select a phenomenon" ValueNotFoundText="Select a phenomenon"
-                                        SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
-                                        <DirectEvents>
-                                            <Select OnEvent="cbPhenomenonSelect" />
-                                        </DirectEvents>
-                                    </ext:ComboBox>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container21" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".333">
-                                <Items>
-                                    <ext:ComboBox ID="cbOffering" runat="server" StoreID="PhenomenonOfferingStore" DisplayField="Name"
-                                        ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Offering"
-                                        AllowBlank="false" DataIndex="PhenomenonOfferingID" EmptyText="Select an offering" ValueNotFoundText="Select an offering"
-                                        SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
-                                    </ext:ComboBox>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container22" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".333">
-                                <Items>
-                                    <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="PhenomenonUnitOfMeasureStore" Editable="true" DisplayField="Unit"
-                                        ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Unit of measure"
-                                        AllowBlank="false" DataIndex="PhenomenonUOMID" EmptyText="Select a unit of measure" ValueNotFoundText="Select a unit of measure"
-                                        SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
-                                    </ext:ComboBox>
-                                </Items>
-                            </ext:Container>
+                            <ext:SelectBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore" DisplayField="Name"
+                                ValueField="Id" TypeAhead="true" ForceSelection="true" FieldLabel="Phenomenon" Mode="Local"
+                                AllowBlank="false" DataIndex="PhenomenonID" EmptyText="Select a phenomenon" ValueNotFoundText="Select a phenomenon"
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                <DirectEvents>
+                                    <Select OnEvent="cbPhenomenonSelect" />
+                                </DirectEvents>
+                            </ext:SelectBox>
                         </Items>
                     </ext:Container>
-                    <%--                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="FormLayout"
-                        LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
-                            <ext:Parameter Name="blankText" Value="Sensor is a required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
+                    <ext:Container ID="Container21" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbSensor" runat="server" StoreID="SensorStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
-                                AllowBlank="false" DataIndex="SensorID" EmptyText="Select Sensor"
+                            <ext:SelectBox ID="cbOffering" runat="server" StoreID="PhenomenonOfferingStore" DisplayField="Name"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Offering"
+                                AllowBlank="false" DataIndex="PhenomenonOfferingID" EmptyText="Select an offering" ValueNotFoundText="Select an offering"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                            </ext:SelectBox>
+                        </Items>
+                    </ext:Container>
+                    <ext:Container ID="Container22" runat="server" LabelAlign="Top" Layout="Form">
+                        <Items>
+                            <ext:SelectBox ID="cbUnitOfMeasure" runat="server" StoreID="PhenomenonUnitOfMeasureStore" Editable="true" DisplayField="Unit"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Unit of measure"
+                                AllowBlank="false" DataIndex="PhenomenonUOMID" EmptyText="Select a unit of measure" ValueNotFoundText="Select a unit of measure"
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                            </ext:SelectBox>
+                        </Items>
+                    </ext:Container>
+                    <ext:Container ID="Container13" runat="server" LabelAlign="Top" Layout="Form">
+                        <Items>
+                            <ext:TextField ID="tfEmptyValue" DataIndex="EmptyValue" MaxLength="50" runat="server" FieldLabel="Empty Value" AnchorHorizontal="95%">
+                            </ext:TextField>
+                        </Items>
+                    </ext:Container>
+                    <ext:Container ID="Container15" runat="server" LabelAlign="Top" Layout="Form">
+                        <Items>
+                            <ext:TimeField ID="ttFixedTime" runat="server" DataIndex="FixedTime" FieldLabel="Fixed Time"
+                                EmptyText="Please select" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false"
+                                BlankText="Fixed Time is required" ClientIDMode="Static" Format="H:mm" Increment="60">
                                 <Triggers>
                                     <ext:FieldTrigger Icon="Clear" />
                                 </Triggers>
                                 <Listeners>
-                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                    <TriggerClick Handler="this.clearValue();" />
                                 </Listeners>
-                            </ext:ComboBox>
+                            </ext:TimeField>
                         </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel10" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Start Date is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:DateField ID="dfSensorStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
-                            </ext:DateField>
-                        </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel11" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="End Date is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:DateField ID="dfSensorEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
-                            </ext:DateField>
-                        </Items>
-                    </ext:Panel>--%>
+                    </ext:Container>
                 </Items>
                 <Buttons>
                     <ext:Button ID="btnSchemaColumnAddSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">

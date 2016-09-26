@@ -15,4 +15,14 @@ public static class Utilities
         else
             return new Guid(value.ToString());
     }
+
+    public static string NullIfEmpty(string value)
+    {
+        value = value?.Trim();
+        if (string.IsNullOrEmpty(value))
+            return null;
+        else
+            return value;
+    }
+
 }

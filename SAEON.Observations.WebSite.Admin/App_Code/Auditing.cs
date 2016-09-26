@@ -20,7 +20,7 @@ public static class Auditing
             isFirst = false;
             result += kvPair.Key + "=";
             if (kvPair.Value is string)  
-                result += string.Format("'{0}'", kvPair.Value);
+                result += string.Format("'{0}'", kvPair.Value ?? "" );
             //else if (kvPair.Value is Guid)
             //    result += string.Format("{0}", kvPair.Value);
             else

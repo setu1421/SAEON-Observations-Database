@@ -51,7 +51,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         }
 
         if (!string.IsNullOrEmpty(checkColumn))
-            if (String.IsNullOrEmpty(tfID.Text.ToString()))
+            if (string.IsNullOrEmpty(tfID.Text.ToString()))
                 col = new DataSchemaCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
             else
                 col = new DataSchemaCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(DataSchema.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
@@ -88,9 +88,9 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         else
             schema = new DataSchema(tfID.Text.Trim());
 
-        schema.Code = tfCode.Text.Trim();
-        schema.Name = tfName.Text.Trim();
-        schema.Description = tfDescription.Text.Trim();
+        schema.Code = Utilities.NullIfEmpty(tfCode.Text);
+        schema.Name = Utilities.NullIfEmpty(tfName.Text);
+        schema.Description = Utilities.NullIfEmpty(tfDescription.Text);
 
         if (!String.IsNullOrEmpty(nfIgnoreFirst.Text))
             schema.IgnoreFirst = Int32.Parse(nfIgnoreFirst.Text);
@@ -102,11 +102,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         else
             schema.IgnoreLast = 0;
 
-        if (!String.IsNullOrEmpty(tfCondition.Text))
-            schema.Condition = tfCondition.Text;
-        else
-            schema.Condition = null;
-
+        schema.Condition = Utilities.NullIfEmpty(tfCondition.Text);
 
         if (!String.IsNullOrEmpty(tfSplit.Text))
         {
@@ -134,14 +130,10 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
         var masterID = new Guid(masterRow.SelectedRecordID);
         DataSchema schema = new DataSchema(masterID);
-        if (schema.DataSourceTypeID == new Guid(DataSourceType.CSV))
-        {
-            nfWidth.Visible = false;
-        }
-        else
-        {
-            nfWidth.Visible = true;
-        }
+        DataSourceType dataSourceType = new DataSourceType(schema.DataSourceTypeID);
+        nfWidth.Hidden = (dataSourceType.Code == "CSV");
+        nfWidth.AllowBlank = nfWidth.Hidden;
+        SetFields();
     }
 
     #endregion
@@ -177,24 +169,71 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             var masterID = new Guid(masterRow.SelectedRecordID);
             SchemaColumn schemaColumn = new SchemaColumn(Utilities.MakeGuid(SchemaColumnAddID.Value));
             schemaColumn.DataSchemaID = masterID;
-            //schemaColumn.SchemaColumnTypeID = new Guid(cbSchemaColumnType.SelectedItem.Value.Trim());
-            //if (!String.IsNullOrEmpty(dfSchemaColumnStartDate.Text) && (dfSchemaColumnStartDate.SelectedDate.Year >= 1900))
-            //    DataSchemaSchemaColumn.StartDate = dfSchemaColumnStartDate.SelectedDate;
-            //else
-            //    DataSchemaSchemaColumn.StartDate = null;
-            //if (!String.IsNullOrEmpty(dfSchemaColumnEndDate.Text) && (dfSchemaColumnEndDate.SelectedDate.Year >= 1900))
-            //    DataSchemaSchemaColumn.EndDate = dfSchemaColumnEndDate.SelectedDate;
-            //else
-            //    DataSchemaSchemaColumn.EndDate = null;
-            //DataSchemaSchemaColumn.UserId = AuthHelper.GetLoggedInUserId;
-            //DataSchemaSchemaColumn.Save();
+            schemaColumn.Name = Utilities.NullIfEmpty(tfColumnName.Text);
+            schemaColumn.SchemaColumnTypeID = new Guid(cbSchemaColumnType.SelectedItem.Value.Trim());
+            DataSchema schema = new DataSchema(masterID);
+            DataSourceType dataSourceType = new DataSourceType(schema.DataSourceTypeID);
+            if (dataSourceType.Code == "CSV")
+                schemaColumn.Width = null;
+            else if (string.IsNullOrEmpty(nfWidth.Text.Trim()))
+                schemaColumn.Width = null;
+            else
+                schemaColumn.Width = int.Parse(nfWidth.Text.Trim());
+            switch (cbSchemaColumnType.SelectedItem.Text)
+            {
+                case "Date":
+                    schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
+                    schemaColumn.PhenomenonID = null;
+                    schemaColumn.PhenomenonOfferingID = null;
+                    schemaColumn.PhenomenonUOMID = null;
+                    break;
+                case "Time":
+                    schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
+                    break;
+                case "Offering":
+                    schemaColumn.Format = null;
+                    schemaColumn.PhenomenonID = new Guid(cbPhenomenon.SelectedItem.Value);
+                    schemaColumn.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
+                    schemaColumn.PhenomenonUOMID = new Guid(cbUnitOfMeasure.SelectedItem.Value);
+                    schemaColumn.EmptyValue = Utilities.NullIfEmpty(tfEmptyValue.Text);
+                    schemaColumn.FixedTime = null;
+                    break;
+                case "Fixed Time":
+                    schemaColumn.PhenomenonID = new Guid(cbPhenomenon.SelectedItem.Value);
+                    schemaColumn.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
+                    schemaColumn.PhenomenonUOMID = new Guid(cbUnitOfMeasure.SelectedItem.Value);
+                    schemaColumn.EmptyValue = Utilities.NullIfEmpty(tfEmptyValue.Text);
+                    if (string.IsNullOrEmpty(ttFixedTime.Text.Trim()))
+                        schemaColumn.FixedTime = null;
+                    else
+                        schemaColumn.FixedTime = int.Parse(ttFixedTime.Text.Trim());
+                    break;
+                default:
+                    schemaColumn.Format = null;
+                    schemaColumn.PhenomenonID = null;
+                    schemaColumn.PhenomenonOfferingID = null;
+                    schemaColumn.PhenomenonUOMID = null;
+                    schemaColumn.EmptyValue = null;
+                    schemaColumn.FixedTime = null;
+                    break;
+            }
+            schemaColumn.UserId = AuthHelper.GetLoggedInUserId;
+            schemaColumn.Save();
             Auditing.Log("DataSchemas.AddSchemaColumn", new Dictionary<string, object> {
                 { "DataSchemaID", schemaColumn.DataSchemaID },
                 { "DataSchemaCode", schemaColumn.DataSchema.Code },
-                //{ "SchemaColumnID", DataSchemaSchemaColumn.SchemaColumnID},
-                //{ "SchemaColumnCode", DataSchemaSchemaColumn.SchemaColumn.Code},
-                //{ "StartDate", DataSchemaSchemaColumn.StartDate },
-                //{ "EndDate", DataSchemaSchemaColumn.EndDate}
+                { "Name", schemaColumn.Name },
+                { "SchemaColumnType", schemaColumn.SchemaColumnType.Name },
+                { "Width", schemaColumn?.Width },
+                { "Format", schemaColumn.Format },
+                { "PhenomenonID", schemaColumn.PhenomenonID },
+                { "PhenomenonCode", schemaColumn?.Phenomenon.Code },
+                { "PhenomenonOfferingID", schemaColumn.PhenomenonOfferingID },
+                { "PhenomenonOfferingCode", schemaColumn?.PhenomenonOffering.Offering.Code },
+                { "PhenomenonUnitOfMeasureID", schemaColumn.PhenomenonUOMID },
+                { "PhenomenonUnitOfMeasureCode", schemaColumn?.PhenomenonUOM.UnitOfMeasure.Code },
+                { "EmptyValue", schemaColumn.EmptyValue },
+                { "FixedTime", schemaColumn.FixedTime }
             });
             SchemaColumnsGrid.DataBind();
             SchemaColumnAddWindow.Hide();
@@ -259,9 +298,68 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         cbUnitOfMeasure.Clear();
     }
 
+    private void SetFields()
+    {
+        cbFormat.AllowBlank = true;
+        cbFormat.MarkAsValid();
+        cbFormat.Hidden = true;
+        cbPhenomenon.AllowBlank = true;
+        cbPhenomenon.ForceSelection = false;
+        cbPhenomenon.MarkAsValid();
+        cbPhenomenon.Hidden = true;
+        cbOffering.AllowBlank = true;
+        cbOffering.ForceSelection = true;
+        cbOffering.MarkAsValid();
+        cbOffering.Hidden = true;
+        cbUnitOfMeasure.AllowBlank = true;
+        cbUnitOfMeasure.ForceSelection = true;
+        cbUnitOfMeasure.MarkAsValid();
+        cbUnitOfMeasure.Hidden = true;
+        tfEmptyValue.Hidden = true;
+        ttFixedTime.AllowBlank = true;
+        ttFixedTime.MarkAsValid();
+        ttFixedTime.Hidden = true;
+        switch (cbSchemaColumnType.SelectedItem.Text)
+        {
+            case "Date":
+                cbFormat.AllowBlank = false;
+                cbFormat.Hidden = false;
+                break;
+            case "Time":
+                cbFormat.AllowBlank = false;
+                cbFormat.Hidden = false;
+                break;
+            case "Ignore":
+                break;
+            case "Offering":
+                cbPhenomenon.Hidden = false;
+                cbPhenomenon.AllowBlank = false;
+                cbOffering.Hidden = false;
+                cbOffering.AllowBlank = false;
+                cbUnitOfMeasure.Hidden = false;
+                cbUnitOfMeasure.AllowBlank = false;
+                tfEmptyValue.Hidden = false;
+                break;
+            case "Fixed Time":
+                cbPhenomenon.Hidden = false;
+                cbPhenomenon.AllowBlank = false;
+                cbOffering.Hidden = false;
+                cbOffering.AllowBlank = false;
+                cbUnitOfMeasure.Hidden = false;
+                cbUnitOfMeasure.AllowBlank = false;
+                tfEmptyValue.Hidden = false;
+                ttFixedTime.AllowBlank = false;
+                ttFixedTime.Hidden = false;
+                break;
+            case "Comment":
+                break;
+        }
+    }
+
     [DirectMethod]
     public void cbSchemaColumnTypeSelect(object sender, DirectEventArgs e)
     {
+        SetFields();
     }
 
     #endregion

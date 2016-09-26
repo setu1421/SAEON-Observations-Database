@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid DataSchemaID,int Number,string Name,Guid SchemaColumnTypeID,int? Width,string Format,Guid? PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,string FixedTime,string EmptyValue,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,Guid DataSchemaID,int Number,string Name,Guid SchemaColumnTypeID,int? Width,string Format,Guid? PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,int? FixedTime,string EmptyValue,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    SchemaColumn item = new SchemaColumn();
 		    
@@ -122,7 +122,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid DataSchemaID,int Number,string Name,Guid SchemaColumnTypeID,int? Width,string Format,Guid? PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,string FixedTime,string EmptyValue,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,Guid DataSchemaID,int Number,string Name,Guid SchemaColumnTypeID,int? Width,string Format,Guid? PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,int? FixedTime,string EmptyValue,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    SchemaColumn item = new SchemaColumn();
 	        item.MarkOld();
