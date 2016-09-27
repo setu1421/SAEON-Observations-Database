@@ -239,9 +239,10 @@
                                                             <ext:RecordField Name="DataSchemaID" Type="Auto" />
                                                             <ext:RecordField Name="Name" Type="Auto" />
                                                             <ext:RecordField Name="Number" Type="Auto" />
-                                                            <ext:RecordField Name="Width" Type="Auto" />
                                                             <ext:RecordField Name="SchemaColumnTypeID" Type="Auto" />
                                                             <ext:RecordField Name="SchemaColumnTypeName" Type="Auto" />
+                                                            <ext:RecordField Name="Width" Type="Auto" />
+                                                            <ext:RecordField Name="Format" Type="Auto" />
                                                             <ext:RecordField Name="PhenomenonID" Type="Auto" />
                                                             <ext:RecordField Name="PhenomenonName" Type="Auto" />
                                                             <ext:RecordField Name="PhenomenonOfferingID" Type="Auto" />
@@ -262,13 +263,14 @@
                                         <ColumnModel ID="ColumnModel4" runat="server">
                                             <Columns>
                                                 <ext:Column Header="Name" DataIndex="Name" Width="200" />
-                                                <ext:Column Header="Width" DataIndex="Width" Width="100" />
                                                 <ext:Column Header="Type" DataIndex="SchemaColumnTypeName" Width="100" />
+                                                <ext:Column Header="Width" DataIndex="Width" Width="50" />
+                                                <ext:Column Header="Format" DataIndex="Format" Width="50" />
                                                 <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
-                                                <ext:Column Header="Offering" DataIndex="OfferingName" Width="1500" />
-                                                <ext:Column Header="Unit of measure" DataIndex="UnitOfMeasureUnit" Width="150" />
+                                                <ext:Column Header="Offering" DataIndex="PhenomenonOfferingName" Width="150" />
+                                                <ext:Column Header="Unit of measure" DataIndex="PhenomenonUOMUnit" Width="150" />
                                                 <ext:Column Header="Empty value" DataIndex="EmptyValue" Width="100" />
-                                                <ext:Column Header="Fixed time" DataIndex="FixedTime" Width="100" />
+                                                <ext:Column Header="Fixed time" DataIndex="FixedTime" Width="50" />
                                                 <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />

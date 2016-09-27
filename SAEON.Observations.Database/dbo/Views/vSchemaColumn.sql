@@ -1,11 +1,12 @@
-﻿CREATE VIEW [dbo].[vSchemaColumn]
+﻿--> Added 2.0.11 20160927 TimPN
+CREATE VIEW [dbo].[vSchemaColumn]
 AS 
 SELECT 
   SchemaColumn.*,
-  SchemaColumnType.Name ColumnTypeName, 
+  SchemaColumnType.Name SchemaColumnTypeName, 
   Phenomenon.Name PhenomenonName,
-  Offering.Name OfferingName,
-  UnitOfMeasure.Unit UnitOfMeasureUnit
+  Offering.Name PhenomenonOfferingName,
+  UnitOfMeasure.Unit PhenomenonUOMUnit
 FROM 
   SchemaColumn
   inner join SchemaColumnType 
@@ -20,4 +21,5 @@ FROM
     on (SchemaColumn.PhenomenonUOMID = PhenomenonUOM.ID)
   left join  UnitOfMeasure
     on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+--< Added 2.0.11 20160927 TimPN
     
