@@ -8,6 +8,13 @@ Declare @UrlPrefix varchar(100)
 set @UrlPrefix = ''
 Declare @MasterModuleId UniqueIdentifier = (Select ID from Module where Name like 'Master Data Management')
 -- New
+if not Exists(select * from Module where Name like 'Hidden') 
+begin
+	Insert into Module
+	  (Name, Description, URL, Icon, iOrder)
+	values
+	  ('Hidden','Hidden','_',7,401)
+end
 if Exists(select * from Module where Name like 'Programmes') 
   Update Module set ModuleID = @MasterModuleId where Name like 'Programmes'
 else
@@ -72,6 +79,11 @@ Update Module set Url = Replace(Url,'/PLATFORM_TEST/SWDB/Admin/',@UrlPrefix+'/Ad
 Update Module set Url = Replace(Url,'/Admin/',@UrlPrefix+'/Admin/') where Url like '/Admin/%'
 Update Module set Url = Replace(Url,'Admin/',@UrlPrefix+'/Admin/') where Url like 'Admin/%'
 Update Module set Url = Replace(Replace(Url,'.aspx',''),'//','/')
+-- Hidden
+Declare @HiddenModuleId int = (Select ID from Module where Name like 'Hidden')
+Update Module set ModuleID = @HiddenModuleId where Name like 'Data Sources'
+Update Module set ModuleID = @HiddenModuleId where Name like 'Data Schemas'
+Update Module set ModuleID = @HiddenModuleId where Name like 'Import batches'
 -- Update order
 Update Module set iOrder = 10 where Name like 'Data Views'
 Update Module set iOrder = 20 where Name like 'Master Data Management'
@@ -94,3 +106,4 @@ Update Module set iOrder = 255 where Name like 'Offerings'
 Update Module set iOrder = 260 where Name like 'Import batches'
 Update Module set iOrder = 300 where Name like 'Roles'
 Update Module set iOrder = 305 where Name like 'Users'
+Update Module set iOrder = 400 where Name like 'Hidden'
