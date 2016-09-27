@@ -43,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.WebSite.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E60445F4-F6B6-40A1-BD4A-46A122B068AF}"
 	ProjectSection(SolutionItems) = preProject
-		License.md1 = License.md1
+		License.md = License.md
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
