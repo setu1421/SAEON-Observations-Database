@@ -1,5 +1,5 @@
 ﻿-- 2.0.9
-use Observations
+--use Observations
 Declare @UrlPrefix varchar(100)
 --set @UrlPrefix = '/ObservationsDBv1Live'
 --set @UrlPrefix = '/ObservationsDBv1Staging'
@@ -56,7 +56,7 @@ Update Module set Url = @UrlPrefix+'/Admin/Organisations', ModuleID = @MasterMod
 Update Module set Url = @UrlPrefix+'/Admin/Stations' where Name like 'Stations'
 Update Module set Url = @UrlPrefix+'/Admin/Sensors' where Name like 'Sensors'
 Update Module set Url = @UrlPrefix+'/Admin/DataSource' where Name like 'Data Sources'
-Update Module set Url = @UrlPrefix+'/Admin/DataSchema' where Name like 'Data Schemas'
+Update Module set Url = @UrlPrefix+'/Admin/DataSchemas' where Name like 'Data Schemas'
 -- Deletes
 Delete RoleModule from RoleModule inner join Module on (RoleModule.ModuleID = Module.ID) where Module.Name like 'Projects/Sites'
 Delete Module where Name like 'Projects/Sites'
@@ -74,16 +74,16 @@ Delete RoleModule from RoleModule inner join Module on (RoleModule.ModuleID = Mo
 Delete Module where Name like 'Version 2'
 -- Changed
 Update Module set Url = Replace(Url,'/PLATFORM_TEST/SWDB/Admin/',@UrlPrefix+'/Admin/') where Url like '/PLATFORM_TEST/SWDB/Admin/%'
---Update Module set Url = Replace(Url,'/ObservationsDBv1Live/Admin/',@UrlPrefix+'/Admin/') where Url like '/ObservationsDBv1Live/Admin/%'
---Update Module set Url = Replace(Url,'/ObservationsDBv1Staging/Admin/',@UrlPrefix+'/Admin/') where Url like '/ObservationsDBv1Staging/Admin/%'
+Update Module set Url = Replace(Url,'/ObservationsDBv1Live/Admin/',@UrlPrefix+'/Admin/') where Url like '/ObservationsDBv1Live/Admin/%'
+Update Module set Url = Replace(Url,'/ObservationsDBv1Staging/Admin/',@UrlPrefix+'/Admin/') where Url like '/ObservationsDBv1Staging/Admin/%'
 Update Module set Url = Replace(Url,'/Admin/',@UrlPrefix+'/Admin/') where Url like '/Admin/%'
 Update Module set Url = Replace(Url,'Admin/',@UrlPrefix+'/Admin/') where Url like 'Admin/%'
 Update Module set Url = Replace(Replace(Url,'.aspx',''),'//','/')
 -- Hidden
-Declare @HiddenModuleId int = (Select ID from Module where Name like 'Hidden')
-Update Module set ModuleID = @HiddenModuleId where Name like 'Data Sources'
-Update Module set ModuleID = @HiddenModuleId where Name like 'Data Schemas'
-Update Module set ModuleID = @HiddenModuleId where Name like 'Import batches'
+--Declare @HiddenModuleId UniqueIdentifier = (Select ID from Module where Name like 'Hidden')
+--Update Module set ModuleID = @HiddenModuleId where Name like 'Data Sources'
+--Update Module set ModuleID = @HiddenModuleId where Name like 'Data Schemas'
+--Update Module set ModuleID = @HiddenModuleId where Name like 'Import batches'
 -- Update order
 Update Module set iOrder = 10 where Name like 'Data Views'
 Update Module set iOrder = 20 where Name like 'Master Data Management'

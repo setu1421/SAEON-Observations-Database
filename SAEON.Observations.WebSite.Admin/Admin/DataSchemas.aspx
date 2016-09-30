@@ -28,7 +28,7 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
-    <ext:Store ID="SchemaColumnTypeStore" runat="server">
+    <ext:Store ID="SchemaColumnTypeStore" runat="server" AutoLoad="true">
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
@@ -48,22 +48,22 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
-    <ext:Store ID="PhenomenonOfferingStore" runat="server">
+    <ext:Store ID="OfferingStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
                     <ext:RecordField Name="Id" Type="Auto" />
-                    <ext:RecordField Name="Name" Type="String" />
+                    <ext:RecordField Name="OfferingName" Type="String" />
                 </Fields>
             </ext:JsonReader>
         </Reader>
     </ext:Store>
-    <ext:Store ID="PhenomenonUnitOfMeasureStore" runat="server">
+    <ext:Store ID="UnitOfMeasureStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
                     <ext:RecordField Name="Id" Type="Auto" />
-                    <ext:RecordField Name="Unit" Type="String" />
+                    <ext:RecordField Name="UnitOfMeasureUnit" Type="String" />
                 </Fields>
             </ext:JsonReader>
         </Reader>
@@ -246,9 +246,9 @@
                                                             <ext:RecordField Name="PhenomenonID" Type="Auto" />
                                                             <ext:RecordField Name="PhenomenonName" Type="Auto" />
                                                             <ext:RecordField Name="PhenomenonOfferingID" Type="Auto" />
-                                                            <ext:RecordField Name="PhenomenonOfferingName" Type="Auto" />
+                                                            <ext:RecordField Name="OfferingName" Type="Auto" />
                                                             <ext:RecordField Name="PhenomenonUOMID" Type="Auto" />
-                                                            <ext:RecordField Name="PhenomenonUOMUnit" Type="Auto" />
+                                                            <ext:RecordField Name="UnitOfMeasureUnit" Type="Auto" />
                                                             <ext:RecordField Name="EmptyValue" Type="Auto" />
                                                             <ext:RecordField Name="FixedTime" Type="Auto" />
                                                         </Fields>
@@ -267,14 +267,14 @@
                                                 <ext:Column Header="Width" DataIndex="Width" Width="50" />
                                                 <ext:Column Header="Format" DataIndex="Format" Width="50" />
                                                 <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
-                                                <ext:Column Header="Offering" DataIndex="PhenomenonOfferingName" Width="150" />
-                                                <ext:Column Header="Unit of measure" DataIndex="PhenomenonUOMUnit" Width="150" />
+                                                <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
+                                                <ext:Column Header="Unit of measure" DataIndex="UnitOfMeasureUnit" Width="150" />
                                                 <ext:Column Header="Empty value" DataIndex="EmptyValue" Width="100" />
                                                 <ext:Column Header="Fixed time" DataIndex="FixedTime" Width="50" />
                                                 <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
-                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
+                                                        <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="Delete" />
                                                     </Commands>
                                                 </ext:CommandColumn>
                                             </Columns>
@@ -317,12 +317,15 @@
                                     </ext:TextField>
                                     <ext:ComboBox ID="cbDataSourceType" runat="server" StoreID="DataSourceTypeStore" BlankText="Data Source Type is required"
                                         MsgTarget="Side" DisplayField="Description" ValueField="Id" TypeAhead="true"
-                                        Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false" DataIndex="DataSourceTypeID"
+                                        ForceSelection="true" TriggerAction="All" AllowBlank="false" DataIndex="DataSourceTypeID"
                                         EmptyText="Select Data Source Type" SelectOnFocus="true" FieldLabel="Data Source Type"
                                         AnchorHorizontal="93%">
                                         <Listeners>
-                                            <Select Handler="#{cbDataSourceType}.getValue() == '25839703-3cb3-4c23-aca3-4399cc52ecde'?#{cbDelimiter}.allowBlank=false:#{cbDelimiter}.allowBlank=true;#{cbDelimiter}.clearValue();#{cbDelimiter}.clearInvalid();#{cbDelimiter}.markAsValid();" />
+                                            <%--<Select Handler="#{cbDataSourceType}.getValue() == '25839703-3cb3-4c23-aca3-4399cc52ecde'?#{cbDelimiter}.allowBlank=false:#{cbDelimiter}.allowBlank=true;#{cbDelimiter}.clearValue();#{cbDelimiter}.clearInvalid();#{cbDelimiter}.markAsValid();" />--%>
                                         </Listeners>
+                                        <DirectEvents>
+                                            <Select OnEvent="cbDataSourceTypeSelect" />
+                                        </DirectEvents>
                                     </ext:ComboBox>
                                 </Items>
                             </ext:Container>
@@ -334,7 +337,7 @@
                                         <RemoteValidation OnValidation="ValidateField" />
                                     </ext:TextField>
                                     <ext:ComboBox ID="cbDelimiter" runat="server" Editable="false" MsgTarget="Side" TypeAhead="true"
-                                        Mode="Local" ForceSelection="true" TriggerAction="All" DataIndex="Delimiter"
+                                        ForceSelection="true" TriggerAction="All" DataIndex="Delimiter"
                                         EmptyText="Select Delimiter" SelectOnFocus="true" BlankText="Delimiter is required for this Source Type"
                                         FieldLabel="Delimiter" AnchorHorizontal="93%" ClientIDMode="Static">
                                         <Items>
@@ -459,9 +462,9 @@
                     <ext:Container ID="Container17" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbSchemaColumnType" runat="server" StoreID="SchemaColumnTypeStore" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Column type"
-                                AllowBlank="false" DataIndex="SchemaColumTypeID" EmptyText="Select a column type"
-                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                ValueField="Id" TypeAhead="true" ForceSelection="true" FieldLabel="Column type"
+                                AllowBlank="false" DataIndex="SchemaColumnTypeID" EmptyText="Select a column type" Editable="true"
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
                                 <DirectEvents>
                                     <Select OnEvent="cbSchemaColumnTypeSelect" />
                                 </DirectEvents>
@@ -478,7 +481,7 @@
                     <ext:Container ID="ctFormat" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbFormat" runat="server" Editable="true"
-                                TypeAhead="true" Mode="Local" ForceSelection="false" FieldLabel="Format"
+                                TypeAhead="true" ForceSelection="false" FieldLabel="Format"
                                 AllowBlank="false" DataIndex="Format" EmptyText="Select a format"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                             </ext:ComboBox>
@@ -486,32 +489,35 @@
                     </ext:Container>
                     <ext:Container ID="Container20" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:SelectBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" ForceSelection="true" FieldLabel="Phenomenon" Mode="Local"
+                            <ext:ComboBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore" DisplayField="Name"
+                                ValueField="Id" TypeAhead="true" ForceSelection="true" FieldLabel="Phenomenon" Editable="true"
                                 AllowBlank="false" DataIndex="PhenomenonID" EmptyText="Select a phenomenon" ValueNotFoundText="Select a phenomenon"
-                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
+                                <Listeners>
+                                    <Select Handler="#{cbOffering}.clearValue();#{OfferingStore}.load();#{cbUnitOfMeasure}.clearValue();#{UnitOfMeasureStore}.load();" />
+                                </Listeners>
                                 <DirectEvents>
                                     <Select OnEvent="cbPhenomenonSelect" />
                                 </DirectEvents>
-                            </ext:SelectBox>
+                            </ext:ComboBox>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container21" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:SelectBox ID="cbOffering" runat="server" StoreID="PhenomenonOfferingStore" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Offering"
+                            <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore" DisplayField="OfferingName" Mode="Local"
+                                ValueField="Id" TypeAhead="true" ForceSelection="true" FieldLabel="Offering" Editable="true"
                                 AllowBlank="false" DataIndex="PhenomenonOfferingID" EmptyText="Select an offering" ValueNotFoundText="Select an offering"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
-                            </ext:SelectBox>
+                            </ext:ComboBox>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container22" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:SelectBox ID="cbUnitOfMeasure" runat="server" StoreID="PhenomenonUnitOfMeasureStore" Editable="true" DisplayField="Unit"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" FieldLabel="Unit of measure"
+                            <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="UnitOfMeasureStore" Editable="true" DisplayField="UnitOfMeasureUnit"
+                                ValueField="Id" TypeAhead="true" ForceSelection="true" FieldLabel="Unit of measure" Mode="Local"
                                 AllowBlank="false" DataIndex="PhenomenonUOMID" EmptyText="Select a unit of measure" ValueNotFoundText="Select a unit of measure"
-                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
-                            </ext:SelectBox>
+                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
+                            </ext:ComboBox>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container13" runat="server" LabelAlign="Top" Layout="Form">

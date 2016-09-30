@@ -1,0 +1,143 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[AuditLog]
+       [dbo].[DataSource]
+       [dbo].[Sensor]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Rename
+       [dbo].[FK_Progress_Sensor] (Foreign Key)
+       [dbo].[Progress].[IX_Progress_SensorID] (Index)
+     Drop
+       [dbo].[Sensor].[IX_SensorProcedure_DataSourceID] (Index)
+       [dbo].[DataLog].[IX_DataLog_SensorProcedureID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorProcedureID] (Index)
+       [dbo].[Sensor].[IX_SensorProcedure_DataSchemaID] (Index)
+       [dbo].[Sensor].[IX_SensorProcedure_PhenomenonID] (Index)
+       [dbo].[Sensor].[IX_SensorProcedure_StationID] (Index)
+       [dbo].[Sensor].[IX_SensorProcedure_UserId] (Index)
+       [dbo].[Station].[IX_DataSource_StationID] (Index)
+       [dbo].[DF_SensorProcedure_ID] (Default Constraint)
+       [dbo].[FK_SensorProcedure_DataSource] (Foreign Key)
+       [dbo].[FK_DataLog_SensorProcedure] (Foreign Key)
+       [dbo].[FK_Observation_SensorProcedure] (Foreign Key)
+       [dbo].[FK_SensorProcedure_aspnet_Users] (Foreign Key)
+       [dbo].[FK_SensorProcedure_DataSchema] (Foreign Key)
+       [dbo].[FK_SensorProcedure_Phenomenon] (Foreign Key)
+       [dbo].[FK_SensorProcedure_Station] (Foreign Key)
+       [dbo].[UX_SensorProcedure_Code] (Unique Constraint)
+       [dbo].[UX_SensorProcedure_Name] (Unique Constraint)
+     Table rebuild
+       [dbo].[AuditLog] (Table)
+       [dbo].[DataSource] (Table)
+       [dbo].[Sensor] (Table)
+     Create
+       [dbo].[DataSource].[IX_DataSource_StationID] (Index)
+       [dbo].[DataSource].[IX_DataSource_StartDate] (Index)
+       [dbo].[DataSource].[IX_DataSource_EndDate] (Index)
+       [dbo].[Sensor].[IX_Sensor_StationID] (Index)
+       [dbo].[Sensor].[IX_Sensor_PhenomenonID] (Index)
+       [dbo].[Sensor].[IX_Sensor_DataSourceID] (Index)
+       [dbo].[Sensor].[IX_Sensor_DataSchemaID] (Index)
+       [dbo].[Sensor].[IX_Sensor_UserId] (Index)
+       [dbo].[Site].[IX_Site_EndDate] (Index)
+       [dbo].[Site].[IX_Site_StartDate] (Index)
+       [dbo].[DataSource_Organisation] (Table)
+       [dbo].[DataSource_Organisation].[IX_DataSource_Organisation_DataSourceID] (Index)
+       [dbo].[DataSource_Organisation].[IX_DataSource_Organisation_OrganisationID] (Index)
+       [dbo].[DataSource_Organisation].[IX_DataSource_Organisation_OrganisationRoleID] (Index)
+       [dbo].[DataSource_Organisation].[IX_DataSource_Organisation_StartDate] (Index)
+       [dbo].[DataSource_Organisation].[IX_DataSource_Organisation_EndDate] (Index)
+       [dbo].[DataSource_Organisation].[IX_DataSource_Organisation_UserId] (Index)
+       [dbo].[DataLog].[IX_DataLog_SensorID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID] (Index)
+       [dbo].[DF_DataSource_Organisation_ID] (Default Constraint)
+       [dbo].[DF_DataSource_Organisation_AddedAt] (Default Constraint)
+       [dbo].[DF_DataSource_Organisation_UpdatedAt] (Default Constraint)
+       [dbo].[FK_Sensor_aspnet_Users] (Foreign Key)
+       [dbo].[FK_Sensor_DataSchema] (Foreign Key)
+       [dbo].[FK_Sensor_DataSource] (Foreign Key)
+       [dbo].[FK_Sensor_Phenomenon] (Foreign Key)
+       [dbo].[FK_Sensor_Station] (Foreign Key)
+       [dbo].[FK_DataSource_Organisation_DataSource] (Foreign Key)
+       [dbo].[FK_DataSource_Organisation_Organisation] (Foreign Key)
+       [dbo].[FK_DataSource_Organisation_OrganisationRole] (Foreign Key)
+       [dbo].[FK_DataSource_Organisation_aspnet_Users] (Foreign Key)
+       [dbo].[FK_DataLog_Sensor] (Foreign Key)
+       [dbo].[FK_Observation_Sensor] (Foreign Key)
+       [dbo].[TR_AuditLog_Insert] (Trigger)
+       [dbo].[TR_AuditLog_Update] (Trigger)
+       [dbo].[TR_DataSource_Insert] (Trigger)
+       [dbo].[TR_DataSource_Update] (Trigger)
+       [dbo].[TR_DataSource_Organisation_Insert] (Trigger)
+       [dbo].[TR_DataSource_Organisation_Update] (Trigger)
+       [dbo].[TR_Site_Insert] (Trigger)
+       [dbo].[TR_Site_Update] (Trigger)
+       [dbo].[TR_Site_Organisation_Insert] (Trigger)
+       [dbo].[TR_Site_Organisation_Update] (Trigger)
+       [dbo].[TR_Station_Insert] (Trigger)
+       [dbo].[TR_Station_Update] (Trigger)
+       [dbo].[TR_Station_Organisation_Insert] (Trigger)
+       [dbo].[TR_Station_Organisation_Update] (Trigger)
+       [dbo].[vDataSourceOrganisation] (View)
+       [dbo].[vSensor] (View)
+     Alter
+       [dbo].[Site] (Table)
+       [dbo].[Site_Organisation] (Table)
+       [dbo].[Station] (Table)
+       [dbo].[Station_Organisation] (Table)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationRoles] (View)
+       [dbo].[vStation] (View)
+       [dbo].[progress_Progress_Resolved] (View)
+       [dbo].[vDataLog] (View)
+       [dbo].[vDataQuery] (View)
+       [dbo].[vInventory] (View)
+       [dbo].[progress_Status_Raw] (Procedure)
+
+** Supporting actions
+     Drop
+       [dbo].[Station].[IX_Station_ProjectSiteID] (Index)
+       [dbo].[DF_AuditLog_ID] (Default Constraint)
+       [dbo].[DF_AuditLog_AddedAt] (Default Constraint)
+       [dbo].[DF_DataSource_ID] (Default Constraint)
+       [dbo].[FK_AuditLog_aspnet_Users] (Foreign Key)
+       [dbo].[FK_ImportBatch_DataSource] (Foreign Key)
+       [dbo].[FK_DataSourceTransformation_DataSource] (Foreign Key)
+       [dbo].[FK_DataSourceRole_DataSource] (Foreign Key)
+       [dbo].[FK_DataSource_Station] (Foreign Key)
+       [dbo].[FK_DataSource_DataSchema] (Foreign Key)
+       [dbo].[FK_DataSource_aspnet_Users] (Foreign Key)
+       [dbo].[FK_Station_ProjectSite] (Foreign Key)
+       [dbo].[FK_Progress_Sensor] (Foreign Key)
+     Create
+       [dbo].[AuditLog].[IX_AuditLog_UserId] (Index)
+       [dbo].[DataSource].[IX_DataSource_DataSchemaID] (Index)
+       [dbo].[DataSource].[IX_DataSource_UserId] (Index)
+       [dbo].[Station].[IX_Station_ProjectSiteID] (Index)
+       [dbo].[FK_AuditLog_aspnet_Users] (Foreign Key)
+       [dbo].[FK_ImportBatch_DataSource] (Foreign Key)
+       [dbo].[FK_DataSourceTransformation_DataSource] (Foreign Key)
+       [dbo].[FK_DataSourceRole_DataSource] (Foreign Key)
+       [dbo].[FK_DataSource_Station] (Foreign Key)
+       [dbo].[FK_DataSource_DataSchema] (Foreign Key)
+       [dbo].[FK_DataSource_aspnet_Users] (Foreign Key)
+       [dbo].[FK_Station_ProjectSite] (Foreign Key)
+       [dbo].[FK_Progress_Sensor] (Foreign Key)
+     Refresh
+       [dbo].[vAuditLog] (View)
+       [dbo].[vDataSource] (View)
+       [dbo].[vDataSourceTransformation] (View)
+       [dbo].[vImportBatch] (View)
+       [dbo].[vSiteOrganisation] (View)
+       [dbo].[vStationOrganisation] (View)
+
+If this deployment is executed, changes to [dbo].[DataSource] might introduce run-time errors in [dbo].[vSensorProcedure].
+If this deployment is executed, changes to [dbo].[Station] might introduce run-time errors in [dbo].[vSensorProcedure].
+

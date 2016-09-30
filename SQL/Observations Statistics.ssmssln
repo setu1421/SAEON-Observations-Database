@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90A646C5-207C-4F06-985C-ECFA00E7B00A}"
 	ProjectSection(SolutionItems) = preProject
 		Entity Statistics.sql = Entity Statistics.sql
+		Indexes.sql = Indexes.sql
 		Table Statistics.sql = Table Statistics.sql
 	EndProjectSection
 EndProject
@@ -14,7 +15,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CE6B72C1-0BEC-4DD8-9334-378AD9EDA183}.Default|Default.ActiveCfg = Default
+		{CC602DC9-855D-437D-8DC2-EBC69019B8ED}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

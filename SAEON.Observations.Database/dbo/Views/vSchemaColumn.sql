@@ -5,8 +5,8 @@ SELECT
   SchemaColumn.*,
   SchemaColumnType.Name SchemaColumnTypeName, 
   Phenomenon.Name PhenomenonName,
-  Offering.Name PhenomenonOfferingName,
-  UnitOfMeasure.Unit PhenomenonUOMUnit
+  Offering.Name OfferingName,
+  UnitOfMeasure.Unit UnitOfMeasureUnit
 FROM 
   SchemaColumn
   inner join SchemaColumnType 

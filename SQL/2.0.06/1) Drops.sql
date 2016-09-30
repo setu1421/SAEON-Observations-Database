@@ -1,0 +1,3 @@
+drop view vSiteOrganisation
+drop view vStationOrganisation
+drop view vInstrumentOrganisation
