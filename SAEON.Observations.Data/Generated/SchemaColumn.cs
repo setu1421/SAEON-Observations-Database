@@ -262,19 +262,6 @@ namespace SAEON.Observations.Data
 					colvarPhenomenonUOMID.ForeignKeyTableName = "PhenomenonUOM";
 				schema.Columns.Add(colvarPhenomenonUOMID);
 				
-				TableSchema.TableColumn colvarFixedTime = new TableSchema.TableColumn(schema);
-				colvarFixedTime.ColumnName = "FixedTime";
-				colvarFixedTime.DataType = DbType.Int32;
-				colvarFixedTime.MaxLength = 0;
-				colvarFixedTime.AutoIncrement = false;
-				colvarFixedTime.IsNullable = true;
-				colvarFixedTime.IsPrimaryKey = false;
-				colvarFixedTime.IsForeignKey = false;
-				colvarFixedTime.IsReadOnly = false;
-				colvarFixedTime.DefaultSetting = @"";
-				colvarFixedTime.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarFixedTime);
-				
 				TableSchema.TableColumn colvarEmptyValue = new TableSchema.TableColumn(schema);
 				colvarEmptyValue.ColumnName = "EmptyValue";
 				colvarEmptyValue.DataType = DbType.AnsiString;
@@ -287,6 +274,19 @@ namespace SAEON.Observations.Data
 				colvarEmptyValue.DefaultSetting = @"";
 				colvarEmptyValue.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarEmptyValue);
+				
+				TableSchema.TableColumn colvarFixedTime = new TableSchema.TableColumn(schema);
+				colvarFixedTime.ColumnName = "FixedTime";
+				colvarFixedTime.DataType = DbType.Int32;
+				colvarFixedTime.MaxLength = 0;
+				colvarFixedTime.AutoIncrement = false;
+				colvarFixedTime.IsNullable = true;
+				colvarFixedTime.IsPrimaryKey = false;
+				colvarFixedTime.IsForeignKey = false;
+				colvarFixedTime.IsReadOnly = false;
+				colvarFixedTime.DefaultSetting = @"";
+				colvarFixedTime.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarFixedTime);
 				
 				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
 				colvarUserId.ColumnName = "UserId";
@@ -420,20 +420,20 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.PhenomenonUOMID, value); }
 		}
 		  
-		[XmlAttribute("FixedTime")]
-		[Bindable(true)]
-		public int? FixedTime 
-		{
-			get { return GetColumnValue<int?>(Columns.FixedTime); }
-			set { SetColumnValue(Columns.FixedTime, value); }
-		}
-		  
 		[XmlAttribute("EmptyValue")]
 		[Bindable(true)]
 		public string EmptyValue 
 		{
 			get { return GetColumnValue<string>(Columns.EmptyValue); }
 			set { SetColumnValue(Columns.EmptyValue, value); }
+		}
+		  
+		[XmlAttribute("FixedTime")]
+		[Bindable(true)]
+		public int? FixedTime 
+		{
+			get { return GetColumnValue<int?>(Columns.FixedTime); }
+			set { SetColumnValue(Columns.FixedTime, value); }
 		}
 		  
 		[XmlAttribute("UserId")]
@@ -547,7 +547,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varDataSchemaID,int varNumber,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,int? varFixedTime,string varEmptyValue,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varDataSchemaID,int varNumber,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varEmptyValue,int? varFixedTime,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			SchemaColumn item = new SchemaColumn();
 			
@@ -571,9 +571,9 @@ namespace SAEON.Observations.Data
 			
 			item.PhenomenonUOMID = varPhenomenonUOMID;
 			
-			item.FixedTime = varFixedTime;
-			
 			item.EmptyValue = varEmptyValue;
+			
+			item.FixedTime = varFixedTime;
 			
 			item.UserId = varUserId;
 			
@@ -591,7 +591,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varDataSchemaID,int varNumber,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,int? varFixedTime,string varEmptyValue,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varDataSchemaID,int varNumber,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varEmptyValue,int? varFixedTime,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			SchemaColumn item = new SchemaColumn();
 			
@@ -615,9 +615,9 @@ namespace SAEON.Observations.Data
 			
 				item.PhenomenonUOMID = varPhenomenonUOMID;
 			
-				item.FixedTime = varFixedTime;
-			
 				item.EmptyValue = varEmptyValue;
+			
+				item.FixedTime = varFixedTime;
 			
 				item.UserId = varUserId;
 			
@@ -708,14 +708,14 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn FixedTimeColumn
+        public static TableSchema.TableColumn EmptyValueColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn EmptyValueColumn
+        public static TableSchema.TableColumn FixedTimeColumn
         {
             get { return Schema.Columns[11]; }
         }
@@ -757,8 +757,8 @@ namespace SAEON.Observations.Data
 			 public static string PhenomenonID = @"PhenomenonID";
 			 public static string PhenomenonOfferingID = @"PhenomenonOfferingID";
 			 public static string PhenomenonUOMID = @"PhenomenonUOMID";
-			 public static string FixedTime = @"FixedTime";
 			 public static string EmptyValue = @"EmptyValue";
+			 public static string FixedTime = @"FixedTime";
 			 public static string UserId = @"UserId";
 			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";

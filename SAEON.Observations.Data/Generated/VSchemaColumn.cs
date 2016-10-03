@@ -177,18 +177,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarPhenomenonUOMID);
                 
-                TableSchema.TableColumn colvarFixedTime = new TableSchema.TableColumn(schema);
-                colvarFixedTime.ColumnName = "FixedTime";
-                colvarFixedTime.DataType = DbType.Int32;
-                colvarFixedTime.MaxLength = 0;
-                colvarFixedTime.AutoIncrement = false;
-                colvarFixedTime.IsNullable = true;
-                colvarFixedTime.IsPrimaryKey = false;
-                colvarFixedTime.IsForeignKey = false;
-                colvarFixedTime.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarFixedTime);
-                
                 TableSchema.TableColumn colvarEmptyValue = new TableSchema.TableColumn(schema);
                 colvarEmptyValue.ColumnName = "EmptyValue";
                 colvarEmptyValue.DataType = DbType.AnsiString;
@@ -200,6 +188,18 @@ namespace SAEON.Observations.Data{
                 colvarEmptyValue.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarEmptyValue);
+                
+                TableSchema.TableColumn colvarFixedTime = new TableSchema.TableColumn(schema);
+                colvarFixedTime.ColumnName = "FixedTime";
+                colvarFixedTime.DataType = DbType.Int32;
+                colvarFixedTime.MaxLength = 0;
+                colvarFixedTime.AutoIncrement = false;
+                colvarFixedTime.IsNullable = true;
+                colvarFixedTime.IsPrimaryKey = false;
+                colvarFixedTime.IsForeignKey = false;
+                colvarFixedTime.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarFixedTime);
                 
                 TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
                 colvarUserId.ColumnName = "UserId";
@@ -475,20 +475,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("FixedTime")]
-        [Bindable(true)]
-        public int? FixedTime 
-	    {
-		    get
-		    {
-			    return GetColumnValue<int?>("FixedTime");
-		    }
-            set 
-		    {
-			    SetColumnValue("FixedTime", value);
-            }
-        }
-	      
         [XmlAttribute("EmptyValue")]
         [Bindable(true)]
         public string EmptyValue 
@@ -500,6 +486,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("EmptyValue", value);
+            }
+        }
+	      
+        [XmlAttribute("FixedTime")]
+        [Bindable(true)]
+        public int? FixedTime 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int?>("FixedTime");
+		    }
+            set 
+		    {
+			    SetColumnValue("FixedTime", value);
             }
         }
 	      
@@ -628,9 +628,9 @@ namespace SAEON.Observations.Data{
             
             public static string PhenomenonUOMID = @"PhenomenonUOMID";
             
-            public static string FixedTime = @"FixedTime";
-            
             public static string EmptyValue = @"EmptyValue";
+            
+            public static string FixedTime = @"FixedTime";
             
             public static string UserId = @"UserId";
             

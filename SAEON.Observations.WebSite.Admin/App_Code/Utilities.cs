@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -24,5 +25,23 @@ public static class Utilities
         else
             return value;
     }
+
+    public static string Dump(this DataRow dataRow, bool oneLine = true)
+    {
+        List<string> result = new List<string>();
+        foreach (DataColumn col in dataRow.Table.Columns)
+            result.Add($"{col.ColumnName}: {dataRow[col.ColumnName]}");
+        return string.Join(oneLine ? "; " : "<br />", result);
+    }
+
+    public static string Dump(this DataTable dataTable, string name = "")
+    {
+        List<string> result = new List<string>();
+        if (!string.IsNullOrEmpty(name)) result.Add(name);
+        foreach (DataRow row in dataTable.Rows)
+            result.Add(row.Dump());
+        return string.Join("<br />", result); 
+    }
+
 
 }

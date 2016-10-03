@@ -22,27 +22,6 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             SchemaColumnTypeStore.DataBind();
             PhenomenonStore.DataSource = new PhenomenonCollection().OrderByAsc(Phenomenon.Columns.Name).Load();
             PhenomenonStore.DataBind();
-            var table = new Select(PhenomenonOffering.IdColumn.QualifiedName, Phenomenon.NameColumn.QualifiedName + " PhenomenonName", Offering.NameColumn.QualifiedName + " OfferingName")
-                .From(PhenomenonOffering.Schema)
-                .InnerJoin(Phenomenon.IdColumn, PhenomenonOffering.PhenomenonIDColumn)
-                .InnerJoin(Offering.IdColumn, PhenomenonOffering.PhenomenonIDColumn)
-                .OrderAsc(Phenomenon.NameColumn.QualifiedName, Offering.NameColumn.QualifiedName)
-                .ExecuteDataSet().Tables[0];
-            MessageBoxes.Info("PhenomenonOffering", string.Join(", ", table.Columns.Cast<DataColumn>().Select(c => c.ColumnName)));
-            OfferingStore.DataSource = new Select(PhenomenonOffering.IdColumn.QualifiedName, Phenomenon.NameColumn.QualifiedName + " PhenomenonName", Offering.NameColumn.QualifiedName + " OfferingName")
-                .From(PhenomenonOffering.Schema)
-                .InnerJoin(Phenomenon.IdColumn, PhenomenonOffering.PhenomenonIDColumn)
-                .InnerJoin(Offering.IdColumn, PhenomenonOffering.PhenomenonIDColumn)
-                .OrderAsc(Phenomenon.NameColumn.QualifiedName, Offering.NameColumn.QualifiedName)
-                .ExecuteDataSet().Tables[0];
-            OfferingStore.DataBind();
-            UnitOfMeasureStore.DataSource = new Select(PhenomenonUOM.IdColumn.QualifiedName, Phenomenon.NameColumn.QualifiedName+" PhenomenonName", UnitOfMeasure.UnitColumn.QualifiedName+" UnitOfMeasureUnit")
-                .From(PhenomenonUOM.Schema)
-                .InnerJoin(Phenomenon.IdColumn, PhenomenonUOM.PhenomenonIDColumn)
-                .InnerJoin(UnitOfMeasure.IdColumn, PhenomenonUOM.UnitOfMeasureIDColumn)
-                .OrderAsc(Phenomenon.NameColumn.QualifiedName, UnitOfMeasure.UnitColumn.QualifiedName)
-                .ExecuteDataSet().Tables[0];
-            UnitOfMeasureStore.DataBind();
         }
     }
 
@@ -154,6 +133,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         DataSourceType dataSourceType = new DataSourceType(schema.DataSourceTypeID);
         nfWidth.Hidden = (dataSourceType.Code == "CSV");
         nfWidth.AllowBlank = nfWidth.Hidden;
+        var cm = SchemaColumnsGrid.ColumnModel.Columns.FirstOrDefault(c => c.DataIndex == "Width").Hidden = nfWidth.Hidden;
         SetFields();
     }
 
@@ -182,6 +162,14 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         }
     }
 
+    protected void OfferingStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+    }
+
+    protected void UnitOfMeasureStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+    }
+
     protected void SchemaColumnAddSave(object sender, DirectEventArgs e)
     {
         try
@@ -193,7 +181,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             SqlQuery qry = new Select(Aggregate.Max(SchemaColumn.Columns.Number))
                 .From(SchemaColumn.Schema)
                 .Where(SchemaColumn.Columns.DataSchemaID).IsEqualTo(masterID);
-            schemaColumn.Number = qry.ExecuteScalar<int>()+1;
+            schemaColumn.Number = qry.ExecuteScalar<int>() + 1;
             schemaColumn.Name = Utilities.NullIfEmpty(tfColumnName.Text);
             schemaColumn.SchemaColumnTypeID = new Guid(cbSchemaColumnType.SelectedItem.Value.Trim());
             DataSchema schema = new DataSchema(masterID);
@@ -230,7 +218,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     schemaColumn.PhenomenonUOMID = Utilities.MakeGuid(cbUnitOfMeasure.Value);
                     schemaColumn.EmptyValue = Utilities.NullIfEmpty(tfEmptyValue.Text);
                     if (!string.IsNullOrEmpty(ttFixedTime.Text.Trim()))
-                        schemaColumn.FixedTime = int.Parse(ttFixedTime.Text.Trim());
+                        schemaColumn.FixedTime = ttFixedTime.SelectedTime.Hours;
                     break;
             }
             schemaColumn.UserId = AuthHelper.GetLoggedInUserId;
@@ -303,7 +291,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             cbDelimiter.AllowBlank = true;
             cbDelimiter.ClearValue();
             cbDelimiter.ClearInvalid();
-            cbDelimiter.MarkAsValid();
+            cbDelimiter.MarkInvalid();
         }
     }
 
@@ -311,29 +299,39 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void cbPhenomenonSelect(object sender, DirectEventArgs e)
     {
-        //var Id = cbPhenomenon.Value;
-        //var table = new Select(PhenomenonOffering.IdColumn, Offering.NameColumn)
-        //    .From(Offering.Schema)
-        //    .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
-        //    .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
-        //    .OrderAsc(Offering.Columns.Name)
-        //    .ExecuteDataSet().Tables[0];
-        //OfferingStore.DataSource = new Select(PhenomenonOffering.IdColumn, Offering.NameColumn)
-        //    .From(Offering.Schema)
-        //    .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
-        //    .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
-        //    .OrderAsc(Offering.Columns.Name)
-        //    .ExecuteDataSet().Tables[0];
-        //OfferingStore.DataBind();
-        //UnitOfMeasureStore.DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
-        //    .From(UnitOfMeasure.Schema)
-        //    .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
-        //    .Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(Id)
-        //    .OrderAsc(UnitOfMeasure.Columns.Unit)
-        //    .ExecuteDataSet().Tables[0];
-        //UnitOfMeasureStore.DataBind();
-        //cbOffering.Clear();
-        //cbUnitOfMeasure.Clear();
+        OfferingStore.DataSource = new Select(PhenomenonOffering.IdColumn.QualifiedName + " Id", Phenomenon.NameColumn.QualifiedName + " PhenomenonName", Offering.NameColumn.QualifiedName + " OfferingName")
+            .From(PhenomenonOffering.Schema)
+            .InnerJoin(Phenomenon.IdColumn, PhenomenonOffering.PhenomenonIDColumn)
+            .InnerJoin(Offering.IdColumn, PhenomenonOffering.OfferingIDColumn)
+            .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(cbPhenomenon.Value)
+            .OrderAsc(Phenomenon.NameColumn.QualifiedName, Offering.NameColumn.QualifiedName)
+            .ExecuteDataSet().Tables[0];
+        OfferingStore.DataBind();
+        UnitOfMeasureStore.DataSource = new Select(PhenomenonUOM.IdColumn.QualifiedName + " Id", Phenomenon.NameColumn.QualifiedName + " PhenomenonName", UnitOfMeasure.UnitColumn.QualifiedName + " UnitOfMeasureUnit")
+           .From(PhenomenonUOM.Schema)
+           .InnerJoin(Phenomenon.IdColumn, PhenomenonUOM.PhenomenonIDColumn)
+           .InnerJoin(UnitOfMeasure.IdColumn, PhenomenonUOM.UnitOfMeasureIDColumn)
+           .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(cbPhenomenon.Value)
+           .OrderAsc(Phenomenon.NameColumn.QualifiedName, UnitOfMeasure.UnitColumn.QualifiedName)
+           .ExecuteDataSet().Tables[0];
+        UnitOfMeasureStore.DataBind();
+        cbOffering.Clear();
+        cbOffering.ClearInvalid();
+        cbOffering.MarkInvalid();
+        cbUnitOfMeasure.Clear();
+        cbUnitOfMeasure.ClearInvalid();
+        cbUnitOfMeasure.MarkInvalid();
+    }
+
+    [DirectMethod]
+    public void LoadCombos(string columnType, string phenomenonID, string offeringID, string unitOfMeasureID)
+    {
+        cbSchemaColumnType.Value = columnType;
+        SetFields();
+        cbPhenomenon.Value = phenomenonID;
+        cbPhenomenonSelect(cbPhenomenon, new DirectEventArgs(null));
+        cbOffering.Value = offeringID;
+        cbUnitOfMeasure.Value = unitOfMeasureID;
     }
 
     private void SetFields()

@@ -531,28 +531,6 @@ namespace SAEON.Observations.Data
 		
 		
 		/// <summary>
-		/// Returns a PhenomenonOffering ActiveRecord object related to this DataSourceTransformation
-		/// 
-		/// </summary>
-		public SAEON.Observations.Data.PhenomenonOffering PhenomenonOffering
-		{
-			get { return SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.NewPhenomenonOfferingID); }
-			set { SetColumnValue("NewPhenomenonOfferingID", value.Id); }
-		}
-		
-		
-		/// <summary>
-		/// Returns a PhenomenonUOM ActiveRecord object related to this DataSourceTransformation
-		/// 
-		/// </summary>
-		public SAEON.Observations.Data.PhenomenonUOM PhenomenonUOM
-		{
-			get { return SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.NewPhenomenonUOMID); }
-			set { SetColumnValue("NewPhenomenonUOMID", value.Id); }
-		}
-		
-		
-		/// <summary>
 		/// Returns a Phenomenon ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
@@ -567,10 +545,32 @@ namespace SAEON.Observations.Data
 		/// Returns a PhenomenonOffering ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
+		public SAEON.Observations.Data.PhenomenonOffering PhenomenonOffering
+		{
+			get { return SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.NewPhenomenonOfferingID); }
+			set { SetColumnValue("NewPhenomenonOfferingID", value.Id); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a PhenomenonOffering ActiveRecord object related to this DataSourceTransformation
+		/// 
+		/// </summary>
 		public SAEON.Observations.Data.PhenomenonOffering PhenomenonOfferingToPhenomenonOfferingID
 		{
 			get { return SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.PhenomenonOfferingID); }
 			set { SetColumnValue("PhenomenonOfferingID", value.Id); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a PhenomenonUOM ActiveRecord object related to this DataSourceTransformation
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.PhenomenonUOM PhenomenonUOM
+		{
+			get { return SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.NewPhenomenonUOMID); }
+			set { SetColumnValue("NewPhenomenonUOMID", value.Id); }
 		}
 		
 		

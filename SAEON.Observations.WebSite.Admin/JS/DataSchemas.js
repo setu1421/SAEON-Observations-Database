@@ -45,6 +45,7 @@ function OnSchemaColumnAddCommand(e, record) {
     } else if (e === 'Edit') {
         SchemaColumnAddFormPanel.getForm().reset();
         SchemaColumnAddFormPanel.getForm().loadRecord(record);
+        DirectCall.LoadCombos(record.get("SchemaColumnTypeID"), record.get("PhenomenonID"), record.get("PhenomenonOfferingID"), record.get("PhenomenonUOMID"));
         SchemaColumnAddFormPanel.getForm().clearInvalid();
         SchemaColumnAddWindow.show();
     }
