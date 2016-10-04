@@ -39,7 +39,15 @@ function ClearSchemaColumnAddForm() {
     SchemaColumnAddFormPanel.getForm().reset();
 }
 
-function OnSchemaColumnAddCommand(e, record) {
+function PrepareSchemaColumnsToolbar(grid, toolbar, rowIndex, record) {
+    if (rowIndex === 0) {
+        toolbar.items.get(2).setDisabled(true);
+    } else if (rowIndex === SchemaColumnsGrid.getStore().getCount()-1) {
+        toolbar.items.get(3).setDisabled(true);
+    }
+}
+
+function OnSchemaColumnCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteSchemaColumn(record.get('Id'), { eventMask: { showMask: true } });
     } else if (e === 'Edit') {
@@ -48,6 +56,10 @@ function OnSchemaColumnAddCommand(e, record) {
         DirectCall.LoadCombos(record.get("SchemaColumnTypeID"), record.get("PhenomenonID"), record.get("PhenomenonOfferingID"), record.get("PhenomenonUOMID"));
         SchemaColumnAddFormPanel.getForm().clearInvalid();
         SchemaColumnAddWindow.show();
+    } else if (e === 'Up') {
+        DirectCall.SchemaColumnUp(record.get('Id'), { eventMask: { showMask: true } });
+    } else if (e === 'Down') {
+        DirectCall.SchemaColumnDown(record.get('Id'), { eventMask: { showMask: true } });
     }
 }
 

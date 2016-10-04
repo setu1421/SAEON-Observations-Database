@@ -272,11 +272,14 @@
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                                 <ext:Column Header="Unit of measure" DataIndex="UnitOfMeasureUnit" Width="150" />
                                                 <ext:Column Header="Empty value" DataIndex="EmptyValue" Width="100" />
-                                                <ext:Column Header="Fixed time" DataIndex="FixedTime" Width="75" />
-                                                <ext:CommandColumn Width="150">
+                                                <ext:Column Header="Fixed time" DataIndex="FixedTime" Width="100" />
+                                                <ext:CommandColumn Width="200">
+                                                    <PrepareToolbar Fn="PrepareSchemaColumnsToolbar" />
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
                                                         <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="Delete" />
+                                                        <ext:GridCommand Icon="ArrowUp" CommandName="Up" Text="Up" />
+                                                        <ext:GridCommand Icon="ArrowDown" CommandName="Down" Text="Down" />
                                                     </Commands>
                                                 </ext:CommandColumn>
                                             </Columns>
@@ -287,7 +290,7 @@
                                         </SelectionModel>
                                         <LoadMask ShowMask="true" />
                                         <Listeners>
-                                            <Command Fn="OnSchemaColumnAddCommand" />
+                                            <Command Fn="OnSchemaColumnCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>
@@ -454,18 +457,20 @@
                     <ext:Hidden ID="SchemaColumnAddID" DataIndex="Id" runat="server" ClientIDMode="Static" />
                     <ext:Container ID="Container14" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:TextField ID="tfColumnName" DataIndex="Name" MaxLength="50" runat="server"
-                                FieldLabel="Name" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false"
+                            <ext:TextField ID="tfColumnName" DataIndex="Name" MaxLength="50" runat="server" IsRemoteValidation="true" ClientIDMode="Static"
+                                FieldLabel="Name" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false" EmptyText="Enter a name"
                                 Regex="^[A-Za-z]+\w*$" RegexText="Name must start with a character and can only contain characters, numbers and underscores">
+                                <RemoteValidation OnValidation="ValidateColumnField" />
                             </ext:TextField>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container17" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbSchemaColumnType" runat="server" StoreID="SchemaColumnTypeStore"
+                            <ext:ComboBox ID="cbSchemaColumnType" runat="server" StoreID="SchemaColumnTypeStore" IsRemoteValidation="true" MsgTarget="Side"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" DisplayField="Name" DataIndex="SchemaColumnTypeID" FieldLabel="Column type" EmptyText="Select a column type"
                                 AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
+                                <RemoteValidation OnValidation="ValidateColumnField" />
                                 <DirectEvents>
                                     <Select OnEvent="cbSchemaColumnTypeSelect" />
                                 </DirectEvents>
@@ -474,23 +479,22 @@
                     </ext:Container>
                     <ext:Container ID="ctWidth" runat="server" LabelAlign="Top" Layout="Form" ClientIDMode="Static">
                         <Items>
-                            <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server" AllowBlank="false" EmptyText="Enter a width"
-                                FieldLabel="Width" AnchorHorizontal="95%" MsgTarget="Side" AllowDecimals="false">
+                            <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server" AllowBlank="false" EmptyText="Enter a width"  MsgTarget="Side"
+                                FieldLabel="Width" AnchorHorizontal="95%" AllowDecimals="false" MinValue="1">
                             </ext:NumberField>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="ctFormat" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbFormat" runat="server"
-                                Editable="false" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true"
-                                FieldLabel="Format" DataIndex="Format" EmptyText="Select a format"
-                                AnchorHorizontal="95%" ClientIDMode="Static">
-                            </ext:ComboBox>
+                            <ext:TextField ID="tfFormat" runat="server" IsRemoteValidation="true" ClientIDMode="Static" MsgTarget="Side" MaxLength="10"
+                                AllowBlank="false" TriggerAction="All" FieldLabel="Format" DataIndex="Format" EmptyText="Enter a format" AnchorHorizontal="95%">
+                                <RemoteValidation OnValidation="ValidateColumnField" />
+                            </ext:TextField>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container20" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore" DisplayField="Name"
+                            <ext:ComboBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore"  MsgTarget="Side" DisplayField="Name"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" FieldLabel="Phenomenon" DataIndex="PhenomenonID" EmptyText="Select a phenomenon" ValueNotFoundText="Select a phenomenon"
                                 AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
@@ -502,7 +506,7 @@
                     </ext:Container>
                     <ext:Container ID="Container21" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore" DisplayField="OfferingName"
+                            <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore"  MsgTarget="Side" DisplayField="OfferingName"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" FieldLabel="Offering" DataIndex="PhenomenonOfferingID" EmptyText="Select an offering" ValueNotFoundText="Select an offering"
                                 AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
@@ -511,7 +515,7 @@
                     </ext:Container>
                     <ext:Container ID="Container22" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="UnitOfMeasureStore" DisplayField="UnitOfMeasureUnit"
+                            <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="UnitOfMeasureStore"  MsgTarget="Side" DisplayField="UnitOfMeasureUnit"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" FieldLabel="Unit of measure" DataIndex="PhenomenonUOMID" EmptyText="Select a unit of measure" ValueNotFoundText="Select a unit of measure"
                                 AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
@@ -526,8 +530,8 @@
                     </ext:Container>
                     <ext:Container ID="Container15" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:TimeField ID="ttFixedTime" runat="server" DataIndex="FixedTime" FieldLabel="Fixed Time"
-                                EmptyText="Please select" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false"
+                            <ext:TimeField ID="ttFixedTime" runat="server" DataIndex="FixedTime" FieldLabel="Fixed Time"  MsgTarget="Side"
+                                EmptyText="Please select" AnchorHorizontal="95%" AllowBlank="false"
                                 BlankText="Fixed Time is required" ClientIDMode="Static" Format="H:mm" Increment="60">
                                 <Triggers>
                                     <ext:FieldTrigger Icon="Clear" />

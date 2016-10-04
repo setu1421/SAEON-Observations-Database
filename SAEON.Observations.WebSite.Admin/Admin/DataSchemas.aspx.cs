@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Transactions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -41,12 +42,12 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
         if (e.ID == "tfCode")
         {
-            checkColumn = Instrument.Columns.Code;
+            checkColumn = DataSchema.Columns.Code;
             errorMessage = "The specified Data Schema Code already exists";
         }
         else if (e.ID == "tfName")
         {
-            checkColumn = Instrument.Columns.Name;
+            checkColumn = DataSchema.Columns.Name;
             errorMessage = "The specified Data Schema Name already exists";
 
         }
@@ -162,12 +163,37 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         }
     }
 
-    protected void OfferingStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void ValidateColumnField(object sender, RemoteValidationEventArgs e)
     {
-    }
-
-    protected void UnitOfMeasureStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
-    {
+        e.Success = true;
+        if (e.ID == "tfColumnName")
+        {
+            RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            SchemaColumnCollection col = new SchemaColumnCollection()
+                .Where(SchemaColumn.Columns.DataSchemaID, masterID)
+                .Where(SchemaColumn.Columns.Name, e.Value.ToString().Trim())
+                .Load();
+            if (col.Any())
+            {
+                e.Success = false;
+                e.ErrorMessage = "The specified Schema Column Name already exists";
+            }
+        }
+        else if (e.ID == "tfFormat")
+        {
+            try
+            {
+                DateTime dt = DateTime.Now;
+                string format = e.Value.ToString().Trim();
+                DateTime.ParseExact(dt.ToString(format), format, null);
+            }
+            catch
+            {
+                e.Success = false;
+                e.ErrorMessage = "The format specified is invalid.";
+            }
+        }
     }
 
     protected void SchemaColumnAddSave(object sender, DirectEventArgs e)
@@ -201,10 +227,10 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             switch (cbSchemaColumnType.SelectedItem.Text)
             {
                 case "Date":
-                    schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
+                    schemaColumn.Format = tfFormat.Text.Trim();
                     break;
                 case "Time":
-                    schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
+                    schemaColumn.Format = tfFormat.Text.Trim();
                     break;
                 case "Offering":
                     schemaColumn.PhenomenonID = Utilities.MakeGuid(cbPhenomenon.Value);
@@ -336,9 +362,9 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     private void SetFields()
     {
-        cbFormat.AllowBlank = true;
-        cbFormat.MarkAsValid();
-        cbFormat.Hidden = true;
+        tfFormat.AllowBlank = true;
+        tfFormat.MarkAsValid();
+        tfFormat.Hidden = true;
         cbPhenomenon.AllowBlank = true;
         cbPhenomenon.ForceSelection = false;
         cbPhenomenon.MarkAsValid();
@@ -358,12 +384,12 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         switch (cbSchemaColumnType.SelectedItem.Text)
         {
             case "Date":
-                cbFormat.AllowBlank = false;
-                cbFormat.Hidden = false;
+                tfFormat.AllowBlank = false;
+                tfFormat.Hidden = false;
                 break;
             case "Time":
-                cbFormat.AllowBlank = false;
-                cbFormat.Hidden = false;
+                tfFormat.AllowBlank = false;
+                tfFormat.Hidden = false;
                 break;
             case "Ignore":
                 break;
@@ -398,5 +424,82 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         SetFields();
     }
 
+    [DirectMethod]
+    public void SchemaColumnUp(Guid aID)
+    {
+        try
+        {
+            SchemaColumnCollection col = new SchemaColumnCollection().Where("DataSchemaID", new SchemaColumn(aID).DataSchemaID).OrderByAsc("Number").Load();
+            SchemaColumn col1 = col.FirstOrDefault(c => c.Id == aID);
+            SchemaColumn col2 = col.ElementAtOrDefault(col.IndexOf(col1) - 1);
+            if (col2 == null)
+            {
+                col1.Number--;
+                col1.Save();
+            }
+            else
+                using (var ts = new TransactionScope())
+                using (new SharedDbConnectionScope())
+                {
+                    int old1 = col1.Number;
+                    int old2 = col2.Number;
+                    col1.Number = int.MinValue;
+                    col1.Save();
+                    col2.Number = int.MaxValue;
+                    col2.Save();
+                    col1.Number = old2;
+                    col1.Save();
+                    col2.Number = old1;
+                    col2.Save();
+                    ts.Complete();
+            }
+            Auditing.Log("DataSchemas.SchemaColumnUp", new Dictionary<string, object> { { "ID", aID } });
+            SchemaColumnsGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DataSchemas.SchemaColumnUp({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to move SchemaColumn up");
+        }
+    }
+
+    [DirectMethod]
+    public void SchemaColumnDown(Guid aID)
+    {
+        try
+        {
+            SchemaColumnCollection col = new SchemaColumnCollection().Where("DataSchemaID", new SchemaColumn(aID).DataSchemaID).OrderByAsc("Number").Load();
+            SchemaColumn col1 = col.FirstOrDefault(c => c.Id == aID);
+            SchemaColumn col2 = col.ElementAtOrDefault(col.IndexOf(col1) + 1);
+            if (col2 == null)
+            {
+                col1.Number++;
+                col1.Save();
+            }
+            else
+                using (var ts = new TransactionScope())
+                using (new SharedDbConnectionScope())
+                {
+                    int old1 = col1.Number;
+                    int old2 = col2.Number;
+                    col1.Number = int.MinValue;
+                    col1.Save();
+                    col2.Number = int.MaxValue;
+                    col2.Save();
+                    col1.Number = old2;
+                    col1.Save();
+                    col2.Number = old1;
+                    col2.Save();
+                    ts.Complete();
+                }
+            Auditing.Log("DataSchemas.SchemaColumnDown", new Dictionary<string, object> { { "ID", aID } });
+            SchemaColumnsGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DataSchemas.SchemaColumnDown({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to move SchemaColumn down");
+        }
+    }
     #endregion
 }

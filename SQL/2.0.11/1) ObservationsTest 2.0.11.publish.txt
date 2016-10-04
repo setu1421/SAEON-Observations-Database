@@ -35,6 +35,7 @@
        [dbo].[TR_Sensor_Insert] (Trigger)
        [dbo].[TR_Sensor_Update] (Trigger)
      Alter
+       [dbo].[vImportBatch] (View)
        [dbo].[vSchemaColumn] (View)
 
 ** Supporting actions
@@ -125,7 +126,6 @@
        [dbo].[TR_SchemaColumn_Update] (Trigger)
      Refresh
        [dbo].[progress_Progress_Resolved] (View)
-       [dbo].[vImportBatch] (View)
        [dbo].[vInstrumentOrganisation] (View)
        [dbo].[vOrganisationInstrument] (View)
        [dbo].[vOrganisationSite] (View)
