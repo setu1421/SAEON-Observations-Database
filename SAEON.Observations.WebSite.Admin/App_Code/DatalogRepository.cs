@@ -18,7 +18,7 @@ public class DataLogRepository : BaseRepository
         //
     }
 
-    public static List<VDataLog> GetPagedListByBatch(StoreRefreshDataEventArgs e, string paramPrefix, Int64 BatchID)
+    public static List<VDataLog> GetPagedListByBatch(StoreRefreshDataEventArgs e, string paramPrefix, Guid BatchID)
     {
 
 

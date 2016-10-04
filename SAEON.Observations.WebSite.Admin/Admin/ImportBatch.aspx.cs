@@ -69,7 +69,7 @@ public partial class _ImportBatch : System.Web.UI.Page
     {
         if (e.Parameters["ImportBatchID"] != null && e.Parameters["ImportBatchID"].ToString() != "-1")
         {
-            Int64 BatchId = Int64.Parse(e.Parameters["ImportBatchID"].ToString());
+            Guid BatchId = Utilities.MakeGuid(e.Parameters["ImportBatchID"].ToString());
 
             this.DSLogGrid.GetStore().DataSource = DataLogRepository.GetPagedListByBatch(e, e.Parameters[this.GridFilters1.ParamPrefix], BatchId);
             this.DSLogGrid.GetStore().DataBind();
@@ -568,14 +568,14 @@ public partial class _ImportBatch : System.Web.UI.Page
 
 
     [DirectMethod]
-    public void ConfirmDeleteBatch(int ImportBatchId)
+    public void ConfirmDeleteBatch(Guid ImportBatchId)
     {
         X.Msg.Confirm("Confirm Delete", "Are you sure you want to Delete this Batch?", new MessageBoxButtonsConfig
         {
 
             Yes = new MessageBoxButtonConfig
             {
-                Handler = String.Concat("DirectCall.DeleteBatch(", ImportBatchId, ",{ eventMask: { showMask: true}});"),
+                Handler = String.Concat("DirectCall.DeleteBatch('", ImportBatchId, "',{ eventMask: { showMask: true}});"),
                 Text = "Yes",
             },
             No = new MessageBoxButtonConfig
@@ -586,7 +586,7 @@ public partial class _ImportBatch : System.Web.UI.Page
     }
 
     [DirectMethod]
-    public void DeleteBatch(int ImportBatchId)
+    public void DeleteBatch(Guid ImportBatchId)
     {
         using (TransactionScope ts = new TransactionScope())
         {
@@ -606,14 +606,14 @@ public partial class _ImportBatch : System.Web.UI.Page
 
 
     [DirectMethod]
-    public void ConfirmMoveBatch(int ImportBatchId)
+    public void ConfirmMoveBatch(Guid ImportBatchId)
     {
         X.Msg.Confirm("Confirm Move", "Are you sure you want to Move this Batch to the DataLog?", new MessageBoxButtonsConfig
         {
 
             Yes = new MessageBoxButtonConfig
             {
-                Handler = String.Concat("DirectCall.MoveBatch(", ImportBatchId, ",{ eventMask: { showMask: true}});"),
+                Handler = String.Concat("DirectCall.MoveBatch('", ImportBatchId, "',{ eventMask: { showMask: true}});"),
                 Text = "Yes",
             },
             No = new MessageBoxButtonConfig
@@ -624,7 +624,7 @@ public partial class _ImportBatch : System.Web.UI.Page
     }
 
     [DirectMethod]
-    public void MoveBatch(int ImportBatchId)
+    public void MoveBatch(Guid ImportBatchId)
     {
 
         ObservationCollection col = new ObservationCollection().Where(Observation.Columns.ImportBatchID, ImportBatchId).Load();
@@ -660,14 +660,14 @@ public partial class _ImportBatch : System.Web.UI.Page
     }
 
     [DirectMethod]
-    public void ConfirmDeleteEntry(int Id)
+    public void ConfirmDeleteEntry(Guid Id)
     {
         X.Msg.Confirm("Confirm Delete", "Are you sure you want to Delete this entry?", new MessageBoxButtonsConfig
         {
 
             Yes = new MessageBoxButtonConfig
             {
-                Handler = String.Concat("DirectCall.DeleteEntry(", Id, ",{ eventMask: { showMask: true}});"),
+                Handler = String.Concat("DirectCall.DeleteEntry('", Id, "',{ eventMask: { showMask: true}});"),
                 Text = "Yes",
             },
             No = new MessageBoxButtonConfig
@@ -720,14 +720,14 @@ public partial class _ImportBatch : System.Web.UI.Page
     }
 
     [DirectMethod]
-    public void ConfirmMoveToObservation(int Id)
+    public void ConfirmMoveToObservation(Guid Id)
     {
         X.Msg.Confirm("Confirm Move", "Are you sure you want to move this entry to the observations?", new MessageBoxButtonsConfig
         {
 
             Yes = new MessageBoxButtonConfig
             {
-                Handler = String.Concat("DirectCall.MoveToObservation(", Id, ",{ eventMask: { showMask: true}});"),
+                Handler = String.Concat("DirectCall.MoveToObservation('", Id, "',{ eventMask: { showMask: true}});"),
                 Text = "Yes",
             },
             No = new MessageBoxButtonConfig
@@ -738,7 +738,7 @@ public partial class _ImportBatch : System.Web.UI.Page
     }
 
     [DirectMethod]
-    public void MoveToObservation(int Id)
+    public void MoveToObservation(Guid Id)
     {
         using (TransactionScope ts = new TransactionScope())
         {

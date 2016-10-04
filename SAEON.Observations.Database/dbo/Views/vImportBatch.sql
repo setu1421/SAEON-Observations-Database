@@ -3,6 +3,9 @@ AS
 
 SELECT 
 b.ID,
+--> Added 2.0.11 20161004 TimPN
+b.Code,
+--< Added 2.0.11 20161004 TimPN
 b.DataSourceID,
 b.ImportDate, 
 b.[Status],

@@ -64,7 +64,8 @@
                                         <Reader>
                                             <ext:JsonReader IDProperty="Id">
                                                 <Fields>
-                                                    <ext:RecordField Name="Id" Type="Int" />
+                                                    <ext:RecordField Name="Id" Type="Auto" />
+                                                    <ext:RecordField Name="Code" Type="Int" />
                                                     <ext:RecordField Name="ImportDate" Type="Date" />
                                                     <ext:RecordField Name="Status" Type="Int" />
                                                     <ext:RecordField Name="DataSourceName" Type="String" />
@@ -86,7 +87,7 @@
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Number" DataIndex="Id" Width="80" />
+                                        <ext:Column Header="Number" DataIndex="Code" Width="80"/>
                                         <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="150" Format="dd-MM-yyyy HH:mm:ss" />
                                         <ext:Column Header="DataSourceID" DataIndex="DataSourceID" Width="150" Hidden="true">
                                         </ext:Column>
@@ -116,7 +117,7 @@
                                 <Plugins>
                                     <ext:GridFilters runat="server" ID="GridFilters1">
                                         <Filters>
-                                            <ext:StringFilter DataIndex="Id" />
+                                            <ext:NumericFilter DataIndex="Code" />
                                             <ext:DateFilter DataIndex="ImportDate" />
                                             <ext:StringFilter DataIndex="DataSourceID" />
                                             <ext:StringFilter DataIndex="DataSourceName" />

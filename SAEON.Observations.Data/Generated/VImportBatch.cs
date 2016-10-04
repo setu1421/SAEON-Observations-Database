@@ -69,6 +69,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarId);
                 
+                TableSchema.TableColumn colvarCode = new TableSchema.TableColumn(schema);
+                colvarCode.ColumnName = "Code";
+                colvarCode.DataType = DbType.Int32;
+                colvarCode.MaxLength = 0;
+                colvarCode.AutoIncrement = false;
+                colvarCode.IsNullable = false;
+                colvarCode.IsPrimaryKey = false;
+                colvarCode.IsForeignKey = false;
+                colvarCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarCode);
+                
                 TableSchema.TableColumn colvarDataSourceID = new TableSchema.TableColumn(schema);
                 colvarDataSourceID.ColumnName = "DataSourceID";
                 colvarDataSourceID.DataType = DbType.Guid;
@@ -241,6 +253,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("Code")]
+        [Bindable(true)]
+        public int Code 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int>("Code");
+		    }
+            set 
+		    {
+			    SetColumnValue("Code", value);
+            }
+        }
+	      
         [XmlAttribute("DataSourceID")]
         [Bindable(true)]
         public Guid DataSourceID 
@@ -375,6 +401,8 @@ namespace SAEON.Observations.Data{
 		    
 		    
             public static string Id = @"ID";
+            
+            public static string Code = @"Code";
             
             public static string DataSourceID = @"DataSourceID";
             
