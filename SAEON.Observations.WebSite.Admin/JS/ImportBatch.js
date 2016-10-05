@@ -7,27 +7,27 @@
 function prepareCommand(grid, cmd, record, row) {
 
 
-    if (cmd.command == 'InvalidDate') {
+    if (cmd.command === 'InvalidDate') {
         if (record.get("DateValueInvalid") || record.get("TimeValueInvalid"))
             cmd.hidden = false;
     }
-    else if (cmd.command == 'InvalidSensor') {
+    else if (cmd.command === 'InvalidSensor') {
         if (record.get("SensorInvalid"))
             cmd.hidden = false;
     }
-    else if (cmd.command == 'InvalidRawValue') {
+    else if (cmd.command === 'InvalidRawValue') {
         if (record.get("RawValueInvalid"))
             cmd.hidden = false;
     }
-    else if (cmd.command == 'InvalidDataValue') {
+    else if (cmd.command === 'InvalidDataValue') {
         if (record.get("DataValueInvalid"))
             cmd.hidden = false;
     }
-    else if (cmd.command == 'InvalidOffering') {
+    else if (cmd.command === 'InvalidOffering') {
         if (record.get("OfferingInvalid"))
             cmd.hidden = false;
     }
-    else if (cmd.command == 'InvalidUOM') {
+    else if (cmd.command === 'InvalidUOM') {
         if (record.get("UOMInvalid"))
             cmd.hidden = false;
     }
@@ -36,13 +36,13 @@ function prepareCommand(grid, cmd, record, row) {
 function onLogCommand(e, record)
 {
 	//////////////////////
-	if (e == 'Delete')
+	if (e === 'Delete')
 	{
 		DirectCall.ConfirmDeleteEntry(record.get('Id'), { eventMask: { showMask: true} });
 	}
-	else if (e == 'MoveToObservation')
+	else if (e === 'MoveToObservation')
 	{
-		if (record.get("StatusID") != "edb0a37c-f68d-4693-8ba6-d14d1b4fabe8")
+		if (record.get("StatusID") !== "edb0a37c-f68d-4693-8ba6-d14d1b4fabe8")
 		{
 			Ext.Msg.alert('Error', 'You can only move items with the status "Duplicate of a previous empty value".');
 
@@ -121,7 +121,7 @@ function onLogCommand(e, record)
 
 			var val = record.get('PhenomenonOfferingID');
 			var rd = cbOffering.findRecord(cbOffering.valueField, val);
-			if (rd != null)
+			if (rd !== null)
 			{
 				cbOffering.setValue(val);
 				cbOffering.setReadOnly(true);
@@ -154,7 +154,7 @@ function onLogCommand(e, record)
 
 			var val = DetailsFormPanel.getForm()._record.get('PhenomenonUOMID')
 			var rd = cbUnitofMeasure.findRecord(cbUnitofMeasure.valueField, val);
-			if (rd != null)
+			if (rd !== null)
 			{
 				cbUnitofMeasure.setValue(val);
 				cbUnitofMeasure.setReadOnly(true);
@@ -200,7 +200,7 @@ function SelectSensor() {
 
         var val =  DetailsFormPanel.getForm()._record.get('PhenomenonOfferingID');
         var rd = cbOffering.findRecord(cbOffering.valueField, val);
-        if (rd != null) {
+        if (rd !== null) {
             cbOffering.setValue(val);
             cbOffering.setReadOnly(true);
         }
@@ -214,7 +214,7 @@ function SelectSensor() {
 
         var val = DetailsFormPanel.getForm()._record.get('PhenomenonUOMID')
         var rd = cbUnitofMeasure.findRecord(cbUnitofMeasure.valueField, val);
-        if (rd != null) {
+        if (rd !== null) {
             cbUnitofMeasure.setValue(val);
             cbUnitofMeasure.setReadOnly(true);
         }
@@ -231,10 +231,10 @@ function SelectSensor() {
 }
 
 function onBatchCommand(e, record) {
-    if (e == 'Delete') {
+    if (e === 'Delete') {
         DirectCall.ConfirmDeleteBatch(record.get('Id'), { eventMask: { showMask: true}});
     }
-    else if (e == 'Move')
+    else if (e === 'Move')
     {
         DirectCall.ConfirmMoveBatch(record.get('Id'),{eventMask: {showMask:true}});
     }
@@ -245,7 +245,7 @@ function prepareToolbarCommand (grid, toolbar, rowIndex, record)
     var moveButton = toolbar.items.get(0);
     var deleteButton = toolbar.items.get(1);
 
-    if (record.data.Status == 0) {
+    if (record.data.Status === 0) {
         moveButton.setDisabled(true);
         moveButton.setTooltip("Disabled");
     }
@@ -257,7 +257,7 @@ function prepareToolbarCommand (grid, toolbar, rowIndex, record)
 
 function prepareToolbarTransformation(grid, toolbar, rowIndex, record)
 {
-	if (record.get("StatusID") != "edb0a37c-f68d-4693-8ba6-d14d1b4fabe8")
+	if (record.get("StatusID") !== "edb0a37c-f68d-4693-8ba6-d14d1b4fabe8")
 	{
 		toolbar.items.itemAt(2).hide();
 	}
@@ -267,7 +267,7 @@ function prepareToolbarTransformation(grid, toolbar, rowIndex, record)
 //var rendererData = function (value, metadata, record, rowIndex, colIndex, store)
 //{
 //	//edb0a37c-f68d-4693-8ba6-d14d1b4fabe8	QA-99	Duplicate of a previous empty value	Duplicate of a previous empty value
-////	if (record.get("StatusID") != "edb0a37c-f68d-4693-8ba6-d14d1b4fabe8")
+////	if (record.get("StatusID") !== "edb0a37c-f68d-4693-8ba6-d14d1b4fabe8")
 ////	{
 ////		//metadata.style += "background-color: #FFFAC8;";
 ////	}

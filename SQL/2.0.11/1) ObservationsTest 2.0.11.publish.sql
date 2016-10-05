@@ -40,14 +40,6 @@ USE [$(DatabaseName)];
 
 
 GO
-/*
-The type for column FixedTime in table [dbo].[SchemaColumn] is currently  VARCHAR (50) NULL but is being changed to  INT NULL. Data loss could occur.
-*/
-
-IF EXISTS (select top 1 1 from [dbo].[SchemaColumn])
-    RAISERROR (N'Rows were detected. The schema update is terminating because data loss might occur.', 16, 127) WITH NOWAIT
-
-GO
 PRINT N'Dropping [dbo].[DF_ImportBatch_ID]...';
 
 
@@ -77,46 +69,6 @@ PRINT N'Dropping [dbo].[DF_ImportBatch_UpdatedAt]...';
 
 GO
 ALTER TABLE [dbo].[ImportBatch] DROP CONSTRAINT [DF_ImportBatch_UpdatedAt];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_SchemaColumn_ID]...';
-
-
-GO
-ALTER TABLE [dbo].[SchemaColumn] DROP CONSTRAINT [DF_SchemaColumn_ID];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_SchemaColumn_AddedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[SchemaColumn] DROP CONSTRAINT [DF_SchemaColumn_AddedAt];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_SchemaColumn_UpdatedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[SchemaColumn] DROP CONSTRAINT [DF_SchemaColumn_UpdatedAt];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Progress_ImportBatch]...';
-
-
-GO
-ALTER TABLE [dbo].[Progress] DROP CONSTRAINT [FK_Progress_ImportBatch];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataLog_ImportBatch]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_ImportBatch];
 
 
 GO
@@ -152,187 +104,27 @@ ALTER TABLE [dbo].[ImportBatch] DROP CONSTRAINT [FK_ImportBatch_StatusReason];
 
 
 GO
+PRINT N'Dropping [dbo].[FK_Progress_ImportBatch]...';
+
+
+GO
+ALTER TABLE [dbo].[Progress] DROP CONSTRAINT [FK_Progress_ImportBatch];
+
+
+GO
+PRINT N'Dropping [dbo].[FK_DataLog_ImportBatch]...';
+
+
+GO
+ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_ImportBatch];
+
+
+GO
 PRINT N'Dropping [dbo].[FK_Observation_ImportBatch]...';
 
 
 GO
 ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_ImportBatch];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_SchemaColumn_DataSchema]...';
-
-
-GO
-ALTER TABLE [dbo].[SchemaColumn] DROP CONSTRAINT [FK_SchemaColumn_DataSchema];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_SchemaColumn_SchemaColumnType]...';
-
-
-GO
-ALTER TABLE [dbo].[SchemaColumn] DROP CONSTRAINT [FK_SchemaColumn_SchemaColumnType];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_SchemaColumn_Phenomenon]...';
-
-
-GO
-ALTER TABLE [dbo].[SchemaColumn] DROP CONSTRAINT [FK_SchemaColumn_Phenomenon];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_SchemaColumn_PhenomenonOffering]...';
-
-
-GO
-ALTER TABLE [dbo].[SchemaColumn] DROP CONSTRAINT [FK_SchemaColumn_PhenomenonOffering];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_SchemaColumn_PhenomenonUOM]...';
-
-
-GO
-ALTER TABLE [dbo].[SchemaColumn] DROP CONSTRAINT [FK_SchemaColumn_PhenomenonUOM];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_SchemaColumn_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[SchemaColumn] DROP CONSTRAINT [FK_SchemaColumn_aspnet_Users];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Organisation_Instrument_OrganisationRole]...';
-
-
-GO
-ALTER TABLE [dbo].[Organisation_Instrument] DROP CONSTRAINT [FK_Organisation_Instrument_OrganisationRole];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Organisation_Site_OrganisationRole]...';
-
-
-GO
-ALTER TABLE [dbo].[Organisation_Site] DROP CONSTRAINT [FK_Organisation_Site_OrganisationRole];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Organisation_Station_OrganisationRole]...';
-
-
-GO
-ALTER TABLE [dbo].[Organisation_Station] DROP CONSTRAINT [FK_Organisation_Station_OrganisationRole];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_OrganisationRole_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[OrganisationRole] DROP CONSTRAINT [FK_OrganisationRole_aspnet_Users];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Instrument_Sensor_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[Instrument_Sensor] DROP CONSTRAINT [FK_Instrument_Sensor_Sensor];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Progress_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[Progress] DROP CONSTRAINT [FK_Progress_Sensor];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataSourceTransformation_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[DataSourceTransformation] DROP CONSTRAINT [FK_DataSourceTransformation_Sensor];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataLog_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_Sensor];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Observation_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_Sensor];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Sensor_DataSchema]...';
-
-
-GO
-ALTER TABLE [dbo].[Sensor] DROP CONSTRAINT [FK_Sensor_DataSchema];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Sensor_DataSource]...';
-
-
-GO
-ALTER TABLE [dbo].[Sensor] DROP CONSTRAINT [FK_Sensor_DataSource];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Sensor_Phenomenon]...';
-
-
-GO
-ALTER TABLE [dbo].[Sensor] DROP CONSTRAINT [FK_Sensor_Phenomenon];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Sensor_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[Sensor] DROP CONSTRAINT [FK_Sensor_aspnet_Users];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Sensor_Station]...';
-
-
-GO
-ALTER TABLE [dbo].[Sensor] DROP CONSTRAINT [FK_Sensor_Station];
-
-
-GO
-PRINT N'Dropping [dbo].[UX_SchemaColumn_Name]...';
-
-
-GO
-ALTER TABLE [dbo].[SchemaColumn] DROP CONSTRAINT [UX_SchemaColumn_Name];
-
-
-GO
-PRINT N'Dropping [dbo].[UX_SchemaColumn_Number]...';
-
-
-GO
-ALTER TABLE [dbo].[SchemaColumn] DROP CONSTRAINT [UX_SchemaColumn_Number];
 
 
 GO
@@ -460,7 +252,7 @@ CREATE NONCLUSTERED INDEX [IX_ImportBatch_StatusReasonID]
 
 
 GO
-PRINT N'Starting rebuilding table [dbo].[OrganisationRole]...';
+PRINT N'Creating [dbo].[SchemaColumn]...';
 
 
 GO
@@ -468,99 +260,8 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-BEGIN TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-
-SET XACT_ABORT ON;
-
-CREATE TABLE [dbo].[tmp_ms_xx_OrganisationRole] (
-    [ID]          UNIQUEIDENTIFIER CONSTRAINT [DF_OrganisationRole_ID] DEFAULT newid() NOT NULL,
-    [Code]        VARCHAR (50)     NOT NULL,
-    [Name]        VARCHAR (150)    NOT NULL,
-    [Description] VARCHAR (5000)   NULL,
-    [UserId]      UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt]     DATETIME         CONSTRAINT [DF_OrganisationRole_AddedAt] DEFAULT GetDate() NULL,
-    [UpdatedAt]   DATETIME         CONSTRAINT [DF_OrganisationRole_UpdatedAt] DEFAULT GetDate() NULL,
-    CONSTRAINT [tmp_ms_xx_constraint_PK_OrganisationRole1] PRIMARY KEY NONCLUSTERED ([ID] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_OrganisationRole_Code1] UNIQUE NONCLUSTERED ([Code] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_OrganisationRole_Name1] UNIQUE NONCLUSTERED ([Name] ASC)
-);
-
-CREATE CLUSTERED INDEX [tmp_ms_xx_index_CX_OrganisationRole1]
-    ON [dbo].[tmp_ms_xx_OrganisationRole]([AddedAt] ASC);
-
-IF EXISTS (SELECT TOP 1 1 
-           FROM   [dbo].[OrganisationRole])
-    BEGIN
-        INSERT INTO [dbo].[tmp_ms_xx_OrganisationRole] ([ID], [Code], [Name], [Description], [UserId])
-        SELECT [ID],
-               [Code],
-               [Name],
-               [Description],
-               [UserId]
-        FROM   [dbo].[OrganisationRole];
-    END
-
-DROP TABLE [dbo].[OrganisationRole];
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_OrganisationRole]', N'OrganisationRole';
-
-EXECUTE sp_rename N'[dbo].[OrganisationRole].[tmp_ms_xx_index_CX_OrganisationRole1]', N'CX_OrganisationRole', N'INDEX';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_OrganisationRole1]', N'PK_OrganisationRole', N'OBJECT';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_OrganisationRole_Code1]', N'UX_OrganisationRole_Code', N'OBJECT';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_OrganisationRole_Name1]', N'UX_OrganisationRole_Name', N'OBJECT';
-
-COMMIT TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Creating [dbo].[OrganisationRole].[IX_OrganisationRole_UserId]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_OrganisationRole_UserId]
-    ON [dbo].[OrganisationRole]([UserId] ASC);
-
-
-GO
-PRINT N'Starting rebuilding table [dbo].[SchemaColumn]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-BEGIN TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-
-SET XACT_ABORT ON;
-
-CREATE TABLE [dbo].[tmp_ms_xx_SchemaColumn] (
-    [ID]                   UNIQUEIDENTIFIER CONSTRAINT [DF_SchemaColumn_ID] DEFAULT newid() NOT NULL,
+CREATE TABLE [dbo].[SchemaColumn] (
+    [ID]                   UNIQUEIDENTIFIER NOT NULL,
     [DataSchemaID]         UNIQUEIDENTIFIER NOT NULL,
     [Number]               INT              NOT NULL,
     [Name]                 VARCHAR (100)    NOT NULL,
@@ -573,62 +274,25 @@ CREATE TABLE [dbo].[tmp_ms_xx_SchemaColumn] (
     [EmptyValue]           VARCHAR (50)     NULL,
     [FixedTime]            INT              NULL,
     [UserId]               UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt]              DATETIME         CONSTRAINT [DF_SchemaColumn_AddedAt] DEFAULT GetDate() NULL,
-    [UpdatedAt]            DATETIME         CONSTRAINT [DF_SchemaColumn_UpdatedAt] DEFAULT GetDate() NULL,
-    CONSTRAINT [tmp_ms_xx_constraint_PK_SchemaColumn1] PRIMARY KEY NONCLUSTERED ([ID] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_SchemaColumn_DataSchemaID_Number1] UNIQUE NONCLUSTERED ([DataSchemaID] ASC, [Number] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_SchemaColumn_DataSchemaID_Name1] UNIQUE NONCLUSTERED ([DataSchemaID] ASC, [Name] ASC)
+    [AddedAt]              DATETIME         NULL,
+    [UpdatedAt]            DATETIME         NULL,
+    CONSTRAINT [PK_SchemaColumn] PRIMARY KEY NONCLUSTERED ([ID] ASC),
+    CONSTRAINT [UX_SchemaColumn_DataSchemaID_Name] UNIQUE NONCLUSTERED ([DataSchemaID] ASC, [Name] ASC),
+    CONSTRAINT [UX_SchemaColumn_DataSchemaID_Number] UNIQUE NONCLUSTERED ([DataSchemaID] ASC, [Number] ASC)
 );
 
-CREATE CLUSTERED INDEX [tmp_ms_xx_index_CX_SchemaColumn1]
-    ON [dbo].[tmp_ms_xx_SchemaColumn]([AddedAt] ASC);
-
-IF EXISTS (SELECT TOP 1 1 
-           FROM   [dbo].[SchemaColumn])
-    BEGIN
-        INSERT INTO [dbo].[tmp_ms_xx_SchemaColumn] ([AddedAt], [ID], [DataSchemaID], [Number], [Name], [SchemaColumnTypeID], [Width], [Format], [PhenomenonID], [PhenomenonOfferingID], [PhenomenonUOMID], [FixedTime], [EmptyValue], [UserId], [UpdatedAt])
-        SELECT   [AddedAt],
-                 [ID],
-                 [DataSchemaID],
-                 [Number],
-                 [Name],
-                 [SchemaColumnTypeID],
-                 [Width],
-                 [Format],
-                 [PhenomenonID],
-                 [PhenomenonOfferingID],
-                 [PhenomenonUOMID],
-                 [FixedTime],
-                 [EmptyValue],
-                 [UserId],
-                 [UpdatedAt]
-        FROM     [dbo].[SchemaColumn]
-        ORDER BY [AddedAt] ASC;
-    END
-
-DROP TABLE [dbo].[SchemaColumn];
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_SchemaColumn]', N'SchemaColumn';
-
-EXECUTE sp_rename N'[dbo].[SchemaColumn].[tmp_ms_xx_index_CX_SchemaColumn1]', N'CX_SchemaColumn', N'INDEX';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_SchemaColumn1]', N'PK_SchemaColumn', N'OBJECT';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_SchemaColumn_DataSchemaID_Number1]', N'UX_SchemaColumn_DataSchemaID_Number', N'OBJECT';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_SchemaColumn_DataSchemaID_Name1]', N'UX_SchemaColumn_DataSchemaID_Name', N'OBJECT';
-
-COMMIT TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-
 
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+PRINT N'Creating [dbo].[SchemaColumn].[CX_SchemaColumn]...';
+
+
+GO
+CREATE CLUSTERED INDEX [CX_SchemaColumn]
+    ON [dbo].[SchemaColumn]([AddedAt] ASC);
 
 
 GO
@@ -686,201 +350,100 @@ CREATE NONCLUSTERED INDEX [IX_SchemaColumn_UserId]
 
 
 GO
-PRINT N'Starting rebuilding table [dbo].[Sensor]...';
+PRINT N'Creating [dbo].[SchemaColumnType]...';
 
 
 GO
-BEGIN TRANSACTION;
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
-SET XACT_ABORT ON;
-
-CREATE TABLE [dbo].[tmp_ms_xx_Sensor] (
-    [ID]           UNIQUEIDENTIFIER CONSTRAINT [DF_Sensor_ID] DEFAULT (newid()) NOT NULL,
-    [Code]         VARCHAR (50)     NOT NULL,
-    [Name]         VARCHAR (150)    NOT NULL,
-    [Description]  VARCHAR (5000)   NULL,
-    [Url]          VARCHAR (250)    NULL,
-    [StationID]    UNIQUEIDENTIFIER NOT NULL,
-    [PhenomenonID] UNIQUEIDENTIFIER NOT NULL,
-    [DataSourceID] UNIQUEIDENTIFIER NOT NULL,
-    [DataSchemaID] UNIQUEIDENTIFIER NULL,
-    [UserId]       UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt]      DATETIME         CONSTRAINT [DF_Sensor_AddedAt] DEFAULT GetDate() NULL,
-    [UpdatedAt]    DATETIME         CONSTRAINT [DF_Sensor_UpdatedAt] DEFAULT GetDate() NULL,
-    CONSTRAINT [tmp_ms_xx_constraint_PK_Sensor1] PRIMARY KEY NONCLUSTERED ([ID] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_Sensor_Code1] UNIQUE NONCLUSTERED ([Code] ASC)
+GO
+CREATE TABLE [dbo].[SchemaColumnType] (
+    [ID]          UNIQUEIDENTIFIER NOT NULL,
+    [Name]        VARCHAR (50)     NOT NULL,
+    [Description] VARCHAR (250)    NOT NULL,
+    [UserId]      UNIQUEIDENTIFIER NOT NULL,
+    [AddedAt]     DATETIME         NULL,
+    [UpdatedAt]   DATETIME         NULL,
+    CONSTRAINT [PK_SchemaColumnType] PRIMARY KEY NONCLUSTERED ([ID] ASC),
+    CONSTRAINT [UX_SchemaColumnType] UNIQUE NONCLUSTERED ([Name] ASC)
 );
 
-CREATE CLUSTERED INDEX [tmp_ms_xx_index_CX_Sensor1]
-    ON [dbo].[tmp_ms_xx_Sensor]([AddedAt] ASC);
 
-IF EXISTS (SELECT TOP 1 1 
-           FROM   [dbo].[Sensor])
-    BEGIN
-        INSERT INTO [dbo].[tmp_ms_xx_Sensor] ([ID], [Code], [Name], [Description], [Url], [StationID], [PhenomenonID], [DataSourceID], [DataSchemaID], [UserId])
-        SELECT [ID],
-               [Code],
-               [Name],
-               [Description],
-               [Url],
-               [StationID],
-               [PhenomenonID],
-               [DataSourceID],
-               [DataSchemaID],
-               [UserId]
-        FROM   [dbo].[Sensor];
-    END
-
-DROP TABLE [dbo].[Sensor];
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_Sensor]', N'Sensor';
-
-EXECUTE sp_rename N'[dbo].[Sensor].[tmp_ms_xx_index_CX_Sensor1]', N'CX_Sensor', N'INDEX';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_Sensor1]', N'PK_Sensor', N'OBJECT';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Sensor_Code1]', N'UX_Sensor_Code', N'OBJECT';
-
-COMMIT TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Creating [dbo].[Sensor].[IX_Sensor_StationID]...';
+PRINT N'Creating [dbo].[SchemaColumnType].[CX_SchemaColumnType]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Sensor_StationID]
-    ON [dbo].[Sensor]([StationID] ASC);
+CREATE CLUSTERED INDEX [CX_SchemaColumnType]
+    ON [dbo].[SchemaColumnType]([AddedAt] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Sensor].[IX_Sensor_PhenomenonID]...';
+PRINT N'Creating [dbo].[SchemaColumnType].[IX_SchemaColumnType_UserId]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Sensor_PhenomenonID]
-    ON [dbo].[Sensor]([PhenomenonID] ASC);
+CREATE NONCLUSTERED INDEX [IX_SchemaColumnType_UserId]
+    ON [dbo].[SchemaColumnType]([UserId] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Sensor].[IX_Sensor_DataSourceID]...';
+PRINT N'Creating [dbo].[DF_SchemaColumn_ID]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Sensor_DataSourceID]
-    ON [dbo].[Sensor]([DataSourceID] ASC);
+ALTER TABLE [dbo].[SchemaColumn]
+    ADD CONSTRAINT [DF_SchemaColumn_ID] DEFAULT newid() FOR [ID];
 
 
 GO
-PRINT N'Creating [dbo].[Sensor].[IX_Sensor_DataSchemaID]...';
+PRINT N'Creating [dbo].[DF_SchemaColumn_AddedAt]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Sensor_DataSchemaID]
-    ON [dbo].[Sensor]([DataSchemaID] ASC);
+ALTER TABLE [dbo].[SchemaColumn]
+    ADD CONSTRAINT [DF_SchemaColumn_AddedAt] DEFAULT GetDate() FOR [AddedAt];
 
 
 GO
-PRINT N'Creating [dbo].[Sensor].[IX_Sensor_UserId]...';
+PRINT N'Creating [dbo].[DF_SchemaColumn_UpdatedAt]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Sensor_UserId]
-    ON [dbo].[Sensor]([UserId] ASC);
+ALTER TABLE [dbo].[SchemaColumn]
+    ADD CONSTRAINT [DF_SchemaColumn_UpdatedAt] DEFAULT GetDate() FOR [UpdatedAt];
 
 
 GO
-PRINT N'Creating [dbo].[DF_Instrument_AddedAt]...';
+PRINT N'Creating [dbo].[DF_SchemaColumnType_ID]...';
 
 
 GO
-ALTER TABLE [dbo].[Instrument]
-    ADD CONSTRAINT [DF_Instrument_AddedAt] DEFAULT GetDate() FOR [AddedAt];
+ALTER TABLE [dbo].[SchemaColumnType]
+    ADD CONSTRAINT [DF_SchemaColumnType_ID] DEFAULT newid() FOR [ID];
 
 
 GO
-PRINT N'Creating [dbo].[DF_Instrument_ID]...';
+PRINT N'Creating [dbo].[DF_SchemaColumnType_AddedAt]...';
 
 
 GO
-ALTER TABLE [dbo].[Instrument]
-    ADD CONSTRAINT [DF_Instrument_ID] DEFAULT newid() FOR [ID];
+ALTER TABLE [dbo].[SchemaColumnType]
+    ADD CONSTRAINT [DF_SchemaColumnType_AddedAt] DEFAULT GetDate() FOR [AddedAt];
 
 
 GO
-PRINT N'Creating [dbo].[DF_Instrument_UpdatedAt]...';
+PRINT N'Creating [dbo].[DF_SchemaColumnType_UpdatedAt]...';
 
 
 GO
-ALTER TABLE [dbo].[Instrument]
-    ADD CONSTRAINT [DF_Instrument_UpdatedAt] DEFAULT GetDate() FOR [UpdatedAt];
-
-
-GO
-PRINT N'Creating [dbo].[DF_Site_AddedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[Site]
-    ADD CONSTRAINT [DF_Site_AddedAt] DEFAULT GetDate() FOR [AddedAt];
-
-
-GO
-PRINT N'Creating [dbo].[DF_Site_ID]...';
-
-
-GO
-ALTER TABLE [dbo].[Site]
-    ADD CONSTRAINT [DF_Site_ID] DEFAULT newid() FOR [ID];
-
-
-GO
-PRINT N'Creating [dbo].[DF_Site_UpdatedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[Site]
-    ADD CONSTRAINT [DF_Site_UpdatedAt] DEFAULT GetDate() FOR [UpdatedAt];
-
-
-GO
-PRINT N'Creating [dbo].[DF_Station_AddedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[Station]
-    ADD CONSTRAINT [DF_Station_AddedAt] DEFAULT GetDate() FOR [AddedAt];
-
-
-GO
-PRINT N'Creating [dbo].[DF_Station_UpdatedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[Station]
-    ADD CONSTRAINT [DF_Station_UpdatedAt] DEFAULT GetDate() FOR [UpdatedAt];
-
-
-GO
-PRINT N'Creating [dbo].[FK_Progress_ImportBatch]...';
-
-
-GO
-ALTER TABLE [dbo].[Progress] WITH NOCHECK
-    ADD CONSTRAINT [FK_Progress_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataLog_ImportBatch]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]);
+ALTER TABLE [dbo].[SchemaColumnType]
+    ADD CONSTRAINT [DF_SchemaColumnType_UpdatedAt] DEFAULT GetDate() FOR [UpdatedAt];
 
 
 GO
@@ -917,6 +480,24 @@ PRINT N'Creating [dbo].[FK_ImportBatch_StatusReason]...';
 GO
 ALTER TABLE [dbo].[ImportBatch] WITH NOCHECK
     ADD CONSTRAINT [FK_ImportBatch_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_Progress_ImportBatch]...';
+
+
+GO
+ALTER TABLE [dbo].[Progress] WITH NOCHECK
+    ADD CONSTRAINT [FK_Progress_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_DataLog_ImportBatch]...';
+
+
+GO
+ALTER TABLE [dbo].[DataLog] WITH NOCHECK
+    ADD CONSTRAINT [FK_DataLog_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]);
 
 
 GO
@@ -983,129 +564,12 @@ ALTER TABLE [dbo].[SchemaColumn] WITH NOCHECK
 
 
 GO
-PRINT N'Creating [dbo].[FK_Organisation_Instrument_OrganisationRole]...';
+PRINT N'Creating [dbo].[FK_SchemaColumnType_aspnet_Users]...';
 
 
 GO
-ALTER TABLE [dbo].[Organisation_Instrument] WITH NOCHECK
-    ADD CONSTRAINT [FK_Organisation_Instrument_OrganisationRole] FOREIGN KEY ([OrganisationRoleID]) REFERENCES [dbo].[OrganisationRole] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Organisation_Site_OrganisationRole]...';
-
-
-GO
-ALTER TABLE [dbo].[Organisation_Site] WITH NOCHECK
-    ADD CONSTRAINT [FK_Organisation_Site_OrganisationRole] FOREIGN KEY ([OrganisationRoleID]) REFERENCES [dbo].[OrganisationRole] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Organisation_Station_OrganisationRole]...';
-
-
-GO
-ALTER TABLE [dbo].[Organisation_Station] WITH NOCHECK
-    ADD CONSTRAINT [FK_Organisation_Station_OrganisationRole] FOREIGN KEY ([OrganisationRoleID]) REFERENCES [dbo].[OrganisationRole] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_OrganisationRole_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[OrganisationRole] WITH NOCHECK
-    ADD CONSTRAINT [FK_OrganisationRole_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Instrument_Sensor_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[Instrument_Sensor] WITH NOCHECK
-    ADD CONSTRAINT [FK_Instrument_Sensor_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Progress_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[Progress] WITH NOCHECK
-    ADD CONSTRAINT [FK_Progress_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataSourceTransformation_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[DataSourceTransformation] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataSourceTransformation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataLog_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Observation_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[Observation] WITH NOCHECK
-    ADD CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Sensor_DataSchema]...';
-
-
-GO
-ALTER TABLE [dbo].[Sensor] WITH NOCHECK
-    ADD CONSTRAINT [FK_Sensor_DataSchema] FOREIGN KEY ([DataSchemaID]) REFERENCES [dbo].[DataSchema] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Sensor_DataSource]...';
-
-
-GO
-ALTER TABLE [dbo].[Sensor] WITH NOCHECK
-    ADD CONSTRAINT [FK_Sensor_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Sensor_Phenomenon]...';
-
-
-GO
-ALTER TABLE [dbo].[Sensor] WITH NOCHECK
-    ADD CONSTRAINT [FK_Sensor_Phenomenon] FOREIGN KEY ([PhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Sensor_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[Sensor] WITH NOCHECK
-    ADD CONSTRAINT [FK_Sensor_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_Sensor_Station]...';
-
-
-GO
-ALTER TABLE [dbo].[Sensor] WITH NOCHECK
-    ADD CONSTRAINT [FK_Sensor_Station] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]);
+ALTER TABLE [dbo].[SchemaColumnType] WITH NOCHECK
+    ADD CONSTRAINT [FK_SchemaColumnType_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
 
 
 GO
@@ -1207,7 +671,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Creating [dbo].[TR_OrganisationRole]...';
+PRINT N'Creating [dbo].[TR_SchemaColumnType_Insert]...';
 
 
 GO
@@ -1215,7 +679,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-CREATE TRIGGER [dbo].[TR_OrganisationRole] ON [dbo].[OrganisationRole]
+CREATE TRIGGER [dbo].[TR_SchemaColumnType_Insert] ON [dbo].[SchemaColumnType]
 FOR INSERT
 AS
 BEGIN
@@ -1227,7 +691,7 @@ BEGIN
         UpdatedAt = NULL
     from
         inserted ins
-        inner join OrganisationRole src
+        inner join SchemaColumnType src
             on (ins.ID = src.ID)
 END
 GO
@@ -1235,7 +699,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Creating [dbo].[TR_OrganisationRole_Update]...';
+PRINT N'Creating [dbo].[TR_SchemaColumnType_Update]...';
 
 
 GO
@@ -1243,7 +707,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-CREATE TRIGGER [dbo].[TR_OrganisationRole_Update] ON [dbo].[OrganisationRole]
+CREATE TRIGGER [dbo].[TR_SchemaColumnType_Update] ON [dbo].[SchemaColumnType]
 FOR UPDATE
 AS
 BEGIN
@@ -1255,55 +719,14 @@ BEGIN
         UpdatedAt = GETDATE()
     from
         inserted ins
-        inner join OrganisationRole src
+        inner join SchemaColumnType src
             on (ins.ID = src.ID)
 END
---< Added 2.0.8 20160718 TimPN
+--< Added 2.0.11 20160908 TimPN
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
-GO
-PRINT N'Creating [dbo].[TR_Sensor_Insert]...';
-
-
-GO
-CREATE TRIGGER [dbo].[TR_Sensor_Insert] ON [dbo].[Sensor]
-FOR INSERT
-AS
-BEGIN
-    SET NoCount ON
-    Update
-        src
-    set
-        AddedAt = GETDATE(),
-        UpdatedAt = NULL
-    from
-        inserted ins
-        inner join Sensor src
-            on (ins.ID = src.ID)
-END
-GO
-PRINT N'Creating [dbo].[TR_Sensor_Update]...';
-
-
-GO
-CREATE TRIGGER [dbo].[TR_Sensor_Update] ON [dbo].[Sensor]
-FOR UPDATE
-AS
-BEGIN
-    SET NoCount ON
-    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
-    Update
-        src
-    set
-        UpdatedAt = GETDATE()
-    from
-        inserted ins
-        inner join Sensor src
-            on (ins.ID = src.ID)
-END
---< Added 2.0.8 20160718 TimPN
 GO
 PRINT N'Refreshing [dbo].[progress_Progress_Resolved]...';
 
@@ -1345,203 +768,6 @@ INNER JOIN DataSource d
 INNER JOIN aspnet_Users u
   on b.UserId = u.UserId
 GO
-PRINT N'Refreshing [dbo].[vInstrumentOrganisation]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInstrumentOrganisation]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vOrganisationInstrument]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vOrganisationInstrument]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vOrganisationSite]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vOrganisationSite]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vOrganisationStation]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vOrganisationStation]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vSiteOrganisation]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSiteOrganisation]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vStationOrganisation]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vStationOrganisation]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Altering [dbo].[vSchemaColumn]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
---> Added 2.0.11 20160927 TimPN
-ALTER VIEW [dbo].[vSchemaColumn]
-AS 
-SELECT 
-  SchemaColumn.*,
-  SchemaColumnType.Name SchemaColumnTypeName, 
-  Phenomenon.Name PhenomenonName,
-  Offering.Name OfferingName,
-  UnitOfMeasure.Unit UnitOfMeasureUnit
-FROM 
-  SchemaColumn
-  inner join SchemaColumnType 
-    on (SchemaColumn.SchemaColumnTypeID = SchemaColumnType.ID)
-  left join Phenomenon
-    on (SchemaColumn.PhenomenonID = Phenomenon.ID)
-  left join PhenomenonOffering
-    on (SchemaColumn.PhenomenonOfferingID = PhenomenonOffering.ID)
-  left join Offering
-    on (PhenomenonOffering.OfferingID = Offering.ID)
-  left join PhenomenonUOM 
-    on (SchemaColumn.PhenomenonUOMID = PhenomenonUOM.ID)
-  left join  UnitOfMeasure
-    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
---< Added 2.0.11 20160927 TimPN
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vDataLog]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vDataLog]';
-
-
-GO
-PRINT N'Refreshing [dbo].[vDataQuery]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vDataQuery]';
-
-
-GO
-PRINT N'Refreshing [dbo].[vInstrumentSensor]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInstrumentSensor]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vInventory]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventory]';
-
-
-GO
-PRINT N'Refreshing [dbo].[vObservation]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vObservation]';
-
-
-GO
-PRINT N'Refreshing [dbo].[vSensor]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensor]';
-
-
-GO
-PRINT N'Refreshing [dbo].[vObservationRoles]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vObservationRoles]';
-
-
-GO
 PRINT N'Checking existing data against newly created constraints';
 
 
@@ -1550,10 +776,6 @@ USE [$(DatabaseName)];
 
 
 GO
-ALTER TABLE [dbo].[Progress] WITH CHECK CHECK CONSTRAINT [FK_Progress_ImportBatch];
-
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_ImportBatch];
-
 ALTER TABLE [dbo].[ImportBatch] WITH CHECK CHECK CONSTRAINT [FK_ImportBatch_aspnet_Users];
 
 ALTER TABLE [dbo].[ImportBatch] WITH CHECK CHECK CONSTRAINT [FK_ImportBatch_DataSource];
@@ -1561,6 +783,10 @@ ALTER TABLE [dbo].[ImportBatch] WITH CHECK CHECK CONSTRAINT [FK_ImportBatch_Data
 ALTER TABLE [dbo].[ImportBatch] WITH CHECK CHECK CONSTRAINT [FK_ImportBatch_Status];
 
 ALTER TABLE [dbo].[ImportBatch] WITH CHECK CHECK CONSTRAINT [FK_ImportBatch_StatusReason];
+
+ALTER TABLE [dbo].[Progress] WITH CHECK CHECK CONSTRAINT [FK_Progress_ImportBatch];
+
+ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_ImportBatch];
 
 ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_ImportBatch];
 
@@ -1576,33 +802,7 @@ ALTER TABLE [dbo].[SchemaColumn] WITH CHECK CHECK CONSTRAINT [FK_SchemaColumn_Ph
 
 ALTER TABLE [dbo].[SchemaColumn] WITH CHECK CHECK CONSTRAINT [FK_SchemaColumn_aspnet_Users];
 
-ALTER TABLE [dbo].[Organisation_Instrument] WITH CHECK CHECK CONSTRAINT [FK_Organisation_Instrument_OrganisationRole];
-
-ALTER TABLE [dbo].[Organisation_Site] WITH CHECK CHECK CONSTRAINT [FK_Organisation_Site_OrganisationRole];
-
-ALTER TABLE [dbo].[Organisation_Station] WITH CHECK CHECK CONSTRAINT [FK_Organisation_Station_OrganisationRole];
-
-ALTER TABLE [dbo].[OrganisationRole] WITH CHECK CHECK CONSTRAINT [FK_OrganisationRole_aspnet_Users];
-
-ALTER TABLE [dbo].[Instrument_Sensor] WITH CHECK CHECK CONSTRAINT [FK_Instrument_Sensor_Sensor];
-
-ALTER TABLE [dbo].[Progress] WITH CHECK CHECK CONSTRAINT [FK_Progress_Sensor];
-
-ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_Sensor];
-
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_Sensor];
-
-ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_Sensor];
-
-ALTER TABLE [dbo].[Sensor] WITH CHECK CHECK CONSTRAINT [FK_Sensor_DataSchema];
-
-ALTER TABLE [dbo].[Sensor] WITH CHECK CHECK CONSTRAINT [FK_Sensor_DataSource];
-
-ALTER TABLE [dbo].[Sensor] WITH CHECK CHECK CONSTRAINT [FK_Sensor_Phenomenon];
-
-ALTER TABLE [dbo].[Sensor] WITH CHECK CHECK CONSTRAINT [FK_Sensor_aspnet_Users];
-
-ALTER TABLE [dbo].[Sensor] WITH CHECK CHECK CONSTRAINT [FK_Sensor_Station];
+ALTER TABLE [dbo].[SchemaColumnType] WITH CHECK CHECK CONSTRAINT [FK_SchemaColumnType_aspnet_Users];
 
 
 GO
