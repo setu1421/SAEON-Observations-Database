@@ -198,8 +198,159 @@
                     </ext:Panel>
                 </Center>
                 <South Collapsible="true" Split="true" MinHeight="250">
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" ActiveTabIndex="2" TabPosition="Top" Border="false" ClientIDMode="Static">
+                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
+                            <ext:Panel ID="pnlInstruments" runat="server" Title="Instruments" Layout="FitLayout"
+                                Height="200" ClientIDMode="Static">
+                                <TopBar>
+                                    <ext:Toolbar ID="Toolbar2" runat="server">
+                                        <Items>
+                                            <ext:Button ID="btnInstrumentLinkAdd" runat="server" Icon="LinkAdd" Text="Link Instrument" ClientIDMode="Static">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
+                                                </ToolTips>
+                                                <Listeners>
+                                                    <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{InstrumentLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
+                                                </Listeners>
+                                            </ext:Button>
+                                            <%-- 
+                                            <ext:Button ID="btnAddInstrument" runat="server" Icon="Add" Text="Add Instrument">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="AddInstrumentClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            --%>
+                                        </Items>
+                                    </ext:Toolbar>
+                                </TopBar>
+                                <Items>
+                                    <ext:GridPanel ID="InstrumentLinksGrid" runat="server" Border="false" ClientIDMode="Static">
+                                        <Store>
+                                            <ext:Store ID="InstrumentLinksGridStore" runat="server" OnRefreshData="InstrumentLinksGridStore_RefreshData">
+                                                <Proxy>
+                                                    <ext:PageProxy />
+                                                </Proxy>
+                                                <Reader>
+                                                    <ext:JsonReader IDProperty="Id">
+                                                        <Fields>
+                                                            <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="InstrumentID" Type="Auto" />
+                                                            <ext:RecordField Name="InstrumentCode" Type="Auto" />
+                                                            <ext:RecordField Name="InstrumentName" Type="Auto" />
+                                                            <ext:RecordField Name="StartDate" Type="Date" />
+                                                            <ext:RecordField Name="EndDate" Type="Date" />
+                                                        </Fields>
+                                                    </ext:JsonReader>
+                                                </Reader>
+                                                <BaseParams>
+                                                    <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection() ? #{StationsGrid}.getSelectionModel().getSelected().id : -1"
+                                                        Mode="Raw" />
+                                                </BaseParams>
+                                            </ext:Store>
+                                        </Store>
+                                        <ColumnModel ID="ColumnModel2" runat="server">
+                                            <Columns>
+                                                <ext:Column Header="Code" DataIndex="InstrumentCode" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="InstrumentName" Width="200" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:CommandColumn Width="150">
+                                                    <Commands>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
+                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
+                                                    </Commands>
+                                                </ext:CommandColumn>
+                                            </Columns>
+                                        </ColumnModel>
+                                        <SelectionModel>
+                                            <ext:RowSelectionModel ID="RowSelectionModel2" runat="server" SingleSelect="true">
+                                            </ext:RowSelectionModel>
+                                        </SelectionModel>
+                                        <LoadMask ShowMask="true" />
+                                        <Listeners>
+                                            <Command Fn="OnInstrumentLinkCommand" />
+                                        </Listeners>
+                                    </ext:GridPanel>
+                                </Items>
+                            </ext:Panel>
+                            <ext:Panel ID="pnlProjects" runat="server" Title="Projects" Layout="FitLayout" ClientIDMode="Static">
+                                <TopBar>
+                                    <ext:Toolbar ID="Toolbar4" runat="server">
+                                        <Items>
+                                            <ext:Button ID="btnProjectLinkAdd" runat="server" Icon="LinkAdd" Text="Link Project" ClientIDMode="Static">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip6" runat="server" Html="Link" />
+                                                </ToolTips>
+                                                <Listeners>
+                                                    <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{ProjectLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
+                                                </Listeners>
+                                            </ext:Button>
+                                            <%-- 
+                                            <ext:Button ID="btnAddProject" runat="server" Icon="Add" Text="Add Project">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip7" runat="server" Html="Add" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="AddProjectClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            --%>
+                                        </Items>
+                                    </ext:Toolbar>
+                                </TopBar>
+                                <Items>
+                                    <ext:GridPanel ID="ProjectLinksGrid" runat="server" Border="false" ClientIDMode="Static">
+                                        <Store>
+                                            <ext:Store ID="ProjectLinksGridStore" runat="server" OnRefreshData="ProjectLinksGridStore_RefreshData">
+                                                <Proxy>
+                                                    <ext:PageProxy />
+                                                </Proxy>
+                                                <Reader>
+                                                    <ext:JsonReader IDProperty="Id">
+                                                        <Fields>
+                                                            <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="ProjectID" Type="Auto" />
+                                                            <ext:RecordField Name="ProjectCode" Type="Auto" />
+                                                            <ext:RecordField Name="ProjectName" Type="Auto" />
+                                                            <ext:RecordField Name="StartDate" Type="Date" />
+                                                            <ext:RecordField Name="EndDate" Type="Date" />
+                                                        </Fields>
+                                                    </ext:JsonReader>
+                                                </Reader>
+                                                <BaseParams>
+                                                    <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection() ? #{StationsGrid}.getSelectionModel().getSelected().id : -1"
+                                                        Mode="Raw" />
+                                                </BaseParams>
+                                            </ext:Store>
+                                        </Store>
+                                        <ColumnModel ID="ColumnModel3" runat="server">
+                                            <Columns>
+                                                <ext:Column Header="Code" DataIndex="ProjectCode" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="ProjectName" Width="200" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:CommandColumn Width="150">
+                                                    <Commands>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
+                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
+                                                    </Commands>
+                                                </ext:CommandColumn>
+                                            </Columns>
+                                        </ColumnModel>
+                                        <SelectionModel>
+                                            <ext:RowSelectionModel ID="RowSelectionModel4" runat="server" SingleSelect="true">
+                                            </ext:RowSelectionModel>
+                                        </SelectionModel>
+                                        <LoadMask ShowMask="true" />
+                                        <Listeners>
+                                            <Command Fn="OnProjectLinkCommand" />
+                                        </Listeners>
+                                    </ext:GridPanel>
+                                </Items>
+                            </ext:Panel>
                             <ext:Panel ID="pnlOrganisations" runat="server" Title="Organisations" Layout="FitLayout" Width="425" ClientIDMode="Static">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar3" runat="server">
@@ -282,157 +433,6 @@
                                         <LoadMask ShowMask="true" />
                                         <Listeners>
                                             <Command Fn="OnOrganisationLinkCommand" />
-                                        </Listeners>
-                                    </ext:GridPanel>
-                                </Items>
-                            </ext:Panel>
-                            <ext:Panel ID="pnlProjects" runat="server" Title="Projects" Layout="FitLayout" ClientIDMode="Static">
-                                <TopBar>
-                                    <ext:Toolbar ID="Toolbar4" runat="server">
-                                        <Items>
-                                            <ext:Button ID="btnProjectLinkAdd" runat="server" Icon="LinkAdd" Text="Link Project" ClientIDMode="Static">
-                                                <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip6" runat="server" Html="Link" />
-                                                </ToolTips>
-                                                <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{ProjectLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
-                                                </Listeners>
-                                            </ext:Button>
-                                            <%-- 
-                                            <ext:Button ID="btnAddProject" runat="server" Icon="Add" Text="Add Project">
-                                                <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip7" runat="server" Html="Add" />
-                                                </ToolTips>
-                                                <DirectEvents>
-                                                    <Click OnEvent="AddProjectClick" />
-                                                </DirectEvents>
-                                            </ext:Button>
-                                            --%>
-                                        </Items>
-                                    </ext:Toolbar>
-                                </TopBar>
-                                <Items>
-                                    <ext:GridPanel ID="ProjectLinksGrid" runat="server" Border="false" ClientIDMode="Static">
-                                        <Store>
-                                            <ext:Store ID="ProjectLinksGridStore" runat="server" OnRefreshData="ProjectLinksGridStore_RefreshData">
-                                                <Proxy>
-                                                    <ext:PageProxy />
-                                                </Proxy>
-                                                <Reader>
-                                                    <ext:JsonReader IDProperty="Id">
-                                                        <Fields>
-                                                            <ext:RecordField Name="Id" Type="Auto" />
-                                                            <ext:RecordField Name="ProjectID" Type="Auto" />
-                                                            <ext:RecordField Name="ProjectCode" Type="Auto" />
-                                                            <ext:RecordField Name="ProjectName" Type="Auto" />
-                                                            <ext:RecordField Name="StartDate" Type="Date" />
-                                                            <ext:RecordField Name="EndDate" Type="Date" />
-                                                        </Fields>
-                                                    </ext:JsonReader>
-                                                </Reader>
-                                                <BaseParams>
-                                                    <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection() ? #{StationsGrid}.getSelectionModel().getSelected().id : -1"
-                                                        Mode="Raw" />
-                                                </BaseParams>
-                                            </ext:Store>
-                                        </Store>
-                                        <ColumnModel ID="ColumnModel3" runat="server">
-                                            <Columns>
-                                                <ext:Column Header="Code" DataIndex="ProjectCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="ProjectName" Width="200" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="150">
-                                                    <Commands>
-                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
-                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
-                                                    </Commands>
-                                                </ext:CommandColumn>
-                                            </Columns>
-                                        </ColumnModel>
-                                        <SelectionModel>
-                                            <ext:RowSelectionModel ID="RowSelectionModel4" runat="server" SingleSelect="true">
-                                            </ext:RowSelectionModel>
-                                        </SelectionModel>
-                                        <LoadMask ShowMask="true" />
-                                        <Listeners>
-                                            <Command Fn="OnProjectLinkCommand" />
-                                        </Listeners>
-                                    </ext:GridPanel>
-                                </Items>
-                            </ext:Panel>
-                            <ext:Panel ID="pnlInstruments" runat="server" Title="Instruments" Layout="FitLayout"
-                                Height="200" ClientIDMode="Static">
-                                <TopBar>
-                                    <ext:Toolbar ID="Toolbar2" runat="server">
-                                        <Items>
-                                            <ext:Button ID="btnInstrumentLinkAdd" runat="server" Icon="LinkAdd" Text="Link Instrument" ClientIDMode="Static">
-                                                <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
-                                                </ToolTips>
-                                                <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection()){#{InstrumentLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a station.')}" />
-                                                </Listeners>
-                                            </ext:Button>
-                                            <%-- 
-                                            <ext:Button ID="btnAddInstrument" runat="server" Icon="Add" Text="Add Instrument">
-                                                <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
-                                                </ToolTips>
-                                                <DirectEvents>
-                                                    <Click OnEvent="AddInstrumentClick" />
-                                                </DirectEvents>
-                                            </ext:Button>
-                                            --%>
-                                        </Items>
-                                    </ext:Toolbar>
-                                </TopBar>
-                                <Items>
-                                    <ext:GridPanel ID="InstrumentLinksGrid" runat="server" Border="false" ClientIDMode="Static">
-                                        <Store>
-                                            <ext:Store ID="InstrumentLinksGridStore" runat="server" OnRefreshData="InstrumentLinksGridStore_RefreshData">
-                                                <Proxy>
-                                                    <ext:PageProxy />
-                                                </Proxy>
-                                                <Reader>
-                                                    <ext:JsonReader IDProperty="Id">
-                                                        <Fields>
-                                                            <ext:RecordField Name="Id" Type="Auto" />
-                                                            <ext:RecordField Name="InstrumentID" Type="Auto" />
-                                                            <ext:RecordField Name="InstrumentCode" Type="Auto" />
-                                                            <ext:RecordField Name="InstrumentName" Type="Auto" />
-                                                            <ext:RecordField Name="StartDate" Type="Date" />
-                                                            <ext:RecordField Name="EndDate" Type="Date" />
-                                                        </Fields>
-                                                    </ext:JsonReader>
-                                                </Reader>
-                                                <BaseParams>
-                                                    <ext:Parameter Name="StationID" Value="Ext.getCmp('#{StationsGrid}') && #{StationsGrid}.getSelectionModel().hasSelection() ? #{StationsGrid}.getSelectionModel().getSelected().id : -1"
-                                                        Mode="Raw" />
-                                                </BaseParams>
-                                            </ext:Store>
-                                        </Store>
-                                        <ColumnModel ID="ColumnModel2" runat="server">
-                                            <Columns>
-                                                <ext:Column Header="Code" DataIndex="InstrumentCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="InstrumentName" Width="200" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="150">
-                                                    <Commands>
-                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
-                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
-                                                    </Commands>
-                                                </ext:CommandColumn>
-                                            </Columns>
-                                        </ColumnModel>
-                                        <SelectionModel>
-                                            <ext:RowSelectionModel ID="RowSelectionModel2" runat="server" SingleSelect="true">
-                                            </ext:RowSelectionModel>
-                                        </SelectionModel>
-                                        <LoadMask ShowMask="true" />
-                                        <Listeners>
-                                            <Command Fn="OnInstrumentLinkCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>

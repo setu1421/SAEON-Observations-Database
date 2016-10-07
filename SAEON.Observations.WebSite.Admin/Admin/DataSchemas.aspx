@@ -208,7 +208,7 @@
                                         <Items>
                                             <ext:Button ID="btnSchemaColumnAdd" runat="server" Icon="Add" Text="Add Column" ClientIDMode="Static">
                                                 <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip4" runat="server" Html="Link" />
+                                                    <ext:ToolTip ID="ToolTip4" runat="server" Html="Add" />
                                                 </ToolTips>
                                                 <Listeners>
                                                     <Click Handler="if(Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection()){#{SchemaColumnAddWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Data Schema.')}" />
@@ -267,12 +267,12 @@
                                                 <ext:Column Header="Name" DataIndex="Name" Width="200" />
                                                 <ext:Column Header="Type" DataIndex="SchemaColumnTypeName" Width="100" />
                                                 <ext:Column Header="Width" DataIndex="Width" Width="50" Hideable="true" />
-                                                <ext:Column Header="Format" DataIndex="Format" Width="50" />
+                                                <ext:Column Header="Format" DataIndex="Format" Width="75" />
                                                 <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                                 <ext:Column Header="Unit of measure" DataIndex="UnitOfMeasureUnit" Width="150" />
-                                                <ext:Column Header="Empty value" DataIndex="EmptyValue" Width="100" />
-                                                <ext:Column Header="Fixed time" DataIndex="FixedTime" Width="100" />
+                                                <ext:Column Header="Empty value" DataIndex="EmptyValue" Width="75" />
+                                                <ext:Column Header="Fixed time" DataIndex="FixedTime" Width="75" />
                                                 <ext:CommandColumn Width="200">
                                                     <PrepareToolbar Fn="PrepareSchemaColumnsToolbar" />
                                                     <Commands>
@@ -291,6 +291,82 @@
                                         <LoadMask ShowMask="true" />
                                         <Listeners>
                                             <Command Fn="OnSchemaColumnCommand" />
+                                        </Listeners>
+                                    </ext:GridPanel>
+                                </Items>
+                            </ext:Panel>
+                            <ext:Panel ID="Panel2" runat="server" Title="Data Sources" Layout="FitLayout" Height="200" ClientIDMode="Static">
+                                <TopBar>
+                                    <ext:Toolbar ID="Toolbar2" runat="server">
+                                        <Items>
+                                            <ext:Button ID="Button1" runat="server" Icon="Link" Text="Link Data Sources" ClientIDMode="Static">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
+                                                </ToolTips>
+                                                <Listeners>
+                                                    <Click Handler="if(Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection()){#{AvailableDataSourcesGridStore}.reload();#{AvailableDataSourcesWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Data Schema.')}" />
+                                                </Listeners>
+                                            </ext:Button>
+                                            <%-- 
+                                            <ext:Button ID="btnAddDataSource" runat="server" Icon="Add" Text="Add DataSource">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="AddDataSourceClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            --%>
+                                        </Items>
+                                    </ext:Toolbar>
+                                </TopBar>
+                                <Items>
+                                    <ext:GridPanel ID="DataSourcesGrid" runat="server" Border="false" ClientIDMode="Static">
+                                        <Store>
+                                            <ext:Store ID="DataSourcesGridStore" runat="server" OnRefreshData="DataSourcesGridStore_RefreshData">
+                                                <Proxy>
+                                                    <ext:PageProxy />
+                                                </Proxy>
+                                                <Reader>
+                                                    <ext:JsonReader IDProperty="Id">
+                                                        <Fields>
+                                                            <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="Code" Type="Auto" />
+                                                            <ext:RecordField Name="Name" Type="Auto" />
+                                                            <ext:RecordField Name="Url" Type="Auto" />
+                                                            <ext:RecordField Name="StartDate" Type="Date" />
+                                                            <ext:RecordField Name="LastUpdate" Type="Date" />
+                                                        </Fields>
+                                                    </ext:JsonReader>
+                                                </Reader>
+                                                <BaseParams>
+                                                    <ext:Parameter Name="DataSchemaID" Value="Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection() ? #{DataSchemasGrid}.getSelectionModel().getSelected().id : -1"
+                                                        Mode="Raw" />
+                                                </BaseParams>
+                                            </ext:Store>
+                                        </Store>
+                                        <ColumnModel ID="ColumnModel2" runat="server">
+                                            <Columns>
+                                                <ext:Column Header="Code" DataIndex="Code" Width="100" />
+                                                <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                                                <ext:Column Header="Url" DataIndex="Url" Width="100" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="Last Update" DataIndex="LastUpdate" Width="150" Format="dd MMM yyyy" />
+                                                <ext:CommandColumn Width="200">
+                                                    <Commands>
+                                                        <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />--%>
+                                                        <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="Delete" />
+                                                    </Commands>
+                                                </ext:CommandColumn>
+                                            </Columns>
+                                        </ColumnModel>
+                                        <SelectionModel>
+                                            <ext:RowSelectionModel ID="RowSelectionModel2" runat="server" SingleSelect="true">
+                                            </ext:RowSelectionModel>
+                                        </SelectionModel>
+                                        <LoadMask ShowMask="true" />
+                                        <Listeners>
+                                            <Command Fn="OnDataSourceCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>
@@ -479,7 +555,7 @@
                     </ext:Container>
                     <ext:Container ID="ctWidth" runat="server" LabelAlign="Top" Layout="Form" ClientIDMode="Static">
                         <Items>
-                            <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server" AllowBlank="false" EmptyText="Enter a width"  MsgTarget="Side"
+                            <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server" AllowBlank="false" EmptyText="Enter a width" MsgTarget="Side"
                                 FieldLabel="Width" AnchorHorizontal="95%" AllowDecimals="false" MinValue="1">
                             </ext:NumberField>
                         </Items>
@@ -494,7 +570,7 @@
                     </ext:Container>
                     <ext:Container ID="Container20" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore"  MsgTarget="Side" DisplayField="Name"
+                            <ext:ComboBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore" MsgTarget="Side" DisplayField="Name"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" FieldLabel="Phenomenon" DataIndex="PhenomenonID" EmptyText="Select a phenomenon" ValueNotFoundText="Select a phenomenon"
                                 AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
@@ -506,7 +582,7 @@
                     </ext:Container>
                     <ext:Container ID="Container21" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore"  MsgTarget="Side" DisplayField="OfferingName"
+                            <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore" MsgTarget="Side" DisplayField="OfferingName"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" FieldLabel="Offering" DataIndex="PhenomenonOfferingID" EmptyText="Select an offering" ValueNotFoundText="Select an offering"
                                 AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
@@ -515,7 +591,7 @@
                     </ext:Container>
                     <ext:Container ID="Container22" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="UnitOfMeasureStore"  MsgTarget="Side" DisplayField="UnitOfMeasureUnit"
+                            <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="UnitOfMeasureStore" MsgTarget="Side" DisplayField="UnitOfMeasureUnit"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" FieldLabel="Unit of measure" DataIndex="PhenomenonUOMID" EmptyText="Select a unit of measure" ValueNotFoundText="Select a unit of measure"
                                 AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
@@ -530,7 +606,7 @@
                     </ext:Container>
                     <ext:Container ID="Container15" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:TimeField ID="ttFixedTime" runat="server" DataIndex="FixedTime" FieldLabel="Fixed Time"  MsgTarget="Side"
+                            <ext:TimeField ID="ttFixedTime" runat="server" DataIndex="FixedTime" FieldLabel="Fixed Time" MsgTarget="Side"
                                 EmptyText="Please select" AnchorHorizontal="95%" AllowBlank="false"
                                 BlankText="Fixed Time is required" ClientIDMode="Static" Format="H:mm" Increment="60">
                                 <Triggers>
@@ -560,6 +636,60 @@
                 </Listeners>
             </ext:FormPanel>
         </Content>
+    </ext:Window>
+    <ext:Window ID="AvailableDataSourcesWindow" runat="server" Collapsible="false" Maximizable="false"
+        Title="Available DataSources" Width="750" Height="300" X="50" Y="50"
+        Layout="Fit" Hidden="true" ClientIDMode="Static">
+        <Listeners>
+            <Hide Fn="CloseAvailableDataSources" />
+        </Listeners>
+        <Items>
+            <ext:GridPanel ID="AvailableDataSourcesGrid" runat="server" Header="false" Border="false" ClientIDMode="Static">
+                <Store>
+                    <ext:Store ID="AvailableDataSourcesGridStore" runat="server" OnRefreshData="AvailableDataSourcesGridStore_RefreshData">
+                        <Proxy>
+                            <ext:PageProxy />
+                        </Proxy>
+                        <Reader>
+                            <ext:JsonReader IDProperty="Id">
+                                <Fields>
+                                    <ext:RecordField Name="Id" Type="Auto" />
+                                    <ext:RecordField Name="Code" Type="String" />
+                                    <ext:RecordField Name="Name" Type="String" />
+                                    <ext:RecordField Name="StartDate" Type="Date" />
+                                    <ext:RecordField Name="LastUpdate" Type="Date" />
+                                </Fields>
+                            </ext:JsonReader>
+                        </Reader>
+                        <BaseParams>
+                            <ext:Parameter Name="DataSchemaID" Value="Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection() ? #{DataSchemasGrid}.getSelectionModel().getSelected().id : -1"
+                                Mode="Raw" />
+                        </BaseParams>
+                    </ext:Store>
+                </Store>
+                <ColumnModel ID="ColumnModel3" runat="server">
+                    <Columns>
+                        <ext:Column Header="Code" DataIndex="Code" Width="200" />
+                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                        <ext:DateColumn Header="Last Update" DataIndex="LastUpdate" Width="100" Format="dd MMM yyyy" />
+                    </Columns>
+                </ColumnModel>
+                <LoadMask ShowMask="true" />
+                <SelectionModel>
+                    <ext:CheckboxSelectionModel ID="CheckboxSelectionModel2" runat="server" />
+                </SelectionModel>
+                <Buttons>
+                    <ext:Button ID="btnDataSourceLinksSave" runat="server" Text="Save" Icon="Accept" ClientIDMode="Static">
+                        <DirectEvents>
+                            <Click OnEvent="DataSourceLinksSave">
+                                <EventMask ShowMask="true" />
+                            </Click>
+                        </DirectEvents>
+                    </ext:Button>
+                </Buttons>
+            </ext:GridPanel>
+        </Items>
     </ext:Window>
 </asp:Content>
 

@@ -32,6 +32,7 @@ function New() {
 function MasterRowSelect(e, record) {
     if (pnlSouth.isVisible()) {
         SchemaColumnsGrid.getStore().reload();
+        DataSourcesGrid.getStore().reload();
     }
 }
 
@@ -63,5 +64,14 @@ function OnSchemaColumnCommand(e, record) {
     }
 }
 
+function CloseAvailableDataSources() {
+    AvailableDataSourcesGrid.selModel.clearSelections();
+}
+
+function OnDataSourceCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteDataSource(record.get('Id'), { eventMask: { showMask: true } });
+    }
+}
 
 

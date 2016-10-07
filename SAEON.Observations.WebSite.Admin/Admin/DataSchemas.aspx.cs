@@ -502,4 +502,114 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         }
     }
     #endregion
+
+    #region Data Sources
+    protected void DataSourcesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["DataSchemaID"] != null && e.Parameters["DataSchemaID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["DataSchemaID"].ToString());
+            try
+            {
+                DataSourceCollection col = new DataSourceCollection()
+                    .Where(DataSource.Columns.DataSchemaID, Id)
+                    .OrderByAsc(DataSource.Columns.Name)
+                    .Load();
+                DataSourcesGrid.GetStore().DataSource = col;
+                DataSourcesGrid.GetStore().DataBind();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "DataSchemas.DataSourceGridStore_RefreshData");
+                MessageBoxes.Error(ex, "Error", "Unable to refresh DataSources grid");
+            }
+        }
+    }
+
+    [DirectMethod]
+    public void ConfirmDeleteDataSource(Guid aID)
+    {
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteDataSource(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this Data Source?");
+    }
+
+    [DirectMethod]
+    public void DeleteDataSource(Guid aID)
+    {
+        try
+        {
+            DataSource dataSource = new DataSource(aID);
+            dataSource.DataSchemaID = null;
+            dataSource.Save();
+            Auditing.Log("DataSchemas.DeleteDataSource", new Dictionary<string, object> { { "ID", aID } });
+            DataSourcesGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DataSchemas.DeleteDataSource({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete DataSource");
+        }
+    }
+
+    protected void AvailableDataSourcesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        if (e.Parameters["DataSchemaID"] != null && e.Parameters["DataSchemaID"].ToString() != "-1")
+        {
+            Guid Id = Guid.Parse(e.Parameters["DataSchemaID"].ToString());
+            DataSourceCollection col = new Select()
+                .From(DataSource.Schema)
+                .Where(DataSource.IdColumn)
+                .NotIn(new Select(new string[] { DataSource.Columns.Id }).From(DataSource.Schema).Where(DataSource.DataSchemaIDColumn).IsEqualTo(Id))
+                .And(DataSource.DataSchemaIDColumn)
+                .IsNull()
+                .OrderAsc(DataSource.Columns.StartDate)
+                .OrderAsc(DataSource.Columns.Name)
+                .ExecuteAsCollection<DataSourceCollection>();
+            AvailableDataSourcesGrid.GetStore().DataSource = col;
+            AvailableDataSourcesGrid.GetStore().DataBind();
+        }
+    }
+
+    protected void DataSourceLinksSave(object sender, DirectEventArgs e)
+    {
+        RowSelectionModel sm = AvailableDataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel DataSchemaRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+
+        string DataSchemaID = DataSchemaRow.SelectedRecordID;
+        if (sm.SelectedRows.Count > 0)
+        {
+            foreach (SelectedRow row in sm.SelectedRows)
+            {
+                DataSource DataSource = new DataSource(row.RecordID);
+                if (DataSource != null)
+                    try
+                    {
+                        DataSource.DataSchemaID = new Guid(DataSchemaID);
+                        DataSource.UserId = AuthHelper.GetLoggedInUserId;
+                        DataSource.Save();
+                        Auditing.Log("DataSchemas.AddDataSourceLink", new Dictionary<string, object> {
+                                { "DataSchemaID", DataSource.DataSchemaID},
+                                { "DataSchemaCode", DataSource.DataSchema.Code},
+                                { "DataSourceID", DataSource.Id },
+                                { "DataSourceCode", DataSource.Code }
+                            });
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "DataSchemas.LinkDataSource_Click");
+                        MessageBoxes.Error(ex, "Error", "Unable to link DataSource");
+                    }
+            }
+            DataSourcesGridStore.DataBind();
+            AvailableDataSourcesWindow.Hide();
+        }
+        else
+        {
+            MessageBoxes.Error("Invalid Selection", "Select at least one DataSource");
+        }
+    }
+
+    #endregion
 }
