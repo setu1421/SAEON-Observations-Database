@@ -118,6 +118,7 @@
     <Folder Include="dbo\Views\" />
     <Folder Include="Security\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Phenomenon.sql">
@@ -537,6 +538,9 @@
     <Build Include="dbo\Tables\SchemaColumn.sql" />
     <Build Include="dbo\Tables\SchemaColumnType.sql" />
     <Build Include="dbo\Views\vSchemaColumn.sql" />
+    <Build Include="Scripts\AuthenticationFileGroup.sql" />
+    <Build Include="Scripts\ObservationsFileGroup.sql" />
+    <Build Include="Scripts\DocumentsFileGroup.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

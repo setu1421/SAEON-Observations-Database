@@ -1,0 +1,1 @@
+In SQL Configuration Manager enable FileStream
