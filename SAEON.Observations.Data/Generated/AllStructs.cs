@@ -392,6 +392,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VDataSource = @"vDataSource";
         
+		public static readonly string VDataSourceRole = @"vDataSourceRole";
+        
 		public static readonly string VDataSourceTransformation = @"vDataSourceTransformation";
         
 		public static readonly string VImportBatch = @"vImportBatch";

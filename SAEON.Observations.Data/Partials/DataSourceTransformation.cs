@@ -57,7 +57,7 @@ namespace SAEON.Observations.Data
         /// <summary>
         /// 
         /// </summary>
-        public IEnumerable<double> RatingTableValues
+        public IEnumerable<double> RatingTableValues 
         {
             get
             {

@@ -170,6 +170,7 @@
     <Compile Include="Generated\VDataQuery.cs" />
     <Compile Include="Generated\VDataSchema.cs" />
     <Compile Include="Generated\VDataSource.cs" />
+    <Compile Include="Generated\VDataSourceRole.cs" />
     <Compile Include="Generated\VDataSourceTransformation.cs" />
     <Compile Include="Generated\VImportBatch.cs" />
     <Compile Include="Generated\VInstrumentDataSource.cs" />

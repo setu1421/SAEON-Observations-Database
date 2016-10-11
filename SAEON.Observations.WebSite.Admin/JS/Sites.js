@@ -69,10 +69,6 @@ function OnOrganisationLinkCommand(e, record) {
     }
 }
 
-function ClearStationLinkForm() {
-    StationLinkFormPanel.getForm().reset();
-}
-
 function CloseAvailableStations() {
     AvailableStationsGrid.selModel.clearSelections();
 }

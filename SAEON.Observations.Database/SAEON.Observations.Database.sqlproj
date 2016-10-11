@@ -541,6 +541,7 @@
     <Build Include="Scripts\AuthenticationFileGroup.sql" />
     <Build Include="Scripts\ObservationsFileGroup.sql" />
     <Build Include="Scripts\DocumentsFileGroup.sql" />
+    <Build Include="dbo\Views\vDataSourceRole.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />
