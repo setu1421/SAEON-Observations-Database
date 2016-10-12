@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Roles.aspx.cs" Inherits="_Roles"  MasterPageFile="~/Site.master" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/Roles.js"></script>
+    <script type="text/javascript" src="/JS/Roles.js"></script>
 </asp:Content>
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="ContentPlaceHolder1">
 	<ext:Viewport ID="Viewport1" runat="server" Layout="Fit">

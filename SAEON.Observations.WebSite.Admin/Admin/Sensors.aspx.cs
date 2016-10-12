@@ -259,7 +259,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
     {
         try
         {
-            new InstrumentSensorController().Delete(aID);
+            InstrumentSensor.Delete(aID);
             Auditing.Log("Sensors.DeleteInstrumentLink", new Dictionary<string, object> { { "ID", aID } });
             InstrumentLinksGrid.DataBind();
         }

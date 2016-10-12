@@ -1,8 +1,8 @@
 ﻿<%@ Page Title="Instruments" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Instruments.aspx.cs" Inherits="Admin_Instruments" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/Instruments.js"></script>
-    <script type="text/javascript" src="../JS/generic.js"></script>
+    <script type="text/javascript" src="/JS/Instruments.js"></script>
+    <script type="text/javascript" src="/JS/generic.js"></script>
     <script type="text/javascript">
         var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));

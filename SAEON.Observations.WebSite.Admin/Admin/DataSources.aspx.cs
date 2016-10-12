@@ -318,7 +318,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     {
         try
         {
-            new InstrumentDataSourceController().Delete(aID);
+            InstrumentDataSource.Delete(aID);
             Auditing.Log("DataSources.DeleteInstrumentLink", new Dictionary<string, object> { { "ID", aID } });
             InstrumentLinksGrid.DataBind();
         }

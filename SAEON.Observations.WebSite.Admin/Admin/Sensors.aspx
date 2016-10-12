@@ -1,8 +1,8 @@
 ﻿<%@ Page Title="Sensors" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Sensors.aspx.cs" Inherits="Admin_Sensors" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-    <script type="text/javascript" src="../JS/Sensors.js"></script>
-    <script type="text/javascript" src="../JS/generic.js"></script>
+    <script type="text/javascript" src="/JS/Sensors.js"></script>
+    <script type="text/javascript" src="/JS/generic.js"></script>
 
     <script type="text/javascript">
         var submitValue = function (format) {

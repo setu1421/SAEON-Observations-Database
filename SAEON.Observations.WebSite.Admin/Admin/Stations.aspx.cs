@@ -224,7 +224,7 @@ public partial class Admin_Stations : System.Web.UI.Page
     {
         try
         {
-            new OrganisationStationController().Delete(aID);
+            OrganisationStation.Delete(aID);
             Auditing.Log("Stations.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", aID } });
             OrganisationLinksGrid.DataBind();
         }
@@ -311,7 +311,7 @@ public partial class Admin_Stations : System.Web.UI.Page
     {
         try
         {
-            new ProjectStationController().Delete(aID);
+            ProjectStation.Delete(aID);
             Auditing.Log("Stations.DeleteProjectLink", new Dictionary<string, object> { { "ID", aID } });
             ProjectLinksGrid.DataBind();
         }
@@ -398,7 +398,7 @@ public partial class Admin_Stations : System.Web.UI.Page
     {
         try
         {
-            new StationInstrumentController().Delete(aID);
+            StationInstrument.Delete(aID);
             Auditing.Log("Stations.DeleteInstrumentLink", new Dictionary<string, object> { { "ID", aID } });
             InstrumentLinksGrid.DataBind();
         }

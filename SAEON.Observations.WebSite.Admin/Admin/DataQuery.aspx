@@ -5,8 +5,8 @@
 <head runat="server">
 	<title></title>
 	<link href="../Styles/Site.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="../JS/DataQuery.js"></script>
-    <script type="text/javascript" src="../JS/generic.js"></script>
+	<script type="text/javascript" src="/JS/DataQuery.js"></script>
+    <script type="text/javascript" src="/JS/generic.js"></script>
 	<script type="text/javascript">
 		var saveData = function (s, e)
 		{

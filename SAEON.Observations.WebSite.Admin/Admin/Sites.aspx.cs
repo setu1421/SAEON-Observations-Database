@@ -200,7 +200,7 @@ public partial class Admin_Sites : System.Web.UI.Page
     {
         try
         {
-            new da.OrganisationSiteController().Delete(aID);
+            da.OrganisationSite.Delete(aID);
             Auditing.Log("Sites.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", aID } });
             OrganisationLinksGrid.DataBind();
         }

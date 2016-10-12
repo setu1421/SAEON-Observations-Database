@@ -1,8 +1,8 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ProjectSite.aspx.cs" Inherits="_ProjectSite"  MasterPageFile="~/Site.master" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/ProjectSite.js"></script>
-    <script type="text/javascript" src="../JS/generic.js"></script>
+    <script type="text/javascript" src="/JS/ProjectSite.js"></script>
+    <script type="text/javascript" src="/JS/generic.js"></script>
     <script type="text/javascript">
         var submitValue = function (format)
         {

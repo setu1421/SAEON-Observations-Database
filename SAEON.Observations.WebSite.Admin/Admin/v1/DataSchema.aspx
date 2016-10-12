@@ -2,8 +2,8 @@
     MasterPageFile="~/Site.master" ValidateRequest="false" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/DataSchema.js"></script>
-    <script type="text/javascript" src="../JS/generic.js"></script>
+    <script type="text/javascript" src="/JS/DataSchema.js"></script>
+    <script type="text/javascript" src="/JS/generic.js"></script>
 </asp:Content>
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="ContentPlaceHolder1">
     <script type="text/javascript">

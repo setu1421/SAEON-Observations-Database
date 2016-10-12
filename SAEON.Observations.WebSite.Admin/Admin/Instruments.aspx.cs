@@ -230,7 +230,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     {
         try
         {
-            new OrganisationInstrumentController().Delete(aID);
+            OrganisationInstrument.Delete(aID);
             Auditing.Log("Instruments.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", aID } });
             OrganisationLinksGrid.DataBind();
         }
@@ -324,7 +324,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     {
         try
         {
-            new StationInstrumentController().Delete(aID);
+            StationInstrument.Delete(aID);
             Auditing.Log("Instruments.DeleteStationLink", new Dictionary<string, object> { { "ID", aID } });
             StationLinksGrid.DataBind();
         }
@@ -418,7 +418,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     {
         try
         {
-            new InstrumentDataSourceController().Delete(aID);
+            InstrumentDataSource.Delete(aID);
             Auditing.Log("Instruments.DeleteDataSourceLink", new Dictionary<string, object> { { "ID", aID } });
             DataSourceLinksGrid.DataBind();
         }
@@ -512,7 +512,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     {
         try
         {
-            new InstrumentSensorController().Delete(aID);
+            InstrumentSensor.Delete(aID);
             Auditing.Log("Instruments.DeleteSensorLink", new Dictionary<string, object> { { "ID", aID } });
             SensorLinksGrid.DataBind();
         }

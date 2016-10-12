@@ -2,7 +2,7 @@
     MasterPageFile="~/Site.master" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/User.js"></script>
+    <script type="text/javascript" src="/JS/User.js"></script>
 </asp:Content>
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="ContentPlaceHolder1">
     <ext:Viewport ID="ViewPort1" runat="server">

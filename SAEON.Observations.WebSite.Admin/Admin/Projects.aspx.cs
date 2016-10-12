@@ -189,7 +189,7 @@ public partial class Admin_Projects : System.Web.UI.Page
     {
         try
         {
-            new ProjectStationController().Delete(aID);
+            ProjectStation.Delete(aID);
             Auditing.Log("Projects.DeleteStationLink", new Dictionary<string, object> { { "ID", aID } });
             StationLinksGrid.DataBind();
         }

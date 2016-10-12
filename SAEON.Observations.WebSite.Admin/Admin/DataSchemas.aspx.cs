@@ -289,7 +289,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     {
         try
         {
-            new SchemaColumnController().Delete(aID);
+            SchemaColumn.Delete(aID);
             Auditing.Log("DataSchemas.DeleteSchemaColumn", new Dictionary<string, object> { { "ID", aID } });
             SchemaColumnsGrid.DataBind();
         }
