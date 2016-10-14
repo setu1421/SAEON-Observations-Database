@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Text;
 using NCalc;
 using SAEON.Observations.Data;
+using Serilog;
 
 /// <summary>
 /// Summary description for ImportSchema
@@ -44,7 +45,6 @@ public class ImportSchemaHelper : IDisposable
 	public ImportSchemaHelper(DataSource ds, DataSchema schema, string Data, Sensor obj = null, ImportLogHelper loghelper = null)
 	{
 		dataSource = ds;
-
 		recordType = ClassBuilder.LoadFromXmlString(schema.DataSchemaX).CreateRecordClass();
 		engine = new FileHelperEngine(recordType);
 		engine.ErrorMode = ErrorMode.SaveAndContinue;
@@ -533,9 +533,10 @@ public class ImportSchemaHelper : IDisposable
 				}
 
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
-				rec.DataValue = rec.RawValue;
+                Log.Error(ex, "TransformValue");
+                rec.DataValue = rec.RawValue;
 			}
 
 		}

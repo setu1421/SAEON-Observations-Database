@@ -344,7 +344,10 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
             Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
 
-            VDataSourceTransformationCollection trCol = new VDataSourceTransformationCollection().Where(VDataSourceTransformation.Columns.DataSourceID, Id).Load();
+            VDataSourceTransformationCollection trCol = new VDataSourceTransformationCollection()
+                .Where(VDataSourceTransformation.Columns.DataSourceID, Id)
+                .OrderByAsc(VDataSourceTransformation.Columns.Rank)
+                .Load();
 
             TransformationsGrid.GetStore().DataSource = trCol;
             TransformationsGrid.GetStore().DataBind();

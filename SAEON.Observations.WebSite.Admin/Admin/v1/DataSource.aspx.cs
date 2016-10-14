@@ -241,7 +241,10 @@ public partial class _DataSource : System.Web.UI.Page
 
             Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
 
-            VDataSourceTransformationCollection trCol = new VDataSourceTransformationCollection().Where(VDataSourceTransformation.Columns.DataSourceID, Id).Load();
+            VDataSourceTransformationCollection trCol = new VDataSourceTransformationCollection()
+                .Where(VDataSourceTransformation.Columns.DataSourceID, Id)
+                .OrderByAsc(VDataSourceTransformation.Columns.Rank)
+                .Load();
 
             DSTransformGrid.GetStore().DataSource = trCol;
             DSTransformGrid.GetStore().DataBind();

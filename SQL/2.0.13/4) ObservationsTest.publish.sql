@@ -94,15 +94,6 @@ USE [$(DatabaseName)];
 
 
 GO
-PRINT N'Dropping [dbo].[Observation].[IX_Observation_Comment]...';
-
-
-GO
-DROP INDEX [IX_Observation_Comment]
-    ON [dbo].[Observation];
-
-
-GO
 PRINT N'Dropping unnamed constraint on [dbo].[aspnet_Membership]...';
 
 

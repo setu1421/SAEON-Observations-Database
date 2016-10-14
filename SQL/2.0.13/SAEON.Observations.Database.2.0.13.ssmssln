@@ -8,6 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		1) Pre process.txt = 1) Pre process.txt
 		2) Pre process.sql = 2) Pre process.sql
 		3) Restart Server.txt = 3) Restart Server.txt
+		4) Observations.publish.sql = 4) Observations.publish.sql
+		4) Observations.publish.txt = 4) Observations.publish.txt
 		4) ObservationsTest.publish.sql = 4) ObservationsTest.publish.sql
 		4) ObservationsTest.publish.txt = 4) ObservationsTest.publish.txt
 		5) Post process.sql = 5) Post process.sql
@@ -18,7 +20,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4279CA34-C4D8-4179-9B3B-57AA72A7E68A}.Default|Default.ActiveCfg = Default
+		{AEA8D537-9580-49BF-B6BD-D6EDDC5BC44B}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

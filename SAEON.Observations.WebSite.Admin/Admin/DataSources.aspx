@@ -292,6 +292,7 @@
                                                             <ext:RecordField Name="UnitofMeasure" Type="String" />
                                                             <ext:RecordField Name="NewPhenomenonOfferingID" Type="Auto" />
                                                             <ext:RecordField Name="NewPhenomenonUOMID" Type="Auto" />
+                                                            <ext:RecordField Name="Rank" Type="Int" UseNull="true" />
                                                         </Fields>
                                                     </ext:JsonReader>
                                                 </Reader>
@@ -312,6 +313,7 @@
                                                 <ext:CommandColumn Width="75">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" ToolTip-Text="Edit" />
+                                                        <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />
                                                     </Commands>
                                                 </ext:CommandColumn>
                                             </Columns>
@@ -758,6 +760,15 @@
                                     <TriggerClick Handler="this.clearValue();" />
                                 </Listeners>
                             </ext:SelectBox>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel10" runat="server" Border="false" Header="false" Layout="Form"
+                        LabelAlign="Top">
+                        <Items>
+                            <ext:NumberField AllowDecimals="false" ID="tfRank" DataIndex="Rank" MaxLength="10"
+                                runat="server" FieldLabel="Transformation Rank" AnchorHorizontal="95%"
+                                AllowBlank="false" BlankText="Rank is required">
+                            </ext:NumberField>
                         </Items>
                     </ext:Panel>
                     <%--=============--%>

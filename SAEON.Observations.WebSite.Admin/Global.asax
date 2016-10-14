@@ -1,5 +1,6 @@
 ﻿<%@ Application Language="C#" %>
 <%@ Import Namespace="Serilog" %>
+<%@ Import Namespace="Serilog.Settings.AppSettings" %>
 <%@ Import Namespace="Serilog.Sinks.RollingFile" %>
 <%@ Import Namespace="System.Web.Routing" %>
 
@@ -9,7 +10,7 @@
     {
         // Code that runs on application startup
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
+            .ReadFrom.AppSettings()
             .WriteTo.RollingFile(Server.MapPath(@"~/App_Data/Logs/Log-{Date}.txt"))
             .CreateLogger();
         RouteConfig.RegisterRoutes(RouteTable.Routes);

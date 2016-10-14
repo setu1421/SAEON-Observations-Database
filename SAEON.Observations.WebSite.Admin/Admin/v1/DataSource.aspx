@@ -277,6 +277,7 @@
                                                     <ext:RecordField Name="UnitofMeasure" Type="String" />
                                                     <ext:RecordField Name="NewPhenomenonOfferingID" Type="Auto" />
                                                     <ext:RecordField Name="NewPhenomenonUOMID" Type="Auto" />
+                                                    <ext:RecordField Name="Rank" Type="Int" UseNull="true" />
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>
@@ -294,9 +295,11 @@
                                         <ext:Column Header="UOM" DataIndex="UnitofMeasure" Width="150" />
                                         <ext:DateColumn Header="Effective Date" DataIndex="StartDate" Width="150" Format="dd/MM/yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="150" Format="dd/MM/yyyy" />
+                                        <ext:Column Header="Order" DataIndex="Rank" Width="150" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                                <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -589,6 +592,15 @@
                                     <TriggerClick Handler="this.clearValue();" />
                                 </Listeners>
                             </ext:SelectBox>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="Form"
+                        LabelAlign="Top">
+                        <Items>
+                            <ext:NumberField AllowDecimals="false" ID="tfRank" DataIndex="Rank" MaxLength="10"
+                                runat="server" FieldLabel="Transformation Rank" AnchorHorizontal="95%"
+                                   AllowBlank="false" BlankText="Rank is required">
+                            </ext:NumberField>
                         </Items>
                     </ext:Panel>
                     <%--=============--%>

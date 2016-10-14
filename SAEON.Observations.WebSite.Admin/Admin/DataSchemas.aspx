@@ -151,6 +151,7 @@
                                         <ext:CommandColumn Width="75">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
+                                                <%--<ext:GridCommand Icon="Zoom" CommandName="Preview" Text="Test" ToolTip-Text="Test" />--%>
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
