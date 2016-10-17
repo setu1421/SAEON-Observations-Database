@@ -1,5 +1,6 @@
 ﻿USE [Observations]
 --USE [ObservationsTest]
+alter table SchemaColumn alter column FixedTime varchar(1)
 PRINT 'Create aspnet_Applications_Index'
 GO
 CREATE CLUSTERED INDEX [aspnet_Applications_Index]

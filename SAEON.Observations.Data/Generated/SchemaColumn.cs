@@ -277,8 +277,8 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarFixedTime = new TableSchema.TableColumn(schema);
 				colvarFixedTime.ColumnName = "FixedTime";
-				colvarFixedTime.DataType = DbType.Int32;
-				colvarFixedTime.MaxLength = 0;
+				colvarFixedTime.DataType = DbType.AnsiString;
+				colvarFixedTime.MaxLength = 1;
 				colvarFixedTime.AutoIncrement = false;
 				colvarFixedTime.IsNullable = true;
 				colvarFixedTime.IsPrimaryKey = false;
@@ -430,9 +430,9 @@ namespace SAEON.Observations.Data
 		  
 		[XmlAttribute("FixedTime")]
 		[Bindable(true)]
-		public int? FixedTime 
+		public string FixedTime 
 		{
-			get { return GetColumnValue<int?>(Columns.FixedTime); }
+			get { return GetColumnValue<string>(Columns.FixedTime); }
 			set { SetColumnValue(Columns.FixedTime, value); }
 		}
 		  
@@ -547,7 +547,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varDataSchemaID,int varNumber,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varEmptyValue,int? varFixedTime,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varDataSchemaID,int varNumber,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varEmptyValue,string varFixedTime,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			SchemaColumn item = new SchemaColumn();
 			
@@ -591,7 +591,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varDataSchemaID,int varNumber,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varEmptyValue,int? varFixedTime,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varDataSchemaID,int varNumber,string varName,Guid varSchemaColumnTypeID,int? varWidth,string varFormat,Guid? varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varEmptyValue,string varFixedTime,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			SchemaColumn item = new SchemaColumn();
 			

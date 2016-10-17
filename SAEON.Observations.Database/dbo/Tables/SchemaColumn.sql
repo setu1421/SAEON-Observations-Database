@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[SchemaColumn]
     [PhenomenonOfferingID] UNIQUEIDENTIFIER NULL,
     [PhenomenonUOMID] UNIQUEIDENTIFIER NULL,
     [EmptyValue] VARCHAR(50) NULL,
-    [FixedTime] INT NULL,
+    [FixedTime] VARCHAR(10) NULL,
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumn_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumn_UpdatedAt] DEFAULT GetDate(), 

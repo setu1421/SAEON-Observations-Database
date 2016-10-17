@@ -244,7 +244,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     schemaColumn.PhenomenonUOMID = Utilities.MakeGuid(cbUnitOfMeasure.Value);
                     schemaColumn.EmptyValue = Utilities.NullIfEmpty(tfEmptyValue.Text);
                     if (!string.IsNullOrEmpty(ttFixedTime.Text.Trim()))
-                        schemaColumn.FixedTime = ttFixedTime.SelectedTime.Hours;
+                        schemaColumn.FixedTime = ttFixedTime.SelectedTime.ToString();
                     break;
             }
             schemaColumn.UserId = AuthHelper.GetLoggedInUserId;
