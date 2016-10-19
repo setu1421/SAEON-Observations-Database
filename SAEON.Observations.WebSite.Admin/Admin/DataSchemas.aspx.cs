@@ -196,18 +196,18 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         }
     }
 
-    protected void SchemaColumnAddSave(object sender, DirectEventArgs e)
+    protected void SchemaColumnSave(object sender, DirectEventArgs e)
     {
         try
         {
             RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
-            SchemaColumn schemaColumn = new SchemaColumn(Utilities.MakeGuid(SchemaColumnAddID.Value));
+            SchemaColumn schemaColumn = new SchemaColumn(Utilities.MakeGuid(SchemaColumnID.Value));
             schemaColumn.DataSchemaID = masterID;
             SqlQuery qry = new Select(Aggregate.Max(SchemaColumn.Columns.Number))
                 .From(SchemaColumn.Schema)
                 .Where(SchemaColumn.Columns.DataSchemaID).IsEqualTo(masterID);
-            schemaColumn.Number = qry.ExecuteScalar<int>() + 1;
+            if (Utilities.MakeGuid(SchemaColumnID.Value) == Guid.Empty) schemaColumn.Number = qry.ExecuteScalar<int>() + 1;
             schemaColumn.Name = Utilities.NullIfEmpty(tfColumnName.Text);
             schemaColumn.SchemaColumnTypeID = new Guid(cbSchemaColumnType.SelectedItem.Value.Trim());
             DataSchema schema = new DataSchema(masterID);
@@ -249,7 +249,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             schemaColumn.UserId = AuthHelper.GetLoggedInUserId;
             schemaColumn.Save();
-            Auditing.Log("DataSchemas.AddSchemaColumn", new Dictionary<string, object> {
+            Auditing.Log("DataSchemas.SchemaColumn", new Dictionary<string, object> {
                 { "DataSchemaID", schemaColumn.DataSchemaID },
                 { "DataSchemaCode", schemaColumn.DataSchema.Code },
                 { "Name", schemaColumn.Name },
@@ -266,12 +266,12 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 { "FixedTime", schemaColumn.FixedTime }
             });
             SchemaColumnsGrid.DataBind();
-            SchemaColumnAddWindow.Hide();
+            SchemaColumnWindow.Hide();
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "DataSchemas.AddSchemaColumn_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to add SchemaColumn");
+            Log.Error(ex, "DataSchemas.SchemaColumn_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to  SchemaColumn");
         }
     }
 
@@ -321,7 +321,6 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         }
     }
 
-
     [DirectMethod]
     public void cbPhenomenonSelect(object sender, DirectEventArgs e)
     {
@@ -353,34 +352,41 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     public void LoadCombos(string columnType, string phenomenonID, string offeringID, string unitOfMeasureID)
     {
         cbSchemaColumnType.Value = columnType;
+        cbSchemaColumnType.MarkAsValid();
         SetFields();
         cbPhenomenon.Value = phenomenonID;
         cbPhenomenonSelect(cbPhenomenon, new DirectEventArgs(null));
+        cbPhenomenon.MarkAsValid();
         cbOffering.Value = offeringID;
+        cbOffering.MarkAsValid();
         cbUnitOfMeasure.Value = unitOfMeasureID;
+        cbUnitOfMeasure.MarkAsValid();
+        tfColumnName.Disabled = true;
     }
 
-    private void SetFields()
+    [DirectMethod]
+    public void SetFields()
     {
+        bool hidden = true;
         tfFormat.AllowBlank = true;
         tfFormat.MarkAsValid();
-        tfFormat.Hidden = true;
+        tfFormat.Hidden = hidden;
         cbPhenomenon.AllowBlank = true;
         cbPhenomenon.ForceSelection = false;
         cbPhenomenon.MarkAsValid();
-        cbPhenomenon.Hidden = true;
+        cbPhenomenon.Hidden = hidden;
         cbOffering.AllowBlank = true;
-        cbOffering.ForceSelection = true;
+        cbOffering.ForceSelection = false;
         cbOffering.MarkAsValid();
-        cbOffering.Hidden = true;
+        cbOffering.Hidden = hidden;
         cbUnitOfMeasure.AllowBlank = true;
-        cbUnitOfMeasure.ForceSelection = true;
+        cbUnitOfMeasure.ForceSelection = false;
         cbUnitOfMeasure.MarkAsValid();
-        cbUnitOfMeasure.Hidden = true;
+        cbUnitOfMeasure.Hidden = hidden;
         tfEmptyValue.Hidden = true;
         ttFixedTime.AllowBlank = true;
         ttFixedTime.MarkAsValid();
-        ttFixedTime.Hidden = true;
+        ttFixedTime.Hidden = hidden;
         switch (cbSchemaColumnType.SelectedItem.Text)
         {
             case "Date":
@@ -604,6 +610,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             DataSourcesGridStore.DataBind();
             AvailableDataSourcesWindow.Hide();
+            tfColumnName.Disabled = false;
         }
         else
         {

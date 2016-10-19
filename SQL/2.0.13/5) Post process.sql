@@ -1,6 +1,7 @@
 ﻿USE [Observations]
 --USE [ObservationsTest]
-alter table SchemaColumn alter column FixedTime varchar(1)
+alter table SchemaColumn alter column FixedTime varchar(10)
+EXECUTE sp_refreshsqlmodule '[dbo].[vSchemaColumn]'
 PRINT 'Create aspnet_Applications_Index'
 GO
 CREATE CLUSTERED INDEX [aspnet_Applications_Index]

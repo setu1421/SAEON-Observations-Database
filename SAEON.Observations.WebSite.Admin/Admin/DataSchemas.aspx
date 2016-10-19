@@ -3,6 +3,9 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <script type="text/javascript" src="/JS/DataSchemas.js"></script>
     <script type="text/javascript" src="/JS/generic.js"></script>
+    <script type="text/javascript">
+        var formMode = 'Add';
+    </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <script type="text/javascript">
@@ -79,7 +82,7 @@
             <ext:BorderLayout ID="BorderLayout1" runat="server">
                 <Center MarginsSummary="5 0 0 5">
                     <ext:Panel ID="Panel1" runat="server" Title="Data Schemas" Layout="Fit">
-                        <TopBar>
+                        <topbar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
                                     <ext:Button ID="btnAdd" runat="server" Icon="Add" Text="Add Schema" ClientIDMode="Static">
@@ -103,7 +106,7 @@
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
-                        </TopBar>
+                        </topbar>
                         <Items>
                             <ext:GridPanel ID="DataSchemasGrid" runat="server" Border="false">
                                 <Store>
@@ -141,7 +144,7 @@
                                         <DirectEventConfig IsUpload="true" />
                                     </ext:Store>
                                 </Store>
-                                <ColumnModel ID="ColumnModel1" runat="server">
+                                <columnmodel id="ColumnModel1" runat="server">
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" />
@@ -155,20 +158,20 @@
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
-                                </ColumnModel>
+                                </columnmodel>
                                 <SelectionModel>
                                     <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" SingleSelect="true">
                                         <Listeners>
-                                            <RowSelect Fn="MasterRowSelect" Buffer="250" />
+                                            <rowselect fn="MasterRowSelect" buffer="250" />
                                         </Listeners>
                                         <DirectEvents>
-                                            <RowSelect OnEvent="MasterRowSelect" />
+                                            <rowselect onevent="MasterRowSelect" />
                                         </DirectEvents>
 
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
-                                <LoadMask ShowMask="true" />
-                                <Plugins>
+                                <loadmask showmask="true" />
+                                <plugins>
                                     <ext:GridFilters runat="server" ID="GridFilters1">
                                         <Filters>
                                             <ext:StringFilter DataIndex="ID" />
@@ -179,12 +182,12 @@
                                             <ext:StringFilter DataIndex="DataSourceTypeDesc" />
                                         </Filters>
                                     </ext:GridFilters>
-                                </Plugins>
-                                <BottomBar>
+                                </plugins>
+                                <bottombar>
                                     <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="25" EmptyMsg="No data found" />
-                                </BottomBar>
+                                </bottombar>
                                 <Listeners>
-                                    <Command Fn="onCommand" />
+                                    <command fn="onCommand" />
                                 </Listeners>
                                 <%--                                <DirectEvents>
                                     <Command OnEvent="onCommand">
@@ -204,15 +207,15 @@
                         <Items>
                             <ext:Panel ID="pnlSchemaColumns" runat="server" Title="Columns" Layout="FitLayout"
                                 Height="200" ClientIDMode="Static">
-                                <TopBar>
+                                <topbar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnSchemaColumnAdd" runat="server" Icon="Add" Text="Add Column" ClientIDMode="Static">
+                                            <ext:Button ID="btnSchemaColumn" runat="server" Icon="Add" Text="Add Column" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip4" runat="server" Html="Add" />
                                                 </ToolTips>
                                                 <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection()){#{SchemaColumnAddWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Data Schema.')}" />
+                                                    <Click Handler="if(Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection()){#{SchemaColumnWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Data Schema.')}" />
                                                 </Listeners>
                                             </ext:Button>
                                             <%-- 
@@ -227,7 +230,7 @@
                                             --%>
                                         </Items>
                                     </ext:Toolbar>
-                                </TopBar>
+                                </topbar>
                                 <Items>
                                     <ext:GridPanel ID="SchemaColumnsGrid" runat="server" Border="false" ClientIDMode="Static">
                                         <Store>
@@ -263,7 +266,7 @@
                                                 </BaseParams>
                                             </ext:Store>
                                         </Store>
-                                        <ColumnModel ID="ColumnModel4" runat="server">
+                                        <columnmodel id="ColumnModel4" runat="server">
                                             <Columns>
                                                 <ext:Column Header="Name" DataIndex="Name" Width="200" />
                                                 <ext:Column Header="Type" DataIndex="SchemaColumnTypeName" Width="100" />
@@ -273,7 +276,7 @@
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                                 <ext:Column Header="Unit of measure" DataIndex="UnitOfMeasureUnit" Width="150" />
                                                 <ext:Column Header="Empty value" DataIndex="EmptyValue" Width="75" />
-                                                <ext:Column Header="Fixed time" DataIndex="FixedTime" Width="75" />
+                                                <ext:Column Header="Fixed time" DataIndex="FixedTime" Width="75"/>
                                                 <ext:CommandColumn Width="200">
                                                     <PrepareToolbar Fn="PrepareSchemaColumnsToolbar" />
                                                     <Commands>
@@ -284,20 +287,20 @@
                                                     </Commands>
                                                 </ext:CommandColumn>
                                             </Columns>
-                                        </ColumnModel>
+                                        </columnmodel>
                                         <SelectionModel>
                                             <ext:RowSelectionModel ID="RowSelectionModel4" runat="server" SingleSelect="true">
                                             </ext:RowSelectionModel>
                                         </SelectionModel>
-                                        <LoadMask ShowMask="true" />
+                                        <loadmask showmask="true" />
                                         <Listeners>
-                                            <Command Fn="OnSchemaColumnCommand" />
+                                            <command fn="OnSchemaColumnCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
                             <ext:Panel ID="Panel2" runat="server" Title="Data Sources" Layout="FitLayout" Height="200" ClientIDMode="Static">
-                                <TopBar>
+                                <topbar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
                                             <ext:Button ID="Button1" runat="server" Icon="Link" Text="Link Data Sources" ClientIDMode="Static">
@@ -320,7 +323,7 @@
                                             --%>
                                         </Items>
                                     </ext:Toolbar>
-                                </TopBar>
+                                </topbar>
                                 <Items>
                                     <ext:GridPanel ID="DataSourcesGrid" runat="server" Border="false" ClientIDMode="Static">
                                         <Store>
@@ -346,7 +349,7 @@
                                                 </BaseParams>
                                             </ext:Store>
                                         </Store>
-                                        <ColumnModel ID="ColumnModel2" runat="server">
+                                        <columnmodel id="ColumnModel2" runat="server">
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="Code" Width="100" />
                                                 <ext:Column Header="Name" DataIndex="Name" Width="200" />
@@ -360,14 +363,14 @@
                                                     </Commands>
                                                 </ext:CommandColumn>
                                             </Columns>
-                                        </ColumnModel>
+                                        </columnmodel>
                                         <SelectionModel>
                                             <ext:RowSelectionModel ID="RowSelectionModel2" runat="server" SingleSelect="true">
                                             </ext:RowSelectionModel>
                                         </SelectionModel>
-                                        <LoadMask ShowMask="true" />
+                                        <loadmask showmask="true" />
                                         <Listeners>
-                                            <Command Fn="OnDataSourceCommand" />
+                                            <command fn="OnDataSourceCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>
@@ -386,8 +389,7 @@
                 MonitorResize="true" Padding="10" ButtonAlign="Right" Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
-                    <ext:Hidden ID="tfID" DataIndex="Id" runat="server" ClientIDMode="Static">
-                    </ext:Hidden>
+                    <ext:Hidden ID="tfID" DataIndex="Id" runat="server" ClientIDMode="Static"/>
                     <ext:Container ID="Container1" runat="server" Layout="Column" Height="100">
                         <Items>
                             <ext:Container ID="Container2" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
@@ -395,7 +397,7 @@
                                     <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
                                         runat="server" FieldLabel="Code" AnchorHorizontal="93%" AllowBlank="false" BlankText="Code is a required"
                                         MsgTarget="Side" ClientIDMode="Static">
-                                        <RemoteValidation OnValidation="ValidateField" />
+                                        <RemoteValidation OnValidation="ValidateField"/>
                                     </ext:TextField>
                                     <ext:ComboBox ID="cbDataSourceType" runat="server" StoreID="DataSourceTypeStore" BlankText="Data Source Type is required"
                                         MsgTarget="Side" DisplayField="Description" ValueField="Id" TypeAhead="true"
@@ -406,7 +408,7 @@
                                             <%--<Select Handler="#{cbDataSourceType}.getValue() == '25839703-3cb3-4c23-aca3-4399cc52ecde'?#{cbDelimiter}.allowBlank=false:#{cbDelimiter}.allowBlank=true;#{cbDelimiter}.clearValue();#{cbDelimiter}.clearInvalid();#{cbDelimiter}.markAsValid();" />--%>
                                         </Listeners>
                                         <DirectEvents>
-                                            <Select OnEvent="cbDataSourceTypeSelect" />
+                                            <select onevent="cbDataSourceTypeSelect" />
                                         </DirectEvents>
                                     </ext:ComboBox>
                                 </Items>
@@ -432,7 +434,7 @@
                                             <ext:FieldTrigger Icon="Clear" />
                                         </Triggers>
                                         <Listeners>
-                                            <TriggerClick Handler="this.clearValue();" />
+                                            <triggerclick handler="this.clearValue();" />
                                         </Listeners>
                                     </ext:ComboBox>
                                 </Items>
@@ -493,7 +495,7 @@
                                         FieldLabel="Data file Split Index" AnchorHorizontal="93%" AllowDecimals="true"
                                         BlankText="Split index is required for a split data file" MsgTarget="Side">
                                         <Listeners>
-                                            <Valid Handler="if(#{tfSplit}.getValue() == '') this.allowBlank = true;else this.allowBlank = false;" />
+                                            <valid handler="if(#{tfSplit}.getValue() == '') this.allowBlank = true;else this.allowBlank = false;" />
                                         </Listeners>
                                     </ext:NumberField>
                                 </Items>
@@ -501,7 +503,7 @@
                         </Items>
                     </ext:Container>
                 </Items>
-                <Buttons>
+                <buttons>
                     <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">
@@ -509,30 +511,31 @@
                             </Click>
                         </DirectEvents>
                     </ext:Button>
-                </Buttons>
-                <BottomBar>
+                </buttons>
+                <bottombar>
                     <ext:StatusBar ID="StatusBar1" runat="server" Height="25" />
-                </BottomBar>
+                </bottombar>
                 <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                    <clientvalidation handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
                 </Listeners>
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="SchemaColumnAddWindow" runat="server" Width="800" Height="500" Closable="true"
-        Hidden="true" Collapsible="false" Title="Add Column"
+    <ext:Window ID="SchemaColumnWindow" runat="server" Width="800" Height="500" Closable="true"
+        Hidden="true" Collapsible="false" Title=" Column"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
-            <Hide Fn="ClearSchemaColumnAddForm" />
+            <show fn="ShowSchemaColumnForm" />
+            <hide fn="HideSchemaColumnForm" />
         </Listeners>
         <Content>
-            <ext:FormPanel ID="SchemaColumnAddFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
+            <ext:FormPanel ID="SchemaColumnFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
                 MonitorResize="true" Padding="10" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
-                    <ext:Hidden ID="SchemaColumnAddID" DataIndex="Id" runat="server" ClientIDMode="Static" />
-                    <ext:Container ID="Container14" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Hidden ID="SchemaColumnID" DataIndex="Id" runat="server" ClientIDMode="Static" />
+                    <ext:Container ID="Container16" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
                             <ext:TextField ID="tfColumnName" DataIndex="Name" MaxLength="50" runat="server" IsRemoteValidation="true" ClientIDMode="Static"
                                 FieldLabel="Name" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false" EmptyText="Enter a name"
@@ -541,7 +544,7 @@
                             </ext:TextField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container17" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container18" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbSchemaColumnType" runat="server" StoreID="SchemaColumnTypeStore" IsRemoteValidation="true" MsgTarget="Side"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
@@ -549,7 +552,7 @@
                                 AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
                                 <RemoteValidation OnValidation="ValidateColumnField" />
                                 <DirectEvents>
-                                    <Select OnEvent="cbSchemaColumnTypeSelect" />
+                                    <select onevent="cbSchemaColumnTypeSelect" />
                                 </DirectEvents>
                             </ext:ComboBox>
                         </Items>
@@ -564,24 +567,24 @@
                     <ext:Container ID="ctFormat" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
                             <ext:TextField ID="tfFormat" runat="server" IsRemoteValidation="true" ClientIDMode="Static" MsgTarget="Side" MaxLength="10"
-                                AllowBlank="false" TriggerAction="All" FieldLabel="Format" DataIndex="Format" EmptyText="Enter a format" AnchorHorizontal="95%">
+                                AllowBlank="false" FieldLabel="Format" DataIndex="Format" EmptyText="Enter a format" AnchorHorizontal="95%">
                                 <RemoteValidation OnValidation="ValidateColumnField" />
                             </ext:TextField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container20" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container19" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore" MsgTarget="Side" DisplayField="Name"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" FieldLabel="Phenomenon" DataIndex="PhenomenonID" EmptyText="Select a phenomenon" ValueNotFoundText="Select a phenomenon"
                                 AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
                                 <DirectEvents>
-                                    <Select OnEvent="cbPhenomenonSelect" />
+                                    <select onevent="cbPhenomenonSelect" />
                                 </DirectEvents>
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container21" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container23" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore" MsgTarget="Side" DisplayField="OfferingName"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
@@ -590,7 +593,7 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container22" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container24" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="UnitOfMeasureStore" MsgTarget="Side" DisplayField="UnitOfMeasureUnit"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
@@ -599,13 +602,13 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container13" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container25" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
                             <ext:TextField ID="tfEmptyValue" DataIndex="EmptyValue" MaxLength="50" runat="server" FieldLabel="Empty Value" AnchorHorizontal="95%">
                             </ext:TextField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container15" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container26" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
                             <ext:TimeField ID="ttFixedTime" runat="server" DataIndex="FixedTime" FieldLabel="Fixed Time" MsgTarget="Side"
                                 EmptyText="Please select" AnchorHorizontal="95%" AllowBlank="false"
@@ -614,26 +617,26 @@
                                     <ext:FieldTrigger Icon="Clear" />
                                 </Triggers>
                                 <Listeners>
-                                    <TriggerClick Handler="this.clearValue();" />
+                                    <triggerclick handler="this.clearValue();" />
                                 </Listeners>
                             </ext:TimeField>
                         </Items>
                     </ext:Container>
                 </Items>
-                <Buttons>
-                    <ext:Button ID="btnSchemaColumnAddSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
+                <buttons>
+                    <ext:Button ID="btnSchemaColumnSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
-                            <Click OnEvent="SchemaColumnAddSave">
+                            <Click OnEvent="SchemaColumnSave">
                                 <EventMask ShowMask="true" />
                             </Click>
                         </DirectEvents>
                     </ext:Button>
-                </Buttons>
-                <BottomBar>
-                    <ext:StatusBar ID="StatusBar4" runat="server" Height="25" />
-                </BottomBar>
+                </buttons>
+                <bottombar>
+                    <ext:StatusBar ID="StatusBar2" runat="server" Height="25" />
+                </bottombar>
                 <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                    <clientvalidation handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
                 </Listeners>
             </ext:FormPanel>
         </Content>
@@ -642,7 +645,7 @@
         Title="Available DataSources" Width="750" Height="300" X="50" Y="50"
         Layout="Fit" Hidden="true" ClientIDMode="Static">
         <Listeners>
-            <Hide Fn="CloseAvailableDataSources" />
+            <hide fn="CloseAvailableDataSources" />
         </Listeners>
         <Items>
             <ext:GridPanel ID="AvailableDataSourcesGrid" runat="server" Header="false" Border="false" ClientIDMode="Static">
@@ -668,19 +671,19 @@
                         </BaseParams>
                     </ext:Store>
                 </Store>
-                <ColumnModel ID="ColumnModel3" runat="server">
+                <columnmodel id="ColumnModel3" runat="server">
                     <Columns>
                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                         <ext:Column Header="Name" DataIndex="Name" Width="200" />
                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                         <ext:DateColumn Header="Last Update" DataIndex="LastUpdate" Width="100" Format="dd MMM yyyy" />
                     </Columns>
-                </ColumnModel>
-                <LoadMask ShowMask="true" />
+                </columnmodel>
+                <loadmask showmask="true" />
                 <SelectionModel>
                     <ext:CheckboxSelectionModel ID="CheckboxSelectionModel2" runat="server" />
                 </SelectionModel>
-                <Buttons>
+                <buttons>
                     <ext:Button ID="btnDataSourceLinksSave" runat="server" Text="Save" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="DataSourceLinksSave">
@@ -688,7 +691,7 @@
                             </Click>
                         </DirectEvents>
                     </ext:Button>
-                </Buttons>
+                </buttons>
             </ext:GridPanel>
         </Items>
     </ext:Window>

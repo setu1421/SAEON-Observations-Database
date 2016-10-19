@@ -302,3 +302,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Log Files
+App_Data/

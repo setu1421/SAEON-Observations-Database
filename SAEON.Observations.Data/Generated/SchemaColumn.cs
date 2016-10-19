@@ -278,7 +278,7 @@ namespace SAEON.Observations.Data
 				TableSchema.TableColumn colvarFixedTime = new TableSchema.TableColumn(schema);
 				colvarFixedTime.ColumnName = "FixedTime";
 				colvarFixedTime.DataType = DbType.AnsiString;
-				colvarFixedTime.MaxLength = 1;
+				colvarFixedTime.MaxLength = 10;
 				colvarFixedTime.AutoIncrement = false;
 				colvarFixedTime.IsNullable = true;
 				colvarFixedTime.IsPrimaryKey = false;

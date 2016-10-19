@@ -191,8 +191,8 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarFixedTime = new TableSchema.TableColumn(schema);
                 colvarFixedTime.ColumnName = "FixedTime";
-                colvarFixedTime.DataType = DbType.Int32;
-                colvarFixedTime.MaxLength = 0;
+                colvarFixedTime.DataType = DbType.AnsiString;
+                colvarFixedTime.MaxLength = 10;
                 colvarFixedTime.AutoIncrement = false;
                 colvarFixedTime.IsNullable = true;
                 colvarFixedTime.IsPrimaryKey = false;
@@ -491,11 +491,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("FixedTime")]
         [Bindable(true)]
-        public int? FixedTime 
+        public string FixedTime 
 	    {
 		    get
 		    {
-			    return GetColumnValue<int?>("FixedTime");
+			    return GetColumnValue<string>("FixedTime");
 		    }
             set 
 		    {
