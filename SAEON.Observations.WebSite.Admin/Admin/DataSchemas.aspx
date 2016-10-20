@@ -1,8 +1,8 @@
 ﻿<%@ Page Title="Data Schemas" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="DataSchemas.aspx.cs" Inherits="Admin_DataSchemas" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-    <script type="text/javascript" src="/JS/DataSchemas.js"></script>
-    <script type="text/javascript" src="/JS/generic.js"></script>
+    <script type="text/javascript" src="../JS/DataSchemas.js"></script>
+    <script type="text/javascript" src="../JS/generic.js"></script>
     <script type="text/javascript">
         var formMode = 'Add';
     </script>

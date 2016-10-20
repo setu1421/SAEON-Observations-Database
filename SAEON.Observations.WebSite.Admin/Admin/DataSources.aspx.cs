@@ -346,6 +346,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
             VDataSourceTransformationCollection trCol = new VDataSourceTransformationCollection()
                 .Where(VDataSourceTransformation.Columns.DataSourceID, Id)
+                .OrderByAsc(VDataSourceTransformation.Columns.Iorder)
                 .OrderByAsc(VDataSourceTransformation.Columns.Rank)
                 .Load();
 

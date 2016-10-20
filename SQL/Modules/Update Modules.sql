@@ -55,7 +55,7 @@ end
 Update Module set Url = @UrlPrefix+'/Admin/Organisations', ModuleID = @MasterModuleId where Name like 'Organisations'
 Update Module set Url = @UrlPrefix+'/Admin/Stations' where Name like 'Stations'
 Update Module set Url = @UrlPrefix+'/Admin/Sensors' where Name like 'Sensors'
-Update Module set Url = @UrlPrefix+'/Admin/DataSource' where Name like 'Data Sources'
+Update Module set Url = @UrlPrefix+'/Admin/DataSources' where Name like 'Data Sources'
 Update Module set Url = @UrlPrefix+'/Admin/DataSchemas' where Name like 'Data Schemas'
 -- Deletes
 Delete RoleModule from RoleModule inner join Module on (RoleModule.ModuleID = Module.ID) where Module.Name like 'Projects/Sites'

@@ -2,8 +2,8 @@
     MasterPageFile="~/Site.master" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="/JS/ImportBatch.js"></script>
-    <script type="text/javascript" src="/JS/generic.js"></script>
+    <script type="text/javascript" src="../JS/ImportBatch.js"></script>
+    <script type="text/javascript" src="../JS/generic.js"></script>
     <script type="text/javascript">
         var submitValue = function (format)
         {
