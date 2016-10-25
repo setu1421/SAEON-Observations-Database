@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="b1dffd34-adcf-4c1c-b921-b9d401038bb6" ChangeDateTime="10/24/2016 11:04:46">
+    <Property Name="ElementName" Value="[dbo].[Observation].[CorerelationID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Observation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CorrelationID" />
+  </Operation>
+</Operations>

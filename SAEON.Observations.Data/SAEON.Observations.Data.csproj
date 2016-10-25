@@ -180,6 +180,7 @@
     <Compile Include="Generated\VModuleRoleModule.cs" />
     <Compile Include="Generated\VObservation.cs" />
     <Compile Include="Generated\VObservationRole.cs" />
+    <Compile Include="Generated\VObservationsList.cs" />
     <Compile Include="Generated\VOrganisationInstrument.cs" />
     <Compile Include="Generated\VOrganisationSite.cs" />
     <Compile Include="Generated\VOrganisationStation.cs" />

@@ -84,6 +84,8 @@ Update Module set Url = Replace(Replace(Url,'.aspx',''),'//','/')
 --Update Module set ModuleID = @HiddenModuleId where Name like 'Data Sources'
 --Update Module set ModuleID = @HiddenModuleId where Name like 'Data Schemas'
 --Update Module set ModuleID = @HiddenModuleId where Name like 'Import batches'
+-- Unhidden
+Update Module set ModuleID = @MasterModuleId where Name like 'Import batches'
 -- Update order
 Update Module set iOrder = 10 where Name like 'Data Views'
 Update Module set iOrder = 20 where Name like 'Master Data Management'

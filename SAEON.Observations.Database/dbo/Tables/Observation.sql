@@ -30,6 +30,9 @@
     [StatusID] UNIQUEIDENTIFIER NULL,
     [StatusReasonID] UNIQUEIDENTIFIER NULL,
 --< Added 2.0.9 20160823 TimPN
+--> Added 2.0.15 20161024 TimPN
+	[CorrelationID] UNIQUEIDENTIFIER NULL,
+--< Added 2.0.15 20161024 TimPN
     [UserId]                UNIQUEIDENTIFIER NOT NULL,
     [AddedDate]             DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
 --> Added 2.0.8 20160718 TimPN
@@ -140,6 +143,10 @@ CREATE INDEX [IX_Observation_StatusReasonID] ON [dbo].[Observation] ([StatusReas
 --< Added 2.0.10 20160901 TimPN
 --> Removed 2.0.12 2016107 TimPN
 --> Added 2.0.8 20160718 TimPN
+--> Added 2.0.15 20161024 TimPN
+GO
+CREATE INDEX [IX_Observation_CorrelationID] ON [dbo].[Observation] ([CorrelationID]) ON [Observations];
+--< Added 2.0.15 20161024 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]
 FOR INSERT

@@ -1,24 +1,22 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ImportBatch.aspx.cs" Inherits="_ImportBatch"
-    MasterPageFile="~/Site.master" %>
+﻿<%@ Page Title="Import Batches" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="ImportBatches.aspx.cs" Inherits="Admin_ImportBatches" %>
 
-<asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/ImportBatch.js"></script>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <script type="text/javascript" src="../JS/ImportBatches.js"></script>
     <script type="text/javascript" src="../JS/generic.js"></script>
     <script type="text/javascript">
-        var submitValue = function (format)
-        {
+        var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
-            //VisCols.setValue(Ext.encode(ImportBatchGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-            var viscolsNew = makenewJsonForExport(ImportBatchGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            //VisCols.setValue(Ext.encode(ImportBatchesGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
+            var viscolsNew = makenewJsonForExport(ImportBatchesGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
 
-            ImportBatchGrid.submitData(false);
+            ImportBatchesGrid.submitData(false);
         };
     </script>
 </asp:Content>
-<asp:Content ID="Content" runat="server" ContentPlaceHolderID="ContentPlaceHolder1">
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
@@ -28,7 +26,7 @@
             <ext:BorderLayout ID="BorderLayout1" runat="server">
                 <Center MarginsSummary="5 5 0 5">
                     <ext:Panel ID="Panel1" runat="server" Title="Import Batches" Layout="FitLayout" Hidden="false">
-                        <TopBar>
+                        <topbar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
                                     <ext:Button ID="Button1" runat="server" Icon="Add" Text="New Import">
@@ -52,12 +50,12 @@
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
-                        </TopBar>
+                        </topbar>
                         <Items>
-                            <ext:GridPanel ID="ImportBatchGrid" runat="server" Border="false" ClientIDMode="Static">
+                            <ext:GridPanel ID="ImportBatchesGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="Store2" runat="server" RemoteSort="true" OnRefreshData="ImportBatchStore_RefreshData"
-                                        OnSubmitData="ImportBatchStore_Submit">
+                                    <ext:Store ID="ImportBatchesGridStore" runat="server" RemoteSort="true" OnRefreshData="ImportBatchesGridStore_RefreshData"
+                                        OnSubmitData="ImportBatchesGridStore_Submit">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -85,7 +83,7 @@
                                         <DirectEventConfig IsUpload="true" />
                                     </ext:Store>
                                 </Store>
-                                <ColumnModel ID="ColumnModel1" runat="server">
+                                <columnmodel id="ColumnModel1" runat="server">
                                     <Columns>
                                         <ext:Column Header="Number" DataIndex="Code" Width="80"/>
                                         <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="150" Format="dd-MM-yyyy HH:mm:ss" />
@@ -105,16 +103,16 @@
                                             <PrepareToolbar Fn="prepareToolbarCommand" />
                                         </ext:CommandColumn>
                                     </Columns>
-                                </ColumnModel>
+                                </columnmodel>
                                 <SelectionModel>
                                     <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" SingleSelect="true">
                                         <Listeners>
-                                            <RowSelect Fn="ImportBatchRowSelect" Buffer="250" />
+                                            <rowselect fn="ImportBatchRowSelect" buffer="250" />
                                         </Listeners>
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
-                                <LoadMask ShowMask="true" />
-                                <Plugins>
+                                <loadmask showmask="true" />
+                                <plugins>
                                     <ext:GridFilters runat="server" ID="GridFilters1">
                                         <Filters>
                                             <ext:NumericFilter DataIndex="Code" />
@@ -124,77 +122,181 @@
                                             <ext:StringFilter DataIndex="Description" />
                                         </Filters>
                                     </ext:GridFilters>
-                                </Plugins>
-                                <BottomBar>
+                                </plugins>
+                                <bottombar>
                                     <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="25" EmptyMsg="No data found" />
-                                </BottomBar>
+                                </bottombar>
                                 <Listeners>
-                                    <Command Fn="onBatchCommand" />
+                                    <command fn="onBatchCommand" />
                                 </Listeners>
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
                 </Center>
                 <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
-                    <ext:Panel ID="pnlSouth" runat="server" Title="Data Log" Layout="FitLayout" Height="350"
-                        ClientIDMode="Static">
+                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:GridPanel ID="DSLogGrid" runat="server" Border="false" ClientIDMode="Static">
-                                <Store>
-                                    <ext:Store ID="Store4" runat="server" RemoteSort="true" OnRefreshData="DSLogGrid_RefreshData"  >
-                                        <Proxy>
-                                            <ext:PageProxy />
-                                        </Proxy>
-                                        <Reader>
-                                            <ext:JsonReader IDProperty="Id">
-                                                <Fields>
-                                                    <ext:RecordField Name="Id" Type="Auto" />
-                                                    <ext:RecordField Name="Organisation" Type="String" />
-                                                    <ext:RecordField Name="ProjectSite" Type="String" />
-                                                    <ext:RecordField Name="StationName" Type="String" />
-                                                    <ext:RecordField Name="ImportDate" Type="Date" />
-                                                    <ext:RecordField Name="SensorName" Type="String" />
-                                                    <ext:RecordField Name="SensorID" Type="Auto" />
-                                                    <ext:RecordField Name="SensorInvalid" Type="Boolean" />
-                                                    <ext:RecordField Name="ValueDate" Type="Date" />
-                                                    <ext:RecordField Name="InvalidDateValue" Type="String" />
-                                                    <ext:RecordField Name="DateValueInvalid" Type="Boolean" />
-                                                    <ext:RecordField Name="ValueTime" Type="Date" UseNull="true" />
-                                                    <ext:RecordField Name="InvalidTimeValue" Type="String" />
-                                                    <ext:RecordField Name="TimeValueInvalid" Type="Boolean" />
-                                                    <ext:RecordField Name="RawValue" Type="Float" />
-                                                    <ext:RecordField Name="ValueText" Type="String" />
-                                                    <ext:RecordField Name="RawValueInvalid" Type="Boolean" />
-                                                    <ext:RecordField Name="DataValue" Type="Float" UseNull="true" />
-                                                    <ext:RecordField Name="TransformValueText" Type="String" />
-                                                    <ext:RecordField Name="DataValueInvalid" Type="Boolean" />
-                                                    <ext:RecordField Name="PhenomenonName" Type="String" />
-                                                    <ext:RecordField Name="OfferingName" Type="String" />
-                                                    <ext:RecordField Name="Unit" Type="String" />
-                                                    <ext:RecordField Name="PhenomenonOfferingID" Type="Auto" />
-                                                    <ext:RecordField Name="OfferingInvalid" Type="Boolean" />
-                                                    <ext:RecordField Name="PhenomenonUOMID" Type="Auto" />
-                                                    <ext:RecordField Name="UOMInvalid" Type="Boolean" />
-                                                    <ext:RecordField Name="RawFieldValue" Type="String" />
-                                                    <ext:RecordField Name="Status" Type="String" />
-                                                    <ext:RecordField Name="StatusID" Type="String" />
-                                                    <ext:RecordField Name="DataSourceTransformationID" Type="Auto" />
-                                                    <ext:RecordField Name="Transformation" Type="String" />
-                                                </Fields>
-                                            </ext:JsonReader>
-                                        </Reader>
-                                        <BaseParams>
-                                            <ext:Parameter Name="ImportBatchID" Value="Ext.getCmp('#{ImportBatchGrid}') && #{ImportBatchGrid}.getSelectionModel().hasSelection() ? #{ImportBatchGrid}.getSelectionModel().getSelected().id : -1"
-                                                Mode="Raw" />
-                                            <ext:Parameter Name="start" Value="0" Mode="Raw" />
-                                            <ext:Parameter Name="limit" Value="25" Mode="Raw" />
-                                            <ext:Parameter Name="sort" Value="" />
-                                            <ext:Parameter Name="dir" Value="" />
-                                        </BaseParams>
-                                        <SortInfo Field="Id" Direction="ASC" />
-                                    </ext:Store>
-                                </Store>
-                                <ColumnModel ID="ColumnModel2" runat="server">
+                            <ext:Panel ID="Panel4" runat="server" Title="Observations" Layout="FitLayout" Height="200" ClientIDMode="Static">
+                                <topbar>
+                                    <ext:Toolbar ID="Toolbar2" runat="server">
+                                        <Items>
+                                            <ext:Button ID="Button4" runat="server" Icon="ShieldGo" Text="Apply status" ClientIDMode="Static">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip2" runat="server" Html="Apply" />
+                                                </ToolTips>
+                                                <Listeners>
+                                                    <%--<Click Handler="if(Ext.getCmp('#{ImportBatchesGrid}') && #{ImportBatchesGrid}.getSelectionModel().hasSelection()){#{AvailableObservationsGridStore}.reload();#{AvailableObservationsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Data Schema.')}" />--%>
+                                                </Listeners>
+                                            </ext:Button>
+                                            <%-- 
+                                            <ext:Button ID="btnAddObservation" runat="server" Icon="Add" Text="Add Observation">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="AddObservationClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            --%>
+                                        </Items>
+                                    </ext:Toolbar>
+                                </topbar>
+                                <Items>
+                                    <ext:GridPanel ID="ObservationsGrid" runat="server" Border="false" ClientIDMode="Static">
+                                        <Store>
+                                            <ext:Store ID="ObservationsGridStore" runat="server" OnRefreshData="ObservationsGridStore_RefreshData">
+                                                <Proxy>
+                                                    <ext:PageProxy />
+                                                </Proxy>
+                                                <Reader>
+                                                    <ext:JsonReader IDProperty="Id">
+                                                        <Fields>
+                                                            <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="SensorName" Type="Auto" />
+                                                            <ext:RecordField Name="OfferingName" Type="Auto" />
+                                                            <ext:RecordField Name="UnitOfMeasureUnit" Type="Auto" />
+                                                            <ext:RecordField Name="ValueDate" Type="Date" />
+                                                            <ext:RecordField Name="RawValue" Type="Auto" />
+                                                            <ext:RecordField Name="DataValue" Type="Auto" />
+                                                            <ext:RecordField Name="StatusName" Type="Auto" />
+                                                            <ext:RecordField Name="SatusReasonName" Type="Auto" />
+                                                            <ext:RecordField Name="Comment" Type="Auto" />
+                                                        </Fields>
+                                                    </ext:JsonReader>
+                                                </Reader>
+                                                <BaseParams>
+                                                    <ext:Parameter Name="ImportBatchID" Value="Ext.getCmp('#{ImportBatchesGrid}') && #{ImportBatchesGrid}.getSelectionModel().hasSelection() ? #{ImportBatchesGrid}.getSelectionModel().getSelected().id : -1"
+                                                        Mode="Raw" />
+                                                    <ext:Parameter Name="start" Value="0" Mode="Raw" />
+                                                    <ext:Parameter Name="limit" Value="25" Mode="Raw" />
+                                                    <ext:Parameter Name="sort" Value="" />
+                                                    <ext:Parameter Name="dir" Value="" />
+                                                </BaseParams>
+                                            </ext:Store>
+                                        </Store>
+                                        <columnmodel id="ColumnModel4" runat="server">
+                                            <Columns>
+                                                <ext:Column Header="Sensor" DataIndex="SensorName" Width="150" />
+                                                <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
+                                                <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
+                                                <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="75" Format="dd MMM yyyy" />
+                                                <ext:Column Header="Raw value" DataIndex="RawValue" Width="100" />
+                                                <ext:Column Header="Data value" DataIndex="DataValue" Width="100" />
+                                                <ext:Column Header="Status" DataIndex="StatusName" Width="150" />
+                                                <ext:Column Header="Reason" DataIndex="StatusReasonName" Width="150" />
+                                                <ext:Column Header="Comment" DataIndex="Comment" Width="200" />
+<%--                                                <ext:CommandColumn Width="200">
+                                                    <Commands>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
+                                                        <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="Delete" />
+                                                    </Commands>
+                                                </ext:CommandColumn>--%>
+                                            </Columns>
+                                        </columnmodel>
+                                        <SelectionModel>
+                                            <ext:RowSelectionModel ID="RowSelectionModel3" runat="server" SingleSelect="true">
+                                            </ext:RowSelectionModel>
+                                        </SelectionModel>
+                                        <loadmask showmask="true" />
+                                        <plugins>
+                                            <ext:GridFilters runat="server" ID="GridFilters3">
+                                                <Filters>
+                                                    <ext:StringFilter DataIndex="SensorName" />
+                                                    <ext:DateFilter DataIndex="ValueDate" />
+                                                    <ext:StringFilter DataIndex="RawValue" />
+                                                    <ext:NumericFilter DataIndex="DataValue" />
+                                                    <ext:StringFilter DataIndex="PhenomenonName" />
+                                                    <ext:StringFilter DataIndex="OfferingName" />
+                                                    <ext:StringFilter DataIndex="UnitOfMeasureUnit" />
+                                                    <ext:StringFilter DataIndex="StatusName" />
+                                                    <ext:StringFilter DataIndex="StatusReasonName" />
+                                                </Filters>
+                                            </ext:GridFilters>
+                                        </plugins>
+                                        <bottombar>
+                                            <ext:PagingToolbar ID="PagingToolbar3" runat="server" PageSize="25" EmptyMsg="No data found" />
+                                        </bottombar>
+                                    </ext:GridPanel>
+                                </Items>
+                            </ext:Panel>
+                            <ext:Panel ID="Panel12" runat="server" Title="Data Log" Layout="FitLayout" Height="350" ClientIDMode="Static">
+                                <Items>
+                                    <ext:GridPanel ID="DSLogGrid" runat="server" Border="false" ClientIDMode="Static">
+                                        <Store>
+                                            <ext:Store ID="Store4" runat="server" RemoteSort="true" OnRefreshData="DSLogGrid_RefreshData">
+                                                <Proxy>
+                                                    <ext:PageProxy />
+                                                </Proxy>
+                                                <Reader>
+                                                    <ext:JsonReader IDProperty="Id">
+                                                        <Fields>
+                                                            <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="Organisation" Type="String" />
+                                                            <ext:RecordField Name="ProjectSite" Type="String" />
+                                                            <ext:RecordField Name="StationName" Type="String" />
+                                                            <ext:RecordField Name="ImportDate" Type="Date" />
+                                                            <ext:RecordField Name="SensorName" Type="String" />
+                                                            <ext:RecordField Name="SensorID" Type="Auto" />
+                                                            <ext:RecordField Name="SensorInvalid" Type="Boolean" />
+                                                            <ext:RecordField Name="ValueDate" Type="Date" />
+                                                            <ext:RecordField Name="InvalidDateValue" Type="String" />
+                                                            <ext:RecordField Name="DateValueInvalid" Type="Boolean" />
+                                                            <ext:RecordField Name="ValueTime" Type="Date" UseNull="true" />
+                                                            <ext:RecordField Name="InvalidTimeValue" Type="String" />
+                                                            <ext:RecordField Name="TimeValueInvalid" Type="Boolean" />
+                                                            <ext:RecordField Name="RawValue" Type="Float" />
+                                                            <ext:RecordField Name="ValueText" Type="String" />
+                                                            <ext:RecordField Name="RawValueInvalid" Type="Boolean" />
+                                                            <ext:RecordField Name="DataValue" Type="Float" UseNull="true" />
+                                                            <ext:RecordField Name="TransformValueText" Type="String" />
+                                                            <ext:RecordField Name="DataValueInvalid" Type="Boolean" />
+                                                            <ext:RecordField Name="PhenomenonName" Type="String" />
+                                                            <ext:RecordField Name="OfferingName" Type="String" />
+                                                            <ext:RecordField Name="Unit" Type="String" />
+                                                            <ext:RecordField Name="PhenomenonOfferingID" Type="Auto" />
+                                                            <ext:RecordField Name="OfferingInvalid" Type="Boolean" />
+                                                            <ext:RecordField Name="PhenomenonUOMID" Type="Auto" />
+                                                            <ext:RecordField Name="UOMInvalid" Type="Boolean" />
+                                                            <ext:RecordField Name="RawFieldValue" Type="String" />
+                                                            <ext:RecordField Name="Status" Type="String" />
+                                                            <ext:RecordField Name="StatusID" Type="String" />
+                                                            <ext:RecordField Name="DataSourceTransformationID" Type="Auto" />
+                                                            <ext:RecordField Name="Transformation" Type="String" />
+                                                        </Fields>
+                                                    </ext:JsonReader>
+                                                </Reader>
+                                                <BaseParams>
+                                                    <ext:Parameter Name="ImportBatchID" Value="Ext.getCmp('#{ImportBatchesGrid}') && #{ImportBatchesGrid}.getSelectionModel().hasSelection() ? #{ImportBatchesGrid}.getSelectionModel().getSelected().id : -1"
+                                                        Mode="Raw" />
+                                                    <ext:Parameter Name="start" Value="0" Mode="Raw" />
+                                                    <ext:Parameter Name="limit" Value="25" Mode="Raw" />
+                                                    <ext:Parameter Name="sort" Value="" />
+                                                    <ext:Parameter Name="dir" Value="" />
+                                                </BaseParams>
+                                                <SortInfo Field="Id" Direction="ASC" />
+                                            </ext:Store>
+                                        </Store>
+                                        <columnmodel id="ColumnModel2" runat="server">
                                     <Columns>
                                         <%--<ext:Column Header="Data" DataIndex="Data">
                                             <Renderer Fn="rendererData " />
@@ -291,13 +393,13 @@
                                             <PrepareToolbar Fn="prepareToolbarTransformation"/>
                                         </ext:CommandColumn>
                                     </Columns>
-                                </ColumnModel>
-                                <SelectionModel>
-                                    <ext:RowSelectionModel ID="RowSelectionModel2" runat="server" SingleSelect="true">
-                                    </ext:RowSelectionModel>
-                                </SelectionModel>
-                                <LoadMask ShowMask="true" />
-                                <Plugins>
+                                </columnmodel>
+                                        <SelectionModel>
+                                            <ext:RowSelectionModel ID="RowSelectionModel2" runat="server" SingleSelect="true">
+                                            </ext:RowSelectionModel>
+                                        </SelectionModel>
+                                        <loadmask showmask="true" />
+                                        <plugins>
                                     <ext:GridFilters runat="server" ID="GridFilters2">
                                         <Filters>
                                             <ext:DateFilter DataIndex="ImportDate" />
@@ -314,16 +416,18 @@
                                             <ext:StringFilter DataIndex="Status" />
                                         </Filters>
                                     </ext:GridFilters>
-                                </Plugins>
-                                <BottomBar>
+                                </plugins>
+                                        <bottombar>
                                     <ext:PagingToolbar ID="PagingToolbar2" runat="server" PageSize="25" EmptyMsg="No data found" />
-                                </BottomBar>
-                                <Listeners>
-                                    <Command Fn="onLogCommand" />
-                                </Listeners>
-                            </ext:GridPanel>
+                                </bottombar>
+                                        <Listeners>
+                                            <command fn="onLogCommand" />
+                                        </Listeners>
+                                    </ext:GridPanel>
+                                </Items>
+                            </ext:Panel>
                         </Items>
-                    </ext:Panel>
+                    </ext:TabPanel>
                 </South>
             </ext:BorderLayout>
         </Items>
@@ -367,9 +471,9 @@
                                 FieldLabel="Log File" ButtonText="" Icon="Zoom" ClientIDMode="Static" />
                         </Items>
                         <Listeners>
-                            <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);" />
+                            <clientvalidation handler="#{SaveButton}.setDisabled(!valid);" />
                         </Listeners>
-                        <Buttons>
+                        <buttons>
                             <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept">
                                 <DirectEvents>
                                     <Click OnEvent="UploadClick" Before="if (!#{BasicForm}.getForm().isValid()) { return false; } 
@@ -389,14 +493,14 @@
                                     <Click Handler="#{BasicForm}.getForm().reset();" />
                                 </Listeners>
                             </ext:Button>
-                        </Buttons>
+                        </buttons>
                     </ext:FormPanel>
                 </North>
                 <Center MarginsSummary="0 5 0 5">
                     <ext:GridPanel ID="ErrorGrid" runat="server" Title="Errors" Layout="FitLayout" ClientIDMode="Static"
                         Height="100" EnableHdMenu="false">
-                        <ColumnModel runat="server" ID="ColumnModel3">
-                        </ColumnModel>
+                        <columnmodel runat="server" id="ColumnModel3">
+                        </columnmodel>
                         <Store>
                             <ext:Store ID="ErrorGridStore" runat="server">
                                 <Reader>
@@ -413,13 +517,13 @@
                                 </Reader>
                             </ext:Store>
                         </Store>
-                        <ColumnModel>
+                        <columnmodel>
                             <Columns>
                                 <ext:Column Header="Error Message" DataIndex="ErrorMessage" Width="400" />
                                 <ext:Column Header="Line No" DataIndex="LineNo" Width="50" />
                                 <ext:Column Header="Raw Data" DataIndex="RecordString" Width="200" />
                             </Columns>
-                        </ColumnModel>
+                        </columnmodel>
                     </ext:GridPanel>
                 </Center>
                 <%-- <South MarginsSummary="0 0 5 5" Split="true">
@@ -466,7 +570,7 @@
                                     </ext:Store>
                                 </Store>
                                 <Listeners>
-                                    <Select Fn="SelectSensor" />
+                                    <select fn="SelectSensor" />
                                 </Listeners>
                             </ext:ComboBox>
                         </Items>
@@ -553,7 +657,7 @@
                         </Items>
                     </ext:Panel>
                 </Items>
-                <Buttons>
+                <buttons>
                     <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="SaveObservation" Method="POST">
@@ -561,14 +665,15 @@
                             </Click>
                         </DirectEvents>
                     </ext:Button>
-                </Buttons>
-                <BottomBar>
+                </buttons>
+                <bottombar>
                     <ext:StatusBar ID="StatusBar1" runat="server" Height="25" />
-                </BottomBar>
+                </bottombar>
                 <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                    <clientvalidation handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
                 </Listeners>
             </ext:FormPanel>
         </Content>
     </ext:Window>
 </asp:Content>
+

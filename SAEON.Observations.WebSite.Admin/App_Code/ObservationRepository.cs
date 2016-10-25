@@ -37,4 +37,14 @@ public class ObservationRepository : BaseRepository
 
         return col.ToList<object>();
     }
+
+    public static List<VObservationsList> GetPagedListByBatch(StoreRefreshDataEventArgs e, string paramPrefix, Guid BatchID)
+    {
+        SqlQuery q = new Select().From(VObservationsList.Schema)
+            .Where(VObservationsList.Columns.ImportBatchID).IsEqualTo(BatchID)
+            .OrderAsc(VObservationsList.Columns.ValueDate);
+        GetPagedQuery(ref q, e, paramPrefix);
+        VObservationsListCollection col = q.ExecuteAsCollection<VObservationsListCollection>();
+        return q.ExecuteAsCollection<VObservationsListCollection>().ToList<VObservationsList>();
+    }
 }

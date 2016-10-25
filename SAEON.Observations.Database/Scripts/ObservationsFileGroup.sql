@@ -10,7 +10,9 @@ ALTER DATABASE [$(DatabaseName)]
 	ADD FILE
 	(
 		NAME = [Observations],
-		FILENAME = '$(DefaultDataPath)$(DefaultFilePrefix)_Observations.ndf'
+		FILENAME = '$(DefaultDataPath)$(DefaultFilePrefix)_Observations.ndf',
+		MAXSIZE = UNLIMITED,
+		FILEGROWTH = 1GB
 	) TO FILEGROUP [Observations];
 GO
 --< Added 2.0.13 20161010 TimPN

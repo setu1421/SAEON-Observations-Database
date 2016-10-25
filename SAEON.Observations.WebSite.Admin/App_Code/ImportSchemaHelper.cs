@@ -279,6 +279,7 @@ public class ImportSchemaHelper : IDisposable
 		SchemaDefinition dtdef = schemaDefs.FirstOrDefault(t => t.IsDate);
 		SchemaDefinition tmdef = schemaDefs.FirstOrDefault(t => t.IsTime);
 
+        Guid correlationID = Guid.NewGuid();
 
 		if (tmdef == null)
 			tmdef = schemaDefs.FirstOrDefault(t => t.IsFixedTime);
@@ -435,7 +436,7 @@ public class ImportSchemaHelper : IDisposable
 
 				if (RowComment.Length > 0)
 					rec.Comment = RowComment;
-
+                rec.CorrelationID = correlationID;
 				SchemaValues.Add(rec);
 			}
 		}
@@ -709,11 +710,12 @@ public class SchemaValue
 	public string FieldRawValue { get; set; }
 	public string Comment { get; set; }
 
+    public Guid CorrelationID { get; set; }
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public bool IsValid
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool IsValid
 	{
 		get
 		{

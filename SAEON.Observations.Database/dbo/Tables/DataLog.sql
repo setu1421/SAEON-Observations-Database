@@ -37,6 +37,9 @@
 --< Changed 2.0.8 20160720 TimPN
     [RawRecordData]              VARCHAR (500)    NULL,
     [RawFieldValue]              VARCHAR (50)     NOT NULL,
+--> Added 2.0.15 20161024 TimPN
+	[CorrelationID] UNIQUEIDENTIFIER NULL,
+--< Added 2.0.15 20161024 TimPN
 --> Added 2.0.8 20160708 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataLog_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataLog_UpdatedAt] DEFAULT GetDate(), 

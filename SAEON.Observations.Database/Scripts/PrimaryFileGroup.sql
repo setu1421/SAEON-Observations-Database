@@ -4,14 +4,15 @@ Do not change the database path or name variables.
 Any sqlcmd variables will be properly substituted during 
 build and deployment.
 */
-ALTER DATABASE [$(DatabaseName)] ADD FILEGROUP [Documents] CONTAINS FILESTREAM;
+ALTER DATABASE [$(DatabaseName)] ADD FILEGROUP [Primary];
 GO
 ALTER DATABASE [$(DatabaseName)]
 	ADD FILE
 	(
-		NAME = [Documents],
-		FILENAME = '$(DefaultDataPath)$(DefaultFilePrefix)_Documents.ndf',
-		MAXSIZE = UNLIMITED
-	) TO FILEGROUP [Documents];
-GO
+		NAME = [Primary],
+		FILENAME = '$(DefaultDataPath)$(DefaultFilePrefix).mdf',
+		MAXSIZE = UNLIMITED,
+		FILEGROWTH = 1GB
+	) TO FILEGROUP [Primary];
 --< Added 2.0.13 20161010 TimPN
+	

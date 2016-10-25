@@ -79,6 +79,7 @@
     <DefaultFilegroup>PRIMARY</DefaultFilegroup>
     <GenerateCreateScript>True</GenerateCreateScript>
     <TargetFrameworkProfile />
+    <DefaultFileStreamFilegroup>Documents</DefaultFileStreamFilegroup>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -542,6 +543,8 @@
     <Build Include="Scripts\ObservationsFileGroup.sql" />
     <Build Include="Scripts\DocumentsFileGroup.sql" />
     <Build Include="dbo\Views\vDataSourceRole.sql" />
+    <Build Include="dbo\Views\vObservationsList.sql" />
+    <Build Include="Scripts\PrimaryFileGroup.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />
@@ -556,5 +559,8 @@
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SAEON.Observations.Database.refactorlog" />
   </ItemGroup>
 </Project>

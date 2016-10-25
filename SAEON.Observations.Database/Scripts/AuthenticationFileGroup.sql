@@ -10,7 +10,9 @@ ALTER DATABASE [$(DatabaseName)]
 	ADD FILE
 	(
 		NAME = [Authentication],
-		FILENAME = '$(DefaultDataPath)$(DefaultFilePrefix)_Authentication.ndf'
+		FILENAME = '$(DefaultDataPath)$(DefaultFilePrefix)_Authentication.ndf',
+		MAXSIZE = UNLIMITED,
+		FILEGROWTH = 1GB
 	) TO FILEGROUP [Authentication];
 GO
 --< Added 2.0.13 20161010 TimPN
