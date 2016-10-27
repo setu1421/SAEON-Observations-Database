@@ -4,6 +4,7 @@ using Serilog;
 using SubSonic;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Transactions;
@@ -20,18 +21,13 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             Store store = cbDataSource.GetStore();
             SqlQuery q = new Select(DataSource.IdColumn).From(DataSource.Schema).Distinct()
                             .InnerJoin(Sensor.DataSourceIDColumn, DataSource.IdColumn);
-
             SqlQuery q1 = new Select(DataSourceRole.DataSourceIDColumn).From(DataSourceRole.Schema).Distinct()
                 .Where(DataSourceRole.RoleNameColumn).In(System.Web.Security.Roles.GetRolesForUser())
                 .And(DataSourceRole.IsRoleReadOnlyColumn).IsEqualTo(false)
                 .And(DataSourceRole.DataSourceIDColumn).In(q);
-
-
             SqlQuery sourceQuery = new Select(DataSource.IdColumn, DataSource.NameColumn)
                         .From(DataSource.Schema).Where(DataSource.IdColumn).In(q1).OrderAsc(DataSource.NameColumn.QualifiedName);
-
-
-            System.Data.DataSet ds = sourceQuery.ExecuteDataSet();
+            DataSet ds = sourceQuery.ExecuteDataSet();
             store.DataSource = ds.Tables[0];
 
             store.DataBind();
@@ -52,6 +48,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
               .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
               .ExecuteDataSet().Tables[0];
             this.cbUnitofMeasure.GetStore().DataBind();
+
+            StatusStore.DataSource = new StatusCollection().OrderByAsc(Status.Columns.Name).Load();
+            StatusStore.DataBind();
+            StatusReasonStore.DataSource = new StatusReasonCollection().OrderByAsc(StatusReason.Columns.Name).Load();
+            StatusReasonStore.DataBind();
         }
     }
 
@@ -781,6 +782,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         if (e.Parameters["ImportBatchID"] != null && e.Parameters["ImportBatchID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["ImportBatchID"].ToString());
+            btnApply.Disabled = true;
             try
             {
                 ObservationsGridStore.DataSource = ObservationRepository.GetPagedListByBatch(e, e.Parameters[GridFilters1.ParamPrefix], Id);
@@ -791,6 +793,67 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 Log.Error(ex, "ImportBatches.ObservationsGridStore_RefreshData");
                 MessageBoxes.Error(ex, "Error", "Unable to refresh Observations grid");
             }
+        }
+    }
+
+    protected void ApplyClick(object sender, DirectEventArgs e)
+    {
+        var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+        if (cbStatus.SelectedItem.Text == "Verified")
+        {
+            MessageBoxes.Confirm("Confirm",
+            "DirectCall.ApplyStatusAndReason({eventMask: { showMask: true}});",
+            $"Are your sure you want to apply status '{cbStatus.SelectedItem.Text}' to the {sm.SelectedRows.Count:N0} selected observations?");
+
+        }
+        else
+        {
+            MessageBoxes.Confirm("Confirm",
+            "DirectCall.ApplyStatusAndReason({eventMask: { showMask: true}});",
+            $"Are your sure you want to apply status '{cbStatus.SelectedItem.Text}' and reason '{cbStatusReason.SelectedItem.Text}' to the {sm.SelectedRows.Count:N0} selected observations?");
+
+        }
+    }
+
+    [DirectMethod]
+    public void ApplyStatusAndReason()
+    {
+        try
+        {
+            var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+            foreach (SelectedRow row in sm.SelectedRows)
+            {
+                Observation obs = new Observation(row.RecordID);
+                obs.StatusID = Utilities.MakeGuid(cbStatus.SelectedItem.Value);
+                if (cbStatus.SelectedItem.Text == "Verified")
+                    obs.StatusReasonID = null;
+                else
+                    obs.StatusReasonID = Utilities.MakeGuid(cbStatusReason.SelectedItem.Value);
+                obs.Save();
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "ImportBatches.ApplyClick");
+            MessageBoxes.Error(ex, "Error", "Unable to apply status and reason to selected observations");
+        }
+        ObservationsGrid.DataBind();
+    }
+
+    protected void EnableApply(object sender, DirectEventArgs e)
+    {
+        var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+        if (cbStatus.SelectedItem.Text == "Verified")
+        {
+            cbStatusReason.SelectedIndex = -1;
+            cbStatusReason.SetValue(null);
+            cbStatusReason.Disabled = true;
+            btnApply.Disabled = (cbStatus.SelectedIndex == -1) || (sm.SelectedRows.Count == 0);
+        }
+        else
+        {
+            cbStatusReason.Disabled = false;
+            btnApply.Disabled = (cbStatus.SelectedIndex == -1) || (cbStatusReason.SelectedIndex == -1) || (sm.SelectedRows.Count == 0);
         }
     }
     #endregion

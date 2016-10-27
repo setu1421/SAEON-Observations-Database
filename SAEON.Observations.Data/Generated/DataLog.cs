@@ -448,6 +448,19 @@ namespace SAEON.Observations.Data
 				colvarRawFieldValue.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRawFieldValue);
 				
+				TableSchema.TableColumn colvarCorrelationID = new TableSchema.TableColumn(schema);
+				colvarCorrelationID.ColumnName = "CorrelationID";
+				colvarCorrelationID.DataType = DbType.Guid;
+				colvarCorrelationID.MaxLength = 0;
+				colvarCorrelationID.AutoIncrement = false;
+				colvarCorrelationID.IsNullable = true;
+				colvarCorrelationID.IsPrimaryKey = false;
+				colvarCorrelationID.IsForeignKey = false;
+				colvarCorrelationID.IsReadOnly = false;
+				colvarCorrelationID.DefaultSetting = @"";
+				colvarCorrelationID.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarCorrelationID);
+				
 				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
 				colvarAddedAt.ColumnName = "AddedAt";
 				colvarAddedAt.DataType = DbType.DateTime;
@@ -678,6 +691,14 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.RawFieldValue, value); }
 		}
 		  
+		[XmlAttribute("CorrelationID")]
+		[Bindable(true)]
+		public Guid? CorrelationID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.CorrelationID); }
+			set { SetColumnValue(Columns.CorrelationID, value); }
+		}
+		  
 		[XmlAttribute("AddedAt")]
 		[Bindable(true)]
 		public DateTime? AddedAt 
@@ -803,7 +824,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,Guid? varCorrelationID,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataLog item = new DataLog();
 			
@@ -855,6 +876,8 @@ namespace SAEON.Observations.Data
 			
 			item.RawFieldValue = varRawFieldValue;
 			
+			item.CorrelationID = varCorrelationID;
+			
 			item.AddedAt = varAddedAt;
 			
 			item.UpdatedAt = varUpdatedAt;
@@ -869,7 +892,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,Guid? varCorrelationID,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataLog item = new DataLog();
 			
@@ -920,6 +943,8 @@ namespace SAEON.Observations.Data
 				item.RawRecordData = varRawRecordData;
 			
 				item.RawFieldValue = varRawFieldValue;
+			
+				item.CorrelationID = varCorrelationID;
 			
 				item.AddedAt = varAddedAt;
 			
@@ -1106,16 +1131,23 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn CorrelationIDColumn
         {
             get { return Schema.Columns[24]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[25]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[26]; }
         }
         
         
@@ -1148,6 +1180,7 @@ namespace SAEON.Observations.Data
 			 public static string ImportBatchID = @"ImportBatchID";
 			 public static string RawRecordData = @"RawRecordData";
 			 public static string RawFieldValue = @"RawFieldValue";
+			 public static string CorrelationID = @"CorrelationID";
 			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
 						

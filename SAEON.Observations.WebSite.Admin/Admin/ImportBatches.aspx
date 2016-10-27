@@ -3,6 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <script type="text/javascript" src="../JS/ImportBatches.js"></script>
     <script type="text/javascript" src="../JS/generic.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery-3.1.1.js"></script>
     <script type="text/javascript">
         var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
@@ -15,8 +16,39 @@
             ImportBatchesGrid.submitData(false);
         };
     </script>
+    <style type="text/css">
+        .myTextField {
+            border: none;
+            background-image: none;
+            background-color: transparent;
+        }
+    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <ext:Store ID="StatusStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="Auto" />
+                    <ext:RecordField Name="Code" Type="String" />
+                    <ext:RecordField Name="Name" Type="String" />
+                    <ext:RecordField Name="Description" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
+    <ext:Store ID="StatusReasonStore" runat="server">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="Auto" />
+                    <ext:RecordField Name="Code" Type="String" />
+                    <ext:RecordField Name="Name" Type="String" />
+                    <ext:RecordField Name="Description" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
     <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
     <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
@@ -26,7 +58,7 @@
             <ext:BorderLayout ID="BorderLayout1" runat="server">
                 <Center MarginsSummary="5 5 0 5">
                     <ext:Panel ID="Panel1" runat="server" Title="Import Batches" Layout="FitLayout" Hidden="false">
-                        <topbar>
+                        <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
                                     <ext:Button ID="Button1" runat="server" Icon="Add" Text="New Import">
@@ -50,7 +82,7 @@
                                     </ext:Button>
                                 </Items>
                             </ext:Toolbar>
-                        </topbar>
+                        </TopBar>
                         <Items>
                             <ext:GridPanel ID="ImportBatchesGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
@@ -83,9 +115,9 @@
                                         <DirectEventConfig IsUpload="true" />
                                     </ext:Store>
                                 </Store>
-                                <columnmodel id="ColumnModel1" runat="server">
+                                <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Number" DataIndex="Code" Width="80"/>
+                                        <ext:Column Header="Number" DataIndex="Code" Width="80" />
                                         <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="150" Format="dd-MM-yyyy HH:mm:ss" />
                                         <ext:Column Header="DataSourceID" DataIndex="DataSourceID" Width="150" Hidden="true">
                                         </ext:Column>
@@ -103,16 +135,16 @@
                                             <PrepareToolbar Fn="prepareToolbarCommand" />
                                         </ext:CommandColumn>
                                     </Columns>
-                                </columnmodel>
+                                </ColumnModel>
                                 <SelectionModel>
                                     <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" SingleSelect="true">
                                         <Listeners>
-                                            <rowselect fn="ImportBatchRowSelect" buffer="250" />
+                                            <RowSelect Fn="ImportBatchRowSelect" Buffer="250" />
                                         </Listeners>
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
-                                <loadmask showmask="true" />
-                                <plugins>
+                                <LoadMask ShowMask="true" />
+                                <Plugins>
                                     <ext:GridFilters runat="server" ID="GridFilters1">
                                         <Filters>
                                             <ext:NumericFilter DataIndex="Code" />
@@ -122,12 +154,12 @@
                                             <ext:StringFilter DataIndex="Description" />
                                         </Filters>
                                     </ext:GridFilters>
-                                </plugins>
-                                <bottombar>
+                                </Plugins>
+                                <BottomBar>
                                     <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="25" EmptyMsg="No data found" />
-                                </bottombar>
+                                </BottomBar>
                                 <Listeners>
-                                    <command fn="onBatchCommand" />
+                                    <Command Fn="onBatchCommand" />
                                 </Listeners>
                             </ext:GridPanel>
                         </Items>
@@ -137,16 +169,37 @@
                     <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
                             <ext:Panel ID="Panel4" runat="server" Title="Observations" Layout="FitLayout" Height="200" ClientIDMode="Static">
-                                <topbar>
-                                    <ext:Toolbar ID="Toolbar2" runat="server">
+                                <TopBar>
+                                    <ext:Toolbar ID="tbObservations" runat="server" ClientIDMode="Static">
                                         <Items>
-                                            <ext:Button ID="Button4" runat="server" Icon="ShieldGo" Text="Apply status" ClientIDMode="Static">
+                                            <ext:ComboBox ID="cbStatus" runat="server" StoreID="StatusStore" MsgTarget="Side" DisplayField="Name" Width="200"
+                                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
+                                                ValueField="Id" DataIndex="Id" EmptyText="Select a status" ValueNotFoundText="Select a status"
+                                                ClientIDMode="Static">
+<%--                                                <Listeners>
+                                                    <Select Fn="EnableApply" />
+                                                </Listeners>--%>
+                                                <DirectEvents>
+                                                    <Select OnEvent="EnableApply" />
+                                                </DirectEvents>
+                                            </ext:ComboBox>
+                                            <ext:TextField Width="20px" Height="20px" Disabled="true" runat="server" Cls="myTextField" />
+                                            <ext:ComboBox ID="cbStatusReason" runat="server" StoreID="StatusReasonStore" MsgTarget="Side" DisplayField="Name" Width="200"
+                                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
+                                                ValueField="Id" DataIndex="Id" EmptyText="Select a reason" ValueNotFoundText="Select a status"
+                                                ClientIDMode="Static">
+                                                <DirectEvents>
+                                                    <Select OnEvent="EnableApply" />
+                                                </DirectEvents>
+                                            </ext:ComboBox>
+                                            <ext:TextField Width="20px" Height="20px" Disabled="true" runat="server" Cls="myTextField" />
+                                            <ext:Button ID="btnApply" runat="server" Icon="ShieldGo" Text="Apply" ClientIDMode="Static" Disabled="true">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Apply" />
                                                 </ToolTips>
-                                                <Listeners>
-                                                    <%--<Click Handler="if(Ext.getCmp('#{ImportBatchesGrid}') && #{ImportBatchesGrid}.getSelectionModel().hasSelection()){#{AvailableObservationsGridStore}.reload();#{AvailableObservationsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Data Schema.')}" />--%>
-                                                </Listeners>
+                                                <DirectEvents>
+                                                    <Click OnEvent="ApplyClick" />
+                                                </DirectEvents>
                                             </ext:Button>
                                             <%-- 
                                             <ext:Button ID="btnAddObservation" runat="server" Icon="Add" Text="Add Observation">
@@ -160,7 +213,7 @@
                                             --%>
                                         </Items>
                                     </ext:Toolbar>
-                                </topbar>
+                                </TopBar>
                                 <Items>
                                     <ext:GridPanel ID="ObservationsGrid" runat="server" Border="false" ClientIDMode="Static">
                                         <Store>
@@ -176,10 +229,10 @@
                                                             <ext:RecordField Name="OfferingName" Type="Auto" />
                                                             <ext:RecordField Name="UnitOfMeasureUnit" Type="Auto" />
                                                             <ext:RecordField Name="ValueDate" Type="Date" />
-                                                            <ext:RecordField Name="RawValue" Type="Auto" />
-                                                            <ext:RecordField Name="DataValue" Type="Auto" />
+                                                            <ext:RecordField Name="RawValue" Type="Float" />
+                                                            <ext:RecordField Name="DataValue" Type="Float" />
                                                             <ext:RecordField Name="StatusName" Type="Auto" />
-                                                            <ext:RecordField Name="SatusReasonName" Type="Auto" />
+                                                            <ext:RecordField Name="StatusReasonName" Type="Auto" />
                                                             <ext:RecordField Name="Comment" Type="Auto" />
                                                         </Fields>
                                                     </ext:JsonReader>
@@ -194,7 +247,7 @@
                                                 </BaseParams>
                                             </ext:Store>
                                         </Store>
-                                        <columnmodel id="ColumnModel4" runat="server">
+                                        <ColumnModel ID="ColumnModel4" runat="server">
                                             <Columns>
                                                 <ext:Column Header="Sensor" DataIndex="SensorName" Width="150" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
@@ -204,21 +257,24 @@
                                                 <ext:Column Header="Data value" DataIndex="DataValue" Width="100" />
                                                 <ext:Column Header="Status" DataIndex="StatusName" Width="150" />
                                                 <ext:Column Header="Reason" DataIndex="StatusReasonName" Width="150" />
-                                                <ext:Column Header="Comment" DataIndex="Comment" Width="200" />
-<%--                                                <ext:CommandColumn Width="200">
+                                                <ext:Column Header="Comment" DataIndex="Comment" Width="400" />
+                                                <%--                                                <ext:CommandColumn Width="200">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
                                                         <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="Delete" />
                                                     </Commands>
                                                 </ext:CommandColumn>--%>
                                             </Columns>
-                                        </columnmodel>
+                                        </ColumnModel>
                                         <SelectionModel>
-                                            <ext:RowSelectionModel ID="RowSelectionModel3" runat="server" SingleSelect="true">
-                                            </ext:RowSelectionModel>
+                                            <ext:CheckboxSelectionModel runat="server">
+                                                <DirectEvents>
+                                                    <SelectionChange OnEvent="EnableApply" />
+                                                </DirectEvents>
+                                            </ext:CheckboxSelectionModel>
                                         </SelectionModel>
-                                        <loadmask showmask="true" />
-                                        <plugins>
+                                        <LoadMask ShowMask="true" />
+                                        <Plugins>
                                             <ext:GridFilters runat="server" ID="GridFilters3">
                                                 <Filters>
                                                     <ext:StringFilter DataIndex="SensorName" />
@@ -232,10 +288,10 @@
                                                     <ext:StringFilter DataIndex="StatusReasonName" />
                                                 </Filters>
                                             </ext:GridFilters>
-                                        </plugins>
-                                        <bottombar>
+                                        </Plugins>
+                                        <BottomBar>
                                             <ext:PagingToolbar ID="PagingToolbar3" runat="server" PageSize="25" EmptyMsg="No data found" />
-                                        </bottombar>
+                                        </BottomBar>
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
@@ -296,132 +352,132 @@
                                                 <SortInfo Field="Id" Direction="ASC" />
                                             </ext:Store>
                                         </Store>
-                                        <columnmodel id="ColumnModel2" runat="server">
-                                    <Columns>
-                                        <%--<ext:Column Header="Data" DataIndex="Data">
+                                        <ColumnModel ID="ColumnModel2" runat="server">
+                                            <Columns>
+                                                <%--<ext:Column Header="Data" DataIndex="Data">
                                             <Renderer Fn="rendererData " />
                                         </ext:Column>--%>
-                                        <ext:Column Header="Organisation" DataIndex="Organisation" Width="100" Hidden="true" />
-                                        <ext:Column Header="ProjectSite" DataIndex="ProjectSite" Width="100" Hidden="true" />
-                                        <ext:Column Header="Station" DataIndex="StationName" Width="100" Hidden="true" />
-                                        <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="100" Format="dd-MM-yyyy HH:mm:ss"
-                                            Hidden="true" />
-                                        <ext:Column Header="Sensor ID" DataIndex="SensorID" Width="40" Hidden="true">
-                                            <Commands>
-                                                <ext:ImageCommand Icon="Delete" CommandName="InvalidSensor" Hidden="true" HideMode="Display">
-                                                    <ToolTip Text="Invalid Sensor" />
-                                                </ext:ImageCommand>
-                                            </Commands>
-                                            <PrepareCommand Fn="prepareCommand" />
-                                        </ext:Column>
-                                        <ext:CheckColumn Locked="true" Header="Sensor Invalid" DataIndex="SensorInvalid"
-                                            Width="30" Hidden="true" />
-                                        <ext:Column Header="Sensor" DataIndex="SensorName" Width="150" />
-                                        <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="120" Format="dd-MM-yyyy HH:mm:ss">
-                                            <Commands>
-                                                <ext:ImageCommand Icon="Delete" CommandName="InvalidDate" Hidden="true" HideMode="Display">
-                                                    <ToolTip Text="Invalid Date" />
-                                                </ext:ImageCommand>
-                                            </Commands>
-                                            <PrepareCommand Fn="prepareCommand" />
-                                        </ext:DateColumn>
-                                        <ext:CheckColumn Header="Date Invalid" DataIndex="DateValueInvalid" Width="30" Hidden="true" />
-                                        <ext:Column Header="Invalid Date" DataIndex="InvalidDateValue" Width="80" Hidden="true" />
-                                        <ext:CheckColumn Locked="true" Header="Time Invalid" DataIndex="TimeValueInvalid"
-                                            Width="30" Hidden="true" />
-                                        <ext:DateColumn Header="Time Value" DataIndex="ValueTime" Width="80" Format="HH:mm:ss"
-                                            Hidden="true" />
-                                        <ext:Column Header="Invalid Time" DataIndex="InvalidTimeValue" Width="80" Hidden="true" />
-                                        <ext:Column Header="Raw converted value" DataIndex="RawValue" Width="80" Hidden="true" />
-                                        <ext:CheckColumn Locked="true" Header="Raw Value Invalid" DataIndex="RawValueInvalid"
-                                            Width="30" Hidden="true" />
-                                        <ext:Column Header="Invalid Raw value" DataIndex="ValueText" Width="150" Hidden="true" />
-                                        <ext:Column Header="Raw Value" DataIndex="RawFieldValue" Width="90">
-                                            <Commands>
-                                                <ext:ImageCommand Icon="Delete" CommandName="InvalidRawValue" Hidden="true" HideMode="Display">
-                                                    <ToolTip Text="Invalid Raw Value" />
-                                                </ext:ImageCommand>
-                                            </Commands>
-                                            <PrepareCommand Fn="prepareCommand" />
-                                        </ext:Column>
-                                        <ext:CheckColumn Locked="true" Header="Data Value Invalid" DataIndex="DataValueInvalid"
-                                            Width="30" Hidden="true" />
-                                        <ext:Column Header="Invalid Data Value" DataIndex="TransformValueText" Width="150"
-                                            Hidden="true" />
-                                        <ext:Column Header="Data Value" DataIndex="DataValue" Width="90">
-                                            <Commands>
-                                                <ext:ImageCommand Icon="Delete" CommandName="InvalidDataValue" Hidden="true" HideMode="Display">
-                                                    <ToolTip Text="Invalid data Value (Transformed Value)" />
-                                                </ext:ImageCommand>
-                                            </Commands>
-                                            <PrepareCommand Fn="prepareCommand" />
-                                        </ext:Column>
-                                        <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
-                                        <ext:Column Header="Offering ID" DataIndex="PhenomenonOfferingID" Width="150" Hidden="true" />
-                                        <ext:CheckColumn Locked="true" Header="Offering Invalid" DataIndex="OfferingInvalid"
-                                            Width="30" Hidden="true" />
-                                        <ext:Column Header="Offering" DataIndex="OfferingName" Width="150">
-                                            <Commands>
-                                                <ext:ImageCommand Icon="Delete" CommandName="InvalidOffering" Hidden="true" HideMode="Display">
-                                                    <ToolTip Text="Invalid Offering" />
-                                                </ext:ImageCommand>
-                                            </Commands>
-                                            <PrepareCommand Fn="prepareCommand" />
-                                        </ext:Column>
-                                        <ext:Column Header="UOM ID" DataIndex="PhenomenonUOMID" Width="150" Hidden="true" />
-                                        <ext:CheckColumn Locked="true" Header="UOM Invalid" DataIndex="UOMInvalid" Width="30"
-                                            Hidden="true" />
-                                        <ext:Column Header="Unit" DataIndex="Unit" Width="150">
-                                            <Commands>
-                                                <ext:ImageCommand Icon="Delete" CommandName="InvalidUOM" Hidden="true" HideMode="Display">
-                                                    <ToolTip Text="Invalid Unit of measurement" />
-                                                </ext:ImageCommand>
-                                            </Commands>
-                                            <PrepareCommand Fn="prepareCommand" />
-                                        </ext:Column>
-                                        <ext:Column Header="Status" DataIndex="Status" Width="150" />
-                                        <ext:Column Header="Data Transformation ID" DataIndex="DataSourceTransformationID"
-                                            Width="150" Hidden="true" />
-                                        <ext:Column Header="Transformation" DataIndex="Transformation" Width="150" Hidden="true" />
-                                        <ext:CommandColumn Width="75">
-                                            
-                                            <Commands>
-                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
-                                                <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />
-                                                <ext:GridCommand Icon="Add" CommandName="MoveToObservation" Text="" ToolTip-Text="Move to observation"  />
-                                            </Commands>
-                                            <PrepareToolbar Fn="prepareToolbarTransformation"/>
-                                        </ext:CommandColumn>
-                                    </Columns>
-                                </columnmodel>
+                                                <ext:Column Header="Organisation" DataIndex="Organisation" Width="100" Hidden="true" />
+                                                <ext:Column Header="ProjectSite" DataIndex="ProjectSite" Width="100" Hidden="true" />
+                                                <ext:Column Header="Station" DataIndex="StationName" Width="100" Hidden="true" />
+                                                <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="100" Format="dd-MM-yyyy HH:mm:ss"
+                                                    Hidden="true" />
+                                                <ext:Column Header="Sensor ID" DataIndex="SensorID" Width="40" Hidden="true">
+                                                    <Commands>
+                                                        <ext:ImageCommand Icon="Delete" CommandName="InvalidSensor" Hidden="true" HideMode="Display">
+                                                            <ToolTip Text="Invalid Sensor" />
+                                                        </ext:ImageCommand>
+                                                    </Commands>
+                                                    <PrepareCommand Fn="prepareCommand" />
+                                                </ext:Column>
+                                                <ext:CheckColumn Locked="true" Header="Sensor Invalid" DataIndex="SensorInvalid"
+                                                    Width="30" Hidden="true" />
+                                                <ext:Column Header="Sensor" DataIndex="SensorName" Width="150" />
+                                                <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="120" Format="dd-MM-yyyy HH:mm:ss">
+                                                    <Commands>
+                                                        <ext:ImageCommand Icon="Delete" CommandName="InvalidDate" Hidden="true" HideMode="Display">
+                                                            <ToolTip Text="Invalid Date" />
+                                                        </ext:ImageCommand>
+                                                    </Commands>
+                                                    <PrepareCommand Fn="prepareCommand" />
+                                                </ext:DateColumn>
+                                                <ext:CheckColumn Header="Date Invalid" DataIndex="DateValueInvalid" Width="30" Hidden="true" />
+                                                <ext:Column Header="Invalid Date" DataIndex="InvalidDateValue" Width="80" Hidden="true" />
+                                                <ext:CheckColumn Locked="true" Header="Time Invalid" DataIndex="TimeValueInvalid"
+                                                    Width="30" Hidden="true" />
+                                                <ext:DateColumn Header="Time Value" DataIndex="ValueTime" Width="80" Format="HH:mm:ss"
+                                                    Hidden="true" />
+                                                <ext:Column Header="Invalid Time" DataIndex="InvalidTimeValue" Width="80" Hidden="true" />
+                                                <ext:Column Header="Raw converted value" DataIndex="RawValue" Width="80" Hidden="true" />
+                                                <ext:CheckColumn Locked="true" Header="Raw Value Invalid" DataIndex="RawValueInvalid"
+                                                    Width="30" Hidden="true" />
+                                                <ext:Column Header="Invalid Raw value" DataIndex="ValueText" Width="150" Hidden="true" />
+                                                <ext:Column Header="Raw Value" DataIndex="RawFieldValue" Width="90">
+                                                    <Commands>
+                                                        <ext:ImageCommand Icon="Delete" CommandName="InvalidRawValue" Hidden="true" HideMode="Display">
+                                                            <ToolTip Text="Invalid Raw Value" />
+                                                        </ext:ImageCommand>
+                                                    </Commands>
+                                                    <PrepareCommand Fn="prepareCommand" />
+                                                </ext:Column>
+                                                <ext:CheckColumn Locked="true" Header="Data Value Invalid" DataIndex="DataValueInvalid"
+                                                    Width="30" Hidden="true" />
+                                                <ext:Column Header="Invalid Data Value" DataIndex="TransformValueText" Width="150"
+                                                    Hidden="true" />
+                                                <ext:Column Header="Data Value" DataIndex="DataValue" Width="90">
+                                                    <Commands>
+                                                        <ext:ImageCommand Icon="Delete" CommandName="InvalidDataValue" Hidden="true" HideMode="Display">
+                                                            <ToolTip Text="Invalid data Value (Transformed Value)" />
+                                                        </ext:ImageCommand>
+                                                    </Commands>
+                                                    <PrepareCommand Fn="prepareCommand" />
+                                                </ext:Column>
+                                                <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
+                                                <ext:Column Header="Offering ID" DataIndex="PhenomenonOfferingID" Width="150" Hidden="true" />
+                                                <ext:CheckColumn Locked="true" Header="Offering Invalid" DataIndex="OfferingInvalid"
+                                                    Width="30" Hidden="true" />
+                                                <ext:Column Header="Offering" DataIndex="OfferingName" Width="150">
+                                                    <Commands>
+                                                        <ext:ImageCommand Icon="Delete" CommandName="InvalidOffering" Hidden="true" HideMode="Display">
+                                                            <ToolTip Text="Invalid Offering" />
+                                                        </ext:ImageCommand>
+                                                    </Commands>
+                                                    <PrepareCommand Fn="prepareCommand" />
+                                                </ext:Column>
+                                                <ext:Column Header="UOM ID" DataIndex="PhenomenonUOMID" Width="150" Hidden="true" />
+                                                <ext:CheckColumn Locked="true" Header="UOM Invalid" DataIndex="UOMInvalid" Width="30"
+                                                    Hidden="true" />
+                                                <ext:Column Header="Unit" DataIndex="Unit" Width="150">
+                                                    <Commands>
+                                                        <ext:ImageCommand Icon="Delete" CommandName="InvalidUOM" Hidden="true" HideMode="Display">
+                                                            <ToolTip Text="Invalid Unit of measurement" />
+                                                        </ext:ImageCommand>
+                                                    </Commands>
+                                                    <PrepareCommand Fn="prepareCommand" />
+                                                </ext:Column>
+                                                <ext:Column Header="Status" DataIndex="Status" Width="150" />
+                                                <ext:Column Header="Data Transformation ID" DataIndex="DataSourceTransformationID"
+                                                    Width="150" Hidden="true" />
+                                                <ext:Column Header="Transformation" DataIndex="Transformation" Width="150" Hidden="true" />
+                                                <ext:CommandColumn Width="75">
+
+                                                    <Commands>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                                        <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />
+                                                        <ext:GridCommand Icon="Add" CommandName="MoveToObservation" Text="" ToolTip-Text="Move to observation" />
+                                                    </Commands>
+                                                    <PrepareToolbar Fn="prepareToolbarTransformation" />
+                                                </ext:CommandColumn>
+                                            </Columns>
+                                        </ColumnModel>
                                         <SelectionModel>
                                             <ext:RowSelectionModel ID="RowSelectionModel2" runat="server" SingleSelect="true">
                                             </ext:RowSelectionModel>
                                         </SelectionModel>
-                                        <loadmask showmask="true" />
-                                        <plugins>
-                                    <ext:GridFilters runat="server" ID="GridFilters2">
-                                        <Filters>
-                                            <ext:DateFilter DataIndex="ImportDate" />
-                                            <ext:StringFilter DataIndex="Organisation" />
-                                            <ext:StringFilter DataIndex="ProjectSite" />
-                                            <ext:StringFilter DataIndex="ProjectSite" />
-                                            <ext:StringFilter DataIndex="SensorName" />
-                                            <ext:DateFilter DataIndex="ValueDate" />
-                                            <ext:StringFilter DataIndex="RawFieldValue" />
-                                            <ext:NumericFilter DataIndex="DataValue" />
-                                            <ext:StringFilter DataIndex="PhenomenonName" />
-                                            <ext:StringFilter DataIndex="OfferingName" />
-                                            <ext:StringFilter DataIndex="Unit" />
-                                            <ext:StringFilter DataIndex="Status" />
-                                        </Filters>
-                                    </ext:GridFilters>
-                                </plugins>
-                                        <bottombar>
-                                    <ext:PagingToolbar ID="PagingToolbar2" runat="server" PageSize="25" EmptyMsg="No data found" />
-                                </bottombar>
+                                        <LoadMask ShowMask="true" />
+                                        <Plugins>
+                                            <ext:GridFilters runat="server" ID="GridFilters2">
+                                                <Filters>
+                                                    <ext:DateFilter DataIndex="ImportDate" />
+                                                    <ext:StringFilter DataIndex="Organisation" />
+                                                    <ext:StringFilter DataIndex="ProjectSite" />
+                                                    <ext:StringFilter DataIndex="ProjectSite" />
+                                                    <ext:StringFilter DataIndex="SensorName" />
+                                                    <ext:DateFilter DataIndex="ValueDate" />
+                                                    <ext:StringFilter DataIndex="RawFieldValue" />
+                                                    <ext:NumericFilter DataIndex="DataValue" />
+                                                    <ext:StringFilter DataIndex="PhenomenonName" />
+                                                    <ext:StringFilter DataIndex="OfferingName" />
+                                                    <ext:StringFilter DataIndex="Unit" />
+                                                    <ext:StringFilter DataIndex="Status" />
+                                                </Filters>
+                                            </ext:GridFilters>
+                                        </Plugins>
+                                        <BottomBar>
+                                            <ext:PagingToolbar ID="PagingToolbar2" runat="server" PageSize="25" EmptyMsg="No data found" />
+                                        </BottomBar>
                                         <Listeners>
-                                            <command fn="onLogCommand" />
+                                            <Command Fn="onLogCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>
@@ -471,13 +527,14 @@
                                 FieldLabel="Log File" ButtonText="" Icon="Zoom" ClientIDMode="Static" />
                         </Items>
                         <Listeners>
-                            <clientvalidation handler="#{SaveButton}.setDisabled(!valid);" />
+                            <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);" />
                         </Listeners>
-                        <buttons>
+                        <Buttons>
                             <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept">
                                 <DirectEvents>
                                     <Click OnEvent="UploadClick" Before="if (!#{BasicForm}.getForm().isValid()) { return false; } 
-                                                    Ext.Msg.wait('Uploading and processing...', 'Processing');" Failure="Ext.Msg.show({ 
+                                                    Ext.Msg.wait('Uploading and processing...', 'Processing');"
+                                        Failure="Ext.Msg.show({ 
                                                     title   : 'Error', 
                                                     msg     : 'Error during uploading', 
                                                     minWidth: 200, 
@@ -493,14 +550,14 @@
                                     <Click Handler="#{BasicForm}.getForm().reset();" />
                                 </Listeners>
                             </ext:Button>
-                        </buttons>
+                        </Buttons>
                     </ext:FormPanel>
                 </North>
                 <Center MarginsSummary="0 5 0 5">
                     <ext:GridPanel ID="ErrorGrid" runat="server" Title="Errors" Layout="FitLayout" ClientIDMode="Static"
                         Height="100" EnableHdMenu="false">
-                        <columnmodel runat="server" id="ColumnModel3">
-                        </columnmodel>
+                        <ColumnModel runat="server" ID="ColumnModel3">
+                        </ColumnModel>
                         <Store>
                             <ext:Store ID="ErrorGridStore" runat="server">
                                 <Reader>
@@ -517,13 +574,13 @@
                                 </Reader>
                             </ext:Store>
                         </Store>
-                        <columnmodel>
+                        <ColumnModel>
                             <Columns>
                                 <ext:Column Header="Error Message" DataIndex="ErrorMessage" Width="400" />
                                 <ext:Column Header="Line No" DataIndex="LineNo" Width="50" />
                                 <ext:Column Header="Raw Data" DataIndex="RecordString" Width="200" />
                             </Columns>
-                        </columnmodel>
+                        </ColumnModel>
                     </ext:GridPanel>
                 </Center>
                 <%-- <South MarginsSummary="0 0 5 5" Split="true">
@@ -570,7 +627,7 @@
                                     </ext:Store>
                                 </Store>
                                 <Listeners>
-                                    <select fn="SelectSensor" />
+                                    <Select Fn="SelectSensor" />
                                 </Listeners>
                             </ext:ComboBox>
                         </Items>
@@ -657,7 +714,7 @@
                         </Items>
                     </ext:Panel>
                 </Items>
-                <buttons>
+                <Buttons>
                     <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="SaveObservation" Method="POST">
@@ -665,12 +722,12 @@
                             </Click>
                         </DirectEvents>
                     </ext:Button>
-                </buttons>
-                <bottombar>
+                </Buttons>
+                <BottomBar>
                     <ext:StatusBar ID="StatusBar1" runat="server" Height="25" />
-                </bottombar>
+                </BottomBar>
                 <Listeners>
-                    <clientvalidation handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
                 </Listeners>
             </ext:FormPanel>
         </Content>

@@ -537,7 +537,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     {
         MessageBoxes.Confirm(
             "Confirm Delete",
-            String.Format("DirectCall.DeleteDataSource(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            $"DirectCall.DeleteDataSource(\"{aID.ToString()}\",{{ eventMask: {{ showMask: true}}}});",
             "Are you sure you want to delete this Data Source?");
     }
 
