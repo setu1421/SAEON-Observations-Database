@@ -1,5 +1,4 @@
-﻿-- 2.0.9
---use Observations
+﻿--use Observations
 Declare @UrlPrefix varchar(100)
 --set @UrlPrefix = '/ObservationsDBv1Live'
 --set @UrlPrefix = '/ObservationsDBv1Staging'
@@ -57,6 +56,7 @@ Update Module set Url = @UrlPrefix+'/Admin/Stations' where Name like 'Stations'
 Update Module set Url = @UrlPrefix+'/Admin/Sensors' where Name like 'Sensors'
 Update Module set Url = @UrlPrefix+'/Admin/DataSources' where Name like 'Data Sources'
 Update Module set Url = @UrlPrefix+'/Admin/DataSchemas' where Name like 'Data Schemas'
+Update Module set Url = @UrlPrefix+'/Admin/ImportBatches' where Name like 'Import Batches'
 -- Deletes
 Delete RoleModule from RoleModule inner join Module on (RoleModule.ModuleID = Module.ID) where Module.Name like 'Projects/Sites'
 Delete Module where Name like 'Projects/Sites'
