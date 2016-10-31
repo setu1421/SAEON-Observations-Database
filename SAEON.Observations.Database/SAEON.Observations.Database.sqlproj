@@ -12,8 +12,8 @@
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>SAEON.ObservationsDB.Database</RootNamespace>
-    <AssemblyName>SAEON.ObservationsDB.Database</AssemblyName>
+    <RootNamespace>SAEON.Observations.Database</RootNamespace>
+    <AssemblyName>SAEON.Observations.Database</AssemblyName>
     <ModelCollation>1033,CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -562,5 +562,11 @@
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SAEON.Observations.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 </Project>
