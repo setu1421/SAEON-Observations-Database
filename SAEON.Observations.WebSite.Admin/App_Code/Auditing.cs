@@ -50,14 +50,23 @@ public static class Auditing
         try
         {
             AuditLog auditLog = new AuditLog();
-            auditLog.AddedAt = DateTime.Now;
+            auditLog.AddedAt = null;
+            auditLog.UpdatedAt = null;                
             auditLog.Description = Auditing.MethodCall(methodName, methodParameters);
             auditLog.UserId = AuthHelper.GetLoggedInUserId;
             auditLog.Save();
         }
         catch (Exception ex)
         {
-            Serilog.Log.Error(ex, "Log({0})", methodName);
+            try
+            {
+                Serilog.Log.Error(ex, "Log({0})", Auditing.MethodCall(methodName, methodParameters));
+            }
+            catch (Exception)
+            {
+                Serilog.Log.Error(ex, "Log({0})", methodName);
+            }
+
         }
     }
 

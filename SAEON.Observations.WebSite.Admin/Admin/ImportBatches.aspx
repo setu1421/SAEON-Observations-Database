@@ -12,7 +12,6 @@
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
-
             ImportBatchesGrid.submitData(false);
         };
     </script>
@@ -87,7 +86,7 @@
                             <ext:GridPanel ID="ImportBatchesGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
                                     <ext:Store ID="ImportBatchesGridStore" runat="server" RemoteSort="true" OnRefreshData="ImportBatchesGridStore_RefreshData"
-                                        OnSubmitData="ImportBatchesGridStore_Submit">
+                                        OnSubmitData="ImportBatchesGridStore_Submit" ClientIDMode="Static">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -96,7 +95,7 @@
                                                 <Fields>
                                                     <ext:RecordField Name="Id" Type="Auto" />
                                                     <ext:RecordField Name="Code" Type="Int" />
-                                                    <ext:RecordField Name="ImportDate" Type="Date" />
+                                                    <ext:RecordField Name="ImportDate" Type="Date"/>
                                                     <ext:RecordField Name="Status" Type="Int" />
                                                     <ext:RecordField Name="DataSourceName" Type="String" />
                                                     <ext:RecordField Name="StatusDescription" Type="String" />
@@ -118,9 +117,8 @@
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
                                         <ext:Column Header="Number" DataIndex="Code" Width="80" />
-                                        <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="150" Format="dd-MM-yyyy HH:mm:ss" />
-                                        <ext:Column Header="DataSourceID" DataIndex="DataSourceID" Width="150" Hidden="true">
-                                        </ext:Column>
+                                        <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="125" Format="dd MMM yyyy hh:mm:ss" />
+                                        <ext:Column Header="DataSourceID" DataIndex="DataSourceID" Width="150" Hidden="true" />
                                         <ext:Column Header="DataSourceName" DataIndex="DataSourceName" Width="250" />
                                         <ext:Column Header="FileName" DataIndex="FileName" Width="200" />
                                         <ext:Column Header="LogFileName" DataIndex="LogFileName" Width="200" />
@@ -176,7 +174,7 @@
                                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                                 ValueField="Id" DataIndex="Id" EmptyText="Select a status" ValueNotFoundText="Select a status"
                                                 ClientIDMode="Static">
-<%--                                                <Listeners>
+                                                <%--                                                <Listeners>
                                                     <Select Fn="EnableApply" />
                                                 </Listeners>--%>
                                                 <DirectEvents>
@@ -245,6 +243,7 @@
                                                     <ext:Parameter Name="sort" Value="" />
                                                     <ext:Parameter Name="dir" Value="" />
                                                 </BaseParams>
+                                                <SortInfo Field="ValueDate" Direction="ASC" />
                                             </ext:Store>
                                         </Store>
                                         <ColumnModel ID="ColumnModel4" runat="server">
@@ -252,7 +251,7 @@
                                                 <ext:Column Header="Sensor" DataIndex="SensorName" Width="150" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
-                                                <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="75" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy hh:mm:ss" />
                                                 <ext:Column Header="Raw value" DataIndex="RawValue" Width="100" />
                                                 <ext:Column Header="Data value" DataIndex="DataValue" Width="100" />
                                                 <ext:Column Header="Status" DataIndex="StatusName" Width="150" />
@@ -349,7 +348,7 @@
                                                     <ext:Parameter Name="sort" Value="" />
                                                     <ext:Parameter Name="dir" Value="" />
                                                 </BaseParams>
-                                                <SortInfo Field="Id" Direction="ASC" />
+                                                <SortInfo Field="ValueDate" Direction="ASC" />
                                             </ext:Store>
                                         </Store>
                                         <ColumnModel ID="ColumnModel2" runat="server">
@@ -360,7 +359,7 @@
                                                 <ext:Column Header="Organisation" DataIndex="Organisation" Width="100" Hidden="true" />
                                                 <ext:Column Header="ProjectSite" DataIndex="ProjectSite" Width="100" Hidden="true" />
                                                 <ext:Column Header="Station" DataIndex="StationName" Width="100" Hidden="true" />
-                                                <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="100" Format="dd-MM-yyyy HH:mm:ss"
+                                                <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="125" Format="dd MMM yyyy hh:mm:ss"
                                                     Hidden="true" />
                                                 <ext:Column Header="Sensor ID" DataIndex="SensorID" Width="40" Hidden="true">
                                                     <Commands>
@@ -373,7 +372,7 @@
                                                 <ext:CheckColumn Locked="true" Header="Sensor Invalid" DataIndex="SensorInvalid"
                                                     Width="30" Hidden="true" />
                                                 <ext:Column Header="Sensor" DataIndex="SensorName" Width="150" />
-                                                <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="120" Format="dd-MM-yyyy HH:mm:ss">
+                                                <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy hh:mm:ss">
                                                     <Commands>
                                                         <ext:ImageCommand Icon="Delete" CommandName="InvalidDate" Hidden="true" HideMode="Display">
                                                             <ToolTip Text="Invalid Date" />
@@ -385,7 +384,7 @@
                                                 <ext:Column Header="Invalid Date" DataIndex="InvalidDateValue" Width="80" Hidden="true" />
                                                 <ext:CheckColumn Locked="true" Header="Time Invalid" DataIndex="TimeValueInvalid"
                                                     Width="30" Hidden="true" />
-                                                <ext:DateColumn Header="Time Value" DataIndex="ValueTime" Width="80" Format="HH:mm:ss"
+                                                <ext:DateColumn Header="Time Value" DataIndex="ValueTime" Width="80" Format="hh:mm:ss"
                                                     Hidden="true" />
                                                 <ext:Column Header="Invalid Time" DataIndex="InvalidTimeValue" Width="80" Hidden="true" />
                                                 <ext:Column Header="Raw converted value" DataIndex="RawValue" Width="80" Hidden="true" />
@@ -435,7 +434,7 @@
                                                     </Commands>
                                                     <PrepareCommand Fn="prepareCommand" />
                                                 </ext:Column>
-                                                <ext:Column Header="Status" DataIndex="Status" Width="150" />
+                                                <ext:Column Header="Status" DataIndex="Status" Width="200" />
                                                 <ext:Column Header="Data Transformation ID" DataIndex="DataSourceTransformationID"
                                                     Width="150" Hidden="true" />
                                                 <ext:Column Header="Transformation" DataIndex="Transformation" Width="150" Hidden="true" />
@@ -506,7 +505,14 @@
                         <Items>
                             <ext:ComboBox ID="cbDataSource" runat="server" DataIndex="DataSourceID" DisplayField="Name"
                                 ValueField="ID" FieldLabel="Data Source" EmptyText="Please select" AnchorHorizontal="95%"
-                                MsgTarget="Side" AllowBlank="false" BlankText="Data Source is required">
+                                MsgTarget="Side" BlankText="Data Source is required"
+                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <Listeners>
+                                    <TriggerClick Handler="this.clearValue();this.focus();" />
+                                </Listeners>
                                 <Store>
                                     <ext:Store ID="storeDataSource" runat="server">
                                         <Reader>
@@ -634,7 +640,7 @@
                     </ext:Container>
                     <ext:Container ID="Container1" runat="server" LabelAlign="Top" Layout="RowLayout">
                         <Items>
-                            <ext:DateField ID="ValueDate" runat="server" DataIndex="ValueDate" FieldLabel="Date Value"
+                            <ext:DateField ID="ValueDate" runat="server" DataIndex="ValueDate" FieldLabel="Date Value" Format="dd MMM yyyy hh:mm:ss"
                                 EmptyText="Please select" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false"
                                 BlankText="Date Value is required" ClientIDMode="Static" />
                         </Items>

@@ -9,7 +9,7 @@ using SAEON.Observations.Data;
 /// <summary>
 /// Summary description for ImportBatchRepository
 /// </summary>
-public class ImportBatchRepository:BaseRepository
+public class ImportBatchRepository : BaseRepository
 {
     public ImportBatchRepository()
     {
@@ -21,8 +21,9 @@ public class ImportBatchRepository:BaseRepository
     public static List<VImportBatch> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix)
     {
 
-        SqlQuery q = new Select().From(VImportBatch.Schema);
-        q.Where(VImportBatch.Columns.UserId).IsNotNull();
+        SqlQuery q = new Select().From(VImportBatch.Schema)
+            .Where(VImportBatch.Columns.UserId).IsNotNull();
+            //.OrderDesc(VImportBatch.Columns.Code);
 
         GetPagedQuery(ref q, e, paramPrefix);
 

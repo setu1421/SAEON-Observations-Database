@@ -253,6 +253,7 @@ public class ImportSchemaHelper : IDisposable
 			}
 			catch (Exception Ex)
 			{
+                Log.Error(Ex, "ProcessSchema() Unprocessed");
 				throw Ex;
 			}
 
@@ -414,6 +415,15 @@ public class ImportSchemaHelper : IDisposable
 						rec.RawValueInvalid = true;
 						rec.InvalidRawValue = RawValue;
 						rec.InvalidStatuses.Add(Status.ValueInvalid);
+                        try
+                        {
+                            Double.Parse(RawValue);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex, $"ProcessRow({dr.Dump()})");
+                            throw;
+                        }
 					}
 					else
 					{
@@ -536,7 +546,7 @@ public class ImportSchemaHelper : IDisposable
 			}
 			catch (Exception ex)
 			{
-                Log.Error(ex, "TransformValue");
+                Log.Error(ex, "TransformValue({dtid},{rec})");
                 rec.DataValue = rec.RawValue;
 			}
 

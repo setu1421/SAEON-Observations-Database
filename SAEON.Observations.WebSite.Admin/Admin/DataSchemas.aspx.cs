@@ -588,18 +588,18 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         {
             foreach (SelectedRow row in sm.SelectedRows)
             {
-                DataSource DataSource = new DataSource(row.RecordID);
-                if (DataSource != null)
+                DataSource dataSource = new DataSource(row.RecordID);
+                if (dataSource != null)
                     try
                     {
-                        DataSource.DataSchemaID = new Guid(DataSchemaID);
-                        DataSource.UserId = AuthHelper.GetLoggedInUserId;
-                        DataSource.Save();
+                        dataSource.DataSchemaID = new Guid(DataSchemaID);
+                        dataSource.UserId = AuthHelper.GetLoggedInUserId;
+                        dataSource.Save();
                         Auditing.Log("DataSchemas.AddDataSourceLink", new Dictionary<string, object> {
-                                { "DataSchemaID", DataSource.DataSchemaID},
-                                { "DataSchemaCode", DataSource.DataSchema.Code},
-                                { "DataSourceID", DataSource.Id },
-                                { "DataSourceCode", DataSource.Code }
+                                { "DataSchemaID", dataSource.DataSchemaID},
+                                { "DataSchemaCode", dataSource.DataSchema.Code},
+                                { "DataSourceID", dataSource.Id },
+                                { "DataSourceCode", dataSource.Code }
                             });
                     }
                     catch (Exception ex)

@@ -40,7 +40,13 @@ public partial class _DataQuery : System.Web.UI.Page
         root.Icon = (Icon)modx.Icon;
         FilterTree.Root.Add(root);
 
-        OrganisationCollection organisationCol = new OrganisationCollection().Where("ID", SubSonic.Comparison.IsNot, null).OrderByAsc(Organisation.Columns.Name).Load();
+        OrganisationCollection organisationCol = new Select(Organisation.Schema.TableName)
+            .From(Organisation.Schema)
+            .InnerJoin(OrganisationSite.Schema)
+            .OrderAsc(Organisation.Columns.Name)
+            .ExecuteAsCollection<OrganisationCollection>();
+
+        //        OrganisationCollection organisationCol = new OrganisationCollection().Where("ID", SubSonic.Comparison.IsNot, null).OrderByAsc(Organisation.Columns.Name).Load();
 
         foreach (Organisation organisation in organisationCol)
         {

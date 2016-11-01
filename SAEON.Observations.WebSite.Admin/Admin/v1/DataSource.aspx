@@ -293,8 +293,8 @@
                                         <ext:Column Header="Transformation" DataIndex="TransformationName" Width="150" />
                                         <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                         <ext:Column Header="UOM" DataIndex="UnitofMeasure" Width="150" />
-                                        <ext:DateColumn Header="Effective Date" DataIndex="StartDate" Width="150" Format="dd/MM/yyyy" />
-                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="150" Format="dd/MM/yyyy" />
+                                        <ext:DateColumn Header="Effective Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="150" Format="dd MMM yyyy" />
                                         <ext:Column Header="Order" DataIndex="Rank" Width="150" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
@@ -384,7 +384,7 @@
                             <ext:Container ID="Container7" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                                 <Items>
                                     <ext:DateField ID="StartDate" DataIndex="StartDate" runat="server" FieldLabel="Start Date"
-                                        BlankText="Start Date is required." AnchorHorizontal="93%" Format="dd/MM/yyyy"
+                                        BlankText="Start Date is required." AnchorHorizontal="93%" Format="dd MMM yyyy"
                                         ClientIDMode="Static">
                                     </ext:DateField>
                                 </Items>

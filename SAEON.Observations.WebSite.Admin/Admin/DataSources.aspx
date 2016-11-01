@@ -127,11 +127,11 @@
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Code" DataIndex="Code" Width="100" />
-                                        <ext:Column Header="Name" DataIndex="Name" Width="100" />
+                                        <ext:Column Header="Code" DataIndex="Code" Width="200" />
+                                        <ext:Column Header="Name" DataIndex="Name" Width="300" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="150" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
-                                        <ext:Column Header="Data Schema" DataIndex="DataSchemaName" Width="100" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="300" />
+                                        <ext:Column Header="Data Schema" DataIndex="DataSchemaName" Width="200" />
                                         <ext:CommandColumn Width="75">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" ToolTip-Text="Edit" />
@@ -473,7 +473,7 @@
                             <ext:Container ID="Container7" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                                 <Items>
                                     <ext:DateField ID="StartDate" DataIndex="StartDate" runat="server" FieldLabel="Start Date"
-                                        BlankText="Start Date is required." AnchorHorizontal="93%" Format="dd/MM/yyyy"
+                                        BlankText="Start Date is required." AnchorHorizontal="93%" Format="dd MMM yyyy"
                                         ClientIDMode="Static">
                                     </ext:DateField>
                                 </Items>

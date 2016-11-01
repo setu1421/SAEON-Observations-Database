@@ -80,18 +80,18 @@ body
 .icon-exclamation
 {
     padding-left: 25px !important;
-    background: url(/icons/exclamation-png/ext.axd) no-repeat 3px 3px !important;
+    background: url(../icons/exclamation-png/ext.axd) no-repeat 3px 3px !important;
 }
 
 .icon-accept1
 {
     padding-left: 25px !important;
-    background: url(/icons/accept-png/ext.axd) no-repeat 3px 3px !important;
+    background: url(../icons/accept-png/ext.axd) no-repeat 3px 3px !important;
 }
 
 .lock-open1
 {
-    background-image: url("/icons/lock_open-png/ext.axd") !important
+    background-image: url(../icons/lock_open-png/ext.axd) !important
 }
 
 /* DEFAULTS
