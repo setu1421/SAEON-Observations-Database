@@ -1,0 +1,91 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[TR_PhenomenonUPM_Insert] (Trigger)
+     Alter
+       [dbo].[TR_AuditLog_Insert] (Trigger)
+       [dbo].[TR_AuditLog_Update] (Trigger)
+       [dbo].[TR_DataLog_Insert] (Trigger)
+       [dbo].[TR_DataLog_Update] (Trigger)
+       [dbo].[TR_DataSchema_Insert] (Trigger)
+       [dbo].[TR_DataSchema_Update] (Trigger)
+       [dbo].[TR_DataSource_Insert] (Trigger)
+       [dbo].[TR_DataSource_Update] (Trigger)
+       [dbo].[TR_DataSourceRole_Insert] (Trigger)
+       [dbo].[TR_DataSourceRole_Update] (Trigger)
+       [dbo].[TR_DataSourceTransformation_Insert] (Trigger)
+       [dbo].[TR_DataSourceTransformation_Update] (Trigger)
+       [dbo].[TR_DataSourceType_Insert] (Trigger)
+       [dbo].[TR_DataSourceType_Update] (Trigger)
+       [dbo].[TR_ImportBatch_Insert] (Trigger)
+       [dbo].[TR_ImportBatch_Update] (Trigger)
+       [dbo].[TR_Instrument_Insert] (Trigger)
+       [dbo].[TR_Instrument_Update] (Trigger)
+       [dbo].[TR_Instrument_DataSource_Insert] (Trigger)
+       [dbo].[TR_Instrument_DataSource_Update] (Trigger)
+       [dbo].[TR_Instrument_Sensor_Insert] (Trigger)
+       [dbo].[TR_Instrument_Sensor_Update] (Trigger)
+       [dbo].[TR_Observation_Insert] (Trigger)
+       [dbo].[TR_Observation_Update] (Trigger)
+       [dbo].[TR_Offering_Insert] (Trigger)
+       [dbo].[TR_Offering_Update] (Trigger)
+       [dbo].[TR_Organisation_Insert] (Trigger)
+       [dbo].[TR_Organisation_Update] (Trigger)
+       [dbo].[TR_Organisation_Instrument_Insert] (Trigger)
+       [dbo].[TR_Organisation_Instrument_Update] (Trigger)
+       [dbo].[TR_Organisation_Site_Insert] (Trigger)
+       [dbo].[TR_Organisation_Site_Update] (Trigger)
+       [dbo].[TR_Organisation_Station_Insert] (Trigger)
+       [dbo].[TR_Organisation_Station_Update] (Trigger)
+       [dbo].[TR_OrganisationRole] (Trigger)
+       [dbo].[TR_OrganisationRole_Update] (Trigger)
+       [dbo].[TR_Phenomenon_Insert] (Trigger)
+       [dbo].[TR_Phenomenon_Update] (Trigger)
+       [dbo].[TR_PhenomenonOffering_Insert] (Trigger)
+       [dbo].[TR_PhenomenonOffering_Update] (Trigger)
+       [dbo].[TR_PhenomenonUOM_Update] (Trigger)
+       [dbo].[TR_Programme_Insert] (Trigger)
+       [dbo].[TR_Programme_Update] (Trigger)
+       [dbo].[TR_Project_Insert] (Trigger)
+       [dbo].[TR_Project_Update] (Trigger)
+       [dbo].[TR_Project_Station_Insert] (Trigger)
+       [dbo].[TR_Project_Station_Update] (Trigger)
+       [dbo].[TR_SchemaColumn_Insert] (Trigger)
+       [dbo].[TR_SchemaColumn_Update] (Trigger)
+       [dbo].[TR_SchemaColumnType_Insert] (Trigger)
+       [dbo].[TR_SchemaColumnType_Update] (Trigger)
+       [dbo].[TR_Sensor_Insert] (Trigger)
+       [dbo].[TR_Sensor_Update] (Trigger)
+       [dbo].[TR_Site_Insert] (Trigger)
+       [dbo].[TR_Site_Update] (Trigger)
+       [dbo].[TR_Station_Insert] (Trigger)
+       [dbo].[TR_Station_Update] (Trigger)
+       [dbo].[TR_Station_Instrument_Insert] (Trigger)
+       [dbo].[TR_Station_Instrument_Update] (Trigger)
+       [dbo].[TR_Status_Insert] (Trigger)
+       [dbo].[TR_Status_Update] (Trigger)
+       [dbo].[TR_StatusReason_Insert] (Trigger)
+       [dbo].[TR_StatusReason_Update] (Trigger)
+       [dbo].[TR_TransformationType_Insert] (Trigger)
+       [dbo].[TR_TransformationType_Update] (Trigger)
+       [dbo].[TR_UnitOfMeasure_Insert] (Trigger)
+       [dbo].[TR_UnitOfMeasure_Update] (Trigger)
+     Create
+       [dbo].[TR_PhenomenonUOM_Insert] (Trigger)
+
+** Supporting actions
+
+The source's object [Authentication] is different than the target's version of the object but the target object will not be updated.
+The source's object [Observations] is different than the target's version of the object but the target object will not be updated.
+The object [Authentication] already exists in database with a different definition and will not be altered.
+The object [Observations] already exists in database with a different definition and will not be altered.
+

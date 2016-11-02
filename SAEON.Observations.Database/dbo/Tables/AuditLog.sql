@@ -17,6 +17,7 @@ GO
 CREATE INDEX [IX_AuditLog_UserId] ON [dbo].AuditLog ([UserId])
 --< Added 2.0.2 20160419 TimPN
 --> Added 2.0.3 20160421 TimPN
+--> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_AuditLog_Insert] ON [dbo].[AuditLog]
 FOR INSERT
@@ -29,8 +30,8 @@ BEGIN
         AddedAt = GETDATE(),
         UpdatedAt = NULL
     from
-        inserted ins 
-        inner join AuditLog src
+        AuditLog src
+		inner join inserted ins 
             on (ins.ID = src.ID)
 END
 GO
@@ -39,16 +40,17 @@ FOR UPDATE
 AS
 BEGIN
     SET NoCount ON
-    if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
-    if UPDATE(UpdatedAt) RAISERROR ('Cannot update UpdatedAt.', 16, 1)
-    if not UPDATE(AddedAt) and not UPDATE(UpdatedAt)
-        Update 
-            src 
-        set 
-            UpdatedAt = GETDATE()
-        from
-            inserted ins 
-            inner join AuditLog src
-                on (ins.ID = src.ID)
+    Update 
+        src 
+    set 
+		AddedAt = del.AddedAt,
+        UpdatedAt = GETDATE()
+    from
+        AuditLog src
+		inner join inserted ins 
+            on (ins.ID = src.ID)
+		inner join deleted del
+			on (del.ID = src.ID)
 END
+--> Changed 2.0.15 20161102 TimPN
 --< Added 2.0.3 20160421 TimPN

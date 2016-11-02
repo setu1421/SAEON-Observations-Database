@@ -16,6 +16,7 @@ GO
 CREATE CLUSTERED INDEX [CX_SchemaColumnType] ON [dbo].[SchemaColumnType] ([AddedAt])
 GO
 CREATE INDEX [IX_SchemaColumnType_UserId] ON [dbo].[SchemaColumnType] ([UserId])
+--> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_SchemaColumnType_Insert] ON [dbo].[SchemaColumnType]
 FOR INSERT
@@ -28,8 +29,8 @@ BEGIN
         AddedAt = GETDATE(),
         UpdatedAt = NULL
     from
-        inserted ins
-        inner join SchemaColumnType src
+        SchemaColumnType src
+        inner join inserted ins
             on (ins.ID = src.ID)
 END
 GO
@@ -38,14 +39,17 @@ FOR UPDATE
 AS
 BEGIN
     SET NoCount ON
-    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
     Update
         src
     set
+		AddedAt = del.AddedAt,
         UpdatedAt = GETDATE()
     from
-        inserted ins
-        inner join SchemaColumnType src
+        SchemaColumnType src
+        inner join inserted ins
             on (ins.ID = src.ID)
+		inner join deleted del
+			on (del.ID = src.ID)
 END
+--< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.11 20160908 TimPN

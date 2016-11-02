@@ -27,6 +27,7 @@ GO
 CREATE INDEX [IX_OrganisationRole_UserId] ON [dbo].[OrganisationRole] ([UserId])
 --< Added 2.0.1 20160406 TimPN
 --> Added 2.0.8 20160718 TimPN
+--> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_OrganisationRole] ON [dbo].[OrganisationRole]
 FOR INSERT
@@ -39,8 +40,8 @@ BEGIN
         AddedAt = GETDATE(),
         UpdatedAt = NULL
     from
-        inserted ins
-        inner join OrganisationRole src
+        OrganisationRole src
+        inner join inserted ins
             on (ins.ID = src.ID)
 END
 GO
@@ -49,15 +50,18 @@ FOR UPDATE
 AS
 BEGIN
     SET NoCount ON
-    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
     Update
         src
     set
+		AddedAt = del.AddedAt,
         UpdatedAt = GETDATE()
     from
-        inserted ins
-        inner join OrganisationRole src
+        OrganisationRole src
+        inner join inserted ins
             on (ins.ID = src.ID)
+		inner join deleted del
+			on (del.ID = src.ID)
 END
+--< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160718 TimPN
 

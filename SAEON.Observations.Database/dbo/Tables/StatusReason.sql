@@ -17,6 +17,7 @@ GO
 CREATE CLUSTERED INDEX [CX_StatusReason] ON [dbo].[StatusReason] ([AddedAt])
 GO
 CREATE INDEX [IX_StatusReason_UserId] ON [dbo].[StatusReason] ([UserId])
+--> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_StatusReason_Insert] ON [dbo].[StatusReason]
 FOR INSERT
@@ -29,8 +30,8 @@ BEGIN
         AddedAt = GETDATE(),
         UpdatedAt = NULL
     from
-        inserted ins
-        inner join StatusReason src
+        StatusReason src
+        inner join inserted ins
             on (ins.ID = src.ID)
 END
 GO
@@ -39,14 +40,17 @@ FOR UPDATE
 AS
 BEGIN
     SET NoCount ON
-    --if UPDATE(AddedAt) RAISERROR ('Cannot update AddedAt.', 16, 1)
     Update
         src
     set
+		AddedAt = del.AddedAt,
         UpdatedAt = GETDATE()
     from
-        inserted ins
-        inner join StatusReason src
+        StatusReason src
+        inner join inserted ins
             on (ins.ID = src.ID)
+		inner join deleted del
+			on (del.ID = src.ID)
 END
+--< Changed 2.0.15 20161102 TimPN
 --> Added 2.0.9 20160823 TimPN
