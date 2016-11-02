@@ -66,7 +66,7 @@
 		<Items>
 			<ext:BorderLayout ID="BorderLayout1" runat="server">
 				<West Collapsible="true" Split="true" MarginsSummary="5 0 5 5">
-					<ext:Panel ID="pnlEast" runat="server" Title="Data" Width="270" Layout="Fit">
+					<ext:Panel ID="pnlEast" runat="server" Title="Data" Width="400" Layout="Fit">
 						<Items>
 							<ext:TreePanel ID="FilterTree" runat="server" Animate="false" AutoScroll="true" Icon="BookOpen"
 								ClientIDMode="Static" MonitorResize="true">

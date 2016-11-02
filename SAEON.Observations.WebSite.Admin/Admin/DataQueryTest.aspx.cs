@@ -11,11 +11,12 @@ public partial class Admin_DataQueryTest : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        DataList1.DataSource = new Select()
+        GridView1.DataSource = new Select()
             .From(Organisation.Schema)
             .InnerJoin(OrganisationSite.Schema)
             .OrderAsc(Organisation.Columns.Name)
+            .Distinct()
             .ExecuteDataSet();
-        DataList1.DataBind();
+        GridView1.DataBind();
     }
 }

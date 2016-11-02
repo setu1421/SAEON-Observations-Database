@@ -60,11 +60,11 @@ public static class Auditing
         {
             try
             {
-                Serilog.Log.Error(ex, "Log({0})", Auditing.MethodCall(methodName, methodParameters));
+                Serilog.Log.Error(ex, "Log({MethodCall})", Auditing.MethodCall(methodName, methodParameters));
             }
             catch (Exception)
             {
-                Serilog.Log.Error(ex, "Log({0})", methodName);
+                Serilog.Log.Error(ex, "Log({methodName})", methodName);
             }
 
         }

@@ -40,9 +40,10 @@ public partial class _DataQuery : System.Web.UI.Page
         root.Icon = (Icon)modx.Icon;
         FilterTree.Root.Add(root);
 
-        OrganisationCollection organisationCol = new Select(Organisation.Schema.TableName)
+        OrganisationCollection organisationCol = new Select()
             .From(Organisation.Schema)
             .InnerJoin(OrganisationSite.Schema)
+            .Distinct()
             .OrderAsc(Organisation.Columns.Name)
             .ExecuteAsCollection<OrganisationCollection>();
 
@@ -53,83 +54,183 @@ public partial class _DataQuery : System.Web.UI.Page
             Ext.Net.TreeNode organisationNode = new Ext.Net.TreeNode(organisation.Name, Icon.ResultsetNext);
             root.Nodes.Add(organisationNode);
 
-            ProjectSiteCollection projectSiteCol = new ProjectSiteCollection().Where("ID", SubSonic.Comparison.IsNot, null)
-                .Where("OrganisationID", SubSonic.Comparison.Equals, organisation.Id)
-                .OrderByAsc(ProjectSite.Columns.Name).Load();
-
-            modx = new ModuleX("bd5f2a82-3dd3-46b1-8ce3-7ee99d5c77ad");
-            Ext.Net.TreeNode projectSiteroot = new Ext.Net.TreeNode("Project Site", (Icon)modx.Icon);
-            organisationNode.Nodes.Add(projectSiteroot);
-
-            foreach (ProjectSite projectSite in projectSiteCol)
+            SiteCollection siteCol = new Select()
+                .From(SAEON.Observations.Data.Site.Schema)
+                .InnerJoin(OrganisationSite.Schema)
+                .Where(OrganisationSite.Columns.OrganisationID)
+                .IsEqualTo(organisation.Id)
+                .OrderAsc(SAEON.Observations.Data.Site.Columns.Name)
+                .Distinct()
+                .ExecuteAsCollection<SiteCollection>();
+            modx = new ModuleX("A5C81FF7-69D6-4344-8548-E3EF7F08C4E7");
+            Ext.Net.TreeNode siteRoot = new Ext.Net.TreeNode("Site", (Icon)modx.Icon);
+            organisationNode.Nodes.Add(siteRoot);
+            foreach (var site in siteCol)
             {
-                Ext.Net.TreeNode projectSiteNode = new Ext.Net.TreeNode(projectSite.Name, Icon.ResultsetNext);
-                projectSiteroot.Nodes.Add(projectSiteNode);
+                Ext.Net.TreeNode siteNode = new Ext.Net.TreeNode(site.Name, Icon.ResultsetNext);
+                siteRoot.Nodes.Add(siteNode);
 
-                StationCollection StationCol = new StationCollection().Where("ID", SubSonic.Comparison.IsNot, null)
-                    .Where("ProjectSiteID", SubSonic.Comparison.Equals, projectSite.Id)
-                    .OrderByAsc(Station.Columns.Name).Load();
+                StationCollection stationCol = new Select()
+                    .From(Station.Schema)
+                    .InnerJoin(SAEON.Observations.Data.Site.Schema)
+                    .Where(Station.Columns.SiteID)
+                    .IsEqualTo(site.Id)
+                    .OrderAsc(Station.Columns.Name)
+                    .Distinct()
+                    .ExecuteAsCollection<StationCollection>();
 
                 modx = new ModuleX("0585e63d-0f9f-4dda-98ec-7de9397dc614");
-                Ext.Net.TreeNode stationroot = new Ext.Net.TreeNode("Station", (Icon)modx.Icon);
-                projectSiteNode.Nodes.Add(stationroot);
+                Ext.Net.TreeNode stationRoot = new Ext.Net.TreeNode("Station", (Icon)modx.Icon);
+                siteNode.Nodes.Add(stationRoot);
 
-                foreach (Station station in StationCol)
+                foreach (var station in stationCol)
                 {
                     Ext.Net.TreeNode stationNode = new Ext.Net.TreeNode(station.Name, Icon.ResultsetNext);
                     stationNode.Checked = Ext.Net.ThreeStateBool.False;
                     stationNode.NodeID = station.Id.ToString() + "_Station";
-                    stationroot.Nodes.Add(stationNode);
+                    stationRoot.Nodes.Add(stationNode);
 
-                    SensorCollection SensorCol = new SensorCollection().Where("ID", SubSonic.Comparison.IsNot, null)
-                        .Where("StationID", SubSonic.Comparison.Equals, station.Id)
-                        .OrderByAsc(Sensor.Columns.Name).Load();
+                    modx = new ModuleX("2610866B-8CBF-44E1-9A38-6511B31A8350");
+                    Ext.Net.TreeNode instrumentRoot = new Ext.Net.TreeNode("Instrument", (Icon)modx.Icon);
+                    stationNode.Nodes.Add(instrumentRoot);
 
-                    modx = new ModuleX("9992ba10-cb0c-4a22-841c-1d695e8293d5");
-                    Ext.Net.TreeNode Sensorroot = new Ext.Net.TreeNode("Sensor Procedure", (Icon)modx.Icon);
-                    stationNode.Nodes.Add(Sensorroot);
+                    InstrumentCollection instrumentCol = new Select()
+                        .From(Instrument.Schema)
+                        .InnerJoin(StationInstrument.Schema)
+                        .Where(StationInstrument.Columns.StationID)
+                        .IsEqualTo(station.Id)
+                        .OrderAsc(Instrument.Columns.Name)
+                        .Distinct()
+                        .ExecuteAsCollection<InstrumentCollection>();
 
-                    foreach (Sensor sensor in SensorCol)
+                    foreach (var instrument in instrumentCol)
                     {
-                        Ext.Net.TreeNode SensorNode = new Ext.Net.TreeNode(sensor.Name, Icon.ResultsetNext);
-                        SensorNode.Checked = Ext.Net.ThreeStateBool.False;
-                        SensorNode.NodeID = sensor.Id.ToString() + "_Sensor";
-                        Sensorroot.Nodes.Add(SensorNode);
-                        Phenomenon phenomenon = new Phenomenon(sensor.PhenomenonID);
+                        Ext.Net.TreeNode instrumentNode = new Ext.Net.TreeNode(instrument.Name, Icon.ResultsetNext);
+                        instrumentNode.Checked = Ext.Net.ThreeStateBool.False;
+                        instrumentNode.NodeID = station.Id.ToString() + "_Instrument";
+                        instrumentRoot.Nodes.Add(instrumentNode);
 
+                        modx = new ModuleX("9992ba10-cb0c-4a22-841c-1d695e8293d5");
+                        Ext.Net.TreeNode sensorRoot = new Ext.Net.TreeNode("Sensor", (Icon)modx.Icon);
+                        instrumentNode.Nodes.Add(sensorRoot);
 
-                        Ext.Net.TreeNode phenomenonNode = new Ext.Net.TreeNode(phenomenon.Name, Icon.ResultsetNext);
-                        phenomenonNode.Checked = Ext.Net.ThreeStateBool.False;
-
-                        phenomenonNode.NodeID = sensor.Id.ToString() + "_Phenomenon";
-                        SensorNode.Nodes.Add(phenomenonNode);
-
-                        //PhenomenonOfferingCollection phenomenonOfferingCollection = new PhenomenonOfferingCollection().Where("ID", SubSonic.Comparison.IsNot, null)
-                        //    .Where("PhenomenonID", SubSonic.Comparison.Equals, phenomenon.Id).Load();
-
-
-                        // this.cbUnitofMeasure.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
-                        //.From(UnitOfMeasure.Schema)
-                        //.InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
-                        //.Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(Id)
-                        //.ExecuteDataSet().Tables[0];
-
-                        PhenomenonOfferingCollection phenomenonOfferingCollection = new Select().From(PhenomenonOffering.Schema)
-                                    .InnerJoin(Phenomenon.IdColumn, PhenomenonOffering.PhenomenonIDColumn)
-                                    .Where(Phenomenon.IdColumn).IsEqualTo(phenomenon.Id)
-                                    .OrderAsc(Phenomenon.Columns.Name)
-                                    .ExecuteAsCollection<PhenomenonOfferingCollection>();
-
-                        foreach (PhenomenonOffering phenomenonOffering in phenomenonOfferingCollection)
+                        SensorCollection sensorCol = new Select()
+                            .From(Sensor.Schema)
+                            .InnerJoin(InstrumentSensor.Schema)
+                            .Where(InstrumentSensor.Columns.InstrumentID)
+                            .IsEqualTo(instrument.Id)
+                            .OrderAsc(Instrument.Columns.Name)
+                            .Distinct()
+                            .ExecuteAsCollection<SensorCollection>();
+                        foreach (var sensor in sensorCol)
                         {
-                            Ext.Net.TreeNode phenomenonOfferingNode = new Ext.Net.TreeNode(phenomenonOffering.Offering.Name, Icon.ResultsetNext);
-                            phenomenonOfferingNode.Checked = Ext.Net.ThreeStateBool.False;
-                            phenomenonOfferingNode.NodeID = phenomenonOffering.Offering.Id.ToString() + "_Offering#" + sensor.Id;
-                            phenomenonNode.Nodes.Add(phenomenonOfferingNode);
+                            Ext.Net.TreeNode sensorNode = new Ext.Net.TreeNode(sensor.Name, Icon.ResultsetNext);
+                            sensorNode.Checked = Ext.Net.ThreeStateBool.False;
+                            sensorNode.NodeID = sensor.Id.ToString() + "_Sensor";
+                            sensorRoot.Nodes.Add(sensorNode);
+                            Phenomenon phenomenon = new Phenomenon(sensor.PhenomenonID);
+                            Ext.Net.TreeNode phenomenonNode = new Ext.Net.TreeNode(phenomenon.Name, Icon.ResultsetNext);
+                            phenomenonNode.Checked = Ext.Net.ThreeStateBool.False;
+                            phenomenonNode.NodeID = sensor.Id.ToString() + "_Phenomenon";
+                            sensorNode.Nodes.Add(phenomenonNode);
+
+                            PhenomenonOfferingCollection phenomenonOfferingCol = new Select()
+                                .From(PhenomenonOffering.Schema)
+                                .InnerJoin(Phenomenon.Schema)
+                                .Where(Phenomenon.Columns.Id)
+                                .IsEqualTo(phenomenon.Id)
+                                .OrderAsc(Phenomenon.Columns.Name)
+                                //.Distinct()
+                                .ExecuteAsCollection<PhenomenonOfferingCollection>();
+                            foreach (var phenomenonOffering in phenomenonOfferingCol)
+                            {
+                                Ext.Net.TreeNode phenomenonOfferingNode = new Ext.Net.TreeNode(phenomenonOffering.Offering.Name, Icon.ResultsetNext);
+                                phenomenonOfferingNode.Checked = Ext.Net.ThreeStateBool.False;
+                                phenomenonOfferingNode.NodeID = phenomenonOffering.Offering.Id.ToString() + "_Offering#" + sensor.Id;
+                                phenomenonNode.Nodes.Add(phenomenonOfferingNode);
+                            }
                         }
                     }
                 }
             }
+
+            //ProjectSiteCollection projectSiteCol = new ProjectSiteCollection().Where("ID", SubSonic.Comparison.IsNot, null)
+            //    .Where("OrganisationID", SubSonic.Comparison.Equals, organisation.Id)
+            //    .OrderByAsc(ProjectSite.Columns.Name).Load();
+
+            //modx = new ModuleX("bd5f2a82-3dd3-46b1-8ce3-7ee99d5c77ad");
+            //Ext.Net.TreeNode projectSiteroot = new Ext.Net.TreeNode("Project Site", (Icon)modx.Icon);
+            //organisationNode.Nodes.Add(projectSiteroot);
+
+            //foreach (ProjectSite projectSite in projectSiteCol)
+            //{
+            //    Ext.Net.TreeNode projectSiteNode = new Ext.Net.TreeNode(projectSite.Name, Icon.ResultsetNext);
+            //    projectSiteroot.Nodes.Add(projectSiteNode);
+
+            //    StationCollection StationCol = new StationCollection().Where("ID", SubSonic.Comparison.IsNot, null)
+            //        .Where("ProjectSiteID", SubSonic.Comparison.Equals, projectSite.Id)
+            //        .OrderByAsc(Station.Columns.Name).Load();
+
+            //    modx = new ModuleX("0585e63d-0f9f-4dda-98ec-7de9397dc614");
+            //    Ext.Net.TreeNode stationroot = new Ext.Net.TreeNode("Station", (Icon)modx.Icon);
+            //    projectSiteNode.Nodes.Add(stationroot);
+
+            //    foreach (Station station in StationCol)
+            //    {
+            //        Ext.Net.TreeNode stationNode = new Ext.Net.TreeNode(station.Name, Icon.ResultsetNext);
+            //        stationNode.Checked = Ext.Net.ThreeStateBool.False;
+            //        stationNode.NodeID = station.Id.ToString() + "_Station";
+            //        stationroot.Nodes.Add(stationNode);
+
+            //        SensorCollection SensorCol = new SensorCollection().Where("ID", SubSonic.Comparison.IsNot, null)
+            //            .Where("StationID", SubSonic.Comparison.Equals, station.Id)
+            //            .OrderByAsc(Sensor.Columns.Name).Load();
+
+            //        modx = new ModuleX("9992ba10-cb0c-4a22-841c-1d695e8293d5");
+            //        Ext.Net.TreeNode Sensorroot = new Ext.Net.TreeNode("Sensor Procedure", (Icon)modx.Icon);
+            //        stationNode.Nodes.Add(Sensorroot);
+
+            //        foreach (Sensor sensor in SensorCol)
+            //        {
+            //            Ext.Net.TreeNode SensorNode = new Ext.Net.TreeNode(sensor.Name, Icon.ResultsetNext);
+            //            SensorNode.Checked = Ext.Net.ThreeStateBool.False;
+            //            SensorNode.NodeID = sensor.Id.ToString() + "_Sensor";
+            //            Sensorroot.Nodes.Add(SensorNode);
+            //            Phenomenon phenomenon = new Phenomenon(sensor.PhenomenonID);
+
+
+            //            Ext.Net.TreeNode phenomenonNode = new Ext.Net.TreeNode(phenomenon.Name, Icon.ResultsetNext);
+            //            phenomenonNode.Checked = Ext.Net.ThreeStateBool.False;
+
+            //            phenomenonNode.NodeID = sensor.Id.ToString() + "_Phenomenon";
+            //            SensorNode.Nodes.Add(phenomenonNode);
+
+            //            //PhenomenonOfferingCollection phenomenonOfferingCollection = new PhenomenonOfferingCollection().Where("ID", SubSonic.Comparison.IsNot, null)
+            //            //    .Where("PhenomenonID", SubSonic.Comparison.Equals, phenomenon.Id).Load();
+
+
+            //            // this.cbUnitofMeasure.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
+            //            //.From(UnitOfMeasure.Schema)
+            //            //.InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
+            //            //.Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(Id)
+            //            //.ExecuteDataSet().Tables[0];
+
+            //            PhenomenonOfferingCollection phenomenonOfferingCollection = new Select().From(PhenomenonOffering.Schema)
+            //                        .InnerJoin(Phenomenon.IdColumn, PhenomenonOffering.PhenomenonIDColumn)
+            //                        .Where(Phenomenon.IdColumn).IsEqualTo(phenomenon.Id)
+            //                        .OrderAsc(Phenomenon.Columns.Name)
+            //                        .ExecuteAsCollection<PhenomenonOfferingCollection>();
+
+            //            foreach (PhenomenonOffering phenomenonOffering in phenomenonOfferingCollection)
+            //            {
+            //                Ext.Net.TreeNode phenomenonOfferingNode = new Ext.Net.TreeNode(phenomenonOffering.Offering.Name, Icon.ResultsetNext);
+            //                phenomenonOfferingNode.Checked = Ext.Net.ThreeStateBool.False;
+            //                phenomenonOfferingNode.NodeID = phenomenonOffering.Offering.Id.ToString() + "_Offering#" + sensor.Id;
+            //                phenomenonNode.Nodes.Add(phenomenonOfferingNode);
+            //            }
+            //        }
+            //    }
+            //}
         }
     }
 

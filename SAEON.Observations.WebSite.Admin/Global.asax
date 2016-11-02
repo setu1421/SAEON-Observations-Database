@@ -11,7 +11,7 @@
         // Code that runs on application startup
         Log.Logger = new LoggerConfiguration()
             .ReadFrom.AppSettings()
-            .WriteTo.RollingFile(Server.MapPath(@"~/App_Data/Logs/Log-{Date}.txt"))
+            .WriteTo.RollingFile(Server.MapPath(@"~/App_Data/Logs/SAEON.Observations.Admin-{Date}.txt"))
             .CreateLogger();
         RouteConfig.RegisterRoutes(RouteTable.Routes);
     }
