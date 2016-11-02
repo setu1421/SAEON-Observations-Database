@@ -200,24 +200,24 @@ public class ImportSchemaHelper : IDisposable
     public void ProcessSchema()
     {
         Log.Information("ProcessSchema() 1.1");
-        BuildSchemaDefinition();
-
-        for (int i = 0; i < dtResults.Rows.Count; i++)
+        try
         {
-            DataRow dr = dtResults.Rows[i];
-            ProcessRow(dr);
-        }
+            BuildSchemaDefinition();
 
-        //Add
-
-        if (this.LogHelper != null)
-        {
-            List<SchemaDefinition> defs = schemaDefs.Where(t => t.IsOffering).ToList();
-            List<DateTime> unprocesseddt = LogHelper.GetUnprocessedDates();
-
-
-            try
+            for (int i = 0; i < dtResults.Rows.Count; i++)
             {
+                DataRow dr = dtResults.Rows[i];
+                ProcessRow(dr);
+            }
+
+            //Add
+
+            if (this.LogHelper != null)
+            {
+                List<SchemaDefinition> defs = schemaDefs.Where(t => t.IsOffering).ToList();
+                List<DateTime> unprocesseddt = LogHelper.GetUnprocessedDates();
+
+
                 for (int b = 0; b < unprocesseddt.Count; b++)
                 {
                     for (int i = 0; i < defs.Count; i++)
@@ -251,14 +251,15 @@ public class ImportSchemaHelper : IDisposable
                         SchemaValues.Add(rec);
                     }
                 }
-            }
-            catch (Exception Ex)
-            {
-                Log.Error(Ex, "ProcessSchema() Unprocessed");
-                throw Ex;
-            }
 
+            }
         }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "ProcessSchema() Unprocessed");
+            throw ex;
+        }
+
     }
 
     /// <summary>
@@ -267,133 +268,227 @@ public class ImportSchemaHelper : IDisposable
     /// <param name="dr"></param>
     void ProcessRow(DataRow dr)
     {
-        DateTime dttme = DateTime.MinValue,
-                    dt = DateTime.MinValue,
-                    tm = DateTime.MinValue;
-        Boolean ErrorInDate = false;
-        Boolean ErrorInTime = false;
-
-        string InvalidDateValue = String.Empty,
-               InvalidTimeValue = String.Empty,
-               RowComment = String.Empty;
-
-
-        SchemaDefinition dtdef = schemaDefs.FirstOrDefault(t => t.IsDate);
-        SchemaDefinition tmdef = schemaDefs.FirstOrDefault(t => t.IsTime);
-
-        Guid correlationID = Guid.NewGuid();
-
-        if (tmdef == null)
-            tmdef = schemaDefs.FirstOrDefault(t => t.IsFixedTime);
-
-        if (dtdef != null)
+        try
         {
-            string sDateValue = dr[dtdef.Index].ToString();
-            if (String.IsNullOrEmpty(sDateValue) || !DateTime.TryParseExact(sDateValue.ToUpper().Trim(), dtdef.Dateformat, null, DateTimeStyles.None, out dt))
-            {
-                ErrorInDate = true;
-                InvalidDateValue = sDateValue;
-            }
-        }
+            DateTime dttme = DateTime.MinValue,
+            dt = DateTime.MinValue,
+            tm = DateTime.MinValue;
+            Boolean ErrorInDate = false;
+            Boolean ErrorInTime = false;
 
-        if (tmdef != null)
-        {
-            if (tmdef.IsTime)
+            string InvalidDateValue = String.Empty,
+                   InvalidTimeValue = String.Empty,
+                   RowComment = String.Empty;
+
+
+            SchemaDefinition dtdef = schemaDefs.FirstOrDefault(t => t.IsDate);
+            SchemaDefinition tmdef = schemaDefs.FirstOrDefault(t => t.IsTime);
+
+            Guid correlationID = Guid.NewGuid();
+
+            if (tmdef == null)
+                tmdef = schemaDefs.FirstOrDefault(t => t.IsFixedTime);
+
+            if (dtdef != null)
             {
-                string sTimeValue = dr[tmdef.Index].ToString();
-                if (String.IsNullOrEmpty(sTimeValue) || !DateTime.TryParseExact(sTimeValue.ToUpper().Trim(), tmdef.Timeformat, null, DateTimeStyles.None, out tm))
+                string sDateValue = dr[dtdef.Index].ToString();
+                if (String.IsNullOrEmpty(sDateValue) || !DateTime.TryParseExact(sDateValue.ToUpper().Trim(), dtdef.Dateformat, null, DateTimeStyles.None, out dt))
                 {
-                    ErrorInTime = true;
-                    InvalidTimeValue = sTimeValue;
+                    ErrorInDate = true;
+                    InvalidDateValue = sDateValue;
                 }
             }
-            else if (tmdef.IsFixedTime)
-                tm = DateTime.Now.Date.AddMilliseconds(tmdef.FixedTimeValue.TotalMilliseconds);
-        }
 
-        if (concatedatetime &&
-           !ErrorInDate &&
-           !ErrorInTime)
-        {
-            dttme = dt.Date.AddMilliseconds(tm.TimeOfDay.TotalMilliseconds);
-        }
-
-        //Add Row Comment
-        foreach (var df in schemaDefs.Where(t => t.IsComment))
-        {
-            RowComment += dr[df.Index].ToString();
-        }
-
-        for (int i = 0; i < schemaDefs.Count; i++)
-        {
-            SchemaDefinition def = schemaDefs[i];
-
-            if (def.IsOffering)
+            if (tmdef != null)
             {
-                SchemaValue rec = new SchemaValue();
-
-                rec.SensorNotFound = def.SensorNotFound;
-                rec.SensorID = def.SensorID;
-
-                if (rec.SensorNotFound)
-                    rec.InvalidStatuses.Add(Status.SensorNotFound);
-
-                rec.InValidOffering = def.InValidOffering;
-                rec.PhenomenonOfferingID = def.PhenomenonOfferingID;
-
-                if (rec.InValidOffering)
-                    rec.InvalidStatuses.Add(Status.OfferingInvalid);
-
-                rec.InValidUOM = def.InValidUOM;
-                rec.PhenomenonUOMID = def.PhenomenonUOMID;
-                if (rec.InValidUOM)
-                    rec.InvalidStatuses.Add(Status.UOMInvalid);
-
-
-                if (ErrorInTime)
+                if (tmdef.IsTime)
                 {
-                    rec.TimeValueInvalid = true;
-                    rec.InvalidTimeValue = InvalidTimeValue;
-                    rec.InvalidStatuses.Add(Status.TimeInvalid);
-                }
-
-                if (ErrorInDate)
-                {
-                    rec.DateValueInvalid = true;
-                    rec.InvalidDateValue = InvalidDateValue;
-                    rec.InvalidStatuses.Add(Status.DateInvalid);
-
-                    //Make Time visible on input
-                    rec.TimeValueInvalid = true;
-                    rec.InvalidTimeValue = "";
-                }
-
-                if (concatedatetime && !ErrorInDate && !ErrorInTime)
-                    rec.DateValue = dttme;
-                else if (!ErrorInDate)
-                    rec.DateValue = dt;
-
-                if (!ErrorInTime)
-                    rec.TimeValue = tm;
-
-                string RawValue = dr[def.Index].ToString();
-
-
-                if (!ErrorInDate && LogHelper != null && LogHelper.CheckRecordGap(rec.DateValue))
-                {
-                    rec.RawValue = null;
-                    rec.DataValue = null;
-                }
-                else if (String.IsNullOrEmpty(RawValue) || def.IsEmptyValue && RawValue.Trim() == def.EmptyValue)
-                {
-                    rec.FieldRawValue = RawValue;
-                    rec.RawValue = null;// dataSource.DefaultNullValue;
-                    rec.DataValue = null;// dataSource.DefaultNullValue;
-
-                    foreach (var dtid in def.DataSourceTransformationIDs)
+                    string sTimeValue = dr[tmdef.Index].ToString();
+                    if (String.IsNullOrEmpty(sTimeValue) || !DateTime.TryParseExact(sTimeValue.ToUpper().Trim(), tmdef.Timeformat, null, DateTimeStyles.None, out tm))
                     {
-                        //TransformValue(dtid, ref rec);
-                        //
+                        ErrorInTime = true;
+                        InvalidTimeValue = sTimeValue;
+                    }
+                }
+                else if (tmdef.IsFixedTime)
+                    tm = DateTime.Now.Date.AddMilliseconds(tmdef.FixedTimeValue.TotalMilliseconds);
+            }
+
+            if (concatedatetime &&
+               !ErrorInDate &&
+               !ErrorInTime)
+            {
+                dttme = dt.Date.AddMilliseconds(tm.TimeOfDay.TotalMilliseconds);
+            }
+
+            //Add Row Comment
+            foreach (var df in schemaDefs.Where(t => t.IsComment))
+            {
+                RowComment += dr[df.Index].ToString();
+            }
+
+            for (int i = 0; i < schemaDefs.Count; i++)
+            {
+                SchemaDefinition def = schemaDefs[i];
+
+                if (def.IsOffering)
+                {
+                    SchemaValue rec = new SchemaValue();
+
+                    rec.SensorNotFound = def.SensorNotFound;
+                    rec.SensorID = def.SensorID;
+
+                    if (rec.SensorNotFound)
+                        rec.InvalidStatuses.Add(Status.SensorNotFound);
+
+                    rec.InValidOffering = def.InValidOffering;
+                    rec.PhenomenonOfferingID = def.PhenomenonOfferingID;
+
+                    if (rec.InValidOffering)
+                        rec.InvalidStatuses.Add(Status.OfferingInvalid);
+
+                    rec.InValidUOM = def.InValidUOM;
+                    rec.PhenomenonUOMID = def.PhenomenonUOMID;
+                    if (rec.InValidUOM)
+                        rec.InvalidStatuses.Add(Status.UOMInvalid);
+
+
+                    if (ErrorInTime)
+                    {
+                        rec.TimeValueInvalid = true;
+                        rec.InvalidTimeValue = InvalidTimeValue;
+                        rec.InvalidStatuses.Add(Status.TimeInvalid);
+                    }
+
+                    if (ErrorInDate)
+                    {
+                        rec.DateValueInvalid = true;
+                        rec.InvalidDateValue = InvalidDateValue;
+                        rec.InvalidStatuses.Add(Status.DateInvalid);
+
+                        //Make Time visible on input
+                        rec.TimeValueInvalid = true;
+                        rec.InvalidTimeValue = "";
+                    }
+
+                    if (concatedatetime && !ErrorInDate && !ErrorInTime)
+                        rec.DateValue = dttme;
+                    else if (!ErrorInDate)
+                        rec.DateValue = dt;
+
+                    if (!ErrorInTime)
+                        rec.TimeValue = tm;
+
+                    string RawValue = dr[def.Index].ToString();
+
+
+                    if (!ErrorInDate && LogHelper != null && LogHelper.CheckRecordGap(rec.DateValue))
+                    {
+                        rec.RawValue = null;
+                        rec.DataValue = null;
+                    }
+                    else if (String.IsNullOrEmpty(RawValue) || def.IsEmptyValue && RawValue.Trim() == def.EmptyValue)
+                    {
+                        rec.FieldRawValue = RawValue;
+                        rec.RawValue = null;// dataSource.DefaultNullValue;
+                        rec.DataValue = null;// dataSource.DefaultNullValue;
+
+                        foreach (var dtid in def.DataSourceTransformationIDs)
+                        {
+                            //TransformValue(dtid, ref rec);
+                            //
+                            DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
+                            if (dst.NewPhenomenonOfferingID != null)
+                            {
+                                rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
+                            }
+                            if (dst.NewPhenomenonUOMID != null)
+                            {
+                                rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
+                            }
+                            //
+                        }
+                    }
+                    else
+                    {
+                        rec.FieldRawValue = RawValue;
+                        Double dvalue = -1;
+
+                        if (!Double.TryParse(RawValue, out dvalue))
+                        {
+                            rec.RawValueInvalid = true;
+                            rec.InvalidRawValue = RawValue;
+                            rec.InvalidStatuses.Add(Status.ValueInvalid);
+                            try
+                            {
+                                Double.Parse(RawValue);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error(ex, "ProcessRow({@dr},{@rec},RawValue)", dr, rec, RawValue);
+                            }
+                        }
+                        else
+                        {
+                            rec.RawValue = dvalue;
+
+                            if (def.DataSourceTransformationIDs.Count > 0)
+                            {
+                                foreach (var dtid in def.DataSourceTransformationIDs)
+                                {
+                                    TransformValue(dtid, ref rec);
+                                    //
+
+                                    //
+                                }
+                            }
+                            else
+                                rec.DataValue = rec.RawValue;
+                        }
+                    }
+
+                    if (RowComment.Length > 0)
+                        rec.Comment = RowComment;
+                    rec.CorrelationID = correlationID;
+                    SchemaValues.Add(rec);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "ProcessRow({@dr}})", dr);
+            throw;
+        }
+
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    void TransformValue(Guid dtid, ref SchemaValue rec)
+    {
+        try
+        {
+            bool valid = true;
+            var trns = transformations.FirstOrDefault(t => t.Id == dtid);
+
+            bool process = trns.PhenomenonOfferingID.HasValue ? trns.PhenomenonOfferingID.Value == rec.PhenomenonOfferingID : true &&
+                    trns.PhenomenonUOMID.HasValue ? trns.PhenomenonUOMID.Value == rec.PhenomenonUOMID : true;
+
+            if (trns.TransformationTypeID.ToString() == TransformationType.CorrectionValues)
+            {
+                if (process)
+                {
+                    Dictionary<string, string> corrvals = trns.CorrectionValues;
+
+                    if (corrvals.ContainsKey("eq"))
+                    {
+                        //string eq = corrvals["equation"].Replace("\"","").Replace("\"","");
+                        Expression exp = new Expression(corrvals["eq"]);
+                        exp.Parameters["value"] = rec.RawValue;
+                        object val = exp.Evaluate();
+                        rec.DataValue = Double.Parse(val.ToString());
+
                         DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
                         if (dst.NewPhenomenonOfferingID != null)
                         {
@@ -403,176 +498,99 @@ public class ImportSchemaHelper : IDisposable
                         {
                             rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
                         }
-                        //
-                    }
-                }
-                else
-                {
-                    rec.FieldRawValue = RawValue;
-                    Double dvalue = -1;
-
-                    if (!Double.TryParse(RawValue, out dvalue))
-                    {
-                        rec.RawValueInvalid = true;
-                        rec.InvalidRawValue = RawValue;
-                        rec.InvalidStatuses.Add(Status.ValueInvalid);
-                        try
-                        {
-                            Double.Parse(RawValue);
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error(ex, "ProcessRow({@dr},{@rec},RawValue)", dr, rec,RawValue);
-                        }
-                    }
-                    else
-                    {
-                        rec.RawValue = dvalue;
-
-                        if (def.DataSourceTransformationIDs.Count > 0)
-                        {
-                            foreach (var dtid in def.DataSourceTransformationIDs)
-                            {
-                                TransformValue(dtid, ref rec);
-                                //
-
-                                //
-                            }
-                        }
-                        else
-                            rec.DataValue = rec.RawValue;
-                    }
-                }
-
-                if (RowComment.Length > 0)
-                    rec.Comment = RowComment;
-                rec.CorrelationID = correlationID;
-                SchemaValues.Add(rec);
-            }
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    void TransformValue(Guid dtid, ref SchemaValue rec)
-    {
-        bool valid = true;
-        var trns = transformations.FirstOrDefault(t => t.Id == dtid);
-
-        bool process = trns.PhenomenonOfferingID.HasValue ? trns.PhenomenonOfferingID.Value == rec.PhenomenonOfferingID : true &&
-                trns.PhenomenonUOMID.HasValue ? trns.PhenomenonUOMID.Value == rec.PhenomenonUOMID : true;
-
-        if (trns.TransformationTypeID.ToString() == TransformationType.CorrectionValues)
-        {
-            if (process)
-            {
-                Dictionary<string, string> corrvals = trns.CorrectionValues;
-
-                if (corrvals.ContainsKey("eq"))
-                {
-                    //string eq = corrvals["equation"].Replace("\"","").Replace("\"","");
-                    Expression exp = new Expression(corrvals["eq"]);
-                    exp.Parameters["value"] = rec.RawValue;
-                    object val = exp.Evaluate();
-                    rec.DataValue = Double.Parse(val.ToString());
-
-                    DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
-                    if (dst.NewPhenomenonOfferingID != null)
-                    {
-                        rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
-                    }
-                    if (dst.NewPhenomenonUOMID != null)
-                    {
-                        rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
-                    }
-                }
-            }
-            else
-            {
-                rec.DataValue = rec.RawValue;
-            }
-        }
-        else if (trns.TransformationTypeID.ToString() == TransformationType.RatingTable && process)
-        {
-
-            try
-            {
-                //List<double> vals = trns.RatingTableValues.ToList();
-
-                //var index = vals.BinarySearch(rec.RawValue.Value);
-
-                //if (index < 0)
-                //{
-                //    index = ~index;
-                //    index -= 1;
-                //}
-
-                //var result = vals[index];
-
-                //if (index != vals.Count - 1 && rec.RawValue.Value != result)
-                //{
-                //    var floor = result;
-                //    var ceiling = vals[vals.Count - 1];
-
-                //    if ((rec.RawValue - floor) > (ceiling - rec.RawValue))
-                //        rec.DataValue = ceiling;
-                //    else
-                //        rec.DataValue = floor;
-                //}
-                //else
-                //    rec.DataValue = rec.RawValue;
-
-
-                if (process)
-                {
-                    rec.DataValue = trns.GetRatingValue(rec.RawValue.Value);
-
-                    DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
-                    if (dst.NewPhenomenonOfferingID != null)
-                    {
-                        rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
-                    }
-                    if (dst.NewPhenomenonUOMID != null)
-                    {
-                        rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
                     }
                 }
                 else
                 {
                     rec.DataValue = rec.RawValue;
                 }
-
             }
-            catch (Exception ex)
+            else if (trns.TransformationTypeID.ToString() == TransformationType.RatingTable && process)
             {
-                Log.Error(ex, "TransformValue({@dtid},{@rec})");
-                rec.DataValue = rec.RawValue;
+
+                try
+                {
+                    //List<double> vals = trns.RatingTableValues.ToList();
+
+                    //var index = vals.BinarySearch(rec.RawValue.Value);
+
+                    //if (index < 0)
+                    //{
+                    //    index = ~index;
+                    //    index -= 1;
+                    //}
+
+                    //var result = vals[index];
+
+                    //if (index != vals.Count - 1 && rec.RawValue.Value != result)
+                    //{
+                    //    var floor = result;
+                    //    var ceiling = vals[vals.Count - 1];
+
+                    //    if ((rec.RawValue - floor) > (ceiling - rec.RawValue))
+                    //        rec.DataValue = ceiling;
+                    //    else
+                    //        rec.DataValue = floor;
+                    //}
+                    //else
+                    //    rec.DataValue = rec.RawValue;
+
+
+                    if (process)
+                    {
+                        rec.DataValue = trns.GetRatingValue(rec.RawValue.Value);
+
+                        DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
+                        if (dst.NewPhenomenonOfferingID != null)
+                        {
+                            rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
+                        }
+                        if (dst.NewPhenomenonUOMID != null)
+                        {
+                            rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
+                        }
+                    }
+                    else
+                    {
+                        rec.DataValue = rec.RawValue;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "TransformValue({@dtid},{@rec})", dtid, rec);
+                    rec.DataValue = rec.RawValue;
+                }
+
             }
 
+            else if (trns.TransformationTypeID.ToString() == TransformationType.QualityControlValues)
+            {
+
+                if (!rec.DataValue.HasValue)
+                    rec.DataValue = rec.RawValue;
+
+                Dictionary<string, Double> qv = trns.QualityValues;
+                if (qv.ContainsKey("min") && rec.DataValue.Value < qv["min"])
+                    valid = false;
+
+                if (qv.ContainsKey("max") && rec.DataValue.Value > qv["max"])
+                    valid = false;
+
+                if (!valid)
+                {
+                    rec.InvalidStatuses.Add(Status.TransformValueInvalid);
+                    rec.DataSourceTransformationID = trns.Id;
+
+                    rec.DataValueInvalid = true;
+                    rec.InvalidDataValue = rec.DataValue.ToString();
+                }
+            }
         }
-
-        else if (trns.TransformationTypeID.ToString() == TransformationType.QualityControlValues)
+        catch (Exception ex)
         {
-
-            if (!rec.DataValue.HasValue)
-                rec.DataValue = rec.RawValue;
-
-            Dictionary<string, Double> qv = trns.QualityValues;
-            if (qv.ContainsKey("min") && rec.DataValue.Value < qv["min"])
-                valid = false;
-
-            if (qv.ContainsKey("max") && rec.DataValue.Value > qv["max"])
-                valid = false;
-
-            if (!valid)
-            {
-                rec.InvalidStatuses.Add(Status.TransformValueInvalid);
-                rec.DataSourceTransformationID = trns.Id;
-
-                rec.DataValueInvalid = true;
-                rec.InvalidDataValue = rec.DataValue.ToString();
-            }
+            Log.Error(ex, "TransformValue({@dtid},{@rec})", dtid, rec);
+            throw;
         }
     }
 
