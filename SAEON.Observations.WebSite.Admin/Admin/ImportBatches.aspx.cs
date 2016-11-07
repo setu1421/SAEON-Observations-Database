@@ -418,7 +418,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                     Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
 
-                    using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, sp, logHelper))
+                    //                   using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, sp, logHelper))
+                    ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, sp, logHelper);
                     {
                         if (helper.Errors.Count > 0)
                         {
@@ -441,7 +442,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                 Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
 
-                using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, null, logHelper))
+                //using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, null, logHelper))
+                    ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, null, logHelper);
                 {
                     if (helper.Errors.Count > 0)
                     {

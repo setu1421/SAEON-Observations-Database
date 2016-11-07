@@ -2,6 +2,7 @@
 <%@ Import Namespace="Serilog" %>
 <%@ Import Namespace="Serilog.Settings.AppSettings" %>
 <%@ Import Namespace="Serilog.Sinks.RollingFile" %>
+<%@ Import Namespace="Serilog.Sinks.Seq" %>
 <%@ Import Namespace="System.Web.Routing" %>
 
 <script RunAt="server">
@@ -11,7 +12,9 @@
         // Code that runs on application startup
         Log.Logger = new LoggerConfiguration()
             .ReadFrom.AppSettings()
-            .WriteTo.RollingFile(Server.MapPath(@"~/App_Data/Logs/SAEON.Observations.Admin-{Date}.txt"))
+            .Enrich.FromLogContext()
+            .WriteTo.RollingFile(Server.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebSite.Admin-{Date}.txt"))
+            .WriteTo.Seq("http://localhost:5341/")
             .CreateLogger();
         RouteConfig.RegisterRoutes(RouteTable.Routes);
     }
