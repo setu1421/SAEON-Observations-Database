@@ -32,18 +32,27 @@ AS
 --                      dbo.Organisation AS org ON org.ID = ps.OrganisationID INNER JOIN
 --                      dbo.UnitOfMeasure AS uom ON uom.ID = puom.UnitOfMeasureID INNER JOIN
 --                      dbo.aspnet_Users AS users ON users.UserId = o.UserId 
-
 SELECT 
-  o.ID, o.SensorID, o.PhenomenonOfferingID, o.PhenomenonUOMID, o.UserId, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, o.Comment, aspnet_Users.UserName,
+  o.ID, o.SensorID, o.PhenomenonOfferingID, o.PhenomenonUOMID, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, o.Comment, 
+  o.UserId, aspnet_Users.UserName,
+  Offering.ID OfferingID,
   Offering.Name OfferingName,
+  UnitOfMeasure.ID UnitOfMeasureID,
   UnitOfMeasure.Unit UnitOfMeasureUnit,
   UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
   Sensor.Name SensorName,
+  Phenomenon.ID PhenomenonID,
+  Phenomenon.Name PhenomenonName,
   DataSource.ID DataSourceID,
+  DataSource.Name DataSourceName,
   IsNull(SensorSchema.Name, DataSourceSchema.Name) DataSchemaName,
+  Instrument.ID InstrumentID,
   Instrument.Name InstrumentName,
+  Station.ID StationID,
   Station.Name StationName,
+  Site.ID SiteID,
   Site.Name SiteName,
+  Organisation.ID OrganisationID,
   Organisation.Name OrganisationName
 FROM
   Observation o
@@ -57,6 +66,8 @@ FROM
     on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
   inner join Sensor 
     on (o.SensorID = Sensor.ID)
+  inner join Phenomenon
+    on (Sensor.PhenomenonID = Phenomenon.ID)
   left join DataSchema SensorSchema
     on (Sensor.DataSchemaID = SensorSchema.ID)
   inner join DataSource

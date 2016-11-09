@@ -29,13 +29,13 @@ AS
 --INNER JOIN aspnet_Users ur
 -- ON dr.UserId = ur.UserId
 Select
-  vObservation.*, DataSourceRoles.*
+  vObservation.*
 from
   vObservation
   inner join
     (
 	  Select
-	    dr.DataSourceID RoleDataSourceID, aspnet_UsersInRoles.UserID RoleUserID, Min(dr.DateStart) DateStart, Max(dr.DateStart) DateEnd
+	    dr.DataSourceID RoleDataSourceID, aspnet_UsersInRoles.UserId RoleUserId, Min(dr.DateStart) DateStart, Max(dr.DateStart) DateEnd
 	  from
 	    DataSourceRole dr
 		inner join aspnet_Roles 
@@ -44,11 +44,9 @@ from
 		  on (aspnet_Roles.RoleId = aspnet_UsersInRoles.RoleId)
       group by
 		dr.DataSourceID, aspnet_UsersInRoles.UserId
-
 	) DataSourceRoles
 	on (vObservation.DataSourceID = DataSourceRoles.RoleDataSourceID) and
-	   (vObservation.ValueDate >= DataSourceRoles.DateStart) and (vObservation.ValueDate <= DataSourceRoles.DateEnd)
-  inner join aspnet_Users
-    on (DataSourceRoles.RoleUserId = aspnet_Users.UserId)
+	   (vObservation.ValueDate >= DataSourceRoles.DateStart) and (vObservation.ValueDate <= DataSourceRoles.DateEnd) and
+       (DataSourceRoles.RoleUserId = vObservation.UserId)
 --< Changed 2.0.16 20161107 TimPN
  
