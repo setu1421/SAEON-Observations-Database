@@ -107,7 +107,7 @@ public partial class _DataQuery : System.Web.UI.Page
                     {
                         Ext.Net.TreeNode instrumentNode = new Ext.Net.TreeNode(instrument.Name, Icon.ResultsetNext);
                         instrumentNode.Checked = Ext.Net.ThreeStateBool.False;
-                        instrumentNode.NodeID = station.Id.ToString() + "_Instrument";
+                        instrumentNode.NodeID = stationNode.NodeID + "|" + instrument.Id.ToString() + "_Instrument";
                         instrumentRoot.Nodes.Add(instrumentNode);
 
                         modx = new ModuleX("9992ba10-cb0c-4a22-841c-1d695e8293d5");
@@ -126,27 +126,30 @@ public partial class _DataQuery : System.Web.UI.Page
                         {
                             Ext.Net.TreeNode sensorNode = new Ext.Net.TreeNode(sensor.Name, Icon.ResultsetNext);
                             sensorNode.Checked = Ext.Net.ThreeStateBool.False;
-                            sensorNode.NodeID = sensor.Id.ToString() + "_Sensor";
+                            sensorNode.NodeID = instrumentNode.NodeID + "|" + sensor.Id.ToString() + "_Sensor";
                             sensorRoot.Nodes.Add(sensorNode);
                             Phenomenon phenomenon = new Phenomenon(sensor.PhenomenonID);
                             Ext.Net.TreeNode phenomenonNode = new Ext.Net.TreeNode(phenomenon.Name, Icon.ResultsetNext);
                             phenomenonNode.Checked = Ext.Net.ThreeStateBool.False;
-                            phenomenonNode.NodeID = sensor.Id.ToString() + "_Phenomenon";
+                            phenomenonNode.NodeID = sensorNode.NodeID + "|" + phenomenon.Id.ToString() + "_Phenomenon";
                             sensorNode.Nodes.Add(phenomenonNode);
 
                             PhenomenonOfferingCollection phenomenonOfferingCol = new Select()
                                 .From(PhenomenonOffering.Schema)
-                                .InnerJoin(Phenomenon.Schema)
-                                .Where(Phenomenon.Columns.Id)
+                                .InnerJoin(Offering.Schema)
+                                .Where(PhenomenonOffering.Columns.PhenomenonID)
                                 .IsEqualTo(phenomenon.Id)
-                                .OrderAsc(Phenomenon.Columns.Name)
+                                .OrderAsc(Offering.Columns.Name)
                                 //.Distinct()
                                 .ExecuteAsCollection<PhenomenonOfferingCollection>();
+                            int n = 0;
                             foreach (var phenomenonOffering in phenomenonOfferingCol)
                             {
+                                n++;
+                                if (n > 5) break;
                                 Ext.Net.TreeNode phenomenonOfferingNode = new Ext.Net.TreeNode(phenomenonOffering.Offering.Name, Icon.ResultsetNext);
                                 phenomenonOfferingNode.Checked = Ext.Net.ThreeStateBool.False;
-                                phenomenonOfferingNode.NodeID = phenomenonOffering.Offering.Id.ToString() + "_Offering#" + sensor.Id;
+                                phenomenonOfferingNode.NodeID = phenomenonNode.NodeID + "|" + phenomenonOffering.Offering.Id.ToString() + "_Offering";
                                 phenomenonNode.Nodes.Add(phenomenonOfferingNode);
                             }
                         }
@@ -236,6 +239,7 @@ public partial class _DataQuery : System.Web.UI.Page
 
     protected class QueryDataClass
     {
+        public string NodeID { get; set; }
         public Guid ID { get; set; }
         public string Type { get; set; }
     }
@@ -267,7 +271,7 @@ public partial class _DataQuery : System.Web.UI.Page
         DateTime ToDate = ToFilter.SelectedDate;
 
         SqlQuery q = new Select().From(VObservationRole.Schema);
-        
+
         if (FilterTree.CheckedNodes != null)
         {
             List<SubmittedNode> nodes = FilterTree.CheckedNodes;
@@ -275,7 +279,8 @@ public partial class _DataQuery : System.Web.UI.Page
 
             foreach (var item in nodes)
             {
-                QueryDataClassList.Add(new QueryDataClass() { ID = new Guid(item.NodeID.Substring(0, item.NodeID.IndexOf("_"))), Type = item.NodeID.Substring(item.NodeID.IndexOf("_") + 1) });
+                var items = item.NodeID.Split('|').Reverse().Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item1), Type = items[0].Item2 });
             }
 
             #region buildQ
@@ -283,24 +288,50 @@ public partial class _DataQuery : System.Web.UI.Page
             {
 
                 int count = 0;
-                Offering offering = new Offering();
-                Phenomenon Phenomenon = new Phenomenon();
-                Sensor Sensor = new Sensor();
-                Station station = new Station();
+                //Offering offering = new Offering();
+                //Phenomenon Phenomenon = new Phenomenon();
+                //Sensor Sensor = new Sensor();
+                //Station station = new Station();
+
+                switch (item.Type)
+                {
+                    case "Offering":
+                        count++;
+                        var items = item.NodeID.Split('|').Reverse().Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        Offering offering = new Offering(item.ID);
+                        Phenomenon phenomenon = new Phenomenon(new Guid(items[2].Item1));
+                        Sensor sensor = new Sensor(new Guid(items[2].Item1));
+                        Instrument instrument = new Instrument(new Guid(items[1].Item1));
+                        Station station = new Station(new Guid(items[1].Item1));
+                        q.OrExpression(VObservation.Columns.OfferingID).IsEqualTo(offering.Id)
+                       .And(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
+                       .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                       .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                       .And(VObservation.Columns.StationID).IsEqualTo(station.Id);
+                        break;
+                    case "Phenomenon":
+                        break;
+                    case "Sensor":
+                        break;
+                    case "Instrument":
+                        break;
+                    case "Station":
+                        break;
+                }
+
 
                 if (item.Type.Length > 20)
                 {
-                    if (item.Type.Substring(0, 8) == "Offering")
+                    if (item.Type == "Offering")
                     {
                         count++;
-                        Offering off = new Offering(item.ID);
-                        Sensor sp = new Sensor(item.Type.Substring(item.Type.IndexOf("#") + 1, item.Type.Substring(item.Type.IndexOf("#") + 1, 36).Length));
-
-
-                        q.OrExpression(VObservation.Columns.OffID).IsEqualTo(off.Id)
-                       .And(VObservation.Columns.PhenomenonID).IsEqualTo(sp.PhenomenonID)
-                       .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
-                       .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
+                        Offering offering = new Offering(item.ID);
+                        Sensor sensor = new Sensor(item.Type.Substring(item.Type.IndexOf("#") + 1, item.Type.Substring(item.Type.IndexOf("#") + 1, 36).Length));
+                        q.OrExpression(VObservation.Columns.OfferingID).IsEqualTo(offering.Id)
+                       .And(VObservation.Columns.PhenomenonID).IsEqualTo(sensor.PhenomenonID)
+                       .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                       //.And(VObservation.Columns.InstrumentID).IsEqualTo()
+                       .And(VObservation.Columns.StationID).IsEqualTo(sensor.StationID);
                     }
                 }
 
@@ -319,17 +350,17 @@ public partial class _DataQuery : System.Web.UI.Page
                 if (item.Type == "Sensor")
                 {
                     count++;
-                    Sensor = new Sensor(item.ID);
+                    //Sensor = new Sensor(item.ID);
 
-                    q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(item.ID)
-                    .And(VObservation.Columns.StationID).IsEqualTo(Sensor.StationID);
+                    //q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(item.ID)
+                    //.And(VObservation.Columns.StationID).IsEqualTo(Sensor.StationID);
 
                 }
 
                 if (item.Type == "Station")
                 {
                     count++;
-                    station = new Station(item.ID);
+                    //station = new Station(item.ID);
                     q.OrExpression(VObservation.Columns.StationID).IsEqualTo(item.ID);
 
                 }
@@ -344,7 +375,7 @@ public partial class _DataQuery : System.Web.UI.Page
                     {
                         q.And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(ToDate.AddHours(23).AddMinutes(59).AddSeconds(59).ToString());
                     }
-                    q.And(VObservationRole.Columns.Expr5).IsEqualTo(AuthHelper.GetLoggedInUserId);
+                    q.And(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
                     DataQueryRepository.qFilterNSort(ref q, ref e);
 
                     q.CloseExpression();
@@ -368,7 +399,7 @@ public partial class _DataQuery : System.Web.UI.Page
     }
 
 
-    
+
     public string BuildQ(string json, string visCols, DateTime dateFrom, DateTime dateTo, string sortCol, string sortDir)
     {
         Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(visCols);
@@ -400,7 +431,7 @@ public partial class _DataQuery : System.Web.UI.Page
         SqlQuery q = new Select(colms).From(VObservationRole.Schema);
 
         //q.And(VObservationRole.Columns.Expr5).IsEqualTo(AuthHelper.GetLoggedInUserId);
-        
+
 
         if (FilterTree.CheckedNodes != null)
         {
@@ -431,7 +462,7 @@ public partial class _DataQuery : System.Web.UI.Page
                         Sensor sp = new Sensor(item.Type.Substring(item.Type.IndexOf("#") + 1, item.Type.Substring(item.Type.IndexOf("#") + 1, 36).Length));
 
 
-                        q.OrExpression(VObservation.Columns.OffID).IsEqualTo(off.Id)
+                        q.OrExpression(VObservation.Columns.OfferingID).IsEqualTo(off.Id)
                        .And(VObservation.Columns.PhenomenonID).IsEqualTo(sp.PhenomenonID)
                        .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
                        .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
@@ -541,7 +572,7 @@ public partial class _DataQuery : System.Web.UI.Page
                         }
                     }
 
-                    q.And(VObservationRole.Columns.Expr5).IsEqualTo(AuthHelper.GetLoggedInUserId);
+                    q.And(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
                     q.CloseExpression();
 
 
@@ -617,5 +648,5 @@ public partial class _DataQuery : System.Web.UI.Page
         //this.Response.End();
     }
 
-    
+
 }

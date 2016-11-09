@@ -14,7 +14,7 @@
             </ext:Panel>
            
             <ext:Panel ID="PanelW" runat="server" Title="Navigation" Region="West" Layout="accordion"
-                Width="225" MinWidth="225" MaxWidth="400" Collapsible="true" Border="false" Split="false"
+                Width="175" MinWidth="175" MaxWidth="400" Collapsible="true" Border="false" Split="false"
                 ClientIDMode="Static">
                 <Items>
                 </Items>
