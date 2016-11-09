@@ -837,7 +837,95 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         catch (Exception ex)
         {
             Log.Error(ex, "ImportBatches.ApplyClick");
-            MessageBoxes.Error(ex, "Error", "Unable to apply status and reason to selected observations");
+            MessageBoxes.Error(ex, "Error", "Unable to apply status and reason to the selected observations");
+        }
+        ObservationsGrid.DataBind();
+    }
+
+    protected void ApplyToRestClick(object sender, DirectEventArgs e)
+    {
+        var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+        if (cbStatus.SelectedItem.Text == "Verified")
+        {
+            MessageBoxes.Confirm("Confirm",
+            "DirectCall.ApplyStatusAndReason({eventMask: { showMask: true}});",
+            $"Are your sure you want to apply status '{cbStatus.SelectedItem.Text}' to the unselected observations?");
+
+        }
+        else
+        {
+            MessageBoxes.Confirm("Confirm",
+            "DirectCall.ApplyStatusAndReasonToRest({eventMask: { showMask: true}});",
+            $"Are your sure you want to apply status '{cbStatus.SelectedItem.Text}' and reason '{cbStatusReason.SelectedItem.Text}' to the unselected observations?");
+
+        }
+    }
+
+    [DirectMethod]
+    public void ApplyStatusAndReasonToRest()
+    {
+        try
+        {
+            var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+            foreach (SelectedRow row in sm.SelectedRows)
+            {
+                //Observation obs = new Observation(row.RecordID);
+                //obs.StatusID = Utilities.MakeGuid(cbStatus.SelectedItem.Value);
+                //if (cbStatus.SelectedItem.Text == "Verified")
+                //    obs.StatusReasonID = null;
+                //else
+                //    obs.StatusReasonID = Utilities.MakeGuid(cbStatusReason.SelectedItem.Value);
+                //obs.Save();
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "ImportBatches.ApplyToRestClick");
+            MessageBoxes.Error(ex, "Error", "Unable to apply status and reason to the unselected observations");
+        }
+        ObservationsGrid.DataBind();
+    }
+
+    protected void ApplyToAllClick(object sender, DirectEventArgs e)
+    {
+        var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+        if (cbStatus.SelectedItem.Text == "Verified")
+        {
+            MessageBoxes.Confirm("Confirm",
+            "DirectCall.ApplyStatusAndReason({eventMask: { showMask: true}});",
+            $"Are your sure you want to apply status '{cbStatus.SelectedItem.Text}' to all the observations?");
+
+        }
+        else
+        {
+            MessageBoxes.Confirm("Confirm",
+            "DirectCall.ApplyStatusAndReasonToRest({eventMask: { showMask: true}});",
+            $"Are your sure you want to apply status '{cbStatus.SelectedItem.Text}' and reason '{cbStatusReason.SelectedItem.Text}' to all the observations?");
+
+        }
+    }
+
+    [DirectMethod]
+    public void ApplyStatusAndReasonToAll()
+    {
+        try
+        {
+            var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+            foreach (SelectedRow row in sm.SelectedRows)
+            {
+                //Observation obs = new Observation(row.RecordID);
+                //obs.StatusID = Utilities.MakeGuid(cbStatus.SelectedItem.Value);
+                //if (cbStatus.SelectedItem.Text == "Verified")
+                //    obs.StatusReasonID = null;
+                //else
+                //    obs.StatusReasonID = Utilities.MakeGuid(cbStatusReason.SelectedItem.Value);
+                //obs.Save();
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "ImportBatches.ApplyToAllClick");
+            MessageBoxes.Error(ex, "Error", "Unable to apply status and reason to all observations");
         }
         ObservationsGrid.DataBind();
     }
@@ -851,11 +939,15 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             cbStatusReason.SetValue(null);
             cbStatusReason.Disabled = true;
             btnApply.Disabled = (cbStatus.SelectedIndex == -1) || (sm.SelectedRows.Count == 0);
+            btnApplyToRest.Disabled = (cbStatus.SelectedIndex == -1);
+            btnApplyToAll.Disabled = (cbStatus.SelectedIndex == -1);
         }
         else
         {
             cbStatusReason.Disabled = false;
             btnApply.Disabled = (cbStatus.SelectedIndex == -1) || (cbStatusReason.SelectedIndex == -1) || (sm.SelectedRows.Count == 0);
+            btnApplyToRest.Disabled = (cbStatus.SelectedIndex == -1) || (cbStatusReason.SelectedIndex == -1);
+            btnApplyToAll.Disabled = (cbStatus.SelectedIndex == -1) || (cbStatusReason.SelectedIndex == -1);
         }
     }
     #endregion

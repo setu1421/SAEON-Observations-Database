@@ -95,7 +95,7 @@
                                                 <Fields>
                                                     <ext:RecordField Name="Id" Type="Auto" />
                                                     <ext:RecordField Name="Code" Type="Int" />
-                                                    <ext:RecordField Name="ImportDate" Type="Date"/>
+                                                    <ext:RecordField Name="ImportDate" Type="Date" />
                                                     <ext:RecordField Name="Status" Type="Int" />
                                                     <ext:RecordField Name="DataSourceName" Type="String" />
                                                     <ext:RecordField Name="StatusDescription" Type="String" />
@@ -117,7 +117,7 @@
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
                                         <ext:Column Header="Number" DataIndex="Code" Width="80" />
-                                        <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="125" Format="dd MMM yyyy hh:mm:ss" />
+                                        <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
                                         <ext:Column Header="DataSourceID" DataIndex="DataSourceID" Width="150" Hidden="true" />
                                         <ext:Column Header="DataSourceName" DataIndex="DataSourceName" Width="250" />
                                         <ext:Column Header="FileName" DataIndex="FileName" Width="200" />
@@ -170,6 +170,7 @@
                                 <TopBar>
                                     <ext:Toolbar ID="tbObservations" runat="server" ClientIDMode="Static">
                                         <Items>
+                                            <ext:ToolbarTextItem Text="Status:" />
                                             <ext:ComboBox ID="cbStatus" runat="server" StoreID="StatusStore" MsgTarget="Side" DisplayField="Name" Width="200"
                                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                                 ValueField="Id" DataIndex="Id" EmptyText="Select a status" ValueNotFoundText="Select a status"
@@ -181,7 +182,7 @@
                                                     <Select OnEvent="EnableApply" />
                                                 </DirectEvents>
                                             </ext:ComboBox>
-                                            <ext:TextField Width="20px" Height="20px" Disabled="true" runat="server" Cls="myTextField" />
+                                            <ext:ToolbarTextItem Text="Status:" />
                                             <ext:ComboBox ID="cbStatusReason" runat="server" StoreID="StatusReasonStore" MsgTarget="Side" DisplayField="Name" Width="200"
                                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                                 ValueField="Id" DataIndex="Id" EmptyText="Select a reason" ValueNotFoundText="Select a status"
@@ -190,13 +191,29 @@
                                                     <Select OnEvent="EnableApply" />
                                                 </DirectEvents>
                                             </ext:ComboBox>
-                                            <ext:TextField Width="20px" Height="20px" Disabled="true" runat="server" Cls="myTextField" />
+                                            <ext:ToolbarSeparator Width="10" />
                                             <ext:Button ID="btnApply" runat="server" Icon="ShieldGo" Text="Apply" ClientIDMode="Static" Disabled="true">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Apply" />
                                                 </ToolTips>
                                                 <DirectEvents>
                                                     <Click OnEvent="ApplyClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            <ext:Button ID="btnApplyToRest" runat="server" Icon="ShieldGo" Text="Apply" ClientIDMode="Static" Disabled="true">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip3" runat="server" Html="Apply to rest" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="ApplyToRestClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            <ext:Button ID="btnApplyToAll" runat="server" Icon="ShieldGo" Text="Apply to all" ClientIDMode="Static" Disabled="true">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip4" runat="server" Html="Apply to all" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="ApplyToAllClick" />
                                                 </DirectEvents>
                                             </ext:Button>
                                             <%-- 
@@ -251,7 +268,7 @@
                                                 <ext:Column Header="Sensor" DataIndex="SensorName" Width="150" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
-                                                <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy hh:mm:ss" />
+                                                <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
                                                 <ext:Column Header="Raw value" DataIndex="RawValue" Width="100" />
                                                 <ext:Column Header="Data value" DataIndex="DataValue" Width="100" />
                                                 <ext:Column Header="Status" DataIndex="StatusName" Width="150" />
@@ -359,7 +376,7 @@
                                                 <ext:Column Header="Organisation" DataIndex="Organisation" Width="100" Hidden="true" />
                                                 <ext:Column Header="ProjectSite" DataIndex="ProjectSite" Width="100" Hidden="true" />
                                                 <ext:Column Header="Station" DataIndex="StationName" Width="100" Hidden="true" />
-                                                <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="125" Format="dd MMM yyyy hh:mm:ss"
+                                                <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="125" Format="dd MMM yyyy HH:mm:ss"
                                                     Hidden="true" />
                                                 <ext:Column Header="Sensor ID" DataIndex="SensorID" Width="40" Hidden="true">
                                                     <Commands>
@@ -372,7 +389,7 @@
                                                 <ext:CheckColumn Locked="true" Header="Sensor Invalid" DataIndex="SensorInvalid"
                                                     Width="30" Hidden="true" />
                                                 <ext:Column Header="Sensor" DataIndex="SensorName" Width="150" />
-                                                <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy hh:mm:ss">
+                                                <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm:ss">
                                                     <Commands>
                                                         <ext:ImageCommand Icon="Delete" CommandName="InvalidDate" Hidden="true" HideMode="Display">
                                                             <ToolTip Text="Invalid Date" />
@@ -384,7 +401,7 @@
                                                 <ext:Column Header="Invalid Date" DataIndex="InvalidDateValue" Width="80" Hidden="true" />
                                                 <ext:CheckColumn Locked="true" Header="Time Invalid" DataIndex="TimeValueInvalid"
                                                     Width="30" Hidden="true" />
-                                                <ext:DateColumn Header="Time Value" DataIndex="ValueTime" Width="80" Format="hh:mm:ss"
+                                                <ext:DateColumn Header="Time Value" DataIndex="ValueTime" Width="80" Format="HH:mm:ss"
                                                     Hidden="true" />
                                                 <ext:Column Header="Invalid Time" DataIndex="InvalidTimeValue" Width="80" Hidden="true" />
                                                 <ext:Column Header="Raw converted value" DataIndex="RawValue" Width="80" Hidden="true" />
@@ -640,7 +657,7 @@
                     </ext:Container>
                     <ext:Container ID="Container1" runat="server" LabelAlign="Top" Layout="RowLayout">
                         <Items>
-                            <ext:DateField ID="ValueDate" runat="server" DataIndex="ValueDate" FieldLabel="Date Value" Format="dd MMM yyyy hh:mm:ss"
+                            <ext:DateField ID="ValueDate" runat="server" DataIndex="ValueDate" FieldLabel="Date Value" Format="dd MMM yyyy HH:mm:ss"
                                 EmptyText="Please select" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false"
                                 BlankText="Date Value is required" ClientIDMode="Static" />
                         </Items>
