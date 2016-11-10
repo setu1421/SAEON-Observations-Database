@@ -147,17 +147,18 @@
                                                 <ext:JsonReader IDProperty="Id">
                                                     <Fields>
                                                         <ext:RecordField Name="Id" Type="Auto" />
-                                                        <ext:RecordField Name="OrgName" Type="String" />
-                                                        <ext:RecordField Name="PsName" Type="String" />
-                                                        <ext:RecordField Name="StName" Type="String" />
-                                                        <ext:RecordField Name="SpName" Type="String" />
-                                                        <ext:RecordField Name="PhName" Type="String" />
-                                                        <ext:RecordField Name="OffName" Type="String" />
+                                                        <ext:RecordField Name="OrganisationName" Type="String" />
+                                                        <ext:RecordField Name="SiteName" Type="String" />
+                                                        <ext:RecordField Name="StationName" Type="String" />
+                                                        <ext:RecordField Name="InstrumentName" Type="String" />
+                                                        <ext:RecordField Name="SensorName" Type="String" />
+                                                        <ext:RecordField Name="PhenomenonName" Type="String" />
+                                                        <ext:RecordField Name="OfferingName" Type="String" />
                                                         <ext:RecordField Name="DataValue" Type="Float" UseNull="true" />
                                                         <ext:RecordField Name="RawValue" Type="Float" UseNull="true" />
-                                                        <ext:RecordField Name="UomUnit" Type="String" />
-                                                        <ext:RecordField Name="UomSymbol" Type="String" />
-                                                        <ext:RecordField Name="DschemaName" Type="String" />
+                                                        <ext:RecordField Name="UnitOfMeasureUnit" Type="String" />
+                                                        <ext:RecordField Name="UnitOfMeasureSymbol" Type="String" />
+                                                        <ext:RecordField Name="DataSchemaName" Type="String" />
                                                         <ext:RecordField Name="ValueDate" Type="Date" SortType="AsDate" />
                                                         <ext:RecordField Name="UserName" Type="String" />
                                                         <ext:RecordField Name="Comment" Type="String" />
@@ -176,21 +177,20 @@
                                     </Store>
                                     <ColumnModel ID="ColumnModel1" runat="server">
                                         <Columns>
-                                            <ext:Column Header="Organisation" DataIndex="OrgName" Width="100" Hideable="true"
+                                            <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="100" Hideable="true"
                                                 Hidden="true" />
-                                            <ext:Column Header="ProjectSite" DataIndex="PsName" Width="100" Hideable="true" Hidden="true" />
-                                            <ext:Column Header="Station" DataIndex="StName" Width="100" />
-                                            <ext:Column Header="SensorProcedure" DataIndex="SpName" Width="100" />
-                                            <ext:Column Header="Phenomenon" DataIndex="PhName" Width="100" />
-                                            <ext:Column Header="Offering" DataIndex="OffName" Width="100" />
+                                            <ext:Column Header="Site" DataIndex="SiteName" Width="100" Hideable="true" Hidden="true" />
+                                            <ext:Column Header="Station" DataIndex="StationName" Width="100" />
+                                            <ext:Column Header="Instrument" DataIndex="InstrumentName" Width="100" />
+                                            <ext:Column Header="Sensor" DataIndex="SensorName" Width="100" />
+                                            <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="100" />
+                                            <ext:Column Header="Offering" DataIndex="OfferingName" Width="100" />
                                             <ext:Column Header="DataValue" DataIndex="DataValue" Width="100" />
                                             <ext:Column Header="RawValue" DataIndex="RawValue" Width="100" Hideable="true" Hidden="true" />
-                                            <ext:Column Header="Unit of Measure" DataIndex="UomUnit" Width="100" Hideable="true"
-                                                Hidden="true" />
-                                            <ext:Column Header="Symbol" DataIndex="UomSymbol" Width="50" />
-                                            <ext:Column Header="Schema Name" DataIndex="DschemaName" Width="100" Hideable="true"
-                                                Hidden="true" />
-                                            <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="100" Format="yyyy/MM/dd HH:mm" />
+                                            <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="100" Hideable="true" Hidden="true" />
+                                            <ext:Column Header="Symbol" DataIndex="UnitOfMeasureSymbol" Width="50" />
+                                            <ext:Column Header="Schema Name" DataIndex="DataSchemaName" Width="100" Hideable="true" Hidden="true" />
+                                            <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="100" Format="dd MMM yyyy HH:mm" />
                                             <ext:Column Header="Comment" DataIndex="Comment" Width="150" Hideable="true" />
                                             <ext:Column Header="User" DataIndex="UserName" Width="100" Hideable="true" Hidden="true" />
                                         </Columns>
@@ -200,16 +200,17 @@
                                         <ext:GridFilters runat="server" ID="GridFilters1" ClientIDMode="Static">
                                             <Filters>
                                                 <ext:StringFilter DataIndex="Id" />
-                                                <ext:StringFilter DataIndex="PsName" />
-                                                <ext:StringFilter DataIndex="StName" />
-                                                <ext:StringFilter DataIndex="SpName" />
-                                                <ext:StringFilter DataIndex="PhName" />
-                                                <ext:StringFilter DataIndex="OffName" />
+                                                <ext:StringFilter DataIndex="SiteName" />
+                                                <ext:StringFilter DataIndex="StationName" />
+                                                <ext:StringFilter DataIndex="InstrumentName" />
+                                                <ext:StringFilter DataIndex="SensorName" />
+                                                <ext:StringFilter DataIndex="PhenomenonName" />
+                                                <ext:StringFilter DataIndex="OfferingName" />
                                                 <ext:NumericFilter DataIndex="DataValue" />
                                                 <ext:NumericFilter DataIndex="RawValue" />
-                                                <ext:StringFilter DataIndex="UomUnit" />
-                                                <ext:StringFilter DataIndex="UomSymbol" />
-                                                <ext:StringFilter DataIndex="DschemaName" />
+                                                <ext:StringFilter DataIndex="UnitOfMeasureUnit" />
+                                                <ext:StringFilter DataIndex="UnitOfMeasureSymbol" />
+                                                <ext:StringFilter DataIndex="DataSchemaName" />
                                                 <ext:DateFilter DataIndex="ValueDate" />
                                                 <ext:StringFilter DataIndex="UserName" />
                                             </Filters>

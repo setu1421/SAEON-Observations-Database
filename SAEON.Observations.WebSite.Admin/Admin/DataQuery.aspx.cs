@@ -15,6 +15,7 @@ using System.Dynamic;
 using System.Text;
 using System.Web.Script.Serialization;
 using System.Data;
+using Serilog;
 
 public partial class _DataQuery : System.Web.UI.Page
 {
@@ -146,7 +147,7 @@ public partial class _DataQuery : System.Web.UI.Page
                             foreach (var phenomenonOffering in phenomenonOfferingCol)
                             {
                                 n++;
-                                if (n > 5) break;
+                                if (n > 20) break;
                                 Ext.Net.TreeNode phenomenonOfferingNode = new Ext.Net.TreeNode(phenomenonOffering.Offering.Name, Icon.ResultsetNext);
                                 phenomenonOfferingNode.Checked = Ext.Net.ThreeStateBool.False;
                                 phenomenonOfferingNode.NodeID = phenomenonNode.NodeID + "|" + phenomenonOffering.Offering.Id.ToString() + "_Offering";
@@ -244,10 +245,7 @@ public partial class _DataQuery : System.Web.UI.Page
         public string Type { get; set; }
     }
 
-
-
-
-    protected void DQStore_Submit(object sender, StoreSubmitDataEventArgs e)
+        protected void DQStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {
         string type = FormatType.Text;
         string json = GridData.Text;
@@ -283,6 +281,8 @@ public partial class _DataQuery : System.Web.UI.Page
                 QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item1), Type = items[0].Item2 });
             }
 
+            Log.Information("Items: {@items}", QueryDataClassList);
+
             #region buildQ
             foreach (QueryDataClass item in QueryDataClassList)
             {
@@ -292,78 +292,107 @@ public partial class _DataQuery : System.Web.UI.Page
                 //Phenomenon Phenomenon = new Phenomenon();
                 //Sensor Sensor = new Sensor();
                 //Station station = new Station();
-
+                List<Tuple<string, string>> items = null;
+                Offering offering = null;
+                Phenomenon phenomenon = null;
+                Sensor sensor = null;
+                Instrument instrument = null;
+                Station station = null;
                 switch (item.Type)
                 {
                     case "Offering":
                         count++;
-                        var items = item.NodeID.Split('|').Reverse().Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                        Offering offering = new Offering(item.ID);
-                        Phenomenon phenomenon = new Phenomenon(new Guid(items[2].Item1));
-                        Sensor sensor = new Sensor(new Guid(items[2].Item1));
-                        Instrument instrument = new Instrument(new Guid(items[1].Item1));
-                        Station station = new Station(new Guid(items[1].Item1));
+                        items = item.NodeID.Split('|').Reverse().Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        Log.Information("Items: {@items}", items);
+                        offering = new Offering(item.ID);
+                        phenomenon = new Phenomenon(new Guid(items[1].Item1));
+                        sensor = new Sensor(new Guid(items[2].Item1));
+                        instrument = new Instrument(new Guid(items[3].Item1));
+                        station = new Station(new Guid(items[4].Item1));
                         q.OrExpression(VObservation.Columns.OfferingID).IsEqualTo(offering.Id)
-                       .And(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
-                       .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
-                       .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
-                       .And(VObservation.Columns.StationID).IsEqualTo(station.Id);
+                            .And(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
+                            .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                            .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id);
                         break;
                     case "Phenomenon":
+                        count++;
+                        items = item.NodeID.Split('|').Reverse().Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        phenomenon = new Phenomenon(item.ID);
+                        sensor = new Sensor(new Guid(items[1].Item1));
+                        instrument = new Instrument(new Guid(items[2].Item1));
+                        station = new Station(new Guid(items[3].Item1));
+                        q.OrExpression(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
+                            .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                            .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id);
                         break;
                     case "Sensor":
+                        items = item.NodeID.Split('|').Reverse().Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        sensor = new Sensor(item.ID);
+                        instrument = new Instrument(new Guid(items[1].Item1));
+                        station = new Station(new Guid(items[2].Item1));
+                        q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                            .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id);
                         break;
                     case "Instrument":
+                        instrument = new Instrument(item.ID);
+                        station = new Station(new Guid(items[1].Item1));
+                        q.OrExpression(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id);
                         break;
                     case "Station":
+                        station = new Station(item.ID);
+                        q.OrExpression(VObservation.Columns.StationID).IsEqualTo(station.Id);
                         break;
                 }
 
 
-                if (item.Type.Length > 20)
-                {
-                    if (item.Type == "Offering")
-                    {
-                        count++;
-                        Offering offering = new Offering(item.ID);
-                        Sensor sensor = new Sensor(item.Type.Substring(item.Type.IndexOf("#") + 1, item.Type.Substring(item.Type.IndexOf("#") + 1, 36).Length));
-                        q.OrExpression(VObservation.Columns.OfferingID).IsEqualTo(offering.Id)
-                       .And(VObservation.Columns.PhenomenonID).IsEqualTo(sensor.PhenomenonID)
-                       .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
-                       //.And(VObservation.Columns.InstrumentID).IsEqualTo()
-                       .And(VObservation.Columns.StationID).IsEqualTo(sensor.StationID);
-                    }
-                }
+                //if (item.Type.Length > 20)
+                //{
+                //    if (item.Type == "Offering")
+                //    {
+                //        count++;
+                //        Offering offering = new Offering(item.ID);
+                //        Sensor sensor = new Sensor(item.Type.Substring(item.Type.IndexOf("#") + 1, item.Type.Substring(item.Type.IndexOf("#") + 1, 36).Length));
+                //        q.OrExpression(VObservation.Columns.OfferingID).IsEqualTo(offering.Id)
+                //       .And(VObservation.Columns.PhenomenonID).IsEqualTo(sensor.PhenomenonID)
+                //       .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                //       //.And(VObservation.Columns.InstrumentID).IsEqualTo()
+                //       .And(VObservation.Columns.StationID).IsEqualTo(sensor.StationID);
+                //    }
+                //}
 
-                if (item.Type == "Phenomenon")
-                {
-                    count++;
-                    Sensor sp = new Sensor(item.ID);
-                    Phenomenon phenomenon = new Phenomenon(sp.PhenomenonID);
+                //if (item.Type == "Phenomenon")
+                //{
+                //    count++;
+                //    Sensor sp = new Sensor(item.ID);
+                //    Phenomenon phenomenon = new Phenomenon(sp.PhenomenonID);
 
-                    q.OrExpression(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
-                    .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
-                    .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
+                //    q.OrExpression(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
+                //    .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
+                //    .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
 
-                }
+                //}
 
-                if (item.Type == "Sensor")
-                {
-                    count++;
-                    //Sensor = new Sensor(item.ID);
+                //if (item.Type == "Sensor")
+                //{
+                //    count++;
+                //    //Sensor = new Sensor(item.ID);
 
-                    //q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(item.ID)
-                    //.And(VObservation.Columns.StationID).IsEqualTo(Sensor.StationID);
+                //    //q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(item.ID)
+                //    //.And(VObservation.Columns.StationID).IsEqualTo(Sensor.StationID);
 
-                }
+                //}
 
-                if (item.Type == "Station")
-                {
-                    count++;
-                    //station = new Station(item.ID);
-                    q.OrExpression(VObservation.Columns.StationID).IsEqualTo(item.ID);
+                //if (item.Type == "Station")
+                //{
+                //    count++;
+                //    //station = new Station(item.ID);
+                //    q.OrExpression(VObservation.Columns.StationID).IsEqualTo(item.ID);
 
-                }
+                //}
 
                 if (count != 0)
                 {
@@ -375,7 +404,7 @@ public partial class _DataQuery : System.Web.UI.Page
                     {
                         q.And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(ToDate.AddHours(23).AddMinutes(59).AddSeconds(59).ToString());
                     }
-                    q.And(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
+                    q.And(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
                     DataQueryRepository.qFilterNSort(ref q, ref e);
 
                     q.CloseExpression();
@@ -384,6 +413,8 @@ public partial class _DataQuery : System.Web.UI.Page
                 }
             }
             #endregion buildQ
+
+            Log.Information("SQL: {sql}",q.BuildSqlStatement());
 
             DataQueryRepository.qPage(ref q, ref e);
             Ext.Net.GridFilters gfs = FindControl("GridFilters1") as Ext.Net.GridFilters;
@@ -440,7 +471,9 @@ public partial class _DataQuery : System.Web.UI.Page
 
             foreach (var item in nodes)
             {
-                QueryDataClassList.Add(new QueryDataClass() { ID = new Guid(item.NodeID.Substring(0, item.NodeID.IndexOf("_"))), Type = item.NodeID.Substring(item.NodeID.IndexOf("_") + 1) });
+                var items = item.NodeID.Split('|').Reverse().Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item1), Type = items[0].Item2 });
+                //QueryDataClassList.Add(new QueryDataClass() { ID = new Guid(item.NodeID.Substring(0, item.NodeID.IndexOf("_"))), Type = item.NodeID.Substring(item.NodeID.IndexOf("_") + 1) });
             }
 
             #region buildQ
@@ -448,56 +481,111 @@ public partial class _DataQuery : System.Web.UI.Page
             {
 
                 int count = 0;
-                Offering offering = new Offering();
-                Phenomenon Phenomenon = new Phenomenon();
-                Sensor Sensor = new Sensor();
-                Station station = new Station();
-
-                if (item.Type.Length > 20)
+                List<Tuple<string, string>> items = null;
+                Offering offering = null;
+                Phenomenon phenomenon = null;
+                Sensor sensor = null;
+                Instrument instrument = null;
+                Station station = null;
+                switch (item.Type)
                 {
-                    if (item.Type.Substring(0, 8) == "Offering")
-                    {
+                    case "Offering":
                         count++;
-                        Offering off = new Offering(item.ID);
-                        Sensor sp = new Sensor(item.Type.Substring(item.Type.IndexOf("#") + 1, item.Type.Substring(item.Type.IndexOf("#") + 1, 36).Length));
-
-
-                        q.OrExpression(VObservation.Columns.OfferingID).IsEqualTo(off.Id)
-                       .And(VObservation.Columns.PhenomenonID).IsEqualTo(sp.PhenomenonID)
-                       .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
-                       .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
-                    }
+                        items = item.NodeID.Split('|').Reverse().Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        Log.Information("Items: {@items}", items);
+                        offering = new Offering(item.ID);
+                        phenomenon = new Phenomenon(new Guid(items[1].Item1));
+                        sensor = new Sensor(new Guid(items[2].Item1));
+                        instrument = new Instrument(new Guid(items[3].Item1));
+                        station = new Station(new Guid(items[4].Item1));
+                        q.OrExpression(VObservation.Columns.OfferingID).IsEqualTo(offering.Id)
+                            .And(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
+                            .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                            .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id);
+                        break;
+                    case "Phenomenon":
+                        count++;
+                        items = item.NodeID.Split('|').Reverse().Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        phenomenon = new Phenomenon(item.ID);
+                        sensor = new Sensor(new Guid(items[1].Item1));
+                        instrument = new Instrument(new Guid(items[2].Item1));
+                        station = new Station(new Guid(items[3].Item1));
+                        q.OrExpression(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
+                            .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                            .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id);
+                        break;
+                    case "Sensor":
+                        items = item.NodeID.Split('|').Reverse().Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        sensor = new Sensor(item.ID);
+                        instrument = new Instrument(new Guid(items[1].Item1));
+                        station = new Station(new Guid(items[2].Item1));
+                        q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                            .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id);
+                        break;
+                    case "Instrument":
+                        instrument = new Instrument(item.ID);
+                        station = new Station(new Guid(items[1].Item1));
+                        q.OrExpression(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id);
+                        break;
+                    case "Station":
+                        station = new Station(item.ID);
+                        q.OrExpression(VObservation.Columns.StationID).IsEqualTo(station.Id);
+                        break;
                 }
+                //Offering offering = new Offering();
+                //Phenomenon Phenomenon = new Phenomenon();
+                //Sensor Sensor = new Sensor();
+                //Station station = new Station();
 
-                if (item.Type == "Phenomenon")
-                {
-                    count++;
-                    Sensor sp = new Sensor(item.ID);
-                    Phenomenon phenomenon = new Phenomenon(sp.PhenomenonID);
+                //if (item.Type.Length > 20)
+                //{
+                //    if (item.Type.Substring(0, 8) == "Offering")
+                //    {
+                //        count++;
+                //        Offering off = new Offering(item.ID);
+                //        Sensor sp = new Sensor(item.Type.Substring(item.Type.IndexOf("#") + 1, item.Type.Substring(item.Type.IndexOf("#") + 1, 36).Length));
 
-                    q.OrExpression(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
-                    .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
-                    .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
 
-                }
+                //        q.OrExpression(VObservation.Columns.OfferingID).IsEqualTo(off.Id)
+                //       .And(VObservation.Columns.PhenomenonID).IsEqualTo(sp.PhenomenonID)
+                //       .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
+                //       .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
+                //    }
+                //}
 
-                if (item.Type == "Sensor")
-                {
-                    count++;
-                    Sensor = new Sensor(item.ID);
+                //if (item.Type == "Phenomenon")
+                //{
+                //    count++;
+                //    Sensor sp = new Sensor(item.ID);
+                //    Phenomenon phenomenon = new Phenomenon(sp.PhenomenonID);
 
-                    q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(item.ID)
-                    .And(VObservation.Columns.StationID).IsEqualTo(Sensor.StationID);
+                //    q.OrExpression(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
+                //    .And(VObservation.Columns.SensorID).IsEqualTo(sp.Id)
+                //    .And(VObservation.Columns.StationID).IsEqualTo(sp.StationID);
 
-                }
+                //}
 
-                if (item.Type == "Station")
-                {
-                    count++;
-                    station = new Station(item.ID);
-                    q.OrExpression(VObservation.Columns.StationID).IsEqualTo(item.ID);
+                //if (item.Type == "Sensor")
+                //{
+                //    count++;
+                //    Sensor = new Sensor(item.ID);
 
-                }
+                //    q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(item.ID)
+                //    .And(VObservation.Columns.StationID).IsEqualTo(Sensor.StationID);
+
+                //}
+
+                //if (item.Type == "Station")
+                //{
+                //    count++;
+                //    station = new Station(item.ID);
+                //    q.OrExpression(VObservation.Columns.StationID).IsEqualTo(item.ID);
+
+                //}
 
                 if (count != 0)
                 {
@@ -572,7 +660,7 @@ public partial class _DataQuery : System.Web.UI.Page
                         }
                     }
 
-                    q.And(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
+                    q.And(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
                     q.CloseExpression();
 
 

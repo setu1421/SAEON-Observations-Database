@@ -30,7 +30,7 @@ public class DataQueryRepository:BaseRepository
 		//    .And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(DataSourceRole.Columns.DateStart)
 		//    .And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(DataSourceRole.Columns.DateEnd);
 		SqlQuery q = new Select().From(VObservationRole.Schema)
-			.Where(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
+			.Where(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
 
         GetPagedQuery(ref q, e, paramPrefix);
 

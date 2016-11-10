@@ -153,7 +153,7 @@ public class BaseRepository
 
         if (TableName == "VObservationRoles")
         {
-            q.And(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
+            q.And(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
         }
 
         #region filters
