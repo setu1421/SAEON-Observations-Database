@@ -10,6 +10,8 @@
 
 ** User actions
      Alter
+       [dbo].[vObservation] (View)
        [dbo].[vObservationRoles] (View)
+       [dbo].[vSensor] (View)
 
 ** Supporting actions

@@ -36,17 +36,18 @@ IF N'$(__IsSqlCmdEnabled)' NOT LIKE N'True'
 
 
 GO
-IF (SELECT is_default
-    FROM   [$(DatabaseName)].[sys].[filegroups]
-    WHERE  [name] = N'Documents') = 0
-    BEGIN
-        ALTER DATABASE [$(DatabaseName)]
-            MODIFY FILEGROUP [Documents] DEFAULT;
-    END
+--IF (SELECT is_default
+--    FROM   [$(DatabaseName)].[sys].[filegroups]
+--    WHERE  [name] = N'Documents') = 0
+--    BEGIN
+--        ALTER DATABASE [$(DatabaseName)]
+--            MODIFY FILEGROUP [Documents] DEFAULT;
+--    END
 
 
 GO
 USE [$(DatabaseName)];
+
 
 GO
 PRINT N'Altering [dbo].[vObservation]...';
@@ -88,7 +89,8 @@ AS
 --                      dbo.UnitOfMeasure AS uom ON uom.ID = puom.UnitOfMeasureID INNER JOIN
 --                      dbo.aspnet_Users AS users ON users.UserId = o.UserId 
 SELECT 
-  o.ID, o.SensorID, o.PhenomenonOfferingID, o.PhenomenonUOMID, o.UserId, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, o.Comment, aspnet_Users.UserName,
+  o.ID, o.SensorID, o.PhenomenonOfferingID, o.PhenomenonUOMID, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, o.Comment, 
+  o.UserId, aspnet_Users.UserName,
   Offering.ID OfferingID,
   Offering.Name OfferingName,
   UnitOfMeasure.ID UnitOfMeasureID,
@@ -181,27 +183,66 @@ AS
 --INNER JOIN aspnet_Users ur
 -- ON dr.UserId = ur.UserId
 Select
-  vObservation.*
+  vObservation.*, DataSourceRoles.RoleUserId
 from
   vObservation
   inner join
     (
 	  Select
-	    dr.DataSourceID RoleDataSourceID, aspnet_UsersInRoles.UserID RoleUserID, Min(dr.DateStart) DateStart, Max(dr.DateStart) DateEnd
+	    dsr.DataSourceID, aspnet_UsersInRoles.UserId RoleUserId, Min(dsr.DateStart) DateStart, Max(dsr.DateEnd) DateEnd
 	  from
-	    DataSourceRole dr
-		inner join aspnet_Roles 
-		  on (dr.RoleId = aspnet_Roles.RoleId)
+	    DataSourceRole dsr
 		inner join aspnet_UsersInRoles
-		  on (aspnet_Roles.RoleId = aspnet_UsersInRoles.RoleId)
+		  on (dsr.RoleId = aspnet_UsersInRoles.RoleId)
       group by
-		dr.DataSourceID, aspnet_UsersInRoles.UserId
+		dsr.DataSourceID, aspnet_UsersInRoles.UserId
 	) DataSourceRoles
-	on (vObservation.DataSourceID = DataSourceRoles.RoleDataSourceID) and
-	   (vObservation.ValueDate >= DataSourceRoles.DateStart) and (vObservation.ValueDate <= DataSourceRoles.DateEnd) and
-       (DataSourceRoles.RoleUserId = vObservation.UserId)
-
+	on (vObservation.DataSourceID = DataSourceRoles.DataSourceID) and
+	   (vObservation.ValueDate >= DataSourceRoles.DateStart) and (vObservation.ValueDate <= DataSourceRoles.DateEnd)
 --< Changed 2.0.16 20161107 TimPN
+GO
+PRINT N'Altering [dbo].[vSensor]...';
+
+
+GO
+--> Changed 2.0.3 20160503 TimPN
+--Renamed SensorProcedure to Sensor
+--< Changed 2.0.3 20160503 TimPN
+ALTER VIEW [dbo].[vSensor]
+AS
+SELECT 
+s.ID,
+s.Code,
+s.Name,
+s.[Description],
+s.Url,
+s.StationID,
+s.DataSourceID,
+s.PhenomenonID,
+--> Added 2.0.7 20160609 TimPN
+  [Phenomenon].Name PhenomenonName,
+--< Added 2.0.7 20160609 TimPN
+s.UserId,
+st.Name AS StationName,
+d.Name AS DataSourceName,
+--> Added 20161110 TimPN
+s.DataSchemaID,
+--< Added 20161110 TimPN
+--> Changed 20161110 TimPN
+--ds.[Description] DataSchemaName
+ds.[Name] DataSchemaName
+--< Changed 20161110 TimPN
+FROM Sensor s
+INNER JOIN DataSource d
+    on s.DataSourceID = d.ID
+INNER JOIN Station st
+    on s.StationID = st.ID
+LEFT JOIN DataSchema ds
+    on s.DataSchemaID = ds.ID
+--> Added 2.0.7 20160609 TimPN
+  inner join [Phenomenon]
+    on (s.PhenomenonID = [Phenomenon].ID)
+--< Added 2.0.7 20160609 TimPN
 GO
 PRINT N'Update complete.';
 
