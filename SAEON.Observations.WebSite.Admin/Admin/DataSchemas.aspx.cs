@@ -138,6 +138,55 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         SetFields();
     }
 
+    [DirectMethod]
+    public void cbDataSourceTypeSelect(object sender, DirectEventArgs e)
+    {
+        DataSourceType dsType = new DataSourceType(cbDataSourceType.Value);
+        if (dsType.Code == "CSV")
+            cbDelimiter.AllowBlank = false;
+        else
+        {
+            cbDelimiter.AllowBlank = true;
+            cbDelimiter.ClearValue();
+            cbDelimiter.ClearInvalid();
+            cbDelimiter.MarkInvalid();
+        }
+    }
+
+    [DirectMethod]
+    public void ConfirmDeleteSchema(Guid aID)
+    {
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteSchema(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this schema?");
+    }
+
+    [DirectMethod]
+    public void DeleteSchema(Guid aID)
+    {
+        try
+        {
+            using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(1, 0, 0)))
+            using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
+            {
+                SchemaColumnCollection cols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, aID).Load();
+                foreach (var col in cols)
+                    SchemaColumn.Delete(col.Id);
+                DataSchema.Delete(aID);
+                ts.Complete();
+            }
+            Auditing.Log("DataSchemas.Delete", new Dictionary<string, object> { { "ID", aID } });
+            DataSchemasGrid.DataBind();
+            SchemaColumnsGrid.DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DataSchemas.Delete({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete Schema");
+        }
+    }
+
     #endregion
 
     #region Schema Columns
@@ -307,21 +356,6 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     }
 
     [DirectMethod]
-    public void cbDataSourceTypeSelect(object sender, DirectEventArgs e)
-    {
-        DataSourceType dsType = new DataSourceType(cbDataSourceType.Value);
-        if (dsType.Code == "CSV")
-            cbDelimiter.AllowBlank = false;
-        else
-        {
-            cbDelimiter.AllowBlank = true;
-            cbDelimiter.ClearValue();
-            cbDelimiter.ClearInvalid();
-            cbDelimiter.MarkInvalid();
-        }
-    }
-
-    [DirectMethod]
     public void cbPhenomenonSelect(object sender, DirectEventArgs e)
     {
         OfferingStore.DataSource = new Select(PhenomenonOffering.IdColumn.QualifiedName + " Id", Phenomenon.NameColumn.QualifiedName + " PhenomenonName", Offering.NameColumn.QualifiedName + " OfferingName")
@@ -367,24 +401,30 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void SetFields()
     {
+        SchemaColumnFormPanel.ClearInvalid();
         bool hidden = true;
         tfFormat.AllowBlank = true;
+        tfFormat.ClearInvalid();
         tfFormat.MarkAsValid();
         tfFormat.Hidden = hidden;
         cbPhenomenon.AllowBlank = true;
         cbPhenomenon.ForceSelection = false;
+        cbPhenomenon.ClearInvalid();
         cbPhenomenon.MarkAsValid();
         cbPhenomenon.Hidden = hidden;
         cbOffering.AllowBlank = true;
         cbOffering.ForceSelection = false;
+        cbOffering.ClearInvalid();
         cbOffering.MarkAsValid();
         cbOffering.Hidden = hidden;
         cbUnitOfMeasure.AllowBlank = true;
         cbUnitOfMeasure.ForceSelection = false;
+        cbUnitOfMeasure.ClearInvalid();
         cbUnitOfMeasure.MarkAsValid();
         cbUnitOfMeasure.Hidden = hidden;
-        tfEmptyValue.Hidden = true;
+        tfEmptyValue.Hidden = hidden;
         ttFixedTime.AllowBlank = true;
+        ttFixedTime.ClearInvalid();
         ttFixedTime.MarkAsValid();
         ttFixedTime.Hidden = hidden;
         switch (cbSchemaColumnType.SelectedItem.Text)
@@ -458,7 +498,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     col2.Number = old1;
                     col2.Save();
                     ts.Complete();
-            }
+                }
             Auditing.Log("DataSchemas.SchemaColumnUp", new Dictionary<string, object> { { "ID", aID } });
             SchemaColumnsGrid.DataBind();
         }

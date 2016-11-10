@@ -1,17 +1,21 @@
 ﻿function onCommand(e, record) {
-    DetailsFormPanel.getForm().reset();
-    DetailsFormPanel.getForm().loadRecord(record);
-    DetailsFormPanel.getForm().clearInvalid();
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteSchema(record.get('Id'), { eventMask: { showMask: true } });
+    } else if (e === 'Edit') {
+        DetailsFormPanel.getForm().reset();
+        DetailsFormPanel.getForm().loadRecord(record);
+        DetailsFormPanel.getForm().clearInvalid();
 
-    tfCode.rvConfig.remoteValidated = false;
-    tfCode.rvConfig.remoteValid = false;
-    tfCode.markAsValid();
+        tfCode.rvConfig.remoteValidated = false;
+        tfCode.rvConfig.remoteValid = false;
+        tfCode.markAsValid();
 
-    tfName.rvConfig.remoteValidated = false;
-    tfName.rvConfig.remoteValid = false;
-    tfName.markAsValid();
+        tfName.rvConfig.remoteValidated = false;
+        tfName.rvConfig.remoteValid = false;
+        tfName.markAsValid();
 
-    DetailWindow.show();
+        DetailWindow.show();
+    }
 }
 
 function New() {
@@ -61,6 +65,7 @@ function OnSchemaColumnCommand(e, record) {
         SchemaColumnFormPanel.getForm().loadRecord(record);
         DirectCall.LoadCombos(record.get("SchemaColumnTypeID"), record.get("PhenomenonID"), record.get("PhenomenonOfferingID"), record.get("PhenomenonUOMID"));
         SchemaColumnFormPanel.getForm().clearInvalid();
+        DirectCall.SetFields();
         SchemaColumnWindow.show();
         tfColumnName.setDisabled(true);
     } else if (e === 'Up') {
