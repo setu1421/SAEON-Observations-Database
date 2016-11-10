@@ -18,7 +18,13 @@ s.PhenomenonID,
 s.UserId,
 st.Name AS StationName,
 d.Name AS DataSourceName,
-ds.[Description] DataSchemaName
+--> Added 20161110 TimPN
+s.DataSchemaID,
+--< Added 20161110 TimPN
+--> Changed 20161110 TimPN
+--ds.[Description] DataSchemaName
+ds.[Name] DataSchemaName
+--< Changed 20161110 TimPN
 FROM Sensor s
 INNER JOIN DataSource d
     on s.DataSourceID = d.ID

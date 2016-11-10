@@ -86,9 +86,9 @@
                                                     <ext:RecordField Name="PhenomenonName" Type="Auto" />
                                                     <ext:RecordField Name="DataSourceID" Type="Auto" />
                                                     <ext:RecordField Name="DataSourceName" Type="String" />
+                                                    <ext:RecordField Name="DataSchemaID" Type="Auto" />
                                                     <ext:RecordField Name="DataSchemaName" Type="String" />
                                                     <ext:RecordField Name="UserId" Type="String" />
-                                                    <ext:RecordField Name="DataSchemaID" Type="Auto" />
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>

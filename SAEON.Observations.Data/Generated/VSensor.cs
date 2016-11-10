@@ -201,10 +201,22 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarDataSourceName);
                 
+                TableSchema.TableColumn colvarDataSchemaID = new TableSchema.TableColumn(schema);
+                colvarDataSchemaID.ColumnName = "DataSchemaID";
+                colvarDataSchemaID.DataType = DbType.Guid;
+                colvarDataSchemaID.MaxLength = 0;
+                colvarDataSchemaID.AutoIncrement = false;
+                colvarDataSchemaID.IsNullable = true;
+                colvarDataSchemaID.IsPrimaryKey = false;
+                colvarDataSchemaID.IsForeignKey = false;
+                colvarDataSchemaID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarDataSchemaID);
+                
                 TableSchema.TableColumn colvarDataSchemaName = new TableSchema.TableColumn(schema);
                 colvarDataSchemaName.ColumnName = "DataSchemaName";
                 colvarDataSchemaName.DataType = DbType.AnsiString;
-                colvarDataSchemaName.MaxLength = 5000;
+                colvarDataSchemaName.MaxLength = 100;
                 colvarDataSchemaName.AutoIncrement = false;
                 colvarDataSchemaName.IsNullable = true;
                 colvarDataSchemaName.IsPrimaryKey = false;
@@ -431,6 +443,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("DataSchemaID")]
+        [Bindable(true)]
+        public Guid? DataSchemaID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid?>("DataSchemaID");
+		    }
+            set 
+		    {
+			    SetColumnValue("DataSchemaID", value);
+            }
+        }
+	      
         [XmlAttribute("DataSchemaName")]
         [Bindable(true)]
         public string DataSchemaName 
@@ -475,6 +501,8 @@ namespace SAEON.Observations.Data{
             public static string StationName = @"StationName";
             
             public static string DataSourceName = @"DataSourceName";
+            
+            public static string DataSchemaID = @"DataSchemaID";
             
             public static string DataSchemaName = @"DataSchemaName";
             
