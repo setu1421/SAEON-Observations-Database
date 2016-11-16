@@ -23,6 +23,7 @@ public class ImportSchemaHelper : IDisposable
     FileHelperEngine engine;
     DataTable dtResults;
     DataSource dataSource;
+    DataSchema dataSchema;
     List<DataSourceTransformation> transformations;
     Type recordType;
     List<SchemaDefinition> schemaDefs;
@@ -47,10 +48,126 @@ public class ImportSchemaHelper : IDisposable
     public ImportSchemaHelper(DataSource ds, DataSchema schema, string Data, Sensor obj = null, ImportLogHelper loghelper = null)
     {
         dataSource = ds;
-        recordType = ClassBuilder.LoadFromXmlString(schema.DataSchemaX).CreateRecordClass();
+        dataSchema = schema;
+        if (schema.DataSourceTypeID == new Guid(DataSourceType.CSV))
+        {
+            DelimitedClassBuilder cb = new DelimitedClassBuilder(schema.Name, schema.Delimiter);
+            cb.IgnoreEmptyLines = true;
+            cb.IgnoreFirstLines = schema.IgnoreFirst;
+            cb.IgnoreLastLines = schema.IgnoreLast;
+            if (!String.IsNullOrEmpty(schema.Condition))
+                schema.Condition = schema.Condition;
+            if (!String.IsNullOrEmpty(schema.SplitSelector))
+            {
+                cb.SplitSelector = schema.SplitSelector;
+                cb.SplitIndex = schema.SplitIndex.Value;
+            }
+            foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
+            {
+                cb.AddField(col.Name, typeof(string));
+                //switch (col.SchemaColumnType.Name)
+                //{
+                //    case "Date":
+                //        cb.LastField.ValueDate = true;
+                //        cb.LastField.ValueDateformat = col.Format;
+                //        break;
+                //    case "Time":
+                //        cb.LastField.ValueTime = true;
+                //        cb.LastField.ValueTimeformat = col.Format;
+                //        break;
+                //    case "Ignore":
+                //        cb.LastField.FieldValueDiscarded = true;
+                //        break;
+                //    case "Comment":
+                //        cb.LastField.ValueComment = true;
+                //        break;
+                //    case "Offering":
+                //        if (!string.IsNullOrEmpty(col.EmptyValue))
+                //        {
+                //            cb.LastField.ValueEmpty = true;
+                //            cb.LastField.EmptyValue = col.EmptyValue;
+                //        }
+                //        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                //        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                //        break;
+                //    case "FixedTime":
+                //        if (!string.IsNullOrEmpty(col.EmptyValue))
+                //        {
+                //            cb.LastField.ValueEmpty = true;
+                //            cb.LastField.EmptyValue = col.EmptyValue;
+                //        }
+                //        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                //        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                //        if (!string.IsNullOrEmpty(col.FixedTime))
+                //        {
+                //            cb.LastField.FixedTime = col.FixedTime;
+                //        }
+                //        break;
+                //}
+            }
+            recordType = cb.CreateRecordClass();
+        }
+        else
+        {
+            FixedLengthClassBuilder cb = new FixedLengthClassBuilder(schema.Name, FixedMode.AllowVariableLength);
+            cb.IgnoreEmptyLines = true;
+            cb.IgnoreFirstLines = schema.IgnoreFirst;
+            cb.IgnoreLastLines = schema.IgnoreLast;
+            if (!String.IsNullOrEmpty(schema.Condition))
+                schema.Condition = schema.Condition;
+            if (!String.IsNullOrEmpty(schema.SplitSelector))
+            {
+                cb.SplitSelector = schema.SplitSelector;
+                cb.SplitIndex = schema.SplitIndex.Value;
+            }
+            foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
+            {
+                cb.AddField(col.Name, col.Width.Value, typeof(string));
+                //switch (col.SchemaColumnType.Name)
+                //{
+                //    case "Date":
+                //        cb.LastField.ValueDate = true;
+                //        cb.LastField.ValueDateformat = col.Format;
+                //        break;
+                //    case "Time":
+                //        cb.LastField.ValueTime = true;
+                //        cb.LastField.ValueTimeformat = col.Format;
+                //        break;
+                //    case "Ignore":
+                //        cb.LastField.FieldValueDiscarded = true;
+                //        break;
+                //    case "Comment":
+                //        cb.LastField.ValueComment = true;
+                //        break;
+                //    case "Offering":
+                //        if (!string.IsNullOrEmpty(col.EmptyValue))
+                //        {
+                //            cb.LastField.ValueEmpty = true;
+                //            cb.LastField.EmptyValue = col.EmptyValue;
+                //        }
+                //        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                //        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                //        break;
+                //    case "FixedTime":
+                //        if (!string.IsNullOrEmpty(col.EmptyValue))
+                //        {
+                //            cb.LastField.ValueEmpty = true;
+                //            cb.LastField.EmptyValue = col.EmptyValue;
+                //        }
+                //        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                //        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                //        if (!string.IsNullOrEmpty(col.FixedTime))
+                //        {
+                //            cb.LastField.FixedTime = col.FixedTime;
+                //        }
+                //        break;
+                //}
+            }
+            recordType = cb.CreateRecordClass();
+        }
+        //recordType = ClassBuilder.LoadFromXmlString(schema.DataSchemaX).CreateRecordClass();
         engine = new FileHelperEngine(recordType);
         engine.ErrorMode = ErrorMode.SaveAndContinue;
-
 
         dtResults = engine.ReadStringAsDT(Data);
         transformations = new List<DataSourceTransformation>();
@@ -77,81 +194,62 @@ public class ImportSchemaHelper : IDisposable
 
             def.Index = i;
             def.FieldName = dtcol.ColumnName;
-
-            if (recordType.GetField(dtcol.ColumnName).IsDefined(typeof(ValueDateAttribute), true))
+            var schemaCol = dataSchema.SchemaColumnRecords().FirstOrDefault(sc => sc.Name.Equals(def.FieldName, StringComparison.CurrentCultureIgnoreCase));
+            if (schemaCol == null) throw new ArgumentNullException($"Unable to find schema column with name {def.FieldName}");
+            switch (schemaCol.SchemaColumnType.Name)
             {
-                ValueDateAttribute att = (ValueDateAttribute)recordType.GetField(dtcol.ColumnName).GetCustomAttributes(typeof(ValueDateAttribute), true)[0];
-                def.IsDate = true;
-                def.Dateformat = att.Format;
-            }
-
-            if (recordType.GetField(dtcol.ColumnName).IsDefined(typeof(ValueTimeAttribute), true))
-            {
-                ValueTimeAttribute att = (ValueTimeAttribute)recordType.GetField(dtcol.ColumnName).GetCustomAttributes(typeof(ValueTimeAttribute), true)[0];
-                def.IsTime = true;
-                def.Timeformat = att.Format;
-            }
-
-            if (recordType.GetField(dtcol.ColumnName).IsDefined(typeof(FieldValueDiscardedAttribute), true))
-                def.IsIgnored = true;
-
-            if (recordType.GetField(dtcol.ColumnName).IsDefined(typeof(ValueCommentAttribute), true))
-                def.IsComment = true;
-
-            if (recordType.GetField(dtcol.ColumnName).IsDefined(typeof(PhenomenonOfferingAttribute), true))
-            {
-                PhenomenonOfferingAttribute att = (PhenomenonOfferingAttribute)recordType.GetField(dtcol.ColumnName).GetCustomAttributes(typeof(PhenomenonOfferingAttribute), true)[0];
-                def.PhenomenonOfferingID = att.PhenomenonOfferingId;
-
-                def.IsOffering = true;
-
-                PhenomenonOffering off = new PhenomenonOffering(def.PhenomenonOfferingID);
-                if (off == null)
-                    def.InValidOffering = true;
-                else
-                    def.DataSourceTransformationIDs = LoadTransformations(att.PhenomenonOfferingId);
-
-
-                if (Sensor == null)
-                {
-                    SensorCollection colsens = new Select()
-                                                          .From(Sensor.Schema)
-                                                          .Where(Sensor.PhenomenonIDColumn).IsEqualTo(off.PhenomenonID)
-                                                          .And(Sensor.DataSourceIDColumn).IsEqualTo(this.dataSource.Id)
-                                                          .ExecuteAsCollection<SensorCollection>();
-
-                    if (colsens.Count() == 0)
-                        def.SensorNotFound = true;
+                case "Date":
+                    def.IsDate = true;
+                    def.Dateformat = schemaCol.Format;
+                    break;
+                case "Time":
+                    def.IsTime = true;
+                    def.Timeformat = schemaCol.Format;
+                    break;
+                case "Ignore":
+                    def.IsIgnored = true;
+                    break;
+                case "Comment":
+                    def.IsComment = true;
+                    break;
+                case "Offering":
+                case "Fixed Time":
+                    def.IsOffering = true;
+                    def.PhenomenonOfferingID = schemaCol.PhenomenonOfferingID;
+                    PhenomenonOffering off = new PhenomenonOffering(def.PhenomenonOfferingID);
+                    if (off == null)
+                        def.InValidOffering = true;
                     else
-                        def.SensorID = colsens[0].Id;
-                }
-                else
-                    def.SensorID = Sensor.Id;
-
-
-                if (recordType.GetField(dtcol.ColumnName).IsDefined(typeof(PhenomenonUOMAttribute), true))
-                {
-                    PhenomenonUOMAttribute attuom = (PhenomenonUOMAttribute)recordType.GetField(dtcol.ColumnName).GetCustomAttributes(typeof(PhenomenonUOMAttribute), true)[0];
-                    def.PhenomenonUOMID = attuom.phenomenonUOMId;
-
+                        def.DataSourceTransformationIDs = LoadTransformations(def.PhenomenonOfferingID.Value);
+                    def.PhenomenonUOMID = schemaCol.PhenomenonUOMID;
                     PhenomenonUOM uom = new PhenomenonUOM(def.PhenomenonUOMID);
                     if (uom == null)
                         def.InValidUOM = true;
-                }
+                    if (Sensor != null)
+                        def.SensorID = Sensor.Id;
+                    else
+                    {
+                        SensorCollection colsens = new Select()
+                                                              .From(Sensor.Schema)
+                                                              .Where(Sensor.PhenomenonIDColumn).IsEqualTo(off.PhenomenonID)
+                                                              .And(Sensor.DataSourceIDColumn).IsEqualTo(this.dataSource.Id)
+                                                              .ExecuteAsCollection<SensorCollection>();
 
-                if (recordType.GetField(dtcol.ColumnName).IsDefined(typeof(ValueEmptyAttribute), true))
-                {
-                    ValueEmptyAttribute attemp = (ValueEmptyAttribute)recordType.GetField(dtcol.ColumnName).GetCustomAttributes(typeof(ValueEmptyAttribute), true)[0];
-                    def.IsEmptyValue = true;
-                    def.EmptyValue = attemp.EmptyValue;
-                }
-
-                if (recordType.GetField(dtcol.ColumnName).IsDefined(typeof(FixedTimeAttribute), true))
-                {
-                    FixedTimeAttribute fatt = (FixedTimeAttribute)recordType.GetField(dtcol.ColumnName).GetCustomAttributes(typeof(FixedTimeAttribute), true)[0];
-                    def.FixedTimeValue = TimeSpan.Parse(fatt.timeSpan);
-                    def.IsFixedTime = true;
-                }
+                        if (colsens.Count() == 0)
+                            def.SensorNotFound = true;
+                        else
+                            def.SensorID = colsens[0].Id;
+                    }
+                    if (!string.IsNullOrEmpty(schemaCol.EmptyValue))
+                    {
+                        def.EmptyValue = schemaCol.EmptyValue;
+                    }
+                    if (schemaCol.SchemaColumnType.Name == "Fixed Time")
+                    {
+                        def.IsFixedTime = true;
+                        def.FixedTimeValue = TimeSpan.Parse(schemaCol.FixedTime);
+                    }
+                    break;
             }
 
             schemaDefs.Add(def);
@@ -203,7 +301,7 @@ public class ImportSchemaHelper : IDisposable
     {
         using (LogContext.PushProperty("Method", "ProcessSchema"))
         {
-            Log.Information("Version 1.5");
+            Log.Information("Version 1.6");
             try
             {
                 BuildSchemaDefinition();
