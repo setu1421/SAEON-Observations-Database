@@ -156,10 +156,19 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void ConfirmDeleteSchema(Guid aID)
     {
-        MessageBoxes.Confirm(
-            "Confirm Delete",
-            String.Format("DirectCall.DeleteSchema(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
-            "Are you sure you want to delete this schema?");
+        List<string> dataSources = new DataSourceCollection().Where(DataSource.Columns.DataSchemaID, aID).OrderByAsc(DataSource.Columns.Name).Load().Select(ds => ds.Name).ToList();
+        List<string> sensors = new SensorCollection().Where(Sensor.Columns.DataSchemaID, aID).OrderByAsc(Sensor.Columns.Name).Load().Select(s => s.Name).ToList();
+        if (dataSources.Any() && sensors.Any())
+            MessageBoxes.Error("Error", $"Cannot delete data schema as it is unsed in data source(s) {string.Join(", ", dataSources)} and sensor(s) {string.Join(", ", sensors)}");
+        else if (dataSources.Any())
+            MessageBoxes.Error("Error", $"Cannot delete data schema as it is unsed in data source(s) {string.Join(", ", dataSources)}");
+        else if (sensors.Any())
+            MessageBoxes.Error("Error", $"Cannot delete data schema as it is unsed in sensor(s) {string.Join(", ", sensors)}");
+        else
+            MessageBoxes.Confirm(
+                "Confirm Delete",
+                String.Format("DirectCall.DeleteSchema(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+                "Are you sure you want to delete this schema?");
     }
 
     [DirectMethod]

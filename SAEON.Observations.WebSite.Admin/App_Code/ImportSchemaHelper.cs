@@ -65,45 +65,45 @@ public class ImportSchemaHelper : IDisposable
             foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
             {
                 cb.AddField(col.Name, typeof(string));
-                //switch (col.SchemaColumnType.Name)
-                //{
-                //    case "Date":
-                //        cb.LastField.ValueDate = true;
-                //        cb.LastField.ValueDateformat = col.Format;
-                //        break;
-                //    case "Time":
-                //        cb.LastField.ValueTime = true;
-                //        cb.LastField.ValueTimeformat = col.Format;
-                //        break;
-                //    case "Ignore":
-                //        cb.LastField.FieldValueDiscarded = true;
-                //        break;
-                //    case "Comment":
-                //        cb.LastField.ValueComment = true;
-                //        break;
-                //    case "Offering":
-                //        if (!string.IsNullOrEmpty(col.EmptyValue))
-                //        {
-                //            cb.LastField.ValueEmpty = true;
-                //            cb.LastField.EmptyValue = col.EmptyValue;
-                //        }
-                //        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                //        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                //        break;
-                //    case "FixedTime":
-                //        if (!string.IsNullOrEmpty(col.EmptyValue))
-                //        {
-                //            cb.LastField.ValueEmpty = true;
-                //            cb.LastField.EmptyValue = col.EmptyValue;
-                //        }
-                //        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                //        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                //        if (!string.IsNullOrEmpty(col.FixedTime))
-                //        {
-                //            cb.LastField.FixedTime = col.FixedTime;
-                //        }
-                //        break;
-                //}
+                switch (col.SchemaColumnType.Name)
+                {
+                    case "Date":
+                        cb.LastField.ValueDate = true;
+                        cb.LastField.ValueDateformat = col.Format;
+                        break;
+                    case "Time":
+                        cb.LastField.ValueTime = true;
+                        cb.LastField.ValueTimeformat = col.Format;
+                        break;
+                    case "Ignore":
+                        cb.LastField.FieldValueDiscarded = true;
+                        break;
+                    case "Comment":
+                        cb.LastField.ValueComment = true;
+                        break;
+                    case "Offering":
+                        if (!string.IsNullOrEmpty(col.EmptyValue))
+                        {
+                            cb.LastField.ValueEmpty = true;
+                            cb.LastField.EmptyValue = col.EmptyValue;
+                        }
+                        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                        break;
+                    case "FixedTime":
+                        if (!string.IsNullOrEmpty(col.EmptyValue))
+                        {
+                            cb.LastField.ValueEmpty = true;
+                            cb.LastField.EmptyValue = col.EmptyValue;
+                        }
+                        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                        if (!string.IsNullOrEmpty(col.FixedTime))
+                        {
+                            cb.LastField.FixedTime = col.FixedTime;
+                        }
+                        break;
+                }
             }
             recordType = cb.CreateRecordClass();
         }
@@ -123,45 +123,45 @@ public class ImportSchemaHelper : IDisposable
             foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
             {
                 cb.AddField(col.Name, col.Width.Value, typeof(string));
-                //switch (col.SchemaColumnType.Name)
-                //{
-                //    case "Date":
-                //        cb.LastField.ValueDate = true;
-                //        cb.LastField.ValueDateformat = col.Format;
-                //        break;
-                //    case "Time":
-                //        cb.LastField.ValueTime = true;
-                //        cb.LastField.ValueTimeformat = col.Format;
-                //        break;
-                //    case "Ignore":
-                //        cb.LastField.FieldValueDiscarded = true;
-                //        break;
-                //    case "Comment":
-                //        cb.LastField.ValueComment = true;
-                //        break;
-                //    case "Offering":
-                //        if (!string.IsNullOrEmpty(col.EmptyValue))
-                //        {
-                //            cb.LastField.ValueEmpty = true;
-                //            cb.LastField.EmptyValue = col.EmptyValue;
-                //        }
-                //        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                //        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                //        break;
-                //    case "FixedTime":
-                //        if (!string.IsNullOrEmpty(col.EmptyValue))
-                //        {
-                //            cb.LastField.ValueEmpty = true;
-                //            cb.LastField.EmptyValue = col.EmptyValue;
-                //        }
-                //        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                //        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                //        if (!string.IsNullOrEmpty(col.FixedTime))
-                //        {
-                //            cb.LastField.FixedTime = col.FixedTime;
-                //        }
-                //        break;
-                //}
+                switch (col.SchemaColumnType.Name)
+                {
+                    case "Date":
+                        cb.LastField.ValueDate = true;
+                        cb.LastField.ValueDateformat = col.Format;
+                        break;
+                    case "Time":
+                        cb.LastField.ValueTime = true;
+                        cb.LastField.ValueTimeformat = col.Format;
+                        break;
+                    case "Ignore":
+                        cb.LastField.FieldValueDiscarded = true;
+                        break;
+                    case "Comment":
+                        cb.LastField.ValueComment = true;
+                        break;
+                    case "Offering":
+                        if (!string.IsNullOrEmpty(col.EmptyValue))
+                        {
+                            cb.LastField.ValueEmpty = true;
+                            cb.LastField.EmptyValue = col.EmptyValue;
+                        }
+                        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                        break;
+                    case "FixedTime":
+                        if (!string.IsNullOrEmpty(col.EmptyValue))
+                        {
+                            cb.LastField.ValueEmpty = true;
+                            cb.LastField.EmptyValue = col.EmptyValue;
+                        }
+                        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                        if (!string.IsNullOrEmpty(col.FixedTime))
+                        {
+                            cb.LastField.FixedTime = col.FixedTime;
+                        }
+                        break;
+                }
             }
             recordType = cb.CreateRecordClass();
         }
@@ -234,7 +234,6 @@ public class ImportSchemaHelper : IDisposable
                                                               .Where(Sensor.PhenomenonIDColumn).IsEqualTo(off.PhenomenonID)
                                                               .And(Sensor.DataSourceIDColumn).IsEqualTo(this.dataSource.Id)
                                                               .ExecuteAsCollection<SensorCollection>();
-
                         if (colsens.Count() == 0)
                             def.SensorNotFound = true;
                         else
@@ -395,6 +394,8 @@ public class ImportSchemaHelper : IDisposable
 
                 if (dtdef != null)
                 {
+                    //CultureInfo ci = new CultureInfo(CultureInfo.CurrentCulture.LCID);
+                    //ci.Calendar.TwoDigitYearMax = 2000;
                     string sDateValue = dr[dtdef.Index].ToString();
                     if (String.IsNullOrEmpty(sDateValue) || !DateTime.TryParseExact(sDateValue.ToUpper().Trim(), dtdef.Dateformat, null, DateTimeStyles.None, out dt))
                     {
@@ -428,7 +429,7 @@ public class ImportSchemaHelper : IDisposable
                 //Add Row Comment
                 foreach (var df in schemaDefs.Where(t => t.IsComment))
                 {
-                    RowComment += dr[df.Index].ToString();
+                    RowComment += dr[df.Index].ToString() + " ";
                 }
 
                 for (int i = 0; i < schemaDefs.Count; i++)
@@ -496,21 +497,17 @@ public class ImportSchemaHelper : IDisposable
                             rec.FieldRawValue = RawValue;
                             rec.RawValue = null;// dataSource.DefaultNullValue;
                             rec.DataValue = null;// dataSource.DefaultNullValue;
-
-                            foreach (var dtid in def.DataSourceTransformationIDs)
+                            // Lookups
+                            foreach (var transform in transformations.Where(t => t.TransformationType.Name == "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
                             {
-                                //TransformValue(dtid, ref rec);
-                                //
-                                DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
-                                if (dst.NewPhenomenonOfferingID != null)
-                                {
-                                    rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
-                                }
-                                if (dst.NewPhenomenonUOMID != null)
-                                {
-                                    rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
-                                }
-                                //
+                                TransformValue(transform.Id, ref rec);
+                                if (rec.RawValue.HasValue)
+                                    RawValue = rec.RawValue.Value.ToString();
+                            }
+                            // Non lookups
+                            foreach (var transform in transformations.Where(t => t.TransformationType.Name != "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
+                            {
+                                TransformValue(transform.Id, ref rec);
                             }
                         }
                         else
@@ -518,6 +515,16 @@ public class ImportSchemaHelper : IDisposable
                             rec.FieldRawValue = RawValue;
                             Double dvalue = -1;
 
+                            // Possibly do lookups here
+                            if (!Double.TryParse(RawValue, out dvalue))
+                            {
+                                foreach (var transform in transformations.Where(t => t.TransformationType.Name == "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
+                                {
+                                    TransformValue(transform.Id, ref rec);
+                                    if (rec.RawValue.HasValue)
+                                        RawValue = rec.RawValue.Value.ToString();
+                                }
+                            }
                             if (!Double.TryParse(RawValue, out dvalue))
                             {
                                 rec.RawValueInvalid = true;
@@ -535,24 +542,18 @@ public class ImportSchemaHelper : IDisposable
                             else
                             {
                                 rec.RawValue = dvalue;
-
-                                if (def.DataSourceTransformationIDs.Count > 0)
-                                {
-                                    foreach (var dtid in def.DataSourceTransformationIDs)
-                                    {
-                                        TransformValue(dtid, ref rec);
-                                        //
-
-                                        //
-                                    }
-                                }
-                                else
+                                if (!def.DataSourceTransformationIDs.Any())
                                     rec.DataValue = rec.RawValue;
+                                else
+                                    foreach (var transform in transformations.Where(t => t.TransformationType.Name != "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
+                                    {
+                                        TransformValue(transform.Id, ref rec);
+                                    }
                             }
                         }
 
-                        if (RowComment.Length > 0)
-                            rec.Comment = RowComment;
+                        if (RowComment.Trim().Length > 0)
+                            rec.Comment = RowComment.TrimEnd();
                         rec.CorrelationID = correlationID;
                         SchemaValues.Add(rec);
                     }
@@ -581,98 +582,52 @@ public class ImportSchemaHelper : IDisposable
                 bool process = trns.PhenomenonOfferingID.HasValue ? trns.PhenomenonOfferingID.Value == rec.PhenomenonOfferingID : true &&
                         trns.PhenomenonUOMID.HasValue ? trns.PhenomenonUOMID.Value == rec.PhenomenonUOMID : true;
 
+                if (process)
+                {
+                    DateTime trnsenddate = trns.EndDate ?? DateTime.MaxValue;
+
+                    if (!(rec.DateValue >= trns.StartDate && rec.DateValue <= trnsenddate))
+                        process = false;
+                }
+
+                if (!process)
+                {
+                    rec.DataValue = rec.RawValue;
+                    return;
+                }
+
                 if (trns.TransformationTypeID.ToString() == TransformationType.CorrectionValues)
                 {
-                    if (process)
+                    Dictionary<string, string> corrvals = trns.CorrectionValues;
+
+                    if (corrvals.ContainsKey("eq"))
                     {
-                        Dictionary<string, string> corrvals = trns.CorrectionValues;
-
-                        if (corrvals.ContainsKey("eq"))
+                        //string eq = corrvals["equation"].Replace("\"","").Replace("\"","");
+                        Expression exp = new Expression(corrvals["eq"]);
+                        exp.Parameters["value"] = rec.RawValue;
+                        object val = exp.Evaluate();
+                        rec.DataValue = Double.Parse(val.ToString());
+                        DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
+                        if (dst.NewPhenomenonOfferingID != null)
                         {
-                            //string eq = corrvals["equation"].Replace("\"","").Replace("\"","");
-                            Expression exp = new Expression(corrvals["eq"]);
-                            exp.Parameters["value"] = rec.RawValue;
-                            object val = exp.Evaluate();
-                            rec.DataValue = Double.Parse(val.ToString());
-
-                            DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
-                            if (dst.NewPhenomenonOfferingID != null)
-                            {
-                                rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
-                            }
-                            if (dst.NewPhenomenonUOMID != null)
-                            {
-                                rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
-                            }
+                            rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
+                        }
+                        if (dst.NewPhenomenonUOMID != null)
+                        {
+                            rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
                         }
                     }
-                    else
-                    {
-                        rec.DataValue = rec.RawValue;
-                    }
                 }
-                else if (trns.TransformationTypeID.ToString() == TransformationType.RatingTable && process)
+                else if (trns.TransformationTypeID.ToString() == TransformationType.RatingTable)
                 {
 
-                    try
-                    {
-                        //List<double> vals = trns.RatingTableValues.ToList();
-
-                        //var index = vals.BinarySearch(rec.RawValue.Value);
-
-                        //if (index < 0)
-                        //{
-                        //    index = ~index;
-                        //    index -= 1;
-                        //}
-
-                        //var result = vals[index];
-
-                        //if (index != vals.Count - 1 && rec.RawValue.Value != result)
-                        //{
-                        //    var floor = result;
-                        //    var ceiling = vals[vals.Count - 1];
-
-                        //    if ((rec.RawValue - floor) > (ceiling - rec.RawValue))
-                        //        rec.DataValue = ceiling;
-                        //    else
-                        //        rec.DataValue = floor;
-                        //}
-                        //else
-                        //    rec.DataValue = rec.RawValue;
-
-
-                        if (process)
-                        {
-                            rec.DataValue = trns.GetRatingValue(rec.RawValue.Value);
-
-                            DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
-                            if (dst.NewPhenomenonOfferingID != null)
-                            {
-                                rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
-                            }
-                            if (dst.NewPhenomenonUOMID != null)
-                            {
-                                rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
-                            }
-                        }
-                        else
-                        {
-                            rec.DataValue = rec.RawValue;
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "dtid: {dtid} rec: {@rec})", dtid, rec);
-                        rec.DataValue = rec.RawValue;
-                    }
-
+                    rec.DataValue = trns.GetRatingValue(rec.RawValue.Value);
+                    DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
+                    if (dst.NewPhenomenonOfferingID != null) rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
+                    if (dst.NewPhenomenonUOMID != null) rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
                 }
-
                 else if (trns.TransformationTypeID.ToString() == TransformationType.QualityControlValues)
                 {
-
                     if (!rec.DataValue.HasValue)
                         rec.DataValue = rec.RawValue;
 
@@ -682,6 +637,26 @@ public class ImportSchemaHelper : IDisposable
 
                     if (qv.ContainsKey("max") && rec.DataValue.Value > qv["max"])
                         valid = false;
+
+                    if (!valid)
+                    {
+                        rec.InvalidStatuses.Add(Status.TransformValueInvalid);
+                        rec.DataSourceTransformationID = trns.Id;
+
+                        rec.DataValueInvalid = true;
+                        rec.InvalidDataValue = rec.DataValue.ToString();
+                    }
+                }
+                else if (trns.TransformationTypeID.ToString() == TransformationType.Lookup)
+                {
+
+                    var qv = trns.LookupValues;
+                    if (!qv.ContainsKey(rec.FieldRawValue))
+                        valid = false;
+                    else
+                    {
+                        rec.RawValue = trns.LookupValues[rec.FieldRawValue];
+                    }
 
                     if (!valid)
                     {
@@ -855,6 +830,9 @@ public class SchemaValue
     public bool SensorNotFound { get; set; }
     public string FieldRawValue { get; set; }
     public string Comment { get; set; }
+
+    public Guid? RawPhenomenonOfferingID { get; set; }
+    public Guid? RawPhenomenonUOMID { get; set; }
 
     public Guid CorrelationID { get; set; }
 

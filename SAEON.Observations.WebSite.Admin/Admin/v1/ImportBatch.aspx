@@ -284,7 +284,7 @@
                                         <ext:CommandColumn Width="75">
                                             
                                             <Commands>
-                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                                <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />--%>
                                                 <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />
                                                 <ext:GridCommand Icon="Add" CommandName="MoveToObservation" Text="" ToolTip-Text="Move to observation"  />
                                             </Commands>
