@@ -116,23 +116,20 @@ function onLogCommand(e, record)
 			DataValue.setReadOnly(false);
 		}
 
-		var loadcallback = function ()
-		{
-			DSLogGrid.el.mask('Please wait', 'x-mask-loading');
-			cbOffering.getStore().removeListener('load', loadcallback);
+		var loadcallback = function () {
+		    DSLogGrid.el.mask('Please wait', 'x-mask-loading');
+		    cbOffering.getStore().removeListener('load', loadcallback);
 
-			var val = record.get('PhenomenonOfferingID');
-			var rd = cbOffering.findRecord(cbOffering.valueField, val);
-			if (rd !== null)
-			{
-				cbOffering.setValue(val);
-				cbOffering.setReadOnly(true);
-			}
-			else
-			{
-				cbOffering.setReadOnly(false);
-			}
-		}
+		    var val = record.get('PhenomenonOfferingID');
+		    var rd = cbOffering.findRecord(cbOffering.valueField, val);
+		    if (rd !== null) {
+		        cbOffering.setValue(val);
+		        cbOffering.setReadOnly(true);
+		    }
+		    else {
+		        cbOffering.setReadOnly(false);
+		    }
+		};
 
 		if (!record.get('OfferingInvalid'))
 		{
@@ -150,23 +147,20 @@ function onLogCommand(e, record)
 			cbOffering.markInvalid();
 		}
 
-		var uomloadcallback = function ()
-		{
-			cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
+		var uomloadcallback = function () {
+		    cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
 
-			var val = DetailsFormPanel.getForm()._record.get('PhenomenonUOMID')
-			var rd = cbUnitofMeasure.findRecord(cbUnitofMeasure.valueField, val);
-			if (rd !== null)
-			{
-				cbUnitofMeasure.setValue(val);
-				cbUnitofMeasure.setReadOnly(true);
-			}
-			else
-			{
-				cbUnitofMeasure.setReadOnly(false);
-			}
-			DetailWindow.el.unmask();
-		}
+		    var val = DetailsFormPanel.getForm()._record.get('PhenomenonUOMID')
+		    var rd = cbUnitofMeasure.findRecord(cbUnitofMeasure.valueField, val);
+		    if (rd !== null) {
+		        cbUnitofMeasure.setValue(val);
+		        cbUnitofMeasure.setReadOnly(true);
+		    }
+		    else {
+		        cbUnitofMeasure.setReadOnly(false);
+		    }
+		    DetailWindow.el.unmask();
+		};
 
 		if (!record.get('UOMInvalid'))
 		{

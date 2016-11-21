@@ -164,7 +164,7 @@
                     </ext:Panel>
                 </Center>
                 <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
+                    <ext:TabPanel ID="pnlSouth" runat="server" Height="400" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
                             <ext:Panel ID="Panel4" runat="server" Title="Observations" Layout="FitLayout" Height="200" ClientIDMode="Static">
                                 <TopBar>
@@ -179,7 +179,7 @@
                                                     <Select Fn="EnableApply" />
                                                 </Listeners>--%>
                                                 <DirectEvents>
-                                                    <Select OnEvent="EnableApply" />
+                                                    <Select OnEvent="EnableButtons" />
                                                 </DirectEvents>
                                             </ext:ComboBox>
                                             <ext:ToolbarTextItem Text="Status:" />
@@ -188,32 +188,48 @@
                                                 ValueField="Id" DataIndex="Id" EmptyText="Select a reason" ValueNotFoundText="Select a status"
                                                 ClientIDMode="Static">
                                                 <DirectEvents>
-                                                    <Select OnEvent="EnableApply" />
+                                                    <Select OnEvent="EnableButtons" />
                                                 </DirectEvents>
                                             </ext:ComboBox>
                                             <ext:ToolbarSeparator Width="10" />
-                                            <ext:Button ID="btnApply" runat="server" Icon="ShieldGo" Text="Apply" ClientIDMode="Static" Disabled="true">
+                                            <ext:Button ID="btnSetSelected" runat="server" Icon="ShieldAdd" Text="Set selected" ClientIDMode="Static" Disabled="true">
                                                 <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip2" runat="server" Html="Apply" />
+                                                    <ext:ToolTip ID="ToolTip2" runat="server" Html="Set selected" />
                                                 </ToolTips>
                                                 <DirectEvents>
-                                                    <Click OnEvent="ApplyClick" />
+                                                    <Click OnEvent="SetSelectedClick" />
                                                 </DirectEvents>
                                             </ext:Button>
-                                            <ext:Button ID="btnApplyToRest" runat="server" Icon="ShieldGo" Text="Apply" ClientIDMode="Static" Disabled="true">
+                                            <ext:Button ID="btnSetWithout" runat="server" Icon="ShieldAdd" Text="Set without" ClientIDMode="Static" Disabled="true">
                                                 <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip3" runat="server" Html="Apply to rest" />
+                                                    <ext:ToolTip ID="ToolTip3" runat="server" Html="Set without status" />
                                                 </ToolTips>
                                                 <DirectEvents>
-                                                    <Click OnEvent="ApplyToRestClick" />
+                                                    <Click OnEvent="SetWithoutClick" />
                                                 </DirectEvents>
                                             </ext:Button>
-                                            <ext:Button ID="btnApplyToAll" runat="server" Icon="ShieldGo" Text="Apply to all" ClientIDMode="Static" Disabled="true">
+                                            <ext:Button ID="btnSetAll" runat="server" Icon="ShieldAdd" Text="Set all" ClientIDMode="Static" Disabled="true">
                                                 <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip4" runat="server" Html="Apply to all" />
+                                                    <ext:ToolTip ID="ToolTip4" runat="server" Html="Set all" />
                                                 </ToolTips>
                                                 <DirectEvents>
-                                                    <Click OnEvent="ApplyToAllClick" />
+                                                    <Click OnEvent="SetAllClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            <ext:Button ID="btnClearSelected" runat="server" Icon="ShieldDelete" Text="Clear selected" ClientIDMode="Static" Disabled="true">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip5" runat="server" Html="Clear selected" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="ClearSelectedClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            <ext:Button ID="btnClearAll" runat="server" Icon="ShieldDelete" Text="Clear all" ClientIDMode="Static" Disabled="true">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip7" runat="server" Html="Cleat all" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="ClearAllClick" />
                                                 </DirectEvents>
                                             </ext:Button>
                                             <%-- 
@@ -256,11 +272,11 @@
                                                     <ext:Parameter Name="ImportBatchID" Value="Ext.getCmp('#{ImportBatchesGrid}') && #{ImportBatchesGrid}.getSelectionModel().hasSelection() ? #{ImportBatchesGrid}.getSelectionModel().getSelected().id : -1"
                                                         Mode="Raw" />
                                                     <ext:Parameter Name="start" Value="0" Mode="Raw" />
-                                                    <ext:Parameter Name="limit" Value="25" Mode="Raw" />
+                                                    <ext:Parameter Name="limit" Value="250" Mode="Raw" />
                                                     <ext:Parameter Name="sort" Value="" />
                                                     <ext:Parameter Name="dir" Value="" />
                                                 </BaseParams>
-                                                <SortInfo Field="ValueDate" Direction="ASC" />
+                                                <SortInfo Field="ValueDate" Direction="DESC" />
                                             </ext:Store>
                                         </Store>
                                         <ColumnModel ID="ColumnModel4" runat="server">
@@ -285,7 +301,7 @@
                                         <SelectionModel>
                                             <ext:CheckboxSelectionModel runat="server">
                                                 <DirectEvents>
-                                                    <SelectionChange OnEvent="EnableApply" />
+                                                    <SelectionChange OnEvent="EnableButtons" />
                                                 </DirectEvents>
                                             </ext:CheckboxSelectionModel>
                                         </SelectionModel>
@@ -306,7 +322,7 @@
                                             </ext:GridFilters>
                                         </Plugins>
                                         <BottomBar>
-                                            <ext:PagingToolbar ID="PagingToolbar3" runat="server" PageSize="25" EmptyMsg="No data found" />
+                                            <ext:PagingToolbar ID="PagingToolbar3" runat="server" PageSize="250" EmptyMsg="No data found" />
                                         </BottomBar>
                                     </ext:GridPanel>
                                 </Items>

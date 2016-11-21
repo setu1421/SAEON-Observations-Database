@@ -42,7 +42,9 @@ public class ObservationRepository : BaseRepository
     {
         SqlQuery q = new Select().From(VObservationsList.Schema)
             .Where(VObservationsList.Columns.ImportBatchID).IsEqualTo(BatchID)
-            .OrderAsc(VObservationsList.Columns.ValueDate);
+            .OrderDesc(VObservationsList.Columns.ValueDate)
+            .OrderAsc(VObservationsList.Columns.SensorName)
+            .OrderAsc(VObservationsList.Columns.OfferingName);
         GetPagedQuery(ref q, e, paramPrefix);
         VObservationsListCollection col = q.ExecuteAsCollection<VObservationsListCollection>();
         return q.ExecuteAsCollection<VObservationsListCollection>().ToList<VObservationsList>();
