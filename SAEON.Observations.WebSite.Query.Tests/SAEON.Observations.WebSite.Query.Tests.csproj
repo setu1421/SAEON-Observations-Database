@@ -91,12 +91,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SAEON.Observations.WebSite.Query\SAEON.Observations.WebSite.Query.csproj">
-      <Project>{FB50F9E0-8FD8-40EC-A240-E4AF08CFF1EB}</Project>
-      <Name>SAEON.Observations.WebSite.Query</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
