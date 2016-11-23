@@ -68,11 +68,11 @@
                                     <TopBar>
                                         <ext:Toolbar ID="Toolbar1" runat="server">
                                             <Items>
-                                                <ext:Button Text="Expand All" runat="server" ID="ExpandAllButton">
+                                                <%--                                                <ext:Button Text="Expand All" runat="server" ID="ExpandAllButton">
                                                     <Listeners>
                                                         <Click Handler="#{FilterTree}.expandAll();" />
                                                     </Listeners>
-                                                </ext:Button>
+                                                </ext:Button>--%>
                                                 <ext:Button Text="Collapse All" runat="server" ID="CollapseAllButton">
                                                     <Listeners>
                                                         <Click Handler="#{FilterTree}.collapseAll();" />
@@ -86,6 +86,9 @@
                                             </Items>
                                         </ext:Toolbar>
                                     </TopBar>
+                                    <Loader>
+                                        <ext:PageTreeLoader OnNodeLoad="NodeLoad" />
+                                    </Loader>
                                     <Listeners>
                                         <Click Handler="#{FilterTreeBottomBar}.setStatus({text: 'Node Selected: <b>' + node.text + '</b>', clear: true});" />
                                         <ExpandNode Delay="30" Handler="#{FilterTreeBottomBar}.setStatus({text: 'Node Expanded: <b>' + node.text + '</b>', clear: true});" />
@@ -105,7 +108,7 @@
                                     <Items>
                                         <ext:ToolbarTextItem Text="From Date:" />
                                         <ext:ToolbarSpacer Width="10" />
-                                        <ext:DateField ID="FromFilter" runat="server" Text="From" Vtype="daterange" EndDateField="ToFilter" ClientIDMode="Static" Format="dd MMM yyyy"/>
+                                        <ext:DateField ID="FromFilter" runat="server" Text="From" Vtype="daterange" EndDateField="ToFilter" ClientIDMode="Static" Format="dd MMM yyyy" />
                                         <ext:ToolbarSeparator Width="10" />
                                         <ext:ToolbarTextItem Text="To Date :" />
                                         <ext:ToolbarSpacer Width="10" />
