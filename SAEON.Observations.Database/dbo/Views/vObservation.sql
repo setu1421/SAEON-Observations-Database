@@ -35,6 +35,8 @@ AS
 SELECT 
   o.ID, o.SensorID, o.PhenomenonOfferingID, o.PhenomenonUOMID, o.RawValue, o.DataValue, o.ImportBatchID, o.ValueDate, o.Comment, 
   o.UserId, aspnet_Users.UserName,
+  Status.Name StatusName,
+  StatusReason.Name StatusReasonName,
   Offering.ID OfferingID,
   Offering.Name OfferingName,
   UnitOfMeasure.ID UnitOfMeasureID,
@@ -56,6 +58,10 @@ SELECT
   Organisation.Name OrganisationName
 FROM
   Observation o
+  left join Status
+    on (o.StatusID = Status.ID)
+  left join StatusReason
+    on (o.StatusReasonID = StatusReason.ID)
   inner join PhenomenonOffering
     on (o.PhenomenonOfferingID = PhenomenonOffering.ID)
   inner join Offering

@@ -125,7 +125,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 {
                     try
                     {
-                        using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(1, 0, 0)))
+                        using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 5, 0)))
                         {
                             using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                             {

@@ -163,6 +163,8 @@
                                                         <ext:RecordField Name="UnitOfMeasureSymbol" Type="String" />
                                                         <ext:RecordField Name="DataSchemaName" Type="String" />
                                                         <ext:RecordField Name="ValueDate" Type="Date" SortType="AsDate" />
+                                                        <ext:RecordField Name="StatusName" Type="String" />
+                                                        <ext:RecordField Name="StatusReasonName" Type="String" />
                                                         <ext:RecordField Name="UserName" Type="String" />
                                                         <ext:RecordField Name="Comment" Type="String" />
                                                     </Fields>
@@ -170,7 +172,7 @@
                                             </Reader>
                                             <BaseParams>
                                                 <ext:Parameter Name="start" Value="0" Mode="Raw" />
-                                                <ext:Parameter Name="limit" Value="30" Mode="Raw" />
+                                                <ext:Parameter Name="limit" Value="250" Mode="Raw" />
                                                 <ext:Parameter Name="sort" Value="" />
                                                 <ext:Parameter Name="dir" Value="" />
                                             </BaseParams>
@@ -194,6 +196,8 @@
                                             <ext:Column Header="Symbol" DataIndex="UnitOfMeasureSymbol" Width="50" />
                                             <ext:Column Header="Schema Name" DataIndex="DataSchemaName" Width="100" Hideable="true" Hidden="true" />
                                             <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="100" Format="dd MMM yyyy HH:mm" />
+                                            <ext:Column Header="Status" DataIndex="StatusName" Width="150" Hideable="true" />
+                                            <ext:Column Header="Reason" DataIndex="StatusReasonName" Width="150" Hideable="true" />
                                             <ext:Column Header="Comment" DataIndex="Comment" Width="150" Hideable="true" />
                                             <ext:Column Header="User" DataIndex="UserName" Width="100" Hideable="true" Hidden="true" />
                                         </Columns>
@@ -220,7 +224,7 @@
                                         </ext:GridFilters>
                                     </Plugins>
                                     <BottomBar>
-                                        <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="30" EmptyMsg="No data found" />
+                                        <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="250" EmptyMsg="No data found" />
                                     </BottomBar>
                                 </ext:GridPanel>
                             </Items>
