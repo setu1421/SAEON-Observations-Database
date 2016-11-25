@@ -6,6 +6,7 @@ using Ext.Net;
 using SubSonic;
 using SAEON.Observations.Data;
 using System.Web.Security;
+using Serilog;
 
 /// <summary>
 /// Summary description for OfferingRepository
@@ -30,11 +31,11 @@ public class DataQueryRepository:BaseRepository
 		//    .And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(DataSourceRole.Columns.DateStart)
 		//    .And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(DataSourceRole.Columns.DateEnd);
 		SqlQuery q = new Select().From(VObservationRole.Schema)
-			.Where(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
+			.Where(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
 
         GetPagedQuery(ref q, e, paramPrefix);
-
-		VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
+        Log.Information("GetPagedList SQL: {sql}", q.BuildSqlStatement());
+        VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
 
         return col.ToList<object>();
     }
@@ -60,9 +61,8 @@ public class DataQueryRepository:BaseRepository
 		//if (offerings.Count > 0)
 		//    q.Or(VObservation.Columns.PhenomenonOfferingID).In(offerings);
 
-        //GetPagedQuery(ref q, e, paramPrefix);
-		
-
+        GetPagedQuery(ref q, e, paramPrefix);
+        Log.Information("GetPagedFilteredList SQL: {sql}", q.BuildSqlStatement());
         VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
 
         return col.ToList<object>();
@@ -171,9 +171,8 @@ public class DataQueryRepository:BaseRepository
 
 		storeRefreshDataEventArgs.Total = total;
 
-
 		int currenPage = storeRefreshDataEventArgs.Start / storeRefreshDataEventArgs.Limit + 1;
-
+        Log.Information("CurrentPage: {currentPage} Start: {Start} Limit: {Limit} Total: {total}", currenPage, storeRefreshDataEventArgs.Start, storeRefreshDataEventArgs.Limit, total);
 		if (storeRefreshDataEventArgs.Limit > total)
 			q.Paged(currenPage, total);
 		else

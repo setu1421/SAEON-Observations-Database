@@ -105,18 +105,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarPhenomenonUOMID);
                 
-                TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
-                colvarUserId.ColumnName = "UserId";
-                colvarUserId.DataType = DbType.Guid;
-                colvarUserId.MaxLength = 0;
-                colvarUserId.AutoIncrement = false;
-                colvarUserId.IsNullable = false;
-                colvarUserId.IsPrimaryKey = false;
-                colvarUserId.IsForeignKey = false;
-                colvarUserId.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarUserId);
-                
                 TableSchema.TableColumn colvarRawValue = new TableSchema.TableColumn(schema);
                 colvarRawValue.ColumnName = "RawValue";
                 colvarRawValue.DataType = DbType.Double;
@@ -177,6 +165,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarComment);
                 
+                TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
+                colvarUserId.ColumnName = "UserId";
+                colvarUserId.DataType = DbType.Guid;
+                colvarUserId.MaxLength = 0;
+                colvarUserId.AutoIncrement = false;
+                colvarUserId.IsNullable = false;
+                colvarUserId.IsPrimaryKey = false;
+                colvarUserId.IsForeignKey = false;
+                colvarUserId.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUserId);
+                
                 TableSchema.TableColumn colvarUserName = new TableSchema.TableColumn(schema);
                 colvarUserName.ColumnName = "UserName";
                 colvarUserName.DataType = DbType.String;
@@ -188,6 +188,30 @@ namespace SAEON.Observations.Data{
                 colvarUserName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarUserName);
+                
+                TableSchema.TableColumn colvarStatusName = new TableSchema.TableColumn(schema);
+                colvarStatusName.ColumnName = "StatusName";
+                colvarStatusName.DataType = DbType.AnsiString;
+                colvarStatusName.MaxLength = 150;
+                colvarStatusName.AutoIncrement = false;
+                colvarStatusName.IsNullable = true;
+                colvarStatusName.IsPrimaryKey = false;
+                colvarStatusName.IsForeignKey = false;
+                colvarStatusName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarStatusName);
+                
+                TableSchema.TableColumn colvarStatusReasonName = new TableSchema.TableColumn(schema);
+                colvarStatusReasonName.ColumnName = "StatusReasonName";
+                colvarStatusReasonName.DataType = DbType.AnsiString;
+                colvarStatusReasonName.MaxLength = 150;
+                colvarStatusReasonName.AutoIncrement = false;
+                colvarStatusReasonName.IsNullable = true;
+                colvarStatusReasonName.IsPrimaryKey = false;
+                colvarStatusReasonName.IsForeignKey = false;
+                colvarStatusReasonName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarStatusReasonName);
                 
                 TableSchema.TableColumn colvarOfferingID = new TableSchema.TableColumn(schema);
                 colvarOfferingID.ColumnName = "OfferingID";
@@ -523,20 +547,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("UserId")]
-        [Bindable(true)]
-        public Guid UserId 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("UserId");
-		    }
-            set 
-		    {
-			    SetColumnValue("UserId", value);
-            }
-        }
-	      
         [XmlAttribute("RawValue")]
         [Bindable(true)]
         public double? RawValue 
@@ -607,6 +617,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("UserId")]
+        [Bindable(true)]
+        public Guid UserId 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("UserId");
+		    }
+            set 
+		    {
+			    SetColumnValue("UserId", value);
+            }
+        }
+	      
         [XmlAttribute("UserName")]
         [Bindable(true)]
         public string UserName 
@@ -618,6 +642,34 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("UserName", value);
+            }
+        }
+	      
+        [XmlAttribute("StatusName")]
+        [Bindable(true)]
+        public string StatusName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("StatusName");
+		    }
+            set 
+		    {
+			    SetColumnValue("StatusName", value);
+            }
+        }
+	      
+        [XmlAttribute("StatusReasonName")]
+        [Bindable(true)]
+        public string StatusReasonName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("StatusReasonName");
+		    }
+            set 
+		    {
+			    SetColumnValue("StatusReasonName", value);
             }
         }
 	      
@@ -902,8 +954,6 @@ namespace SAEON.Observations.Data{
             
             public static string PhenomenonUOMID = @"PhenomenonUOMID";
             
-            public static string UserId = @"UserId";
-            
             public static string RawValue = @"RawValue";
             
             public static string DataValue = @"DataValue";
@@ -914,7 +964,13 @@ namespace SAEON.Observations.Data{
             
             public static string Comment = @"Comment";
             
+            public static string UserId = @"UserId";
+            
             public static string UserName = @"UserName";
+            
+            public static string StatusName = @"StatusName";
+            
+            public static string StatusReasonName = @"StatusReasonName";
             
             public static string OfferingID = @"OfferingID";
             

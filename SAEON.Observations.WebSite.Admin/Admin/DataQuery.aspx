@@ -42,7 +42,6 @@
                 VisCols.setValue(viscolsNew);
                 FormatType.setValue(format);
                 SortInfo.setValue(GridFilters1.store.sortInfo.field + "|" + GridFilters1.store.sortInfo.direction);
-
                 ObservationsGrid.submitData(false);
             }
 

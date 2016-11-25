@@ -86,7 +86,7 @@ public partial class _DataQuery : System.Web.UI.Page
                         .ExecuteAsCollection<SiteCollection>();
                     foreach (var item in col)
                     {
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Site_" + item.Id.ToString()+"|"+e.NodeID, item.Name, Icon.ResultsetNext);
+                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Site_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext);
                         node.Checked = ThreeStateBool.False;
                         e.Nodes.Add(node);
                         var q = new Query(Station.Schema).AddWhere(Station.Columns.SiteID, item.Id).GetCount(Station.Columns.Id);
@@ -113,7 +113,7 @@ public partial class _DataQuery : System.Web.UI.Page
                         .ExecuteAsCollection<StationCollection>();
                     foreach (var item in col)
                     {
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Station_" + item.Id.ToString()+"|"+e.NodeID, item.Name, Icon.ResultsetNext);
+                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Station_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext);
                         node.Checked = ThreeStateBool.False;
                         e.Nodes.Add(node);
                         var q = new Query(StationInstrument.Schema).AddWhere(StationInstrument.Columns.StationID, item.Id).GetCount(StationInstrument.Columns.InstrumentID);
@@ -141,7 +141,7 @@ public partial class _DataQuery : System.Web.UI.Page
                         .ExecuteAsCollection<InstrumentCollection>();
                     foreach (var item in col)
                     {
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Instrument_" + item.Id.ToString()+"|"+e.NodeID, item.Name, Icon.ResultsetNext);
+                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Instrument_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext);
                         node.Checked = ThreeStateBool.False;
                         e.Nodes.Add(node);
                         var q = new Query(InstrumentSensor.Schema).AddWhere(InstrumentSensor.Columns.InstrumentID, item.Id).GetCount(InstrumentSensor.Columns.SensorID);
@@ -236,17 +236,11 @@ public partial class _DataQuery : System.Web.UI.Page
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
         string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
         string visCols = VisCols.Value.ToString();
-
-
-
         string js = BuildQ(json, visCols, FromFilter.SelectedDate, ToFilter.SelectedDate, sortCol, sortDir);
-
-
         BaseRepository.doExport(type, js);
-
     }
 
-    private string GetItem(List<Tuple<string,string>> items, string itemType)
+    private string GetItem(List<Tuple<string, string>> items, string itemType)
     {
         return items.Where(i => i.Item1 == itemType).Select(i => i.Item2).First();
     }
@@ -259,7 +253,11 @@ public partial class _DataQuery : System.Web.UI.Page
 
         SqlQuery q = new Select().From(VObservationRole.Schema);
 
-        if (FilterTree.CheckedNodes != null)
+        if (FilterTree.CheckedNodes == null)
+        {
+            this.ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix], fromDate, ToDate);
+        }
+        else
         {
             List<SubmittedNode> nodes = FilterTree.CheckedNodes;
             List<QueryDataClass> QueryDataClassList = new List<QueryDataClass>();
@@ -270,7 +268,7 @@ public partial class _DataQuery : System.Web.UI.Page
                 QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item2), Type = items[0].Item1 });
             }
 
-            Log.Information("Items: {@items}", QueryDataClassList);
+            //Log.Information("Items: {@QueryDataClassList}", QueryDataClassList);
 
             #region buildQ
             foreach (QueryDataClass item in QueryDataClassList)
@@ -282,7 +280,7 @@ public partial class _DataQuery : System.Web.UI.Page
                 //Sensor Sensor = new Sensor();
                 //Station station = new Station();
                 List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                Log.Information("Items: {@items}", items);
+                //Log.Information("Items: {@items}", items);
                 Offering offering = null;
                 Phenomenon phenomenon = null;
                 Sensor sensor = null;
@@ -294,7 +292,7 @@ public partial class _DataQuery : System.Web.UI.Page
                     case "Offering":
                         count++;
                         offering = new Offering(item.ID);
-                        phenomenon = new Phenomenon(new Guid(GetItem(items,"Phenomenon")));
+                        phenomenon = new Phenomenon(new Guid(GetItem(items, "Phenomenon")));
                         sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
                         instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
                         station = new Station(new Guid(GetItem(items, "Station")));
@@ -308,7 +306,6 @@ public partial class _DataQuery : System.Web.UI.Page
                         break;
                     case "Phenomenon":
                         count++;
-                        items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
                         phenomenon = new Phenomenon(item.ID);
                         sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
                         instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
@@ -321,7 +318,7 @@ public partial class _DataQuery : System.Web.UI.Page
                             .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
                         break;
                     case "Sensor":
-                        items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        count++;
                         sensor = new Sensor(item.ID);
                         instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
                         station = new Station(new Guid(GetItem(items, "Station")));
@@ -332,7 +329,7 @@ public partial class _DataQuery : System.Web.UI.Page
                             .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
                         break;
                     case "Instrument":
-                        items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        count++;
                         instrument = new Instrument(item.ID);
                         station = new Station(new Guid(GetItem(items, "Station")));
                         site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
@@ -341,12 +338,14 @@ public partial class _DataQuery : System.Web.UI.Page
                             .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
                         break;
                     case "Station":
+                        count++;
                         station = new Station(item.ID);
                         site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
                         q.OrExpression(VObservation.Columns.StationID).IsEqualTo(station.Id)
                             .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
                         break;
                     case "Site":
+                        count++;
                         site = new SAEON.Observations.Data.Site(item.ID);
                         q.OrExpression(VObservation.Columns.SiteID).IsEqualTo(site.Id);
                         break;
@@ -354,6 +353,7 @@ public partial class _DataQuery : System.Web.UI.Page
 
                 if (count != 0)
                 {
+                    q.And(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
                     if (fromDate.ToString() != "0001/01/01 00:00:00")
                     {
                         q.And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(fromDate.ToString());
@@ -362,38 +362,15 @@ public partial class _DataQuery : System.Web.UI.Page
                     {
                         q.And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(ToDate.AddHours(23).AddMinutes(59).AddSeconds(59).ToString());
                     }
-                    q.And(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
-                    DataQueryRepository.qFilterNSort(ref q, ref e);
-
+                    //DataQueryRepository.qFilterNSort(ref q, ref e);
                     q.CloseExpression();
-
-
                 }
             }
             #endregion buildQ
-
-            Log.Information("SQL: {sql}", q.BuildSqlStatement());
-
-            DataQueryRepository.qPage(ref q, ref e);
-            Ext.Net.GridFilters gfs = FindControl("GridFilters1") as Ext.Net.GridFilters;
-            using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 5, 0)))
-            {
-                using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
-                {
-                    this.ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedFilteredList(e, e.Parameters[this.GridFilters1.ParamPrefix], ref q);
-                }
-                ts.Complete();
-            }
+            //DataQueryRepository.qPage(ref q, ref e);
+            //Log.Information("SQL: {sql}", q.BuildSqlStatement());
+            this.ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedFilteredList(e, e.Parameters[this.GridFilters1.ParamPrefix], ref q);
         }
-        else
-            using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 5, 0)))
-            {
-                using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
-                {
-                    this.ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix], fromDate, ToDate);
-                }
-                ts.Complete();
-            }
     }
 
 
@@ -428,9 +405,6 @@ public partial class _DataQuery : System.Web.UI.Page
 
         SqlQuery q = new Select(colms).From(VObservationRole.Schema);
 
-        //q.And(VObservationRole.Columns.Expr5).IsEqualTo(AuthHelper.GetLoggedInUserId);
-
-
         if (FilterTree.CheckedNodes != null)
         {
             List<SubmittedNode> nodes = FilterTree.CheckedNodes;
@@ -441,6 +415,7 @@ public partial class _DataQuery : System.Web.UI.Page
                 var items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
                 QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item2), Type = items[0].Item1 });
             }
+            //Log.Information("Items: {@QueryDataClassList}", QueryDataClassList);
 
             #region buildQ
             foreach (QueryDataClass item in QueryDataClassList)
@@ -448,7 +423,7 @@ public partial class _DataQuery : System.Web.UI.Page
 
                 int count = 0;
                 List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                Log.Information("Items: {@items}", items);
+                //Log.Information("Items: {@items}", items);
                 Offering offering = null;
                 Phenomenon phenomenon = null;
                 Sensor sensor = null;
@@ -474,7 +449,6 @@ public partial class _DataQuery : System.Web.UI.Page
                         break;
                     case "Phenomenon":
                         count++;
-                        items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
                         phenomenon = new Phenomenon(item.ID);
                         sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
                         instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
@@ -487,7 +461,7 @@ public partial class _DataQuery : System.Web.UI.Page
                             .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
                         break;
                     case "Sensor":
-                        items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        count++;
                         sensor = new Sensor(item.ID);
                         instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
                         station = new Station(new Guid(GetItem(items, "Station")));
@@ -498,7 +472,7 @@ public partial class _DataQuery : System.Web.UI.Page
                             .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
                         break;
                     case "Instrument":
-                        items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        count++;
                         instrument = new Instrument(item.ID);
                         station = new Station(new Guid(GetItem(items, "Station")));
                         site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
@@ -507,21 +481,22 @@ public partial class _DataQuery : System.Web.UI.Page
                             .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
                         break;
                     case "Station":
+                        count++;
                         station = new Station(item.ID);
                         site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
                         q.OrExpression(VObservation.Columns.StationID).IsEqualTo(station.Id)
                             .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
                         break;
                     case "Site":
+                        count++;
                         site = new SAEON.Observations.Data.Site(item.ID);
                         q.OrExpression(VObservation.Columns.SiteID).IsEqualTo(site.Id);
                         break;
                 }
                 if (count != 0)
                 {
-
+                    q.And(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
                     q.And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(dateFrom);
-
                     q.And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(dateTo.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
 
                     if (json != null)
@@ -589,18 +564,10 @@ public partial class _DataQuery : System.Web.UI.Page
 
                         }
                     }
-
-                    q.And(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
                     q.CloseExpression();
-
-
                 }
             }
             #endregion buildQ
-
-            Ext.Net.GridFilters gfs = FindControl("GridFilters1") as Ext.Net.GridFilters;
-
-
         }
 
         if (!(string.IsNullOrEmpty(sortCol) && string.IsNullOrEmpty(sortDir)))
@@ -616,15 +583,7 @@ public partial class _DataQuery : System.Web.UI.Page
         }
 
         Log.Information("SQL: {sql}", q.BuildSqlStatement());
-        DataTable dt = null;
-        using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 5, 0)))
-        {
-            using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
-            {
-                dt = q.ExecuteDataSet().Tables[0];
-            }
-            ts.Complete();
-        }
+        DataTable dt = q.ExecuteDataSet().Tables[0];
 
         for (int k = 0; k < dt.Columns.Count; k++)
         {

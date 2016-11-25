@@ -38,7 +38,7 @@ public partial class _Observation : System.Web.UI.Page
 		string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
 		string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-		string js = BaseRepository.BuildExportQ("VObservationRoles", gridData, visCols, sortCol, sortDir);
+		string js = BaseRepository.BuildExportQ("VObservationList", gridData, visCols, sortCol, sortDir);
 
 		BaseRepository.doExport(type, js);
 	

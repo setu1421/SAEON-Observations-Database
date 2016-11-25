@@ -29,7 +29,7 @@ public class ObservationRepository : BaseRepository
         //           .And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(DataSourceRole.DateStartColumn)
         //           .And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(DataSourceRole.DateEndColumn);
         SqlQuery q = new Select().From(VObservationRole.Schema)
-            .Where(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
+            .Where(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
 
         GetPagedQuery(ref q, e, paramPrefix);
 

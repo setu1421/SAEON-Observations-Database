@@ -28,22 +28,28 @@ AS
 --AND vo.ValueDate >= dr.DateStart AND vo.ValueDate <= dr.DateEnd
 --INNER JOIN aspnet_Users ur
 -- ON dr.UserId = ur.UserId
-Select
-  vObservation.*, DataSourceRoles.RoleUserId
-from
-  vObservation
-  inner join
-    (
-	  Select
-	    dsr.DataSourceID, aspnet_UsersInRoles.UserId RoleUserId, Min(dsr.DateStart) DateStart, Max(dsr.DateEnd) DateEnd
-	  from
-	    DataSourceRole dsr
-		inner join aspnet_UsersInRoles
-		  on (dsr.RoleId = aspnet_UsersInRoles.RoleId)
-      group by
-		dsr.DataSourceID, aspnet_UsersInRoles.UserId
-	) DataSourceRoles
-	on (vObservation.DataSourceID = DataSourceRoles.DataSourceID) and
-	   (vObservation.ValueDate >= DataSourceRoles.DateStart) and (vObservation.ValueDate <= DataSourceRoles.DateEnd)
+	Select
+		vObservation.*
+	from
+		vObservation
+	where
+	  Exists(
+		Select 
+		  *
+		from
+		(
+			Select
+				dsr.DataSourceID, aspnet_UsersInRoles.UserId RoleUserId, Min(dsr.DateStart) DateStart, Max(dsr.DateEnd) DateEnd
+			from
+				DataSourceRole dsr
+			inner join aspnet_UsersInRoles
+				on (dsr.RoleId = aspnet_UsersInRoles.RoleId)
+			group by
+				dsr.DataSourceID, aspnet_UsersInRoles.UserId
+		) DataSourceRoles
+		where
+			(vObservation.DataSourceID = DataSourceRoles.DataSourceID) and
+			(vObservation.ValueDate >= DataSourceRoles.DateStart) and (vObservation.ValueDate <= DataSourceRoles.DateEnd)
+	  )
 --< Changed 2.0.16 20161107 TimPN
  

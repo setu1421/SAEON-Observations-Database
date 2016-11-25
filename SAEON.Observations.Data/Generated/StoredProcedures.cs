@@ -1038,7 +1038,7 @@ namespace SAEON.Observations.Data{
         /// </summary>
         public static StoredProcedure ProgressStatusRaw()
         {
-            SubSonic.StoredProcedure sp = new SubSonic.StoredProcedure("progress_Status_Raw", DataService.GetInstance("ObservationsDB"), "");
+            SubSonic.StoredProcedure sp = new SubSonic.StoredProcedure("progress_Status_Raw", DataService.GetInstance("ObservationsDB"), "dbo");
         	
             return sp;
         }
