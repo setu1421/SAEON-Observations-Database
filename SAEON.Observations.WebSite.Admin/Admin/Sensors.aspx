@@ -291,7 +291,7 @@
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="Form"
+<%--                    <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="Form"
                         LabelAlign="Top">
                         <Items>
                             <ext:ComboBox ID="cbStation" runat="server" DataIndex="StationID" DisplayField="Name" ClientIDMode="Static"
@@ -317,7 +317,7 @@
                                 </Listeners>
                             </ext:ComboBox>
                         </Items>
-                    </ext:Panel>
+                    </ext:Panel>--%>
                     <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="Form"
                         LabelAlign="Top">
                         <Items>

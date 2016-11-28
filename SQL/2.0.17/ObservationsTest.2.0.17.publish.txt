@@ -1,0 +1,31 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[Sensor].[StationID] is being dropped, data loss could occur.
+
+** User actions
+     Drop
+       [dbo].[Sensor].[IX_Sensor_StationID] (Index)
+       [dbo].[FK_Sensor_Station] (Foreign Key)
+     Alter
+       [dbo].[Sensor] (Table)
+       [dbo].[vDataLog] (View)
+       [dbo].[vDataQuery] (View)
+       [dbo].[vInventory] (View)
+       [dbo].[vSensor] (View)
+       [dbo].[vObservationRoles] (View)
+
+** Supporting actions
+     Refresh
+       [dbo].[vInstrumentSensor] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationsList] (View)
+
+The column [dbo].[Sensor].[StationID] is being dropped, data loss could occur.
+If this deployment is executed, changes to [dbo].[Sensor] might introduce run-time errors in [dbo].[progress_Progress_Resolved].
+

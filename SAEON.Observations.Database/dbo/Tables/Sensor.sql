@@ -7,7 +7,9 @@ CREATE TABLE [dbo].[Sensor] (
     [Name]         VARCHAR (150)    NOT NULL,
     [Description]  VARCHAR (5000)   NULL,
     [Url]          VARCHAR (250)    NULL,
-    [StationID]    UNIQUEIDENTIFIER NOT NULL,
+--> Removed 2.0.17 20161128 TimPN
+--    [StationID]    UNIQUEIDENTIFIER NOT NULL,
+--< Removed 2.0.17 20161128 TimPN
     [PhenomenonID] UNIQUEIDENTIFIER NOT NULL,
     [DataSourceID] UNIQUEIDENTIFIER NOT NULL,
     [DataSchemaID] UNIQUEIDENTIFIER NULL,
@@ -24,7 +26,9 @@ CREATE TABLE [dbo].[Sensor] (
     CONSTRAINT [FK_Sensor_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]),
     CONSTRAINT [FK_Sensor_DataSchema] FOREIGN KEY ([DataSchemaID]) REFERENCES [dbo].[DataSchema] ([ID]),
     CONSTRAINT [FK_Sensor_Phenomenon] FOREIGN KEY ([PhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]),
-    CONSTRAINT [FK_Sensor_Station] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]),
+--> Removed 2.0.17 20161128 TimPN
+--    CONSTRAINT [FK_Sensor_Station] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]),
+--< Removed 2.0.17 20161128 TimPN
 --> Changed 2.0.0 20160329 TimPN
 --    CONSTRAINT [IX_Sensor_Code] UNIQUE ([Code])
     CONSTRAINT [UX_Sensor_Code] UNIQUE ([Code]),
@@ -45,8 +49,10 @@ CREATE CLUSTERED INDEX [CX_Sensor] ON [dbo].[Sensor] ([AddedAt])
 --< Removed 2.0.0 20160329 TimPN
 --> Added 2.0.1 20160406 TimPN
 GO
-CREATE INDEX [IX_Sensor_StationID] ON [dbo].[Sensor] ([StationID])
-GO
+--> Removed 2.0.17 20161128 TimPN
+--CREATE INDEX [IX_Sensor_StationID] ON [dbo].[Sensor] ([StationID])
+--GO
+--< Removed 2.0.17 20161128 TimPN
 CREATE INDEX [IX_Sensor_PhenomenonID] ON [dbo].[Sensor] ([PhenomenonID])
 GO
 CREATE INDEX [IX_Sensor_DataSourceID] ON [dbo].[Sensor] ([DataSourceID])

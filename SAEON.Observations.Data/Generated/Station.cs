@@ -478,10 +478,6 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.ProjectStationCollection().Where(ProjectStation.Columns.StationID, Id).Load();
 		}
-		public SAEON.Observations.Data.SensorCollection SensorRecords()
-		{
-			return new SAEON.Observations.Data.SensorCollection().Where(Sensor.Columns.StationID, Id).Load();
-		}
 		public SAEON.Observations.Data.StationInstrumentCollection StationInstrumentRecords()
 		{
 			return new SAEON.Observations.Data.StationInstrumentCollection().Where(StationInstrument.Columns.StationID, Id).Load();

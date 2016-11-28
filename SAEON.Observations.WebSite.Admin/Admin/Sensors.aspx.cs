@@ -20,21 +20,21 @@ public partial class Admin_Sensors : System.Web.UI.Page
             InstrumentStore.DataSource = new InstrumentCollection().OrderByAsc(Instrument.Columns.Name).Load();
             InstrumentStore.DataBind();
 
-            var store = cbStation.GetStore();
-            SubSonic.SqlQuery q = new Select(Station.Columns.Id, Station.Columns.Name)
-                                    .From(Station.Schema)
-                                    .Where(Station.Columns.Id).IsNotNull()
-                                    .OrderAsc(DataSchema.Columns.Name);
-            DataSet ds = q.ExecuteDataSet();
-            store.DataSource = ds.Tables[0];
-            store.DataBind();
+            //var store = cbStation.GetStore();
+            //SubSonic.SqlQuery q = new Select(Station.Columns.Id, Station.Columns.Name)
+            //                        .From(Station.Schema)
+            //                        .Where(Station.Columns.Id).IsNotNull()
+            //                        .OrderAsc(DataSchema.Columns.Name);
+            //DataSet ds = q.ExecuteDataSet();
+            //store.DataSource = ds.Tables[0];
+            //store.DataBind();
 
-            store = cbPhenomenon.GetStore();
-            q = new Select(Phenomenon.Columns.Id, Phenomenon.Columns.Name)
+            var store = cbPhenomenon.GetStore();
+            SqlQuery q = new Select(Phenomenon.Columns.Id, Phenomenon.Columns.Name)
                        .From(Phenomenon.Schema)
                        .Where(Phenomenon.Columns.Id).IsNotNull()
                        .OrderAsc(Phenomenon.Columns.Name);
-            ds = q.ExecuteDataSet();
+            DataSet ds = q.ExecuteDataSet();
             store.DataSource = ds.Tables[0];
             store.DataBind();
 
@@ -115,7 +115,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
             sens.Description = tfDescription.Text.Trim();
             sens.UserId = AuthHelper.GetLoggedInUserId;
             sens.Url = tfUrl.Text.Trim();
-            sens.StationID = Guid.Parse(cbStation.SelectedItem.Value);
+            //sens.StationID = Guid.Parse(cbStation.SelectedItem.Value);
             sens.PhenomenonID = Guid.Parse(cbPhenomenon.SelectedItem.Value);
             sens.DataSourceID = Guid.Parse(cbDataSource.SelectedItem.Value);
 

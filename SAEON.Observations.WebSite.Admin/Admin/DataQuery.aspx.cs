@@ -353,7 +353,7 @@ public partial class _DataQuery : System.Web.UI.Page
 
                 if (count != 0)
                 {
-                    q.And(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
+                    q.And(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
                     if (fromDate.ToString() != "0001/01/01 00:00:00")
                     {
                         q.And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(fromDate.ToString());
@@ -495,7 +495,7 @@ public partial class _DataQuery : System.Web.UI.Page
                 }
                 if (count != 0)
                 {
-                    q.And(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
+                    q.And(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
                     q.And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(dateFrom);
                     q.And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(dateTo.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
 

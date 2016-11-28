@@ -81,41 +81,41 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarImportDate);
                 
-                TableSchema.TableColumn colvarOrganisation = new TableSchema.TableColumn(schema);
-                colvarOrganisation.ColumnName = "Organisation";
-                colvarOrganisation.DataType = DbType.AnsiString;
-                colvarOrganisation.MaxLength = 150;
-                colvarOrganisation.AutoIncrement = false;
-                colvarOrganisation.IsNullable = true;
-                colvarOrganisation.IsPrimaryKey = false;
-                colvarOrganisation.IsForeignKey = false;
-                colvarOrganisation.IsReadOnly = false;
+                TableSchema.TableColumn colvarSiteName = new TableSchema.TableColumn(schema);
+                colvarSiteName.ColumnName = "SiteName";
+                colvarSiteName.DataType = DbType.AnsiString;
+                colvarSiteName.MaxLength = 150;
+                colvarSiteName.AutoIncrement = false;
+                colvarSiteName.IsNullable = false;
+                colvarSiteName.IsPrimaryKey = false;
+                colvarSiteName.IsForeignKey = false;
+                colvarSiteName.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarOrganisation);
-                
-                TableSchema.TableColumn colvarProjectSite = new TableSchema.TableColumn(schema);
-                colvarProjectSite.ColumnName = "ProjectSite";
-                colvarProjectSite.DataType = DbType.AnsiString;
-                colvarProjectSite.MaxLength = 5000;
-                colvarProjectSite.AutoIncrement = false;
-                colvarProjectSite.IsNullable = true;
-                colvarProjectSite.IsPrimaryKey = false;
-                colvarProjectSite.IsForeignKey = false;
-                colvarProjectSite.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarProjectSite);
+                schema.Columns.Add(colvarSiteName);
                 
                 TableSchema.TableColumn colvarStationName = new TableSchema.TableColumn(schema);
                 colvarStationName.ColumnName = "StationName";
                 colvarStationName.DataType = DbType.AnsiString;
                 colvarStationName.MaxLength = 150;
                 colvarStationName.AutoIncrement = false;
-                colvarStationName.IsNullable = true;
+                colvarStationName.IsNullable = false;
                 colvarStationName.IsPrimaryKey = false;
                 colvarStationName.IsForeignKey = false;
                 colvarStationName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarStationName);
+                
+                TableSchema.TableColumn colvarInstrumentName = new TableSchema.TableColumn(schema);
+                colvarInstrumentName.ColumnName = "InstrumentName";
+                colvarInstrumentName.DataType = DbType.AnsiString;
+                colvarInstrumentName.MaxLength = 150;
+                colvarInstrumentName.AutoIncrement = false;
+                colvarInstrumentName.IsNullable = false;
+                colvarInstrumentName.IsPrimaryKey = false;
+                colvarInstrumentName.IsForeignKey = false;
+                colvarInstrumentName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarInstrumentName);
                 
                 TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
                 colvarSensorID.ColumnName = "SensorID";
@@ -134,7 +134,7 @@ namespace SAEON.Observations.Data{
                 colvarSensorName.DataType = DbType.AnsiString;
                 colvarSensorName.MaxLength = 150;
                 colvarSensorName.AutoIncrement = false;
-                colvarSensorName.IsNullable = true;
+                colvarSensorName.IsNullable = false;
                 colvarSensorName.IsPrimaryKey = false;
                 colvarSensorName.IsForeignKey = false;
                 colvarSensorName.IsReadOnly = false;
@@ -543,31 +543,17 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("Organisation")]
+        [XmlAttribute("SiteName")]
         [Bindable(true)]
-        public string Organisation 
+        public string SiteName 
 	    {
 		    get
 		    {
-			    return GetColumnValue<string>("Organisation");
+			    return GetColumnValue<string>("SiteName");
 		    }
             set 
 		    {
-			    SetColumnValue("Organisation", value);
-            }
-        }
-	      
-        [XmlAttribute("ProjectSite")]
-        [Bindable(true)]
-        public string ProjectSite 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("ProjectSite");
-		    }
-            set 
-		    {
-			    SetColumnValue("ProjectSite", value);
+			    SetColumnValue("SiteName", value);
             }
         }
 	      
@@ -582,6 +568,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("StationName", value);
+            }
+        }
+	      
+        [XmlAttribute("InstrumentName")]
+        [Bindable(true)]
+        public string InstrumentName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("InstrumentName");
+		    }
+            set 
+		    {
+			    SetColumnValue("InstrumentName", value);
             }
         }
 	      
@@ -1002,11 +1002,11 @@ namespace SAEON.Observations.Data{
             
             public static string ImportDate = @"ImportDate";
             
-            public static string Organisation = @"Organisation";
-            
-            public static string ProjectSite = @"ProjectSite";
+            public static string SiteName = @"SiteName";
             
             public static string StationName = @"StationName";
+            
+            public static string InstrumentName = @"InstrumentName";
             
             public static string SensorID = @"SensorID";
             

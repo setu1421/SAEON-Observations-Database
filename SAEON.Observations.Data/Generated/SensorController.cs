@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,Guid StationID,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    Sensor item = new Sensor();
 		    
@@ -93,8 +93,6 @@ namespace SAEON.Observations.Data
             item.Description = Description;
             
             item.Url = Url;
-            
-            item.StationID = StationID;
             
             item.PhenomenonID = PhenomenonID;
             
@@ -116,7 +114,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,Guid StationID,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,string Code,string Name,string Description,string Url,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    Sensor item = new Sensor();
 	        item.MarkOld();
@@ -131,8 +129,6 @@ namespace SAEON.Observations.Data
 			item.Description = Description;
 				
 			item.Url = Url;
-				
-			item.StationID = StationID;
 				
 			item.PhenomenonID = PhenomenonID;
 				

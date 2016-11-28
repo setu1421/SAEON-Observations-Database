@@ -109,7 +109,7 @@ public partial class _Sensor : System.Web.UI.Page
         sens.Description = tfDescription.Text.Trim();
         sens.UserId = AuthHelper.GetLoggedInUserId;
         sens.Url = tfUrl.Text.Trim();
-        sens.StationID = Guid.Parse(sbStation.SelectedItem.Value);
+        //sens.StationID = Guid.Parse(sbStation.SelectedItem.Value);
         sens.PhenomenonID = Guid.Parse(sbPhenomenon.SelectedItem.Value);
         sens.DataSourceID = Guid.Parse(cbDataSource.SelectedItem.Value);
 

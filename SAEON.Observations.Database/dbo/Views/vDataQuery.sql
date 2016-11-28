@@ -3,18 +3,46 @@
 --< Changed 2.0.3 20160503 TimPN
 CREATE VIEW [dbo].[vDataQuery]
 AS
-SELECT     TOP (100) PERCENT NEWID() AS ID, dbo.Organisation.ID AS OrganisationID, dbo.Organisation.Name AS Organisation, 
-                      dbo.Organisation.Description AS OrganisationDesc, dbo.ProjectSite.ID AS ProjectSiteID, dbo.ProjectSite.Name AS ProjectSite, 
-                      dbo.ProjectSite.Description AS ProjectSiteDesc, dbo.Station.ID AS StationID, dbo.Station.Name AS Station, dbo.Station.Description AS StationDesc, 
-                      dbo.Sensor.ID AS SensorID, dbo.Sensor.Name AS Sensor, dbo.Sensor.Description AS SensorDesc, 
-                      dbo.Phenomenon.ID AS PhenomenonID, dbo.Phenomenon.Name AS Phenomenon, dbo.Phenomenon.Description AS PhenomenonDesc, dbo.Offering.ID AS OfferingID, 
-                      dbo.Offering.Name AS Offering, dbo.Offering.Description AS OfferingDesc
-FROM         dbo.Station INNER JOIN
-                      dbo.Sensor ON dbo.Sensor.StationID = dbo.Station.ID INNER JOIN
-                      dbo.Phenomenon ON dbo.Phenomenon.ID = dbo.Sensor.PhenomenonID INNER JOIN
-                      dbo.PhenomenonOffering ON dbo.PhenomenonOffering.PhenomenonID = dbo.Phenomenon.ID INNER JOIN
-                      dbo.Offering ON dbo.Offering.ID = dbo.PhenomenonOffering.OfferingID INNER JOIN
-                      dbo.ProjectSite ON dbo.ProjectSite.ID = dbo.Station.ProjectSiteID INNER JOIN
-                      dbo.Organisation ON dbo.Organisation.ID = dbo.ProjectSite.OrganisationID
-ORDER BY Organisation, ProjectSite, Station, Sensor, Phenomenon, Offering
+--> Removed 2.0.17 20161128 TimPN
+--SELECT     TOP (100) PERCENT NEWID()ID, Organisation.IDOrganisationID, Organisation.NameOrganisation, 
+--                      Organisation.DescriptionOrganisationDesc, ProjectSite.IDProjectSiteID, ProjectSite.NameProjectSite, 
+--                      ProjectSite.DescriptionProjectSiteDesc, Station.IDStationID, Station.NameStation, Station.DescriptionStationDesc, 
+--                      Sensor.IDSensorID, Sensor.NameSensor, Sensor.DescriptionSensorDesc, 
+--                      Phenomenon.IDPhenomenonID, Phenomenon.NamePhenomenon, Phenomenon.DescriptionPhenomenonDesc, Offering.IDOfferingID, 
+--                      Offering.NameOffering, Offering.DescriptionOfferingDesc
+--FROM         Station INNER JOIN
+--                      Sensor ON Sensor.StationID = Station.ID INNER JOIN
+--                      Phenomenon ON Phenomenon.ID = Sensor.PhenomenonID INNER JOIN
+--                      PhenomenonOffering ON PhenomenonOffering.PhenomenonID = Phenomenon.ID INNER JOIN
+--                      Offering ON Offering.ID = PhenomenonOffering.OfferingID INNER JOIN
+--                      ProjectSite ON ProjectSite.ID = Station.ProjectSiteID INNER JOIN
+--                      Organisation ON Organisation.ID = ProjectSite.OrganisationID
+--ORDER BY Organisation, ProjectSite, Station, Sensor, Phenomenon, Offering
+--< Removed 2.0.17 20161128 TimPN
+--> Added 2.0.17 20161128 TimPN
+SELECT Top (100) Percent    
+  Site.ID SiteID, Site.Name SiteName, Site.Description SiteDesc,
+  Station.ID StationID, Station.Name StationName, Station.Description StationDesc,
+  Instrument.ID InstrumentID, Instrument.Name InstrumentName, Instrument.Description InstrumentDesc,
+  Sensor.ID SensorID, Sensor.Name Sensor, Sensor.Description SensorDesc, 
+  Phenomenon.ID PhenomenonID, Phenomenon.Name Phenomenon, Phenomenon.Description PhenomenonDesc, 
+  Offering.ID OfferingID, Offering.Name Offering, Offering.Description OfferingDesc
+FROM
+	Sensor 
+	inner join Instrument_Sensor
+	  on (Instrument_Sensor.SensorID = Sensor.ID)
+	inner join Instrument
+	  on (Instrument_Sensor.InstrumentID = Instrument.ID)
+	inner join Station_Instrument
+	  on (Station_Instrument.InstrumentID = Instrument.ID)
+	inner join Station 
+	  on (Station_Instrument.StationID = Station.ID)
+	inner join Site
+	  on (Station.SiteID = Site.ID)
+	INNER JOIN Phenomenon ON Phenomenon.ID = Sensor.PhenomenonID 
+	INNER JOIN PhenomenonOffering ON PhenomenonOffering.PhenomenonID = Phenomenon.ID 
+	INNER JOIN Offering ON Offering.ID = PhenomenonOffering.OfferingID 
+ORDER BY 
+  Site.Name, Station.Name, Instrument.Name, Sensor, Phenomenon, Offering
+--< Added 2.0.17 20161128 TimPN
 

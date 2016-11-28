@@ -57,89 +57,41 @@ namespace SAEON.Observations.Data{
                 schema.SchemaName = @"dbo";
                 //columns
                 
-                TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
-                colvarId.ColumnName = "ID";
-                colvarId.DataType = DbType.Guid;
-                colvarId.MaxLength = 0;
-                colvarId.AutoIncrement = false;
-                colvarId.IsNullable = true;
-                colvarId.IsPrimaryKey = false;
-                colvarId.IsForeignKey = false;
-                colvarId.IsReadOnly = false;
+                TableSchema.TableColumn colvarSiteID = new TableSchema.TableColumn(schema);
+                colvarSiteID.ColumnName = "SiteID";
+                colvarSiteID.DataType = DbType.Guid;
+                colvarSiteID.MaxLength = 0;
+                colvarSiteID.AutoIncrement = false;
+                colvarSiteID.IsNullable = false;
+                colvarSiteID.IsPrimaryKey = false;
+                colvarSiteID.IsForeignKey = false;
+                colvarSiteID.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarId);
+                schema.Columns.Add(colvarSiteID);
                 
-                TableSchema.TableColumn colvarOrganisationID = new TableSchema.TableColumn(schema);
-                colvarOrganisationID.ColumnName = "OrganisationID";
-                colvarOrganisationID.DataType = DbType.Guid;
-                colvarOrganisationID.MaxLength = 0;
-                colvarOrganisationID.AutoIncrement = false;
-                colvarOrganisationID.IsNullable = false;
-                colvarOrganisationID.IsPrimaryKey = false;
-                colvarOrganisationID.IsForeignKey = false;
-                colvarOrganisationID.IsReadOnly = false;
+                TableSchema.TableColumn colvarSiteName = new TableSchema.TableColumn(schema);
+                colvarSiteName.ColumnName = "SiteName";
+                colvarSiteName.DataType = DbType.AnsiString;
+                colvarSiteName.MaxLength = 150;
+                colvarSiteName.AutoIncrement = false;
+                colvarSiteName.IsNullable = false;
+                colvarSiteName.IsPrimaryKey = false;
+                colvarSiteName.IsForeignKey = false;
+                colvarSiteName.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarOrganisationID);
+                schema.Columns.Add(colvarSiteName);
                 
-                TableSchema.TableColumn colvarOrganisation = new TableSchema.TableColumn(schema);
-                colvarOrganisation.ColumnName = "Organisation";
-                colvarOrganisation.DataType = DbType.AnsiString;
-                colvarOrganisation.MaxLength = 150;
-                colvarOrganisation.AutoIncrement = false;
-                colvarOrganisation.IsNullable = false;
-                colvarOrganisation.IsPrimaryKey = false;
-                colvarOrganisation.IsForeignKey = false;
-                colvarOrganisation.IsReadOnly = false;
+                TableSchema.TableColumn colvarSiteDesc = new TableSchema.TableColumn(schema);
+                colvarSiteDesc.ColumnName = "SiteDesc";
+                colvarSiteDesc.DataType = DbType.AnsiString;
+                colvarSiteDesc.MaxLength = 5000;
+                colvarSiteDesc.AutoIncrement = false;
+                colvarSiteDesc.IsNullable = true;
+                colvarSiteDesc.IsPrimaryKey = false;
+                colvarSiteDesc.IsForeignKey = false;
+                colvarSiteDesc.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarOrganisation);
-                
-                TableSchema.TableColumn colvarOrganisationDesc = new TableSchema.TableColumn(schema);
-                colvarOrganisationDesc.ColumnName = "OrganisationDesc";
-                colvarOrganisationDesc.DataType = DbType.AnsiString;
-                colvarOrganisationDesc.MaxLength = 5000;
-                colvarOrganisationDesc.AutoIncrement = false;
-                colvarOrganisationDesc.IsNullable = true;
-                colvarOrganisationDesc.IsPrimaryKey = false;
-                colvarOrganisationDesc.IsForeignKey = false;
-                colvarOrganisationDesc.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarOrganisationDesc);
-                
-                TableSchema.TableColumn colvarProjectSiteID = new TableSchema.TableColumn(schema);
-                colvarProjectSiteID.ColumnName = "ProjectSiteID";
-                colvarProjectSiteID.DataType = DbType.Guid;
-                colvarProjectSiteID.MaxLength = 0;
-                colvarProjectSiteID.AutoIncrement = false;
-                colvarProjectSiteID.IsNullable = false;
-                colvarProjectSiteID.IsPrimaryKey = false;
-                colvarProjectSiteID.IsForeignKey = false;
-                colvarProjectSiteID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarProjectSiteID);
-                
-                TableSchema.TableColumn colvarProjectSite = new TableSchema.TableColumn(schema);
-                colvarProjectSite.ColumnName = "ProjectSite";
-                colvarProjectSite.DataType = DbType.AnsiString;
-                colvarProjectSite.MaxLength = 150;
-                colvarProjectSite.AutoIncrement = false;
-                colvarProjectSite.IsNullable = false;
-                colvarProjectSite.IsPrimaryKey = false;
-                colvarProjectSite.IsForeignKey = false;
-                colvarProjectSite.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarProjectSite);
-                
-                TableSchema.TableColumn colvarProjectSiteDesc = new TableSchema.TableColumn(schema);
-                colvarProjectSiteDesc.ColumnName = "ProjectSiteDesc";
-                colvarProjectSiteDesc.DataType = DbType.AnsiString;
-                colvarProjectSiteDesc.MaxLength = 5000;
-                colvarProjectSiteDesc.AutoIncrement = false;
-                colvarProjectSiteDesc.IsNullable = false;
-                colvarProjectSiteDesc.IsPrimaryKey = false;
-                colvarProjectSiteDesc.IsForeignKey = false;
-                colvarProjectSiteDesc.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarProjectSiteDesc);
+                schema.Columns.Add(colvarSiteDesc);
                 
                 TableSchema.TableColumn colvarStationID = new TableSchema.TableColumn(schema);
                 colvarStationID.ColumnName = "StationID";
@@ -153,17 +105,17 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarStationID);
                 
-                TableSchema.TableColumn colvarStation = new TableSchema.TableColumn(schema);
-                colvarStation.ColumnName = "Station";
-                colvarStation.DataType = DbType.AnsiString;
-                colvarStation.MaxLength = 150;
-                colvarStation.AutoIncrement = false;
-                colvarStation.IsNullable = false;
-                colvarStation.IsPrimaryKey = false;
-                colvarStation.IsForeignKey = false;
-                colvarStation.IsReadOnly = false;
+                TableSchema.TableColumn colvarStationName = new TableSchema.TableColumn(schema);
+                colvarStationName.ColumnName = "StationName";
+                colvarStationName.DataType = DbType.AnsiString;
+                colvarStationName.MaxLength = 150;
+                colvarStationName.AutoIncrement = false;
+                colvarStationName.IsNullable = false;
+                colvarStationName.IsPrimaryKey = false;
+                colvarStationName.IsForeignKey = false;
+                colvarStationName.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarStation);
+                schema.Columns.Add(colvarStationName);
                 
                 TableSchema.TableColumn colvarStationDesc = new TableSchema.TableColumn(schema);
                 colvarStationDesc.ColumnName = "StationDesc";
@@ -176,6 +128,42 @@ namespace SAEON.Observations.Data{
                 colvarStationDesc.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarStationDesc);
+                
+                TableSchema.TableColumn colvarInstrumentID = new TableSchema.TableColumn(schema);
+                colvarInstrumentID.ColumnName = "InstrumentID";
+                colvarInstrumentID.DataType = DbType.Guid;
+                colvarInstrumentID.MaxLength = 0;
+                colvarInstrumentID.AutoIncrement = false;
+                colvarInstrumentID.IsNullable = false;
+                colvarInstrumentID.IsPrimaryKey = false;
+                colvarInstrumentID.IsForeignKey = false;
+                colvarInstrumentID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarInstrumentID);
+                
+                TableSchema.TableColumn colvarInstrumentName = new TableSchema.TableColumn(schema);
+                colvarInstrumentName.ColumnName = "InstrumentName";
+                colvarInstrumentName.DataType = DbType.AnsiString;
+                colvarInstrumentName.MaxLength = 150;
+                colvarInstrumentName.AutoIncrement = false;
+                colvarInstrumentName.IsNullable = false;
+                colvarInstrumentName.IsPrimaryKey = false;
+                colvarInstrumentName.IsForeignKey = false;
+                colvarInstrumentName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarInstrumentName);
+                
+                TableSchema.TableColumn colvarInstrumentDesc = new TableSchema.TableColumn(schema);
+                colvarInstrumentDesc.ColumnName = "InstrumentDesc";
+                colvarInstrumentDesc.DataType = DbType.AnsiString;
+                colvarInstrumentDesc.MaxLength = 5000;
+                colvarInstrumentDesc.AutoIncrement = false;
+                colvarInstrumentDesc.IsNullable = true;
+                colvarInstrumentDesc.IsPrimaryKey = false;
+                colvarInstrumentDesc.IsForeignKey = false;
+                colvarInstrumentDesc.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarInstrumentDesc);
                 
                 TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
                 colvarSensorID.ColumnName = "SensorID";
@@ -335,101 +323,45 @@ namespace SAEON.Observations.Data{
 	    #region Props
 	    
           
-        [XmlAttribute("Id")]
+        [XmlAttribute("SiteID")]
         [Bindable(true)]
-        public Guid? Id 
+        public Guid SiteID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid?>("ID");
+			    return GetColumnValue<Guid>("SiteID");
 		    }
             set 
 		    {
-			    SetColumnValue("ID", value);
+			    SetColumnValue("SiteID", value);
             }
         }
 	      
-        [XmlAttribute("OrganisationID")]
+        [XmlAttribute("SiteName")]
         [Bindable(true)]
-        public Guid OrganisationID 
+        public string SiteName 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid>("OrganisationID");
+			    return GetColumnValue<string>("SiteName");
 		    }
             set 
 		    {
-			    SetColumnValue("OrganisationID", value);
+			    SetColumnValue("SiteName", value);
             }
         }
 	      
-        [XmlAttribute("Organisation")]
+        [XmlAttribute("SiteDesc")]
         [Bindable(true)]
-        public string Organisation 
+        public string SiteDesc 
 	    {
 		    get
 		    {
-			    return GetColumnValue<string>("Organisation");
+			    return GetColumnValue<string>("SiteDesc");
 		    }
             set 
 		    {
-			    SetColumnValue("Organisation", value);
-            }
-        }
-	      
-        [XmlAttribute("OrganisationDesc")]
-        [Bindable(true)]
-        public string OrganisationDesc 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("OrganisationDesc");
-		    }
-            set 
-		    {
-			    SetColumnValue("OrganisationDesc", value);
-            }
-        }
-	      
-        [XmlAttribute("ProjectSiteID")]
-        [Bindable(true)]
-        public Guid ProjectSiteID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("ProjectSiteID");
-		    }
-            set 
-		    {
-			    SetColumnValue("ProjectSiteID", value);
-            }
-        }
-	      
-        [XmlAttribute("ProjectSite")]
-        [Bindable(true)]
-        public string ProjectSite 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("ProjectSite");
-		    }
-            set 
-		    {
-			    SetColumnValue("ProjectSite", value);
-            }
-        }
-	      
-        [XmlAttribute("ProjectSiteDesc")]
-        [Bindable(true)]
-        public string ProjectSiteDesc 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("ProjectSiteDesc");
-		    }
-            set 
-		    {
-			    SetColumnValue("ProjectSiteDesc", value);
+			    SetColumnValue("SiteDesc", value);
             }
         }
 	      
@@ -447,17 +379,17 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("Station")]
+        [XmlAttribute("StationName")]
         [Bindable(true)]
-        public string Station 
+        public string StationName 
 	    {
 		    get
 		    {
-			    return GetColumnValue<string>("Station");
+			    return GetColumnValue<string>("StationName");
 		    }
             set 
 		    {
-			    SetColumnValue("Station", value);
+			    SetColumnValue("StationName", value);
             }
         }
 	      
@@ -472,6 +404,48 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("StationDesc", value);
+            }
+        }
+	      
+        [XmlAttribute("InstrumentID")]
+        [Bindable(true)]
+        public Guid InstrumentID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("InstrumentID");
+		    }
+            set 
+		    {
+			    SetColumnValue("InstrumentID", value);
+            }
+        }
+	      
+        [XmlAttribute("InstrumentName")]
+        [Bindable(true)]
+        public string InstrumentName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("InstrumentName");
+		    }
+            set 
+		    {
+			    SetColumnValue("InstrumentName", value);
+            }
+        }
+	      
+        [XmlAttribute("InstrumentDesc")]
+        [Bindable(true)]
+        public string InstrumentDesc 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("InstrumentDesc");
+		    }
+            set 
+		    {
+			    SetColumnValue("InstrumentDesc", value);
             }
         }
 	      
@@ -608,25 +582,23 @@ namespace SAEON.Observations.Data{
 	    {
 		    
 		    
-            public static string Id = @"ID";
+            public static string SiteID = @"SiteID";
             
-            public static string OrganisationID = @"OrganisationID";
+            public static string SiteName = @"SiteName";
             
-            public static string Organisation = @"Organisation";
-            
-            public static string OrganisationDesc = @"OrganisationDesc";
-            
-            public static string ProjectSiteID = @"ProjectSiteID";
-            
-            public static string ProjectSite = @"ProjectSite";
-            
-            public static string ProjectSiteDesc = @"ProjectSiteDesc";
+            public static string SiteDesc = @"SiteDesc";
             
             public static string StationID = @"StationID";
             
-            public static string Station = @"Station";
+            public static string StationName = @"StationName";
             
             public static string StationDesc = @"StationDesc";
+            
+            public static string InstrumentID = @"InstrumentID";
+            
+            public static string InstrumentName = @"InstrumentName";
+            
+            public static string InstrumentDesc = @"InstrumentDesc";
             
             public static string SensorID = @"SensorID";
             

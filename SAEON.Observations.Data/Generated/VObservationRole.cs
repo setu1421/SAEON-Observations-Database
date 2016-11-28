@@ -441,6 +441,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarOrganisationName);
                 
+                TableSchema.TableColumn colvarRoleUserId = new TableSchema.TableColumn(schema);
+                colvarRoleUserId.ColumnName = "RoleUserId";
+                colvarRoleUserId.DataType = DbType.Guid;
+                colvarRoleUserId.MaxLength = 0;
+                colvarRoleUserId.AutoIncrement = false;
+                colvarRoleUserId.IsNullable = false;
+                colvarRoleUserId.IsPrimaryKey = false;
+                colvarRoleUserId.IsForeignKey = false;
+                colvarRoleUserId.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarRoleUserId);
+                
                 
                 BaseSchema = schema;
                 //add this schema to the provider
@@ -938,6 +950,20 @@ namespace SAEON.Observations.Data{
 			    SetColumnValue("OrganisationName", value);
             }
         }
+	      
+        [XmlAttribute("RoleUserId")]
+        [Bindable(true)]
+        public Guid RoleUserId 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("RoleUserId");
+		    }
+            set 
+		    {
+			    SetColumnValue("RoleUserId", value);
+            }
+        }
 	    
 	    #endregion
     
@@ -1009,6 +1035,8 @@ namespace SAEON.Observations.Data{
             public static string OrganisationID = @"OrganisationID";
             
             public static string OrganisationName = @"OrganisationName";
+            
+            public static string RoleUserId = @"RoleUserId";
             
 	    }
 	    #endregion

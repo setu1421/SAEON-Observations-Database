@@ -8,11 +8,18 @@ SELECT
 d.ID, 
 d.ImportDate,
 
-org.Name Organisation,
-ps.[Description] ProjectSite,
-st.Name StationName,
+--> Added 2.0.17 20161128 TimPN
+Site.Name SiteName,
+Station.Name StationName,
+Instrument.Name InstrumentName,
+--< Added 2.0.17 20161128 TimPN
+--> Removed 2.0.17 20161128 TimPN
+--org.Name Organisation,
+--ps.[Description] ProjectSite,
+--st.Name StationName,
+--< Removed 2.0.17 20161128 TimPN
 d.SensorID,
-sp.Name SensorName,
+Sensor.Name SensorName,
 CASE 
     WHEN d.SensorID is null then 1
     ELSE 0
@@ -82,14 +89,30 @@ d.RawFieldValue,
 d.Comment
 
 FROM DataLog d
-LEFT JOIN Sensor sp
-    on d.SensorID = sp.ID
-LEFT JOIN Station st
-    on sp.StationID = st.ID
-LEFT JOIN ProjectSite ps
-    on st.ProjectSiteID = ps.ID
-LEFT JOIN Organisation org
-    on ps.OrganisationID = org.ID
+--> Removed 2.0.17 20161128 TimPN
+--LEFT JOIN Sensor sp
+--    on d.SensorID = sp.ID
+--LEFT JOIN Station st
+--    on sp.StationID = st.ID
+--LEFT JOIN ProjectSite ps
+--    on st.ProjectSiteID = ps.ID
+--LEFT JOIN Organisation org
+--    on ps.OrganisationID = org.ID
+--< Removed 2.0.17 20161128 TimPN
+--> Added 2.0.17 20161128 TimPN
+  inner join Sensor 
+    on (d.SensorID = Sensor.ID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID)
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID)
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID)
+  inner join Station 
+    on (Station_Instrument.StationID = Station.ID)
+  inner join Site
+    on (Station.SiteID = Site.ID)
+--< Added 2.0.17 20161128 TimPN
 LEFT JOIN PhenomenonOffering po
  ON d.PhenomenonOfferingID = po.ID
 LEFT JOIN Phenomenon p

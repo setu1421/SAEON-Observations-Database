@@ -81,6 +81,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarStation);
                 
+                TableSchema.TableColumn colvarInstrument = new TableSchema.TableColumn(schema);
+                colvarInstrument.ColumnName = "Instrument";
+                colvarInstrument.DataType = DbType.AnsiString;
+                colvarInstrument.MaxLength = 150;
+                colvarInstrument.AutoIncrement = false;
+                colvarInstrument.IsNullable = false;
+                colvarInstrument.IsPrimaryKey = false;
+                colvarInstrument.IsForeignKey = false;
+                colvarInstrument.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarInstrument);
+                
                 TableSchema.TableColumn colvarSensor = new TableSchema.TableColumn(schema);
                 colvarSensor.ColumnName = "Sensor";
                 colvarSensor.DataType = DbType.AnsiString;
@@ -207,6 +219,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("Instrument")]
+        [Bindable(true)]
+        public string Instrument 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Instrument");
+		    }
+            set 
+		    {
+			    SetColumnValue("Instrument", value);
+            }
+        }
+	      
         [XmlAttribute("Sensor")]
         [Bindable(true)]
         public string Sensor 
@@ -273,6 +299,8 @@ namespace SAEON.Observations.Data{
             public static string Site = @"Site";
             
             public static string Station = @"Station";
+            
+            public static string Instrument = @"Instrument";
             
             public static string Sensor = @"Sensor";
             
