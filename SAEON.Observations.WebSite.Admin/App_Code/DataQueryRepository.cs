@@ -34,7 +34,7 @@ public class DataQueryRepository:BaseRepository
 			.Where(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
 
         GetPagedQuery(ref q, e, paramPrefix);
-        Log.Information("GetPagedList SQL: {sql}", q.BuildSqlStatement());
+        Log.Verbose("GetPagedList SQL: {sql}", q.BuildSqlStatement());
         VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
 
         return col.ToList<object>();
@@ -62,7 +62,7 @@ public class DataQueryRepository:BaseRepository
 		//    q.Or(VObservation.Columns.PhenomenonOfferingID).In(offerings);
 
         GetPagedQuery(ref q, e, paramPrefix);
-        Log.Information("GetPagedFilteredList SQL: {sql}", q.BuildSqlStatement());
+        Log.Verbose("GetPagedFilteredList SQL: {sql}", q.BuildSqlStatement());
         VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
 
         return col.ToList<object>();
@@ -172,7 +172,7 @@ public class DataQueryRepository:BaseRepository
 		storeRefreshDataEventArgs.Total = total;
 
 		int currenPage = storeRefreshDataEventArgs.Start / storeRefreshDataEventArgs.Limit + 1;
-        Log.Information("CurrentPage: {currentPage} Start: {Start} Limit: {Limit} Total: {total}", currenPage, storeRefreshDataEventArgs.Start, storeRefreshDataEventArgs.Limit, total);
+        Log.Verbose("CurrentPage: {currentPage} Start: {Start} Limit: {Limit} Total: {total}", currenPage, storeRefreshDataEventArgs.Start, storeRefreshDataEventArgs.Limit, total);
 		if (storeRefreshDataEventArgs.Limit > total)
 			q.Paged(currenPage, total);
 		else

@@ -159,79 +159,91 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-
-        DataSource ds = new DataSource();
-
-        if (String.IsNullOrEmpty(tfID.Text))
-            ds.Id = Guid.NewGuid();
-        else
-            ds = new DataSource(tfID.Text.Trim());
-
-        ds.Code = tfCode.Text.Trim();
-        ds.Name = tfName.Text.Trim();
-        ds.Description = tfDescription.Text.Trim();
-        ds.Url = tfUrl.Text;
-        //ds.DataSourceTypeID = new Guid(cbDataSourceType.SelectedItem.Value);
-        //ds.DefaultNullValue = Int64.Parse(nfDefaultValue.Value.ToString());
-
-        ds.UpdateFreq = int.Parse(cbUpdateFrequency.SelectedItem.Value);
-
-        if (cbDataSchema.SelectedItem.Value != null)
+        try
         {
-            //test if dataschema is valid (linked to test in datasource files)
-            bool isValid = true;
-            string sensorName = "";
+            DataSource ds = new DataSource();
 
-            SensorCollection spCol = new SensorCollection()
-                .Where(Sensor.Columns.DataSourceID, ds.Id)
-                .Load();
+            if (String.IsNullOrEmpty(tfID.Text))
+                ds.Id = Guid.NewGuid();
+            else
+                ds = new DataSource(tfID.Text.Trim());
 
-            foreach (Sensor sp in spCol)
+            ds.Code = tfCode.Text.Trim();
+            ds.Name = tfName.Text.Trim();
+            ds.Description = tfDescription.Text.Trim();
+            ds.Url = tfUrl.Text;
+            //ds.DataSourceTypeID = new Guid(cbDataSourceType.SelectedItem.Value);
+            //ds.DefaultNullValue = Int64.Parse(nfDefaultValue.Value.ToString());
+
+            ds.UpdateFreq = int.Parse(cbUpdateFrequency.SelectedItem.Value);
+
+            if (cbDataSchema.SelectedItem.Value == null)
+                ds.DataSchemaID = null;
+            else
             {
-                if (sp.DataSchemaID != null)
+                SensorCollection col = new Select().From(Sensor.Schema)
+                    .Where(Sensor.Columns.DataSourceID).IsEqualTo(ds.Id)
+                    .And(Sensor.Columns.DataSchemaID).IsNotNull()
+                    .ExecuteAsCollection<SensorCollection>();
+
+                if (!col.Any())
                 {
-                    isValid = false;
-                    sensorName = sp.Name;
+                    ds.DataSchemaID = Guid.Parse(cbDataSchema.SelectedItem.Value);
+                }
+                else
+                {
+                    Log.Verbose($"DirectCall.DeleteSensorSchemas(\"{ds.Id.ToString()}\",{{ eventMask: {{ showMask: true}}}});");
+                    MessageBoxes.Confirm("Confirm",
+                        $"DirectCall.DeleteSensorSchemas(\"{ds.Id.ToString()}\",{{ eventMask: {{ showMask: true}}}});",
+                        $"This data source can't have a data schema because sensor{(col.Count > 1 ? "s" : "")} {string.Join(", ", col)} are already linked to a data schema. Clear the schema from these sensor{(col.Count > 1 ? "s" : "")}?");
+                    return;
                 }
             }
 
-            //
-            if (isValid)
-            {
-                ds.DataSchemaID = Guid.Parse(cbDataSchema.SelectedItem.Value);
-            }
-            else
-            {
-                X.Msg.Show(new MessageBoxConfig
-                {
-                    Title = "Invalid Data Source",
-                    //Message = "The selected data schema is already linked to a sensor that is linked to this data source.",
-                    Message = "This data source cant have a data schema because one of the sensors linked to it (" + sensorName + ") is already linked to a data schema",
-                    Buttons = MessageBox.Button.OK,
-                    Icon = MessageBox.Icon.ERROR
-                });
 
-                return;
+            if (!String.IsNullOrEmpty(StartDate.Text))
+                ds.StartDate = StartDate.SelectedDate;
+            if (StartDate.SelectedDate.Date.Year < 1900)
+            {
+                ds.StartDate = null;
             }
+
+            ds.UserId = AuthHelper.GetLoggedInUserId;
+
+            ds.Save();
+            Auditing.Log("DataSources.Save", new Dictionary<string, object> {
+                { "ID", ds.Id }, { "Code", ds.Code }, { "Name", ds.Name } });
+            DataSourcesGrid.DataBind();
+
+            DetailWindow.Hide();
         }
-        else
-            ds.DataSchemaID = null;
-
-
-        if (!String.IsNullOrEmpty(StartDate.Text))
-            ds.StartDate = StartDate.SelectedDate;
-        if (StartDate.SelectedDate.Date.Year < 1900)
+        catch (Exception ex)
         {
-            ds.StartDate = null;
+            Log.Error(ex, "Unable to save data source");
+            throw;
         }
+    }
 
-        ds.UserId = AuthHelper.GetLoggedInUserId;
-
-        ds.Save();
-
-        DataSourcesGrid.DataBind();
-
-        DetailWindow.Hide();
+    [DirectMethod]
+    public void DeleteSensorSchemas(Guid aId)
+    {
+        try
+        {
+            SensorCollection col = new Select().From(Sensor.Schema)
+                .Where(Sensor.Columns.DataSourceID).IsEqualTo(aId)
+                .And(Sensor.Columns.DataSchemaID).IsNotNull()
+                .ExecuteAsCollection<SensorCollection>();
+            foreach (var sensor in col)
+            {
+                sensor.DataSchemaID = null;
+                sensor.Save();
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Unable to delete sensor schemas");
+            throw;
+        }
     }
 
     protected void DataSourcesGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
@@ -309,7 +321,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     {
         MessageBoxes.Confirm(
             "Confirm Delete",
-            String.Format("DirectCall.DeleteInstrumentLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            $"DirectCall.DeleteInstrumentLink(\"{aID.ToString()}\",{{ eventMask: {{ showMask: true}}}});",
             "Are you sure you want to delete this instrument link?");
     }
 

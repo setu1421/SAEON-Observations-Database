@@ -257,6 +257,7 @@
                                                         <Fields>
                                                             <ext:RecordField Name="Id" Type="Auto" />
                                                             <ext:RecordField Name="SensorName" Type="Auto" />
+                                                            <ext:RecordField Name="PhenomenonName" Type="Auto" />
                                                             <ext:RecordField Name="OfferingName" Type="Auto" />
                                                             <ext:RecordField Name="UnitOfMeasureUnit" Type="Auto" />
                                                             <ext:RecordField Name="ValueDate" Type="Date" />
@@ -265,6 +266,7 @@
                                                             <ext:RecordField Name="StatusName" Type="Auto" />
                                                             <ext:RecordField Name="StatusReasonName" Type="Auto" />
                                                             <ext:RecordField Name="Comment" Type="Auto" />
+                                                            <ext:RecordField Name="CorrelationID" Type="Auto" />
                                                         </Fields>
                                                     </ext:JsonReader>
                                                 </Reader>
@@ -281,7 +283,8 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel4" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Sensor" DataIndex="SensorName" Width="150" />
+                                                <ext:Column Header="Sensor" DataIndex="SensorName" Width="250" />
+                                                <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
                                                 <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
@@ -289,6 +292,7 @@
                                                 <ext:Column Header="Data value" DataIndex="DataValue" Width="100" />
                                                 <ext:Column Header="Status" DataIndex="StatusName" Width="150" />
                                                 <ext:Column Header="Reason" DataIndex="StatusReasonName" Width="150" />
+                                                <ext:Column Header="Correlation ID" DataIndex="CorrelationID" Width="150" />
                                                 <ext:Column Header="Comment" DataIndex="Comment" Width="400" />
                                                 <%--                                                <ext:CommandColumn Width="200">
                                                     <Commands>

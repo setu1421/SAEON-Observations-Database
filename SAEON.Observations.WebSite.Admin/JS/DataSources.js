@@ -43,7 +43,7 @@ function handlechange(e)
 function NewTransform()
 {
 
-	if (DataSourceGrid.getSelectionModel().hasSelection())
+	if (DataSourcesGrid.getSelectionModel().hasSelection())
 	{
 		TransformationDetailPanel.getForm().reset();
 

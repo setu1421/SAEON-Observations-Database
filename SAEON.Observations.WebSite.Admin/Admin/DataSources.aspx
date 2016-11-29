@@ -307,7 +307,7 @@
                                                 <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
                                                 <ext:Column Header="Transformation" DataIndex="TransformationName" Width="150" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
-                                                <ext:Column Header="UOM" DataIndex="UnitofMeasure" Width="150" />
+                                                <ext:Column Header="Unit of Measure" DataIndex="UnitofMeasure" Width="150" />
                                                 <ext:DateColumn Header="Effective Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="150" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="75">

@@ -300,7 +300,7 @@ public class ImportSchemaHelper : IDisposable
     {
         using (LogContext.PushProperty("Method", "ProcessSchema"))
         {
-            Log.Information("Version 1.6");
+            Log.Information("Version 1.7");
             try
             {
                 BuildSchemaDefinition();
@@ -373,6 +373,7 @@ public class ImportSchemaHelper : IDisposable
         {
             try
             {
+                Log.Verbose(dr.Dump());
                 DateTime dttme = DateTime.MinValue,
                 dt = DateTime.MinValue,
                 tm = DateTime.MinValue;
@@ -590,6 +591,8 @@ public class ImportSchemaHelper : IDisposable
                         process = false;
                 }
 
+                if (!rec.RawValue.HasValue) process = false;
+
                 if (!process)
                 {
                     rec.DataValue = rec.RawValue;
@@ -610,10 +613,12 @@ public class ImportSchemaHelper : IDisposable
                         DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
                         if (dst.NewPhenomenonOfferingID != null)
                         {
+                            rec.RawPhenomenonOfferingID = rec.PhenomenonOfferingID;
                             rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
                         }
                         if (dst.NewPhenomenonUOMID != null)
                         {
+                            rec.RawPhenomenonUOMID = rec.PhenomenonUOMID;
                             rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
                         }
                     }
@@ -623,8 +628,16 @@ public class ImportSchemaHelper : IDisposable
 
                     rec.DataValue = trns.GetRatingValue(rec.RawValue.Value);
                     DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
-                    if (dst.NewPhenomenonOfferingID != null) rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
-                    if (dst.NewPhenomenonUOMID != null) rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
+                    if (dst.NewPhenomenonOfferingID != null)
+                    {
+                        rec.RawPhenomenonOfferingID = rec.PhenomenonOfferingID;
+                        rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
+                    }
+                    if (dst.NewPhenomenonUOMID != null)
+                    {
+                        rec.RawPhenomenonUOMID = rec.PhenomenonUOMID;
+                        rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
+                    }
                 }
                 else if (trns.TransformationTypeID.ToString() == TransformationType.QualityControlValues)
                 {

@@ -203,8 +203,8 @@
                         </Items>
                     </ext:Panel>
                 </Center>
-                <South Collapsible="true" Split="true" MinHeight="250">
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
+                <South Collapsible="true" Split="true" MinHeight="400">
+                    <ext:TabPanel ID="pnlSouth" runat="server" Height="400" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
                             <ext:Panel ID="pnlSchemaColumns" runat="server" Title="Columns" Layout="FitLayout"
                                 Height="200" ClientIDMode="Static">
@@ -294,6 +294,9 @@
                                             </ext:RowSelectionModel>
                                         </SelectionModel>
                                         <LoadMask ShowMask="true" />
+                                        <BottomBar>
+                                            <ext:PagingToolbar ID="PagingToolbar3" runat="server" PageSize="25" EmptyMsg="No data found" />
+                                        </BottomBar>
                                         <Listeners>
                                             <Command Fn="OnSchemaColumnCommand" />
                                         </Listeners>
@@ -370,6 +373,9 @@
                                             </ext:RowSelectionModel>
                                         </SelectionModel>
                                         <LoadMask ShowMask="true" />
+                                        <BottomBar>
+                                            <ext:PagingToolbar ID="PagingToolbar2" runat="server" PageSize="25" EmptyMsg="No data found" />
+                                        </BottomBar>
                                         <Listeners>
                                             <Command Fn="OnDataSourceCommand" />
                                         </Listeners>
