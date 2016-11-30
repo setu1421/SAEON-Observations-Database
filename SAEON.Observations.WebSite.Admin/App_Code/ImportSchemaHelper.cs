@@ -556,7 +556,8 @@ public class ImportSchemaHelper : IDisposable
                         if (RowComment.Trim().Length > 0)
                             rec.Comment = RowComment.TrimEnd();
                         rec.CorrelationID = correlationID;
-                        SchemaValues.Add(rec);
+                        if (rec.DataValue.HasValue)
+                            SchemaValues.Add(rec);
                     }
                 }
             }

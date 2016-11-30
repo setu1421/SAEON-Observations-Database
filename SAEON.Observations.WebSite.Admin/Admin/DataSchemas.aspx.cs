@@ -477,6 +477,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     public void cbSchemaColumnTypeSelect(object sender, DirectEventArgs e)
     {
         SetFields();
+        cbSchemaColumnType.MarkAsValid();
     }
 
     [DirectMethod]

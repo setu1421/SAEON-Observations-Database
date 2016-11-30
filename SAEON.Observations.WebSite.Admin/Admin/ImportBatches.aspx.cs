@@ -606,7 +606,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         using (LogContext.PushProperty("Method", "DeleteBatch"))
             try
             {
-                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 5, 0)))
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
                 {
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
