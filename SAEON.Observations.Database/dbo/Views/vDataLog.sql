@@ -113,15 +113,15 @@ FROM DataLog d
   inner join Station_Instrument
     on (Station_Instrument.InstrumentID = Instrument.ID) and
 	   ((Station_Instrument.StartDate is null) or (d.ValueDate >= Station_Instrument.StartDate)) and
-	   ((Station_Instrument.EndDate is null) or (d.ValueDate >= Station_Instrument.EndDate))
+	   ((Station_Instrument.EndDate is null) or (d.ValueDate <= Station_Instrument.EndDate))
   inner join Station 
     on (Station_Instrument.StationID = Station.ID) and
 	   ((Station.StartDate is null) or (Cast(d.ValueDate as Date) >= Cast(Station.StartDate as Date))) and
-	   ((Station.EndDate is null) or (Cast(d.ValueDate as Date) >= Cast(Station.EndDate as Date)))
+	   ((Station.EndDate is null) or (Cast(d.ValueDate as Date) <= Cast(Station.EndDate as Date)))
   inner join Site
     on (Station.SiteID = Site.ID) and
 	   ((Site.StartDate is null) or  (Cast(d.ValueDate as Date) >= Cast(Site.StartDate as Date))) and
-	   ((Site.EndDate is null) or  (Cast(d.ValueDate as Date) >= Cast(Site.EndDate as Date)))
+	   ((Site.EndDate is null) or  (Cast(d.ValueDate as Date) <= Cast(Site.EndDate as Date)))
 --< Added 2.0.17 20161128 TimPN
 LEFT JOIN PhenomenonOffering po
  ON d.PhenomenonOfferingID = po.ID
