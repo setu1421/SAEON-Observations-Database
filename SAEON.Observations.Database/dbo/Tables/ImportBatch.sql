@@ -1,7 +1,10 @@
 ﻿CREATE TABLE [dbo].[ImportBatch] (
 --> Changed 2.0.8 20160720 TimPN
 --    [ID]           INT              IDENTITY (1, 1) NOT NULL,
-    [ID]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_ImportBatch_ID] DEFAULT newid(),
+--> Changed 2.0.18 20161130 TimPN
+--    [ID]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_ImportBatch_ID] DEFAULT newid(),
+    [ID]         UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL CONSTRAINT [DF_ImportBatch_ID] DEFAULT newid(),
+--< Changed 2.0.18 20161130 TimPN
 --< Changed 2.0.8 20160720 TimPN
 --> Removed 2.0.8 20160720 TimPN
 --> Changed 2.0.0 20160329 TimPN
@@ -29,6 +32,13 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_ImportBatch_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_ImportBatch_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160715 TimPN
+--> Added 2.0.18 20161130 TimPN
+	[SourceFile] VARBINARY(MAX) FILESTREAM NULL, 
+	[Pass1File] VARBINARY(MAX) FILESTREAM NULL, 
+	[Pass2File] VARBINARY(MAX) FILESTREAM NULL, 
+	[Pass3File] VARBINARY(MAX) FILESTREAM NULL, 
+	[Pass4File] VARBINARY(MAX) FILESTREAM NULL, 
+--< Added 2.0.18 20161130 TimPN
 --> Changed 2.0.8 20160715 TimPN
 --    CONSTRAINT [PK_ImportBatch] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [PK_ImportBatch] PRIMARY KEY NONCLUSTERED ([ID]),

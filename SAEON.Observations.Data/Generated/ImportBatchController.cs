@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,DateTime? AddedAt,DateTime? UpdatedAt,byte[] SourceFile,byte[] Pass1File,byte[] Pass2File,byte[] Pass3File,byte[] Pass4File)
 	    {
 		    ImportBatch item = new ImportBatch();
 		    
@@ -108,6 +108,16 @@ namespace SAEON.Observations.Data
             
             item.UpdatedAt = UpdatedAt;
             
+            item.SourceFile = SourceFile;
+            
+            item.Pass1File = Pass1File;
+            
+            item.Pass2File = Pass2File;
+            
+            item.Pass3File = Pass3File;
+            
+            item.Pass4File = Pass4File;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -116,7 +126,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,int Code,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,int Code,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,DateTime? AddedAt,DateTime? UpdatedAt,byte[] SourceFile,byte[] Pass1File,byte[] Pass2File,byte[] Pass3File,byte[] Pass4File)
 	    {
 		    ImportBatch item = new ImportBatch();
 	        item.MarkOld();
@@ -147,6 +157,16 @@ namespace SAEON.Observations.Data
 			item.AddedAt = AddedAt;
 				
 			item.UpdatedAt = UpdatedAt;
+				
+			item.SourceFile = SourceFile;
+				
+			item.Pass1File = Pass1File;
+				
+			item.Pass2File = Pass2File;
+				
+			item.Pass3File = Pass3File;
+				
+			item.Pass4File = Pass4File;
 				
 	        item.Save(UserName);
 	    }
