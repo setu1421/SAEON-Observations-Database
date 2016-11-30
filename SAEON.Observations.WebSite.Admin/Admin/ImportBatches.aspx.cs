@@ -20,12 +20,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         if (!X.IsAjaxRequest)
         {
             Store store = cbDataSource.GetStore();
-            SqlQuery q = new Select(DataSource.IdColumn).From(DataSource.Schema).Distinct()
-                            .InnerJoin(Sensor.DataSourceIDColumn, DataSource.IdColumn);
+            //SqlQuery q = new Select(DataSource.IdColumn).From(DataSource.Schema).Distinct()
+            //                .InnerJoin(Sensor.DataSourceIDColumn, DataSource.IdColumn);
             SqlQuery q1 = new Select(DataSourceRole.DataSourceIDColumn).From(DataSourceRole.Schema).Distinct()
                 .Where(DataSourceRole.RoleNameColumn).In(System.Web.Security.Roles.GetRolesForUser())
-                .And(DataSourceRole.IsRoleReadOnlyColumn).IsEqualTo(false)
-                .And(DataSourceRole.DataSourceIDColumn).In(q);
+                .And(DataSourceRole.IsRoleReadOnlyColumn).IsEqualTo(false);
+                //.And(DataSourceRole.DataSourceIDColumn).In(q);
             SqlQuery sourceQuery = new Select(DataSource.IdColumn, DataSource.NameColumn)
                         .From(DataSource.Schema).Where(DataSource.IdColumn).In(q1).OrderAsc(DataSource.NameColumn.QualifiedName);
             DataSet ds = sourceQuery.ExecuteDataSet();
