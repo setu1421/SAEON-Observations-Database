@@ -331,7 +331,7 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="355" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="450" Closable="true"
         Hidden="true" Collapsible="false" Title="Site Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>

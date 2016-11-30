@@ -29,16 +29,16 @@ SELECT Top (100) Percent
   Offering.ID OfferingID, Offering.Name Offering, Offering.Description OfferingDesc
 FROM
 	Sensor 
-	inner join Instrument_Sensor
-	  on (Instrument_Sensor.SensorID = Sensor.ID)
-	inner join Instrument
-	  on (Instrument_Sensor.InstrumentID = Instrument.ID)
-	inner join Station_Instrument
-	  on (Station_Instrument.InstrumentID = Instrument.ID)
-	inner join Station 
-	  on (Station_Instrument.StationID = Station.ID)
-	inner join Site
-	  on (Station.SiteID = Site.ID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) 
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID)
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID)
+  inner join Station 
+    on (Station_Instrument.StationID = Station.ID)
+  inner join Site
+    on (Station.SiteID = Site.ID)
 	INNER JOIN Phenomenon ON Phenomenon.ID = Sensor.PhenomenonID 
 	INNER JOIN PhenomenonOffering ON PhenomenonOffering.PhenomenonID = Phenomenon.ID 
 	INNER JOIN Offering ON Offering.ID = PhenomenonOffering.OfferingID 

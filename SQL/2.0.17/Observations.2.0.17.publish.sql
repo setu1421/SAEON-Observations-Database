@@ -192,15 +192,25 @@ FROM DataLog d
   inner join Sensor 
     on (d.SensorID = Sensor.ID)
   inner join Instrument_Sensor
-    on (Instrument_Sensor.SensorID = Sensor.ID)
+    on (Instrument_Sensor.SensorID = Sensor.ID) and
+	   ((Instrument_Sensor.StartDate is null) or (d.ValueDate >= Instrument_Sensor.StartDate)) and
+	   ((Instrument_Sensor.EndDate is null) or (d.ValueDate <= Instrument_Sensor.EndDate))
   inner join Instrument
-    on (Instrument_Sensor.InstrumentID = Instrument.ID)
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+	   ((Instrument.StartDate is null) or (d.ValueDate >= Instrument.StartDate )) and
+	   ((Instrument.EndDate is null) or (d.ValueDate <= Instrument.EndDate))
   inner join Station_Instrument
-    on (Station_Instrument.InstrumentID = Instrument.ID)
+    on (Station_Instrument.InstrumentID = Instrument.ID) and
+	   ((Station_Instrument.StartDate is null) or (d.ValueDate >= Station_Instrument.StartDate)) and
+	   ((Station_Instrument.EndDate is null) or (d.ValueDate >= Station_Instrument.EndDate))
   inner join Station 
-    on (Station_Instrument.StationID = Station.ID)
+    on (Station_Instrument.StationID = Station.ID) and
+	   ((Station.StartDate is null) or (Cast(d.ValueDate as Date) >= Cast(Station.StartDate as Date))) and
+	   ((Station.EndDate is null) or (Cast(d.ValueDate as Date) >= Cast(Station.EndDate as Date)))
   inner join Site
-    on (Station.SiteID = Site.ID)
+    on (Station.SiteID = Site.ID) and
+	   ((Site.StartDate is null) or  (Cast(d.ValueDate as Date) >= Cast(Site.StartDate as Date))) and
+	   ((Site.EndDate is null) or  (Cast(d.ValueDate as Date) >= Cast(Site.EndDate as Date)))
 --< Added 2.0.17 20161128 TimPN
 LEFT JOIN PhenomenonOffering po
  ON d.PhenomenonOfferingID = po.ID
@@ -336,26 +346,35 @@ Select
   d.EndDate
 from
   Sensor 
+  INNER JOIN 
+  (
+     SELECT SensorID,MIN(ValueDate) StartDate,MAX(ValueDate) EndDate
+     FROM Observation
+     Group By SensorID
+  ) d
+    ON (Sensor.ID = d.SensorID)
   inner join Instrument_Sensor
-	on (Instrument_Sensor.SensorID = Sensor.ID)
+    on (Instrument_Sensor.SensorID = Sensor.ID) and
+	   ((Instrument_Sensor.StartDate is null) or (d.StartDate >= Instrument_Sensor.StartDate)) and
+	   ((Instrument_Sensor.EndDate is null) or (d.EndDate <= Instrument_Sensor.EndDate))
   inner join Instrument
-	on (Instrument_Sensor.InstrumentID = Instrument.ID)
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+	   ((Instrument.StartDate is null) or (d.StartDate >= Instrument.StartDate )) and
+	   ((Instrument.EndDate is null) or (d.EndDate <= Instrument.EndDate))
   inner join Station_Instrument
-    on (Station_Instrument.InstrumentID = Instrument.ID)
+    on (Station_Instrument.InstrumentID = Instrument.ID) and
+	   ((Station_Instrument.StartDate is null) or (d.StartDate >= Station_Instrument.StartDate)) and
+	   ((Station_Instrument.EndDate is null) or (d.EndDate >= Station_Instrument.EndDate))
   inner join Station 
-    on (Station_Instrument.StationID = Station.ID)
+    on (Station_Instrument.StationID = Station.ID) and
+	   ((Station.StartDate is null) or (Cast(d.StartDate as Date) >= Cast(Station.StartDate as Date))) and
+	   ((Station.EndDate is null) or (Cast(d.EndDate as Date) >= Cast(Station.EndDate as Date)))
   inner join Site
-    on (Station.SiteID = Site.ID)
+    on (Station.SiteID = Site.ID) and
+	   ((Site.StartDate is null) or  (Cast(d.StartDate as Date) >= Cast(Site.StartDate as Date))) and
+	   ((Site.EndDate is null) or  (Cast(d.EndDate as Date) >= Cast(Site.EndDate as Date)))
   inner join Phenomenon p 
    on (Sensor.PhenomenonID = p.ID )
-
-INNER JOIN 
-(
- SELECT SensorID,MIN(ValueDate) StartDate,MAX(ValueDate) EndDate
-  FROM Observation with (nolock)
- Group By SensorID
-)d
-ON (Sensor.ID = d.SensorID)
 --< Added 2.0.17 20161128 TimPN
 GO
 PRINT N'Altering [dbo].[vObservation]...';
@@ -445,17 +464,28 @@ FROM
   left join DataSchema DataSourceSchema
     on (DataSource.DataSchemaID = DataSourceSchema.ID)
   inner join Instrument_Sensor
-    on (Instrument_Sensor.SensorID = Sensor.ID)
+    on (Instrument_Sensor.SensorID = Sensor.ID) and
+	   ((Instrument_Sensor.StartDate is null) or (o.ValueDate >= Instrument_Sensor.StartDate)) and
+	   ((Instrument_Sensor.EndDate is null) or (o.ValueDate <= Instrument_Sensor.EndDate))
   inner join Instrument
-    on (Instrument_Sensor.InstrumentID = Instrument.ID)
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+	   ((Instrument.StartDate is null) or (o.ValueDate >= Instrument.StartDate )) and
+	   ((Instrument.EndDate is null) or (o.ValueDate <= Instrument.EndDate))
   inner join Station_Instrument
-    on (Station_Instrument.InstrumentID = Instrument.ID)
-  inner join Station
-    on (Station_Instrument.StationID = Station.ID)
+    on (Station_Instrument.InstrumentID = Instrument.ID) and
+	   ((Station_Instrument.StartDate is null) or (o.ValueDate >= Station_Instrument.StartDate)) and
+	   ((Station_Instrument.EndDate is null) or (o.ValueDate >= Station_Instrument.EndDate))
+  inner join Station 
+    on (Station_Instrument.StationID = Station.ID) and
+	   ((Station.StartDate is null) or (Cast(o.ValueDate as Date) >= Cast(Station.StartDate as Date))) and
+	   ((Station.EndDate is null) or (Cast(o.ValueDate as Date) >= Cast(Station.EndDate as Date)))
   inner join Site
-    on (Station.SiteID = Site.ID)
+    on (Station.SiteID = Site.ID) and
+	   ((Site.StartDate is null) or  (Cast(o.ValueDate as Date) >= Cast(Site.StartDate as Date))) and
+	   ((Site.EndDate is null) or  (Cast(o.ValueDate as Date) >= Cast(Site.EndDate as Date)))
   inner join Organisation_Site
-    on (Organisation_Site.SiteID = Site.ID)
+    on (Organisation_Site.SiteID = Site.ID) and
+	   ((Organisation_Site.StartDate is null) or (Cast(o.ValueDate as Date) >= Cast(Organisation_Site.StartDate as Date)))
   inner join Organisation
     on (Organisation_Site.OrganisationID = Organisation.ID)
   inner join aspnet_Users

@@ -137,8 +137,8 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="200" />
-                                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
+                                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy HH:mm" />
+                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy HH:mm" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="200" />
                                         <ext:CommandColumn Width="75">
                                             <Commands>
@@ -240,8 +240,8 @@
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="SensorCode" Width="200" />
                                                 <ext:Column Header="Name" DataIndex="SensorName" Width="200" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy HH:mm" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy HH:mm" />
                                                 <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
@@ -316,8 +316,8 @@
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="DataSourceCode" Width="200" />
                                                 <ext:Column Header="Name" DataIndex="DataSourceName" Width="200" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy HH:mm" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy HH:mm" />
                                                 <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
@@ -392,8 +392,8 @@
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="StationCode" Width="200" />
                                                 <ext:Column Header="Name" DataIndex="StationName" Width="200" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy HH:mm" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy HH:mm" />
                                                 <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
@@ -476,8 +476,8 @@
                                                 <ext:Column Header="Name" DataIndex="LevelName" Width="200" />
                                                 <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="75" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy HH:mm" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy HH:mm" />
                                                 <ext:CommandColumn Width="150">
                                                     <PrepareToolbar Fn="PrepareOrganisationLinkToolbar" />
                                                     <Commands>
@@ -579,7 +579,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfStartDate" DataIndex="StartDate" MaxLength="100" runat="server"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -591,7 +591,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfEndDate" DataIndex="EndDate" MaxLength="100" runat="server"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -678,7 +678,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -690,7 +690,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -756,7 +756,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfStationStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -768,7 +768,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfStationEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -834,7 +834,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfSensorStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -846,7 +846,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfSensorEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -912,7 +912,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfDataSourceStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -924,7 +924,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfDataSourceEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
