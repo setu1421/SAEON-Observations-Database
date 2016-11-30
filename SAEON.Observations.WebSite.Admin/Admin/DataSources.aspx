@@ -109,6 +109,7 @@
                                                     <ext:RecordField Name="DefaultNullValue" Type="Float" />
                                                     <ext:RecordField Name="UpdateFreq" Type="Float" />
                                                     <ext:RecordField Name="StartDate" Type="Date" />
+                                                    <ext:RecordField Name="EndDate" Type="Date" />
                                                     <ext:RecordField Name="LastUpdate" Type="Date" />
                                                     <ext:RecordField Name="DataSchemaID" Type="Auto" />
                                                     <ext:RecordField Name="DataSchemaName" Type="String" />
@@ -155,8 +156,9 @@
                                             <ext:StringFilter DataIndex="Name" />
                                             <ext:StringFilter DataIndex="Url" />
                                             <ext:StringFilter DataIndex="Description" />
+                                            <ext:DateFilter DataIndex="StartDate" />
+                                            <ext:DateFilter DataIndex="EndDate" />
                                             <ext:DateFilter DataIndex="LastUpdate" />
-                                            <ext:StringFilter DataIndex="StartDate" />
                                             <ext:StringFilter DataIndex="DataSchemaName" />
                                         </Filters>
                                     </ext:GridFilters>
@@ -308,7 +310,7 @@
                                                 <ext:Column Header="Transformation" DataIndex="TransformationName" Width="150" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitofMeasure" Width="150" />
-                                                <ext:DateColumn Header="Effective Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="150" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="75">
                                                     <Commands>
@@ -474,6 +476,14 @@
                                 <Items>
                                     <ext:DateField ID="StartDate" DataIndex="StartDate" runat="server" FieldLabel="Start Date"
                                         BlankText="Start Date is required." AnchorHorizontal="93%" Format="dd MMM yyyy"
+                                        ClientIDMode="Static">
+                                    </ext:DateField>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container ID="Container13" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                                <Items>
+                                    <ext:DateField ID="EndDate" DataIndex="EndDate" runat="server" FieldLabel="End Date"
+                                        BlankText="End Date is required." AnchorHorizontal="93%" Format="dd MMM yyyy"
                                         ClientIDMode="Static">
                                     </ext:DateField>
                                 </Items>
@@ -688,8 +698,15 @@
                     </ext:Panel>
                     <ext:Container ID="Container9" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                         <Items>
-                            <ext:DateField ID="dfTransStart" DataIndex="StartDate" runat="server" FieldLabel="Effective Date"
-                                AnchorHorizontal="95%" AllowBlank="false" BlankText="Effective Date is required">
+                            <ext:DateField ID="dfTransStart" DataIndex="StartDate" runat="server" FieldLabel="Start Date"
+                                AnchorHorizontal="95%" AllowBlank="false" BlankText="Start Date is required">
+                            </ext:DateField>
+                        </Items>
+                    </ext:Container>
+                    <ext:Container ID="Container14" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                        <Items>
+                            <ext:DateField ID="dfTransEnd" DataIndex="EndDate" runat="server" FieldLabel="Start Date"
+                                AnchorHorizontal="95%" AllowBlank="true" BlankText="Start Date is required">
                             </ext:DateField>
                         </Items>
                     </ext:Container>
@@ -854,7 +871,7 @@
                     <ext:Container ID="Container8" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                         <Items>
                             <ext:DateField ID="dfRoleDetailStart" DataIndex="DateStart" runat="server" FieldLabel="Start Date"
-                                AnchorHorizontal="95%" Format="dd MMM yyyy" AllowBlank="false" BlankText="Start Date is required">
+                                AnchorHorizontal="95%" Format="dd MMM yyyy" AllowBlank="true" BlankText="Start Date is required">
                             </ext:DateField>
                         </Items>
                     </ext:Container>

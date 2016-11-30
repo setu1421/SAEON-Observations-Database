@@ -40,12 +40,18 @@ public class ImportSchemaHelper : IDisposable
 
     Boolean concatedatetime = false;
 
+
     /// <summary>
     /// 
+    /// string SourceFile;
+    /// string Pass1File; // As loaded from source file
+    /// string Pass2File; // After 1st R Call
+    /// string Pass3File; // After processing
+    /// string Pass4File; // After 2nd R Call
     /// </summary>
     /// <param name="schema"></param>
     /// <param name="InputStream"></param>
-    public ImportSchemaHelper(DataSource ds, DataSchema schema, string Data, Sensor obj = null, ImportLogHelper loghelper = null)
+    public ImportSchemaHelper(DataSource ds, DataSchema schema, string Data, ImportBatch batch, Sensor obj = null, ImportLogHelper loghelper = null)
     {
         dataSource = ds;
         dataSchema = schema;
@@ -169,7 +175,14 @@ public class ImportSchemaHelper : IDisposable
         engine = new FileHelperEngine(recordType);
         engine.ErrorMode = ErrorMode.SaveAndContinue;
 
+        batch.SourceFile = Encoding.Unicode.GetBytes(Data);
         dtResults = engine.ReadStringAsDT(Data);
+        dtResults.TableName = ds.Name + " " + DateTime.Now.ToString("yyyyMMddHHmmss");
+        using (StringWriter sw = new StringWriter())
+        {
+            dtResults.WriteXml(sw);
+            batch.Pass1File = Encoding.Unicode.GetBytes(sw.ToString());
+        }
         transformations = new List<DataSourceTransformation>();
         schemaDefs = new List<SchemaDefinition>();
 

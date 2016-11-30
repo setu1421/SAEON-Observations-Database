@@ -201,12 +201,14 @@ public partial class Admin_DataSources : System.Web.UI.Page
             }
 
 
-            if (!String.IsNullOrEmpty(StartDate.Text))
-                ds.StartDate = StartDate.SelectedDate;
             if (StartDate.SelectedDate.Date.Year < 1900)
-            {
                 ds.StartDate = null;
-            }
+            else
+                ds.StartDate = StartDate.SelectedDate;
+            if (EndDate.SelectedDate.Date.Year < 1900)
+                ds.EndDate = null;
+            else
+                ds.EndDate = EndDate.SelectedDate;
 
             ds.UserId = AuthHelper.GetLoggedInUserId;
 
@@ -288,14 +290,14 @@ public partial class Admin_DataSources : System.Web.UI.Page
             InstrumentDataSource instrumentDataSource = new InstrumentDataSource(Utilities.MakeGuid(InstrumentLinkID.Value));
             instrumentDataSource.DataSourceID = masterID;
             instrumentDataSource.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
-                instrumentDataSource.StartDate = dfInstrumentStartDate.SelectedDate;
-            else
+            if (dfInstrumentStartDate.SelectedDate.Year < 1900)
                 instrumentDataSource.StartDate = null;
-            if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
-                instrumentDataSource.EndDate = dfInstrumentEndDate.SelectedDate;
             else
+                instrumentDataSource.StartDate = dfInstrumentStartDate.SelectedDate;
+            if (dfInstrumentEndDate.SelectedDate.Year < 1900)
                 instrumentDataSource.EndDate = null;
+            else
+                instrumentDataSource.EndDate = dfInstrumentEndDate.SelectedDate;
             instrumentDataSource.UserId = AuthHelper.GetLoggedInUserId;
             instrumentDataSource.Save();
             Auditing.Log("DataSources.AddInstrumentLink", new Dictionary<string, object> {
@@ -369,87 +371,105 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void SaveTransformation(object sender, DirectEventArgs e)
     {
-
-        RowSelectionModel datasourceRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
-
-        DataSourceTransformation dstransform = new DataSourceTransformation();
-
-        //Check for outdated Transforms
-        SqlQuery q = new Select().From<DataSourceTransformation>()
-                    .Where(DataSourceTransformation.TransformationTypeIDColumn).IsEqualTo(cbTransformType.SelectedItem.Value)
-                    .And(DataSourceTransformation.PhenomenonIDColumn).IsEqualTo(cbPhenomenon.SelectedItem.Value)
-                    .And(DataSourceTransformation.DataSourceIDColumn).IsEqualTo(datasourceRow.SelectedRecordID)
-                    .AndExpression(DataSourceTransformation.EndDateColumn.QualifiedName).IsNull().Or(DataSourceTransformation.EndDateColumn).IsGreaterThanOrEqualTo(dfTransStart.SelectedDate).CloseExpression();
-
-        if (String.IsNullOrEmpty(tfTransID.Text))
-            dstransform.Id = Guid.NewGuid();
-        else
+        try
         {
-            dstransform = new DataSourceTransformation(tfTransID.Text.Trim());
-            q = q.And(DataSourceTransformation.IdColumn).IsNotEqualTo(dstransform.Id);
-        }
 
-        DataSourceTransformationCollection OutdatedItems = q.ExecuteAsCollection<DataSourceTransformationCollection>();
+            RowSelectionModel datasourceRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
 
-        using (TransactionScope ts = new TransactionScope())
-        {
-            using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
+            DataSourceTransformation dstransform = new DataSourceTransformation();
+
+            //Check for outdated Transforms
+            SqlQuery q = new Select().From<DataSourceTransformation>()
+                        .Where(DataSourceTransformation.TransformationTypeIDColumn).IsEqualTo(cbTransformType.SelectedItem.Value)
+                        .And(DataSourceTransformation.PhenomenonIDColumn).IsEqualTo(cbPhenomenon.SelectedItem.Value)
+                        .And(DataSourceTransformation.DataSourceIDColumn).IsEqualTo(datasourceRow.SelectedRecordID)
+                        .AndExpression(DataSourceTransformation.EndDateColumn.QualifiedName).IsNull().Or(DataSourceTransformation.EndDateColumn).IsGreaterThanOrEqualTo(dfTransStart.SelectedDate).CloseExpression();
+
+            if (String.IsNullOrEmpty(tfTransID.Text))
+                dstransform.Id = Guid.NewGuid();
+            else
             {
-
-                foreach (var item in OutdatedItems)
-                {
-                    item.EndDate = dfTransStart.SelectedDate.Date;
-                    item.Save();
-                }
-
-                dstransform.DataSourceID = new Guid(datasourceRow.SelectedRecordID);
-                dstransform.TransformationTypeID = new Guid(cbTransformType.SelectedItem.Value);
-                dstransform.PhenomenonID = new Guid(cbPhenomenon.SelectedItem.Value);
-
-                if (cbOffering.SelectedItem.Value != null)
-                    dstransform.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
-                else
-                    dstransform.PhenomenonOfferingID = null;
-
-                if (cbUnitofMeasure.SelectedItem.Value != null)
-                    dstransform.PhenomenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);
-                else
-                    dstransform.PhenomenonUOMID = null;
-
-                //9ca36c10-cbad-4862-9f28-591acab31237 = Quality Control on Values
-                if (new Guid(cbTransformType.SelectedItem.Value) != new Guid("9ca36c10-cbad-4862-9f28-591acab31237"))
-                {
-
-                    if (sbNewOffering.SelectedItem.Value != null)
-                        dstransform.NewPhenomenonOfferingID = new Guid(sbNewOffering.SelectedItem.Value);
-                    else
-                        dstransform.NewPhenomenonOfferingID = null;
-
-                    if (sbNewUoM.SelectedItem.Value != null)
-                        dstransform.NewPhenomenonUOMID = new Guid(sbNewUoM.SelectedItem.Value);
-                    else
-                        dstransform.NewPhenomenonUOMID = null;
-                }
-                else
-                {
-                    dstransform.NewPhenomenonOfferingID = null;
-                    dstransform.NewPhenomenonUOMID = null;
-                }
-                //
-
-                dstransform.StartDate = dfTransStart.SelectedDate;
-                dstransform.Definition = tfDefinition.Text.Trim().ToLower();
-
-
-                dstransform.Save();
+                dstransform = new DataSourceTransformation(tfTransID.Text.Trim());
+                q = q.And(DataSourceTransformation.IdColumn).IsNotEqualTo(dstransform.Id);
             }
 
-            ts.Complete();
+            DataSourceTransformationCollection OutdatedItems = q.ExecuteAsCollection<DataSourceTransformationCollection>();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
+                {
+
+                    foreach (var item in OutdatedItems)
+                    {
+                        item.EndDate = dfTransStart.SelectedDate.Date;
+                        item.Save();
+                    }
+
+                    dstransform.DataSourceID = new Guid(datasourceRow.SelectedRecordID);
+                    dstransform.TransformationTypeID = new Guid(cbTransformType.SelectedItem.Value);
+                    dstransform.PhenomenonID = new Guid(cbPhenomenon.SelectedItem.Value);
+
+                    if (cbOffering.SelectedItem.Value != null)
+                        dstransform.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
+                    else
+                        dstransform.PhenomenonOfferingID = null;
+
+                    if (cbUnitofMeasure.SelectedItem.Value != null)
+                        dstransform.PhenomenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);
+                    else
+                        dstransform.PhenomenonUOMID = null;
+
+                    //9ca36c10-cbad-4862-9f28-591acab31237 = Quality Control on Values
+                    if (new Guid(cbTransformType.SelectedItem.Value) != new Guid("9ca36c10-cbad-4862-9f28-591acab31237"))
+                    {
+
+                        if (sbNewOffering.SelectedItem.Value != null)
+                            dstransform.NewPhenomenonOfferingID = new Guid(sbNewOffering.SelectedItem.Value);
+                        else
+                            dstransform.NewPhenomenonOfferingID = null;
+
+                        if (sbNewUoM.SelectedItem.Value != null)
+                            dstransform.NewPhenomenonUOMID = new Guid(sbNewUoM.SelectedItem.Value);
+                        else
+                            dstransform.NewPhenomenonUOMID = null;
+                    }
+                    else
+                    {
+                        dstransform.NewPhenomenonOfferingID = null;
+                        dstransform.NewPhenomenonUOMID = null;
+                    }
+                    //
+
+                    if (dfTransStart.SelectedDate.Year < 1900)
+                    {
+                        //dstransform.StartDate = null;
+                    }
+                    else
+                        dstransform.StartDate = dfTransStart.SelectedDate;
+                    if (dfTransEnd.SelectedDate.Year < 1900)
+                        dstransform.EndDate = null;
+                    else
+                        dstransform.EndDate = dfTransEnd.SelectedDate;
+                    dstransform.Definition = tfDefinition.Text.Trim().ToLower();
+
+
+                    dstransform.Save();
+                }
+
+                ts.Complete();
+            }
+
+            TransformationsGrid.GetStore().DataBind();
+
+            TransformationDetailWindow.Hide();
         }
-
-        TransformationsGrid.GetStore().DataBind();
-
-        TransformationDetailWindow.Hide();
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Unable to save transformation");
+            MessageBoxes.Error(ex, "Error", "Unable to save transformation");
+            throw;
+        }
     }
 
     protected void cbOffering_RefreshData(object sender, StoreRefreshDataEventArgs e)
@@ -506,17 +526,41 @@ public partial class Admin_DataSources : System.Web.UI.Page
     #region Roles
     protected void SaveRoleDetail(object sender, DirectEventArgs e)
     {
-        DataSourceRole dsRole = new DataSourceRole(hiddenRoleDetail.Text);
+        try
+        {
+            DataSourceRole dsRole = new DataSourceRole(hiddenRoleDetail.Text);
 
-        dsRole.DateStart = DateTime.Parse(dfRoleDetailStart.Text);
-        dsRole.DateEnd = DateTime.Parse(dfRoleDetailEnd.Text);
-        dsRole.IsRoleReadOnly = bool.Parse(cbIsRoleReadOnly.Value.ToString());
+            if (dfRoleDetailStart.SelectedDate.Year < 1900)
+                dsRole.DateStart = null;
+            else
+                dsRole.DateStart = dfRoleDetailStart.SelectedDate;
+            if (dfRoleDetailEnd.SelectedDate.Year < 1900)
+                dsRole.DateEnd = null;
+            else
+                dsRole.DateEnd = dfRoleDetailEnd.SelectedDate;
+            dsRole.IsRoleReadOnly = bool.Parse(cbIsRoleReadOnly.Value.ToString());
 
-        dsRole.Save();
+            dsRole.Save();
 
-        RolesGrid.GetStore().DataBind();
+            Auditing.Log("DataSources.SaveRoleDetail", new Dictionary<string, object> {
+                { "DataSourceID", dsRole.DataSourceID},
+                { "DataSourceCode", dsRole.DataSource.Code},
+                { "RoleID", dsRole.RoleId },
+                { "RoleName", dsRole.AspnetRole.RoleName },
+                { "DateStart", dsRole.DateStart },
+                { "DateEnd", dsRole.DateEnd},
+                { "IsReadOnly", dsRole.IsRoleReadOnly }
+                            });
+            RolesGrid.GetStore().DataBind();
 
-        RoleDetailWindow.Hide();
+            RoleDetailWindow.Hide();
+
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Unable to save role detail");
+            MessageBoxes.Error(ex, "Error", "Unable to save role detail");
+        }
     }
 
     protected void OnDefinitionValidation(object sender, RemoteValidationEventArgs e)
@@ -621,20 +665,25 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void RoleLinksSave(object sender, DirectEventArgs e)
     {
-        RowSelectionModel sm = AvailableRolesGrid.SelectionModel.Primary as RowSelectionModel;
-        RowSelectionModel dataSourceRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
-
-        string dataSourceID = dataSourceRow.SelectedRecordID;
-        if (sm.SelectedRows.Count > 0)
+        try
         {
-            foreach (SelectedRow row in sm.SelectedRows)
+            RowSelectionModel sm = AvailableRolesGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel dataSourceRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
+
+            string dataSourceID = dataSourceRow.SelectedRecordID;
+            if (sm.SelectedRows.Count == 0)
             {
-                try
+                MessageBoxes.Error("Invalid Selection", "Select at least one data source");
+            }
+            else
+            {
+                foreach (SelectedRow row in sm.SelectedRows)
                 {
                     AspnetRole aspRole = new AspnetRole(row.RecordID);
                     DataSourceRole role = new DataSourceRole();
                     role.DataSourceID = Utilities.MakeGuid(dataSourceID);
                     role.RoleId = aspRole.RoleId;
+                    role.RoleName = aspRole.RoleName;
                     role.UserId = AuthHelper.GetLoggedInUserId;
                     role.Save();
                     Auditing.Log("DataSources.AddRoleLink", new Dictionary<string, object> {
@@ -644,19 +693,15 @@ public partial class Admin_DataSources : System.Web.UI.Page
                                 { "RoleName", role.AspnetRole.RoleName }
                             });
                 }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "DataSources.LinkRole_Click");
-                    MessageBoxes.Error(ex, "Error", "Unable to link role");
-                }
+                RolesGridStore.DataBind();
+                AvailableRolesGridStore.DataBind();
+                AvailableRolesWindow.Hide();
             }
-            RolesGridStore.DataBind();
-            AvailableRolesGridStore.DataBind();
-            AvailableRolesWindow.Hide();
         }
-        else
+        catch (Exception ex)
         {
-            MessageBoxes.Error("Invalid Selection", "Select at least one data source");
+            Log.Error(ex, "DataSources.LinkRole_Click");
+            MessageBoxes.Error(ex, "Error", "Unable to link role");
         }
     }
 

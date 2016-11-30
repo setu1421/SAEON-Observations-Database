@@ -117,12 +117,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 }
                 //
 
-                // Save file to FileStream container
-
-
-                List<SchemaValue> values = Import(DataSourceId);
-
-
+                ImportBatch batch = new ImportBatch();
+                List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())
                 {
@@ -132,7 +128,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         {
                             using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                             {
-                                ImportBatch batch = new ImportBatch();
+                                //ImportBatch batch = new ImportBatch();
                                 //batch.Guid = Guid.NewGuid();
                                 batch.Id = Guid.NewGuid();
                                 batch.DataSourceID = DataSourceId;
@@ -386,7 +382,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     /// 
     /// </summary>
     /// <returns></returns>
-    List<SchemaValue> Import(Guid DataSourceId)
+    List<SchemaValue> Import(Guid DataSourceId, ImportBatch batch)
     {
         DataSource ds = new DataSource(DataSourceId);
         List<SchemaValue> ImportValues = new List<SchemaValue>();
@@ -425,7 +421,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
 
                     //                   using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, sp, logHelper))
-                    ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, sp, logHelper);
+                    ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, sp, logHelper);
                     {
                         if (helper.Errors.Count > 0)
                         {
@@ -449,7 +445,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
 
                 //using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, null, logHelper))
-                ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, null, logHelper);
+                ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, null, logHelper);
                 {
                     if (helper.Errors.Count > 0)
                     {
