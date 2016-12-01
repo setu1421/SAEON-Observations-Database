@@ -261,9 +261,9 @@
                                                             <ext:RecordField Name="OfferingName" Type="Auto" />
                                                             <ext:RecordField Name="UnitOfMeasureUnit" Type="Auto" />
                                                             <ext:RecordField Name="ValueDate" Type="Date" />
-                                                            <ext:RecordField Name="RawValue" Type="Float" />
+                                                            <ext:RecordField Name="RawValue" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="DataValue" Type="Float" UseNull="true"/>
-                                                            <ext:RecordField Name="StatusName" Type="Auto" UseNull="true"/>
+                                                            <ext:RecordField Name="StatusName" Type="Auto"/>
                                                             <ext:RecordField Name="StatusReasonName" Type="Auto" />
                                                             <ext:RecordField Name="Comment" Type="Auto" />
                                                             <ext:RecordField Name="CorrelationID" Type="Auto" />

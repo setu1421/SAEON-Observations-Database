@@ -13,6 +13,8 @@ using NCalc;
 using SAEON.Observations.Data;
 using Serilog;
 using Serilog.Context;
+using System.Web.Configuration;
+using System.Web.Hosting;
 
 /// <summary>
 /// Summary description for ImportSchema
@@ -40,7 +42,7 @@ public class ImportSchemaHelper : IDisposable
 
     Boolean concatedatetime = false;
 
-
+    string docNamePrefix;
     /// <summary>
     /// 
     /// string SourceFile;
@@ -176,12 +178,15 @@ public class ImportSchemaHelper : IDisposable
         engine.ErrorMode = ErrorMode.SaveAndContinue;
 
         batch.SourceFile = Encoding.Unicode.GetBytes(Data);
+        docNamePrefix = $"{ds.Name}-{DateTime.Now.ToString("yyyyMMdd HHmmss")}-{Path.GetFileNameWithoutExtension(batch.FileName)}-";
+        SaveDocument("Source.txt",Data);
         dtResults = engine.ReadStringAsDT(Data);
-        dtResults.TableName = ds.Name + " " + DateTime.Now.ToString("yyyyMMddHHmmss");
+        dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
         using (StringWriter sw = new StringWriter())
         {
             dtResults.WriteXml(sw);
             batch.Pass1File = Encoding.Unicode.GetBytes(sw.ToString());
+            SaveDocument("Pass1.xml", sw.ToString());
         }
         transformations = new List<DataSourceTransformation>();
         schemaDefs = new List<SchemaDefinition>();
@@ -191,6 +196,12 @@ public class ImportSchemaHelper : IDisposable
         Sensor = obj;
 
         LogHelper = loghelper;
+    }
+
+    public void SaveDocument(string fileName, string text)
+    {
+        string docPath = HostingEnvironment.MapPath(WebConfigurationManager.AppSettings["DocumentsPath"]);
+        File.WriteAllText(Path.Combine(docPath,docNamePrefix+fileName), text);
     }
 
     /// <summary>
@@ -569,7 +580,7 @@ public class ImportSchemaHelper : IDisposable
                         if (RowComment.Trim().Length > 0)
                             rec.Comment = RowComment.TrimEnd();
                         rec.CorrelationID = correlationID;
-                        if (rec.DataValue.HasValue)
+                        //if (rec.DataValue.HasValue)
                             SchemaValues.Add(rec);
                     }
                 }

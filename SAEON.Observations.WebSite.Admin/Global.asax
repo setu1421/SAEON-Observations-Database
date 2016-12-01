@@ -17,9 +17,18 @@
             .WriteTo.Seq("http://localhost:5341/")
             .CreateLogger();
         RouteConfig.RegisterRoutes(RouteTable.Routes);
+        string docPath = System.Web.Configuration.WebConfigurationManager.AppSettings["DocumentsPath"];
+        if (!string.IsNullOrEmpty(docPath))
+        {
+                string path = Server.MapPath(docPath);
+                if (!string.IsNullOrEmpty(path))
+                    System.IO.Directory.CreateDirectory(path);
+        }
     }
 
     void Application_End(object sender, EventArgs e)
+
+
     {
         //  Code that runs on application shutdown
 

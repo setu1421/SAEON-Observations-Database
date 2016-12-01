@@ -10,6 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Transactions;
 using System.Web;
+using System.Web.Configuration;
+using System.Web.Hosting;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -118,6 +120,19 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 //
 
                 ImportBatch batch = new ImportBatch();
+                batch.Id = Guid.NewGuid();
+                batch.DataSourceID = DataSourceId;
+                batch.ImportDate = DateTime.Now;
+
+                FileInfo fi;
+                if (!string.IsNullOrEmpty(LogFileUpload.PostedFile.FileName))
+                {
+                    fi = new FileInfo(LogFileUpload.PostedFile.FileName);
+                    batch.LogFileName = fi.Name;
+                }
+
+                fi = new FileInfo(DataFileUpload.PostedFile.FileName);
+                batch.FileName = fi.Name;
                 List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())
@@ -130,19 +145,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             {
                                 //ImportBatch batch = new ImportBatch();
                                 //batch.Guid = Guid.NewGuid();
-                                batch.Id = Guid.NewGuid();
-                                batch.DataSourceID = DataSourceId;
-                                batch.ImportDate = DateTime.Now;
-
-                                FileInfo fi;
-                                if (!string.IsNullOrEmpty(LogFileUpload.PostedFile.FileName))
-                                {
-                                    fi = new FileInfo(LogFileUpload.PostedFile.FileName);
-                                    batch.LogFileName = fi.Name;
-                                }
-
-                                fi = new FileInfo(DataFileUpload.PostedFile.FileName);
-                                batch.FileName = fi.Name;
 
 
                                 if (values.FirstOrDefault(t => t.IsValid) == null)
@@ -419,7 +421,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     DataSchema schema = sp.DataSchema;
 
                     Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
-
                     //                   using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, sp, logHelper))
                     ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, sp, logHelper);
                     {
