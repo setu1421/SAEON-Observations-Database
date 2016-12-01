@@ -281,7 +281,7 @@ public partial class _DataQuery : System.Web.UI.Page
                 //Station station = new Station();
                 List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
                 //Log.Information("Items: {@items}", items);
-                Offering offering = null;
+                PhenomenonOffering offering = null;
                 Phenomenon phenomenon = null;
                 Sensor sensor = null;
                 Instrument instrument = null;
@@ -291,13 +291,13 @@ public partial class _DataQuery : System.Web.UI.Page
                 {
                     case "Offering":
                         count++;
-                        offering = new Offering(item.ID);
+                        offering = new PhenomenonOffering(item.ID);
                         phenomenon = new Phenomenon(new Guid(GetItem(items, "Phenomenon")));
                         sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
                         instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
                         station = new Station(new Guid(GetItem(items, "Station")));
                         site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                        q.OrExpression(VObservation.Columns.OfferingID).IsEqualTo(offering.Id)
+                        q.OrExpression(VObservation.Columns.PhenomenonOfferingID).IsEqualTo(offering.Id)
                             .And(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
                             .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
                             .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
@@ -424,7 +424,7 @@ public partial class _DataQuery : System.Web.UI.Page
                 int count = 0;
                 List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
                 //Log.Information("Items: {@items}", items);
-                Offering offering = null;
+                PhenomenonOffering offering = null;
                 Phenomenon phenomenon = null;
                 Sensor sensor = null;
                 Instrument instrument = null;
@@ -434,13 +434,13 @@ public partial class _DataQuery : System.Web.UI.Page
                 {
                     case "Offering":
                         count++;
-                        offering = new Offering(item.ID);
+                        offering = new PhenomenonOffering(item.ID);
                         phenomenon = new Phenomenon(new Guid(GetItem(items, "Phenomenon")));
                         sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
                         instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
                         station = new Station(new Guid(GetItem(items, "Station")));
                         site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                        q.OrExpression(VObservation.Columns.OfferingID).IsEqualTo(offering.Id)
+                        q.OrExpression(VObservation.Columns.PhenomenonOfferingID).IsEqualTo(offering.Id)
                             .And(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
                             .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
                             .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
