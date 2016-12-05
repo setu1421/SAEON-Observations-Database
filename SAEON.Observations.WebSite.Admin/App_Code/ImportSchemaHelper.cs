@@ -269,6 +269,7 @@ public class ImportSchemaHelper : IDisposable
                     }
                     if (!string.IsNullOrEmpty(schemaCol.EmptyValue))
                     {
+                        def.IsEmptyValue = true;
                         def.EmptyValue = schemaCol.EmptyValue;
                     }
                     if (schemaCol.SchemaColumnType.Name == "Fixed Time")
@@ -514,7 +515,6 @@ public class ImportSchemaHelper : IDisposable
                             rec.TimeValue = tm;
 
                         string RawValue = dr[def.Index].ToString();
-
 
                         if (!ErrorInDate && LogHelper != null && LogHelper.CheckRecordGap(rec.DateValue))
                         {

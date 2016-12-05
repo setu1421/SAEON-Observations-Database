@@ -552,6 +552,7 @@
     <None Include="ObservationDB.publish.xml" />
     <None Include="Observations.publish.xml" />
     <None Include="ObservationsTest.publish.xml" />
+    <None Include="SAEON.Observations.Database.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\master.dacpac">

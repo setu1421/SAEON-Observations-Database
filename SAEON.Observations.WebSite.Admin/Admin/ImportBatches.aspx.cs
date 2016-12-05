@@ -17,6 +17,7 @@ using System.Web.UI.WebControls;
 
 public partial class Admin_ImportBatches : System.Web.UI.Page
 {
+    private static TimeSpan timeout = new TimeSpan(0, 30, 0);
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!X.IsAjaxRequest)
@@ -139,13 +140,13 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 {
                     try
                     {
-                        using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+                        Log.Information("Start");
+                        using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, timeout))
                         {
                             using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                             {
                                 //ImportBatch batch = new ImportBatch();
                                 //batch.Guid = Guid.NewGuid();
-
 
                                 if (values.FirstOrDefault(t => t.IsValid) == null)
                                     batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
@@ -264,6 +265,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                             }
                             ts.Complete();
+                            Log.Information("Finish");
                         }
 
                         this.ImportBatchesGrid.GetStore().DataBind();
@@ -519,7 +521,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                 if (q.GetRecordCount() == 0)
                 {
-                    using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+                    using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, timeout))
                     {
                         using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                         {
@@ -603,7 +605,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         using (LogContext.PushProperty("Method", "DeleteBatch"))
             try
             {
-                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, timeout))
                 {
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
@@ -652,7 +654,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             try
             {
                 ObservationCollection col = new ObservationCollection().Where(Observation.Columns.ImportBatchID, ImportBatchId).Load();
-                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, timeout))
                 {
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
@@ -714,7 +716,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         using (LogContext.PushProperty("Method", "DeleteEntry"))
             try
             {
-                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, timeout))
                 {
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
@@ -785,7 +787,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         using (LogContext.PushProperty("Method", "MoveToObservation"))
             try
             {
-                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, timeout))
                 {
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
@@ -924,7 +926,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             {
                 RowSelectionModel batchRow = this.ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
                 ImportBatch batch = new ImportBatch(batchRow.SelectedRecordID);
-                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, timeout))
                 {
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
@@ -987,7 +989,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             {
                 RowSelectionModel batchRow = this.ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
                 ImportBatch batch = new ImportBatch(batchRow.SelectedRecordID);
-                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, timeout))
                 {
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
@@ -1072,7 +1074,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             {
                 RowSelectionModel batchRow = this.ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
                 ImportBatch batch = new ImportBatch(batchRow.SelectedRecordID);
-                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, timeout))
                 {
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
