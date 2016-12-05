@@ -538,7 +538,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 dsRole.DateEnd = null;
             else
                 dsRole.DateEnd = dfRoleDetailEnd.SelectedDate;
-            dsRole.IsRoleReadOnly = bool.Parse(cbIsRoleReadOnly.Value.ToString());
+            dsRole.IsRoleReadOnly = cbIsRoleReadOnly.Checked;
 
             dsRole.Save();
 
