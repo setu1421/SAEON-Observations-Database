@@ -53,7 +53,10 @@ BEGIN
     Update
         src
     set
-		AddedAt = del.AddedAt,
+--> Changed 2.0.19 20161205 TimPN
+--		AddedAt = del.AddedAt,
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
+--< Changed 2.0.19 20161205 TimPN
         UpdatedAt = GETDATE()
     from
         Instrument_DataSource src
