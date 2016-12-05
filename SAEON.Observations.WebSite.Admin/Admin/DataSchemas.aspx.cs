@@ -176,13 +176,15 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     {
         try
         {
-            using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(1, 0, 0)))
-            using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
+            using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
             {
-                SchemaColumnCollection cols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, aID).Load();
-                foreach (var col in cols)
-                    SchemaColumn.Delete(col.Id);
-                DataSchema.Delete(aID);
+                using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
+                {
+                    SchemaColumnCollection cols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, aID).Load();
+                    foreach (var col in cols)
+                        SchemaColumn.Delete(col.Id);
+                    DataSchema.Delete(aID);
+                }
                 ts.Complete();
             }
             Auditing.Log("DataSchemas.Delete", new Dictionary<string, object> { { "ID", aID } });
@@ -495,18 +497,20 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             else
                 using (var ts = new TransactionScope())
-                using (new SharedDbConnectionScope())
                 {
-                    int old1 = col1.Number;
-                    int old2 = col2.Number;
-                    col1.Number = int.MinValue;
-                    col1.Save();
-                    col2.Number = int.MaxValue;
-                    col2.Save();
-                    col1.Number = old2;
-                    col1.Save();
-                    col2.Number = old1;
-                    col2.Save();
+                    using (new SharedDbConnectionScope())
+                    {
+                        int old1 = col1.Number;
+                        int old2 = col2.Number;
+                        col1.Number = int.MinValue;
+                        col1.Save();
+                        col2.Number = int.MaxValue;
+                        col2.Save();
+                        col1.Number = old2;
+                        col1.Save();
+                        col2.Number = old1;
+                        col2.Save();
+                    }
                     ts.Complete();
                 }
             Auditing.Log("DataSchemas.SchemaColumnUp", new Dictionary<string, object> { { "ID", aID } });
@@ -534,18 +538,20 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
             else
                 using (var ts = new TransactionScope())
-                using (new SharedDbConnectionScope())
                 {
-                    int old1 = col1.Number;
-                    int old2 = col2.Number;
-                    col1.Number = int.MinValue;
-                    col1.Save();
-                    col2.Number = int.MaxValue;
-                    col2.Save();
-                    col1.Number = old2;
-                    col1.Save();
-                    col2.Number = old1;
-                    col2.Save();
+                    using (new SharedDbConnectionScope())
+                    {
+                        int old1 = col1.Number;
+                        int old2 = col2.Number;
+                        col1.Number = int.MinValue;
+                        col1.Save();
+                        col2.Number = int.MaxValue;
+                        col2.Save();
+                        col1.Number = old2;
+                        col1.Save();
+                        col2.Number = old1;
+                        col2.Save();
+                    }
                     ts.Complete();
                 }
             Auditing.Log("DataSchemas.SchemaColumnDown", new Dictionary<string, object> { { "ID", aID } });

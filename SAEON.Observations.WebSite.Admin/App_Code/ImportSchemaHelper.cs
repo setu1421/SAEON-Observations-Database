@@ -179,6 +179,10 @@ public class ImportSchemaHelper : IDisposable
 
         batch.SourceFile = Encoding.Unicode.GetBytes(Data);
         docNamePrefix = $"{ds.Name}-{DateTime.Now.ToString("yyyyMMdd HHmmss")}-{Path.GetFileNameWithoutExtension(batch.FileName)}-";
+        foreach (var c in Path.GetInvalidFileNameChars())
+            docNamePrefix = docNamePrefix.Replace(c, '_');
+        foreach (var c in Path.GetInvalidPathChars())
+            docNamePrefix = docNamePrefix.Replace(c, '_');
         SaveDocument("Source.txt",Data);
         dtResults = engine.ReadStringAsDT(Data);
         dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -324,7 +328,7 @@ public class ImportSchemaHelper : IDisposable
     {
         using (LogContext.PushProperty("Method", "ProcessSchema"))
         {
-            Log.Information("Version 1.7");
+            Log.Information("Version 1.8");
             try
             {
                 BuildSchemaDefinition();
