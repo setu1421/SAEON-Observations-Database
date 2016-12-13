@@ -120,6 +120,7 @@
     <Folder Include="Security\" />
     <Folder Include="dbo\Stored Procedures\" />
     <Folder Include="Scripts" />
+    <Folder Include="dbo\Functions" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Phenomenon.sql">
@@ -545,6 +546,7 @@
     <Build Include="dbo\Views\vDataSourceRole.sql" />
     <Build Include="dbo\Views\vObservationsList.sql" />
     <Build Include="Scripts\PrimaryFileGroup.sql" />
+    <Build Include="dbo\Functions\fnObservations.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

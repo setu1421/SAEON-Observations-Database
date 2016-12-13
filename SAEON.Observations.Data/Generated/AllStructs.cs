@@ -410,8 +410,6 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VObservation = @"vObservation";
         
-		public static readonly string VObservationRole = @"vObservationRoles";
-        
 		public static readonly string VObservationsList = @"vObservationsList";
         
 		public static readonly string VOrganisationInstrument = @"vOrganisationInstrument";
