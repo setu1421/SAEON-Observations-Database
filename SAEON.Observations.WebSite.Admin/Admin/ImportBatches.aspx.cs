@@ -17,7 +17,8 @@ using System.Web.UI.WebControls;
 
 public partial class Admin_ImportBatches : System.Web.UI.Page
 {
-    private static TimeSpan timeout = new TimeSpan(0, 30, 0);
+    private static TimeSpan timeout = TimeSpan.FromMinutes(30);
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!X.IsAjaxRequest)
@@ -167,9 +168,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
                                         .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
                                     //add offering
-
+                                    Log.Verbose("ExecuteScalar start");
                                     int totalDuplicate = q.ExecuteScalar<int>();
-
+                                    Log.Verbose("ExecuteScalar end");
 
                                     if (schval.IsValid && totalDuplicate == 0)
                                     {

@@ -59,7 +59,7 @@ public class ImportSchemaHelper : IDisposable
         dataSchema = schema;
         if (schema.DataSourceTypeID == new Guid(DataSourceType.CSV))
         {
-            DelimitedClassBuilder cb = new DelimitedClassBuilder(schema.Name, schema.Delimiter);
+            DelimitedClassBuilder cb = new DelimitedClassBuilder("ImportBatches", schema.Delimiter);
             cb.IgnoreEmptyLines = true;
             cb.IgnoreFirstLines = schema.IgnoreFirst;
             cb.IgnoreLastLines = schema.IgnoreLast;
