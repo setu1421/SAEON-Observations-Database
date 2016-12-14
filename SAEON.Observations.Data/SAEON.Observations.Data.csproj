@@ -42,6 +42,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Ext.Net 1.2.0.21945\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SubSonic, Version=2.2.1.0, Culture=neutral, PublicKeyToken=eadb47849839a332, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SAEON.SubSonic\SubSonic\bin\Release\SubSonic.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -195,7 +200,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="favicon.ico" />
     <Content Include="SAEON.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
