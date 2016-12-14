@@ -38,6 +38,12 @@ CREATE INDEX [IX_DataSourceRole_RoleId] ON [dbo].[DataSourceRole] ([RoleId])
 GO
 CREATE INDEX [IX_DataSourceRole_UserId] ON [dbo].[DataSourceRole] ([UserId])
 --< Added 2.0.0 20160406 TimPN
+--> Added 2.0.20 20161213 TimPN
+GO
+CREATE INDEX [IX_DataSourceRole_DateStart] ON [dbo].[DataSourceRole] ([DateStart])
+GO
+CREATE INDEX [IX_DataSourceRole_DateEnd] ON [dbo].[DataSourceRole] ([DateEnd])
+--< Added 2.0.20 20161213 TimPN
 --> Added 2.0.8 20160715 TimPN
 --> Changed 2.0.15 20161102 TimPN
 GO

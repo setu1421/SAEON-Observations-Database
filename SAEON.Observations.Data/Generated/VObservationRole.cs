@@ -446,7 +446,7 @@ namespace SAEON.Observations.Data{
                 colvarRoleUserId.DataType = DbType.Guid;
                 colvarRoleUserId.MaxLength = 0;
                 colvarRoleUserId.AutoIncrement = false;
-                colvarRoleUserId.IsNullable = false;
+                colvarRoleUserId.IsNullable = true;
                 colvarRoleUserId.IsPrimaryKey = false;
                 colvarRoleUserId.IsForeignKey = false;
                 colvarRoleUserId.IsReadOnly = false;
@@ -953,11 +953,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("RoleUserId")]
         [Bindable(true)]
-        public Guid RoleUserId 
+        public Guid? RoleUserId 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid>("RoleUserId");
+			    return GetColumnValue<Guid?>("RoleUserId");
 		    }
             set 
 		    {

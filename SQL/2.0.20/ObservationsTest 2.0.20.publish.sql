@@ -38,44 +38,90 @@ IF N'$(__IsSqlCmdEnabled)' NOT LIKE N'True'
 GO
 USE [$(DatabaseName)];
 
-
 GO
-PRINT N'Creating [dbo].[fnObservations]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+PRINT N'Creating [dbo].[DataSourceRole].[IX_DataSourceRole_DateEnd]...';
 
 
 GO
---> Added 2.0.20 20161213 TimPN
-Create function fnObservations(@UserID UniqueIdentifier)
-Returns Table
-As
-return
-  Select
-	vObservation.*
-  from
-	vObservation
-  where
-	Exists(
-	  Select 
-	    * 
-	  from 
-		DataSourceRole 
-	  inner join  aspnet_UsersInRoles 
-		on (DataSourceRole.RoleId = aspnet_UsersInRoles.RoleId)
-	  where
-		(vObservation.ValueDate >= DataSourceRole.DateStart) and
-		(vObservation.ValueDate <= DataSourceRole.DateEnd))
---< Added 2.0.20 20161213 TimPN
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+CREATE NONCLUSTERED INDEX [IX_DataSourceRole_DateEnd]
+    ON [dbo].[DataSourceRole]([DateEnd] ASC);
+
 
 GO
-PRINT N'Dropping [dbo].[vObservationRole]...';
+PRINT N'Creating [dbo].[DataSourceRole].[IX_DataSourceRole_DateStart]...';
 
-Drop View vObservationRoles
+
+GO
+CREATE NONCLUSTERED INDEX [IX_DataSourceRole_DateStart]
+    ON [dbo].[DataSourceRole]([DateStart] ASC);
+
+GO
+PRINT N'Altering [dbo].[vObservationRoles]...';
+
+
+GO
+USE [Observations]
+GO
+
+/****** Object:  View [dbo].[vObservationRoles]    Script Date: 14 Dec 2016 4:20:24 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+--> Changed 2.0.3 20160503 TimPN
+--Renamed SensorProcedure to Sensor
+--< Changed 2.0.3 20160503 TimPN
+ALTER VIEW [dbo].[vObservationRoles]
+AS
+--> Changed 2.0.16 20161107 TimPN
+----> Changed 2.0.3 20160421 TimPN
+----SELECT     vo.ID, vo.SensorID, vo.PhenonmenonOfferingID, vo.PhenonmenonUOMID, vo.UserId, vo.RawValue, vo.DataValue, vo.ImportBatchID, vo.ValueDate, 
+--SELECT     vo.ID, vo.SensorID, vo.PhenomenonOfferingID, vo.PhenomenonUOMID, vo.UserId, vo.RawValue, vo.DataValue, vo.ImportBatchID, vo.ValueDate, 
+----> Changed 2.0.3 20160421 TimPN
+--                      vo.spCode, vo.spDesc, vo.spName, vo.spURL, vo.DataSchemaID, vo.DataSourceID, vo.PhenomenonID, vo.StationID, vo.phName, vo.stName, vo.dsName, 
+--                      vo.dschemaName, vo.offName, vo.offID, vo.psName, vo.psID, vo.orgName, vo.orgID, vo.uomUnit, vo.uomSymbol, vo.UserName,
+--                      dr.DataSourceID AS Expr2, dr.DateStart, dr.DateEnd,
+--                      ur.UserId AS Expr5, vo.Comment
+--FROM         dbo.vObservation AS vo 
+--INNER JOIN 
+--(
+-- SELECT dr.DataSourceID,
+--        ur.UserId,
+--        MIN(dr.DateStart) DateStart,
+--        MAX(dr.DateEnd) DateEnd
+-- FROM DataSourceRole dr
+-- INNER JOIN    dbo.aspnet_Roles AS ar ON dr.RoleId = ar.RoleId INNER JOIN
+--               dbo.aspnet_UsersInRoles AS ur ON ar.RoleId = ur.RoleId
+-- GROUP By dr.DataSourceID,ur.UserId
+--) dr
+--ON vo.DataSourceID = dr.DataSourceID 
+--AND vo.ValueDate >= dr.DateStart AND vo.ValueDate <= dr.DateEnd
+--INNER JOIN aspnet_Users ur
+-- ON dr.UserId = ur.UserId
+	Select
+		vObservation.*, DataSourceRoles.RoleUserId
+	from
+		vObservation
+		inner join
+        (
+			Select
+				dsr.DataSourceID, aspnet_UsersInRoles.UserId RoleUserId, Min(dsr.DateStart) DateStart, Max(dsr.DateEnd) DateEnd
+			from
+				DataSourceRole dsr
+			inner join aspnet_UsersInRoles
+				on (dsr.RoleId = aspnet_UsersInRoles.RoleId)
+			group by
+				dsr.DataSourceID, aspnet_UsersInRoles.UserId
+		) DataSourceRoles
+		on (vObservation.DataSourceID = DataSourceRoles.DataSourceID) and
+		   (vObservation.ValueDate >= DataSourceRoles.DateStart) and 
+		   (vObservation.ValueDate <= DataSourceRoles.DateEnd)
+--< Changed 2.0.16 20161107 TimPN
+
+GO
+
 
 GO
 PRINT N'Update complete.';

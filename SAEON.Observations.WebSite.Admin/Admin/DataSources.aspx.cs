@@ -531,11 +531,11 @@ public partial class Admin_DataSources : System.Web.UI.Page
             DataSourceRole dsRole = new DataSourceRole(hiddenRoleDetail.Text);
 
             if (dfRoleDetailStart.SelectedDate.Year < 1900)
-                dsRole.DateStart = null;
+                dsRole.DateStart = new DateTime(1901,1,1);
             else
                 dsRole.DateStart = dfRoleDetailStart.SelectedDate;
             if (dfRoleDetailEnd.SelectedDate.Year < 1900)
-                dsRole.DateEnd = null;
+                dsRole.DateEnd = new DateTime(2101, 1, 1);
             else
                 dsRole.DateEnd = dfRoleDetailEnd.SelectedDate;
             dsRole.IsRoleReadOnly = cbIsRoleReadOnly.Checked;

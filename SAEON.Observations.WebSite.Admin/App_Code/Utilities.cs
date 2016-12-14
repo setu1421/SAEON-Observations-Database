@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Transactions;
 using System.Web;
 
 /// <summary>
@@ -43,5 +44,8 @@ public static class Utilities
         return string.Join("<br />", result); 
     }
 
-
+    public static TransactionScope NewTransactionScope()
+    {
+        return new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted, Timeout = TimeSpan.FromMinutes(30) });
+    }
 }

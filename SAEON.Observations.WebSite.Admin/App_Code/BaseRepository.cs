@@ -151,10 +151,10 @@ public class BaseRepository
 
         SqlQuery q = new Select(colms).From(TableName);
 
-        if (TableName == "VObservationRoles")
-        {
-            q.And(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
-        }
+        //if (TableName == "VObservationRoles")
+        //{
+        //    q.And(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
+        //}
 
         #region filters
         if (!string.IsNullOrEmpty(json))

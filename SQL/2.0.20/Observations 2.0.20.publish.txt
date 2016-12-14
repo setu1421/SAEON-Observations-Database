@@ -10,10 +10,6 @@
 
 ** User actions
      Alter
-       [dbo].[fnObservations] (Function)
+       [dbo].[vObservationRoles] (View)
 
 ** Supporting actions
-
-The source's object [Documents] is different than the target's version of the object but the target object will not be updated.
-The object [Documents] already exists in database with a different definition and will not be altered.
-

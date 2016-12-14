@@ -9,7 +9,7 @@
        None
 
 ** User actions
-     Create
-       [dbo].[fnObservations] (Function)
+     Alter
+       [dbo].[vObservationRoles] (View)
 
 ** Supporting actions
