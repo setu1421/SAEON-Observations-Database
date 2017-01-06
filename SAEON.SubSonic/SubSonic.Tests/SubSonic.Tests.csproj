@@ -340,7 +340,7 @@
       <Project>{0E82F4EB-BA66-474C-A5F9-3D10D1EE2206}</Project>
       <Name>SubSonic.Migrations</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SubSonic\SubSonic.csproj">
+    <ProjectReference Include="..\SubSonic\SAEON.SubSonic.csproj">
       <Project>{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}</Project>
       <Name>SubSonic</Name>
     </ProjectReference>
