@@ -1,0 +1,2 @@
+2016-12-02 15:03:03.365 +02:00 [Information] Version 1.8
+2016-12-02 15:13:58.940 +02:00 [Information] Version 1.8

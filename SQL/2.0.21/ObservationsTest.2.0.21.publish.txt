@@ -1,0 +1,75 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[DataSchema]
+       [dbo].[ImportBatch]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[DataSchema] (Table)
+       [dbo].[ImportBatch] (Table)
+     Alter
+       [dbo].[vObservationRoles] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[DF_DataSchema_ID] (Default Constraint)
+       [dbo].[DF_DataSchema_IgnoreFirst] (Default Constraint)
+       [dbo].[DF_DataSchema_IgnoreLast] (Default Constraint)
+       [dbo].[DF_DataSchema_AddedAt] (Default Constraint)
+       [dbo].[DF_DataSchema_UpdatedAt] (Default Constraint)
+       [dbo].[DF_ImportBatch_ID] (Default Constraint)
+       [dbo].[DF_ImportBatch_ImportDate] (Default Constraint)
+       [dbo].[DF_ImportBatch_AddedAt] (Default Constraint)
+       [dbo].[DF_ImportBatch_UpdatedAt] (Default Constraint)
+       [dbo].[FK_DataSource_DataSchema] (Foreign Key)
+       [dbo].[FK_Sensor_DataSchema] (Foreign Key)
+       [dbo].[FK_DataSchema_aspnet_Users] (Foreign Key)
+       [dbo].[FK_DataSchema_DataSourceType] (Foreign Key)
+       [dbo].[FK_SchemaColumn_DataSchema] (Foreign Key)
+       [dbo].[FK_Progress_ImportBatch] (Foreign Key)
+       [dbo].[FK_ImportBatch_aspnet_Users] (Foreign Key)
+       [dbo].[FK_ImportBatch_DataSource] (Foreign Key)
+       [dbo].[FK_ImportBatch_Status] (Foreign Key)
+       [dbo].[FK_ImportBatch_StatusReason] (Foreign Key)
+       [dbo].[FK_DataLog_ImportBatch] (Foreign Key)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+     Create
+       [dbo].[DataSchema].[IX_DataSchema_DataSourceTypeID] (Index)
+       [dbo].[DataSchema].[IX_DataSchema_UserId] (Index)
+       [dbo].[ImportBatch].[IX_ImportBatch_DataSourceID] (Index)
+       [dbo].[ImportBatch].[IX_ImportBatch_UserId] (Index)
+       [dbo].[ImportBatch].[IX_ImportBatch_ImportDate] (Index)
+       [dbo].[ImportBatch].[IX_ImportBatch_LogFileName] (Index)
+       [dbo].[ImportBatch].[IX_ImportBatch_StatusID] (Index)
+       [dbo].[ImportBatch].[IX_ImportBatch_StatusReasonID] (Index)
+       [dbo].[FK_DataSource_DataSchema] (Foreign Key)
+       [dbo].[FK_Sensor_DataSchema] (Foreign Key)
+       [dbo].[FK_DataSchema_aspnet_Users] (Foreign Key)
+       [dbo].[FK_DataSchema_DataSourceType] (Foreign Key)
+       [dbo].[FK_SchemaColumn_DataSchema] (Foreign Key)
+       [dbo].[FK_Progress_ImportBatch] (Foreign Key)
+       [dbo].[FK_ImportBatch_aspnet_Users] (Foreign Key)
+       [dbo].[FK_ImportBatch_DataSource] (Foreign Key)
+       [dbo].[FK_ImportBatch_Status] (Foreign Key)
+       [dbo].[FK_ImportBatch_StatusReason] (Foreign Key)
+       [dbo].[FK_DataLog_ImportBatch] (Foreign Key)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+       [dbo].[TR_DataSchema_Insert] (Trigger)
+       [dbo].[TR_DataSchema_Update] (Trigger)
+       [dbo].[TR_ImportBatch_Insert] (Trigger)
+       [dbo].[TR_ImportBatch_Update] (Trigger)
+     Refresh
+       [dbo].[vDataSchema] (View)
+       [dbo].[vDataSource] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vSensor] (View)
+       [dbo].[vImportBatch] (View)
+
+If this deployment is executed, changes to [dbo].[ImportBatch] might introduce run-time errors in [dbo].[progress_Progress_Resolved].
+

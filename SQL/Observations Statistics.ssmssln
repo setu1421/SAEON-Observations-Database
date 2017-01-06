@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Entity Statistics.sql = Entity Statistics.sql
 		Index file groups.sql = Index file groups.sql
+		Index usage.sql = Index usage.sql
 		Indexes.sql = Indexes.sql
 		Table file groups.sql = Table file groups.sql
 		Table Statistics.sql = Table Statistics.sql
@@ -17,7 +18,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5D8E75D8-879D-4F0A-B937-553C6DB3AC64}.Default|Default.ActiveCfg = Default
+		{C136BFCA-B787-4595-B595-B81A355C9600}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,bool? HasHeaderRow,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    DataSchema item = new DataSchema();
 		    
@@ -95,6 +95,8 @@ namespace SAEON.Observations.Data
             item.DataSourceTypeID = DataSourceTypeID;
             
             item.IgnoreFirst = IgnoreFirst;
+            
+            item.HasHeaderRow = HasHeaderRow;
             
             item.IgnoreLast = IgnoreLast;
             
@@ -122,7 +124,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,bool? HasHeaderRow,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    DataSchema item = new DataSchema();
 	        item.MarkOld();
@@ -139,6 +141,8 @@ namespace SAEON.Observations.Data
 			item.DataSourceTypeID = DataSourceTypeID;
 				
 			item.IgnoreFirst = IgnoreFirst;
+				
+			item.HasHeaderRow = HasHeaderRow;
 				
 			item.IgnoreLast = IgnoreLast;
 				

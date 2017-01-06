@@ -275,33 +275,18 @@ namespace SAEON.Observations.Data
 					colvarStatusReasonID.ForeignKeyTableName = "StatusReason";
 				schema.Columns.Add(colvarStatusReasonID);
 				
-				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
-				colvarAddedAt.ColumnName = "AddedAt";
-				colvarAddedAt.DataType = DbType.DateTime;
-				colvarAddedAt.MaxLength = 0;
-				colvarAddedAt.AutoIncrement = false;
-				colvarAddedAt.IsNullable = true;
-				colvarAddedAt.IsPrimaryKey = false;
-				colvarAddedAt.IsForeignKey = false;
-				colvarAddedAt.IsReadOnly = false;
-				
-						colvarAddedAt.DefaultSetting = @"(getdate())";
-				colvarAddedAt.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarAddedAt);
-				
-				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
-				colvarUpdatedAt.ColumnName = "UpdatedAt";
-				colvarUpdatedAt.DataType = DbType.DateTime;
-				colvarUpdatedAt.MaxLength = 0;
-				colvarUpdatedAt.AutoIncrement = false;
-				colvarUpdatedAt.IsNullable = true;
-				colvarUpdatedAt.IsPrimaryKey = false;
-				colvarUpdatedAt.IsForeignKey = false;
-				colvarUpdatedAt.IsReadOnly = false;
-				
-						colvarUpdatedAt.DefaultSetting = @"(getdate())";
-				colvarUpdatedAt.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarUpdatedAt);
+				TableSchema.TableColumn colvarErrors = new TableSchema.TableColumn(schema);
+				colvarErrors.ColumnName = "Errors";
+				colvarErrors.DataType = DbType.AnsiString;
+				colvarErrors.MaxLength = 1000;
+				colvarErrors.AutoIncrement = false;
+				colvarErrors.IsNullable = true;
+				colvarErrors.IsPrimaryKey = false;
+				colvarErrors.IsForeignKey = false;
+				colvarErrors.IsReadOnly = false;
+				colvarErrors.DefaultSetting = @"";
+				colvarErrors.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarErrors);
 				
 				TableSchema.TableColumn colvarSourceFile = new TableSchema.TableColumn(schema);
 				colvarSourceFile.ColumnName = "SourceFile";
@@ -367,6 +352,34 @@ namespace SAEON.Observations.Data
 				colvarPass4File.DefaultSetting = @"";
 				colvarPass4File.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarPass4File);
+				
+				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+				colvarAddedAt.ColumnName = "AddedAt";
+				colvarAddedAt.DataType = DbType.DateTime;
+				colvarAddedAt.MaxLength = 0;
+				colvarAddedAt.AutoIncrement = false;
+				colvarAddedAt.IsNullable = true;
+				colvarAddedAt.IsPrimaryKey = false;
+				colvarAddedAt.IsForeignKey = false;
+				colvarAddedAt.IsReadOnly = false;
+				
+						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedAt);
+				
+				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+				colvarUpdatedAt.ColumnName = "UpdatedAt";
+				colvarUpdatedAt.DataType = DbType.DateTime;
+				colvarUpdatedAt.MaxLength = 0;
+				colvarUpdatedAt.AutoIncrement = false;
+				colvarUpdatedAt.IsNullable = true;
+				colvarUpdatedAt.IsPrimaryKey = false;
+				colvarUpdatedAt.IsForeignKey = false;
+				colvarUpdatedAt.IsReadOnly = false;
+				
+						colvarUpdatedAt.DefaultSetting = @"(getdate())";
+				colvarUpdatedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUpdatedAt);
 				
 				BaseSchema = schema;
 				//add this schema to the provider
@@ -466,20 +479,12 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.StatusReasonID, value); }
 		}
 		  
-		[XmlAttribute("AddedAt")]
+		[XmlAttribute("Errors")]
 		[Bindable(true)]
-		public DateTime? AddedAt 
+		public string Errors 
 		{
-			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
-			set { SetColumnValue(Columns.AddedAt, value); }
-		}
-		  
-		[XmlAttribute("UpdatedAt")]
-		[Bindable(true)]
-		public DateTime? UpdatedAt 
-		{
-			get { return GetColumnValue<DateTime?>(Columns.UpdatedAt); }
-			set { SetColumnValue(Columns.UpdatedAt, value); }
+			get { return GetColumnValue<string>(Columns.Errors); }
+			set { SetColumnValue(Columns.Errors, value); }
 		}
 		  
 		[XmlAttribute("SourceFile")]
@@ -520,6 +525,22 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<byte[]>(Columns.Pass4File); }
 			set { SetColumnValue(Columns.Pass4File, value); }
+		}
+		  
+		[XmlAttribute("AddedAt")]
+		[Bindable(true)]
+		public DateTime? AddedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
+			set { SetColumnValue(Columns.AddedAt, value); }
+		}
+		  
+		[XmlAttribute("UpdatedAt")]
+		[Bindable(true)]
+		public DateTime? UpdatedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.UpdatedAt); }
+			set { SetColumnValue(Columns.UpdatedAt, value); }
 		}
 		
 		#endregion
@@ -607,7 +628,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varSourceFile,byte[] varPass1File,byte[] varPass2File,byte[] varPass3File,byte[] varPass4File)
+		public static void Insert(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varErrors,byte[] varSourceFile,byte[] varPass1File,byte[] varPass2File,byte[] varPass3File,byte[] varPass4File,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -631,9 +652,7 @@ namespace SAEON.Observations.Data
 			
 			item.StatusReasonID = varStatusReasonID;
 			
-			item.AddedAt = varAddedAt;
-			
-			item.UpdatedAt = varUpdatedAt;
+			item.Errors = varErrors;
 			
 			item.SourceFile = varSourceFile;
 			
@@ -645,6 +664,10 @@ namespace SAEON.Observations.Data
 			
 			item.Pass4File = varPass4File;
 			
+			item.AddedAt = varAddedAt;
+			
+			item.UpdatedAt = varUpdatedAt;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -655,7 +678,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,int varCode,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varSourceFile,byte[] varPass1File,byte[] varPass2File,byte[] varPass3File,byte[] varPass4File)
+		public static void Update(Guid varId,int varCode,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varErrors,byte[] varSourceFile,byte[] varPass1File,byte[] varPass2File,byte[] varPass3File,byte[] varPass4File,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -681,9 +704,7 @@ namespace SAEON.Observations.Data
 			
 				item.StatusReasonID = varStatusReasonID;
 			
-				item.AddedAt = varAddedAt;
-			
-				item.UpdatedAt = varUpdatedAt;
+				item.Errors = varErrors;
 			
 				item.SourceFile = varSourceFile;
 			
@@ -694,6 +715,10 @@ namespace SAEON.Observations.Data
 				item.Pass3File = varPass3File;
 			
 				item.Pass4File = varPass4File;
+			
+				item.AddedAt = varAddedAt;
+			
+				item.UpdatedAt = varUpdatedAt;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -785,51 +810,58 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn ErrorsColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn SourceFileColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn SourceFileColumn
+        public static TableSchema.TableColumn Pass1FileColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn Pass1FileColumn
+        public static TableSchema.TableColumn Pass2FileColumn
         {
             get { return Schema.Columns[14]; }
         }
         
         
         
-        public static TableSchema.TableColumn Pass2FileColumn
+        public static TableSchema.TableColumn Pass3FileColumn
         {
             get { return Schema.Columns[15]; }
         }
         
         
         
-        public static TableSchema.TableColumn Pass3FileColumn
+        public static TableSchema.TableColumn Pass4FileColumn
         {
             get { return Schema.Columns[16]; }
         }
         
         
         
-        public static TableSchema.TableColumn Pass4FileColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[17]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[18]; }
         }
         
         
@@ -849,13 +881,14 @@ namespace SAEON.Observations.Data
 			 public static string Comment = @"Comment";
 			 public static string StatusID = @"StatusID";
 			 public static string StatusReasonID = @"StatusReasonID";
-			 public static string AddedAt = @"AddedAt";
-			 public static string UpdatedAt = @"UpdatedAt";
+			 public static string Errors = @"Errors";
 			 public static string SourceFile = @"SourceFile";
 			 public static string Pass1File = @"Pass1File";
 			 public static string Pass2File = @"Pass2File";
 			 public static string Pass3File = @"Pass3File";
 			 public static string Pass4File = @"Pass4File";
+			 public static string AddedAt = @"AddedAt";
+			 public static string UpdatedAt = @"UpdatedAt";
 						
 		}
 		#endregion

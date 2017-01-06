@@ -18,6 +18,7 @@
 [Rr]eleases/
 x64/
 x86/
+amd64/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -303,5 +304,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# Log Files
-App_Data/
+# Application Data
+/App_Data/*

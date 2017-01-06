@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using Ext.Net;
+using Serilog;
 
 /// <summary>
 /// Summary description for Login
@@ -40,6 +41,7 @@ public partial class _Login : System.Web.UI.Page
         }
         catch (Exception ex)
         {
+            Log.Error(ex, "Unable to login");
             MessageBoxes.Error(ex, "Error", "Unable to login");
         }
 

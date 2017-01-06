@@ -1,0 +1,559 @@
+2016-11-25 09:34:17.919 +02:00 [Information] Items: [QueryDataClass { NodeID: "Station_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Stations_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Site_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Sites_bea77ec2-5a67-4f29-86df-3e54df40fb6f|Organisation_bea77ec2-5a67-4f29-86df-3e54df40fb6f", ID: 2e0b5097-8b53-4a81-9635-c52adf9fc4ed, Type: "Station" }]
+2016-11-25 09:34:17.953 +02:00 [Information] Items: [Tuple`2 { Item1: "Station", Item2: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed" }, Tuple`2 { Item1: "Stations", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Site", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Sites", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }, Tuple`2 { Item1: "Organisation", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }]
+2016-11-25 09:34:17.991 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[StationID] = @StationID0
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID1
+)"
+2016-11-25 09:37:29.104 +02:00 [Information] Items: [QueryDataClass { NodeID: "Station_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Stations_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Site_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Sites_bea77ec2-5a67-4f29-86df-3e54df40fb6f|Organisation_bea77ec2-5a67-4f29-86df-3e54df40fb6f", ID: 2e0b5097-8b53-4a81-9635-c52adf9fc4ed, Type: "Station" }]
+2016-11-25 09:37:29.104 +02:00 [Information] Items: [Tuple`2 { Item1: "Station", Item2: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed" }, Tuple`2 { Item1: "Stations", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Site", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Sites", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }, Tuple`2 { Item1: "Organisation", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }]
+2016-11-25 09:37:29.130 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[StationID] = @StationID0
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID1
+)"
+2016-11-25 09:39:30.050 +02:00 [Information] Items: [QueryDataClass { NodeID: "Station_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Stations_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Site_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Sites_bea77ec2-5a67-4f29-86df-3e54df40fb6f|Organisation_bea77ec2-5a67-4f29-86df-3e54df40fb6f", ID: 2e0b5097-8b53-4a81-9635-c52adf9fc4ed, Type: "Station" }]
+2016-11-25 09:39:30.050 +02:00 [Information] Items: [Tuple`2 { Item1: "Station", Item2: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed" }, Tuple`2 { Item1: "Stations", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Site", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Sites", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }, Tuple`2 { Item1: "Organisation", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }]
+2016-11-25 09:39:30.052 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[StationID] = @StationID0
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID1
+)"
+2016-11-25 09:56:48.025 +02:00 [Information] Items: [QueryDataClass { NodeID: "Station_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Stations_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Site_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Sites_bea77ec2-5a67-4f29-86df-3e54df40fb6f|Organisation_bea77ec2-5a67-4f29-86df-3e54df40fb6f", ID: 2e0b5097-8b53-4a81-9635-c52adf9fc4ed, Type: "Station" }]
+2016-11-25 09:56:48.045 +02:00 [Information] Items: [Tuple`2 { Item1: "Station", Item2: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed" }, Tuple`2 { Item1: "Stations", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Site", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Sites", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }, Tuple`2 { Item1: "Organisation", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }]
+2016-11-25 09:57:06.817 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[StationID] = @StationID0
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID1
+)"
+2016-11-25 10:09:27.649 +02:00 [Information] Items: [QueryDataClass { NodeID: "Instrument_4fd5042a-da55-4622-bf36-036bd459bc00|Instruments_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Station_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Stations_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Site_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Sites_bea77ec2-5a67-4f29-86df-3e54df40fb6f|Organisation_bea77ec2-5a67-4f29-86df-3e54df40fb6f", ID: 4fd5042a-da55-4622-bf36-036bd459bc00, Type: "Instrument" }]
+2016-11-25 10:09:27.649 +02:00 [Information] Items: [Tuple`2 { Item1: "Instrument", Item2: "4fd5042a-da55-4622-bf36-036bd459bc00" }, Tuple`2 { Item1: "Instruments", Item2: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed" }, Tuple`2 { Item1: "Station", Item2: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed" }, Tuple`2 { Item1: "Stations", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Site", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Sites", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }, Tuple`2 { Item1: "Organisation", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }]
+2016-11-25 10:09:42.344 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId0
+ OR ([dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate4
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate5
+)
+"
+2016-11-25 10:20:34.819 +02:00 [Information] Items: [QueryDataClass { NodeID: "Instrument_4fd5042a-da55-4622-bf36-036bd459bc00|Instruments_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Station_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Stations_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Site_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Sites_bea77ec2-5a67-4f29-86df-3e54df40fb6f|Organisation_bea77ec2-5a67-4f29-86df-3e54df40fb6f", ID: 4fd5042a-da55-4622-bf36-036bd459bc00, Type: "Instrument" }]
+2016-11-25 10:20:34.820 +02:00 [Information] Items: [Tuple`2 { Item1: "Instrument", Item2: "4fd5042a-da55-4622-bf36-036bd459bc00" }, Tuple`2 { Item1: "Instruments", Item2: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed" }, Tuple`2 { Item1: "Station", Item2: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed" }, Tuple`2 { Item1: "Stations", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Site", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Sites", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }, Tuple`2 { Item1: "Organisation", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }]
+2016-11-25 10:42:17.753 +02:00 [Information] Items: [QueryDataClass { NodeID: "Instrument_4fd5042a-da55-4622-bf36-036bd459bc00|Instruments_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Station_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Stations_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Site_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Sites_bea77ec2-5a67-4f29-86df-3e54df40fb6f|Organisation_bea77ec2-5a67-4f29-86df-3e54df40fb6f", ID: 4fd5042a-da55-4622-bf36-036bd459bc00, Type: "Instrument" }]
+2016-11-25 10:42:17.772 +02:00 [Information] Items: [Tuple`2 { Item1: "Instrument", Item2: "4fd5042a-da55-4622-bf36-036bd459bc00" }, Tuple`2 { Item1: "Instruments", Item2: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed" }, Tuple`2 { Item1: "Station", Item2: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed" }, Tuple`2 { Item1: "Stations", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Site", Item2: "d8f1e8df-8864-44cc-826f-27ece5e9cb55" }, Tuple`2 { Item1: "Sites", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }, Tuple`2 { Item1: "Organisation", Item2: "bea77ec2-5a67-4f29-86df-3e54df40fb6f" }]
+2016-11-25 10:51:36.305 +02:00 [Information] Items: [QueryDataClass { NodeID: "Sensor_c5159c63-1230-4b85-998e-9bd0976beb95|Sensors_4fd5042a-da55-4622-bf36-036bd459bc00|Instrument_4fd5042a-da55-4622-bf36-036bd459bc00|Instruments_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Station_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Stations_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Site_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Sites_bea77ec2-5a67-4f29-86df-3e54df40fb6f|Organisation_bea77ec2-5a67-4f29-86df-3e54df40fb6f", ID: c5159c63-1230-4b85-998e-9bd0976beb95, Type: "Sensor" }]
+2016-11-25 10:51:36.335 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId0
+ OR ([dbo].[vObservationRoles].[SensorID] = @SensorID1
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID2
+ AND [dbo].[vObservationRoles].[StationID] = @StationID3
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+"
+2016-11-25 10:56:31.989 +02:00 [Information] Items: [QueryDataClass { NodeID: "Offering_8b2ff2df-b036-48b9-b9eb-e7c8771a4378|Phenomenon_5c029394-6a23-42fe-b227-ea025410b94d|Sensor_c5159c63-1230-4b85-998e-9bd0976beb95|Sensors_4fd5042a-da55-4622-bf36-036bd459bc00|Instrument_4fd5042a-da55-4622-bf36-036bd459bc00|Instruments_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Station_2e0b5097-8b53-4a81-9635-c52adf9fc4ed|Stations_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Site_d8f1e8df-8864-44cc-826f-27ece5e9cb55|Sites_bea77ec2-5a67-4f29-86df-3e54df40fb6f|Organisation_bea77ec2-5a67-4f29-86df-3e54df40fb6f", ID: 8b2ff2df-b036-48b9-b9eb-e7c8771a4378, Type: "Offering" }]
+2016-11-25 10:56:32.008 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId0
+ OR ([dbo].[vObservationRoles].[OfferingID] = @OfferingID1
+ AND [dbo].[vObservationRoles].[PhenomenonID] = @PhenomenonID2
+ AND [dbo].[vObservationRoles].[SensorID] = @SensorID3
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID4
+ AND [dbo].[vObservationRoles].[StationID] = @StationID5
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID6
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate7
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate8
+)
+"
+2016-11-25 11:00:38.402 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId0
+ OR ([dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate4
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate5
+)
+"
+2016-11-25 11:52:06.910 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE [dbo].[vObservationRoles].[UserId] = @UserId0
+ OR ([dbo].[vObservationRoles].[StationID] = @StationID1
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID2
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate3
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate4
+)
+"
+2016-11-25 11:53:35.205 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE [dbo].[vObservationRoles].[UserId] = @UserId0
+ OR ([dbo].[vObservationRoles].[StationID] = @StationID1
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID2
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate3
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate4
+)
+"
+2016-11-25 12:09:16.140 +02:00 [Information] CurrentPage: 1 Start: 0 Limit: 250 Total: 17414
+2016-11-25 12:09:16.185 +02:00 [Information] SQL: "					
+					DECLARE @Page int
+					DECLARE @PageSize int
+
+					SET @Page = 1
+					SET @PageSize = 250
+
+					SET NOCOUNT ON
+
+					-- create a temp table to hold order ids
+					DECLARE @TempTable TABLE (IndexId int identity, _keyID UniqueIdentifier)
+
+					-- insert the table ids and row numbers into the memory table
+					INSERT INTO @TempTable
+					(
+					  _keyID
+					)
+					SELECT 
+						[dbo].[vObservationRoles].[ID]
+					     FROM [dbo].[vObservationRoles]
+ WHERE [dbo].[vObservationRoles].[UserId] = @UserId0
+ OR ([dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+
+                         AND [dbo].[vObservationRoles].[UserId] = @UserId0
+ OR ([dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+ ORDER BY ValueDate DESC
+
+					-- select only those rows belonging to the proper page
+					    SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ FROM [dbo].[vObservationRoles]
+
+					INNER JOIN @TempTable t ON [dbo].[vObservationRoles].[ID] = t._keyID
+					WHERE t.IndexId BETWEEN ((@Page - 1) * @PageSize + 1) AND (@Page * @PageSize)
+                    
+                    "
+2016-11-25 12:12:13.790 +02:00 [Information] CurrentPage: 1 Start: 0 Limit: 250 Total: 14170
+2016-11-25 12:12:13.791 +02:00 [Information] SQL: "					
+					DECLARE @Page int
+					DECLARE @PageSize int
+
+					SET @Page = 1
+					SET @PageSize = 250
+
+					SET NOCOUNT ON
+
+					-- create a temp table to hold order ids
+					DECLARE @TempTable TABLE (IndexId int identity, _keyID UniqueIdentifier)
+
+					-- insert the table ids and row numbers into the memory table
+					INSERT INTO @TempTable
+					(
+					  _keyID
+					)
+					SELECT 
+						[dbo].[vObservationRoles].[ID]
+					     FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[InstrumentID] = @InstrumentID0
+ AND [dbo].[vObservationRoles].[StationID] = @StationID1
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID2
+ AND [dbo].[vObservationRoles].[UserId] = @UserId3
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate4
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate5
+)
+
+                         AND ([dbo].[vObservationRoles].[InstrumentID] = @InstrumentID0
+ AND [dbo].[vObservationRoles].[StationID] = @StationID1
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID2
+ AND [dbo].[vObservationRoles].[UserId] = @UserId3
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate4
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate5
+)
+ ORDER BY ValueDate DESC
+
+					-- select only those rows belonging to the proper page
+					    SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ FROM [dbo].[vObservationRoles]
+
+					INNER JOIN @TempTable t ON [dbo].[vObservationRoles].[ID] = t._keyID
+					WHERE t.IndexId BETWEEN ((@Page - 1) * @PageSize + 1) AND (@Page * @PageSize)
+                    
+                    "
+2016-11-25 12:31:10.995 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[InstrumentID] = @InstrumentID0
+ AND [dbo].[vObservationRoles].[StationID] = @StationID1
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID2
+ AND [dbo].[vObservationRoles].[UserId] = @UserId3
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate4
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate5
+)
+"
+2016-11-25 12:43:11.888 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+"
+2016-11-25 14:02:39.838 +02:00 [Information] ObservationsDB
+2016-11-25 14:02:47.631 +02:00 [Information] GetPagedFilteredList SQL: "					
+					DECLARE @Page int
+					DECLARE @PageSize int
+
+					SET @Page = 1
+					SET @PageSize = 250
+
+					SET NOCOUNT ON
+
+					-- create a temp table to hold order ids
+					DECLARE @TempTable TABLE (IndexId int identity, _keyID UniqueIdentifier)
+
+					-- insert the table ids and row numbers into the memory table
+					INSERT INTO @TempTable
+					(
+					  _keyID
+					)
+					SELECT 
+						[dbo].[vObservationRoles].[ID]
+					     FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+
+                         AND ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+ ORDER BY ValueDate DESC
+
+					-- select only those rows belonging to the proper page
+					    SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ FROM [dbo].[vObservationRoles]
+
+					INNER JOIN @TempTable t ON [dbo].[vObservationRoles].[ID] = t._keyID
+					WHERE t.IndexId BETWEEN ((@Page - 1) * @PageSize + 1) AND (@Page * @PageSize)
+                    
+                    "
+2016-11-25 14:10:40.659 +02:00 [Information] Providers: 1 ["SubSonic.SqlDataProvider"]
+2016-11-25 14:53:38.197 +02:00 [Information] GetPagedFilteredList SQL: "
+SELECT 250 FROM (
+SELECT ROW_NUMBER() OVER ( ORDER BY ValueDate DESC
+) AS Row, 
+ [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ 
+ FROM [dbo].[vObservationRoles]
+
+
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+
+
+) AS PagedResults
+WHERE  Row >= 1 AND Row <= 250"
+2016-11-25 15:03:07.494 +02:00 [Information] GetPagedFilteredList SQL: "
+SELECT * FROM (
+SELECT ROW_NUMBER() OVER ( ORDER BY ValueDate DESC
+) AS Row, 
+ [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ 
+ FROM [dbo].[vObservationRoles]
+
+
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+
+
+) AS PagedResults
+WHERE  Row >= 1 AND Row <= 250"
+2016-11-25 15:03:48.488 +02:00 [Information] GetPagedFilteredList SQL: "
+SELECT * FROM (
+SELECT ROW_NUMBER() OVER ( ORDER BY ValueDate DESC
+) AS Row, 
+ [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ 
+ FROM [dbo].[vObservationRoles]
+
+
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+
+
+) AS PagedResults
+WHERE  Row >= 251 AND Row <= 500"
+2016-11-25 15:03:52.192 +02:00 [Information] GetPagedFilteredList SQL: "
+SELECT * FROM (
+SELECT ROW_NUMBER() OVER ( ORDER BY ValueDate DESC
+) AS Row, 
+ [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ 
+ FROM [dbo].[vObservationRoles]
+
+
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+
+
+) AS PagedResults
+WHERE  Row >= 501 AND Row <= 750"
+2016-11-25 15:03:55.325 +02:00 [Information] GetPagedFilteredList SQL: "
+SELECT * FROM (
+SELECT ROW_NUMBER() OVER ( ORDER BY ValueDate DESC
+) AS Row, 
+ [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ 
+ FROM [dbo].[vObservationRoles]
+
+
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+
+
+) AS PagedResults
+WHERE  Row >= 751 AND Row <= 1000"
+2016-11-25 15:03:58.264 +02:00 [Information] GetPagedFilteredList SQL: "
+SELECT * FROM (
+SELECT ROW_NUMBER() OVER ( ORDER BY ValueDate DESC
+) AS Row, 
+ [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ 
+ FROM [dbo].[vObservationRoles]
+
+
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+
+
+) AS PagedResults
+WHERE  Row >= 2501 AND Row <= 2750"
+2016-11-25 15:04:09.283 +02:00 [Information] GetPagedFilteredList SQL: "
+SELECT * FROM (
+SELECT ROW_NUMBER() OVER ( ORDER BY ValueDate DESC
+) AS Row, 
+ [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ 
+ FROM [dbo].[vObservationRoles]
+
+
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+
+
+) AS PagedResults
+WHERE  Row >= 1 AND Row <= 105"
+2016-11-25 15:04:20.657 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[Comment]
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+ ORDER BY ValueDate DESC
+"
+2016-11-25 15:15:55.515 +02:00 [Information] GetPagedFilteredList SQL: "
+SELECT * FROM (
+SELECT ROW_NUMBER() OVER ( ORDER BY ValueDate DESC
+) AS Row, 
+ [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ 
+ FROM [dbo].[vObservationRoles]
+
+
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+
+
+) AS PagedResults
+WHERE  Row >= 1 AND Row <= 250"
+2016-11-25 15:17:36.682 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[Comment]
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+ ORDER BY ValueDate DESC
+"
+2016-11-25 15:20:31.686 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[Comment]
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+ ORDER BY ValueDate DESC
+"
+2016-11-25 15:20:43.886 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[Comment]
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+ ORDER BY ValueDate DESC
+"
+2016-11-25 15:24:29.604 +02:00 [Information] GetPagedFilteredList SQL: "
+SELECT * FROM (
+SELECT ROW_NUMBER() OVER ( ORDER BY ValueDate DESC
+) AS Row, 
+ [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName]
+
+ 
+ FROM [dbo].[vObservationRoles]
+
+
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+
+
+) AS PagedResults
+WHERE  Row >= 1 AND Row <= 250"
+2016-11-25 15:24:35.303 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[Comment]
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+ ORDER BY ValueDate DESC
+"
+2016-11-25 15:24:36.769 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[Comment]
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+ ORDER BY ValueDate DESC
+"
+2016-11-25 15:24:42.315 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[StatusName], [dbo].[vObservationRoles].[StatusReasonName], [dbo].[vObservationRoles].[Comment]
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+ AND [dbo].[vObservationRoles].[SiteID] = @SiteID3
+ AND [dbo].[vObservationRoles].[UserId] = @UserId4
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate5
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate6
+)
+ ORDER BY ValueDate DESC
+"

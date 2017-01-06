@@ -1,0 +1,140 @@
+2016-11-21 12:46:36.566 +02:00 [Error] Unable to clear status and reason on all observations
+SubSonic.SqlQueryException: Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+   at SubSonic.Update.Execute()
+   at Admin_ImportBatches.ClearAll() in S:\Development\SAEON.ObservationsDatabase\SAEON.Observations.WebSite.Admin\Admin\ImportBatches.aspx.cs:line 1056
+2016-11-21 14:19:27.577 +02:00 [Error] Unable to clear status and reason on all observations
+SubSonic.SqlQueryException: Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+   at SubSonic.Update.Execute()
+   at Admin_ImportBatches.ClearAll() in S:\Development\SAEON.ObservationsDatabase\SAEON.Observations.WebSite.Admin\Admin\ImportBatches.aspx.cs:line 1061
+2016-11-21 15:42:09.066 +02:00 [Error] Unable to clear status and reason on all observations
+SubSonic.SqlQueryException: Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+   at SubSonic.Update.Execute()
+   at Admin_ImportBatches.ClearAll() in S:\Development\SAEON.ObservationsDatabase\SAEON.Observations.WebSite.Admin\Admin\ImportBatches.aspx.cs:line 1060
+2016-11-21 16:10:45.323 +02:00 [Information] Items: [QueryDataClass { NodeID: "40cd2a07-5777-4928-b35d-891c4c6a81eb_Station|631d177a-8871-43fd-98cc-6736918d3dc9_Instrument|b126b802-62ea-41da-9647-d76775f76f17_Sensor|5597a189-00f5-4bae-991b-7ffd733a46d6_Phenomenon", ID: 5597a189-00f5-4bae-991b-7ffd733a46d6, Type: "Phenomenon" }]
+2016-11-21 16:10:45.373 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[PhenomenonID] = @PhenomenonID0
+ AND [dbo].[vObservationRoles].[SensorID] = @SensorID1
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID2
+ AND [dbo].[vObservationRoles].[StationID] = @StationID3
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate4
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate5
+ AND [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId6
+)
+"
+2016-11-21 16:11:02.430 +02:00 [Information] Items: [QueryDataClass { NodeID: "40cd2a07-5777-4928-b35d-891c4c6a81eb_Station|631d177a-8871-43fd-98cc-6736918d3dc9_Instrument|b126b802-62ea-41da-9647-d76775f76f17_Sensor|5597a189-00f5-4bae-991b-7ffd733a46d6_Phenomenon", ID: 5597a189-00f5-4bae-991b-7ffd733a46d6, Type: "Phenomenon" }, QueryDataClass { NodeID: "40cd2a07-5777-4928-b35d-891c4c6a81eb_Station|631d177a-8871-43fd-98cc-6736918d3dc9_Instrument|09997032-35d6-4bd7-8185-933fbf98f8f9_Sensor|5597a189-00f5-4bae-991b-7ffd733a46d6_Phenomenon", ID: 5597a189-00f5-4bae-991b-7ffd733a46d6, Type: "Phenomenon" }]
+2016-11-21 16:11:02.454 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[PhenomenonID] = @PhenomenonID0
+ AND [dbo].[vObservationRoles].[SensorID] = @SensorID1
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID2
+ AND [dbo].[vObservationRoles].[StationID] = @StationID3
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate4
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate5
+ AND [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId6
+)
+ OR ([dbo].[vObservationRoles].[PhenomenonID] = @PhenomenonID8
+ AND [dbo].[vObservationRoles].[SensorID] = @SensorID9
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID10
+ AND [dbo].[vObservationRoles].[StationID] = @StationID11
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate12
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate13
+ AND [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId14
+)
+"
+2016-11-21 16:11:20.466 +02:00 [Information] Items: [QueryDataClass { NodeID: "40cd2a07-5777-4928-b35d-891c4c6a81eb_Station|631d177a-8871-43fd-98cc-6736918d3dc9_Instrument|b126b802-62ea-41da-9647-d76775f76f17_Sensor|5597a189-00f5-4bae-991b-7ffd733a46d6_Phenomenon", ID: 5597a189-00f5-4bae-991b-7ffd733a46d6, Type: "Phenomenon" }, QueryDataClass { NodeID: "40cd2a07-5777-4928-b35d-891c4c6a81eb_Station|631d177a-8871-43fd-98cc-6736918d3dc9_Instrument|09997032-35d6-4bd7-8185-933fbf98f8f9_Sensor|5597a189-00f5-4bae-991b-7ffd733a46d6_Phenomenon", ID: 5597a189-00f5-4bae-991b-7ffd733a46d6, Type: "Phenomenon" }, QueryDataClass { NodeID: "c22273dd-e529-4525-8f96-ef04b6450c09_Station|a78e462e-ab21-4212-8015-745c7a8f4632_Instrument|c63680ea-4d60-4cd5-811f-4997ebdebde9_Sensor|a2b1ee25-48e4-492a-bd31-73535bcb9e59_Phenomenon", ID: a2b1ee25-48e4-492a-bd31-73535bcb9e59, Type: "Phenomenon" }]
+2016-11-21 16:11:20.485 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[PhenomenonID] = @PhenomenonID0
+ AND [dbo].[vObservationRoles].[SensorID] = @SensorID1
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID2
+ AND [dbo].[vObservationRoles].[StationID] = @StationID3
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate4
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate5
+ AND [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId6
+)
+ OR ([dbo].[vObservationRoles].[PhenomenonID] = @PhenomenonID8
+ AND [dbo].[vObservationRoles].[SensorID] = @SensorID9
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID10
+ AND [dbo].[vObservationRoles].[StationID] = @StationID11
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate12
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate13
+ AND [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId14
+)
+ OR ([dbo].[vObservationRoles].[PhenomenonID] = @PhenomenonID16
+ AND [dbo].[vObservationRoles].[SensorID] = @SensorID17
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID18
+ AND [dbo].[vObservationRoles].[StationID] = @StationID19
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate20
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate21
+ AND [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId22
+)
+"
+2016-11-21 16:11:26.106 +02:00 [Information] Items: [QueryDataClass { NodeID: "40cd2a07-5777-4928-b35d-891c4c6a81eb_Station|631d177a-8871-43fd-98cc-6736918d3dc9_Instrument|b126b802-62ea-41da-9647-d76775f76f17_Sensor|5597a189-00f5-4bae-991b-7ffd733a46d6_Phenomenon", ID: 5597a189-00f5-4bae-991b-7ffd733a46d6, Type: "Phenomenon" }, QueryDataClass { NodeID: "40cd2a07-5777-4928-b35d-891c4c6a81eb_Station|631d177a-8871-43fd-98cc-6736918d3dc9_Instrument|09997032-35d6-4bd7-8185-933fbf98f8f9_Sensor|5597a189-00f5-4bae-991b-7ffd733a46d6_Phenomenon", ID: 5597a189-00f5-4bae-991b-7ffd733a46d6, Type: "Phenomenon" }, QueryDataClass { NodeID: "c22273dd-e529-4525-8f96-ef04b6450c09_Station|a78e462e-ab21-4212-8015-745c7a8f4632_Instrument|c63680ea-4d60-4cd5-811f-4997ebdebde9_Sensor", ID: c63680ea-4d60-4cd5-811f-4997ebdebde9, Type: "Sensor" }, QueryDataClass { NodeID: "c22273dd-e529-4525-8f96-ef04b6450c09_Station|a78e462e-ab21-4212-8015-745c7a8f4632_Instrument|c63680ea-4d60-4cd5-811f-4997ebdebde9_Sensor|a2b1ee25-48e4-492a-bd31-73535bcb9e59_Phenomenon", ID: a2b1ee25-48e4-492a-bd31-73535bcb9e59, Type: "Phenomenon" }]
+2016-11-21 16:11:26.111 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[PhenomenonID] = @PhenomenonID0
+ AND [dbo].[vObservationRoles].[SensorID] = @SensorID1
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID2
+ AND [dbo].[vObservationRoles].[StationID] = @StationID3
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate4
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate5
+ AND [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId6
+)
+ OR ([dbo].[vObservationRoles].[PhenomenonID] = @PhenomenonID8
+ AND [dbo].[vObservationRoles].[SensorID] = @SensorID9
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID10
+ AND [dbo].[vObservationRoles].[StationID] = @StationID11
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate12
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate13
+ AND [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId14
+)
+ OR ([dbo].[vObservationRoles].[SensorID] = @SensorID16
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID17
+ AND [dbo].[vObservationRoles].[StationID] = @StationID18
+)
+ OR ([dbo].[vObservationRoles].[PhenomenonID] = @PhenomenonID20
+ AND [dbo].[vObservationRoles].[SensorID] = @SensorID21
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID22
+ AND [dbo].[vObservationRoles].[StationID] = @StationID23
+ AND [dbo].[vObservationRoles].[ValueDate] >= @ValueDate24
+ AND [dbo].[vObservationRoles].[ValueDate] <= @ValueDate25
+ AND [dbo].[vObservationRoles].[RoleUserId] = @RoleUserId26
+)
+"
+2016-11-21 16:35:08.260 +02:00 [Information] Items: [QueryDataClass { NodeID: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed_Station|4fd5042a-da55-4622-bf36-036bd459bc00_Instrument|c5159c63-1230-4b85-998e-9bd0976beb95_Sensor", ID: c5159c63-1230-4b85-998e-9bd0976beb95, Type: "Sensor" }]
+2016-11-21 16:35:08.375 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+)"
+2016-11-21 16:35:32.518 +02:00 [Information] Items: [QueryDataClass { NodeID: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed_Station|4fd5042a-da55-4622-bf36-036bd459bc00_Instrument|c5159c63-1230-4b85-998e-9bd0976beb95_Sensor", ID: c5159c63-1230-4b85-998e-9bd0976beb95, Type: "Sensor" }]
+2016-11-21 16:35:32.520 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+)"
+2016-11-21 16:35:51.809 +02:00 [Information] Items: [QueryDataClass { NodeID: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed_Station|4fd5042a-da55-4622-bf36-036bd459bc00_Instrument|c5159c63-1230-4b85-998e-9bd0976beb95_Sensor", ID: c5159c63-1230-4b85-998e-9bd0976beb95, Type: "Sensor" }]
+2016-11-21 16:35:51.811 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+)"
+2016-11-21 16:37:58.815 +02:00 [Information] Items: [QueryDataClass { NodeID: "2e0b5097-8b53-4a81-9635-c52adf9fc4ed_Station|4fd5042a-da55-4622-bf36-036bd459bc00_Instrument|c5159c63-1230-4b85-998e-9bd0976beb95_Sensor", ID: c5159c63-1230-4b85-998e-9bd0976beb95, Type: "Sensor" }]
+2016-11-21 16:37:58.817 +02:00 [Information] SQL: "SELECT [dbo].[vObservationRoles].[ID], [dbo].[vObservationRoles].[SensorID], [dbo].[vObservationRoles].[PhenomenonOfferingID], [dbo].[vObservationRoles].[PhenomenonUOMID], [dbo].[vObservationRoles].[UserId], [dbo].[vObservationRoles].[RawValue], [dbo].[vObservationRoles].[DataValue], [dbo].[vObservationRoles].[ImportBatchID], [dbo].[vObservationRoles].[ValueDate], [dbo].[vObservationRoles].[Comment], [dbo].[vObservationRoles].[UserName], [dbo].[vObservationRoles].[OfferingID], [dbo].[vObservationRoles].[OfferingName], [dbo].[vObservationRoles].[UnitOfMeasureID], [dbo].[vObservationRoles].[UnitOfMeasureUnit], [dbo].[vObservationRoles].[UnitOfMeasureSymbol], [dbo].[vObservationRoles].[SensorName], [dbo].[vObservationRoles].[PhenomenonID], [dbo].[vObservationRoles].[PhenomenonName], [dbo].[vObservationRoles].[DataSourceID], [dbo].[vObservationRoles].[DataSourceName], [dbo].[vObservationRoles].[DataSchemaName], [dbo].[vObservationRoles].[InstrumentID], [dbo].[vObservationRoles].[InstrumentName], [dbo].[vObservationRoles].[StationID], [dbo].[vObservationRoles].[StationName], [dbo].[vObservationRoles].[SiteID], [dbo].[vObservationRoles].[SiteName], [dbo].[vObservationRoles].[OrganisationID], [dbo].[vObservationRoles].[OrganisationName], [dbo].[vObservationRoles].[RoleUserId]
+
+ FROM [dbo].[vObservationRoles]
+ WHERE ([dbo].[vObservationRoles].[SensorID] = @SensorID0
+ AND [dbo].[vObservationRoles].[InstrumentID] = @InstrumentID1
+ AND [dbo].[vObservationRoles].[StationID] = @StationID2
+)"

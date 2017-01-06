@@ -1,0 +1,9 @@
+2017-01-05 14:01:25.907 +02:00 [Error] Unable to login
+System.Threading.ThreadAbortException: Thread was being aborted.
+   at System.Threading.Thread.AbortInternal()
+   at System.Threading.Thread.Abort(Object stateInfo)
+   at System.Web.HttpResponse.AbortCurrentThread()
+   at System.Web.HttpResponse.End()
+   at System.Web.HttpResponse.Redirect(String url, Boolean endResponse, Boolean permanent)
+   at System.Web.HttpResponse.Redirect(String url)
+   at _Login.btnLogin_Click(Object sender, DirectEventArgs e) in S:\Development\SAEON.ObservationsDatabase\SAEON.Observations.WebSite.Admin\Login.aspx.cs:line 34

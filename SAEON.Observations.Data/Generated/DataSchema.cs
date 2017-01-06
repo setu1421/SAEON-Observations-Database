@@ -207,6 +207,19 @@ namespace SAEON.Observations.Data
 				colvarIgnoreFirst.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarIgnoreFirst);
 				
+				TableSchema.TableColumn colvarHasHeaderRow = new TableSchema.TableColumn(schema);
+				colvarHasHeaderRow.ColumnName = "HasHeaderRow";
+				colvarHasHeaderRow.DataType = DbType.Boolean;
+				colvarHasHeaderRow.MaxLength = 0;
+				colvarHasHeaderRow.AutoIncrement = false;
+				colvarHasHeaderRow.IsNullable = true;
+				colvarHasHeaderRow.IsPrimaryKey = false;
+				colvarHasHeaderRow.IsForeignKey = false;
+				colvarHasHeaderRow.IsReadOnly = false;
+				colvarHasHeaderRow.DefaultSetting = @"";
+				colvarHasHeaderRow.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarHasHeaderRow);
+				
 				TableSchema.TableColumn colvarIgnoreLast = new TableSchema.TableColumn(schema);
 				colvarIgnoreLast.ColumnName = "IgnoreLast";
 				colvarIgnoreLast.DataType = DbType.Int32;
@@ -386,6 +399,14 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.IgnoreFirst, value); }
 		}
 		  
+		[XmlAttribute("HasHeaderRow")]
+		[Bindable(true)]
+		public bool? HasHeaderRow 
+		{
+			get { return GetColumnValue<bool?>(Columns.HasHeaderRow); }
+			set { SetColumnValue(Columns.HasHeaderRow, value); }
+		}
+		  
 		[XmlAttribute("IgnoreLast")]
 		[Bindable(true)]
 		public int IgnoreLast 
@@ -525,7 +546,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,bool? varHasHeaderRow,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSchema item = new DataSchema();
 			
@@ -540,6 +561,8 @@ namespace SAEON.Observations.Data
 			item.DataSourceTypeID = varDataSourceTypeID;
 			
 			item.IgnoreFirst = varIgnoreFirst;
+			
+			item.HasHeaderRow = varHasHeaderRow;
 			
 			item.IgnoreLast = varIgnoreLast;
 			
@@ -569,7 +592,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,bool? varHasHeaderRow,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSchema item = new DataSchema();
 			
@@ -584,6 +607,8 @@ namespace SAEON.Observations.Data
 				item.DataSourceTypeID = varDataSourceTypeID;
 			
 				item.IgnoreFirst = varIgnoreFirst;
+			
+				item.HasHeaderRow = varHasHeaderRow;
 			
 				item.IgnoreLast = varIgnoreLast;
 			
@@ -658,65 +683,72 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn IgnoreLastColumn
+        public static TableSchema.TableColumn HasHeaderRowColumn
         {
             get { return Schema.Columns[6]; }
         }
         
         
         
-        public static TableSchema.TableColumn ConditionColumn
+        public static TableSchema.TableColumn IgnoreLastColumn
         {
             get { return Schema.Columns[7]; }
         }
         
         
         
-        public static TableSchema.TableColumn DataSchemaXColumn
+        public static TableSchema.TableColumn ConditionColumn
         {
             get { return Schema.Columns[8]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn DataSchemaXColumn
         {
             get { return Schema.Columns[9]; }
         }
         
         
         
-        public static TableSchema.TableColumn DelimiterColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn SplitSelectorColumn
+        public static TableSchema.TableColumn DelimiterColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn SplitIndexColumn
+        public static TableSchema.TableColumn SplitSelectorColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn SplitIndexColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[14]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[15]; }
         }
         
         
@@ -731,6 +763,7 @@ namespace SAEON.Observations.Data
 			 public static string Description = @"Description";
 			 public static string DataSourceTypeID = @"DataSourceTypeID";
 			 public static string IgnoreFirst = @"IgnoreFirst";
+			 public static string HasHeaderRow = @"HasHeaderRow";
 			 public static string IgnoreLast = @"IgnoreLast";
 			 public static string Condition = @"Condition";
 			 public static string DataSchemaX = @"DataSchema";
