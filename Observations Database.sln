@@ -46,10 +46,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.FileHelpers", "SAEON.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.SubSonic", "SAEON.SubSonic\SubSonic\SAEON.SubSonic.csproj", "{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.QuerySite", "SAEON.Observations.QuerySite\SAEON.Observations.QuerySite.csproj", "{44210924-0FB3-4860-8A11-6B43A7BD17BD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.QuerySite.Tests", "SAEON.Observations.QuerySite.Tests\SAEON.Observations.QuerySite.Tests.csproj", "{37DBFE21-2E2D-430B-9C37-C65761653E03}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (SQL Server Only)|Any CPU = Debug (SQL Server Only)|Any CPU
@@ -110,22 +106,6 @@ Global
 		{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}.Release (SQL Server Only)|Any CPU.Build.0 = Release (SQL Server Only)|Any CPU
 		{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44210924-0FB3-4860-8A11-6B43A7BD17BD}.Debug (SQL Server Only)|Any CPU.ActiveCfg = Debug|Any CPU
-		{44210924-0FB3-4860-8A11-6B43A7BD17BD}.Debug (SQL Server Only)|Any CPU.Build.0 = Debug|Any CPU
-		{44210924-0FB3-4860-8A11-6B43A7BD17BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44210924-0FB3-4860-8A11-6B43A7BD17BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44210924-0FB3-4860-8A11-6B43A7BD17BD}.Release (SQL Server Only)|Any CPU.ActiveCfg = Release|Any CPU
-		{44210924-0FB3-4860-8A11-6B43A7BD17BD}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
-		{44210924-0FB3-4860-8A11-6B43A7BD17BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44210924-0FB3-4860-8A11-6B43A7BD17BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{37DBFE21-2E2D-430B-9C37-C65761653E03}.Debug (SQL Server Only)|Any CPU.ActiveCfg = Debug|Any CPU
-		{37DBFE21-2E2D-430B-9C37-C65761653E03}.Debug (SQL Server Only)|Any CPU.Build.0 = Debug|Any CPU
-		{37DBFE21-2E2D-430B-9C37-C65761653E03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{37DBFE21-2E2D-430B-9C37-C65761653E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{37DBFE21-2E2D-430B-9C37-C65761653E03}.Release (SQL Server Only)|Any CPU.ActiveCfg = Release|Any CPU
-		{37DBFE21-2E2D-430B-9C37-C65761653E03}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
-		{37DBFE21-2E2D-430B-9C37-C65761653E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{37DBFE21-2E2D-430B-9C37-C65761653E03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
