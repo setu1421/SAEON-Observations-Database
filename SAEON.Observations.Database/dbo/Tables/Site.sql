@@ -6,8 +6,14 @@ CREATE TABLE [dbo].[Site]
     [Name] VARCHAR(150) NOT NULL, 
     [Description] VARCHAR(5000) NULL,
     [Url] VARCHAR(250) NULL, 
-    [StartDate] DATETIME NULL, 
-    [EndDate] DATETIME NULL, 
+--> Changed 2.0.22 20170111 TimPN
+--    [StartDate]        DATETIME         NULL,
+    [StartDate]        DATE         NULL,
+--< Changed 2.0.22 20170111 TimPN
+--> Changed 2.0.22 20170111 TimPN
+--    [EndDate]        DATETIME         NULL,
+    [EndDate]        DATE         NULL,
+--< Changed 2.0.22 20170111 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
 --> Added 2.0.3 20160421 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Site_AddedAt] DEFAULT GetDate(), 

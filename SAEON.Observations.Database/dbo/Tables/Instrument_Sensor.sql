@@ -4,8 +4,14 @@ CREATE TABLE [dbo].[Instrument_Sensor]
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Instrument_Sensor_ID] DEFAULT newid(), 
     [InstrumentID] UNIQUEIDENTIFIER NOT NULL, 
     [SensorID] UNIQUEIDENTIFIER NOT NULL, 
-    [StartDate] DATETIME NULL,
-    [EndDate] DATETIME NULL,
+--> Changed 2.0.22 20170111 TimPN
+--    [StartDate]        DATETIME         NULL,
+    [StartDate]        DATE         NULL,
+--< Changed 2.0.22 20170111 TimPN
+--> Changed 2.0.22 20170111 TimPN
+--    [EndDate]        DATETIME         NULL,
+    [EndDate]        DATE         NULL,
+--< Changed 2.0.22 20170111 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Instrument_Sensor_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Instrument_Sensor_UpdatedAt] DEFAULT GetDate(), 

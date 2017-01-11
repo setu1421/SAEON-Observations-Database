@@ -4,8 +4,14 @@ CREATE TABLE [dbo].[Station_Instrument]
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Station_Instrument_ID] DEFAULT newid(), 
     [StationID] UNIQUEIDENTIFIER NOT NULL, 
     [InstrumentID] UNIQUEIDENTIFIER NOT NULL, 
-    [StartDate] DATETIME NULL,
-    [EndDate] DATETIME NULL,
+--> Changed 2.0.22 20170111 TimPN
+--    [StartDate]        DATETIME         NULL,
+    [StartDate]        DATE         NULL,
+--< Changed 2.0.22 20170111 TimPN
+--> Changed 2.0.22 20170111 TimPN
+--    [EndDate]        DATETIME         NULL,
+    [EndDate]        DATE         NULL,
+--< Changed 2.0.22 20170111 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Station_Instrument_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Station_Instrument_UpdatedAt] DEFAULT GetDate(), 

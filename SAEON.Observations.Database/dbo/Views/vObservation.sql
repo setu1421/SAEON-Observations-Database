@@ -82,28 +82,50 @@ FROM
     on (DataSource.DataSchemaID = DataSourceSchema.ID)
   inner join Instrument_Sensor
     on (Instrument_Sensor.SensorID = Sensor.ID) and
-	   ((Instrument_Sensor.StartDate is null) or (o.ValueDate >= Instrument_Sensor.StartDate)) and
-	   ((Instrument_Sensor.EndDate is null) or (o.ValueDate <= Instrument_Sensor.EndDate))
+--> Changed 2.0.22 20170111 TimPN
+--	   ((Instrument_Sensor.StartDate is null) or (o.ValueDate >= Instrument_Sensor.StartDate)) and
+--	   ((Instrument_Sensor.EndDate is null) or (o.ValueDate <= Instrument_Sensor.EndDate))
+	   ((Instrument_Sensor.StartDate is null) or (Cast(o.ValueDate as Date) >= Instrument_Sensor.StartDate)) and
+	   ((Instrument_Sensor.EndDate is null) or (Cast(o.ValueDate as Date) <= Instrument_Sensor.EndDate))
+--< Changed 2.0.22 20170111 TimPN
   inner join Instrument
     on (Instrument_Sensor.InstrumentID = Instrument.ID) and
-	   ((Instrument.StartDate is null) or (o.ValueDate >= Instrument.StartDate )) and
-	   ((Instrument.EndDate is null) or (o.ValueDate <= Instrument.EndDate))
+--> Changed 2.0.22 20170111 TimPN
+--	   ((Instrument.StartDate is null) or (o.ValueDate >= Instrument.StartDate )) and
+--	   ((Instrument.EndDate is null) or (o.ValueDate <= Instrument.EndDate))
+	   ((Instrument.StartDate is null) or (Cast(o.ValueDate as Date) >= Instrument.StartDate )) and
+	   ((Instrument.EndDate is null) or (Cast(o.ValueDate as Date) <= Instrument.EndDate))
+--< Changed 2.0.22 20170111 TimPN
   inner join Station_Instrument
     on (Station_Instrument.InstrumentID = Instrument.ID) and
-	   ((Station_Instrument.StartDate is null) or (o.ValueDate >= Station_Instrument.StartDate)) and
-	   ((Station_Instrument.EndDate is null) or (o.ValueDate <= Station_Instrument.EndDate))
+--> Changed 2.0.22 20170111 TimPN
+--	   ((Station_Instrument.StartDate is null) or (o.ValueDate >= Station_Instrument.StartDate)) and
+--	   ((Station_Instrument.EndDate is null) or (o.ValueDate <= Station_Instrument.EndDate))
+	   ((Station_Instrument.StartDate is null) or (Cast(o.ValueDate as Date) >= Station_Instrument.StartDate)) and
+	   ((Station_Instrument.EndDate is null) or (Cast(o.ValueDate as Date) <= Station_Instrument.EndDate))
+--< Changed 2.0.22 20170111 TimPN
   inner join Station 
     on (Station_Instrument.StationID = Station.ID) and
+--> Changed 2.0.22 20170111 TimPN
 	   ((Station.StartDate is null) or (Cast(o.ValueDate as Date) >= Cast(Station.StartDate as Date))) and
 	   ((Station.EndDate is null) or (Cast(o.ValueDate as Date) <= Cast(Station.EndDate as Date)))
+--< Changed 2.0.22 20170111 TimPN
   inner join Site
     on (Station.SiteID = Site.ID) and
-	   ((Site.StartDate is null) or  (Cast(o.ValueDate as Date) >= Cast(Site.StartDate as Date))) and
-	   ((Site.EndDate is null) or  (Cast(o.ValueDate as Date) <= Cast(Site.EndDate as Date)))
+--> Changed 2.0.22 20170111 TimPN
+--	   ((Site.StartDate is null) or  (Cast(o.ValueDate as Date) >= Cast(Site.StartDate as Date))) and
+--	   ((Site.EndDate is null) or  (Cast(o.ValueDate as Date) <= Cast(Site.EndDate as Date)))
+	   ((Site.StartDate is null) or  (Cast(o.ValueDate as Date) >= Site.StartDate)) and
+	   ((Site.EndDate is null) or  (Cast(o.ValueDate as Date) <= Site.EndDate))
+--< Changed 2.0.22 20170111 TimPN
   inner join Organisation_Site
     on (Organisation_Site.SiteID = Site.ID) and
-	   ((Organisation_Site.StartDate is null) or (Cast(o.ValueDate as Date) >= Cast(Organisation_Site.StartDate as Date))) and
-	   ((Organisation_Site.EndDate is null) or (Cast(o.ValueDate as Date) <= Cast(Organisation_Site.EndDate as Date)))
+--> Changed 2.0.22 20170111 TimPN
+--	   ((Organisation_Site.StartDate is null) or (Cast(o.ValueDate as Date) >= Cast(Organisation_Site.StartDate as Date))) and
+--	   ((Organisation_Site.EndDate is null) or (Cast(o.ValueDate as Date) <= Cast(Organisation_Site.EndDate as Date)))
+	   ((Organisation_Site.StartDate is null) or (Cast(o.ValueDate as Date) >= Organisation_Site.StartDate)) and
+	   ((Organisation_Site.EndDate is null) or (Cast(o.ValueDate as Date) <= Organisation_Site.EndDate))
+--< Changed 2.0.22 20170111 TimPN
   inner join Organisation
     on (Organisation_Site.OrganisationID = Organisation.ID)
   inner join aspnet_Users

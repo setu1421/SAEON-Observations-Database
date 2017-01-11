@@ -5,8 +5,14 @@ CREATE TABLE [dbo].[Organisation_Station]
     [OrganisationID] UNIQUEIDENTIFIER NOT NULL, 
     [StationID] UNIQUEIDENTIFIER NOT NULL, 
     [OrganisationRoleID] UNIQUEIDENTIFIER NOT NULL,
-    [StartDate] DATETIME NULL,
-    [EndDate] DATETIME NULL,
+--> Changed 2.0.22 20170111 TimPN
+--    [StartDate]        DATETIME         NULL,
+    [StartDate]        DATE         NULL,
+--< Changed 2.0.22 20170111 TimPN
+--> Changed 2.0.22 20170111 TimPN
+--    [EndDate]        DATETIME         NULL,
+    [EndDate]        DATE         NULL,
+--< Changed 2.0.22 20170111 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Station_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Station_UpdatedAt] DEFAULT GetDate(), 

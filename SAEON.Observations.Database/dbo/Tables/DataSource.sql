@@ -7,9 +7,15 @@
     [DefaultNullValue] FLOAT (53)       NULL,
     [ErrorEstimate]    FLOAT (53)       NULL,
     [UpdateFreq]       INT              NOT NULL,
-    [StartDate]        DATETIME         NULL,
+--> Changed 2.0.22 20170111 TimPN
+--    [StartDate]        DATETIME         NULL,
+    [StartDate]        DATE         NULL,
+--< Changed 2.0.22 20170111 TimPN
 --> Added 2.0.2 20160419 TimPN
-    [EndDate]        DATETIME         NULL,
+--> Changed 2.0.22 20170111 TimPN
+--    [EndDate]        DATETIME         NULL,
+    [EndDate]        DATE         NULL,
+--< Changed 2.0.22 20170111 TimPN
 --< Added 2.0.2 20160419 TimPN
     [LastUpdate]       DATETIME         NOT NULL,
     [DataSchemaID]     UNIQUEIDENTIFIER NULL,
