@@ -204,7 +204,7 @@ public class ImportSchemaHelper : IDisposable
 
     public void SaveDocument(string fileName, string text)
     {
-        string docPath = HostingEnvironment.MapPath(WebConfigurationManager.AppSettings["DocumentsPath"]);
+        string docPath = HostingEnvironment.MapPath(Path.Combine(WebConfigurationManager.AppSettings["DocumentsPath"],"Uploads"));
         File.WriteAllText(Path.Combine(docPath,docNamePrefix+fileName), text);
     }
 
