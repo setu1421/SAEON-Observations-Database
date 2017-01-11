@@ -1,3 +1,0 @@
-2016-11-02 11:30:03.257 +02:00 [Information] ProcessSchema() 1.0
-2016-11-02 11:34:28.007 +02:00 [Information] ProcessSchema() 1.0
-2016-11-02 11:40:58.419 +02:00 [Information] ProcessSchema() 1.0
