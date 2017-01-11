@@ -123,6 +123,7 @@
                                                     <ext:RecordField Name="Name" Type="String" />
                                                     <ext:RecordField Name="IgnoreFirst" Type="Int" />
                                                     <ext:RecordField Name="IgnoreLast" Type="Int" />
+                                                    <ext:RecordField Name="HasHeaderRow" Type="Boolean" />
                                                     <ext:RecordField Name="Condition" Type="String" />
                                                     <ext:RecordField Name="Delimiter" Type="String" />
                                                     <ext:RecordField Name="Description" Type="String" />
@@ -151,6 +152,10 @@
                                         <ext:Column Header="Description" DataIndex="Description" Width="200" />
                                         <ext:Column Header="Source Type Code" Width="100" DataIndex="DataSourceTypeCode" />
                                         <ext:Column Header="Source Type Description" Width="150" DataIndex="DataSourceTypeDesc" />
+                                        <ext:Column Header="Ignore First" DataIndex="IgnoreFirst" Width="100" />
+                                        <ext:BooleanColumn Header="Header Row" DataIndex="HasHeaderRow" Width="100"  FalseText="No" TrueText="Yes"/>
+                                        <ext:Column Header="Delimiter" DataIndex="Delimiter" Width="100" />
+                                        <ext:Column Header="Ignore Last" DataIndex="IgnoreLast" Width="100" />
                                         <ext:CommandColumn Width="150">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
