@@ -16,6 +16,7 @@ using Microsoft.Owin.Security.OAuth;
 using SAEON.Observations.WebAPI.Models;
 using SAEON.Observations.WebAPI.Providers;
 using SAEON.Observations.WebAPI.Results;
+using SAEON.Observations.Identity;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
