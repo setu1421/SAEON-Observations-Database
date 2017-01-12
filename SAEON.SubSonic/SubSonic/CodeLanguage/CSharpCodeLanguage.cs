@@ -255,9 +255,6 @@ using SubSonic.Utilities;
                     return "decimal";
 
                 case DbType.Date:
-                    //--> Added 20170112 TimPN                
-                    return "Date";
-                    //--< Added 20170112 TimPN                
                 case DbType.DateTime:
                     return "DateTime";
 

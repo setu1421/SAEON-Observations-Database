@@ -255,9 +255,6 @@ Imports SubSonic.Utilities
                     return "Decimal";
 
                 case DbType.Date:
-                    //--> Added 20170112 TimPN                
-                    return "Date";
-                    //--< Added 20170112 TimPN                
                 case DbType.DateTime:
                     return "DateTime";
 

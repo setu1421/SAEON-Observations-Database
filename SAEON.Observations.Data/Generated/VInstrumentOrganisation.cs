@@ -453,11 +453,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("StartDate")]
         [Bindable(true)]
-        public Date? StartDate 
+        public DateTime? StartDate 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Date?>("StartDate");
+			    return GetColumnValue<DateTime?>("StartDate");
 		    }
             set 
 		    {
@@ -467,11 +467,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("EndDate")]
         [Bindable(true)]
-        public Date? EndDate 
+        public DateTime? EndDate 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Date?>("EndDate");
+			    return GetColumnValue<DateTime?>("EndDate");
 		    }
             set 
 		    {

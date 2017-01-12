@@ -399,17 +399,17 @@ namespace SAEON.Observations.Data
 		  
 		[XmlAttribute("StartDate")]
 		[Bindable(true)]
-		public Date? StartDate 
+		public DateTime? StartDate 
 		{
-			get { return GetColumnValue<Date?>(Columns.StartDate); }
+			get { return GetColumnValue<DateTime?>(Columns.StartDate); }
 			set { SetColumnValue(Columns.StartDate, value); }
 		}
 		  
 		[XmlAttribute("EndDate")]
 		[Bindable(true)]
-		public Date? EndDate 
+		public DateTime? EndDate 
 		{
-			get { return GetColumnValue<Date?>(Columns.EndDate); }
+			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
 			set { SetColumnValue(Columns.EndDate, value); }
 		}
 		  
@@ -621,7 +621,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Date? varStartDate,Date? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -667,7 +667,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Date? varStartDate,Date? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			

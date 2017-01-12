@@ -294,17 +294,17 @@ namespace SAEON.Observations.Data
 		  
 		[XmlAttribute("StartDate")]
 		[Bindable(true)]
-		public Date? StartDate 
+		public DateTime? StartDate 
 		{
-			get { return GetColumnValue<Date?>(Columns.StartDate); }
+			get { return GetColumnValue<DateTime?>(Columns.StartDate); }
 			set { SetColumnValue(Columns.StartDate, value); }
 		}
 		  
 		[XmlAttribute("EndDate")]
 		[Bindable(true)]
-		public Date? EndDate 
+		public DateTime? EndDate 
 		{
-			get { return GetColumnValue<Date?>(Columns.EndDate); }
+			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
 			set { SetColumnValue(Columns.EndDate, value); }
 		}
 		  
@@ -397,7 +397,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varOrganisationID,Guid varStationID,Guid varOrganisationRoleID,Date? varStartDate,Date? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varOrganisationID,Guid varStationID,Guid varOrganisationRoleID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			OrganisationStation item = new OrganisationStation();
 			
@@ -429,7 +429,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varOrganisationID,Guid varStationID,Guid varOrganisationRoleID,Date? varStartDate,Date? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varOrganisationID,Guid varStationID,Guid varOrganisationRoleID,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			OrganisationStation item = new OrganisationStation();
 			
