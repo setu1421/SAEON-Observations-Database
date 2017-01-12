@@ -198,10 +198,10 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
 				colvarStartDate.ColumnName = "StartDate";
-				colvarStartDate.DataType = DbType.DateTime;
+				colvarStartDate.DataType = DbType.AnsiString;
 				colvarStartDate.MaxLength = 0;
 				colvarStartDate.AutoIncrement = false;
-				colvarStartDate.IsNullable = false;
+				colvarStartDate.IsNullable = true;
 				colvarStartDate.IsPrimaryKey = false;
 				colvarStartDate.IsForeignKey = false;
 				colvarStartDate.IsReadOnly = false;
@@ -211,7 +211,7 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
 				colvarEndDate.ColumnName = "EndDate";
-				colvarEndDate.DataType = DbType.DateTime;
+				colvarEndDate.DataType = DbType.AnsiString;
 				colvarEndDate.MaxLength = 0;
 				colvarEndDate.AutoIncrement = false;
 				colvarEndDate.IsNullable = true;
@@ -399,17 +399,17 @@ namespace SAEON.Observations.Data
 		  
 		[XmlAttribute("StartDate")]
 		[Bindable(true)]
-		public DateTime StartDate 
+		public string StartDate 
 		{
-			get { return GetColumnValue<DateTime>(Columns.StartDate); }
+			get { return GetColumnValue<string>(Columns.StartDate); }
 			set { SetColumnValue(Columns.StartDate, value); }
 		}
 		  
 		[XmlAttribute("EndDate")]
 		[Bindable(true)]
-		public DateTime? EndDate 
+		public string EndDate 
 		{
-			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
+			get { return GetColumnValue<string>(Columns.EndDate); }
 			set { SetColumnValue(Columns.EndDate, value); }
 		}
 		  
@@ -621,7 +621,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varStartDate,string varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -667,7 +667,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,string varStartDate,string varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			

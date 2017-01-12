@@ -1036,6 +1036,10 @@ ORDER BY OrdinalPosition ASC";
                     return DbType.Int32;
                 case "uniqueidentifier":
                     return DbType.Guid;
+                //--> Added 20170112 TimPN                
+                case "date":
+                    return DbType.Date;
+                //--< Added 20170112 TimPN                
                 case "datetime":
                 case "datetime2":
                     return DbType.DateTime;

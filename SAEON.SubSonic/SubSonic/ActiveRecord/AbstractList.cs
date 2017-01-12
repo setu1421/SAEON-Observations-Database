@@ -81,7 +81,15 @@ namespace SubSonic
                 string sY = (null == yVal) ? String.Empty : yVal.ToString();
                 result = sX.CompareTo(sY);
             }
-            else if(dbType == DbType.DateTime)
+            //--> Added 20170112 TimPN                
+            else if (dbType == DbType.Date)
+            {
+                DateTime dX = Convert.ToDateTime(xVal);
+                DateTime dY = Convert.ToDateTime(yVal);
+                result = dX.CompareTo(dY);
+            }
+            //--< Added 20170112 TimPN                
+            else if (dbType == DbType.DateTime)
             {
                 DateTime dX = Convert.ToDateTime(xVal);
                 DateTime dY = Convert.ToDateTime(yVal);

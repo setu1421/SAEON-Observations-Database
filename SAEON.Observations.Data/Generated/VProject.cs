@@ -131,7 +131,7 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
                 colvarStartDate.ColumnName = "StartDate";
-                colvarStartDate.DataType = DbType.DateTime;
+                colvarStartDate.DataType = DbType.AnsiString;
                 colvarStartDate.MaxLength = 0;
                 colvarStartDate.AutoIncrement = false;
                 colvarStartDate.IsNullable = true;
@@ -143,7 +143,7 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
                 colvarEndDate.ColumnName = "EndDate";
-                colvarEndDate.DataType = DbType.DateTime;
+                colvarEndDate.DataType = DbType.AnsiString;
                 colvarEndDate.MaxLength = 0;
                 colvarEndDate.AutoIncrement = false;
                 colvarEndDate.IsNullable = true;
@@ -349,11 +349,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("StartDate")]
         [Bindable(true)]
-        public DateTime? StartDate 
+        public string StartDate 
 	    {
 		    get
 		    {
-			    return GetColumnValue<DateTime?>("StartDate");
+			    return GetColumnValue<string>("StartDate");
 		    }
             set 
 		    {
@@ -363,11 +363,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("EndDate")]
         [Bindable(true)]
-        public DateTime? EndDate 
+        public string EndDate 
 	    {
 		    get
 		    {
-			    return GetColumnValue<DateTime?>("EndDate");
+			    return GetColumnValue<string>("EndDate");
 		    }
             set 
 		    {
