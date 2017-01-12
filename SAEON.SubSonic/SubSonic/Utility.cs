@@ -524,7 +524,10 @@ namespace SubSonic.Utilities
                 case DbType.Currency:
                     return SqlDbType.Money;
                 case DbType.Date:
-                    return SqlDbType.DateTime;
+                    //--> Added 20170112 TimPN                
+                    //return SqlDbType.DateTime;
+                    return SqlDbType.Date;
+                //--< Added 20170112 TimPN                
                 case DbType.DateTime:
                     return SqlDbType.DateTime;
                 case DbType.Decimal:

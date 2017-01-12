@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,double? DefaultNullValue,double? ErrorEstimate,int UpdateFreq,string StartDate,string EndDate,DateTime LastUpdate,Guid? DataSchemaID,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,double? DefaultNullValue,double? ErrorEstimate,int UpdateFreq,Date? StartDate,Date? EndDate,DateTime LastUpdate,Guid? DataSchemaID,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    DataSource item = new DataSource();
 		    
@@ -122,7 +122,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,double? DefaultNullValue,double? ErrorEstimate,int UpdateFreq,string StartDate,string EndDate,DateTime LastUpdate,Guid? DataSchemaID,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,string Code,string Name,string Description,string Url,double? DefaultNullValue,double? ErrorEstimate,int UpdateFreq,Date? StartDate,Date? EndDate,DateTime LastUpdate,Guid? DataSchemaID,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
 	    {
 		    DataSource item = new DataSource();
 	        item.MarkOld();

@@ -139,7 +139,7 @@ using SubSonic.Utilities;
         public string GetDefaultValue(string colName, DbType dbType, bool isNullableColumn)
         {
             string variableType = GetDefaultValue(colName, dbType);
-            if(isNullableColumn && Utility.IsNullableDbType(dbType))
+            if (isNullableColumn && Utility.IsNullableDbType(dbType))
                 variableType = String.Concat(variableType, CodeFragment.NULLABLE_VARIABLE);
             return variableType;
         }
@@ -153,7 +153,7 @@ using SubSonic.Utilities;
         {
             StringBuilder usingStatements = new StringBuilder();
 
-            foreach(string space in namespaces)
+            foreach (string space in namespaces)
             {
                 usingStatements.AppendFormat("using {0};", space);
                 usingStatements.Append(Environment.NewLine);
@@ -171,7 +171,7 @@ using SubSonic.Utilities;
         public string GetVariableType(DbType dbType, bool isNullableColumn)
         {
             string variableType = GetVariableType(dbType);
-            if(isNullableColumn && Utility.IsNullableDbType(dbType))
+            if (isNullableColumn && Utility.IsNullableDbType(dbType))
                 variableType = String.Concat(variableType, CodeFragment.NULLABLE_VARIABLE);
             return variableType;
         }
@@ -201,10 +201,10 @@ using SubSonic.Utilities;
         /// <returns></returns>
         private static string GetDefaultValue(string colName, DbType dbType)
         {
-            if(Utility.IsLogicalDeleteColumn(colName))
+            if (Utility.IsLogicalDeleteColumn(colName))
                 return "false";
 
-            switch(dbType)
+            switch (dbType)
             {
                 case DbType.Guid:
                     return "Guid.Empty";
@@ -234,7 +234,7 @@ using SubSonic.Utilities;
         /// <returns></returns>
         private static string GetVariableType(DbType dbType)
         {
-            switch(dbType)
+            switch (dbType)
             {
                 case DbType.AnsiString:
                 case DbType.AnsiStringFixedLength:
@@ -255,6 +255,9 @@ using SubSonic.Utilities;
                     return "decimal";
 
                 case DbType.Date:
+                    //--> Added 20170112 TimPN                
+                    return "Date";
+                    //--< Added 20170112 TimPN                
                 case DbType.DateTime:
                     return "DateTime";
 

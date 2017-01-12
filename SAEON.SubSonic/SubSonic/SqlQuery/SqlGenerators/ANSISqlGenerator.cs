@@ -907,8 +907,11 @@ namespace SubSonic
                     return "tinyint";
                 case DbType.Currency:
                     return "money";
-                case DbType.Time:
+                //--> Added 20170112 TimPN                
                 case DbType.Date:
+                    return "date";
+                //--< Added 20170112 TimPN                
+                case DbType.Time:
                 case DbType.DateTime:
                     //Orcas Only! case DbType.DateTime2:
                     //Orcas Only! case DbType.DateTimeOffset:

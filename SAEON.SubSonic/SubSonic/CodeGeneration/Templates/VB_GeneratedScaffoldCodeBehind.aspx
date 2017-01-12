@@ -1,6 +1,7 @@
 <%@ Page Language="C#" %>
-<%@ Import namespace="System.Data"%>
-<%@ Import namespace="SubSonic.Utilities"%>
+
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="SubSonic.Utilities" %>
 <%@ Import Namespace="SubSonic" %>
 <%
     //The data we need
@@ -12,12 +13,12 @@
 
     //The main vars we need
     string className = tbl.ClassName;
-  const bool showGenerationInfo = false;
-  
+    const bool showGenerationInfo = false;
+
 %>
 
-<% if(showGenerationInfo)
-   { %>
+<% if (showGenerationInfo)
+    { %>
  'Generated on <%=DateTime.Now.ToString() %> by <%=Environment.UserName %>
 <% }  %>
 Imports System
@@ -66,11 +67,13 @@ Namespace <%=provider.GeneratedNamespace%>
 		End Sub
 
 
-		''' <summary>
+		'''
+<summary>
 		''' Loads the editor with data
 		''' </summary>
-		''' <param name="id"></param>
-		Sub LoadEditor(ByVal id As String)
+'''
+<param name="id"></param>
+Sub LoadEditor(ByVal id As String)
 			ToggleEditor(True)
 			LoadDrops()
 			If Not [String].IsNullOrEmpty(id) AndAlso id <> "0" Then
@@ -81,102 +84,105 @@ Namespace <%=provider.GeneratedNamespace%>
 
 				'bind the page 
 					<%
-						foreach (TableSchema.TableColumn col in tbl.Columns)
-						{
-							if (!col.IsPrimaryKey)
-							{
-								bool toString = true;
-								string controlAssignment = null;
-								bool isNullableType = (col.IsNullable && Utility.IsNullableDbType(col.DataType));
+                        foreach (TableSchema.TableColumn col in tbl.Columns)
+                        {
+                            if (!col.IsPrimaryKey)
+                            {
+                                bool toString = true;
+                                string controlAssignment = null;
+                                bool isNullableType = (col.IsNullable && Utility.IsNullableDbType(col.DataType));
 
-								if (col.IsForeignKey)
-								{
-									controlAssignment = ControlValueProperty.DROP_DOWN_LIST;
-								}
-								else if(Utility.MatchesOne(col.ColumnName, ReservedColumnName.CREATED_ON, ReservedColumnName.MODIFIED_ON))
-								{
-									controlAssignment = ControlValueProperty.LABEL;
-								}
-								else
-								{
-									switch (col.DataType)
-									{
-										case DbType.Binary:
-											break;
-										case DbType.DateTime:
-											toString = false;
-											controlAssignment = ControlValueProperty.CALENDAR;
-											break;
-										case DbType.Boolean:
-											toString = false;
-											controlAssignment = ControlValueProperty.CHECK_BOX;
-											break;
-										case DbType.Currency:
-										case DbType.VarNumeric:
-											controlAssignment = ControlValueProperty.TEXT_BOX;
-											break;
-										case DbType.Int16:
-										case DbType.Int32:
-										case DbType.UInt16:
-										case DbType.Int64:
-										case DbType.UInt32:
-										case DbType.UInt64:
-										case DbType.Single:
-										case DbType.Decimal:
-										case DbType.Double:
+                                if (col.IsForeignKey)
+                                {
+                                    controlAssignment = ControlValueProperty.DROP_DOWN_LIST;
+                                }
+                                else if (Utility.MatchesOne(col.ColumnName, ReservedColumnName.CREATED_ON, ReservedColumnName.MODIFIED_ON))
+                                {
+                                    controlAssignment = ControlValueProperty.LABEL;
+                                }
+                                else
+                                {
+                                    switch (col.DataType)
+                                    {
+                                        case DbType.Binary:
+                                            break;
+                                        //--> Added 20170112 TimPN                
+                                        case DbType.Date
+                                        //--< Added 20170112 TimPN                
+                                        case DbType.DateTime:
+                                            toString = false;
+                                            controlAssignment = ControlValueProperty.CALENDAR;
+                                            break;
+                                        case DbType.Boolean:
+                                            toString = false;
+                                            controlAssignment = ControlValueProperty.CHECK_BOX;
+                                            break;
+                                        case DbType.Currency:
+                                        case DbType.VarNumeric:
+                                            controlAssignment = ControlValueProperty.TEXT_BOX;
+                                            break;
+                                        case DbType.Int16:
+                                        case DbType.Int32:
+                                        case DbType.UInt16:
+                                        case DbType.Int64:
+                                        case DbType.UInt32:
+                                        case DbType.UInt64:
+                                        case DbType.Single:
+                                        case DbType.Decimal:
+                                        case DbType.Double:
                                         case DbType.Byte:
-											controlAssignment = ControlValueProperty.TEXT_BOX;
-											break;
-										case DbType.AnsiString:
-										case DbType.AnsiStringFixedLength:	
-										case DbType.String:
-											toString = false;
-											controlAssignment = ControlValueProperty.TEXT_BOX;
-											break;
-										default:
-											controlAssignment = ControlValueProperty.TEXT_BOX;
-											break;
-									}
-								}
-								string propName = col.PropertyName;
-								string controlID = "ctrl" + propName;
+                                            controlAssignment = ControlValueProperty.TEXT_BOX;
+                                            break;
+                                        case DbType.AnsiString:
+                                        case DbType.AnsiStringFixedLength:
+                                        case DbType.String:
+                                            toString = false;
+                                            controlAssignment = ControlValueProperty.TEXT_BOX;
+                                            break;
+                                        default:
+                                            controlAssignment = ControlValueProperty.TEXT_BOX;
+                                            break;
+                                    }
+                                }
+                                string propName = col.PropertyName;
+                                string controlID = "ctrl" + propName;
 
-								if (!String.IsNullOrEmpty(controlAssignment))
-								{
-									if (isNullableType)
-									{%>
+                                if (!String.IsNullOrEmpty(controlAssignment))
+                                {
+                                    if (isNullableType)
+                                    {%>
 						If item.<%=propName%>.HasValue Then
 						<%
-						if (toString)
-						{%>
-							<%=controlID%>.<%=controlAssignment%> = item.<%=propName%>.Value.ToString()
+                                    if (toString)
+                                    {%>
+<%=controlID%>.<%=controlAssignment%> = item.<%=propName%>.Value.ToString()
 						<%
-						}
-						else
-						{%>
-							<%=controlID%>.<%=controlAssignment%> = item.<%=propName%>.Value
+    }
+    else
+    {%>
+<%=controlID%>.<%=controlAssignment%> = item.<%=propName%>.Value
 						<%
-						}%>
+    }%>
 						End If
 					<%
-						}
+           }
 
-						else
-						{
-							if (toString)
-							{%>
-							<%=controlID%>.<%=controlAssignment%> = item.<%=propName%>.ToString()
+           else
+           {
+               if (toString)
+               {%>
+<%=controlID%>.<%=controlAssignment%> = item.<%=propName%>.ToString()
 						<%
-						}
-						else
-						{%>
-							<%=controlID%>.<%=controlAssignment%> = item.<%=propName%>
-						<%
-						}
-					}
-				}
-			}
-		}
+    }
+    else
+    {%>
+<%=controlID%>.<%=controlAssignment%> = item.<%=propName%>
+<%
+                    }
+                }
+            }
+        }
+    }
 %>			
   
 				'set the delete confirmation
@@ -184,45 +190,48 @@ Namespace <%=provider.GeneratedNamespace%>
 			End If
 		End Sub
 
-		' <summary>
+		'
+<summary>
 		' Loads the DropDownLists
 		' </summary>
-		Private Sub LoadDrops() 
+Private Sub LoadDrops() 
 			'load the listboxes
 			<%
-				foreach (TableSchema.TableColumn col in tbl.Columns)
-				{
-					string controlName = "ctrl" + col.PropertyName;
+                foreach (TableSchema.TableColumn col in tbl.Columns)
+                {
+                    string controlName = "ctrl" + col.PropertyName;
 
-					if (!col.IsPrimaryKey)
-					{
-						if(col.IsForeignKey)
-						{
-							TableSchema.Table FKTable = DataService.GetForeignKeyTable(col, tbl);
-							if(FKTable != null)
-							{
-			%>
+                    if (!col.IsPrimaryKey)
+                    {
+                        if (col.IsForeignKey)
+                        {
+                            TableSchema.Table FKTable = DataService.GetForeignKeyTable(col, tbl);
+                            if (FKTable != null)
+                            {
+            %>
 								Dim qry<%= controlName %> As Query = <%= FKTable.ClassName %>.CreateQuery() 
 								qry<%= controlName %>.OrderBy = OrderBy.Asc("<%= FKTable.Columns[1].ColumnName %>")
 								Utility.LoadDropDown(<%= controlName %>, qry<%= controlName %>.ExecuteReader(), True)
 			<% 
-								if(col.IsNullable)
-								{
-			%>						<%= controlName %>.Items.Insert(0, new ListItem("(Not Specified)", String.Empty))							
+                if (col.IsNullable)
+                {
+            %>						<%= controlName %>.Items.Insert(0, new ListItem("(Not Specified)", String.Empty))							
 			<%
-								}
-							}
-						}
-					}
-				} 
-			 %>
+                    }
+                }
+            }
+        }
+    }
+            %>
 		End Sub
 	    
-		''' <summary>
+		'''
+<summary>
 		''' Shows/Hides the Grid and Editor panels
 		''' </summary>
-		''' <param name="showIt"></param>
-		Sub ToggleEditor(ByVal showIt As Boolean)
+'''
+<param name="showIt"></param>
+Sub ToggleEditor(ByVal showIt As Boolean)
 			pnlEdit.Visible = showIt
 			pnlGrid.Visible = Not showIt
 		End Sub
@@ -257,8 +266,8 @@ Namespace <%=provider.GeneratedNamespace%>
 		'<summary>
 		'Binds and saves the data
 		'</summary>
-		'<param name="id"></param>
-		Private Sub BindAndSave(ByVal id As String) 
+'<param name="id"></param>
+Private Sub BindAndSave(ByVal id As String) 
 		
 			Dim item As <%= className %>
 			If Not String.IsNullOrEmpty(id) AndAlso id <> "0" Then 
@@ -270,75 +279,76 @@ Namespace <%=provider.GeneratedNamespace%>
 			End If  
 	      
 			<%
-			    
-			
-				foreach (TableSchema.TableColumn col in tbl.Columns)
-				{
-					if (!col.IsPrimaryKey && col.DataType != DbType.Binary)
-					{
-						string controlID = "ctrl" + col.PropertyName;
-						string propName = col.PropertyName;
-						string converterType;
 
-						switch (col.DataType)
-						{
-							case DbType.Currency:
-							case DbType.VarNumeric:
-								converterType = "Decimal";
-								break;
-							case DbType.AnsiString:
-							case DbType.AnsiStringFixedLength:
-								converterType = "String";
-								break;
-							default:
-								converterType = col.DataType.ToString();
-								break;
-						}
-						
-						%>
+
+                foreach (TableSchema.TableColumn col in tbl.Columns)
+                {
+                    if (!col.IsPrimaryKey && col.DataType != DbType.Binary)
+                    {
+                        string controlID = "ctrl" + col.PropertyName;
+                        string propName = col.PropertyName;
+                        string converterType;
+
+                        switch (col.DataType)
+                        {
+                            case DbType.Currency:
+                            case DbType.VarNumeric:
+                                converterType = "Decimal";
+                                break;
+                            case DbType.AnsiString:
+                            case DbType.AnsiStringFixedLength:
+                                converterType = "String";
+                                break;
+                            default:
+                                converterType = col.DataType.ToString();
+                                break;
+                        }
+
+            %>
 						Dim val<%= controlID %> As Object = Utility.GetDefaultControlValue(<%= className %>.Schema.GetColumn("<%= col.ColumnName %>"), <%= controlID %>, isAdd, False)
 						<%
 
-						if (col.IsNullable)
-						{
-						%>
+                            if (col.IsNullable)
+                            {
+                        %>
 						If val<%= controlID %> Is Nothing Then
 							item.<%= propName %> = Nothing
 						Else
 						<%
-						}
+                            }
 
-						if (col.DataType != DbType.Guid)
-						{
-						%>
+                            if (col.DataType != DbType.Guid)
+                            {
+                        %>
 							item.<%= propName %> = Convert.To<%= converterType %>(val<%= controlID %>)
 						<%
-						}
-						else
-						{
-						%>
+    }
+    else
+    {
+                        %>
 							item.<%= propName %> = New <%= converterType %>(val<%= controlID %>.ToString())
 						<%
-						}
+                            }
 
-						if (col.IsNullable)
-						{
-						%>
+                            if (col.IsNullable)
+                            {
+                        %>
 						End If
 						<%
-						}
-				}
-			}
-	%>    
+            }
+        }
+    }
+                        %>    
 			'bind it
 
 			item.Save(User.Identity.Name)
 		End Sub
 
-		''' <summary>
+		'''
+<summary>
 		''' Binds the GridView
 		''' </summary>
-		Private Sub BindGrid(ByVal orderBy As String)
+Private Sub BindGrid(ByVal orderBy As String)
 
 			Dim tblSchema As TableSchema.Table = DataService.GetTableSchema("<%= tbl.Name %>", "<%= tbl.Provider.Name %>")
 			If Not tblSchema.PrimaryKey Is Nothing Then

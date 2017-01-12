@@ -785,7 +785,11 @@ namespace SubSonic
                     else if(Utility.IsMatch(oVal.ToString(), Boolean.TrueString))
                         oVal = 1;
                 }
-                else if(dataType == DbType.DateTime)
+                //--> Added 20170112 TimPN                
+                else if (dataType == DbType.Date)
+                    oVal = Convert.ToDateTime(oVal);
+                //--< Added 20170112 TimPN                
+                else if (dataType == DbType.DateTime)
                     oVal = Convert.ToDateTime(oVal);
             }
             return oVal;
