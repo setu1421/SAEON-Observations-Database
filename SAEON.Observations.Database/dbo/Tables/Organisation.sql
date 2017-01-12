@@ -11,7 +11,10 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Organisation_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Organisation_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.4 20160509 TimPN
-    CONSTRAINT [PK_Organisation] PRIMARY KEY CLUSTERED ([ID]),
+--> Changed 2.0.23 20170112 TimPN
+--    CONSTRAINT [PK_Organisation] PRIMARY KEY CLUSTERED ([ID]),
+    CONSTRAINT [PK_Organisation] PRIMARY KEY NONCLUSTERED ([ID]),
+--< Changed 2.0.23 20170112 TimPN
     CONSTRAINT [FK_Organisation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --> Changed 20160329 TimPN
 --    CONSTRAINT [IX_Organisation_Code] UNIQUE ([Code]),
@@ -22,6 +25,10 @@
     CONSTRAINT [UX_Organisation_Name] UNIQUE ([Name])
 --< Changed 20160329 TimPN
 );
+--> Added 2.0.23 20170112 TimPN
+GO
+CREATE UNIQUE CLUSTERED INDEX [CX_Organisation] ON [dbo].[Organisation] ([AddedAt])
+--< Added 2.0.23 20170112 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Organisation_UserId] ON [dbo].[Organisation] ([UserId])

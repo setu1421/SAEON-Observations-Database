@@ -29,7 +29,10 @@ CREATE TABLE [dbo].[Site]
 )
 --> Added 2.0.5 20160411 TimPN
 GO
-CREATE CLUSTERED INDEX [CX_Site] ON [dbo].[Site] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_Site] ON [dbo].[Site] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_Site] ON [dbo].[Site] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 --< Added 2.0.5 20160411 TimPN
 GO
 CREATE INDEX [IX_Site_UserId] ON [dbo].[Site] ([UserId])

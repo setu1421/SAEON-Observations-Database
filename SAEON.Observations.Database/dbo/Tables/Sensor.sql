@@ -41,7 +41,10 @@ CREATE TABLE [dbo].[Sensor] (
 );
 --> Added 2.0.8 20160718 TimPN
 GO
-CREATE CLUSTERED INDEX [CX_Sensor] ON [dbo].[Sensor] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_Sensor] ON [dbo].[Sensor] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_Sensor] ON [dbo].[Sensor] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 --< Added 2.0.8 20160718 TimPN
 --> Removed 2.0.0 20160329 TimPN
 --GO

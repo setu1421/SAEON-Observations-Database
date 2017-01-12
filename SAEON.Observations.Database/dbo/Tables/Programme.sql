@@ -23,7 +23,10 @@ CREATE TABLE [dbo].[Programme]
     CONSTRAINT [FK_Programme_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
-CREATE CLUSTERED INDEX [CX_Programme] ON [dbo].[Programme] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_Programme] ON [dbo].[Programme] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_Programme] ON [dbo].[Programme] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_Programme_UserId] ON [dbo].[Programme] ([UserId])
 GO

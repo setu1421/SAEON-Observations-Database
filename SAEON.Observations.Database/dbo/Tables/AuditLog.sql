@@ -12,7 +12,10 @@ CREATE TABLE [dbo].[AuditLog]
     CONSTRAINT [FK_AuditLog_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
-CREATE CLUSTERED INDEX [IX_AuditLog_AddedAt] ON [dbo].AuditLog ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [IX_AuditLog_AddedAt] ON [dbo].AuditLog ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_AuditLog_AddedAt] ON [dbo].AuditLog ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_AuditLog_UserId] ON [dbo].AuditLog ([UserId])
 --< Added 2.0.2 20160419 TimPN

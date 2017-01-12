@@ -39,7 +39,10 @@ CREATE TABLE [dbo].[Instrument]
 )
 --> Added 2.0.5 20160516 TimPN
 GO
-CREATE CLUSTERED INDEX [CX_Instrument] ON [dbo].[Instrument] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_Instrument] ON [dbo].[Instrument] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_Instrument] ON [dbo].[Instrument] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 --< Added 2.0.5 20160516 TimPN
 GO
 CREATE INDEX [IX_Instrument_StartDate] ON [dbo].[Instrument] ([StartDate])

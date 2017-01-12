@@ -24,7 +24,9 @@
 );
 --> Added 2.0.8 20160718 TimPN
 GO
-CREATE CLUSTERED INDEX [CX_PhenomenonUOM] ON [dbo].[PhenomenonUOM] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+CREATE UNIQUE CLUSTERED INDEX [CX_PhenomenonUOM] ON [dbo].[PhenomenonUOM] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 --< Added 2.0.8 20160718 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO

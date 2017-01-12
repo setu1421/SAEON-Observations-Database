@@ -22,7 +22,10 @@ CREATE TABLE [dbo].[Project_Station]
     CONSTRAINT [FK_Project_Station_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
-CREATE CLUSTERED INDEX [CX_Project_Station] ON [dbo].[Project_Station] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_Project_Station] ON [dbo].[Project_Station] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_Project_Station] ON [dbo].[Project_Station] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_Project_Station_ProjectID] ON [dbo].[Project_Station] ([ProjectID])
 GO

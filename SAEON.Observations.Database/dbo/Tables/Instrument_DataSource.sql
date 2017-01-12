@@ -22,7 +22,10 @@ CREATE TABLE [dbo].[Instrument_DataSource]
     CONSTRAINT [UX_Instrument_DataSource] UNIQUE ([InstrumentID],[DataSourceID],[StartDate],[EndDate])
 )
 GO
-CREATE CLUSTERED INDEX [CX_Instrument_DataSource] ON [dbo].[Instrument_DataSource] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_Instrument_DataSource] ON [dbo].[Instrument_DataSource] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_Instrument_DataSource] ON [dbo].[Instrument_DataSource] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_Instrument_DataSource_InstrumentID] ON [dbo].[Instrument_DataSource] ([InstrumentID])
 GO

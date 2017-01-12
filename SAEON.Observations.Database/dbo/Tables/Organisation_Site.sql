@@ -24,7 +24,10 @@ CREATE TABLE [dbo].[Organisation_Site]
     CONSTRAINT [UX_Organisation_Site] UNIQUE ([OrganisationID],[SiteID],[OrganisationRoleID],[StartDate],[EndDate])
 )
 GO
-CREATE CLUSTERED INDEX [CX_Organisation_Site] ON [dbo].[Organisation_Site] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_Organisation_Site] ON [dbo].[Organisation_Site] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_Organisation_Site] ON [dbo].[Organisation_Site] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_Organisation_Site_OrganisationID] ON [dbo].[Organisation_Site] ([OrganisationID])
 GO

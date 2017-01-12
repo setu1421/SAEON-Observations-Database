@@ -27,7 +27,10 @@ CREATE TABLE [dbo].[SchemaColumn]
     CONSTRAINT [UX_SchemaColumn_DataSchemaID_Name] UNIQUE ([DataSchemaID],[Name])
 )
 GO
-CREATE CLUSTERED INDEX [CX_SchemaColumn] ON [dbo].[SchemaColumn] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_SchemaColumn] ON [dbo].[SchemaColumn] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_SchemaColumn] ON [dbo].[SchemaColumn] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_SchemaColumn_DataSchemaID] ON [dbo].[SchemaColumn] ([DataSchemaID])
 GO

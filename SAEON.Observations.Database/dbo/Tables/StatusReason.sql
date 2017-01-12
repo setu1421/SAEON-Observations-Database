@@ -14,7 +14,10 @@ CREATE TABLE [dbo].[StatusReason]
     CONSTRAINT [FK_StatusReason_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 )
 GO
-CREATE CLUSTERED INDEX [CX_StatusReason] ON [dbo].[StatusReason] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_StatusReason] ON [dbo].[StatusReason] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_StatusReason] ON [dbo].[StatusReason] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_StatusReason_UserId] ON [dbo].[StatusReason] ([UserId])
 --> Changed 2.0.15 20161102 TimPN

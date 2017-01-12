@@ -13,7 +13,10 @@ CREATE TABLE [dbo].[SchemaColumnType]
     CONSTRAINT [UX_SchemaColumnType] UNIQUE ([Name])
 )
 GO
-CREATE CLUSTERED INDEX [CX_SchemaColumnType] ON [dbo].[SchemaColumnType] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_SchemaColumnType] ON [dbo].[SchemaColumnType] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_SchemaColumnType] ON [dbo].[SchemaColumnType] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_SchemaColumnType_UserId] ON [dbo].[SchemaColumnType] ([UserId])
 --> Changed 2.0.15 20161102 TimPN

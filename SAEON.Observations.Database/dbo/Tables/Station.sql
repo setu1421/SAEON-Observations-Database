@@ -53,7 +53,10 @@
 );
 --> Added 2.0.5 20160411 TimPN
 GO
-CREATE CLUSTERED INDEX [CX_Station] ON [dbo].[Station] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_Station] ON [dbo].[Station] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_Station] ON [dbo].[Station] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 --< Added 2.0.5 20160411 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO

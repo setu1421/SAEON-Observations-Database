@@ -64,7 +64,10 @@
 );
 --> Added 2.0.8 20160718 TimPN
 GO
-CREATE CLUSTERED INDEX [CX_Observation] ON [dbo].[Observation] ([AddedAt])
+--> Changed 2.0.23 20170112 TimPN
+--CREATE CLUSTERED INDEX [CX_Observation] ON [dbo].[Observation] ([AddedAt])
+CREATE UNIQUE CLUSTERED INDEX [CX_Observation] ON [dbo].[Observation] ([AddedAt])
+--< Changed 2.0.23 20170112 TimPN
 --> Added 2.0.13 20161010 TimPN
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 --< Added 2.0.13 20161010 TimPN
