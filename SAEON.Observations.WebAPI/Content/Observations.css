@@ -1,0 +1,25 @@
+﻿.page-header {
+    margin-top: 0;
+    padding-top: 0;
+    /*padding-bottom: 0;
+    border-bottom: 0;*/
+}
+
+body {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #567baf;
+}
+
+#Page {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 15px;
+    background-color: white;
+    color: black;
+}
+
+.Logo {
+    margin-bottom: 10px;
+}
+

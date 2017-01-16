@@ -17,14 +17,17 @@ namespace SAEON.Observations.WebAPI
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
-            // Web API routes
-            config.MapHttpAttributeRoutes();
-
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
+                name: "ApiById",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            // Web API routes
+            config.MapHttpAttributeRoutes();
+
+            // API versioning
+            config.AddApiVersioning(o => o.AssumeDefaultVersionWhenUnspecified = true);
         }
     }
 }
