@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.Migrations;
 
 namespace SAEON.Observations.Identity
 {
@@ -29,10 +30,11 @@ namespace SAEON.Observations.Identity
             return userIdentity;
         }
     }
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("Observations", throwIfV1Schema: false)
         {
         }
 
@@ -40,6 +42,40 @@ namespace SAEON.Observations.Identity
         {
             return new ApplicationDbContext();
         }
+    }
+    public class ApplicationDbInitializer : CreateDatabaseIfNotExists<ApplicationDbContext> { }
+
+    public class ApplicationDbMigration : DbMigrationsConfiguration<ApplicationDbContext>
+    {
+        public ApplicationDbMigration()
+            : base()
+        {
+            AutomaticMigrationsEnabled = true;
+            //AutomaticMigrationDataLossAllowed = true;
+        }
+
+        private void AddUser(string name, string email, string password, string[] roles, UserManager<ApplicationUser> userManager)
+        {
+            var user = new ApplicationUser { UserName = email, Email = email, Name = name, EmailConfirmed = true };
+            var result = userManager.Create(user, password);
+            if (result.Succeeded)
+                foreach (var role in roles)
+                    userManager.AddToRole(user.Id, role);
+        }
+
+        protected override void Seed(ApplicationDbContext context)
+        {
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            string[] roles = new string[] { "Administrator", "DataReader", "DataWriter", "QuerySite" };
+            foreach (var role in roles)
+                if (!roleManager.RoleExists(role)) roleManager.Create(new IdentityRole(role));
+            AddUser("Administrator", "observations@saeon.ac.za.za", "", new string[] { "Administrator" }, userManager);
+            AddUser("Tim Parker-Nance", "tim@nimbusservices.co.za", "", new string[] { "Administrator" }, userManager);
+            AddUser("Query Site", "observations@saeon.ac.za", "", new string[] { "QuerySite" }, userManager);
+            base.Seed(context);
+        }
+
     }
 }
 
