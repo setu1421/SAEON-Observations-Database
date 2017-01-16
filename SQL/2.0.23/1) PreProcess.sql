@@ -172,8 +172,9 @@ enable trigger TR_Instrument_Sensor_Update on Instrument_Sensor;
 --Update Observation set AddedAt = UpdatedAt where AddedAt is null;
 --Declare @BatchSize Int = 1000000
 --Declare @BatchNum Int = 0
---Declare @RowCount Int = 1000000
---Declare @LastAdded DateTime = '2016-09-23 13:38:19.127';
+--Declare @RowCount Int = @BatchSize
+--Declare @StartDate DateTime = '2016-09-24 10:55:55.827'
+--Declare @LastAdded DateTime = @StartDate
 --Declare @Msg VarChar(100)
 --while (@RowCount > 0)
 --begin
@@ -186,12 +187,14 @@ enable trigger TR_Instrument_Sensor_Update on Instrument_Sensor;
 --	Set
 --	  @LastAdded = AddedAt = DATEADD(ms,10,@LastAdded)
 --	from
---	  (Select ID, ROW_NUMBER() OVER (Partition By AddedAt Order By AddedAt, ValueDate) RowNum from Observation where AddedAt = '2016-09-23 13:38:19.127') src
+--	  (Select ID, ROW_NUMBER() OVER (Partition By AddedAt Order By AddedAt, ValueDate) RowNum from Observation where AddedAt = @StartDate) src
 --	where
 --	  (Observation.ID = src.ID) and (src.RowNum > 1)
 --  Set @RowCount = @@RowCount
 --  commit transaction
 --  checkpoint
+  --Set @Msg = 'Batch #'+Cast(@BatchNum as varchar(100))+' added '+Cast(@RowCount as varchar(100))+' rows'
+  --RAISERROR(@msg, 0, 1) WITH NOWAIT
 --end;
 --enable trigger TR_Observation_Update on Observation;
 -- Observation
