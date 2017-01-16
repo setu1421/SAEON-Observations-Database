@@ -17,10 +17,12 @@ using SAEON.Observations.WebAPI.Models;
 using SAEON.Observations.WebAPI.Providers;
 using SAEON.Observations.WebAPI.Results;
 using SAEON.Observations.Identity;
+using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [Authorize]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
