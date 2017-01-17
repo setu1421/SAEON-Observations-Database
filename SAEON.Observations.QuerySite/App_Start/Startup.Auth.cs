@@ -46,24 +46,24 @@ namespace SAEON.Observations.QuerySite
             // This is similar to the RememberMe option when you log in.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
-            // Uncomment the following lines to enable logging in with third party login providers
-            //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
+            //Uncomment the following lines to enable logging in with third party login providers
+            app.UseMicrosoftAccountAuthentication(
+                clientId: "d54e063a-40e8-4ea5-959b-f19573d42702",
+                clientSecret: "hEpwZ4oLQiKMUXPL2REgCBk");
 
             //app.UseTwitterAuthentication(
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "595998070597872",
+               appSecret: "f2687dc8b4486064d67af6e47bd3217a");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "833245400053-eednvfhcjva3gna8kv2vv3rpsuiin2ac.apps.googleusercontent.com",
+                ClientSecret = "5PGqrG1BA_n3usDG-s8KZBH1"
+            });
         }
     }
 }

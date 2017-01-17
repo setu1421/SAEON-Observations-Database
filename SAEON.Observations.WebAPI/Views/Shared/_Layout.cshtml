@@ -15,7 +15,7 @@
         <header class="page-top">
             <div class="row">
                 <div class="col-md-12">
-                    <img class="Logo image-responsive center-block" src="~/Images/Logo.jpeg" alt="SAEON Observations Database Logo" />
+                    <img class="Logo image-responsive center-block" src="~/Images/Banner.jpg" alt="SAEON Banner" />
                 </div>
             </div>
             <nav class="navbar navbar-default" role="navigation">
@@ -35,7 +35,8 @@
                     <div class="collapse navbar-collapse" id="rd-navbar-collapse">
                         <ul class="nav navbar-nav">
                             <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("API", "Index", "Help", new { area = "HelpPage" }, null)</li>
+                            <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+                            <li>@Html.ActionLink("Swagger", "", "Swagger", new { area = "" }, null)</li>
                             <li>@Html.ActionLink("About", "About", "Home")</li>
                             <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                         </ul>

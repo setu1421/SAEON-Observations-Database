@@ -28,6 +28,9 @@ namespace SAEON.Observations.WebAPI
 
             // API versioning
             config.AddApiVersioning(o => o.AssumeDefaultVersionWhenUnspecified = true);
+
+            // Authentication
+            config.Filters.Add(new AuthorizeAttribute());
         }
     }
 }

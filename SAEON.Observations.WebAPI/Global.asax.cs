@@ -22,10 +22,17 @@ namespace SAEON.Observations.WebAPI
                 .WriteTo.RollingFile(Server.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebAPI.Admin-{Date}.txt"))
                 .WriteTo.Seq("http://localhost:5341/")
                 .CreateLogger();
-            Database.SetInitializer<ApplicationDbContext>(new MigrateDatabaseToLatestVersion<ApplicationDbContext, ApplicationDbMigration>());
-            using (var context = new ApplicationDbContext())
+            try
             {
-                context.Database.Initialize(false);
+                Database.SetInitializer<ApplicationDbContext>(new MigrateDatabaseToLatestVersion<ApplicationDbContext, ApplicationDbMigration>());
+                using (var context = new ApplicationDbContext())
+                {
+                    context.Database.Initialize(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unable to initialize database");
             }
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);

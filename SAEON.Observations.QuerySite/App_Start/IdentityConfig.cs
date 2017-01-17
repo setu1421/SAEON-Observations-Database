@@ -12,6 +12,9 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using SAEON.Observations.QuerySite.Models;
 using SAEON.Observations.Identity;
+using System.Net.Mail;
+using System.Net;
+using Serilog;
 
 namespace SAEON.Observations.QuerySite
 {
@@ -19,8 +22,31 @@ namespace SAEON.Observations.QuerySite
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            try
+            {
+                SmtpClient client = new SmtpClient("smtp.gmail.com");
+                client.Port = 587;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential("observations@nimbusservices.co.za", "vPZrCxkYxLg3");
+                var msg = new MailMessage("observations@nimbusservices.co.za", message.Destination);
+                msg.Subject = message.Subject;
+                msg.Bcc.Add(new MailAddress("observations@nimbusservices.co.za"));
+                msg.Body = $"<html><head><title>{message.Subject}</title></head><body>{message.Body}" +
+                    "<p><b>South African Environmental Observation Network (SAEON)<b>" +
+                    "<p><a href=\"http://www.saeon.ac.za.org.za\"><img style=\"height: 50px; border: 0; border-style: none\" src=\"/Images/Logo.png\" alt=\"SAEON Logo\"></img></a></p>" +
+                    "<p><a href=\"http://www.saeon.ac.za\">www.SAEON.ac.za</a><br>" +
+                    "<a href=\"mailto:observations@nimbusservices.co.za\">observations@nimbusservices.co.za</a></p>" +
+                    "</body></html>";
+                msg.IsBodyHtml = true;
+                return client.SendMailAsync(msg);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unable to send email");
+                throw;
+            }
         }
     }
 
@@ -54,7 +80,7 @@ namespace SAEON.Observations.QuerySite
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
+                RequiredLength = 8,
                 RequireNonLetterOrDigit = true,
                 RequireDigit = true,
                 RequireLowercase = true,
@@ -68,10 +94,10 @@ namespace SAEON.Observations.QuerySite
 
             // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
             // You can write your own provider and plug it in here.
-            manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>
-            {
-                MessageFormat = "Your security code is {0}"
-            });
+            //manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>
+            //{
+            //    MessageFormat = "Your security code is {0}"
+            //});
             manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
             {
                 Subject = "Security Code",

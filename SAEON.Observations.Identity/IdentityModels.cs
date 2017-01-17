@@ -5,6 +5,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Migrations;
+using System;
+using Serilog;
 
 namespace SAEON.Observations.Identity
 {
@@ -65,15 +67,23 @@ namespace SAEON.Observations.Identity
 
         protected override void Seed(ApplicationDbContext context)
         {
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-            string[] roles = new string[] { "Administrator", "DataReader", "DataWriter", "QuerySite" };
-            foreach (var role in roles)
-                if (!roleManager.RoleExists(role)) roleManager.Create(new IdentityRole(role));
-            AddUser("Administrator", "observations@saeon.ac.za.za", "", new string[] { "Administrator" }, userManager);
-            AddUser("Tim Parker-Nance", "tim@nimbusservices.co.za", "", new string[] { "Administrator" }, userManager);
-            AddUser("Query Site", "observations@saeon.ac.za", "", new string[] { "QuerySite" }, userManager);
-            base.Seed(context);
+            try
+            {
+                base.Seed(context);
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+                string[] roles = new string[] { "Administrator", "DataReader", "DataWriter", "QuerySite" };
+                foreach (var role in roles)
+                    if (!roleManager.RoleExists(role)) roleManager.Create(new IdentityRole(role));
+                AddUser("Administrator", "observations@saeon.ac.za.za", "0d3DHCClCsAh", new string[] { "Administrator" }, userManager);
+                AddUser("Tim Parker-Nance", "tim@nimbusservices.co.za", "TimPN1#", new string[] { "Administrator" }, userManager);
+                AddUser("Query Site", "observations@saeon.ac.za", "0583dUSVyuFs", new string[] { "QuerySite" }, userManager);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unable to seed database");
+                throw;
+            }
         }
 
     }

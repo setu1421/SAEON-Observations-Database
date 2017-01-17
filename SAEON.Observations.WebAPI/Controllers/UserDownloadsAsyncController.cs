@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
@@ -13,18 +15,20 @@ namespace SAEON.Observations.WebAPI.Controllers
     /// Users have to be logged in to download data in the QuerySite. Any downloads are saved for later re-downloads.
     /// </summary>
     [ApiVersion("1.0")]
-    [RoutePrefix("UserDownloads")]
+    [RoutePrefix("UserDownloadsAsync")]
     [Authorize(Roles = "Administrators,DataReaders")]
-    public class UserDownloadsController : ApiController
+    public class UserDownloadsAsyncController : ApiController
     {
         /// <summary>
         /// Return all UserDownloads for the logged in user
         /// </summary>
         /// <returns></returns>
         [Route]
-        public IEnumerable<UserDownloadModel> Get()
+        [ResponseType(typeof(List<UserDownloadModel>))]
+        public async Task<IHttpActionResult> GetAsync()
         {
-            return new UserDownloadModel[] { };
+            List<UserDownloadModel> downloads = await Task.Run(() => new List<UserDownloadModel>());
+            return Ok(downloads);
         }
 
         /// <summary>
@@ -33,9 +37,16 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">The id of the UserDownload</param>
         /// <returns></returns>
         [Route("{id:guid}")]
-        public UserDownloadModel Get(Guid id)
+        [ResponseType(typeof(UserDownloadModel))]
+        public async Task<IHttpActionResult> GetAsync(Guid id)
         {
-            return null;
+            var download = await Task.Run(() => new UserDownloadModel());
+            if (download == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(download);
         }
 
         /// <summary>
@@ -44,9 +55,16 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="name">The name of the UserDownload</param>
         /// <returns></returns>
         [Route("{name}")]
-        public UserDownloadModel GetByName(string name)
+        [ResponseType(typeof(UserDownloadModel))]
+        public async Task<IHttpActionResult> GetByNameAsync(string name)
         {
-            return null;
+            var download = await Task.Run(() => new UserDownloadModel());
+            if (download == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(download);
         }
 
         /// <summary>
@@ -55,9 +73,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="value">The UserDownload values to be created</param>
         [Route]
         [Authorize(Roles = "QuerySite")]
-        public UserDownloadModel Post([FromBody]UserDownloadModel value)
+        [ResponseType(typeof(UserDownloadModel))]
+        public async Task<IHttpActionResult> PostAsync([FromBody]UserDownloadModel value)
         {
-            return null;
+            var download = await Task.Run(() => new UserDownloadModel());
+            return CreatedAtRoute("UserDownloadsAsync", new { id = download.Id }, download);
         }
 
         /// <summary>
@@ -67,8 +87,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="value">The UserDownload values to be updated</param>
         [Route("{id:guid}")]
         [Authorize(Roles = "QuerySite")]
-        public void Put(Guid id, [FromBody]UserDownloadModel value)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> Put(Guid id, [FromBody]UserDownloadModel value)
         {
+            await Task.Run(() => new UserDownloadModel());
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         /// <summary>
@@ -78,8 +101,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="value">The UserDownload values to be updated</param>
         [Route("{name}")]
         [Authorize(Roles = "QuerySite")]
-        public void PutByName(string name, [FromBody]UserDownloadModel value)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutByName(string name, [FromBody]UserDownloadModel value)
         {
+            await Task.Run(() => new UserDownloadModel());
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         /// <summary>
@@ -88,8 +114,12 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">The id of the UserDownload</param>
         [Route("{id:guid}")]
         [Authorize(Roles = "QuerySite")]
-        public void Delete(Guid id)
-        { }
+        [ResponseType(typeof(UserDownloadModel))]
+        public async Task<IHttpActionResult> Delete(Guid id)
+        {
+            var download = await Task.Run(() => new UserDownloadModel());
+            return Ok(download);
+        }
 
         /// <summary>
         /// Delete a UserDownload for the logged in user
@@ -97,8 +127,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="name">The name of the UserDownload</param>
         [Route("{name}")]
         [Authorize(Roles = "QuerySite")]
-        public void DeleteByName(string name)
+        [ResponseType(typeof(UserDownloadModel))]
+        public async Task<IHttpActionResult> DeleteByName(string name)
         {
+            var download = await Task.Run(() => new UserDownloadModel());
+            return Ok(download);
         }
     }
 }

@@ -15,18 +15,20 @@ namespace SAEON.Observations.WebAPI.Controllers
     /// Logged in users can save frequently used queries in the QuerySite for later use
     /// </summary>
     [ApiVersion("1.0")]
-    [RoutePrefix("UserQueries")]
+    [RoutePrefix("UserQueriesAsync")]
     [Authorize(Roles = "Administrators,DataReaders")]
-    public class UserQueriesController : ApiController
+    public class UserQueriesAsyncController : ApiController
     {
         /// <summary>
         /// Return all UserQueries for the logged in user
         /// </summary>
         /// <returns></returns>
         [Route]
-        public IEnumerable<UserQueryModel> Get()
+        [ResponseType(typeof(List<UserQueryModel>))]
+        public async Task<IHttpActionResult> GetAsync()
         {
-            return new UserQueryModel[] {};
+            List<UserQueryModel> downloads = await Task.Run(() => new List<UserQueryModel>());
+            return Ok(downloads);
         }
 
         /// <summary>
@@ -35,9 +37,16 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">The id of the UserQuery</param>
         /// <returns></returns>
         [Route("{id:guid}")]
-        public UserQueryModel Get(Guid id)
+        [ResponseType(typeof(UserQueryModel))]
+        public async Task<IHttpActionResult> GetAsync(Guid id)
         {
-            return null;
+            var download = await Task.Run(() => new UserQueryModel());
+            if (download == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(download);
         }
 
         /// <summary>
@@ -46,9 +55,16 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="name">The name of the UserQuery</param>
         /// <returns></returns>
         [Route("{name}")]
-        public UserQueryModel GetByName(string name)
+        [ResponseType(typeof(UserQueryModel))]
+        public async Task<IHttpActionResult> GetByNameAsync(string name)
         {
-            return null;
+            var download = await Task.Run(() => new UserQueryModel());
+            if (download == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(download);
         }
 
         /// <summary>
@@ -56,10 +72,12 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="value">The UserQuery values to be created</param>
         [Route]
-        [Authorize(Roles="QuerySite")]
-        public UserQueryModel Post([FromBody]UserQueryModel value)
+        [Authorize(Roles = "QuerySite")]
+        [ResponseType(typeof(UserQueryModel))]
+        public async Task<IHttpActionResult> PostAsync([FromBody]UserQueryModel value)
         {
-            return null;
+            var download = await Task.Run(() => new UserQueryModel());
+            return CreatedAtRoute("UserQueriesAsync", new { id = download.Id }, download);
         }
 
         /// <summary>
@@ -69,8 +87,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="value">The UserQuery values to be updated</param>
         [Route("{id:guid}")]
         [Authorize(Roles = "QuerySite")]
-        public void Put(Guid id, [FromBody]UserQueryModel value)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> Put(Guid id, [FromBody]UserQueryModel value)
         {
+            await Task.Run(() => new UserQueryModel());
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         /// <summary>
@@ -80,8 +101,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="value">The UserQuery values to be updated</param>
         [Route("{name}")]
         [Authorize(Roles = "QuerySite")]
-        public void PutByName(string name, [FromBody]UserQueryModel value)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutByName(string name, [FromBody]UserQueryModel value)
         {
+            await Task.Run(() => new UserQueryModel());
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         /// <summary>
@@ -90,8 +114,12 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">The id of the UserQuery</param>
         [Route("{id:guid}")]
         [Authorize(Roles = "QuerySite")]
-        public void Delete(Guid id)
-        { }
+        [ResponseType(typeof(UserQueryModel))]
+        public async Task<IHttpActionResult> Delete(Guid id)
+        {
+            var download = await Task.Run(() => new UserQueryModel());
+            return Ok(download);
+        }
 
         /// <summary>
         /// Delete a UserQuery for the logged in user
@@ -99,8 +127,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="name">The name of the UserQuery</param>
         [Route("{name}")]
         [Authorize(Roles = "QuerySite")]
-        public void DeleteByName(string name)
+        [ResponseType(typeof(UserQueryModel))]
+        public async Task<IHttpActionResult> DeleteByName(string name)
         {
+            var download = await Task.Run(() => new UserQueryModel());
+            return Ok(download);
         }
     }
 }
