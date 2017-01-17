@@ -167,21 +167,24 @@ enable trigger TR_Instrument_Sensor_Update on Instrument_Sensor;
 ---- Observation
 --print 'Observation'
 --go
---disable trigger TR_Observation_Update on Observation;
+--disable trigger TR_Observation_Update on Observation
 --Update Observation set UpdatedAt = GetDate() where AddedAt is null and UpdatedAt is Null
---Update Observation set AddedAt = UpdatedAt where AddedAt is null;
+--Update Observation set AddedAt = UpdatedAt where AddedAt is null
 --Declare @BatchSize Int = 1000000
---Declare @BatchNum Int = 0
 --Declare @RowCount Int = @BatchSize
---Declare @StartDate DateTime = '2016-09-24 10:55:55.827'
---Declare @LastAdded DateTime = @StartDate
---Declare @Msg VarChar(100)
---while (@RowCount > 0)
+--Declare @StartDate DateTime
+--Set @StartDate = (Select top(1) Min(AddedAt) from Observation group by AddedAt having (Count(ID) > 10000))
+--while (@StartDate is not null)
 --begin
---  Set @BatchNum += 1
---  Set @Msg = 'Batch #'+Cast(@BatchNum as varchar(100))
---  RAISERROR(@msg, 0, 1) WITH NOWAIT
---  begin transaction;
+--  Declare @BatchNum Int = 0
+--  Declare @LastAdded DateTime = @StartDate
+--  Declare @Msg VarChar(100)
+--  while (@RowCount > 0)
+--  begin
+--	Set @BatchNum += 1
+--	Set @Msg = Convert(varchar(100), @StartDate,121)+' Batch #'+Cast(@BatchNum as varchar(100))
+--	RAISERROR(@msg, 0, 1) WITH NOWAIT
+--	begin transaction
 --	Update top (@BatchSize)
 --	  Observation
 --	Set
@@ -190,13 +193,16 @@ enable trigger TR_Instrument_Sensor_Update on Instrument_Sensor;
 --	  (Select ID, ROW_NUMBER() OVER (Partition By AddedAt Order By AddedAt, ValueDate) RowNum from Observation where AddedAt = @StartDate) src
 --	where
 --	  (Observation.ID = src.ID) and (src.RowNum > 1)
---  Set @RowCount = @@RowCount
---  commit transaction
---  checkpoint
-  --Set @Msg = 'Batch #'+Cast(@BatchNum as varchar(100))+' added '+Cast(@RowCount as varchar(100))+' rows'
-  --RAISERROR(@msg, 0, 1) WITH NOWAIT
+--	Set @RowCount = @@RowCount
+--	commit transaction
+--	checkpoint
+--	Set @Msg = Convert(varchar(100), @StartDate,121)+' Batch #'+Cast(@BatchNum as varchar(100))+' added '+Cast(@RowCount as varchar(100))+' rows'
+--	RAISERROR(@msg, 0, 1) WITH NOWAIT
+--  end
+--  Set @RowCount = @BatchSize
+--  Set @StartDate = (Select top(1) Min(AddedAt) from Observation group by AddedAt having (Count(ID) > 10000))
 --end;
---enable trigger TR_Observation_Update on Observation;
+--enable trigger TR_Observation_Update on Observation
 -- Observation
 print 'Observation'
 go
