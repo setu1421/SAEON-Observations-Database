@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Transactions;
 using System.Web;
 using System.Web.Configuration;
@@ -193,6 +194,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                                             Obrecord.CorrelationID = schval.CorrelationID;
                                             Obrecord.Save();
+                                            Thread.Sleep(1); // Delay 1ms to make sure clustered index on AddedAt is unique
                                         }
 
                                     }
@@ -261,6 +263,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                                         logrecord.CorrelationID = schval.CorrelationID;
                                         logrecord.Save();
+                                        Thread.Sleep(1); // Delay 1ms to make sure clustered index on AddedAt is unique
                                     }
                                 }
                             }
