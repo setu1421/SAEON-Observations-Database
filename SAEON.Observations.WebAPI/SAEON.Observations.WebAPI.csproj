@@ -472,13 +472,9 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SAEON.Observations.Entities\SAEON.Observations.Entities.csproj">
-      <Project>{b790dfa5-61e1-4cf3-abfb-a7f5b5f62f54}</Project>
-      <Name>SAEON.Observations.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SAEON.Observations.Identity\SAEON.Observations.Identity.csproj">
-      <Project>{4c97a6d1-84a0-4f25-aa65-9881c898dc3d}</Project>
-      <Name>SAEON.Observations.Identity</Name>
+    <ProjectReference Include="..\SAEON.Observations.Core\SAEON.Observations.Core.csproj">
+      <Project>{e3791465-ccce-4e02-af9f-8f677148fee1}</Project>
+      <Name>SAEON.Observations.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

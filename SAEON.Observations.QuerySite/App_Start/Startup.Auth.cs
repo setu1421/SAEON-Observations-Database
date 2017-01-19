@@ -5,8 +5,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using SAEON.Observations.QuerySite.Models;
-using SAEON.Observations.Identity;
+using SAEON.Observations.Core;
 
 namespace SAEON.Observations.QuerySite
 {

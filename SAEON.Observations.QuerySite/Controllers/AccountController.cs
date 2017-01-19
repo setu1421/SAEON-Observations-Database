@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using SAEON.Observations.QuerySite.Models;
-using SAEON.Observations.Identity;
+using SAEON.Observations.Core;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {

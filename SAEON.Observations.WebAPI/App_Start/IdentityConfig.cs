@@ -3,8 +3,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using SAEON.Observations.WebAPI.Models;
-using SAEON.Observations.Identity;
+using SAEON.Observations.Core;
 
 namespace SAEON.Observations.WebAPI
 {

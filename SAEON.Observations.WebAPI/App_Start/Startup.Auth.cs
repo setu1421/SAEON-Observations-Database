@@ -9,8 +9,7 @@ using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 using SAEON.Observations.WebAPI.Providers;
-using SAEON.Observations.WebAPI.Models;
-using SAEON.Observations.Identity;
+using SAEON.Observations.Core;
 
 namespace SAEON.Observations.WebAPI
 {

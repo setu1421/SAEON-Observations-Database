@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAEON.Observations.Core;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -9,7 +10,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using SAEON.Observations.Identity;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {

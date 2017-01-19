@@ -293,9 +293,9 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SAEON.Observations.Identity\SAEON.Observations.Identity.csproj">
-      <Project>{4C97A6D1-84A0-4F25-AA65-9881C898DC3D}</Project>
-      <Name>SAEON.Observations.Identity</Name>
+    <ProjectReference Include="..\SAEON.Observations.Core\SAEON.Observations.Core.csproj">
+      <Project>{e3791465-ccce-4e02-af9f-8f677148fee1}</Project>
+      <Name>SAEON.Observations.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -13,11 +13,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
-using SAEON.Observations.WebAPI.Models;
 using SAEON.Observations.WebAPI.Providers;
 using SAEON.Observations.WebAPI.Results;
-using SAEON.Observations.Identity;
 using System.Web.Http.Description;
+using SAEON.Observations.WebAPI.Models;
+using SAEON.Observations.Core;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.Web.Http;
-using SAEON.Observations.Entities;
-using SAEON.Observations.WebAPI.Models;
+using SAEON.Observations.Core;
 using Serilog;
 using Serilog.Context;
 using System;

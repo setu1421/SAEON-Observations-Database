@@ -10,11 +10,10 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using SAEON.Observations.QuerySite.Models;
-using SAEON.Observations.Identity;
 using System.Net.Mail;
 using System.Net;
 using Serilog;
+using SAEON.Observations.Core;
 
 namespace SAEON.Observations.QuerySite
 {

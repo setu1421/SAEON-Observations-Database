@@ -1,4 +1,4 @@
-﻿using SAEON.Observations.Identity;
+﻿using SAEON.Observations.Core;
 using Serilog;
 using System;
 using System.Collections.Generic;
