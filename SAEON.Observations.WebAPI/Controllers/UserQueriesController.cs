@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using Microsoft.Web.Http;
 using SAEON.Observations.Core;
 using Serilog;
@@ -44,7 +45,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [Route]
-        public IEnumerable<UserQuery> Get()
+        public IEnumerable<UserQueryDTO> Get()
         {
             return db.UserQueries.Where(d => d.UserId == User.Identity.GetUserId());
         }
@@ -55,7 +56,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">The id of the UserQuery</param>
         /// <returns></returns>
         [Route("{id:guid}")]
-        public UserQuery Get(Guid id)
+        public UserQueryDTO Get(Guid id)
         {
             var item = db.UserQueries.FirstOrDefault(d => (d.UserId == User.Identity.GetUserId()) && (d.Id == id));
             if (item == null)
@@ -71,7 +72,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="name">The name of the UserQuery</param>
         /// <returns></returns>
         [Route("{name}")]
-        public UserQuery GetByName(string name)
+        public UserQueryDTO GetByName(string name)
         {
             var item = db.UserQueries.FirstOrDefault(d => (d.UserId == User.Identity.GetUserId()) && (d.Name == name));
             if (item == null)
@@ -84,28 +85,28 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <summary>
         /// Create a UserQuery
         /// </summary>
-        /// <param name="item">The UserQuery to be created</param>
+        /// <param name="itemDTO">The UserQuery to be created</param>
         [Route]
         [Authorize(Roles="QuerySite")]
-        public UserQuery Post([FromBody]UserQuery item)
+        public UserQueryDTO Post([FromBody]UserQueryDTO itemDTO)
         {
             using (LogContext.PushProperty("Method", "Post"))
             {
                 try
                 {
-                    Log.Verbose("Adding {item.Name} {@Item}", item);
+                    Log.Verbose("Adding {itemDTO.Name} {@itemDTO}", itemDTO);
                     if (!ModelState.IsValid)
                     {
                         throw new HttpResponseException(HttpStatusCode.BadRequest);
                     }
                     try
                     {
-                        db.UserQueries.Add(item);
+                        db.UserQueries.Add(Mapper.Map<UserQueryDTO,UserQuery>(itemDTO));
                         db.SaveChanges();
                     }
                     catch (DbUpdateException)
                     {
-                        if (!db.UserQueries.Any(i => i.Id == item.Id))
+                        if (!db.UserQueries.Any(i => i.Id == itemDTO.Id))
                         {
                             throw new HttpResponseException(HttpStatusCode.Conflict);
                         }
@@ -114,11 +115,11 @@ namespace SAEON.Observations.WebAPI.Controllers
                             throw;
                         }
                     }
-                    return item;
+                    return itemDTO;
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to add {item.Name}", item);
+                    Log.Error(ex, "Unable to add {itemDTO.Name}", itemDTO);
                     throw;
                 }
             }
@@ -128,36 +129,27 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Update a UserQuery for the logged in user
         /// </summary>
         /// <param name="id">The id of the UserQuery</param>
-        /// <param name="item">The UserQuery to be updated</param>
+        /// <param name="itemDTO">The UserQuery to be updated</param>
         [Route("{id:guid}")]
         [Authorize(Roles = "QuerySite")]
-        public void PutById(Guid id, [FromBody]UserQuery item)
+        public void PutById(Guid id, [FromBody]UserQueryDTO itemDTO)
         {
             using (LogContext.PushProperty("Method", "PutById"))
             {
                 try
                 {
-                    Log.Verbose("Updating {id} to {@item}", id, item);
-                    if (!ModelState.IsValid || (id != item.Id))
+                    Log.Verbose("Updating {id} {@itemDTO}", id, itemDTO);
+                    if (!ModelState.IsValid || (id != itemDTO.Id))
                     {
                         throw new HttpResponseException(HttpStatusCode.BadRequest);
                     }
-                    try
+                    var item = db.UserQueries.FirstOrDefault(i => i.Id == id);
+                    if (item == null)
                     {
-                        db.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
+                        throw new HttpResponseException(HttpStatusCode.NotFound);
                     }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!db.UserQueries.Any(i => i.Id == item.Id))
-                        {
-                            throw new HttpResponseException(HttpStatusCode.NotFound);
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
+                    Mapper.Map<UserQueryDTO, UserQuery>(itemDTO, item);
+                    db.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -171,36 +163,26 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Update a UserQuery for the logged in user
         /// </summary>
         /// <param name="name">The name of the UserQuery</param>
-        /// <param name="item">The UserQuery to be updated</param>
+        /// <param name="itemDTO">The UserQuery to be updated</param>
         [Route("{name}")]
         [Authorize(Roles = "QuerySite")]
-        public void PutByName(string name, [FromBody]UserQuery item)
+        public void PutByName(string name, [FromBody]UserQueryDTO itemDTO)
         {
             using (LogContext.PushProperty("Method", "PutByName"))
             {
                 try
                 {
-                    Log.Verbose("Updating {name} to {@item}", name);
-                    if (!ModelState.IsValid || (name != item.Name))
+                    Log.Verbose("Updating {name} {@itemDTO}", name);
+                    if (!ModelState.IsValid || (name != itemDTO.Name))
                     {
                         throw new HttpResponseException(HttpStatusCode.BadRequest);
                     }
-                    try
+                    var item = db.UserQueries.FirstOrDefault(i => i.Name == name);
+                    if (item == null)
                     {
-                        db.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
+                        throw new HttpResponseException(HttpStatusCode.NotFound);
                     }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!db.UserQueries.Any(i => i.Name == item.Name))
-                        {
-                            throw new HttpResponseException(HttpStatusCode.NotFound);
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
+                    Mapper.Map<UserQueryDTO, UserQuery>(itemDTO, item);
                 }
                 catch (Exception ex)
                 {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using Microsoft.Web.Http;
 using SAEON.Observations.Core;
 using Serilog;
@@ -45,7 +46,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [Route]
-        [ResponseType(typeof(List<UserDownload>))]
+        [ResponseType(typeof(List<UserDownloadDTO>))]
         public async Task<IHttpActionResult> GetAsync()
         {
             return Ok(await db.UserDownloads.Where(d => d.UserId == User.Identity.GetUserId()).ToListAsync());
@@ -57,7 +58,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">The id of the UserDownload</param>
         /// <returns></returns>
         [Route("{id:guid}")]
-        [ResponseType(typeof(UserDownload))]
+        [ResponseType(typeof(UserDownloadDTO))]
         public async Task<IHttpActionResult> GetAsync(Guid id)
         {
             var item = await db.UserDownloads.FirstOrDefaultAsync(d => (d.UserId == User.Identity.GetUserId()) && (d.Id == id));
@@ -74,7 +75,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="name">The name of the UserDownload</param>
         /// <returns></returns>
         [Route("{name}")]
-        [ResponseType(typeof(UserDownload))]
+        [ResponseType(typeof(UserDownloadDTO))]
         public async Task<IHttpActionResult> GetByNameAsync(string name)
         {
             var item = await db.UserDownloads.FirstOrDefaultAsync(d => (d.UserId == User.Identity.GetUserId()) && (d.Name == name));
@@ -88,32 +89,32 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <summary>
         /// Create a UserDownload
         /// </summary>
-        /// <param name="item">The UserDownload to be created</param>
+        /// <param name="itemDTO">The UserDownload to be created</param>
         [Route]
         [Authorize(Roles = "QuerySite")]
-        [ResponseType(typeof(UserDownload))]
-        public async Task<IHttpActionResult> PostAsync([FromBody]UserDownload item)
+        [ResponseType(typeof(UserDownloadDTO))]
+        public async Task<IHttpActionResult> PostAsync([FromBody]UserDownloadDTO itemDTO)
         {
             using (LogContext.PushProperty("Method", "PostAsync"))
             {
                 try
                 {
-                    Log.Verbose("Adding {item.Name} {@item}", item);
+                    Log.Verbose("Adding {itemDTO.Name} {@itemDTO}", itemDTO);
                     if (!ModelState.IsValid)
                     {
-                        Log.Error("{item.Name} ModelState.Invalid",item);
+                        Log.Error("{itemDTO.Name} ModelState.Invalid", itemDTO);
                         return BadRequest(ModelState);
                     }
                     try
                     {
-                        db.UserDownloads.Add(item);
+                        db.UserDownloads.Add(Mapper.Map<UserDownloadDTO, UserDownload>(itemDTO));
                         await db.SaveChangesAsync();
                     }
                     catch (DbUpdateException)
                     {
-                        if (!db.UserDownloads.Any(i => i.Id == item.Id))
+                        if (!db.UserDownloads.Any(i => i.Id == itemDTO.Id))
                         {
-                            Log.Error("{item.Name} Conflict",item);
+                            Log.Error("{itemDTO.Name} Conflict", itemDTO);
                             return Conflict();
                         }
                         else
@@ -121,11 +122,11 @@ namespace SAEON.Observations.WebAPI.Controllers
                             throw;
                         }
                     }
-                    return CreatedAtRoute("UserDownloadsAsync", new { id = item.Id }, item);
+                    return CreatedAtRoute("UserDownloadsAsync", new { id = itemDTO.Id }, itemDTO);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to add {item.Name}",item);
+                    Log.Error(ex, "Unable to add {itemDTO.Name}", itemDTO);
                     throw;
                 }
             }
@@ -135,44 +136,35 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Update a UserDownload for the logged in user
         /// </summary>
         /// <param name="id">The id of the UserDownload</param>
-        /// <param name="item">The UserDownload to be updated</param>
+        /// <param name="itemDTO">The UserDownload to be updated</param>
         [Route("{id:guid}")]
         [Authorize(Roles = "QuerySite")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutByIdAsync(Guid id, [FromBody]UserDownload item)
+        public async Task<IHttpActionResult> PutByIdAsync(Guid id, [FromBody]UserDownloadDTO itemDTO)
         {
             using (LogContext.PushProperty("Method", "PutByIdAsync"))
             {
                 try
                 {
-                    Log.Verbose("Updating {id} to {@item}", id, item);
+                    Log.Verbose("Updating {id} {@itemDTO}", id, itemDTO);
                     if (!ModelState.IsValid)
                     {
-                        Log.Error("{id} ModelState.Invalid",id);
+                        Log.Error("{id} ModelState.Invalid", id);
                         return BadRequest(ModelState);
                     }
-                    if (id != item.Id)
+                    if (id != itemDTO.Id)
                     {
-                        Log.Error("{id} Ids not same",id);
+                        Log.Error("{id} Ids not same", id);
                         return BadRequest();
                     }
-                    try
+                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => i.Id == id);
+                    if (item == null)
                     {
-                        db.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                        await db.SaveChangesAsync();
+                        Log.Error("{id} Not found", id);
+                        return NotFound();
                     }
-                    catch (DbUpdateException)
-                    {
-                        if (!db.UserDownloads.Any(i => i.Id == item.Id))
-                        {
-                            Log.Error("{id} Not found",id);
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
+                    Mapper.Map<UserDownloadDTO, UserDownload>(itemDTO, item);
+                    await db.SaveChangesAsync();
                     return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
@@ -187,44 +179,34 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Update a UserDownload for the logged in user
         /// </summary>
         /// <param name="name">The name of the UserDownload</param>
-        /// <param name="item">The UserDownload to be updated</param>
+        /// <param name="itemDTO">The UserDownload to be updated</param>
         [Route("{name}")]
         [Authorize(Roles = "QuerySite")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutByNameAsync(string name, [FromBody]UserDownload item)
+        public async Task<IHttpActionResult> PutByNameAsync(string name, [FromBody]UserDownloadDTO itemDTO)
         {
             using (LogContext.PushProperty("Method", "PutByNameAsync"))
             {
                 try
                 {
-                    Log.Verbose("Updating {name} to {@item}", name);
+                    Log.Verbose("Updating {name} to {@itemDTO}", name, itemDTO);
                     if (!ModelState.IsValid)
                     {
-                        Log.Error("{name} ModelState.Invalid",name);
+                        Log.Error("{name} ModelState.Invalid", name);
                         return BadRequest(ModelState);
                     }
-                    if (name != item.Name)
+                    if (name != itemDTO.Name)
                     {
-                        Log.Error("{name} Names not same",name);
+                        Log.Error("{name} Names not same", name);
                         return BadRequest();
                     }
-                    try
+                    var item = db.UserDownloads.FirstOrDefault(i => i.Name == name);
+                    if (item == null)
                     {
-                        db.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                        await db.SaveChangesAsync();
+                        Log.Error("{name} Not found", name);
+                        return NotFound();
                     }
-                    catch (DbUpdateException)
-                    {
-                        if (!db.UserDownloads.Any(i => i.Name == item.Name))
-                        {
-                            Log.Error("{name} Not found", name);
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
+                    await db.SaveChangesAsync();
                     return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
@@ -241,7 +223,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">The id of the UserDownload</param>
         [Route("{id:guid}")]
         [Authorize(Roles = "QuerySite")]
-        [ResponseType(typeof(UserDownload))]
+        [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> DeleteByIdAsync(Guid id)
         {
             using (LogContext.PushProperty("Method", "DeleteByIdAsync"))
@@ -257,7 +239,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                     }
                     db.UserDownloads.Remove(item);
                     await db.SaveChangesAsync();
-                    return Ok(item);
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
                 {
@@ -273,7 +255,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="name">The name of the UserDownload</param>
         [Route("{name}")]
         [Authorize(Roles = "QuerySite")]
-        [ResponseType(typeof(UserDownload))]
+        [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> DeleteByNameAsync(string name)
         {
             using (LogContext.PushProperty("Method", "DeleteByNameAsync"))
@@ -284,12 +266,12 @@ namespace SAEON.Observations.WebAPI.Controllers
                     var item = await db.UserDownloads.FirstOrDefaultAsync(d => (d.UserId == User.Identity.GetUserId()) && (d.Name == name));
                     if (item == null)
                     {
-                        Log.Error("{name} Not found",name);
+                        Log.Error("{name} Not found", name);
                         return NotFound();
                     }
                     db.UserDownloads.Remove(item);
                     await db.SaveChangesAsync();
-                    return Ok(item);
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
                 {
