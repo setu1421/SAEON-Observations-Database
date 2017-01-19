@@ -30,6 +30,12 @@ namespace SAEON.Observations.Core
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
         public DbSet<ApplicationUser> Users { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ApplicationUser>().HasKey(u => u.Id);
+        }
     }
 
 }
