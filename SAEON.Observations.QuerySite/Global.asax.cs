@@ -21,18 +21,7 @@ namespace SAEON.Observations.QuerySite
                 .WriteTo.RollingFile(Server.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite.Admin-{Date}.txt"))
                 .WriteTo.Seq("http://localhost:5341/")
                 .CreateLogger();
-            try
-            {
-                Database.SetInitializer<ApplicationDbContext>(new MigrateDatabaseToLatestVersion<ApplicationDbContext, ApplicationDbMigration>());
-                using (var context = new ApplicationDbContext())
-                {
-                    context.Database.Initialize(false);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Unable to initialize database");
-            }
+            BootStrapper.Initialize();
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
