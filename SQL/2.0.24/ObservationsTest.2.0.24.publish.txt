@@ -1,0 +1,54 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[ImportBatch]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[ImportBatch].[Errors] is being dropped, data loss could occur.
+
+** User actions
+     Table rebuild
+       [dbo].[ImportBatch] (Table)
+     Alter
+       [dbo].[vDataLog] (View)
+       [dbo].[vInventory] (View)
+       [dbo].[vObservation] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[DF_ImportBatch_ImportDate] (Default Constraint)
+       [dbo].[DF_ImportBatch_AddedAt] (Default Constraint)
+       [dbo].[DF_ImportBatch_UpdatedAt] (Default Constraint)
+       [dbo].[DF_ImportBatch_ID] (Default Constraint)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+       [dbo].[FK_Progress_ImportBatch] (Foreign Key)
+       [dbo].[FK_DataLog_ImportBatch] (Foreign Key)
+       [dbo].[FK_ImportBatch_DataSource] (Foreign Key)
+       [dbo].[FK_ImportBatch_aspnet_Users] (Foreign Key)
+       [dbo].[FK_ImportBatch_Status] (Foreign Key)
+       [dbo].[FK_ImportBatch_StatusReason] (Foreign Key)
+     Create
+       [dbo].[ImportBatch].[IX_ImportBatch_DataSourceID] (Index)
+       [dbo].[ImportBatch].[IX_ImportBatch_UserId] (Index)
+       [dbo].[ImportBatch].[IX_ImportBatch_ImportDate] (Index)
+       [dbo].[ImportBatch].[IX_ImportBatch_LogFileName] (Index)
+       [dbo].[ImportBatch].[IX_ImportBatch_StatusID] (Index)
+       [dbo].[ImportBatch].[IX_ImportBatch_StatusReasonID] (Index)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+       [dbo].[FK_Progress_ImportBatch] (Foreign Key)
+       [dbo].[FK_DataLog_ImportBatch] (Foreign Key)
+       [dbo].[FK_ImportBatch_DataSource] (Foreign Key)
+       [dbo].[FK_ImportBatch_aspnet_Users] (Foreign Key)
+       [dbo].[FK_ImportBatch_Status] (Foreign Key)
+       [dbo].[FK_ImportBatch_StatusReason] (Foreign Key)
+       [dbo].[TR_ImportBatch_Insert] (Trigger)
+       [dbo].[TR_ImportBatch_Update] (Trigger)
+     Refresh
+       [dbo].[vImportBatch] (View)
+       [dbo].[vObservationRoles] (View)
+
+The column [dbo].[ImportBatch].[Errors] is being dropped, data loss could occur.
+If this deployment is executed, changes to [dbo].[ImportBatch] might introduce run-time errors in [dbo].[progress_Progress_Resolved].
+
