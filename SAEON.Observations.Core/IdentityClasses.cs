@@ -11,12 +11,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http.Description;
 
 namespace SAEON.Observations.Core
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
-    [ApiExplorerSettings(IgnoreApi = true)]
     public class ApplicationUser : IdentityUser
     {
         [Required]

@@ -36,26 +36,8 @@ IF N'$(__IsSqlCmdEnabled)' NOT LIKE N'True'
 
 
 GO
-IF (SELECT is_default
-    FROM   [$(DatabaseName)].[sys].[filegroups]
-    WHERE  [name] = N'Documents') = 0
-    BEGIN
-        ALTER DATABASE [$(DatabaseName)]
-            MODIFY FILEGROUP [Documents] DEFAULT;
-    END
-
-
-GO
 USE [$(DatabaseName)];
 
-
-GO
-/*
-The column [dbo].[ImportBatch].[Errors] is being dropped, data loss could occur.
-*/
-
-IF EXISTS (select top 1 1 from [dbo].[ImportBatch])
-    RAISERROR (N'Rows were detected. The schema update is terminating because data loss might occur.', 16, 127) WITH NOWAIT
 
 GO
 PRINT N'Dropping [dbo].[DF_ImportBatch_ImportDate]...';
