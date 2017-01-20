@@ -18,6 +18,8 @@ namespace SAEON.Observations.Data
 	public partial struct Tables
 	{
 		
+		public static readonly string MigrationHistory = @"__MigrationHistory";
+        
 		public static readonly string RefactorLog = @"__RefactorLog";
         
 		public static readonly string AspnetApplication = @"aspnet_Applications";
@@ -41,6 +43,16 @@ namespace SAEON.Observations.Data
 		public static readonly string AspnetUsersInRole = @"aspnet_UsersInRoles";
         
 		public static readonly string AspnetWebEventEvent = @"aspnet_WebEvent_Events";
+        
+		public static readonly string AspNetRole = @"AspNetRoles";
+        
+		public static readonly string AspNetUserClaim = @"AspNetUserClaims";
+        
+		public static readonly string AspNetUserLogin = @"AspNetUserLogins";
+        
+		public static readonly string AspNetUserRole = @"AspNetUserRoles";
+        
+		public static readonly string AspNetUser = @"AspNetUsers";
         
 		public static readonly string AuditLog = @"AuditLog";
         
@@ -123,6 +135,11 @@ namespace SAEON.Observations.Data
     #region Schemas
     public partial class Schemas {
 		
+		public static TableSchema.Table MigrationHistory
+		{
+            get { return DataService.GetSchema("__MigrationHistory", "ObservationsDB"); }
+		}
+        
 		public static TableSchema.Table RefactorLog
 		{
             get { return DataService.GetSchema("__RefactorLog", "ObservationsDB"); }
@@ -181,6 +198,31 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table AspnetWebEventEvent
 		{
             get { return DataService.GetSchema("aspnet_WebEvent_Events", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table AspNetRole
+		{
+            get { return DataService.GetSchema("AspNetRoles", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table AspNetUserClaim
+		{
+            get { return DataService.GetSchema("AspNetUserClaims", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table AspNetUserLogin
+		{
+            get { return DataService.GetSchema("AspNetUserLogins", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table AspNetUserRole
+		{
+            get { return DataService.GetSchema("AspNetUserRoles", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table AspNetUser
+		{
+            get { return DataService.GetSchema("AspNetUsers", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table AuditLog

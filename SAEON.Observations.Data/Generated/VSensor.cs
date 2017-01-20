@@ -182,7 +182,7 @@ namespace SAEON.Observations.Data{
                 colvarStation.DataType = DbType.AnsiString;
                 colvarStation.MaxLength = 150;
                 colvarStation.AutoIncrement = false;
-                colvarStation.IsNullable = false;
+                colvarStation.IsNullable = true;
                 colvarStation.IsPrimaryKey = false;
                 colvarStation.IsForeignKey = false;
                 colvarStation.IsReadOnly = false;
@@ -194,7 +194,7 @@ namespace SAEON.Observations.Data{
                 colvarInstrument.DataType = DbType.AnsiString;
                 colvarInstrument.MaxLength = 150;
                 colvarInstrument.AutoIncrement = false;
-                colvarInstrument.IsNullable = false;
+                colvarInstrument.IsNullable = true;
                 colvarInstrument.IsPrimaryKey = false;
                 colvarInstrument.IsForeignKey = false;
                 colvarInstrument.IsReadOnly = false;

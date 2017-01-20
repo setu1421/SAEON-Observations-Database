@@ -59,13 +59,13 @@ SELECT
   ds.[Name] DataSchemaName
 FROM 
   Sensor 
-  inner join Instrument_Sensor
+  left join Instrument_Sensor
 	on (Instrument_Sensor.SensorID = Sensor.ID)
-  inner join Instrument
+  left join Instrument
 	on (Instrument_Sensor.InstrumentID = Instrument.ID)
-  inner join Station_Instrument
+  left join Station_Instrument
     on (Station_Instrument.InstrumentID = Instrument.ID)
-  inner join Station 
+  left join Station 
     on (Station_Instrument.StationID = Station.ID)
   inner join Site
     on (Station.SiteID = Site.ID)

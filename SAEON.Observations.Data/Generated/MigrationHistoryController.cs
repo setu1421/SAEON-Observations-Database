@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
     /// <summary>
-    /// Controller class for AspNetRoles
+    /// Controller class for __MigrationHistory
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class AspNetRoleController
+    public partial class MigrationHistoryController
     {
         // Preload our schema..
-        AspNetRole thisSchemaLoad = new AspNetRole();
+        MigrationHistory thisSchemaLoad = new MigrationHistory();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,51 +42,67 @@ namespace SAEON.Observations.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public AspNetRoleCollection FetchAll()
+        public MigrationHistoryCollection FetchAll()
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection();
-            Query qry = new Query(AspNetRole.Schema);
+            MigrationHistoryCollection coll = new MigrationHistoryCollection();
+            Query qry = new Query(MigrationHistory.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public AspNetRoleCollection FetchByID(object Id)
+        public MigrationHistoryCollection FetchByID(object MigrationId)
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection().Where("Id", Id).Load();
+            MigrationHistoryCollection coll = new MigrationHistoryCollection().Where("MigrationId", MigrationId).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public AspNetRoleCollection FetchByQuery(Query qry)
+        public MigrationHistoryCollection FetchByQuery(Query qry)
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection();
+            MigrationHistoryCollection coll = new MigrationHistoryCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
-        public bool Delete(object Id)
+        public bool Delete(object MigrationId)
         {
-            return (AspNetRole.Delete(Id) == 1);
+            return (MigrationHistory.Delete(MigrationId) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
-        public bool Destroy(object Id)
+        public bool Destroy(object MigrationId)
         {
-            return (AspNetRole.Destroy(Id) == 1);
+            return (MigrationHistory.Destroy(MigrationId) == 1);
         }
         
         
+        
+        [DataObjectMethod(DataObjectMethodType.Delete, true)]
+        public bool Delete(string MigrationId,string ContextKey)
+        {
+            Query qry = new Query(MigrationHistory.Schema);
+            qry.QueryType = QueryType.Delete;
+            qry.AddWhere("MigrationId", MigrationId).AND("ContextKey", ContextKey);
+            qry.Execute();
+            return (true);
+        }        
+       
+    	
     	
 	    /// <summary>
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(string Id,string Name)
+	    public void Insert(string MigrationId,string ContextKey,byte[] Model,string ProductVersion)
 	    {
-		    AspNetRole item = new AspNetRole();
+		    MigrationHistory item = new MigrationHistory();
 		    
-            item.Id = Id;
+            item.MigrationId = MigrationId;
             
-            item.Name = Name;
+            item.ContextKey = ContextKey;
+            
+            item.Model = Model;
+            
+            item.ProductVersion = ProductVersion;
             
 	    
 		    item.Save(UserName);
@@ -96,15 +112,19 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(string Id,string Name)
+	    public void Update(string MigrationId,string ContextKey,byte[] Model,string ProductVersion)
 	    {
-		    AspNetRole item = new AspNetRole();
+		    MigrationHistory item = new MigrationHistory();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
-			item.Id = Id;
+			item.MigrationId = MigrationId;
 				
-			item.Name = Name;
+			item.ContextKey = ContextKey;
+				
+			item.Model = Model;
+				
+			item.ProductVersion = ProductVersion;
 				
 	        item.Save(UserName);
 	    }

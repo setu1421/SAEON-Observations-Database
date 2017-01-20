@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
     /// <summary>
-    /// Controller class for aspnet_Users
+    /// Controller class for AspNetUsers
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class AspnetUserController
+    public partial class AspNetUserController
     {
         // Preload our schema..
-        AspnetUser thisSchemaLoad = new AspnetUser();
+        AspNetUser thisSchemaLoad = new AspNetUser();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.Observations.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public AspnetUserCollection FetchAll()
+        public AspNetUserCollection FetchAll()
         {
-            AspnetUserCollection coll = new AspnetUserCollection();
-            Query qry = new Query(AspnetUser.Schema);
+            AspNetUserCollection coll = new AspNetUserCollection();
+            Query qry = new Query(AspNetUser.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public AspnetUserCollection FetchByID(object UserId)
+        public AspNetUserCollection FetchByID(object Id)
         {
-            AspnetUserCollection coll = new AspnetUserCollection().Where("UserId", UserId).Load();
+            AspNetUserCollection coll = new AspNetUserCollection().Where("Id", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public AspnetUserCollection FetchByQuery(Query qry)
+        public AspNetUserCollection FetchByQuery(Query qry)
         {
-            AspnetUserCollection coll = new AspnetUserCollection();
+            AspNetUserCollection coll = new AspNetUserCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
-        public bool Delete(object UserId)
+        public bool Delete(object Id)
         {
-            return (AspnetUser.Delete(UserId) == 1);
+            return (AspNetUser.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
-        public bool Destroy(object UserId)
+        public bool Destroy(object Id)
         {
-            return (AspnetUser.Destroy(UserId) == 1);
+            return (AspNetUser.Destroy(Id) == 1);
         }
         
         
@@ -80,23 +80,35 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid ApplicationId,Guid UserId,string UserName,string LoweredUserName,string MobileAlias,bool IsAnonymous,DateTime LastActivityDate)
+	    public void Insert(string Id,string Name,string Email,bool EmailConfirmed,string PasswordHash,string SecurityStamp,string PhoneNumber,bool PhoneNumberConfirmed,bool TwoFactorEnabled,DateTime? LockoutEndDateUtc,bool LockoutEnabled,int AccessFailedCount,string UserName)
 	    {
-		    AspnetUser item = new AspnetUser();
+		    AspNetUser item = new AspNetUser();
 		    
-            item.ApplicationId = ApplicationId;
+            item.Id = Id;
             
-            item.UserId = UserId;
+            item.Name = Name;
+            
+            item.Email = Email;
+            
+            item.EmailConfirmed = EmailConfirmed;
+            
+            item.PasswordHash = PasswordHash;
+            
+            item.SecurityStamp = SecurityStamp;
+            
+            item.PhoneNumber = PhoneNumber;
+            
+            item.PhoneNumberConfirmed = PhoneNumberConfirmed;
+            
+            item.TwoFactorEnabled = TwoFactorEnabled;
+            
+            item.LockoutEndDateUtc = LockoutEndDateUtc;
+            
+            item.LockoutEnabled = LockoutEnabled;
+            
+            item.AccessFailedCount = AccessFailedCount;
             
             item.UserName = UserName;
-            
-            item.LoweredUserName = LoweredUserName;
-            
-            item.MobileAlias = MobileAlias;
-            
-            item.IsAnonymous = IsAnonymous;
-            
-            item.LastActivityDate = LastActivityDate;
             
 	    
 		    item.Save(UserName);
@@ -106,25 +118,37 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid ApplicationId,Guid UserId,string UserName,string LoweredUserName,string MobileAlias,bool IsAnonymous,DateTime LastActivityDate)
+	    public void Update(string Id,string Name,string Email,bool EmailConfirmed,string PasswordHash,string SecurityStamp,string PhoneNumber,bool PhoneNumberConfirmed,bool TwoFactorEnabled,DateTime? LockoutEndDateUtc,bool LockoutEnabled,int AccessFailedCount,string UserName)
 	    {
-		    AspnetUser item = new AspnetUser();
+		    AspNetUser item = new AspNetUser();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
-			item.ApplicationId = ApplicationId;
+			item.Id = Id;
 				
-			item.UserId = UserId;
+			item.Name = Name;
+				
+			item.Email = Email;
+				
+			item.EmailConfirmed = EmailConfirmed;
+				
+			item.PasswordHash = PasswordHash;
+				
+			item.SecurityStamp = SecurityStamp;
+				
+			item.PhoneNumber = PhoneNumber;
+				
+			item.PhoneNumberConfirmed = PhoneNumberConfirmed;
+				
+			item.TwoFactorEnabled = TwoFactorEnabled;
+				
+			item.LockoutEndDateUtc = LockoutEndDateUtc;
+				
+			item.LockoutEnabled = LockoutEnabled;
+				
+			item.AccessFailedCount = AccessFailedCount;
 				
 			item.UserName = UserName;
-				
-			item.LoweredUserName = LoweredUserName;
-				
-			item.MobileAlias = MobileAlias;
-				
-			item.IsAnonymous = IsAnonymous;
-				
-			item.LastActivityDate = LastActivityDate;
 				
 	        item.Save(UserName);
 	    }

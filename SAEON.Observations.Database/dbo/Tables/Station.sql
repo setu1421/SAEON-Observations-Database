@@ -13,7 +13,10 @@
 --< Changed 2.0.3 20160426 TimPN
     [UserId]        UNIQUEIDENTIFIER NOT NULL,
 --> Added 2.0.2 20160407 TimPN
-    [SiteID] UNIQUEIDENTIFIER NULL, 
+--> Changed 2.0.25 20170120 TimPN
+--    [SiteID] UNIQUEIDENTIFIER NULL, 
+    [SiteID] UNIQUEIDENTIFIER NOT NULL, 
+--< Changed 2.0.25 20170120 TimPN
 --> Changed 2.0.22 20170111 TimPN
 --    [StartDate]        DATETIME         NULL,
     [StartDate]        DATE         NULL,

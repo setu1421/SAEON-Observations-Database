@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
     /// <summary>
-    /// Controller class for AspNetRoles
+    /// Controller class for AspNetUserLogins
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class AspNetRoleController
+    public partial class AspNetUserLoginController
     {
         // Preload our schema..
-        AspNetRole thisSchemaLoad = new AspNetRole();
+        AspNetUserLogin thisSchemaLoad = new AspNetUserLogin();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,51 +42,65 @@ namespace SAEON.Observations.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public AspNetRoleCollection FetchAll()
+        public AspNetUserLoginCollection FetchAll()
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection();
-            Query qry = new Query(AspNetRole.Schema);
+            AspNetUserLoginCollection coll = new AspNetUserLoginCollection();
+            Query qry = new Query(AspNetUserLogin.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public AspNetRoleCollection FetchByID(object Id)
+        public AspNetUserLoginCollection FetchByID(object LoginProvider)
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection().Where("Id", Id).Load();
+            AspNetUserLoginCollection coll = new AspNetUserLoginCollection().Where("LoginProvider", LoginProvider).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public AspNetRoleCollection FetchByQuery(Query qry)
+        public AspNetUserLoginCollection FetchByQuery(Query qry)
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection();
+            AspNetUserLoginCollection coll = new AspNetUserLoginCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
-        public bool Delete(object Id)
+        public bool Delete(object LoginProvider)
         {
-            return (AspNetRole.Delete(Id) == 1);
+            return (AspNetUserLogin.Delete(LoginProvider) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
-        public bool Destroy(object Id)
+        public bool Destroy(object LoginProvider)
         {
-            return (AspNetRole.Destroy(Id) == 1);
+            return (AspNetUserLogin.Destroy(LoginProvider) == 1);
         }
         
         
+        
+        [DataObjectMethod(DataObjectMethodType.Delete, true)]
+        public bool Delete(string LoginProvider,string ProviderKey,string UserId)
+        {
+            Query qry = new Query(AspNetUserLogin.Schema);
+            qry.QueryType = QueryType.Delete;
+            qry.AddWhere("LoginProvider", LoginProvider).AND("ProviderKey", ProviderKey).AND("UserId", UserId);
+            qry.Execute();
+            return (true);
+        }        
+       
+    	
     	
 	    /// <summary>
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(string Id,string Name)
+	    public void Insert(string LoginProvider,string ProviderKey,string UserId)
 	    {
-		    AspNetRole item = new AspNetRole();
+		    AspNetUserLogin item = new AspNetUserLogin();
 		    
-            item.Id = Id;
+            item.LoginProvider = LoginProvider;
             
-            item.Name = Name;
+            item.ProviderKey = ProviderKey;
+            
+            item.UserId = UserId;
             
 	    
 		    item.Save(UserName);
@@ -96,15 +110,17 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(string Id,string Name)
+	    public void Update(string LoginProvider,string ProviderKey,string UserId)
 	    {
-		    AspNetRole item = new AspNetRole();
+		    AspNetUserLogin item = new AspNetUserLogin();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
-			item.Id = Id;
+			item.LoginProvider = LoginProvider;
 				
-			item.Name = Name;
+			item.ProviderKey = ProviderKey;
+				
+			item.UserId = UserId;
 				
 	        item.Save(UserName);
 	    }

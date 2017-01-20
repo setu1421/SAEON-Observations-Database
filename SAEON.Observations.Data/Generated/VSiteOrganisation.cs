@@ -110,7 +110,7 @@ namespace SAEON.Observations.Data{
                 colvarSiteID.DataType = DbType.Guid;
                 colvarSiteID.MaxLength = 0;
                 colvarSiteID.AutoIncrement = false;
-                colvarSiteID.IsNullable = true;
+                colvarSiteID.IsNullable = false;
                 colvarSiteID.IsPrimaryKey = false;
                 colvarSiteID.IsForeignKey = false;
                 colvarSiteID.IsReadOnly = false;
@@ -369,11 +369,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("SiteID")]
         [Bindable(true)]
-        public Guid? SiteID 
+        public Guid SiteID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid?>("SiteID");
+			    return GetColumnValue<Guid>("SiteID");
 		    }
             set 
 		    {

@@ -182,7 +182,7 @@ namespace SAEON.Observations.Data{
                 colvarSiteID.DataType = DbType.Guid;
                 colvarSiteID.MaxLength = 0;
                 colvarSiteID.AutoIncrement = false;
-                colvarSiteID.IsNullable = true;
+                colvarSiteID.IsNullable = false;
                 colvarSiteID.IsPrimaryKey = false;
                 colvarSiteID.IsForeignKey = false;
                 colvarSiteID.IsReadOnly = false;
@@ -236,18 +236,6 @@ namespace SAEON.Observations.Data{
                 colvarUpdatedAt.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarUpdatedAt);
-                
-                TableSchema.TableColumn colvarProjectSiteName = new TableSchema.TableColumn(schema);
-                colvarProjectSiteName.ColumnName = "ProjectSiteName";
-                colvarProjectSiteName.DataType = DbType.AnsiString;
-                colvarProjectSiteName.MaxLength = 203;
-                colvarProjectSiteName.AutoIncrement = false;
-                colvarProjectSiteName.IsNullable = true;
-                colvarProjectSiteName.IsPrimaryKey = false;
-                colvarProjectSiteName.IsForeignKey = false;
-                colvarProjectSiteName.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarProjectSiteName);
                 
                 TableSchema.TableColumn colvarSiteCode = new TableSchema.TableColumn(schema);
                 colvarSiteCode.ColumnName = "SiteCode";
@@ -465,11 +453,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("SiteID")]
         [Bindable(true)]
-        public Guid? SiteID 
+        public Guid SiteID 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid?>("SiteID");
+			    return GetColumnValue<Guid>("SiteID");
 		    }
             set 
 		    {
@@ -530,20 +518,6 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("UpdatedAt", value);
-            }
-        }
-	      
-        [XmlAttribute("ProjectSiteName")]
-        [Bindable(true)]
-        public string ProjectSiteName 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("ProjectSiteName");
-		    }
-            set 
-		    {
-			    SetColumnValue("ProjectSiteName", value);
             }
         }
 	      
@@ -611,8 +585,6 @@ namespace SAEON.Observations.Data{
             public static string AddedAt = @"AddedAt";
             
             public static string UpdatedAt = @"UpdatedAt";
-            
-            public static string ProjectSiteName = @"ProjectSiteName";
             
             public static string SiteCode = @"SiteCode";
             

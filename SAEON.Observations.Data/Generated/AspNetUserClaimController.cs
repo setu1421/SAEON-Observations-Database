@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
     /// <summary>
-    /// Controller class for AspNetRoles
+    /// Controller class for AspNetUserClaims
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class AspNetRoleController
+    public partial class AspNetUserClaimController
     {
         // Preload our schema..
-        AspNetRole thisSchemaLoad = new AspNetRole();
+        AspNetUserClaim thisSchemaLoad = new AspNetUserClaim();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.Observations.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public AspNetRoleCollection FetchAll()
+        public AspNetUserClaimCollection FetchAll()
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection();
-            Query qry = new Query(AspNetRole.Schema);
+            AspNetUserClaimCollection coll = new AspNetUserClaimCollection();
+            Query qry = new Query(AspNetUserClaim.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public AspNetRoleCollection FetchByID(object Id)
+        public AspNetUserClaimCollection FetchByID(object Id)
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection().Where("Id", Id).Load();
+            AspNetUserClaimCollection coll = new AspNetUserClaimCollection().Where("Id", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public AspNetRoleCollection FetchByQuery(Query qry)
+        public AspNetUserClaimCollection FetchByQuery(Query qry)
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection();
+            AspNetUserClaimCollection coll = new AspNetUserClaimCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
         public bool Delete(object Id)
         {
-            return (AspNetRole.Delete(Id) == 1);
+            return (AspNetUserClaim.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
         public bool Destroy(object Id)
         {
-            return (AspNetRole.Destroy(Id) == 1);
+            return (AspNetUserClaim.Destroy(Id) == 1);
         }
         
         
@@ -80,13 +80,15 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(string Id,string Name)
+	    public void Insert(string UserId,string ClaimType,string ClaimValue)
 	    {
-		    AspNetRole item = new AspNetRole();
+		    AspNetUserClaim item = new AspNetUserClaim();
 		    
-            item.Id = Id;
+            item.UserId = UserId;
             
-            item.Name = Name;
+            item.ClaimType = ClaimType;
+            
+            item.ClaimValue = ClaimValue;
             
 	    
 		    item.Save(UserName);
@@ -96,15 +98,19 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(string Id,string Name)
+	    public void Update(int Id,string UserId,string ClaimType,string ClaimValue)
 	    {
-		    AspNetRole item = new AspNetRole();
+		    AspNetUserClaim item = new AspNetUserClaim();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
 			item.Id = Id;
 				
-			item.Name = Name;
+			item.UserId = UserId;
+				
+			item.ClaimType = ClaimType;
+				
+			item.ClaimValue = ClaimValue;
 				
 	        item.Save(UserName);
 	    }

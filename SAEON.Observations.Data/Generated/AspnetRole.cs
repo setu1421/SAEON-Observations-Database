@@ -15,23 +15,23 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
 	/// <summary>
-	/// Strongly-typed collection for the AspnetRole class.
+	/// Strongly-typed collection for the AspNetRole class.
 	/// </summary>
     [Serializable]
-	public partial class AspnetRoleCollection : ActiveList<AspnetRole, AspnetRoleCollection>
+	public partial class AspNetRoleCollection : ActiveList<AspNetRole, AspNetRoleCollection>
 	{	   
-		public AspnetRoleCollection() {}
+		public AspNetRoleCollection() {}
         
         /// <summary>
 		/// Filters an existing collection based on the set criteria. This is an in-memory filter
 		/// Thanks to developingchris for this!
         /// </summary>
-        /// <returns>AspnetRoleCollection</returns>
-		public AspnetRoleCollection Filter()
+        /// <returns>AspNetRoleCollection</returns>
+		public AspNetRoleCollection Filter()
         {
             for (int i = this.Count - 1; i > -1; i--)
             {
-                AspnetRole o = this[i];
+                AspNetRole o = this[i];
                 foreach (SubSonic.Where w in this.wheres)
                 {
                     bool remove = false;
@@ -62,14 +62,14 @@ namespace SAEON.Observations.Data
 		
 	}
 	/// <summary>
-	/// This is an ActiveRecord class which wraps the aspnet_Roles table.
+	/// This is an ActiveRecord class which wraps the AspNetRoles table.
 	/// </summary>
 	[Serializable]
-	public partial class AspnetRole : ActiveRecord<AspnetRole>, IActiveRecord
+	public partial class AspNetRole : ActiveRecord<AspNetRole>, IActiveRecord
 	{
 		#region .ctors and Default Settings
 		
-		public AspnetRole()
+		public AspNetRole()
 		{
 		  SetSQLProps();
 		  InitSetDefaults();
@@ -78,7 +78,7 @@ namespace SAEON.Observations.Data
 		
 		private void InitSetDefaults() { SetDefaults(); }
 		
-		public AspnetRole(bool useDatabaseDefaults)
+		public AspNetRole(bool useDatabaseDefaults)
 		{
 			SetSQLProps();
 			if(useDatabaseDefaults)
@@ -86,14 +86,14 @@ namespace SAEON.Observations.Data
 			MarkNew();
 		}
         
-		public AspnetRole(object keyID)
+		public AspNetRole(object keyID)
 		{
 			SetSQLProps();
 			InitSetDefaults();
 			LoadByKey(keyID);
 		}
 		 
-		public AspnetRole(string columnName, object columnValue)
+		public AspNetRole(string columnName, object columnValue)
 		{
 			SetSQLProps();
 			InitSetDefaults();
@@ -121,126 +121,61 @@ namespace SAEON.Observations.Data
 			if(!IsSchemaInitialized)
 			{
 				//Schema declaration
-				TableSchema.Table schema = new TableSchema.Table("aspnet_Roles", TableType.Table, DataService.GetInstance("ObservationsDB"));
+				TableSchema.Table schema = new TableSchema.Table("AspNetRoles", TableType.Table, DataService.GetInstance("ObservationsDB"));
 				schema.Columns = new TableSchema.TableColumnCollection();
 				schema.SchemaName = @"dbo";
 				//columns
 				
-				TableSchema.TableColumn colvarApplicationId = new TableSchema.TableColumn(schema);
-				colvarApplicationId.ColumnName = "ApplicationId";
-				colvarApplicationId.DataType = DbType.Guid;
-				colvarApplicationId.MaxLength = 0;
-				colvarApplicationId.AutoIncrement = false;
-				colvarApplicationId.IsNullable = false;
-				colvarApplicationId.IsPrimaryKey = false;
-				colvarApplicationId.IsForeignKey = true;
-				colvarApplicationId.IsReadOnly = false;
-				colvarApplicationId.DefaultSetting = @"";
+				TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
+				colvarId.ColumnName = "Id";
+				colvarId.DataType = DbType.String;
+				colvarId.MaxLength = 128;
+				colvarId.AutoIncrement = false;
+				colvarId.IsNullable = false;
+				colvarId.IsPrimaryKey = true;
+				colvarId.IsForeignKey = false;
+				colvarId.IsReadOnly = false;
+				colvarId.DefaultSetting = @"";
+				colvarId.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarId);
 				
-					colvarApplicationId.ForeignKeyTableName = "aspnet_Applications";
-				schema.Columns.Add(colvarApplicationId);
-				
-				TableSchema.TableColumn colvarRoleId = new TableSchema.TableColumn(schema);
-				colvarRoleId.ColumnName = "RoleId";
-				colvarRoleId.DataType = DbType.Guid;
-				colvarRoleId.MaxLength = 0;
-				colvarRoleId.AutoIncrement = false;
-				colvarRoleId.IsNullable = false;
-				colvarRoleId.IsPrimaryKey = true;
-				colvarRoleId.IsForeignKey = false;
-				colvarRoleId.IsReadOnly = false;
-				
-						colvarRoleId.DefaultSetting = @"(newid())";
-				colvarRoleId.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarRoleId);
-				
-				TableSchema.TableColumn colvarRoleName = new TableSchema.TableColumn(schema);
-				colvarRoleName.ColumnName = "RoleName";
-				colvarRoleName.DataType = DbType.String;
-				colvarRoleName.MaxLength = 256;
-				colvarRoleName.AutoIncrement = false;
-				colvarRoleName.IsNullable = false;
-				colvarRoleName.IsPrimaryKey = false;
-				colvarRoleName.IsForeignKey = false;
-				colvarRoleName.IsReadOnly = false;
-				colvarRoleName.DefaultSetting = @"";
-				colvarRoleName.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarRoleName);
-				
-				TableSchema.TableColumn colvarLoweredRoleName = new TableSchema.TableColumn(schema);
-				colvarLoweredRoleName.ColumnName = "LoweredRoleName";
-				colvarLoweredRoleName.DataType = DbType.String;
-				colvarLoweredRoleName.MaxLength = 256;
-				colvarLoweredRoleName.AutoIncrement = false;
-				colvarLoweredRoleName.IsNullable = false;
-				colvarLoweredRoleName.IsPrimaryKey = false;
-				colvarLoweredRoleName.IsForeignKey = false;
-				colvarLoweredRoleName.IsReadOnly = false;
-				colvarLoweredRoleName.DefaultSetting = @"";
-				colvarLoweredRoleName.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarLoweredRoleName);
-				
-				TableSchema.TableColumn colvarDescription = new TableSchema.TableColumn(schema);
-				colvarDescription.ColumnName = "Description";
-				colvarDescription.DataType = DbType.String;
-				colvarDescription.MaxLength = 256;
-				colvarDescription.AutoIncrement = false;
-				colvarDescription.IsNullable = true;
-				colvarDescription.IsPrimaryKey = false;
-				colvarDescription.IsForeignKey = false;
-				colvarDescription.IsReadOnly = false;
-				colvarDescription.DefaultSetting = @"";
-				colvarDescription.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarDescription);
+				TableSchema.TableColumn colvarName = new TableSchema.TableColumn(schema);
+				colvarName.ColumnName = "Name";
+				colvarName.DataType = DbType.String;
+				colvarName.MaxLength = 256;
+				colvarName.AutoIncrement = false;
+				colvarName.IsNullable = false;
+				colvarName.IsPrimaryKey = false;
+				colvarName.IsForeignKey = false;
+				colvarName.IsReadOnly = false;
+				colvarName.DefaultSetting = @"";
+				colvarName.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarName);
 				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
-				DataService.Providers["ObservationsDB"].AddSchema("aspnet_Roles",schema);
+				DataService.Providers["ObservationsDB"].AddSchema("AspNetRoles",schema);
 			}
 		}
 		#endregion
 		
 		#region Props
 		  
-		[XmlAttribute("ApplicationId")]
+		[XmlAttribute("Id")]
 		[Bindable(true)]
-		public Guid ApplicationId 
+		public string Id 
 		{
-			get { return GetColumnValue<Guid>(Columns.ApplicationId); }
-			set { SetColumnValue(Columns.ApplicationId, value); }
+			get { return GetColumnValue<string>(Columns.Id); }
+			set { SetColumnValue(Columns.Id, value); }
 		}
 		  
-		[XmlAttribute("RoleId")]
+		[XmlAttribute("Name")]
 		[Bindable(true)]
-		public Guid RoleId 
+		public string Name 
 		{
-			get { return GetColumnValue<Guid>(Columns.RoleId); }
-			set { SetColumnValue(Columns.RoleId, value); }
-		}
-		  
-		[XmlAttribute("RoleName")]
-		[Bindable(true)]
-		public string RoleName 
-		{
-			get { return GetColumnValue<string>(Columns.RoleName); }
-			set { SetColumnValue(Columns.RoleName, value); }
-		}
-		  
-		[XmlAttribute("LoweredRoleName")]
-		[Bindable(true)]
-		public string LoweredRoleName 
-		{
-			get { return GetColumnValue<string>(Columns.LoweredRoleName); }
-			set { SetColumnValue(Columns.LoweredRoleName, value); }
-		}
-		  
-		[XmlAttribute("Description")]
-		[Bindable(true)]
-		public string Description 
-		{
-			get { return GetColumnValue<string>(Columns.Description); }
-			set { SetColumnValue(Columns.Description, value); }
+			get { return GetColumnValue<string>(Columns.Name); }
+			set { SetColumnValue(Columns.Name, value); }
 		}
 		
 		#endregion
@@ -256,109 +191,88 @@ namespace SAEON.Observations.Data
         }
         
 		
-		public SAEON.Observations.Data.AspnetUsersInRoleCollection AspnetUsersInRoles()
+		public SAEON.Observations.Data.AspNetUserRoleCollection AspNetUserRoles()
 		{
-			return new SAEON.Observations.Data.AspnetUsersInRoleCollection().Where(AspnetUsersInRole.Columns.RoleId, RoleId).Load();
-		}
-		public SAEON.Observations.Data.DataSourceRoleCollection DataSourceRoleRecords()
-		{
-			return new SAEON.Observations.Data.DataSourceRoleCollection().Where(DataSourceRole.Columns.RoleId, RoleId).Load();
-		}
-		public SAEON.Observations.Data.RoleModuleCollection RoleModuleRecords()
-		{
-			return new SAEON.Observations.Data.RoleModuleCollection().Where(RoleModule.Columns.RoleId, RoleId).Load();
+			return new SAEON.Observations.Data.AspNetUserRoleCollection().Where(AspNetUserRole.Columns.RoleId, Id).Load();
 		}
 		#endregion
 		
 			
 		
-		#region ForeignKey Properties
-		
-		/// <summary>
-		/// Returns a AspnetApplication ActiveRecord object related to this AspnetRole
-		/// 
-		/// </summary>
-		public SAEON.Observations.Data.AspnetApplication AspnetApplication
-		{
-			get { return SAEON.Observations.Data.AspnetApplication.FetchByID(this.ApplicationId); }
-			set { SetColumnValue("ApplicationId", value.ApplicationId); }
-		}
-		
-		
-		#endregion
+		//no foreign key tables defined (0)
 		
 		
 		
 		#region Many To Many Helpers
 		
 		 
-		public SAEON.Observations.Data.AspnetUserCollection GetAspnetUserCollection() { return AspnetRole.GetAspnetUserCollection(this.RoleId); }
-		public static SAEON.Observations.Data.AspnetUserCollection GetAspnetUserCollection(Guid varRoleId)
+		public SAEON.Observations.Data.AspNetUserCollection GetAspNetUserCollection() { return AspNetRole.GetAspNetUserCollection(this.Id); }
+		public static SAEON.Observations.Data.AspNetUserCollection GetAspNetUserCollection(string varId)
 		{
-		    SubSonic.QueryCommand cmd = new SubSonic.QueryCommand("SELECT * FROM [dbo].[aspnet_Users] INNER JOIN [aspnet_UsersInRoles] ON [aspnet_Users].[UserId] = [aspnet_UsersInRoles].[UserId] WHERE [aspnet_UsersInRoles].[RoleId] = @RoleId", AspnetRole.Schema.Provider.Name);
-			cmd.AddParameter("@RoleId", varRoleId, DbType.Guid);
+		    SubSonic.QueryCommand cmd = new SubSonic.QueryCommand("SELECT * FROM [dbo].[AspNetUsers] INNER JOIN [AspNetUserRoles] ON [AspNetUsers].[Id] = [AspNetUserRoles].[UserId] WHERE [AspNetUserRoles].[RoleId] = @RoleId", AspNetRole.Schema.Provider.Name);
+			cmd.AddParameter("@RoleId", varId, DbType.String);
 			IDataReader rdr = SubSonic.DataService.GetReader(cmd);
-			AspnetUserCollection coll = new AspnetUserCollection();
+			AspNetUserCollection coll = new AspNetUserCollection();
 			coll.LoadAndCloseReader(rdr);
 			return coll;
 		}
 		
-		public static void SaveAspnetUserMap(Guid varRoleId, AspnetUserCollection items)
+		public static void SaveAspNetUserMap(string varId, AspNetUserCollection items)
 		{
 			QueryCommandCollection coll = new SubSonic.QueryCommandCollection();
 			//delete out the existing
-			QueryCommand cmdDel = new QueryCommand("DELETE FROM [aspnet_UsersInRoles] WHERE [aspnet_UsersInRoles].[RoleId] = @RoleId", AspnetRole.Schema.Provider.Name);
-			cmdDel.AddParameter("@RoleId", varRoleId, DbType.Guid);
+			QueryCommand cmdDel = new QueryCommand("DELETE FROM [AspNetUserRoles] WHERE [AspNetUserRoles].[RoleId] = @RoleId", AspNetRole.Schema.Provider.Name);
+			cmdDel.AddParameter("@RoleId", varId, DbType.String);
 			coll.Add(cmdDel);
 			DataService.ExecuteTransaction(coll);
-			foreach (AspnetUser item in items)
+			foreach (AspNetUser item in items)
 			{
-				AspnetUsersInRole varAspnetUsersInRole = new AspnetUsersInRole();
-				varAspnetUsersInRole.SetColumnValue("RoleId", varRoleId);
-				varAspnetUsersInRole.SetColumnValue("UserId", item.GetPrimaryKeyValue());
-				varAspnetUsersInRole.Save();
+				AspNetUserRole varAspNetUserRole = new AspNetUserRole();
+				varAspNetUserRole.SetColumnValue("RoleId", varId);
+				varAspNetUserRole.SetColumnValue("UserId", item.GetPrimaryKeyValue());
+				varAspNetUserRole.Save();
 			}
 		}
-		public static void SaveAspnetUserMap(Guid varRoleId, System.Web.UI.WebControls.ListItemCollection itemList) 
+		public static void SaveAspNetUserMap(string varId, System.Web.UI.WebControls.ListItemCollection itemList) 
 		{
 			QueryCommandCollection coll = new SubSonic.QueryCommandCollection();
 			//delete out the existing
-			 QueryCommand cmdDel = new QueryCommand("DELETE FROM [aspnet_UsersInRoles] WHERE [aspnet_UsersInRoles].[RoleId] = @RoleId", AspnetRole.Schema.Provider.Name);
-			cmdDel.AddParameter("@RoleId", varRoleId, DbType.Guid);
+			 QueryCommand cmdDel = new QueryCommand("DELETE FROM [AspNetUserRoles] WHERE [AspNetUserRoles].[RoleId] = @RoleId", AspNetRole.Schema.Provider.Name);
+			cmdDel.AddParameter("@RoleId", varId, DbType.String);
 			coll.Add(cmdDel);
 			DataService.ExecuteTransaction(coll);
 			foreach (System.Web.UI.WebControls.ListItem l in itemList) 
 			{
 				if (l.Selected) 
 				{
-					AspnetUsersInRole varAspnetUsersInRole = new AspnetUsersInRole();
-					varAspnetUsersInRole.SetColumnValue("RoleId", varRoleId);
-					varAspnetUsersInRole.SetColumnValue("UserId", l.Value);
-					varAspnetUsersInRole.Save();
+					AspNetUserRole varAspNetUserRole = new AspNetUserRole();
+					varAspNetUserRole.SetColumnValue("RoleId", varId);
+					varAspNetUserRole.SetColumnValue("UserId", l.Value);
+					varAspNetUserRole.Save();
 				}
 			}
 		}
-		public static void SaveAspnetUserMap(Guid varRoleId , Guid[] itemList) 
+		public static void SaveAspNetUserMap(string varId , string[] itemList) 
 		{
 			QueryCommandCollection coll = new SubSonic.QueryCommandCollection();
 			//delete out the existing
-			 QueryCommand cmdDel = new QueryCommand("DELETE FROM [aspnet_UsersInRoles] WHERE [aspnet_UsersInRoles].[RoleId] = @RoleId", AspnetRole.Schema.Provider.Name);
-			cmdDel.AddParameter("@RoleId", varRoleId, DbType.Guid);
+			 QueryCommand cmdDel = new QueryCommand("DELETE FROM [AspNetUserRoles] WHERE [AspNetUserRoles].[RoleId] = @RoleId", AspNetRole.Schema.Provider.Name);
+			cmdDel.AddParameter("@RoleId", varId, DbType.String);
 			coll.Add(cmdDel);
 			DataService.ExecuteTransaction(coll);
-			foreach (Guid item in itemList) 
+			foreach (string item in itemList) 
 			{
-				AspnetUsersInRole varAspnetUsersInRole = new AspnetUsersInRole();
-				varAspnetUsersInRole.SetColumnValue("RoleId", varRoleId);
-				varAspnetUsersInRole.SetColumnValue("UserId", item);
-				varAspnetUsersInRole.Save();
+				AspNetUserRole varAspNetUserRole = new AspNetUserRole();
+				varAspNetUserRole.SetColumnValue("RoleId", varId);
+				varAspNetUserRole.SetColumnValue("UserId", item);
+				varAspNetUserRole.Save();
 			}
 		}
 		
-		public static void DeleteAspnetUserMap(Guid varRoleId) 
+		public static void DeleteAspNetUserMap(string varId) 
 		{
-			QueryCommand cmdDel = new QueryCommand("DELETE FROM [aspnet_UsersInRoles] WHERE [aspnet_UsersInRoles].[RoleId] = @RoleId", AspnetRole.Schema.Provider.Name);
-			cmdDel.AddParameter("@RoleId", varRoleId, DbType.Guid);
+			QueryCommand cmdDel = new QueryCommand("DELETE FROM [AspNetUserRoles] WHERE [AspNetUserRoles].[RoleId] = @RoleId", AspNetRole.Schema.Provider.Name);
+			cmdDel.AddParameter("@RoleId", varId, DbType.String);
 			DataService.ExecuteQuery(cmdDel);
 		}
 		
@@ -372,19 +286,13 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varApplicationId,Guid varRoleId,string varRoleName,string varLoweredRoleName,string varDescription)
+		public static void Insert(string varId,string varName)
 		{
-			AspnetRole item = new AspnetRole();
+			AspNetRole item = new AspNetRole();
 			
-			item.ApplicationId = varApplicationId;
+			item.Id = varId;
 			
-			item.RoleId = varRoleId;
-			
-			item.RoleName = varRoleName;
-			
-			item.LoweredRoleName = varLoweredRoleName;
-			
-			item.Description = varDescription;
+			item.Name = varName;
 			
 		
 			if (System.Web.HttpContext.Current != null)
@@ -396,19 +304,13 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varApplicationId,Guid varRoleId,string varRoleName,string varLoweredRoleName,string varDescription)
+		public static void Update(string varId,string varName)
 		{
-			AspnetRole item = new AspnetRole();
+			AspNetRole item = new AspNetRole();
 			
-				item.ApplicationId = varApplicationId;
+				item.Id = varId;
 			
-				item.RoleId = varRoleId;
-			
-				item.RoleName = varRoleName;
-			
-				item.LoweredRoleName = varLoweredRoleName;
-			
-				item.Description = varDescription;
+				item.Name = varName;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -423,37 +325,16 @@ namespace SAEON.Observations.Data
         #region Typed Columns
         
         
-        public static TableSchema.TableColumn ApplicationIdColumn
+        public static TableSchema.TableColumn IdColumn
         {
             get { return Schema.Columns[0]; }
         }
         
         
         
-        public static TableSchema.TableColumn RoleIdColumn
+        public static TableSchema.TableColumn NameColumn
         {
             get { return Schema.Columns[1]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn RoleNameColumn
-        {
-            get { return Schema.Columns[2]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn LoweredRoleNameColumn
-        {
-            get { return Schema.Columns[3]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn DescriptionColumn
-        {
-            get { return Schema.Columns[4]; }
         }
         
         
@@ -462,11 +343,8 @@ namespace SAEON.Observations.Data
 		#region Columns Struct
 		public struct Columns
 		{
-			 public static string ApplicationId = @"ApplicationId";
-			 public static string RoleId = @"RoleId";
-			 public static string RoleName = @"RoleName";
-			 public static string LoweredRoleName = @"LoweredRoleName";
-			 public static string Description = @"Description";
+			 public static string Id = @"Id";
+			 public static string Name = @"Name";
 						
 		}
 		#endregion

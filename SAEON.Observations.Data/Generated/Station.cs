@@ -264,7 +264,7 @@ namespace SAEON.Observations.Data
 				colvarSiteID.DataType = DbType.Guid;
 				colvarSiteID.MaxLength = 0;
 				colvarSiteID.AutoIncrement = false;
-				colvarSiteID.IsNullable = true;
+				colvarSiteID.IsNullable = false;
 				colvarSiteID.IsPrimaryKey = false;
 				colvarSiteID.IsForeignKey = true;
 				colvarSiteID.IsReadOnly = false;
@@ -419,9 +419,9 @@ namespace SAEON.Observations.Data
 		  
 		[XmlAttribute("SiteID")]
 		[Bindable(true)]
-		public Guid? SiteID 
+		public Guid SiteID 
 		{
-			get { return GetColumnValue<Guid?>(Columns.SiteID); }
+			get { return GetColumnValue<Guid>(Columns.SiteID); }
 			set { SetColumnValue(Columns.SiteID, value); }
 		}
 		  
@@ -535,7 +535,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Station item = new Station();
 			
@@ -579,7 +579,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid? varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,string varUrl,double? varLatitude,double? varLongitude,int? varElevation,Guid? varProjectSiteID,Guid varUserId,Guid varSiteID,DateTime? varStartDate,DateTime? varEndDate,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			Station item = new Station();
 			
