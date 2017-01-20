@@ -6,6 +6,8 @@ using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 using SAEON.Observations.Core;
+using System.Web.OData.Builder;
+using System.Web.OData.Extensions;
 
 namespace SAEON.Observations.WebAPI
 {
@@ -34,11 +36,11 @@ namespace SAEON.Observations.WebAPI
             //config.Filters.Add(new AuthorizeAttribute());
 
             // OData
-            //ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-            //builder.EntitySet<UserDownload>("UserDownloads");
-            //builder.EntitySet<UserQuery>("UserQueries");
-            //builder.EntitySet<ApplicationUser>("Users");
-            //config.MapODataServiceRoute("OData", "OData", builder.GetEdmModel());
+            ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+            builder.EntitySet<UserDownload>("UserDownloads");
+            builder.EntitySet<UserQuery>("UserQueries");
+            builder.EntitySet<ApplicationUser>("Users");
+            config.MapODataServiceRoute("OData", "OData", builder.GetEdmModel());
         }
     }
 }
