@@ -173,7 +173,8 @@ enable trigger TR_Instrument_Sensor_Update on Instrument_Sensor;
 --Declare @BatchSize Int = 1000000
 --Declare @RowCount Int = @BatchSize
 --Declare @StartDate DateTime
---Set @StartDate = (Select top(1) Min(AddedAt) from Observation group by AddedAt having (Count(ID) > 10000))
+--Declare @GroupCount Int = 1
+--Set @StartDate = (Select top(1) Min(AddedAt) from Observation group by AddedAt having (Count(ID) > @GroupCount))
 --while (@StartDate is not null)
 --begin
 --  Declare @BatchNum Int = 0
@@ -200,7 +201,7 @@ enable trigger TR_Instrument_Sensor_Update on Instrument_Sensor;
 --	RAISERROR(@msg, 0, 1) WITH NOWAIT
 --  end
 --  Set @RowCount = @BatchSize
---  Set @StartDate = (Select top(1) Min(AddedAt) from Observation group by AddedAt having (Count(ID) > 10000))
+--  Set @StartDate = (Select top(1) Min(AddedAt) from Observation group by AddedAt having (Count(ID) > @GroupCount))
 --end;
 --enable trigger TR_Observation_Update on Observation
 -- Observation
