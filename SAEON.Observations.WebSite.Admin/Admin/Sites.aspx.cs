@@ -333,32 +333,32 @@ public partial class Admin_Sites : System.Web.UI.Page
     //    }
     //}
 
-    [DirectMethod]
-    public void ConfirmDeleteStationLink(Guid aID)
-    {
-        MessageBoxes.Confirm(
-            "Confirm Delete",
-            String.Format("DirectCall.DeleteStationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
-            "Are you sure you want to delete this station link?");
-    }
+    //[DirectMethod]
+    //public void ConfirmDeleteStationLink(Guid aID)
+    //{
+    //    MessageBoxes.Confirm(
+    //        "Confirm Delete",
+    //        String.Format("DirectCall.DeleteStationLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+    //        "Are you sure you want to delete this station link?");
+    //}
 
-    [DirectMethod]
-    public void DeleteStationLink(Guid aID)
-    {
-        try
-        {
-            da.Station station = new da.Station(aID);
-            station.SiteID = null;
-            station.Save();
-            Auditing.Log("Sites.DeleteStationLink", new Dictionary<string, object> { { "ID", aID } });
-            StationLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Sites.DeleteStationLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete station link");
-        }
-    }
+    //[DirectMethod]
+    //public void DeleteStationLink(Guid aID)
+    //{
+    //    try
+    //    {
+    //        da.Station station = new da.Station(aID);
+    //        station.SiteID = null;
+    //        station.Save();
+    //        Auditing.Log("Sites.DeleteStationLink", new Dictionary<string, object> { { "ID", aID } });
+    //        StationLinksGrid.DataBind();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Log.Error(ex, "Sites.DeleteStationLink({aID})", aID);
+    //        MessageBoxes.Error(ex, "Error", "Unable to delete station link");
+    //    }
+    //}
 
     [DirectMethod]
     public void AddStationClick(object sender, DirectEventArgs e)

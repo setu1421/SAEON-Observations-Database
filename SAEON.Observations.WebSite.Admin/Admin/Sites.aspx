@@ -222,7 +222,7 @@
                                                 <ext:CommandColumn Width="75">
                                                     <Commands>
                                                         <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />--%>
-                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
+                                                        <%--<ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />--%>
                                                     </Commands>
                                                 </ext:CommandColumn>
                                             </Columns>

@@ -79,10 +79,7 @@ public partial class Admin_Stations : System.Web.UI.Page
                 station.Code = tfCode.Text.Trim();
             if (!string.IsNullOrEmpty(tfName.Text.Trim()))
                 station.Name = tfName.Text.Trim();
-            if (cbSite.SelectedItem.Value == null)
-                station.SiteID = null;
-            else
-                station.SiteID = Utilities.MakeGuid(cbSite.SelectedItem.Value.Trim());
+            station.SiteID = Utilities.MakeGuid(cbSite.SelectedItem.Value.Trim());
             station.Description = tfDescription.Text.Trim();
 
             if (!string.IsNullOrEmpty(nfLatitude.Text))
