@@ -44,16 +44,6 @@ namespace SAEON.Observations.Data
         
 		public static readonly string AspnetWebEventEvent = @"aspnet_WebEvent_Events";
         
-		public static readonly string AspNetRole = @"AspNetRoles";
-        
-		public static readonly string AspNetUserClaim = @"AspNetUserClaims";
-        
-		public static readonly string AspNetUserLogin = @"AspNetUserLogins";
-        
-		public static readonly string AspNetUserRole = @"AspNetUserRoles";
-        
-		public static readonly string AspNetUser = @"AspNetUsers";
-        
 		public static readonly string AuditLog = @"AuditLog";
         
 		public static readonly string DataLog = @"DataLog";
@@ -198,31 +188,6 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table AspnetWebEventEvent
 		{
             get { return DataService.GetSchema("aspnet_WebEvent_Events", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table AspNetRole
-		{
-            get { return DataService.GetSchema("AspNetRoles", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table AspNetUserClaim
-		{
-            get { return DataService.GetSchema("AspNetUserClaims", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table AspNetUserLogin
-		{
-            get { return DataService.GetSchema("AspNetUserLogins", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table AspNetUserRole
-		{
-            get { return DataService.GetSchema("AspNetUserRoles", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table AspNetUser
-		{
-            get { return DataService.GetSchema("AspNetUsers", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table AuditLog

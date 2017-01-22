@@ -15,23 +15,23 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
 	/// <summary>
-	/// Strongly-typed collection for the AspNetUser class.
+	/// Strongly-typed collection for the AspnetUser class.
 	/// </summary>
     [Serializable]
-	public partial class AspNetUserCollection : ActiveList<AspNetUser, AspNetUserCollection>
+	public partial class AspnetUserCollection : ActiveList<AspnetUser, AspnetUserCollection>
 	{	   
-		public AspNetUserCollection() {}
+		public AspnetUserCollection() {}
         
         /// <summary>
 		/// Filters an existing collection based on the set criteria. This is an in-memory filter
 		/// Thanks to developingchris for this!
         /// </summary>
-        /// <returns>AspNetUserCollection</returns>
-		public AspNetUserCollection Filter()
+        /// <returns>AspnetUserCollection</returns>
+		public AspnetUserCollection Filter()
         {
             for (int i = this.Count - 1; i > -1; i--)
             {
-                AspNetUser o = this[i];
+                AspnetUser o = this[i];
                 foreach (SubSonic.Where w in this.wheres)
                 {
                     bool remove = false;
@@ -62,14 +62,14 @@ namespace SAEON.Observations.Data
 		
 	}
 	/// <summary>
-	/// This is an ActiveRecord class which wraps the AspNetUsers table.
+	/// This is an ActiveRecord class which wraps the aspnet_Users table.
 	/// </summary>
 	[Serializable]
-	public partial class AspNetUser : ActiveRecord<AspNetUser>, IActiveRecord
+	public partial class AspnetUser : ActiveRecord<AspnetUser>, IActiveRecord
 	{
 		#region .ctors and Default Settings
 		
-		public AspNetUser()
+		public AspnetUser()
 		{
 		  SetSQLProps();
 		  InitSetDefaults();
@@ -78,7 +78,7 @@ namespace SAEON.Observations.Data
 		
 		private void InitSetDefaults() { SetDefaults(); }
 		
-		public AspNetUser(bool useDatabaseDefaults)
+		public AspnetUser(bool useDatabaseDefaults)
 		{
 			SetSQLProps();
 			if(useDatabaseDefaults)
@@ -86,14 +86,14 @@ namespace SAEON.Observations.Data
 			MarkNew();
 		}
         
-		public AspNetUser(object keyID)
+		public AspnetUser(object keyID)
 		{
 			SetSQLProps();
 			InitSetDefaults();
 			LoadByKey(keyID);
 		}
 		 
-		public AspNetUser(string columnName, object columnValue)
+		public AspnetUser(string columnName, object columnValue)
 		{
 			SetSQLProps();
 			InitSetDefaults();
@@ -121,166 +121,38 @@ namespace SAEON.Observations.Data
 			if(!IsSchemaInitialized)
 			{
 				//Schema declaration
-				TableSchema.Table schema = new TableSchema.Table("AspNetUsers", TableType.Table, DataService.GetInstance("ObservationsDB"));
+				TableSchema.Table schema = new TableSchema.Table("aspnet_Users", TableType.Table, DataService.GetInstance("ObservationsDB"));
 				schema.Columns = new TableSchema.TableColumnCollection();
 				schema.SchemaName = @"dbo";
 				//columns
 				
-				TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
-				colvarId.ColumnName = "Id";
-				colvarId.DataType = DbType.String;
-				colvarId.MaxLength = 128;
-				colvarId.AutoIncrement = false;
-				colvarId.IsNullable = false;
-				colvarId.IsPrimaryKey = true;
-				colvarId.IsForeignKey = false;
-				colvarId.IsReadOnly = false;
-				colvarId.DefaultSetting = @"";
-				colvarId.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarId);
+				TableSchema.TableColumn colvarApplicationId = new TableSchema.TableColumn(schema);
+				colvarApplicationId.ColumnName = "ApplicationId";
+				colvarApplicationId.DataType = DbType.Guid;
+				colvarApplicationId.MaxLength = 0;
+				colvarApplicationId.AutoIncrement = false;
+				colvarApplicationId.IsNullable = false;
+				colvarApplicationId.IsPrimaryKey = false;
+				colvarApplicationId.IsForeignKey = true;
+				colvarApplicationId.IsReadOnly = false;
+				colvarApplicationId.DefaultSetting = @"";
 				
-				TableSchema.TableColumn colvarName = new TableSchema.TableColumn(schema);
-				colvarName.ColumnName = "Name";
-				colvarName.DataType = DbType.String;
-				colvarName.MaxLength = -1;
-				colvarName.AutoIncrement = false;
-				colvarName.IsNullable = false;
-				colvarName.IsPrimaryKey = false;
-				colvarName.IsForeignKey = false;
-				colvarName.IsReadOnly = false;
-				colvarName.DefaultSetting = @"";
-				colvarName.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarName);
+					colvarApplicationId.ForeignKeyTableName = "aspnet_Applications";
+				schema.Columns.Add(colvarApplicationId);
 				
-				TableSchema.TableColumn colvarEmail = new TableSchema.TableColumn(schema);
-				colvarEmail.ColumnName = "Email";
-				colvarEmail.DataType = DbType.String;
-				colvarEmail.MaxLength = 256;
-				colvarEmail.AutoIncrement = false;
-				colvarEmail.IsNullable = true;
-				colvarEmail.IsPrimaryKey = false;
-				colvarEmail.IsForeignKey = false;
-				colvarEmail.IsReadOnly = false;
-				colvarEmail.DefaultSetting = @"";
-				colvarEmail.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarEmail);
+				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
+				colvarUserId.ColumnName = "UserId";
+				colvarUserId.DataType = DbType.Guid;
+				colvarUserId.MaxLength = 0;
+				colvarUserId.AutoIncrement = false;
+				colvarUserId.IsNullable = false;
+				colvarUserId.IsPrimaryKey = true;
+				colvarUserId.IsForeignKey = false;
+				colvarUserId.IsReadOnly = false;
 				
-				TableSchema.TableColumn colvarEmailConfirmed = new TableSchema.TableColumn(schema);
-				colvarEmailConfirmed.ColumnName = "EmailConfirmed";
-				colvarEmailConfirmed.DataType = DbType.Boolean;
-				colvarEmailConfirmed.MaxLength = 0;
-				colvarEmailConfirmed.AutoIncrement = false;
-				colvarEmailConfirmed.IsNullable = false;
-				colvarEmailConfirmed.IsPrimaryKey = false;
-				colvarEmailConfirmed.IsForeignKey = false;
-				colvarEmailConfirmed.IsReadOnly = false;
-				colvarEmailConfirmed.DefaultSetting = @"";
-				colvarEmailConfirmed.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarEmailConfirmed);
-				
-				TableSchema.TableColumn colvarPasswordHash = new TableSchema.TableColumn(schema);
-				colvarPasswordHash.ColumnName = "PasswordHash";
-				colvarPasswordHash.DataType = DbType.String;
-				colvarPasswordHash.MaxLength = -1;
-				colvarPasswordHash.AutoIncrement = false;
-				colvarPasswordHash.IsNullable = true;
-				colvarPasswordHash.IsPrimaryKey = false;
-				colvarPasswordHash.IsForeignKey = false;
-				colvarPasswordHash.IsReadOnly = false;
-				colvarPasswordHash.DefaultSetting = @"";
-				colvarPasswordHash.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarPasswordHash);
-				
-				TableSchema.TableColumn colvarSecurityStamp = new TableSchema.TableColumn(schema);
-				colvarSecurityStamp.ColumnName = "SecurityStamp";
-				colvarSecurityStamp.DataType = DbType.String;
-				colvarSecurityStamp.MaxLength = -1;
-				colvarSecurityStamp.AutoIncrement = false;
-				colvarSecurityStamp.IsNullable = true;
-				colvarSecurityStamp.IsPrimaryKey = false;
-				colvarSecurityStamp.IsForeignKey = false;
-				colvarSecurityStamp.IsReadOnly = false;
-				colvarSecurityStamp.DefaultSetting = @"";
-				colvarSecurityStamp.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarSecurityStamp);
-				
-				TableSchema.TableColumn colvarPhoneNumber = new TableSchema.TableColumn(schema);
-				colvarPhoneNumber.ColumnName = "PhoneNumber";
-				colvarPhoneNumber.DataType = DbType.String;
-				colvarPhoneNumber.MaxLength = -1;
-				colvarPhoneNumber.AutoIncrement = false;
-				colvarPhoneNumber.IsNullable = true;
-				colvarPhoneNumber.IsPrimaryKey = false;
-				colvarPhoneNumber.IsForeignKey = false;
-				colvarPhoneNumber.IsReadOnly = false;
-				colvarPhoneNumber.DefaultSetting = @"";
-				colvarPhoneNumber.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarPhoneNumber);
-				
-				TableSchema.TableColumn colvarPhoneNumberConfirmed = new TableSchema.TableColumn(schema);
-				colvarPhoneNumberConfirmed.ColumnName = "PhoneNumberConfirmed";
-				colvarPhoneNumberConfirmed.DataType = DbType.Boolean;
-				colvarPhoneNumberConfirmed.MaxLength = 0;
-				colvarPhoneNumberConfirmed.AutoIncrement = false;
-				colvarPhoneNumberConfirmed.IsNullable = false;
-				colvarPhoneNumberConfirmed.IsPrimaryKey = false;
-				colvarPhoneNumberConfirmed.IsForeignKey = false;
-				colvarPhoneNumberConfirmed.IsReadOnly = false;
-				colvarPhoneNumberConfirmed.DefaultSetting = @"";
-				colvarPhoneNumberConfirmed.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarPhoneNumberConfirmed);
-				
-				TableSchema.TableColumn colvarTwoFactorEnabled = new TableSchema.TableColumn(schema);
-				colvarTwoFactorEnabled.ColumnName = "TwoFactorEnabled";
-				colvarTwoFactorEnabled.DataType = DbType.Boolean;
-				colvarTwoFactorEnabled.MaxLength = 0;
-				colvarTwoFactorEnabled.AutoIncrement = false;
-				colvarTwoFactorEnabled.IsNullable = false;
-				colvarTwoFactorEnabled.IsPrimaryKey = false;
-				colvarTwoFactorEnabled.IsForeignKey = false;
-				colvarTwoFactorEnabled.IsReadOnly = false;
-				colvarTwoFactorEnabled.DefaultSetting = @"";
-				colvarTwoFactorEnabled.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarTwoFactorEnabled);
-				
-				TableSchema.TableColumn colvarLockoutEndDateUtc = new TableSchema.TableColumn(schema);
-				colvarLockoutEndDateUtc.ColumnName = "LockoutEndDateUtc";
-				colvarLockoutEndDateUtc.DataType = DbType.DateTime;
-				colvarLockoutEndDateUtc.MaxLength = 0;
-				colvarLockoutEndDateUtc.AutoIncrement = false;
-				colvarLockoutEndDateUtc.IsNullable = true;
-				colvarLockoutEndDateUtc.IsPrimaryKey = false;
-				colvarLockoutEndDateUtc.IsForeignKey = false;
-				colvarLockoutEndDateUtc.IsReadOnly = false;
-				colvarLockoutEndDateUtc.DefaultSetting = @"";
-				colvarLockoutEndDateUtc.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarLockoutEndDateUtc);
-				
-				TableSchema.TableColumn colvarLockoutEnabled = new TableSchema.TableColumn(schema);
-				colvarLockoutEnabled.ColumnName = "LockoutEnabled";
-				colvarLockoutEnabled.DataType = DbType.Boolean;
-				colvarLockoutEnabled.MaxLength = 0;
-				colvarLockoutEnabled.AutoIncrement = false;
-				colvarLockoutEnabled.IsNullable = false;
-				colvarLockoutEnabled.IsPrimaryKey = false;
-				colvarLockoutEnabled.IsForeignKey = false;
-				colvarLockoutEnabled.IsReadOnly = false;
-				colvarLockoutEnabled.DefaultSetting = @"";
-				colvarLockoutEnabled.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarLockoutEnabled);
-				
-				TableSchema.TableColumn colvarAccessFailedCount = new TableSchema.TableColumn(schema);
-				colvarAccessFailedCount.ColumnName = "AccessFailedCount";
-				colvarAccessFailedCount.DataType = DbType.Int32;
-				colvarAccessFailedCount.MaxLength = 0;
-				colvarAccessFailedCount.AutoIncrement = false;
-				colvarAccessFailedCount.IsNullable = false;
-				colvarAccessFailedCount.IsPrimaryKey = false;
-				colvarAccessFailedCount.IsForeignKey = false;
-				colvarAccessFailedCount.IsReadOnly = false;
-				colvarAccessFailedCount.DefaultSetting = @"";
-				colvarAccessFailedCount.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarAccessFailedCount);
+						colvarUserId.DefaultSetting = @"(newid())";
+				colvarUserId.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUserId);
 				
 				TableSchema.TableColumn colvarUserName = new TableSchema.TableColumn(schema);
 				colvarUserName.ColumnName = "UserName";
@@ -295,110 +167,84 @@ namespace SAEON.Observations.Data
 				colvarUserName.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarUserName);
 				
+				TableSchema.TableColumn colvarLoweredUserName = new TableSchema.TableColumn(schema);
+				colvarLoweredUserName.ColumnName = "LoweredUserName";
+				colvarLoweredUserName.DataType = DbType.String;
+				colvarLoweredUserName.MaxLength = 256;
+				colvarLoweredUserName.AutoIncrement = false;
+				colvarLoweredUserName.IsNullable = false;
+				colvarLoweredUserName.IsPrimaryKey = false;
+				colvarLoweredUserName.IsForeignKey = false;
+				colvarLoweredUserName.IsReadOnly = false;
+				colvarLoweredUserName.DefaultSetting = @"";
+				colvarLoweredUserName.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarLoweredUserName);
+				
+				TableSchema.TableColumn colvarMobileAlias = new TableSchema.TableColumn(schema);
+				colvarMobileAlias.ColumnName = "MobileAlias";
+				colvarMobileAlias.DataType = DbType.String;
+				colvarMobileAlias.MaxLength = 16;
+				colvarMobileAlias.AutoIncrement = false;
+				colvarMobileAlias.IsNullable = true;
+				colvarMobileAlias.IsPrimaryKey = false;
+				colvarMobileAlias.IsForeignKey = false;
+				colvarMobileAlias.IsReadOnly = false;
+				
+						colvarMobileAlias.DefaultSetting = @"(NULL)";
+				colvarMobileAlias.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarMobileAlias);
+				
+				TableSchema.TableColumn colvarIsAnonymous = new TableSchema.TableColumn(schema);
+				colvarIsAnonymous.ColumnName = "IsAnonymous";
+				colvarIsAnonymous.DataType = DbType.Boolean;
+				colvarIsAnonymous.MaxLength = 0;
+				colvarIsAnonymous.AutoIncrement = false;
+				colvarIsAnonymous.IsNullable = false;
+				colvarIsAnonymous.IsPrimaryKey = false;
+				colvarIsAnonymous.IsForeignKey = false;
+				colvarIsAnonymous.IsReadOnly = false;
+				
+						colvarIsAnonymous.DefaultSetting = @"((0))";
+				colvarIsAnonymous.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarIsAnonymous);
+				
+				TableSchema.TableColumn colvarLastActivityDate = new TableSchema.TableColumn(schema);
+				colvarLastActivityDate.ColumnName = "LastActivityDate";
+				colvarLastActivityDate.DataType = DbType.DateTime;
+				colvarLastActivityDate.MaxLength = 0;
+				colvarLastActivityDate.AutoIncrement = false;
+				colvarLastActivityDate.IsNullable = false;
+				colvarLastActivityDate.IsPrimaryKey = false;
+				colvarLastActivityDate.IsForeignKey = false;
+				colvarLastActivityDate.IsReadOnly = false;
+				colvarLastActivityDate.DefaultSetting = @"";
+				colvarLastActivityDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarLastActivityDate);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
-				DataService.Providers["ObservationsDB"].AddSchema("AspNetUsers",schema);
+				DataService.Providers["ObservationsDB"].AddSchema("aspnet_Users",schema);
 			}
 		}
 		#endregion
 		
 		#region Props
 		  
-		[XmlAttribute("Id")]
+		[XmlAttribute("ApplicationId")]
 		[Bindable(true)]
-		public string Id 
+		public Guid ApplicationId 
 		{
-			get { return GetColumnValue<string>(Columns.Id); }
-			set { SetColumnValue(Columns.Id, value); }
+			get { return GetColumnValue<Guid>(Columns.ApplicationId); }
+			set { SetColumnValue(Columns.ApplicationId, value); }
 		}
 		  
-		[XmlAttribute("Name")]
+		[XmlAttribute("UserId")]
 		[Bindable(true)]
-		public string Name 
+		public Guid UserId 
 		{
-			get { return GetColumnValue<string>(Columns.Name); }
-			set { SetColumnValue(Columns.Name, value); }
-		}
-		  
-		[XmlAttribute("Email")]
-		[Bindable(true)]
-		public string Email 
-		{
-			get { return GetColumnValue<string>(Columns.Email); }
-			set { SetColumnValue(Columns.Email, value); }
-		}
-		  
-		[XmlAttribute("EmailConfirmed")]
-		[Bindable(true)]
-		public bool EmailConfirmed 
-		{
-			get { return GetColumnValue<bool>(Columns.EmailConfirmed); }
-			set { SetColumnValue(Columns.EmailConfirmed, value); }
-		}
-		  
-		[XmlAttribute("PasswordHash")]
-		[Bindable(true)]
-		public string PasswordHash 
-		{
-			get { return GetColumnValue<string>(Columns.PasswordHash); }
-			set { SetColumnValue(Columns.PasswordHash, value); }
-		}
-		  
-		[XmlAttribute("SecurityStamp")]
-		[Bindable(true)]
-		public string SecurityStamp 
-		{
-			get { return GetColumnValue<string>(Columns.SecurityStamp); }
-			set { SetColumnValue(Columns.SecurityStamp, value); }
-		}
-		  
-		[XmlAttribute("PhoneNumber")]
-		[Bindable(true)]
-		public string PhoneNumber 
-		{
-			get { return GetColumnValue<string>(Columns.PhoneNumber); }
-			set { SetColumnValue(Columns.PhoneNumber, value); }
-		}
-		  
-		[XmlAttribute("PhoneNumberConfirmed")]
-		[Bindable(true)]
-		public bool PhoneNumberConfirmed 
-		{
-			get { return GetColumnValue<bool>(Columns.PhoneNumberConfirmed); }
-			set { SetColumnValue(Columns.PhoneNumberConfirmed, value); }
-		}
-		  
-		[XmlAttribute("TwoFactorEnabled")]
-		[Bindable(true)]
-		public bool TwoFactorEnabled 
-		{
-			get { return GetColumnValue<bool>(Columns.TwoFactorEnabled); }
-			set { SetColumnValue(Columns.TwoFactorEnabled, value); }
-		}
-		  
-		[XmlAttribute("LockoutEndDateUtc")]
-		[Bindable(true)]
-		public DateTime? LockoutEndDateUtc 
-		{
-			get { return GetColumnValue<DateTime?>(Columns.LockoutEndDateUtc); }
-			set { SetColumnValue(Columns.LockoutEndDateUtc, value); }
-		}
-		  
-		[XmlAttribute("LockoutEnabled")]
-		[Bindable(true)]
-		public bool LockoutEnabled 
-		{
-			get { return GetColumnValue<bool>(Columns.LockoutEnabled); }
-			set { SetColumnValue(Columns.LockoutEnabled, value); }
-		}
-		  
-		[XmlAttribute("AccessFailedCount")]
-		[Bindable(true)]
-		public int AccessFailedCount 
-		{
-			get { return GetColumnValue<int>(Columns.AccessFailedCount); }
-			set { SetColumnValue(Columns.AccessFailedCount, value); }
+			get { return GetColumnValue<Guid>(Columns.UserId); }
+			set { SetColumnValue(Columns.UserId, value); }
 		}
 		  
 		[XmlAttribute("UserName")]
@@ -407,6 +253,38 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<string>(Columns.UserName); }
 			set { SetColumnValue(Columns.UserName, value); }
+		}
+		  
+		[XmlAttribute("LoweredUserName")]
+		[Bindable(true)]
+		public string LoweredUserName 
+		{
+			get { return GetColumnValue<string>(Columns.LoweredUserName); }
+			set { SetColumnValue(Columns.LoweredUserName, value); }
+		}
+		  
+		[XmlAttribute("MobileAlias")]
+		[Bindable(true)]
+		public string MobileAlias 
+		{
+			get { return GetColumnValue<string>(Columns.MobileAlias); }
+			set { SetColumnValue(Columns.MobileAlias, value); }
+		}
+		  
+		[XmlAttribute("IsAnonymous")]
+		[Bindable(true)]
+		public bool IsAnonymous 
+		{
+			get { return GetColumnValue<bool>(Columns.IsAnonymous); }
+			set { SetColumnValue(Columns.IsAnonymous, value); }
+		}
+		  
+		[XmlAttribute("LastActivityDate")]
+		[Bindable(true)]
+		public DateTime LastActivityDate 
+		{
+			get { return GetColumnValue<DateTime>(Columns.LastActivityDate); }
+			set { SetColumnValue(Columns.LastActivityDate, value); }
 		}
 		
 		#endregion
@@ -422,96 +300,253 @@ namespace SAEON.Observations.Data
         }
         
 		
-		public SAEON.Observations.Data.AspNetUserClaimCollection AspNetUserClaims()
+		public SAEON.Observations.Data.AspnetMembershipCollection AspnetMembershipRecords()
 		{
-			return new SAEON.Observations.Data.AspNetUserClaimCollection().Where(AspNetUserClaim.Columns.UserId, Id).Load();
+			return new SAEON.Observations.Data.AspnetMembershipCollection().Where(AspnetMembership.Columns.UserId, UserId).Load();
 		}
-		public SAEON.Observations.Data.AspNetUserLoginCollection AspNetUserLogins()
+		public SAEON.Observations.Data.AspnetPersonalizationPerUserCollection AspnetPersonalizationPerUserRecords()
 		{
-			return new SAEON.Observations.Data.AspNetUserLoginCollection().Where(AspNetUserLogin.Columns.UserId, Id).Load();
+			return new SAEON.Observations.Data.AspnetPersonalizationPerUserCollection().Where(AspnetPersonalizationPerUser.Columns.UserId, UserId).Load();
 		}
-		public SAEON.Observations.Data.AspNetUserRoleCollection AspNetUserRoles()
+		public SAEON.Observations.Data.AspnetProfileCollection AspnetProfileRecords()
 		{
-			return new SAEON.Observations.Data.AspNetUserRoleCollection().Where(AspNetUserRole.Columns.UserId, Id).Load();
+			return new SAEON.Observations.Data.AspnetProfileCollection().Where(AspnetProfile.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.AspnetUsersInRoleCollection AspnetUsersInRoles()
+		{
+			return new SAEON.Observations.Data.AspnetUsersInRoleCollection().Where(AspnetUsersInRole.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.AuditLogCollection AuditLogRecords()
+		{
+			return new SAEON.Observations.Data.AuditLogCollection().Where(AuditLog.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.DataLogCollection DataLogRecords()
+		{
+			return new SAEON.Observations.Data.DataLogCollection().Where(DataLog.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.DataSchemaCollection DataSchemaRecords()
+		{
+			return new SAEON.Observations.Data.DataSchemaCollection().Where(DataSchema.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.DataSourceCollection DataSourceRecords()
+		{
+			return new SAEON.Observations.Data.DataSourceCollection().Where(DataSource.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.DataSourceRoleCollection DataSourceRoleRecords()
+		{
+			return new SAEON.Observations.Data.DataSourceRoleCollection().Where(DataSourceRole.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
+		{
+			return new SAEON.Observations.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.DataSourceTypeCollection DataSourceTypeRecords()
+		{
+			return new SAEON.Observations.Data.DataSourceTypeCollection().Where(DataSourceType.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.ImportBatchCollection ImportBatchRecords()
+		{
+			return new SAEON.Observations.Data.ImportBatchCollection().Where(ImportBatch.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.InstrumentCollection InstrumentRecords()
+		{
+			return new SAEON.Observations.Data.InstrumentCollection().Where(Instrument.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.InstrumentDataSourceCollection InstrumentDataSourceRecords()
+		{
+			return new SAEON.Observations.Data.InstrumentDataSourceCollection().Where(InstrumentDataSource.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.InstrumentSensorCollection InstrumentSensorRecords()
+		{
+			return new SAEON.Observations.Data.InstrumentSensorCollection().Where(InstrumentSensor.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.ObservationCollection ObservationRecords()
+		{
+			return new SAEON.Observations.Data.ObservationCollection().Where(Observation.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.OfferingCollection OfferingRecords()
+		{
+			return new SAEON.Observations.Data.OfferingCollection().Where(Offering.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.OrganisationCollection OrganisationRecords()
+		{
+			return new SAEON.Observations.Data.OrganisationCollection().Where(Organisation.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.OrganisationInstrumentCollection OrganisationInstrumentRecords()
+		{
+			return new SAEON.Observations.Data.OrganisationInstrumentCollection().Where(OrganisationInstrument.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.OrganisationSiteCollection OrganisationSiteRecords()
+		{
+			return new SAEON.Observations.Data.OrganisationSiteCollection().Where(OrganisationSite.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.OrganisationStationCollection OrganisationStationRecords()
+		{
+			return new SAEON.Observations.Data.OrganisationStationCollection().Where(OrganisationStation.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.OrganisationRoleCollection OrganisationRoleRecords()
+		{
+			return new SAEON.Observations.Data.OrganisationRoleCollection().Where(OrganisationRole.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.PhenomenonCollection PhenomenonRecords()
+		{
+			return new SAEON.Observations.Data.PhenomenonCollection().Where(Phenomenon.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.PhenomenonOfferingCollection PhenomenonOfferingRecords()
+		{
+			return new SAEON.Observations.Data.PhenomenonOfferingCollection().Where(PhenomenonOffering.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.PhenomenonUOMCollection PhenomenonUOMRecords()
+		{
+			return new SAEON.Observations.Data.PhenomenonUOMCollection().Where(PhenomenonUOM.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.ProgrammeCollection ProgrammeRecords()
+		{
+			return new SAEON.Observations.Data.ProgrammeCollection().Where(Programme.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.ProjectCollection ProjectRecords()
+		{
+			return new SAEON.Observations.Data.ProjectCollection().Where(Project.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.ProjectStationCollection ProjectStationRecords()
+		{
+			return new SAEON.Observations.Data.ProjectStationCollection().Where(ProjectStation.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.ProjectSiteCollection ProjectSiteRecords()
+		{
+			return new SAEON.Observations.Data.ProjectSiteCollection().Where(ProjectSite.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.SchemaColumnCollection SchemaColumnRecords()
+		{
+			return new SAEON.Observations.Data.SchemaColumnCollection().Where(SchemaColumn.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.SchemaColumnTypeCollection SchemaColumnTypeRecords()
+		{
+			return new SAEON.Observations.Data.SchemaColumnTypeCollection().Where(SchemaColumnType.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.SensorCollection SensorRecords()
+		{
+			return new SAEON.Observations.Data.SensorCollection().Where(Sensor.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.SiteCollection SiteRecords()
+		{
+			return new SAEON.Observations.Data.SiteCollection().Where(Site.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.StationCollection StationRecords()
+		{
+			return new SAEON.Observations.Data.StationCollection().Where(Station.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.StationInstrumentCollection StationInstrumentRecords()
+		{
+			return new SAEON.Observations.Data.StationInstrumentCollection().Where(StationInstrument.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.StatusCollection StatusRecords()
+		{
+			return new SAEON.Observations.Data.StatusCollection().Where(Status.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.StatusReasonCollection StatusReasonRecords()
+		{
+			return new SAEON.Observations.Data.StatusReasonCollection().Where(StatusReason.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.TransformationTypeCollection TransformationTypeRecords()
+		{
+			return new SAEON.Observations.Data.TransformationTypeCollection().Where(TransformationType.Columns.UserId, UserId).Load();
+		}
+		public SAEON.Observations.Data.UnitOfMeasureCollection UnitOfMeasureRecords()
+		{
+			return new SAEON.Observations.Data.UnitOfMeasureCollection().Where(UnitOfMeasure.Columns.UserId, UserId).Load();
 		}
 		#endregion
 		
 			
 		
-		//no foreign key tables defined (0)
+		#region ForeignKey Properties
+		
+		/// <summary>
+		/// Returns a AspnetApplication ActiveRecord object related to this AspnetUser
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.AspnetApplication AspnetApplication
+		{
+			get { return SAEON.Observations.Data.AspnetApplication.FetchByID(this.ApplicationId); }
+			set { SetColumnValue("ApplicationId", value.ApplicationId); }
+		}
+		
+		
+		#endregion
 		
 		
 		
 		#region Many To Many Helpers
 		
 		 
-		public SAEON.Observations.Data.AspNetRoleCollection GetAspNetRoleCollection() { return AspNetUser.GetAspNetRoleCollection(this.Id); }
-		public static SAEON.Observations.Data.AspNetRoleCollection GetAspNetRoleCollection(string varId)
+		public SAEON.Observations.Data.AspnetRoleCollection GetAspnetRoleCollection() { return AspnetUser.GetAspnetRoleCollection(this.UserId); }
+		public static SAEON.Observations.Data.AspnetRoleCollection GetAspnetRoleCollection(Guid varUserId)
 		{
-		    SubSonic.QueryCommand cmd = new SubSonic.QueryCommand("SELECT * FROM [dbo].[AspNetRoles] INNER JOIN [AspNetUserRoles] ON [AspNetRoles].[Id] = [AspNetUserRoles].[RoleId] WHERE [AspNetUserRoles].[UserId] = @UserId", AspNetUser.Schema.Provider.Name);
-			cmd.AddParameter("@UserId", varId, DbType.String);
+		    SubSonic.QueryCommand cmd = new SubSonic.QueryCommand("SELECT * FROM [dbo].[aspnet_Roles] INNER JOIN [aspnet_UsersInRoles] ON [aspnet_Roles].[RoleId] = [aspnet_UsersInRoles].[RoleId] WHERE [aspnet_UsersInRoles].[UserId] = @UserId", AspnetUser.Schema.Provider.Name);
+			cmd.AddParameter("@UserId", varUserId, DbType.Guid);
 			IDataReader rdr = SubSonic.DataService.GetReader(cmd);
-			AspNetRoleCollection coll = new AspNetRoleCollection();
+			AspnetRoleCollection coll = new AspnetRoleCollection();
 			coll.LoadAndCloseReader(rdr);
 			return coll;
 		}
 		
-		public static void SaveAspNetRoleMap(string varId, AspNetRoleCollection items)
+		public static void SaveAspnetRoleMap(Guid varUserId, AspnetRoleCollection items)
 		{
 			QueryCommandCollection coll = new SubSonic.QueryCommandCollection();
 			//delete out the existing
-			QueryCommand cmdDel = new QueryCommand("DELETE FROM [AspNetUserRoles] WHERE [AspNetUserRoles].[UserId] = @UserId", AspNetUser.Schema.Provider.Name);
-			cmdDel.AddParameter("@UserId", varId, DbType.String);
+			QueryCommand cmdDel = new QueryCommand("DELETE FROM [aspnet_UsersInRoles] WHERE [aspnet_UsersInRoles].[UserId] = @UserId", AspnetUser.Schema.Provider.Name);
+			cmdDel.AddParameter("@UserId", varUserId, DbType.Guid);
 			coll.Add(cmdDel);
 			DataService.ExecuteTransaction(coll);
-			foreach (AspNetRole item in items)
+			foreach (AspnetRole item in items)
 			{
-				AspNetUserRole varAspNetUserRole = new AspNetUserRole();
-				varAspNetUserRole.SetColumnValue("UserId", varId);
-				varAspNetUserRole.SetColumnValue("RoleId", item.GetPrimaryKeyValue());
-				varAspNetUserRole.Save();
+				AspnetUsersInRole varAspnetUsersInRole = new AspnetUsersInRole();
+				varAspnetUsersInRole.SetColumnValue("UserId", varUserId);
+				varAspnetUsersInRole.SetColumnValue("RoleId", item.GetPrimaryKeyValue());
+				varAspnetUsersInRole.Save();
 			}
 		}
-		public static void SaveAspNetRoleMap(string varId, System.Web.UI.WebControls.ListItemCollection itemList) 
+		public static void SaveAspnetRoleMap(Guid varUserId, System.Web.UI.WebControls.ListItemCollection itemList) 
 		{
 			QueryCommandCollection coll = new SubSonic.QueryCommandCollection();
 			//delete out the existing
-			 QueryCommand cmdDel = new QueryCommand("DELETE FROM [AspNetUserRoles] WHERE [AspNetUserRoles].[UserId] = @UserId", AspNetUser.Schema.Provider.Name);
-			cmdDel.AddParameter("@UserId", varId, DbType.String);
+			 QueryCommand cmdDel = new QueryCommand("DELETE FROM [aspnet_UsersInRoles] WHERE [aspnet_UsersInRoles].[UserId] = @UserId", AspnetUser.Schema.Provider.Name);
+			cmdDel.AddParameter("@UserId", varUserId, DbType.Guid);
 			coll.Add(cmdDel);
 			DataService.ExecuteTransaction(coll);
 			foreach (System.Web.UI.WebControls.ListItem l in itemList) 
 			{
 				if (l.Selected) 
 				{
-					AspNetUserRole varAspNetUserRole = new AspNetUserRole();
-					varAspNetUserRole.SetColumnValue("UserId", varId);
-					varAspNetUserRole.SetColumnValue("RoleId", l.Value);
-					varAspNetUserRole.Save();
+					AspnetUsersInRole varAspnetUsersInRole = new AspnetUsersInRole();
+					varAspnetUsersInRole.SetColumnValue("UserId", varUserId);
+					varAspnetUsersInRole.SetColumnValue("RoleId", l.Value);
+					varAspnetUsersInRole.Save();
 				}
 			}
 		}
-		public static void SaveAspNetRoleMap(string varId , string[] itemList) 
+		public static void SaveAspnetRoleMap(Guid varUserId , Guid[] itemList) 
 		{
 			QueryCommandCollection coll = new SubSonic.QueryCommandCollection();
 			//delete out the existing
-			 QueryCommand cmdDel = new QueryCommand("DELETE FROM [AspNetUserRoles] WHERE [AspNetUserRoles].[UserId] = @UserId", AspNetUser.Schema.Provider.Name);
-			cmdDel.AddParameter("@UserId", varId, DbType.String);
+			 QueryCommand cmdDel = new QueryCommand("DELETE FROM [aspnet_UsersInRoles] WHERE [aspnet_UsersInRoles].[UserId] = @UserId", AspnetUser.Schema.Provider.Name);
+			cmdDel.AddParameter("@UserId", varUserId, DbType.Guid);
 			coll.Add(cmdDel);
 			DataService.ExecuteTransaction(coll);
-			foreach (string item in itemList) 
+			foreach (Guid item in itemList) 
 			{
-				AspNetUserRole varAspNetUserRole = new AspNetUserRole();
-				varAspNetUserRole.SetColumnValue("UserId", varId);
-				varAspNetUserRole.SetColumnValue("RoleId", item);
-				varAspNetUserRole.Save();
+				AspnetUsersInRole varAspnetUsersInRole = new AspnetUsersInRole();
+				varAspnetUsersInRole.SetColumnValue("UserId", varUserId);
+				varAspnetUsersInRole.SetColumnValue("RoleId", item);
+				varAspnetUsersInRole.Save();
 			}
 		}
 		
-		public static void DeleteAspNetRoleMap(string varId) 
+		public static void DeleteAspnetRoleMap(Guid varUserId) 
 		{
-			QueryCommand cmdDel = new QueryCommand("DELETE FROM [AspNetUserRoles] WHERE [AspNetUserRoles].[UserId] = @UserId", AspNetUser.Schema.Provider.Name);
-			cmdDel.AddParameter("@UserId", varId, DbType.String);
+			QueryCommand cmdDel = new QueryCommand("DELETE FROM [aspnet_UsersInRoles] WHERE [aspnet_UsersInRoles].[UserId] = @UserId", AspnetUser.Schema.Provider.Name);
+			cmdDel.AddParameter("@UserId", varUserId, DbType.Guid);
 			DataService.ExecuteQuery(cmdDel);
 		}
 		
@@ -525,35 +560,23 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(string varId,string varName,string varEmail,bool varEmailConfirmed,string varPasswordHash,string varSecurityStamp,string varPhoneNumber,bool varPhoneNumberConfirmed,bool varTwoFactorEnabled,DateTime? varLockoutEndDateUtc,bool varLockoutEnabled,int varAccessFailedCount,string varUserName)
+		public static void Insert(Guid varApplicationId,Guid varUserId,string varUserName,string varLoweredUserName,string varMobileAlias,bool varIsAnonymous,DateTime varLastActivityDate)
 		{
-			AspNetUser item = new AspNetUser();
+			AspnetUser item = new AspnetUser();
 			
-			item.Id = varId;
+			item.ApplicationId = varApplicationId;
 			
-			item.Name = varName;
-			
-			item.Email = varEmail;
-			
-			item.EmailConfirmed = varEmailConfirmed;
-			
-			item.PasswordHash = varPasswordHash;
-			
-			item.SecurityStamp = varSecurityStamp;
-			
-			item.PhoneNumber = varPhoneNumber;
-			
-			item.PhoneNumberConfirmed = varPhoneNumberConfirmed;
-			
-			item.TwoFactorEnabled = varTwoFactorEnabled;
-			
-			item.LockoutEndDateUtc = varLockoutEndDateUtc;
-			
-			item.LockoutEnabled = varLockoutEnabled;
-			
-			item.AccessFailedCount = varAccessFailedCount;
+			item.UserId = varUserId;
 			
 			item.UserName = varUserName;
+			
+			item.LoweredUserName = varLoweredUserName;
+			
+			item.MobileAlias = varMobileAlias;
+			
+			item.IsAnonymous = varIsAnonymous;
+			
+			item.LastActivityDate = varLastActivityDate;
 			
 		
 			if (System.Web.HttpContext.Current != null)
@@ -565,35 +588,23 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(string varId,string varName,string varEmail,bool varEmailConfirmed,string varPasswordHash,string varSecurityStamp,string varPhoneNumber,bool varPhoneNumberConfirmed,bool varTwoFactorEnabled,DateTime? varLockoutEndDateUtc,bool varLockoutEnabled,int varAccessFailedCount,string varUserName)
+		public static void Update(Guid varApplicationId,Guid varUserId,string varUserName,string varLoweredUserName,string varMobileAlias,bool varIsAnonymous,DateTime varLastActivityDate)
 		{
-			AspNetUser item = new AspNetUser();
+			AspnetUser item = new AspnetUser();
 			
-				item.Id = varId;
+				item.ApplicationId = varApplicationId;
 			
-				item.Name = varName;
-			
-				item.Email = varEmail;
-			
-				item.EmailConfirmed = varEmailConfirmed;
-			
-				item.PasswordHash = varPasswordHash;
-			
-				item.SecurityStamp = varSecurityStamp;
-			
-				item.PhoneNumber = varPhoneNumber;
-			
-				item.PhoneNumberConfirmed = varPhoneNumberConfirmed;
-			
-				item.TwoFactorEnabled = varTwoFactorEnabled;
-			
-				item.LockoutEndDateUtc = varLockoutEndDateUtc;
-			
-				item.LockoutEnabled = varLockoutEnabled;
-			
-				item.AccessFailedCount = varAccessFailedCount;
+				item.UserId = varUserId;
 			
 				item.UserName = varUserName;
+			
+				item.LoweredUserName = varLoweredUserName;
+			
+				item.MobileAlias = varMobileAlias;
+			
+				item.IsAnonymous = varIsAnonymous;
+			
+				item.LastActivityDate = varLastActivityDate;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -608,93 +619,51 @@ namespace SAEON.Observations.Data
         #region Typed Columns
         
         
-        public static TableSchema.TableColumn IdColumn
+        public static TableSchema.TableColumn ApplicationIdColumn
         {
             get { return Schema.Columns[0]; }
         }
         
         
         
-        public static TableSchema.TableColumn NameColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[1]; }
         }
         
         
         
-        public static TableSchema.TableColumn EmailColumn
+        public static TableSchema.TableColumn UserNameColumn
         {
             get { return Schema.Columns[2]; }
         }
         
         
         
-        public static TableSchema.TableColumn EmailConfirmedColumn
+        public static TableSchema.TableColumn LoweredUserNameColumn
         {
             get { return Schema.Columns[3]; }
         }
         
         
         
-        public static TableSchema.TableColumn PasswordHashColumn
+        public static TableSchema.TableColumn MobileAliasColumn
         {
             get { return Schema.Columns[4]; }
         }
         
         
         
-        public static TableSchema.TableColumn SecurityStampColumn
+        public static TableSchema.TableColumn IsAnonymousColumn
         {
             get { return Schema.Columns[5]; }
         }
         
         
         
-        public static TableSchema.TableColumn PhoneNumberColumn
+        public static TableSchema.TableColumn LastActivityDateColumn
         {
             get { return Schema.Columns[6]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn PhoneNumberConfirmedColumn
-        {
-            get { return Schema.Columns[7]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn TwoFactorEnabledColumn
-        {
-            get { return Schema.Columns[8]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn LockoutEndDateUtcColumn
-        {
-            get { return Schema.Columns[9]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn LockoutEnabledColumn
-        {
-            get { return Schema.Columns[10]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn AccessFailedCountColumn
-        {
-            get { return Schema.Columns[11]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn UserNameColumn
-        {
-            get { return Schema.Columns[12]; }
         }
         
         
@@ -703,19 +672,13 @@ namespace SAEON.Observations.Data
 		#region Columns Struct
 		public struct Columns
 		{
-			 public static string Id = @"Id";
-			 public static string Name = @"Name";
-			 public static string Email = @"Email";
-			 public static string EmailConfirmed = @"EmailConfirmed";
-			 public static string PasswordHash = @"PasswordHash";
-			 public static string SecurityStamp = @"SecurityStamp";
-			 public static string PhoneNumber = @"PhoneNumber";
-			 public static string PhoneNumberConfirmed = @"PhoneNumberConfirmed";
-			 public static string TwoFactorEnabled = @"TwoFactorEnabled";
-			 public static string LockoutEndDateUtc = @"LockoutEndDateUtc";
-			 public static string LockoutEnabled = @"LockoutEnabled";
-			 public static string AccessFailedCount = @"AccessFailedCount";
+			 public static string ApplicationId = @"ApplicationId";
+			 public static string UserId = @"UserId";
 			 public static string UserName = @"UserName";
+			 public static string LoweredUserName = @"LoweredUserName";
+			 public static string MobileAlias = @"MobileAlias";
+			 public static string IsAnonymous = @"IsAnonymous";
+			 public static string LastActivityDate = @"LastActivityDate";
 						
 		}
 		#endregion

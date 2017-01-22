@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
     /// <summary>
-    /// Controller class for AspNetRoles
+    /// Controller class for aspnet_Roles
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class AspNetRoleController
+    public partial class AspnetRoleController
     {
         // Preload our schema..
-        AspNetRole thisSchemaLoad = new AspNetRole();
+        AspnetRole thisSchemaLoad = new AspnetRole();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.Observations.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public AspNetRoleCollection FetchAll()
+        public AspnetRoleCollection FetchAll()
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection();
-            Query qry = new Query(AspNetRole.Schema);
+            AspnetRoleCollection coll = new AspnetRoleCollection();
+            Query qry = new Query(AspnetRole.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public AspNetRoleCollection FetchByID(object Id)
+        public AspnetRoleCollection FetchByID(object RoleId)
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection().Where("Id", Id).Load();
+            AspnetRoleCollection coll = new AspnetRoleCollection().Where("RoleId", RoleId).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public AspNetRoleCollection FetchByQuery(Query qry)
+        public AspnetRoleCollection FetchByQuery(Query qry)
         {
-            AspNetRoleCollection coll = new AspNetRoleCollection();
+            AspnetRoleCollection coll = new AspnetRoleCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
-        public bool Delete(object Id)
+        public bool Delete(object RoleId)
         {
-            return (AspNetRole.Delete(Id) == 1);
+            return (AspnetRole.Delete(RoleId) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
-        public bool Destroy(object Id)
+        public bool Destroy(object RoleId)
         {
-            return (AspNetRole.Destroy(Id) == 1);
+            return (AspnetRole.Destroy(RoleId) == 1);
         }
         
         
@@ -80,13 +80,19 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(string Id,string Name)
+	    public void Insert(Guid ApplicationId,Guid RoleId,string RoleName,string LoweredRoleName,string Description)
 	    {
-		    AspNetRole item = new AspNetRole();
+		    AspnetRole item = new AspnetRole();
 		    
-            item.Id = Id;
+            item.ApplicationId = ApplicationId;
             
-            item.Name = Name;
+            item.RoleId = RoleId;
+            
+            item.RoleName = RoleName;
+            
+            item.LoweredRoleName = LoweredRoleName;
+            
+            item.Description = Description;
             
 	    
 		    item.Save(UserName);
@@ -96,15 +102,21 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(string Id,string Name)
+	    public void Update(Guid ApplicationId,Guid RoleId,string RoleName,string LoweredRoleName,string Description)
 	    {
-		    AspNetRole item = new AspNetRole();
+		    AspnetRole item = new AspnetRole();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    
-			item.Id = Id;
+			item.ApplicationId = ApplicationId;
 				
-			item.Name = Name;
+			item.RoleId = RoleId;
+				
+			item.RoleName = RoleName;
+				
+			item.LoweredRoleName = LoweredRoleName;
+				
+			item.Description = Description;
 				
 	        item.Save(UserName);
 	    }
