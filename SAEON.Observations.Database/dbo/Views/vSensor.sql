@@ -59,15 +59,30 @@ SELECT
   ds.[Name] DataSchemaName
 FROM 
   Sensor 
+--> Changed 20170123 TimPN
+--  inner join Instrument_Sensor
   left join Instrument_Sensor
+--< Changed 20170123 TimPN
 	on (Instrument_Sensor.SensorID = Sensor.ID)
+--> Changed 20170123 TimPN
+--  inner join Instrument
   left join Instrument
+--< Changed 20170123 TimPN
 	on (Instrument_Sensor.InstrumentID = Instrument.ID)
+--> Changed 20170123 TimPN
+--  inner join Station_Instrument
   left join Station_Instrument
+--< Changed 20170123 TimPN
     on (Station_Instrument.InstrumentID = Instrument.ID)
+--> Changed 20170123 TimPN
+--  inner join Station 
   left join Station 
+--< Changed 20170123 TimPN
     on (Station_Instrument.StationID = Station.ID)
-  inner join Site
+--> Changed 20170123 TimPN
+--  inner join Site
+  left join Site
+--< Changed 20170123 TimPN
     on (Station.SiteID = Site.ID)
 INNER JOIN DataSource d
     on Sensor.DataSourceID = d.ID
