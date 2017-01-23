@@ -10,14 +10,31 @@ using System.Threading.Tasks;
 namespace SAEON.Observations.Core
 {
     /// <summary>
-    /// UserDownload model
+    /// Site entity
+    /// </summary>
+    public class Site : SiteDTO
+    {
+        public ICollection<Station> Stations { get; set; }
+    }
+    /// <summary>
+    /// Station entity
+    /// </summary>
+    public class Station : StationDTO
+    {
+        public Site Site { get; set; }
+    }
+    /// <summary>
+    /// UserDownload entity
     /// </summary>
     public class UserDownload : UserDownloadDTO
     {
         public ApplicationUser User { get; set; }
     }
 
-    public class UserQuery: UserQueryDTO
+    /// <summary>
+    /// UserQuery entity
+    /// </summary>
+    public class UserQuery : UserQueryDTO
     {
         public ApplicationUser User { get; set; }
     }
@@ -25,8 +42,13 @@ namespace SAEON.Observations.Core
     public class ObservationsDbContext : DbContext
     {
         public ObservationsDbContext() : base("Observations")
-        { }
+        {
+            Configuration.ProxyCreationEnabled = false;
+            Configuration.LazyLoadingEnabled = false;
+        }
 
+        public DbSet<Site> Sites { get; set; }
+        public DbSet<Station> Stations { get; set; }
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
         public DbSet<ApplicationUser> Users { get; set; }

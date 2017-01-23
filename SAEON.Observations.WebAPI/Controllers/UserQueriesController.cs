@@ -6,6 +6,7 @@ using Serilog;
 using Serilog.Context;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
@@ -26,6 +27,9 @@ namespace SAEON.Observations.WebAPI.Controllers
     {
         ObservationsDbContext db = null;
 
+        /// <summary>
+        /// UserQueries constructor
+        /// </summary>
         public UserQueriesController()
         {
             db = new ObservationsDbContext();
@@ -45,9 +49,21 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [Route]
-        public IEnumerable<UserQueryDTO> Get()
+        [ResponseType(typeof(List<UserQueryDTO>))]
+        public async Task<IHttpActionResult> Get()
         {
-            return db.UserQueries.Where(d => d.UserId == User.Identity.GetUserId());
+            using (LogContext.PushProperty("Method", "Get"))
+            {
+                try
+                {
+                    return Ok(await db.UserQueries.Where(i => i.UserId == User.Identity.GetUserId()).OrderBy(i => i.Name).ToListAsync());
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get");
+                    throw;
+                }
+            }
         }
 
         /// <summary>
@@ -56,14 +72,27 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">The id of the UserQuery</param>
         /// <returns></returns>
         [Route("{id:guid}")]
-        public UserQueryDTO Get(Guid id)
+        [ResponseType(typeof(UserQueryDTO))]
+        public async Task<IHttpActionResult> Get(Guid id)
         {
-            var item = db.UserQueries.FirstOrDefault(d => (d.UserId == User.Identity.GetUserId()) && (d.Id == id));
-            if (item == null)
+            using (LogContext.PushProperty("Method", "Get"))
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                try
+                {
+                    var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
+                    if (item == null)
+                    {
+                        Log.Error("{id} not found", id);
+                        return NotFound();
+                    }
+                    return Ok(item);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get {id}", id);
+                    throw;
+                }
             }
-            return item;
         }
 
         /// <summary>
@@ -72,14 +101,27 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="name">The name of the UserQuery</param>
         /// <returns></returns>
         [Route("{name}")]
-        public UserQueryDTO GetByName(string name)
+        [ResponseType(typeof(UserQueryDTO))]
+        public async Task<IHttpActionResult> GetByName(string name)
         {
-            var item = db.UserQueries.FirstOrDefault(d => (d.UserId == User.Identity.GetUserId()) && (d.Name == name));
-            if (item == null)
+            using (LogContext.PushProperty("Method", "GetByName"))
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                try
+                {
+                    var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
+                    if (item == null)
+                    {
+                        Log.Error("{name} not found", name);
+                        return NotFound();
+                    }
+                    return Ok(item);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get {name}", name);
+                    throw;
+                }
             }
-            return item;
         }
 
         /// <summary>
@@ -87,8 +129,9 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="itemDTO">The UserQuery to be created</param>
         [Route]
-        [Authorize(Roles="QuerySite")]
-        public UserQueryDTO Post([FromBody]UserQueryDTO itemDTO)
+        [Authorize(Roles = "QuerySite")]
+        [ResponseType(typeof(UserQueryDTO))]
+        public async Task<IHttpActionResult> Post([FromBody]UserQueryDTO itemDTO)
         {
             using (LogContext.PushProperty("Method", "Post"))
             {
@@ -97,25 +140,28 @@ namespace SAEON.Observations.WebAPI.Controllers
                     Log.Verbose("Adding {itemDTO.Name} {@itemDTO}", itemDTO);
                     if (!ModelState.IsValid)
                     {
-                        throw new HttpResponseException(HttpStatusCode.BadRequest);
+                        Log.Error("{itemDTO.Name} ModelState.Invalid", itemDTO);
+                        return BadRequest(ModelState);
                     }
                     try
                     {
-                        db.UserQueries.Add(Mapper.Map<UserQueryDTO,UserQuery>(itemDTO));
-                        db.SaveChanges();
+                        itemDTO.UserId = User.Identity.GetUserId();
+                        db.UserQueries.Add(Mapper.Map<UserQueryDTO, UserQuery>(itemDTO));
+                        await db.SaveChangesAsync();
                     }
                     catch (DbUpdateException)
                     {
-                        if (!db.UserQueries.Any(i => i.Id == itemDTO.Id))
+                        if (!db.UserQueries.Any(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == itemDTO.Id)))
                         {
-                            throw new HttpResponseException(HttpStatusCode.Conflict);
+                            Log.Error("{itemDTO.Name} conflict", itemDTO);
+                            return Conflict();
                         }
                         else
                         {
                             throw;
                         }
                     }
-                    return itemDTO;
+                    return CreatedAtRoute("UserQueriesA", new { id = itemDTO.Id }, itemDTO);
                 }
                 catch (Exception ex)
                 {
@@ -129,27 +175,36 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Update a UserQuery for the logged in user
         /// </summary>
         /// <param name="id">The id of the UserQuery</param>
-        /// <param name="itemDTO">The UserQuery to be updated</param>
+        /// <param name="itemDTO">The UserQuery values to be updated</param>
         [Route("{id:guid}")]
         [Authorize(Roles = "QuerySite")]
-        public void PutById(Guid id, [FromBody]UserQueryDTO itemDTO)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutById(Guid id, [FromBody]UserQueryDTO itemDTO)
         {
             using (LogContext.PushProperty("Method", "PutById"))
             {
                 try
                 {
                     Log.Verbose("Updating {id} {@itemDTO}", id, itemDTO);
-                    if (!ModelState.IsValid || (id != itemDTO.Id))
+                    if (!ModelState.IsValid)
                     {
-                        throw new HttpResponseException(HttpStatusCode.BadRequest);
+                        Log.Error("{id} ModelState.Invalid", id);
+                        return BadRequest(ModelState);
                     }
-                    var item = db.UserQueries.FirstOrDefault(i => i.Id == id);
+                    if (id != itemDTO.Id)
+                    {
+                        Log.Error("{id} Ids not same", id);
+                        return BadRequest();
+                    }
+                    var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
                     if (item == null)
                     {
-                        throw new HttpResponseException(HttpStatusCode.NotFound);
+                        Log.Error("{id} not found", id);
+                        return NotFound();
                     }
                     Mapper.Map<UserQueryDTO, UserQuery>(itemDTO, item);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
                 {
@@ -163,26 +218,35 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Update a UserQuery for the logged in user
         /// </summary>
         /// <param name="name">The name of the UserQuery</param>
-        /// <param name="itemDTO">The UserQuery to be updated</param>
+        /// <param name="itemDTO">The UserQuery values to be updated</param>
         [Route("{name}")]
         [Authorize(Roles = "QuerySite")]
-        public void PutByName(string name, [FromBody]UserQueryDTO itemDTO)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutByName(string name, [FromBody]UserQueryDTO itemDTO)
         {
             using (LogContext.PushProperty("Method", "PutByName"))
             {
                 try
                 {
-                    Log.Verbose("Updating {name} {@itemDTO}", name);
-                    if (!ModelState.IsValid || (name != itemDTO.Name))
+                    Log.Verbose("Updating {name} {@itemDTO}", name, itemDTO);
+                    if (!ModelState.IsValid)
                     {
-                        throw new HttpResponseException(HttpStatusCode.BadRequest);
+                        Log.Error("{name} ModelState.Invalid", name);
+                        return BadRequest(ModelState);
                     }
-                    var item = db.UserQueries.FirstOrDefault(i => i.Name == name);
+                    if (name != itemDTO.Name)
+                    {
+                        Log.Error("{name} names not same", name);
+                        return BadRequest();
+                    }
+                    var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
                     if (item == null)
                     {
-                        throw new HttpResponseException(HttpStatusCode.NotFound);
+                        Log.Error("{name} not found", name);
+                        return NotFound();
                     }
                     Mapper.Map<UserQueryDTO, UserQuery>(itemDTO, item);
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
                 {
@@ -198,20 +262,23 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">The id of the UserQuery</param>
         [Route("{id:guid}")]
         [Authorize(Roles = "QuerySite")]
-        public void DeleteById(Guid id)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> DeleteByIdAsync(Guid id)
         {
             using (LogContext.PushProperty("Method", "DeleteById"))
             {
                 try
                 {
                     Log.Verbose("Deleting {id}", id);
-                    var item = db.UserQueries.FirstOrDefault(d => (d.UserId == User.Identity.GetUserId()) && (d.Id == id));
+                    var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
                     if (item == null)
                     {
-                        throw new HttpResponseException(HttpStatusCode.NotFound);
+                        Log.Error("{id} not found");
+                        return NotFound();
                     }
                     db.UserQueries.Remove(item);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
                 {
@@ -227,20 +294,23 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="name">The name of the UserQuery</param>
         [Route("{name}")]
         [Authorize(Roles = "QuerySite")]
-        public void DeleteByName(string name)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> DeleteByNameAsync(string name)
         {
             using (LogContext.PushProperty("Method", "DeleteByName"))
             {
                 try
                 {
                     Log.Verbose("Deleting {name}", name);
-                    var item = db.UserQueries.FirstOrDefault(d => (d.UserId == User.Identity.GetUserId()) && (d.Name == name));
+                    var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
                     if (item == null)
                     {
-                        throw new HttpResponseException(HttpStatusCode.NotFound);
+                        Log.Error("{name} not found", name);
+                        return NotFound();
                     }
                     db.UserQueries.Remove(item);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
+                    return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
                 {

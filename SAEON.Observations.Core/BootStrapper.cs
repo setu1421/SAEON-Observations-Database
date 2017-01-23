@@ -31,6 +31,8 @@ namespace SAEON.Observations.Core
                 }
             }
             Mapper.Initialize(cfg => {
+                cfg.CreateMap<Site, SiteDTO>();
+                cfg.CreateMap<Station, StationDTO>();
                 cfg.CreateMap<UserDownload, UserDownloadDTO>();
                 cfg.CreateMap<UserQuery, UserQueryDTO>();
             });

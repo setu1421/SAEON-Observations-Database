@@ -8,12 +8,111 @@ using System.Threading.Tasks;
 namespace SAEON.Observations.Core
 {
     /// <summary>
-    /// UserDownload model
+    /// Site Data Transfer Object
+    /// </summary>
+    public class SiteDTO
+    {
+        /// <summary>
+        /// Id of the Site
+        /// </summary>
+        [Required]
+        [Key]
+        public Guid Id { get; set; }
+        /// <summary>
+        /// Code of the Site
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// Name of the Site
+        /// </summary>
+        [Required, StringLength(150)]
+        public string Name { get; set; }
+        /// <summary>
+        /// Description of the Site
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Site
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+        /// <summary>
+        /// StartDate of the Site, null means always
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+        /// <summary>
+        /// EndDate of the Site, null means always
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+    }
+
+    /// <summary>
+    /// Station Data Transfer Object
+    /// </summary>
+    public class StationDTO
+    {
+        /// <summary>
+        /// Id of the Station
+        /// </summary>
+        [Required]
+        [Key]
+        public Guid Id { get; set; }
+        /// <summary>
+        /// The SiteId of the Station
+        /// </summary>
+        [Required]
+        public Guid SiteId { get; set; }
+        /// <summary>
+        /// Code of the Station
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// Name of the Station
+        /// </summary>
+        [Required, StringLength(150)]
+        public string Name { get; set; }
+        /// <summary>
+        /// Description of the Station
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Station
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+        /// <summary>
+        /// StartDate of the site, null means always
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+        /// <summary>
+        /// EndDate of the Station, null means always
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+        /// <summary>
+        /// Latitude of the Station
+        /// </summary>
+        public double? Latitude { get; set; }
+        /// <summary>
+        /// Logitude of the Station
+        /// </summary>
+        public double? Longitude { get; set; }
+        /// <summary>
+        /// Elevation of the Station, positive above sea level, negative below sea level
+        /// </summary>
+        public double? Elevation { get; set; }
+    }
+
+    /// <summary>
+    /// UserDownload Data Transfer Object
     /// </summary>
     public class UserDownloadDTO
     {
         /// <summary>
-        /// Id of the user dowbload
+        /// Id of the user download
         /// </summary>
         [Required]
         [Key]
@@ -43,9 +142,11 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Required, StringLength(500)]
         public string URI { get; set; }
-
     }
 
+    /// <summary>
+    /// User Query Data Transfer Object
+    /// </summary>
     public class UserQueryDTO
     {
         /// <summary>

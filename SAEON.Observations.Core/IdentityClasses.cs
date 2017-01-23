@@ -5,6 +5,7 @@ using Serilog.Context;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
@@ -35,7 +36,9 @@ namespace SAEON.Observations.Core
             // Add custom user claims here
             return userIdentity;
         }
+
     }
+
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
