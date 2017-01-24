@@ -18,12 +18,14 @@ using SAEON.Observations.WebAPI.Results;
 using System.Web.Http.Description;
 using SAEON.Observations.WebAPI.Models;
 using SAEON.Observations.Core;
+using Microsoft.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [Authorize]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [RoutePrefix("api/Account")]
+    [RoutePrefix("Account")]
+    [ApiVersion("1.0")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";

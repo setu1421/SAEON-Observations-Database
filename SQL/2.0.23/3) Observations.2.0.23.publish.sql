@@ -2444,7 +2444,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_ImportBatch] (
     [Comment]        VARCHAR (8000)             NULL,
     [StatusID]       UNIQUEIDENTIFIER           NULL,
     [StatusReasonID] UNIQUEIDENTIFIER           NULL,
-    [Errors]         VARCHAR (1000)             NULL,
+    [Problems]/*[Errors]*/         VARCHAR (1000)             NULL,
     [SourceFile]     VARBINARY (MAX) FILESTREAM NULL,
     [Pass1File]      VARBINARY (MAX) FILESTREAM NULL,
     [Pass2File]      VARBINARY (MAX) FILESTREAM NULL,
@@ -2464,7 +2464,7 @@ IF EXISTS (SELECT TOP 1 1
            FROM   [dbo].[ImportBatch])
     BEGIN
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_ImportBatch] ON;
-        INSERT INTO [dbo].[tmp_ms_xx_ImportBatch] ([AddedAt], [ID], [Code], [DataSourceID], [ImportDate], [Status], [UserId], [FileName], [LogFileName], [Comment], [StatusID], [StatusReasonID], [Errors], [SourceFile], [Pass1File], [Pass2File], [Pass3File], [Pass4File], [UpdatedAt])
+        INSERT INTO [dbo].[tmp_ms_xx_ImportBatch] ([AddedAt], [ID], [Code], [DataSourceID], [ImportDate], [Status], [UserId], [FileName], [LogFileName], [Comment], [StatusID], [StatusReasonID], [Problems], /*[Errors],*/ [SourceFile], [Pass1File], [Pass2File], [Pass3File], [Pass4File], [UpdatedAt])
         SELECT   [AddedAt],
                  [ID],
                  [Code],
@@ -2477,7 +2477,7 @@ IF EXISTS (SELECT TOP 1 1
                  [Comment],
                  [StatusID],
                  [StatusReasonID],
-                 [Errors],
+                 [Problems], /*[Errors],*/
                  [SourceFile],
                  [Pass1File],
                  [Pass2File],
@@ -2906,79 +2906,79 @@ CREATE NONCLUSTERED INDEX [IX_Instrument_Sensor_UserId]
     ON [dbo].[Instrument_Sensor]([UserId] ASC);
 
 
-GO
-PRINT N'Starting rebuilding table [dbo].[Observation]...';
+--GO
+--PRINT N'Starting rebuilding table [dbo].[Observation]...';
 
 
-GO
-BEGIN TRANSACTION;
+--GO
+--BEGIN TRANSACTION;
 
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+--SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
-SET XACT_ABORT ON;
+--SET XACT_ABORT ON;
 
-CREATE TABLE [dbo].[tmp_ms_xx_Observation] (
-    [ID]                   UNIQUEIDENTIFIER     CONSTRAINT [DF_Observation_ID] DEFAULT newid() NOT NULL,
-    [SensorID]             UNIQUEIDENTIFIER     NOT NULL,
-    [ValueDate]            DATETIME             NOT NULL,
-    [RawValue]             FLOAT (53)           NULL,
-    [DataValue]            FLOAT (53)           NULL,
-    [Comment]              VARCHAR (250) SPARSE NULL,
-    [PhenomenonOfferingID] UNIQUEIDENTIFIER     NOT NULL,
-    [PhenomenonUOMID]      UNIQUEIDENTIFIER     NOT NULL,
-    [ImportBatchID]        UNIQUEIDENTIFIER     NOT NULL,
-    [StatusID]             UNIQUEIDENTIFIER     NULL,
-    [StatusReasonID]       UNIQUEIDENTIFIER     NULL,
-    [CorrelationID]        UNIQUEIDENTIFIER     NULL,
-    [UserId]               UNIQUEIDENTIFIER     NOT NULL,
-    [AddedDate]            DATETIME             CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
-    [AddedAt]              DATETIME             CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate() NULL,
-    [UpdatedAt]            DATETIME             CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate() NULL,
-    CONSTRAINT [tmp_ms_xx_constraint_PK_Observation1] PRIMARY KEY NONCLUSTERED ([ID] ASC) ON [Observations],
-    CONSTRAINT [tmp_ms_xx_constraint_UX_Observation1] UNIQUE NONCLUSTERED ([SensorID] ASC, [ImportBatchID] ASC, [ValueDate] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC) ON [Observations]
-);
+--CREATE TABLE [dbo].[tmp_ms_xx_Observation] (
+--    [ID]                   UNIQUEIDENTIFIER     CONSTRAINT [DF_Observation_ID] DEFAULT newid() NOT NULL,
+--    [SensorID]             UNIQUEIDENTIFIER     NOT NULL,
+--    [ValueDate]            DATETIME             NOT NULL,
+--    [RawValue]             FLOAT (53)           NULL,
+--    [DataValue]            FLOAT (53)           NULL,
+--    [Comment]              VARCHAR (250) SPARSE NULL,
+--    [PhenomenonOfferingID] UNIQUEIDENTIFIER     NOT NULL,
+--    [PhenomenonUOMID]      UNIQUEIDENTIFIER     NOT NULL,
+--    [ImportBatchID]        UNIQUEIDENTIFIER     NOT NULL,
+--    [StatusID]             UNIQUEIDENTIFIER     NULL,
+--    [StatusReasonID]       UNIQUEIDENTIFIER     NULL,
+--    [CorrelationID]        UNIQUEIDENTIFIER     NULL,
+--    [UserId]               UNIQUEIDENTIFIER     NOT NULL,
+--    [AddedDate]            DATETIME             CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
+--    [AddedAt]              DATETIME             CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate() NULL,
+--    [UpdatedAt]            DATETIME             CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate() NULL,
+--    CONSTRAINT [tmp_ms_xx_constraint_PK_Observation1] PRIMARY KEY NONCLUSTERED ([ID] ASC) ON [Observations],
+--    CONSTRAINT [tmp_ms_xx_constraint_UX_Observation1] UNIQUE NONCLUSTERED ([SensorID] ASC, [ImportBatchID] ASC, [ValueDate] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC) ON [Observations]
+--);
 
-CREATE UNIQUE CLUSTERED INDEX [tmp_ms_xx_index_CX_Observation1]
-    ON [dbo].[tmp_ms_xx_Observation]([AddedAt] ASC)
-    ON [Observations];
+--CREATE /*UNIQUE*/ CLUSTERED INDEX [tmp_ms_xx_index_CX_Observation1]
+--    ON [dbo].[tmp_ms_xx_Observation]([AddedAt] ASC)
+--    ON [Observations];
 
-IF EXISTS (SELECT TOP 1 1 
-           FROM   [dbo].[Observation])
-    BEGIN
-        INSERT INTO [dbo].[tmp_ms_xx_Observation] ([AddedAt], [ID], [SensorID], [ValueDate], [RawValue], [DataValue], [Comment], [PhenomenonOfferingID], [PhenomenonUOMID], [ImportBatchID], [StatusID], [StatusReasonID], [CorrelationID], [UserId], [AddedDate], [UpdatedAt])
-        SELECT   [AddedAt],
-                 [ID],
-                 [SensorID],
-                 [ValueDate],
-                 [RawValue],
-                 [DataValue],
-                 [Comment],
-                 [PhenomenonOfferingID],
-                 [PhenomenonUOMID],
-                 [ImportBatchID],
-                 [StatusID],
-                 [StatusReasonID],
-                 [CorrelationID],
-                 [UserId],
-                 [AddedDate],
-                 [UpdatedAt]
-        FROM     [dbo].[Observation]
-        ORDER BY [AddedAt] ASC;
-    END
+--IF EXISTS (SELECT TOP 1 1 
+--           FROM   [dbo].[Observation])
+--    BEGIN
+--        INSERT INTO [dbo].[tmp_ms_xx_Observation] ([AddedAt], [ID], [SensorID], [ValueDate], [RawValue], [DataValue], [Comment], [PhenomenonOfferingID], [PhenomenonUOMID], [ImportBatchID], [StatusID], [StatusReasonID], [CorrelationID], [UserId], [AddedDate], [UpdatedAt])
+--        SELECT   [AddedAt],
+--                 [ID],
+--                 [SensorID],
+--                 [ValueDate],
+--                 [RawValue],
+--                 [DataValue],
+--                 [Comment],
+--                 [PhenomenonOfferingID],
+--                 [PhenomenonUOMID],
+--                 [ImportBatchID],
+--                 [StatusID],
+--                 [StatusReasonID],
+--                 [CorrelationID],
+--                 [UserId],
+--                 [AddedDate],
+--                 [UpdatedAt]
+--        FROM     [dbo].[Observation]
+--        ORDER BY [AddedAt] ASC;
+--    END
 
-DROP TABLE [dbo].[Observation];
+--DROP TABLE [dbo].[Observation];
 
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_Observation]', N'Observation';
+--EXECUTE sp_rename N'[dbo].[tmp_ms_xx_Observation]', N'Observation';
 
-EXECUTE sp_rename N'[dbo].[Observation].[tmp_ms_xx_index_CX_Observation1]', N'CX_Observation', N'INDEX';
+--EXECUTE sp_rename N'[dbo].[Observation].[tmp_ms_xx_index_CX_Observation1]', N'CX_Observation', N'INDEX';
 
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_Observation1]', N'PK_Observation', N'OBJECT';
+--EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_Observation1]', N'PK_Observation', N'OBJECT';
 
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Observation1]', N'UX_Observation', N'OBJECT';
+--EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Observation1]', N'UX_Observation', N'OBJECT';
 
-COMMIT TRANSACTION;
+--COMMIT TRANSACTION;
 
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 
 GO

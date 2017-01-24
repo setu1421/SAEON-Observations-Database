@@ -1,15 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # SQL Server Management Studio Solution File, Format Version 13.00
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A08D3E3D-B6F1-46A8-A50D-7B9DA2533FCD}"
 	ProjectSection(SolutionItems) = preProject
 		1) PreProcess.sql = 1) PreProcess.sql
+		2) ObservationsTest.2.0.23.publish.sql = 2) ObservationsTest.2.0.23.publish.sql
 		2) ObservationsTest.2.0.23.publish.txt = 2) ObservationsTest.2.0.23.publish.txt
 		3) Observations.2.0.23.publish.sql = 3) Observations.2.0.23.publish.sql
 		3) Observations.2.0.23.publish.txt = 3) Observations.2.0.23.publish.txt
-		2) ObservationsTest.2.0.23.publish.sql = 2) ObservationsTest.2.0.23.publish.sql
+		Duplicates.sql = Duplicates.sql
+		Remove Duplicates.sql = Remove Duplicates.sql
 	EndProjectSection
 EndProject
 Global
@@ -17,7 +19,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A45A2348-E477-45B9-AA21-50ABD8DC7652}.Default|Default.ActiveCfg = Default
+		{2F1E7C21-EAF2-4D7D-8474-29B8E9724577}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

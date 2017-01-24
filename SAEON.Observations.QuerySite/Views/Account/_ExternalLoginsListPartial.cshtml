@@ -18,8 +18,33 @@
             @Html.AntiForgeryToken()
             <div id="socialLoginList">
                 <p>
-                    @foreach (AuthenticationDescription p in loginProviders) {
-                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                    @foreach (AuthenticationDescription p in loginProviders)
+                    {
+                        if (@p.Caption == "Facebook")
+                        {
+                            <button type="submit" class="btn btn-block btn-social btn-facebook" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
+                                <span class="fa fa-facebook"></span>
+                                Login with Facebook
+                            </button>
+                        }
+                        else if (@p.Caption == "Google")
+                        {
+                            <button type="submit" class="btn btn-block btn-social btn-google" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
+                                <span class="fa fa-google"></span>
+                                Login with Google
+                            </button>
+                        }
+                        else if (@p.Caption == "Microsoft")
+                        {
+                            <button type="submit" class="btn btn-block btn-social btn-microsoft" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">
+                                <span class="fa fa-windows"></span>
+                                Login with Microsoft
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                        }
                     }
                 </p>
             </div>

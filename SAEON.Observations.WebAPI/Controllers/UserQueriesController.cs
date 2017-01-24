@@ -50,9 +50,9 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <returns></returns>
         [Route]
         [ResponseType(typeof(List<UserQueryDTO>))]
-        public async Task<IHttpActionResult> Get()
+        public async Task<IHttpActionResult> GetAll()
         {
-            using (LogContext.PushProperty("Method", "Get"))
+            using (LogContext.PushProperty("Method", "GetAll"))
             {
                 try
                 {
@@ -60,7 +60,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get");
+                    Log.Error(ex, "Unable to get all");
                     throw;
                 }
             }
@@ -73,9 +73,9 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <returns></returns>
         [Route("{id:guid}")]
         [ResponseType(typeof(UserQueryDTO))]
-        public async Task<IHttpActionResult> Get(Guid id)
+        public async Task<IHttpActionResult> GetById(Guid id)
         {
-            using (LogContext.PushProperty("Method", "Get"))
+            using (LogContext.PushProperty("Method", "GetById"))
             {
                 try
                 {
@@ -142,6 +142,11 @@ namespace SAEON.Observations.WebAPI.Controllers
                     {
                         Log.Error("{itemDTO.Name} ModelState.Invalid", itemDTO);
                         return BadRequest(ModelState);
+                    }
+                    if (itemDTO.UserId != User.Identity.GetUserId())
+                    {
+                        Log.Error("{itemDTO.Name} invalid user", itemDTO);
+                        return BadRequest();
                     }
                     try
                     {
@@ -263,7 +268,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [Route("{id:guid}")]
         [Authorize(Roles = "QuerySite")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> DeleteByIdAsync(Guid id)
+        public async Task<IHttpActionResult> DeleteById(Guid id)
         {
             using (LogContext.PushProperty("Method", "DeleteById"))
             {
@@ -295,7 +300,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [Route("{name}")]
         [Authorize(Roles = "QuerySite")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> DeleteByNameAsync(string name)
+        public async Task<IHttpActionResult> DeleteByName(string name)
         {
             using (LogContext.PushProperty("Method", "DeleteByName"))
             {

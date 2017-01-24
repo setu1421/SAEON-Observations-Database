@@ -168,8 +168,8 @@ enable trigger TR_Instrument_Sensor_Update on Instrument_Sensor;
 --print 'Observation'
 --go
 --disable trigger TR_Observation_Update on Observation
---Update Observation set UpdatedAt = GetDate() where AddedAt is null and UpdatedAt is Null
---Update Observation set AddedAt = UpdatedAt where AddedAt is null
+----Update Observation set UpdatedAt = GetDate() where AddedAt is null and UpdatedAt is Null
+----Update Observation set AddedAt = UpdatedAt where AddedAt is null
 --Declare @BatchSize Int = 1000000
 --Declare @RowCount Int = @BatchSize
 --Declare @StartDate DateTime
@@ -204,21 +204,21 @@ enable trigger TR_Instrument_Sensor_Update on Instrument_Sensor;
 --  Set @StartDate = (Select top(1) Min(AddedAt) from Observation group by AddedAt having (Count(ID) > @GroupCount))
 --end;
 --enable trigger TR_Observation_Update on Observation
--- Observation
-print 'Observation'
-go
-disable trigger TR_Observation_Update on Observation;
-Update Observation set UpdatedAt = GetDate() where AddedAt is null and UpdatedAt is Null
-Update Observation set AddedAt = UpdatedAt where AddedAt is null;
-Update 
-  Observation
-Set
-  AddedAt = DATEADD(ms,(RowNum-1)*10,AddedAt)
-from
-  (Select ID, ROW_NUMBER() OVER (Partition By AddedAt Order By AddedAt, ValueDate) RowNum from Observation) src
-where
-  (Observation.ID = src.ID) and (src.RowNum > 1);
-enable trigger TR_Observation_Update on Observation;
+---- Observation
+--print 'Observation'
+--go
+--disable trigger TR_Observation_Update on Observation;
+--Update Observation set UpdatedAt = GetDate() where AddedAt is null and UpdatedAt is Null
+--Update Observation set AddedAt = UpdatedAt where AddedAt is null;
+--Update 
+--  Observation
+--Set
+--  AddedAt = DATEADD(ms,(RowNum-1)*10,AddedAt)
+--from
+--  (Select ID, ROW_NUMBER() OVER (Partition By AddedAt Order By AddedAt, ValueDate) RowNum from Observation) src
+--where
+--  (Observation.ID = src.ID) and (src.RowNum > 1);
+--enable trigger TR_Observation_Update on Observation;
 -- Offering
 print 'Offering'
 go

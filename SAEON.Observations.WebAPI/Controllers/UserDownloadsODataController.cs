@@ -14,6 +14,9 @@ using System.Web.OData.Query;
 using System.Web.OData.Routing;
 using SAEON.Observations.Core;
 using System.Web.Http.Description;
+using Serilog.Context;
+using Serilog;
+using Microsoft.AspNet.Identity;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
@@ -29,148 +32,321 @@ namespace SAEON.Observations.WebAPI.Controllers
     config.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
     */
     [ApiExplorerSettings(IgnoreApi = true)]
+    [ODataRoutePrefix("UserDownloads")]
+    [Authorize(Roles = "Administrators,DataReaders")]
     public class UserDownloadsODataController : ODataController
     {
         private ObservationsDbContext db = new ObservationsDbContext();
 
         // GET: odata/UserDownloadsOData
         [EnableQuery]
+        [ODataRoute]
         public IQueryable<UserDownload> GetUserDownloads()
         {
-            return db.UserDownloads;
+            using (LogContext.PushProperty("Method", "Get"))
+            {
+                try
+                {
+                    return db.UserDownloads.Where(i => (i.UserId == User.Identity.GetUserId())).OrderBy(i => i.Name);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get");
+                    throw;
+                }
+            }
         }
 
         // GET: odata/UserDownloadsOData(5)
         [EnableQuery]
-        public SingleResult<UserDownload> GetUserDownload([FromODataUri] Guid key)
+        [ODataRoute("({id})")]
+        public SingleResult<UserDownload> GetUserDownloadById([FromODataUri] Guid id)
         {
-            return SingleResult.Create(db.UserDownloads.Where(userDownload => userDownload.Id == key));
-        }
-
-        // PUT: odata/UserDownloadsOData(5)
-        public async Task<IHttpActionResult> Put([FromODataUri] Guid key, Delta<UserDownload> patch)
-        {
-            Validate(patch.GetEntity());
-
-            if (!ModelState.IsValid)
+            using (LogContext.PushProperty("Method", "GetUserDownloadById"))
             {
-                return BadRequest(ModelState);
-            }
-
-            UserDownload userDownload = await db.UserDownloads.FindAsync(key);
-            if (userDownload == null)
-            {
-                return NotFound();
-            }
-
-            patch.Put(userDownload);
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserDownloadExists(key))
+                try
                 {
-                    return NotFound();
+                    return SingleResult.Create(db.UserDownloads.Where(i => (i.UserId == User.Identity.GetUserId()) && i.Id == id));
                 }
-                else
+                catch (Exception ex)
                 {
+                    Log.Error(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
+        }
 
-            return Updated(userDownload);
+        [EnableQuery]
+        [ODataRoute("({name})")]
+        public SingleResult<UserDownload> GetUserDownloadByName([FromODataUri] string name)
+        {
+            using (LogContext.PushProperty("Method", "GetUserDownloadByName"))
+            {
+                try
+                {
+                    return SingleResult.Create(db.UserDownloads.Where(i => (i.UserId == User.Identity.GetUserId()) && i.Name == name));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get {name}", name);
+                    throw;
+                }
+            }
         }
 
         // POST: odata/UserDownloadsOData
-        public async Task<IHttpActionResult> Post(UserDownload userDownload)
+        [ODataRoute]
+        [Authorize(Roles = "QuerySite")]
+        public async Task<IHttpActionResult> Post(UserDownload item)
         {
-            if (!ModelState.IsValid)
+            using (LogContext.PushProperty("Method", "Post"))
             {
-                return BadRequest(ModelState);
-            }
-
-            db.UserDownloads.Add(userDownload);
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (UserDownloadExists(userDownload.Id))
+                try
                 {
-                    return Conflict();
+                    Log.Verbose("Adding {item.Name} {@item}", item);
+                    if (!ModelState.IsValid)
+                    {
+                        Log.Error("{item.Name} ModelState.Invalid", item);
+                        return BadRequest(ModelState);
+                    }
+                    if (item.UserId != User.Identity.GetUserId())
+                    {
+                        Log.Error("{item.Name} invalid user", item);
+                        return BadRequest();
+                    }
+                    item.UserId = User.Identity.GetUserId();
+                    db.UserDownloads.Add(item);
+                    try
+                    {
+                        await db.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
+                        if (db.UserDownloads.Any(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == item.Id)))
+                        {
+                            Log.Error("{item.Name} conflict", item);
+                            return Conflict();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return Created(item);
                 }
-                else
+                catch (Exception ex)
                 {
+                    Log.Error(ex, "Unable to add {item.Name}", item);
                     throw;
                 }
             }
+        }
 
-            return Created(userDownload);
+        // PUT: odata/UserDownloadsOData(5)
+        [ODataRoute("({id})")]
+        [Authorize(Roles = "QuerySite")]
+        public async Task<IHttpActionResult> PutById([FromODataUri] Guid id, Delta<UserDownload> patch)
+        {
+            using (LogContext.PushProperty("Method", "PutById"))
+            {
+                try
+                {
+                    Log.Verbose("Updating {id} {@patch}", id, patch);
+                    Validate(patch.GetEntity());
+                    if (!ModelState.IsValid)
+                    {
+                        Log.Error("{id} ModelState.Invalid", id);
+                        return BadRequest(ModelState);
+                    }
+                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
+                    if (item == null)
+                    {
+                        Log.Error("{id} not found", id);
+                        return NotFound();
+                    }
+                    patch.Put(item);
+                    await db.SaveChangesAsync();
+                    return Updated(item);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to update {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        [ODataRoute("({name})")]
+        [Authorize(Roles = "QuerySite")]
+        public async Task<IHttpActionResult> PutByName([FromODataUri] string name, Delta<UserDownload> patch)
+        {
+            using (LogContext.PushProperty("Method", "PutByName"))
+            {
+                try
+                {
+                    Log.Verbose("Updating {name} {@patch}", name, patch);
+                    Validate(patch.GetEntity());
+                    if (!ModelState.IsValid)
+                    {
+                        Log.Error("{name} ModelState.Invalid", name);
+                        return BadRequest(ModelState);
+                    }
+                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
+                    if (item == null)
+                    {
+                        Log.Error("{name} not found", name);
+                        return NotFound();
+                    }
+                    patch.Put(item);
+                    await db.SaveChangesAsync();
+                    return Updated(item);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to update {name}", name);
+                    throw;
+                }
+            }
         }
 
         // PATCH: odata/UserDownloadsOData(5)
         [AcceptVerbs("PATCH", "MERGE")]
-        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<UserDownload> patch)
+        [ODataRoute("({id})")]
+        [Authorize(Roles = "QuerySite")]
+        public async Task<IHttpActionResult> PatchById([FromODataUri] Guid id, Delta<UserDownload> patch)
         {
-            Validate(patch.GetEntity());
-
-            if (!ModelState.IsValid)
+            using (LogContext.PushProperty("Method", "PatchById"))
             {
-                return BadRequest(ModelState);
-            }
-
-            UserDownload userDownload = await db.UserDownloads.FindAsync(key);
-            if (userDownload == null)
-            {
-                return NotFound();
-            }
-
-            patch.Patch(userDownload);
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserDownloadExists(key))
+                try
                 {
-                    return NotFound();
+                    Validate(patch.GetEntity());
+                    if (!ModelState.IsValid)
+                    {
+                        Log.Error("{id} ModelState.Invalid", id);
+                        return BadRequest(ModelState);
+                    }
+                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
+                    if (item == null)
+                    {
+                        Log.Error("{id} not found", id);
+                        return NotFound();
+                    }
+                    patch.Patch(item);
+                    await db.SaveChangesAsync();
+                    return Updated(item);
                 }
-                else
+                catch (Exception ex)
                 {
+                    Log.Error(ex, "Unable to patch {id}", id);
                     throw;
                 }
             }
+        }
 
-            return Updated(userDownload);
+        [AcceptVerbs("PATCH", "MERGE")]
+        [ODataRoute("({name})")]
+        [Authorize(Roles = "QuerySite")]
+        public async Task<IHttpActionResult> PatchByName([FromODataUri] string name, Delta<UserDownload> patch)
+        {
+            using (LogContext.PushProperty("Method", "PatchByName"))
+            {
+                try
+                {
+                    Validate(patch.GetEntity());
+                    if (!ModelState.IsValid)
+                    {
+                        Log.Error("{name} ModelState.Invalid", name);
+                        return BadRequest(ModelState);
+                    }
+                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
+                    if (item == null)
+                    {
+                        Log.Error("{name} not found", name);
+                        return NotFound();
+                    }
+                    patch.Patch(item);
+                    await db.SaveChangesAsync();
+                    return Updated(item);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to patch {name}", name);
+                    throw;
+                }
+            }
         }
 
         // DELETE: odata/UserDownloadsOData(5)
-        public async Task<IHttpActionResult> Delete([FromODataUri] Guid key)
+        [ODataRoute("({id})")]
+        [Authorize(Roles = "QuerySite")]
+        public async Task<IHttpActionResult> DeleteById([FromODataUri] Guid id)
         {
-            UserDownload userDownload = await db.UserDownloads.FindAsync(key);
-            if (userDownload == null)
+            using (LogContext.PushProperty("Method", "DeleteById"))
             {
-                return NotFound();
+                try
+                {
+                    Log.Verbose("Deleting {id}", id);
+                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
+                    if (item == null)
+                    {
+                        Log.Error("{id} not found", id);
+                        return NotFound();
+                    }
+                    db.UserDownloads.Remove(item);
+                    await db.SaveChangesAsync();
+                    return StatusCode(HttpStatusCode.NoContent);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to delete {id}", id);
+                    throw;
+                }
             }
+        }
 
-            db.UserDownloads.Remove(userDownload);
-            await db.SaveChangesAsync();
-
-            return StatusCode(HttpStatusCode.NoContent);
+        [ODataRoute("({name})")]
+        [Authorize(Roles = "QuerySite")]
+        public async Task<IHttpActionResult> DeleteByName([FromODataUri] string name)
+        {
+            using (LogContext.PushProperty("Method", "DeleteById"))
+            {
+                try
+                {
+                    Log.Verbose("Deleting {name}", name);
+                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
+                    if (item == null)
+                    {
+                        Log.Error("{name} not found", name);
+                        return NotFound();
+                    }
+                    db.UserDownloads.Remove(item);
+                    await db.SaveChangesAsync();
+                    return StatusCode(HttpStatusCode.NoContent);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to delete {name}", name);
+                    throw;
+                }
+            }
         }
 
         // GET: odata/UserDownloadsOData(5)/User
         [EnableQuery]
-        public SingleResult<ApplicationUser> GetUser([FromODataUri] Guid key)
+        public SingleResult<ApplicationUser> GetUser([FromODataUri] Guid id)
         {
-            return SingleResult.Create(db.UserDownloads.Where(m => m.Id == key).Select(m => m.User));
+            using (LogContext.PushProperty("Method", "PutByName"))
+            {
+                try
+                {
+                    return SingleResult.Create(db.UserDownloads.Where(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id)).Select(i => i.User));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -182,9 +358,5 @@ namespace SAEON.Observations.WebAPI.Controllers
             base.Dispose(disposing);
         }
 
-        private bool UserDownloadExists(Guid key)
-        {
-            return db.UserDownloads.Any(e => e.Id == key);
-        }
     }
 }

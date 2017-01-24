@@ -26,7 +26,9 @@ namespace SAEON.Observations.QuerySite
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                      "~/Content/Observations.css"));
+                      "~/Content/Observations.css",
+                      "~/Content/font-awesome.css",
+                      "~/Content/bootstrap-social.css"));
         }
     }
 }

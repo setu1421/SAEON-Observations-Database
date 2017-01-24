@@ -177,6 +177,12 @@ namespace SAEON.Observations.QuerySite.Controllers
             return View(model);
         }
 
+        // Get: /Account/RegisterSuccess
+        public ActionResult RegisterSuccess()
+        {
+            return View();
+        }
+
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
