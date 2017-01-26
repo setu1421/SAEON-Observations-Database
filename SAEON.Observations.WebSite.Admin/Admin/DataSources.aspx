@@ -312,10 +312,10 @@
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitofMeasure" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="150" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="75">
+                                                <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" ToolTip-Text="Edit" />
-                                                        <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="" ToolTip-Text="Delete" />
+                                                        <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="Delete" ToolTip-Text="Delete" />
                                                     </Commands>
                                                 </ext:CommandColumn>
                                             </Columns>
@@ -601,7 +601,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="TransformationDetailWindow" runat="server" Width="450" Height="600"
+    <ext:Window ID="TransformationDetailWindow" runat="server" Width="450" Height="650"
         Closable="true" Hidden="true" Collapsible="false" Title="Transformation Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
@@ -699,14 +699,14 @@
                     <ext:Container ID="Container9" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                         <Items>
                             <ext:DateField ID="dfTransStart" DataIndex="StartDate" runat="server" FieldLabel="Start Date"
-                                AnchorHorizontal="95%" AllowBlank="false" BlankText="Start Date is required">
+                                AnchorHorizontal="95%" AllowBlank="true" BlankText="Start Date is required" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container14" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                         <Items>
-                            <ext:DateField ID="dfTransEnd" DataIndex="EndDate" runat="server" FieldLabel="Start Date"
-                                AnchorHorizontal="95%" AllowBlank="true" BlankText="Start Date is required">
+                            <ext:DateField ID="dfTransEnd" DataIndex="EndDate" runat="server" FieldLabel="End Date"
+                                AnchorHorizontal="95%" AllowBlank="true" BlankText="End Date is required" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Container>
@@ -784,13 +784,18 @@
                         <Items>
                             <ext:NumberField AllowDecimals="false" ID="tfRank" DataIndex="Rank" MaxLength="10"
                                 runat="server" FieldLabel="Transformation Rank" AnchorHorizontal="95%"
-                                AllowBlank="false" BlankText="Rank is required">
+                                AllowBlank="false" BlankText="Rank is required" MinValue="0" Number="0">
                             </ext:NumberField>
                         </Items>
                     </ext:Panel>
                     <%--=============--%>
                 </Items>
                 <Buttons>
+<%--                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                        <Listeners>
+                            <Click Handler="alert(#{TransformationDetailPanel}.validate())" />
+                        </Listeners>
+                    </ext:Button>--%>
                     <ext:Button ID="SaveTransform" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="SaveTransformation" Method="POST">
@@ -800,10 +805,18 @@
                     </ext:Button>
                 </Buttons>
                 <BottomBar>
-                    <ext:StatusBar ID="StatusBar2" runat="server" Height="25" />
+                    <ext:StatusBar ID="StatusBar2" runat="server" Height="25">
+<%--                        <Plugins>
+                            <ext:ValidationStatus
+                                runat="server"
+                                FormPanelID="TransformationDetailPanel"
+                                ValidIcon="Accept"
+                                ErrorIcon="Exclamation" />
+                        </Plugins>--%>
+                    </ext:StatusBar>
                 </BottomBar>
                 <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                        <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
                 </Listeners>
             </ext:FormPanel>
         </Content>

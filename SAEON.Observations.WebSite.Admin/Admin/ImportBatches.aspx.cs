@@ -168,9 +168,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
                                         .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
                                     //add offering
-                                    Log.Verbose("ExecuteScalar start");
                                     int totalDuplicate = q.ExecuteScalar<int>();
-                                    Log.Verbose("ExecuteScalar end");
 
                                     if (schval.IsValid && totalDuplicate == 0)
                                     {

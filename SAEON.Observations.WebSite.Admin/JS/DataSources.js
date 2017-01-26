@@ -1,30 +1,27 @@
-﻿function onCommand(e, record)
-{
-	DetailsFormPanel.getForm().reset();
-	DetailsFormPanel.getForm().loadRecord(record);
-	DetailsFormPanel.getForm().clearInvalid();
+﻿function onCommand(e, record) {
+    DetailsFormPanel.getForm().reset();
+    DetailsFormPanel.getForm().loadRecord(record);
+    DetailsFormPanel.getForm().clearInvalid();
 
 
-	tfCode.rvConfig.remoteValidated = false;
-	tfCode.rvConfig.remoteValid = false;
+    tfCode.rvConfig.remoteValidated = false;
+    tfCode.rvConfig.remoteValid = false;
 
-	tfCode.markAsValid();
-	tfName.markAsValid();
-	DetailWindow.show();
+    tfCode.markAsValid();
+    tfName.markAsValid();
+    DetailWindow.show();
 }
 
-function New()
-{
+function New() {
 
-	DetailsFormPanel.getForm().reset();
-	tfCode.rvConfig.remoteValidated = false;
-	tfCode.rvConfig.remoteValid = false;
-	DetailWindow.show();
+    DetailsFormPanel.getForm().reset();
+    tfCode.rvConfig.remoteValidated = false;
+    tfCode.rvConfig.remoteValid = false;
+    DetailWindow.show();
 
 }
 
-function DataSourceRowSelect(e, record)
-{
+function DataSourceRowSelect(e, record) {
     if (pnlSouth.isVisible()) {
         InstrumentLinksGrid.getStore().reload();
         RolesGrid.getStore().reload();
@@ -32,125 +29,116 @@ function DataSourceRowSelect(e, record)
     }
 }
 
-function handlechange(e)
-{
-	tfDefinition.rvConfig.remoteValidated = false;
-	tfDefinition.rvConfig.remoteValid = false;
-	delete tfDefinition.rvConfig.lastValue;
-	tfDefinition.performRemoteValidation();
+function handlechange(e) {
+    tfDefinition.rvConfig.remoteValidated = false;
+    tfDefinition.rvConfig.remoteValid = false;
+    delete tfDefinition.rvConfig.lastValue;
+    tfDefinition.performRemoteValidation();
 }
 
-function NewTransform()
-{
+function NewTransform() {
 
-	if (DataSourcesGrid.getSelectionModel().hasSelection())
-	{
-		TransformationDetailPanel.getForm().reset();
+    if (DataSourcesGrid.getSelectionModel().hasSelection()) {
+        TransformationDetailPanel.getForm().reset();
+        TransformationDetailPanel.getForm().clearInvalid();
 
-		tfDefinition.rvConfig.remoteValidated = false;
-		tfDefinition.rvConfig.remoteValid = false;
-		delete tfDefinition.rvConfig.lastValue;
+        tfDefinition.rvConfig.remoteValidated = false;
+        tfDefinition.rvConfig.remoteValid = false;
+        delete tfDefinition.rvConfig.lastValue;
+        tfDefinition.markAsValid();
 
-		TransformationDetailWindow.show();
-	}
-	else
-	{
-	    Ext.Msg.alert('Invalid Selection', 'Select a Data Source.');
-	}
+        TransformationDetailWindow.show();
+    }
+    else {
+        Ext.Msg.alert('Invalid Selection', 'Select a Data Source.');
+    }
 }
 
-function onTransformCommand(e, record)
-{
-	TransformationDetailPanel.getForm().reset();
-	TransformationDetailPanel.getForm().loadRecord(record);
-	TransformationDetailPanel.getForm().clearInvalid();
+function onTransformCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteTransformation(record.get('Id'), { eventMask: { showMask: true } });
+    }
+    else if (e = "Edit") {
+        TransformationDetailPanel.getForm().reset();
+        TransformationDetailPanel.getForm().loadRecord(record);
+        TransformationDetailPanel.getForm().clearInvalid();
 
-	TransformationsGrid.el.mask('Please wait', 'x-mask-loading');
+        //TransformationsGrid.el.mask('Please wait', 'x-mask-loading');
 
-	var loadcallback = function () {
-	    cbOffering.getStore().removeListener('load', loadcallback);
-	    cbOffering.setValue(record.data.PhenomenonOfferingId);
-	};
+        var loadcallback = function () {
+            cbOffering.getStore().removeListener('load', loadcallback);
+            cbOffering.setValue(record.data.PhenomenonOfferingId);
+        };
 
-	var uomloadcallback = function () {
-	    cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
-	    cbUnitofMeasure.setValue(record.data.UnitOfMeasureId);
-	    //		TransformationsGrid.el.unmask();
-	    //		TransformationDetailWindow.show()
-	};
+        var uomloadcallback = function () {
+            cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
+            cbUnitofMeasure.setValue(record.data.UnitOfMeasureId);
+        };
 
-	//
-	var newOloadcallback = function () {
-	    sbNewOffering.getStore().removeListener('load', newOloadcallback);
-	    sbNewOffering.setValue(record.data.NewPhenomenonOfferingID);
-	};
+        //
+        var newOloadcallback = function () {
+            sbNewOffering.getStore().removeListener('load', newOloadcallback);
+            sbNewOffering.setValue(record.data.NewPhenomenonOfferingID);
+        };
 
-	var newUOMloadcallback = function () {
-	    sbNewUoM.getStore().removeListener('load', newUOMloadcallback);
-	    sbNewUoM.setValue(record.data.NewPhenomenonUOMID);
-	    TransformationsGrid.el.unmask();
-	    TransformationDetailWindow.show();
-	};
-	//
+        var newUOMloadcallback = function () {
+            sbNewUoM.getStore().removeListener('load', newUOMloadcallback);
+            sbNewUoM.setValue(record.data.NewPhenomenonUOMID);
+        };
+        //
 
-	tfDefinition.rvConfig.remoteValidated = false;
-	tfDefinition.rvConfig.remoteValid = false;
-	tfDefinition.markAsValid();
-	delete tfDefinition.rvConfig.lastValue;
+        tfDefinition.rvConfig.remoteValidated = false;
+        tfDefinition.rvConfig.remoteValid = false;
+        tfDefinition.markAsValid();
+        delete tfDefinition.rvConfig.lastValue; 
 
-	cbOffering.getStore().on("load", loadcallback);
-	cbUnitofMeasure.getStore().on("load", uomloadcallback);
+        cbOffering.getStore().on("load", loadcallback);
+        cbUnitofMeasure.getStore().on("load", uomloadcallback);
 
-	//
-	sbNewOffering.getStore().on("load", newOloadcallback);
-	sbNewUoM.getStore().on("load", newUOMloadcallback);
-	//
+        //
+        sbNewOffering.getStore().on("load", newOloadcallback);
+        sbNewUoM.getStore().on("load", newUOMloadcallback);
+        
 
-	cbPhenomenon.setValueAndFireSelect(record.data.PhenomenonID);
-
-
-
+        cbPhenomenon.setValueAndFireSelect(record.data.PhenomenonID);
+        //cbOffering.setValueAndFireSelect(record.data.PhenomenonOfferingID)
+        //cbUnitofMeasure.setValueAndFireSelect(record.data.PhenomenonUOMID)
+        TransformationDetailWindow.show();
+    }
 }
 
-function CloseAvailableRole()
-{
-	RolesGrid.selModel.clearSelections();
+function CloseAvailableRole() {
+    RolesGrid.selModel.clearSelections();
 }
 
-function FrequencyUpdate()
-{
+function FrequencyUpdate() {
 
-	if (cbUpdateFrequency.getValue() === '0')
-	{
-		tfUrl.allowBlank = true;
-		tfUrl.markAsValid();
+    if (cbUpdateFrequency.getValue() === '0') {
+        tfUrl.allowBlank = true;
+        tfUrl.markAsValid();
 
 
-		StartDate.allowBlank = true;
-		StartDate.markAsValid();
-	}
-	else
-	{
-		tfUrl.allowBlank = false;
-		StartDate.allowBlank = false;
-	}
+        StartDate.allowBlank = true;
+        StartDate.markAsValid();
+    }
+    else {
+        tfUrl.allowBlank = false;
+        StartDate.allowBlank = false;
+    }
 }
 
-function onRoleCommand(e, record)
-{
-	if (e === 'Delete')
-	{
-		DirectCall.ConfirmDeleteRole(record.get('Id'), { eventMask: { showMask: true} });
-	}
-	if (e === 'Edit')
-	{
-		RoleDetailFormPanel.getForm().reset();
-		RoleDetailFormPanel.getForm().loadRecord(record);
-		RoleDetailFormPanel.getForm().clearInvalid();
-		//$('#hiddenRoleDetail').val(record.id);
+function onRoleCommand(e, record) {
+    if (e === 'Delete') {
+        DirectCall.ConfirmDeleteRole(record.get('Id'), { eventMask: { showMask: true } });
+    }
+    if (e === 'Edit') {
+        RoleDetailFormPanel.getForm().reset();
+        RoleDetailFormPanel.getForm().loadRecord(record);
+        RoleDetailFormPanel.getForm().clearInvalid();
+        //$('#hiddenRoleDetail').val(record.id);
 
-		RoleDetailWindow.show();
-	}
+        RoleDetailWindow.show();
+    }
 
 }
 

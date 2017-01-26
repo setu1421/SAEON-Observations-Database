@@ -302,7 +302,9 @@ public class ImportSchemaHelper : IDisposable
                                                 .InnerJoin(TransformationType.IdColumn, DataSourceTransformation.TransformationTypeIDColumn)
                                                 .Where(PhenomenonOffering.IdColumn).IsEqualTo(offId)
                                                 .And(DataSourceTransformation.DataSourceIDColumn).IsEqualTo(this.dataSource.Id)
-                                                .And(DataSourceTransformation.StartDateColumn).IsLessThanOrEqualTo(DateTime.Now.Date)
+                                                .AndExpression(DataSourceTransformation.Columns.StartDate).IsNull()
+                                                    .Or(DataSourceTransformation.StartDateColumn).IsLessThanOrEqualTo(DateTime.Now.Date)
+                                                .CloseExpression()
                                                 .AndExpression(DataSourceTransformation.Columns.EndDate).IsNull()
                                                     .Or(DataSourceTransformation.EndDateColumn).IsGreaterThanOrEqualTo(DateTime.Now)
                                                 .CloseExpression()
@@ -329,7 +331,7 @@ public class ImportSchemaHelper : IDisposable
     {
         using (LogContext.PushProperty("Method", "ProcessSchema"))
         {
-            Log.Information("Version 1.9");
+            Log.Information("Version 1.10");
             try
             {
                 BuildSchemaDefinition();
@@ -542,6 +544,7 @@ public class ImportSchemaHelper : IDisposable
                         else
                         {
                             rec.FieldRawValue = RawValue;
+                            rec.RawValue = null;
                             Double dvalue = -1;
 
                             // Possibly do lookups here
@@ -614,13 +617,13 @@ public class ImportSchemaHelper : IDisposable
 
                 if (process)
                 {
-                    DateTime trnsenddate = trns.EndDate ?? DateTime.MaxValue;
-
-                    if (!(rec.DateValue >= trns.StartDate && rec.DateValue <= trnsenddate))
+                    if (trns.StartDate.HasValue && (rec.DateValue < trns.StartDate.Value))
+                        process = false;
+                    if (trns.EndDate.HasValue && (rec.DateValue > trns.EndDate.Value))
                         process = false;
                 }
 
-                if (!rec.RawValue.HasValue) process = false;
+                if ((trns.TransformationTypeID.ToString() != TransformationType.Lookup) && !rec.RawValue.HasValue) process = false;
 
                 if (!process)
                 {

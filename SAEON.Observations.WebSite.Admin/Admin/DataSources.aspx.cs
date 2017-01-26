@@ -374,91 +374,109 @@ public partial class Admin_DataSources : System.Web.UI.Page
         try
         {
 
-            RowSelectionModel datasourceRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
-
-            DataSourceTransformation dstransform = new DataSourceTransformation();
-
-            //Check for outdated Transforms
-            SqlQuery q = new Select().From<DataSourceTransformation>()
-                        .Where(DataSourceTransformation.TransformationTypeIDColumn).IsEqualTo(cbTransformType.SelectedItem.Value)
-                        .And(DataSourceTransformation.PhenomenonIDColumn).IsEqualTo(cbPhenomenon.SelectedItem.Value)
-                        .And(DataSourceTransformation.DataSourceIDColumn).IsEqualTo(datasourceRow.SelectedRecordID)
-                        .AndExpression(DataSourceTransformation.EndDateColumn.QualifiedName).IsNull().Or(DataSourceTransformation.EndDateColumn).IsGreaterThanOrEqualTo(dfTransStart.SelectedDate).CloseExpression();
-
+            RowSelectionModel masterRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            DataSourceTransformation dstransform = null;
             if (String.IsNullOrEmpty(tfTransID.Text))
-                dstransform.Id = Guid.NewGuid();
+            {
+                dstransform = new DataSourceTransformation();
+            }
             else
             {
                 dstransform = new DataSourceTransformation(tfTransID.Text.Trim());
-                q = q.And(DataSourceTransformation.IdColumn).IsNotEqualTo(dstransform.Id);
             }
 
-            DataSourceTransformationCollection OutdatedItems = q.ExecuteAsCollection<DataSourceTransformationCollection>();
+            // --> Removed 20170126 TimPN
+            ////Check for outdated Transforms
+            //SqlQuery q = new Select().From<DataSourceTransformation>()
+            //            .Where(DataSourceTransformation.TransformationTypeIDColumn).IsEqualTo(cbTransformType.SelectedItem.Value)
+            //            .And(DataSourceTransformation.PhenomenonIDColumn).IsEqualTo(cbPhenomenon.SelectedItem.Value)
+            //            .And(DataSourceTransformation.DataSourceIDColumn).IsEqualTo(datasourceRow.SelectedRecordID)
+            //            .AndExpression(DataSourceTransformation.EndDateColumn.QualifiedName).IsNull().Or(DataSourceTransformation.EndDateColumn).IsGreaterThanOrEqualTo(dfTransStart.SelectedDate).CloseExpression();
 
-            using (TransactionScope ts = new TransactionScope())
+            //if (String.IsNullOrEmpty(tfTransID.Text))
+            //    dstransform.Id = Guid.NewGuid();
+            //else
+            //{
+            //    dstransform = new DataSourceTransformation(tfTransID.Text.Trim());
+            //    q = q.And(DataSourceTransformation.IdColumn).IsNotEqualTo(dstransform.Id);
+            //}
+            //DataSourceTransformationCollection OutdatedItems = q.ExecuteAsCollection<DataSourceTransformationCollection>();
+            // --< Removed 20170126 TimPN
+
+            // --> Removed 20170126 TimPN
+            //foreach (var item in OutdatedItems)
+            //{
+            //    item.EndDate = dfTransStart.SelectedDate.Date;
+            //    item.Save();
+            //}
+            // --< Removed 20170126 TimPN
+
+            dstransform.DataSourceID = masterID;
+            dstransform.TransformationTypeID = new Guid(cbTransformType.SelectedItem.Value);
+            dstransform.PhenomenonID = new Guid(cbPhenomenon.SelectedItem.Value);
+
+            if (cbOffering.SelectedItem.Value != null)
+                dstransform.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
+            else
+                dstransform.PhenomenonOfferingID = null;
+
+            if (cbUnitofMeasure.SelectedItem.Value != null)
+                dstransform.PhenomenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);
+            else
+                dstransform.PhenomenonUOMID = null;
+
+            //9ca36c10-cbad-4862-9f28-591acab31237 = Quality Control on Values
+            if (new Guid(cbTransformType.SelectedItem.Value) != new Guid("9ca36c10-cbad-4862-9f28-591acab31237"))
             {
-                using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
-                {
 
-                    foreach (var item in OutdatedItems)
-                    {
-                        item.EndDate = dfTransStart.SelectedDate.Date;
-                        item.Save();
-                    }
+                if (sbNewOffering.SelectedItem.Value != null)
+                    dstransform.NewPhenomenonOfferingID = new Guid(sbNewOffering.SelectedItem.Value);
+                else
+                    dstransform.NewPhenomenonOfferingID = null;
 
-                    dstransform.DataSourceID = new Guid(datasourceRow.SelectedRecordID);
-                    dstransform.TransformationTypeID = new Guid(cbTransformType.SelectedItem.Value);
-                    dstransform.PhenomenonID = new Guid(cbPhenomenon.SelectedItem.Value);
-
-                    if (cbOffering.SelectedItem.Value != null)
-                        dstransform.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
-                    else
-                        dstransform.PhenomenonOfferingID = null;
-
-                    if (cbUnitofMeasure.SelectedItem.Value != null)
-                        dstransform.PhenomenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);
-                    else
-                        dstransform.PhenomenonUOMID = null;
-
-                    //9ca36c10-cbad-4862-9f28-591acab31237 = Quality Control on Values
-                    if (new Guid(cbTransformType.SelectedItem.Value) != new Guid("9ca36c10-cbad-4862-9f28-591acab31237"))
-                    {
-
-                        if (sbNewOffering.SelectedItem.Value != null)
-                            dstransform.NewPhenomenonOfferingID = new Guid(sbNewOffering.SelectedItem.Value);
-                        else
-                            dstransform.NewPhenomenonOfferingID = null;
-
-                        if (sbNewUoM.SelectedItem.Value != null)
-                            dstransform.NewPhenomenonUOMID = new Guid(sbNewUoM.SelectedItem.Value);
-                        else
-                            dstransform.NewPhenomenonUOMID = null;
-                    }
-                    else
-                    {
-                        dstransform.NewPhenomenonOfferingID = null;
-                        dstransform.NewPhenomenonUOMID = null;
-                    }
-                    //
-
-                    if (dfTransStart.SelectedDate.Year < 1900)
-                    {
-                        //dstransform.StartDate = null;
-                    }
-                    else
-                        dstransform.StartDate = dfTransStart.SelectedDate;
-                    if (dfTransEnd.SelectedDate.Year < 1900)
-                        dstransform.EndDate = null;
-                    else
-                        dstransform.EndDate = dfTransEnd.SelectedDate;
-                    dstransform.Definition = tfDefinition.Text.Trim().ToLower();
-
-
-                    dstransform.Save();
-                }
-
-                ts.Complete();
+                if (sbNewUoM.SelectedItem.Value != null)
+                    dstransform.NewPhenomenonUOMID = new Guid(sbNewUoM.SelectedItem.Value);
+                else
+                    dstransform.NewPhenomenonUOMID = null;
             }
+            else
+            {
+                dstransform.NewPhenomenonOfferingID = null;
+                dstransform.NewPhenomenonUOMID = null;
+            }
+            //
+
+            if (dfTransStart.SelectedDate.Year < 1900)
+            {
+                dstransform.StartDate = null;
+            }
+            else
+                dstransform.StartDate = dfTransStart.SelectedDate;
+            if (dfTransEnd.SelectedDate.Year < 1900)
+                dstransform.EndDate = null;
+            else
+                dstransform.EndDate = dfTransEnd.SelectedDate;
+            dstransform.Definition = tfDefinition.Text.Trim().ToLower();
+            dstransform.Rank = (int)tfRank.Number;
+            dstransform.Save();
+            Auditing.Log("DataSources.SaveTransformation", new Dictionary<string, object> {
+                { "DataSourceID", dstransform.DataSourceID},
+                { "DataSourceCode", dstransform.DataSource.Code},
+                { "TransformationTypeID", dstransform.TransformationTypeID},
+                { "TransformationTypeName", dstransform.TransformationType.Name },
+                { "PhenmenonID", dstransform.PhenomenonID},
+                {"PhenomenonName", dstransform.Phenomenon.Name },
+                {"PhenomenonOfferingID", dstransform.PhenomenonOfferingID },
+                {"OfferingName", dstransform.PhenomenonOffering?.Offering.Name },
+                {"PhenomenonUnitOfMeasureID", dstransform.PhenomenonUOMID },
+                {"UnitOfMeasureUnit", dstransform.PhenomenonUOM?.UnitOfMeasure.Unit },
+                {"NewPhenomenonOfferingID", dstransform.NewPhenomenonOfferingID },
+                {"NewPhenomenonUnitOfMeasureID", dstransform.NewPhenomenonUOMID },
+                {"StartDate", dstransform.StartDate },
+                {"EndDate", dstransform.EndDate },
+                {"Rank", dstransform.Rank }
+                });
 
             TransformationsGrid.GetStore().DataBind();
 
@@ -469,6 +487,31 @@ public partial class Admin_DataSources : System.Web.UI.Page
             Log.Error(ex, "Unable to save transformation");
             MessageBoxes.Error(ex, "Error", "Unable to save transformation");
             throw;
+        }
+    }
+
+    [DirectMethod]
+    public void ConfirmDeleteTransformation(Guid aID)
+    {
+        MessageBoxes.Confirm(
+            "Confirm Delete",
+            String.Format("DirectCall.DeleteTransformation(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
+            "Are you sure you want to delete this transformation?");
+    }
+
+    [DirectMethod]
+    public void DeleteTransformation(Guid aID)
+    {
+        try
+        {
+            DataSourceTransformation.Delete(aID);
+            Auditing.Log("DataSource.DeleteTransformation", new Dictionary<string, object> { { "ID", aID } });
+            TransformationsGrid.GetStore().DataBind();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "DataSource.DeleteTransform({aID})", aID);
+            MessageBoxes.Error(ex, "Error", "Unable to delete transformation");
         }
     }
 
@@ -521,48 +564,6 @@ public partial class Admin_DataSources : System.Web.UI.Page
         sbNewUoM.GetStore().DataBind();
     }
 
-    #endregion
-
-    #region Roles
-    protected void SaveRoleDetail(object sender, DirectEventArgs e)
-    {
-        try
-        {
-            DataSourceRole dsRole = new DataSourceRole(hiddenRoleDetail.Text);
-
-            if (dfRoleDetailStart.SelectedDate.Year < 1900)
-                dsRole.DateStart = new DateTime(1901,1,1);
-            else
-                dsRole.DateStart = dfRoleDetailStart.SelectedDate;
-            if (dfRoleDetailEnd.SelectedDate.Year < 1900)
-                dsRole.DateEnd = new DateTime(2101, 1, 1);
-            else
-                dsRole.DateEnd = dfRoleDetailEnd.SelectedDate;
-            dsRole.IsRoleReadOnly = cbIsRoleReadOnly.Checked;
-
-            dsRole.Save();
-
-            Auditing.Log("DataSources.SaveRoleDetail", new Dictionary<string, object> {
-                { "DataSourceID", dsRole.DataSourceID},
-                { "DataSourceCode", dsRole.DataSource.Code},
-                { "RoleID", dsRole.RoleId },
-                { "RoleName", dsRole.AspnetRole.RoleName },
-                { "DateStart", dsRole.DateStart },
-                { "DateEnd", dsRole.DateEnd},
-                { "IsReadOnly", dsRole.IsRoleReadOnly }
-                            });
-            RolesGrid.GetStore().DataBind();
-
-            RoleDetailWindow.Hide();
-
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Unable to save role detail");
-            MessageBoxes.Error(ex, "Error", "Unable to save role detail");
-        }
-    }
-
     protected void OnDefinitionValidation(object sender, RemoteValidationEventArgs e)
     {
 
@@ -585,6 +586,10 @@ public partial class Admin_DataSources : System.Web.UI.Page
                         e.Success = true;
                         break;
                     case TransformationType.QualityControlValues:
+                        JSON.Deserialize<Dictionary<string, double>>(json);
+                        e.Success = true;
+                        break;
+                    case TransformationType.Lookup:
                         JSON.Deserialize<Dictionary<string, double>>(json);
                         e.Success = true;
                         break;
@@ -628,6 +633,48 @@ public partial class Admin_DataSources : System.Web.UI.Page
         {
             e.ErrorMessage = "Invalid Definition.";
             e.Success = false;
+        }
+    }
+
+    #endregion
+
+    #region Roles
+    protected void SaveRoleDetail(object sender, DirectEventArgs e)
+    {
+        try
+        {
+            DataSourceRole dsRole = new DataSourceRole(hiddenRoleDetail.Text);
+
+            if (dfRoleDetailStart.SelectedDate.Year < 1900)
+                dsRole.DateStart = new DateTime(1901, 1, 1);
+            else
+                dsRole.DateStart = dfRoleDetailStart.SelectedDate;
+            if (dfRoleDetailEnd.SelectedDate.Year < 1900)
+                dsRole.DateEnd = new DateTime(2101, 1, 1);
+            else
+                dsRole.DateEnd = dfRoleDetailEnd.SelectedDate;
+            dsRole.IsRoleReadOnly = cbIsRoleReadOnly.Checked;
+
+            dsRole.Save();
+
+            Auditing.Log("DataSources.SaveRoleDetail", new Dictionary<string, object> {
+                { "DataSourceID", dsRole.DataSourceID},
+                { "DataSourceCode", dsRole.DataSource.Code},
+                { "RoleID", dsRole.RoleId },
+                { "RoleName", dsRole.AspnetRole.RoleName },
+                { "DateStart", dsRole.DateStart },
+                { "DateEnd", dsRole.DateEnd},
+                { "IsReadOnly", dsRole.IsRoleReadOnly }
+                            });
+            RolesGrid.GetStore().DataBind();
+
+            RoleDetailWindow.Hide();
+
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Unable to save role detail");
+            MessageBoxes.Error(ex, "Error", "Unable to save role detail");
         }
     }
 

@@ -123,7 +123,7 @@
                                         <ext:Column Header="FileName" DataIndex="FileName" Width="200" />
                                         <ext:Column Header="LogFileName" DataIndex="LogFileName" Width="200" />
                                         <ext:Column Header="Status" DataIndex="StatusDescription" Width="150" />
-                                        <ext:CommandColumn Width="50">
+                                        <ext:CommandColumn Width="75">
                                             <Commands>
                                                 <ext:GridCommand Icon="Pencil" CommandName="Move" Text="" ToolTip-Text="Move Batch">
                                                 </ext:GridCommand>
