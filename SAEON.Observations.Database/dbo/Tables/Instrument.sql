@@ -85,8 +85,8 @@ BEGIN
         Instrument src
         inner join inserted ins 
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --> Changed 2.0.15 20161102 TimPN
 --< Added 2.0.4 20160508 TimPN
