@@ -27,10 +27,7 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataSourceTransformation_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSourceTransformation_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160715 TimPN
---> Changed 2.0.8 20160715 TimPN
---    CONSTRAINT [PK_DataSourceTransformation] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_DataSourceTransformation] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.8 20160715 TimPN
+    CONSTRAINT [PK_DataSourceTransformation] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSourceTransformation_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]),
     CONSTRAINT [FK_DataSourceTransformation_Phenomenon] FOREIGN KEY ([PhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]),
     CONSTRAINT [FK_DataSourceTransformation_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
@@ -50,13 +47,6 @@
     CONSTRAINT [UX_DataSourceTransformation] UNIQUE ([DataSourceID], [SensorID], [Rank], [TransformationTypeID], [PhenomenonID], [PhenomenonOfferingID], [PhenomenonUOMID], [NewPhenomenonOfferingID], [NewPhenomenonUOMID], [StartDate], [EndDate])
 --< Added 2.0.8 20160726 TimPN
 );
---> Added 2.0.8 20160715 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_DataSourceTransformation] ON [dbo].[DataSourceTransformation] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_DataSourceTransformation] ON [dbo].[DataSourceTransformation] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.8 20160715 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_DataSourceTransformation_DataSourceID] ON [dbo].[DataSourceTransformation] ([DataSourceID])
@@ -123,8 +113,8 @@ BEGIN
         DataSourceTransformation src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --> Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160715 TimPN

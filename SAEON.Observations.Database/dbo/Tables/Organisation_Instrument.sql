@@ -16,20 +16,13 @@ CREATE TABLE [dbo].[Organisation_Instrument]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Instrument_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Instrument_UpdatedAt] DEFAULT GetDate(), 
---> Changed 2.0.23 20170112 TimPN
---    CONSTRAINT [PK_Organisation_Instrument] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_Organisation_Instrument] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.23 20170112 TimPN
+    CONSTRAINT [PK_Organisation_Instrument] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Organisation_Instrument_Organisation] FOREIGN KEY ([OrganisationID]) REFERENCES [dbo].[Organisation] ([ID]),
     CONSTRAINT [FK_Organisation_Instrument_Instrument] FOREIGN KEY ([InstrumentID]) REFERENCES [dbo].[Instrument] ([ID]),
     CONSTRAINT [FK_Organisation_Instrument_OrganisationRole] FOREIGN KEY ([OrganisationRoleID]) REFERENCES [dbo].[OrganisationRole] ([ID]),
     CONSTRAINT [FK_Organisation_Instrument_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [UX_Organisation_Instrument] UNIQUE ([OrganisationID],[InstrumentID],[OrganisationRoleID],[StartDate],[EndDate])
 )
---> Added 2.0.23 20170112 TimPN
-GO
-CREATE UNIQUE CLUSTERED INDEX [CX_Organisation_Instrument] ON [dbo].[Organisation_Instrument] ([AddedAt])
---< Added 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_Organisation_Instrument_InstrumentID] ON [dbo].[Organisation_Instrument] ([InstrumentID])
 GO
@@ -77,8 +70,8 @@ BEGIN
         Organisation_Instrument src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.5 20160530 TimPN

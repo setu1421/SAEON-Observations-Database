@@ -19,21 +19,11 @@ CREATE TABLE [dbo].[Site]
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Site_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Site_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.3 20160421 TimPN
---> Changed 2.0.5 20160411 TimPN
---    CONSTRAINT [PK_Site] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_Site] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.5 20160411 TimPN
+    CONSTRAINT [PK_Site] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_Site_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_Site_Name] UNIQUE ([Name]),
     CONSTRAINT [FK_Site_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
---> Added 2.0.5 20160411 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_Site] ON [dbo].[Site] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_Site] ON [dbo].[Site] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.5 20160411 TimPN
 GO
 CREATE INDEX [IX_Site_UserId] ON [dbo].[Site] ([UserId])
 --< Added 2.0.1 20160406 TimPN
@@ -78,8 +68,8 @@ BEGIN
         Site src
         inner join inserted ins 
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.3 20160421 TimPN

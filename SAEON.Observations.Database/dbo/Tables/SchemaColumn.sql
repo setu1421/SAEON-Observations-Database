@@ -16,7 +16,7 @@ CREATE TABLE [dbo].[SchemaColumn]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumn_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumn_UpdatedAt] DEFAULT GetDate(), 
-    CONSTRAINT [PK_SchemaColumn] PRIMARY KEY NONCLUSTERED ([ID]),
+    CONSTRAINT [PK_SchemaColumn] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_SchemaColumn_DataSchema] FOREIGN KEY ([DataSchemaID]) REFERENCES [dbo].[DataSchema] ([ID]),
     CONSTRAINT [FK_SchemaColumn_SchemaColumnType] FOREIGN KEY ([SchemaColumnTypeID]) REFERENCES [dbo].[SchemaColumnType] ([ID]),
     CONSTRAINT [FK_SchemaColumn_Phenomenon] FOREIGN KEY ([PhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]),
@@ -26,11 +26,6 @@ CREATE TABLE [dbo].[SchemaColumn]
     CONSTRAINT [UX_SchemaColumn_DataSchemaID_Number] UNIQUE ([DataSchemaID],[Number]),
     CONSTRAINT [UX_SchemaColumn_DataSchemaID_Name] UNIQUE ([DataSchemaID],[Name])
 )
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_SchemaColumn] ON [dbo].[SchemaColumn] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_SchemaColumn] ON [dbo].[SchemaColumn] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_SchemaColumn_DataSchemaID] ON [dbo].[SchemaColumn] ([DataSchemaID])
 GO
@@ -78,8 +73,8 @@ BEGIN
         SchemaColumn src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.11 20160908 TimPN

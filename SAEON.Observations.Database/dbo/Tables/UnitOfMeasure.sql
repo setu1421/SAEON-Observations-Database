@@ -8,10 +8,7 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_UnitOfMeasure_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_UnitOfMeasure_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160718 TimPN
---> Changed 2.0.8 20160718 TimPN
---    CONSTRAINT [PK_UnitOfMeasure] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_UnitOfMeasure] PRIMARY KEY NONCLUSTERED ([ID]),
---> Changed 2.0.8 20160718 TimPN
+    CONSTRAINT [PK_UnitOfMeasure] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_UnitOfMeasure_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --> Changed 20160329 TimPN
 --    CONSTRAINT [IX_UnitOfMeasure_Code] UNIQUE ([Code]),
@@ -22,13 +19,6 @@
     CONSTRAINT [UX_UnitOfMeasure_Unit] UNIQUE ([Unit])
 --< Changed 20160329 TimPN
 );
---> Added 2.0.8 20160718 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_UnitOfMeasure] ON [dbo].[UnitOfMeasure] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_UnitOfMeasure] ON [dbo].[UnitOfMeasure] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.8 20160718 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_UnitOfMeasure_UserId] ON [dbo].[UnitOfMeasure] ([UserId])
@@ -69,8 +59,8 @@ BEGIN
         UnitOfMeasure src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160718 TimPN

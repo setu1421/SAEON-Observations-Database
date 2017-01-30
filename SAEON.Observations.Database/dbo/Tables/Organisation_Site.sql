@@ -16,18 +16,13 @@ CREATE TABLE [dbo].[Organisation_Site]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Site_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Site_UpdatedAt] DEFAULT GetDate(), 
-    CONSTRAINT [PK_Organisation_Site] PRIMARY KEY NONCLUSTERED ([ID]),
+    CONSTRAINT [PK_Organisation_Site] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Organisation_Site_Organisation] FOREIGN KEY ([OrganisationID]) REFERENCES [dbo].[Organisation] ([ID]),
     CONSTRAINT [FK_Organisation_Site_Site] FOREIGN KEY ([SiteID]) REFERENCES [dbo].[Site] ([ID]),
     CONSTRAINT [FK_Organisation_Site_OrganisationRole] FOREIGN KEY ([OrganisationRoleID]) REFERENCES [dbo].[OrganisationRole] ([ID]),
     CONSTRAINT [FK_Organisation_Site_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [UX_Organisation_Site] UNIQUE ([OrganisationID],[SiteID],[OrganisationRoleID],[StartDate],[EndDate])
 )
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_Organisation_Site] ON [dbo].[Organisation_Site] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_Organisation_Site] ON [dbo].[Organisation_Site] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_Organisation_Site_OrganisationID] ON [dbo].[Organisation_Site] ([OrganisationID])
 GO
@@ -75,8 +70,8 @@ BEGIN
         Organisation_Site src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.5 20160530 TimPN

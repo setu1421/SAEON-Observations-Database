@@ -38,16 +38,13 @@
     [RawRecordData]              VARCHAR (500)    NULL,
     [RawFieldValue]              VARCHAR (50)     NOT NULL,
 --> Added 2.0.15 20161024 TimPN
-	[CorrelationID] UNIQUEIDENTIFIER NULL,
+    [CorrelationID] UNIQUEIDENTIFIER NULL,
 --< Added 2.0.15 20161024 TimPN
 --> Added 2.0.8 20160708 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataLog_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataLog_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160708 TimPN
---> Changed 2.0.8 20160708 TimPN
---    CONSTRAINT [PK_DataLog] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_DataLog] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.8 20160708 TimPN
+    CONSTRAINT [PK_DataLog] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataLog_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_DataLog_DataSourceTransformation] FOREIGN KEY ([DataSourceTransformationID]) REFERENCES [dbo].[DataSourceTransformation] ([ID]),
     CONSTRAINT [FK_DataLog_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]),
@@ -65,13 +62,6 @@
     CONSTRAINT [UX_DataLog] Unique ([ImportBatchID], [SensorID], [ImportDate], [ValueDate], [ValueTime], [PhenomenonOfferingID], [PhenomenonUOMID])
 --> Added 2.0.9 20160905 TimPN
 );
---> Added 2.0.8 20160708 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_DataLog] ON [dbo].[DataLog] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_DataLog] ON [dbo].[DataLog] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.8 20160708 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_DataLog_ImportBatchID] ON [dbo].[DataLog]([ImportBatchID]);
@@ -131,8 +121,8 @@ BEGIN
         DataLog src
         inner join inserted ins 
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160708 TimPN

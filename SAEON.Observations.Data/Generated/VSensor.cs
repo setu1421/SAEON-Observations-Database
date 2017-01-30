@@ -170,7 +170,7 @@ namespace SAEON.Observations.Data{
                 colvarSite.DataType = DbType.AnsiString;
                 colvarSite.MaxLength = 150;
                 colvarSite.AutoIncrement = false;
-                colvarSite.IsNullable = false;
+                colvarSite.IsNullable = true;
                 colvarSite.IsPrimaryKey = false;
                 colvarSite.IsForeignKey = false;
                 colvarSite.IsReadOnly = false;

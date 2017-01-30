@@ -11,24 +11,13 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_TransformationType_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_TransformationType_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160718 TimPN
---> Changed 2.0.8 20160718 TimPN
---    CONSTRAINT [PK_TransformationType] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_TransformationType] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.8 20160718 TimPN
+    CONSTRAINT [PK_TransformationType] PRIMARY KEY CLUSTERED ([ID]),
 --> Added 2.0.0 20160406 TimPN
     CONSTRAINT [UX_TransformationType_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_TransformationType_Name] UNIQUE ([Name]),
     CONSTRAINT [FK_TransformationType_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --< Added 2.0.0 20160406 TimPN
 );
---> Added 2.0.8 20160718 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_TransformationType] ON [dbo].[TransformationType] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_TransformationType] ON [dbo].[TransformationType] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.8 20160718 TimPN
---> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_TransformationType_UserId] ON [dbo].[TransformationType] ([UserId])
 --< Added 2.0.0 20160406 TimPN
@@ -68,8 +57,8 @@ BEGIN
         TransformationType src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160718 TimPN

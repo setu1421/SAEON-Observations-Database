@@ -8,14 +8,9 @@ CREATE TABLE [dbo].[AuditLog]
 --> Added 2.0.3 20160421 TimPN
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_AuditLog_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.3 20160421 TimPN
-    CONSTRAINT [PK_AuditLog] PRIMARY KEY NONCLUSTERED ([ID]),
+    CONSTRAINT [PK_AuditLog] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_AuditLog_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [IX_AuditLog_AddedAt] ON [dbo].AuditLog ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_AuditLog_AddedAt] ON [dbo].AuditLog ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_AuditLog_UserId] ON [dbo].AuditLog ([UserId])
 --< Added 2.0.2 20160419 TimPN
@@ -34,7 +29,7 @@ BEGIN
         UpdatedAt = NULL
     from
         AuditLog src
-		inner join inserted ins 
+        inner join inserted ins 
             on (ins.ID = src.ID)
 END
 GO
@@ -53,10 +48,10 @@ BEGIN
         UpdatedAt = GETDATE()
     from
         AuditLog src
-		inner join inserted ins 
+        inner join inserted ins 
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --> Changed 2.0.15 20161102 TimPN
 --< Added 2.0.3 20160421 TimPN

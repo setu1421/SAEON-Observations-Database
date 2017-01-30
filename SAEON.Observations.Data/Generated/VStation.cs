@@ -242,7 +242,7 @@ namespace SAEON.Observations.Data{
                 colvarSiteCode.DataType = DbType.AnsiString;
                 colvarSiteCode.MaxLength = 50;
                 colvarSiteCode.AutoIncrement = false;
-                colvarSiteCode.IsNullable = true;
+                colvarSiteCode.IsNullable = false;
                 colvarSiteCode.IsPrimaryKey = false;
                 colvarSiteCode.IsForeignKey = false;
                 colvarSiteCode.IsReadOnly = false;
@@ -254,7 +254,7 @@ namespace SAEON.Observations.Data{
                 colvarSiteName.DataType = DbType.AnsiString;
                 colvarSiteName.MaxLength = 150;
                 colvarSiteName.AutoIncrement = false;
-                colvarSiteName.IsNullable = true;
+                colvarSiteName.IsNullable = false;
                 colvarSiteName.IsPrimaryKey = false;
                 colvarSiteName.IsForeignKey = false;
                 colvarSiteName.IsReadOnly = false;

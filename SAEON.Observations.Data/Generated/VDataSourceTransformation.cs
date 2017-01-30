@@ -201,17 +201,17 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarUnitOfMeasureId);
                 
-                TableSchema.TableColumn colvarUnitofMeasure = new TableSchema.TableColumn(schema);
-                colvarUnitofMeasure.ColumnName = "UnitofMeasure";
-                colvarUnitofMeasure.DataType = DbType.AnsiString;
-                colvarUnitofMeasure.MaxLength = 100;
-                colvarUnitofMeasure.AutoIncrement = false;
-                colvarUnitofMeasure.IsNullable = true;
-                colvarUnitofMeasure.IsPrimaryKey = false;
-                colvarUnitofMeasure.IsForeignKey = false;
-                colvarUnitofMeasure.IsReadOnly = false;
+                TableSchema.TableColumn colvarUnitOfMeasureUnit = new TableSchema.TableColumn(schema);
+                colvarUnitOfMeasureUnit.ColumnName = "UnitOfMeasureUnit";
+                colvarUnitOfMeasureUnit.DataType = DbType.AnsiString;
+                colvarUnitOfMeasureUnit.MaxLength = 100;
+                colvarUnitOfMeasureUnit.AutoIncrement = false;
+                colvarUnitOfMeasureUnit.IsNullable = true;
+                colvarUnitOfMeasureUnit.IsPrimaryKey = false;
+                colvarUnitOfMeasureUnit.IsForeignKey = false;
+                colvarUnitOfMeasureUnit.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarUnitofMeasure);
+                schema.Columns.Add(colvarUnitOfMeasureUnit);
                 
                 TableSchema.TableColumn colvarNewPhenomenonOfferingID = new TableSchema.TableColumn(schema);
                 colvarNewPhenomenonOfferingID.ColumnName = "NewPhenomenonOfferingID";
@@ -225,6 +225,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarNewPhenomenonOfferingID);
                 
+                TableSchema.TableColumn colvarNewOfferingName = new TableSchema.TableColumn(schema);
+                colvarNewOfferingName.ColumnName = "NewOfferingName";
+                colvarNewOfferingName.DataType = DbType.AnsiString;
+                colvarNewOfferingName.MaxLength = 150;
+                colvarNewOfferingName.AutoIncrement = false;
+                colvarNewOfferingName.IsNullable = true;
+                colvarNewOfferingName.IsPrimaryKey = false;
+                colvarNewOfferingName.IsForeignKey = false;
+                colvarNewOfferingName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarNewOfferingName);
+                
                 TableSchema.TableColumn colvarNewPhenomenonUOMID = new TableSchema.TableColumn(schema);
                 colvarNewPhenomenonUOMID.ColumnName = "NewPhenomenonUOMID";
                 colvarNewPhenomenonUOMID.DataType = DbType.Guid;
@@ -236,6 +248,18 @@ namespace SAEON.Observations.Data{
                 colvarNewPhenomenonUOMID.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarNewPhenomenonUOMID);
+                
+                TableSchema.TableColumn colvarNewUnitOfMeasureUnit = new TableSchema.TableColumn(schema);
+                colvarNewUnitOfMeasureUnit.ColumnName = "NewUnitOfMeasureUnit";
+                colvarNewUnitOfMeasureUnit.DataType = DbType.AnsiString;
+                colvarNewUnitOfMeasureUnit.MaxLength = 100;
+                colvarNewUnitOfMeasureUnit.AutoIncrement = false;
+                colvarNewUnitOfMeasureUnit.IsNullable = true;
+                colvarNewUnitOfMeasureUnit.IsPrimaryKey = false;
+                colvarNewUnitOfMeasureUnit.IsForeignKey = false;
+                colvarNewUnitOfMeasureUnit.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarNewUnitOfMeasureUnit);
                 
                 TableSchema.TableColumn colvarIorder = new TableSchema.TableColumn(schema);
                 colvarIorder.ColumnName = "iorder";
@@ -479,17 +503,17 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("UnitofMeasure")]
+        [XmlAttribute("UnitOfMeasureUnit")]
         [Bindable(true)]
-        public string UnitofMeasure 
+        public string UnitOfMeasureUnit 
 	    {
 		    get
 		    {
-			    return GetColumnValue<string>("UnitofMeasure");
+			    return GetColumnValue<string>("UnitOfMeasureUnit");
 		    }
             set 
 		    {
-			    SetColumnValue("UnitofMeasure", value);
+			    SetColumnValue("UnitOfMeasureUnit", value);
             }
         }
 	      
@@ -507,6 +531,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("NewOfferingName")]
+        [Bindable(true)]
+        public string NewOfferingName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("NewOfferingName");
+		    }
+            set 
+		    {
+			    SetColumnValue("NewOfferingName", value);
+            }
+        }
+	      
         [XmlAttribute("NewPhenomenonUOMID")]
         [Bindable(true)]
         public Guid? NewPhenomenonUOMID 
@@ -518,6 +556,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("NewPhenomenonUOMID", value);
+            }
+        }
+	      
+        [XmlAttribute("NewUnitOfMeasureUnit")]
+        [Bindable(true)]
+        public string NewUnitOfMeasureUnit 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("NewUnitOfMeasureUnit");
+		    }
+            set 
+		    {
+			    SetColumnValue("NewUnitOfMeasureUnit", value);
             }
         }
 	      
@@ -580,11 +632,15 @@ namespace SAEON.Observations.Data{
             
             public static string UnitOfMeasureId = @"UnitOfMeasureId";
             
-            public static string UnitofMeasure = @"UnitofMeasure";
+            public static string UnitOfMeasureUnit = @"UnitOfMeasureUnit";
             
             public static string NewPhenomenonOfferingID = @"NewPhenomenonOfferingID";
             
+            public static string NewOfferingName = @"NewOfferingName";
+            
             public static string NewPhenomenonUOMID = @"NewPhenomenonUOMID";
+            
+            public static string NewUnitOfMeasureUnit = @"NewUnitOfMeasureUnit";
             
             public static string Iorder = @"iorder";
             

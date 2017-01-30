@@ -18,8 +18,6 @@ namespace SAEON.Observations.Data
 	public partial struct Tables
 	{
 		
-		public static readonly string MigrationHistory = @"__MigrationHistory";
-        
 		public static readonly string RefactorLog = @"__RefactorLog";
         
 		public static readonly string AspnetApplication = @"aspnet_Applications";
@@ -120,16 +118,15 @@ namespace SAEON.Observations.Data
         
 		public static readonly string UnitOfMeasure = @"UnitOfMeasure";
         
+		public static readonly string UserDownload = @"UserDownloads";
+        
+		public static readonly string UserQuery = @"UserQueries";
+        
 	}
 	#endregion
     #region Schemas
     public partial class Schemas {
 		
-		public static TableSchema.Table MigrationHistory
-		{
-            get { return DataService.GetSchema("__MigrationHistory", "ObservationsDB"); }
-		}
-        
 		public static TableSchema.Table RefactorLog
 		{
             get { return DataService.GetSchema("__RefactorLog", "ObservationsDB"); }
@@ -380,6 +377,16 @@ namespace SAEON.Observations.Data
             get { return DataService.GetSchema("UnitOfMeasure", "ObservationsDB"); }
 		}
         
+		public static TableSchema.Table UserDownload
+		{
+            get { return DataService.GetSchema("UserDownloads", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table UserQuery
+		{
+            get { return DataService.GetSchema("UserQueries", "ObservationsDB"); }
+		}
+        
 	
     }
     #endregion
@@ -402,6 +409,8 @@ namespace SAEON.Observations.Data
 		public static readonly string VDataSourceRole = @"vDataSourceRole";
         
 		public static readonly string VDataSourceTransformation = @"vDataSourceTransformation";
+        
+		public static readonly string VDownload = @"vDownloads";
         
 		public static readonly string VImportBatch = @"vImportBatch";
         

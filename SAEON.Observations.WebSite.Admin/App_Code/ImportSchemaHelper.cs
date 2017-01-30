@@ -183,7 +183,7 @@ public class ImportSchemaHelper : IDisposable
             docNamePrefix = docNamePrefix.Replace(c, '_');
         foreach (var c in Path.GetInvalidPathChars())
             docNamePrefix = docNamePrefix.Replace(c, '_');
-        SaveDocument("Source.txt",Data);
+        SaveDocument("Source.txt", Data);
         dtResults = engine.ReadStringAsDT(Data);
         dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
         using (StringWriter sw = new StringWriter())
@@ -204,8 +204,8 @@ public class ImportSchemaHelper : IDisposable
 
     public void SaveDocument(string fileName, string text)
     {
-        string docPath = HostingEnvironment.MapPath(Path.Combine(WebConfigurationManager.AppSettings["DocumentsPath"],"Uploads"));
-        File.WriteAllText(Path.Combine(docPath,docNamePrefix+fileName), text);
+        string docPath = HostingEnvironment.MapPath(Path.Combine(WebConfigurationManager.AppSettings["DocumentsPath"], "Uploads"));
+        File.WriteAllText(Path.Combine(docPath, docNamePrefix + fileName), text);
     }
 
     /// <summary>
@@ -526,15 +526,15 @@ public class ImportSchemaHelper : IDisposable
                         else if (String.IsNullOrEmpty(RawValue) || def.IsEmptyValue && RawValue.Trim() == def.EmptyValue)
                         {
                             rec.FieldRawValue = RawValue;
-                            rec.RawValue = null;// dataSource.DefaultNullValue;
-                            rec.DataValue = null;// dataSource.DefaultNullValue;
-                            // Lookups
-                            foreach (var transform in transformations.Where(t => t.TransformationType.Name == "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
-                            {
-                                TransformValue(transform.Id, ref rec);
-                                if (rec.RawValue.HasValue)
-                                    RawValue = rec.RawValue.Value.ToString();
-                            }
+                            rec.RawValue = null; // dataSource.DefaultNullValue;
+                            rec.DataValue = null; // dataSource.DefaultNullValue;
+                            //// Lookups
+                            //foreach (var transform in transformations.Where(t => t.TransformationType.Name == "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
+                            //{
+                            //    TransformValue(transform.Id, ref rec);
+                            //    if (rec.RawValue.HasValue)
+                            //        RawValue = rec.RawValue.Value.ToString();
+                            //}
                             // Non lookups
                             foreach (var transform in transformations.Where(t => t.TransformationType.Name != "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
                             {
@@ -574,13 +574,11 @@ public class ImportSchemaHelper : IDisposable
                             else
                             {
                                 rec.RawValue = dvalue;
-                                if (!def.DataSourceTransformationIDs.Any())
-                                    rec.DataValue = rec.RawValue;
-                                else
-                                    foreach (var transform in transformations.Where(t => t.TransformationType.Name != "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
-                                    {
-                                        TransformValue(transform.Id, ref rec);
-                                    }
+                                rec.DataValue = rec.RawValue;
+                                foreach (var transform in transformations.Where(t => t.TransformationType.Name != "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
+                                {
+                                    TransformValue(transform.Id, ref rec);
+                                }
                             }
                         }
 
@@ -588,7 +586,7 @@ public class ImportSchemaHelper : IDisposable
                             rec.Comment = RowComment.TrimEnd();
                         rec.CorrelationID = correlationID;
                         //if (rec.DataValue.HasValue)
-                            SchemaValues.Add(rec);
+                        SchemaValues.Add(rec);
                     }
                 }
             }
@@ -701,6 +699,7 @@ public class ImportSchemaHelper : IDisposable
                     else
                     {
                         rec.RawValue = trns.LookupValues[rec.FieldRawValue];
+                        rec.DataValue = rec.RawValue;
                     }
 
                     if (!valid)

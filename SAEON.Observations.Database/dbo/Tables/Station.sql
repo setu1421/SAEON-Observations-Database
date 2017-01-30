@@ -30,10 +30,7 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Station_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Station_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.3 20160421 TimPN
---> Changed 2.0.5 20160411 TimPN
---    CONSTRAINT [PKStation] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PKStation] PRIMARY KEY NONCLUSTERED ([ID]),
---> Changed 2.0.5 20160411 TimPN
+    CONSTRAINT [PKStation] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Station_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_Station_ProjectSite] FOREIGN KEY ([ProjectSiteID]) REFERENCES [dbo].[ProjectSite] ([ID]),
 --> Added 2.0.2 20160407 TimPN
@@ -54,13 +51,6 @@
 --< Changed 2.0.5 20160411 TimPN
 --< Changed 2.0.0 20160329 TimPN
 );
---> Added 2.0.5 20160411 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_Station] ON [dbo].[Station] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_Station] ON [dbo].[Station] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.5 20160411 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Station_ProjectSiteID] ON [dbo].[Station] ([ProjectSiteID])
@@ -107,8 +97,8 @@ BEGIN
         Station src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.3 20160421 TimPN

@@ -9,10 +9,7 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Phenomenon_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Phenomenon_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160718 TimPN
---> Changed 2.0.8 20160718 TimPN
---    CONSTRAINT [PK_Phenomenon] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_Phenomenon] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.8 20160718 TimPN
+    CONSTRAINT [PK_Phenomenon] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Phenomenon_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --> Changed 20160329 TimPN
 --    CONSTRAINT [IX_Phenomenon_Code] UNIQUE ([Code]),
@@ -23,13 +20,6 @@
     CONSTRAINT [UX_Phenomenon_Name] UNIQUE ([Name])
 --< Changed 20160329 TimPN
 );
---> Added 2.0.8 20160718 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_Phenomenon] ON [dbo].[Phenomenon] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_Phenomenon] ON [dbo].[Phenomenon] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.8 20160718 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Phenomenon_UserId] ON [dbo].[Phenomenon] ([UserId])
@@ -70,8 +60,8 @@ BEGIN
         Phenomenon src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160718 TimPN

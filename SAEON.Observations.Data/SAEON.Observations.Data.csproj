@@ -157,12 +157,14 @@
     <Compile Include="Generated\TransformationTypeController.cs" />
     <Compile Include="Generated\UnitOfMeasure.cs" />
     <Compile Include="Generated\UnitOfMeasureController.cs" />
+    <Compile Include="Generated\VAuditLog.cs" />
     <Compile Include="Generated\VDataLog.cs" />
     <Compile Include="Generated\VDataQuery.cs" />
     <Compile Include="Generated\VDataSchema.cs" />
     <Compile Include="Generated\VDataSource.cs" />
     <Compile Include="Generated\VDataSourceRole.cs" />
     <Compile Include="Generated\VDataSourceTransformation.cs" />
+    <Compile Include="Generated\VDownload.cs" />
     <Compile Include="Generated\VImportBatch.cs" />
     <Compile Include="Generated\VInstrumentDataSource.cs" />
     <Compile Include="Generated\VInstrumentOrganisation.cs" />

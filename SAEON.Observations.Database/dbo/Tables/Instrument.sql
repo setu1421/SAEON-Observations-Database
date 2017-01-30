@@ -20,10 +20,7 @@ CREATE TABLE [dbo].[Instrument]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Instrument_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Instrument_UpdatedAt] DEFAULT GetDate(), 
---> Changed 2.0.5 20160516 TimPN
---    CONSTRAINT [PK_Instrument] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_Instrument] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.5 20160516 TimPN
+    CONSTRAINT [PK_Instrument] PRIMARY KEY CLUSTERED ([ID]),
 --> Removed 2.0.9 20160824 TimPN
 --    CONSTRAINT [FK_Instrument_Station] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]),
 --> Removed 2.0.9 20160824 TimPN
@@ -37,13 +34,6 @@ CREATE TABLE [dbo].[Instrument]
     CONSTRAINT [UX_Instrument_Name] UNIQUE ([Name])
 --< Added 2.0.9 20160824 TimPN
 )
---> Added 2.0.5 20160516 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_Instrument] ON [dbo].[Instrument] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_Instrument] ON [dbo].[Instrument] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.5 20160516 TimPN
 GO
 CREATE INDEX [IX_Instrument_StartDate] ON [dbo].[Instrument] ([StartDate])
 GO

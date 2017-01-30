@@ -20,9 +20,12 @@
         string docPath = System.Web.Configuration.WebConfigurationManager.AppSettings["DocumentsPath"];
         if (!string.IsNullOrEmpty(docPath))
         {
-                string path = Server.MapPath(docPath);
-                if (!string.IsNullOrEmpty(path))
-                    System.IO.Directory.CreateDirectory(path);
+            string path = Server.MapPath(docPath);
+            if (!string.IsNullOrEmpty(path))
+            {
+                System.IO.Directory.CreateDirectory(System.IO.Path.Combine(path,"Uploads"));
+                System.IO.Directory.CreateDirectory(System.IO.Path.Combine(path,"Downloads"));
+            }
         }
     }
 

@@ -18,17 +18,12 @@ CREATE TABLE [dbo].[Project]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Project_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Project_UpdatedAt] DEFAULT GetDate(), 
-    CONSTRAINT [PK_Project] PRIMARY KEY NONCLUSTERED ([ID]),
+    CONSTRAINT [PK_Project] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_Project_ProgramID_Code] UNIQUE ([ProgrammeID],[Code]),
     CONSTRAINT [UX_Project_ProgramID_Name] UNIQUE ([ProgrammeID],[Name]),
     CONSTRAINT [FK_Project_Programme] FOREIGN KEY ([ProgrammeID]) REFERENCES [dbo].[Programme] ([ID]),
     CONSTRAINT [FK_Project_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_Project] ON [dbo].[Project] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_Project] ON [dbo].[Project] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_Project_ProgrammeID] ON [dbo].[Project] ([ProgrammeID])
 GO
@@ -72,8 +67,8 @@ BEGIN
         Project src
         inner join inserted ins 
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.5 20160511 TimPN

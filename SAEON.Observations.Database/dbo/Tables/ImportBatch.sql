@@ -31,24 +31,21 @@
 --> Added 2.0.21 20170106 TimPN
 --> Changed 2.0.24 20170120 TimPN
 --	[Errors] VARCHAR(1000) NULL,
-	[Problems] VARCHAR(1000) NULL,
+    [Problems] VARCHAR(1000) NULL,
 --< Changed 2.0.24 20170120 TimPN
 --< Added 2.0.21 20170106 TimPN
 --> Added 2.0.18 20161130 TimPN
-	[SourceFile] VARBINARY(MAX) FILESTREAM NULL, 
-	[Pass1File] VARBINARY(MAX) FILESTREAM NULL, 
-	[Pass2File] VARBINARY(MAX) FILESTREAM NULL, 
-	[Pass3File] VARBINARY(MAX) FILESTREAM NULL, 
-	[Pass4File] VARBINARY(MAX) FILESTREAM NULL, 
+    [SourceFile] VARBINARY(MAX) FILESTREAM NULL, 
+    [Pass1File] VARBINARY(MAX) FILESTREAM NULL, 
+    [Pass2File] VARBINARY(MAX) FILESTREAM NULL, 
+    [Pass3File] VARBINARY(MAX) FILESTREAM NULL, 
+    [Pass4File] VARBINARY(MAX) FILESTREAM NULL, 
 --< Added 2.0.18 20161130 TimPN
 --> Added 2.0.8 20160715 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_ImportBatch_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_ImportBatch_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160715 TimPN
---> Changed 2.0.8 20160715 TimPN
---    CONSTRAINT [PK_ImportBatch] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_ImportBatch] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.8 20160715 TimPN
+    CONSTRAINT [PK_ImportBatch] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_ImportBatch_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_ImportBatch_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]),
 --> Added 2.0.9 20160823 TimPN
@@ -62,13 +59,6 @@
     CONSTRAINT [UX_ImportBatch] UNIQUE ([DataSourceID], [ImportDate], [LogFileName])
 --< Added 2.0.8 20160726 TimPN
 );
---> Added 2.0.8 20160715 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_ImportBatch] ON [dbo].[ImportBatch] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_ImportBatch] ON [dbo].[ImportBatch] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.8 20160715 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_ImportBatch_DataSourceID] ON [dbo].[ImportBatch] ([DataSourceID])
@@ -123,8 +113,8 @@ BEGIN
         ImportBatch src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160715 TimPN

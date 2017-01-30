@@ -8,10 +8,7 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonUOM_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonUOM_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160718 TimPN
---> Changed 2.0.8 20160718 TimPN
---    CONSTRAINT [PK_PhenomenonUOM] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_PhenomenonUOM] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.8 20160718 TimPN
+    CONSTRAINT [PK_PhenomenonUOM] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_PhenomenonUOM_PhenomenonUOM] FOREIGN KEY ([PhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]),
     CONSTRAINT [FK_PhenomenonUOM_UnitOfMeasure] FOREIGN KEY ([UnitOfMeasureID]) REFERENCES [dbo].[UnitOfMeasure] ([ID]),
 --> Changed 20160329 TimPN
@@ -22,12 +19,6 @@
     CONSTRAINT [FK_PhenomenonUOM_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 --< Added 2.0.0 20160406 TimPN
 );
---> Added 2.0.8 20160718 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
-CREATE UNIQUE CLUSTERED INDEX [CX_PhenomenonUOM] ON [dbo].[PhenomenonUOM] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.8 20160718 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_PhenomenonUOM_PhenomenonID] ON [dbo].[PhenomenonUOM] ([PhenomenonID])
@@ -72,8 +63,8 @@ BEGIN
         PhenomenonUOM src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160718 TimPN

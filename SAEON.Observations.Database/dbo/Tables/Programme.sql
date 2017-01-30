@@ -17,16 +17,12 @@ CREATE TABLE [dbo].[Programme]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Programme_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Programme_UpdatedAt] DEFAULT GetDate(), 
-    CONSTRAINT [PK_Programme] PRIMARY KEY NONCLUSTERED ([ID]),
+    CONSTRAINT [PK_Programme] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_Programme_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_Programme_Name] UNIQUE ([Name]),
     CONSTRAINT [FK_Programme_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_Programme] ON [dbo].[Programme] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_Programme] ON [dbo].[Programme] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_Programme_UserId] ON [dbo].[Programme] ([UserId])
 GO
@@ -68,8 +64,8 @@ BEGIN
         Programme src
         inner join inserted ins 
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.5 20160511 TimPN

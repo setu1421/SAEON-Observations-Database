@@ -14,7 +14,7 @@ Select dt.ID,
        pu.ID as UnitOfMeasureId,
 --> Changed 2.0.26 20170127 TimPN
 --       uom.Unit as UnitOfMeasure,
-       uom.Unit as UnitOfMeasureName,
+       uom.Unit as UnitOfMeasureUnit,
 --< Changed 2.0.26 20170127 TimPN
        dt.NewPhenomenonOfferingID,
 --> Added 2.0.26 20170127 TimPN

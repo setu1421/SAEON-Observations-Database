@@ -356,16 +356,24 @@ public partial class Admin_DataSources : System.Web.UI.Page
         if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
         {
 
-            Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
+            try
+            {
+                Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
 
-            VDataSourceTransformationCollection trCol = new VDataSourceTransformationCollection()
-                .Where(VDataSourceTransformation.Columns.DataSourceID, Id)
-                .OrderByAsc(VDataSourceTransformation.Columns.Iorder)
-                .OrderByAsc(VDataSourceTransformation.Columns.Rank)
-                .Load();
+                VDataSourceTransformationCollection trCol = new VDataSourceTransformationCollection()
+                    .Where(VDataSourceTransformation.Columns.DataSourceID, Id)
+                    .OrderByAsc(VDataSourceTransformation.Columns.Iorder)
+                    .OrderByAsc(VDataSourceTransformation.Columns.Rank)
+                    .Load();
 
-            TransformationsGrid.GetStore().DataSource = trCol;
-            TransformationsGrid.GetStore().DataBind();
+                TransformationsGrid.GetStore().DataSource = trCol;
+                TransformationsGrid.GetStore().DataBind();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Unable to load transformations");
+                throw;
+            }
         }
     }
 

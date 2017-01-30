@@ -6,7 +6,7 @@
     [DataSourceTypeID] UNIQUEIDENTIFIER NOT NULL,
     [IgnoreFirst]      INT              CONSTRAINT [DF_DataSchema_IgnoreFirst] DEFAULT ((0)) NOT NULL,
 --> Added 2.0.21 20170106 TimPN
-	[HasHeaderRow]		BIT				NULL,
+    [HasHeaderRow]		BIT				NULL,
 --< Added 2.0.21 20170106 TimPN
     [IgnoreLast]       INT              CONSTRAINT [DF_DataSchema_IgnoreLast] DEFAULT ((0)) NOT NULL,
     [Condition]        VARCHAR (500)    NULL,
@@ -19,10 +19,7 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataSchema_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSchema_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160715 TimPN
---> Changed 2.0.8 20160715 TimPN
---    CONSTRAINT [PK_DataSchema] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_DataSchema] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.8 20160715 TimPN
+    CONSTRAINT [PK_DataSchema] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSchema_DataSourceType] FOREIGN KEY ([DataSourceTypeID]) REFERENCES [dbo].[DataSourceType] ([ID]),
 --> Added 2.0.0 20160406 TimPN
 --> Added 2.0.9 20160727 TimPN
@@ -32,13 +29,6 @@
     CONSTRAINT [UX_DataSchema_Name] Unique ([Name])
 --< Added 2.0.0 20160406 TimPN
 );
---> Added 2.0.8 20160715 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_DataSchema] ON [dbo].[DataSchema] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_DataSchema] ON [dbo].[DataSchema] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.8 20160715 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_DataSchema_DataSourceTypeID] ON [dbo].[DataSchema] ([DataSourceTypeID])
@@ -81,8 +71,8 @@ BEGIN
         DataSchema src
         inner join inserted ins 
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160715 TimPN

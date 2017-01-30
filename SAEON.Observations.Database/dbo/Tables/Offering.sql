@@ -8,10 +8,7 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Offering_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Offering_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160718 TimPN
---> Changed 2.0.8 20160718 TimPN
---    CONSTRAINT [PK_Offering] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_Offering] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.8 20160718 TimPN
+    CONSTRAINT [PK_Offering] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Offering_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --> Changed 20160329 TimPN
 --    CONSTRAINT [IX_Offering] UNIQUE ([Name]),
@@ -22,13 +19,6 @@
     CONSTRAINT [UX_Offering_Code] UNIQUE ([Code])
 --< Changed 20160329 TimPN
 );
---> Added 2.0.8 20160718 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_Offering] ON [dbo].[Offering] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_Offering] ON [dbo].[Offering] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.8 20160718 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Offering_UserId] ON [dbo].[Offering] ([UserId])
@@ -69,8 +59,8 @@ BEGIN
         Offering src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --> Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160718 TimPN

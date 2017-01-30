@@ -24,10 +24,7 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataSource_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSource_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.3 20160421 TimPN
---> Changed 2.0.8 20160715 TimPN
---    CONSTRAINT [PK_DataSource] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_DataSource] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.8 20160715 TimPN
+    CONSTRAINT [PK_DataSource] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSource_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_DataSource_DataSchema] FOREIGN KEY ([DataSchemaID]) REFERENCES [dbo].[DataSchema] ([ID]),
 --> Added 2.0.0 20160406 TimPN
@@ -35,13 +32,6 @@
     CONSTRAINT [UX_DataSource_Name] Unique ([Name])
 --< Added 2.0.0 20160406 TimPN
 );
---> Added 2.0.8 20160715 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_DataSource] ON [dbo].[DataSource] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_DataSource] ON [dbo].[DataSource] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.8 20160715 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_DataSource_DataSchemaID] ON [dbo].[DataSource] ([DataSchemaID])
@@ -88,8 +78,8 @@ BEGIN
         DataSource src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.3 20160421 TimPN

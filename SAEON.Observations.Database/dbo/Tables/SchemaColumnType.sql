@@ -8,15 +8,10 @@ CREATE TABLE [dbo].[SchemaColumnType]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumnType_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumnType_UpdatedAt] DEFAULT GetDate(), 
-    CONSTRAINT [PK_SchemaColumnType] PRIMARY KEY NONCLUSTERED ([ID]),
+    CONSTRAINT [PK_SchemaColumnType] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_SchemaColumnType_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [UX_SchemaColumnType] UNIQUE ([Name])
 )
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_SchemaColumnType] ON [dbo].[SchemaColumnType] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_SchemaColumnType] ON [dbo].[SchemaColumnType] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_SchemaColumnType_UserId] ON [dbo].[SchemaColumnType] ([UserId])
 --> Changed 2.0.15 20161102 TimPN
@@ -54,8 +49,8 @@ BEGIN
         SchemaColumnType src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.11 20160908 TimPN

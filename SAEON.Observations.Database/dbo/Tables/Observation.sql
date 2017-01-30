@@ -31,7 +31,7 @@
     [StatusReasonID] UNIQUEIDENTIFIER NULL,
 --< Added 2.0.9 20160823 TimPN
 --> Added 2.0.15 20161024 TimPN
-	[CorrelationID] UNIQUEIDENTIFIER NULL,
+    [CorrelationID] UNIQUEIDENTIFIER NULL,
 --< Added 2.0.15 20161024 TimPN
     [UserId]                UNIQUEIDENTIFIER NOT NULL,
     [AddedDate]             DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
@@ -64,10 +64,7 @@
 );
 --> Added 2.0.8 20160718 TimPN
 GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_Observation] ON [dbo].[Observation] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_Observation] ON [dbo].[Observation] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
+CREATE CLUSTERED INDEX [CX_Observation] ON [dbo].[Observation] ([AddedAt])
 --> Added 2.0.13 20161010 TimPN
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 --< Added 2.0.13 20161010 TimPN
@@ -185,8 +182,8 @@ BEGIN
         Observation src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160718 TimPN

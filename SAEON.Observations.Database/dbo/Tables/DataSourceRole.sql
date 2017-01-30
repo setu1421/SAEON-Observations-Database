@@ -13,10 +13,7 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataSourceRole_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSourceRole_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160715 TimPN
---> Changed 2.0.8 20160715 TimPN
---    CONSTRAINT [PK_DataSourceRole] PRIMARY KEY CLUSTERED ([ID]),
-    CONSTRAINT [PK_DataSourceRole] PRIMARY KEY NONCLUSTERED ([ID]),
---< Changed 2.0.8 20160715 TimPN
+    CONSTRAINT [PK_DataSourceRole] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSourceRole_aspnet_Roles] FOREIGN KEY ([RoleId]) REFERENCES [dbo].[aspnet_Roles] ([RoleId]),
     CONSTRAINT [FK_DataSourceRole_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]),
 --> Added 2.0.0 20160406 TimPN
@@ -26,13 +23,6 @@
     CONSTRAINT [UX_DataSourceRole] UNIQUE ([DataSourceID], [RoleId], [DateStart], [DateEnd])
 --< Added 2.0.8 20160726 TimPN
 );
---> Added 2.0.8 20160715 TimPN
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_DataSourceRole] ON [dbo].[DataSourceRole] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_DataSourceRole] ON [dbo].[DataSourceRole] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
---< Added 2.0.8 20160715 TimPN
 --> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_DataSourceRole_DataSourceID] ON [dbo].[DataSourceRole] ([DataSourceID])
@@ -83,8 +73,8 @@ BEGIN
         DataSourceRole src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160715 TimPN

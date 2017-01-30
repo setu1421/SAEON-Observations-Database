@@ -176,82 +176,6 @@
                 <South Collapsible="true" Split="true" MinHeight="250">
                     <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:Panel ID="pnlInstruments" runat="server" Title="Instruments" Layout="FitLayout"
-                                Height="200" ClientIDMode="Static">
-                                <TopBar>
-                                    <ext:Toolbar ID="Toolbar4" runat="server">
-                                        <Items>
-                                            <ext:Button ID="btnInstrumentLinkAdd" runat="server" Icon="LinkAdd" Text="Link Instrument" ClientIDMode="Static">
-                                                <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip4" runat="server" Html="Link" />
-                                                </ToolTips>
-                                                <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{DataSourcesGrid}') && #{DataSourcesGrid}.getSelectionModel().hasSelection()){#{InstrumentLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a DataSource.')}" />
-                                                </Listeners>
-                                            </ext:Button>
-                                            <%-- 
-                                            <ext:Button ID="btnAddInstrument" runat="server" Icon="Add" Text="Add Instrument">
-                                                <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
-                                                </ToolTips>
-                                                <DirectEvents>
-                                                    <Click OnEvent="AddInstrumentClick" />
-                                                </DirectEvents>
-                                            </ext:Button>
-                                            --%>
-                                        </Items>
-                                    </ext:Toolbar>
-                                </TopBar>
-                                <Items>
-                                    <ext:GridPanel ID="InstrumentLinksGrid" runat="server" Border="false" ClientIDMode="Static">
-                                        <Store>
-                                            <ext:Store ID="InstrumentLinksGridStore" runat="server" OnRefreshData="InstrumentLinksGridStore_RefreshData">
-                                                <Proxy>
-                                                    <ext:PageProxy />
-                                                </Proxy>
-                                                <Reader>
-                                                    <ext:JsonReader IDProperty="Id">
-                                                        <Fields>
-                                                            <ext:RecordField Name="Id" Type="Auto" />
-                                                            <ext:RecordField Name="InstrumentID" Type="Auto" />
-                                                            <ext:RecordField Name="InstrumentCode" Type="Auto" />
-                                                            <ext:RecordField Name="InstrumentName" Type="Auto" />
-                                                            <ext:RecordField Name="StartDate" Type="Date" />
-                                                            <ext:RecordField Name="EndDate" Type="Date" />
-                                                        </Fields>
-                                                    </ext:JsonReader>
-                                                </Reader>
-                                                <BaseParams>
-                                                    <ext:Parameter Name="DataSourceID" Value="Ext.getCmp('#{DataSourcesGrid}') && #{DataSourcesGrid}.getSelectionModel().hasSelection() ? #{DataSourcesGrid}.getSelectionModel().getSelected().id : -1"
-                                                        Mode="Raw" />
-                                                </BaseParams>
-                                            </ext:Store>
-                                        </Store>
-                                        <ColumnModel ID="ColumnModel3" runat="server">
-                                            <Columns>
-                                                <ext:Column Header="Code" DataIndex="InstrumentCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="InstrumentName" Width="200" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="150">
-                                                    <Commands>
-                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
-                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
-                                                    </Commands>
-                                                </ext:CommandColumn>
-                                            </Columns>
-                                        </ColumnModel>
-                                        <SelectionModel>
-                                            <ext:RowSelectionModel ID="RowSelectionModel4" runat="server" SingleSelect="true">
-                                            </ext:RowSelectionModel>
-                                        </SelectionModel>
-                                        <LoadMask ShowMask="true" />
-                                        <Listeners>
-                                            <Command Fn="OnInstrumentLinkCommand" />
-                                        </Listeners>
-                                    </ext:GridPanel>
-                                </Items>
-                            </ext:Panel>
                             <ext:Panel ID="pnlTransformations" runat="server" Title="Transformations" Layout="FitLayout"
                                 Height="200" ClientIDMode="Static">
                                 <TopBar>
@@ -289,11 +213,13 @@
                                                             <ext:RecordField Name="PhenomenonName" Type="String" />
                                                             <ext:RecordField Name="TransformationName" Type="String" />
                                                             <ext:RecordField Name="PhenomenonOfferingId" Type="Auto" />
-                                                            <ext:RecordField Name="UnitOfMeasureId" Type="Auto" />
                                                             <ext:RecordField Name="OfferingName" Type="String" />
-                                                            <ext:RecordField Name="UnitofMeasure" Type="String" />
+                                                            <ext:RecordField Name="UnitOfMeasureId" Type="Auto" />
+                                                            <ext:RecordField Name="UnitOfMeasureUnit" Type="String" />
                                                             <ext:RecordField Name="NewPhenomenonOfferingID" Type="Auto" />
+                                                            <ext:RecordField Name="NewOfferingName" Type="Auto" />
                                                             <ext:RecordField Name="NewPhenomenonUOMID" Type="Auto" />
+                                                            <ext:RecordField Name="NewUnitOfMeasureUnit" Type="Auto" />
                                                             <ext:RecordField Name="Rank" Type="Int" UseNull="true" />
                                                         </Fields>
                                                     </ext:JsonReader>
@@ -309,7 +235,9 @@
                                                 <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
                                                 <ext:Column Header="Transformation" DataIndex="TransformationName" Width="150" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
-                                                <ext:Column Header="Unit of Measure" DataIndex="UnitofMeasure" Width="150" />
+                                                <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
+                                                <ext:Column Header="New Offering" DataIndex="NewOfferingName" Width="150" />
+                                                <ext:Column Header="New Unit of Measure" DataIndex="NewUnitOfMeasureUnit" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="150" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="150">
@@ -396,6 +324,82 @@
                                         <LoadMask ShowMask="true" />
                                         <Listeners>
                                             <Command Fn="onRoleCommand" />
+                                        </Listeners>
+                                    </ext:GridPanel>
+                                </Items>
+                            </ext:Panel>
+                            <ext:Panel ID="pnlInstruments" runat="server" Title="Instruments" Layout="FitLayout"
+                                Height="200" ClientIDMode="Static">
+                                <TopBar>
+                                    <ext:Toolbar ID="Toolbar4" runat="server">
+                                        <Items>
+                                            <ext:Button ID="btnInstrumentLinkAdd" runat="server" Icon="LinkAdd" Text="Link Instrument" ClientIDMode="Static">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip4" runat="server" Html="Link" />
+                                                </ToolTips>
+                                                <Listeners>
+                                                    <Click Handler="if(Ext.getCmp('#{DataSourcesGrid}') && #{DataSourcesGrid}.getSelectionModel().hasSelection()){#{InstrumentLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a DataSource.')}" />
+                                                </Listeners>
+                                            </ext:Button>
+                                            <%-- 
+                                            <ext:Button ID="btnAddInstrument" runat="server" Icon="Add" Text="Add Instrument">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="AddInstrumentClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            --%>
+                                        </Items>
+                                    </ext:Toolbar>
+                                </TopBar>
+                                <Items>
+                                    <ext:GridPanel ID="InstrumentLinksGrid" runat="server" Border="false" ClientIDMode="Static">
+                                        <Store>
+                                            <ext:Store ID="InstrumentLinksGridStore" runat="server" OnRefreshData="InstrumentLinksGridStore_RefreshData">
+                                                <Proxy>
+                                                    <ext:PageProxy />
+                                                </Proxy>
+                                                <Reader>
+                                                    <ext:JsonReader IDProperty="Id">
+                                                        <Fields>
+                                                            <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="InstrumentID" Type="Auto" />
+                                                            <ext:RecordField Name="InstrumentCode" Type="Auto" />
+                                                            <ext:RecordField Name="InstrumentName" Type="Auto" />
+                                                            <ext:RecordField Name="StartDate" Type="Date" />
+                                                            <ext:RecordField Name="EndDate" Type="Date" />
+                                                        </Fields>
+                                                    </ext:JsonReader>
+                                                </Reader>
+                                                <BaseParams>
+                                                    <ext:Parameter Name="DataSourceID" Value="Ext.getCmp('#{DataSourcesGrid}') && #{DataSourcesGrid}.getSelectionModel().hasSelection() ? #{DataSourcesGrid}.getSelectionModel().getSelected().id : -1"
+                                                        Mode="Raw" />
+                                                </BaseParams>
+                                            </ext:Store>
+                                        </Store>
+                                        <ColumnModel ID="ColumnModel3" runat="server">
+                                            <Columns>
+                                                <ext:Column Header="Code" DataIndex="InstrumentCode" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="InstrumentName" Width="200" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:CommandColumn Width="150">
+                                                    <Commands>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
+                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
+                                                    </Commands>
+                                                </ext:CommandColumn>
+                                            </Columns>
+                                        </ColumnModel>
+                                        <SelectionModel>
+                                            <ext:RowSelectionModel ID="RowSelectionModel4" runat="server" SingleSelect="true">
+                                            </ext:RowSelectionModel>
+                                        </SelectionModel>
+                                        <LoadMask ShowMask="true" />
+                                        <Listeners>
+                                            <Command Fn="OnInstrumentLinkCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>

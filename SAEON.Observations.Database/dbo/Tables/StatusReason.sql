@@ -8,16 +8,11 @@ CREATE TABLE [dbo].[StatusReason]
     [UserId] UNIQUEIDENTIFIER NOT NULL, 
     [AddedAt] DATETIME NULL CONSTRAINT [DF_StatusReason_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_StatusReason_UpdatedAt] DEFAULT GetDate(), 
-    CONSTRAINT [PK_StatusReason] PRIMARY KEY NONCLUSTERED ([ID]),
+    CONSTRAINT [PK_StatusReason] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_StatusReason_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_StatusReason_Name] UNIQUE ([Name]),
     CONSTRAINT [FK_StatusReason_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 )
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_StatusReason] ON [dbo].[StatusReason] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_StatusReason] ON [dbo].[StatusReason] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_StatusReason_UserId] ON [dbo].[StatusReason] ([UserId])
 --> Changed 2.0.15 20161102 TimPN
@@ -55,8 +50,8 @@ BEGIN
         StatusReason src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --> Added 2.0.9 20160823 TimPN

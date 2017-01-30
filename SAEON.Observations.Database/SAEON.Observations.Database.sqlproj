@@ -552,6 +552,7 @@
     <Build Include="dbo\Tables\AspNetUserClaims.sql" />
     <Build Include="dbo\Tables\AspNetUserLogins.sql" />
     <Build Include="dbo\Tables\UserDownloads.sql" />
+    <Build Include="dbo\Views\vDownloads.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

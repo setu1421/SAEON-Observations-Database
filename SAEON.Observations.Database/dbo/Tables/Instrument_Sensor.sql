@@ -15,17 +15,12 @@ CREATE TABLE [dbo].[Instrument_Sensor]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Instrument_Sensor_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Instrument_Sensor_UpdatedAt] DEFAULT GetDate(), 
-    CONSTRAINT [PK_Instrument_Sensor] PRIMARY KEY NONCLUSTERED ([ID]),
+    CONSTRAINT [PK_Instrument_Sensor] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Instrument_Sensor_Instrument] FOREIGN KEY ([InstrumentID]) REFERENCES [dbo].[Instrument] ([ID]),
     CONSTRAINT [FK_Instrument_Sensor_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
     CONSTRAINT [FK_Instrument_Sensor_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [UX_Instrument_Sensor] UNIQUE ([InstrumentID],[SensorID],[StartDate],[EndDate])
 )
-GO
---> Changed 2.0.23 20170112 TimPN
---CREATE CLUSTERED INDEX [CX_Instrument_Sensor] ON [dbo].[Instrument_Sensor] ([AddedAt])
-CREATE UNIQUE CLUSTERED INDEX [CX_Instrument_Sensor] ON [dbo].[Instrument_Sensor] ([AddedAt])
---< Changed 2.0.23 20170112 TimPN
 GO
 CREATE INDEX [IX_Instrument_Sensor_InstrumentID] ON [dbo].[Instrument_Sensor] ([InstrumentID])
 GO
@@ -71,8 +66,8 @@ BEGIN
         Instrument_Sensor src
         inner join inserted ins
             on (ins.ID = src.ID)
-		inner join deleted del
-			on (del.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
 END
 --< Changed 2.0.15 20161102 TimPN
 --> Added 2.0.5 20160530 TimPN
