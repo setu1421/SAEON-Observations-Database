@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNet.Identity;
-using Microsoft.Web.Http;
 using SAEON.Observations.Core;
 using Serilog;
 using Serilog.Context;
@@ -20,7 +19,6 @@ namespace SAEON.Observations.WebAPI.Controllers
     /// <summary>
     /// Logged in users can save frequently used queries in the QuerySite for later use
     /// </summary>
-    [ApiVersion("1.0")]
     [RoutePrefix("UserQueries")]
     [Authorize(Roles = "Administrators,DataReaders")]
     public class UserQueriesController : ApiController

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNet.Identity;
-using Microsoft.Web.Http;
 using SAEON.Observations.Core;
 using Serilog;
 using Serilog.Context;
@@ -20,7 +19,6 @@ namespace SAEON.Observations.WebAPI.Controllers
     /// <summary>
     /// Users have to be logged in to download data in the QuerySite. Any downloads are saved for later re-downloads.
     /// </summary>
-    [ApiVersion("1.0")]
     [RoutePrefix("UserDownloads")]
     [Authorize(Roles = "Administrators,DataReaders")]
     public class UserDownloadsController : ApiController

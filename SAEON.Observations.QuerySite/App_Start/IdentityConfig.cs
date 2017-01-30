@@ -34,7 +34,7 @@ namespace SAEON.Observations.QuerySite
                 msg.Bcc.Add(new MailAddress("observations@nimbusservices.co.za"));
                 msg.Body = $"<html><head><title>{message.Subject}</title></head><body>{message.Body}" +
                     "<p><b>South African Environmental Observation Network (SAEON)<b>" +
-                    "<p><a href=\"http://www.saeon.ac.za.org.za\"><img style=\"height: 50px; border: 0; border-style: none\" src=\"/Images/Logo.png\" alt=\"SAEON Logo\"></img></a></p>" +
+                    "<p><a href=\"http://www.saeon.ac.za.org.za\"><img style=\"height: 50px; border: 0; border-style: none\" src=\"http://www.saeon.ac.za/image_preview.jpg\" alt=\"NRF Logo\"></img></a></p>" +
                     "<p><a href=\"http://www.saeon.ac.za\">www.SAEON.ac.za</a><br>" +
                     "<a href=\"mailto:observations@nimbusservices.co.za\">observations@nimbusservices.co.za</a></p>" +
                     "</body></html>";

@@ -1,5 +1,4 @@
-﻿using Microsoft.Web.Http;
-using SAEON.Observations.Core;
+﻿using SAEON.Observations.Core;
 using Serilog;
 using Serilog.Context;
 using System;
@@ -17,7 +16,6 @@ namespace SAEON.Observations.WebAPI.Controllers
     /// <summary>
     /// Stations
     /// </summary>
-    [ApiVersion("1.0")]
     [RoutePrefix("Stations")]
     [Authorize(Roles = "Administrators,DataReaders")]
     public class StationsController : ApiController

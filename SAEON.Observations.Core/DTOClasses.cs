@@ -7,6 +7,48 @@ using System.Threading.Tasks;
 
 namespace SAEON.Observations.Core
 {
+
+    /// <summary>
+    /// Instrument Data Transfer Object
+    /// </summary>
+    public class InstrumentDTO
+    {
+        /// <summary>
+        /// Id of the Instrument
+        /// </summary>
+        [Required]
+        [Key]
+        public Guid Id { get; set; }
+        /// <summary>
+        /// Code of the Instrument
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// Name of the Instrument
+        /// </summary>
+        [Required, StringLength(150)]
+        public string Name { get; set; }
+        /// <summary>
+        /// Description of the Instrument
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Instrument
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+        /// <summary>
+        /// StartDate of the Instrument, null means always
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+        /// <summary>
+        /// EndDate of the Instrument, null means always
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+    }
+
     /// <summary>
     /// Site Data Transfer Object
     /// </summary>
@@ -46,6 +88,10 @@ namespace SAEON.Observations.Core
         /// EndDate of the Site, null means always
         /// </summary>
         public DateTime? EndDate { get; set; }
+        /// <summary>
+        /// The Stations linked to this Site
+        /// </summary>
+        public List<StationDTO> Stations { get; set; }
     }
 
     /// <summary>
@@ -64,6 +110,10 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Required]
         public Guid SiteId { get; set; }
+        /// <summary>
+        /// The Site this Station is linked to
+        /// </summary>
+        public SiteDTO Site { get; set;}
         /// <summary>
         /// Code of the Station
         /// </summary>
@@ -125,7 +175,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Name of the user download
         /// </summary>
-        [Required, StringLength(100)]
+        [Required, StringLength(150)]
         public string Name { get; set; }
         /// <summary>
         /// Description of the user download
@@ -141,7 +191,7 @@ namespace SAEON.Observations.Core
         /// URI of the user download
         /// </summary>
         [Required, StringLength(500)]
-        public string URI { get; set; }
+        public string DownloadURI { get; set; }
     }
 
     /// <summary>
@@ -163,7 +213,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Name of the user query
         /// </summary>
-        [Required, StringLength(100)]
+        [Required, StringLength(150)]
         public string Name { get; set; }
         /// <summary>
         /// Description of the user query

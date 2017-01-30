@@ -33,6 +33,10 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.Observations.WebSite.
 		SlnRelativePath = "SAEON.Observations.WebSite.Admin\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{9280C8D0-C7B0-4D21-A68C-A829BE448C35} = {9280C8D0-C7B0-4D21-A68C-A829BE448C35}
+		{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D} = {EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E60445F4-F6B6-40A1-BD4A-46A122B068AF}"
 	ProjectSection(SolutionItems) = preProject

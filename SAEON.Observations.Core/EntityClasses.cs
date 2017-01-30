@@ -10,19 +10,29 @@ using System.Threading.Tasks;
 namespace SAEON.Observations.Core
 {
     /// <summary>
+    /// Instrument entity
+    /// </summary>
+    public class Instrument : InstrumentDTO
+    {
+        public ICollection<Station> Stations { get; set; }
+    }
+
+    /// <summary>
     /// Site entity
     /// </summary>
     public class Site : SiteDTO
     {
-        public ICollection<Station> Stations { get; set; }
+        public new ICollection<Station> Stations { get; set; }
     }
+
     /// <summary>
     /// Station entity
     /// </summary>
     public class Station : StationDTO
     {
-        public Site Site { get; set; }
+        public new Site Site { get; set; }
     }
+
     /// <summary>
     /// UserDownload entity
     /// </summary>
@@ -47,6 +57,7 @@ namespace SAEON.Observations.Core
             Configuration.LazyLoadingEnabled = false;
         }
 
+        public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Station> Stations { get; set; }
         public DbSet<UserDownload> UserDownloads { get; set; }
