@@ -2938,7 +2938,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_Observation] (
     CONSTRAINT [tmp_ms_xx_constraint_UX_Observation1] UNIQUE NONCLUSTERED ([SensorID] ASC, [ImportBatchID] ASC, [ValueDate] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC) ON [Observations]
 );
 
-CREATE UNIQUE CLUSTERED INDEX [tmp_ms_xx_index_CX_Observation1]
+CREATE CLUSTERED INDEX [tmp_ms_xx_index_CX_Observation1]
     ON [dbo].[tmp_ms_xx_Observation]([AddedAt] ASC)
     ON [Observations];
 
