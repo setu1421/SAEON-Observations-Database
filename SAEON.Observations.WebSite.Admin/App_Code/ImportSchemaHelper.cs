@@ -43,17 +43,48 @@ public class ImportSchemaHelper : IDisposable
     Boolean concatedatetime = false;
 
     string docNamePrefix;
+
+    // string SourceFile;
+    // string Pass1File; // As loaded from source file
+    // string Pass2File; // After 1st R Call
+    // string Pass3File; // After processing
+    // string Pass4File; // After 2nd R Call
+
+
+    private List<string> LoadColumnNamesDelimited(DataSchema schema, string data)
+    {
+        List<string> result = new List<string>();
+        string[] lines = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+        int columnNamesLine = schema.IgnoreFirst;
+        if (columnNamesLine >= lines.Length)
+        {
+            throw new IndexOutOfRangeException("Column Names line greater than lines in source file");
+        }
+        {
+            List<string> columnNames = lines[columnNamesLine].Split(new string[] { schema.Delimiter.Replace("\\t","\t") }, StringSplitOptions.None).ToList();
+            List<string> badColumnNames = columnNames
+                .GroupBy(x => x)
+                .Where(g => g.Count() > 1)
+                .Select(y => y.Key)
+                .ToList();
+            if (badColumnNames.Any())
+            {
+                throw new InvalidOperationException("Duplicate column names found " + string.Join(", ", columnNames));
+            }
+            else
+            {
+                result.AddRange(columnNames);
+            }
+        }
+        return result;
+    }
+
     /// <summary>
     /// 
-    /// string SourceFile;
-    /// string Pass1File; // As loaded from source file
-    /// string Pass2File; // After 1st R Call
-    /// string Pass3File; // After processing
-    /// string Pass4File; // After 2nd R Call
     /// </summary>
     /// <param name="schema"></param>
     /// <param name="InputStream"></param>
-    public ImportSchemaHelper(DataSource ds, DataSchema schema, string Data, ImportBatch batch, Sensor obj = null, ImportLogHelper loghelper = null)
+    public ImportSchemaHelper(DataSource ds, DataSchema schema, string data, ImportBatch batch, Sensor obj = null, ImportLogHelper loghelper = null)
     {
         dataSource = ds;
         dataSchema = schema;
@@ -62,6 +93,10 @@ public class ImportSchemaHelper : IDisposable
             DelimitedClassBuilder cb = new DelimitedClassBuilder("ImportBatches", schema.Delimiter);
             cb.IgnoreEmptyLines = true;
             cb.IgnoreFirstLines = schema.IgnoreFirst;
+            if (schema.HasColumnNames.HasValue && schema.HasColumnNames.Value)
+            {
+                cb.IgnoreFirstLines++;
+            }
             cb.IgnoreLastLines = schema.IgnoreLast;
             if (!String.IsNullOrEmpty(schema.Condition))
                 schema.Condition = schema.Condition;
@@ -70,47 +105,119 @@ public class ImportSchemaHelper : IDisposable
                 cb.SplitSelector = schema.SplitSelector;
                 cb.SplitIndex = schema.SplitIndex.Value;
             }
-            foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
+            if (!(schema.HasColumnNames.HasValue && schema.HasColumnNames.Value))
             {
-                cb.AddField(col.Name, typeof(string));
-                switch (col.SchemaColumnType.Name)
+                foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
                 {
-                    case "Date":
-                        cb.LastField.ValueDate = true;
-                        cb.LastField.ValueDateformat = col.Format;
-                        break;
-                    case "Time":
-                        cb.LastField.ValueTime = true;
-                        cb.LastField.ValueTimeformat = col.Format;
-                        break;
-                    case "Ignore":
+                    cb.AddField(col.Name, typeof(string));
+                    switch (col.SchemaColumnType.Name)
+                    {
+                        case "Date":
+                            cb.LastField.ValueDate = true;
+                            cb.LastField.ValueDateformat = col.Format;
+                            break;
+                        case "Time":
+                            cb.LastField.ValueTime = true;
+                            cb.LastField.ValueTimeformat = col.Format;
+                            break;
+                        case "Ignore":
+                            cb.LastField.FieldValueDiscarded = true;
+                            break;
+                        case "Comment":
+                            cb.LastField.ValueComment = true;
+                            break;
+                        case "Offering":
+                            if (!string.IsNullOrEmpty(col.EmptyValue))
+                            {
+                                cb.LastField.ValueEmpty = true;
+                                cb.LastField.EmptyValue = col.EmptyValue;
+                            }
+                            cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                            cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                            break;
+                        case "FixedTime":
+                            if (!string.IsNullOrEmpty(col.EmptyValue))
+                            {
+                                cb.LastField.ValueEmpty = true;
+                                cb.LastField.EmptyValue = col.EmptyValue;
+                            }
+                            cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                            cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                            if (!string.IsNullOrEmpty(col.FixedTime))
+                            {
+                                cb.LastField.FixedTime = col.FixedTime;
+                            }
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                // Load column names from file
+                List<string> columnNames = LoadColumnNamesDelimited(schema, data);
+                // Loop through and if in schema add else ignore
+                List<string> columnsNotInSchema = new List<string>();
+                foreach (var columnName in columnNames)
+                {
+                    var col = schema.SchemaColumnRecords().Where(c => c.Name.Equals(columnName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+                    cb.AddField(columnName, typeof(string));
+                    if (col == null)
+                    {
+                        columnsNotInSchema.Add(columnName);
                         cb.LastField.FieldValueDiscarded = true;
-                        break;
-                    case "Comment":
-                        cb.LastField.ValueComment = true;
-                        break;
-                    case "Offering":
-                        if (!string.IsNullOrEmpty(col.EmptyValue))
+                    }
+                    else
+                    {
+                        switch (col.SchemaColumnType.Name)
                         {
-                            cb.LastField.ValueEmpty = true;
-                            cb.LastField.EmptyValue = col.EmptyValue;
+                            case "Date":
+                                cb.LastField.ValueDate = true;
+                                cb.LastField.ValueDateformat = col.Format;
+                                break;
+                            case "Time":
+                                cb.LastField.ValueTime = true;
+                                cb.LastField.ValueTimeformat = col.Format;
+                                break;
+                            case "Ignore":
+                                cb.LastField.FieldValueDiscarded = true;
+                                break;
+                            case "Comment":
+                                cb.LastField.ValueComment = true;
+                                break;
+                            case "Offering":
+                                if (!string.IsNullOrEmpty(col.EmptyValue))
+                                {
+                                    cb.LastField.ValueEmpty = true;
+                                    cb.LastField.EmptyValue = col.EmptyValue;
+                                }
+                                cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                                cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                                break;
+                            case "FixedTime":
+                                if (!string.IsNullOrEmpty(col.EmptyValue))
+                                {
+                                    cb.LastField.ValueEmpty = true;
+                                    cb.LastField.EmptyValue = col.EmptyValue;
+                                }
+                                cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                                cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                                if (!string.IsNullOrEmpty(col.FixedTime))
+                                {
+                                    cb.LastField.FixedTime = col.FixedTime;
+                                }
+                                break;
                         }
-                        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                        break;
-                    case "FixedTime":
-                        if (!string.IsNullOrEmpty(col.EmptyValue))
-                        {
-                            cb.LastField.ValueEmpty = true;
-                            cb.LastField.EmptyValue = col.EmptyValue;
-                        }
-                        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                        if (!string.IsNullOrEmpty(col.FixedTime))
-                        {
-                            cb.LastField.FixedTime = col.FixedTime;
-                        }
-                        break;
+                    }
+                }
+                if (columnsNotInSchema.Any())
+                {
+                    batch.Problems += "Columns in data file but not in schema - " + string.Join(", ", columnsNotInSchema);
+
+                }
+                var columnsNotInDataFile = schema.SchemaColumnRecords().Select(c => c.Name.ToLower()).Except(cb.Fields.Select(f => f.FieldName.ToLower()));
+                if (columnsNotInDataFile.Any())
+                {
+                    batch.Problems += "Columns in schema but not in data file - " + string.Join(", ", columnsNotInDataFile);
                 }
             }
             recordType = cb.CreateRecordClass();
@@ -120,6 +227,10 @@ public class ImportSchemaHelper : IDisposable
             FixedLengthClassBuilder cb = new FixedLengthClassBuilder(schema.Name, FixedMode.AllowVariableLength);
             cb.IgnoreEmptyLines = true;
             cb.IgnoreFirstLines = schema.IgnoreFirst;
+            //if (schema.HasColumnNames.HasValue && schema.HasColumnNames.Value)
+            //{
+            //    cb.IgnoreFirstLines++;
+            //}
             cb.IgnoreLastLines = schema.IgnoreLast;
             if (!String.IsNullOrEmpty(schema.Condition))
                 schema.Condition = schema.Condition;
@@ -128,48 +239,55 @@ public class ImportSchemaHelper : IDisposable
                 cb.SplitSelector = schema.SplitSelector;
                 cb.SplitIndex = schema.SplitIndex.Value;
             }
-            foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
+            if (true) // !(schema.HasColumnNames.HasValue && schema.HasColumnNames.Value))
             {
-                cb.AddField(col.Name, col.Width.Value, typeof(string));
-                switch (col.SchemaColumnType.Name)
+                foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
                 {
-                    case "Date":
-                        cb.LastField.ValueDate = true;
-                        cb.LastField.ValueDateformat = col.Format;
-                        break;
-                    case "Time":
-                        cb.LastField.ValueTime = true;
-                        cb.LastField.ValueTimeformat = col.Format;
-                        break;
-                    case "Ignore":
-                        cb.LastField.FieldValueDiscarded = true;
-                        break;
-                    case "Comment":
-                        cb.LastField.ValueComment = true;
-                        break;
-                    case "Offering":
-                        if (!string.IsNullOrEmpty(col.EmptyValue))
-                        {
-                            cb.LastField.ValueEmpty = true;
-                            cb.LastField.EmptyValue = col.EmptyValue;
-                        }
-                        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                        break;
-                    case "FixedTime":
-                        if (!string.IsNullOrEmpty(col.EmptyValue))
-                        {
-                            cb.LastField.ValueEmpty = true;
-                            cb.LastField.EmptyValue = col.EmptyValue;
-                        }
-                        cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                        cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                        if (!string.IsNullOrEmpty(col.FixedTime))
-                        {
-                            cb.LastField.FixedTime = col.FixedTime;
-                        }
-                        break;
+                    cb.AddField(col.Name, col.Width.Value, typeof(string));
+                    switch (col.SchemaColumnType.Name)
+                    {
+                        case "Date":
+                            cb.LastField.ValueDate = true;
+                            cb.LastField.ValueDateformat = col.Format;
+                            break;
+                        case "Time":
+                            cb.LastField.ValueTime = true;
+                            cb.LastField.ValueTimeformat = col.Format;
+                            break;
+                        case "Ignore":
+                            cb.LastField.FieldValueDiscarded = true;
+                            break;
+                        case "Comment":
+                            cb.LastField.ValueComment = true;
+                            break;
+                        case "Offering":
+                            if (!string.IsNullOrEmpty(col.EmptyValue))
+                            {
+                                cb.LastField.ValueEmpty = true;
+                                cb.LastField.EmptyValue = col.EmptyValue;
+                            }
+                            cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                            cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                            break;
+                        case "FixedTime":
+                            if (!string.IsNullOrEmpty(col.EmptyValue))
+                            {
+                                cb.LastField.ValueEmpty = true;
+                                cb.LastField.EmptyValue = col.EmptyValue;
+                            }
+                            cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
+                            cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
+                            if (!string.IsNullOrEmpty(col.FixedTime))
+                            {
+                                cb.LastField.FixedTime = col.FixedTime;
+                            }
+                            break;
+                    }
                 }
+            }
+            else
+            {
+                // Still to come
             }
             recordType = cb.CreateRecordClass();
         }
@@ -177,14 +295,14 @@ public class ImportSchemaHelper : IDisposable
         engine = new FileHelperEngine(recordType);
         engine.ErrorMode = ErrorMode.SaveAndContinue;
 
-        batch.SourceFile = Encoding.Unicode.GetBytes(Data);
+        batch.SourceFile = Encoding.Unicode.GetBytes(data);
         docNamePrefix = $"{ds.Name}-{DateTime.Now.ToString("yyyyMMdd HHmmss")}-{Path.GetFileNameWithoutExtension(batch.FileName)}-";
         foreach (var c in Path.GetInvalidFileNameChars())
             docNamePrefix = docNamePrefix.Replace(c, '_');
         foreach (var c in Path.GetInvalidPathChars())
             docNamePrefix = docNamePrefix.Replace(c, '_');
-        SaveDocument("Source.txt", Data);
-        dtResults = engine.ReadStringAsDT(Data);
+        SaveDocument("Source.txt", data);
+        dtResults = engine.ReadStringAsDT(data);
         dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
         using (StringWriter sw = new StringWriter())
         {

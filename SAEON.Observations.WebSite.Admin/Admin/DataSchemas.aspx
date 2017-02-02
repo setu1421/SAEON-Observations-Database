@@ -457,7 +457,7 @@
                         <Items>
                             <ext:Container ID="Container5" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                                 <Items>
-                                    <ext:NumberField AllowDecimals="false" ID="nfIgnoreFirst" DataIndex="IgnoreFirst"
+                                    <ext:NumberField AllowDecimals="false" ID="nfIgnoreFirst" DataIndex="IgnoreFirst" MinValue="0"
                                         MaxLength="10" runat="server" FieldLabel="Ignore first # of lines on import"
                                         AnchorHorizontal="93%">
                                     </ext:NumberField>
@@ -465,7 +465,7 @@
                             </ext:Container>
                             <ext:Container ID="Container6" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                                 <Items>
-                                    <ext:NumberField AllowDecimals="false" ID="nfIgnoreLast" DataIndex="IgnoreLast" MaxLength="10"
+                                    <ext:NumberField AllowDecimals="false" ID="nfIgnoreLast" DataIndex="IgnoreLast" MaxLength="10" MinValue="0"
                                         runat="server" FieldLabel="Ignore last # of lines on import" AnchorHorizontal="95%">
                                     </ext:NumberField>
                                 </Items>

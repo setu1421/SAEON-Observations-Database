@@ -153,7 +153,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
                                 else
                                     batch.Status = (int)ImportBatchStatus.NoLogErrors;
-
                                 batch.UserId = AuthHelper.GetLoggedInUserId;
                                 batch.Save();
 

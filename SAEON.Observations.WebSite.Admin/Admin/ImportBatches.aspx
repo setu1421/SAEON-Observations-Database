@@ -315,7 +315,7 @@
                                                 <Filters>
                                                     <ext:StringFilter DataIndex="SensorName" />
                                                     <ext:DateFilter DataIndex="ValueDate" />
-                                                    <ext:StringFilter DataIndex="RawValue" />
+                                                    <ext:NumericFilter DataIndex="RawValue" />
                                                     <ext:NumericFilter DataIndex="DataValue" />
                                                     <ext:StringFilter DataIndex="PhenomenonName" />
                                                     <ext:StringFilter DataIndex="OfferingName" />
