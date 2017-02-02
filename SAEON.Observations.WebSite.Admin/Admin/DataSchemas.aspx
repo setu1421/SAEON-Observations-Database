@@ -123,7 +123,7 @@
                                                     <ext:RecordField Name="Name" Type="String" />
                                                     <ext:RecordField Name="IgnoreFirst" Type="Int" />
                                                     <ext:RecordField Name="IgnoreLast" Type="Int" />
-                                                    <ext:RecordField Name="HasHeaderRow" Type="Boolean" />
+                                                    <ext:RecordField Name="HasColumnNames" Type="Boolean" />
                                                     <ext:RecordField Name="Condition" Type="String" />
                                                     <ext:RecordField Name="Delimiter" Type="String" />
                                                     <ext:RecordField Name="Description" Type="String" />
@@ -153,9 +153,9 @@
                                         <ext:Column Header="Source Type Code" Width="100" DataIndex="DataSourceTypeCode" />
                                         <ext:Column Header="Source Type Description" Width="150" DataIndex="DataSourceTypeDesc" />
                                         <ext:Column Header="Ignore First" DataIndex="IgnoreFirst" Width="100" />
-                                        <ext:BooleanColumn Header="Header Row" DataIndex="HasHeaderRow" Width="100"  FalseText="No" TrueText="Yes"/>
-                                        <ext:Column Header="Delimiter" DataIndex="Delimiter" Width="100" />
                                         <ext:Column Header="Ignore Last" DataIndex="IgnoreLast" Width="100" />
+                                        <ext:CheckColumn Header="Column Names" DataIndex="HasColumnNames" Width="100" Tooltip="Column Names" />
+                                        <ext:Column Header="Delimiter" DataIndex="Delimiter" Width="100" />
                                         <ext:CommandColumn Width="150">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
@@ -393,7 +393,7 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="640" Height="470" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="640" Height="420" Closable="true"
         Hidden="true" Collapsible="false" Title="Data Schema Detail" Maximizable="false"
         Layout="Fit" AutoScroll="true" ClientIDMode="Static">
         <Content>
@@ -472,7 +472,7 @@
                             </ext:Container>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container10" runat="server" Layout="Column" Height="100">
+                    <ext:Container ID="Container10" runat="server" Layout="Column" Height="50">
                         <Items>
                             <ext:Container ID="Container11" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                                 <Items>
@@ -492,7 +492,7 @@
                             </ext:Container>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container7" runat="server" Layout="Column" Height="100">
+                    <ext:Container ID="Container7" runat="server" Layout="Column" Height="50">
                         <Items>
                             <ext:Container ID="Container8" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
                                 <Items>
@@ -512,6 +512,13 @@
                                     </ext:NumberField>
                                 </Items>
                             </ext:Container>
+                        </Items>
+                    </ext:Container>
+                    <ext:Container ID="Container17" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                        <Items>
+                            <ext:Checkbox ID="cbHasColumnNames" DataIndex="HasColumnNames" runat="server" FieldLabel="Column Names"
+                                AnchorHorizontal="95%">
+                            </ext:Checkbox>
                         </Items>
                     </ext:Container>
                 </Items>
@@ -635,7 +642,7 @@
                     </ext:Container>
                 </Items>
                 <Buttons>
-<%--                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                    <%--                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
                         <Listeners>
                             <Click Handler="alert(#{SchemaColumnFormPanel}.validate())" />
                         </Listeners>
@@ -651,7 +658,7 @@
                 <BottomBar>
                     <ext:StatusBar ID="StatusBar2" runat="server" Height="25">
                         <Plugins>
-<%--                            <ext:ValidationStatus
+                            <%--                            <ext:ValidationStatus
                                 runat="server"
                                 FormPanelID="SchemaColumnFormPanel"
                                 ValidIcon="Accept"

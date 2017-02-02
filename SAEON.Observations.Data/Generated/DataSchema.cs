@@ -207,18 +207,18 @@ namespace SAEON.Observations.Data
 				colvarIgnoreFirst.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarIgnoreFirst);
 				
-				TableSchema.TableColumn colvarHasHeaderRow = new TableSchema.TableColumn(schema);
-				colvarHasHeaderRow.ColumnName = "HasHeaderRow";
-				colvarHasHeaderRow.DataType = DbType.Boolean;
-				colvarHasHeaderRow.MaxLength = 0;
-				colvarHasHeaderRow.AutoIncrement = false;
-				colvarHasHeaderRow.IsNullable = true;
-				colvarHasHeaderRow.IsPrimaryKey = false;
-				colvarHasHeaderRow.IsForeignKey = false;
-				colvarHasHeaderRow.IsReadOnly = false;
-				colvarHasHeaderRow.DefaultSetting = @"";
-				colvarHasHeaderRow.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarHasHeaderRow);
+				TableSchema.TableColumn colvarHasColumnNames = new TableSchema.TableColumn(schema);
+				colvarHasColumnNames.ColumnName = "HasColumnNames";
+				colvarHasColumnNames.DataType = DbType.Boolean;
+				colvarHasColumnNames.MaxLength = 0;
+				colvarHasColumnNames.AutoIncrement = false;
+				colvarHasColumnNames.IsNullable = true;
+				colvarHasColumnNames.IsPrimaryKey = false;
+				colvarHasColumnNames.IsForeignKey = false;
+				colvarHasColumnNames.IsReadOnly = false;
+				colvarHasColumnNames.DefaultSetting = @"";
+				colvarHasColumnNames.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarHasColumnNames);
 				
 				TableSchema.TableColumn colvarIgnoreLast = new TableSchema.TableColumn(schema);
 				colvarIgnoreLast.ColumnName = "IgnoreLast";
@@ -399,12 +399,12 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.IgnoreFirst, value); }
 		}
 		  
-		[XmlAttribute("HasHeaderRow")]
+		[XmlAttribute("HasColumnNames")]
 		[Bindable(true)]
-		public bool? HasHeaderRow 
+		public bool? HasColumnNames 
 		{
-			get { return GetColumnValue<bool?>(Columns.HasHeaderRow); }
-			set { SetColumnValue(Columns.HasHeaderRow, value); }
+			get { return GetColumnValue<bool?>(Columns.HasColumnNames); }
+			set { SetColumnValue(Columns.HasColumnNames, value); }
 		}
 		  
 		[XmlAttribute("IgnoreLast")]
@@ -546,7 +546,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,bool? varHasHeaderRow,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,bool? varHasColumnNames,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSchema item = new DataSchema();
 			
@@ -562,7 +562,7 @@ namespace SAEON.Observations.Data
 			
 			item.IgnoreFirst = varIgnoreFirst;
 			
-			item.HasHeaderRow = varHasHeaderRow;
+			item.HasColumnNames = varHasColumnNames;
 			
 			item.IgnoreLast = varIgnoreLast;
 			
@@ -592,7 +592,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,bool? varHasHeaderRow,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,string varCode,string varName,string varDescription,Guid varDataSourceTypeID,int varIgnoreFirst,bool? varHasColumnNames,int varIgnoreLast,string varCondition,string varDataSchemaX,Guid varUserId,string varDelimiter,string varSplitSelector,int? varSplitIndex,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			DataSchema item = new DataSchema();
 			
@@ -608,7 +608,7 @@ namespace SAEON.Observations.Data
 			
 				item.IgnoreFirst = varIgnoreFirst;
 			
-				item.HasHeaderRow = varHasHeaderRow;
+				item.HasColumnNames = varHasColumnNames;
 			
 				item.IgnoreLast = varIgnoreLast;
 			
@@ -683,7 +683,7 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn HasHeaderRowColumn
+        public static TableSchema.TableColumn HasColumnNamesColumn
         {
             get { return Schema.Columns[6]; }
         }
@@ -763,7 +763,7 @@ namespace SAEON.Observations.Data
 			 public static string Description = @"Description";
 			 public static string DataSourceTypeID = @"DataSourceTypeID";
 			 public static string IgnoreFirst = @"IgnoreFirst";
-			 public static string HasHeaderRow = @"HasHeaderRow";
+			 public static string HasColumnNames = @"HasColumnNames";
 			 public static string IgnoreLast = @"IgnoreLast";
 			 public static string Condition = @"Condition";
 			 public static string DataSchemaX = @"DataSchema";

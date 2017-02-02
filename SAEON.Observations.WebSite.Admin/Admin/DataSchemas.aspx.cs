@@ -29,7 +29,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     #region Data Schemas
     protected void DataSchemasGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.DataSchemasGrid.GetStore().DataSource = DataSchemRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        DataSchemasGrid.GetStore().DataSource = DataSchemRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -82,48 +82,59 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-
-        DataSchema schema = new DataSchema();
-
-        if (String.IsNullOrEmpty(tfID.Text))
-            schema.Id = Guid.NewGuid();
-        else
-            schema = new DataSchema(tfID.Text.Trim());
-        schema.Code = Utilities.NullIfEmpty(tfCode.Text);
-        schema.Name = Utilities.NullIfEmpty(tfName.Text);
-        schema.Description = Utilities.NullIfEmpty(tfDescription.Text);
-
-        if (!String.IsNullOrEmpty(nfIgnoreFirst.Text))
-            schema.IgnoreFirst = Int32.Parse(nfIgnoreFirst.Text);
-        else
-            schema.IgnoreFirst = 0;
-
-        if (!String.IsNullOrEmpty(nfIgnoreLast.Text))
-            schema.IgnoreLast = Int32.Parse(nfIgnoreLast.Text);
-        else
-            schema.IgnoreLast = 0;
-
-        schema.Condition = Utilities.NullIfEmpty(tfCondition.Text);
-
-        if (!String.IsNullOrEmpty(tfSplit.Text))
+        try
         {
-            schema.SplitSelector = tfSplit.Text;
-            schema.SplitIndex = int.Parse(nfSplitIndex.Value.ToString());
+
+            DataSchema schema = new DataSchema();
+
+            if (String.IsNullOrEmpty(tfID.Text))
+                schema.Id = Guid.NewGuid();
+            else
+                schema = new DataSchema(tfID.Text.Trim());
+            schema.Code = Utilities.NullIfEmpty(tfCode.Text);
+            schema.Name = Utilities.NullIfEmpty(tfName.Text);
+            schema.Description = Utilities.NullIfEmpty(tfDescription.Text);
+
+            if (!String.IsNullOrEmpty(nfIgnoreFirst.Text))
+                schema.IgnoreFirst = Int32.Parse(nfIgnoreFirst.Text);
+            else
+                schema.IgnoreFirst = 0;
+
+            if (!String.IsNullOrEmpty(nfIgnoreLast.Text))
+                schema.IgnoreLast = Int32.Parse(nfIgnoreLast.Text);
+            else
+                schema.IgnoreLast = 0;
+
+            schema.Condition = Utilities.NullIfEmpty(tfCondition.Text);
+
+            if (!String.IsNullOrEmpty(tfSplit.Text))
+            {
+                schema.SplitSelector = tfSplit.Text;
+                schema.SplitIndex = int.Parse(nfSplitIndex.Value.ToString());
+            }
+            else
+            {
+                schema.SplitSelector = null;
+                schema.SplitIndex = null;
+            }
+
+            schema.DataSourceTypeID = new Guid(cbDataSourceType.SelectedItem.Value);
+            schema.HasColumnNames = cbHasColumnNames.Checked;
+            schema.Delimiter = cbDelimiter.SelectedItem.Value;
+
+            schema.UserId = AuthHelper.GetLoggedInUserId;
+            schema.Save();
+            Auditing.Log("DataSchema.Save", new Dictionary<string, object> {
+                { "ID", schema.Id }, { "Code", schema.Code }, { "Name", schema.Name } });
+            DataSchemasGrid.DataBind();
+
+            DetailWindow.Hide();
         }
-        else
+        catch (Exception ex)
         {
-            schema.SplitSelector = null;
-            schema.SplitIndex = null;
+            Log.Error(ex, "Instruments.Save");
+            MessageBoxes.Error(ex, "Error", "Unable to save instrument");
         }
-
-        schema.DataSourceTypeID = new Guid(cbDataSourceType.SelectedItem.Value);
-        schema.Delimiter = cbDelimiter.SelectedItem.Value;
-
-        schema.UserId = AuthHelper.GetLoggedInUserId;
-        schema.Save();
-        DataSchemasGrid.DataBind();
-
-        this.DetailWindow.Hide();
     }
 
     protected void MasterRowSelect(object sender, DirectEventArgs e)

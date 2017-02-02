@@ -6,7 +6,7 @@
     [DataSourceTypeID] UNIQUEIDENTIFIER NOT NULL,
     [IgnoreFirst]      INT              CONSTRAINT [DF_DataSchema_IgnoreFirst] DEFAULT ((0)) NOT NULL,
 --> Added 2.0.21 20170106 TimPN
-    [HasHeaderRow]		BIT				NULL,
+    [HasColumnNames]	BIT				NULL,
 --< Added 2.0.21 20170106 TimPN
     [IgnoreLast]       INT              CONSTRAINT [DF_DataSchema_IgnoreLast] DEFAULT ((0)) NOT NULL,
     [Condition]        VARCHAR (500)    NULL,

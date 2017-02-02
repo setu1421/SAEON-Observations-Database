@@ -105,18 +105,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarDescription);
                 
-                TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
-                colvarUserId.ColumnName = "UserId";
-                colvarUserId.DataType = DbType.Guid;
-                colvarUserId.MaxLength = 0;
-                colvarUserId.AutoIncrement = false;
-                colvarUserId.IsNullable = false;
-                colvarUserId.IsPrimaryKey = false;
-                colvarUserId.IsForeignKey = false;
-                colvarUserId.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarUserId);
-                
                 TableSchema.TableColumn colvarDataSourceTypeID = new TableSchema.TableColumn(schema);
                 colvarDataSourceTypeID.ColumnName = "DataSourceTypeID";
                 colvarDataSourceTypeID.DataType = DbType.Guid;
@@ -141,6 +129,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarIgnoreFirst);
                 
+                TableSchema.TableColumn colvarHasColumnNames = new TableSchema.TableColumn(schema);
+                colvarHasColumnNames.ColumnName = "HasColumnNames";
+                colvarHasColumnNames.DataType = DbType.Boolean;
+                colvarHasColumnNames.MaxLength = 0;
+                colvarHasColumnNames.AutoIncrement = false;
+                colvarHasColumnNames.IsNullable = true;
+                colvarHasColumnNames.IsPrimaryKey = false;
+                colvarHasColumnNames.IsForeignKey = false;
+                colvarHasColumnNames.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarHasColumnNames);
+                
                 TableSchema.TableColumn colvarIgnoreLast = new TableSchema.TableColumn(schema);
                 colvarIgnoreLast.ColumnName = "IgnoreLast";
                 colvarIgnoreLast.DataType = DbType.Int32;
@@ -153,18 +153,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarIgnoreLast);
                 
-                TableSchema.TableColumn colvarDelimiter = new TableSchema.TableColumn(schema);
-                colvarDelimiter.ColumnName = "Delimiter";
-                colvarDelimiter.DataType = DbType.AnsiString;
-                colvarDelimiter.MaxLength = 3;
-                colvarDelimiter.AutoIncrement = false;
-                colvarDelimiter.IsNullable = true;
-                colvarDelimiter.IsPrimaryKey = false;
-                colvarDelimiter.IsForeignKey = false;
-                colvarDelimiter.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarDelimiter);
-                
                 TableSchema.TableColumn colvarCondition = new TableSchema.TableColumn(schema);
                 colvarCondition.ColumnName = "Condition";
                 colvarCondition.DataType = DbType.AnsiString;
@@ -176,6 +164,42 @@ namespace SAEON.Observations.Data{
                 colvarCondition.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarCondition);
+                
+                TableSchema.TableColumn colvarDataSchema = new TableSchema.TableColumn(schema);
+                colvarDataSchema.ColumnName = "DataSchema";
+                colvarDataSchema.DataType = DbType.AnsiString;
+                colvarDataSchema.MaxLength = 2147483647;
+                colvarDataSchema.AutoIncrement = false;
+                colvarDataSchema.IsNullable = true;
+                colvarDataSchema.IsPrimaryKey = false;
+                colvarDataSchema.IsForeignKey = false;
+                colvarDataSchema.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarDataSchema);
+                
+                TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
+                colvarUserId.ColumnName = "UserId";
+                colvarUserId.DataType = DbType.Guid;
+                colvarUserId.MaxLength = 0;
+                colvarUserId.AutoIncrement = false;
+                colvarUserId.IsNullable = false;
+                colvarUserId.IsPrimaryKey = false;
+                colvarUserId.IsForeignKey = false;
+                colvarUserId.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUserId);
+                
+                TableSchema.TableColumn colvarDelimiter = new TableSchema.TableColumn(schema);
+                colvarDelimiter.ColumnName = "Delimiter";
+                colvarDelimiter.DataType = DbType.AnsiString;
+                colvarDelimiter.MaxLength = 3;
+                colvarDelimiter.AutoIncrement = false;
+                colvarDelimiter.IsNullable = true;
+                colvarDelimiter.IsPrimaryKey = false;
+                colvarDelimiter.IsForeignKey = false;
+                colvarDelimiter.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarDelimiter);
                 
                 TableSchema.TableColumn colvarSplitSelector = new TableSchema.TableColumn(schema);
                 colvarSplitSelector.ColumnName = "SplitSelector";
@@ -200,6 +224,30 @@ namespace SAEON.Observations.Data{
                 colvarSplitIndex.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarSplitIndex);
+                
+                TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+                colvarAddedAt.ColumnName = "AddedAt";
+                colvarAddedAt.DataType = DbType.DateTime;
+                colvarAddedAt.MaxLength = 0;
+                colvarAddedAt.AutoIncrement = false;
+                colvarAddedAt.IsNullable = true;
+                colvarAddedAt.IsPrimaryKey = false;
+                colvarAddedAt.IsForeignKey = false;
+                colvarAddedAt.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarAddedAt);
+                
+                TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+                colvarUpdatedAt.ColumnName = "UpdatedAt";
+                colvarUpdatedAt.DataType = DbType.DateTime;
+                colvarUpdatedAt.MaxLength = 0;
+                colvarUpdatedAt.AutoIncrement = false;
+                colvarUpdatedAt.IsNullable = true;
+                colvarUpdatedAt.IsPrimaryKey = false;
+                colvarUpdatedAt.IsForeignKey = false;
+                colvarUpdatedAt.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUpdatedAt);
                 
                 TableSchema.TableColumn colvarDataSourceTypeCode = new TableSchema.TableColumn(schema);
                 colvarDataSourceTypeCode.ColumnName = "DataSourceTypeCode";
@@ -331,20 +379,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("UserId")]
-        [Bindable(true)]
-        public Guid UserId 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("UserId");
-		    }
-            set 
-		    {
-			    SetColumnValue("UserId", value);
-            }
-        }
-	      
         [XmlAttribute("DataSourceTypeID")]
         [Bindable(true)]
         public Guid DataSourceTypeID 
@@ -373,6 +407,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("HasColumnNames")]
+        [Bindable(true)]
+        public bool? HasColumnNames 
+	    {
+		    get
+		    {
+			    return GetColumnValue<bool?>("HasColumnNames");
+		    }
+            set 
+		    {
+			    SetColumnValue("HasColumnNames", value);
+            }
+        }
+	      
         [XmlAttribute("IgnoreLast")]
         [Bindable(true)]
         public int IgnoreLast 
@@ -387,20 +435,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("Delimiter")]
-        [Bindable(true)]
-        public string Delimiter 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("Delimiter");
-		    }
-            set 
-		    {
-			    SetColumnValue("Delimiter", value);
-            }
-        }
-	      
         [XmlAttribute("Condition")]
         [Bindable(true)]
         public string Condition 
@@ -412,6 +446,48 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("Condition", value);
+            }
+        }
+	      
+        [XmlAttribute("DataSchema")]
+        [Bindable(true)]
+        public string DataSchema 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("DataSchema");
+		    }
+            set 
+		    {
+			    SetColumnValue("DataSchema", value);
+            }
+        }
+	      
+        [XmlAttribute("UserId")]
+        [Bindable(true)]
+        public Guid UserId 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("UserId");
+		    }
+            set 
+		    {
+			    SetColumnValue("UserId", value);
+            }
+        }
+	      
+        [XmlAttribute("Delimiter")]
+        [Bindable(true)]
+        public string Delimiter 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Delimiter");
+		    }
+            set 
+		    {
+			    SetColumnValue("Delimiter", value);
             }
         }
 	      
@@ -440,6 +516,34 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("SplitIndex", value);
+            }
+        }
+	      
+        [XmlAttribute("AddedAt")]
+        [Bindable(true)]
+        public DateTime? AddedAt 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("AddedAt");
+		    }
+            set 
+		    {
+			    SetColumnValue("AddedAt", value);
+            }
+        }
+	      
+        [XmlAttribute("UpdatedAt")]
+        [Bindable(true)]
+        public DateTime? UpdatedAt 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("UpdatedAt");
+		    }
+            set 
+		    {
+			    SetColumnValue("UpdatedAt", value);
             }
         }
 	      
@@ -486,21 +590,29 @@ namespace SAEON.Observations.Data{
             
             public static string Description = @"Description";
             
-            public static string UserId = @"UserId";
-            
             public static string DataSourceTypeID = @"DataSourceTypeID";
             
             public static string IgnoreFirst = @"IgnoreFirst";
             
+            public static string HasColumnNames = @"HasColumnNames";
+            
             public static string IgnoreLast = @"IgnoreLast";
             
-            public static string Delimiter = @"Delimiter";
-            
             public static string Condition = @"Condition";
+            
+            public static string DataSchema = @"DataSchema";
+            
+            public static string UserId = @"UserId";
+            
+            public static string Delimiter = @"Delimiter";
             
             public static string SplitSelector = @"SplitSelector";
             
             public static string SplitIndex = @"SplitIndex";
+            
+            public static string AddedAt = @"AddedAt";
+            
+            public static string UpdatedAt = @"UpdatedAt";
             
             public static string DataSourceTypeCode = @"DataSourceTypeCode";
             

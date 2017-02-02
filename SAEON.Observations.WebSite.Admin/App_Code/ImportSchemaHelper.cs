@@ -528,17 +528,9 @@ public class ImportSchemaHelper : IDisposable
                             rec.FieldRawValue = RawValue;
                             rec.RawValue = null; // dataSource.DefaultNullValue;
                             rec.DataValue = null; // dataSource.DefaultNullValue;
-                            //// Lookups
-                            //foreach (var transform in transformations.Where(t => t.TransformationType.Name == "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
-                            //{
-                            //    TransformValue(transform.Id, ref rec);
-                            //    if (rec.RawValue.HasValue)
-                            //        RawValue = rec.RawValue.Value.ToString();
-                            //}
-                            // Non lookups
-                            foreach (var transform in transformations.Where(t => t.TransformationType.Name != "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
+                            foreach (var transform in transformations.Where(t => def.DataSourceTransformationIDs.Contains(t.Id)))
                             {
-                                TransformValue(transform.Id, ref rec);
+                                TransformValue(transform.Id, ref rec, true);
                             }
                         }
                         else
@@ -601,7 +593,7 @@ public class ImportSchemaHelper : IDisposable
     /// <summary>
     /// 
     /// </summary>
-    void TransformValue(Guid dtid, ref SchemaValue rec)
+    void TransformValue(Guid dtid, ref SchemaValue rec, bool isEmpty = false)
     {
         using (LogContext.PushProperty("Method", "TransformValue"))
         {
@@ -621,7 +613,7 @@ public class ImportSchemaHelper : IDisposable
                         process = false;
                 }
 
-                if ((trns.TransformationTypeID.ToString() != TransformationType.Lookup) && !rec.RawValue.HasValue) process = false;
+                //if ((trns.TransformationTypeID.ToString() != TransformationType.Lookup) && !rec.RawValue.HasValue) process = false;
 
                 if (!process)
                 {
@@ -629,87 +621,79 @@ public class ImportSchemaHelper : IDisposable
                     return;
                 }
 
-                if (trns.TransformationTypeID.ToString() == TransformationType.CorrectionValues)
+                if (!isEmpty)
                 {
-                    Dictionary<string, string> corrvals = trns.CorrectionValues;
-
-                    if (corrvals.ContainsKey("eq"))
+                    if (trns.TransformationTypeID.ToString() == TransformationType.CorrectionValues)
                     {
-                        //string eq = corrvals["equation"].Replace("\"","").Replace("\"","");
-                        Expression exp = new Expression(corrvals["eq"]);
-                        exp.Parameters["value"] = rec.RawValue;
-                        object val = exp.Evaluate();
-                        rec.DataValue = Double.Parse(val.ToString());
-                        DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
-                        if (dst.NewPhenomenonOfferingID != null)
+                        Dictionary<string, string> corrvals = trns.CorrectionValues;
+
+                        if (corrvals.ContainsKey("eq"))
                         {
-                            rec.RawPhenomenonOfferingID = rec.PhenomenonOfferingID;
-                            rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
-                        }
-                        if (dst.NewPhenomenonUOMID != null)
-                        {
-                            rec.RawPhenomenonUOMID = rec.PhenomenonUOMID;
-                            rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
+                            //string eq = corrvals["equation"].Replace("\"","").Replace("\"","");
+                            Expression exp = new Expression(corrvals["eq"]);
+                            exp.Parameters["value"] = rec.RawValue;
+                            object val = exp.Evaluate();
+                            rec.DataValue = Double.Parse(val.ToString());
                         }
                     }
+                    else if (trns.TransformationTypeID.ToString() == TransformationType.RatingTable)
+                    {
+
+                        rec.DataValue = trns.GetRatingValue(rec.RawValue.Value);
+                    }
+                    else if (trns.TransformationTypeID.ToString() == TransformationType.QualityControlValues)
+                    {
+                        if (!rec.DataValue.HasValue)
+                            rec.DataValue = rec.RawValue;
+
+                        Dictionary<string, Double> qv = trns.QualityValues;
+                        if (qv.ContainsKey("min") && rec.DataValue.Value < qv["min"])
+                            valid = false;
+
+                        if (qv.ContainsKey("max") && rec.DataValue.Value > qv["max"])
+                            valid = false;
+
+                        if (!valid)
+                        {
+                            rec.InvalidStatuses.Add(Status.TransformValueInvalid);
+                            rec.DataSourceTransformationID = trns.Id;
+
+                            rec.DataValueInvalid = true;
+                            rec.InvalidDataValue = rec.DataValue.ToString();
+                        }
+                    }
+                    else if (trns.TransformationTypeID.ToString() == TransformationType.Lookup)
+                    {
+
+                        var qv = trns.LookupValues;
+                        if (!qv.ContainsKey(rec.FieldRawValue))
+                            valid = false;
+                        else
+                        {
+                            rec.RawValue = trns.LookupValues[rec.FieldRawValue];
+                            rec.DataValue = rec.RawValue;
+                        }
+
+                        if (!valid)
+                        {
+                            rec.InvalidStatuses.Add(Status.TransformValueInvalid);
+                            rec.DataSourceTransformationID = trns.Id;
+
+                            rec.DataValueInvalid = true;
+                            rec.InvalidDataValue = rec.DataValue.ToString();
+                        }
+                    }
                 }
-                else if (trns.TransformationTypeID.ToString() == TransformationType.RatingTable)
+                //Set new offering/UOM
+                if (trns.NewPhenomenonOfferingID.HasValue)
                 {
-
-                    rec.DataValue = trns.GetRatingValue(rec.RawValue.Value);
-                    DataSourceTransformation dst = new DataSourceTransformation(dtid.ToString());
-                    if (dst.NewPhenomenonOfferingID != null)
-                    {
-                        rec.RawPhenomenonOfferingID = rec.PhenomenonOfferingID;
-                        rec.PhenomenonOfferingID = dst.NewPhenomenonOfferingID;
-                    }
-                    if (dst.NewPhenomenonUOMID != null)
-                    {
-                        rec.RawPhenomenonUOMID = rec.PhenomenonUOMID;
-                        rec.PhenomenonUOMID = dst.NewPhenomenonUOMID;
-                    }
+                    rec.RawPhenomenonOfferingID = trns.PhenomenonOfferingID;
+                    rec.PhenomenonOfferingID = trns.NewPhenomenonOfferingID;
                 }
-                else if (trns.TransformationTypeID.ToString() == TransformationType.QualityControlValues)
+                if (trns.NewPhenomenonUOMID.HasValue)
                 {
-                    if (!rec.DataValue.HasValue)
-                        rec.DataValue = rec.RawValue;
-
-                    Dictionary<string, Double> qv = trns.QualityValues;
-                    if (qv.ContainsKey("min") && rec.DataValue.Value < qv["min"])
-                        valid = false;
-
-                    if (qv.ContainsKey("max") && rec.DataValue.Value > qv["max"])
-                        valid = false;
-
-                    if (!valid)
-                    {
-                        rec.InvalidStatuses.Add(Status.TransformValueInvalid);
-                        rec.DataSourceTransformationID = trns.Id;
-
-                        rec.DataValueInvalid = true;
-                        rec.InvalidDataValue = rec.DataValue.ToString();
-                    }
-                }
-                else if (trns.TransformationTypeID.ToString() == TransformationType.Lookup)
-                {
-
-                    var qv = trns.LookupValues;
-                    if (!qv.ContainsKey(rec.FieldRawValue))
-                        valid = false;
-                    else
-                    {
-                        rec.RawValue = trns.LookupValues[rec.FieldRawValue];
-                        rec.DataValue = rec.RawValue;
-                    }
-
-                    if (!valid)
-                    {
-                        rec.InvalidStatuses.Add(Status.TransformValueInvalid);
-                        rec.DataSourceTransformationID = trns.Id;
-
-                        rec.DataValueInvalid = true;
-                        rec.InvalidDataValue = rec.DataValue.ToString();
-                    }
+                    rec.RawPhenomenonUOMID = trns.PhenomenonUOMID;
+                    rec.PhenomenonUOMID = trns.NewPhenomenonUOMID;
                 }
             }
             catch (Exception ex)

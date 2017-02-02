@@ -1,7 +1,6 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="Site" %>
-
 <!DOCTYPE html>
-<html>
+<html lang="en-za">
 <head runat="server">
     <title>Environmental Observations</title>
     <link href="Styles/Site.css" rel="stylesheet" type="text/css" />
