@@ -16,173 +16,170 @@ using SAEON.Observations.Core;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
-    /*
-    The WebApiConfig class may require additional changes to add a route for this controller. Merge these statements into the Register method of the WebApiConfig class as applicable. Note that OData URLs are case sensitive.
-
-    using System.Web.OData.Builder;
-    using System.Web.OData.Extensions;
-    using SAEON.Observations.Core;
-    ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-    builder.EntitySet<Instrument>("InstrumentsOData");
-    builder.EntitySet<Station>("Stations"); 
-    config.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
-    */
-    public class InstrumentsODataController : ODataController
+    /// <summary>
+    /// Instruments
+    /// </summary>
+    [ODataRoutePrefix("Instruments")]
+    public class InstrumentsODataController : BaseODataController<Instrument>
     {
-        private ObservationsDbContext db = new ObservationsDbContext();
 
-        // GET: odata/InstrumentsOData
-        [EnableQuery]
-        public IQueryable<Instrument> GetInstrumentsOData()
+        // GET: odata/Instruments
+        /// <summary>
+        /// Get a list of Instruments
+        /// </summary>
+        /// <returns>A list of Instrument</returns>
+        public override IQueryable<Instrument> GetAll()
         {
-            return db.Instruments;
+            return base.GetAll();
         }
 
-        // GET: odata/InstrumentsOData(5)
-        [EnableQuery]
-        public SingleResult<Instrument> GetInstrument([FromODataUri] Guid key)
+        // GET: odata/Instruments(5)
+        /// <summary>
+        /// Get an Instrument by Id
+        /// </summary>
+        /// <param name="id">Id of Instrument</param>
+        /// <returns>Instrument</returns>
+        public override SingleResult<Instrument> GetById([FromODataUri] Guid id)
         {
-            return SingleResult.Create(db.Instruments.Where(instrument => instrument.Id == key));
+            return base.GetById(id);
         }
 
-        // PUT: odata/InstrumentsOData(5)
-        public async Task<IHttpActionResult> Put([FromODataUri] Guid key, Delta<Instrument> patch)
+        // GET: odata/Instruments(5)
+        /// <summary>
+        /// Get an Instrument by Name
+        /// </summary>
+        /// <param name="name">Name of Instrument</param>
+        /// <returns>Instrument</returns>
+        public override SingleResult<Instrument> GetByName([FromODataUri] string name)
         {
-            Validate(patch.GetEntity());
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            Instrument instrument = await db.Instruments.FindAsync(key);
-            if (instrument == null)
-            {
-                return NotFound();
-            }
-
-            patch.Put(instrument);
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!InstrumentExists(key))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return Updated(instrument);
+            return base.GetByName(name);
         }
 
-        // POST: odata/InstrumentsOData
-        public async Task<IHttpActionResult> Post(Instrument instrument)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //// PUT: odata/Instruments(5)
+        //public async Task<IHttpActionResult> Put([FromODataUri] Guid key, Delta<Instrument> patch)
+        //{
+        //    Validate(patch.GetEntity());
 
-            db.Instruments.Add(instrument);
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (InstrumentExists(instrument.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    Instrument instrument = await db.Instruments.FindAsync(key);
+        //    if (instrument == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Created(instrument);
-        }
+        //    patch.Put(instrument);
 
-        // PATCH: odata/InstrumentsOData(5)
-        [AcceptVerbs("PATCH", "MERGE")]
-        public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<Instrument> patch)
-        {
-            Validate(patch.GetEntity());
+        //    try
+        //    {
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!InstrumentExists(key))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //    return Updated(instrument);
+        //}
 
-            Instrument instrument = await db.Instruments.FindAsync(key);
-            if (instrument == null)
-            {
-                return NotFound();
-            }
+        //// POST: odata/Instruments
+        //public async Task<IHttpActionResult> Post(Instrument instrument)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            patch.Patch(instrument);
+        //    db.Instruments.Add(instrument);
 
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!InstrumentExists(key))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateException)
+        //    {
+        //        if (InstrumentExists(instrument.Id))
+        //        {
+        //            return Conflict();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return Updated(instrument);
-        }
+        //    return Created(instrument);
+        //}
 
-        // DELETE: odata/InstrumentsOData(5)
-        public async Task<IHttpActionResult> Delete([FromODataUri] Guid key)
-        {
-            Instrument instrument = await db.Instruments.FindAsync(key);
-            if (instrument == null)
-            {
-                return NotFound();
-            }
+        //// PATCH: odata/Instruments(5)
+        //[AcceptVerbs("PATCH", "MERGE")]
+        //public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<Instrument> patch)
+        //{
+        //    Validate(patch.GetEntity());
 
-            db.Instruments.Remove(instrument);
-            await db.SaveChangesAsync();
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            return StatusCode(HttpStatusCode.NoContent);
-        }
+        //    Instrument instrument = await db.Instruments.FindAsync(key);
+        //    if (instrument == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-        // GET: odata/InstrumentsOData(5)/Stations
+        //    patch.Patch(instrument);
+
+        //    try
+        //    {
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!InstrumentExists(key))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return Updated(instrument);
+        //}
+
+        //// DELETE: odata/Instruments(5)
+        //public async Task<IHttpActionResult> Delete([FromODataUri] Guid key)
+        //{
+        //    Instrument instrument = await db.Instruments.FindAsync(key);
+        //    if (instrument == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    db.Instruments.Remove(instrument);
+        //    await db.SaveChangesAsync();
+
+        //    return StatusCode(HttpStatusCode.NoContent);
+        //}
+
+        // GET: odata/Instruments(5)/Stations
         [EnableQuery]
         public IQueryable<Station> GetStations([FromODataUri] Guid key)
         {
             return db.Instruments.Where(m => m.Id == key).SelectMany(m => m.Stations);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool InstrumentExists(Guid key)
-        {
-            return db.Instruments.Count(e => e.Id == key) > 0;
-        }
     }
 }

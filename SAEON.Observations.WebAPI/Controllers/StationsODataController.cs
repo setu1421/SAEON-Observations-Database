@@ -17,34 +17,42 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
-    /*
-    The WebApiConfig class may require additional changes to add a route for this controller. Merge these statements into the Register method of the WebApiConfig class as applicable. Note that OData URLs are case sensitive.
-
-    using System.Web.OData.Builder;
-    using System.Web.OData.Extensions;
-    using SAEON.Observations.Core;
-    ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-    builder.EntitySet<Station>("StationsOData");
-    builder.EntitySet<Site>("Sites"); 
-    config.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
-    */
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public class StationsODataController : ODataController
+    /// <summary>
+    /// Stations
+    /// </summary>
+    [ODataRoutePrefix("Stations")]
+    public class StationsODataController : BaseODataController<Station>
     {
-        private ObservationsDbContext db = new ObservationsDbContext();
-
-        // GET: odata/StationsOData
-        [EnableQuery]
-        public IQueryable<Station> GetStations()
+        /// <summary>
+        /// Get a list of Stations
+        /// </summary>
+        /// <returns>A list of Station</returns>
+        public override IQueryable<Station> GetAll()
         {
-            return db.Stations;
+            return base.GetAll();
         }
 
-        // GET: odata/StationsOData(5)
-        [EnableQuery]
-        public SingleResult<Station> GetStation([FromODataUri] Guid key)
+        // GET: odata/Stations(5)
+        /// <summary>
+        /// Get a Station by Id
+        /// </summary>
+        /// <param name="id">Id of Station</param>
+        /// <returns>Station</returns>
+        public override SingleResult<Station> GetById([FromODataUri] Guid id)
         {
-            return SingleResult.Create(db.Stations.Where(station => station.Id == key));
+            return base.GetById(id);
+        }
+
+
+        // GET: odata/Stations(5)
+        /// <summary>
+        /// Get a Station by Name
+        /// </summary>
+        /// <param name="name">Name of Station</param>
+        /// <returns>Station</returns>
+        public override SingleResult<Station> GetByName([FromODataUri] string name)
+        {
+            return base.GetByName(name);
         }
 
         // PUT: odata/StationsOData(5)
@@ -173,18 +181,5 @@ namespace SAEON.Observations.WebAPI.Controllers
             return SingleResult.Create(db.Stations.Where(m => m.Id == key).Select(m => m.Site));
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool StationExists(Guid key)
-        {
-            return db.Stations.Any(e => e.Id == key);
-        }
     }
 }

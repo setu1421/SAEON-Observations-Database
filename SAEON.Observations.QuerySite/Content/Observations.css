@@ -23,3 +23,8 @@ body {
     margin-bottom: 10px;
 }
 
+.navbar-inverse {
+  background-color: #567baf;
+  border-color: #567baf;
+}
+

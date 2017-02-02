@@ -1,4 +1,5 @@
 ﻿using SAEON.Observations.Core;
+using SAEON.Observations.WebAPI.Controllers;
 using Serilog;
 using Serilog.Context;
 using System;
@@ -17,106 +18,38 @@ namespace SAEON.Observations.WebAPI.Controllers
     /// Stations
     /// </summary>
     [RoutePrefix("Stations")]
-    [Authorize(Roles = "Administrators,DataReaders")]
-    public class StationsController : ApiController
+    public class StationsController : BaseApiController<Station>
     {
-        ObservationsDbContext db = null;
-
         /// <summary>
-        /// Stations construtor
+        /// Return a list of Stations
         /// </summary>
-        public StationsController()
+        /// <returns>A list of Station</returns>
+        [ResponseType(typeof(List<Station>))]
+        public override async Task<IHttpActionResult> GetAll()
         {
-            db = new ObservationsDbContext();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            return await base.GetAll();
         }
 
         /// <summary>
-        /// Return all Stations
+        /// Return a Station by Id
         /// </summary>
-        /// <returns></returns>
-        [Route]
-        [ResponseType(typeof(List<StationDTO>))]
-        public async Task<IHttpActionResult> Get()
+        /// <param name="id">The Id of the Station</param>
+        /// <returns>Station</returns>
+        [ResponseType(typeof(Station))]
+        public override async Task<IHttpActionResult> GetById(Guid id)
         {
-            using (LogContext.PushProperty("Method", "Get"))
-            {
-                try
-                {
-                    return Ok(await db.Stations.OrderBy(i => i.Name).ToListAsync());
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to get");
-                    throw;
-                }
-            }
+            return await base.GetById(id);
         }
 
         /// <summary>
-        /// Return a Station
+        /// Return a Station by Name
         /// </summary>
-        /// <param name="id">The id of the UserQuery</param>
-        /// <returns></returns>
-        [Route("{id:guid}")]
-        [ResponseType(typeof(StationDTO))]
-        public async Task<IHttpActionResult> Get(Guid id)
+        /// <param name="name">The Name of the Station</param>
+        /// <returns>Station</returns>
+        [ResponseType(typeof(UserQuery))]
+        public override async Task<IHttpActionResult> GetByName(string name)
         {
-            using (LogContext.PushProperty("Method", "Get"))
-            {
-                try
-                {
-                    var item = await db.Stations.FirstOrDefaultAsync(i => (i.Id == id));
-                    if (item == null)
-                    {
-                        Log.Error("{id} not found", id);
-                        return NotFound();
-                    }
-                    return Ok(item);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Return a Station
-        /// </summary>
-        /// <param name="name">The name of the Station</param>
-        /// <returns></returns>
-        [Route("{name}")]
-        [ResponseType(typeof(UserQueryDTO))]
-        public async Task<IHttpActionResult> GetByName(string name)
-        {
-            using (LogContext.PushProperty("Method", "GetByName"))
-            {
-                try
-                {
-                    var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.Name == name));
-                    if (item == null)
-                    {
-                        Log.Error("{name} not found", name);
-                        return NotFound();
-                    }
-                    return Ok(item);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to get {name}", name);
-                    throw;
-                }
-            }
+            return await base.GetByName(name);
         }
 
     }

@@ -10,43 +10,197 @@ using System.Threading.Tasks;
 namespace SAEON.Observations.Core
 {
     /// <summary>
+    /// Base for entities
+    /// </summary>
+    public abstract class BaseEntity
+    {
+        /// <summary>
+        /// Id of the Entity
+        /// </summary>
+        [Required]
+        [Key]
+        public Guid Id { get; set; }
+        /// <summary>
+        /// Name of the Entity
+        /// </summary>
+        [Required, StringLength(150)]
+        public string Name { get; set; }
+    }
+
+    /// <summary>
     /// Instrument entity
     /// </summary>
-    public class Instrument : InstrumentDTO
+    public class Instrument : BaseEntity
     {
+        /// <summary>
+        /// Code of the Instrument
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// Description of the Instrument
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Instrument
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+        /// <summary>
+        /// StartDate of the Instrument, null means always
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+        /// <summary>
+        /// EndDate of the Instrument, null means always
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+
+        // Navigation
+        /// <summary>
+        /// Stations linked to this Instrument
+        /// </summary>
         public ICollection<Station> Stations { get; set; }
     }
 
     /// <summary>
     /// Site entity
     /// </summary>
-    public class Site : SiteDTO
+    public class Site : BaseEntity
     {
-        public new ICollection<Station> Stations { get; set; }
+        /// <summary>
+        /// Code of the Site
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// Description of the Site
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Site
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+        /// <summary>
+        /// StartDate of the Site, null means always
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+        /// <summary>
+        /// EndDate of the Site, null means always
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+
+        // Navigation
+
+        /// <summary>
+        /// The Stations linked to this Site
+        /// </summary>
+        public ICollection<Station> Stations { get; set; }
     }
 
     /// <summary>
     /// Station entity
     /// </summary>
-    public class Station : StationDTO
+    public class Station : BaseEntity
     {
-        public new Site Site { get; set; }
+        /// <summary>
+        /// The SiteId of the Station
+        /// </summary>
+        [Required]
+        public Guid SiteId { get; set; }
+        /// <summary>
+        /// Code of the Station
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// Description of the Station
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Station
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+        /// <summary>
+        /// StartDate of the site, null means always
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+        /// <summary>
+        /// EndDate of the Station, null means always
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+        /// <summary>
+        /// Latitude of the Station
+        /// </summary>
+        public double? Latitude { get; set; }
+        /// <summary>
+        /// Logitude of the Station
+        /// </summary>
+        public double? Longitude { get; set; }
+        /// <summary>
+        /// Elevation of the Station, positive above sea level, negative below sea level
+        /// </summary>
+        public double? Elevation { get; set; }
+
+        // Navigation
+
+        /// <summary>
+        /// Site of the station
+        /// </summary>
+        public Site Site { get; set; }
     }
 
     /// <summary>
     /// UserDownload entity
     /// </summary>
-    public class UserDownload : UserDownloadDTO
+    public class UserDownload : BaseEntity
     {
-        public ApplicationUser User { get; set; }
+        /// <summary>
+        /// UserId of user query
+        /// </summary>
+        [Required, StringLength(128)]
+        public string UserId { get; set; }
+        /// <summary>
+        /// Description of the user download
+        /// </summary>
+        [StringLength(500)]
+        public string Description { get; set; }
+        /// <summary>
+        /// The URI of the original query that generated the download
+        /// </summary>
+        [StringLength(500)]
+        public string QueryURI { get; set; }
+        /// <summary>
+        /// URI of the user download
+        /// </summary>
+        [Required, StringLength(500)]
+        public string DownloadURI { get; set; }
     }
 
     /// <summary>
     /// UserQuery entity
     /// </summary>
-    public class UserQuery : UserQueryDTO
+    public class UserQuery : BaseEntity
     {
-        public ApplicationUser User { get; set; }
+        /// <summary>
+        /// UserId of user query
+        /// </summary>
+        [Required, StringLength(128)]
+        public string UserId { get; set; }
+        /// <summary>
+        /// Description of the user query
+        /// </summary>
+        [StringLength(500)]
+        public string Description { get; set; }
+        /// <summary>
+        /// URI of the user query
+        /// </summary>
+        [Required, StringLength(500)]
+        public string QueryURI { get; set; }
     }
 
     public class ObservationsDbContext : DbContext
@@ -62,35 +216,15 @@ namespace SAEON.Observations.Core
         public DbSet<Station> Stations { get; set; }
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
-        public DbSet<ApplicationUser> Users { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.Entity<ApplicationUser>().Map(k => k.MapInheritedProperties());
-            modelBuilder.Entity<ApplicationUser>().HasKey(k => k.Id);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.AccessFailedCount);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.Claims);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.Email);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.EmailConfirmed);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.LockoutEnabled);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.LockoutEndDateUtc);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.Logins);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.PasswordHash);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.PhoneNumber);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.PhoneNumberConfirmed);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.Roles);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.SecurityStamp);
-            modelBuilder.Entity<ApplicationUser>().Ignore(c => c.TwoFactorEnabled);
-            //modelBuilder.Entity<IdentityUser>().HasKey(k => k.Id);
+            modelBuilder.Ignore<ApplicationUser>();
             modelBuilder.Ignore<IdentityRole>();
-            //modelBuilder.Entity<IdentityRole>().HasKey(k => k.Id);
             modelBuilder.Ignore<IdentityUserClaim>();
-            //modelBuilder.Entity<IdentityUserClaim>().HasKey(k => k.Id);
             modelBuilder.Ignore<IdentityUserLogin>();
-            //modelBuilder.Entity<IdentityUserLogin>().HasKey(k => new { k.LoginProvider, k.ProviderKey, k.UserId});
             modelBuilder.Ignore<IdentityUserRole>();
-            //modelBuilder.Entity<IdentityUserRole>().HasKey(k => new { k.UserId, k.RoleId });
         }
     }
 

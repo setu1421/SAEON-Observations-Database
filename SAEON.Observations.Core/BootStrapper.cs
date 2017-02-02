@@ -19,10 +19,12 @@ namespace SAEON.Observations.Core
                 try
                 {
                     Database.SetInitializer<ObservationsDbContext>(null);
-                    Database.SetInitializer<ApplicationDbContext>(new MigrateDatabaseToLatestVersion<ApplicationDbContext, ApplicationDbMigration>());
+                    Database.SetInitializer<ApplicationDbContext>(null);
+                    //Database.SetInitializer<ApplicationDbContext>(new MigrateDatabaseToLatestVersion<ApplicationDbContext, ApplicationDbMigration>());
                     using (var context = new ApplicationDbContext())
                     {
                         context.Database.Initialize(false);
+                        context.Seed();
                     }
                 }
                 catch (Exception ex)
@@ -30,11 +32,13 @@ namespace SAEON.Observations.Core
                     Log.Error(ex, "Unable to initialize database");
                 }
             }
-            Mapper.Initialize(cfg => {
-                cfg.CreateMap<Site, SiteDTO>();
-                cfg.CreateMap<Station, StationDTO>();
-                cfg.CreateMap<UserDownload, UserDownloadDTO>();
-                cfg.CreateMap<UserQuery, UserQueryDTO>();
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Instrument, Instrument>().ForMember(i => i.Id, y => y.Ignore());
+                cfg.CreateMap<Site, Site>().ForMember(i => i.Id, y => y.Ignore());
+                cfg.CreateMap<Station, Station>().ForMember(i => i.Id, y => y.Ignore());
+                cfg.CreateMap<UserDownload, UserDownload>().ForMember(i => i.Id, y => y.Ignore());
+                cfg.CreateMap<UserQuery, UserQuery>().ForMember(i => i.Id, y => y.Ignore());
             });
         }
     }

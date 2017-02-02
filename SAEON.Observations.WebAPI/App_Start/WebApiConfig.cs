@@ -26,18 +26,12 @@ namespace SAEON.Observations.WebAPI
 
             config.Routes.MapHttpRoute(
                 name: "ApiById",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
 
             // Web API routes
             config.MapHttpAttributeRoutes();
-
-            // API versioning
-            //config.AddApiVersioning(o => o.AssumeDefaultVersionWhenUnspecified = true);
-
-            // Authentication
-            //config.Filters.Add(new AuthorizeAttribute());
 
             // OData
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
@@ -46,20 +40,21 @@ namespace SAEON.Observations.WebAPI
             builder.EntitySet<Station>("Stations");
             builder.EntitySet<UserDownload>("UserDownloads");
             builder.EntitySet<UserQuery>("UserQueries");
-            builder.EntitySet<ApplicationUser>("Users");
-            builder.EntityType<ApplicationUser>().Ignore(c => c.AccessFailedCount);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.Claims);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.Email);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.EmailConfirmed);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.LockoutEnabled);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.LockoutEndDateUtc);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.Logins);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.PasswordHash);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.PhoneNumber);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.PhoneNumberConfirmed);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.Roles);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.SecurityStamp);
-            builder.EntityType<ApplicationUser>().Ignore(c => c.TwoFactorEnabled);
+            builder.Ignore<ApplicationUser>();
+            //builder.EntitySet<ApplicationUser>("Users");
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.AccessFailedCount);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.Claims);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.Email);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.EmailConfirmed);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.LockoutEnabled);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.LockoutEndDateUtc);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.Logins);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.PasswordHash);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.PhoneNumber);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.PhoneNumberConfirmed);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.Roles);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.SecurityStamp);
+            //builder.EntityType<ApplicationUser>().Ignore(c => c.TwoFactorEnabled);
             builder.Ignore<IdentityRole>();
             builder.Ignore<IdentityUserClaim>();
             builder.Ignore<IdentityUserLogin>();

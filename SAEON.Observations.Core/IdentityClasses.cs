@@ -51,6 +51,53 @@ namespace SAEON.Observations.Core
         {
             return new ApplicationDbContext();
         }
+
+        private void AddUser(string name, string email, string password, string[] roles, UserManager<ApplicationUser> userManager)
+        {
+            if (userManager.FindByName(name) == null)
+            {
+                userManager.Create(new ApplicationUser { UserName = email, Email = email, Name = name, EmailConfirmed = true }, password);
+            }
+            var user = userManager.FindByName(name);
+            if (user != null)
+                foreach (var role in roles)
+                {
+                    if (!userManager.IsInRole(user.Id, role))
+                    {
+                        userManager.AddToRole(user.Id, role);
+                    }
+                }
+        }
+
+        public void Seed()
+        {
+            using (LogContext.PushProperty("Method", "Seed"))
+            {
+                Log.Verbose("Seeding database");
+                try
+                {
+                    var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(this));
+                    var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(this));
+                    string[] roles = new string[] { "Administrator", "DataReader", "DataWriter", "QuerySite" };
+                    foreach (var role in roles)
+                    {
+                        if (!roleManager.RoleExists(role))
+                        {
+                            roleManager.Create(new IdentityRole(role));
+                        }
+                    }
+                    AddUser("Administrator", "observations@saeon.ac.za.za", "0d3DHCClCsAh", new string[] { "Administrator" }, userManager);
+                    AddUser("Tim Parker-Nance", "tim@nimbusservices.co.za", "25m2Ue*9&E0i", new string[] { "Administrator" }, userManager);
+                    AddUser("Query Site", "querysite@saeon.ac.za", "0583dUSVyuFs", new string[] { "QuerySite" }, userManager);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to seed database");
+                    throw;
+                }
+            }
+        }
+
     }
     public class ApplicationDbInitializer : CreateDatabaseIfNotExists<ApplicationDbContext> { }
 
@@ -63,38 +110,10 @@ namespace SAEON.Observations.Core
             //AutomaticMigrationDataLossAllowed = true;
         }
 
-        private void AddUser(string name, string email, string password, string[] roles, UserManager<ApplicationUser> userManager)
-        {
-            var user = new ApplicationUser { UserName = email, Email = email, Name = name, EmailConfirmed = true };
-            var result = userManager.Create(user, password);
-            if (result.Succeeded)
-                foreach (var role in roles)
-                    userManager.AddToRole(user.Id, role);
-        }
-
         protected override void Seed(ApplicationDbContext context)
         {
-            using (LogContext.PushProperty("Method", "Seed"))
-            {
-                Log.Verbose("Seeding database");
-                try
-                {
-                    base.Seed(context);
-                    var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-                    var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-                    string[] roles = new string[] { "Administrator", "DataReader", "DataWriter", "QuerySite" };
-                    foreach (var role in roles)
-                        if (!roleManager.RoleExists(role)) roleManager.Create(new IdentityRole(role));
-                    AddUser("Administrator", "observations@saeon.ac.za.za", "0d3DHCClCsAh", new string[] { "Administrator" }, userManager);
-                    AddUser("Tim Parker-Nance", "tim@nimbusservices.co.za", "TimPN1#", new string[] { "Administrator" }, userManager);
-                    AddUser("Query Site", "observations@saeon.ac.za", "0583dUSVyuFs", new string[] { "QuerySite" }, userManager);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to seed database");
-                    throw;
-                }
-            }
+            base.Seed(context);
+            context.Seed();
         }
 
     }

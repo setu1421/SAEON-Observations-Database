@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Linq.Expressions;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
@@ -20,307 +21,115 @@ namespace SAEON.Observations.WebAPI.Controllers
     /// Users have to be logged in to download data in the QuerySite. Any downloads are saved for later re-downloads.
     /// </summary>
     [RoutePrefix("UserDownloads")]
-    [Authorize(Roles = "Administrators,DataReaders")]
-    public class UserDownloadsController : ApiController
+    public class UserDownloadsController : BaseApiController<UserDownload>
     {
-        ObservationsDbContext db = null;
-
         /// <summary>
-        /// UserDownloads constructor
-        /// </summary>
-        public UserDownloadsController()
-        {
-            db = new ObservationsDbContext();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        /// <summary>
-        /// Return all UserDownloads for the logged in user
+        /// Filter only for logged in user
         /// </summary>
         /// <returns></returns>
-        [Route]
-        [ResponseType(typeof(List<UserDownloadDTO>))]
-        public async Task<IHttpActionResult> GetAll()
+        protected override Expression<Func<UserDownload, bool>> EntityFilter()
         {
-            using (LogContext.PushProperty("Method", "GetAll"))
-            {
-                try
-                {
-                    return Ok(await db.UserDownloads.Where(i => i.UserId == User.Identity.GetUserId()).OrderBy(i => i.Name).ToListAsync());
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to get all");
-                    throw;
-                }
-            }
+            return (i => i.UserId == User.Identity.GetUserId());
         }
 
         /// <summary>
-        /// Return a UserDownload for for the logged in user
+        /// Return a list of UserDownloads
         /// </summary>
-        /// <param name="id">The id of the UserDownload</param>
-        /// <returns></returns>
-        [Route("{id:guid}")]
-        [ResponseType(typeof(UserDownloadDTO))]
-        public async Task<IHttpActionResult> GetById(Guid id)
+        /// <returns>A list of UserDownload</returns>
+        [ResponseType(typeof(List<UserDownload>))]
+        public override async Task<IHttpActionResult> GetAll()
         {
-            using (LogContext.PushProperty("Method", "GetById"))
-            {
-                try
-                {
-                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
-                    if (item == null)
-                    {
-                        Log.Error("{id} not found", id);
-                        return NotFound();
-                    }
-                    return Ok(item);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
+            return await base.GetAll();
         }
 
         /// <summary>
-        /// Return a UserDownload for for the logged in user
+        /// Return a UserDownload by Id
         /// </summary>
-        /// <param name="name">The name of the UserDownload</param>
-        /// <returns></returns>
-        [Route("{name}")]
-        [ResponseType(typeof(UserDownloadDTO))]
-        public async Task<IHttpActionResult> GetByName(string name)
+        /// <param name="id">The Id of the UserDownload</param>
+        /// <returns>UserDownload</returns>
+        [ResponseType(typeof(UserDownload))]
+        public override async Task<IHttpActionResult> GetById(Guid id)
         {
-            using (LogContext.PushProperty("Method", "GetByName"))
-            {
-                try
-                {
-                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
-                    if (item == null)
-                    {
-                        Log.Error("{name} not found", name);
-                        return NotFound();
-                    }
-                    return Ok(item);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to get {name}", name);
-                    throw;
-                }
-            }
+            return await base.GetById(id);
+        }
+
+        /// <summary>
+        /// Return a UserDownload by Name
+        /// </summary>
+        /// <param name="name">The Name of the UserDownload</param>
+        /// <returns>UserDownload</returns>
+        [ResponseType(typeof(UserDownload))]
+        public override async Task<IHttpActionResult> GetByName(string name)
+        {
+            return await base.GetByName(name);
+        }
+
+        protected override bool IsEntityOk(UserDownload item)
+        {
+            return base.IsEntityOk(item) && (item.UserId != User.Identity.GetUserId());
+        }
+
+        protected override void SetEntity(ref UserDownload item)
+        {
+            base.SetEntity(ref item);
+            item.UserId = User.Identity.GetUserId();
         }
 
         /// <summary>
         /// Create a UserDownload
         /// </summary>
-        /// <param name="itemDTO">The UserDownload to be created</param>
-        [Route]
-        [Authorize(Roles = "QuerySite")]
-        [ResponseType(typeof(UserDownloadDTO))]
-        public async Task<IHttpActionResult> Post([FromBody]UserDownloadDTO itemDTO)
+        /// <param name="item">The UserDownload to be created</param>
+        [ResponseType(typeof(UserDownload))]
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public override async Task<IHttpActionResult> Post([FromBody]UserDownload item)
         {
-            using (LogContext.PushProperty("Method", "Post"))
-            {
-                try
-                {
-                    Log.Verbose("Adding {itemDTO.Name} {@itemDTO}", itemDTO);
-                    if (!ModelState.IsValid)
-                    {
-                        Log.Error("{itemDTO.Name} ModelState.Invalid", itemDTO);
-                        return BadRequest(ModelState);
-                    }
-                    if (itemDTO.UserId != User.Identity.GetUserId())
-                    {
-                        Log.Error("{itemDTO.Name} invalid user", itemDTO);
-                        return BadRequest();
-                    }
-                    try
-                    {
-                        itemDTO.UserId = User.Identity.GetUserId();
-                        db.UserDownloads.Add(Mapper.Map<UserDownloadDTO, UserDownload>(itemDTO));
-                        await db.SaveChangesAsync();
-                    }
-                    catch (DbUpdateException)
-                    {
-                        if (!db.UserDownloads.Any(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == itemDTO.Id)))
-                        {
-                            Log.Error("{itemDTO.Name} conflict", itemDTO);
-                            return Conflict();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                    return CreatedAtRoute("UserDownloads", new { id = itemDTO.Id }, itemDTO);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to add {itemDTO.Name}", itemDTO);
-                    throw;
-                }
-            }
+            return await base.Post(item);
         }
 
         /// <summary>
-        /// Update a UserDownload for the logged in user
+        /// Update a UserDownload by Id
         /// </summary>
-        /// <param name="id">The id of the UserDownload</param>
-        /// <param name="itemDTO">The UserDownload to be updated</param>
-        [Route("{id:guid}")]
-        [Authorize(Roles = "QuerySite")]
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutById(Guid id, [FromBody]UserDownloadDTO itemDTO)
+        /// <param name="id">Id of UserDownload</param>
+        /// <param name="delta">The new UserDownload</param>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public override Task<IHttpActionResult> PutById(Guid id, [FromBody] UserDownload delta)
         {
-            using (LogContext.PushProperty("Method", "PutById"))
-            {
-                try
-                {
-                    Log.Verbose("Updating {id} {@itemDTO}", id, itemDTO);
-                    if (!ModelState.IsValid)
-                    {
-                        Log.Error("{id} ModelState.Invalid", id);
-                        return BadRequest(ModelState);
-                    }
-                    if (id != itemDTO.Id)
-                    {
-                        Log.Error("{id} Ids not same", id);
-                        return BadRequest();
-                    }
-                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
-                    if (item == null)
-                    {
-                        Log.Error("{id} not found", id);
-                        return NotFound();
-                    }
-                    Mapper.Map<UserDownloadDTO, UserDownload>(itemDTO, item);
-                    await db.SaveChangesAsync();
-                    return StatusCode(HttpStatusCode.NoContent);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to update {id}", id);
-                    throw;
-                }
-            }
+            return base.PutById(id, delta);
         }
 
         /// <summary>
-        /// Update a UserDownload for the logged in user
+        /// Update a UserDownload by Name
         /// </summary>
-        /// <param name="name">The name of the UserDownload</param>
-        /// <param name="itemDTO">The UserDownload to be updated</param>
-        [Route("{name}")]
-        [Authorize(Roles = "QuerySite")]
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutByName(string name, [FromBody]UserDownloadDTO itemDTO)
+        /// <param name="name">Name of UserDownload</param>
+        /// <param name="delta">The new UserDownload</param>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public override Task<IHttpActionResult> PutByName(string name, [FromBody] UserDownload delta)
         {
-            using (LogContext.PushProperty("Method", "PutByName"))
-            {
-                try
-                {
-                    Log.Verbose("Updating {name} to {@itemDTO}", name, itemDTO);
-                    if (!ModelState.IsValid)
-                    {
-                        Log.Error("{name} ModelState.Invalid", name);
-                        return BadRequest(ModelState);
-                    }
-                    if (name != itemDTO.Name)
-                    {
-                        Log.Error("{name} names not same", name);
-                        return BadRequest();
-                    }
-                    var item = db.UserDownloads.FirstOrDefault(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
-                    if (item == null)
-                    {
-                        Log.Error("{name} not found", name);
-                        return NotFound();
-                    }
-                    await db.SaveChangesAsync();
-                    return StatusCode(HttpStatusCode.NoContent);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to update {name}", name);
-                    throw;
-                }
-            }
+            return base.PutByName(name, delta);
         }
 
         /// <summary>
-        /// Delete a UserDownload for the logged in user
+        /// Delete a UserDownload by Id
         /// </summary>
-        /// <param name="id">The id of the UserDownload</param>
-        [Route("{id:guid}")]
-        [Authorize(Roles = "QuerySite")]
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> DeleteById(Guid id)
+        /// <param name="id">Id of UserDownload</param>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public override Task<IHttpActionResult> DeleteById(Guid id)
         {
-            using (LogContext.PushProperty("Method", "DeleteById"))
-            {
-                try
-                {
-                    Log.Verbose("Deleting {id}", id);
-                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
-                    if (item == null)
-                    {
-                        Log.Error("{id} not found");
-                        return NotFound();
-                    }
-                    db.UserDownloads.Remove(item);
-                    await db.SaveChangesAsync();
-                    return StatusCode(HttpStatusCode.NoContent);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to delete {id}", id);
-                    throw;
-                }
-            }
+            return base.DeleteById(id);
         }
 
         /// <summary>
-        /// Delete a UserDownload for the logged in user
+        /// Delete a UserDownload by Name
         /// </summary>
-        /// <param name="name">The name of the UserDownload</param>
-        [Route("{name}")]
-        [Authorize(Roles = "QuerySite")]
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> DeleteByName(string name)
+        /// <param name="name">Name of UserDownload</param>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = false)]
+        public override Task<IHttpActionResult> DeleteByName(string name)
         {
-            using (LogContext.PushProperty("Method", "DeleteByName"))
-            {
-                try
-                {
-                    Log.Verbose("Deleting {name}", name);
-                    var item = await db.UserDownloads.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
-                    if (item == null)
-                    {
-                        Log.Error("{name} not found", name);
-                        return NotFound();
-                    }
-                    db.UserDownloads.Remove(item);
-                    await db.SaveChangesAsync();
-                    return StatusCode(HttpStatusCode.NoContent);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to delete {name}", name);
-                    throw;
-                }
-            }
+            return base.DeleteByName(name);
         }
     }
 }

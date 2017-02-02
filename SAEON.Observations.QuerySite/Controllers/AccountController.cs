@@ -14,6 +14,8 @@ using SAEON.Observations.Core;
 namespace SAEON.Observations.QuerySite.Controllers
 {
     [Authorize]
+    [RoutePrefix("Account")]
+    [Route("{action=index}")]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -76,7 +78,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
             switch (result)
             {
                 case SignInStatus.Success:

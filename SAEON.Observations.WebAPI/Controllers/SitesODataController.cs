@@ -17,37 +17,45 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
-    /*
-    The WebApiConfig class may require additional changes to add a route for this controller. Merge these statements into the Register method of the WebApiConfig class as applicable. Note that OData URLs are case sensitive.
-
-    using System.Web.OData.Builder;
-    using System.Web.OData.Extensions;
-    using SAEON.Observations.Core;
-    ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-    builder.EntitySet<Site>("SitesOData");
-    builder.EntitySet<Station>("Stations"); 
-    config.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
-    */
-    [ApiExplorerSettings(IgnoreApi = true)]
-    public class SitesODataController : ODataController
+    /// <summary>
+    /// Sites
+    /// </summary>
+    [ODataRoutePrefix("Sites")]
+    public class SitesODataController : BaseODataController<Site>
     {
-        private ObservationsDbContext db = new ObservationsDbContext();
-
-        // GET: odata/SitesOData
-        [EnableQuery]
-        public IQueryable<Site> GetSites()
+        /// <summary>
+        /// Get a list of Sites
+        /// </summary>
+        /// <returns>A list of Site</returns>
+        public override IQueryable<Site> GetAll()
         {
-            return db.Sites;
+            return base.GetAll();
         }
 
-        // GET: odata/SitesOData(5)
-        [EnableQuery]
-        public SingleResult<Site> GetSite([FromODataUri] Guid key)
+        // GET: odata/Sites(5)
+        /// <summary>
+        /// Get a Site by Id
+        /// </summary>
+        /// <param name="id">Id of Site</param>
+        /// <returns>Site</returns>
+        public override SingleResult<Site> GetById([FromODataUri] Guid id)
         {
-            return SingleResult.Create(db.Sites.Where(site => site.Id == key));
+            return base.GetById(id);
         }
 
-        // PUT: odata/SitesOData(5)
+
+        // GET: odata/Sites(5)
+        /// <summary>
+        /// Get a Site by Name
+        /// </summary>
+        /// <param name="name">Name of Site</param>
+        /// <returns>Site</returns>
+        public override SingleResult<Site> GetByName([FromODataUri] string name)
+        {
+            return base.GetByName(name);
+        }
+
+        // PUT: odata/Sites(5)
         //public async Task<IHttpActionResult> Put([FromODataUri] Guid key, Delta<Site> patch)
         //{
         //    Validate(patch.GetEntity());
@@ -84,7 +92,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //    return Updated(site);
         //}
 
-        // POST: odata/SitesOData
+        // POST: odata/Sites
         //public async Task<IHttpActionResult> Post(Site site)
         //{
         //    if (!ModelState.IsValid)
@@ -113,7 +121,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //    return Created(site);
         //}
 
-        // PATCH: odata/SitesOData(5)
+        // PATCH: odata/Sites(5)
         //[AcceptVerbs("PATCH", "MERGE")]
         //public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<Site> patch)
         //{
@@ -151,7 +159,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //    return Updated(site);
         //}
 
-        // DELETE: odata/SitesOData(5)
+        // DELETE: odata/Sites(5)
         //public async Task<IHttpActionResult> Delete([FromODataUri] Guid key)
         //{
         //    Site site = await db.Sites.FindAsync(key);
@@ -166,25 +174,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         //    return StatusCode(HttpStatusCode.NoContent);
         //}
 
-        // GET: odata/SitesOData(5)/Stations
+        //GET: odata/Sites(5)/Stations
         [EnableQuery]
         public IQueryable<Station> GetStations([FromODataUri] Guid key)
         {
             return db.Sites.Where(m => m.Id == key).SelectMany(m => m.Stations);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool SiteExists(Guid key)
-        {
-            return db.Sites.Any(e => e.Id == key);
         }
     }
 }

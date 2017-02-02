@@ -49,6 +49,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.SubSonic", "SAEON.SubSonic\SubSonic\SAEON.SubSonic.csproj", "{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.QuerySite", "SAEON.Observations.QuerySite\SAEON.Observations.QuerySite.csproj", "{593E9A77-F2B6-44FB-A324-A9D1F1F20348}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A} = {FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.QuerySite.Tests", "SAEON.Observations.QuerySite.Tests\SAEON.Observations.QuerySite.Tests.csproj", "{5A79BA42-446A-4A3B-99D1-7316448AE98D}"
 EndProject

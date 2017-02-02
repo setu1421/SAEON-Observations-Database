@@ -17,106 +17,38 @@ namespace SAEON.Observations.WebAPI.Controllers
     /// Sites
     /// </summary>
     [RoutePrefix("Sites")]
-    [Authorize(Roles = "Administrators,DataReaders")]
-    public class SitesController : ApiController
+    public class SitesController : BaseApiController<Site>
     {
-        ObservationsDbContext db = null;
-
         /// <summary>
-        /// Site contructor
+        /// Return a list of Sites
         /// </summary>
-        public SitesController()
+        /// <returns>A list of Site</returns>
+        [ResponseType(typeof(List<Site>))]
+        public override async Task<IHttpActionResult> GetAll()
         {
-            db = new ObservationsDbContext();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            return await base.GetAll();
         }
 
         /// <summary>
-        /// Return all Sites
+        /// Return a Site by Id
         /// </summary>
-        /// <returns></returns>
-        [Route]
-        [ResponseType(typeof(List<SiteDTO>))]
-        public async Task<IHttpActionResult> Get()
+        /// <param name="id">The Id of the Site</param>
+        /// <returns>Site</returns>
+        [ResponseType(typeof(Site))]
+        public override async Task<IHttpActionResult> GetById(Guid id)
         {
-            using (LogContext.PushProperty("Method", "Get"))
-            {
-                try
-                {
-                    return Ok(await db.Sites.OrderBy(i => i.Name).ToListAsync());
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to get");
-                    throw;
-                }
-            }
+            return await base.GetById(id);
         }
 
         /// <summary>
-        /// Return a Site
+        /// Return a Site by Name
         /// </summary>
-        /// <param name="id">The id of the UserQuery</param>
-        /// <returns></returns>
-        [Route("{id:guid}")]
-        [ResponseType(typeof(SiteDTO))]
-        public async Task<IHttpActionResult> Get(Guid id)
+        /// <param name="name">The Name of the Site</param>
+        /// <returns>Site</returns>
+        [ResponseType(typeof(Site))]
+        public override async Task<IHttpActionResult> GetByName(string name)
         {
-            using (LogContext.PushProperty("Method", "Get"))
-            {
-                try
-                {
-                    var item = await db.Sites.FirstOrDefaultAsync(i => (i.Id == id));
-                    if (item == null)
-                    {
-                        Log.Error("{id} not found", id);
-                        return NotFound();
-                    }
-                    return Ok(item);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Return a Site
-        /// </summary>
-        /// <param name="name">The name of the Site</param>
-        /// <returns></returns>
-        [Route("{name}")]
-        [ResponseType(typeof(UserQueryDTO))]
-        public async Task<IHttpActionResult> GetByName(string name)
-        {
-            using (LogContext.PushProperty("Method", "GetByName"))
-            {
-                try
-                {
-                    var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.Name == name));
-                    if (item == null)
-                    {
-                        Log.Error("{name} not found", name);
-                        return NotFound();
-                    }
-                    return Ok(item);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to get {name}", name);
-                    throw;
-                }
-            }
+            return await base.GetByName(name);
         }
 
     }

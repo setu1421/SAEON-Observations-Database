@@ -11,6 +11,8 @@ using SAEON.Observations.QuerySite.Models;
 namespace SAEON.Observations.QuerySite.Controllers
 {
     [Authorize]
+    [RoutePrefix("Manage")]
+    [Route("{action=index}")]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;
