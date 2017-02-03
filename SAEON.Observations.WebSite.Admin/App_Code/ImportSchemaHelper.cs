@@ -61,7 +61,7 @@ public class ImportSchemaHelper : IDisposable
             throw new IndexOutOfRangeException("Column Names line greater than lines in source file");
         }
         {
-            List<string> columnNames = lines[columnNamesLine].Split(new string[] { schema.Delimiter.Replace("\\t","\t") }, StringSplitOptions.None).ToList();
+            List<string> columnNames = lines[columnNamesLine].Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None).ToList();
             List<string> badColumnNames = columnNames
                 .GroupBy(x => x)
                 .Where(g => g.Count() > 1)
@@ -211,13 +211,13 @@ public class ImportSchemaHelper : IDisposable
                 }
                 if (columnsNotInSchema.Any())
                 {
-                    batch.Problems += "Columns in data file but not in schema - " + string.Join(", ", columnsNotInSchema);
+                    batch.Issues += "Columns in data file but not in schema - " + string.Join(", ", columnsNotInSchema) + Environment.NewLine;
 
                 }
                 var columnsNotInDataFile = schema.SchemaColumnRecords().Select(c => c.Name.ToLower()).Except(cb.Fields.Select(f => f.FieldName.ToLower()));
                 if (columnsNotInDataFile.Any())
                 {
-                    batch.Problems += "Columns in schema but not in data file - " + string.Join(", ", columnsNotInDataFile);
+                    batch.Issues += "Columns in schema but not in data file - " + string.Join(", ", columnsNotInDataFile) + Environment.NewLine;
                 }
             }
             recordType = cb.CreateRecordClass();
@@ -294,6 +294,7 @@ public class ImportSchemaHelper : IDisposable
         //recordType = ClassBuilder.LoadFromXmlString(schema.DataSchemaX).CreateRecordClass();
         engine = new FileHelperEngine(recordType);
         engine.ErrorMode = ErrorMode.SaveAndContinue;
+        List<object> list = engine.ReadStringAsList(data);
 
         batch.SourceFile = Encoding.Unicode.GetBytes(data);
         docNamePrefix = $"{ds.Name}-{DateTime.Now.ToString("yyyyMMdd HHmmss")}-{Path.GetFileNameWithoutExtension(batch.FileName)}-";
@@ -303,6 +304,7 @@ public class ImportSchemaHelper : IDisposable
             docNamePrefix = docNamePrefix.Replace(c, '_');
         SaveDocument("Source.txt", data);
         dtResults = engine.ReadStringAsDT(data);
+        Log.Information(dtResults.Dump());
         dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
         using (StringWriter sw = new StringWriter())
         {
@@ -341,62 +343,69 @@ public class ImportSchemaHelper : IDisposable
             def.Index = i;
             def.FieldName = dtcol.ColumnName;
             var schemaCol = dataSchema.SchemaColumnRecords().FirstOrDefault(sc => sc.Name.Equals(def.FieldName, StringComparison.CurrentCultureIgnoreCase));
-            if (schemaCol == null) throw new ArgumentNullException($"Unable to find schema column with name {def.FieldName}");
-            switch (schemaCol.SchemaColumnType.Name)
-            {
-                case "Date":
-                    def.IsDate = true;
-                    def.Dateformat = schemaCol.Format;
-                    break;
-                case "Time":
-                    def.IsTime = true;
-                    def.Timeformat = schemaCol.Format;
-                    break;
-                case "Ignore":
+            if (schemaCol == null)
+                if ((dataSchema.DataSourceTypeID == new Guid(DataSourceType.CSV)) && dataSchema.HasColumnNames.HasValue && dataSchema.HasColumnNames.Value)
                     def.IsIgnored = true;
-                    break;
-                case "Comment":
-                    def.IsComment = true;
-                    break;
-                case "Offering":
-                case "Fixed Time":
-                    def.IsOffering = true;
-                    def.PhenomenonOfferingID = schemaCol.PhenomenonOfferingID;
-                    PhenomenonOffering off = new PhenomenonOffering(def.PhenomenonOfferingID);
-                    if (off == null)
-                        def.InValidOffering = true;
-                    else
-                        def.DataSourceTransformationIDs = LoadTransformations(def.PhenomenonOfferingID.Value);
-                    def.PhenomenonUOMID = schemaCol.PhenomenonUOMID;
-                    PhenomenonUOM uom = new PhenomenonUOM(def.PhenomenonUOMID);
-                    if (uom == null)
-                        def.InValidUOM = true;
-                    if (Sensor != null)
-                        def.SensorID = Sensor.Id;
-                    else
-                    {
-                        SensorCollection colsens = new Select()
-                                                              .From(Sensor.Schema)
-                                                              .Where(Sensor.PhenomenonIDColumn).IsEqualTo(off.PhenomenonID)
-                                                              .And(Sensor.DataSourceIDColumn).IsEqualTo(this.dataSource.Id)
-                                                              .ExecuteAsCollection<SensorCollection>();
-                        if (colsens.Count() == 0)
-                            def.SensorNotFound = true;
+                else
+                {
+                    throw new ArgumentNullException($"Unable to find schema column with name {def.FieldName}");
+                }
+            else
+                switch (schemaCol.SchemaColumnType.Name)
+                {
+                    case "Date":
+                        def.IsDate = true;
+                        def.Dateformat = schemaCol.Format;
+                        break;
+                    case "Time":
+                        def.IsTime = true;
+                        def.Timeformat = schemaCol.Format;
+                        break;
+                    case "Ignore":
+                        def.IsIgnored = true;
+                        break;
+                    case "Comment":
+                        def.IsComment = true;
+                        break;
+                    case "Offering":
+                    case "Fixed Time":
+                        def.IsOffering = true;
+                        def.PhenomenonOfferingID = schemaCol.PhenomenonOfferingID;
+                        PhenomenonOffering off = new PhenomenonOffering(def.PhenomenonOfferingID);
+                        if (off == null)
+                            def.InValidOffering = true;
                         else
-                            def.SensorID = colsens[0].Id;
-                    }
-                    if (!string.IsNullOrEmpty(schemaCol.EmptyValue))
-                    {
-                        def.IsEmptyValue = true;
-                        def.EmptyValue = schemaCol.EmptyValue;
-                    }
-                    if (schemaCol.SchemaColumnType.Name == "Fixed Time")
-                    {
-                        def.IsFixedTime = true;
-                        def.FixedTimeValue = TimeSpan.Parse(schemaCol.FixedTime);
-                    }
-                    break;
-            }
+                            def.DataSourceTransformationIDs = LoadTransformations(def.PhenomenonOfferingID.Value);
+                        def.PhenomenonUOMID = schemaCol.PhenomenonUOMID;
+                        PhenomenonUOM uom = new PhenomenonUOM(def.PhenomenonUOMID);
+                        if (uom == null)
+                            def.InValidUOM = true;
+                        if (Sensor != null)
+                            def.SensorID = Sensor.Id;
+                        else
+                        {
+                            SensorCollection colsens = new Select()
+                                                                  .From(Sensor.Schema)
+                                                                  .Where(Sensor.PhenomenonIDColumn).IsEqualTo(off.PhenomenonID)
+                                                                  .And(Sensor.DataSourceIDColumn).IsEqualTo(this.dataSource.Id)
+                                                                  .ExecuteAsCollection<SensorCollection>();
+                            if (colsens.Count() == 0)
+                                def.SensorNotFound = true;
+                            else
+                                def.SensorID = colsens[0].Id;
+                        }
+                        if (!string.IsNullOrEmpty(schemaCol.EmptyValue))
+                        {
+                            def.IsEmptyValue = true;
+                            def.EmptyValue = schemaCol.EmptyValue;
+                        }
+                        if (schemaCol.SchemaColumnType.Name == "Fixed Time")
+                        {
+                            def.IsFixedTime = true;
+                            def.FixedTimeValue = TimeSpan.Parse(schemaCol.FixedTime);
+                        }
+                        break;
+                }
 
             schemaDefs.Add(def);
         }

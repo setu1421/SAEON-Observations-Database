@@ -18,7 +18,10 @@ CASE b.[Status]
 	WHEN 2 THEN 'Moved to Datalog'
 END StatusDescription,
 b.[FileName],
-b.LogFileName
+b.LogFileName,
+--> Added 20170203 TimPN
+b.Issues
+--< Added 20170203 TimPN
 
 FROM ImportBatch b
 INNER JOIN DataSource d

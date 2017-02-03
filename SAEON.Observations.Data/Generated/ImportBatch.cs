@@ -275,18 +275,18 @@ namespace SAEON.Observations.Data
 					colvarStatusReasonID.ForeignKeyTableName = "StatusReason";
 				schema.Columns.Add(colvarStatusReasonID);
 				
-				TableSchema.TableColumn colvarProblems = new TableSchema.TableColumn(schema);
-				colvarProblems.ColumnName = "Problems";
-				colvarProblems.DataType = DbType.AnsiString;
-				colvarProblems.MaxLength = 1000;
-				colvarProblems.AutoIncrement = false;
-				colvarProblems.IsNullable = true;
-				colvarProblems.IsPrimaryKey = false;
-				colvarProblems.IsForeignKey = false;
-				colvarProblems.IsReadOnly = false;
-				colvarProblems.DefaultSetting = @"";
-				colvarProblems.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarProblems);
+				TableSchema.TableColumn colvarIssues = new TableSchema.TableColumn(schema);
+				colvarIssues.ColumnName = "Issues";
+				colvarIssues.DataType = DbType.AnsiString;
+				colvarIssues.MaxLength = 1000;
+				colvarIssues.AutoIncrement = false;
+				colvarIssues.IsNullable = true;
+				colvarIssues.IsPrimaryKey = false;
+				colvarIssues.IsForeignKey = false;
+				colvarIssues.IsReadOnly = false;
+				colvarIssues.DefaultSetting = @"";
+				colvarIssues.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarIssues);
 				
 				TableSchema.TableColumn colvarSourceFile = new TableSchema.TableColumn(schema);
 				colvarSourceFile.ColumnName = "SourceFile";
@@ -479,12 +479,12 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.StatusReasonID, value); }
 		}
 		  
-		[XmlAttribute("Problems")]
+		[XmlAttribute("Issues")]
 		[Bindable(true)]
-		public string Problems 
+		public string Issues 
 		{
-			get { return GetColumnValue<string>(Columns.Problems); }
-			set { SetColumnValue(Columns.Problems, value); }
+			get { return GetColumnValue<string>(Columns.Issues); }
+			set { SetColumnValue(Columns.Issues, value); }
 		}
 		  
 		[XmlAttribute("SourceFile")]
@@ -628,7 +628,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varProblems,byte[] varSourceFile,byte[] varPass1File,byte[] varPass2File,byte[] varPass3File,byte[] varPass4File,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Insert(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varIssues,byte[] varSourceFile,byte[] varPass1File,byte[] varPass2File,byte[] varPass3File,byte[] varPass4File,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -652,7 +652,7 @@ namespace SAEON.Observations.Data
 			
 			item.StatusReasonID = varStatusReasonID;
 			
-			item.Problems = varProblems;
+			item.Issues = varIssues;
 			
 			item.SourceFile = varSourceFile;
 			
@@ -678,7 +678,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,int varCode,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varProblems,byte[] varSourceFile,byte[] varPass1File,byte[] varPass2File,byte[] varPass3File,byte[] varPass4File,DateTime? varAddedAt,DateTime? varUpdatedAt)
+		public static void Update(Guid varId,int varCode,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varIssues,byte[] varSourceFile,byte[] varPass1File,byte[] varPass2File,byte[] varPass3File,byte[] varPass4File,DateTime? varAddedAt,DateTime? varUpdatedAt)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -704,7 +704,7 @@ namespace SAEON.Observations.Data
 			
 				item.StatusReasonID = varStatusReasonID;
 			
-				item.Problems = varProblems;
+				item.Issues = varIssues;
 			
 				item.SourceFile = varSourceFile;
 			
@@ -810,7 +810,7 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn ProblemsColumn
+        public static TableSchema.TableColumn IssuesColumn
         {
             get { return Schema.Columns[11]; }
         }
@@ -881,7 +881,7 @@ namespace SAEON.Observations.Data
 			 public static string Comment = @"Comment";
 			 public static string StatusID = @"StatusID";
 			 public static string StatusReasonID = @"StatusReasonID";
-			 public static string Problems = @"Problems";
+			 public static string Issues = @"Issues";
 			 public static string SourceFile = @"SourceFile";
 			 public static string Pass1File = @"Pass1File";
 			 public static string Pass2File = @"Pass2File";

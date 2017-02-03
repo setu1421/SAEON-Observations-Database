@@ -101,6 +101,7 @@
                                                     <ext:RecordField Name="StatusDescription" Type="String" />
                                                     <ext:RecordField Name="FileName" Type="String" />
                                                     <ext:RecordField Name="LogFileName" Type="String" />
+                                                    <ext:RecordField Name="Issues" Type="String" />
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>
@@ -123,6 +124,7 @@
                                         <ext:Column Header="FileName" DataIndex="FileName" Width="200" />
                                         <ext:Column Header="LogFileName" DataIndex="LogFileName" Width="200" />
                                         <ext:Column Header="Status" DataIndex="StatusDescription" Width="150" />
+                                        <ext:Column Header="Issues" DataIndex="Issues" Width="150" />
                                         <ext:CommandColumn Width="75">
                                             <Commands>
                                                 <ext:GridCommand Icon="Pencil" CommandName="Move" Text="" ToolTip-Text="Move Batch">

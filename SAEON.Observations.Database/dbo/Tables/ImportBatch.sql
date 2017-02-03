@@ -29,7 +29,7 @@
     [StatusReasonID] UNIQUEIDENTIFIER NULL,
 --< Added 2.0.9 20160823 TimPN
 --> Added 2.0.21 20170106 TimPN
-    [Problems] VARCHAR(1000) NULL,
+    [Issues] VARCHAR(1000) NULL,
 --< Added 2.0.21 20170106 TimPN
 --> Added 2.0.18 20161130 TimPN
     [SourceFile] VARBINARY(MAX) FILESTREAM NULL, 

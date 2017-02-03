@@ -189,6 +189,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarLogFileName);
                 
+                TableSchema.TableColumn colvarIssues = new TableSchema.TableColumn(schema);
+                colvarIssues.ColumnName = "Issues";
+                colvarIssues.DataType = DbType.AnsiString;
+                colvarIssues.MaxLength = 1000;
+                colvarIssues.AutoIncrement = false;
+                colvarIssues.IsNullable = true;
+                colvarIssues.IsPrimaryKey = false;
+                colvarIssues.IsForeignKey = false;
+                colvarIssues.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarIssues);
+                
                 
                 BaseSchema = schema;
                 //add this schema to the provider
@@ -392,6 +404,20 @@ namespace SAEON.Observations.Data{
 			    SetColumnValue("LogFileName", value);
             }
         }
+	      
+        [XmlAttribute("Issues")]
+        [Bindable(true)]
+        public string Issues 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Issues");
+		    }
+            set 
+		    {
+			    SetColumnValue("Issues", value);
+            }
+        }
 	    
 	    #endregion
     
@@ -421,6 +447,8 @@ namespace SAEON.Observations.Data{
             public static string FileName = @"FileName";
             
             public static string LogFileName = @"LogFileName";
+            
+            public static string Issues = @"Issues";
             
 	    }
 	    #endregion
