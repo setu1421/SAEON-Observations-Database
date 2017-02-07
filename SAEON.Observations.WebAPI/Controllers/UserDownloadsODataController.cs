@@ -33,7 +33,43 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <returns></returns>
         protected override Expression<Func<UserDownload, bool>> EntityFilter()
         {
-            return (i => i.UserId == User.Identity.GetUserId());
+            var userId = User.Identity.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("Logged in UserId");
+            }
+            return (i => i.UserId == userId);
+        }
+
+        /// <summary>
+        /// Check UserId is logged in UserId
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected override bool IsEntityOk(UserDownload item)
+        {
+            var userId = User.Identity.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new NullReferenceException("Not logged in");
+            }
+            return base.IsEntityOk(item) && (item.UserId == userId);
+        }
+
+        /// <summary>
+        /// Check UserId is logged in UserId
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected override void SetEntity(ref UserDownload item)
+        {
+            base.SetEntity(ref item);
+            var userId = User.Identity.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("Logged in UserId");
+            }
+            item.UserId = userId;
         }
 
         /// <summary>

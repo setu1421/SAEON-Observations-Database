@@ -1,6 +1,10 @@
 ﻿using SAEON.Observations.Core;
+using SAEON.Observations.WebAPI.Controllers;
+using Serilog;
+using Serilog.Context;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,38 +15,38 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers
 {
     /// <summary>
-    /// Instruments
+    /// Stations
     /// </summary>
-    [RoutePrefix("Instruments")]
-    public class InstrumentsController : BaseApiController<Instrument>
+    [RoutePrefix("Stations")]
+    public class StationsApiController : BaseApiController<Station>
     {
         /// <summary>
-        /// Return a list of Instruments
+        /// Return a list of Stations
         /// </summary>
-        /// <returns>A list of Instrument</returns>
-        [ResponseType(typeof(List<Instrument>))]
+        /// <returns>A list of Station</returns>
+        [ResponseType(typeof(List<Station>))]
         public override async Task<IHttpActionResult> GetAll()
         {
             return await base.GetAll();
         }
 
         /// <summary>
-        /// Return a Instrument by Id
+        /// Return a Station by Id
         /// </summary>
-        /// <param name="id">The Id of the Instrument</param>
-        /// <returns>Instrument</returns>
-        [ResponseType(typeof(Instrument))]
+        /// <param name="id">The Id of the Station</param>
+        /// <returns>Station</returns>
+        [ResponseType(typeof(Station))]
         public override async Task<IHttpActionResult> GetById(Guid id)
         {
             return await base.GetById(id);
         }
 
         /// <summary>
-        /// Return a Instrument by Name
+        /// Return a Station by Name
         /// </summary>
-        /// <param name="name">The Name of the Instrument</param>
-        /// <returns>Instrument</returns>
-        [ResponseType(typeof(Instrument))]
+        /// <param name="name">The Name of the Station</param>
+        /// <returns>Station</returns>
+        [ResponseType(typeof(UserQuery))]
         public override async Task<IHttpActionResult> GetByName(string name)
         {
             return await base.GetByName(name);

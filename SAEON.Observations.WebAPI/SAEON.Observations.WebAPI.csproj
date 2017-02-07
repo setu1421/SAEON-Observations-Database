@@ -57,8 +57,8 @@
       <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.7\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.DependencyCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -115,7 +115,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.2.3.0\lib\net46\Serilog.dll</HintPath>
+      <HintPath>..\packages\Serilog.2.4.0\lib\net46\Serilog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Serilog.Formatting.Compact, Version=1.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
@@ -311,15 +311,15 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\BaseODataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\InstrumentsController.cs" />
+    <Compile Include="Controllers\InstrumentsApiController.cs" />
     <Compile Include="Controllers\InstrumentsODataController.cs" />
-    <Compile Include="Controllers\SitesController.cs" />
+    <Compile Include="Controllers\SitesApiController.cs" />
     <Compile Include="Controllers\SitesODataController.cs" />
-    <Compile Include="Controllers\StationsController.cs" />
+    <Compile Include="Controllers\StationsApiController.cs" />
     <Compile Include="Controllers\StationsODataController.cs" />
     <Compile Include="Controllers\UserDownloadsODataController.cs" />
-    <Compile Include="Controllers\UserQueriesController.cs" />
-    <Compile Include="Controllers\UserDownloadsController.cs" />
+    <Compile Include="Controllers\UserQueriesApiController.cs" />
+    <Compile Include="Controllers\UserDownloadsApiController.cs" />
     <Compile Include="Controllers\UserQueriesODataController.cs" />
     <Compile Include="ErrorHandler\AiHandleErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">

@@ -28,13 +28,31 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Overwrite to filter Entities
+        /// Overwrite to filter entities
         /// </summary>
-        /// <returns></returns>
+        /// <returns>PredicateOf(TEntity)</returns>
         protected virtual Expression<Func<TEntity, bool>> EntityFilter()
         {
             return null;
         }
+
+        /// <summary>
+        /// Overwrite to do additional checks before Post or Put
+        /// </summary>
+        /// <param name="item">TEntity</param>
+        /// <returns>True if TEntity is Ok else False</returns>
+        protected virtual bool IsEntityOk(TEntity item)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Overwrite to do additional checks before Post or Put
+        /// </summary>
+        /// <param name="item">TEntity</param>
+        protected virtual void SetEntity(ref TEntity item)
+        { }
+
 
         [EnableQuery]
         public virtual IQueryable<TEntity> GetAll()

@@ -17,7 +17,7 @@ namespace SAEON.Observations.WebAPI.Controllers
     /// Sites
     /// </summary>
     [RoutePrefix("Sites")]
-    public class SitesController : BaseApiController<Site>
+    public class SitesApiController : BaseApiController<Site>
     {
         /// <summary>
         /// Return a list of Sites

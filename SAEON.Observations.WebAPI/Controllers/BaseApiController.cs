@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
@@ -16,7 +17,8 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
-    //[Authorize(Roles = "Administrators, DataReaders")]
+    [Route("{action=index}")]
+    [Authorize(Roles = "Administrators, DataReaders")]
     public abstract class BaseApiController<TEntity> : ApiController where TEntity : BaseEntity
     {
         protected ObservationsDbContext db = new ObservationsDbContext();
@@ -38,6 +40,23 @@ namespace SAEON.Observations.WebAPI.Controllers
         {
             return null;
         }
+
+        /// <summary>
+        /// Overwrite to do additional checks before Post or Put
+        /// </summary>
+        /// <param name="item">TEntity</param>
+        /// <returns>True if TEntity is Ok else False</returns>
+        protected virtual bool IsEntityOk(TEntity item)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Overwrite to do additional checks before Post or Put
+        /// </summary>
+        /// <param name="item">TEntity</param>
+        protected virtual void SetEntity(ref TEntity item)
+        { }
 
         /// <summary>
         /// Return all TEntity
@@ -131,24 +150,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Overwrite to do additional checks before Post or Put
-        /// </summary>
-        /// <param name="item">TEntity</param>
-        /// <returns>True if Tentity is Ok else False</returns>
-        protected virtual bool IsEntityOk(TEntity item)
-        {
-            return true;
-        }
-
-        protected virtual void SetEntity(ref TEntity item)
-        { }
-
-        /// <summary>
         /// Create a TEntity
         /// </summary>
         /// <param name="item">The new TEntity </param>
         [Route]
-        //[Authorize(Roles = "QuerySite")]
+        [Authorize(Roles = "Administrators, DataWriters")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
         {
@@ -156,21 +162,32 @@ namespace SAEON.Observations.WebAPI.Controllers
             {
                 try
                 {
-                    Log.Verbose("Adding {item.Name} {@item}", item);
+                    Log.Verbose("Adding {Name} {@item}", item.Name, item);
+                    if (item == null)
+                    {
+                        Log.Error("item cannot be null");
+                        return BadRequest("item cannot be null");
+
+                    }
                     if (!ModelState.IsValid)
                     {
-                        Log.Error("{item.Name} ModelState.Invalid", item);
+                        Log.Error("{Name} ModelState.Invalid", item.Name);
                         return BadRequest(ModelState);
                     }
                     if (!IsEntityOk(item))
                     {
-                        Log.Error("{item.Name} invalid", item);
-                        return BadRequest();
+                        Log.Error("{Name} invalid", item.Name);
+                        return BadRequest($"{item.Name} invalid");
                     }
                     try
                     {
+                        Log.Verbose("1: {@item}", item);
                         SetEntity(ref item);
-                        db.Set<TEntity>().Add(Mapper.Map<TEntity, TEntity>(item));
+                        Log.Verbose("2: {@item}", item);
+                        item = Mapper.Map<TEntity, TEntity>(item);
+                        Log.Verbose("3: {@item}", item);
+                        db.Set<TEntity>().Add(item);
+                        Log.Verbose("4: {@item}", item);
                         await db.SaveChangesAsync();
                     }
                     catch (DbUpdateException)
@@ -182,7 +199,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                             query = query.Where(filter);
                         if (await query.AnyAsync())
                         {
-                            Log.Error("{item.Name} conflict", item);
+                            Log.Error("{Name} conflict", item.Name);
                             return Conflict();
                         }
                         else
@@ -190,11 +207,17 @@ namespace SAEON.Observations.WebAPI.Controllers
                             throw;
                         }
                     }
+                    catch (DbEntityValidationException ex)
+                    {
+                        Log.Error(ex, "Unable to add {Name} {EntityValidationErrors}", item.Name, ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName+": "+m.ErrorMessage)).ToList());
+                        return BadRequest($"Unable to add {item.Name} EntityValidationErrors");
+
+                    }
                     return CreatedAtRoute(nameof(TEntity), new { id = item.Id }, item);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to add {item.Name}", item);
+                    Log.Error(ex, "Unable to add {Name}", item.Name);
                     throw;
                 }
             }
@@ -206,7 +229,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">The Id of the TEnity</param>
         /// <param name="delta">The new TEntity</param>
         [Route("{id:guid}")]
-        //[Authorize(Roles = "QuerySite")]
+        [Authorize(Roles = "Administrators, DataWriters")]
         [ResponseType(typeof(void))]
         [ApiExplorerSettings(IgnoreApi = true)]
         public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
@@ -263,7 +286,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="name">The Name of the TEnity</param>
         /// <param name="delta">The new TEntity</param>
         [Route("{name}")]
-        //[Authorize(Roles = "QuerySite")]
+        [Authorize(Roles = "Administrators, DataWriters")]
         [ResponseType(typeof(void))]
         [ApiExplorerSettings(IgnoreApi = true)]
         public virtual async Task<IHttpActionResult> PutByName(string name, [FromBody]TEntity delta)
@@ -319,7 +342,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">The Id of the TEntity</param>
         [Route("{id:guid}")]
-        //[Authorize(Roles = "QuerySite")]
+        [Authorize(Roles = "Administrators, DataWriters")]
         [ResponseType(typeof(void))]
         [ApiExplorerSettings(IgnoreApi = true)]
         public virtual async Task<IHttpActionResult> DeleteById(Guid id)
@@ -359,7 +382,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">The Name of the TEntity</param>
         [Route("{name}")]
-        //[Authorize(Roles = "QuerySite")]
+        [Authorize(Roles = "Administrators, DataWriters")]
         [ResponseType(typeof(void))]
         [ApiExplorerSettings(IgnoreApi = true)]
         public virtual async Task<IHttpActionResult> DeleteByName(string name)

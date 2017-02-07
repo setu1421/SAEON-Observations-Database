@@ -21,7 +21,7 @@ namespace SAEON.Observations.WebAPI.Controllers
     /// Logged in users can save frequently used queries in the QueryUserQuery for later use
     /// </summary>
     [RoutePrefix("UserQueries")]
-    public class UserQueriesController : BaseApiController<UserQuery>
+    public class UserQueriesApiController : BaseApiController<UserQuery>
     {
         /// <summary>
         /// Filter only for logged in user
@@ -29,7 +29,43 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <returns></returns>
         protected override Expression<Func<UserQuery, bool>> EntityFilter()
         {
-            return (i => i.UserId == User.Identity.GetUserId());
+            var userId = User.Identity.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("Logged in UserId");
+            }
+            return (i => i.UserId == userId);
+        }
+
+        /// <summary>
+        /// Check UserId is logged in UserId
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected override bool IsEntityOk(UserQuery item)
+        {
+            var userId = User.Identity.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new NullReferenceException("Not logged in");
+            }
+            return base.IsEntityOk(item) && (item.UserId == userId);
+        }
+
+        /// <summary>
+        /// Check UserId is logged in UserId
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected override void SetEntity(ref UserQuery item)
+        {
+            base.SetEntity(ref item);
+            var userId = User.Identity.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new NullReferenceException("Not logged in");
+            }
+            item.UserId = userId;
         }
 
         /// <summary>
@@ -62,17 +98,6 @@ namespace SAEON.Observations.WebAPI.Controllers
         public override async Task<IHttpActionResult> GetByName(string name)
         {
             return await base.GetByName(name);
-        }
-
-        protected override bool IsEntityOk(UserQuery item)
-        {
-            return base.IsEntityOk(item) && (item.UserId != User.Identity.GetUserId());
-        }
-
-        protected override void SetEntity(ref UserQuery item)
-        {
-            base.SetEntity(ref item);
-            item.UserId = User.Identity.GetUserId();
         }
 
         /// <summary>

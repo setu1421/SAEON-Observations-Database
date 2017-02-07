@@ -32,12 +32,12 @@ namespace SAEON.Observations.WebAPI
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Configure the application for OAuth based flow
-            PublicClientId = "self";
+            PublicClientId = "SAEON.Observations.Database";
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
                 TokenEndpointPath = new PathString("/Token"),
                 Provider = new ApplicationOAuthProvider(PublicClientId),
-                AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
+                AuthorizeEndpointPath = new PathString("/Account/ExternalLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
                 // In production mode set AllowInsecureHttp = false
                 AllowInsecureHttp = true
@@ -46,23 +46,23 @@ namespace SAEON.Observations.WebAPI
             // Enable the application to use bearer tokens to authenticate users
             app.UseOAuthBearerTokens(OAuthOptions);
 
-            // Uncomment the following lines to enable logging in with third party login providers
+            //Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(
-            //    clientId: "",
-            //    clientSecret: "");
+            //    clientId: "d54e063a-40e8-4ea5-959b-f19573d42702",
+            //    clientSecret: "hEpwZ4oLQiKMUXPL2REgCBk");
 
             //app.UseTwitterAuthentication(
-            //    consumerKey: "",
-            //    consumerSecret: "");
+            //   consumerKey: "",
+            //   consumerSecret: "");
 
             //app.UseFacebookAuthentication(
-            //    appId: "",
-            //    appSecret: "");
+            //   appId: "595998070597872",
+            //   appSecret: "f2687dc8b4486064d67af6e47bd3217a");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
-            //    ClientId = "",
-            //    ClientSecret = ""
+            //    ClientId = "833245400053-eednvfhcjva3gna8kv2vv3rpsuiin2ac.apps.googleusercontent.com",
+            //    ClientSecret = "5PGqrG1BA_n3usDG-s8KZBH1"
             //});
         }
     }
