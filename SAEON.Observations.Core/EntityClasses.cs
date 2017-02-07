@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SAEON.Observations.Core
 {
@@ -17,8 +19,10 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Id of the Entity
         /// </summary>
-        [Required]
+        //[Required]
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ScaffoldColumn(false), HiddenInput]
         public Guid Id { get; set; }
         /// <summary>
         /// Name of the Entity
@@ -160,11 +164,6 @@ namespace SAEON.Observations.Core
     public class UserDownload : BaseEntity
     {
         /// <summary>
-        /// UserId of user query
-        /// </summary>
-        [Required, StringLength(128)]
-        public string UserId { get; set; }
-        /// <summary>
         /// Description of the user download
         /// </summary>
         [StringLength(500)]
@@ -179,6 +178,21 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Required, StringLength(500)]
         public string DownloadURI { get; set; }
+        /// <summary>
+        /// UserId of UserDownload
+        /// </summary>
+        [StringLength(128), ScaffoldColumn(false), HiddenInput]
+        public string UserId { get; set; }
+        /// <summary>
+        /// UserId of user who added the UserDownload
+        /// </summary>
+        [StringLength(128), ScaffoldColumn(false)]
+        public string AddedBy { get; set; }
+        /// <summary>
+        /// UserId of user who last updated the UserDownload
+        /// </summary>
+        [StringLength(128), ScaffoldColumn(false)]
+        public string UpdatedBy { get; set; }
     }
 
     /// <summary>
@@ -186,11 +200,6 @@ namespace SAEON.Observations.Core
     /// </summary>
     public class UserQuery : BaseEntity
     {
-        /// <summary>
-        /// UserId of user query
-        /// </summary>
-        [Required, StringLength(128)]
-        public string UserId { get; set; }
         /// <summary>
         /// Description of the user query
         /// </summary>
@@ -201,6 +210,21 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Required, StringLength(500)]
         public string QueryURI { get; set; }
+        /// <summary>
+        /// UserId of UserQuery
+        /// </summary>
+        [StringLength(128), ScaffoldColumn(false), HiddenInput]
+        public string UserId { get; set; }
+        /// <summary>
+        /// UserId of user who added the UserQuery
+        /// </summary>
+        [StringLength(128), ScaffoldColumn(false)]
+        public string AddedBy { get; set; }
+        /// <summary>
+        /// UserId of user who last updated the UserQuery
+        /// </summary>
+        [StringLength(128), ScaffoldColumn(false)]
+        public string UpdatedBy { get; set; }
     }
 
     public class ObservationsDbContext : DbContext

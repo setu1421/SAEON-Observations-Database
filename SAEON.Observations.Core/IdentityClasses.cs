@@ -54,11 +54,11 @@ namespace SAEON.Observations.Core
 
         private void AddUser(string name, string email, string password, string[] roles, UserManager<ApplicationUser> userManager)
         {
-            if (userManager.FindByName(name) == null)
+            if (userManager.FindByName(email) == null)
             {
                 userManager.Create(new ApplicationUser { UserName = email, Email = email, Name = name, EmailConfirmed = true }, password);
             }
-            var user = userManager.FindByName(name);
+            var user = userManager.FindByName(email);
             if (user != null)
                 foreach (var role in roles)
                 {
@@ -78,7 +78,7 @@ namespace SAEON.Observations.Core
                 {
                     var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(this));
                     var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(this));
-                    string[] roles = new string[] { "Administrator", "DataReader", "DataWriter", "QuerySite" };
+                    string[] roles = new string[] { "Administrator", "DataReader", "DataWriter" };
                     foreach (var role in roles)
                     {
                         if (!roleManager.RoleExists(role))
@@ -88,7 +88,6 @@ namespace SAEON.Observations.Core
                     }
                     AddUser("Administrator", "observations@saeon.ac.za.za", "0d3DHCClCsAh", new string[] { "Administrator" }, userManager);
                     AddUser("Tim Parker-Nance", "tim@nimbusservices.co.za", "25m2Ue*9&E0i", new string[] { "Administrator" }, userManager);
-                    AddUser("Query Site", "querysite@saeon.ac.za", "0583dUSVyuFs", new string[] { "QuerySite" }, userManager);
                 }
                 catch (Exception ex)
                 {
@@ -98,6 +97,9 @@ namespace SAEON.Observations.Core
             }
         }
 
+        public System.Data.Entity.DbSet<SAEON.Observations.Core.UserDownload> UserDownloads { get; set; }
+
+        public System.Data.Entity.DbSet<SAEON.Observations.Core.UserQuery> UserQueries { get; set; }
     }
     public class ApplicationDbInitializer : CreateDatabaseIfNotExists<ApplicationDbContext> { }
 
