@@ -186,6 +186,48 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         //
+        // GET: /Account/Manage
+        public async Task<ActionResult> Manage()
+        {
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var model = new ManageViewModel { Name = user.Name };
+            return View(model);
+        }
+
+        //
+        // POST: /Account/Manage
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Manage(ManageViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user == null)
+                    ModelState.AddModelError("", "Unable to find logged in user!");
+                else
+                {
+                    user.Name = model.Name;
+                    var result = await UserManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ManageSuccess", "Account");
+                    }
+                    AddErrors(result);
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        // Get: /Account/ManageSuccess
+        public ActionResult ManageSuccess()
+        {
+            return View();
+        }
+
+        //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
@@ -396,6 +438,13 @@ namespace SAEON.Observations.QuerySite.Controllers
 
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
+        }
+
+        public ActionResult LogOut()
+        {
+            var authenticationManager = HttpContext.GetOwinContext().Authentication;
+            authenticationManager.SignOut();
+            return RedirectToAction("Index", "Home");
         }
 
         //

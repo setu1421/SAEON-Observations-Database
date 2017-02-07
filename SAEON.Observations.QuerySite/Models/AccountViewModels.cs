@@ -84,6 +84,12 @@ namespace SAEON.Observations.QuerySite.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class ManageViewModel
+    {
+        [Required, Display(Name = "Name")]
+        public string Name { get; set; }
+    }
+
     public class ResetPasswordViewModel
     {
         [Required]
