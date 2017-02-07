@@ -654,11 +654,11 @@ public partial class Admin_DataSources : System.Web.UI.Page
             DataSourceRole dsRole = new DataSourceRole(hiddenRoleDetail.Text);
 
             if (dfRoleDetailStart.SelectedDate.Year < 1900)
-                dsRole.DateStart = new DateTime(1901, 1, 1);
+                dsRole.DateStart = null;
             else
                 dsRole.DateStart = dfRoleDetailStart.SelectedDate;
             if (dfRoleDetailEnd.SelectedDate.Year < 1900)
-                dsRole.DateEnd = new DateTime(2101, 1, 1);
+                dsRole.DateEnd = null;
             else
                 dsRole.DateEnd = dfRoleDetailEnd.SelectedDate;
             dsRole.IsRoleReadOnly = cbIsRoleReadOnly.Checked;
@@ -739,6 +739,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                     role.DataSourceID = Utilities.MakeGuid(dataSourceID);
                     role.RoleId = aspRole.RoleId;
                     role.RoleName = aspRole.RoleName;
+                    role.IsRoleReadOnly = false;
                     role.UserId = AuthHelper.GetLoggedInUserId;
                     role.Save();
                     Auditing.Log("DataSources.AddRoleLink", new Dictionary<string, object> {
