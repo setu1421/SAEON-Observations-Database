@@ -372,6 +372,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Connections.config" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Images\Banner.jpg" />
     <Content Include="Images\Logo.png" />
