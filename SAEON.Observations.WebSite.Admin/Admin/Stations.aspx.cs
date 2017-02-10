@@ -194,8 +194,8 @@ public partial class Admin_Stations : System.Web.UI.Page
                 { "OrganisationCode", stationOrganisation.Organisation.Code},
                 { "RoleID", stationOrganisation.OrganisationRoleID },
                 { "RoleCode", stationOrganisation.OrganisationRole.Code},
-                { "StartDate", stationOrganisation.StartDate },
-                { "EndDate", stationOrganisation.EndDate}
+                { "StartDate", stationOrganisation?.StartDate },
+                { "EndDate", stationOrganisation?.EndDate}
             });
             OrganisationLinksGrid.DataBind();
             OrganisationLinkWindow.Hide();
@@ -281,8 +281,8 @@ public partial class Admin_Stations : System.Web.UI.Page
                 { "StationCode", projectStation.Station.Code },
                 { "ProjectID", projectStation.ProjectID},
                 { "ProjectCode", projectStation.Project.Code},
-                { "StartDate", projectStation.StartDate },
-                { "EndDate", projectStation.EndDate}
+                { "StartDate", projectStation?.StartDate },
+                { "EndDate", projectStation?.EndDate}
             });
             ProjectLinksGrid.DataBind();
             ProjectLinkWindow.Hide();
@@ -368,8 +368,8 @@ public partial class Admin_Stations : System.Web.UI.Page
                 { "StationCode", stationInstrument.Station.Code },
                 { "InstrumentID", stationInstrument.InstrumentID},
                 { "InstrumentCode", stationInstrument.Instrument.Code},
-                { "StartDate", stationInstrument.StartDate },
-                { "EndDate", stationInstrument.EndDate}
+                { "StartDate", stationInstrument?.StartDate },
+                { "EndDate", stationInstrument?.EndDate}
             });
             InstrumentLinksGrid.DataBind();
             InstrumentLinkWindow.Hide();

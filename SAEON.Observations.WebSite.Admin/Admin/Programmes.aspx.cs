@@ -215,8 +215,8 @@ public partial class Admin_Programmes : System.Web.UI.Page
     //            { "ProgrammeCode", programmeProject.Programme.Code },
     //            { "ProjectID", programmeProject.ProjectID},
     //            { "ProjectCode", programmeProject.Project.Code},
-    //            { "StartDate", programmeProject.StartDate },
-    //            { "EndDate", programmeProject.EndDate}
+    //            { "StartDate", programmeProject?.StartDate },
+    //            { "EndDate", programmeProject?.EndDate}
     //        });
     //        ProjectLinksGrid.DataBind();
     //        ProjectLinkWindow.Hide();

@@ -173,8 +173,8 @@ public partial class Admin_Sites : System.Web.UI.Page
                 { "OrganisationCode", siteOrganisation.Organisation.Code},
                 { "RoleID", siteOrganisation.OrganisationRoleID },
                 { "RoleCode", siteOrganisation.OrganisationRole.Code},
-                { "StartDate", siteOrganisation.StartDate },
-                { "EndDate", siteOrganisation.EndDate}
+                { "StartDate", siteOrganisation?.StartDate },
+                { "EndDate", siteOrganisation?.EndDate}
             });
             OrganisationLinksGrid.DataBind();
             OrganisationLinkWindow.Hide();
@@ -320,8 +320,8 @@ public partial class Admin_Sites : System.Web.UI.Page
     //            { "SiteCode", siteStation.Site.Code},
     //            { "StationID", siteStation.StationID },
     //            { "StationCode", siteStation.Station.Code },
-    //            { "StartDate", siteStation.StartDate },
-    //            { "EndDate", siteStation.EndDate}
+    //            { "StartDate", siteStation?.StartDate },
+    //            { "EndDate", siteStation?.EndDate}
     //        });
     //        StationLinksGrid.DataBind();
     //        StationLinkWindow.Hide();

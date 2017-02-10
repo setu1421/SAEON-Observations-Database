@@ -203,8 +203,8 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 { "OrganisationCode", organisationInstrument.Organisation.Code},
                 { "RoleID", organisationInstrument.OrganisationRoleID },
                 { "RoleCode", organisationInstrument.OrganisationRole.Code},
-                { "StartDate", organisationInstrument.StartDate },
-                { "EndDate", organisationInstrument.EndDate}
+                { "StartDate", organisationInstrument?.StartDate },
+                { "EndDate", organisationInstrument?.EndDate}
             });
             OrganisationLinksGrid.DataBind();
             OrganisationLinkWindow.Hide();
@@ -297,8 +297,8 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 { "InstrumentCode", stationInstrument.Instrument.Code },
                 { "StationID", stationInstrument.StationID},
                 { "StationCode", stationInstrument.Station.Code},
-                { "StartDate", stationInstrument.StartDate },
-                { "EndDate", stationInstrument.EndDate}
+                { "StartDate", stationInstrument?.StartDate },
+                { "EndDate", stationInstrument?.EndDate}
             });
             StationLinksGrid.DataBind();
             StationLinkWindow.Hide();
@@ -391,8 +391,8 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 { "InstrumentCode", instrumentDataSource.Instrument.Code },
                 { "DataSourceID", instrumentDataSource.DataSourceID},
                 { "DataSourceCode", instrumentDataSource.DataSource.Code},
-                { "StartDate", instrumentDataSource.StartDate },
-                { "EndDate", instrumentDataSource.EndDate}
+                { "StartDate", instrumentDataSource?.StartDate },
+                { "EndDate", instrumentDataSource?.EndDate}
             });
             DataSourceLinksGrid.DataBind();
             DataSourceLinkWindow.Hide();
@@ -485,8 +485,8 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 { "InstrumentCode", instrumentSensor.Instrument.Code },
                 { "SensorID", instrumentSensor.SensorID},
                 { "SensorCode", instrumentSensor.Sensor.Code},
-                { "StartDate", instrumentSensor.StartDate },
-                { "EndDate", instrumentSensor.EndDate}
+                { "StartDate", instrumentSensor?.StartDate },
+                { "EndDate", instrumentSensor?.EndDate}
             });
             SensorLinksGrid.DataBind();
             SensorLinkWindow.Hide();

@@ -19,8 +19,10 @@ public static class Auditing
             if (!isFirst) result += ", ";
             isFirst = false;
             result += kvPair.Key + "=";
-            if (kvPair.Value is string)  
-                result += string.Format("'{0}'", kvPair.Value ?? "" );
+            if (kvPair.Value == null)
+                result += "Null";
+            else if (kvPair.Value is string)
+                result += string.Format("'{0}'", kvPair.Value ?? "");
             //else if (kvPair.Value is Guid)
             //    result += string.Format("{0}", kvPair.Value);
             else

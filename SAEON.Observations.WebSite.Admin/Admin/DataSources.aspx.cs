@@ -305,8 +305,8 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 { "DataSourceCode", instrumentDataSource.DataSource.Code },
                 { "InstrumentID", instrumentDataSource.InstrumentID},
                 { "InstrumentCode", instrumentDataSource.Instrument.Code},
-                { "StartDate", instrumentDataSource.StartDate },
-                { "EndDate", instrumentDataSource.EndDate}
+                { "StartDate", instrumentDataSource?.StartDate },
+                { "EndDate", instrumentDataSource?.EndDate}
             });
             InstrumentLinksGrid.DataBind();
             InstrumentLinkWindow.Hide();
@@ -481,8 +481,8 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 {"UnitOfMeasureUnit", dstransform.PhenomenonUOM?.UnitOfMeasure.Unit },
                 {"NewPhenomenonOfferingID", dstransform.NewPhenomenonOfferingID },
                 {"NewPhenomenonUnitOfMeasureID", dstransform.NewPhenomenonUOMID },
-                {"StartDate", dstransform.StartDate },
-                {"EndDate", dstransform.EndDate },
+                {"StartDate", dstransform?.StartDate },
+                {"EndDate", dstransform?.EndDate },
                 {"Rank", dstransform.Rank }
                 });
 

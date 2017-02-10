@@ -318,7 +318,7 @@ public partial class _Phenomenon : System.Web.UI.Page
                 X.Msg.Show(new MessageBoxConfig
                     {
                         Title = "Error",
-                        Message = "Phenomenon's cant be deleted when they have unit of measurements, offerings or sensor procedures connected to them.",
+                        Message = "Phenomenon's cant be deleted when they have unit of measurements, offerings or sensors connected to them.",
                         Buttons = MessageBox.Button.OK,
                         Icon = MessageBox.Icon.ERROR
                     });

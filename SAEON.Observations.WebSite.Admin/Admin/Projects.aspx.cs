@@ -162,8 +162,8 @@ public partial class Admin_Projects : System.Web.UI.Page
                 { "ProjectCode", projectStation.Project.Name },
                 { "StationID", projectStation.StationID},
                 { "StationCode", projectStation.Station.Code},
-                { "StartDate", projectStation.StartDate },
-                { "EndDate", projectStation.EndDate}
+                { "StartDate", projectStation?.StartDate },
+                { "EndDate", projectStation?.EndDate}
             });
             StationLinksGrid.DataBind();
             StationLinkWindow.Hide();

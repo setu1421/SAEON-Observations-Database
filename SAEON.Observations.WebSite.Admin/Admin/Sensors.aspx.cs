@@ -72,12 +72,12 @@ public partial class Admin_Sensors : System.Web.UI.Page
             if (e.ID == "tfCode")
             {
                 checkColumn = Sensor.Columns.Code;
-                errorMessage = "The specified Sensor Procedure Code already exists";
+                errorMessage = "The specified Sensor Code already exists";
             }
             else if (e.ID == "tfName")
             {
                 checkColumn = Sensor.Columns.Name;
-                errorMessage = "The specified Sensor Procedure Name already exists";
+                errorMessage = "The specified Sensor Name already exists";
 
             }
 
@@ -142,7 +142,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
                     {
                         Title = "Invalid Data Source",
                         //Message = "The selected data schema is already linked to a sensor that is linked to this data source.",
-                        Message = "This sensor procedure cant have a data schema because its data source (" + dataSourceName + ") is already linked to a data schema",
+                        Message = "This sensor cant have a data schema because its data source (" + dataSourceName + ") is already linked to a data schema",
                         Buttons = MessageBox.Button.OK,
                         Icon = MessageBox.Icon.ERROR
                     });
@@ -232,8 +232,8 @@ public partial class Admin_Sensors : System.Web.UI.Page
                 { "SensorCode", instrumentSensor.Sensor.Code },
                 { "InstrumentID", instrumentSensor.InstrumentID},
                 { "InstrumentCode", instrumentSensor.Instrument.Code},
-                { "StartDate", instrumentSensor.StartDate },
-                { "EndDate", instrumentSensor.EndDate}
+                { "StartDate", instrumentSensor?.StartDate },
+                { "EndDate", instrumentSensor?.EndDate}
             });
             InstrumentLinksGrid.DataBind();
             InstrumentLinkWindow.Hide();
