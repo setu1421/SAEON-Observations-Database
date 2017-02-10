@@ -27,6 +27,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Get a list of Sites
         /// </summary>
         /// <returns>A list of Site</returns>
+        [EnableQuery, ODataRoute]
         public override IQueryable<Site> GetAll()
         {
             return base.GetAll();
@@ -38,6 +39,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">Id of Site</param>
         /// <returns>Site</returns>
+        [EnableQuery, ODataRoute]
         public override SingleResult<Site> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -50,6 +52,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">Name of Site</param>
         /// <returns>Site</returns>
+        [EnableQuery, ODataRoute]
         public override SingleResult<Site> GetByName([FromODataUri] string name)
         {
             return base.GetByName(name);

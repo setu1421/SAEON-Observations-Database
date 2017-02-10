@@ -4,7 +4,7 @@ Create Table [dbo].[UserDownloads]
     [ID] UniqueIdentifier Constraint [DF_UserDownloads_ID] Default NewId(), 
     [UserId] NVarChar(128) not Null,
     [Name] VarChar(150) not Null, 
-    [Description] VarChar(500) Null,
+    [Description] VarChar(5000) Null,
     [QueryURI] VarChar(500) not Null,
     [DownloadURI] VarChar(500) not Null,
     [AddedAt] DateTime null Constraint [DF_UserDownloads_AddedAt] Default GetDate(),

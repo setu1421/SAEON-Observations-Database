@@ -17,16 +17,6 @@ namespace SAEON.Observations.WebAPI.Controllers
     public class InstrumentsApiController : BaseApiController<Instrument>
     {
         /// <summary>
-        /// Return a list of Instruments
-        /// </summary>
-        /// <returns>A list of Instrument</returns>
-        [ResponseType(typeof(List<Instrument>))]
-        public override async Task<IHttpActionResult> GetAll()
-        {
-            return await base.GetAll();
-        }
-
-        /// <summary>
         /// Return a Instrument by Id
         /// </summary>
         /// <param name="id">The Id of the Instrument</param>

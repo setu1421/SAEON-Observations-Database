@@ -1,10 +1,6 @@
 ﻿using SAEON.Observations.Core;
-using SAEON.Observations.WebAPI.Controllers;
-using Serilog;
-using Serilog.Context;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,28 +11,28 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers
 {
     /// <summary>
-    /// Stations
+    /// Phenomena
     /// </summary>
-    [RoutePrefix("Stations")]
-    public class StationsApiController : BaseApiController<Station>
+    [RoutePrefix("Phenomena")]
+    public class PhenomenaApiController : BaseApiController<Phenomenon>
     {
         /// <summary>
-        /// Return a Station by Id
+        /// Return a Phenomenon by Id
         /// </summary>
-        /// <param name="id">The Id of the Station</param>
-        /// <returns>Station</returns>
-        [ResponseType(typeof(Station))]
+        /// <param name="id">The Id of the Phenomenon</param>
+        /// <returns>Phenomenon</returns>
+        [ResponseType(typeof(Phenomenon))]
         public override async Task<IHttpActionResult> GetById(Guid id)
         {
             return await base.GetById(id);
         }
 
         /// <summary>
-        /// Return a Station by Name
+        /// Return a Phenomenon by Name
         /// </summary>
-        /// <param name="name">The Name of the Station</param>
-        /// <returns>Station</returns>
-        [ResponseType(typeof(UserQuery))]
+        /// <param name="name">The Name of the Phenomenon</param>
+        /// <returns>Phenomenon</returns>
+        [ResponseType(typeof(Phenomenon))]
         public override async Task<IHttpActionResult> GetByName(string name)
         {
             return await base.GetByName(name);

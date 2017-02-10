@@ -75,6 +75,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Get a list of UserQueries
         /// </summary>
         /// <returns>A list of UserQuery</returns>
+        [EnableQuery, ODataRoute]
         public override IQueryable<UserQuery> GetAll()
         {
             return base.GetAll();
@@ -86,6 +87,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">Id of UserQuery</param>
         /// <returns>UserQuery</returns>
+        [EnableQuery, ODataRoute]
         public override SingleResult<UserQuery> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -98,247 +100,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">Name of UserQuery</param>
         /// <returns>UserQuery</returns>
+        [EnableQuery, ODataRoute]
         public override SingleResult<UserQuery> GetByName([FromODataUri] string name)
         {
             return base.GetByName(name);
         }
-
-        //// POST: odata/UserQueries
-        //[ODataRoute]
-        //[Authorize(Roles = "QuerySite")]
-        //public async Task<IHttpActionResult> Post(UserQuery item)
-        //{
-        //    using (LogContext.PushProperty("Method", "Post"))
-        //    {
-        //        try
-        //        {
-        //            Log.Verbose("Adding {item.Name} {@item}", item);
-        //            if (!ModelState.IsValid)
-        //            {
-        //                Log.Error("{item.Name} ModelState.Invalid", item);
-        //                return BadRequest(ModelState);
-        //            }
-        //            if (item.UserId != User.Identity.GetUserId())
-        //            {
-        //                Log.Error("{item.Name} invalid user", item);
-        //                return BadRequest();
-        //            }
-        //            item.UserId = User.Identity.GetUserId();
-        //            db.UserQueries.Add(item);
-        //            try
-        //            {
-        //                await db.SaveChangesAsync();
-        //            }
-        //            catch (DbUpdateException)
-        //            {
-        //                if (db.UserQueries.Any(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == item.Id)))
-        //                {
-        //                    Log.Error("{item.Name} conflict", item);
-        //                    return Conflict();
-        //                }
-        //                else
-        //                {
-        //                    throw;
-        //                }
-        //            }
-        //            return Created(item);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Log.Error(ex, "Unable to add {item.Name}", item);
-        //            throw;
-        //        }
-        //    }
-        //}
-
-        //// PUT: odata/UserQueries(5)
-        //[ODataRoute("({id})")]
-        //[Authorize(Roles = "QuerySite")]
-        //public async Task<IHttpActionResult> PutById([FromODataUri] Guid id, Delta<UserQuery> patch)
-        //{
-        //    using (LogContext.PushProperty("Method", "PutById"))
-        //    {
-        //        try
-        //        {
-        //            Log.Verbose("Updating {id} {@patch}", id, patch);
-        //            Validate(patch.GetEntity());
-        //            if (!ModelState.IsValid)
-        //            {
-        //                Log.Error("{id} ModelState.Invalid", id);
-        //                return BadRequest(ModelState);
-        //            }
-        //            var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
-        //            if (item == null)
-        //            {
-        //                Log.Error("{id} not found", id);
-        //                return NotFound();
-        //            }
-        //            patch.Put(item);
-        //            await db.SaveChangesAsync();
-        //            return Updated(item);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Log.Error(ex, "Unable to update {id}", id);
-        //            throw;
-        //        }
-        //    }
-        //}
-
-        //[ODataRoute("({name})")]
-        //[Authorize(Roles = "QuerySite")]
-        //public async Task<IHttpActionResult> PutByName([FromODataUri] string name, Delta<UserQuery> patch)
-        //{
-        //    using (LogContext.PushProperty("Method", "PutByName"))
-        //    {
-        //        try
-        //        {
-        //            Log.Verbose("Updating {name} {@patch}", name, patch);
-        //            Validate(patch.GetEntity());
-        //            if (!ModelState.IsValid)
-        //            {
-        //                Log.Error("{name} ModelState.Invalid", name);
-        //                return BadRequest(ModelState);
-        //            }
-        //            var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
-        //            if (item == null)
-        //            {
-        //                Log.Error("{name} not found", name);
-        //                return NotFound();
-        //            }
-        //            patch.Put(item);
-        //            await db.SaveChangesAsync();
-        //            return Updated(item);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Log.Error(ex, "Unable to update {name}", name);
-        //            throw;
-        //        }
-        //    }
-        //}
-
-        //// PATCH: odata/UserQueries(5)
-        //[AcceptVerbs("PATCH", "MERGE")]
-        //[ODataRoute("({id})")]
-        //[Authorize(Roles = "QuerySite")]
-        //public async Task<IHttpActionResult> PatchById([FromODataUri] Guid id, Delta<UserQuery> patch)
-        //{
-        //    using (LogContext.PushProperty("Method", "PatchById"))
-        //    {
-        //        try
-        //        {
-        //            Validate(patch.GetEntity());
-        //            if (!ModelState.IsValid)
-        //            {
-        //                Log.Error("{id} ModelState.Invalid", id);
-        //                return BadRequest(ModelState);
-        //            }
-        //            var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
-        //            if (item == null)
-        //            {
-        //                Log.Error("{id} not found", id);
-        //                return NotFound();
-        //            }
-        //            patch.Patch(item);
-        //            await db.SaveChangesAsync();
-        //            return Updated(item);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Log.Error(ex, "Unable to patch {id}", id);
-        //            throw;
-        //        }
-        //    }
-        //}
-
-        //[AcceptVerbs("PATCH", "MERGE")]
-        //[ODataRoute("({name})")]
-        //[Authorize(Roles = "QuerySite")]
-        //public async Task<IHttpActionResult> PatchByName([FromODataUri] string name, Delta<UserQuery> patch)
-        //{
-        //    using (LogContext.PushProperty("Method", "PatchByName"))
-        //    {
-        //        try
-        //        {
-        //            Validate(patch.GetEntity());
-        //            if (!ModelState.IsValid)
-        //            {
-        //                Log.Error("{name} ModelState.Invalid", name);
-        //                return BadRequest(ModelState);
-        //            }
-        //            var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
-        //            if (item == null)
-        //            {
-        //                Log.Error("{name} not found", name);
-        //                return NotFound();
-        //            }
-        //            patch.Patch(item);
-        //            await db.SaveChangesAsync();
-        //            return Updated(item);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Log.Error(ex, "Unable to patch {name}", name);
-        //            throw;
-        //        }
-        //    }
-        //}
-
-        //// DELETE: odata/UserQueries(5)
-        //[ODataRoute("({id})")]
-        //[Authorize(Roles = "QuerySite")]
-        //public async Task<IHttpActionResult> DeleteById([FromODataUri] Guid id)
-        //{
-        //    using (LogContext.PushProperty("Method", "DeleteById"))
-        //    {
-        //        try
-        //        {
-        //            Log.Verbose("Deleting {id}", id);
-        //            var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Id == id));
-        //            if (item == null)
-        //            {
-        //                Log.Error("{id} not found", id);
-        //                return NotFound();
-        //            }
-        //            db.UserQueries.Remove(item);
-        //            await db.SaveChangesAsync();
-        //            return StatusCode(HttpStatusCode.NoContent);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Log.Error(ex, "Unable to delete {id}", id);
-        //            throw;
-        //        }
-        //    }
-        //}
-
-        //[ODataRoute("({name})")]
-        //[Authorize(Roles = "QuerySite")]
-        //public async Task<IHttpActionResult> DeleteByName([FromODataUri] string name)
-        //{
-        //    using (LogContext.PushProperty("Method", "DeleteById"))
-        //    {
-        //        try
-        //        {
-        //            Log.Verbose("Deleting {name}", name);
-        //            var item = await db.UserQueries.FirstOrDefaultAsync(i => (i.UserId == User.Identity.GetUserId()) && (i.Name == name));
-        //            if (item == null)
-        //            {
-        //                Log.Error("{name} not found", name);
-        //                return NotFound();
-        //            }
-        //            db.UserQueries.Remove(item);
-        //            await db.SaveChangesAsync();
-        //            return StatusCode(HttpStatusCode.NoContent);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Log.Error(ex, "Unable to delete {name}", name);
-        //            throw;
-        //        }
-        //    }
-        //}
 
     }
 }

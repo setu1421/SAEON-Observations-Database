@@ -20,16 +20,6 @@ namespace SAEON.Observations.WebAPI.Controllers
     public class SitesApiController : BaseApiController<Site>
     {
         /// <summary>
-        /// Return a list of Sites
-        /// </summary>
-        /// <returns>A list of Site</returns>
-        [ResponseType(typeof(List<Site>))]
-        public override async Task<IHttpActionResult> GetAll()
-        {
-            return await base.GetAll();
-        }
-
-        /// <summary>
         /// Return a Site by Id
         /// </summary>
         /// <param name="id">The Id of the Site</param>

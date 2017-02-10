@@ -21,7 +21,7 @@ namespace SAEON.Observations.WebAPI.Controllers
     /// Logged in users can save frequently used queries in the QueryUserQuery for later use
     /// </summary>
     [RoutePrefix("UserQueries")]
-    public class UserQueriesApiController : BaseApiController<UserQuery>
+    public class UserQueriesApiController : BaseApiWriteController<UserQuery>
     {
         /// <summary>
         /// Filter only for logged in user
@@ -69,16 +69,6 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a list of UserQueries
-        /// </summary>
-        /// <returns>A list of UserQuery</returns>
-        [ResponseType(typeof(List<UserQuery>))]
-        public override async Task<IHttpActionResult> GetAll()
-        {
-            return await base.GetAll();
-        }
-
-        /// <summary>
         /// Return a UserQuery by Id
         /// </summary>
         /// <param name="id">The Id of the UserQuery</param>
@@ -105,7 +95,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="item">The UserQuery to be created</param>
         [ResponseType(typeof(UserQuery))]
-        [ApiExplorerSettings(IgnoreApi = false)]
+        [Route]
         public override async Task<IHttpActionResult> Post([FromBody]UserQuery item)
         {
             return await base.Post(item);
@@ -117,7 +107,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">Id of UserQuery</param>
         /// <param name="delta">The new UserQuery</param>
         /// <returns></returns>
-        [ApiExplorerSettings(IgnoreApi = false)]
+        [Route("{id:guid}")]
         public override Task<IHttpActionResult> PutById(Guid id, [FromBody] UserQuery delta)
         {
             return base.PutById(id, delta);
@@ -129,7 +119,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="name">Name of UserQuery</param>
         /// <param name="delta">The new UserQuery</param>
         /// <returns></returns>
-        [ApiExplorerSettings(IgnoreApi = false)]
+        [Route]
         public override Task<IHttpActionResult> PutByName(string name, [FromBody] UserQuery delta)
         {
             return base.PutByName(name, delta);
@@ -140,7 +130,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">Id of UserQuery</param>
         /// <returns></returns>
-        [ApiExplorerSettings(IgnoreApi = false)]
+        [Route("{id:guid}")]
         public override Task<IHttpActionResult> DeleteById(Guid id)
         {
             return base.DeleteById(id);
@@ -151,7 +141,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">Name of UserQuery</param>
         /// <returns></returns>
-        [ApiExplorerSettings(IgnoreApi = false)]
+        [Route]
         public override Task<IHttpActionResult> DeleteByName(string name)
         {
             return base.DeleteByName(name);

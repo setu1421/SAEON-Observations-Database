@@ -1,10 +1,6 @@
 ﻿using SAEON.Observations.Core;
-using SAEON.Observations.WebAPI.Controllers;
-using Serilog;
-using Serilog.Context;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,28 +11,28 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers
 {
     /// <summary>
-    /// Stations
+    /// Sensors
     /// </summary>
-    [RoutePrefix("Stations")]
-    public class StationsApiController : BaseApiController<Station>
+    [RoutePrefix("Sensors")]
+    public class SensorsApiController : BaseApiController<Sensor>
     {
         /// <summary>
-        /// Return a Station by Id
+        /// Return a Sensor by Id
         /// </summary>
-        /// <param name="id">The Id of the Station</param>
-        /// <returns>Station</returns>
-        [ResponseType(typeof(Station))]
+        /// <param name="id">The Id of the Sensor</param>
+        /// <returns>Sensor</returns>
+        [ResponseType(typeof(Sensor))]
         public override async Task<IHttpActionResult> GetById(Guid id)
         {
             return await base.GetById(id);
         }
 
         /// <summary>
-        /// Return a Station by Name
+        /// Return a Sensor by Name
         /// </summary>
-        /// <param name="name">The Name of the Station</param>
-        /// <returns>Station</returns>
-        [ResponseType(typeof(UserQuery))]
+        /// <param name="name">The Name of the Sensor</param>
+        /// <returns>Sensor</returns>
+        [ResponseType(typeof(Sensor))]
         public override async Task<IHttpActionResult> GetByName(string name)
         {
             return await base.GetByName(name);

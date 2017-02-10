@@ -9,11 +9,12 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.OData;
+using System.Web.OData.Routing;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    //[Authorize(Roles = "Administrators, DataReaders")]
+    [Authorize]
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {
         protected ObservationsDbContext db = new ObservationsDbContext();
@@ -54,7 +55,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         { }
 
 
-        [EnableQuery]
+        [EnableQuery, ODataRoute]
         public virtual IQueryable<TEntity> GetAll()
         {
             using (LogContext.PushProperty("Method", "GetAll"))
@@ -75,7 +76,7 @@ namespace SAEON.Observations.WebAPI.Controllers
             }
         }
 
-        [EnableQuery]
+        [EnableQuery, ODataRoute]
         public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
         {
             using (LogContext.PushProperty("Method", "GetById"))
@@ -96,7 +97,7 @@ namespace SAEON.Observations.WebAPI.Controllers
             }
         }
 
-        [EnableQuery]
+        [EnableQuery, ODataRoute]
         public virtual SingleResult<TEntity> GetByName([FromODataUri] string name)
         {
             using (LogContext.PushProperty("Method", "GetByName"))
@@ -116,6 +117,125 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
             }
         }
+
+        //// PUT: odata/Instruments(5)
+        //public async Task<IHttpActionResult> Put([FromODataUri] Guid key, Delta<Instrument> patch)
+        //{
+        //    Validate(patch.GetEntity());
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    Instrument instrument = await db.Instruments.FindAsync(key);
+        //    if (instrument == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    patch.Put(instrument);
+
+        //    try
+        //    {
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!InstrumentExists(key))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return Updated(instrument);
+        //}
+
+        //// POST: odata/Instruments
+        //public async Task<IHttpActionResult> Post(Instrument instrument)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    db.Instruments.Add(instrument);
+
+        //    try
+        //    {
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateException)
+        //    {
+        //        if (InstrumentExists(instrument.Id))
+        //        {
+        //            return Conflict();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return Created(instrument);
+        //}
+
+        //// PATCH: odata/Instruments(5)
+        //[AcceptVerbs("PATCH", "MERGE")]
+        //public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<Instrument> patch)
+        //{
+        //    Validate(patch.GetEntity());
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    Instrument instrument = await db.Instruments.FindAsync(key);
+        //    if (instrument == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    patch.Patch(instrument);
+
+        //    try
+        //    {
+        //        await db.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!InstrumentExists(key))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return Updated(instrument);
+        //}
+
+        //// DELETE: odata/Instruments(5)
+        //public async Task<IHttpActionResult> Delete([FromODataUri] Guid key)
+        //{
+        //    Instrument instrument = await db.Instruments.FindAsync(key);
+        //    if (instrument == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    db.Instruments.Remove(instrument);
+        //    await db.SaveChangesAsync();
+
+        //    return StatusCode(HttpStatusCode.NoContent);
+        //}
 
     }
 

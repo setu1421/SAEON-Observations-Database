@@ -12,7 +12,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// The Observations Database WebAPI home page
         /// </summary>
         /// <returns></returns>
-        //[Route]
+        [Route]
         public ActionResult Index()
         {
             return View();
@@ -22,7 +22,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// About the Observations Database WebAPO
         /// </summary>
         /// <returns></returns>
-        //[Route("About")]
+        [Route("About")]
 
         public ActionResult About()
         {
@@ -33,7 +33,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Contact SAEON
         /// </summary>
         /// <returns></returns>
-        //[Route("Contact")]
+        [Route("Contact")]
         public ActionResult Contact()
         {
             return View();

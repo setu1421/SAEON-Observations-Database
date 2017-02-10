@@ -24,7 +24,6 @@ namespace SAEON.Observations.Core
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [ScaffoldColumn(false), HiddenInput]
         public Guid Id { get; set; }
-        /// <summary>
         /// Name of the Entity
         /// </summary>
         [Required, StringLength(150)]
@@ -41,6 +40,7 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Required, StringLength(50)]
         public string Code { get; set; }
+        /// <summary>
         /// <summary>
         /// Description of the Instrument
         /// </summary>
@@ -68,6 +68,70 @@ namespace SAEON.Observations.Core
     }
 
     /// <summary>
+    /// Offering entity
+    /// </summary>
+    public class Offering : BaseEntity
+    {
+        /// <summary>
+        /// Code of the Offering
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// <summary>
+        /// Description of the Offering
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+    }
+
+    /// <summary>
+    /// Phenomenon entity
+    /// </summary>
+    public class Phenomenon : BaseEntity
+    {
+        /// <summary>
+        /// Code of the Phenomenon
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// <summary>
+        /// Description of the Phenomenon
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Phenomenon
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+    }
+
+    /// <summary>
+    /// Sensor entity
+    /// </summary>
+    public class Sensor : BaseEntity
+    {
+        /// <summary>
+        /// Code of the Sensor
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// <summary>
+        /// Description of the Sensor
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Sensor
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+    }
+
+    /// <summary>
     /// Site entity
     /// </summary>
     public class Site : BaseEntity
@@ -77,6 +141,7 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Required, StringLength(50)]
         public string Code { get; set; }
+        /// <summary>
         /// <summary>
         /// Description of the Site
         /// </summary>
@@ -110,20 +175,21 @@ namespace SAEON.Observations.Core
     public class Station : BaseEntity
     {
         /// <summary>
-        /// The SiteId of the Station
-        /// </summary>
-        [Required]
-        public Guid SiteId { get; set; }
-        /// <summary>
         /// Code of the Station
         /// </summary>
         [Required, StringLength(50)]
         public string Code { get; set; }
         /// <summary>
+        /// <summary>
         /// Description of the Station
         /// </summary>
         [StringLength(5000)]
         public string Description { get; set; }
+        /// <summary>
+        /// The SiteId of the Station
+        /// </summary>
+        [Required]
+        public Guid SiteId { get; set; }
         /// <summary>
         /// Url of the Station
         /// </summary>
@@ -159,14 +225,32 @@ namespace SAEON.Observations.Core
     }
 
     /// <summary>
+    /// UnitOfMeasure Entity
+    /// </summary>
+    public class UnitOfMeasure : BaseEntity
+    {
+        /// <summary>
+        /// Symbol of the Entity
+        /// </summary>
+        [Required, StringLength(20)]
+        public string Symbol { get; set; }
+    }
+
+    /// <summary>
     /// UserDownload entity
     /// </summary>
     public class UserDownload : BaseEntity
     {
         /// <summary>
-        /// Description of the user download
+        /// Code of the UserDownload
         /// </summary>
-        [StringLength(500)]
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// <summary>
+        /// Description of the UserDownload
+        /// </summary>
+        [StringLength(5000)]
         public string Description { get; set; }
         /// <summary>
         /// The URI of the original query that generated the download
@@ -201,9 +285,15 @@ namespace SAEON.Observations.Core
     public class UserQuery : BaseEntity
     {
         /// <summary>
-        /// Description of the user query
+        /// Code of the UserQuery
         /// </summary>
-        [StringLength(500)]
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// <summary>
+        /// Description of the UserQuery
+        /// </summary>
+        [StringLength(5000)]
         public string Description { get; set; }
         /// <summary>
         /// URI of the user query
@@ -236,14 +326,19 @@ namespace SAEON.Observations.Core
         }
 
         public DbSet<Instrument> Instruments { get; set; }
+        public DbSet<Offering> Offerings { get; set; }
+        public DbSet<Phenomenon> Phenomenons { get; set; }
+        public DbSet<Sensor> Sensors { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Station> Stations { get; set; }
+        public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<UnitOfMeasure>().Property(p => p.Name).HasColumnName("Unit");
             modelBuilder.Ignore<ApplicationUser>();
             modelBuilder.Ignore<IdentityRole>();
             modelBuilder.Ignore<IdentityUserClaim>();

@@ -17,8 +17,8 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
-    [Route("{action=index}")]
-    [Authorize(Roles = "Administrators, DataReaders")]
+  
+    [Authorize]
     public abstract class BaseApiController<TEntity> : ApiController where TEntity : BaseEntity
     {
         protected ObservationsDbContext db = new ObservationsDbContext();
@@ -63,7 +63,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <returns>List of TEntity</returns>
         [Route]
-        public virtual async Task<IHttpActionResult> GetAll()
+        public virtual IQueryable<TEntity> GetAll()
         {
             using (LogContext.PushProperty("Method", "GetAll"))
             {
@@ -71,9 +71,9 @@ namespace SAEON.Observations.WebAPI.Controllers
                 {
                     var filter = EntityFilter();
                     if (filter == null)
-                        return Ok(await db.Set<TEntity>().OrderBy(i => i.Name).ToListAsync());
+                        return db.Set<TEntity>().OrderBy(i => i.Name);
                     else
-                        return Ok(await db.Set<TEntity>().Where(filter).OrderBy(i => i.Name).ToListAsync());
+                        return db.Set<TEntity>().Where(filter).OrderBy(i => i.Name);
                 }
                 catch (Exception ex)
                 {
@@ -89,6 +89,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="id">The Id of the TEntity</param>
         /// <returns>TEntity</returns>
         [Route("{id:guid}")]
+        //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetById(Guid id)
         {
             using (LogContext.PushProperty("Method", "GetById"))
@@ -121,7 +122,8 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">The Name of the TEntity</param>
         /// <returns>TEntity</returns>
-        [Route("{name}")]
+        [Route]
+        //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetByName(string name)
         {
             using (LogContext.PushProperty("Method", "GetByName"))
@@ -148,14 +150,17 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
             }
         }
+    }
 
+
+    [Authorize]
+    public abstract class BaseApiWriteController<TEntity> : BaseApiController<TEntity> where TEntity : BaseEntity
+    {
         /// <summary>
         /// Create a TEntity
         /// </summary>
         /// <param name="item">The new TEntity </param>
-        [Route]
-        [Authorize(Roles = "Administrators, DataWriters")]
-        [ApiExplorerSettings(IgnoreApi = true)]
+        //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
         {
             using (LogContext.PushProperty("Method", "Post"))
@@ -181,13 +186,9 @@ namespace SAEON.Observations.WebAPI.Controllers
                     }
                     try
                     {
-                        Log.Verbose("1: {@item}", item);
                         SetEntity(ref item);
-                        Log.Verbose("2: {@item}", item);
                         item = Mapper.Map<TEntity, TEntity>(item);
-                        Log.Verbose("3: {@item}", item);
                         db.Set<TEntity>().Add(item);
-                        Log.Verbose("4: {@item}", item);
                         await db.SaveChangesAsync();
                     }
                     catch (DbUpdateException)
@@ -209,8 +210,9 @@ namespace SAEON.Observations.WebAPI.Controllers
                     }
                     catch (DbEntityValidationException ex)
                     {
-                        Log.Error(ex, "Unable to add {Name} {EntityValidationErrors}", item.Name, ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName+": "+m.ErrorMessage)).ToList());
-                        return BadRequest($"Unable to add {item.Name} EntityValidationErrors");
+                        var validationErrors = ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
+                        Log.Error(ex, "Unable to add {Name} {EntityValidationErrors}", item.Name, validationErrors);
+                        return BadRequest($"Unable to add {item.Name} EntityValidationErrors: {string.Join("; ", validationErrors)}");
 
                     }
                     return CreatedAtRoute(nameof(TEntity), new { id = item.Id }, item);
@@ -228,10 +230,8 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">The Id of the TEnity</param>
         /// <param name="delta">The new TEntity</param>
-        [Route("{id:guid}")]
-        [Authorize(Roles = "Administrators, DataWriters")]
+        //[Route("{id:guid}")] Required in derived classes
         [ResponseType(typeof(void))]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
         {
             using (LogContext.PushProperty("Method", "PutById"))
@@ -285,10 +285,8 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">The Name of the TEnity</param>
         /// <param name="delta">The new TEntity</param>
-        [Route("{name}")]
-        [Authorize(Roles = "Administrators, DataWriters")]
+        //[Route] Required in derived classes
         [ResponseType(typeof(void))]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public virtual async Task<IHttpActionResult> PutByName(string name, [FromBody]TEntity delta)
         {
             using (LogContext.PushProperty("Method", "PutByName"))
@@ -341,10 +339,8 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Delete a TEntity by Id
         /// </summary>
         /// <param name="id">The Id of the TEntity</param>
-        [Route("{id:guid}")]
-        [Authorize(Roles = "Administrators, DataWriters")]
+        //[Route("{id:guid}")] Required in derived classes
         [ResponseType(typeof(void))]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public virtual async Task<IHttpActionResult> DeleteById(Guid id)
         {
             using (LogContext.PushProperty("Method", "DeleteById"))
@@ -381,10 +377,8 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Delete a TEntity by Name
         /// </summary>
         /// <param name="name">The Name of the TEntity</param>
-        [Route("{name}")]
-        [Authorize(Roles = "Administrators, DataWriters")]
+        //[Route] Required in derived classes
         [ResponseType(typeof(void))]
-        [ApiExplorerSettings(IgnoreApi = true)]
         public virtual async Task<IHttpActionResult> DeleteByName(string name)
         {
             using (LogContext.PushProperty("Method", "DeleteByName"))
@@ -418,4 +412,5 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
     }
+
 }

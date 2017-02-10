@@ -185,8 +185,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                         }
                         catch (DbEntityValidationException ex)
                         {
-                            Log.Error(ex, "Unable to add {Name} {EntityValidationErrors}", item.Name, ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList());
-                            return new HttpStatusCodeResult(HttpStatusCode.BadRequest, $"Unable to add {item.Name} EntityValidationErrors");
+                            var validationErrors = ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
+                            Log.Error(ex, "Unable to add {Name} {EntityValidationErrors}", item.Name, validationErrors);
+                            return new HttpStatusCodeResult(HttpStatusCode.BadRequest, $"Unable to add {item.Name} EntityValidationErrors:  {string.Join("; ", validationErrors)}");
 
                         }
                         return RedirectToAction("Index");
@@ -267,7 +268,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     {
                         if (!IsEntityOk(delta))
                         {
-                            Log.Error("{delta.Name} invalid", delta);
+                            Log.Error("{Name} invalid", delta.Name);
                             return new HttpStatusCodeResult(HttpStatusCode.BadRequest, $"{delta.Name} invalid");
                         }
                         var filter = EntityFilter();

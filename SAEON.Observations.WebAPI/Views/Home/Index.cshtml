@@ -3,5 +3,15 @@
 }
 <div class="row">
     <div class="col-md-12">
+        <p>
+            The South African Environmental Observation Network (SAEON) was established in 2002. SAEON has a network of stations, both terrestrial and marine,
+            around South Africa. These stations have instruments that regularly measure a variety of phenomena, like temperature and rainfall,
+            in a number of offerings, like actual, cumulative, in a number of units, like °C and mm, that are saved in a database as observations.
+        </p>
+        <p>
+            You can access these observations through this @Html.ActionLink("API", "Index", "Help", new { area = "" }, null). You need to have registered on
+            the <a href="http://observations.saeon.ac.za">Observations Database</a> site. Once you have an account you need to get an
+            OAuth2 @Html.ActionLink("bearer token", "Token") that you need to use for authorization in your API calls.
+        </p>
     </div>
 </div>

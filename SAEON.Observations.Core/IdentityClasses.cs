@@ -78,7 +78,7 @@ namespace SAEON.Observations.Core
                 {
                     var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(this));
                     var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(this));
-                    string[] roles = new string[] { "Administrator", "DataReader", "DataWriter" };
+                    string[] roles = new string[] { "Administrator", "DataReader", "DataWriter", "QuerySite" };
                     foreach (var role in roles)
                     {
                         if (!roleManager.RoleExists(role))
@@ -86,8 +86,9 @@ namespace SAEON.Observations.Core
                             roleManager.Create(new IdentityRole(role));
                         }
                     }
-                    AddUser("Administrator", "observations@saeon.ac.za.za", "0d3DHCClCsAh", new string[] { "Administrator" }, userManager);
+                    AddUser("Administrator", "observations@nimbusservices.co.za", "0d3DHCClCsAh", new string[] { "Administrator" }, userManager);
                     AddUser("Tim Parker-Nance", "tim@nimbusservices.co.za", "25m2Ue*9&E0i", new string[] { "Administrator" }, userManager);
+                    AddUser("Query Site", "querysite@nimbusservices.co.za", "0583dUSVyuFs", new string[] { "QuerySite" }, userManager);
                 }
                 catch (Exception ex)
                 {

@@ -27,6 +27,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Get a list of Stations
         /// </summary>
         /// <returns>A list of Station</returns>
+        [EnableQuery, ODataRoute]
         public override IQueryable<Station> GetAll()
         {
             return base.GetAll();
@@ -38,6 +39,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">Id of Station</param>
         /// <returns>Station</returns>
+        [EnableQuery, ODataRoute]
         public override SingleResult<Station> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -50,12 +52,13 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">Name of Station</param>
         /// <returns>Station</returns>
+        [EnableQuery, ODataRoute]
         public override SingleResult<Station> GetByName([FromODataUri] string name)
         {
             return base.GetByName(name);
         }
 
-        // PUT: odata/StationsOData(5)
+        // PUT: odata/Stations(5)
         //public async Task<IHttpActionResult> Put([FromODataUri] Guid key, Delta<Station> patch)
         //{
         //    Validate(patch.GetEntity());
@@ -92,7 +95,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //    return Updated(station);
         //}
 
-        // POST: odata/StationsOData
+        // POST: odata/Stations
         //public async Task<IHttpActionResult> Post(Station station)
         //{
         //    if (!ModelState.IsValid)
@@ -121,7 +124,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //    return Created(station);
         //}
 
-        // PATCH: odata/StationsOData(5)
+        // PATCH: odata/Stations(5)
         //[AcceptVerbs("PATCH", "MERGE")]
         //public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<Station> patch)
         //{
@@ -159,7 +162,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //    return Updated(station);
         //}
 
-        // DELETE: odata/StationsOData(5)
+        // DELETE: odata/Stations(5)
         //public async Task<IHttpActionResult> Delete([FromODataUri] Guid key)
         //{
         //    Station station = await db.Stations.FindAsync(key);
@@ -174,7 +177,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //    return StatusCode(HttpStatusCode.NoContent);
         //}
 
-        // GET: odata/StationsOData(5)/Site
+        // GET: odata/Stations(5)/Site
         [EnableQuery]
         public SingleResult<Site> GetSite([FromODataUri] Guid key)
         {

@@ -29,12 +29,12 @@ namespace SAEON.Observations.QuerySite
                 client.UseDefaultCredentials = false;
                 client.EnableSsl = true;
                 client.Credentials = new NetworkCredential("observations@nimbusservices.co.za", "vPZrCxkYxLg3");
-                var msg = new MailMessage("observations@nimbusservices.co.za", message.Destination);
+                var msg = new MailMessage(new MailAddress("observations@nimbusservices.co.za", "SAEON Observations Database"), new MailAddress(message.Destination));
                 msg.Subject = message.Subject;
                 msg.Bcc.Add(new MailAddress("observations@nimbusservices.co.za"));
                 msg.Body = $"<html><head><title>{message.Subject}</title></head><body>{message.Body}" +
                     "<p><b>South African Environmental Observation Network (SAEON)<b>" +
-                    "<p><a href=\"http://www.saeon.ac.za.org.za\"><img style=\"height: 50px; border: 0; border-style: none\" src=\"http://www.saeon.ac.za/image_preview.jpg\" alt=\"NRF Logo\"></img></a></p>" +
+                    "<p><a href=\"http://www.saeon.ac.za.org.za\"><img style=\"height: 50px; border: 0; border-style: none\" src=\"http://www.nimbusservices.co.za/images/SAEON logo.png\" alt=\"SAEON Logo\"></img></a></p>" +
                     "<p><a href=\"http://www.saeon.ac.za\">www.SAEON.ac.za</a><br>" +
                     "<a href=\"mailto:observations@nimbusservices.co.za\">observations@nimbusservices.co.za</a></p>" +
                     "</body></html>";
@@ -66,7 +66,7 @@ namespace SAEON.Observations.QuerySite
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
             // Configure validation logic for usernames
@@ -107,7 +107,7 @@ namespace SAEON.Observations.QuerySite
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
+                manager.UserTokenProvider =
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
