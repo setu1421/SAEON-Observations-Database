@@ -19,7 +19,7 @@ using Serilog;
 using Serilog.Context;
 using System.Transactions;
 
-public partial class _DataQuery : System.Web.UI.Page
+public partial class Admin_DataQuery : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -27,6 +27,7 @@ public partial class _DataQuery : System.Web.UI.Page
         {
             FromFilter.SelectedDate = DateTime.Now.AddYears(-100);
             ToFilter.SelectedDate = DateTime.Now;
+            ResourceManager ResourceManager1 = (ResourceManager)Master.FindControl("ResourceManager1");
             ResourceManager1.RegisterIcon(Icon.ResultsetNext);
             ResourceManager1.RegisterIcon((Icon)new ModuleX("A5C81FF7-69D6-4344-8548-E3EF7F08C4E7").Icon);
             ResourceManager1.RegisterIcon((Icon)new ModuleX("0585e63d-0f9f-4dda-98ec-7de9397dc614").Icon);

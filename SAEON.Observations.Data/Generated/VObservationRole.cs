@@ -446,12 +446,36 @@ namespace SAEON.Observations.Data{
                 colvarRoleUserId.DataType = DbType.Guid;
                 colvarRoleUserId.MaxLength = 0;
                 colvarRoleUserId.AutoIncrement = false;
-                colvarRoleUserId.IsNullable = false;
+                colvarRoleUserId.IsNullable = true;
                 colvarRoleUserId.IsPrimaryKey = false;
                 colvarRoleUserId.IsForeignKey = false;
                 colvarRoleUserId.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarRoleUserId);
+                
+                TableSchema.TableColumn colvarRoleStartDate = new TableSchema.TableColumn(schema);
+                colvarRoleStartDate.ColumnName = "RoleStartDate";
+                colvarRoleStartDate.DataType = DbType.DateTime;
+                colvarRoleStartDate.MaxLength = 0;
+                colvarRoleStartDate.AutoIncrement = false;
+                colvarRoleStartDate.IsNullable = true;
+                colvarRoleStartDate.IsPrimaryKey = false;
+                colvarRoleStartDate.IsForeignKey = false;
+                colvarRoleStartDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarRoleStartDate);
+                
+                TableSchema.TableColumn colvarRoleEndDate = new TableSchema.TableColumn(schema);
+                colvarRoleEndDate.ColumnName = "RoleEndDate";
+                colvarRoleEndDate.DataType = DbType.DateTime;
+                colvarRoleEndDate.MaxLength = 0;
+                colvarRoleEndDate.AutoIncrement = false;
+                colvarRoleEndDate.IsNullable = true;
+                colvarRoleEndDate.IsPrimaryKey = false;
+                colvarRoleEndDate.IsForeignKey = false;
+                colvarRoleEndDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarRoleEndDate);
                 
                 
                 BaseSchema = schema;
@@ -953,15 +977,43 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("RoleUserId")]
         [Bindable(true)]
-        public Guid RoleUserId 
+        public Guid? RoleUserId 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid>("RoleUserId");
+			    return GetColumnValue<Guid?>("RoleUserId");
 		    }
             set 
 		    {
 			    SetColumnValue("RoleUserId", value);
+            }
+        }
+	      
+        [XmlAttribute("RoleStartDate")]
+        [Bindable(true)]
+        public DateTime? RoleStartDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("RoleStartDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("RoleStartDate", value);
+            }
+        }
+	      
+        [XmlAttribute("RoleEndDate")]
+        [Bindable(true)]
+        public DateTime? RoleEndDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("RoleEndDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("RoleEndDate", value);
             }
         }
 	    
@@ -1037,6 +1089,10 @@ namespace SAEON.Observations.Data{
             public static string OrganisationName = @"OrganisationName";
             
             public static string RoleUserId = @"RoleUserId";
+            
+            public static string RoleStartDate = @"RoleStartDate";
+            
+            public static string RoleEndDate = @"RoleEndDate";
             
 	    }
 	    #endregion

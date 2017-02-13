@@ -28,22 +28,34 @@ AS
 --AND vo.ValueDate >= dr.DateStart AND vo.ValueDate <= dr.DateEnd
 --INNER JOIN aspnet_Users ur
 -- ON dr.UserId = ur.UserId
-	Select
-		vObservation.*, DataSourceRoles.RoleUserId
-	from
-		vObservation
-		inner join
+    Select
+--> Changed 20170213 TimPN
+--        vObservation.*, DataSourceRoles.RoleUserId
+      vObservation.*, DataSourceRoles.RoleUserId, DataSourceRoles.DateStart RoleStartDate, DataSourceRoles.DateEnd RoleEndDate
+--< Changed 20170213 TimPN
+    from
+        vObservation
+--> Changed 20170213 TimPN
+--        inner join
+        left join
+--< Changed 20170213 TimPN
         (
-			Select
-				dsr.DataSourceID, aspnet_UsersInRoles.UserId RoleUserId, Min(dsr.DateStart) DateStart, Max(dsr.DateEnd) DateEnd
-			from
-				DataSourceRole dsr
-			inner join aspnet_UsersInRoles
-				on (dsr.RoleId = aspnet_UsersInRoles.RoleId)
-			group by
-				dsr.DataSourceID, aspnet_UsersInRoles.UserId
-		) DataSourceRoles
-		on (vObservation.DataSourceID = DataSourceRoles.DataSourceID) and
-		   (vObservation.ValueDate >= DataSourceRoles.DateStart) and 
-		   (vObservation.ValueDate <= DataSourceRoles.DateEnd)
+            Select
+                dsr.DataSourceID, aspnet_UsersInRoles.UserId RoleUserId, Min(dsr.DateStart) DateStart, Max(dsr.DateEnd) DateEnd
+            from
+                DataSourceRole dsr
+            inner join aspnet_UsersInRoles
+                on (dsr.RoleId = aspnet_UsersInRoles.RoleId)
+            group by
+                dsr.DataSourceID, aspnet_UsersInRoles.UserId
+        ) DataSourceRoles
+--> Changed 20170213 TimPN
+        --on (vObservation.DataSourceID = DataSourceRoles.DataSourceID) and
+        --   (vObservation.ValueDate >= DataSourceRoles.DateStart) and 
+        --   (vObservation.ValueDate <= DataSourceRoles.DateEnd)
+          on (vObservation.DataSourceID = DataSourceRoles.DataSourceID) 
+        where
+           ((DataSourceRoles.DateStart is null) or (vObservation.ValueDate >= DataSourceRoles.DateStart)) and 
+           ((DataSourceRoles.DateEnd is null) or (vObservation.ValueDate <= DataSourceRoles.DateEnd))
+--< Changed 20170213 TimPN
 --< Changed 2.0.16 20161107 TimPN

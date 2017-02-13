@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +66,10 @@ namespace SAEON.Observations.Core
         /// Stations linked to this Instrument
         /// </summary>
         public ICollection<Station> Stations { get; set; }
+        /// <summary>
+        /// Sensors linked to this Instrument
+        /// </summary>
+        public ICollection<Sensor> Sensors { get; set; }
     }
 
     /// <summary>
@@ -106,6 +111,13 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Url, StringLength(250)]
         public string Url { get; set; }
+
+        // Navigation
+        /// <summary>
+        /// Sensors linked to this Phenomenon
+        /// </summary>
+        public ICollection<Sensor> Sensors { get; set; }
+
     }
 
     /// <summary>
@@ -129,6 +141,16 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Url, StringLength(250)]
         public string Url { get; set; }
+
+        // Navigation
+        /// <summary>
+        /// Instruments linked to this Sensor
+        /// </summary>
+        public ICollection<Instrument> Instruments { get; set; }
+        /// <summary>
+        /// Phenomenon of the Sensor
+        /// </summary>
+        public Phenomenon Phenomenon { get; set; }
     }
 
     /// <summary>
@@ -214,14 +236,18 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Elevation of the Station, positive above sea level, negative below sea level
         /// </summary>
-        public double? Elevation { get; set; }
+        public int? Elevation { get; set; }
 
         // Navigation
 
         /// <summary>
-        /// Site of the station
+        /// Site of the Station
         /// </summary>
         public Site Site { get; set; }
+        /// <summary>
+        /// Instruments linked to this Station
+        /// </summary>
+        public ICollection<Instrument> Instruments { get; set; }
     }
 
     /// <summary>
@@ -241,11 +267,6 @@ namespace SAEON.Observations.Core
     /// </summary>
     public class UserDownload : BaseEntity
     {
-        /// <summary>
-        /// Code of the UserDownload
-        /// </summary>
-        [Required, StringLength(50)]
-        public string Code { get; set; }
         /// <summary>
         /// <summary>
         /// Description of the UserDownload
@@ -284,11 +305,6 @@ namespace SAEON.Observations.Core
     /// </summary>
     public class UserQuery : BaseEntity
     {
-        /// <summary>
-        /// Code of the UserQuery
-        /// </summary>
-        [Required, StringLength(50)]
-        public string Code { get; set; }
         /// <summary>
         /// <summary>
         /// Description of the UserQuery
@@ -338,7 +354,30 @@ namespace SAEON.Observations.Core
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<Station>()
+                .HasMany<Instrument>(l => l.Instruments)
+                .WithMany(r => r.Stations)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("StationID");
+                    cs.MapRightKey("InstrumentID");
+                    cs.ToTable("Station_Instrument");
+                });
+            modelBuilder.Entity<Instrument>()
+                .HasMany<Sensor>(l => l.Sensors)
+                .WithMany(r => r.Instruments)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("InstrumentID");
+                    cs.MapRightKey("SensorID");
+                    cs.ToTable("Instrument_Sensor");
+                });
+            modelBuilder.Entity<UnitOfMeasure>().ToTable("UnitOfMeasure");
             modelBuilder.Entity<UnitOfMeasure>().Property(p => p.Name).HasColumnName("Unit");
+            modelBuilder.Entity<UnitOfMeasure>().Property(p => p.Symbol).HasColumnName("UnitSymbol");
+            modelBuilder.Entity<UserDownload>().ToTable("UserDownloads");
+            modelBuilder.Entity<UserQuery>().ToTable("UserQueries");
             modelBuilder.Ignore<ApplicationUser>();
             modelBuilder.Ignore<IdentityRole>();
             modelBuilder.Ignore<IdentityUserClaim>();

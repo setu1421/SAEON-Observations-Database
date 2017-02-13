@@ -1,4 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="Site" %>
+
 <!DOCTYPE html>
 <html lang="en-za">
 <head runat="server">
@@ -8,22 +9,22 @@
     </asp:ContentPlaceHolder>
     <script type="text/javascript">
         var onAjaxRequestException = function (response, result, el, eventType, action, extraParams, o) {
-            var r = Ext.decode(response.responseText); 
+            var r = Ext.decode(response.responseText);
         };
     </script>
 </head>
 <body>
-    <ext:ResourceManager ID="ResourceManager1" runat="server" DirectMethodNamespace="DirectCall"
+    <ext:ResourceManager ID="ResourceManager1" runat="server" DirectMethodNamespace="DirectCall" ClientIDMode="Static"
         ShowWarningOnAjaxFailure="false">
         <Listeners>
             <AjaxRequestException Fn="onAjaxRequestException" />
         </Listeners>
     </ext:ResourceManager>
     <form id="form1" runat="server">
-    <div>
-        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-        </asp:ContentPlaceHolder>
-    </div>
+        <div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
     </form>
 </body>
 </html>
