@@ -23,6 +23,8 @@ namespace SAEON.Observations.WebAPI.Controllers
     {
         protected ObservationsDbContext db = new ObservationsDbContext();
 
+        protected bool TrackChanges { get; set; } = false;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -35,11 +37,47 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <summary>
         /// Overwrite to filter entities
         /// </summary>
-        /// <returns>PredicateOf(TEntity)</returns>
-        protected virtual Expression<Func<TEntity, bool>> EntityFilter()
+        /// <returns>ListOf(PredicateOf(TEntity))</returns>
+        protected virtual List<Expression<Func<TEntity, bool>>> GetWheres()
         {
-            return null;
+            return new List<Expression<Func<TEntity, bool>>>();
         }
+
+        /// <summary>
+        /// Overwrite for entity includes
+        /// </summary>
+        /// <returns>ListOf(PredicateOf(TEntity))</returns>
+        protected virtual List<Expression<Func<TEntity, object>>> GetIncludes() 
+        {
+            return new List<Expression<Func<TEntity, object>>>();
+        }
+
+        /// <summary>
+        /// Returns query for items
+        /// </summary>
+        /// <returns></returns>
+        protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
+        {
+            var query = db.Set<TEntity>().AsQueryable();
+            if (!TrackChanges)
+            {
+                query = query.AsNoTracking();
+            }
+            foreach (var include in GetIncludes())
+            {
+                query = query.Include(include);
+            }
+            foreach (var where in GetWheres())
+            {
+                query = query.Where(where);
+            }
+            if (extraWhere != null)
+            {
+                query = query.Where(extraWhere);
+            }
+            return query;
+        }
+
 
         /// <summary>
         /// Overwrite to do additional checks before Post or Put
@@ -61,7 +99,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <summary>
         /// Return all TEntity
         /// </summary>
-        /// <returns>List of TEntity</returns>
+        /// <returns>ListOf(TEntity)</returns>
         [Route]
         public virtual IQueryable<TEntity> GetAll()
         {
@@ -69,11 +107,7 @@ namespace SAEON.Observations.WebAPI.Controllers
             {
                 try
                 {
-                    var filter = EntityFilter();
-                    if (filter == null)
-                        return db.Set<TEntity>().OrderBy(i => i.Name);
-                    else
-                        return db.Set<TEntity>().Where(filter).OrderBy(i => i.Name);
+                    return GetQuery().OrderBy(i => i.Name);
                 }
                 catch (Exception ex)
                 {
@@ -96,12 +130,7 @@ namespace SAEON.Observations.WebAPI.Controllers
             {
                 try
                 {
-                    var filter = EntityFilter();
-                    TEntity item;
-                    if (filter == null)
-                        item = await db.Set<TEntity>().FirstOrDefaultAsync(i => (i.Id == id));
-                    else
-                        item = await db.Set<TEntity>().Where(filter).FirstOrDefaultAsync(i => (i.Id == id));
+                    TEntity item = await GetQuery(i => (i.Id == id)).FirstOrDefaultAsync();
                     if (item == null)
                     {
                         Log.Error("{id} not found", id);
@@ -130,12 +159,7 @@ namespace SAEON.Observations.WebAPI.Controllers
             {
                 try
                 {
-                    var filter = EntityFilter();
-                    TEntity item;
-                    if (filter == null)
-                        item = await db.Set<TEntity>().FirstOrDefaultAsync(i => (i.Name == name));
-                    else
-                        item = await db.Set<TEntity>().Where(filter).FirstOrDefaultAsync(i => (i.Name == name));
+                    TEntity item = await GetQuery(i => (i.Name == name)).FirstOrDefaultAsync();
                     if (item == null)
                     {
                         Log.Error("{name} not found", name);
@@ -150,12 +174,121 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
             }
         }
-    }
 
+        /// <summary>
+        /// Get a Related Entity TEntity.TRelated
+        /// </summary>
+        /// <typeparam name="TRelated"></typeparam>
+        /// <param name="id">Id of TEntity</param>
+        /// <param name="select">Lambda to select TRelated</param>
+        /// <param name="include">Lamda to include TRelated.ListOf(TEntrity)</param>
+        /// <returns>TaskOf(IHttpActionResult)</returns>
+        //[ResponseType(typeof(TRelated))] Required in derived classes
+        //[Route("{id:guid}/TRelated")] Required in derived classes
+        protected async Task<IHttpActionResult> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
+        {
+            using (LogContext.PushProperty("Method", $"GetSingle<{nameof(TRelated)}>"))
+            {
+                try
+                {
+                    if (!await GetQuery(i => (i.Id == id)).AnyAsync())
+                    {
+                        Log.Error("{id} not found", id);
+                        return NotFound();
+                    }
+                    return Ok(await GetQuery(i => (i.Id == id)).Select(select).Include(include).FirstOrDefaultAsync());
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        ///// <summary>
+        ///// Get IQueryableOf(TRelated)
+        ///// </summary>
+        ///// <typeparam name="TRelated"></typeparam>
+        ///// <param name="id">Id of TEntity</param>
+        ///// <param name="select">Lambda to select ListOf(TRelated)</param>
+        ///// <returns>IQueryableOf(TRelated)</returns>
+        ////[Route("{id:guid}/TRelated")] Required in derived classes
+        //protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : BaseEntity
+        //{
+        //    using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
+        //    {
+        //        try
+        //        {
+        //            return GetQuery(i => i.Id == id).SelectMany(select).OrderBy(i => i.Name);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Log.Error(ex, "Unable to get {id}", id);
+        //            throw;
+        //        }
+        //    }
+        //}
+
+        /// <summary>
+        /// Get IQueryableOf(TRelated)
+        /// </summary>
+        /// <typeparam name="TRelated"></typeparam>
+        /// <param name="id">Id of TEntity</param>
+        /// <param name="select">Lambda to select ListOf(TRelated)</param>
+        /// <param name="include">Lambda to include TRelated.TEntity</param>
+        /// <returns>IQueryableOf(TRelated)</returns>
+        //[Route("{id:guid}/TRelated")] Required in derived classes
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseEntity
+        {
+            using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
+            {
+                try
+                {
+                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get IQueryableOf(TRelated)
+        /// </summary>
+        /// <typeparam name="TRelated"></typeparam>
+        /// <param name="id">Id of TEntity</param>
+        /// <param name="select">Lambda to select ListOf(TRelated)</param>
+        /// <param name="include">Lambda to include TRelated.ListOf(TEntity)</param>
+        /// <returns>IQueryableOf(TRelated)</returns>
+        //[Route("{id:guid}/TRelated")] Required in derived classes
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
+        {
+            using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
+            {
+                try
+                {
+                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+    }
 
     [Authorize]
     public abstract class BaseApiWriteController<TEntity> : BaseApiController<TEntity> where TEntity : BaseEntity
     {
+        public BaseApiWriteController() : base()
+        {
+            TrackChanges = true;
+        }
+
         /// <summary>
         /// Create a TEntity
         /// </summary>
@@ -193,12 +326,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                     }
                     catch (DbUpdateException)
                     {
-                        var filter = EntityFilter();
-                        IQueryable<TEntity> query;
-                        query = db.Set<TEntity>().Where(i => i.Id == item.Id);
-                        if (filter != null)
-                            query = query.Where(filter);
-                        if (await query.AnyAsync())
+                        if (await GetQuery().Where(i => i.Id == item.Id).AnyAsync())
                         {
                             Log.Error("{Name} conflict", item.Name);
                             return Conflict();
@@ -254,14 +382,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                         Log.Error("{delta.Name} invalid", delta);
                         return BadRequest($"{delta.Name} invalid");
                     }
-                    var filter = EntityFilter();
-                    IQueryable<TEntity> query;
-                    query = db.Set<TEntity>().Where(i => i.Id == id);
-                    if (filter != null)
-                    {
-                        query = query.Where(filter);
-                    }
-                    var item = await query.FirstOrDefaultAsync();
+                    var item = await GetQuery().Where(i => i.Id == id).FirstOrDefaultAsync();
                     if (item == null)
                     {
                         Log.Error("{id} not found", id);
@@ -309,14 +430,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                         Log.Error("{delta.Name} invalid", delta);
                         return BadRequest($"{delta.Name} invalid");
                     }
-                    var filter = EntityFilter();
-                    IQueryable<TEntity> query;
-                    query = db.Set<TEntity>().Where(i => i.Name == name);
-                    if (filter != null)
-                    {
-                        query = query.Where(filter);
-                    }
-                    var item = await query.FirstOrDefaultAsync();
+                    var item = await GetQuery().Where(i => i.Name == name).FirstOrDefaultAsync();
                     if (item == null)
                     {
                         Log.Error("{name} not found", name);
@@ -348,14 +462,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 try
                 {
                     Log.Verbose("Deleting {id}", id);
-                    var filter = EntityFilter();
-                    IQueryable<TEntity> query;
-                    query = db.Set<TEntity>().Where(i => i.Id == id);
-                    if (filter != null)
-                    {
-                        query = query.Where(filter);
-                    }
-                    var item = await query.FirstOrDefaultAsync();
+                    var item = await GetQuery().Where(i => i.Id == id).FirstOrDefaultAsync();
                     if (item == null)
                     {
                         Log.Error("{id} not found", id);
@@ -386,14 +493,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 try
                 {
                     Log.Verbose("Deleting {name}", name);
-                    var filter = EntityFilter();
-                    IQueryable<TEntity> query;
-                    query = db.Set<TEntity>().Where(i => i.Name == name);
-                    if (filter != null)
-                    {
-                        query = query.Where(filter);
-                    }
-                    var item = await query.FirstOrDefaultAsync();
+                    var item = await GetQuery().Where(i => i.Name == name).FirstOrDefaultAsync();
                     if (item == null)
                     {
                         Log.Error("{name} not found", name);

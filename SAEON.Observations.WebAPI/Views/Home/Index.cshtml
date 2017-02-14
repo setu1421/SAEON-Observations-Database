@@ -10,8 +10,15 @@
         </p>
         <p>
             You can access these observations through this @Html.ActionLink("API", "Index", "Help", new { area = "" }, null). You need to have registered on
-            the <a href="http://observations.saeon.ac.za">Observations Database</a> site. Once you have an account you need to get an
-            OAuth2 @Html.ActionLink("bearer token", "Token") that you need to use for authorization in your API calls.
+            the <a href="http://observations.saeon.ac.za">Observations Database</a> site. Once you have an account you need to do a post to
+            <a href="http://observationsapi.saeon.ac.za/token">observatiosnaspi.saeon.ac.za</a> to get an OAuth2 bearer token that
+            you need to use for authorization in your API calls. The post needs the following:
+            <ul>
+                <li>Content-Type: application/x-www-form-urlencoded</li>
+                <li>grant_type: password</li>
+                <li>username: (the email address you registered)</li>
+                <li>password: (the password you registered)</li>
+            </ul>
         </p>
     </div>
 </div>

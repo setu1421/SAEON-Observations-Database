@@ -414,13 +414,17 @@
     <Compile Include="Controllers\InstrumentsApiController.cs" />
     <Compile Include="Controllers\InstrumentsODataController.cs" />
     <Compile Include="Controllers\OfferingsApiController.cs" />
+    <Compile Include="Controllers\OfferingsODataController.cs" />
     <Compile Include="Controllers\PhenomenaApiController.cs" />
+    <Compile Include="Controllers\PhenomenaODataController.cs" />
     <Compile Include="Controllers\SensorsApiController.cs" />
+    <Compile Include="Controllers\SensorsODataContoller.cs" />
     <Compile Include="Controllers\SitesApiController.cs" />
     <Compile Include="Controllers\SitesODataController.cs" />
     <Compile Include="Controllers\StationsApiController.cs" />
     <Compile Include="Controllers\StationsODataController.cs" />
     <Compile Include="Controllers\UnitsOfMeasureApiController.cs" />
+    <Compile Include="Controllers\UnitsOfMeasureODataController.cs" />
     <Compile Include="Controllers\UserDownloadsODataController.cs" />
     <Compile Include="Controllers\UserQueriesApiController.cs" />
     <Compile Include="Controllers\UserDownloadsApiController.cs" />

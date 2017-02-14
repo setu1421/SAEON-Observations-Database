@@ -1,7 +1,7 @@
 ﻿--> Added 2.0.26 20170130 TimPN
 CREATE VIEW [dbo].[vDownloads]
 AS
-select top (1000)
+Select 
   Site.Code SiteCode,
   Site.Name SiteName,
   Site.Description SiteDescription,
@@ -38,6 +38,8 @@ select top (1000)
   Observation.CorrelationID
 from
   Observation
+  inner join Status
+    on (Observation.StatusID = Status.ID)
   inner join Sensor
     on (Observation.SensorID = Sensor.ID)
   inner join PhenomenonOffering
@@ -71,5 +73,5 @@ from
        ((Site.StartDate is null) or (Cast(Observation.ValueDate as Date) >= Cast(Site.StartDate as Date))) and
        ((Site.EndDate is null) or (Cast(Observation.ValueDate as Date) <= Cast(Site.EndDate as Date)))
 where
-  (Observation.StatusID = (Select ID from Status where Name = 'Verified'))
+  (Status.Name = 'Verified')
 --< Added 2.0.26 20170130 TimPN

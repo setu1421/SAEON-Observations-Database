@@ -27,18 +27,17 @@ namespace SAEON.Observations.WebAPI.Controllers
     [ODataRoutePrefix("UserQueries")]
     public class UserQueriesODataController : BaseODataController<UserQuery>
     {
-        /// <summary>
-        /// Filter only for logged in user
-        /// </summary>
-        /// <returns></returns>
-        protected override Expression<Func<UserQuery, bool>> EntityFilter()
+
+        protected override List<Expression<Func<UserQuery, bool>>> GetWheres()
         {
             var userId = User.Identity.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new ArgumentNullException("Logged in UserId");
             }
-            return (i => i.UserId == userId);
+            var list = base.GetWheres();
+            list.Add(i => i.UserId == userId);
+            return list;
         }
 
         /// <summary>
@@ -87,7 +86,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">Id of UserQuery</param>
         /// <returns>UserQuery</returns>
-        [EnableQuery, ODataRoute]
+        [EnableQuery, ODataRoute("({id})")]
         public override SingleResult<UserQuery> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -100,7 +99,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">Name of UserQuery</param>
         /// <returns>UserQuery</returns>
-        [EnableQuery, ODataRoute]
+        [EnableQuery, ODataRoute("({name})")]
         public override SingleResult<UserQuery> GetByName([FromODataUri] string name)
         {
             return base.GetByName(name);

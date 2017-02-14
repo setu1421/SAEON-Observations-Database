@@ -88,6 +88,12 @@ namespace SAEON.Observations.Core
         /// </summary>
         [StringLength(5000)]
         public string Description { get; set; }
+        
+        // Navigation
+        /// <summary>
+        /// Phenomena of this Offering
+        /// </summary>
+        public ICollection<Phenomenon> Phenomena { get; set; }
     }
 
     /// <summary>
@@ -117,7 +123,14 @@ namespace SAEON.Observations.Core
         /// Sensors linked to this Phenomenon
         /// </summary>
         public ICollection<Sensor> Sensors { get; set; }
-
+        /// <summary>
+        /// Offerings of this Phenomenon
+        /// </summary>
+        public ICollection<Offering> Offerings { get; set; }
+        /// <summary>
+        /// UnitsOfMeasure of the Phenomenon
+        /// </summary>
+        public ICollection<UnitOfMeasure> UnitsOfMeasure { get; set; }
     }
 
     /// <summary>
@@ -141,6 +154,10 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Url, StringLength(250)]
         public string Url { get; set; }
+        /// <summary>
+        /// PhenomenonId of the sensor
+        /// </summary>
+        public Guid PhenomenonId { get; set; }
 
         // Navigation
         /// <summary>
@@ -260,6 +277,12 @@ namespace SAEON.Observations.Core
         /// </summary>
         [Required, StringLength(20)]
         public string Symbol { get; set; }
+
+        // Navigation
+        /// <summary>
+        /// Phenomena of this UnitOfMeasure
+        /// </summary>
+        public ICollection<Phenomenon> Phenomena { get; set; }
     }
 
     /// <summary>
@@ -339,11 +362,12 @@ namespace SAEON.Observations.Core
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
+            //Database.Log = Console.Write;
         }
 
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Offering> Offerings { get; set; }
-        public DbSet<Phenomenon> Phenomenons { get; set; }
+        public DbSet<Phenomenon> Phenomena { get; set; }
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Station> Stations { get; set; }
@@ -373,9 +397,28 @@ namespace SAEON.Observations.Core
                     cs.MapRightKey("SensorID");
                     cs.ToTable("Instrument_Sensor");
                 });
+            modelBuilder.Entity<Phenomenon>().ToTable("Phenomenon");
+            modelBuilder.Entity<Phenomenon>()
+                .HasMany<Offering>(l => l.Offerings)
+                .WithMany(r => r.Phenomena)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("PhenomenonID");
+                    cs.MapRightKey("OfferingID");
+                    cs.ToTable("PhenomenonOffering");
+                });
             modelBuilder.Entity<UnitOfMeasure>().ToTable("UnitOfMeasure");
             modelBuilder.Entity<UnitOfMeasure>().Property(p => p.Name).HasColumnName("Unit");
             modelBuilder.Entity<UnitOfMeasure>().Property(p => p.Symbol).HasColumnName("UnitSymbol");
+            modelBuilder.Entity<Phenomenon>()
+                .HasMany<UnitOfMeasure>(l => l.UnitsOfMeasure)
+                .WithMany(r => r.Phenomena)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("PhenomenonID");
+                    cs.MapRightKey("UnitOfMeasureID");
+                    cs.ToTable("PhenomenonUOM");
+                });
             modelBuilder.Entity<UserDownload>().ToTable("UserDownloads");
             modelBuilder.Entity<UserQuery>().ToTable("UserQueries");
             modelBuilder.Ignore<ApplicationUser>();

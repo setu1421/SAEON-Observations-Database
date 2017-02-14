@@ -6,7 +6,6 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using SAEON.Observations.Core;
-using Microsoft.Owin.Security.OpenIdConnect;
 
 namespace SAEON.Observations.QuerySite
 {
@@ -63,14 +62,6 @@ namespace SAEON.Observations.QuerySite
             {
                 ClientId = "833245400053-eednvfhcjva3gna8kv2vv3rpsuiin2ac.apps.googleusercontent.com",
                 ClientSecret = "5PGqrG1BA_n3usDG-s8KZBH1"
-            });
-
-            app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
-            {
-                ClientId = "833245400053-eednvfhcjva3gna8kv2vv3rpsuiin2ac.apps.googleusercontent.com",
-                Authority = "https://accounts.google.com",
-                RedirectUri = "http://localhost:58091/Account/ExternalLoginCallback",
-                
             });
         }
     }

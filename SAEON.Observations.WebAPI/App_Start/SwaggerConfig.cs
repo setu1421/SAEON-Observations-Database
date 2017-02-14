@@ -4,6 +4,10 @@ using SAEON.Observations.WebAPI;
 using Swashbuckle.Application;
 using System.Web.Hosting;
 using System.Linq;
+using System.Collections.Generic;
+using System;
+using System.Collections;
+using Swashbuckle.Swagger;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -11,6 +15,16 @@ namespace SAEON.Observations.WebAPI
 {
     public class SwaggerConfig
     {
+        public class CustomDocumentFilter : IDocumentFilter
+        {
+            public void Apply(SwaggerDocument swaggerDoc, SchemaRegistry schemaRegistry, System.Web.Http.Description.IApiExplorer apiExplorer)
+            {
+                //make operations alphabetic
+                var paths = swaggerDoc.paths.OrderBy(e => e.Key).ToList();
+                swaggerDoc.paths = paths.ToDictionary(e => e.Key, e => e.Value);
+            }
+        }
+
         public static void Register()
         {
             var thisAssembly = typeof(SwaggerConfig).Assembly;
@@ -68,8 +82,8 @@ namespace SAEON.Observations.WebAPI
                         //c.OAuth2("oauth2")
                         //    .Description("OAuth2 Implicit Grant")
                         //    .Flow("implicit")
-                        //    .AuthorizationUrl("http://petstore.swagger.wordnik.com/api/oauth/dialog")
-                        //    //.TokenUrl("https://tempuri.org/token")
+                        //    .AuthorizationUrl("/account/login")
+                        //    .TokenUrl("/token")
                         //    .Scopes(scopes =>
                         //    {
                         //        scopes.Add("read", "Read access to protected resources");
@@ -92,7 +106,7 @@ namespace SAEON.Observations.WebAPI
                         // ProductsController will be listed before those from a CustomersController. This is typically
                         // used to customize the order of groupings in the swagger-ui.
                         //
-                        //c.OrderActionGroupsBy(new DescendingAlphabeticComparer());
+                        //c.OrderActionGroupsBy(new AlphabeticComparer());
 
                         // If you annotate Controllers and API Types with
                         // Xml comments (http://msdn.microsoft.com/en-us/library/b2s063f7(v=vs.110).aspx), you can incorporate
@@ -149,7 +163,7 @@ namespace SAEON.Observations.WebAPI
                         // Operation filters.
                         //
                         //c.OperationFilter<AddDefaultResponse>();
-                        //
+                        c.DocumentFilter<CustomDocumentFilter>();                        //
                         // If you've defined an OAuth2 flow as described above, you could use a custom filter
                         // to inspect some attribute on each action and infer which (if any) OAuth2 scopes are required
                         // to execute the operation

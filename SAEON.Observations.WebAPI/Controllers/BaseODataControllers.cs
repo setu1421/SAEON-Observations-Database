@@ -3,6 +3,7 @@ using Serilog;
 using Serilog.Context;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
@@ -31,10 +32,41 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <summary>
         /// Overwrite to filter entities
         /// </summary>
-        /// <returns>PredicateOf(TEntity)</returns>
-        protected virtual Expression<Func<TEntity, bool>> EntityFilter()
+        /// <returns>ListOf(PredicateOf(TEntity))</returns>
+        protected virtual List<Expression<Func<TEntity, bool>>> GetWheres()
         {
-            return null;
+            return new List<Expression<Func<TEntity, bool>>>();
+        }
+
+        /// <summary>
+        /// Overwrite for entity includes
+        /// </summary>
+        /// <returns>ListOf(PredicateOf(TEntity))</returns>
+        protected virtual List<Expression<Func<TEntity, bool>>> GetIncludes()
+        {
+            return new List<Expression<Func<TEntity, bool>>>();
+        }
+
+        /// <summary>
+        /// Returns query for items
+        /// </summary>
+        /// <returns></returns>
+        protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
+        {
+            var query = db.Set<TEntity>().AsQueryable();
+            foreach (var include in GetIncludes())
+            {
+                query = query.Include(include);
+            }
+            foreach (var where in GetWheres())
+            {
+                query = query.Where(where);
+            }
+            if (extraWhere != null)
+            {
+                query = query.Where(extraWhere);
+            }
+            return query;
         }
 
         /// <summary>
@@ -55,18 +87,14 @@ namespace SAEON.Observations.WebAPI.Controllers
         { }
 
 
-        [EnableQuery, ODataRoute]
+        //[EnableQuery, ODataRoute] Required in derived class
         public virtual IQueryable<TEntity> GetAll()
         {
             using (LogContext.PushProperty("Method", "GetAll"))
             {
                 try
                 {
-                    var filter = EntityFilter();
-                    if (filter == null)
-                        return db.Set<TEntity>().OrderBy(i => i.Name);
-                    else
-                        return db.Set<TEntity>().Where(filter).OrderBy(i => i.Name);
+                    return GetQuery().OrderBy(i => i.Name);
                 }
                 catch (Exception ex)
                 {
@@ -76,18 +104,14 @@ namespace SAEON.Observations.WebAPI.Controllers
             }
         }
 
-        [EnableQuery, ODataRoute]
+        //[EnableQuery, ODataRoute("({id})")] Required in derived class
         public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
         {
             using (LogContext.PushProperty("Method", "GetById"))
             {
                 try
                 {
-                    var filter = EntityFilter();
-                    if (filter == null)
-                        return SingleResult.Create(db.Set<TEntity>().Where(i => (i.Id == id)));
-                    else
-                        return SingleResult.Create(db.Set<TEntity>().Where(filter).Where(i => (i.Id == id)));
+                    return SingleResult.Create(GetQuery(i => (i.Id == id)));
                 }
                 catch (Exception ex)
                 {
@@ -97,22 +121,97 @@ namespace SAEON.Observations.WebAPI.Controllers
             }
         }
 
-        [EnableQuery, ODataRoute]
+        //[EnableQuery, ODataRoute("({name})")] Required in derived class 
         public virtual SingleResult<TEntity> GetByName([FromODataUri] string name)
         {
             using (LogContext.PushProperty("Method", "GetByName"))
             {
                 try
                 {
-                    var filter = EntityFilter();
-                    if (filter == null)
-                        return SingleResult.Create(db.Set<TEntity>().Where(i => (i.Name == name)));
-                    else
-                        return SingleResult.Create(db.Set<TEntity>().Where(filter).Where(i => (i.Name == name)));
+                    return SingleResult.Create(GetQuery(i => (i.Name == name)));
                 }
                 catch (Exception ex)
                 {
                     Log.Error(ex, "Unable to get {name}", name);
+                    throw;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Get a Related Entity TEntity.TRelated
+        /// </summary>
+        /// <typeparam name="TRelated"></typeparam>
+        /// <param name="id">Id of TEntity</param>
+        /// <param name="select">Lambda to select TRelated</param>
+        /// <param name="include">Lamda to include TRelated.ListOf(TEntrity)</param>
+        /// <returns>SingleResultOf(TRelated)</returns>
+        // GET: odata/TEntity(5)/TRelated
+        //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
+        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
+        {
+            using (LogContext.PushProperty("Method", $"GetSingle<{nameof(TRelated)}>"))
+            {
+                try
+                {
+                    return SingleResult.Create(GetQuery(i => (i.Id == id)).Select(select).Include(include));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get IQueryableOf(TRelated)
+        /// </summary>
+        /// <typeparam name="TRelated"></typeparam>
+        /// <param name="id">Id of TEntity</param>
+        /// <param name="select">Lambda to select ListOf(TRelated)</param>
+        /// <param name="include">Lambda to include TRelated.TEntity</param>
+        /// <returns>IQueryableOf(TRelated)</returns>
+        // GET: odata/TEntity(5)/TRelated
+        //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseEntity
+        {
+            using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
+            {
+                try
+                {
+                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get IQueryableOf(TRelated)
+        /// </summary>
+        /// <typeparam name="TRelated"></typeparam>
+        /// <param name="id">Id of TEntity</param>
+        /// <param name="select">Lambda to select ListOf(TRelated)</param>
+        /// <param name="include">Lambda to include TRelated.ListOf(TEntity)</param>
+        /// <returns>IQueryableOf(TRelated)</returns>
+        // GET: odata/TEntity(5)/TRelated
+        //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
+        {
+            using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
+            {
+                try
+                {
+                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Unable to get {id}", id);
                     throw;
                 }
             }

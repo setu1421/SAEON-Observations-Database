@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -16,6 +17,22 @@ namespace SAEON.Observations.WebAPI.Controllers
     [RoutePrefix("Offerings")]
     public class OfferingsApiController : BaseApiController<Offering>
     {
+        protected override List<Expression<Func<Offering, object>>> GetIncludes()
+        {
+            var list = base.GetIncludes();
+            list.Add(i => i.Phenomena);
+            return list;
+        }
+
+        /// <summary>
+        /// Return a list of Offerings
+        /// </summary>
+        /// <returns>A list of Offering</returns>
+        public override IQueryable<Offering> GetAll()
+        {
+            return base.GetAll();
+        }
+
         /// <summary>
         /// Return a Offering by Id
         /// </summary>
@@ -38,5 +55,11 @@ namespace SAEON.Observations.WebAPI.Controllers
             return await base.GetByName(name);
         }
 
+        // GET: Offerings/5/Phenomena
+        [Route("{id:guid}/Phenomena")]
+        public IQueryable<Phenomenon> GetPhenomena([FromUri] Guid id)
+        {
+            return GetMany<Phenomenon>(id, s => s.Phenomena, i => i.Offerings);
+        }
     }
 }

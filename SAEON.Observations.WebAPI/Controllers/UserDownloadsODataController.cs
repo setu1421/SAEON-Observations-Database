@@ -27,18 +27,16 @@ namespace SAEON.Observations.WebAPI.Controllers
     [ODataRoutePrefix("UserDownloads")]
     public class UserDownloadsODataController : BaseODataController<UserDownload>
     {
-        /// <summary>
-        /// Filter only for logged in user
-        /// </summary>
-        /// <returns></returns>
-        protected override Expression<Func<UserDownload, bool>> EntityFilter()
+        protected override List<Expression<Func<UserDownload, bool>>> GetWheres()
         {
             var userId = User.Identity.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new ArgumentNullException("Logged in UserId");
             }
-            return (i => i.UserId == userId);
+            var list = base.GetWheres();
+            list.Add(i => i.UserId == userId);
+            return list;
         }
 
         /// <summary>
@@ -89,7 +87,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">Id of UserDownload</param>
         /// <returns>UserDownload</returns>
-        [EnableQuery, ODataRoute]
+        [EnableQuery, ODataRoute("({id})")]
         public override SingleResult<UserDownload> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -102,7 +100,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">Name of UserDownload</param>
         /// <returns>UserDownload</returns>
-        [EnableQuery, ODataRoute]
+        [EnableQuery, ODataRoute("({name})")]
         public override SingleResult<UserDownload> GetByName([FromODataUri] string name)
         {
             return base.GetByName(name);

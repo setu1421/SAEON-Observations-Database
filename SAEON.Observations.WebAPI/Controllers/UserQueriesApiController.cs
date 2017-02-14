@@ -23,18 +23,16 @@ namespace SAEON.Observations.WebAPI.Controllers
     [RoutePrefix("UserQueries")]
     public class UserQueriesApiController : BaseApiWriteController<UserQuery>
     {
-        /// <summary>
-        /// Filter only for logged in user
-        /// </summary>
-        /// <returns></returns>
-        protected override Expression<Func<UserQuery, bool>> EntityFilter()
+        protected override List<Expression<Func<UserQuery, bool>>> GetWheres()
         {
             var userId = User.Identity.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new ArgumentNullException("Logged in UserId");
             }
-            return (i => i.UserId == userId);
+            var list = base.GetWheres();
+            list.Add(i => i.UserId == userId);
+            return list;
         }
 
         /// <summary>
@@ -66,6 +64,15 @@ namespace SAEON.Observations.WebAPI.Controllers
                 throw new NullReferenceException("Not logged in");
             }
             item.UserId = userId;
+        }
+
+        /// <summary>
+        /// Return a list of UserQueries
+        /// </summary>
+        /// <returns>A list of UserQuery</returns>
+        public override IQueryable<UserQuery> GetAll()
+        {
+            return base.GetAll();
         }
 
         /// <summary>

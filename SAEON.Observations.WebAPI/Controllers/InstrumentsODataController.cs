@@ -40,7 +40,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">Id of Instrument</param>
         /// <returns>Instrument</returns>
-        [EnableQuery, ODataRoute]
+        [EnableQuery, ODataRoute("({id})")]
         public override SingleResult<Instrument> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -52,17 +52,34 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">Name of Instrument</param>
         /// <returns>Instrument</returns>
-        [EnableQuery, ODataRoute]
+        [EnableQuery, ODataRoute("({name})")]
         public override SingleResult<Instrument> GetByName([FromODataUri] string name)
         {
             return base.GetByName(name);
         }
 
         // GET: odata/Instruments(5)/Stations
-        [EnableQuery]
-        public IQueryable<Station> GetStations([FromODataUri] Guid key)
+        /// <summary>
+        /// Get Stations for the Instrument
+        /// </summary>
+        /// <param name="id">Id of Instrument</param>
+        /// <returns>ListOf(Station)</returns>
+        [EnableQuery, ODataRoute("({id})/Stations")]
+        public IQueryable<Station> GetStations([FromODataUri] Guid id)
         {
-            return db.Instruments.Where(m => m.Id == key).SelectMany(m => m.Stations);
+            return GetMany<Station>(id, s => s.Stations, i => i.Instruments);
+        }
+
+        // GET: odata/Instruments(5)/Sensors
+        /// <summary>
+        /// Get Sensors for the Instrument
+        /// </summary>
+        /// <param name="id">Id of Instrument</param>
+        /// <returns>ListOf(Sensor)</returns>
+        [EnableQuery, ODataRoute("({id})/Sensors")]
+        public IQueryable<Sensor> GetSensors([FromODataUri] Guid id)
+        {
+            return GetMany<Sensor>(id, s => s.Sensors, i => i.Instruments);
         }
 
     }

@@ -14,6 +14,8 @@ using System.Web.OData.Query;
 using System.Web.OData.Routing;
 using SAEON.Observations.Core;
 using System.Web.Http.Description;
+using Serilog.Context;
+using Serilog;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
@@ -39,7 +41,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">Id of Station</param>
         /// <returns>Station</returns>
-        [EnableQuery, ODataRoute]
+        [EnableQuery, ODataRoute("({id})")]
         public override SingleResult<Station> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -52,137 +54,24 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">Name of Station</param>
         /// <returns>Station</returns>
-        [EnableQuery, ODataRoute]
+        [EnableQuery, ODataRoute("({name})")]
         public override SingleResult<Station> GetByName([FromODataUri] string name)
         {
             return base.GetByName(name);
         }
 
-        // PUT: odata/Stations(5)
-        //public async Task<IHttpActionResult> Put([FromODataUri] Guid key, Delta<Station> patch)
-        //{
-        //    Validate(patch.GetEntity());
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    Station station = await db.Stations.FindAsync(key);
-        //    if (station == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    patch.Put(station);
-
-        //    try
-        //    {
-        //        await db.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!StationExists(key))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return Updated(station);
-        //}
-
-        // POST: odata/Stations
-        //public async Task<IHttpActionResult> Post(Station station)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    db.Stations.Add(station);
-
-        //    try
-        //    {
-        //        await db.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        if (StationExists(station.Id))
-        //        {
-        //            return Conflict();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return Created(station);
-        //}
-
-        // PATCH: odata/Stations(5)
-        //[AcceptVerbs("PATCH", "MERGE")]
-        //public async Task<IHttpActionResult> Patch([FromODataUri] Guid key, Delta<Station> patch)
-        //{
-        //    Validate(patch.GetEntity());
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    Station station = await db.Stations.FindAsync(key);
-        //    if (station == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    patch.Patch(station);
-
-        //    try
-        //    {
-        //        await db.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!StationExists(key))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return Updated(station);
-        //}
-
-        // DELETE: odata/Stations(5)
-        //public async Task<IHttpActionResult> Delete([FromODataUri] Guid key)
-        //{
-        //    Station station = await db.Stations.FindAsync(key);
-        //    if (station == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    db.Stations.Remove(station);
-        //    await db.SaveChangesAsync();
-
-        //    return StatusCode(HttpStatusCode.NoContent);
-        //}
-
         // GET: odata/Stations(5)/Site
-        [EnableQuery]
-        public SingleResult<Site> GetSite([FromODataUri] Guid key)
+        [EnableQuery, ODataRoute("({id})/Site")]
+        public SingleResult<Site> GetSite([FromODataUri] Guid id)
         {
-            return SingleResult.Create(db.Stations.Where(m => m.Id == key).Select(m => m.Site));
+            return GetSingle(id, s => s.Site, i => i.Stations);
         }
 
+        // GET: odata/Stations(5)/Instruments
+        [EnableQuery, ODataRoute("({id})/Instruments")]
+        public IQueryable<Instrument> GetInstruments([FromODataUri] Guid id)
+        {
+            return GetMany(id, s => s.Instruments, i => i.Stations);
+        }
     }
 }
