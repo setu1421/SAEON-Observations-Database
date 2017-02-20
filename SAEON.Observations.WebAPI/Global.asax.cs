@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -19,7 +20,7 @@ namespace SAEON.Observations.WebAPI
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.AppSettings()
                 .Enrich.FromLogContext()
-                .WriteTo.RollingFile(Server.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebAPI.Admin-{Date}.txt"))
+                .WriteTo.RollingFile(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebAPI.Admin-{Date}.txt"))
                 .WriteTo.Seq("http://localhost:5341/")
                 .CreateLogger();
             BootStrapper.Initialize();

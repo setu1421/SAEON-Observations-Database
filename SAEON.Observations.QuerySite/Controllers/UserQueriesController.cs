@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using SAEON.Observations.Core;
 using System.Linq.Expressions;
-using Microsoft.AspNet.Identity;
+//using Microsoft.AspNet.Identity;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {

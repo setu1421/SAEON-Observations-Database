@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using SAEON.Observations.Core;
 using System.Linq.Expressions;
 using SAEON.Observations.QuerySite.Controllers;
-using Microsoft.AspNet.Identity;
+//using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.DownloadSite.Controllers
