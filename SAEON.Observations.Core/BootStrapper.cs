@@ -2,11 +2,7 @@
 using Serilog;
 using Serilog.Context;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAEON.Observations.Core
 {
@@ -19,13 +15,6 @@ namespace SAEON.Observations.Core
                 try
                 {
                     Database.SetInitializer<ObservationsDbContext>(null);
-                    Database.SetInitializer<ApplicationDbContext>(null);
-                    //Database.SetInitializer<ApplicationDbContext>(new MigrateDatabaseToLatestVersion<ApplicationDbContext, ApplicationDbMigration>());
-                    using (var context = new ApplicationDbContext())
-                    {
-                        context.Database.Initialize(false);
-                        context.Seed();
-                    }
                 }
                 catch (Exception ex)
                 {

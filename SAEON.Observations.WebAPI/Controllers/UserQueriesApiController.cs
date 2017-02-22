@@ -1,16 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.AspNet.Identity;
-using SAEON.Observations.Core;
-using Serilog;
-using Serilog.Context;
+﻿using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -25,7 +17,7 @@ namespace SAEON.Observations.WebAPI.Controllers
     {
         protected override List<Expression<Func<UserQuery, bool>>> GetWheres()
         {
-            var userId = User.Identity.GetUserId();
+            var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new ArgumentNullException("Logged in UserId");
@@ -42,7 +34,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <returns></returns>
         protected override bool IsEntityOk(UserQuery item)
         {
-            var userId = User.Identity.GetUserId();
+            var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new NullReferenceException("Not logged in");
@@ -58,7 +50,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         protected override void SetEntity(ref UserQuery item)
         {
             base.SetEntity(ref item);
-            var userId = User.Identity.GetUserId();
+            var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new NullReferenceException("Not logged in");

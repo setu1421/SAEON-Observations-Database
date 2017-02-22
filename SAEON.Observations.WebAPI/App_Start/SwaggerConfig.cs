@@ -4,9 +4,6 @@ using SAEON.Observations.WebAPI;
 using Swashbuckle.Application;
 using System.Web.Hosting;
 using System.Linq;
-using System.Collections.Generic;
-using System;
-using System.Collections;
 using Swashbuckle.Swagger;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]

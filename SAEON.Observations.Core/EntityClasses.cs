@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace SAEON.Observations.Core
@@ -421,11 +417,6 @@ namespace SAEON.Observations.Core
                 });
             modelBuilder.Entity<UserDownload>().ToTable("UserDownloads");
             modelBuilder.Entity<UserQuery>().ToTable("UserQueries");
-            modelBuilder.Ignore<ApplicationUser>();
-            modelBuilder.Ignore<IdentityRole>();
-            modelBuilder.Ignore<IdentityUserClaim>();
-            modelBuilder.Ignore<IdentityUserLogin>();
-            modelBuilder.Ignore<IdentityUserRole>();
         }
     }
 

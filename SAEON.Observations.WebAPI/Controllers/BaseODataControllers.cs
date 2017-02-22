@@ -6,11 +6,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.OData;
-using System.Web.OData.Routing;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
@@ -53,7 +51,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
-            var query = db.Set<TEntity>().AsQueryable();
+            var query = db.Set<TEntity>().AsQueryable().AsNoTracking();
             foreach (var include in GetIncludes())
             {
                 query = query.Include(include);

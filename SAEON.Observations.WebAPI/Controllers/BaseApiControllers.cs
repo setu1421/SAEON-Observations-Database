@@ -11,13 +11,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
-  
+
     [Authorize]
     public abstract class BaseApiController<TEntity> : ApiController where TEntity : BaseEntity
     {

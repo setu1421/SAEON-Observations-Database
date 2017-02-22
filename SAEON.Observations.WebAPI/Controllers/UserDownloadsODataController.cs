@@ -1,22 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.ModelBinding;
 using System.Web.OData;
-using System.Web.OData.Query;
 using System.Web.OData.Routing;
 using SAEON.Observations.Core;
-using System.Web.Http.Description;
-using Serilog.Context;
-using Serilog;
-using Microsoft.AspNet.Identity;
 using System.Linq.Expressions;
 
 namespace SAEON.Observations.WebAPI.Controllers
@@ -29,7 +17,7 @@ namespace SAEON.Observations.WebAPI.Controllers
     {
         protected override List<Expression<Func<UserDownload, bool>>> GetWheres()
         {
-            var userId = User.Identity.GetUserId();
+            var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new ArgumentNullException("Logged in UserId");
@@ -46,7 +34,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <returns></returns>
         protected override bool IsEntityOk(UserDownload item)
         {
-            var userId = User.Identity.GetUserId();
+            var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new NullReferenceException("Not logged in");
@@ -62,7 +50,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         protected override void SetEntity(ref UserDownload item)
         {
             base.SetEntity(ref item);
-            var userId = User.Identity.GetUserId();
+            var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new ArgumentNullException("Logged in UserId");

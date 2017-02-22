@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
-using Newtonsoft.Json.Serialization;
 using SAEON.Observations.Core;
-using System.Reflection;
-using System.Linq.Expressions;
-using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.Http.Routing;
 using System.Web.Http.Controllers;
 using System.Web.OData.Builder;
@@ -52,11 +45,6 @@ namespace SAEON.Observations.WebAPI
             builder.EntitySet<UnitOfMeasure>("UnitsOfMeasure");
             builder.EntitySet<UserDownload>("UserDownloads");
             builder.EntitySet<UserQuery>("UserQueries");
-            builder.Ignore<ApplicationUser>();
-            builder.Ignore<IdentityRole>();
-            builder.Ignore<IdentityUserClaim>();
-            builder.Ignore<IdentityUserLogin>();
-            builder.Ignore<IdentityUserRole>();
             config.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
 
             config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
