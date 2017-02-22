@@ -22,7 +22,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         /// <returns></returns>
         protected override Expression<Func<UserQuery, bool>> EntityFilter()
         {
-            var userId = User.Identity.GetUserId();
+            var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new ArgumentNullException("Logged in UserId");
@@ -38,7 +38,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         /// <returns></returns>
         protected override bool IsEntityOk(UserQuery item, bool isInsert = false)
         {
-            var userId = User.Identity.GetUserId();
+            var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new NullReferenceException("Not logged in");
@@ -54,7 +54,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         protected override void SetEntity(ref UserQuery item)
         {
             base.SetEntity(ref item);
-            var userId = User.Identity.GetUserId();
+            var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new NullReferenceException("Not logged in");

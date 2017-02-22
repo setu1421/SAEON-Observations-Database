@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="BootStrapper.cs" />
     <Compile Include="EntityClasses.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="IdentityClasses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
