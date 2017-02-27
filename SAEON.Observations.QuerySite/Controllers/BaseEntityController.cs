@@ -19,7 +19,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 {
     [Authorize]
     //[Authorize(Roles = "Administrators, DataReaders")]
-    public class BaseController<TEntity> : Controller where TEntity : BaseEntity
+    public class BaseEntityController<TEntity> : Controller where TEntity : BaseEntity
     {
         protected ObservationsDbContext db = new ObservationsDbContext();
 

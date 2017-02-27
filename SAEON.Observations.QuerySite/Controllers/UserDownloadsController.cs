@@ -16,7 +16,7 @@ using System.Security.Claims;
 namespace SAEON.Observations.DownloadSite.Controllers
 {
     [RoutePrefix("UserDownloads"), Route("{action=index}")]
-    public class UserDownloadsController : BaseController<UserDownload>
+    public class UserDownloadsController : BaseEntityController<UserDownload>
     {
         /// <summary>
         /// Filter only for logged in user

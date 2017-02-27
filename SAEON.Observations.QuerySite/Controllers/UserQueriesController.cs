@@ -14,7 +14,7 @@ using System.Linq.Expressions;
 namespace SAEON.Observations.QuerySite.Controllers
 {
     [RoutePrefix("UserQueries"), Route("{action=index}")]
-    public class UserQueriesController : BaseController<UserQuery>
+    public class UserQueriesController : BaseEntityController<UserQuery>
     {
         /// <summary>
         /// Filter only for logged in user

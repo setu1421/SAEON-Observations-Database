@@ -19,7 +19,7 @@ namespace SAEON.Observations.QuerySite
     public partial class Startup
     {
         private const string ClientUri = @"http://localhost:58091/";
-        private const string CallbackEndpoint = ClientUri + @"/account/signInCallback";
+        //private const string CallbackEndpoint = ClientUri + @"/account/signInCallback";
         private const string IdServBaseUri = @"https://localhost:44311/oauth2";
         private const string AuthorizeUri = IdServBaseUri + @"/connect/authorize";
         private const string LogoutUri = IdServBaseUri + @"/connect/endsession";
@@ -58,38 +58,25 @@ namespace SAEON.Observations.QuerySite
                     {
                         AuthorizationCodeReceived = async n =>
                         {
-                            // use the code to get the access and refresh token
-                            var tokenClient = new TokenClient(TokenEndpoint, "SAEON.Observations.QuerySite", "It6fWPU5J708");
-                            var tokenResponse = await tokenClient.RequestAuthorizationCodeAsync(n.Code, n.RedirectUri);
-
-                            if (tokenResponse.IsError)
-                            {
-                                throw new Exception(tokenResponse.Error);
-                            }
-
-                            // use the access token to retrieve claims from userinfo
-                            //var userInfoClient = new UserInfoClient(new Uri(UserInfoEndpoint), n.ProtocolMessage.AccessToken);
-                            var userInfoClient = new UserInfoClient(new Uri(UserInfoEndpoint), tokenResponse.AccessToken);
+                            var userInfoClient = new UserInfoClient(new Uri(UserInfoEndpoint), n.ProtocolMessage.AccessToken);
                             var userInfoResponse = await userInfoClient.GetAsync();
 
-                            // create new identity
                             var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType);
                             identity.AddClaims(userInfoResponse.GetClaimsIdentity().Claims);
 
-                            identity.AddClaim(new Claim("access_token", tokenResponse.AccessToken));
-                            identity.AddClaim(new Claim("expires_at", DateTime.UtcNow.AddSeconds(tokenResponse.ExpiresIn).ToLocalTime().ToString(CultureInfo.InvariantCulture)));
-                            identity.AddClaim(new Claim("refresh_token", tokenResponse.RefreshToken));
+                            // keep the id_token for logout
                             identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
-                            //identity.AddClaim(new Claim("sid", n.AuthenticationTicket.Identity.FindFirst("sid").Value));
 
-                            //n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
-                            n.AuthenticationTicket = new AuthenticationTicket(
-                                new ClaimsIdentity(identity.Claims, n.AuthenticationTicket.Identity.AuthenticationType, "name", "role"),
-                                n.AuthenticationTicket.Properties);
+                            // add access token for sample API
+                            identity.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
+
+                            // keep track of access token expiration
+                            identity.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
+
+                            n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
                         },
                         RedirectToIdentityProvider = n =>
                         {
-                            // if signing out, add the id_token_hint
                             if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.LogoutRequest)
                             {
                                 var idTokenHint = n.OwinContext.Authentication.User.FindFirst("id_token");
@@ -98,7 +85,6 @@ namespace SAEON.Observations.QuerySite
                                 {
                                     n.ProtocolMessage.IdTokenHint = idTokenHint.Value;
                                 }
-
                             }
 
                             return Task.FromResult(0);

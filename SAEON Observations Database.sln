@@ -61,6 +61,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.WebAPI.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Core", "SAEON.Observations.Core\SAEON.Observations.Core.csproj", "{E3791465-CCCE-4E02-AF9F-8F677148FEE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.WebAPITest", "SAEON.Observations.WebAPITest\SAEON.Observations.WebAPITest.csproj", "{3CB7E045-590D-4588-8072-9B84E32D42E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.MVCTest", "SAEON.Observations.MVCTest\SAEON.Observations.MVCTest.csproj", "{94D88583-D876-4D31-8B3E-05E384976A96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (SQL Server Only)|Any CPU = Debug (SQL Server Only)|Any CPU
@@ -153,6 +157,22 @@ Global
 		{E3791465-CCCE-4E02-AF9F-8F677148FEE1}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
 		{E3791465-CCCE-4E02-AF9F-8F677148FEE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3791465-CCCE-4E02-AF9F-8F677148FEE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CB7E045-590D-4588-8072-9B84E32D42E3}.Debug (SQL Server Only)|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CB7E045-590D-4588-8072-9B84E32D42E3}.Debug (SQL Server Only)|Any CPU.Build.0 = Debug|Any CPU
+		{3CB7E045-590D-4588-8072-9B84E32D42E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CB7E045-590D-4588-8072-9B84E32D42E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CB7E045-590D-4588-8072-9B84E32D42E3}.Release (SQL Server Only)|Any CPU.ActiveCfg = Release|Any CPU
+		{3CB7E045-590D-4588-8072-9B84E32D42E3}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
+		{3CB7E045-590D-4588-8072-9B84E32D42E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CB7E045-590D-4588-8072-9B84E32D42E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94D88583-D876-4D31-8B3E-05E384976A96}.Debug (SQL Server Only)|Any CPU.ActiveCfg = Debug|Any CPU
+		{94D88583-D876-4D31-8B3E-05E384976A96}.Debug (SQL Server Only)|Any CPU.Build.0 = Debug|Any CPU
+		{94D88583-D876-4D31-8B3E-05E384976A96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94D88583-D876-4D31-8B3E-05E384976A96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94D88583-D876-4D31-8B3E-05E384976A96}.Release (SQL Server Only)|Any CPU.ActiveCfg = Release|Any CPU
+		{94D88583-D876-4D31-8B3E-05E384976A96}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
+		{94D88583-D876-4D31-8B3E-05E384976A96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94D88583-D876-4D31-8B3E-05E384976A96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

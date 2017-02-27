@@ -17,7 +17,7 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers
 {
 
-    [Authorize]
+    //[Authorize]
     public abstract class BaseApiController<TEntity> : ApiController where TEntity : BaseEntity
     {
         protected ObservationsDbContext db = new ObservationsDbContext();
