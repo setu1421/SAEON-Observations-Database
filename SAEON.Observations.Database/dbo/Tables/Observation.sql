@@ -55,7 +55,9 @@
     CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
 --< Changed 2.0.3 20160503 TimPN
 --> Added 2.0.8 20160726 TimPN
-    CONSTRAINT [UX_Observation] UNIQUE ([SensorID], [ImportBatchID], [ValueDate], [PhenomenonOfferingID], [PhenomenonUOMID]) ON [Observations],
+--> Removed 20170301 TimPN
+--    CONSTRAINT [UX_Observation] UNIQUE ([SensorID], [ImportBatchID], [ValueDate], [PhenomenonOfferingID], [PhenomenonUOMID]) ON [Observations],
+--< Removed 20170301 TimPN
 --< Added 2.0.8 20160726 TimPN
 --> Added 2.0.9 20160823 TimPN
     CONSTRAINT [FK_Observation_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]),
