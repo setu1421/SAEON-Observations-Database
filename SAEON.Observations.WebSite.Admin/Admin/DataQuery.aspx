@@ -47,9 +47,9 @@
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <ext:Hidden ID="GridData" runat="server" />
-    <ext:Hidden ID="VisCols" runat="server" />
-    <ext:Hidden ID="FormatType" runat="server" />
+    <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static"  />
+    <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static"  />
+    <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static"  />
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="ViewPort1" runat="server">
         <Items>
@@ -102,7 +102,11 @@
                                 <Items>
                                     <ext:ToolbarTextItem Text="From Date:" />
                                     <ext:ToolbarSpacer Width="10" />
-                                    <ext:DateField ID="FromFilter" runat="server" Text="From" Vtype="daterange" EndDateField="ToFilter" ClientIDMode="Static" Format="dd MMM yyyy" />
+                                    <ext:DateField ID="FromFilter" runat="server" Text="From" Vtype="daterange" ClientIDMode="Static" Format="dd MMM yyyy" >
+                                        <CustomConfig>
+                                            <ext:ConfigItem Name="endDateField" Value="#{ToFilter}" Mode="Value" />
+                                        </CustomConfig>
+                                        </ext:DateField>
                                     <ext:ToolbarSeparator Width="10" />
                                     <ext:ToolbarTextItem Text="To Date :" />
                                     <ext:ToolbarSpacer Width="10" />
