@@ -12,9 +12,11 @@ Create Table [dbo].[UserDownloads]
     [UpdatedAt] DateTime null Constraint [DF_UserDownloads_UpdatedAt] Default GetDate(), 
     [UpdatedBy] NVarChar(128) not Null,
     Constraint [PK_UserDownloads] Primary Key Clustered ([ID]),
-    Constraint [FK_UserDownloads_AspNetUsers_UserId] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
-    Constraint [FK_UserDownloads_AspNetUsers_AddedBy] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
-    Constraint [FK_UserDownloads_AspNetUsers_UpdatedBy] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
+--> Removed 20170301
+--    Constraint [FK_UserDownloads_AspNetUsers_UserId] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
+--    Constraint [FK_UserDownloads_AspNetUsers_AddedBy] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
+--    Constraint [FK_UserDownloads_AspNetUsers_UpdatedBy] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
+--< Removed 20170301
     Constraint [UX_UserDownloads_UserId_Name] Unique ([UserId],[Name])
 )
 GO

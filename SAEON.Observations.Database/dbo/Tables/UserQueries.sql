@@ -11,9 +11,11 @@ Create Table [dbo].[UserQueries]
     [UpdatedAt] DateTime null Constraint [DF_UserQueries_UpdatedAt] Default GetDate(), 
     [UpdatedBy] NVarChar(128) not Null,
     Constraint [PK_UserQueries] Primary Key Clustered ([ID]),
-    Constraint [FK_UserQueries_AspNetUsers_UserId] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
-    Constraint [FK_UserQueries_AspNetUsers_AddedBy] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
-    Constraint [FK_UserQueries_AspNetUsers_UpdatedBy] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
+--> Removed 20170301
+--    Constraint [FK_UserQueries_AspNetUsers_UserId] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
+--    Constraint [FK_UserQueries_AspNetUsers_AddedBy] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
+--    Constraint [FK_UserQueries_AspNetUsers_UpdatedBy] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
+--< Removed 20170301
     Constraint [UX_UserQueries_UserId_Name] Unique ([UserId],[Name])
 )
 GO
