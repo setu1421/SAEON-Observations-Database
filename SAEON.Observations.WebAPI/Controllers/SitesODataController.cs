@@ -14,9 +14,9 @@ namespace SAEON.Observations.WebAPI.Controllers
     public class SitesODataController : BaseODataController<Site>
     {
         /// <summary>
-        /// Get a list of Sites
+        /// All Sites
         /// </summary>
-        /// <returns>A list of Site</returns>
+        /// <returns>ListOf(Site)</returns>
         [EnableQuery, ODataRoute]
         public override IQueryable<Site> GetAll()
         {
@@ -25,7 +25,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/Sites(5)
         /// <summary>
-        /// Get a Site by Id
+        /// Site by Id
         /// </summary>
         /// <param name="id">Id of Site</param>
         /// <returns>Site</returns>
@@ -38,7 +38,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/Sites(5)
         /// <summary>
-        /// Get a Site by Name
+        /// Site by Name
         /// </summary>
         /// <param name="name">Name of Site</param>
         /// <returns>Site</returns>
@@ -50,10 +50,10 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         //GET: odata/Sites(5)/Stations
         /// <summary>
-        /// Return a list of Stations for the Site
+        /// Stations for the Site
         /// </summary>
         /// <param name="id">Id of Site</param>
-        /// <returns>List of Station</returns>
+        /// <returns>ListOf(Station)</returns>
         [EnableQuery, ODataRoute("({id})/Stations")]
         public IQueryable<Station> GetStations([FromODataUri] Guid id)
         {

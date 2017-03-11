@@ -24,16 +24,16 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a list of Sensors
+        /// Sensors
         /// </summary>
-        /// <returns>A list of Sensor</returns>
+        /// <returns>ListOf(Sensor)</returns>
         public override IQueryable<Sensor> GetAll()
         {
             return base.GetAll();
         }
 
         /// <summary>
-        /// Return a Sensor by Id
+        /// Sensor by Id
         /// </summary>
         /// <param name="id">The Id of the Sensor</param>
         /// <returns>Sensor</returns>
@@ -44,7 +44,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a Sensor by Name
+        /// Sensor by Name
         /// </summary>
         /// <param name="name">The Name of the Sensor</param>
         /// <returns>Sensor</returns>
@@ -56,6 +56,11 @@ namespace SAEON.Observations.WebAPI.Controllers
 
 
         // GET: Sensors/5/Instruments
+        /// <summary>
+        /// Instruments for the Sensor
+        /// </summary>
+        /// <param name="id">Id of the Sensor</param>
+        /// <returns>ListOf(Instrument)</returns>
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
@@ -64,10 +69,10 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: Sensors/5/Phenomenon
         /// <summary>
-        /// Return the Phenomenon of a Sensor
+        /// Phenomena of a Sensor
         /// </summary>
         /// <param name="id">The Id of the Sensor</param>
-        /// <returns>Site</returns>
+        /// <returns>Phenomenon</returns>
         [Route("{id:guid}/Phenomenon")]
         [ResponseType(typeof(Phenomenon))]
         public async Task<IHttpActionResult> GetPhenomenon(Guid id)

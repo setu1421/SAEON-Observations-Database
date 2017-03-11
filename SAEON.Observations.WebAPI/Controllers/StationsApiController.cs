@@ -24,16 +24,16 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a list of Stations
+        /// All Stations
         /// </summary>
-        /// <returns>A list of Station</returns>
+        /// <returns>ListOf(Station)</returns>
         public override IQueryable<Station> GetAll()
         {
             return base.GetAll();
         }
 
         /// <summary>
-        /// Return a Station by Id
+        /// Station by Id
         /// </summary>
         /// <param name="id">The Id of the Station</param>
         /// <returns>Station</returns>
@@ -44,7 +44,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a Station by Name
+        /// Station by Name
         /// </summary>
         /// <param name="name">The Name of the Station</param>
         /// <returns>Station</returns>
@@ -56,7 +56,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: Stations/5/Site
         /// <summary>
-        /// Return the Site of a Station
+        /// Site of a Station
         /// </summary>
         /// <param name="id">The Id of the Station</param>
         /// <returns>Site</returns>
@@ -68,6 +68,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         // GET: Stations/5/Instruments
+        /// <summary>
+        /// Instruments for the Station
+        /// </summary>
+        /// <param name="id">Id of the Station</param>
+        /// <returns>ListOf(Instrument)</returns>
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {

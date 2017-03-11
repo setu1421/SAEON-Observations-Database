@@ -1,49 +1,39 @@
-﻿using System.Collections.Generic;
-using System.Web.Http;
-using Microsoft.Owin.Security.OAuth;
+﻿using Newtonsoft.Json;
 using SAEON.Observations.Core;
-using System.Web.Http.Routing;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 using System.Web.Http.Controllers;
+using System.Web.Http.Routing;
 using System.Web.OData.Builder;
 using System.Web.OData.Extensions;
-using Newtonsoft.Json;
 
 namespace SAEON.Observations.WebAPI
 {
     public class InheritedDirectRouteProvider : DefaultDirectRouteProvider
     {
-        protected override IReadOnlyList<IDirectRouteFactory>
-        GetActionRouteFactories(HttpActionDescriptor actionDescriptor)
+        protected override IReadOnlyList<IDirectRouteFactory>GetActionRouteFactories(HttpActionDescriptor actionDescriptor)
         {
-            return actionDescriptor.GetCustomAttributes<IDirectRouteFactory>
-            (inherit: true);
+            return actionDescriptor.GetCustomAttributes<IDirectRouteFactory>(inherit: true);
         }
     }
 
     public static class WebApiConfig
     {
-        public static HttpConfiguration Register()
-        {
-            HttpConfiguration config = new HttpConfiguration();
-            Register(config);
-            return config;
-        }
-
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            // Configure Web API to use only bearer token authentication.
-            config.SuppressDefaultHostAuthentication();
-            config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
             // Web API routes
-            config.MapHttpAttributeRoutes(new InheritedDirectRouteProvider());
             //config.MapHttpAttributeRoutes();
+            config.MapHttpAttributeRoutes(new InheritedDirectRouteProvider());
 
             // OData
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.EntitySet<Instrument>("Instruments");
             builder.EntitySet<Offering>("Offerings");
+            builder.EntitySet<Organisation>("Organisations");
             builder.EntitySet<Phenomenon>("Phenomena");
             builder.EntitySet<Sensor>("Sensors");
             builder.EntitySet<Site>("Sites");
@@ -57,8 +47,8 @@ namespace SAEON.Observations.WebAPI
             config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
 
             //config.Routes.MapHttpRoute(
-            //    name: "ApiById",
-            //    routeTemplate: "{controller}/{id}",
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{id}",
             //    defaults: new { id = RouteParameter.Optional }
             //);
         }

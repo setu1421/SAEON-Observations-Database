@@ -16,9 +16,9 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/Offerings
         /// <summary>
-        /// Get a list of Offerings
+        /// Get all Offerings
         /// </summary>
-        /// <returns>A list of Offering</returns>
+        /// <returns>ListOf(Offering)</returns>
         [EnableQuery, ODataRoute]
         public override IQueryable<Offering> GetAll()
         {
@@ -27,7 +27,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/Offerings(5)
         /// <summary>
-        /// Get an Offering by Id
+        /// Offering by Id
         /// </summary>
         /// <param name="id">Id of Offering</param>
         /// <returns>Offering</returns>
@@ -39,7 +39,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/Offerings(5)
         /// <summary>
-        /// Get an Offering by Name
+        /// Offering by Name
         /// </summary>
         /// <param name="name">Name of Offering</param>
         /// <returns>Offering</returns>
@@ -50,6 +50,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         // GET: odata/Offerings(5)/Phenomena
+        /// <summary>
+        /// Phenomena for the Offering
+        /// </summary>
+        /// <param name="id">Id of the Offering</param>
+        /// <returns>ListOf(Phenomenon)</returns>
         [EnableQuery, ODataRoute("({id})/Phenomena")]
         public IQueryable<Phenomenon> GetPhenomena([FromODataUri] Guid id)
         {

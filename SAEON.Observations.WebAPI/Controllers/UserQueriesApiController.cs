@@ -59,16 +59,16 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a list of UserQueries
+        /// All UserQueries for logged in user
         /// </summary>
-        /// <returns>A list of UserQuery</returns>
+        /// <returns>ListOf(UserQuery)</returns>
         public override IQueryable<UserQuery> GetAll()
         {
             return base.GetAll();
         }
 
         /// <summary>
-        /// Return a UserQuery by Id
+        /// UserQuery by Id for logged in user
         /// </summary>
         /// <param name="id">The Id of the UserQuery</param>
         /// <returns>UserQuery</returns>
@@ -79,7 +79,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a UserQuery by Name
+        /// UserQuery by Name for logged in user
         /// </summary>
         /// <param name="name">The Name of the UserQuery</param>
         /// <returns>UserQuery</returns>
@@ -90,7 +90,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Create a UserQuery
+        /// Create a UserQuery for logged in user
         /// </summary>
         /// <param name="item">The UserQuery to be created</param>
         [ResponseType(typeof(UserQuery))]
@@ -101,7 +101,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Update a UserQuery by Id
+        /// Update a UserQuery by Id for logged in user
         /// </summary>
         /// <param name="id">Id of UserQuery</param>
         /// <param name="delta">The new UserQuery</param>
@@ -113,7 +113,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Update a UserQuery by Name
+        /// Update a UserQuery by Name for logged in user
         /// </summary>
         /// <param name="name">Name of UserQuery</param>
         /// <param name="delta">The new UserQuery</param>
@@ -125,7 +125,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Delete a UserQuery by Id
+        /// Delete a UserQuery by Id for logged in user
         /// </summary>
         /// <param name="id">Id of UserQuery</param>
         /// <returns></returns>
@@ -136,7 +136,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Delete a UserQuery by Name
+        /// Delete a UserQuery by Name for logged in user
         /// </summary>
         /// <param name="name">Name of UserQuery</param>
         /// <returns></returns>

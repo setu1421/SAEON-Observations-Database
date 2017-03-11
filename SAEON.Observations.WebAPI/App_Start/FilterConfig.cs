@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using SAEON.Observations.WebAPI.ErrorHandler;
+using System.Web;
+using System.Web.Mvc;
 
 namespace SAEON.Observations.WebAPI
 {
@@ -7,7 +9,7 @@ namespace SAEON.Observations.WebAPI
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             //filters.Add(new HandleErrorAttribute());
-            filters.Add(new ErrorHandler.AiHandleErrorAttribute());
+            filters.Add(new AiHandleErrorAttribute());
         }
     }
 }

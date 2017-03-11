@@ -119,7 +119,7 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
 
         /// <summary>
         /// Specifies the actual type of <see cref="System.Net.Http.ObjectContent{T}"/> passed to the <see cref="System.Net.Http.HttpRequestMessage"/> in an action.
-        /// The help page will use this information to produce more accurate request samples.
+        /// help page will use this information to produce more accurate request samples.
         /// </summary>
         /// <param name="config">The <see cref="HttpConfiguration"/>.</param>
         /// <param name="type">The type.</param>
@@ -132,7 +132,7 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
 
         /// <summary>
         /// Specifies the actual type of <see cref="System.Net.Http.ObjectContent{T}"/> passed to the <see cref="System.Net.Http.HttpRequestMessage"/> in an action.
-        /// The help page will use this information to produce more accurate request samples.
+        /// help page will use this information to produce more accurate request samples.
         /// </summary>
         /// <param name="config">The <see cref="HttpConfiguration"/>.</param>
         /// <param name="type">The type.</param>
@@ -146,7 +146,7 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
 
         /// <summary>
         /// Specifies the actual type of <see cref="System.Net.Http.ObjectContent{T}"/> returned as part of the <see cref="System.Net.Http.HttpRequestMessage"/> in an action.
-        /// The help page will use this information to produce more accurate response samples.
+        /// help page will use this information to produce more accurate response samples.
         /// </summary>
         /// <param name="config">The <see cref="HttpConfiguration"/>.</param>
         /// <param name="type">The type.</param>
@@ -159,7 +159,7 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
 
         /// <summary>
         /// Specifies the actual type of <see cref="System.Net.Http.ObjectContent{T}"/> returned as part of the <see cref="System.Net.Http.HttpRequestMessage"/> in an action.
-        /// The help page will use this information to produce more accurate response samples.
+        /// help page will use this information to produce more accurate response samples.
         /// </summary>
         /// <param name="config">The <see cref="HttpConfiguration"/>.</param>
         /// <param name="type">The type.</param>

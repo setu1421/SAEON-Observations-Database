@@ -25,16 +25,16 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a list of Phenomena
+        /// all Phenomena
         /// </summary>
-        /// <returns>A list of Phenomenon</returns>
+        /// <returns>ListOf(Phenomenon)</returns>
         public override IQueryable<Phenomenon> GetAll()
         {
             return base.GetAll();
         }
 
         /// <summary>
-        /// Return a Phenomenon by Id
+        /// Phenomenon by Id
         /// </summary>
         /// <param name="id">The Id of the Phenomenon</param>
         /// <returns>Phenomenon</returns>
@@ -45,7 +45,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a Phenomenon by Name
+        /// Phenomenon by Name
         /// </summary>
         /// <param name="name">The Name of the Phenomenon</param>
         /// <returns>Phenomenon</returns>
@@ -56,6 +56,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         // GET: Phenomena/5/Sensors
+        /// <summary>
+        /// Sensors for the Phenomenon
+        /// </summary>
+        /// <param name="id">Id of the Phenomenon</param>
+        /// <returns>ListOf(Sensor)</returns>
         [Route("{id:guid}/Sensors")]
         public IQueryable<Sensor> GetSensors([FromUri] Guid id)
         {
@@ -63,6 +68,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         // GET: Phenomena/5/Offerings
+        /// <summary>
+        /// Offerings for the Phenomenon
+        /// </summary>
+        /// <param name="id">Id of the Phenomenon</param>
+        /// <returns>ListOf(Offering)</returns>
         [Route("{id:guid}/Offerings")]
         public IQueryable<Offering> GetOfferings([FromUri] Guid id)
         {
@@ -70,6 +80,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         // GET: Phenomena/5/UnitsOfMeasure
+        /// <summary>
+        /// UnitsOfMeasure for the Phenomenon
+        /// </summary>
+        /// <param name="id">Id of the Phenomenon</param>
+        /// <returns>ListOf(UnitOfMeasure)</returns>
         [Route("{id:guid}/UnitsOfMeasure")]
         public IQueryable<UnitOfMeasure> GetUnitsOfMeasure([FromUri] Guid id)
         {

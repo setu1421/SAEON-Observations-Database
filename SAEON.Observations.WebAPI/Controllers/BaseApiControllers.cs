@@ -10,6 +10,7 @@ using System.Data.Entity.Validation;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -17,7 +18,7 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers
 {
 
-    //[Authorize]
+    [Authorize]
     public abstract class BaseApiController<TEntity> : ApiController where TEntity : BaseEntity
     {
         protected ObservationsDbContext db = new ObservationsDbContext();
@@ -52,7 +53,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Returns query for items
+        /// query for items
         /// </summary>
         /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
@@ -96,13 +97,13 @@ namespace SAEON.Observations.WebAPI.Controllers
         { }
 
         /// <summary>
-        /// Return all TEntity
+        /// all TEntity
         /// </summary>
         /// <returns>ListOf(TEntity)</returns>
         [Route]
         public virtual IQueryable<TEntity> GetAll()
         {
-            using (LogContext.PushProperty("Method", "GetAll"))
+            using (this.MethodCall())
             {
                 try
                 {
@@ -117,7 +118,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return an TEntity by Id
+        /// an TEntity by Id
         /// </summary>
         /// <param name="id">The Id of the TEntity</param>
         /// <returns>TEntity</returns>
@@ -125,7 +126,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetById(Guid id)
         {
-            using (LogContext.PushProperty("Method", "GetById"))
+            using (this.MethodCall(new object[] { id }))
             {
                 try
                 {
@@ -146,7 +147,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return an TEntity by Name
+        /// an TEntity by Name
         /// </summary>
         /// <param name="name">The Name of the TEntity</param>
         /// <returns>TEntity</returns>
@@ -154,7 +155,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetByName(string name)
         {
-            using (LogContext.PushProperty("Method", "GetByName"))
+            using (this.MethodCall(new object[] { name }))
             {
                 try
                 {
@@ -175,7 +176,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get a Related Entity TEntity.TRelated
+        /// Related Entity TEntity.TRelated
         /// </summary>
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
@@ -186,7 +187,8 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected async Task<IHttpActionResult> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
-            using (LogContext.PushProperty("Method", $"GetSingle<{nameof(TRelated)}>"))
+            //using (LogContext.PushProperty("Method", $"GetSingle<{nameof(TRelated)}>"))
+            using (this.MethodCall<TRelated>())
             {
                 try
                 {
@@ -240,7 +242,8 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseEntity
         {
-            using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
+            //using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
+            using (this.MethodCall<TRelated>())
             {
                 try
                 {
@@ -265,7 +268,8 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
-            using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
+            //using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
+            using (this.MethodCall<TRelated>())
             {
                 try
                 {
@@ -295,7 +299,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
         {
-            using (LogContext.PushProperty("Method", "Post"))
+            using (this.MethodCall(new object[] { item?.Name }))
             {
                 try
                 {
@@ -361,7 +365,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
         {
-            using (LogContext.PushProperty("Method", "PutById"))
+            using (this.MethodCall(new object[] { id }))
             {
                 try
                 {
@@ -409,7 +413,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> PutByName(string name, [FromBody]TEntity delta)
         {
-            using (LogContext.PushProperty("Method", "PutByName"))
+            using (this.MethodCall(new object[] { name }))
             {
                 try
                 {
@@ -456,7 +460,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> DeleteById(Guid id)
         {
-            using (LogContext.PushProperty("Method", "DeleteById"))
+            using (this.MethodCall(new object[] { id }))
             {
                 try
                 {
@@ -487,7 +491,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> DeleteByName(string name)
         {
-            using (LogContext.PushProperty("Method", "DeleteByName"))
+            using (this.MethodCall(new object[] { name }))
             {
                 try
                 {

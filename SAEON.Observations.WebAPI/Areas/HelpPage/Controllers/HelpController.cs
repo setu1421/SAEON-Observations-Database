@@ -7,7 +7,7 @@ using SAEON.Observations.WebAPI.Areas.HelpPage.Models;
 namespace SAEON.Observations.WebAPI.Areas.HelpPage.Controllers
 {
     /// <summary>
-    /// The controller that will handle requests for the help page.
+    /// controller that will handle requests for the help page.
     /// </summary>
     public class HelpController : Controller
     {

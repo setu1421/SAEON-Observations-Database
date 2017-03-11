@@ -27,42 +27,42 @@ namespace SAEON.Observations.WebAPI.Controllers
             return list;
         }
 
-        /// <summary>
-        /// Check UserId is logged in UserId
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        protected override bool IsEntityOk(UserDownload item)
-        {
-            var userId = User.GetUserId();
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new NullReferenceException("Not logged in");
-            }
-            return base.IsEntityOk(item) && (item.UserId == userId);
-        }
+        ///// <summary>
+        ///// Check UserId is logged in UserId
+        ///// </summary>
+        ///// <param name="item"></param>
+        ///// <returns></returns>
+        //protected override bool IsEntityOk(UserDownload item)
+        //{
+        //    var userId = User.GetUserId();
+        //    if (string.IsNullOrEmpty(userId))
+        //    {
+        //        throw new NullReferenceException("Not logged in");
+        //    }
+        //    return base.IsEntityOk(item) && (item.UserId == userId);
+        //}
 
-        /// <summary>
-        /// Check UserId is logged in UserId
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        protected override void SetEntity(ref UserDownload item)
-        {
-            base.SetEntity(ref item);
-            var userId = User.GetUserId();
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new ArgumentNullException("Logged in UserId");
-            }
-            item.UserId = userId;
-        }
+        ///// <summary>
+        ///// Check UserId is logged in UserId
+        ///// </summary>
+        ///// <param name="item"></param>
+        ///// <returns></returns>
+        //protected override void SetEntity(ref UserDownload item)
+        //{
+        //    base.SetEntity(ref item);
+        //    var userId = User.GetUserId();
+        //    if (string.IsNullOrEmpty(userId))
+        //    {
+        //        throw new ArgumentNullException("Logged in UserId");
+        //    }
+        //    item.UserId = userId;
+        //}
 
         // GET: odata/UserDownloads
         /// <summary>
-        /// Get a list of UserDownloads
+        /// All UserDownloads for logged in user
         /// </summary>
-        /// <returns>A list of UserDownload</returns>
+        /// <returns>ListOf(UserDownload)</returns>
         [EnableQuery, ODataRoute]
         public override IQueryable<UserDownload> GetAll()
         {
@@ -71,7 +71,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/UserDownloads(5)
         /// <summary>
-        /// Get a UserDownload by Id
+        /// UserDownload by Id for logged in user
         /// </summary>
         /// <param name="id">Id of UserDownload</param>
         /// <returns>UserDownload</returns>
@@ -84,7 +84,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/UserDownloads(5)
         /// <summary>
-        /// Get a UserDownload by Name
+        /// UserDownload by Name for logged in user
         /// </summary>
         /// <param name="name">Name of UserDownload</param>
         /// <returns>UserDownload</returns>

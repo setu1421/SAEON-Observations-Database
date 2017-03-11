@@ -19,21 +19,22 @@ namespace SAEON.Observations.WebAPI.Controllers
         protected override List<Expression<Func<Site, object>>> GetIncludes()
         {
             var list = base.GetIncludes();
+            list.Add(i => i.Organisations);
             list.Add(i => i.Stations);
             return list;
         }
 
         /// <summary>
-        /// Return a list of Sites
+        /// all Sites
         /// </summary>
-        /// <returns>A list of Site</returns>
+        /// <returns>ListOf(Site)</returns>
         public override IQueryable<Site> GetAll()
         {
             return base.GetAll();
         }
 
         /// <summary>
-        /// Return a Site by Id
+        /// Site by Id
         /// </summary>
         /// <param name="id">The Id of the Site</param>
         /// <returns>Site</returns>
@@ -44,7 +45,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a Site by Name
+        /// Site by Name
         /// </summary>
         /// <param name="name">The Name of the Site</param>
         /// <returns>Site</returns>
@@ -54,12 +55,24 @@ namespace SAEON.Observations.WebAPI.Controllers
             return await base.GetByName(name);
         }
 
-        //GET: Sites/5/Stations
+        //GET: Sites/5/Organisations
         /// <summary>
-        /// Return a list of Stations for the Site
+        /// Organisations for the Site
         /// </summary>
         /// <param name="id">Id of Site</param>
-        /// <returns>List of Station</returns>
+        /// <returns>ListOf(Organisation)</returns>
+        [Route("{id:guid}/Organisations")]
+        public IQueryable<Organisation> GetOrganisations([FromUri] Guid id)
+        {
+            return GetMany<Organisation>(id, s => s.Organisations, i => i.Sites);
+        }
+
+        //GET: Sites/5/Stations
+        /// <summary>
+        /// Stations for the Site
+        /// </summary>
+        /// <param name="id">Id of Site</param>
+        /// <returns>ListOf(Station)</returns>
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {

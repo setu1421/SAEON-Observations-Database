@@ -16,9 +16,9 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/Instruments
         /// <summary>
-        /// Get a list of Instruments
+        /// Get all Instruments
         /// </summary>
-        /// <returns>A list of Instrument</returns>
+        /// <returns>ListOf(Instrument)</returns>
         [EnableQuery, ODataRoute]
         public override IQueryable<Instrument> GetAll()
         {
@@ -27,7 +27,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/Instruments(5)
         /// <summary>
-        /// Get an Instrument by Id
+        /// Instrument by Id
         /// </summary>
         /// <param name="id">Id of Instrument</param>
         /// <returns>Instrument</returns>
@@ -39,7 +39,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/Instruments(5)
         /// <summary>
-        /// Get an Instrument by Name
+        /// Instrument by Name
         /// </summary>
         /// <param name="name">Name of Instrument</param>
         /// <returns>Instrument</returns>

@@ -23,16 +23,16 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a list of UnitsOfMeasure
+        /// All UnitsOfMeasure
         /// </summary>
-        /// <returns>A list of UnitOfMeasure</returns>
+        /// <returns>ListOf(UnitOfMeasure)</returns>
         public override IQueryable<UnitOfMeasure> GetAll()
         {
             return base.GetAll();
         }
 
         /// <summary>
-        /// Return a UnitOfMeasure by Id
+        /// UnitOfMeasure by Id
         /// </summary>
         /// <param name="id">The Id of the UnitOfMeasure</param>
         /// <returns>UnitOfMeasure</returns>
@@ -43,7 +43,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a UnitOfMeasure by Name
+        /// UnitOfMeasure by Name
         /// </summary>
         /// <param name="name">The Name of the UnitOfMeasure</param>
         /// <returns>UnitOfMeasure</returns>
@@ -54,6 +54,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         // GET: UnitsOfMeasure/5/Phenomena
+        /// <summary>
+        /// Phenomena for the UnitOfMeaure
+        /// </summary>
+        /// <param name="id">Id of the UnitOfMeasure</param>
+        /// <returns>ListOf(Phenomenon)</returns>
         [Route("{id:guid}/Phenomena")]
         public IQueryable<Phenomenon> GetPhenomena([FromUri] Guid id)
         {

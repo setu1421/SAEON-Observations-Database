@@ -15,9 +15,9 @@ namespace SAEON.Observations.WebAPI.Controllers
     {
         // GET: odata/Phenomena
         /// <summary>
-        /// Get a list of Phenomena
+        /// Get all Phenomena
         /// </summary>
-        /// <returns>A list of Phenomenon</returns>
+        /// <returns>ListOf(Phenomenon)</returns>
         [EnableQuery, ODataRoute]
         public override IQueryable<Phenomenon> GetAll()
         {
@@ -26,7 +26,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/Phenomena(5)
         /// <summary>
-        /// Get an Phenomenon by Id
+        /// Phenomenon by Id
         /// </summary>
         /// <param name="id">Id of Phenomenon</param>
         /// <returns>Phenomenon</returns>
@@ -38,7 +38,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/Phenomena(5)
         /// <summary>
-        /// Get an Phenomenon by Name
+        /// Phenomenon by Name
         /// </summary>
         /// <param name="name">Name of Phenomenon</param>
         /// <returns>Phenomenon</returns>
@@ -49,6 +49,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         // GET: odata/Phenomena(5)/Sensors
+        /// <summary>
+        /// Sensors for the Phenomenon
+        /// </summary>
+        /// <param name="id">Id of the Phenomenon</param>
+        /// <returns>ListOf(Sensor)</returns>
         [EnableQuery, ODataRoute("({id})/Sensors")]
         public IQueryable<Sensor> GetSensors([FromODataUri] Guid id)
         {
@@ -56,6 +61,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         // GET: odata/Phenomena(5)/Offerings
+        /// <summary>
+        /// Offerings for the Phenomenon
+        /// </summary>
+        /// <param name="id">Id of the Phenomenon</param>
+        /// <returns>ListOf(Offering)</returns>
         [EnableQuery, ODataRoute("({id})/Offerings")]
         public IQueryable<Offering> GetOfferings([FromODataUri] Guid id)
         {
@@ -63,6 +73,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         // GET: odata/Phenomena(5)/UnitsOfMeasure
+        /// <summary>
+        /// UnitsOfMeasure for the Phenomenon
+        /// </summary>
+        /// <param name="id">Id of the Phenomenon</param>
+        /// <returns>ListOf(UnitOfMeasure)</returns>
         [EnableQuery, ODataRoute("({id})/UnitsOfMeasure")]
         public IQueryable<UnitOfMeasure> GetUnitsOfMeasure([FromODataUri] Guid id)
         {

@@ -1,14 +1,15 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SAEON.Observations.WebAPI")]
-[assembly: AssemblyDescription("SAEON Observations Database - WebAPI")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("South African Environmental Observation Network (SAEON)")]
-[assembly: AssemblyProduct("SAEON Observations Database")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("SAEON.Observations.WebAPI")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("301eb87f-8799-4f5c-9a08-203a03072962")]
+[assembly: Guid("977b377f-f627-4aec-8764-696e817a8bc8")]
 
 // Version information for an assembly consists of the following four values:
 //

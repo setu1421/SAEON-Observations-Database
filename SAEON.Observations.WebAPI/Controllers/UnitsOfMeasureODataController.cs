@@ -16,9 +16,9 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/UnitsOfMeasure
         /// <summary>
-        /// Get a list of UnitsOfMeasure
+        /// All UnitsOfMeasure
         /// </summary>
-        /// <returns>A list of UnitOfMeasure</returns>
+        /// <returns>ListOf(UnitOfMeasure)</returns>
         [EnableQuery, ODataRoute]
         public override IQueryable<UnitOfMeasure> GetAll()
         {
@@ -27,7 +27,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/UnitsOfMeasure(5)
         /// <summary>
-        /// Get an UnitOfMeasure by Id
+        /// UnitOfMeasure by Id
         /// </summary>
         /// <param name="id">Id of UnitOfMeasure</param>
         /// <returns>UnitOfMeasure</returns>
@@ -39,7 +39,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         // GET: odata/UnitsOfMeasure(5)
         /// <summary>
-        /// Get an UnitOfMeasure by Name
+        /// UnitOfMeasure by Name
         /// </summary>
         /// <param name="name">Name of UnitOfMeasure</param>
         /// <returns>UnitOfMeasure</returns>
@@ -50,6 +50,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         // GET: odata/UnitsOfMeasure(5)/Phenomena
+        /// <summary>
+        /// Phenomena for the UnitOfMeasure
+        /// </summary>
+        /// <param name="id">Id of the UnitOfMeasure</param>
+        /// <returns>ListOf(Phenomenon)</returns>
         [EnableQuery, ODataRoute("({id})/Phenomena")]
         public IQueryable<Phenomenon> GetPhenomena([FromODataUri] Guid id)
         {

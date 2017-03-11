@@ -59,16 +59,16 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a list of UserDownloads
+        /// All UserDownloads for logged in user
         /// </summary>
-        /// <returns>A list of UserDownload</returns>
+        /// <returns>ListOf(UserDownload)</returns>
         public override IQueryable<UserDownload> GetAll()
         {
             return base.GetAll();
         }
 
         /// <summary>
-        /// Return a UserDownload by Id
+        /// UserDownload by Id for logged in user
         /// </summary>
         /// <param name="id">The Id of the UserDownload</param>
         /// <returns>UserDownload</returns>
@@ -79,7 +79,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a UserDownload by Name
+        /// UserDownload by Name for logged in user
         /// </summary>
         /// <param name="name">The Name of the UserDownload</param>
         /// <returns>UserDownload</returns>
@@ -90,7 +90,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Create a UserDownload
+        /// Create a UserDownload for logged in user
         /// </summary>
         /// <param name="item">The UserDownload to be created</param>
         [ResponseType(typeof(UserDownload))]
@@ -101,7 +101,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Update a UserDownload by Id
+        /// Update a UserDownload by Id for logged in user
         /// </summary>
         /// <param name="id">Id of UserDownload</param>
         /// <param name="delta">The new UserDownload</param>
@@ -113,7 +113,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Update a UserDownload by Name
+        /// Update a UserDownload by Name for logged in user
         /// </summary>
         /// <param name="name">Name of UserDownload</param>
         /// <param name="delta">The new UserDownload</param>
@@ -125,7 +125,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Delete a UserDownload by Id
+        /// Delete a UserDownload by Id for logged in user
         /// </summary>
         /// <param name="id">Id of UserDownload</param>
         /// <returns></returns>
@@ -136,7 +136,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Delete a UserDownload by Name
+        /// Delete a UserDownload by Name for logged in user
         /// </summary>
         /// <param name="name">Name of UserDownload</param>
         /// <returns></returns>

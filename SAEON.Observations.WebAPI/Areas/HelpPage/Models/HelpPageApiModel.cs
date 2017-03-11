@@ -7,7 +7,7 @@ using SAEON.Observations.WebAPI.Areas.HelpPage.ModelDescriptions;
 namespace SAEON.Observations.WebAPI.Areas.HelpPage.Models
 {
     /// <summary>
-    /// The model that represents an API displayed on the help page.
+    /// model that represents an API displayed on the help page.
     /// </summary>
     public class HelpPageApiModel
     {

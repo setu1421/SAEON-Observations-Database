@@ -46,7 +46,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Returns query for items
+        /// query for items
         /// </summary>
         /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
@@ -67,28 +67,27 @@ namespace SAEON.Observations.WebAPI.Controllers
             return query;
         }
 
-        /// <summary>
-        /// Overwrite to do additional checks before Post or Put
-        /// </summary>
-        /// <param name="item">TEntity</param>
-        /// <returns>True if TEntity is Ok else False</returns>
-        protected virtual bool IsEntityOk(TEntity item)
-        {
-            return true;
-        }
+        ///// <summary>
+        ///// Overwrite to do additional checks before Post or Put
+        ///// </summary>
+        ///// <param name="item">TEntity</param>
+        ///// <returns>True if TEntity is Ok else False</returns>
+        //protected virtual bool IsEntityOk(TEntity item)
+        //{
+        //    return true;
+        //}
 
-        /// <summary>
-        /// Overwrite to do additional checks before Post or Put
-        /// </summary>
-        /// <param name="item">TEntity</param>
-        protected virtual void SetEntity(ref TEntity item)
-        { }
-
+        ///// <summary>
+        ///// Overwrite to do additional checks before Post or Put
+        ///// </summary>
+        ///// <param name="item">TEntity</param>
+        //protected virtual void SetEntity(ref TEntity item)
+        //{ }
 
         //[EnableQuery, ODataRoute] Required in derived class
         public virtual IQueryable<TEntity> GetAll()
         {
-            using (LogContext.PushProperty("Method", "GetAll"))
+            using (this.MethodCall())
             {
                 try
                 {
@@ -96,7 +95,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get all");
+                    this.ErrorInCall(ex, "Unable to get all");
                     throw;
                 }
             }
@@ -105,7 +104,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({id})")] Required in derived class
         public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
         {
-            using (LogContext.PushProperty("Method", "GetById"))
+            using (this.MethodCall(new object[] { id }))
             {
                 try
                 {
@@ -113,7 +112,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get {id}", id);
+                    this.ErrorInCall(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
@@ -122,7 +121,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({name})")] Required in derived class 
         public virtual SingleResult<TEntity> GetByName([FromODataUri] string name)
         {
-            using (LogContext.PushProperty("Method", "GetByName"))
+            using (this.MethodCall(new object[] { name }))
             {
                 try
                 {
@@ -130,7 +129,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get {name}", name);
+                    this.ErrorInCall(ex, "Unable to get {name}", name);
                     throw;
                 }
             }
@@ -138,7 +137,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
 
         /// <summary>
-        /// Get a Related Entity TEntity.TRelated
+        /// Related Entity TEntity.TRelated
         /// </summary>
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
@@ -149,7 +148,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
         protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
-            using (LogContext.PushProperty("Method", $"GetSingle<{nameof(TRelated)}>"))
+            using (this.MethodCall<TRelated>())
             {
                 try
                 {
@@ -157,7 +156,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get {id}", id);
+                    this.ErrorInCall(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
@@ -175,7 +174,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseEntity
         {
-            using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
+            using (this.MethodCall<TRelated>())
             {
                 try
                 {
@@ -183,7 +182,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get {id}", id);
+                    this.ErrorInCall(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
@@ -201,7 +200,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
-            using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
+            using (this.MethodCall<TRelated>())
             {
                 try
                 {
@@ -209,7 +208,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get {id}", id);
+                    this.ErrorInCall(ex, "Unable to get {id}", id);
                     throw;
                 }
             }

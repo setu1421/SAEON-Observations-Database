@@ -23,16 +23,16 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a list of Offerings
+        /// all Offerings
         /// </summary>
-        /// <returns>A list of Offering</returns>
+        /// <returns>ListOf(Offering)</returns>
         public override IQueryable<Offering> GetAll()
         {
             return base.GetAll();
         }
 
         /// <summary>
-        /// Return a Offering by Id
+        /// Offering by Id
         /// </summary>
         /// <param name="id">The Id of the Offering</param>
         /// <returns>Offering</returns>
@@ -43,7 +43,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Return a Offering by Name
+        /// Offering by Name
         /// </summary>
         /// <param name="name">The Name of the Offering</param>
         /// <returns>Offering</returns>
@@ -54,6 +54,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         // GET: Offerings/5/Phenomena
+        /// <summary>
+        /// Phenomena for the Offering
+        /// </summary>
+        /// <param name="id">Id of the Offering</param>
+        /// <returns>ListOf(Phenomemon)</returns>
         [Route("{id:guid}/Phenomena")]
         public IQueryable<Phenomenon> GetPhenomena([FromUri] Guid id)
         {

@@ -2,9 +2,11 @@ using System.Web.Http;
 using WebActivatorEx;
 using SAEON.Observations.WebAPI;
 using Swashbuckle.Application;
-using System.Web.Hosting;
-using System.Linq;
 using Swashbuckle.Swagger;
+using System.Linq;
+using System.Web.Hosting;
+using System.Web.Http.Description;
+using System.Collections.Generic;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -22,11 +24,37 @@ namespace SAEON.Observations.WebAPI
             }
         }
 
+        public class AssignOAuth2SecurityRequirements : IOperationFilter
+        {
+            public void Apply(Operation operation, SchemaRegistry schemaRegistry, ApiDescription apiDescription)
+            {
+                var actFilters = apiDescription.ActionDescriptor.GetFilterPipeline();
+                var allowsAnonymous = actFilters.Select(f => f.Instance).OfType<OverrideAuthorizationAttribute>().Any();
+                if (allowsAnonymous)
+                    return; // must be an anonymous method
+
+
+                //var scopes = apiDescription.ActionDescriptor.GetFilterPipeline()
+                //    .Select(filterInfo => filterInfo.Instance)
+                //    .OfType<AllowAnonymousAttribute>()
+                //    .SelectMany(attr => attr.Roles.Split(','))
+                //    .Distinct();
+
+                if (operation.security == null)
+                    operation.security = new List<IDictionary<string, IEnumerable<string>>>();
+
+                var oAuthRequirements = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"oauth2", new List<string> {"SAEON.Observations.WebAPI"}}
+                };
+                operation.security.Add(oAuthRequirements);
+            }
+        }
         public static void Register()
         {
             var thisAssembly = typeof(SwaggerConfig).Assembly;
 
-            GlobalConfiguration.Configuration 
+            GlobalConfiguration.Configuration
                 .EnableSwagger(c =>
                     {
                         // By default, the service root url is inferred from the request used to access the docs.
@@ -79,13 +107,23 @@ namespace SAEON.Observations.WebAPI
                         //c.OAuth2("oauth2")
                         //    .Description("OAuth2 Implicit Grant")
                         //    .Flow("implicit")
-                        //    .AuthorizationUrl("/account/login")
-                        //    .TokenUrl("/token")
+                        //    .AuthorizationUrl("http://petstore.swagger.wordnik.com/api/oauth/dialog")
+                        //    //.TokenUrl("https://tempuri.org/token")
                         //    .Scopes(scopes =>
                         //    {
                         //        scopes.Add("read", "Read access to protected resources");
                         //        scopes.Add("write", "Write access to protected resources");
                         //    });
+                        c.OAuth2("oauth2")
+                            .Description("OAuth2 Implicit Grant")
+                            .Flow("hybrid")
+                            .AuthorizationUrl("https://localhost:44311/oauth2/connect/authorize")
+                            .TokenUrl("https://localhost:44311/oauth2/connect/token")
+                            .Scopes(scopes =>
+                            {
+                                scopes.Add("SAEON.Observations.WebAPI", "SAEON Observations Database WebAPI");
+                            });
+
 
                         // Set this flag to omit descriptions for any actions decorated with the Obsolete attribute
                         //c.IgnoreObsoleteActions();
@@ -103,7 +141,7 @@ namespace SAEON.Observations.WebAPI
                         // ProductsController will be listed before those from a CustomersController. This is typically
                         // used to customize the order of groupings in the swagger-ui.
                         //
-                        //c.OrderActionGroupsBy(new AlphabeticComparer());
+                        //c.OrderActionGroupsBy(new DescendingAlphabeticComparer());
 
                         // If you annotate Controllers and API Types with
                         // Xml comments (http://msdn.microsoft.com/en-us/library/b2s063f7(v=vs.110).aspx), you can incorporate
@@ -152,7 +190,7 @@ namespace SAEON.Observations.WebAPI
                         // enum type. Swashbuckle will honor this change out-of-the-box. However, if you use a different
                         // approach to serialize enums as strings, you can also force Swashbuckle to describe them as strings.
                         // 
-                        //c.DescribeAllEnumsAsStrings();
+                        c.DescribeAllEnumsAsStrings();
 
                         // Similar to Schema filters, Swashbuckle also supports Operation and Document filters:
                         //
@@ -160,12 +198,12 @@ namespace SAEON.Observations.WebAPI
                         // Operation filters.
                         //
                         //c.OperationFilter<AddDefaultResponse>();
-                        c.DocumentFilter<CustomDocumentFilter>();                        //
+                        //
                         // If you've defined an OAuth2 flow as described above, you could use a custom filter
                         // to inspect some attribute on each action and infer which (if any) OAuth2 scopes are required
                         // to execute the operation
                         //
-                        //c.OperationFilter<AssignOAuth2SecurityRequirements>();
+                        c.OperationFilter<AssignOAuth2SecurityRequirements>();
 
                         // Post-modify the entire Swagger document by wiring up one or more Document filters.
                         // This gives full control to modify the final SwaggerDocument. You should have a good understanding of
@@ -173,6 +211,7 @@ namespace SAEON.Observations.WebAPI
                         // before using this option.
                         //
                         //c.DocumentFilter<ApplyDocumentVendorExtensions>();
+                        c.DocumentFilter<CustomDocumentFilter>();                        //
 
                         // In contrast to WebApi, Swagger 2.0 does not include the query string component when mapping a URL
                         // to an action. As a result, Swashbuckle will raise an exception if it encounters multiple actions
@@ -248,6 +287,14 @@ namespace SAEON.Observations.WebAPI
                         //    appName: "Swagger UI"
                         //    //additionalQueryStringParams: new Dictionary<string, string>() { { "foo", "bar" } }
                         //);
+                        //c.EnableOAuth2Support(
+                        //    clientId: "SAEON.Observations.WebAPI",
+                        //    clientSecret: "81g5wyGSC89a",
+                        //    realm: "saeon.ac.za",
+                        //    appName: "Swagger UI"
+                        ////additionalQueryStringParams: new Dictionary<string, string>() { { "foo", "bar" } }
+                        //);
+                        //c.EnableOAuth2Support("SAEON.Observations.WebAPI", "saeon.ac.za", "Swagger UI");
 
                         // If your API supports ApiKey, you can override the default values.
                         // "apiKeyIn" can either be "query" or "header"                                                

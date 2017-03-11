@@ -12,7 +12,9 @@
     //ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model
       .OrderBy(d => d.ActionDescriptor.ControllerDescriptor.ControllerName)
-      .ToLookup(api => api.ActionDescriptor.ControllerDescriptor);}
+      .ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
+}
+
 <link type="text/css" href="~/Areas/HelpPage/HelpPage.css" rel="stylesheet" />
 <div class="row">
     <div class="col-md-12">

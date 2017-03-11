@@ -1,11 +1,15 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
     public class HomeController : Controller
     {
         /// <summary>
-        /// The Observations Database WebAPI home page
+        /// Observations Database WebAPI home page
         /// </summary>
         /// <returns></returns>
         [Route]
