@@ -11,17 +11,17 @@ namespace SAEON.Observations.Core
         {
             //var identity = principal as ClaimsIdentity;
             //return identity?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            return ClaimsPrincipal.Current.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            return ClaimsPrincipal.Current.Claims.FirstOrDefault(c => c.Type == Constants.Subject)?.Value;
         }
 
         public static string GetEmail(this IPrincipal principal)
         {
-            return ClaimsPrincipal.Current.Claims.FirstOrDefault(c => c.Type == "preferred_username")?.Value;
+            return ClaimsPrincipal.Current.Claims.FirstOrDefault(c => c.Type == Constants.Email)?.Value;
         }
 
         public static string GetUserName(this IPrincipal principal)
         {
-            return ClaimsPrincipal.Current.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+            return ClaimsPrincipal.Current.Claims.FirstOrDefault(c => c.Type == Constants.UserName)?.Value;
         }
 
 
@@ -29,6 +29,5 @@ namespace SAEON.Observations.Core
         {
             return ClaimsPrincipal.Current.Claims.Select(c => c.Type + ": "+c.Value).ToList();
         }
-
     }
 }

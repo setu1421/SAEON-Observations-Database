@@ -10,25 +10,26 @@ namespace SAEON.Observations.Core
     {
         public static void Initialize()
         {
-            using (LogContext.PushProperty("Method", "BootStrapper.Initialize"))
+            using (Logging.MethodCall(typeof(BootStrapper)))
             {
                 try
                 {
                     Database.SetInitializer<ObservationsDbContext>(null);
+                    Mapper.Initialize(cfg =>
+                    {
+                        //cfg.CreateMap<Instrument, Instrument>().ForMember(i => i.Id, y => y.Ignore());
+                        //cfg.CreateMap<Site, Site>().ForMember(i => i.Id, y => y.Ignore());
+                        //cfg.CreateMap<Station, Station>().ForMember(i => i.Id, y => y.Ignore());
+                        cfg.CreateMap<UserDownload, UserDownload>().ForMember(i => i.Id, y => y.Ignore());
+                        cfg.CreateMap<UserQuery, UserQuery>().ForMember(i => i.Id, y => y.Ignore());
+                    });
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to initialize database");
+                    Logging.ErrorInCall(ex, "Unable to initialise bootstrapper");
+                    throw;
                 }
             }
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<Instrument, Instrument>().ForMember(i => i.Id, y => y.Ignore());
-                cfg.CreateMap<Site, Site>().ForMember(i => i.Id, y => y.Ignore());
-                cfg.CreateMap<Station, Station>().ForMember(i => i.Id, y => y.Ignore());
-                cfg.CreateMap<UserDownload, UserDownload>().ForMember(i => i.Id, y => y.Ignore());
-                cfg.CreateMap<UserQuery, UserQuery>().ForMember(i => i.Id, y => y.Ignore());
-            });
         }
     }
 }

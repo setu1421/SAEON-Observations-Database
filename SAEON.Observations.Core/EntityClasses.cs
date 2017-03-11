@@ -84,12 +84,42 @@ namespace SAEON.Observations.Core
         /// </summary>
         [StringLength(5000)]
         public string Description { get; set; }
-        
+
         // Navigation
         /// <summary>
         /// Phenomena of this Offering
         /// </summary>
         public ICollection<Phenomenon> Phenomena { get; set; }
+    }
+
+    /// <summary>
+    /// Organisation entity
+    /// </summary>
+    public class Organisation : BaseEntity
+    {
+        /// <summary>
+        /// Code of the Site
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// <summary>
+        /// Description of the Site
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Site
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+
+        // Navigation
+
+        /// <summary>
+        /// The Sites linked to this Organisation
+        /// </summary>
+        public ICollection<Site> Sites { get; set; }
     }
 
     /// <summary>
@@ -198,6 +228,10 @@ namespace SAEON.Observations.Core
 
         // Navigation
 
+        /// <summary>
+        /// The Organisations linked to this Site
+        /// </summary>
+        public ICollection<Organisation> Organisations { get; set; }
         /// <summary>
         /// The Stations linked to this Site
         /// </summary>
@@ -363,6 +397,7 @@ namespace SAEON.Observations.Core
 
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Offering> Offerings { get; set; }
+        public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<Site> Sites { get; set; }
@@ -375,6 +410,15 @@ namespace SAEON.Observations.Core
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<Organisation>()
+                .HasMany<Site>(l => l.Sites)
+                .WithMany(r => r.Organisations)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("OrganisationID");
+                    cs.MapRightKey("SiteID");
+                    cs.ToTable("Organisation_Site");
+                });
             modelBuilder.Entity<Station>()
                 .HasMany<Instrument>(l => l.Instruments)
                 .WithMany(r => r.Stations)
