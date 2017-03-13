@@ -1,0 +1,84 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[Organisation]
+       [dbo].[Organisation_Instrument]
+     Clustered indexes that will be dropped
+       [dbo].[PK_Organisation] on [dbo].[Organisation]
+       [dbo].[PK_Organisation_Instrument] on [dbo].[Organisation_Instrument]
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[FK_UserDownloads_AspNetUsers_AddedBy] (Foreign Key)
+       [dbo].[FK_UserDownloads_AspNetUsers_UpdatedBy] (Foreign Key)
+       [dbo].[FK_UserDownloads_AspNetUsers_UserId] (Foreign Key)
+       [dbo].[FK_UserQueries_AspNetUsers_AddedBy] (Foreign Key)
+       [dbo].[FK_UserQueries_AspNetUsers_UpdatedBy] (Foreign Key)
+       [dbo].[FK_UserQueries_AspNetUsers_UserId] (Foreign Key)
+       [dbo].[UX_Observation] (Unique Constraint)
+       [dbo].[PK_Organisation] (Primary Key)
+       [dbo].[PK_Organisation_Instrument] (Primary Key)
+     Alter
+       [dbo].[UserDownloads] (Table)
+       [dbo].[vObservationRoles] (View)
+     Table rebuild
+       [dbo].[Organisation] (Table)
+       [dbo].[Organisation_Instrument] (Table)
+     Create
+       [dbo].[DF_Observation_AddedAt] (Default Constraint)
+       [dbo].[DF_Observation_AddedDate] (Default Constraint)
+       [dbo].[DF_Observation_ID] (Default Constraint)
+       [dbo].[DF_Observation_UpdatedAt] (Default Constraint)
+
+** Supporting actions
+     Drop
+       [dbo].[DF_Organisation_ID] (Default Constraint)
+       [dbo].[DF_Organisation_UpdatedAt] (Default Constraint)
+       [dbo].[DF_Organisation_AddedAt] (Default Constraint)
+       [dbo].[DF_Organisation_Instrument_UpdatedAt] (Default Constraint)
+       [dbo].[DF_Organisation_Instrument_AddedAt] (Default Constraint)
+       [dbo].[DF_Organisation_Instrument_ID] (Default Constraint)
+       [dbo].[FK_Organisation_Site_Organisation] (Foreign Key)
+       [dbo].[FK_Organisation_Station_Organisation] (Foreign Key)
+       [dbo].[FK_ProjectSite_Organisation] (Foreign Key)
+       [dbo].[FK_Organisation_Instrument_Organisation] (Foreign Key)
+       [dbo].[FK_Organisation_aspnet_Users] (Foreign Key)
+       [dbo].[FK_Organisation_Instrument_Instrument] (Foreign Key)
+       [dbo].[FK_Organisation_Instrument_OrganisationRole] (Foreign Key)
+       [dbo].[FK_Organisation_Instrument_aspnet_Users] (Foreign Key)
+     Create
+       [dbo].[Organisation].[IX_Organisation_UserId] (Index)
+       [dbo].[Organisation_Instrument].[IX_Organisation_Instrument_InstrumentID] (Index)
+       [dbo].[Organisation_Instrument].[IX_Organisation_Instrument_OrganisationRoleID] (Index)
+       [dbo].[Organisation_Instrument].[IX_Organisation_Instrument_OrganisationID] (Index)
+       [dbo].[Organisation_Instrument].[IX_Organisation_Instrument_StartDate] (Index)
+       [dbo].[Organisation_Instrument].[IX_Organisation_Instrument_EndDate] (Index)
+       [dbo].[Organisation_Instrument].[IX_Organisation_Instrument_UserId] (Index)
+       [dbo].[FK_Organisation_Site_Organisation] (Foreign Key)
+       [dbo].[FK_Organisation_Station_Organisation] (Foreign Key)
+       [dbo].[FK_ProjectSite_Organisation] (Foreign Key)
+       [dbo].[FK_Organisation_Instrument_Organisation] (Foreign Key)
+       [dbo].[FK_Organisation_aspnet_Users] (Foreign Key)
+       [dbo].[FK_Organisation_Instrument_Instrument] (Foreign Key)
+       [dbo].[FK_Organisation_Instrument_OrganisationRole] (Foreign Key)
+       [dbo].[FK_Organisation_Instrument_aspnet_Users] (Foreign Key)
+       [dbo].[TR_Organisation_Insert] (Trigger)
+       [dbo].[TR_Organisation_Update] (Trigger)
+       [dbo].[TR_Organisation_Instrument_Insert] (Trigger)
+       [dbo].[TR_Organisation_Instrument_Update] (Trigger)
+     Refresh
+       [dbo].[vInstrumentOrganisation] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vOrganisationInstrument] (View)
+       [dbo].[vOrganisationSite] (View)
+       [dbo].[vOrganisationStation] (View)
+       [dbo].[vProjectSite] (View)
+       [dbo].[vSiteOrganisation] (View)
+       [dbo].[vStationOrganisation] (View)
+
+The source's object [Documents] is different than the target's version of the object but the target object will not be updated.
+The object [Documents] already exists in database with a different definition and will not be altered.
+
