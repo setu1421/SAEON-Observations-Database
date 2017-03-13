@@ -2,7 +2,6 @@
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
@@ -19,14 +18,25 @@ namespace SAEON.Observations.QuerySite
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.AppSettings()
                 .Enrich.FromLogContext()
-                .WriteTo.RollingFile(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite.Admin-{Date}.txt"))
+                .WriteTo.RollingFile(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite {Date}.txt"))
                 .WriteTo.Seq("http://localhost:5341/")
                 .CreateLogger();
-            BootStrapper.Initialize();
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            using (Logging.MethodCall(this.GetType()))
+            {
+                try
+                {
+                    BootStrapper.Initialize();
+                    AreaRegistration.RegisterAllAreas();
+                    FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+                    RouteConfig.RegisterRoutes(RouteTable.Routes);
+                    BundleConfig.RegisterBundles(BundleTable.Bundles);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
         }
     }
 }

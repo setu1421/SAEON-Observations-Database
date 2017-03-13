@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("South African Environmental Observation Network (SAEON)")]
 [assembly: AssemblyProduct("SAEON Observations Database")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("51aa3ff9-662f-4ad3-8d6b-239e9ccd3284")]
+[assembly: Guid("6e4a16c1-e05a-4033-be43-0b0b367adfaa")]
 
 // Version information for an assembly consists of the following four values:
 //

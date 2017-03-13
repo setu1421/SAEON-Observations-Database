@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using SAEON.Observations.QuerySite.ErrorHandler;
+using System.Web;
 using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite
@@ -7,8 +8,8 @@ namespace SAEON.Observations.QuerySite
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new ErrorHandler.AiHandleErrorAttribute());
-            //filters.Add(new RequireHttpsAttribute());
+            //filters.Add(new HandleErrorAttribute());
+            filters.Add(new AiHandleErrorAttribute());
         }
     }
 }

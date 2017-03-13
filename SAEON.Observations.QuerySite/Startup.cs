@@ -1,96 +1,124 @@
 ﻿using IdentityModel.Client;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin;
+using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
+using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IdentityModel.Tokens;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Helpers;
 
 [assembly: OwinStartupAttribute(typeof(SAEON.Observations.QuerySite.Startup))]
+
 namespace SAEON.Observations.QuerySite
 {
-    public partial class Startup
+    public class Startup
     {
-        private const string ClientUri = @"http://localhost:58091/";
-        //private const string CallbackEndpoint = ClientUri + @"/account/signInCallback";
-        private const string IdServBaseUri = @"https://localhost:44311/oauth2";
-        private const string AuthorizeUri = IdServBaseUri + @"/connect/authorize";
-        private const string LogoutUri = IdServBaseUri + @"/connect/endsession";
-        private const string UserInfoEndpoint = IdServBaseUri + @"/connect/userinfo";
-        private const string TokenEndpoint = IdServBaseUri + @"/connect/token";
-
         public void Configuration(IAppBuilder app)
         {
-            AntiForgeryConfig.UniqueClaimTypeIdentifier = "sub";
-            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
-            //{
-            //    { "role", ClaimTypes.Role}
-            //};
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            using (Logging.MethodCall(this.GetType()))
             {
-                AuthenticationType = "Cookies"
-            });
-
-            app.UseOpenIdConnectAuthentication(
-                new OpenIdConnectAuthenticationOptions
+                try
                 {
-                    ClientId = "SAEON.Observations.QuerySite",
-                    Authority = IdServBaseUri,
-                    RedirectUri = ClientUri,
-                    PostLogoutRedirectUri = ClientUri,
-                    ResponseType = "code id_token token",
-                    Scope = "openid profile email roles offline_access",
-                    TokenValidationParameters = new TokenValidationParameters
+                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
+                    JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
+                    app.UseCors(CorsOptions.AllowAll);
+                    app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
-                        NameClaimType = "name",
-                        RoleClaimType = "role"
-                    },
-                    SignInAsAuthenticationType = "Cookies",
-                    Notifications = new OpenIdConnectAuthenticationNotifications
+                        AuthenticationType = "Cookies"
+                    });
+                    app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                     {
-                        AuthorizationCodeReceived = async n =>
+                        Authority = Properties.Settings.Default.IdentityServer,
+                        ClientId = "SAEON.Observations.QuerySite",
+                        //Scope = "openid profile email roles offline_access SAEON.Observations.WebAPI",
+                        Scope = "openid profile roles SAEON.Observations.WebAPI",
+                        //ResponseType = "code id_token token",
+                        ResponseType = "id_token token code",
+                        RedirectUri = "http://localhost:50160/",
+                        //TokenValidationParameters = new TokenValidationParameters
+                        //{
+                        //    NameClaimType = "name",
+                        //    RoleClaimType = "role"
+                        //},
+                        SignInAsAuthenticationType = "Cookies",
+                        UseTokenLifetime = false,
+                        Notifications = new OpenIdConnectAuthenticationNotifications
                         {
-                            var userInfoClient = new UserInfoClient(new Uri(UserInfoEndpoint), n.ProtocolMessage.AccessToken);
-                            var userInfoResponse = await userInfoClient.GetAsync();
-
-                            var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType);
-                            identity.AddClaims(userInfoResponse.GetClaimsIdentity().Claims);
-
-                            // keep the id_token for logout
-                            identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
-
-                            // add access token for sample API
-                            identity.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
-
-                            // keep track of access token expiration
-                            identity.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
-
-                            n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
-                        },
-                        RedirectToIdentityProvider = n =>
-                        {
-                            if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.LogoutRequest)
+                            AuthorizationCodeReceived = async n =>
                             {
-                                var idTokenHint = n.OwinContext.Authentication.User.FindFirst("id_token");
+                                var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType, "givven_name", "role");
 
-                                if (idTokenHint != null)
+                                var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo"), n.ProtocolMessage.AccessToken);
+                                var userInfo = await userInfoClient.GetAsync();
+
+                                identity.AddClaims(userInfo.GetClaimsIdentity().Claims);
+
+                                // keep the id_token for logout
+                                identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
+
+                                // add access token for sample API
+                                identity.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
+
+                                // keep track of access token expiration
+                                identity.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
+
+                                n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
+                            },
+                            SecurityTokenValidated = async n =>
+                            {
+                                var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType, "given_name", "role");
+
+                                // get userinfo data
+                                var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo"), n.ProtocolMessage.AccessToken);
+
+                                var userInfo = await userInfoClient.GetAsync();
+                                identity.AddClaims(userInfo.GetClaimsIdentity().Claims);
+
+                                // keep the id_token for logout
+                                identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
+
+                                // add access token for sample API
+                                identity.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
+
+                                // keep track of access token expiration
+                                identity.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
+
+                                // add some other app specific claim
+                                identity.AddClaim(new Claim("app_specific", "some data"));
+
+                                n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
+                            },
+                            RedirectToIdentityProvider = n =>
+                            {
+                                if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.LogoutRequest)
                                 {
-                                    n.ProtocolMessage.IdTokenHint = idTokenHint.Value;
-                                }
-                            }
+                                    var idTokenHint = n.OwinContext.Authentication.User.FindFirst("id_token");
 
-                            return Task.FromResult(0);
-                        }
-                    },
-                });
+                                    if (idTokenHint != null)
+                                    {
+                                        n.ProtocolMessage.IdTokenHint = idTokenHint.Value;
+                                    }
+                                }
+                                return Task.FromResult(0);
+                            }
+                        },
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to configure application");
+                    throw;
+                }
+            }
         }
     }
 }

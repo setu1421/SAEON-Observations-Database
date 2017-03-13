@@ -1,14 +1,13 @@
 ﻿using IdentityModel.Client;
 using Newtonsoft.Json;
-using RestSharp;
-using RestSharp.Deserializers;
 using SAEON.Observations.Core;
-using Serilog;
-using Serilog.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -16,88 +15,309 @@ using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class BaseRestController<TEntity> : Controller where TEntity : BaseEntity, new()
     {
-        private static string apiBaseUrl = "http://localhost:50840/";
+        private static string apiBaseUrl = "http://localhost:63378/";
         private static string identityUrl = "https://localhost:44311/oauth2";
         private static string tokenUrl = identityUrl + "/connect/token";
         private string resource = null;
         protected string Resource { get { return resource; } set { resource = value; } }
 
-        protected List<TEntity> GetAll()
-        {
-            using (LogContext.PushProperty("Method", "Index"))
-            {
-                try
-                {
-                    RestClient client = new RestClient(apiBaseUrl);
-                    RestRequest request = new RestRequest(Resource, Method.GET);
-                    //request.AddParameter("Authorization", $"Bearer {access_token}"),ParameterType.HttpHeader);
-                    request.AddHeader("Accept", "application/json");
-                    request.RequestFormat = DataFormat.Json;
-                    var response = client.Execute<List<TEntity>>(request);
-                    return response.Data;
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Unable to get all");
-                    throw;
-                }
-            }
-        }
-
-        private async Task<TokenResponse> GetTokenAsync()
-        {
-            var client = new TokenClient(tokenUrl, "SAEON.Observations.WebAPI", "81g5wyGSC89a");
-            return await client.RequestClientCredentialsAsync("SAEON.Observations.WebAPI");
-        }
-
+        // GET: TEntity
         public virtual async Task<ActionResult> Index()
         {
-            using (LogContext.PushProperty("Method", "Index"))
+            using (Logging.MethodCall<TEntity>(this.GetType()))
             {
                 try
                 {
-                    var client = new HttpClient();
-                    var user = User as ClaimsPrincipal;
-                    var token = user.FindFirst("access_token").Value;
-                    client.SetBearerToken(token);
-                    var response = await client.GetAsync(apiBaseUrl + "/" + Resource);
-                    var data = JsonConvert.DeserializeObject<List<TEntity>>(response.Content.ToString());
-                    return View(data);
+                    using (var client = new HttpClient())
+                    {
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var user = User as ClaimsPrincipal;
+                        var token = user.FindFirst("access_token").Value;
+                        Logging.Verbose("Token: {token}", token);
+                        client.SetBearerToken(token);
+                        var response = await client.GetAsync($"{apiBaseUrl}/{Resource}");
+                        Logging.Verbose("Response: {response}", response);
+                        response.EnsureSuccessStatusCode();
+                        var data = await response.Content.ReadAsAsync<IEnumerable<TEntity>>();
+                        Logging.Verbose("Data: {data}", data);
+                        return View(data);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get all");
+                    Logging.Exception(ex);
                     throw;
                 }
             }
         }
 
-        //public virtual ActionResult Index()
-        //{
-        //    using (LogContext.PushProperty("Method", "Index"))
-        //    {
-        //        try
-        //        {
-        //            RestClient client = new RestClient(apiBaseUrl);
-        //            client.AddHandler("*", new JsonDeserializer());
-        //            RestRequest request = new RestRequest(Resource, Method.GET);
-        //            //request.AddParameter("Authorization", $"Bearer {access_token}"),ParameterType.HttpHeader);
-        //            request.AddHeader("Accept", "application/json");
-        //            request.RequestFormat = DataFormat.Json;
-        //            var response = client.Execute<List<TEntity>>(request);
-        //            var data = JsonConvert.DeserializeObject<List<TEntity>>(response.Content);
-        //            return View(data);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Log.Error(ex, "Unable to get all");
-        //            throw;
-        //        }
-        //    }
-        //}
+        // GET: TEntity/Details/Id
+        /// <summary>
+        /// Return an TEntity by Id
+        /// </summary>
+        /// <param name="id">The Id of the TEntity</param>
+        /// <returns>View(TEntity)</returns>
+        [Route("{id:guid}")]
+        public virtual async Task<ActionResult> Details(Guid? id)
+        {
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
+            {
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var user = User as ClaimsPrincipal;
+                        var token = user.FindFirst("access_token").Value;
+                        Logging.Verbose("Token: {token}", token);
+                        client.SetBearerToken(token);
+                        var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
+                        Logging.Verbose("Response: {response}", response);
+                        response.EnsureSuccessStatusCode();
+                        var data = await response.Content.ReadAsAsync<TEntity>();
+                        Logging.Verbose("Data: {data}", data);
+                        return View(data);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
 
+        // GET: TEntity/Create
+        /// <summary>
+        /// Create a TEntity
+        /// </summary>
+        /// <returns>View()</returns>
+        [Authorize]
+        //[Authorize(Roles = "Administrators, DataWriters")]
+        public virtual ActionResult Create()
+        {
+            using (Logging.MethodCall<TEntity>(this.GetType()))
+            {
+                try
+                {
+                    return View();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        // POST: TEntity/Create
+        /// <summary>
+        /// Create a TEntity
+        /// </summary>
+        /// <param name="item">TEntity to create</param>
+        /// <returns>View(TEntity)</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        //[Authorize(Roles = "Administrators, DataWriters")]
+        public virtual async Task<ActionResult> Create(TEntity item)
+        {
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Name", item?.Name }, { "Item", item } }))
+            {
+                try
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        return View(item);
+                    }
+                    else
+                        using (var client = new HttpClient())
+                        {
+                            client.DefaultRequestHeaders.Accept.Clear();
+                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            var user = User as ClaimsPrincipal;
+                            var token = user.FindFirst("access_token").Value;
+                            Logging.Verbose("Token: {token}", token);
+                            client.SetBearerToken(token);
+                            var response = await client.PostAsJsonAsync<TEntity>($"{apiBaseUrl}/{Resource}", item);
+                            Logging.Verbose("Response: {response}", response);
+                            response.EnsureSuccessStatusCode();
+                            return RedirectToAction("Index");
+                        }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to add {Name}", item.Name);
+                    throw;
+                }
+            }
+        }
+
+        // GET: TEntity/Edit/Id
+        /// <summary>
+        /// Edit a TEntity
+        /// </summary>
+        /// <param name="id">id of TEntity</param>
+        /// <returns>View(TEntity)</returns>
+        [Route("{id:guid}")]
+        [Authorize]
+        //[Authorize(Roles = "Administrators, DataWriters")]
+        public virtual async Task<ActionResult> Edit(Guid? id)
+        {
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
+            {
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var user = User as ClaimsPrincipal;
+                        var token = user.FindFirst("access_token").Value;
+                        Logging.Verbose("Token: {token}", token);
+                        client.SetBearerToken(token);
+                        var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
+                        Logging.Verbose("Response: {response}", response);
+                        response.EnsureSuccessStatusCode();
+                        var data = await response.Content.ReadAsAsync<TEntity>();
+                        Logging.Verbose("Data: {data}", data);
+                        return View(data);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        // POST: TEntity/Edit
+        /// <summary>
+        /// Edit a TEntity
+        /// </summary>
+        /// <param name="delta">TEntity to edit</param>
+        /// <returns>View(TEntity)</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        //[Authorize(Roles = "Administrators, DataWriters")]
+        public virtual async Task<ActionResult> Edit(TEntity delta)
+        {
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", delta?.Id }, { "Delta", delta } }))
+            {
+                try
+                {
+                    if (!ModelState.IsValid)
+                    {
+                        return View(delta);
+                    }
+                    else
+                    {
+                        using (var client = new HttpClient())
+                        {
+                            client.DefaultRequestHeaders.Accept.Clear();
+                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                            var user = User as ClaimsPrincipal;
+                            var token = user.FindFirst("access_token").Value;
+                            Logging.Verbose("Token: {token}", token);
+                            client.SetBearerToken(token);
+                            var response = await client.PutAsJsonAsync<TEntity>($"{apiBaseUrl}/{Resource}/{delta?.Id}", delta);
+                            Logging.Verbose("Response: {response}", response);
+                            response.EnsureSuccessStatusCode();
+                            return RedirectToAction("Index");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to edit {id}", delta?.Id);
+                    throw;
+                }
+            }
+
+        }
+
+        // GET: TEntity/Delete/Id
+        /// <summary>
+        /// Delete a TEntity
+        /// </summary>
+        /// <param name="id">Id of the TEntity</param>
+        /// <returns>View(item)</returns>
+        [Route("{id:guid}")]
+        [Authorize]
+        //[Authorize(Roles = "Administrators, DataWriters")]
+        public virtual async Task<ActionResult> Delete(Guid? id)
+        {
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
+            {
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var user = User as ClaimsPrincipal;
+                        var token = user.FindFirst("access_token").Value;
+                        Logging.Verbose("Token: {token}", token);
+                        client.SetBearerToken(token);
+                        var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
+                        Logging.Verbose("Response: {response}", response);
+                        response.EnsureSuccessStatusCode();
+                        var data = await response.Content.ReadAsAsync<TEntity>();
+                        Logging.Verbose("Data: {data}", data);
+                        return View(data);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to delete {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        // POST: TEntity/Delete/Id
+        /// <summary>
+        /// Delete a TEnity
+        /// </summary>
+        /// <param name="id">If of TEntity</param>
+        /// <returns></returns>
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        //[Authorize(Roles = "Administrators, DataWriters")]
+        public virtual async Task<ActionResult> DeleteConfirmed(Guid id)
+        {
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
+            {
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var user = User as ClaimsPrincipal;
+                        var token = user.FindFirst("access_token").Value;
+                        Logging.Verbose("Token: {token}", token);
+                        client.SetBearerToken(token);
+                        var response = await client.DeleteAsync($"{apiBaseUrl}/{Resource}/{id}");
+                        Logging.Verbose("Response: {response}", response);
+                        response.EnsureSuccessStatusCode();
+                        return RedirectToAction("Index");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to delete {id}", id);
+                    throw;
+                }
+            }
+        }
     }
 }
