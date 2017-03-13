@@ -17,16 +17,19 @@ namespace SAEON.Observations.Core
                     Database.SetInitializer<ObservationsDbContext>(null);
                     Mapper.Initialize(cfg =>
                     {
-                        //cfg.CreateMap<Instrument, Instrument>().ForMember(i => i.Id, y => y.Ignore());
-                        //cfg.CreateMap<Site, Site>().ForMember(i => i.Id, y => y.Ignore());
-                        //cfg.CreateMap<Station, Station>().ForMember(i => i.Id, y => y.Ignore());
-                        cfg.CreateMap<UserDownload, UserDownload>().ForMember(i => i.Id, y => y.Ignore());
-                        cfg.CreateMap<UserQuery, UserQuery>().ForMember(i => i.Id, y => y.Ignore());
+                        cfg.CreateMap<UserDownload, UserDownload>()
+                            .ForMember(i => i.Id, opt => opt.Ignore())
+                            .ForMember(i => i.AddedBy, opt => opt.Ignore())
+                            .ForMember(i => i.UpdatedBy, opt => opt.Ignore());
+                        cfg.CreateMap<UserQuery, UserQuery>()
+                            .ForMember(i => i.Id, opt => opt.Ignore())
+                            .ForMember(i => i.AddedBy, opt => opt.Ignore())
+                            .ForMember(i => i.UpdatedBy, opt => opt.Ignore());
                     });
                 }
                 catch (Exception ex)
                 {
-                    Logging.ErrorInCall(ex, "Unable to initialise bootstrapper");
+                    Logging.Exception(ex, "Unable to initialise bootstrapper");
                     throw;
                 }
             }
