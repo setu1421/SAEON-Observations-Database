@@ -147,11 +147,10 @@ namespace SAEON.Observations.Data
 				colvarUserId.AutoIncrement = false;
 				colvarUserId.IsNullable = false;
 				colvarUserId.IsPrimaryKey = false;
-				colvarUserId.IsForeignKey = true;
+				colvarUserId.IsForeignKey = false;
 				colvarUserId.IsReadOnly = false;
 				colvarUserId.DefaultSetting = @"";
-				
-					colvarUserId.ForeignKeyTableName = "AspNetUsers";
+				colvarUserId.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarUserId);
 				
 				TableSchema.TableColumn colvarName = new TableSchema.TableColumn(schema);
@@ -334,9 +333,7 @@ namespace SAEON.Observations.Data
 		
 			
 		
-		#region ForeignKey Properties
-		
-		#endregion
+		//no foreign key tables defined (0)
 		
 		
 		
