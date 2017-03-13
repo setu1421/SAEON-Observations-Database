@@ -48,13 +48,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.FileHelpers", "SAEON.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.SubSonic", "SAEON.SubSonic\SubSonic\SAEON.SubSonic.csproj", "{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.QuerySite0", "SAEON.Observations.QuerySite0\SAEON.Observations.QuerySite0.csproj", "{593E9A77-F2B6-44FB-A324-A9D1F1F20348}"
-	ProjectSection(ProjectDependencies) = postProject
-		{FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A} = {FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.WebAPI0", "SAEON.Observations.WebAPI0\SAEON.Observations.WebAPI0.csproj", "{FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Core", "SAEON.Observations.Core\SAEON.Observations.Core.csproj", "{E3791465-CCCE-4E02-AF9F-8F677148FEE1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.WebAPI", "SAEON.Observations.WebAPI\SAEON.Observations.WebAPI.csproj", "{48BC1051-A1C8-4597-A79F-3844F6808244}"
@@ -113,22 +106,6 @@ Global
 		{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}.Release (SQL Server Only)|Any CPU.Build.0 = Release (SQL Server Only)|Any CPU
 		{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{593E9A77-F2B6-44FB-A324-A9D1F1F20348}.Debug (SQL Server Only)|Any CPU.ActiveCfg = Debug|Any CPU
-		{593E9A77-F2B6-44FB-A324-A9D1F1F20348}.Debug (SQL Server Only)|Any CPU.Build.0 = Debug|Any CPU
-		{593E9A77-F2B6-44FB-A324-A9D1F1F20348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{593E9A77-F2B6-44FB-A324-A9D1F1F20348}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{593E9A77-F2B6-44FB-A324-A9D1F1F20348}.Release (SQL Server Only)|Any CPU.ActiveCfg = Release|Any CPU
-		{593E9A77-F2B6-44FB-A324-A9D1F1F20348}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
-		{593E9A77-F2B6-44FB-A324-A9D1F1F20348}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{593E9A77-F2B6-44FB-A324-A9D1F1F20348}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A}.Debug (SQL Server Only)|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A}.Debug (SQL Server Only)|Any CPU.Build.0 = Debug|Any CPU
-		{FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A}.Release (SQL Server Only)|Any CPU.ActiveCfg = Release|Any CPU
-		{FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
-		{FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE8EA8E4-ABF7-4CE8-8689-40AAB3F79F5A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E3791465-CCCE-4E02-AF9F-8F677148FEE1}.Debug (SQL Server Only)|Any CPU.ActiveCfg = Debug|Any CPU
 		{E3791465-CCCE-4E02-AF9F-8F677148FEE1}.Debug (SQL Server Only)|Any CPU.Build.0 = Debug|Any CPU
 		{E3791465-CCCE-4E02-AF9F-8F677148FEE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
