@@ -87,7 +87,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute] Required in derived class
         public virtual IQueryable<TEntity> GetAll()
         {
-            using (this.MethodCall())
+            using (Logging.MethodCall(this.GetType()))
             {
                 try
                 {
@@ -95,7 +95,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    this.ErrorInCall(ex, "Unable to get all");
+                    Logging.Exception(ex, "Unable to get all");
                     throw;
                 }
             }
@@ -104,7 +104,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({id})")] Required in derived class
         public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
         {
-            using (this.MethodCall(new object[] { id }))
+            using (Logging.MethodCall(this.GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {
@@ -112,7 +112,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    this.ErrorInCall(ex, "Unable to get {id}", id);
+                    Logging.Exception(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
@@ -121,7 +121,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({name})")] Required in derived class 
         public virtual SingleResult<TEntity> GetByName([FromODataUri] string name)
         {
-            using (this.MethodCall(new object[] { name }))
+            using (Logging.MethodCall(this.GetType(),new ParameterList{ { "Name", name } }))
             {
                 try
                 {
@@ -129,7 +129,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    this.ErrorInCall(ex, "Unable to get {name}", name);
+                    Logging.Exception(ex, "Unable to get {name}", name);
                     throw;
                 }
             }
@@ -148,7 +148,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
         protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
-            using (this.MethodCall<TRelated>())
+            using (Logging.MethodCall<TRelated>(this.GetType()))
             {
                 try
                 {
@@ -156,7 +156,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    this.ErrorInCall(ex, "Unable to get {id}", id);
+                    Logging.Exception(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
@@ -174,7 +174,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseEntity
         {
-            using (this.MethodCall<TRelated>())
+            using (Logging.MethodCall<TRelated>(this.GetType()))
             {
                 try
                 {
@@ -182,7 +182,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    this.ErrorInCall(ex, "Unable to get {id}", id);
+                    Logging.Exception(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
@@ -200,7 +200,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
-            using (this.MethodCall<TRelated>())
+            using (Logging.MethodCall<TRelated>(this.GetType()))
             {
                 try
                 {
@@ -208,7 +208,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    this.ErrorInCall(ex, "Unable to get {id}", id);
+                    Logging.Exception(ex, "Unable to get {id}", id);
                     throw;
                 }
             }

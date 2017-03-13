@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using SAEON.Observations.Core;
-using Serilog;
-using Serilog.Context;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -47,7 +45,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Overwrite for entity includes
         /// </summary>
         /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, object>>> GetIncludes() 
+        protected virtual List<Expression<Func<TEntity, object>>> GetIncludes()
         {
             return new List<Expression<Func<TEntity, object>>>();
         }
@@ -78,32 +76,15 @@ namespace SAEON.Observations.WebAPI.Controllers
             return query;
         }
 
-
-        /// <summary>
-        /// Overwrite to do additional checks before Post or Put
-        /// </summary>
-        /// <param name="item">TEntity</param>
-        /// <returns>True if TEntity is Ok else False</returns>
-        protected virtual bool IsEntityOk(TEntity item)
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Overwrite to do additional checks before Post or Put
-        /// </summary>
-        /// <param name="item">TEntity</param>
-        protected virtual void SetEntity(ref TEntity item)
-        { }
-
         /// <summary>
         /// all TEntity
         /// </summary>
         /// <returns>ListOf(TEntity)</returns>
+        [HttpGet]
         [Route]
         public virtual IQueryable<TEntity> GetAll()
         {
-            using (this.MethodCall())
+            using (Logging.MethodCall<TEntity>(this.GetType()))
             {
                 try
                 {
@@ -111,7 +92,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get all");
+                    Logging.Exception(ex, "Unable to get all");
                     throw;
                 }
             }
@@ -122,25 +103,26 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">The Id of the TEntity</param>
         /// <returns>TEntity</returns>
+        [HttpGet]
         [Route("{id:guid}")]
         //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetById(Guid id)
         {
-            using (this.MethodCall(new object[] { id }))
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {
                     TEntity item = await GetQuery(i => (i.Id == id)).FirstOrDefaultAsync();
                     if (item == null)
                     {
-                        Log.Error("{id} not found", id);
+                        Logging.Error("{id} not found", id);
                         return NotFound();
                     }
                     return Ok(item);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get {id}", id);
+                    Logging.Exception(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
@@ -151,25 +133,26 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">The Name of the TEntity</param>
         /// <returns>TEntity</returns>
+        [HttpGet]
         [Route]
         //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetByName(string name)
         {
-            using (this.MethodCall(new object[] { name }))
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Name", name } }))
             {
                 try
                 {
                     TEntity item = await GetQuery(i => (i.Name == name)).FirstOrDefaultAsync();
                     if (item == null)
                     {
-                        Log.Error("{name} not found", name);
+                        Logging.Error("{name} not found", name);
                         return NotFound();
                     }
                     return Ok(item);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get {name}", name);
+                    Logging.Exception(ex, "Unable to get {name}", name);
                     throw;
                 }
             }
@@ -183,53 +166,30 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="select">Lambda to select TRelated</param>
         /// <param name="include">Lamda to include TRelated.ListOf(TEntrity)</param>
         /// <returns>TaskOf(IHttpActionResult)</returns>
+        [HttpGet]
         //[ResponseType(typeof(TRelated))] Required in derived classes
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected async Task<IHttpActionResult> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
             //using (LogContext.PushProperty("Method", $"GetSingle<{nameof(TRelated)}>"))
-            using (this.MethodCall<TRelated>())
+            using (Logging.MethodCall<TEntity, TRelated>(this.GetType()))
             {
                 try
                 {
                     if (!await GetQuery(i => (i.Id == id)).AnyAsync())
                     {
-                        Log.Error("{id} not found", id);
+                        Logging.Error("{id} not found", id);
                         return NotFound();
                     }
                     return Ok(await GetQuery(i => (i.Id == id)).Select(select).Include(include).FirstOrDefaultAsync());
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get {id}", id);
+                    Logging.Exception(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
         }
-
-        ///// <summary>
-        ///// Get IQueryableOf(TRelated)
-        ///// </summary>
-        ///// <typeparam name="TRelated"></typeparam>
-        ///// <param name="id">Id of TEntity</param>
-        ///// <param name="select">Lambda to select ListOf(TRelated)</param>
-        ///// <returns>IQueryableOf(TRelated)</returns>
-        ////[Route("{id:guid}/TRelated")] Required in derived classes
-        //protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : BaseEntity
-        //{
-        //    using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
-        //    {
-        //        try
-        //        {
-        //            return GetQuery(i => i.Id == id).SelectMany(select).OrderBy(i => i.Name);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Log.Error(ex, "Unable to get {id}", id);
-        //            throw;
-        //        }
-        //    }
-        //}
 
         /// <summary>
         /// Get IQueryableOf(TRelated)
@@ -239,11 +199,12 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
         /// <param name="include">Lambda to include TRelated.TEntity</param>
         /// <returns>IQueryableOf(TRelated)</returns>
+        [HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseEntity
         {
             //using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
-            using (this.MethodCall<TRelated>())
+            using (Logging.MethodCall<TEntity, TRelated>(this.GetType()))
             {
                 try
                 {
@@ -251,7 +212,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get {id}", id);
+                    Logging.Exception(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
@@ -265,11 +226,12 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
         /// <param name="include">Lambda to include TRelated.ListOf(TEntity)</param>
         /// <returns>IQueryableOf(TRelated)</returns>
+        [HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
             //using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
-            using (this.MethodCall<TRelated>())
+            using (Logging.MethodCall<TEntity, TRelated>(this.GetType()))
             {
                 try
                 {
@@ -277,7 +239,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to get {id}", id);
+                    Logging.Exception(ex, "Unable to get {id}", id);
                     throw;
                 }
             }
@@ -293,37 +255,56 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         /// <summary>
+        /// Overwrite to do additional checks before Post or Put
+        /// </summary>
+        /// <param name="item">TEntity</param>
+        /// <param name="isPost"></param>
+        /// <returns>True if TEntity is Ok else False</returns>
+        protected virtual bool IsEntityOk(TEntity item, bool isPost)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Overwrite to do additional checks before Post or Put
+        /// </summary>
+        /// <param name="item">TEntity</param>
+        /// <param name="isPost"></param>
+        protected virtual void SetEntity(ref TEntity item, bool isPost)
+        { }
+
+        /// <summary>
         /// Create a TEntity
         /// </summary>
         /// <param name="item">The new TEntity </param>
+        [HttpPost]
         //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
         {
-            using (this.MethodCall(new object[] { item?.Name }))
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Name", item?.Name } }))
             {
                 try
                 {
-                    Log.Verbose("Adding {Name} {@item}", item.Name, item);
+                    Logging.Verbose("Adding {Name} {@item}", item.Name, item);
                     if (item == null)
                     {
-                        Log.Error("item cannot be null");
+                        Logging.Error("item cannot be null");
                         return BadRequest("item cannot be null");
-
                     }
                     if (!ModelState.IsValid)
                     {
-                        Log.Error("{Name} ModelState.Invalid", item.Name);
+                        Logging.Error("{Name} ModelState.Invalid", item.Name);
                         return BadRequest(ModelState);
                     }
-                    if (!IsEntityOk(item))
+                    if (!IsEntityOk(item, true))
                     {
-                        Log.Error("{Name} invalid", item.Name);
+                        Logging.Error("{Name} invalid", item.Name);
                         return BadRequest($"{item.Name} invalid");
                     }
                     try
                     {
-                        SetEntity(ref item);
-                        item = Mapper.Map<TEntity, TEntity>(item);
+                        SetEntity(ref item, true);
+                        Logging.Verbose("Adding {@item}", item);
                         db.Set<TEntity>().Add(item);
                         await db.SaveChangesAsync();
                     }
@@ -331,7 +312,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                     {
                         if (await GetQuery().Where(i => i.Id == item.Id).AnyAsync())
                         {
-                            Log.Error("{Name} conflict", item.Name);
+                            Logging.Error("{Name} conflict", item.Name);
                             return Conflict();
                         }
                         else
@@ -342,15 +323,18 @@ namespace SAEON.Observations.WebAPI.Controllers
                     catch (DbEntityValidationException ex)
                     {
                         var validationErrors = ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
-                        Log.Error(ex, "Unable to add {Name} {EntityValidationErrors}", item.Name, validationErrors);
+                        Logging.Exception(ex, "Unable to add {Name} {EntityValidationErrors}", item.Name, validationErrors);
                         return BadRequest($"Unable to add {item.Name} EntityValidationErrors: {string.Join("; ", validationErrors)}");
-
                     }
-                    return CreatedAtRoute(nameof(TEntity), new { id = item.Id }, item);
+                    var attr = (RoutePrefixAttribute)this.GetType().GetCustomAttributes(typeof(RoutePrefixAttribute), true)?[0];
+                    var location = $"{attr?.Prefix ?? typeof(TEntity).Name}/{item.Id}";
+                    Logging.Verbose("Location: {location} Id: {Id} Item: {@item}", location, item.Id, item);
+                    return Created<TEntity>(location, item);
+                    //return CreatedAtRoute(name, new { id = item.Id }, item);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to add {Name}", item.Name);
+                    Logging.Exception(ex, "Unable to add {Name}", item.Name);
                     throw;
                 }
             }
@@ -361,44 +345,48 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="id">The Id of the TEnity</param>
         /// <param name="delta">The new TEntity</param>
+        [HttpPut]
         //[Route("{id:guid}")] Required in derived classes
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
         {
-            using (this.MethodCall(new object[] { id }))
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {
-                    Log.Verbose("Updating {id} {@delta}", id, delta);
+                    Logging.Verbose("Updating {id} {@delta}", id, delta);
                     if (!ModelState.IsValid)
                     {
-                        Log.Error("{id} ModelState invalid", id);
+                        Logging.Error("{id} ModelState invalid", id);
                         return BadRequest(ModelState);
                     }
                     if (id != delta.Id)
                     {
-                        Log.Error("{id} Id not same", id);
+                        Logging.Error("{id} Id not same", id);
                         return BadRequest($"{id} Id not same");
                     }
-                    if (!IsEntityOk(delta))
+                    if (!IsEntityOk(delta, false))
                     {
-                        Log.Error("{delta.Name} invalid", delta);
+                        Logging.Error("{delta.Name} invalid", delta);
                         return BadRequest($"{delta.Name} invalid");
                     }
                     var item = await GetQuery().Where(i => i.Id == id).FirstOrDefaultAsync();
                     if (item == null)
                     {
-                        Log.Error("{id} not found", id);
+                        Logging.Error("{id} not found", id);
                         return NotFound();
                     }
-                    SetEntity(ref delta);
-                    Mapper.Map<TEntity, TEntity>(delta, item);
+                    Logging.Verbose("Loaded {@item}", item);
+                    Mapper.Map(delta, item);
+                    Logging.Verbose("Mapped delta {@item}", item);
+                    SetEntity(ref item, false);
+                    Logging.Verbose("Set {@item}", item);
                     await db.SaveChangesAsync();
                     return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to update {id}", id);
+                    Logging.Exception(ex, "Unable to update {id}", id);
                     throw;
                 }
             }
@@ -409,44 +397,48 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <param name="name">The Name of the TEnity</param>
         /// <param name="delta">The new TEntity</param>
+        [HttpPut]
         //[Route] Required in derived classes
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> PutByName(string name, [FromBody]TEntity delta)
         {
-            using (this.MethodCall(new object[] { name }))
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Name", name } }))
             {
                 try
                 {
-                    Log.Verbose("Updating {id} {@delta}", name, delta);
+                    Logging.Verbose("Updating {id} {@delta}", name, delta);
                     if (!ModelState.IsValid)
                     {
-                        Log.Error("{id} ModelState Invalid", name);
+                        Logging.Error("{id} ModelState Invalid", name);
                         return BadRequest(ModelState);
                     }
                     if (name != delta.Name)
                     {
-                        Log.Error("{name} Name not same", name);
+                        Logging.Error("{name} Name not same", name);
                         return BadRequest($"{name} Name not same");
                     }
-                    if (!IsEntityOk(delta))
+                    if (!IsEntityOk(delta, false))
                     {
-                        Log.Error("{delta.Name} invalid", delta);
+                        Logging.Error("{delta.Name} invalid", delta);
                         return BadRequest($"{delta.Name} invalid");
                     }
                     var item = await GetQuery().Where(i => i.Name == name).FirstOrDefaultAsync();
                     if (item == null)
                     {
-                        Log.Error("{name} not found", name);
+                        Logging.Error("{name} not found", name);
                         return NotFound();
                     }
-                    SetEntity(ref delta);
-                    Mapper.Map<TEntity, TEntity>(delta, item);
+                    Logging.Verbose("Loaded {@item}", item);
+                    Mapper.Map(delta, item);
+                    Logging.Verbose("Mapped delta {@item}", item);
+                    SetEntity(ref item, false);
+                    Logging.Verbose("Set {@item}", item);
                     await db.SaveChangesAsync();
                     return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to update {id}", name);
+                    Logging.Exception(ex, "Unable to update {id}", name);
                     throw;
                 }
             }
@@ -456,19 +448,20 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Delete a TEntity by Id
         /// </summary>
         /// <param name="id">The Id of the TEntity</param>
+        [HttpDelete]
         //[Route("{id:guid}")] Required in derived classes
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> DeleteById(Guid id)
         {
-            using (this.MethodCall(new object[] { id }))
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {
-                    Log.Verbose("Deleting {id}", id);
+                    Logging.Verbose("Deleting {id}", id);
                     var item = await GetQuery().Where(i => i.Id == id).FirstOrDefaultAsync();
                     if (item == null)
                     {
-                        Log.Error("{id} not found", id);
+                        Logging.Error("{id} not found", id);
                         return NotFound();
                     }
                     db.Set<TEntity>().Remove(item);
@@ -477,7 +470,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to delete {id}", id);
+                    Logging.Exception(ex, "Unable to delete {id}", id);
                     throw;
                 }
             }
@@ -487,19 +480,20 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Delete a TEntity by Name
         /// </summary>
         /// <param name="name">The Name of the TEntity</param>
+        [HttpDelete]
         //[Route] Required in derived classes
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> DeleteByName(string name)
         {
-            using (this.MethodCall(new object[] { name }))
+            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Name", name } }))
             {
                 try
                 {
-                    Log.Verbose("Deleting {name}", name);
+                    Logging.Verbose("Deleting {name}", name);
                     var item = await GetQuery().Where(i => i.Name == name).FirstOrDefaultAsync();
                     if (item == null)
                     {
-                        Log.Error("{name} not found", name);
+                        Logging.Error("{name} not found", name);
                         return NotFound();
                     }
                     db.Set<TEntity>().Remove(item);
@@ -508,12 +502,10 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Unable to delete {name}", name);
+                    Logging.Exception(ex, "Unable to delete {name}", name);
                     throw;
                 }
             }
         }
-
     }
-
 }

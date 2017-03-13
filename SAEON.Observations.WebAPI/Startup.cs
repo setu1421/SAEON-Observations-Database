@@ -22,7 +22,7 @@ namespace SAEON.Observations.WebAPI
     {
         public void Configuration(IAppBuilder app)
         {
-            using (this.MethodCall())
+            using (Logging.MethodCall(this.GetType()))
             {
                 try
                 {
@@ -52,7 +52,7 @@ namespace SAEON.Observations.WebAPI
                 }
                 catch (Exception ex)
                 {
-                    this.ErrorInCall(ex, "Unable to configure application");
+                    Logging.Exception(ex, "Unable to configure application");
                     throw;
                 }
             }

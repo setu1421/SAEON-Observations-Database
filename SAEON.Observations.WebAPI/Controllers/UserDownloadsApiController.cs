@@ -31,31 +31,42 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// Check UserId is logged in UserId
         /// </summary>
         /// <param name="item"></param>
+        /// <param name="isPost"></param>
         /// <returns></returns>
-        protected override bool IsEntityOk(UserDownload item)
+        protected override bool IsEntityOk(UserDownload item, bool isPost = false)
         {
             var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new NullReferenceException("Not logged in");
             }
-            return base.IsEntityOk(item) && (item.UserId == userId);
+            return base.IsEntityOk(item, isPost) && (isPost || (item.UserId == userId));
         }
 
         /// <summary>
         /// Check UserId is logged in UserId
         /// </summary>
         /// <param name="item"></param>
+        /// <param name="isPost"></param>
         /// <returns></returns>
-        protected override void SetEntity(ref UserDownload item)
+        protected override void SetEntity(ref UserDownload item, bool isPost)
         {
-            base.SetEntity(ref item);
+            base.SetEntity(ref item, isPost);
+            if (isPost && (item.Id == Guid.Empty))
+            {
+                item.Id = new Guid();
+            }
             var userId = User.GetUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 throw new ArgumentNullException("Logged in UserId");
             }
             item.UserId = userId;
+            if (isPost)
+            {
+                item.AddedBy = userId;
+            }
+            item.UpdatedBy = userId;
         }
 
         /// <summary>

@@ -22,7 +22,7 @@ namespace SAEON.Observations.WebAPI
                 .WriteTo.RollingFile(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebAPI {Date}.txt"))
                 .WriteTo.Seq("http://localhost:5341/")
                 .CreateLogger();
-            using (this.MethodCall())
+            using (Logging.MethodCall(this.GetType()))
             {
                 try
                 {
@@ -36,7 +36,7 @@ namespace SAEON.Observations.WebAPI
                 }
                 catch (Exception ex)
                 {
-                    this.ErrorInCall(ex);
+                    Logging.Exception(ex);
                     throw;
                 }
             }

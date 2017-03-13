@@ -304,6 +304,7 @@
     <Compile Include="Controllers\SitesODataController.cs" />
     <Compile Include="Controllers\StationsApiController.cs" />
     <Compile Include="Controllers\StationsODataController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UnitsOfMeasureApiController.cs" />
     <Compile Include="Controllers\UnitsOfMeasureODataController.cs" />
     <Compile Include="Controllers\UserDownloadsApiController.cs" />
@@ -364,6 +365,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Connected Services\Application Insights\ConnectedService.json" />
     <Content Include="Connections.config" />
+    <None Include="Properties\PublishProfiles\Afrihost.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -405,6 +407,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\OrganisationsOData\" />
+    <Folder Include="Views\Test\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
