@@ -116,12 +116,13 @@ namespace SAEON.Observations.WebAPI
                         //    });
                         c.OAuth2("oauth2")
                             .Description("OAuth2 Implicit Grant")
-                            .Flow("hybrid")
+                            .Flow("implicit")
                             .AuthorizationUrl("https://localhost:44311/oauth2/connect/authorize")
                             .TokenUrl("https://localhost:44311/oauth2/connect/token")
                             .Scopes(scopes =>
                             {
-                                scopes.Add("SAEON.Observations.WebAPI", "SAEON Observations Database WebAPI");
+                                scopes.Add("Swagger", "Swagger");
+                                scopes.Add("SAEON.Observations.WebAPI", "SAEON observations WebAPI");
                             });
 
 
@@ -294,7 +295,7 @@ namespace SAEON.Observations.WebAPI
                         //    appName: "Swagger UI"
                         ////additionalQueryStringParams: new Dictionary<string, string>() { { "foo", "bar" } }
                         //);
-                        //c.EnableOAuth2Support("SAEON.Observations.WebAPI", "saeon.ac.za", "Swagger UI");
+                        c.EnableOAuth2Support("Swagger", "Swagger", "Swagger", "Swagger UI");
 
                         // If your API supports ApiKey, you can override the default values.
                         // "apiKeyIn" can either be "query" or "header"                                                
