@@ -206,6 +206,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseRestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\UserDownloadsController.cs" />
     <Compile Include="Controllers\UserQueriesController.cs" />
     <Compile Include="ErrorHandler\AiHandleErrorAttribute.cs" />
@@ -294,6 +295,7 @@
     <Content Include="Views\UserQueries\Details.cshtml" />
     <Content Include="Views\UserQueries\Edit.cshtml" />
     <Content Include="Views\UserQueries\Index.cshtml" />
+    <Content Include="Views\Query\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
