@@ -26,6 +26,7 @@ namespace SAEON.Observations.WebAPI
             {
                 try
                 {
+                    Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServer);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
                     JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
                     app.UseCors(CorsOptions.AllowAll);

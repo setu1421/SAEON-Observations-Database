@@ -117,8 +117,8 @@ namespace SAEON.Observations.WebAPI
                         c.OAuth2("oauth2")
                             .Description("OAuth2 Implicit Grant")
                             .Flow("implicit")
-                            .AuthorizationUrl("https://localhost:44311/oauth2/connect/authorize")
-                            .TokenUrl("https://localhost:44311/oauth2/connect/token")
+                            .AuthorizationUrl(Properties.Settings.Default.IdentityServer+"/connect/authorize")
+                            .TokenUrl(Properties.Settings.Default.IdentityServer + "/connect/token")
                             .Scopes(scopes =>
                             {
                                 scopes.Add("Swagger", "Swagger");
@@ -149,7 +149,7 @@ namespace SAEON.Observations.WebAPI
                         // those comments into the generated docs and UI. You can enable this by providing the path to one or
                         // more Xml comment files.
                         //
-                        c.IncludeXmlComments(HostingEnvironment.MapPath("~/App_Data/SAEON.Observations.WebAPI.xml"));
+                        c.IncludeXmlComments(HostingEnvironment.MapPath("~/bin/SAEON.Observations.WebAPI.xml"));
 
                         // Swashbuckle makes a best attempt at generating Swagger compliant JSON schemas for the various types
                         // exposed in your API. However, there may be occasions when more control of the output is needed.

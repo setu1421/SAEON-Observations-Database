@@ -10,15 +10,20 @@
         </p>
         <p>
             You can access these observations through this @Html.ActionLink("API", "Index", "Help", new { area = "" }, null). You need to have registered on
-            the <a href="http://observations.saeon.ac.za">Observations Database</a> site. Once you have an account you need to do a post to
-            <a href="http://observationsapi.saeon.ac.za/token">observatiosnaspi.saeon.ac.za</a> to get an OAuth2 bearer token that
-            you need to use for authorization in your API calls. The post needs the following:
+            the <a href="http://observations.saeon.nimbusservices.co.za">Observations Database</a> site. Once you have an account you can use 
+            <a href="https://www.getpostman.com/">Postman</a> to test the API. You can do a post to the
+            <a href="https://observationswebapi.saeon.nimbusservices.co.za/oauth2/connect/token">token endpoint</a> 
+            to get an OAuth2 bearer token that you need to use for authorization in your API calls. The post needs the following:
             <ul>
                 <li>Content-Type: application/x-www-form-urlencoded</li>
-                <li>grant_type: password</li>
+                <li>grant_type: client_credentials</li>
                 <li>username: (the email address you registered)</li>
                 <li>password: (the password you registered)</li>
+                <li>client_id: SAEON.Observations.WebAPI</li>
+                <li>client_secret: 81g5wyGSC89a</li>
+                <li>scope: SAEON.Observations.WebAPI</li>
             </ul>
+            You then need to add an Authorization header to your call with value 'bearer (token your received)'
         </p>
     </div>
 </div>
