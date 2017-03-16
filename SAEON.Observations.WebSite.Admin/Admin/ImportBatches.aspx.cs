@@ -68,13 +68,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         {
             try
             {
-                Log.Verbose("ImportBatchesGridStore_RefreshData");
-                var sm = ((CheckboxSelectionModel)ObservationsGrid.SelectionModel.Primary);
-                sm.ClearSelections();
-                sm.UpdateSelection();
+                //Log.Verbose("ImportBatchesGridStore_RefreshData");
                 ImportBatchesGridStore.DataSource = ImportBatchRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
-                sm.ClearSelections();
-                sm.UpdateSelection();
             }
             catch (Exception ex)
             {
@@ -852,7 +847,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         {
             try
             {
-                Log.Verbose("ObservationsGridStore_RefreshData");
+                //Log.Verbose("ObservationsGridStore_RefreshData");
                 if (e.Parameters["ImportBatchID"] != null && e.Parameters["ImportBatchID"].ToString() != "-1")
                 {
                     Guid Id = Guid.Parse(e.Parameters["ImportBatchID"].ToString());

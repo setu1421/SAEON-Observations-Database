@@ -62,7 +62,7 @@ public class DataQueryRepository : BaseRepository
         //    q.Or(VObservation.Columns.PhenomenonOfferingID).In(offerings);
 
         GetPagedQuery(ref q, e, paramPrefix);
-        Log.Verbose("GetPagedFilteredList SQL: {sql}", q.BuildSqlStatement());
+        //Log.Verbose("GetPagedFilteredList SQL: {sql}", q.BuildSqlStatement());
         VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
         return col.ToList<object>();
     }
