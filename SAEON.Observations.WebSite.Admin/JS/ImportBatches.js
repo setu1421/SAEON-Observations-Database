@@ -1,7 +1,9 @@
 ﻿function ImportBatchRowSelect(e, record) {
     if (pnlSouth.isVisible()) {
         DSLogGrid.getStore().reload();
+        ObservationsGrid.getSelectionModel().clearSelections();
         ObservationsGrid.getStore().reload();
+        PagingToolbarObservations.moveFirst();
     }
 }
 

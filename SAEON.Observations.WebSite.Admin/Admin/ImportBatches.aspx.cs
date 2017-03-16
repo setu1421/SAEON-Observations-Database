@@ -64,7 +64,24 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     #region Import Batches
     protected void ImportBatchesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.ImportBatchesGridStore.DataSource = ImportBatchRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        using (LogContext.PushProperty("Method", "ImportBatchesGridStore_RefreshData"))
+        {
+            try
+            {
+                Log.Verbose("ImportBatchesGridStore_RefreshData");
+                var sm = ((CheckboxSelectionModel)ObservationsGrid.SelectionModel.Primary);
+                sm.ClearSelections();
+                sm.UpdateSelection();
+                ImportBatchesGridStore.DataSource = ImportBatchRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+                sm.ClearSelections();
+                sm.UpdateSelection();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex,"An exception occured");
+                throw;
+            }
+        }
     }
 
     protected void DSLogGrid_RefreshData(object sender, StoreRefreshDataEventArgs e)
@@ -72,8 +89,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         if (e.Parameters["ImportBatchID"] != null && e.Parameters["ImportBatchID"].ToString() != "-1")
         {
             Guid BatchId = Utilities.MakeGuid(e.Parameters["ImportBatchID"].ToString());
-
-            this.DSLogGrid.GetStore().DataSource = DataLogRepository.GetPagedListByBatch(e, e.Parameters[this.GridFilters1.ParamPrefix], BatchId);
+            this.DSLogGrid.GetStore().DataSource = DataLogRepository.GetPagedListByBatch(e, e.Parameters[this.GridFiltersDataLog.ParamPrefix], BatchId);
             this.DSLogGrid.GetStore().DataBind();
         }
     }
@@ -150,7 +166,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 //batch.Guid = Guid.NewGuid();
 
                                 if (values.FirstOrDefault(t => t.IsValid) == null)
+                                {
+                                    Log.Error("IsValid: {count}", values.Where(t => !t.IsValid).Count());
                                     batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
+                                }
                                 else
                                     batch.Status = (int)ImportBatchStatus.NoLogErrors;
                                 batch.UserId = AuthHelper.GetLoggedInUserId;
@@ -198,6 +217,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     else
                                     {
                                         //
+                                        Log.Error("TotalDupllicate > 0");
                                         batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
                                         batch.Save();
                                         //
@@ -260,7 +280,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                                         logrecord.CorrelationID = schval.CorrelationID;
                                         logrecord.Save();
-                                        Thread.Sleep(1); // Delay 1ms to make sure clustered index on AddedAt is unique
                                     }
                                 }
                             }
@@ -829,24 +848,37 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     #region Observations
     protected void ObservationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["ImportBatchID"] != null && e.Parameters["ImportBatchID"].ToString() != "-1")
+        using (LogContext.PushProperty("Method", "ObservationsGridStore_RefreshData"))
         {
-            Guid Id = Guid.Parse(e.Parameters["ImportBatchID"].ToString());
-            btnSetSelected.Disabled = true;
-            btnSetWithout.Disabled = true;
-            btnSetAll.Disabled = true;
-            btnClearSelected.Disabled = true;
-            btnClearAll.Disabled = true;
             try
             {
-                ObservationsGridStore.DataSource = ObservationRepository.GetPagedListByBatch(e, e.Parameters[GridFilters1.ParamPrefix], Id);
-                ObservationsGridStore.DataBind();
-                EnableButtons();
+                Log.Verbose("ObservationsGridStore_RefreshData");
+                if (e.Parameters["ImportBatchID"] != null && e.Parameters["ImportBatchID"].ToString() != "-1")
+                {
+                    Guid Id = Guid.Parse(e.Parameters["ImportBatchID"].ToString());
+                    btnSetSelected.Disabled = true;
+                    btnSetWithout.Disabled = true;
+                    btnSetAll.Disabled = true;
+                    btnClearSelected.Disabled = true;
+                    btnClearAll.Disabled = true;
+                    try
+                    {
+                        ObservationsGridStore.DataSource = ObservationRepository.GetPagedListByBatch(e, e.Parameters[GridFiltersObservations.ParamPrefix], Id);
+                        ObservationsGridStore.DataBind();
+                        EnableButtons();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "ImportBatches.ObservationsGridStore_RefreshData");
+                        MessageBoxes.Error(ex, "Error", "Unable to refresh Observations grid");
+                    }
+                }
+
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "ImportBatches.ObservationsGridStore_RefreshData");
-                MessageBoxes.Error(ex, "Error", "Unable to refresh Observations grid");
+                Log.Error(ex, "An exception occured");
+                throw;
             }
         }
     }
@@ -888,6 +920,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         obs.StatusReasonID = Utilities.MakeGuid(cbStatusReason.SelectedItem.Value);
                     obs.Save();
                 }
+                sm.ClearSelections();
                 ObservationsGrid.DataBind();
                 EnableButtons();
             }
@@ -951,6 +984,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     }
                     ts.Complete();
                 }
+                var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+                sm.ClearSelections();
                 ObservationsGrid.DataBind();
                 EnableButtons();
             }
@@ -1012,6 +1047,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     }
                     ts.Complete();
                 }
+                var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+                sm.ClearSelections();
                 ObservationsGrid.DataBind();
                 EnableButtons();
             }
@@ -1046,6 +1083,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     obs.StatusReasonID = null;
                     obs.Save();
                 }
+                sm.ClearSelections();
                 ObservationsGrid.DataBind();
                 EnableButtons();
             }
@@ -1086,6 +1124,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     }
                     ts.Complete();
                 }
+                var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+                sm.ClearSelections();
                 ObservationsGrid.DataBind();
                 EnableButtons();
             }
@@ -1127,4 +1167,5 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         EnableButtons();
     }
     #endregion
+
 }

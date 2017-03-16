@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Security;
 using Ext.Net;
 using Serilog;
+using System.Threading;
 
 /// <summary>
 /// Summary description for Login
@@ -39,11 +40,12 @@ public partial class _Login : System.Web.UI.Page
                 MessageBoxes.Error("Login Failed", "Invalid Username or Password");
             }
         }
+        catch (ThreadAbortException)
+        { }
         catch (Exception ex)
         {
             Log.Error(ex, "Unable to login");
             MessageBoxes.Error(ex, "Error", "Unable to login");
         }
-
     }
 }

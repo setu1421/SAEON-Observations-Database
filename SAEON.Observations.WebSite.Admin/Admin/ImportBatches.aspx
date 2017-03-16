@@ -184,10 +184,10 @@
                                                     <Select OnEvent="EnableButtons" />
                                                 </DirectEvents>
                                             </ext:ComboBox>
-                                            <ext:ToolbarTextItem Text="Status:" />
+                                            <ext:ToolbarTextItem Text="Reason:" />
                                             <ext:ComboBox ID="cbStatusReason" runat="server" StoreID="StatusReasonStore" MsgTarget="Side" DisplayField="Name" Width="200"
                                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
-                                                ValueField="Id" DataIndex="Id" EmptyText="Select a reason" ValueNotFoundText="Select a status"
+                                                ValueField="Id" DataIndex="Id" EmptyText="Select a reason" ValueNotFoundText="Select a reason"
                                                 ClientIDMode="Static">
                                                 <DirectEvents>
                                                     <Select OnEvent="EnableButtons" />
@@ -313,7 +313,7 @@
                                         </SelectionModel>
                                         <LoadMask ShowMask="true" />
                                         <Plugins>
-                                            <ext:GridFilters runat="server" ID="GridFilters3">
+                                            <ext:GridFilters runat="server" ID="GridFiltersObservations">
                                                 <Filters>
                                                     <ext:StringFilter DataIndex="SensorName" />
                                                     <ext:DateFilter DataIndex="ValueDate" />
@@ -328,7 +328,7 @@
                                             </ext:GridFilters>
                                         </Plugins>
                                         <BottomBar>
-                                            <ext:PagingToolbar ID="PagingToolbar3" runat="server" PageSize="250" EmptyMsg="No data found" />
+                                            <ext:PagingToolbar ID="PagingToolbarObservations" runat="server" ClientIDMode="Static" PageSize="250" EmptyMsg="No data found"/>
                                         </BottomBar>
                                     </ext:GridPanel>
                                 </Items>
@@ -494,7 +494,7 @@
                                         </SelectionModel>
                                         <LoadMask ShowMask="true" />
                                         <Plugins>
-                                            <ext:GridFilters runat="server" ID="GridFilters2">
+                                            <ext:GridFilters runat="server" ID="GridFiltersDataLog">
                                                 <Filters>
                                                     <ext:DateFilter DataIndex="ImportDate" />
                                                     <ext:StringFilter DataIndex="Organisation" />

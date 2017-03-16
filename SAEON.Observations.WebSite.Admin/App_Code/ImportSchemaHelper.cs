@@ -304,7 +304,7 @@ public class ImportSchemaHelper : IDisposable
             docNamePrefix = docNamePrefix.Replace(c, '_');
         SaveDocument("Source.txt", data);
         dtResults = engine.ReadStringAsDT(data);
-        Log.Information(dtResults.Dump());
+        //Log.Information(dtResults.Dump());
         dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
         using (StringWriter sw = new StringWriter())
         {
@@ -458,7 +458,7 @@ public class ImportSchemaHelper : IDisposable
     {
         using (LogContext.PushProperty("Method", "ProcessSchema"))
         {
-            Log.Information("Version 1.10");
+            Log.Information("Version 1.11");
             try
             {
                 BuildSchemaDefinition();
