@@ -2,7 +2,10 @@
 CREATE TABLE [dbo].[AuditLog]
 (
     [ID] UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_AuditLog_ID] DEFAULT NewID(), 
-    [Description] VARCHAR(500) NOT NULL, 
+--> Changed 20170316 TimPN
+--    [Description] VARCHAR(500) NOT NULL, 
+    [Description] VARCHAR(5000) NOT NULL, 
+--< Changed 20170316 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_AuditLog_AddedAt] DEFAULT GetDate(), 
 --> Added 2.0.3 20160421 TimPN
