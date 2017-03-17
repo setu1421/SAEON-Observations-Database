@@ -162,7 +162,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                                 if (values.FirstOrDefault(t => t.IsValid) == null)
                                 {
-                                    Log.Error("IsValid: {count}", values.Where(t => !t.IsValid).Count());
+                                    Log.Verbose("Error: IsValid: {count}", values.Where(t => !t.IsValid).Count());
                                     batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
                                 }
                                 else
@@ -211,7 +211,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     else
                                     {
                                         //
-                                        Log.Error("TotalDuplicate: {totalDuplicate}",totalDuplicate);
+                                        Log.Verbose("Error: TotalDuplicate: {totalDuplicate}",totalDuplicate);
                                         batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
                                         batch.Save();
                                         //
@@ -273,7 +273,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                             logrecord.Comment = schval.Comment;
 
                                         logrecord.CorrelationID = schval.CorrelationID;
-                                        Log.Verbose("BatchID: {id} Status: {status} ImportStatus: {importstatus}", batch.Id, logrecord.StatusID, logrecord.ImportStatus);
+                                        //Log.Verbose("BatchID: {id} Status: {status} ImportStatus: {importstatus}", batch.Id, logrecord.StatusID, logrecord.ImportStatus);
                                         try
                                         {
                                             logrecord.Save();
@@ -285,7 +285,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         }
                                     }
                                 }
-                                Log.Verbose("Auditing.Log");
                                 Auditing.Log("Importbatches.UploadClick", new Dictionary<string, object> {
                                     { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status} });
                             }
