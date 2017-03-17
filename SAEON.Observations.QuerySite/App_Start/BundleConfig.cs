@@ -28,6 +28,14 @@ namespace SAEON.Observations.QuerySite
                       "~/Content/site.css",
                       "~/Content/site.css",
                       "~/Content/Observations.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/ejscripts").Include(
+                           "~/Scripts/jsrender.min.js",
+                           "~/Scripts/jquery.easing-1.3.min.js",
+                            "~/Scripts/ej/ej.web.all.min.js",
+                            "~/Scripts/ej/ej.unobtrusive.min.js"));
+            bundles.Add(new StyleBundle("~/bundles/ejstyles").Include(
+                      "~/ejThemes/flat-saffron/ej.web.all.min.css"));
         }
     }
 }

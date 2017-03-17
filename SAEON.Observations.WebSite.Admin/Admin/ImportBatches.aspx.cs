@@ -205,14 +205,13 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                                             Obrecord.CorrelationID = schval.CorrelationID;
                                             Obrecord.Save();
-                                            Thread.Sleep(1); // Delay 1ms to make sure clustered index on AddedAt is unique
                                         }
 
                                     }
                                     else
                                     {
                                         //
-                                        Log.Error("TotalDupllicate > 0");
+                                        Log.Error("TotalDuplicate: {totalDuplicate}",totalDuplicate);
                                         batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
                                         batch.Save();
                                         //
@@ -277,6 +276,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         logrecord.Save();
                                     }
                                 }
+                                Auditing.Log("Importbatches.UploadClick", new Dictionary<string, object> {
+                                    { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status} });
                             }
                             ts.Complete();
                             Log.Information("Finish");

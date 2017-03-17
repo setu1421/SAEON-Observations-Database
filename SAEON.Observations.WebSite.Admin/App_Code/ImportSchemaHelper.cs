@@ -458,7 +458,7 @@ public class ImportSchemaHelper : IDisposable
     {
         using (LogContext.PushProperty("Method", "ProcessSchema"))
         {
-            Log.Information("Version 1.11");
+            Log.Information("Version 1.12");
             try
             {
                 BuildSchemaDefinition();

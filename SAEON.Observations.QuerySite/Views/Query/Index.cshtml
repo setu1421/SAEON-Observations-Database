@@ -5,6 +5,75 @@
 
 <div class="row">
     <div class="col-md-12">
+        <div class="controlframe">
+            @{Html.EJ().Tab("defaultTabs").Items(data =>
+                {
+                data.Add().ID("Sites").Text("Sites").ContentTemplate(@<div>
+                <table>
+                    <tr>
+                        <td valign="top">
+                            <div>
+                                <p>
+                                    Select sites from a treeview
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>);
+                data.Add().ID("Map").Text("Map").ContentTemplate(@<div>
+                <table>
+                    <tr>
+                        <td valign="top">
+                            <div>
+                                <p>
+                                    Select sites from a map
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>);
+                data.Add().ID("Offerings").Text("Offerings").ContentTemplate(@<div>
+                <table>
+                    <tr>
+                        <td valign="top">
+                            <div>
+                                <p>
+                                    Select offerings from a treeview
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>);
+                data.Add().ID("TimeSpan").Text("Time span").ContentTemplate(@<div>
+                <table>
+                    <tr>
+                        <td valign="top">
+                            <div>
+                                <p>
+                                    Select time span
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>);
+                data.Add().ID("Results").Text("Results").ContentTemplate(@<div>
+                <table>
+                    <tr>
+                        <td valign="top">
+                            <div>
+                                <p>
+                                    Tabluar results
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>);
+                }).Render();}
+        </div>
     </div>
 </div>
-

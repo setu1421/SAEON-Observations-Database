@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SAEON.Observations.Database", "SAEON.Observations.Database\SAEON.Observations.Database.sqlproj", "{AC68EB6A-31BD-407E-9B65-558E900AEF61}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Data", "SAEON.Observations.Data\SAEON.Observations.Data.csproj", "{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D} = {EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}
+	EndProjectSection
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.Observations.WebSite.Admin", "SAEON.Observations.WebSite.Admin\", "{EEC81A5F-AC32-43B1-941B-E10496D83287}"
 	ProjectSection(WebsiteProperties) = preProject
