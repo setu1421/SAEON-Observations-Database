@@ -335,9 +335,9 @@
                             </ext:Panel>
                             <ext:Panel ID="Panel12" runat="server" Title="Data Log" Layout="FitLayout" Height="350" ClientIDMode="Static">
                                 <Items>
-                                    <ext:GridPanel ID="DSLogGrid" runat="server" Border="false" ClientIDMode="Static">
+                                    <ext:GridPanel ID="DataLogGrid" runat="server" Border="false" ClientIDMode="Static">
                                         <Store>
-                                            <ext:Store ID="Store4" runat="server" RemoteSort="true" OnRefreshData="DSLogGrid_RefreshData">
+                                            <ext:Store ID="Store4" runat="server" RemoteSort="true" OnRefreshData="DataLogGrid_RefreshData">
                                                 <Proxy>
                                                     <ext:PageProxy />
                                                 </Proxy>
@@ -515,7 +515,7 @@
                                             <ext:PagingToolbar ID="PagingToolbar2" runat="server" PageSize="25" EmptyMsg="No data found" />
                                         </BottomBar>
                                         <Listeners>
-                                            <Command Fn="onLogCommand" />
+                                            <Command Fn="onDataLogCommand" />
                                         </Listeners>
                                     </ext:GridPanel>
                                 </Items>

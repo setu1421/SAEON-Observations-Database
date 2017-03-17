@@ -1,0 +1,23 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[AuditLog] (Table)
+       [dbo].[vDataLog] (View)
+
+** Supporting actions
+     Refresh
+       [dbo].[vAuditLog] (View)
+
+The source's object [Documents] is different than the target's version of the object but the target object will not be updated.
+The object [Documents] already exists in database with a different definition and will not be altered.
+The column Description on table [dbo].[AuditLog] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

@@ -1,6 +1,6 @@
 ﻿function ImportBatchRowSelect(e, record) {
     if (pnlSouth.isVisible()) {
-        DSLogGrid.getStore().reload();
+        DataLogGrid.getStore().reload();
         ObservationsGrid.getSelectionModel().clearSelections();
         ObservationsGrid.getStore().reload();
         PagingToolbarObservations.moveFirst();
@@ -37,7 +37,7 @@ function prepareCommand(grid, cmd, record, row) {
     }
 }
 
-function onLogCommand(e, record)
+function onDataLogCommand(e, record)
 {
 	//////////////////////
 	if (e === 'Delete')

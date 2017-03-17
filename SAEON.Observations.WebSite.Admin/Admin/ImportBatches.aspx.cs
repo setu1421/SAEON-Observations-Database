@@ -48,11 +48,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
             cbOffering.GetStore().DataBind();
 
-            this.cbUnitofMeasure.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
+            cbUnitofMeasure.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
               .From(UnitOfMeasure.Schema)
               .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
               .ExecuteDataSet().Tables[0];
-            this.cbUnitofMeasure.GetStore().DataBind();
+            cbUnitofMeasure.GetStore().DataBind();
 
             StatusStore.DataSource = new StatusCollection().OrderByAsc(Status.Columns.Name).Load();
             StatusStore.DataBind();
@@ -69,7 +69,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             try
             {
                 //Log.Verbose("ImportBatchesGridStore_RefreshData");
-                ImportBatchesGridStore.DataSource = ImportBatchRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+                ImportBatchesGridStore.DataSource = ImportBatchRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
             }
             catch (Exception ex)
             {
@@ -79,13 +79,13 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
-    protected void DSLogGrid_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void DataLogGrid_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["ImportBatchID"] != null && e.Parameters["ImportBatchID"].ToString() != "-1")
         {
             Guid BatchId = Utilities.MakeGuid(e.Parameters["ImportBatchID"].ToString());
-            this.DSLogGrid.GetStore().DataSource = DataLogRepository.GetPagedListByBatch(e, e.Parameters[this.GridFiltersDataLog.ParamPrefix], BatchId);
-            this.DSLogGrid.GetStore().DataBind();
+            DataLogGrid.GetStore().DataSource = DataLogRepository.GetPagedListByBatch(e, e.Parameters[GridFiltersDataLog.ParamPrefix], BatchId);
+            DataLogGrid.GetStore().DataBind();
         }
     }
 
@@ -273,9 +273,19 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                             logrecord.Comment = schval.Comment;
 
                                         logrecord.CorrelationID = schval.CorrelationID;
-                                        logrecord.Save();
+                                        Log.Verbose("BatchID: {id} Status: {status} ImportStatus: {importstatus}", batch.Id, logrecord.StatusID, logrecord.ImportStatus);
+                                        try
+                                        {
+                                            logrecord.Save();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.Error(ex, "Unable to add DataLog");
+                                            throw;
+                                        }
                                     }
                                 }
+                                Log.Verbose("Auditing.Log");
                                 Auditing.Log("Importbatches.UploadClick", new Dictionary<string, object> {
                                     { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status} });
                             }
@@ -283,9 +293,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             Log.Information("Finish");
                         }
 
-                        this.ImportBatchesGrid.GetStore().DataBind();
-                        this.DSLogGrid.GetStore().DataBind();
                         ObservationsGridStore.DataBind();
+                        ImportBatchesGrid.GetStore().DataBind();
+                        DataLogGrid.GetStore().DataBind();
 
                         ImportWindow.Hide();
 
@@ -373,28 +383,28 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
     protected void cbOffering_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        var Id = this.cbSensor.SelectedItem.Value;
+        var Id = cbSensor.SelectedItem.Value;
 
-        this.cbOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.DescriptionColumn)
+        cbOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.DescriptionColumn)
                  .From(Offering.Schema)
                  .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
                  .InnerJoin(Sensor.PhenomenonIDColumn, PhenomenonOffering.PhenomenonIDColumn)
                  .Where(Sensor.IdColumn.QualifiedName).IsEqualTo(Id)
                  .ExecuteDataSet().Tables[0];
-        this.cbOffering.GetStore().DataBind();
+        cbOffering.GetStore().DataBind();
     }
 
     protected void cbUnitofMeasure_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        var Id = this.cbSensor.SelectedItem.Value;
+        var Id = cbSensor.SelectedItem.Value;
 
-        this.cbUnitofMeasure.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
+        cbUnitofMeasure.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
                .From(UnitOfMeasure.Schema)
                .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
                .InnerJoin(Sensor.PhenomenonIDColumn, PhenomenonUOM.PhenomenonIDColumn)
                .Where(Sensor.IdColumn.QualifiedName).IsEqualTo(Id)
                .ExecuteDataSet().Tables[0];
-        this.cbUnitofMeasure.GetStore().DataBind();
+        cbUnitofMeasure.GetStore().DataBind();
     }
 
     /// <summary>
@@ -494,7 +504,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         using (LogContext.PushProperty("Method", "SaveObservation"))
             try
             {
-                RowSelectionModel batchRow = this.ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
+                RowSelectionModel batchRow = ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
                 ImportBatch batch = new ImportBatch(batchRow.SelectedRecordID);
 
                 //DataLog log = new DataLog();
@@ -558,8 +568,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                     DetailWindow.Hide();
 
-                    this.ImportBatchesGrid.GetStore().DataBind();
-                    this.DSLogGrid.GetStore().DataBind();
+                    ImportBatchesGrid.GetStore().DataBind();
+                    DataLogGrid.GetStore().DataBind();
                     ObservationsGridStore.DataBind();
                 }
                 else
@@ -633,7 +643,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 }
 
                 ImportBatchesGrid.GetStore().DataBind();
-                DSLogGrid.GetStore().DataBind();
+                DataLogGrid.GetStore().DataBind();
                 ObservationsGridStore.DataBind();
             }
             catch (Exception ex)
@@ -697,7 +707,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 }
 
                 ImportBatchesGrid.GetStore().DataBind();
-                DSLogGrid.GetStore().DataBind();
+                DataLogGrid.GetStore().DataBind();
                 ObservationsGridStore.DataBind();
             }
             catch (Exception ex)
@@ -754,7 +764,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 }
 
                 ImportBatchesGrid.GetStore().DataBind();
-                DSLogGrid.GetStore().DataBind();
+                DataLogGrid.GetStore().DataBind();
                 ObservationsGridStore.DataBind();
 
             }
@@ -830,7 +840,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 }
 
                 ImportBatchesGrid.GetStore().DataBind();
-                DSLogGrid.GetStore().DataBind();
+                DataLogGrid.GetStore().DataBind();
                 ObservationsGridStore.DataBind();
             }
             catch (Exception ex)
@@ -953,7 +963,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         {
             try
             {
-                RowSelectionModel batchRow = this.ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
+                RowSelectionModel batchRow = ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
                 ImportBatch batch = new ImportBatch(batchRow.SelectedRecordID);
                 using (TransactionScope ts = Utilities.NewTransactionScope())
                 {
@@ -1018,7 +1028,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         {
             try
             {
-                RowSelectionModel batchRow = this.ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
+                RowSelectionModel batchRow = ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
                 ImportBatch batch = new ImportBatch(batchRow.SelectedRecordID);
                 using (TransactionScope ts = Utilities.NewTransactionScope())
                 {
@@ -1106,7 +1116,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         {
             try
             {
-                RowSelectionModel batchRow = this.ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
+                RowSelectionModel batchRow = ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
                 ImportBatch batch = new ImportBatch(batchRow.SelectedRecordID);
                 using (TransactionScope ts = Utilities.NewTransactionScope())
                 {
