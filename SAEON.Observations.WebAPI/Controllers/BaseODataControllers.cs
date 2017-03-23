@@ -67,27 +67,10 @@ namespace SAEON.Observations.WebAPI.Controllers
             return query;
         }
 
-        ///// <summary>
-        ///// Overwrite to do additional checks before Post or Put
-        ///// </summary>
-        ///// <param name="item">TEntity</param>
-        ///// <returns>True if TEntity is Ok else False</returns>
-        //protected virtual bool IsEntityOk(TEntity item)
-        //{
-        //    return true;
-        //}
-
-        ///// <summary>
-        ///// Overwrite to do additional checks before Post or Put
-        ///// </summary>
-        ///// <param name="item">TEntity</param>
-        //protected virtual void SetEntity(ref TEntity item)
-        //{ }
-
         //[EnableQuery, ODataRoute] Required in derived class
         public virtual IQueryable<TEntity> GetAll()
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall<TEntity>(this.GetType()))
             {
                 try
                 {
@@ -104,7 +87,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({id})")] Required in derived class
         public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
         {
-            using (Logging.MethodCall(this.GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<SingleResult<TEntity>>(this.GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {
@@ -121,7 +104,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({name})")] Required in derived class 
         public virtual SingleResult<TEntity> GetByName([FromODataUri] string name)
         {
-            using (Logging.MethodCall(this.GetType(),new ParameterList{ { "Name", name } }))
+            using (Logging.MethodCall<SingleResult<TEntity>>(this.GetType(),new ParameterList{ { "Name", name } }))
             {
                 try
                 {
@@ -148,7 +131,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
         protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
-            using (Logging.MethodCall<TRelated>(this.GetType()))
+            using (Logging.MethodCall<SingleResult<TRelated>>(this.GetType()))
             {
                 try
                 {

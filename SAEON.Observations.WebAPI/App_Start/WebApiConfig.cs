@@ -24,6 +24,7 @@ namespace SAEON.Observations.WebAPI
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
+            //config.AddODataQueryFilter();
 
             // Web API routes
             //config.MapHttpAttributeRoutes();
@@ -31,7 +32,10 @@ namespace SAEON.Observations.WebAPI
 
             // OData
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+            config.Count().Filter().OrderBy().Expand().Select().MaxTop(null); //new line
+            builder.EntitySet<Feature>("Features");
             builder.EntitySet<Instrument>("Instruments");
+            builder.EntitySet<Location>("Locations");
             builder.EntitySet<Offering>("Offerings");
             builder.EntitySet<Organisation>("Organisations");
             builder.EntitySet<Phenomenon>("Phenomena");

@@ -203,7 +203,6 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseEntity
         {
-            //using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
             using (Logging.MethodCall<TEntity, TRelated>(this.GetType()))
             {
                 try
@@ -230,7 +229,6 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
-            //using (LogContext.PushProperty("Method", $"GetMany<{nameof(TRelated)}>"))
             using (Logging.MethodCall<TEntity, TRelated>(this.GetType()))
             {
                 try

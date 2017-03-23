@@ -32,7 +32,6 @@ namespace SAEON.Observations.WebAPI
                     FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
                     RouteConfig.RegisterRoutes(RouteTable.Routes);
                     BundleConfig.RegisterBundles(BundleTable.Bundles);
-
                 }
                 catch (Exception ex)
                 {
