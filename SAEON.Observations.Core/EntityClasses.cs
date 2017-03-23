@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace SAEON.Observations.Core
@@ -61,11 +62,11 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Stations linked to this Instrument
         /// </summary>
-        public ICollection<Station> Stations { get; set; }
+        public List<Station> Stations { get; set; }
         /// <summary>
         /// Sensors linked to this Instrument
         /// </summary>
-        public ICollection<Sensor> Sensors { get; set; }
+        public List<Sensor> Sensors { get; set; }
     }
 
     /// <summary>
@@ -89,7 +90,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Phenomena of this Offering
         /// </summary>
-        public ICollection<Phenomenon> Phenomena { get; set; }
+        public List<Phenomenon> Phenomena { get; set; }
     }
 
     /// <summary>
@@ -114,12 +115,13 @@ namespace SAEON.Observations.Core
         [Url, StringLength(250)]
         public string Url { get; set; }
 
+        public bool HasSites { get { return Sites?.Any() ?? false; } }
         // Navigation
 
         /// <summary>
         /// The Sites linked to this Organisation
         /// </summary>
-        public ICollection<Site> Sites { get; set; }
+        public List<Site> Sites { get; set; }
     }
 
     /// <summary>
@@ -144,19 +146,22 @@ namespace SAEON.Observations.Core
         [Url, StringLength(250)]
         public string Url { get; set; }
 
+        public bool HasOfferings { get { return Offerings?.Any() ?? false; } }
+        public bool HasUnitsOfMeasure { get { return UnitsOfMeasure?.Any() ?? false; } }
+
         // Navigation
         /// <summary>
         /// Sensors linked to this Phenomenon
         /// </summary>
-        public ICollection<Sensor> Sensors { get; set; }
+        public List<Sensor> Sensors { get; set; }
         /// <summary>
         /// Offerings of this Phenomenon
         /// </summary>
-        public ICollection<Offering> Offerings { get; set; }
+        public List<Offering> Offerings { get; set; }
         /// <summary>
         /// UnitsOfMeasure of the Phenomenon
         /// </summary>
-        public ICollection<UnitOfMeasure> UnitsOfMeasure { get; set; }
+        public List<UnitOfMeasure> UnitsOfMeasure { get; set; }
     }
 
     /// <summary>
@@ -189,7 +194,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Instruments linked to this Sensor
         /// </summary>
-        public ICollection<Instrument> Instruments { get; set; }
+        public List<Instrument> Instruments { get; set; }
         /// <summary>
         /// Phenomenon of the Sensor
         /// </summary>
@@ -226,16 +231,17 @@ namespace SAEON.Observations.Core
         /// </summary>
         public DateTime? EndDate { get; set; }
 
+        public bool HasStations { get { return Stations?.Any() ?? false; } }
         // Navigation
 
         /// <summary>
         /// The Organisations linked to this Site
         /// </summary>
-        public ICollection<Organisation> Organisations { get; set; }
+        public List<Organisation> Organisations { get; set; }
         /// <summary>
         /// The Stations linked to this Site
         /// </summary>
-        public ICollection<Station> Stations { get; set; }
+        public List<Station> Stations { get; set; }
     }
 
     /// <summary>
@@ -294,7 +300,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Instruments linked to this Station
         /// </summary>
-        public ICollection<Instrument> Instruments { get; set; }
+        public List<Instrument> Instruments { get; set; }
     }
 
     /// <summary>
@@ -312,7 +318,7 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Phenomena of this UnitOfMeasure
         /// </summary>
-        public ICollection<Phenomenon> Phenomena { get; set; }
+        public List<Phenomenon> Phenomena { get; set; }
     }
 
     /// <summary>
