@@ -73,7 +73,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex,"An exception occured");
+                Log.Error(ex, "An exception occured");
                 throw;
             }
         }
@@ -213,7 +213,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     else
                                     {
                                         //
-                                        Log.Verbose("Error: TotalDuplicate: {totalDuplicate}",totalDuplicate);
+                                        Log.Verbose("Error: IsValid: {isValid} TotalDuplicate: {totalDuplicate}", schval.IsValid, totalDuplicate);
                                         batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
                                         batch.Save();
                                         //
