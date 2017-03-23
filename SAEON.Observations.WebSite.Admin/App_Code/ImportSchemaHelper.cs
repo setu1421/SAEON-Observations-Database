@@ -90,9 +90,11 @@ public class ImportSchemaHelper : IDisposable
         dataSchema = schema;
         if (schema.DataSourceTypeID == new Guid(DataSourceType.CSV))
         {
-            DelimitedClassBuilder cb = new DelimitedClassBuilder("ImportBatches", schema.Delimiter);
-            cb.IgnoreEmptyLines = true;
-            cb.IgnoreFirstLines = schema.IgnoreFirst;
+            DelimitedClassBuilder cb = new DelimitedClassBuilder("ImportBatches", schema.Delimiter)
+            {
+                IgnoreEmptyLines = true,
+                IgnoreFirstLines = schema.IgnoreFirst
+            };
             if (schema.HasColumnNames.HasValue && schema.HasColumnNames.Value)
             {
                 cb.IgnoreFirstLines++;
@@ -224,14 +226,16 @@ public class ImportSchemaHelper : IDisposable
         }
         else
         {
-            FixedLengthClassBuilder cb = new FixedLengthClassBuilder(schema.Name, FixedMode.AllowVariableLength);
-            cb.IgnoreEmptyLines = true;
-            cb.IgnoreFirstLines = schema.IgnoreFirst;
-            //if (schema.HasColumnNames.HasValue && schema.HasColumnNames.Value)
-            //{
-            //    cb.IgnoreFirstLines++;
-            //}
-            cb.IgnoreLastLines = schema.IgnoreLast;
+            FixedLengthClassBuilder cb = new FixedLengthClassBuilder(schema.Name, FixedMode.AllowVariableLength)
+            {
+                IgnoreEmptyLines = true,
+                IgnoreFirstLines = schema.IgnoreFirst,
+                //if (schema.HasColumnNames.HasValue && schema.HasColumnNames.Value)
+                //{
+                //    cb.IgnoreFirstLines++;
+                //}
+                IgnoreLastLines = schema.IgnoreLast
+            };
             if (!String.IsNullOrEmpty(schema.Condition))
                 schema.Condition = schema.Condition;
             if (!String.IsNullOrEmpty(schema.SplitSelector))
@@ -292,8 +296,10 @@ public class ImportSchemaHelper : IDisposable
             recordType = cb.CreateRecordClass();
         }
         //recordType = ClassBuilder.LoadFromXmlString(schema.DataSchemaX).CreateRecordClass();
-        engine = new FileHelperEngine(recordType);
-        engine.ErrorMode = ErrorMode.SaveAndContinue;
+        engine = new FileHelperEngine(recordType)
+        {
+            ErrorMode = ErrorMode.SaveAndContinue
+        };
         List<object> list = engine.ReadStringAsList(data);
 
         batch.SourceFile = Encoding.Unicode.GetBytes(data);
@@ -338,10 +344,11 @@ public class ImportSchemaHelper : IDisposable
         {
             DataColumn dtcol = dtResults.Columns[i];
 
-            SchemaDefinition def = new SchemaDefinition();
-
-            def.Index = i;
-            def.FieldName = dtcol.ColumnName;
+            SchemaDefinition def = new SchemaDefinition()
+            {
+                Index = i,
+                FieldName = dtcol.ColumnName
+            };
             var schemaCol = dataSchema.SchemaColumnRecords().FirstOrDefault(sc => sc.Name.Equals(def.FieldName, StringComparison.CurrentCultureIgnoreCase));
             if (schemaCol == null)
                 if ((dataSchema.DataSourceTypeID == new Guid(DataSourceType.CSV)) && dataSchema.HasColumnNames.HasValue && dataSchema.HasColumnNames.Value)
@@ -483,12 +490,12 @@ public class ImportSchemaHelper : IDisposable
                         {
                             SchemaDefinition def = defs[i];
 
-                            SchemaValue rec = new SchemaValue();
-
-                            rec.DateValue = unprocesseddt[b];
-                            rec.SensorNotFound = def.SensorNotFound;
-                            rec.SensorID = def.SensorID;
-
+                            SchemaValue rec = new SchemaValue()
+                            {
+                                DateValue = unprocesseddt[b],
+                                SensorNotFound = def.SensorNotFound,
+                                SensorID = def.SensorID
+                            };
                             if (rec.SensorNotFound)
                                 rec.InvalidStatuses.Add(Status.SensorNotFound);
 
@@ -597,11 +604,11 @@ public class ImportSchemaHelper : IDisposable
 
                     if (def.IsOffering)
                     {
-                        SchemaValue rec = new SchemaValue();
-
-                        rec.SensorNotFound = def.SensorNotFound;
-                        rec.SensorID = def.SensorID;
-
+                        SchemaValue rec = new SchemaValue()
+                        {
+                            SensorNotFound = def.SensorNotFound,
+                            SensorID = def.SensorID
+                        };
                         if (rec.SensorNotFound)
                             rec.InvalidStatuses.Add(Status.SensorNotFound);
 

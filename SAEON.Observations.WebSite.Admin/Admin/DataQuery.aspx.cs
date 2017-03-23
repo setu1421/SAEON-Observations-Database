@@ -68,8 +68,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                             node.Leaf = true;
                         else
                         {
-                            AsyncTreeNode root = new AsyncTreeNode("Sites_" + item.Id.ToString() + "|" + node.NodeID, "Sites");
-                            root.Icon = (Icon)new ModuleX("A5C81FF7-69D6-4344-8548-E3EF7F08C4E7").Icon;
+                            AsyncTreeNode root = new AsyncTreeNode("Sites_" + item.Id.ToString() + "|" + node.NodeID, "Sites")
+                            {
+                                Icon = (Icon)new ModuleX("A5C81FF7-69D6-4344-8548-E3EF7F08C4E7").Icon
+                            };
                             node.Nodes.Add(root);
                         }
                     }
@@ -87,16 +89,20 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .ExecuteAsCollection<SiteCollection>();
                     foreach (var item in col)
                     {
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Site_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext);
-                        node.Checked = ThreeStateBool.False;
+                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Site_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
+                        {
+                            Checked = ThreeStateBool.False
+                        };
                         e.Nodes.Add(node);
                         var q = new Query(Station.Schema).AddWhere(Station.Columns.SiteID, item.Id).GetCount(Station.Columns.Id);
                         if (q == 0)
                             node.Leaf = true;
                         else
                         {
-                            AsyncTreeNode root = new AsyncTreeNode("Stations_" + item.Id.ToString() + "|" + node.NodeID, "Stations");
-                            root.Icon = (Icon)new ModuleX("0585e63d-0f9f-4dda-98ec-7de9397dc614").Icon;
+                            AsyncTreeNode root = new AsyncTreeNode("Stations_" + item.Id.ToString() + "|" + node.NodeID, "Stations")
+                            {
+                                Icon = (Icon)new ModuleX("0585e63d-0f9f-4dda-98ec-7de9397dc614").Icon
+                            };
                             node.Nodes.Add(root);
                         }
                     }
@@ -114,16 +120,20 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .ExecuteAsCollection<StationCollection>();
                     foreach (var item in col)
                     {
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Station_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext);
-                        node.Checked = ThreeStateBool.False;
+                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Station_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
+                        {
+                            Checked = ThreeStateBool.False
+                        };
                         e.Nodes.Add(node);
                         var q = new Query(StationInstrument.Schema).AddWhere(StationInstrument.Columns.StationID, item.Id).GetCount(StationInstrument.Columns.InstrumentID);
                         if (q == 0)
                             node.Leaf = true;
                         else
                         {
-                            AsyncTreeNode root = new AsyncTreeNode("Instruments_" + item.Id.ToString() + "|" + node.NodeID, "Instruments");
-                            root.Icon = (Icon)new ModuleX("2610866B-8CBF-44E1-9A38-6511B31A8350").Icon;
+                            AsyncTreeNode root = new AsyncTreeNode("Instruments_" + item.Id.ToString() + "|" + node.NodeID, "Instruments")
+                            {
+                                Icon = (Icon)new ModuleX("2610866B-8CBF-44E1-9A38-6511B31A8350").Icon
+                            };
                             node.Nodes.Add(root);
                         }
                     }
@@ -142,16 +152,20 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .ExecuteAsCollection<InstrumentCollection>();
                     foreach (var item in col)
                     {
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Instrument_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext);
-                        node.Checked = ThreeStateBool.False;
+                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Instrument_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
+                        {
+                            Checked = ThreeStateBool.False
+                        };
                         e.Nodes.Add(node);
                         var q = new Query(InstrumentSensor.Schema).AddWhere(InstrumentSensor.Columns.InstrumentID, item.Id).GetCount(InstrumentSensor.Columns.SensorID);
                         if (q == 0)
                             node.Leaf = true;
                         else
                         {
-                            AsyncTreeNode root = new AsyncTreeNode("Sensors_" + item.Id.ToString() + "|" + node.NodeID, "Sensors");
-                            root.Icon = (Icon)new ModuleX("9992ba10-cb0c-4a22-841c-1d695e8293d5").Icon;
+                            AsyncTreeNode root = new AsyncTreeNode("Sensors_" + item.Id.ToString() + "|" + node.NodeID, "Sensors")
+                            {
+                                Icon = (Icon)new ModuleX("9992ba10-cb0c-4a22-841c-1d695e8293d5").Icon
+                            };
                             node.Nodes.Add(root);
                         }
                     }
@@ -170,9 +184,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .ExecuteAsCollection<SensorCollection>();
                     foreach (var item in col)
                     {
-                        AsyncTreeNode node = new AsyncTreeNode("Sensor_" + item.Id.ToString() + "|" + e.NodeID, item.Name);
-                        node.Icon = Icon.ResultsetNext;
-                        node.Checked = ThreeStateBool.False;
+                        AsyncTreeNode node = new AsyncTreeNode("Sensor_" + item.Id.ToString() + "|" + e.NodeID, item.Name)
+                        {
+                            Icon = Icon.ResultsetNext,
+                            Checked = ThreeStateBool.False
+                        };
                         e.Nodes.Add(node);
                         var colOfferings = GetPhenomenonOfferings(item.Id);
                         if (!colOfferings.Any())
@@ -188,8 +204,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 else if (e.NodeID.StartsWith("Sensor_"))
                 {
                     var sensor = new Sensor(e.NodeID.Split('|')[0].Split('_')[1]);
-                    AsyncTreeNode root = new AsyncTreeNode("Phenomenon_" + sensor.PhenomenonID.ToString() + "|" + e.NodeID, sensor.Phenomenon.Name);
-                    root.Icon = Icon.ResultsetNext;
+                    AsyncTreeNode root = new AsyncTreeNode("Phenomenon_" + sensor.PhenomenonID.ToString() + "|" + e.NodeID, sensor.Phenomenon.Name)
+                    {
+                        Icon = Icon.ResultsetNext
+                    };
                     e.Nodes.Add(root);
                 }
                 else if (e.NodeID.StartsWith("Phenomenon_"))
@@ -199,9 +217,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     var col = GetPhenomenonOfferings(items.Where(i => i.Item1 == "Sensor").Select(i => Utilities.MakeGuid(i.Item2)).First());
                     foreach (var item in col)
                     {
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Offering_" + item.Id.ToString() + "|" + e.NodeID, item.Offering.Name, Icon.ResultsetNext);
-                        node.Checked = ThreeStateBool.False;
-                        node.Leaf = true;
+                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Offering_" + item.Id.ToString() + "|" + e.NodeID, item.Offering.Name, Icon.ResultsetNext)
+                        {
+                            Checked = ThreeStateBool.False,
+                            Leaf = true
+                        };
                         e.Nodes.Add(node);
                     }
                 }
@@ -218,8 +238,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
     /// </summary>
     void BuildTree()
     {
-        AsyncTreeNode root = new AsyncTreeNode("Organisations", "Organisations");
-        root.Icon = (Icon)new ModuleX("e4c08bfa-a8f0-4112-b45c-dd1788ade5a0").Icon;
+        AsyncTreeNode root = new AsyncTreeNode("Organisations", "Organisations")
+        {
+            Icon = (Icon)new ModuleX("e4c08bfa-a8f0-4112-b45c-dd1788ade5a0").Icon
+        };
         FilterTree.Root.Add(root);
     }
 
@@ -597,9 +619,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
         }
 
-        JavaScriptSerializer ser = new JavaScriptSerializer();
-        ser.MaxJsonLength = 2147483647;
-
+        JavaScriptSerializer ser = new JavaScriptSerializer()
+        {
+            MaxJsonLength = 2147483647
+        };
         string js = JsonConvert.SerializeObject(dt);
 
         return js;

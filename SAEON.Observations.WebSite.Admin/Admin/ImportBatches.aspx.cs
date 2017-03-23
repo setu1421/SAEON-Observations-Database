@@ -132,11 +132,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 }
                 //
 
-                ImportBatch batch = new ImportBatch();
-                batch.Id = Guid.NewGuid();
-                batch.DataSourceID = DataSourceId;
-                batch.ImportDate = DateTime.Now;
-
+                ImportBatch batch = new ImportBatch()
+                {
+                    Id = Guid.NewGuid(),
+                    DataSourceID = DataSourceId,
+                    ImportDate = DateTime.Now
+                };
                 FileInfo fi;
                 if (!string.IsNullOrEmpty(LogFileUpload.PostedFile.FileName))
                 {
@@ -188,18 +189,19 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                                         if (!isDuplicateOfNull(schval, batch.Id))
                                         {
-                                            Observation Obrecord = new Observation();
-                                            Obrecord.SensorID = schval.SensorID.Value;
-                                            Obrecord.ValueDate = schval.DateValue;
-                                            Obrecord.RawValue = schval.RawValue;
-                                            Obrecord.DataValue = schval.DataValue;
-                                            Obrecord.PhenomenonOfferingID = schval.PhenomenonOfferingID.Value;
-                                            Obrecord.PhenomenonUOMID = schval.PhenomenonUOMID.Value;
-                                            Obrecord.ImportBatchID = batch.Id;
-                                            Obrecord.UserId = AuthHelper.GetLoggedInUserId;
+                                            Observation Obrecord = new Observation()
+                                            {
+                                                SensorID = schval.SensorID.Value,
+                                                ValueDate = schval.DateValue,
+                                                RawValue = schval.RawValue,
+                                                DataValue = schval.DataValue,
+                                                PhenomenonOfferingID = schval.PhenomenonOfferingID.Value,
+                                                PhenomenonUOMID = schval.PhenomenonUOMID.Value,
+                                                ImportBatchID = batch.Id,
+                                                UserId = AuthHelper.GetLoggedInUserId,
 
-                                            Obrecord.AddedDate = DateTime.Now;
-
+                                                AddedDate = DateTime.Now
+                                            };
                                             if (schval.Comment.Length > 0)
                                                 Obrecord.Comment = schval.Comment;
 
@@ -216,10 +218,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         batch.Save();
                                         //
 
-                                        DataLog logrecord = new DataLog();
-
-                                        logrecord.SensorID = schval.SensorID;
-
+                                        DataLog logrecord = new DataLog()
+                                        {
+                                            SensorID = schval.SensorID
+                                        };
                                         if (schval.DateValueInvalid)
                                             logrecord.InvalidDateValue = schval.InvalidDateValue;
                                         else if (schval.DateValue != DateTime.MinValue)
@@ -326,9 +328,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             catch (Exception ex)
             {
                 Log.Error(ex, "Unable to save import batch");
-                List<object> errors = new List<object>();
-                errors.Add(new { ErrorMessage = ex.Message, LineNo = 1, RecordString = "" });
-
+                List<object> errors = new List<object>
+                {
+                    new { ErrorMessage = ex.Message, LineNo = 1, RecordString = "" }
+                };
                 ErrorGridStore.DataSource = errors;
                 ErrorGridStore.DataBind();
                 X.Msg.Hide();
@@ -350,11 +353,13 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         {
             //delete this observation and move it do the datalog with the new value in and a status saying its a duplicate of a null that now has a value. 
             //check if this works with transformations 
-            DataLog d = new DataLog();
-            d.SensorID = oCol[0].SensorID;
-            d.ImportDate = oCol[0].AddedDate;
-            d.ValueDate = oCol[0].ValueDate;
-            d.RawValue = schval.DataValue;
+            DataLog d = new DataLog()
+            {
+                SensorID = oCol[0].SensorID,
+                ImportDate = oCol[0].AddedDate,
+                ValueDate = oCol[0].ValueDate,
+                RawValue = schval.DataValue
+            };
             if (d.DataValue != null)
                 d.RawFieldValue = schval.DataValue.Value.ToString();
 
@@ -508,10 +513,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                 //DataLog log = new DataLog();
 
-                Observation obs = new Observation();
-
-                obs.SensorID = new Guid(cbSensor.SelectedItem.Value);
-
+                Observation obs = new Observation()
+                {
+                    SensorID = new Guid(cbSensor.SelectedItem.Value)
+                };
                 DateTime datevalue = (DateTime)ValueDate.Value;
 
                 if (TimeValue.Value.ToString() != "-10675199.02:48:05.4775808")
@@ -685,18 +690,20 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         for (int i = 0; i < col.Count; i++)
                         {
                             Observation ob = col[i];
-                            DataLog log = new DataLog();
-                            log.ValueDate = ob.ValueDate;
-                            log.ValueTime = ob.ValueDate;
-                            log.SensorID = ob.SensorID;
-                            log.PhenomenonOfferingID = ob.PhenomenonOfferingID;
-                            log.PhenomenonUOMID = ob.PhenomenonUOMID;
-                            log.ImportBatchID = ob.ImportBatchID;
-                            log.RawValue = ob.RawValue;
-                            log.DataValue = ob.DataValue;
-                            log.UserId = AuthHelper.GetLoggedInUserId;
-                            log.StatusID = new Guid(Status.BatchRetracted);
-                            log.CorrelationID = ob.CorrelationID;
+                            DataLog log = new DataLog()
+                            {
+                                ValueDate = ob.ValueDate,
+                                ValueTime = ob.ValueDate,
+                                SensorID = ob.SensorID,
+                                PhenomenonOfferingID = ob.PhenomenonOfferingID,
+                                PhenomenonUOMID = ob.PhenomenonUOMID,
+                                ImportBatchID = ob.ImportBatchID,
+                                RawValue = ob.RawValue,
+                                DataValue = ob.DataValue,
+                                UserId = AuthHelper.GetLoggedInUserId,
+                                StatusID = new Guid(Status.BatchRetracted),
+                                CorrelationID = ob.CorrelationID
+                            };
                             log.Save();
                             Observation.Delete(ob.Id);
                         }
@@ -752,8 +759,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                         if (q.GetRecordCount() == 0)
                         {
-                            ImportBatch iB = new ImportBatch("ID", BatchId);
-                            iB.Status = (int)ImportBatchStatus.NoLogErrors;
+                            ImportBatch iB = new ImportBatch("ID", BatchId)
+                            {
+                                Status = (int)ImportBatchStatus.NoLogErrors
+                            };
                             iB.Save();
                         }
 
@@ -817,18 +826,19 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     {
                         DataLog d = new DataLog(Id);
 
-                        Observation Obrecord = new Observation();
-                        Obrecord.SensorID = d.SensorID.Value;
-                        Obrecord.ValueDate = d.ValueDate.Value;
-                        Obrecord.RawValue = d.RawValue;
-                        Obrecord.DataValue = d.DataValue;
-                        Obrecord.PhenomenonOfferingID = d.PhenomenonOfferingID.Value;
-                        Obrecord.PhenomenonUOMID = d.PhenomenonUOMID.Value;
-                        Obrecord.ImportBatchID = d.ImportBatchID;
-                        Obrecord.UserId = AuthHelper.GetLoggedInUserId;
-                        Obrecord.AddedDate = d.ImportDate;
-                        Obrecord.Comment = d.Comment;
-
+                        Observation Obrecord = new Observation()
+                        {
+                            SensorID = d.SensorID.Value,
+                            ValueDate = d.ValueDate.Value,
+                            RawValue = d.RawValue,
+                            DataValue = d.DataValue,
+                            PhenomenonOfferingID = d.PhenomenonOfferingID.Value,
+                            PhenomenonUOMID = d.PhenomenonUOMID.Value,
+                            ImportBatchID = d.ImportBatchID,
+                            UserId = AuthHelper.GetLoggedInUserId,
+                            AddedDate = d.ImportDate,
+                            Comment = d.Comment
+                        };
                         Obrecord.Save();
 
                         new Delete().From(DataLog.Schema).Where(DataLog.Columns.Id).IsEqualTo(d.Id).Execute();
@@ -917,8 +927,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
                 foreach (SelectedRow row in sm.SelectedRows)
                 {
-                    Observation obs = new Observation(row.RecordID);
-                    obs.StatusID = Utilities.MakeGuid(cbStatus.SelectedItem.Value);
+                    Observation obs = new Observation(row.RecordID)
+                    {
+                        StatusID = Utilities.MakeGuid(cbStatus.SelectedItem.Value)
+                    };
                     if (cbStatus.SelectedItem.Text == "Verified")
                         obs.StatusReasonID = null;
                     else
@@ -1083,9 +1095,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
                 foreach (SelectedRow row in sm.SelectedRows)
                 {
-                    Observation obs = new Observation(row.RecordID);
-                    obs.StatusID = null;
-                    obs.StatusReasonID = null;
+                    Observation obs = new Observation(row.RecordID)
+                    {
+                        StatusID = null,
+                        StatusReasonID = null
+                    };
                     obs.Save();
                 }
                 sm.ClearSelections();
