@@ -18,13 +18,13 @@ namespace SAEON.Observations.QuerySite.Controllers
     [Authorize]
     public class BaseRestController<TEntity> : Controller where TEntity : BaseEntity, new()
     {
-        private static string apiBaseUrl = "http://localhost:63378/";
-        private static string identityUrl = "https://localhost:44311/oauth2";
-        private static string tokenUrl = identityUrl + "/connect/token";
+        private static string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;
+        //private static string identityUrl = Properties.Settings.Default.IdentityServerUrl;
         private string resource = null;
         protected string Resource { get { return resource; } set { resource = value; } }
 
         // GET: TEntity
+        [HttpGet]
         public virtual async Task<ActionResult> Index()
         {
             using (Logging.MethodCall<TEntity>(this.GetType()))
@@ -61,6 +61,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         /// </summary>
         /// <param name="id">The Id of the TEntity</param>
         /// <returns>View(TEntity)</returns>
+        [HttpGet]
         [Route("{id:guid}")]
         public virtual async Task<ActionResult> Details(Guid? id)
         {
@@ -98,6 +99,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         /// </summary>
         /// <returns>View()</returns>
         [Authorize]
+        [HttpGet]
         //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual ActionResult Create()
         {
@@ -164,6 +166,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         /// </summary>
         /// <param name="id">id of TEntity</param>
         /// <returns>View(TEntity)</returns>
+        [HttpGet]
         [Route("{id:guid}")]
         [Authorize]
         //[Authorize(Roles = "Administrators, DataWriters")]
@@ -249,6 +252,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         /// </summary>
         /// <param name="id">Id of the TEntity</param>
         /// <returns>View(item)</returns>
+        [HttpGet]
         [Route("{id:guid}")]
         [Authorize]
         //[Authorize(Roles = "Administrators, DataWriters")]

@@ -28,7 +28,7 @@ namespace SAEON.Observations.QuerySite
             {
                 try
                 {
-                    Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServer);
+                    Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
                     JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
                     app.UseCors(CorsOptions.AllowAll);
@@ -38,7 +38,7 @@ namespace SAEON.Observations.QuerySite
                     });
                     app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                     {
-                        Authority = Properties.Settings.Default.IdentityServer,
+                        Authority = Properties.Settings.Default.IdentityServerUrl,
                         ClientId = "SAEON.Observations.QuerySite",
                         //Scope = "openid profile email roles offline_access SAEON.Observations.WebAPI",
                         Scope = "openid profile roles SAEON.Observations.WebAPI",

@@ -237,6 +237,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseRestController.cs" />
+    <Compile Include="Controllers\BaseWebApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\UserDownloadsController.cs" />
@@ -822,11 +823,15 @@
     <Content Include="Views\UserQueries\Edit.cshtml" />
     <Content Include="Views\UserQueries\Index.cshtml" />
     <Content Include="Views\Query\Index.cshtml" />
+    <Content Include="Views\Query\SelectedLocations.cshtml" />
+    <Content Include="Views\Query\SelectedLocationsPost.cshtml" />
+    <Content Include="Views\Query\SelectedFeatures.cshtml" />
+    <Content Include="Views\Query\SelectedFeaturesPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\BaseRest\" />
+    <Folder Include="Views\BaseWebApi\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

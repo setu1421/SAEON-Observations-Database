@@ -26,9 +26,18 @@ namespace SAEON.Observations.QuerySite.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:44311/oauth2")]
-        public string IdentityServer {
+        public string IdentityServerUrl {
             get {
-                return ((string)(this["IdentityServer"]));
+                return ((string)(this["IdentityServerUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:63378")]
+        public string WebAPIUrl {
+            get {
+                return ((string)(this["WebAPIUrl"]));
             }
         }
     }
