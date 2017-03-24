@@ -143,7 +143,7 @@ namespace SAEON.Observations.Data
 				TableSchema.TableColumn colvarDescription = new TableSchema.TableColumn(schema);
 				colvarDescription.ColumnName = "Description";
 				colvarDescription.DataType = DbType.AnsiString;
-				colvarDescription.MaxLength = 500;
+				colvarDescription.MaxLength = 5000;
 				colvarDescription.AutoIncrement = false;
 				colvarDescription.IsNullable = false;
 				colvarDescription.IsPrimaryKey = false;

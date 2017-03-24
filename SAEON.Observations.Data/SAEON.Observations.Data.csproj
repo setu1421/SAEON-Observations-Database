@@ -182,6 +182,7 @@
     <Compile Include="Generated\VProjectStation.cs" />
     <Compile Include="Generated\VSchemaColumn.cs" />
     <Compile Include="Generated\VSensor.cs" />
+    <Compile Include="Generated\VSensorDate.cs" />
     <Compile Include="Generated\VSiteOrganisation.cs" />
     <Compile Include="Generated\VStation.cs" />
     <Compile Include="Generated\VStationInstrument.cs" />

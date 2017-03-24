@@ -86,7 +86,7 @@ namespace SAEON.Observations.Data{
                 colvarSiteName.DataType = DbType.AnsiString;
                 colvarSiteName.MaxLength = 150;
                 colvarSiteName.AutoIncrement = false;
-                colvarSiteName.IsNullable = false;
+                colvarSiteName.IsNullable = true;
                 colvarSiteName.IsPrimaryKey = false;
                 colvarSiteName.IsForeignKey = false;
                 colvarSiteName.IsReadOnly = false;
@@ -98,7 +98,7 @@ namespace SAEON.Observations.Data{
                 colvarStationName.DataType = DbType.AnsiString;
                 colvarStationName.MaxLength = 150;
                 colvarStationName.AutoIncrement = false;
-                colvarStationName.IsNullable = false;
+                colvarStationName.IsNullable = true;
                 colvarStationName.IsPrimaryKey = false;
                 colvarStationName.IsForeignKey = false;
                 colvarStationName.IsReadOnly = false;
@@ -110,7 +110,7 @@ namespace SAEON.Observations.Data{
                 colvarInstrumentName.DataType = DbType.AnsiString;
                 colvarInstrumentName.MaxLength = 150;
                 colvarInstrumentName.AutoIncrement = false;
-                colvarInstrumentName.IsNullable = false;
+                colvarInstrumentName.IsNullable = true;
                 colvarInstrumentName.IsPrimaryKey = false;
                 colvarInstrumentName.IsForeignKey = false;
                 colvarInstrumentName.IsReadOnly = false;
@@ -134,7 +134,7 @@ namespace SAEON.Observations.Data{
                 colvarSensorName.DataType = DbType.AnsiString;
                 colvarSensorName.MaxLength = 150;
                 colvarSensorName.AutoIncrement = false;
-                colvarSensorName.IsNullable = false;
+                colvarSensorName.IsNullable = true;
                 colvarSensorName.IsPrimaryKey = false;
                 colvarSensorName.IsForeignKey = false;
                 colvarSensorName.IsReadOnly = false;

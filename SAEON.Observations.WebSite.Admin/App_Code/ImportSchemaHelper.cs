@@ -388,7 +388,11 @@ public class ImportSchemaHelper : IDisposable
                         if (uom == null)
                             def.InValidUOM = true;
                         if (Sensor != null)
-                            def.SensorID = Sensor.Id;
+                        {
+                            //def.SensorID = Sensor.Id;
+                            def.Sensors.Clear();
+                            def.Sensors.Add(Sensor);
+                        }
                         else
                         {
                             SensorCollection colsens = new Select()
@@ -399,7 +403,11 @@ public class ImportSchemaHelper : IDisposable
                             if (colsens.Count() == 0)
                                 def.SensorNotFound = true;
                             else
-                                def.SensorID = colsens[0].Id;
+                            {
+                                //def.SensorID = colsens[0].Id;
+                                def.Sensors.Clear();
+                                def.Sensors.AddRange(colsens.ToList());
+                            }
                         }
                         if (!string.IsNullOrEmpty(schemaCol.EmptyValue))
                         {
@@ -465,7 +473,7 @@ public class ImportSchemaHelper : IDisposable
     {
         using (LogContext.PushProperty("Method", "ProcessSchema"))
         {
-            Log.Information("Version 1.14");
+            Log.Information("Version 1.15");
             try
             {
                 BuildSchemaDefinition();
@@ -494,7 +502,8 @@ public class ImportSchemaHelper : IDisposable
                             {
                                 DateValue = unprocesseddt[b],
                                 SensorNotFound = def.SensorNotFound,
-                                SensorID = def.SensorID
+                                //SensorID = def.SensorID
+                                SensorID = def.Sensors.FirstOrDefault()?.Id
                             };
                             if (rec.SensorNotFound)
                                 rec.InvalidStatuses.Add(Status.SensorNotFound);
@@ -607,10 +616,13 @@ public class ImportSchemaHelper : IDisposable
                         SchemaValue rec = new SchemaValue()
                         {
                             SensorNotFound = def.SensorNotFound,
-                            SensorID = def.SensorID
+                            //SensorID = def.SensorID
                         };
                         if (rec.SensorNotFound)
+                        {
+                            rec.SensorID = def.Sensors.FirstOrDefault()?.Id;
                             rec.InvalidStatuses.Add(Status.SensorNotFound);
+                        }
 
                         rec.InValidOffering = def.InValidOffering;
                         rec.PhenomenonOfferingID = def.PhenomenonOfferingID;
@@ -649,6 +661,46 @@ public class ImportSchemaHelper : IDisposable
 
                         if (!ErrorInTime)
                             rec.TimeValue = tm;
+
+                        if (!ErrorInDate)
+                        {
+                            rec.DateValue = dt;
+                            // Find sensor based on Datevalue
+                            bool found = false;
+                            if (def.Sensors.Count > 1)
+                            {
+                                Log.Information("Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
+                            }
+                            foreach (var sensor in def.Sensors)
+                            {
+                                // Sensor x Instrument_Sensor x Instrument x Station_Instrument x Station x Site
+                                var dates = new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault();
+                                var startDates = new List<DateTime?> { dates.InstrumenSensorStartDate, dates.InstrumentStartDate, dates.StationInstrumentStartDate, dates.StationStartDate };
+                                var endDates = new List<DateTime?> { dates.InstrumenSensorEndDate, dates.InstrumentEndDate, dates.StationInstrumentEndDate, dates.StationEndDate };
+                                var startDate = startDates.Max();
+                                var endDate = endDates.Min();
+                                if (startDate.HasValue && (rec.DateValue < startDate.Value))
+                                {
+                                    Log.Information("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
+                                    continue;
+                                }
+                                if (endDate.HasValue && (rec.DateValue > endDate.Value))
+                                {
+                                    Log.Information("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
+                                    continue;
+                                }
+                                rec.SensorID = sensor.Id;
+                                found = true;
+                                break;
+                            }
+                            if (!found)
+                            {
+                                Log.Error("Sensor not found Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
+                                rec.SensorNotFound = true;
+                                rec.SensorID = def.Sensors.FirstOrDefault()?.Id;
+                                rec.InvalidStatuses.Add(Status.SensorNotFound);
+                            }
+                        }
 
                         string RawValue = dr[def.Index].ToString();
 
@@ -954,7 +1006,8 @@ public class SchemaDefinition
     public Boolean IsOffering { get; set; }
 
     public bool IsComment { get; set; }
-    public Guid? SensorID { get; set; }
+    //public Guid? SensorID { get; set; }
+    public List<Sensor> Sensors { get; set; } = new List<Sensor>();
     public bool SensorNotFound { get; set; }
 }
 

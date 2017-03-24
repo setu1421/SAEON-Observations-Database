@@ -548,6 +548,7 @@
     <Build Include="dbo\Tables\UserQueries.sql" />
     <Build Include="dbo\Tables\UserDownloads.sql" />
     <Build Include="dbo\Views\vDownloads.sql" />
+    <Build Include="dbo\Views\vSensorDates.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />
