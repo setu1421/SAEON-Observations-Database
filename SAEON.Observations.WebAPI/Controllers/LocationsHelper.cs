@@ -23,7 +23,8 @@ namespace SAEON.Observations.WebAPI.Controllers
                         var organisationNode = new Location
                         {
                             Id = organisation.Id,
-                            Key = $"|ORG|{organisation.Id}|",
+                            Key = $"ORG~{organisation.Id}~",
+                            //Key = $"ORG-{organisation.Id}-ORG",
                             Text = organisation.Name,
                             HasChildren = organisation.HasSites
                         };
@@ -34,7 +35,8 @@ namespace SAEON.Observations.WebAPI.Controllers
                             {
                                 Id = site.Id,
                                 ParentId = organisationNode.Id,
-                                Key = $"|SIT|{site.Id}{organisationNode.Key}",
+                                Key = $"SIT~{site.Id}~{organisationNode.Key}",
+                                //Key = $"SIT-{site.Id}-SIT",
                                 ParentKey = organisationNode.Key,
                                 Text = site.Name,
                                 HasChildren = site.HasStations
@@ -46,7 +48,8 @@ namespace SAEON.Observations.WebAPI.Controllers
                                 {
                                     Id = station.Id,
                                     ParentId = siteNode.Id,
-                                    Key = $"|STA|{station.Id}{siteNode.Key}",
+                                    Key = $"STA~{station.Id}~{siteNode.Key}",
+                                    //Key = $"STA-{station.Id}-STA",
                                     ParentKey = siteNode.Key,
                                     Text = station.Name,
                                     Name = $"{site.Name} - {station.Name}",

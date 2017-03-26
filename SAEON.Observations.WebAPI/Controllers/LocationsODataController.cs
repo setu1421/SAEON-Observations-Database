@@ -4,11 +4,14 @@ using System.Web.OData;
 using System.Web.OData.Routing;
 using SAEON.Observations.Core;
 using System.Net.Http;
+using System.Web.Http.Description;
+using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [ODataRoutePrefix("Locations")]
-    //[Authorize]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [Authorize]
     public class LocationsODataController : ODataController
     {
         ObservationsDbContext db = new ObservationsDbContext();

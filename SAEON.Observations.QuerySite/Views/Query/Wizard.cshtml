@@ -1,4 +1,5 @@
-﻿@using SAEON.Observations.Core
+﻿@using SAEON.Observations.QuerySite.Models
+@model QueryModel
 @{
     ViewBag.Title = "Query";
 }
@@ -8,29 +9,24 @@
         <div class="controlframe">
             @{Html.EJ().Tab("defaultTabs").Items(tabs =>
                 {
-                tabs.Add().ID("Locations").Text("Locations").ContentTemplate(
+                @*tabs.Add().ID("Locations").Text("Locations").ContentTemplate(
                     @<div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             @(Html.EJ().TreeView("treeViewLocations")
-                                .TreeViewFields(field =>
-                                field.Datasource(locations =>
-                                locations.URL($"{ViewBag.WebAPIUrl}/OData/Locations").Adaptor(AdaptorType.ODataV4Adaptor).CrossDomain(true)
-                                )
+                                .TreeViewFields(field => field.Datasource(Model.Locations.AsEnumerable())
                                 .Id("Key")
                                 .ParentId("ParentKey")
                                 .Text("Text")
                                 .HasChild("HasChildren")
-
                                 )
                                 .ClientSideEvents(events => events.NodeCheck("onUpdateSelectedLocations").NodeUncheck("onUpdateSelectedLocations"))
                                 .ShowCheckbox(true)
-                            //.LoadOnDemand(true)
                             )
                         </div>
-                        <div class="col-md-4" id="PartialSelectedLocations">
-                            @Html.Partial("SelectedLocations", (List<Location>)ViewBag.Locations)
+                        <div class="col-md-6" id="PartialSelectedLocations">
+                            @Html.Partial("SelectedLocations", Model.SelectedLocations)
                         </div>
-                    </div>);
+                    </div>);*@
                 @*tabs.Add().ID("Map").Text("Map").ContentTemplate(
                     @<div>
                         <table>
@@ -47,25 +43,23 @@
                     </div>);*@
             tabs.Add().ID("Features").Text("Features").ContentTemplate(
                 @<div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         @(Html.EJ().TreeView("treeViewFeatures")
-                                .TreeViewFields(field =>
-                                field.Datasource(features =>
-                                    features.URL($"{ViewBag.WebAPIUrl}/OData/Features").Adaptor(AdaptorType.ODataV4Adaptor).CrossDomain(true)
-                                )
+                                .TreeViewFields(field => field.Datasource(Model.Features)
+                                //field.Datasource(features =>
+                                //    features.URL($"{ViewBag.WebAPIUrl}/OData/Features").Adaptor(AdaptorType.ODataV4Adaptor).CrossDomain(true))
                                 .Id("Key")
                                 .ParentId("ParentKey")
                                 .Text("Text")
                                 .HasChild("HasChildren")
-
                                 )
-                                .ClientSideEvents(events => events.NodeCheck("onUpdateSelectedFeatures").NodeUncheck("onUpdateSelectedFeatures"))
+                                //.ClientSideEvents(events => events.NodeCheck("onUpdateSelectedFeatures").NodeUncheck("onUpdateSelectedFeatures"))
                                 .ShowCheckbox(true)
-                        //.LoadOnDemand(true)
+                        //.EnablePersistence(true)
                         )
                     </div>
-                    <div class="col-md-4" id="PartialSelectedFeatures">
-                        @Html.Partial("SelectedFeatures", (List<Feature>)ViewBag.Features)
+                    <div class="col-md-6" id="PartialSelectedFeatures">
+                        @Html.Partial("SelectedFeatures", Model.SelectedFeatures)
                     </div>
                 </div>);
             tabs.Add().ID("TimeFrame").Text("Time frame").ContentTemplate(
@@ -129,7 +123,7 @@
     function ajaxUpdateSelectedLocations(selectedLocations) {
         $.ajax({
             url: "/Query/StoreSelectedLocations",
-            data: JSON.stringify({ SelectedLocations: selectedLocations }),
+            data: JSON.stringify({ Locations: selectedLocations }),
             type: "POST",
             contentType: "application/json; charset=utf-8",
             dataType: "html",
@@ -142,31 +136,31 @@
             }
         });
     }
-    function onUpdateSelectedFeatures() {
-        treeObj = $("#treeViewFeatures").data('ejTreeView');
-        var checkedNodes = treeObj.getCheckedNodes();
-        var selectedFeatures = []
-        for (i = 0; i < checkedNodes.length; i++) {
-            var checkedNode = checkedNodes[i];
-            var nodeData = treeObj.getNode(checkedNode);
-            selectedFeatures.push(nodeData.id);
-        }
-        ajaxUpdateSelectedFeatures(selectedFeatures);
-    }
-    function ajaxUpdateSelectedFeatures(selectedFeatures) {
-        $.ajax({
-            url: "/Query/StoreSelectedFeatures",
-            data: JSON.stringify({ SelectedFeatures: selectedFeatures }),
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: "html",
-            success: function (data) {
-                //alert(data)
-                $('#PartialSelectedFeatures').html(data);
-            },
-            error: function () {
-                alert("Oops");
-            }
-        });
-    }
+    //function onUpdateSelectedFeatures() {
+    //    treeObj = $("#treeViewFeatures").data('ejTreeView');
+    //    var checkedNodes = treeObj.getCheckedNodes();
+    //    var selectedFeatures = []
+    //    for (i = 0; i < checkedNodes.length; i++) {
+    //        var checkedNode = checkedNodes[i];
+    //        var nodeData = treeObj.getNode(checkedNode);
+    //        selectedFeatures.push(nodeData.id);
+    //    }
+    //    ajaxUpdateSelectedFeatures(selectedFeatures);
+    //}
+    //function ajaxUpdateSelectedFeatures(selectedFeatures) {
+    //    $.ajax({
+    //        url: "/Query/StoreSelectedFeatures",
+    //        data: JSON.stringify({ Features: selectedFeatures }),
+    //        type: "POST",
+    //        contentType: "application/json; charset=utf-8",
+    //        dataType: "html",
+    //        success: function (data) {
+    //            //alert(data)
+    //            $('#PartialSelectedFeatures').html(data);
+    //        },
+    //        error: function () {
+    //            alert("Oops");
+    //        }
+    //    });
+    //}
 </script>

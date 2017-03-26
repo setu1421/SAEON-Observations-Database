@@ -3,10 +3,13 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [RoutePrefix("Locations")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [Authorize]
     public class LocationsController : ApiController
     {
         ObservationsDbContext db = new ObservationsDbContext();

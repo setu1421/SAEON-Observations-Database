@@ -21,7 +21,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                         var phenomenonNode = new Feature
                         {
                             Id = phenomenon.Id,
-                            Key = $"|PHE|{phenomenon.Id}|",
+                            Key = $"PHE~{phenomenon.Id}~",
                             Text = phenomenon.Name,
                             HasChildren = phenomenon.HasOfferings
                         };
@@ -32,7 +32,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                             {
                                 Id = offering.Id,
                                 ParentId = phenomenonNode.Id,
-                                Key = $"|OFF|{offering.Id}{phenomenonNode.Id}",
+                                Key = $"OFF~{offering.Id}~{phenomenonNode.Id}",
                                 ParentKey = phenomenonNode.Key,
                                 Text = offering.Name,
                                 Name = $"{phenomenon.Name} - {offering.Name}",

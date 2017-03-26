@@ -6,10 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [RoutePrefix("Features")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [Authorize]
     public class FeaturesController : ApiController
     {
         ObservationsDbContext db = new ObservationsDbContext();

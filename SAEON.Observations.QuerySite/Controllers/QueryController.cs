@@ -1,4 +1,5 @@
 ﻿using SAEON.Observations.Core;
+using SAEON.Observations.QuerySite.Models;
 using Syncfusion.JavaScript;
 using System;
 using System.Collections.Generic;
@@ -12,77 +13,102 @@ namespace SAEON.Observations.QuerySite.Controllers
     [Authorize]
     public class QueryController : BaseWebApiController
     {
+        public QueryController()
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+            }
+            base.Dispose(disposing);
+        }
 
         // GET: Query
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            ViewBag.WebAPIUrl = Properties.Settings.Default.WebAPIUrl;
-            if (System.Web.HttpContext.Current.Session["Locations"] == null)
-            {
-                System.Web.HttpContext.Current.Session["Locations"] = new List<Location>();
-            }
-            ViewBag.Locations = (List<Location>)System.Web.HttpContext.Current.Session["Locations"];
-            if (System.Web.HttpContext.Current.Session["Features"] == null)
-            {
-                System.Web.HttpContext.Current.Session["Features"] = new List<Feature>();
-            }
-            ViewBag.Features = (List<Feature>)System.Web.HttpContext.Current.Session["Features"];
-            return View();
+            //ViewBag.WebAPIUrl = Properties.Settings.Default.WebAPIUrl;
+            ////if (CurrentSession["Locations"] == null)
+            //{
+            //    CurrentSession["Locations"] = GetLocations();
+            //}
+            //ViewBag.Locations = (List<Location>)CurrentSession["Locations"];
+            //CurrentSession["SelectedLocations"] = new List<Location>();
+            //ViewBag.SelectedLocations = (List<Location>)CurrentSession["SelectedLocations"];
+            ////if (CurrentSession["Features"] == null)
+            //{
+            //    CurrentSession["Features"] = GetFeatures();
+            //}
+            //ViewBag.Features = (List<Feature>)CurrentSession["Features"];
+            //CurrentSession["SelectedFeatures"] = new List<Feature>();
+            //ViewBag.SelectedFeatures = (List<Feature>)CurrentSession["SelectedFeatures"];
+            var model = new QueryModel { Locations = await GetLocations(), Features = await GetFeatures() };
+            model.SelectedFeatures.Add(model.Features.First(i => i.Key.StartsWith("OFF~")));
+            model.SelectedLocations.Add(model.Locations.First(i => i.Key.StartsWith("STA~")));
+            return View("Wizard", model);
         }
 
-        public async Task<PartialViewResult> StoreSelectedFeatures(List<string> selectedFeatures)
-        {
-            using (Logging.MethodCall(this.GetType()))
-            {
-                try
-                {
-                    Logging.Verbose("SelectedFeatures: {Features}", selectedFeatures);
-                    var features = new List<Feature>();
-                    if (selectedFeatures != null)
-                    {
-                        selectedFeatures = selectedFeatures.Where(l => l.StartsWith("|OFF|")).ToList();
-                        Logging.Verbose("SelectedOfferings: {Features}", selectedFeatures);
-                        features = (await GetFeatures()).Where(l => selectedFeatures.Contains(l.Key)).OrderBy(l => l.Text).ToList();
-                    }
-                    Logging.Verbose("Features: {@Features}", features);
-                    TempData["Features"] = features;
-                    System.Web.HttpContext.Current.Session["Features"] = features;
-                    return PartialView("SelectedFeaturesPost", features);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex);
-                    throw;
-                }
-            }
-        }
+        //public PartialViewResult StoreSelectedFeatures(List<string> features)
+        //{
+        //    using (Logging.MethodCall(this.GetType()))
+        //    {
+        //        try
+        //        {
+        //            Logging.Verbose("SelectedFeatures: {features}", features);
+        //            var selectedFeatures = new List<Feature>();
+        //            if (features != null)
+        //            {
+        //                var offerings = features.Where(l => l.StartsWith("|OFF|")).ToList();
+        //                Logging.Verbose("SelectedOfferings: {offerings}", offerings);
+        //                selectedFeatures = ((List<Feature>)CurrentSession["Features"])
+        //                    .Where(l => offerings.Contains(l.Key))
+        //                    .OrderBy(l => l.Text)
+        //                    .ToList();
+        //            }
+        //            Logging.Verbose("SelectedFeatures: {@selectedFeatures}", selectedFeatures);
+        //            CurrentSession["SelectedFeatures"] = selectedFeatures;
+        //            return PartialView("SelectedFeaturesPost", selectedFeatures);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Logging.Exception(ex);
+        //            throw;
+        //        }
+        //    }
+        //}
 
-        public async Task<PartialViewResult> StoreSelectedLocations(List<string> selectedLocations)
-        {
-            using (Logging.MethodCall(this.GetType()))
-            {
-                try
-                {
-                    Logging.Verbose("SelectedLocations: {locations}", selectedLocations);
-                    var locations = new List<Location>();
-                    if (selectedLocations != null)
-                    {
-                        selectedLocations = selectedLocations.Where(l => l.StartsWith("|STA|")).ToList();
-                        Logging.Verbose("SelectedStations: {locations}", selectedLocations);
-                        locations = (await GetLocations()).Where(l => selectedLocations.Contains(l.Key)).OrderBy(l => l.Text).ToList();
-                    }
-                    Logging.Verbose("Locations: {@locations}", locations);
-                    TempData["Locations"] = locations;
-                    System.Web.HttpContext.Current.Session["Locations"] = locations;
-                    return PartialView("SelectedLocationsPost", locations);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex);
-                    throw;
-                }
-            }
-        }
+        //public PartialViewResult StoreSelectedLocations(List<string> locations)
+        //{
+        //    using (Logging.MethodCall(this.GetType()))
+        //    {
+        //        try
+        //        {
+        //            Logging.Verbose("SelectedLocations: {locations}", locations);
+        //            var selectedLocations = new List<Location>();
+        //            if (locations != null)
+        //            {
+        //                var stations = locations.Where(l => l.StartsWith("|STA|")).ToList();
+        //                Logging.Verbose("SelectedStations: {stations}", stations);
+        //                selectedLocations = ((List<Location>)CurrentSession["Locations"])
+        //                    .Where(l => stations.Contains(l.Key))
+        //                    .OrderBy(l => l.Text)
+        //                    .ToList();
+        //            }
+        //            Logging.Verbose("SelectedLocations: {@locations}", selectedLocations);
+        //            CurrentSession["SelectedLocations"] = selectedLocations;
+        //            return PartialView("SelectedLocationsPost", selectedLocations);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Logging.Exception(ex);
+        //            throw;
+        //        }
+        //    }
+        //}
 
         protected async Task<List<Feature>> GetFeatures()
         {

@@ -13,7 +13,7 @@ using System.Web.OData;
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    //[Authorize]
+    [Authorize]
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {
         protected ObservationsDbContext db = new ObservationsDbContext();

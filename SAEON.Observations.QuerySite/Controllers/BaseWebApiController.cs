@@ -8,13 +8,17 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
+    [Authorize]
     public class BaseWebApiController : Controller
     {
         private static string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;
         //private static string identityUrl = Properties.Settings.Default.IdentityServerUrl;
+
+        //protected HttpSessionState CurrentSession { get { return System.Web.HttpContext.Current.Session; } }
 
         protected async Task<IEnumerable<TEntity>> GetList<TEntity>(string resource)// where TEntity : BaseEntity
         {
