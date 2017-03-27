@@ -1,0 +1,64 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model QueryModel
+@{
+    ViewBag.Title = "Query";
+    ViewBag.Description = "Features";
+}
+
+@using (Html.BeginForm("FeaturesPost", "Query", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-6">
+            @(Html.EJ().TreeView("treeViewFeatures")
+                                .TreeViewFields(field => field.Datasource(Model.Features)
+                                .Id("Key")
+                                .ParentId("ParentKey")
+                                .Text("Text")
+                                .HasChild("HasChildren")
+                                )
+                                .ClientSideEvents(events => events.NodeCheck("onUpdateSelectedFeatures").NodeUncheck("onUpdateSelectedFeatures"))
+                                .ShowCheckbox(true)
+                                .EnablePersistence()
+            )
+        </div>
+        <div class="col-md-6" id="PartialSelectedFeatures">
+            @Html.Partial("SelectedFeatures", Model)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <input type="submit" value="Locations" name="btnPrev" class="btn btn-default" />
+            <input type="submit" value="Time Frame" name="btnNext" class="btn btn-default" />
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    function onUpdateSelectedFeatures() {
+        treeObj = $("#treeViewFeatures").data('ejTreeView');
+        var checkedNodes = treeObj.getCheckedNodes();
+        var selectedFeatures = []
+        for (i = 0; i < checkedNodes.length; i++) {
+            var checkedNode = checkedNodes[i];
+            var nodeData = treeObj.getNode(checkedNode);
+            selectedFeatures.push(nodeData.id);
+        }
+        ajaxUpdateSelectedFeatures(selectedFeatures);
+    }
+    function ajaxUpdateSelectedFeatures(selectedFeatures) {
+        $.ajax({
+            url: "/Query/UpdateSelectedFeatures",
+            data: JSON.stringify({ Features: selectedFeatures }),
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                //alert(data)
+                $('#PartialSelectedFeatures').html(data);
+            },
+            error: function () {
+                alert("Oops");
+            }
+        });
+    }
+</script>

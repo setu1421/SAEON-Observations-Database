@@ -1,5 +1,5 @@
-﻿@using SAEON.Observations.Core
-@model List<Feature>
-@Html.EJ().ListView("SelectedFeatures").ShowHeader(true).HeaderTitle("Selected").DataSource(Model).FieldSettings(fs => fs.Text("Name"))
+﻿@using SAEON.Observations.QuerySite.Models
+@model QueryModel
+@Html.EJ().ListView("SelectedFeatures").ShowHeader(true).HeaderTitle("Selected").DataSource(Model.SelectedFeatures).FieldSettings(fs => fs.Text("Name"))
 @Html.EJ().ScriptManager()
 

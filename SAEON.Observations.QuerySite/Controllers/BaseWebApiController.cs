@@ -16,9 +16,35 @@ namespace SAEON.Observations.QuerySite.Controllers
     public class BaseWebApiController : Controller
     {
         private static string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;
+        private string sessionModelKey;
         //private static string identityUrl = Properties.Settings.Default.IdentityServerUrl;
 
-        //protected HttpSessionState CurrentSession { get { return System.Web.HttpContext.Current.Session; } }
+        public BaseWebApiController() : base()
+        {
+            sessionModelKey = this.GetType().Name + "Model";
+        }
+
+        private HttpSessionState CurrentSession { get { return System.Web.HttpContext.Current.Session; } }
+
+        protected TEntity GetSessionModel<TEntity>() where TEntity: class, new()
+        {
+            if (CurrentSession[sessionModelKey] == null)
+            {
+                CurrentSession[sessionModelKey] = new TEntity();
+            }
+            return (TEntity)CurrentSession[sessionModelKey];
+
+        }
+
+        protected void SetSessionModel<TEntity>(TEntity value)
+        {
+            CurrentSession[sessionModelKey] = value;
+        }
+
+        protected void RemoveSessionModel()
+        {
+            CurrentSession.Remove(sessionModelKey);
+        }
 
         protected async Task<IEnumerable<TEntity>> GetList<TEntity>(string resource)// where TEntity : BaseEntity
         {

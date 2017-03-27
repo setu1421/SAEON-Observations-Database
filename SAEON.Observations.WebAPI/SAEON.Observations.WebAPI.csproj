@@ -384,7 +384,8 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Connected Services\Application Insights\ConnectedService.json" />
-    <Content Include="Connections.config" />
+    <Content Include="ConnectionStrings.config" />
+    <Content Include="MachineKey.config" />
     <None Include="Properties\PublishProfiles\Afrihost.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

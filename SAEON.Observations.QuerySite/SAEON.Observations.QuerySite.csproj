@@ -625,6 +625,7 @@
     <Content Include="Content\ej\mobile\images\ejmmobilefonts.woff" />
     <Content Include="Content\ej\mobile\images\ejmmobilefonts.ttf" />
     <Content Include="Content\ej\mobile\images\ejmmobilefonts.eot" />
+    <Content Include="MachineKey.config" />
     <None Include="Properties\PublishProfiles\Afrihost.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -828,6 +829,8 @@
     <Content Include="Views\Query\SelectedLocationsPost.cshtml" />
     <Content Include="Views\Query\SelectedFeatures.cshtml" />
     <Content Include="Views\Query\SelectedFeaturesPost.cshtml" />
+    <Content Include="Views\Query\Locations.cshtml" />
+    <Content Include="Views\Query\Features.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

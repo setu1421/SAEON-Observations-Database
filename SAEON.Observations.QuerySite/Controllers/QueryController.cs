@@ -13,7 +13,8 @@ namespace SAEON.Observations.QuerySite.Controllers
     [Authorize]
     public class QueryController : BaseWebApiController
     {
-        public QueryController()
+
+        public QueryController() : base()
         {
             using (Logging.MethodCall(this.GetType()))
             {
@@ -24,91 +25,153 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             using (Logging.MethodCall(this.GetType()))
             {
+                base.Dispose(disposing);
             }
-            base.Dispose(disposing);
+        }
+
+        private QueryModel SessionModel
+        {
+            get
+            {
+                return GetSessionModel<QueryModel>();
+            }
+            set
+            {
+                SetSessionModel<QueryModel>(value);
+            }
         }
 
         // GET: Query
         public async Task<ActionResult> Index()
         {
-            //ViewBag.WebAPIUrl = Properties.Settings.Default.WebAPIUrl;
-            ////if (CurrentSession["Locations"] == null)
-            //{
-            //    CurrentSession["Locations"] = GetLocations();
-            //}
-            //ViewBag.Locations = (List<Location>)CurrentSession["Locations"];
-            //CurrentSession["SelectedLocations"] = new List<Location>();
-            //ViewBag.SelectedLocations = (List<Location>)CurrentSession["SelectedLocations"];
-            ////if (CurrentSession["Features"] == null)
-            //{
-            //    CurrentSession["Features"] = GetFeatures();
-            //}
-            //ViewBag.Features = (List<Feature>)CurrentSession["Features"];
-            //CurrentSession["SelectedFeatures"] = new List<Feature>();
-            //ViewBag.SelectedFeatures = (List<Feature>)CurrentSession["SelectedFeatures"];
-            var model = new QueryModel { Locations = await GetLocations(), Features = await GetFeatures() };
-            model.SelectedFeatures.Add(model.Features.First(i => i.Key.StartsWith("OFF~")));
-            model.SelectedLocations.Add(model.Locations.First(i => i.Key.StartsWith("STA~")));
-            return View("Wizard", model);
+            using (Logging.MethodCall(this.GetType()))
+            {
+                var model = SessionModel;
+                if (model.Locations == null)
+                {
+                    model.Locations = await GetLocations();
+                }
+                if (model.Features == null)
+                {
+                    model.Features = await GetFeatures();
+                }
+                SessionModel = model;
+                Logging.Verbose("Model: {@model}", model);
+                return View("Features", model);
+            }
         }
 
-        //public PartialViewResult StoreSelectedFeatures(List<string> features)
-        //{
-        //    using (Logging.MethodCall(this.GetType()))
-        //    {
-        //        try
-        //        {
-        //            Logging.Verbose("SelectedFeatures: {features}", features);
-        //            var selectedFeatures = new List<Feature>();
-        //            if (features != null)
-        //            {
-        //                var offerings = features.Where(l => l.StartsWith("|OFF|")).ToList();
-        //                Logging.Verbose("SelectedOfferings: {offerings}", offerings);
-        //                selectedFeatures = ((List<Feature>)CurrentSession["Features"])
-        //                    .Where(l => offerings.Contains(l.Key))
-        //                    .OrderBy(l => l.Text)
-        //                    .ToList();
-        //            }
-        //            Logging.Verbose("SelectedFeatures: {@selectedFeatures}", selectedFeatures);
-        //            CurrentSession["SelectedFeatures"] = selectedFeatures;
-        //            return PartialView("SelectedFeaturesPost", selectedFeatures);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logging.Exception(ex);
-        //            throw;
-        //        }
-        //    }
-        //}
+        [HttpGet]
+        public ActionResult Locations()
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                return View(SessionModel);
+            }
+        }
 
-        //public PartialViewResult StoreSelectedLocations(List<string> locations)
-        //{
-        //    using (Logging.MethodCall(this.GetType()))
-        //    {
-        //        try
-        //        {
-        //            Logging.Verbose("SelectedLocations: {locations}", locations);
-        //            var selectedLocations = new List<Location>();
-        //            if (locations != null)
-        //            {
-        //                var stations = locations.Where(l => l.StartsWith("|STA|")).ToList();
-        //                Logging.Verbose("SelectedStations: {stations}", stations);
-        //                selectedLocations = ((List<Location>)CurrentSession["Locations"])
-        //                    .Where(l => stations.Contains(l.Key))
-        //                    .OrderBy(l => l.Text)
-        //                    .ToList();
-        //            }
-        //            Logging.Verbose("SelectedLocations: {@locations}", selectedLocations);
-        //            CurrentSession["SelectedLocations"] = selectedLocations;
-        //            return PartialView("SelectedLocationsPost", selectedLocations);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logging.Exception(ex);
-        //            throw;
-        //        }
-        //    }
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult LocationsPost(QueryModel data)
+        {
+            using (Logging.MethodCall<QueryModel>(this.GetType()))
+            {
+                RedirectToAction("Features");
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Features()
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                return View(SessionModel);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult FeaturesPost(QueryModel data)
+        {
+            using (Logging.MethodCall<QueryModel>(this.GetType()))
+            {
+                RedirectToAction("TimeFrame");
+                return View();
+            }
+        }
+
+        public PartialViewResult UpdateSelectedFeatures(List<string> features)
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                try
+                {
+                    Logging.Verbose("SelectedFeatures: {features}", features);
+                    var model = SessionModel;
+                    var selectedFeatures = new List<Feature>();
+                    if (features != null)
+                    {
+                        // Set IsCheck for all
+                        foreach (var feature in model.Features.Where(i => features.Contains(i.Key)))
+                        {
+                            feature.IsChecked = true;
+                        }
+                        // Only select offerings
+                        var offerings = features.Where(l => l.StartsWith("OFF~")).ToList();
+                        Logging.Verbose("SelectedOfferings: {offerings}", offerings);
+                        selectedFeatures = model.Features.Where(l => offerings.Contains(l.Key)).OrderBy(l => l.Text).ToList();
+                    }
+                    Logging.Verbose("SelectedFeatures: {@features}", selectedFeatures);
+                    model.SelectedFeatures = selectedFeatures;
+                    SessionModel = model;
+                    Logging.Verbose("Model: {@model}", model);
+                    return PartialView("SelectedFeaturesPost", model);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public PartialViewResult UpdateSelectedLocations(List<string> locations)
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                try
+                {
+                    Logging.Verbose("SelectedLocations: {locations}", locations);
+                    var model = SessionModel;
+                    var selectedLocations = new List<Location>();
+                    if (locations != null)
+                    {
+                        // Set IsCheck for all
+                        foreach (var location in model.Locations.Where(i => locations.Contains(i.Key)))
+                        {
+                            location.IsChecked = true;
+                        }
+                        // Only select stations
+                        var stations = locations.Where(l => l.StartsWith("STA~")).ToList();
+                        Logging.Verbose("SelectedStations: {stations}", stations);
+                        selectedLocations = model.Locations.Where(l => stations.Contains(l.Key)).OrderBy(l => l.Name).ToList();
+                    }
+                    Logging.Verbose("SelectedLocations: {@locations}", selectedLocations);
+                    model.SelectedLocations = selectedLocations;
+                    SessionModel = model;
+                    Logging.Verbose("Model: {@model}", model);
+                    return PartialView("SelectedLocationsPost", model);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
 
         protected async Task<List<Feature>> GetFeatures()
         {
