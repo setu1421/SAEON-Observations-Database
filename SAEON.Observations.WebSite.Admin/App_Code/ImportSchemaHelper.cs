@@ -60,22 +60,40 @@ public class ImportSchemaHelper : IDisposable
         {
             throw new IndexOutOfRangeException("Column Names line greater than lines in source file");
         }
+        List<string> columnNames = lines[columnNamesLine].Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None).ToList();
+        List<string> badColumnNames = columnNames
+            .GroupBy(x => x)
+            .Where(g => g.Count() > 1)
+            .Select(y => y.Key)
+            .ToList();
+        if (badColumnNames.Any())
         {
-            List<string> columnNames = lines[columnNamesLine].Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None).ToList();
-            List<string> badColumnNames = columnNames
-                .GroupBy(x => x)
-                .Where(g => g.Count() > 1)
-                .Select(y => y.Key)
-                .ToList();
-            if (badColumnNames.Any())
-            {
-                throw new InvalidOperationException("Duplicate column names found " + string.Join(", ", columnNames));
-            }
-            else
-            {
-                result.AddRange(columnNames);
-            }
+            throw new InvalidOperationException("Duplicate column names found " + string.Join(", ", columnNames));
         }
+        result.AddRange(columnNames);
+        return result;
+    }
+
+    private List<string> LoadColumnNamesFixedWidth(DataSchema schema, string data)
+    {
+        List<string> result = new List<string>();
+        string[] lines = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+        int columnNamesLine = schema.IgnoreFirst;
+        if (columnNamesLine >= lines.Length)
+        {
+            throw new IndexOutOfRangeException("Column Names line greater than lines in source file");
+        }
+        List<string> columnNames = lines[columnNamesLine].Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None).ToList();
+        List<string> badColumnNames = columnNames
+            .GroupBy(x => x)
+            .Where(g => g.Count() > 1)
+            .Select(y => y.Key)
+            .ToList();
+        if (badColumnNames.Any())
+        {
+            throw new InvalidOperationException("Duplicate column names found " + string.Join(", ", columnNames));
+        }
+        result.AddRange(columnNames);
         return result;
     }
 
