@@ -48,7 +48,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     protected void NodeLoad(object sender, NodeLoadEventArgs e)
     {
-        using (LogContext.PushProperty("Method", "NodeLoad"))
+        using (LogContext.PushProperty("Method", $"NodeLoad({e.NodeID})"))
             try
             {
                 if (e.NodeID.StartsWith("Organisations"))
@@ -59,8 +59,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .Distinct()
                         .OrderAsc(Organisation.Columns.Name)
                         .ExecuteAsCollection<OrganisationCollection>();
+                    Log.Verbose("Organisations: {count}", col.Count());
                     foreach (var item in col)
                     {
+                        Log.Verbose("Organisation: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Organisation_" + item.Id.ToString(), item.Name, Icon.ResultsetNext);
                         e.Nodes.Add(node);
                         var q = new Query(OrganisationSite.Schema).AddWhere(OrganisationSite.Columns.OrganisationID, item.Id).GetCount(OrganisationSite.Columns.SiteID);
@@ -87,8 +89,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .OrderAsc(SAEON.Observations.Data.Site.Columns.Name)
                         .Distinct()
                         .ExecuteAsCollection<SiteCollection>();
+                    Log.Verbose("Sites: {count}", col.Count());
                     foreach (var item in col)
                     {
+                        Log.Verbose("Site: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Site_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
@@ -118,8 +122,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .OrderAsc(Station.Columns.Name)
                         .Distinct()
                         .ExecuteAsCollection<StationCollection>();
+                    Log.Verbose("Stations: {count}", col.Count());
                     foreach (var item in col)
                     {
+                        Log.Verbose("Station: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Station_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
@@ -150,8 +156,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .OrderAsc(Instrument.Columns.Name)
                         .Distinct()
                         .ExecuteAsCollection<InstrumentCollection>();
+                    Log.Verbose("Instruments: {count}", col.Count());
                     foreach (var item in col)
                     {
+                        Log.Verbose("Instrument: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Instrument_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
@@ -182,8 +190,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .OrderAsc(Instrument.Columns.Name)
                         .Distinct()
                         .ExecuteAsCollection<SensorCollection>();
+                    Log.Verbose("Sensors: {count}", col.Count());
                     foreach (var item in col)
                     {
+                        Log.Verbose("Sensor: {name}", item.Name);
                         AsyncTreeNode node = new AsyncTreeNode("Sensor_" + item.Id.ToString() + "|" + e.NodeID, item.Name)
                         {
                             Icon = Icon.ResultsetNext,
@@ -215,8 +225,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     var phenomenon = new Phenomenon(e.NodeID.Split('|')[0].Split('_')[1]);
                     var items = e.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
                     var col = GetPhenomenonOfferings(items.Where(i => i.Item1 == "Sensor").Select(i => Utilities.MakeGuid(i.Item2)).First());
+                    Log.Verbose("Offerings: {count}", col.Count());
                     foreach (var item in col)
                     {
+                        Log.Verbose("Phenomenon: {phenomenon} Offering: {offering}", item.Phenomenon.Name, item.Offering.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Offering_" + item.Id.ToString() + "|" + e.NodeID, item.Offering.Name, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False,

@@ -81,7 +81,7 @@
                                     </ext:Toolbar>
                                 </TopBar>
                                 <Loader>
-                                    <ext:PageTreeLoader OnNodeLoad="NodeLoad" />
+                                    <ext:PageTreeLoader OnNodeLoad="NodeLoad" Timeout="900000"/>
                                 </Loader>
                                 <Listeners>
                                     <Click Handler="#{FilterTreeBottomBar}.setStatus({text: 'Node Selected: <b>' + node.text + '</b>', clear: true});" />
