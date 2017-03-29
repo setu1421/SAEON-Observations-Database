@@ -39,7 +39,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     private PhenomenonOfferingCollection GetPhenomenonOfferings(Guid sensorId)
     {
-        QueryCommand cmd = new QueryCommand("Select * from PhenomenonOffering where Exists(Select * from Observation where (Observation.SensorID = @SensorID) and (Observation.PhenomenonOfferingID = PhenomenonOffering.ID))", PhenomenonOffering.Schema.Provider.Name);
+        QueryCommand cmd = new QueryCommand("Select * from PhenomenonOffering where Exists(Select top (1) * from Observation where (Observation.SensorID = @SensorID) and (Observation.PhenomenonOfferingID = PhenomenonOffering.ID))", PhenomenonOffering.Schema.Provider.Name);
         cmd.AddParameter("@SensorID", sensorId, DbType.Guid);
         PhenomenonOfferingCollection result = new PhenomenonOfferingCollection();
         result.LoadAndCloseReader(DataService.GetReader(cmd));

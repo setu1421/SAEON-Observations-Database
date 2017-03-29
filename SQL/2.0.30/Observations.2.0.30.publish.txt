@@ -1,0 +1,19 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Create
+       [dbo].[Observation].[IX_Observation_SensorIDPhenomenonOfferingID] (Index)
+
+** Supporting actions
+
+The source's object [Documents] is different than the target's version of the object but the target object will not be updated.
+The object [Documents] already exists in database with a different definition and will not be altered.
+

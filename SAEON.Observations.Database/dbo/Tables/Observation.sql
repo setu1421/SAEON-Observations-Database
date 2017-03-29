@@ -149,6 +149,10 @@ CREATE INDEX [IX_Observation_StatusReasonID] ON [dbo].[Observation] ([StatusReas
 GO
 CREATE INDEX [IX_Observation_CorrelationID] ON [dbo].[Observation] ([CorrelationID]) ON [Observations];
 --< Added 2.0.15 20161024 TimPN
+--> Added 2.0.30 20170329 TimPN
+GO
+CREATE INDEX [IX_Observation_SensorIDPhenomenonOfferingID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID]) ON [Observations];
+--< Added 2.0.30 20170329 TimPN
 --> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]
