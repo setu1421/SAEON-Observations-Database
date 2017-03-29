@@ -1,38 +1,18 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model QueryModel
-@{
-    ViewBag.Title = "Query";
-    ViewBag.Description = "Features";
-}
-
-@using (Html.BeginForm("FeaturesPost", "Query", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <div class="row">
-        <div class="col-md-6">
-            @(Html.EJ().TreeView("treeViewFeatures")
-                                .TreeViewFields(field => field.Datasource(Model.Features)
-                                .Id("Key")
-                                .ParentId("ParentKey")
-                                .Text("Text")
-                                .HasChild("HasChildren")
-                                )
-                                .ClientSideEvents(events => events.NodeCheck("onUpdateSelectedFeatures").NodeUncheck("onUpdateSelectedFeatures"))
-                                .ShowCheckbox(true)
-                                .EnablePersistence()
-            )
-        </div>
-        <div class="col-md-6" id="PartialSelectedFeatures">
-            @Html.Partial("SelectedFeatures", Model)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <input type="submit" value="Locations" name="btnPrev" class="btn btn-default" />
-            <input type="submit" value="Time Frame" name="btnNext" class="btn btn-default" />
-        </div>
-    </div>
-}
+@(Html.EJ().TreeView("treeViewFeatures")
+    .TreeViewFields(field => field.Datasource(Model.Features)
+        .Id("Key")
+        .ParentId("ParentKey")
+        .Text("Text")
+        .HasChild("HasChildren")
+        .IsChecked("IsChecked")
+        .Expanded("IsExpanded")
+        .Selected("IsSelected")
+    )
+    .ClientSideEvents(events => events.NodeCheck("onUpdateSelectedFeatures").NodeUncheck("onUpdateSelectedFeatures"))
+    .ShowCheckbox(true)
+)
 <script type="text/javascript">
     function onUpdateSelectedFeatures() {
         treeObj = $("#treeViewFeatures").data('ejTreeView');

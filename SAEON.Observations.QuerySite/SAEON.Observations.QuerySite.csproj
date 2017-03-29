@@ -831,6 +831,7 @@
     <Content Include="Views\Query\SelectedFeaturesPost.cshtml" />
     <Content Include="Views\Query\Locations.cshtml" />
     <Content Include="Views\Query\Features.cshtml" />
+    <Content Include="Views\Query\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

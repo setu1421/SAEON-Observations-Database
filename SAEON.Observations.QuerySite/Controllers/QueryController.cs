@@ -57,85 +57,14 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
                 SessionModel = model;
                 Logging.Verbose("Model: {@model}", model);
-                return View("Features", model);
+                return View(model);
             }
         }
 
-        [HttpGet]
-        public ActionResult Locations()
+        #region Locations
+        protected async Task<List<Location>> GetLocations()
         {
-            using (Logging.MethodCall(this.GetType()))
-            {
-                return View(SessionModel);
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult LocationsPost(QueryModel data)
-        {
-            using (Logging.MethodCall<QueryModel>(this.GetType()))
-            {
-                RedirectToAction("Features");
-                return View();
-            }
-        }
-
-        [HttpGet]
-        public ActionResult Features()
-        {
-            using (Logging.MethodCall(this.GetType()))
-            {
-                return View(SessionModel);
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult FeaturesPost(QueryModel data)
-        {
-            using (Logging.MethodCall<QueryModel>(this.GetType()))
-            {
-                RedirectToAction("TimeFrame");
-                return View();
-            }
-        }
-
-        public PartialViewResult UpdateSelectedFeatures(List<string> features)
-        {
-            using (Logging.MethodCall(this.GetType()))
-            {
-                try
-                {
-                    Logging.Verbose("SelectedFeatures: {features}", features);
-                    var model = SessionModel;
-                    var selectedFeatures = new List<Feature>();
-                    if (features != null)
-                    {
-                        // Set IsCheck for all
-                        foreach (var feature in model.Features.Where(i => features.Contains(i.Key)))
-                        {
-                            feature.IsChecked = true;
-                        }
-                        // Only select offerings
-                        var offerings = features.Where(l => l.StartsWith("OFF~")).ToList();
-                        Logging.Verbose("SelectedOfferings: {offerings}", offerings);
-                        selectedFeatures = model.Features.Where(l => offerings.Contains(l.Key)).OrderBy(l => l.Text).ToList();
-                    }
-                    Logging.Verbose("SelectedFeatures: {@features}", selectedFeatures);
-                    model.SelectedFeatures = selectedFeatures;
-                    SessionModel = model;
-                    Logging.Verbose("Model: {@model}", model);
-                    return PartialView("SelectedFeaturesPost", model);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex);
-                    throw;
-                }
-            }
+            return (await GetList<Location>("Locations")).ToList();
         }
 
         public PartialViewResult UpdateSelectedLocations(List<string> locations)
@@ -172,16 +101,49 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+        #endregion
+
+        #region Features
+        public PartialViewResult UpdateSelectedFeatures(List<string> features)
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                try
+                {
+                    Logging.Verbose("SelectedFeatures: {features}", features);
+                    var model = SessionModel;
+                    var selectedFeatures = new List<Feature>();
+                    if (features != null)
+                    {
+                        // Set IsCheck for all
+                        foreach (var feature in model.Features.Where(i => features.Contains(i.Key)))
+                        {
+                            feature.IsChecked = true;
+                        }
+                        // Only select offerings
+                        var offerings = features.Where(l => l.StartsWith("OFF~")).ToList();
+                        Logging.Verbose("SelectedOfferings: {offerings}", offerings);
+                        selectedFeatures = model.Features.Where(l => offerings.Contains(l.Key)).OrderBy(l => l.Text).ToList();
+                    }
+                    Logging.Verbose("SelectedFeatures: {@features}", selectedFeatures);
+                    model.SelectedFeatures = selectedFeatures;
+                    SessionModel = model;
+                    Logging.Verbose("Model: {@model}", model);
+                    return PartialView("SelectedFeaturesPost", model);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
 
         protected async Task<List<Feature>> GetFeatures()
         {
             return (await GetList<Feature>("Features")).ToList();
         }
 
-        protected async Task<List<Location>> GetLocations()
-        {
-            return (await GetList<Location>("Locations")).ToList();
-        }
-
+        #endregion
     }
 }

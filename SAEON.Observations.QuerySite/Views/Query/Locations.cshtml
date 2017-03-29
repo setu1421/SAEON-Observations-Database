@@ -1,37 +1,22 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model QueryModel
-@{
-    ViewBag.Title = "Query";
-    ViewBag.Description = "Locations";
-}
-
-@using (Html.BeginForm("LocationsPost", "Query", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <div class="row">
-        <div class="col-md-6">
-            @(Html.EJ().TreeView("treeViewLocations")
-                                .TreeViewFields(field => field.Datasource(Model.Locations)
-                                .Id("Key")
-                                .ParentId("ParentKey")
-                                .Text("Text")
-                                .HasChild("HasChildren")
-                                )
-                                .ClientSideEvents(events => events.NodeCheck("onUpdateSelectedLocations").NodeUncheck("onUpdateSelectedLocations"))
-                                .ShowCheckbox(true)
-                                .EnablePersistence()
-            )
-        </div>
-        <div class="col-md-6" id="PartialSelectedLocations">
-            @Html.Partial("SelectedLocations", Model)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <input type="submit" value="Features" name="btnNext" class="btn btn-default" />
-        </div>
-    </div>
-}
+@(
+Html.EJ().TreeView("treeViewLocations")
+    .TreeViewFields(field => field
+        .Datasource(Model.SelectedLocations)
+        .Id("Key")
+        .ParentId("ParentKey")
+        .Text("Text")
+        .HasChild("HasChildren")
+        .IsChecked("IsChecked")
+        .Expanded("IsExpanded")
+        .Selected("IsSelected")
+    )
+    .ClientSideEvents(events => events
+        .NodeCheck("onUpdateSelectedLocations")
+        .NodeUncheck("onUpdateSelectedLocations"))
+    .ShowCheckbox(true)
+)
 <script type="text/javascript">
     function onUpdateSelectedLocations() {
         treeObj = $("#treeViewLocations").data('ejTreeView');
@@ -42,7 +27,6 @@
             var nodeData = treeObj.getNode(checkedNode);
             selectedLocations.push(nodeData.id);
         }
-        //if (selectedLocations.length > 0)
         ajaxUpdateSelectedLocations(selectedLocations);
     }
     function ajaxUpdateSelectedLocations(selectedLocations) {
