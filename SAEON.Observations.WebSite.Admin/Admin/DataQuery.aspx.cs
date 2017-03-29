@@ -290,7 +290,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
         if (FilterTree.CheckedNodes == null)
         {
-            this.ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix], fromDate, ToDate);
+            //this.ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix], fromDate, ToDate);
+            this.ObservationsGrid.GetStore().DataSource = null;
         }
         else
         {
