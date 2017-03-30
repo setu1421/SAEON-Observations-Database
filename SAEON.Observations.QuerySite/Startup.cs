@@ -56,7 +56,7 @@ namespace SAEON.Observations.QuerySite
                         {
                             AuthorizationCodeReceived = async n =>
                             {
-                                var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType, "givven_name", "role");
+                                var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType, Constants.GivenName, Constants.Roles);
 
                                 var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo"), n.ProtocolMessage.AccessToken);
                                 var userInfo = await userInfoClient.GetAsync();

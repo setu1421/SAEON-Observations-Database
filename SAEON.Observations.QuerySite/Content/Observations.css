@@ -24,7 +24,16 @@ body {
 }
 
 .navbar-inverse {
-  background-color: #567baf;
-  border-color: #567baf;
+    background-color: #567baf;
+    border-color: #567baf;
 }
 
+/*.listViewSelectedLocations {
+    width: auto;
+    height: auto;
+}
+
+.listViewSelectedFeatures {
+    width: auto;
+    height: auto;
+}*/

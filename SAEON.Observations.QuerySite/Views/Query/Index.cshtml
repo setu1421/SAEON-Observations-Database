@@ -14,75 +14,19 @@
                                 @Html.Partial("Locations", Model)
                             </div>
                             <div class="col-md-6" id="PartialSelectedLocations">
-                                @*@Html.Partial("SelectedLocations", Model)*@
+                                @Html.Partial("SelectedLocations", Model)
                             </div>
                         </div>);
-                    @*tabs.Add().ID("FeaturesTab").Text("Features").ContentTemplate(
+                    tabs.Add().ID("FeaturesTab").Text("Features").ContentTemplate(
                         @<div class="row">
                             <div class="col-md-6" id="PartialFeatures">
-                                @Html.Partial("Features", Model);
+                                @Html.Partial("Features", Model)
                             </div>
                             <div class="col-md-6" id="PartialSelectedFeatures">
                                 @Html.Partial("SelectedFeatures", Model)
                             </div>
-                        </div>);*@
+                        </div>);
                 }).Render();}
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    function onUpdateSelectedLocations() {
-        treeObj = $("#treeViewLocations").data('ejTreeView');
-        var checkedNodes = treeObj.getCheckedNodes();
-        var selectedLocations = []
-        for (i = 0; i < checkedNodes.length; i++) {
-            var checkedNode = checkedNodes[i];
-            var nodeData = treeObj.getNode(checkedNode);
-            selectedLocations.push(nodeData.id);
-        }
-        ajaxUpdateSelectedLocations(selectedLocations);
-    }
-    function ajaxUpdateSelectedLocations(selectedLocations) {
-        $.ajax({
-            url: "/Query/StoreSelectedLocations",
-            data: JSON.stringify({ Locations: selectedLocations }),
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: "html",
-            success: function (data) {
-                //alert(data)
-                $('#PartialSelectedLocations').html(data);
-            },
-            error: function () {
-                alert("Oops");
-            }
-        });
-    }
-    //function onUpdateSelectedFeatures() {
-    //    treeObj = $("#treeViewFeatures").data('ejTreeView');
-    //    var checkedNodes = treeObj.getCheckedNodes();
-    //    var selectedFeatures = []
-    //    for (i = 0; i < checkedNodes.length; i++) {
-    //        var checkedNode = checkedNodes[i];
-    //        var nodeData = treeObj.getNode(checkedNode);
-    //        selectedFeatures.push(nodeData.id);
-    //    }
-    //    ajaxUpdateSelectedFeatures(selectedFeatures);
-    //}
-    //function ajaxUpdateSelectedFeatures(selectedFeatures) {
-    //    $.ajax({
-    //        url: "/Query/StoreSelectedFeatures",
-    //        data: JSON.stringify({ Features: selectedFeatures }),
-    //        type: "POST",
-    //        contentType: "application/json; charset=utf-8",
-    //        dataType: "html",
-    //        success: function (data) {
-    //            //alert(data)
-    //            $('#PartialSelectedFeatures').html(data);
-    //        },
-    //        error: function () {
-    //            alert("Oops");
-    //        }
-    //    });
-    //}
-</script>

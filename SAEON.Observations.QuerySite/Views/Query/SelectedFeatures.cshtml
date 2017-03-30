@@ -1,9 +1,11 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model QueryModel
-@Html.EJ()
+@(Html.EJ()
     .ListView("listViewSelectedFeatures")
+    .AutoAdjustHeight(true)
+    //.AutoAdjustScrollHeight(true)
     .ShowHeader(true)
     .HeaderTitle("Selected")
     .DataSource(Model.SelectedFeatures)
-    .FieldSettings(fs => fs.Text("Name"))
+    .FieldSettings(fs => fs.Text("Name")))
 

@@ -3,7 +3,7 @@
 @(
 Html.EJ().TreeView("treeViewLocations")
     .TreeViewFields(field => field
-        .Datasource(Model.SelectedLocations)
+        .Datasource(Model.Locations)
         .Id("Key")
         .ParentId("ParentKey")
         .Text("Text")

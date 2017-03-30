@@ -1,10 +1,12 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model QueryModel
-@Html.EJ()
+@(Html.EJ()
     .ListView("listViewSelectedLocations")
+    .AutoAdjustHeight(true)
+    //.AutoAdjustScrollHeight(true)
     .ShowHeader(true)
     .HeaderTitle("Selected")
     .DataSource(Model.SelectedLocations)
-    .FieldSettings(fs => fs.Text("Name"))
+    .FieldSettings(fs => fs.Text("Name")))
 @Html.EJ().ScriptManager()
 
