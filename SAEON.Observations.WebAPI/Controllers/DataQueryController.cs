@@ -43,11 +43,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         [HttpPost]
         //[Route("{stationIds}/{phenomenonOfferingIds}/{startDate:datetime?}/{enddate:datetime?}")]
         [Route]
-        public List<object> GetDataQuery([FromBody] string stationIds, [FromBody] string phenomenonOfferingIds, [FromBody] DateTime? startDate, [FromBody] DateTime? endDate)
+        public List<object> GetDataQuery([FromBody] string locations, [FromBody] string features, [FromBody] DateTime? startDate, [FromBody] DateTime? endDate)
         {
             using (Logging.MethodCall(this.GetType(), new ParameterList {
-                { "StationIds", stationIds },
-                { "PhenomenonOfferingIds", phenomenonOfferingIds },
+                { "StationIds", locations },
+                { "PhenomenonOfferingIds", features },
                 { "StartDate", startDate },
                 { "EndDate", endDate } }))
             {
@@ -55,14 +55,14 @@ namespace SAEON.Observations.WebAPI.Controllers
                 {
                     db.Configuration.AutoDetectChangesEnabled = false;
                     var query = db.VDownloads.AsQueryable();
-                    if (!string.IsNullOrEmpty(stationIds))
+                    if (!string.IsNullOrEmpty(locations))
                     {
-                        List<string> stations = stationIds.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
+                        List<string> stations = locations.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
                         query = query.Where(i => stations.Contains(i.StationId.ToString()));
                     }
-                    if (!string.IsNullOrEmpty(phenomenonOfferingIds))
+                    if (!string.IsNullOrEmpty(features))
                     {
-                        List<string> offerings = phenomenonOfferingIds.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
+                        List<string> offerings = features.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
                         query = query.Where(i => offerings.Contains(i.PhenomenonOfferingId.ToString()));
                     }
                     if (startDate.HasValue)
