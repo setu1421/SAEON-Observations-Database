@@ -91,6 +91,10 @@ namespace SAEON.Observations.Core
         /// Phenomena of this Offering
         /// </summary>
         public List<Phenomenon> Phenomena { get; set; }
+        /// <summary>
+        /// PhenomenaOfferings of this Offering
+        /// </summary>
+        public List<PhenomenonOffering> PhenomenaOfferings { get; set; }
     }
 
     /// <summary>
@@ -115,7 +119,7 @@ namespace SAEON.Observations.Core
         [Url, StringLength(250)]
         public string Url { get; set; }
 
-        public bool HasSites { get { return Sites?.Any() ?? false; } }
+        //public bool HasSites { get { return Sites?.Any() ?? false; } }
         // Navigation
 
         /// <summary>
@@ -137,7 +141,8 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// <summary>
         /// Description of the Phenomenon
-        /// </summary>
+ 
+            /// </summary>
         [StringLength(5000)]
         public string Description { get; set; }
         /// <summary>
@@ -146,10 +151,15 @@ namespace SAEON.Observations.Core
         [Url, StringLength(250)]
         public string Url { get; set; }
 
-        public bool HasOfferings { get { return Offerings?.Any() ?? false; } }
-        public bool HasUnitsOfMeasure { get { return UnitsOfMeasure?.Any() ?? false; } }
+        //public bool HasOfferings { get { return Offerings?.Any() ?? false; } }
+        //public bool HasUnitsOfMeasure { get { return UnitsOfMeasure?.Any() ?? false; } }
 
         // Navigation
+
+        /// <summary>
+        /// PhenomenonOfferings linked to this Phenomenon
+        /// </summary>
+        public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
         /// <summary>
         /// Sensors linked to this Phenomenon
         /// </summary>
@@ -157,11 +167,30 @@ namespace SAEON.Observations.Core
         /// <summary>
         /// Offerings of this Phenomenon
         /// </summary>
-        public List<Offering> Offerings { get; set; }
+        //public List<Offering> Offerings { get; set; }
+        public List<Offering> Offerings { get { return PhenomenonOfferings?.Where(i => i.PhenomenonId == Id).Select(i => i.Offering).ToList(); } }
         /// <summary>
         /// UnitsOfMeasure of the Phenomenon
         /// </summary>
         public List<UnitOfMeasure> UnitsOfMeasure { get; set; }
+    }
+
+    public class PhenomenonOffering
+    {
+        //[Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ScaffoldColumn(false), HiddenInput]
+        public Guid Id { get; set; }
+        public Guid PhenomenonId { get; set; }
+        public Phenomenon Phenomenon { get; set; }
+        public Guid OfferingId { get; set; }
+        public Offering Offering { get; set; }
+        // Navigation
+        ///// <summary>
+        ///// Offerings of this Phenomenon
+        ///// </summary>
+        //public List<Offering> Offerings { get; set; }
     }
 
     /// <summary>
@@ -231,7 +260,7 @@ namespace SAEON.Observations.Core
         /// </summary>
         public DateTime? EndDate { get; set; }
 
-        public bool HasStations { get { return Stations?.Any() ?? false; } }
+        //public bool HasStations { get { return Stations?.Any() ?? false; } }
         // Navigation
 
         /// <summary>
@@ -392,6 +421,61 @@ namespace SAEON.Observations.Core
         public string UpdatedBy { get; set; }
     }
 
+    /// <summary>
+    /// Obvservation for Download entity
+    /// </summary>
+    public class VDownload
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ScaffoldColumn(false), HiddenInput]
+        public Guid Id { get; set; }
+        public Guid? SiteID { get; set; }
+        public string SiteCode { get; set; }
+        public string SiteName { get; set; }
+        public string SiteDescription { get; set; }
+        public string SiteUrl { get; set; }
+        public Guid? StationId { get; set; }
+        public string StationCode { get; set; }
+        public string StationName { get; set; }
+        public string StationDescription { get; set; }
+        public string StationUrl { get; set; }
+        public double? StationLatitude { get; set; }
+        public double? StationLongitude { get; set; }
+        public int? StationElevation { get; set; }
+        public Guid? InstrumentId { get; set; }
+        public string InstrumentCode { get; set; }
+        public string InstrumentName { get; set; }
+        public string InstrumentDescription { get; set; }
+        public string InstrumentUrl { get; set; }
+        public string SensorCode { get; set; }
+        public string SensorName { get; set; }
+        public string SensorDescription { get; set; }
+        public string SensorUrl { get; set; }
+        public Guid? PhenomenonId { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public string PhenomenonDescription { get; set; }
+        public string PhenomenonUrl { get; set; }
+        public Guid? PhenomenonOfferingId { get; set; }
+        public Guid? OfferingId { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        public string OfferingDescription { get; set; }
+        public Guid? UnitOfMeasureId { get; set; }
+        public string UnitOfMeasureCode { get; set; }
+        public string UnitOfMeasureUnit { get; set; }
+        public string UnitOfMeasureSymbol { get; set; }
+        public string Feature { get; set; }
+        [Column("ValueDate")]
+        public DateTime Date { get; set; }
+        //public double? RawValue { get; set; }
+        [Column("DataValue")]
+        public double? Value { get; set; }
+        public string Comment { get; set; }
+        public Guid? CorrelationId { get; set; }
+    }
+
     public class ObservationsDbContext : DbContext
     {
         public ObservationsDbContext() : base("Observations")
@@ -402,9 +486,11 @@ namespace SAEON.Observations.Core
         }
 
         public DbSet<Instrument> Instruments { get; set; }
+        public DbSet<VDownload> VDownloads { get; set; }
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }
+        public DbSet<PhenomenonOffering> PhenomenonOfferings { get; set; }
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Station> Stations { get; set; }
@@ -444,15 +530,15 @@ namespace SAEON.Observations.Core
                     cs.ToTable("Instrument_Sensor");
                 });
             modelBuilder.Entity<Phenomenon>().ToTable("Phenomenon");
-            modelBuilder.Entity<Phenomenon>()
-                .HasMany<Offering>(l => l.Offerings)
-                .WithMany(r => r.Phenomena)
-                .Map(cs =>
-                {
-                    cs.MapLeftKey("PhenomenonID");
-                    cs.MapRightKey("OfferingID");
-                    cs.ToTable("PhenomenonOffering");
-                });
+            //modelBuilder.Entity<Phenomenon>()
+            //    .HasMany<Offering>(l => l.Offerings)
+            //    .WithMany(r => r.Phenomena)
+            //    .Map(cs =>
+            //    {
+            //        cs.MapLeftKey("PhenomenonID");
+            //        cs.MapRightKey("OfferingID");
+            //        cs.ToTable("PhenomenonOffering");
+            //    });
             modelBuilder.Entity<UnitOfMeasure>().ToTable("UnitOfMeasure");
             modelBuilder.Entity<UnitOfMeasure>().Property(p => p.Name).HasColumnName("Unit");
             modelBuilder.Entity<UnitOfMeasure>().Property(p => p.Symbol).HasColumnName("UnitSymbol");

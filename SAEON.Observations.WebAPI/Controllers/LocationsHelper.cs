@@ -14,10 +14,11 @@ namespace SAEON.Observations.WebAPI.Controllers
             {
                 try
                 {
+                    db.Configuration.AutoDetectChangesEnabled = false;
                     var result = new List<Location>();
                     foreach (var organisation in db.Organisations
                         .Include(i => i.Sites.Select(s => s.Stations))
-                        //.Where(i => i.HasSites && i.Sites.Any(s => s.HasStations))
+                        .Where(i => i.Sites.Any(s => s.Stations.Any()))
                         .OrderBy(i => i.Name))
                     {
                         var organisationNode = new Location
@@ -26,10 +27,12 @@ namespace SAEON.Observations.WebAPI.Controllers
                             Key = $"ORG~{organisation.Id}~",
                             //Key = $"ORG-{organisation.Id}-ORG",
                             Text = organisation.Name,
-                            HasChildren = organisation.HasSites
+                            HasChildren = organisation.Sites.Any()
                         };
                         result.Add(organisationNode);
-                        foreach (var site in organisation.Sites/*.Where(i => i.HasStations)*/.OrderBy(i => i.Name))
+                        foreach (var site in organisation.Sites
+                            .Where(i => i.Stations.Any())
+                            .OrderBy(i => i.Name))
                         {
                             var siteNode = new Location
                             {
@@ -39,7 +42,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                                 //Key = $"SIT-{site.Id}-SIT",
                                 ParentKey = organisationNode.Key,
                                 Text = site.Name,
-                                HasChildren = site.HasStations
+                                HasChildren = site.Stations.Any()
                             };
                             result.Add(siteNode);
                             foreach (var station in site.Stations.OrderBy(i => i.Name))

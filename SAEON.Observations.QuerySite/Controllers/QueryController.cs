@@ -4,6 +4,7 @@ using Syncfusion.JavaScript;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -144,6 +145,62 @@ namespace SAEON.Observations.QuerySite.Controllers
             return (await GetList<Feature>("Features")).ToList();
         }
 
+        #endregion
+
+        #region Filters
+        public PartialViewResult UpdateFilters(DateTime startDate, DateTime endDate)
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                try
+                {
+                    Logging.Verbose("StartDate: {startDate} EndDate: {endDate}", startDate, endDate);
+                    var model = SessionModel;
+                    model.StartDate = startDate;
+                    model.EndDate = endDate;
+                    SessionModel = model;
+                    Logging.Verbose("Model: {@model}", model);
+                    return PartialView("FiltersPost", model);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region DataQuery
+        [HttpGet]
+        public async Task<PartialViewResult> DataQuery()
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    Logging.Verbose("Model: {@model}", model);
+                    var body = new FormUrlEncodedContent(new[]
+                        {
+                            new KeyValuePair<string, string>("locations", string.Join(",", model.SelectedLocations.Select(i => i.Id))),
+                            new KeyValuePair<string, string>("features", string.Join(",", model.SelectedFeatures.Select(i => i.Id))),
+                            new KeyValuePair<string, string>("startDate",model.StartDate.ToString("yyyy/MM/dd")),
+                            new KeyValuePair<string, string>("endDate",model.EndDate.ToString("yyyy/MM/dd"))
+                        });
+
+                    model.QueryResults = (await GetList<object>($"DataQuery",body)).ToList();
+                    SessionModel = model;
+                    Logging.Verbose("Model: {@model}", model);
+                    return PartialView("QueryResults", model);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
         #endregion
     }
 }

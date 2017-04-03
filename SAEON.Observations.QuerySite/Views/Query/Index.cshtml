@@ -5,28 +5,38 @@
 }
 <div class="row">
     <div class="col-md-12">
-        <div class="controlframe">
-            @{Html.EJ().Tab("QueryTabs").Items(tabs =>
-                {
-                    tabs.Add().ID("LocationsTab").Text("Locations").ContentTemplate(
-                        @<div class="row">
-                            <div class="col-md-6" id="PartialLocations">
-                                @Html.Partial("Locations", Model)
-                            </div>
-                            <div class="col-md-6" id="PartialSelectedLocations">
-                                @Html.Partial("SelectedLocations", Model)
-                            </div>
-                        </div>);
-                    tabs.Add().ID("FeaturesTab").Text("Features").ContentTemplate(
-                        @<div class="row">
-                            <div class="col-md-6" id="PartialFeatures">
-                                @Html.Partial("Features", Model)
-                            </div>
-                            <div class="col-md-6" id="PartialSelectedFeatures">
-                                @Html.Partial("SelectedFeatures", Model)
-                            </div>
-                        </div>);
-                }).Render();}
-        </div>
+        @{Html.EJ().Tab("QueryTabs").Items(tabs =>
+            {
+            tabs.Add().ID("LocationsTab").Text("Locations").ContentTemplate(
+                @<div class="row">
+                    <div class="col-md-6" id="PartialLocations">
+                        @Html.Partial("Locations", Model)
+                    </div>
+                    <div class="col-md-6" id="PartialSelectedLocations">
+                        @Html.Partial("SelectedLocations", Model)
+                    </div>
+                </div>);
+            tabs.Add().ID("FeaturesTab").Text("Features").ContentTemplate(
+                @<div class="row">
+                    <div class="col-md-6" id="PartialFeatures">
+                        @Html.Partial("Features", Model)
+                    </div>
+                    <div class="col-md-6" id="PartialSelectedFeatures">
+                        @Html.Partial("SelectedFeatures", Model)
+                    </div>
+                </div>);
+            tabs.Add().ID("FiltersTab").Text("Filters").ContentTemplate(
+                @<div class="row">
+                    <div class="col-md-12" id="PartialFilters">
+                        @Html.Partial("Filters", Model)
+                    </div>
+                </div>);
+            tabs.Add().ID("ResultsTab").Text("Results").ContentTemplate(
+                @<div class="row">
+                    <div class="col-md-12" id="PartialQueryResults">
+                        @Html.Partial("QueryResults", Model)
+                    </div>
+                </div>);
+            }).Render();}
     </div>
 </div>

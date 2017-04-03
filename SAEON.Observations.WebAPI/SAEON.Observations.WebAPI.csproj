@@ -304,6 +304,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BaseApiControllers.cs" />
     <Compile Include="Controllers\BaseODataControllers.cs" />
+    <Compile Include="Controllers\DataQueryController.cs" />
     <Compile Include="Controllers\FeaturesController.cs" />
     <Compile Include="Controllers\FeaturesHelper.cs" />
     <Compile Include="Controllers\FeaturesODataController.cs" />
