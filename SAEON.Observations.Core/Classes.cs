@@ -43,7 +43,7 @@ namespace SAEON.Observations.Core
 
     public class DataQueryOutput
     {
-        public List<string> Columns { get; set; } = new List<string>();
+        public List<string> Headers { get; set; } = new List<string>();
         public List<object> Rows { get; set; } = new List<object>();
     }
 }
