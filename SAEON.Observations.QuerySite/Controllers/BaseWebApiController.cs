@@ -26,7 +26,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         private HttpSessionState CurrentSession { get { return System.Web.HttpContext.Current.Session; } }
 
-        protected TEntity GetSessionModel<TEntity>() where TEntity: class, new()
+        protected TEntity GetSessionModel<TEntity>() where TEntity : class, new()
         {
             if (CurrentSession[sessionModelKey] == null)
             {
@@ -79,9 +79,9 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<IEnumerable<TEntity>> GetList<TEntity>(string resource, HttpContent body)// where TEntity : BaseEntity
+        protected async Task<TEntity> Post<TEntity, TInput>(string resource, TInput input)// where TEntity : BaseEntity
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(), new ParameterList { { "Resource", resource } }))
+            using (Logging.MethodCall<TEntity>(this.GetType(), new ParameterList { { "Resource", resource }, { "Input", input } }))
             {
                 try
                 {
@@ -96,7 +96,40 @@ namespace SAEON.Observations.QuerySite.Controllers
                         client.SetBearerToken(token);
                         var url = $"{apiBaseUrl}/{resource}";
                         Logging.Verbose("Calling: {url}", url);
-                        var response = await client.PostAsync(url,body);
+                        var response = await client.PostAsJsonAsync(url, input);
+                        Logging.Verbose("Response: {response}", response);
+                        response.EnsureSuccessStatusCode();
+                        var data = await response.Content.ReadAsAsync<TEntity>();
+                        Logging.Verbose("Data: {@data}", data);
+                        return data;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        protected async Task<IEnumerable<TEntity>> PostList<TEntity,TParams>(string resource, TParams parameters)// where TEntity : BaseEntity
+        {
+            using (Logging.MethodCall<TEntity>(this.GetType(), new ParameterList { { "Resource", resource }, { "Parameters", parameters} }))
+            {
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        //client.BaseAddress = new Uri(apiBaseUrl);
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var user = User as ClaimsPrincipal;
+                        var token = user.FindFirst("access_token").Value;
+                        Logging.Verbose("Token: {token}", token);
+                        client.SetBearerToken(token);
+                        var url = $"{apiBaseUrl}/{resource}";
+                        Logging.Verbose("Calling: {url}", url);
+                        var response = await client.PostAsJsonAsync(url,parameters);
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<IEnumerable<TEntity>>();

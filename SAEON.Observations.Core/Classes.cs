@@ -33,4 +33,17 @@ namespace SAEON.Observations.Core
     public class Feature : TreeNode { }
     public class Location : TreeNode { }
 
+    public class DataQueryInput
+    {
+        public List<Guid> Locations { get; set; }
+        public List<Guid> Features { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
+
+    public class DataQueryOutput
+    {
+        public List<string> Columns { get; set; } = new List<string>();
+        public List<object> Rows { get; set; } = new List<object>();
+    }
 }

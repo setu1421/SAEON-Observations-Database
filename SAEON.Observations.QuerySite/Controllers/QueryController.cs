@@ -1,10 +1,12 @@
-﻿using SAEON.Observations.Core;
+﻿using Newtonsoft.Json;
+using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using Syncfusion.JavaScript;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -160,7 +162,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     model.EndDate = endDate;
                     SessionModel = model;
                     Logging.Verbose("Model: {@model}", model);
-                    return PartialView("FiltersPost", model);
+                    return PartialView("Filters", model);
                 }
                 catch (Exception ex)
                 {
@@ -172,7 +174,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region DataQuery
-        [HttpGet]
         public async Task<PartialViewResult> DataQuery()
         {
             using (Logging.MethodCall(this.GetType()))
@@ -181,15 +182,16 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var model = SessionModel;
                     Logging.Verbose("Model: {@model}", model);
-                    var body = new FormUrlEncodedContent(new[]
-                        {
-                            new KeyValuePair<string, string>("locations", string.Join(",", model.SelectedLocations.Select(i => i.Id))),
-                            new KeyValuePair<string, string>("features", string.Join(",", model.SelectedFeatures.Select(i => i.Id))),
-                            new KeyValuePair<string, string>("startDate",model.StartDate.ToString("yyyy/MM/dd")),
-                            new KeyValuePair<string, string>("endDate",model.EndDate.ToString("yyyy/MM/dd"))
-                        });
-
-                    model.QueryResults = (await GetList<object>($"DataQuery",body)).ToList();
+                    var input = new DataQueryInput
+                    {
+                        Locations = model.SelectedLocations.Select(i => i.Id).ToList(),
+                        Features = model.SelectedFeatures.Select(i => i.Id).ToList(),
+                        StartDate = model.StartDate,
+                        EndDate = model.EndDate
+                    };
+                    var results = (await Post<DataQueryOutput,DataQueryInput>("DataQuery", input));
+                    Logging.Verbose("Results: {@results}", results);
+                    model.QueryResults = results;
                     SessionModel = model;
                     Logging.Verbose("Model: {@model}", model);
                     return PartialView("QueryResults", model);

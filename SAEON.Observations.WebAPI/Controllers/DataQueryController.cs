@@ -36,55 +36,44 @@ namespace SAEON.Observations.WebAPI.Controllers
             }
         }
 
-        /// <summary>
-        /// Get
-        /// </summary>
-        /// <returns>Json</returns>
+
         [HttpPost]
         //[Route("{stationIds}/{phenomenonOfferingIds}/{startDate:datetime?}/{enddate:datetime?}")]
         [Route]
-        public List<object> GetDataQuery([FromBody] string locations, [FromBody] string features, [FromBody] DateTime? startDate, [FromBody] DateTime? endDate)
+        public DataQueryOutput DataQuery(DataQueryInput input)
         {
-            using (Logging.MethodCall(this.GetType(), new ParameterList {
-                { "StationIds", locations },
-                { "PhenomenonOfferingIds", features },
-                { "StartDate", startDate },
-                { "EndDate", endDate } }))
+            using (Logging.MethodCall(this.GetType(), new ParameterList { { "Params", input } }))
             {
                 try
                 {
+                    Logging.Verbose("Parameters: {@parameters}", input);
+                    if (input == null) throw new ArgumentNullException("input");
+                    if (input.Locations == null) throw new ArgumentNullException("input.Locations");
+                    if (!input.Locations.Any()) throw new ArgumentOutOfRangeException("input.Locations");
+                    if (input.Features == null) throw new ArgumentNullException("input.Features");
+                    if (!input.Features.Any()) throw new ArgumentOutOfRangeException("input.Features");
                     db.Configuration.AutoDetectChangesEnabled = false;
-                    var query = db.VDownloads.AsQueryable();
-                    if (!string.IsNullOrEmpty(locations))
-                    {
-                        List<string> stations = locations.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
-                        query = query.Where(i => stations.Contains(i.StationId.ToString()));
-                    }
-                    if (!string.IsNullOrEmpty(features))
-                    {
-                        List<string> offerings = features.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
-                        query = query.Where(i => offerings.Contains(i.PhenomenonOfferingId.ToString()));
-                    }
-                    if (startDate.HasValue)
-                    {
-                        query = query.Where(i => i.Date >= startDate.Value);
-                    }
-                    if (endDate.HasValue)
-                    {
-                        query = query.Where(i => i.Date <= endDate.Value);
-                    }
-                    query = query
+                    var dataList = db.VDownloads//.AsQueryable()
+                        .Where(i => input.Locations.Contains(i.StationId))
+                        .Where(i => input.Features.Contains(i.PhenomenonOfferingId))
+                        .Where(i => i.Date >= input.StartDate)
+                        .Where(i => i.Date <= input.EndDate)
                         .OrderBy(i => i.SiteName)
                         .ThenBy(i => i.StationName)
-                        .ThenBy(i => i.Date);
-                    var dataList = query.ToList();
+                        .ThenBy(i => i.Date)
+                        .Take(100)
+                        .ToList();
+                    Logging.Verbose("DataList: {@dataList}", dataList);
                     string lastSite = null;
                     string lastStation = null;
-                    var result = new List<object>();
+                    var result = new DataQueryOutput
+                    {
+                        Columns = new List<string> { "Site", "Station" }
+                    };
                     dynamic row = null;
+                    bool isNewRow = false;
                     foreach (var data in dataList)
                     {
-                        bool isNewRow = false;
                         if (lastSite != data.SiteName)
                         {
                             isNewRow = true;
@@ -99,7 +88,8 @@ namespace SAEON.Observations.WebAPI.Controllers
                         {
                             if (row != null)
                             {
-                                result.Add(row);
+                                result.Rows.Add(row);
+                                row = null;
                             }
                             row = new ExpandoObject();
                             row.SiteName = data.SiteName;
@@ -110,11 +100,39 @@ namespace SAEON.Observations.WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        /*
+        /// <summary>
+        /// Get
+        /// </summary>
+        /// <returns>Json</returns>
+        [HttpPost]
+        //[Route("{stationIds}/{phenomenonOfferingIds}/{startDate:datetime?}/{enddate:datetime?}")]
+        [Route]
+        public List<object> DataQuery([FromBody] string locations, [FromBody] string features, [FromBody] DateTime? startDate, [FromBody] DateTime? endDate)
+        {
+            using (Logging.MethodCall(this.GetType(), new ParameterList {
+                { "StationIds", locations },
+                { "PhenomenonOfferingIds", features },
+                { "StartDate", startDate },
+                { "EndDate", endDate } }))
+            {
+                try
+                {
+                }
+                catch (Exception ex)
+                {
                     Logging.Exception(ex, "Unable to get");
                     throw;
                 }
             }
 
         }
+        */
     }
 }

@@ -424,18 +424,17 @@ namespace SAEON.Observations.Core
     /// <summary>
     /// Obvservation for Download entity
     /// </summary>
+    [Table("vDownloads")]
     public class VDownload
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ScaffoldColumn(false), HiddenInput]
         public Guid Id { get; set; }
-        public Guid? SiteID { get; set; }
+        public Guid SiteID { get; set; }
         public string SiteCode { get; set; }
         public string SiteName { get; set; }
         public string SiteDescription { get; set; }
         public string SiteUrl { get; set; }
-        public Guid? StationId { get; set; }
+        public Guid StationId { get; set; }
         public string StationCode { get; set; }
         public string StationName { get; set; }
         public string StationDescription { get; set; }
@@ -443,7 +442,7 @@ namespace SAEON.Observations.Core
         public double? StationLatitude { get; set; }
         public double? StationLongitude { get; set; }
         public int? StationElevation { get; set; }
-        public Guid? InstrumentId { get; set; }
+        public Guid InstrumentId { get; set; }
         public string InstrumentCode { get; set; }
         public string InstrumentName { get; set; }
         public string InstrumentDescription { get; set; }
@@ -452,17 +451,17 @@ namespace SAEON.Observations.Core
         public string SensorName { get; set; }
         public string SensorDescription { get; set; }
         public string SensorUrl { get; set; }
-        public Guid? PhenomenonId { get; set; }
+        public Guid PhenomenonId { get; set; }
         public string PhenomenonCode { get; set; }
         public string PhenomenonName { get; set; }
         public string PhenomenonDescription { get; set; }
         public string PhenomenonUrl { get; set; }
-        public Guid? PhenomenonOfferingId { get; set; }
-        public Guid? OfferingId { get; set; }
+        public Guid PhenomenonOfferingId { get; set; }
+        public Guid OfferingId { get; set; }
         public string OfferingCode { get; set; }
         public string OfferingName { get; set; }
         public string OfferingDescription { get; set; }
-        public Guid? UnitOfMeasureId { get; set; }
+        public Guid UnitOfMeasureId { get; set; }
         public string UnitOfMeasureCode { get; set; }
         public string UnitOfMeasureUnit { get; set; }
         public string UnitOfMeasureSymbol { get; set; }
@@ -486,7 +485,6 @@ namespace SAEON.Observations.Core
         }
 
         public DbSet<Instrument> Instruments { get; set; }
-        public DbSet<VDownload> VDownloads { get; set; }
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }
@@ -497,6 +495,7 @@ namespace SAEON.Observations.Core
         public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
+        public DbSet<VDownload> VDownloads { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

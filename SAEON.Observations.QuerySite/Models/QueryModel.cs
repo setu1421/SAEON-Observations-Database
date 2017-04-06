@@ -9,14 +9,14 @@ namespace SAEON.Observations.QuerySite.Models
 {
     public class QueryModel
     {
-        public List<Feature> Features { get; set; } = null;
+        public List<Feature> Features { get; set; }
         public List<Feature> SelectedFeatures { get; set; } = new List<Feature>();
-        public List<Location> Locations { get; set; } = null;
+        public List<Location> Locations { get; set; }
         public List<Location> SelectedLocations { get; set; } = new List<Location>();
         [DisplayName("Start Date")]
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
         [DisplayName("End Date")]
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
-        public List<object> QueryResults { get; set; } = new List<object>();
+        public DataQueryOutput QueryResults { get; set; }
     }
 }
