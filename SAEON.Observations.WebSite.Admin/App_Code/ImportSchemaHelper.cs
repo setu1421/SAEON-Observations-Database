@@ -682,12 +682,11 @@ public class ImportSchemaHelper : IDisposable
 
                         if (!ErrorInDate)
                         {
-                            rec.DateValue = dt;
                             // Find sensor based on Datevalue
                             bool found = false;
                             if (def.Sensors.Count > 1)
                             {
-                                Log.Information("Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
+                                Log.Verbose("Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
                             }
                             foreach (var sensor in def.Sensors)
                             {
@@ -697,14 +696,14 @@ public class ImportSchemaHelper : IDisposable
                                 var endDates = new List<DateTime?> { dates.InstrumenSensorEndDate, dates.InstrumentEndDate, dates.StationInstrumentEndDate, dates.StationEndDate };
                                 var startDate = startDates.Max();
                                 var endDate = endDates.Min();
-                                if (startDate.HasValue && (rec.DateValue < startDate.Value))
+                                if (startDate.HasValue && (rec.DateValue.Date < startDate.Value))
                                 {
-                                    Log.Information("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
+                                    Log.Verbose("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
                                     continue;
                                 }
-                                if (endDate.HasValue && (rec.DateValue > endDate.Value))
+                                if (endDate.HasValue && (rec.DateValue.Date > endDate.Value))
                                 {
-                                    Log.Information("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
+                                    Log.Verbose("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
                                     continue;
                                 }
                                 rec.SensorID = sensor.Id;

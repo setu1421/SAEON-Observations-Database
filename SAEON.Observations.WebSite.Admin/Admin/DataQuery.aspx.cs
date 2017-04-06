@@ -618,7 +618,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
         }
 
-        Log.Information("SQL: {sql}", q.BuildSqlStatement());
+        //Log.Information("SQL: {sql}", q.BuildSqlStatement());
         DataTable dt = q.ExecuteDataSet().Tables[0];
 
         for (int k = 0; k < dt.Columns.Count; k++)
