@@ -46,18 +46,20 @@ namespace SAEON.Observations.WebAPI.Controllers
         public class Feature
         {
             public Guid PhenomenonId { get; set; }
+            public Guid PhenomenonOfferingId { get; set; }
             public Guid OfferingId { get; set; }
             public Guid UnitOfMeasureId { get; set; }
-            public string Header { get; set; }
+            public string Caption { get; set; }
             public string Name { get; set; }
 
             public Feature(VDownload data)
             {
                 PhenomenonId = data.PhenomenonId;
+                PhenomenonOfferingId = data.PhenomenonOfferingId;
                 OfferingId = data.OfferingId;
                 UnitOfMeasureId = data.UnitOfMeasureId;
-                Header = $"{data.PhenomenonName}, {data.OfferingName}, {data.UnitOfMeasureSymbol}";
-                Name = $"{data.PhenomenonCode}_{data.OfferingCode}_{data.UnitOfMeasureCode}";
+                Caption = $"{data.PhenomenonName}, {data.OfferingName}, {data.UnitOfMeasureSymbol}";
+                Name = $"Data_{data.PhenomenonCode}_{data.OfferingCode}_{data.UnitOfMeasureCode}";
             }
         }
 
@@ -95,10 +97,15 @@ namespace SAEON.Observations.WebAPI.Controllers
                     DateTime? lastDate = null;
                     var features = new List<Feature>();
                     var result = new DataQueryOutput();
-                    result.Data.Columns.Add("Site", typeof(string)).Caption="Site";
-                    result.Data.Columns.Add("Station", typeof(string)).Caption="Station";
-                    result.Data.Columns.Add("Instrument", typeof(string)).Caption="Instrument";
-                    result.Data.Columns.Add("Date", typeof(DateTime)).Caption = "Date";
+                    result.Data.TableName = "Observations";
+                    result.Data.Columns.Add("Site", typeof(string));
+                    result.Data.Columns.Add("Station", typeof(string));
+                    result.Data.Columns.Add("Instrument", typeof(string));
+                    result.Data.Columns.Add("Date", typeof(DateTime));
+                    result.Captions.Add("Site", "Site");
+                    result.Captions.Add("Station", "Station");
+                    result.Captions.Add("Instrument", "Instrument");
+                    result.Captions.Add("Date", "Date");
                     DataRow row = null;
                     bool isNewRow = false;
                     foreach (var data in dataList)
@@ -143,7 +150,10 @@ namespace SAEON.Observations.WebAPI.Controllers
                         if (!features.Any(i => i.Name == feature.Name))
                         {
                             features.Add(feature);
-                            result.Data.Columns.Add(feature.Name, typeof(double)).Caption=feature.Header;
+                            var col = result.Data.Columns.Add(feature.Name, typeof(double));
+                            col.Caption = feature.Caption;
+                            result.Captions.Add(col.ColumnName, col.Caption);
+                            Logging.Verbose("Adding {name} {caption}", col.ColumnName, col.Caption);
                         }
                         if (row.IsNull(feature.Name))
                             row[feature.Name] = data.Value;
@@ -157,6 +167,15 @@ namespace SAEON.Observations.WebAPI.Controllers
                         }
                     }
                     Logging.Verbose("Result: Cols: {cols} Rows: {rows}", result.Data.Columns.Count, result.Data.Rows.Count);
+                    result.Series.Clear();
+                    foreach (var feature in features)
+                    {
+                        var list = dataList
+                            .Where(i => i.PhenomenonOfferingId == feature.PhenomenonOfferingId)
+                            .Select(i => new SeriesPoint { Date = i.Date, Value = i.Value })
+                            .ToList();
+                        result.Series.Add(feature.Name, list);
+                    }
                     return result;
                 }
                 catch (Exception ex)

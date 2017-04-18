@@ -17,20 +17,20 @@ namespace SAEON.Observations.QuerySite.Controllers
     public class QueryController : BaseWebApiController
     {
 
-        public QueryController() : base()
-        {
-            using (Logging.MethodCall(this.GetType()))
-            {
-            }
-        }
+        //public QueryController() : base()
+        //{
+        //    using (Logging.MethodCall(this.GetType()))
+        //    {
+        //    }
+        //}
 
-        protected override void Dispose(bool disposing)
-        {
-            using (Logging.MethodCall(this.GetType()))
-            {
-                base.Dispose(disposing);
-            }
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    using (Logging.MethodCall(this.GetType()))
+        //    {
+        //        base.Dispose(disposing);
+        //    }
+        //}
 
         private QueryModel SessionModel
         {
@@ -59,7 +59,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     model.Features = await GetFeatures();
                 }
                 SessionModel = model;
-                Logging.Verbose("Model: {@model}", model);
+                //Logging.Verbose("Model: {@model}", model);
                 return View(model);
             }
         }
@@ -94,7 +94,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     Logging.Verbose("SelectedLocations: {@locations}", selectedLocations);
                     model.SelectedLocations = selectedLocations;
                     SessionModel = model;
-                    Logging.Verbose("Model: {@model}", model);
+                    //Logging.Verbose("Model: {@model}", model);
                     return PartialView("SelectedLocationsPost", model);
                 }
                 catch (Exception ex)
@@ -131,7 +131,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     Logging.Verbose("SelectedFeatures: {@features}", selectedFeatures);
                     model.SelectedFeatures = selectedFeatures;
                     SessionModel = model;
-                    Logging.Verbose("Model: {@model}", model);
+                    //Logging.Verbose("Model: {@model}", model);
                     return PartialView("SelectedFeaturesPost", model);
                 }
                 catch (Exception ex)
@@ -161,7 +161,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     model.StartDate = startDate;
                     model.EndDate = endDate;
                     SessionModel = model;
-                    Logging.Verbose("Model: {@model}", model);
+                    //Logging.Verbose("Model: {@model}", model);
                     return PartialView("Filters", model);
                 }
                 catch (Exception ex)
@@ -174,7 +174,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region DataQuery
-        public async Task<PartialViewResult> DataQuery()
+        public async Task<EmptyResult> DataQuery()
         {
             using (Logging.MethodCall(this.GetType()))
             {
@@ -195,7 +195,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     model.QueryResults = results;
                     SessionModel = model;
                     //Logging.Verbose("Model: {@model}", model);
-                    return PartialView("QueryResultsPost", model);
+                    return null;
                 }
                 catch (Exception ex)
                 {
@@ -205,5 +205,47 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
         #endregion
+
+        #region ResultsGrid
+        public PartialViewResult ResultsGrid()
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    //Logging.Verbose("Model: {@model}", model);
+                    return PartialView("ResultsGridPost",model);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region ResultsChart
+        public PartialViewResult ResultsChart()
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    //Logging.Verbose("Model: {@model}", model);
+                    return PartialView("ResultsChartPost", model);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+
     }
 }

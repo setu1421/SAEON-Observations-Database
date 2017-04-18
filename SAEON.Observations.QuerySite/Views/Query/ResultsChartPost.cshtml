@@ -1,0 +1,15 @@
+﻿@using System.Data
+@using SAEON.Observations.QuerySite.Models
+@model QueryModel
+@(Html.EJ().Chart("chartResults")
+    .Series(sr =>
+    {
+        foreach (var s in Model.QueryResults.Series)
+        {
+            sr.DataSource(s.Value)
+            .XName("Date").YName("Value")
+            .Add();
+        }
+    });
+)
+@Html.EJ().ScriptManager()

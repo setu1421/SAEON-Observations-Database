@@ -43,8 +43,17 @@ namespace SAEON.Observations.Core
         public DateTime EndDate { get; set; }
     }
 
+    public class SeriesPoint
+    {
+        public DateTime Date { get; set; }
+        public double? Value { get; set; }
+
+    }
+
     public class DataQueryOutput
     {
+        public Dictionary<string, string> Captions = new Dictionary<string, string>();
         public DataTable Data { get; set; } = new DataTable();
+        public Dictionary<string, List<SeriesPoint>> Series = new Dictionary<string, List<SeriesPoint>>();
     }
 }

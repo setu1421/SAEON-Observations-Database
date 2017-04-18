@@ -1,0 +1,18 @@
+﻿@using System.Data
+@using SAEON.Observations.QuerySite.Models
+@model QueryModel
+@(Html.EJ().Grid<object>("gridResults")
+    .Datasource(Model.QueryResults.Data)
+    .AllowPaging()
+    .AllowResizing()
+    .AllowScrolling()
+    .AllowSorting()
+    .Columns(col =>
+    {
+        foreach (DataColumn c in Model.QueryResults.Data.Columns)
+        {
+            col.Field(c.ColumnName).HeaderText(Model.QueryResults.Captions[c.ColumnName]).Add();
+        }
+    })
+)
+@Html.EJ().ScriptManager()

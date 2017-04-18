@@ -100,7 +100,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
-                        Logging.Verbose("Data: {@data}", data);
+                        //Logging.Verbose("Data: {@data}", data);
                         return data;
                     }
                 }
@@ -133,7 +133,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<IEnumerable<TEntity>>();
-                        Logging.Verbose("Data: {@data}", data);
+                        //Logging.Verbose("Data: {@data}", data);
                         return data;
                     }
                 }

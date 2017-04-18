@@ -1,0 +1,111 @@
+﻿@(Html.EJ()
+    .Button("btnLoadQuery")
+    .Text("Load Query")
+    .ShowRoundedCorner(true)
+    .Type(ButtonType.Button)
+    .Size(ButtonSize.Large)
+    .ContentType(ContentType.TextAndImage)
+    .PrefixIcon("e-icon e-reload"))
+@(Html.EJ()
+    .Button("btnSaveQuery")
+    .Text("Save Query")
+    .ShowRoundedCorner(true)
+    .Type(ButtonType.Button)
+    .Size(ButtonSize.Large)
+    .ContentType(ContentType.TextAndImage)
+    .PrefixIcon("e-icon e-save"))
+@(Html.EJ()
+    .Button("btnSearch")
+    .Text("Search")
+    .ShowRoundedCorner(true)
+    .Type(ButtonType.Button)
+    .Size(ButtonSize.Large)
+    .ContentType(ContentType.TextAndImage)
+    .PrefixIcon("e-icon e-search")
+    .ClientSideEvents(e => e.Click("onSearchClick"))
+)
+@(Html.EJ()
+    .Button("btnDownload")
+    .Text("Download")
+    .ShowRoundedCorner(true)
+    .Type(ButtonType.Button)
+    .Size(ButtonSize.Large)
+    .ContentType(ContentType.TextAndImage)
+    .PrefixIcon("e-icon e-dataexport")
+    //.ClientSideEvents(e => e.Click("onSearchClick"))
+)
+<script type="text/javascript">
+    function onSearchClick() {
+        var startDate = $("#StartDate").ejDatePicker('instance')._dateValue;
+        var endDate = $("#EndDate").ejDatePicker('instance')._dateValue;
+        var wp = $("#waiting").data("ejWaitingPopup");
+        wp.show();
+        ajaxUpdateFilters(startDate, endDate)
+    }
+    function ajaxUpdateFilters(startDate, endDate) {
+        $.ajax({
+            url: "/Query/UpdateFilters",
+            data: JSON.stringify({
+                StartDate: startDate,
+                EndDate: endDate
+            }),
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                ajaxDataQuery();
+            },
+            error: function () {
+                alert("Oops");
+            }
+        });
+    }
+    function ajaxDataQuery() {
+        $.ajax({
+            url: "/Query/DataQuery",
+            async: true,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                ajaxDisplayResultsGrid();
+                ajaxDisplayResultsChart();
+                var wp = $("#waiting").data("ejWaitingPopup");
+                wp.hide();
+            },
+            error: function () {
+                alert("Oops");
+            }
+        });
+    }
+    function ajaxDisplayResultsGrid() {
+        $.ajax({
+            url: "/Query/ResultsGrid",
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#PartialResultsGrid').html(data);
+            },
+            error: function () {
+                alert("Oops");
+            }
+        });
+    }
+    function ajaxDisplayResultsChart() {
+        $.ajax({
+            url: "/Query/ResultsChart",
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (data) {
+                $('#PartialResultsChart').html(data);
+            },
+            error: function () {
+                alert("Oops");
+            }
+        });
+    }
+</script>
+
+
