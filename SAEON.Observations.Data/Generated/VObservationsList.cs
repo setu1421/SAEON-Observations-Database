@@ -57,18 +57,6 @@ namespace SAEON.Observations.Data{
                 schema.SchemaName = @"dbo";
                 //columns
                 
-                TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
-                colvarId.ColumnName = "ID";
-                colvarId.DataType = DbType.Guid;
-                colvarId.MaxLength = 0;
-                colvarId.AutoIncrement = false;
-                colvarId.IsNullable = false;
-                colvarId.IsPrimaryKey = false;
-                colvarId.IsForeignKey = false;
-                colvarId.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarId);
-                
                 TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
                 colvarSensorID.ColumnName = "SensorID";
                 colvarSensorID.DataType = DbType.Guid;
@@ -248,6 +236,30 @@ namespace SAEON.Observations.Data{
                 colvarUpdatedAt.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarUpdatedAt);
+                
+                TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
+                colvarId.ColumnName = "ID";
+                colvarId.DataType = DbType.Int32;
+                colvarId.MaxLength = 0;
+                colvarId.AutoIncrement = false;
+                colvarId.IsNullable = false;
+                colvarId.IsPrimaryKey = false;
+                colvarId.IsForeignKey = false;
+                colvarId.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarId);
+                
+                TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
+                colvarRowVersion.ColumnName = "RowVersion";
+                colvarRowVersion.DataType = DbType.Binary;
+                colvarRowVersion.MaxLength = 0;
+                colvarRowVersion.AutoIncrement = false;
+                colvarRowVersion.IsNullable = false;
+                colvarRowVersion.IsPrimaryKey = false;
+                colvarRowVersion.IsForeignKey = false;
+                colvarRowVersion.IsReadOnly = true;
+                
+                schema.Columns.Add(colvarRowVersion);
                 
                 TableSchema.TableColumn colvarSensorCode = new TableSchema.TableColumn(schema);
                 colvarSensorCode.ColumnName = "SensorCode";
@@ -443,20 +455,6 @@ namespace SAEON.Observations.Data{
 	    #region Props
 	    
           
-        [XmlAttribute("Id")]
-        [Bindable(true)]
-        public Guid Id 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("ID");
-		    }
-            set 
-		    {
-			    SetColumnValue("ID", value);
-            }
-        }
-	      
         [XmlAttribute("SensorID")]
         [Bindable(true)]
         public Guid SensorID 
@@ -667,6 +665,34 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("Id")]
+        [Bindable(true)]
+        public int Id 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int>("ID");
+		    }
+            set 
+		    {
+			    SetColumnValue("ID", value);
+            }
+        }
+	      
+        [XmlAttribute("RowVersion")]
+        [Bindable(true)]
+        public byte[] RowVersion 
+	    {
+		    get
+		    {
+			    return GetColumnValue<byte[]>("RowVersion");
+		    }
+            set 
+		    {
+			    SetColumnValue("RowVersion", value);
+            }
+        }
+	      
         [XmlAttribute("SensorCode")]
         [Bindable(true)]
         public string SensorCode 
@@ -842,8 +868,6 @@ namespace SAEON.Observations.Data{
 	    {
 		    
 		    
-            public static string Id = @"ID";
-            
             public static string SensorID = @"SensorID";
             
             public static string ValueDate = @"ValueDate";
@@ -873,6 +897,10 @@ namespace SAEON.Observations.Data{
             public static string AddedAt = @"AddedAt";
             
             public static string UpdatedAt = @"UpdatedAt";
+            
+            public static string Id = @"ID";
+            
+            public static string RowVersion = @"RowVersion";
             
             public static string SensorCode = @"SensorCode";
             

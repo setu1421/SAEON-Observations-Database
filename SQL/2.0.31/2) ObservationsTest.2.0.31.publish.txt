@@ -1,0 +1,67 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[Observation]
+     Clustered indexes that will be dropped
+       [dbo].[PK_Observation] on [dbo].[Observation]
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The type for column ID in table [dbo].[Observation] is currently  UNIQUEIDENTIFIER NOT NULL but is being changed to  INT
+         NOT NULL. There is no implicit or explicit conversion.
+
+** User actions
+     Drop
+       [dbo].[DF_Observation_ID] (Default Constraint)
+       [dbo].[PK_Observation] (Primary Key)
+     Create
+       [dbo].[ObservationsSequence] (Sequence)
+     Table rebuild
+       [dbo].[Observation] (Table)
+     Alter
+       [dbo].[vDownloads] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[DF_Observation_UpdatedAt] (Default Constraint)
+       [dbo].[DF_Observation_AddedDate] (Default Constraint)
+       [dbo].[DF_Observation_AddedAt] (Default Constraint)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonUOM] (Foreign Key)
+       [dbo].[FK_Observation_Sensor] (Foreign Key)
+       [dbo].[FK_Observation_Status] (Foreign Key)
+       [dbo].[FK_Observation_StatusReason] (Foreign Key)
+       [dbo].[FK_Observation_aspnet_Users] (Foreign Key)
+     Create
+       [dbo].[Observation].[IX_Observation] (Index)
+       [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID] (Index)
+       [dbo].[Observation].[IX_Observation_PhenomenonOfferingID] (Index)
+       [dbo].[Observation].[IX_Observation_PhenomenonUOMID] (Index)
+       [dbo].[Observation].[IX_Observation_UserId] (Index)
+       [dbo].[Observation].[IX_Observation_AddedDate] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDate] (Index)
+       [dbo].[Observation].[IX_Observation_StatusID] (Index)
+       [dbo].[Observation].[IX_Observation_StatusReasonID] (Index)
+       [dbo].[Observation].[IX_Observation_CorrelationID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorIDPhenomenonOfferingID] (Index)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonUOM] (Foreign Key)
+       [dbo].[FK_Observation_Sensor] (Foreign Key)
+       [dbo].[FK_Observation_Status] (Foreign Key)
+       [dbo].[FK_Observation_StatusReason] (Foreign Key)
+       [dbo].[FK_Observation_aspnet_Users] (Foreign Key)
+       [dbo].[TR_Observation_Insert] (Trigger)
+       [dbo].[TR_Observation_Update] (Trigger)
+     Refresh
+       [dbo].[vInventory] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationsList] (View)
+       [dbo].[vObservationRoles] (View)
+       [dbo].[progress_Status_Raw] (Procedure)
+
+The source's object [Documents] is different than the target's version of the object but the target object will not be updated.
+The object [Documents] already exists in database with a different definition and will not be altered.
+The type for column ID in table [dbo].[Observation] is currently  UNIQUEIDENTIFIER NOT NULL but is being changed to  INT NOT NULL. There is no implicit or explicit conversion.
+

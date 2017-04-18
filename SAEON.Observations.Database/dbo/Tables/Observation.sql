@@ -1,8 +1,13 @@
 ﻿CREATE TABLE [dbo].[Observation] (
+--> Added 2.0.31 20170414 TimPN
+	[ID]		Int not null Constraint DF_Observation_ID Default (Next value for dbo.ObservationsSequence),
+--< Added 2.0.31 20170414 TimPN
+--> Removed 2.0.31 20170414 TimPN
 --> Changed 2.0.8 20160720 TimPN
 --    [ID]                    INT              IDENTITY (1, 1) NOT NULL,
-    [ID]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_Observation_ID] DEFAULT newid(),
+--    [ID]         UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_Observation_ID] DEFAULT newid(),
 --< Changed 2.0.8 20160720 TimPN
+--> Removed 2.0.31 20170414 TimPN
 --> Changed 2.0.3 20160503 TimPN
 --    [SensorProcedureID]     UNIQUEIDENTIFIER NOT NULL,
     [SensorID]     UNIQUEIDENTIFIER NOT NULL,
@@ -38,12 +43,18 @@
 --> Added 2.0.8 20160718 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate(), 
+--> Added 2.0.31 20170414 TimPN
+	[RowVersion] RowVersion not null
+--< Added 2.0.31 20170414 TimPN
 --< Added 2.0.8 20160718 TimPN
 --> Changed 2.0.8 20160718 TimPN
 --    CONSTRAINT [PK_Observation] PRIMARY KEY CLUSTERED ([ID]),
 --> Changed 2.0.13 20161011 TimPN
 --    CONSTRAINT [PK_Observation] PRIMARY KEY NONCLUSTERED ([ID]),
-    CONSTRAINT [PK_Observation] PRIMARY KEY NONCLUSTERED ([ID]) on [Observations],
+--> Changed 2.0.31 20170414 TimPN
+--    CONSTRAINT [PK_Observation] PRIMARY KEY NONCLUSTERED ([ID]) on [Observations],
+    CONSTRAINT [PK_Observation] PRIMARY KEY CLUSTERED ([ID]) on [Observations],
+--< Changed 2.0.31 20170414 TimPN
 --< Changed 2.0.13 20161011 TimPN
 --< Changed 2.0.8 20160718 TimPN
     CONSTRAINT [FK_Observation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
@@ -64,13 +75,15 @@
     CONSTRAINT [FK_Observation_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]),
 --< Added 2.0.9 20160823 TimPN
 );
+--> Removed 2.0.31 20170414 TimPN
 --> Added 2.0.8 20160718 TimPN
-GO
-CREATE CLUSTERED INDEX [CX_Observation] ON [dbo].[Observation] ([AddedAt])
+--GO
+--CREATE CLUSTERED INDEX [CX_Observation] ON [dbo].[Observation] ([AddedAt])
 --> Added 2.0.13 20161010 TimPN
-  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
+--  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 --< Added 2.0.13 20161010 TimPN
 --< Added 2.0.8 20160718 TimPN
+--< Removed 2.0.31 20170414 TimPN
 --> Changed 2.0.3 20160503 TimPN
 GO
 --CREATE INDEX [IX_Observation] ON [dbo].[Observation]([SensorProcedureID] ASC, [ValueDate] ASC, [RawValue])
