@@ -1,0 +1,17 @@
+﻿@using System.Data
+@using SAEON.Observations.QuerySite.Models
+@model QueryModel
+@(Html.EJ().Grid<object>("gridResults")
+    .Datasource(Model.QueryResults.Data)
+    //.AllowScrolling()
+    //.ScrollSettings(col => { col.Width("auto").Height("75%"); })
+    .AllowPaging()
+    .Columns(col =>
+    {
+        foreach (DataColumn c in Model.QueryResults.Data.Columns)
+        {
+            col.Field(c.ColumnName).HeaderText(c.Caption).Width("Auto").Add();
+        }
+    })
+)
+@Html.EJ().ScriptManager()

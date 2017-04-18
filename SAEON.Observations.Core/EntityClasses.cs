@@ -428,7 +428,7 @@ namespace SAEON.Observations.Core
     public class VDownload
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public Guid SiteID { get; set; }
         public string SiteCode { get; set; }
         public string SiteName { get; set; }

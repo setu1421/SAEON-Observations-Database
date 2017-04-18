@@ -1,6 +1,7 @@
 ﻿using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Dynamic;
 using System.Linq;
 using System.Net;
@@ -15,22 +16,28 @@ namespace SAEON.Observations.WebAPI.Controllers
     [Authorize]
     public class DataQueryController : ApiController
     {
-        protected ObservationsDbContext db = new ObservationsDbContext();
+        protected ObservationsDbContext db = null;
 
         public DataQueryController() : base()
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
+                db = new ObservationsDbContext();
+                db.Configuration.AutoDetectChangesEnabled = false;
+                db.Database.CommandTimeout = 0;
             }
         }
 
         protected override void Dispose(bool disposing)
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 if (disposing)
                 {
-                    db.Dispose();
+                    if (db != null)
+                    {
+                        db.Dispose();
+                    }
                 }
                 base.Dispose(disposing);
             }
@@ -59,7 +66,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [Route]
         public DataQueryOutput DataQuery(DataQueryInput input)
         {
-            using (Logging.MethodCall(this.GetType(), new ParameterList { { "Params", input } }))
+            using (Logging.MethodCall(GetType(), new ParameterList { { "Params", input } }))
             {
                 try
                 {
@@ -70,28 +77,29 @@ namespace SAEON.Observations.WebAPI.Controllers
                     if (input.Features == null) throw new ArgumentNullException("input.Features");
                     if (!input.Features.Any()) throw new ArgumentOutOfRangeException("input.Features");
                     db.Configuration.AutoDetectChangesEnabled = false;
-                    var dataList = db.VDownloads//.AsQueryable()
+                    var dataList = db.VDownloads
                         .Where(i => input.Locations.Contains(i.StationId))
                         .Where(i => input.Features.Contains(i.PhenomenonOfferingId))
                         .Where(i => i.Date >= input.StartDate)
                         .Where(i => i.Date <= input.EndDate)
                         .OrderBy(i => i.SiteName)
                         .ThenBy(i => i.StationName)
+                        .ThenBy(i => i.InstrumentName)
                         .ThenBy(i => i.Date)
-                        .Take(100)
                         .ToList();
-                    Logging.Verbose("DataList: {count} {@dataList}", dataList.Count, dataList);
+                    Logging.Verbose("DataList: {count}", dataList.Count);
+                    //Logging.Verbose("DataList: {count} {@dataList}", dataList.Count, dataList);
                     string lastSite = null;
                     string lastStation = null;
                     string lastInstrument = null;
-                    string lastSensor = null;
                     DateTime? lastDate = null;
                     var features = new List<Feature>();
-                    var result = new DataQueryOutput
-                    {
-                        Headers = new List<string> { "Site", "Station", "Instrument", "Sensor", "Date" }
-                    };
-                    dynamic row = null;
+                    var result = new DataQueryOutput();
+                    result.Data.Columns.Add("Site", typeof(string)).Caption="Site";
+                    result.Data.Columns.Add("Station", typeof(string)).Caption="Station";
+                    result.Data.Columns.Add("Instrument", typeof(string)).Caption="Instrument";
+                    result.Data.Columns.Add("Date", typeof(DateTime)).Caption = "Date";
+                    DataRow row = null;
                     bool isNewRow = false;
                     foreach (var data in dataList)
                     {
@@ -99,31 +107,22 @@ namespace SAEON.Observations.WebAPI.Controllers
                         {
                             isNewRow = true;
                             lastSite = data.SiteName;
-                            lastStation = null;
-                            lastInstrument = null;
-                            lastSensor = null;
-                            lastDate = null;
+                            lastStation = data.StationName;
+                            lastInstrument = data.InstrumentName;
+                            lastDate = data.Date;
                         }
                         if (!isNewRow && (lastStation != data.StationName))
                         {
                             isNewRow = true;
                             lastStation = data.StationName;
-                            lastInstrument = null;
-                            lastSensor = null;
-                            lastDate = null;
+                            lastInstrument = data.InstrumentName;
+                            lastDate = data.Date;
                         }
                         if (!isNewRow && (lastInstrument != data.InstrumentName))
                         {
                             isNewRow = true;
                             lastInstrument = data.InstrumentName;
-                            lastSensor = null;
-                            lastDate = null;
-                        }
-                        if (!isNewRow && (lastSensor != data.SensorName))
-                        {
-                            isNewRow = true;
-                            lastSensor = data.SensorName;
-                            lastDate = null;
+                            lastDate = data.Date;
                         }
                         if (!isNewRow && lastDate.HasValue && (lastDate.Value != data.Date))
                         {
@@ -133,42 +132,31 @@ namespace SAEON.Observations.WebAPI.Controllers
 
                         if (isNewRow)
                         {
-                            if (row != null)
-                            {
-                                result.Rows.Add(row);
-                                row = null;
-                            }
-                            row = new ExpandoObject();
-                            row.SiteName = data.SiteName;
-                            row.StationName = data.StationName;
-                            row.InstrumentName = data.InstrumentName;
-                            row.SensorName = data.SensorName;
-                            row.Date = data.Date;
+                            row = result.Data.Rows.Add();
+                            row["Site"] = data.SiteName;
+                            row["Station"] = data.StationName;
+                            row["Instrument"] = data.InstrumentName;
+                            row["Date"] = data.Date;
+                            isNewRow = false;
                         }
                         var feature = new Feature(data);
                         if (!features.Any(i => i.Name == feature.Name))
                         {
                             features.Add(feature);
-                            result.Headers.Add(feature.Header);
+                            result.Data.Columns.Add(feature.Name, typeof(double)).Caption=feature.Header;
                         }
-                        var r = row as IDictionary<string, object>;
-                        if (!r.ContainsKey(feature.Name))
-                        {
-                            r.Add(feature.Name, data.Value);
-                        }
+                        if (row.IsNull(feature.Name))
+                            row[feature.Name] = data.Value;
                         else
                         {
-                            double? oldValue = (double?)r[feature.Name];
-                            if (!oldValue.HasValue || !data.Value.HasValue)
+                            double oldValue = row.Field<double>(feature.Name);
+                            if (data.Value.HasValue)
                             {
-                                r[feature.Name] = data.Value;
-                            }
-                            else
-                            {
-                                r[feature.Name] = data.Value + oldValue.Value;
+                                row[feature.Name] = data.Value + oldValue;
                             }
                         }
                     }
+                    Logging.Verbose("Result: Cols: {cols} Rows: {rows}", result.Data.Columns.Count, result.Data.Rows.Count);
                     return result;
                 }
                 catch (Exception ex)
@@ -179,33 +167,5 @@ namespace SAEON.Observations.WebAPI.Controllers
             }
         }
 
-        /*
-        /// <summary>
-        /// Get
-        /// </summary>
-        /// <returns>Json</returns>
-        [HttpPost]
-        //[Route("{stationIds}/{phenomenonOfferingIds}/{startDate:datetime?}/{enddate:datetime?}")]
-        [Route]
-        public List<object> DataQuery([FromBody] string locations, [FromBody] string features, [FromBody] DateTime? startDate, [FromBody] DateTime? endDate)
-        {
-            using (Logging.MethodCall(this.GetType(), new ParameterList {
-                { "StationIds", locations },
-                { "PhenomenonOfferingIds", features },
-                { "StartDate", startDate },
-                { "EndDate", endDate } }))
-            {
-                try
-                {
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get");
-                    throw;
-                }
-            }
-
-        }
-        */
     }
 }

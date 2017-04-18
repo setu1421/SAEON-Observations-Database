@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +45,6 @@ namespace SAEON.Observations.Core
 
     public class DataQueryOutput
     {
-        public List<string> Headers { get; set; } = new List<string>();
-        public List<object> Rows { get; set; } = new List<object>();
+        public DataTable Data { get; set; } = new DataTable();
     }
 }

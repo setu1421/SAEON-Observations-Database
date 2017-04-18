@@ -17,6 +17,6 @@ namespace SAEON.Observations.QuerySite.Models
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
         [DisplayName("End Date")]
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
-        public DataQueryOutput QueryResults { get; set; }
+        public DataQueryOutput QueryResults { get; set; } = new DataQueryOutput();
     }
 }

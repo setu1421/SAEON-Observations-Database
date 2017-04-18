@@ -21,7 +21,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [Route]
         public IQueryable<Feature> GetAll()
         {
-            using (Logging.MethodCall<Feature>(this.GetType()))
+            using (Logging.MethodCall<Feature>(GetType()))
             {
                 try
                 {

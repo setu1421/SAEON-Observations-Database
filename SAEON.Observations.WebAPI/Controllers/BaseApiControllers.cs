@@ -19,15 +19,23 @@ namespace SAEON.Observations.WebAPI.Controllers
     [Authorize]
     public abstract class BaseApiController<TEntity> : ApiController where TEntity : BaseEntity
     {
-        protected ObservationsDbContext db = new ObservationsDbContext();
+        protected ObservationsDbContext db = null;
 
-        protected bool TrackChanges { get; set; } = false;
+        public BaseApiController() : base()
+        {
+            db = new ObservationsDbContext();
+            db.Configuration.AutoDetectChangesEnabled = false;
+
+        }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                if (db != null)
+                {
+                    db.Dispose();
+                }
             }
             base.Dispose(disposing);
         }
@@ -57,10 +65,6 @@ namespace SAEON.Observations.WebAPI.Controllers
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
             var query = db.Set<TEntity>().AsQueryable();
-            if (!TrackChanges)
-            {
-                query = query.AsNoTracking();
-            }
             foreach (var include in GetIncludes())
             {
                 query = query.Include(include);
@@ -84,7 +88,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [Route]
         public virtual IQueryable<TEntity> GetAll()
         {
-            using (Logging.MethodCall<TEntity>(this.GetType()))
+            using (Logging.MethodCall<TEntity>(GetType()))
             {
                 try
                 {
@@ -108,7 +112,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetById(Guid id)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {
@@ -138,7 +142,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetByName(string name)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Name", name } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Name", name } }))
             {
                 try
                 {
@@ -172,7 +176,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         protected async Task<IHttpActionResult> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
             //using (LogContext.PushProperty("Method", $"GetSingle<{nameof(TRelated)}>"))
-            using (Logging.MethodCall<TEntity, TRelated>(this.GetType()))
+            using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
                 try
                 {
@@ -203,7 +207,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseEntity
         {
-            using (Logging.MethodCall<TEntity, TRelated>(this.GetType()))
+            using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
                 try
                 {
@@ -229,7 +233,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
         {
-            using (Logging.MethodCall<TEntity, TRelated>(this.GetType()))
+            using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
                 try
                 {
@@ -249,7 +253,7 @@ namespace SAEON.Observations.WebAPI.Controllers
     {
         public BaseApiWriteController() : base()
         {
-            TrackChanges = true;
+            db.Configuration.AutoDetectChangesEnabled = true;
         }
 
         /// <summary>
@@ -279,7 +283,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Name", item?.Name } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Name", item?.Name } }))
             {
                 try
                 {
@@ -324,7 +328,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                         Logging.Exception(ex, "Unable to add {Name} {EntityValidationErrors}", item.Name, validationErrors);
                         return BadRequest($"Unable to add {item.Name} EntityValidationErrors: {string.Join("; ", validationErrors)}");
                     }
-                    var attr = (RoutePrefixAttribute)this.GetType().GetCustomAttributes(typeof(RoutePrefixAttribute), true)?[0];
+                    var attr = (RoutePrefixAttribute)GetType().GetCustomAttributes(typeof(RoutePrefixAttribute), true)?[0];
                     var location = $"{attr?.Prefix ?? typeof(TEntity).Name}/{item.Id}";
                     Logging.Verbose("Location: {location} Id: {Id} Item: {@item}", location, item.Id, item);
                     return Created<TEntity>(location, item);
@@ -348,7 +352,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {
@@ -400,7 +404,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> PutByName(string name, [FromBody]TEntity delta)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Name", name } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Name", name } }))
             {
                 try
                 {
@@ -451,7 +455,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> DeleteById(Guid id)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {
@@ -483,7 +487,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> DeleteByName(string name)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Name", name } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Name", name } }))
             {
                 try
                 {

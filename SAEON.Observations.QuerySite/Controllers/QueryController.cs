@@ -181,7 +181,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var model = SessionModel;
-                    Logging.Verbose("Model: {@model}", model);
+                    //Logging.Verbose("Model: {@model}", model);
                     var input = new DataQueryInput
                     {
                         Locations = model.SelectedLocations.Select(i => i.Id).ToList(),
@@ -189,12 +189,13 @@ namespace SAEON.Observations.QuerySite.Controllers
                         StartDate = model.StartDate,
                         EndDate = model.EndDate
                     };
-                    var results = (await Post<DataQueryOutput,DataQueryInput>("DataQuery", input));
-                    Logging.Verbose("Results: {@results}", results);
+                    var results = (await Post<DataQueryOutput, DataQueryInput>("DataQuery", input));
+                    Logging.Verbose("Results: Cols: {cols} Rows: {rows}", results.Data.Columns.Count, results.Data.Rows.Count);
+                    //Logging.Verbose("Results: {@results}", results);
                     model.QueryResults = results;
                     SessionModel = model;
-                    Logging.Verbose("Model: {@model}", model);
-                    return PartialView("QueryResults", model);
+                    //Logging.Verbose("Model: {@model}", model);
+                    return PartialView("QueryResultsPost", model);
                 }
                 catch (Exception ex)
                 {

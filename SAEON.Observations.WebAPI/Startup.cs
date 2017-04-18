@@ -22,7 +22,7 @@ namespace SAEON.Observations.WebAPI
     {
         public void Configuration(IAppBuilder app)
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 try
                 {

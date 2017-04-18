@@ -19,7 +19,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [EnableQuery, ODataRoute]
         public IQueryable<Feature> GetAll()
         {
-            using (Logging.MethodCall<Feature>(this.GetType()))
+            using (Logging.MethodCall<Feature>(GetType()))
             {
                 try
                 {

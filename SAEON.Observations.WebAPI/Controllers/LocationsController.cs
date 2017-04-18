@@ -18,7 +18,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [Route]
         public IQueryable<Location> GetAll()
         {
-            using (Logging.MethodCall<Location>(this.GetType()))
+            using (Logging.MethodCall<Location>(GetType()))
             {
                 try
                 {

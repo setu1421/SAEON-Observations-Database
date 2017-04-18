@@ -21,11 +21,11 @@ namespace SAEON.Observations.WebAPI.Controllers
                         .Where(i => i.Sites.Any(s => s.Stations.Any()))
                         .OrderBy(i => i.Name))
                     {
+                        //Logging.Verbose("Organisation: {organisation}", organisation.Name);
                         var organisationNode = new Location
                         {
                             Id = organisation.Id,
                             Key = $"ORG~{organisation.Id}~",
-                            //Key = $"ORG-{organisation.Id}-ORG",
                             Text = organisation.Name,
                             HasChildren = organisation.Sites.Any()
                         };
@@ -34,12 +34,12 @@ namespace SAEON.Observations.WebAPI.Controllers
                             .Where(i => i.Stations.Any())
                             .OrderBy(i => i.Name))
                         {
+                            //Logging.Verbose("Site: {site}", site.Name);
                             var siteNode = new Location
                             {
                                 Id = site.Id,
                                 ParentId = organisationNode.Id,
                                 Key = $"SIT~{site.Id}~{organisationNode.Key}",
-                                //Key = $"SIT-{site.Id}-SIT",
                                 ParentKey = organisationNode.Key,
                                 Text = site.Name,
                                 HasChildren = site.Stations.Any()
@@ -52,7 +52,6 @@ namespace SAEON.Observations.WebAPI.Controllers
                                     Id = station.Id,
                                     ParentId = siteNode.Id,
                                     Key = $"STA~{station.Id}~{siteNode.Key}",
-                                    //Key = $"STA-{station.Id}-STA",
                                     ParentKey = siteNode.Key,
                                     Text = station.Name,
                                     Name = $"{site.Name} - {station.Name}",

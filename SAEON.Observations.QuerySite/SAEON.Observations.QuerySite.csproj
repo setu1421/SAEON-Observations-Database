@@ -834,6 +834,7 @@
     <Content Include="Views\Query\Index.cshtml" />
     <Content Include="Views\Query\Filters.cshtml" />
     <Content Include="Views\Query\QueryResults.cshtml" />
+    <Content Include="Views\Query\QueryResultsPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -23,7 +23,19 @@
                 <li>client_secret: 81g5wyGSC89a</li>
                 <li>scope: SAEON.Observations.WebAPI</li>
             </ul>
-            You then need to add an Authorization header to your call with value 'bearer (token your received)'
+        </p>
+        <p>
+            You will get something back like this:<br />
+            {<br />
+            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImVhbWFaY2ZCTVRiOW9V",<br />
+            "expires_in": 25200,<br />
+            "token_type": "Bearer"<br />
+            }
+        </p>
+        <p>
+            When you call the API you need to add an Authorization header like this:<br />
+            Authorization:bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImVhbWFaY2ZCTVRiOW9V<br />
+            Content-Type:application/json
         </p>
     </div>
 </div>
