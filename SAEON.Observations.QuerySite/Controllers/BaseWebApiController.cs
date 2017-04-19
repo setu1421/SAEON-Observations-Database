@@ -79,9 +79,9 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<TEntity> Post<TEntity, TInput>(string resource, TInput input)// where TEntity : BaseEntity
+        protected async Task<TOutput> Post<TInput, TOutput>(string resource, TInput input)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(), new ParameterList { { "Resource", resource }, { "Input", input } }))
+            using (Logging.MethodCall<TOutput>(this.GetType(), new ParameterList { { "Resource", resource }, { "Input", input } }))
             {
                 try
                 {
@@ -99,7 +99,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         var response = await client.PostAsJsonAsync(url, input);
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
-                        var data = await response.Content.ReadAsAsync<TEntity>();
+                        var data = await response.Content.ReadAsAsync<TOutput>();
                         //Logging.Verbose("Data: {@data}", data);
                         return data;
                     }
@@ -112,6 +112,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
+        /*
         protected async Task<IEnumerable<TEntity>> PostList<TEntity,TParams>(string resource, TParams parameters)// where TEntity : BaseEntity
         {
             using (Logging.MethodCall<TEntity>(this.GetType(), new ParameterList { { "Resource", resource }, { "Parameters", parameters} }))
@@ -144,5 +145,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+        */
     }
 }

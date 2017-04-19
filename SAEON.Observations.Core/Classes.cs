@@ -50,10 +50,17 @@ namespace SAEON.Observations.Core
 
     }
 
+    public class Series
+    {
+        public string Caption { get; set; }
+        public string Name { get; set; }
+        public bool IsFeature { get; set; }
+        public List<SeriesPoint> Points { get; private set; } = new List<SeriesPoint>();
+    }
+
     public class DataQueryOutput
     {
-        public Dictionary<string, string> Captions = new Dictionary<string, string>();
-        public DataTable Data { get; set; } = new DataTable();
-        public Dictionary<string, List<SeriesPoint>> Series = new Dictionary<string, List<SeriesPoint>>();
+        public DataTable Data { get; private set; } = new DataTable();
+        public List<Series> Series { get; private set; } = new List<Core.Series>();
     }
 }

@@ -1,15 +1,24 @@
 ﻿@using System.Data
 @using SAEON.Observations.QuerySite.Models
+@using Syncfusion.JavaScript.DataVisualization
 @model QueryModel
 @(Html.EJ().Chart("chartResults")
+    .PrimaryXAxis(px => px.ValueType(AxisValueType.Datetime).LabelFormat("MMM yyyy"))
+    .PrimaryYAxis(py => py.ValueType(AxisValueType.Double))
     .Series(sr =>
     {
-        foreach (var s in Model.QueryResults.Series)
+        foreach (var s in Model.QueryResults.Series.Where(i => i.IsFeature))
         {
-            sr.DataSource(s.Value)
-            .XName("Date").YName("Value")
+            sr.Name(s.Caption)
+            .Type(SeriesType.Line)
+            .DataSource(s.Points)
+            .XName("Date")
+            .YName("Value")
             .Add();
         }
-    });
+    })
+    .Legend(lgn => lgn.Visible(true))
+    .Size(sz => sz.Width("1000px").Height("800px"))
+    .IsResponsive(true)
 )
 @Html.EJ().ScriptManager()

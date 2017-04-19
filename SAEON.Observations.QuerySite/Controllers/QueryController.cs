@@ -150,7 +150,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region Filters
-        public PartialViewResult UpdateFilters(DateTime startDate, DateTime endDate)
+        public EmptyResult UpdateFilters(DateTime startDate, DateTime endDate)
         {
             using (Logging.MethodCall(this.GetType()))
             {
@@ -162,7 +162,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     model.EndDate = endDate;
                     SessionModel = model;
                     //Logging.Verbose("Model: {@model}", model);
-                    return PartialView("Filters", model);
+                    //return PartialView("Filters", model);
+                    return null;
                 }
                 catch (Exception ex)
                 {
@@ -189,7 +190,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         StartDate = model.StartDate,
                         EndDate = model.EndDate
                     };
-                    var results = (await Post<DataQueryOutput, DataQueryInput>("DataQuery", input));
+                    var results = (await Post<DataQueryInput, DataQueryOutput>("DataQuery", input));
                     Logging.Verbose("Results: Cols: {cols} Rows: {rows}", results.Data.Columns.Count, results.Data.Rows.Count);
                     //Logging.Verbose("Results: {@results}", results);
                     model.QueryResults = results;

@@ -9,9 +9,9 @@
     .AllowSorting()
     .Columns(col =>
     {
-        foreach (DataColumn c in Model.QueryResults.Data.Columns)
+        foreach (var s in Model.QueryResults.Series)
         {
-            col.Field(c.ColumnName).HeaderText(Model.QueryResults.Captions[c.ColumnName]).Add();
+            col.Field(s.Name).HeaderText(s.Caption).Add();
         }
     })
 )

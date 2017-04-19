@@ -32,15 +32,15 @@
     .Size(ButtonSize.Large)
     .ContentType(ContentType.TextAndImage)
     .PrefixIcon("e-icon e-dataexport")
-    //.ClientSideEvents(e => e.Click("onSearchClick"))
+    //.ClientSideEvents(e => e.Click("onDownloadClick"))
 )
 <script type="text/javascript">
     function onSearchClick() {
-        var startDate = $("#StartDate").ejDatePicker('instance')._dateValue;
-        var endDate = $("#EndDate").ejDatePicker('instance')._dateValue;
         var wp = $("#waiting").data("ejWaitingPopup");
         wp.show();
-        ajaxUpdateFilters(startDate, endDate)
+        var startDate = $("#StartDate").ejDatePicker('instance')._dateValue;
+        var endDate = $("#EndDate").ejDatePicker('instance')._dateValue;
+        ajaxUpdateFilters(startDate, endDate);
     }
     function ajaxUpdateFilters(startDate, endDate) {
         $.ajax({
@@ -51,12 +51,11 @@
             }),
             type: "POST",
             contentType: "application/json; charset=utf-8",
-            dataType: "html",
             success: function (data) {
                 ajaxDataQuery();
             },
             error: function () {
-                alert("Oops");
+                alert("Oops ajaxUpdateFilters");
             }
         });
     }
@@ -66,15 +65,11 @@
             async: true,
             type: "GET",
             contentType: "application/json; charset=utf-8",
-            dataType: "html",
             success: function (data) {
                 ajaxDisplayResultsGrid();
-                ajaxDisplayResultsChart();
-                var wp = $("#waiting").data("ejWaitingPopup");
-                wp.hide();
             },
             error: function () {
-                alert("Oops");
+                alert("Oops ajaxDataQuery");
             }
         });
     }
@@ -86,9 +81,10 @@
             dataType: "html",
             success: function (data) {
                 $('#PartialResultsGrid').html(data);
+                ajaxDisplayResultsChart()
             },
             error: function () {
-                alert("Oops");
+                alert("Oops ajaxDisplayResultsGrid");
             }
         });
     }
@@ -100,9 +96,11 @@
             dataType: "html",
             success: function (data) {
                 $('#PartialResultsChart').html(data);
+                var wp = $("#waiting").data("ejWaitingPopup");
+                wp.hide();
             },
             error: function () {
-                alert("Oops");
+                alert("Oops ajaxDisplayResultsChart");
             }
         });
     }

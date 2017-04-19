@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -66,7 +68,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [HttpPost]
         //[Route("{stationIds}/{phenomenonOfferingIds}/{startDate:datetime?}/{enddate:datetime?}")]
         [Route]
-        public DataQueryOutput DataQuery(DataQueryInput input)
+        public async Task<DataQueryOutput> DataQueryAsync(DataQueryInput input)
         {
             using (Logging.MethodCall(GetType(), new ParameterList { { "Params", input } }))
             {
@@ -78,8 +80,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                     if (!input.Locations.Any()) throw new ArgumentOutOfRangeException("input.Locations");
                     if (input.Features == null) throw new ArgumentNullException("input.Features");
                     if (!input.Features.Any()) throw new ArgumentOutOfRangeException("input.Features");
-                    db.Configuration.AutoDetectChangesEnabled = false;
-                    var dataList = db.VDownloads
+                    var dataList = await db.VDownloads
                         .Where(i => input.Locations.Contains(i.StationId))
                         .Where(i => input.Features.Contains(i.PhenomenonOfferingId))
                         .Where(i => i.Date >= input.StartDate)
@@ -88,7 +89,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                         .ThenBy(i => i.StationName)
                         .ThenBy(i => i.InstrumentName)
                         .ThenBy(i => i.Date)
-                        .ToList();
+                        .ToListAsync();
                     Logging.Verbose("DataList: {count}", dataList.Count);
                     //Logging.Verbose("DataList: {count} {@dataList}", dataList.Count, dataList);
                     string lastSite = null;
@@ -102,10 +103,10 @@ namespace SAEON.Observations.WebAPI.Controllers
                     result.Data.Columns.Add("Station", typeof(string));
                     result.Data.Columns.Add("Instrument", typeof(string));
                     result.Data.Columns.Add("Date", typeof(DateTime));
-                    result.Captions.Add("Site", "Site");
-                    result.Captions.Add("Station", "Station");
-                    result.Captions.Add("Instrument", "Instrument");
-                    result.Captions.Add("Date", "Date");
+                    result.Series.Add(new Series { Name = "Site", Caption = "Site" });
+                    result.Series.Add(new Series { Name = "Station", Caption = "Station" });
+                    result.Series.Add(new Series { Name = "Instrument", Caption = "Instrument" });
+                    result.Series.Add(new Series { Name = "Date", Caption = "Date" });
                     DataRow row = null;
                     bool isNewRow = false;
                     foreach (var data in dataList)
@@ -152,8 +153,8 @@ namespace SAEON.Observations.WebAPI.Controllers
                             features.Add(feature);
                             var col = result.Data.Columns.Add(feature.Name, typeof(double));
                             col.Caption = feature.Caption;
-                            result.Captions.Add(col.ColumnName, col.Caption);
-                            Logging.Verbose("Adding {name} {caption}", col.ColumnName, col.Caption);
+                            result.Series.Add(new Series { Name = col.ColumnName, Caption = col.Caption, IsFeature = true });
+                            //Logging.Verbose("Adding {name} {caption}", col.ColumnName, col.Caption);
                         }
                         if (row.IsNull(feature.Name))
                             row[feature.Name] = data.Value;
@@ -167,14 +168,14 @@ namespace SAEON.Observations.WebAPI.Controllers
                         }
                     }
                     Logging.Verbose("Result: Cols: {cols} Rows: {rows}", result.Data.Columns.Count, result.Data.Rows.Count);
-                    result.Series.Clear();
-                    foreach (var feature in features)
+                    foreach (var feature in features.Take(10))
                     {
-                        var list = dataList
+                        var points = dataList
                             .Where(i => i.PhenomenonOfferingId == feature.PhenomenonOfferingId)
                             .Select(i => new SeriesPoint { Date = i.Date, Value = i.Value })
                             .ToList();
-                        result.Series.Add(feature.Name, list);
+                        result.Series.Where(i => i.Name == feature.Name).First().Points.AddRange(points);
+                        Logging.Verbose("Series: Name: {name} Points: {@points}", feature.Caption, points.Take(100));
                     }
                     return result;
                 }
