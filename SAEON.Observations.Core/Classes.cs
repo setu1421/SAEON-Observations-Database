@@ -30,6 +30,10 @@ namespace SAEON.Observations.Core
         public object NodeProperty { get; set; }
         public object LinkProperty { get; set; }
         public object ImageProperty { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public int? Elevation { get; set; }
+        public string Url { get; set; }
     }
 
     public class Feature : TreeNode { }
@@ -63,4 +67,5 @@ namespace SAEON.Observations.Core
         public DataTable Data { get; private set; } = new DataTable();
         public List<Series> Series { get; private set; } = new List<Core.Series>();
     }
+
 }

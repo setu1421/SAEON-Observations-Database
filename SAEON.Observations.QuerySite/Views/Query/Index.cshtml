@@ -18,6 +18,12 @@
                             @Html.Partial("SelectedLocations", Model)
                         </div>
                     </div>);
+                tabs.Add().ID("LocationsMapTab").Text("Map").ContentTemplate(
+                    @<div class="row">
+                        <div class="col-md-12" id="PartialLocationsMap">
+                            @Html.Partial("LocationsMap", Model)
+                        </div>
+                    </div>);
                 tabs.Add().ID("FeaturesTab").Text("Features").ContentTemplate(
                     @<div class="row">
                         <div class="col-md-6" id="PartialFeatures">

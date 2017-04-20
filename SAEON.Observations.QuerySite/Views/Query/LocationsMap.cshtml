@@ -1,0 +1,24 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model QueryModel
+<div class="row">
+    <div class="col-md-12">
+        <div id="mapLocations" style="height:400px; width:100%"></div>
+    </div>
+</div>
+<script>
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('mapLocations'), {
+            zoom: 4
+        });
+        var bounds = new google.maps.LatLngBounds();
+        @foreach (var p in Model.UnselectedStations)
+        {
+
+        }
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcCAczkNZZUu5DfM78-7cpBrAnwyEy_Tg&callback=initMap">
+</script>
+
+

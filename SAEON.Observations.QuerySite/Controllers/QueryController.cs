@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using geoG = GeoJSON.Net.Geometry;
+using geoF = GeoJSON.Net.Feature;
+using Newtonsoft.Json;
 using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using Syncfusion.JavaScript;
@@ -10,6 +12,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
+using System.Net.Mime;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
@@ -64,11 +69,79 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
+        public async Task<ActionResult> MapTest()
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                var model = SessionModel;
+                if (model.Locations == null)
+                {
+                    model.Locations = await GetLocations();
+                }
+                if (model.Features == null)
+                {
+                    model.Features = await GetFeatures();
+                }
+                SessionModel = model;
+                //Logging.Verbose("Model: {@model}", model);
+                return View(model);
+            }
+        }
+
         #region Locations
-        protected async Task<List<Location>> GetLocations()
+        private async Task<List<Location>> GetLocations()
         {
             return (await GetList<Location>("Locations")).ToList();
         }
+
+        #region GeoJson
+        //public async Task<ContentResult> GetSelectedLocations()
+        //{
+        //    var model = SessionModel;
+        //    if (model.Locations == null)
+        //    {
+        //        model.Locations = await GetLocations();
+        //    }
+        //    SessionModel = model;
+        //    var locations = model.SelectedLocations.Where(i => i.Latitude.HasValue && i.Longitude.HasValue);
+        //    List<geoF.Feature> features = new List<geoF.Feature>();
+        //    foreach (var loc in locations)
+        //    {
+        //        var point = new geoG.Point(new geoG.GeographicPosition(loc.Latitude.Value, loc.Longitude.Value, loc.Elevation));
+        //        var featureProperties = new Dictionary<string, object> { };
+        //        featureProperties.Add("Name", loc.Name);
+        //        featureProperties.Add("Url", loc.Url);
+        //        features.Add(new geoF.Feature(point, featureProperties));
+        //    }
+        //    return Content(JsonConvert.SerializeObject(new geoF.FeatureCollection(features), new StringEnumConverter()), "application/json");
+        //}
+
+        //public async Task<ContentResult> GetUnselectedLocations()
+        //{
+        //    var model = SessionModel;
+        //    if (model.Locations == null)
+        //    {
+        //        model.Locations = await GetLocations();
+        //    }
+        //    SessionModel = model;
+        //    var locations = model.Locations
+        //        .Where(i => i.Latitude.HasValue && i.Longitude.HasValue)
+        //        .Except(model.SelectedLocations.Where(i => i.Latitude.HasValue && i.Longitude.HasValue));
+        //    List<geoF.Feature> features = new List<geoF.Feature>();
+        //    foreach (var loc in locations)
+        //    {
+        //        var point = new geoG.Point(new geoG.GeographicPosition(loc.Latitude.Value, loc.Longitude.Value, loc.Elevation));
+        //        var featureProperties = new Dictionary<string, object> { };
+        //        featureProperties.Add("Name", loc.Name);
+        //        featureProperties.Add("Url", loc.Url);
+        //        features.Add(new geoF.Feature(point, featureProperties));
+        //    }
+        //    var col = new geoF.FeatureCollection(features);
+        //    var json = JsonConvert.SerializeObject(new geoF.FeatureCollection(features), new StringEnumConverter());
+        //    Logging.Verbose("Json: {json}", json);
+        //    return Content(json, "application/json");
+        //}
+        #endregion
 
         public PartialViewResult UpdateSelectedLocations(List<string> locations)
         {
@@ -92,7 +165,19 @@ namespace SAEON.Observations.QuerySite.Controllers
                         selectedLocations = model.Locations.Where(l => stations.Contains(l.Key)).OrderBy(l => l.Name).ToList();
                     }
                     Logging.Verbose("SelectedLocations: {@locations}", selectedLocations);
-                    model.SelectedLocations = selectedLocations;
+                    model.SelectedLocations.Clear();
+                    model.SelectedLocations.AddRange(selectedLocations);
+                    model.SelectedStations.Clear();
+                    var s = model.SelectedLocations
+                        .Where(i => i.Latitude.HasValue && i.Longitude.HasValue)
+                        .Select(i => new MapPoint { Title = i.Name, Url = i.Url, Latitude = i.Latitude.Value, Longitude = i.Longitude.Value, Elevation = i.Elevation });
+                    model.SelectedStations.AddRange(s);
+                    model.UnselectedStations.Clear();
+                    var u = model.Locations
+                        .Where(i => i.Latitude.HasValue && i.Longitude.HasValue)
+                        .Except(model.SelectedLocations.Where(i => i.Latitude.HasValue && i.Longitude.HasValue))
+                        .Select(i => new MapPoint { Title = i.Name, Url = i.Url, Latitude = i.Latitude.Value, Longitude = i.Longitude.Value, Elevation = i.Elevation });
+                    model.UnselectedStations.AddRange(u);
                     SessionModel = model;
                     //Logging.Verbose("Model: {@model}", model);
                     return PartialView("SelectedLocationsPost", model);
@@ -107,6 +192,11 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region Features
+        private async Task<List<Feature>> GetFeatures()
+        {
+            return (await GetList<Feature>("Features")).ToList();
+        }
+
         public PartialViewResult UpdateSelectedFeatures(List<string> features)
         {
             using (Logging.MethodCall(this.GetType()))
@@ -129,7 +219,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                         selectedFeatures = model.Features.Where(l => offerings.Contains(l.Key)).OrderBy(l => l.Text).ToList();
                     }
                     Logging.Verbose("SelectedFeatures: {@features}", selectedFeatures);
-                    model.SelectedFeatures = selectedFeatures;
+                    model.SelectedFeatures.Clear();
+                    model.SelectedFeatures.AddRange(selectedFeatures);
                     SessionModel = model;
                     //Logging.Verbose("Model: {@model}", model);
                     return PartialView("SelectedFeaturesPost", model);
@@ -141,12 +232,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-
-        protected async Task<List<Feature>> GetFeatures()
-        {
-            return (await GetList<Feature>("Features")).ToList();
-        }
-
         #endregion
 
         #region Filters
@@ -216,7 +301,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var model = SessionModel;
                     //Logging.Verbose("Model: {@model}", model);
-                    return PartialView("ResultsGridPost",model);
+                    return PartialView("ResultsGridPost", model);
                 }
                 catch (Exception ex)
                 {

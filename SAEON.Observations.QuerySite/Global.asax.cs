@@ -1,4 +1,7 @@
-﻿using SAEON.Observations.Core;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using SAEON.Observations.Core;
 using Serilog;
 using System;
 using System.Collections.Generic;

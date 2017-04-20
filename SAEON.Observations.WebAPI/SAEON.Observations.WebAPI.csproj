@@ -310,7 +310,6 @@
     <Compile Include="Controllers\InstrumentsODataController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\LocationsHelper.cs" />
-    <Compile Include="Controllers\LocationsODataController.cs" />
     <Compile Include="Controllers\OfferingsApiController.cs" />
     <Compile Include="Controllers\OfferingsODataController.cs" />
     <Compile Include="Controllers\OrganisationsApiController.cs" />

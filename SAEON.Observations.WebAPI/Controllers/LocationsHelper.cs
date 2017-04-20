@@ -55,7 +55,11 @@ namespace SAEON.Observations.WebAPI.Controllers
                                     ParentKey = siteNode.Key,
                                     Text = station.Name,
                                     Name = $"{site.Name} - {station.Name}",
-                                    HasChildren = false
+                                    HasChildren = false,
+                                    Latitude = station.Latitude,
+                                    Longitude = station.Longitude,
+                                    Elevation = station.Elevation,
+                                    Url = station.Url
                                 };
                                 result.Add(stationNode);
                             }

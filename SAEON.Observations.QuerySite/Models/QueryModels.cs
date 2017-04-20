@@ -7,12 +7,23 @@ using System.Web;
 
 namespace SAEON.Observations.QuerySite.Models
 {
+    public class MapPoint
+    {
+        public string Title { get; set; }
+        public string Url { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double? Elevation { get; set; }
+    }
+
     public class QueryModel
     {
         public List<Feature> Features { get; set; }
-        public List<Feature> SelectedFeatures { get; set; } = new List<Feature>();
+        public List<Feature> SelectedFeatures { get; private set; } = new List<Feature>();
         public List<Location> Locations { get; set; }
-        public List<Location> SelectedLocations { get; set; } = new List<Location>();
+        public List<Location> SelectedLocations { get; private set; } = new List<Location>();
+        public List<MapPoint> SelectedStations { get; private set; } = new List<MapPoint>();
+        public List<MapPoint> UnselectedStations { get; private set; } = new List<MapPoint>();
         [DisplayName("Start Date")]
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
         [DisplayName("End Date")]
