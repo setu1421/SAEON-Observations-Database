@@ -23,22 +23,8 @@
             var nodeData = treeObj.getNode(checkedNode);
             selectedFeatures.push(nodeData.id);
         }
-        ajaxUpdateSelectedFeatures(selectedFeatures);
-    }
-    function ajaxUpdateSelectedFeatures(selectedFeatures) {
-        $.ajax({
-            url: "/Query/UpdateSelectedFeatures",
-            data: JSON.stringify({ Features: selectedFeatures }),
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: "html",
-            success: function (data) {
-                //alert(data)
-                $('#PartialSelectedFeatures').html(data);
-            },
-            error: function () {
-                alert("Oops");
-            }
-        });
+        $.post("/Query/UpdateSelectedFeatures", { Features: selectedFeatures })
+            .done(function (data) { $('#PartialSelectedFeatures').html(data); })
+            .fail(function () { alert("Oops"); });
     }
 </script>

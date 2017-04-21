@@ -14,6 +14,7 @@ namespace SAEON.Observations.QuerySite.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double? Elevation { get; set; }
+        public bool IsSelected { get; set; }
     }
 
     public class QueryModel
@@ -22,8 +23,7 @@ namespace SAEON.Observations.QuerySite.Models
         public List<Feature> SelectedFeatures { get; private set; } = new List<Feature>();
         public List<Location> Locations { get; set; }
         public List<Location> SelectedLocations { get; private set; } = new List<Location>();
-        public List<MapPoint> SelectedStations { get; private set; } = new List<MapPoint>();
-        public List<MapPoint> UnselectedStations { get; private set; } = new List<MapPoint>();
+        public List<MapPoint> MapPoints { get; private set; } = new List<MapPoint>();
         [DisplayName("Start Date")]
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
         [DisplayName("End Date")]

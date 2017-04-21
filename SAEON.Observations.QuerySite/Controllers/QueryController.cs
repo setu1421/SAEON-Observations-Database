@@ -59,6 +59,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     model.Locations = await GetLocations();
                 }
+                LoadMapPoints(model);
                 if (model.Features == null)
                 {
                     model.Features = await GetFeatures();
@@ -78,6 +79,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     model.Locations = await GetLocations();
                 }
+                LoadMapPoints(model);
                 if (model.Features == null)
                 {
                     model.Features = await GetFeatures();
@@ -86,12 +88,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 //Logging.Verbose("Model: {@model}", model);
                 return View(model);
             }
-        }
-
-        #region Locations
-        private async Task<List<Location>> GetLocations()
-        {
-            return (await GetList<Location>("Locations")).ToList();
         }
 
         #region GeoJson
@@ -141,8 +137,50 @@ namespace SAEON.Observations.QuerySite.Controllers
         //    Logging.Verbose("Json: {json}", json);
         //    return Content(json, "application/json");
         //}
+
+        private void LoadMapPoints(QueryModel model)
+        {
+            model.MapPoints.Clear();
+            var u = model.Locations
+                .Where(i => i.Latitude.HasValue && i.Longitude.HasValue)
+                .Except(model.SelectedLocations.Where(i => i.Latitude.HasValue && i.Longitude.HasValue))
+                .Select(i => new MapPoint { Title = i.Name, Url = i.Url, Latitude = i.Latitude.Value, Longitude = i.Longitude.Value, Elevation = i.Elevation });
+            model.MapPoints.AddRange(u);
+            var s = model.SelectedLocations
+                .Where(i => i.Latitude.HasValue && i.Longitude.HasValue)
+                .Select(i => new MapPoint { Title = i.Name, Url = i.Url, Latitude = i.Latitude.Value, Longitude = i.Longitude.Value, Elevation = i.Elevation, IsSelected = true });
+            model.MapPoints.AddRange(s);
+        }
+
+        [HttpGet]
+        public JsonResult GetMapPoints()
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    Logging.Verbose("MapPoints: {count}", model.MapPoints.Count);
+                    //Logging.Verbose("MapPoints: {count} {@list}", model.MapPoints.Count, model.MapPoints);
+                    return Json(model.MapPoints, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
         #endregion
 
+        #region Locations
+        private async Task<List<Location>> GetLocations()
+        {
+            return (await GetList<Location>("Locations")).ToList();
+        }
+
+        [HttpPost]
         public PartialViewResult UpdateSelectedLocations(List<string> locations)
         {
             using (Logging.MethodCall(this.GetType()))
@@ -167,17 +205,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     Logging.Verbose("SelectedLocations: {@locations}", selectedLocations);
                     model.SelectedLocations.Clear();
                     model.SelectedLocations.AddRange(selectedLocations);
-                    model.SelectedStations.Clear();
-                    var s = model.SelectedLocations
-                        .Where(i => i.Latitude.HasValue && i.Longitude.HasValue)
-                        .Select(i => new MapPoint { Title = i.Name, Url = i.Url, Latitude = i.Latitude.Value, Longitude = i.Longitude.Value, Elevation = i.Elevation });
-                    model.SelectedStations.AddRange(s);
-                    model.UnselectedStations.Clear();
-                    var u = model.Locations
-                        .Where(i => i.Latitude.HasValue && i.Longitude.HasValue)
-                        .Except(model.SelectedLocations.Where(i => i.Latitude.HasValue && i.Longitude.HasValue))
-                        .Select(i => new MapPoint { Title = i.Name, Url = i.Url, Latitude = i.Latitude.Value, Longitude = i.Longitude.Value, Elevation = i.Elevation });
-                    model.UnselectedStations.AddRange(u);
+                    LoadMapPoints(model);
                     SessionModel = model;
                     //Logging.Verbose("Model: {@model}", model);
                     return PartialView("SelectedLocationsPost", model);
@@ -189,6 +217,24 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        public PartialViewResult UpdateLocationsMap()
+        {
+            using (Logging.MethodCall(this.GetType()))
+            {
+                try
+                {
+                    return PartialView("LocationsMap");
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
         #endregion
 
         #region Features
@@ -197,6 +243,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             return (await GetList<Feature>("Features")).ToList();
         }
 
+        [HttpPost]
         public PartialViewResult UpdateSelectedFeatures(List<string> features)
         {
             using (Logging.MethodCall(this.GetType()))
@@ -235,6 +282,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region Filters
+        [HttpPost]
         public EmptyResult UpdateFilters(DateTime startDate, DateTime endDate)
         {
             using (Logging.MethodCall(this.GetType()))
@@ -260,6 +308,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region DataQuery
+        [HttpGet]
         public async Task<EmptyResult> DataQuery()
         {
             using (Logging.MethodCall(this.GetType()))
@@ -293,6 +342,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region ResultsGrid
+        [HttpGet]
         public PartialViewResult ResultsGrid()
         {
             using (Logging.MethodCall(this.GetType()))
@@ -313,6 +363,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region ResultsChart
+        [HttpGet]
         public PartialViewResult ResultsChart()
         {
             using (Logging.MethodCall(this.GetType()))

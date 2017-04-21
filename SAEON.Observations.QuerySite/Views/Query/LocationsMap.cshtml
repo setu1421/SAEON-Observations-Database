@@ -1,20 +1,51 @@
-﻿@using SAEON.Observations.QuerySite.Models
-@model QueryModel
-<div class="row">
+﻿<div class="row">
     <div class="col-md-12">
         <div id="mapLocations" style="height:400px; width:100%"></div>
     </div>
 </div>
 <script>
+    var markers = [];
+    var map;
     function initMap() {
-        var map = new google.maps.Map(document.getElementById('mapLocations'), {
-            zoom: 4
+        map = new google.maps.Map(document.getElementById('mapLocations'), {
+            zoom: 5,
+            center: { lat: -28.7238579, lng: 24.6531662 }
         });
-        var bounds = new google.maps.LatLngBounds();
-        @foreach (var p in Model.UnselectedStations)
-        {
-
-        }
+        UpdateMap(true);
+    }
+    function UpdateMap(isInit = false) {
+        $.getJSON("/Query/GetMapPoints")
+            .done(function (json) {
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(null);
+                }
+                markers = [];
+                var bounds = new google.maps.LatLngBounds();
+                var unselectedLocations = json;
+                for (var i = 0; i < unselectedLocations.length; i++) {
+                    var location = unselectedLocations[i];
+                    var marker = new google.maps.Marker({
+                        position: { lat: location.Latitude, lng: location.Longitude },
+                        map: map,
+                        title: location.Title
+                    });
+                    markers.push(marker);
+                    bounds.extend(marker.position);
+                    if (location.IsSelected) {
+                        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+                    }
+                    else {
+                        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                    }
+                }
+                if (isInit) {
+                    map.fitBounds(bounds);
+                }
+            })
+            .fail(function (jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                alert(err);
+            });
     }
 </script>
 <script async defer

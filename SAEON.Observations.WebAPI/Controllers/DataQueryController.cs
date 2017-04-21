@@ -68,7 +68,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [HttpPost]
         //[Route("{stationIds}/{phenomenonOfferingIds}/{startDate:datetime?}/{enddate:datetime?}")]
         [Route]
-        public async Task<DataQueryOutput> DataQueryAsync(DataQueryInput input)
+        public async Task<DataQueryOutput> DataQuery(DataQueryInput input)
         {
             using (Logging.MethodCall(GetType(), new ParameterList { { "Params", input } }))
             {

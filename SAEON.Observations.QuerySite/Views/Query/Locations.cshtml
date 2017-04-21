@@ -27,22 +27,11 @@ Html.EJ().TreeView("treeViewLocations")
             var nodeData = treeObj.getNode(checkedNode);
             selectedLocations.push(nodeData.id);
         }
-        ajaxUpdateSelectedLocations(selectedLocations);
-    }
-    function ajaxUpdateSelectedLocations(selectedLocations) {
-        $.ajax({
-            url: "/Query/UpdateSelectedLocations",
-            data: JSON.stringify({ Locations: selectedLocations }),
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            dataType: "html",
-            success: function (data) {
-                //alert(data)
+        $.post("/Query/UpdateSelectedLocations", { Locations: selectedLocations })
+            .done(function (data) {
                 $('#PartialSelectedLocations').html(data);
-            },
-            error: function () {
-                alert("Oops");
-            }
-        });
+                UpdateMap();
+            })
+            .fail(function () {alert("Oops");});
     }
 </script>
