@@ -5,7 +5,10 @@ Create Table [dbo].[UserQueries]
     [UserId] NVarChar(128) not Null,
     [Name] VarChar(150) not Null, 
     [Description] VarChar(500) Null,
-    [QueryURI] VarChar(500) not Null,
+--> Changed 2.0.31 20170423 TimPN
+--    [QueryURI] VarChar(500) not Null,
+    [QueryInput] VarChar(5000) not Null,
+--< Changed 2.0.31 20170423 TimPN
     [AddedAt] DateTime null Constraint [DF_UserQueries_AddedAt] Default GetDate(),
     [AddedBy] NVarChar(128) not Null,
     [UpdatedAt] DateTime null Constraint [DF_UserQueries_UpdatedAt] Default GetDate(), 

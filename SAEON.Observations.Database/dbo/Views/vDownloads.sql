@@ -43,6 +43,7 @@ Select
   UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
   Phenomenon.Name + ', ' + Offering.Name + ', ' + UnitOfMeasure.UnitSymbol Feature,
   Observation.ValueDate,
+  Observation.ValueDay,
   Observation.RawValue,
   Observation.DataValue,
   Observation.Comment,
@@ -65,24 +66,44 @@ from
     on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
   inner join Instrument_Sensor
     on (Instrument_Sensor.SensorID = Sensor.ID) and
-       ((Instrument_Sensor.StartDate is null) or (Cast(Observation.ValueDate as Date) >= Instrument_Sensor.StartDate)) and
-       ((Instrument_Sensor.EndDate is null) or (Cast(Observation.ValueDate as Date) <= Instrument_Sensor.EndDate))
+--> Changed 2.0.31 20170423 TimPN
+       --((Instrument_Sensor.StartDate is null) or (Cast(Observation.ValueDate as Date) >= Instrument_Sensor.StartDate)) and
+       --((Instrument_Sensor.EndDate is null) or (Cast(Observation.ValueDate as Date) <= Instrument_Sensor.EndDate))
+       ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (Observation.ValueDay <= Instrument_Sensor.EndDate))
+--< Changed 2.0.31 20170423 TimPN
   inner join Instrument
     on (Instrument_Sensor.InstrumentID = Instrument.ID) and
-       ((Instrument.StartDate is null) or (Cast(Observation.ValueDate as Date) >= Instrument.StartDate )) and
-       ((Instrument.EndDate is null) or (Cast(Observation.ValueDate as Date) <= Instrument.EndDate))
+--> Changed 2.0.31 20170423 TimPN
+       --((Instrument.StartDate is null) or (Cast(Observation.ValueDate as Date) >= Instrument.StartDate )) and
+       --((Instrument.EndDate is null) or (Cast(Observation.ValueDate as Date) <= Instrument.EndDate))
+       ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate )) and
+       ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+--< Changed 2.0.31 20170423 TimPN
   inner join Station_Instrument
     on (Station_Instrument.InstrumentID = Instrument.ID) and
-       ((Station_Instrument.StartDate is null) or (Cast(Observation.ValueDate as Date) >= Station_Instrument.StartDate)) and
-       ((Station_Instrument.EndDate is null) or (Cast(Observation.ValueDate as Date) <= Station_Instrument.EndDate))
+--> Changed 2.0.31 20170423 TimPN
+       --((Station_Instrument.StartDate is null) or (Cast(Observation.ValueDate as Date) >= Station_Instrument.StartDate)) and
+       --((Station_Instrument.EndDate is null) or (Cast(Observation.ValueDate as Date) <= Station_Instrument.EndDate))
+       ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+       ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+--< Changed 2.0.31 20170423 TimPN
   inner join Station
     on (Station_Instrument.StationID = Station.ID) and
-       ((Station.StartDate is null) or (Cast(Observation.ValueDate as Date) >= Cast(Station.StartDate as Date))) and
-       ((Station.EndDate is null) or (Cast(Observation.ValueDate as Date) <= Cast(Station.EndDate as Date)))
+--> Changed 2.0.31 20170423 TimPN
+       --((Station.StartDate is null) or (Cast(Observation.ValueDate as Date) >= Cast(Station.StartDate as Date))) and
+       --((Station.EndDate is null) or (Cast(Observation.ValueDate as Date) <= Cast(Station.EndDate as Date)))
+       ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
+       ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+--< Changed 2.0.31 20170423 TimPN
   inner join Site
     on (Station.SiteID = Site.ID) and
-       ((Site.StartDate is null) or (Cast(Observation.ValueDate as Date) >= Cast(Site.StartDate as Date))) and
-       ((Site.EndDate is null) or (Cast(Observation.ValueDate as Date) <= Cast(Site.EndDate as Date)))
+--> Changed 2.0.31 20170423 TimPN
+       --((Site.StartDate is null) or (Cast(Observation.ValueDate as Date) >= Cast(Site.StartDate as Date))) and
+       --((Site.EndDate is null) or (Cast(Observation.ValueDate as Date) <= Cast(Site.EndDate as Date)))
+       ((Site.StartDate is null) or (Observation.ValueDay >= Site.StartDate)) and
+       ((Site.EndDate is null) or (Observation.ValueDay <= Site.EndDate))
+--< Changed 2.0.31 20170423 TimPN
 where
   (Status.Name = 'Verified')
 --< Added 2.0.26 20170130 TimPN

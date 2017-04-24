@@ -113,8 +113,12 @@ FROM DataLog d
 --> Changed 2.0.22 20170111 TimPN
 --	   ((Instrument_Sensor.StartDate is null) or (d.ValueDate >= Instrument_Sensor.StartDate)) and
 --	   ((Instrument_Sensor.EndDate is null) or (d.ValueDate <= Instrument_Sensor.EndDate))
-	   ((Instrument_Sensor.StartDate is null) or (Cast(d.ValueDate as Date) >= Instrument_Sensor.StartDate)) and
-	   ((Instrument_Sensor.EndDate is null) or (Cast(d.ValueDate as Date) <= Instrument_Sensor.EndDate))
+--> Changed 2.0.31 20170423 TimPN
+       --((Instrument_Sensor.StartDate is null) or (Cast(d.ValueDate as Date) >= Instrument_Sensor.StartDate)) and
+       --((Instrument_Sensor.EndDate is null) or (Cast(d.ValueDate as Date) <= Instrument_Sensor.EndDate))
+       ((Instrument_Sensor.StartDate is null) or (d.ValueDay >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (d.ValueDay <= Instrument_Sensor.EndDate))
+--< Changed 2.0.31 20170423 TimPN
 --< Changed 2.0.22 20170111 TimPN
 --> Changed 2.0.28 20170317 TimPN
 --  inner join Instrument
@@ -124,8 +128,12 @@ FROM DataLog d
 --> Changed 2.0.22 20170111 TimPN
 --	   ((Instrument.StartDate is null) or (d.ValueDate >= Instrument.StartDate )) and
 --	   ((Instrument.EndDate is null) or (d.ValueDate <= Instrument.EndDate))
-	   ((Instrument.StartDate is null) or (Cast(d.ValueDate as Date) >= Instrument.StartDate )) and
-	   ((Instrument.EndDate is null) or (Cast(d.ValueDate as Date) <= Instrument.EndDate))
+--> Changed 2.0.31 20170423 TimPN
+       --((Instrument.StartDate is null) or (Cast(d.ValueDate as Date) >= Instrument.StartDate )) and
+       --((Instrument.EndDate is null) or (Cast(d.ValueDate as Date) <= Instrument.EndDate))
+       ((Instrument.StartDate is null) or (d.ValueDay >= Instrument.StartDate )) and
+       ((Instrument.EndDate is null) or (d.ValueDay <= Instrument.EndDate))
+--< Changed 2.0.31 20170423 TimPN
 --< Changed 2.0.22 20170111 TimPN
 --> Changed 2.0.28 20170317 TimPN
 --  inner join Station_Instrument
@@ -135,8 +143,12 @@ FROM DataLog d
 --> Changed 2.0.22 20170111 TimPN
 --	   ((Station_Instrument.StartDate is null) or (d.ValueDate >= Station_Instrument.StartDate)) and
 --	   ((Station_Instrument.EndDate is null) or (d.ValueDate <= Station_Instrument.EndDate))
-	   ((Station_Instrument.StartDate is null) or (Cast(d.ValueDate as Date) >= Station_Instrument.StartDate)) and
-	   ((Station_Instrument.EndDate is null) or (Cast(d.ValueDate as Date) <= Station_Instrument.EndDate))
+--> Changed 2.0.31 20170423 TimPN
+       --((Station_Instrument.StartDate is null) or (Cast(d.ValueDate as Date) >= Station_Instrument.StartDate)) and
+       --((Station_Instrument.EndDate is null) or (Cast(d.ValueDate as Date) <= Station_Instrument.EndDate))
+       ((Station_Instrument.StartDate is null) or (d.ValueDay >= Station_Instrument.StartDate)) and
+       ((Station_Instrument.EndDate is null) or (d.ValueDay <= Station_Instrument.EndDate))
+--< Changed 2.0.31 20170423 TimPN
 --< Changed 2.0.22 20170111 TimPN
 --> Changed 2.0.28 20170317 TimPN
 --  inner join Station 
@@ -146,8 +158,12 @@ FROM DataLog d
 --> Changed 2.0.22 20170111 TimPN
 --	   ((Station.StartDate is null) or (Cast(d.ValueDate as Date) >= Cast(Station.StartDate as Date))) and
 --	   ((Station.EndDate is null) or (Cast(d.ValueDate as Date) <= Cast(Station.EndDate as Date)))
-	   ((Station.StartDate is null) or (Cast(d.ValueDate as Date) >= Station.StartDate)) and
-	   ((Station.EndDate is null) or (Cast(d.ValueDate as Date) <= Station.EndDate))
+--> Changed 2.0.31 20170423 TimPN
+       --((Station.StartDate is null) or (Cast(d.ValueDate as Date) >= Station.StartDate)) and
+       --((Station.EndDate is null) or (Cast(d.ValueDate as Date) <= Station.EndDate))
+       ((Station.StartDate is null) or (d.ValueDay >= Station.StartDate)) and
+       ((Station.EndDate is null) or (d.ValueDay <= Station.EndDate))
+--< Changed 2.0.31 20170423 TimPN
 --< Changed 2.0.22 20170111 TimPN
 --> Changed 2.0.28 20170317 TimPN
 --  inner join Site
@@ -157,8 +173,12 @@ FROM DataLog d
 --> Changed 2.0.22 20170111 TimPN
 --	   ((Site.StartDate is null) or  (Cast(d.ValueDate as Date) >= Cast(Site.StartDate as Date))) and
 --	   ((Site.EndDate is null) or  (Cast(d.ValueDate as Date) <= Cast(Site.EndDate as Date)))
-	   ((Site.StartDate is null) or  (Cast(d.ValueDate as Date) >= Site.StartDate)) and
-	   ((Site.EndDate is null) or  (Cast(d.ValueDate as Date) <= Site.EndDate))
+--> Changed 2.0.31 20170423 TimPN
+       --((Site.StartDate is null) or  (Cast(d.ValueDate as Date) >= Site.StartDate)) and
+       --((Site.EndDate is null) or  (Cast(d.ValueDate as Date) <= Site.EndDate))
+       ((Site.StartDate is null) or  (d.ValueDay >= Site.StartDate)) and
+       ((Site.EndDate is null) or  (d.ValueDay <= Site.EndDate))
+--< Changed 2.0.31 20170423 TimPN
 --< Changed 2.0.22 20170111 TimPN
 --< Added 2.0.17 20161128 TimPN
 LEFT JOIN PhenomenonOffering po

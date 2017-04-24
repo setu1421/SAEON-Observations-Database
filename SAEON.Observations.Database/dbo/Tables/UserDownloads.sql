@@ -5,7 +5,10 @@ Create Table [dbo].[UserDownloads]
     [UserId] NVarChar(128) not Null,
     [Name] VarChar(150) not Null, 
     [Description] VarChar(5000) Null,
-    [QueryURI] VarChar(500) not Null,
+--> Changed 2.0.31 20170423 TimPN
+--    [QueryURI] VarChar(500) not Null,
+    [QueryInput] VarChar(5000) not Null,
+--< Changed 2.0.31 20170423 TimPN
     [DownloadURI] VarChar(500) not Null,
     [AddedAt] DateTime null Constraint [DF_UserDownloads_AddedAt] Default GetDate(),
     [AddedBy] NVarChar(128) not Null,

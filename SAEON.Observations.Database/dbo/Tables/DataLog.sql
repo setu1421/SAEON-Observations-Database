@@ -10,6 +10,9 @@
     [ImportDate]                 DATETIME         CONSTRAINT [DF_DataLog_ImportDate] DEFAULT (getdate()) NOT NULL,
     [ValueDate]                  DATETIME         NULL,
     [ValueTime]                  DATETIME         NULL,
+--> Added 2.0.31 20170423 TimPN
+    [ValueDay]             as Cast(ValueDate as Date),
+--< Added 2.0.31 20170423 TimPN
     [ValueText]                  VARCHAR (50)     NOT NULL,
     [TransformValueText]         VARCHAR (50)     NULL,
     [RawValue]                   FLOAT (53)       NULL,
@@ -70,6 +73,10 @@ GO
 --CREATE INDEX [IX_DataLog_SensorProcedureID] ON [dbo].[DataLog] ([SensorProcedureID]);
 CREATE INDEX [IX_DataLog_SensorID] ON [dbo].[DataLog] ([SensorID]);
 --< Changed 2.0.3 20160503 TimPN
+--> Added 2.0.31 20170423 TimPN
+GO
+CREATE INDEX [IX_DataLog_ValueDay] ON [dbo].[DataLog] ([ValueDay]);
+--< Added 2.0.31 20170423 TimPN
 GO
 CREATE INDEX [IX_DataLog_DataSourceTransformationID] ON [dbo].[DataLog] ([DataSourceTransformationID])
 GO

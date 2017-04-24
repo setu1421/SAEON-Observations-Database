@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Observation] (
 --> Added 2.0.31 20170414 TimPN
-	[ID]		Int not null Constraint DF_Observation_ID Default (Next value for dbo.ObservationsSequence),
+    [ID]		Int not null Constraint DF_Observation_ID Default (Next value for dbo.ObservationsSequence),
 --< Added 2.0.31 20170414 TimPN
 --> Removed 2.0.31 20170414 TimPN
 --> Changed 2.0.8 20160720 TimPN
@@ -13,6 +13,9 @@
     [SensorID]     UNIQUEIDENTIFIER NOT NULL,
 --< Changed 2.0.3 20160503 TimPN
     [ValueDate]             DATETIME         NOT NULL,
+--> Added 2.0.31 20170423 TimPN
+    [ValueDay]             as Cast(ValueDate as Date),
+--< Added 2.0.31 20170423 TimPN
     [RawValue]              FLOAT (53)       NULL,
     [DataValue]             FLOAT (53)       NULL,
 --> Changed 2.0.10 20160901 TimPN
@@ -44,7 +47,7 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate(), 
 --> Added 2.0.31 20170414 TimPN
-	[RowVersion] RowVersion not null
+    [RowVersion] RowVersion not null
 --< Added 2.0.31 20170414 TimPN
 --< Added 2.0.8 20160718 TimPN
 --> Changed 2.0.8 20160718 TimPN
@@ -131,11 +134,20 @@ CREATE INDEX [IX_Observation_AddedDate] ON [dbo].[Observation] ([SensorID], [Add
 --> Added 2.0.13 20161010 TimPN
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 --< Added 2.0.13 20161010 TimPN
+--> Changed 2.0.31 20170423 TimPN
 GO
-CREATE INDEX [IX_Observation_ValueDate] ON [dbo].[Observation] ([SensorID], [ValueDate])
+--CREATE INDEX [IX_Observation_ValueDate] ON [dbo].[Observation] ([SensorID], [ValueDate])
+CREATE INDEX [IX_Observation_SensorID_ValueDate] ON [dbo].[Observation] ([SensorID], [ValueDate])
+--> Changed 2.0.31 20170423 TimPN
 --> Added 2.0.13 20161010 TimPN
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 --< Added 2.0.13 20161010 TimPN
+--> Added 2.0.31 20170423 TimPN
+GO
+CREATE INDEX [IX_Observation_ValueDate] ON [dbo].[Observation] ([ValueDate]) ON [Observations];
+GO
+CREATE INDEX [IX_Observation_ValueDay] ON [dbo].[Observation] ([ValueDay]);
+--< Added 2.0.31 20170423 TimPN
 --< Added 2.0.8 20160726 TimPN
 --> Added 2.0.9 20160823 TimPN
 GO
