@@ -6,7 +6,7 @@
 <div id="waiting">
     <div class="row">
         <div class="col-md-12">
-            @Html.EJ().WaitingPopup("waiting").ShowOnInit(false)
+            @Html.EJ().WaitingPopup("waiting").ShowOnInit(false).Text("Loading...")
             @{Html.EJ().Tab("QueryTabs").Items(tabs =>
                 {
                 tabs.Add().ID("LocationsTab").Text("Locations").ContentTemplate(
@@ -18,39 +18,39 @@
                             @Html.Partial("SelectedLocations", Model)
                         </div>
                     </div>);
-                tabs.Add().ID("LocationsMapTab").Text("Map").ContentTemplate(
-                    @<div class="row">
-                        <div class="col-md-12" id="PartialLocationsMap">
-                            @Html.Partial("LocationsMap", Model)
-                        </div>
-                    </div>);
-                tabs.Add().ID("FeaturesTab").Text("Features").ContentTemplate(
-                    @<div class="row">
-                        <div class="col-md-6" id="PartialFeatures">
-                            @Html.Partial("Features", Model)
-                        </div>
-                        <div class="col-md-6" id="PartialSelectedFeatures">
-                            @Html.Partial("SelectedFeatures", Model)
-                        </div>
-                    </div>);
-                tabs.Add().ID("FiltersTab").Text("Filters").ContentTemplate(
-                    @<div class="row">
-                        <div class="col-md-12" id="PartialFilters">
-                            @Html.Partial("Filters", Model)
-                        </div>
-                    </div>);
-                tabs.Add().ID("ResultsTab").Text("Results").ContentTemplate(
-                    @<div class="row">
-                        <div class="col-md-12" id="PartialResultsGrid">
-                            @Html.Partial("ResultsGrid", Model)
-                        </div>
-                    </div>);
-                tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
-                    @<div class="row">
-                        <div class="col-md-12" id="PartialResultsChart">
-                            @Html.Partial("ResultsChart", Model)
-                        </div>
-                    </div>);
+                    tabs.Add().ID("LocationsMapTab").Text("Map").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md-12" id="PartialLocationsMap">
+                                @Html.Partial("LocationsMap", Model)
+                            </div>
+                        </div>);
+                    tabs.Add().ID("FeaturesTab").Text("Features").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md-6" id="PartialFeatures">
+                                @Html.Partial("Features", Model)
+                            </div>
+                            <div class="col-md-6" id="PartialSelectedFeatures">
+                                @Html.Partial("SelectedFeatures", Model)
+                            </div>
+                        </div>);
+                    tabs.Add().ID("FiltersTab").Text("Filters").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md-12" id="PartialFilters">
+                                @Html.Partial("Filters", Model)
+                            </div>
+                        </div>);
+                    tabs.Add().ID("ResultsTab").Text("Results").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md-12" id="PartialResultsGrid">
+                                @Html.Partial("ResultsGrid", Model)
+                            </div>
+                        </div>);
+                    tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md-12" id="PartialResultsChart">
+                                @Html.Partial("ResultsChart", Model)
+                            </div>
+                        </div>);
                 })
             .Render();}
         </div>

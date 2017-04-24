@@ -11,9 +11,9 @@
         {
             sr.Name(s.Caption)
             .Type(SeriesType.Line)
-            .DataSource(s.Points)
+            .DataSource(Model.QueryResults.DataAsJson)
             .XName("Date")
-            .YName("Value")
+            .YName(s.ColumnName)
             .EmptyPointSettings(e => e.Visible(true).DisplayMode(ChartEmptyPointMode.Gap))
             .Add();
         }

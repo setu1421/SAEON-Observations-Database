@@ -1,4 +1,6 @@
-﻿using SAEON.Observations.Core;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -98,16 +100,9 @@ namespace SAEON.Observations.WebAPI.Controllers
                     DateTime? lastDate = null;
                     var features = new List<Feature>();
                     var result = new DataQueryOutput();
-                    result.Data.TableName = "Observations";
-                    result.Data.Columns.Add("Site", typeof(string));
-                    result.Data.Columns.Add("Station", typeof(string));
-                    result.Data.Columns.Add("Instrument", typeof(string));
-                    result.Data.Columns.Add("Date", typeof(DateTime));
-                    result.Series.Add(new Series { Name = "Site", Caption = "Site" });
-                    result.Series.Add(new Series { Name = "Station", Caption = "Station" });
-                    result.Series.Add(new Series { Name = "Instrument", Caption = "Instrument" });
-                    result.Series.Add(new Series { Name = "Date", Caption = "Date" });
-                    DataRow row = null;
+                    result.Series.Add(new Series { ColumnName = "Date", Caption = "Date" });
+                    List<ExpandoObject> rows = new List<ExpandoObject>();
+                    dynamic row = null;
                     bool isNewRow = false;
                     foreach (var data in dataList)
                     {
@@ -140,43 +135,46 @@ namespace SAEON.Observations.WebAPI.Controllers
 
                         if (isNewRow)
                         {
-                            row = result.Data.Rows.Add();
-                            row["Site"] = data.SiteName;
-                            row["Station"] = data.StationName;
-                            row["Instrument"] = data.InstrumentName;
-                            row["Date"] = data.Date;
+#pragma warning disable IDE0017 // Simplify object initialization
+                            row = new ExpandoObject();
+#pragma warning restore IDE0017 // Simplify object initialization
+                            row.Date = data.Date;
+                            rows.Add(row);
                             isNewRow = false;
                         }
                         var feature = new Feature(data);
                         if (!features.Any(i => i.Name == feature.Name))
                         {
                             features.Add(feature);
-                            var col = result.Data.Columns.Add(feature.Name, typeof(double));
-                            col.Caption = feature.Caption;
-                            result.Series.Add(new Series { Name = col.ColumnName, Caption = col.Caption, IsFeature = true });
+                            result.Series.Add(new Series { ColumnName = feature.Name, Caption = feature.Caption, IsFeature = true });
                             //Logging.Verbose("Adding {name} {caption}", col.ColumnName, col.Caption);
                         }
-                        if (row.IsNull(feature.Name))
-                            row[feature.Name] = data.Value;
+                        var r = row as IDictionary<string, object>;
+                        if (!r.ContainsKey(feature.Name))
+                        {
+                            r.Add(feature.Name, data.Value);
+                        }
                         else
                         {
-                            double oldValue = row.Field<double>(feature.Name);
-                            if (data.Value.HasValue)
+                            double? oldValue = (double?)r[feature.Name];
+                            if (!oldValue.HasValue || !data.Value.HasValue)
                             {
-                                row[feature.Name] = data.Value + oldValue;
+                                r[feature.Name] = data.Value;
+                            }
+                            else
+                            {
+                                r[feature.Name] = data.Value + oldValue.Value;
                             }
                         }
                     }
-                    Logging.Verbose("Result: Cols: {cols} Rows: {rows}", result.Data.Columns.Count, result.Data.Rows.Count);
-                    foreach (var feature in features.Take(10))
+                    var jArray = new JArray();
+                    foreach (var r in rows)
                     {
-                        var points = dataList
-                            .Where(i => i.PhenomenonOfferingId == feature.PhenomenonOfferingId)
-                            .Select(i => new SeriesPoint { Date = i.Date, Value = i.Value })
-                            .ToList();
-                        result.Series.Where(i => i.Name == feature.Name).First().Points.AddRange(points);
-                        Logging.Verbose("Series: Name: {name} Points: {@points}", feature.Caption, points.Take(100));
+                        jArray.Add(JObject.FromObject(r));
                     }
+                    result.DataAsJson = jArray.ToString();
+                    Logging.Verbose("DataAsJSon: {DataAsJSon}" , result.DataAsJson);
+                    Logging.Verbose("Result: Cols: {cols} Rows: {rows}", result.Series.Count, rows.Count);
                     return result;
                 }
                 catch (Exception ex)

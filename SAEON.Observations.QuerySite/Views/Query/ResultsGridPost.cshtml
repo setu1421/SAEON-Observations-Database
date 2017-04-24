@@ -2,7 +2,7 @@
 @using SAEON.Observations.QuerySite.Models
 @model QueryModel
 @(Html.EJ().Grid<object>("gridResults")
-    .Datasource(Model.QueryResults.Data)
+    .Datasource(Model.QueryResults.DataAsJson)
     .AllowPaging()
     .AllowResizing()
     .AllowScrolling()
@@ -11,7 +11,7 @@
     {
         foreach (var s in Model.QueryResults.Series)
         {
-            col.Field(s.Name).HeaderText(s.Caption).Add();
+            col.Field(s.ColumnName).HeaderText(s.Caption).Add();
         }
     })
 )

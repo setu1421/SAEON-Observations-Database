@@ -14,10 +14,13 @@ Html.EJ().TreeView("treeViewLocations")
     )
     .ClientSideEvents(events => events
         .NodeCheck("onUpdateSelectedLocations")
-        .NodeUncheck("onUpdateSelectedLocations"))
+        .NodeUncheck("onUpdateSelectedLocations")
+        .Ready("onTreeViewLocationsReady"))
     .ShowCheckbox(true)
 )
 <script type="text/javascript">
+    function onTreeViewLocationsReady() {
+    }
     function onUpdateSelectedLocations() {
         treeObj = $("#treeViewLocations").data('ejTreeView');
         var checkedNodes = treeObj.getCheckedNodes();
@@ -31,6 +34,7 @@ Html.EJ().TreeView("treeViewLocations")
             .done(function (data) {
                 $('#PartialSelectedLocations').html(data);
                 UpdateMap();
+                EnableButtons();
             })
             .fail(function () {alert("Oops");});
     }

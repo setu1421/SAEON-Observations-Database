@@ -10,10 +10,18 @@
         .Expanded("IsExpanded")
         .Selected("IsSelected")
     )
-    .ClientSideEvents(events => events.NodeCheck("onUpdateSelectedFeatures").NodeUncheck("onUpdateSelectedFeatures"))
+    .ClientSideEvents(events => events
+        .NodeCheck("onUpdateSelectedFeatures")
+        .NodeUncheck("onUpdateSelectedFeatures")
+        .Ready("onTreeViewFeaturesReady"))
     .ShowCheckbox(true)
 )
 <script type="text/javascript">
+    function onTreeViewFeaturesReady() {
+        EnableButtons();
+        var wp = $("#waiting").data("ejWaitingPopup");
+        wp.hide();
+    }
     function onUpdateSelectedFeatures() {
         treeObj = $("#treeViewFeatures").data('ejTreeView');
         var checkedNodes = treeObj.getCheckedNodes();
@@ -24,7 +32,10 @@
             selectedFeatures.push(nodeData.id);
         }
         $.post("/Query/UpdateSelectedFeatures", { Features: selectedFeatures })
-            .done(function (data) { $('#PartialSelectedFeatures').html(data); })
+            .done(function (data) {
+                $('#PartialSelectedFeatures').html(data);
+                EnableButtons();
+            })
             .fail(function () { alert("Oops"); });
     }
 </script>

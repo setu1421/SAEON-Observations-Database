@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -47,25 +48,17 @@ namespace SAEON.Observations.Core
         public DateTime EndDate { get; set; }
     }
 
-    public class SeriesPoint
-    {
-        public DateTime Date { get; set; }
-        public double? Value { get; set; }
-
-    }
-
     public class Series
     {
         public string Caption { get; set; }
-        public string Name { get; set; }
+        public string ColumnName { get; set; }
         public bool IsFeature { get; set; }
-        public List<SeriesPoint> Points { get; private set; } = new List<SeriesPoint>();
     }
 
     public class DataQueryOutput
     {
-        public DataTable Data { get; private set; } = new DataTable();
-        public List<Series> Series { get; private set; } = new List<Core.Series>();
+        public List<Series> Series { get; private set; } = new List<Series>();
+        public string DataAsJson { get; set; }
     }
 
 }

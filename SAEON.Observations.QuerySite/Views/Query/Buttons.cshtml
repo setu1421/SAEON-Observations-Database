@@ -5,7 +5,8 @@
     .Type(ButtonType.Button)
     .Size(ButtonSize.Large)
     .ContentType(ContentType.TextAndImage)
-    .PrefixIcon("e-icon e-reload"))
+    .PrefixIcon("e-icon e-reload")
+)
 @(Html.EJ()
     .Button("btnSaveQuery")
     .Text("Save Query")
@@ -13,7 +14,9 @@
     .Type(ButtonType.Button)
     .Size(ButtonSize.Large)
     .ContentType(ContentType.TextAndImage)
-    .PrefixIcon("e-icon e-save"))
+    .PrefixIcon("e-icon e-save")
+    .Enabled(false)
+)
 @(Html.EJ()
     .Button("btnSearch")
     .Text("Search")
@@ -22,6 +25,7 @@
     .Size(ButtonSize.Large)
     .ContentType(ContentType.TextAndImage)
     .PrefixIcon("e-icon e-search")
+    .Enabled(true)
     .ClientSideEvents(e => e.Click("onSearchClick"))
 )
 @(Html.EJ()
@@ -32,6 +36,7 @@
     .Size(ButtonSize.Large)
     .ContentType(ContentType.TextAndImage)
     .PrefixIcon("e-icon e-dataexport")
+    .Enabled(false)
 //.ClientSideEvents(e => e.Click("onDownloadClick"))
 )
 <script type="text/javascript">
@@ -46,24 +51,59 @@
                 StartDate: startDate,
                 EndDate: endDate
             }),
+            async: false,
             type: "POST",
             contentType: "application/json; charset=utf-8",
+            success: function () {
+                $.get("/Query/DataQuery")
+                    .done($.get("/Query/ResultsGrid")
+                        .done(function (data) {
+                            $('#PartialResultsGrid').html(data);
+                            $.get("/Query/ResultsChart")
+                                .done(function (data) {
+                                    $('#PartialResultsChart').html(data);
+                                    wp.hide();
+                                    EnableButtons();
+                                })
+                                .error(ErrorInFunc('Error in ResultsChart'))
+                        })
+                        .error(ErrorInFunc('Error in ResultsGrid'))
+                    )
+                    .error(ErrorInFunc('Error in DataQuery'))
+
+            },
+            error: ErrorInFunc('Error in UpdateFilters')
         })
-            .done($.get("/Query/DataQuery")
-                .done($.get("/Query/ResultsGrid")
-                    .done(function (data) {
-                        $('#PartialResultsGrid').html(data);
-                        $.get("/Query/ResultsChart")
-                            .done(function (data) {
-                                $('#PartialResultsChart').html(data);
-                                wp.hide();
-                            })
-                    })
-                )
-            )
-            .fail(function () {
-                wp.hide();
-                alert("Oops");
-            });
+    }
+    function ErrorInFunc(msg) {
+        var wp = $("#waiting").data("ejWaitingPopup");
+        wp.hide();
+        alert(msg);
+    }
+    function EnableButtons() {
+        //treeObj = $("#treeViewLocations").data('ejTreeView');
+        //var checkedNodes = treeObj.getCheckedNodes();
+        //var selectedLocations = []
+        //for (i = 0; i < checkedNodes.length; i++) {
+        //    var checkedNode = checkedNodes[i];
+        //    var nodeData = treeObj.getNode(checkedNode);
+        //    selectedLocations.push(nodeData.id);
+        //}
+        //treeObj = $("#treeViewFeatures").data('ejTreeView');
+        //var checkedNodes = treeObj.getCheckedNodes();
+        //var selectedFeatures = []
+        //for (i = 0; i < checkedNodes.length; i++) {
+        //    var checkedNode = checkedNodes[i];
+        //    var nodeData = treeObj.getNode(checkedNode);
+        //    selectedFeatures.push(nodeData.id);
+        //}
+        //if ((selectedLocations.length > 0) & (selectedFeatures.length > 0)) {
+        //    $('#btnSaveQuery').removeClass('e-disable');
+        //    $('#btnSearch').removeClass('e-disable');
+        //}
+        //else {
+        //    $('#btnSaveQuery').addClass('e-disable')
+        //    $('#btnSearch').addClass('e-disable')
+        //}
     }
 </script>
