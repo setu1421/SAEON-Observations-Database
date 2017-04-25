@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,int Id,byte[] RowVersion)
+	    public void Insert(Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,int Id,byte[] RowVersion,DateTime? ValueDay)
 	    {
 		    Observation item = new Observation();
 		    
@@ -118,6 +118,8 @@ namespace SAEON.Observations.Data
             
             item.RowVersion = RowVersion;
             
+            item.ValueDay = ValueDay;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -126,7 +128,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,int Id,byte[] RowVersion)
+	    public void Update(Guid SensorID,DateTime ValueDate,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,int Id,byte[] RowVersion,DateTime? ValueDay)
 	    {
 		    Observation item = new Observation();
 	        item.MarkOld();
@@ -165,6 +167,8 @@ namespace SAEON.Observations.Data
 			item.Id = Id;
 				
 			item.RowVersion = RowVersion;
+				
+			item.ValueDay = ValueDay;
 				
 	        item.Save(UserName);
 	    }

@@ -549,6 +549,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarValueDate);
                 
+                TableSchema.TableColumn colvarValueDay = new TableSchema.TableColumn(schema);
+                colvarValueDay.ColumnName = "ValueDay";
+                colvarValueDay.DataType = DbType.Date;
+                colvarValueDay.MaxLength = 0;
+                colvarValueDay.AutoIncrement = false;
+                colvarValueDay.IsNullable = true;
+                colvarValueDay.IsPrimaryKey = false;
+                colvarValueDay.IsForeignKey = false;
+                colvarValueDay.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarValueDay);
+                
                 TableSchema.TableColumn colvarRawValue = new TableSchema.TableColumn(schema);
                 colvarRawValue.ColumnName = "RawValue";
                 colvarRawValue.DataType = DbType.Double;
@@ -1221,6 +1233,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("ValueDay")]
+        [Bindable(true)]
+        public DateTime? ValueDay 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("ValueDay");
+		    }
+            set 
+		    {
+			    SetColumnValue("ValueDay", value);
+            }
+        }
+	      
         [XmlAttribute("RawValue")]
         [Bindable(true)]
         public double? RawValue 
@@ -1365,6 +1391,8 @@ namespace SAEON.Observations.Data{
             public static string Feature = @"Feature";
             
             public static string ValueDate = @"ValueDate";
+            
+            public static string ValueDay = @"ValueDay";
             
             public static string RawValue = @"RawValue";
             

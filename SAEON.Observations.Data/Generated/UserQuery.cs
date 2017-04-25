@@ -179,18 +179,18 @@ namespace SAEON.Observations.Data
 				colvarDescription.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarDescription);
 				
-				TableSchema.TableColumn colvarQueryURI = new TableSchema.TableColumn(schema);
-				colvarQueryURI.ColumnName = "QueryURI";
-				colvarQueryURI.DataType = DbType.AnsiString;
-				colvarQueryURI.MaxLength = 500;
-				colvarQueryURI.AutoIncrement = false;
-				colvarQueryURI.IsNullable = false;
-				colvarQueryURI.IsPrimaryKey = false;
-				colvarQueryURI.IsForeignKey = false;
-				colvarQueryURI.IsReadOnly = false;
-				colvarQueryURI.DefaultSetting = @"";
-				colvarQueryURI.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarQueryURI);
+				TableSchema.TableColumn colvarQueryInput = new TableSchema.TableColumn(schema);
+				colvarQueryInput.ColumnName = "QueryInput";
+				colvarQueryInput.DataType = DbType.AnsiString;
+				colvarQueryInput.MaxLength = 5000;
+				colvarQueryInput.AutoIncrement = false;
+				colvarQueryInput.IsNullable = false;
+				colvarQueryInput.IsPrimaryKey = false;
+				colvarQueryInput.IsForeignKey = false;
+				colvarQueryInput.IsReadOnly = false;
+				colvarQueryInput.DefaultSetting = @"";
+				colvarQueryInput.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarQueryInput);
 				
 				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
 				colvarAddedAt.ColumnName = "AddedAt";
@@ -288,12 +288,12 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.Description, value); }
 		}
 		  
-		[XmlAttribute("QueryURI")]
+		[XmlAttribute("QueryInput")]
 		[Bindable(true)]
-		public string QueryURI 
+		public string QueryInput 
 		{
-			get { return GetColumnValue<string>(Columns.QueryURI); }
-			set { SetColumnValue(Columns.QueryURI, value); }
+			get { return GetColumnValue<string>(Columns.QueryInput); }
+			set { SetColumnValue(Columns.QueryInput, value); }
 		}
 		  
 		[XmlAttribute("AddedAt")]
@@ -347,7 +347,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varUserId,string varName,string varDescription,string varQueryURI,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy)
+		public static void Insert(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy)
 		{
 			UserQuery item = new UserQuery();
 			
@@ -359,7 +359,7 @@ namespace SAEON.Observations.Data
 			
 			item.Description = varDescription;
 			
-			item.QueryURI = varQueryURI;
+			item.QueryInput = varQueryInput;
 			
 			item.AddedAt = varAddedAt;
 			
@@ -379,7 +379,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varUserId,string varName,string varDescription,string varQueryURI,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy)
+		public static void Update(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy)
 		{
 			UserQuery item = new UserQuery();
 			
@@ -391,7 +391,7 @@ namespace SAEON.Observations.Data
 			
 				item.Description = varDescription;
 			
-				item.QueryURI = varQueryURI;
+				item.QueryInput = varQueryInput;
 			
 				item.AddedAt = varAddedAt;
 			
@@ -442,7 +442,7 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn QueryURIColumn
+        public static TableSchema.TableColumn QueryInputColumn
         {
             get { return Schema.Columns[4]; }
         }
@@ -485,7 +485,7 @@ namespace SAEON.Observations.Data
 			 public static string UserId = @"UserId";
 			 public static string Name = @"Name";
 			 public static string Description = @"Description";
-			 public static string QueryURI = @"QueryURI";
+			 public static string QueryInput = @"QueryInput";
 			 public static string AddedAt = @"AddedAt";
 			 public static string AddedBy = @"AddedBy";
 			 public static string UpdatedAt = @"UpdatedAt";

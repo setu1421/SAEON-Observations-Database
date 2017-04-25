@@ -261,6 +261,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarRowVersion);
                 
+                TableSchema.TableColumn colvarValueDay = new TableSchema.TableColumn(schema);
+                colvarValueDay.ColumnName = "ValueDay";
+                colvarValueDay.DataType = DbType.Date;
+                colvarValueDay.MaxLength = 0;
+                colvarValueDay.AutoIncrement = false;
+                colvarValueDay.IsNullable = true;
+                colvarValueDay.IsPrimaryKey = false;
+                colvarValueDay.IsForeignKey = false;
+                colvarValueDay.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarValueDay);
+                
                 TableSchema.TableColumn colvarSensorCode = new TableSchema.TableColumn(schema);
                 colvarSensorCode.ColumnName = "SensorCode";
                 colvarSensorCode.DataType = DbType.AnsiString;
@@ -693,6 +705,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("ValueDay")]
+        [Bindable(true)]
+        public DateTime? ValueDay 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("ValueDay");
+		    }
+            set 
+		    {
+			    SetColumnValue("ValueDay", value);
+            }
+        }
+	      
         [XmlAttribute("SensorCode")]
         [Bindable(true)]
         public string SensorCode 
@@ -901,6 +927,8 @@ namespace SAEON.Observations.Data{
             public static string Id = @"ID";
             
             public static string RowVersion = @"RowVersion";
+            
+            public static string ValueDay = @"ValueDay";
             
             public static string SensorCode = @"SensorCode";
             

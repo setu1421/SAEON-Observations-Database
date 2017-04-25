@@ -354,6 +354,19 @@ namespace SAEON.Observations.Data
 				colvarRowVersion.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRowVersion);
 				
+				TableSchema.TableColumn colvarValueDay = new TableSchema.TableColumn(schema);
+				colvarValueDay.ColumnName = "ValueDay";
+				colvarValueDay.DataType = DbType.Date;
+				colvarValueDay.MaxLength = 0;
+				colvarValueDay.AutoIncrement = false;
+				colvarValueDay.IsNullable = true;
+				colvarValueDay.IsPrimaryKey = false;
+				colvarValueDay.IsForeignKey = false;
+				colvarValueDay.IsReadOnly = true;
+				colvarValueDay.DefaultSetting = @"";
+				colvarValueDay.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarValueDay);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -499,6 +512,14 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
 			set { SetColumnValue(Columns.RowVersion, value); }
 		}
+		  
+		[XmlAttribute("ValueDay")]
+		[Bindable(true)]
+		public DateTime? ValueDay 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.ValueDay); }
+			set { SetColumnValue(Columns.ValueDay, value); }
+		}
 		
 		#endregion
 		
@@ -598,7 +619,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,int varId,byte[] varRowVersion)
+		public static void Insert(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,int varId,byte[] varRowVersion,DateTime? varValueDay)
 		{
 			Observation item = new Observation();
 			
@@ -636,6 +657,8 @@ namespace SAEON.Observations.Data
 			
 			item.RowVersion = varRowVersion;
 			
+			item.ValueDay = varValueDay;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -646,7 +669,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,int varId,byte[] varRowVersion)
+		public static void Update(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,int varId,byte[] varRowVersion,DateTime? varValueDay)
 		{
 			Observation item = new Observation();
 			
@@ -683,6 +706,8 @@ namespace SAEON.Observations.Data
 				item.Id = varId;
 			
 				item.RowVersion = varRowVersion;
+			
+				item.ValueDay = varValueDay;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -816,6 +841,13 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn ValueDayColumn
+        {
+            get { return Schema.Columns[17]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -837,6 +869,7 @@ namespace SAEON.Observations.Data
 			 public static string UpdatedAt = @"UpdatedAt";
 			 public static string Id = @"ID";
 			 public static string RowVersion = @"RowVersion";
+			 public static string ValueDay = @"ValueDay";
 						
 		}
 		#endregion
