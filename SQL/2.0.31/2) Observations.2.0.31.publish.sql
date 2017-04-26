@@ -457,8 +457,6 @@ CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate]
 GO
 PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDate]...';
 
-Drop Index IX_Observation_ValueDate on Observation
-
 GO
 CREATE NONCLUSTERED INDEX [IX_Observation_ValueDate]
     ON [dbo].[Observation]([ValueDate] ASC)

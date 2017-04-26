@@ -164,14 +164,6 @@ ALTER TABLE [dbo].[ImportBatch] DROP CONSTRAINT [DF_ImportBatch_UpdatedAt];
 
 
 GO
-PRINT N'Dropping [dbo].[DF_Observation_ID]...';
-
-
-GO
-ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [DF_Observation_ID];
-
-
-GO
 PRINT N'Dropping [dbo].[DF_Observation_AddedDate]...';
 
 
@@ -816,8 +808,6 @@ CREATE NONCLUSTERED INDEX [IX_ImportBatch_StatusReasonID]
 
 GO
 PRINT N'Starting rebuilding table [dbo].[Observation]...';
-
-
 GO
 PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDate]...';
 
@@ -831,7 +821,7 @@ CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate]
 GO
 PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDate]...';
 
-Drop Index IX_Observation_ValueDate on Observation
+
 GO
 CREATE NONCLUSTERED INDEX [IX_Observation_ValueDate]
     ON [dbo].[Observation]([ValueDate] ASC)
@@ -1787,7 +1777,7 @@ from
 --< Changed 2.0.31 20170423 TimPN
 where
   (Status.Name = 'Verified')
---< Ad
+--< Added 2.0.26 20170130 TimPN
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 

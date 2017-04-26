@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[Observation] (
 --> Added 2.0.31 20170414 TimPN
-    [ID]		Int not null Constraint DF_Observation_ID Default (Next value for dbo.ObservationsSequence),
+    --[ID]		Int not null Constraint DF_Observation_ID Default (Next value for dbo.ObservationsSequence),
+    [ID]		Int Identity(1,1) not null,
 --< Added 2.0.31 20170414 TimPN
 --> Removed 2.0.31 20170414 TimPN
 --> Changed 2.0.8 20160720 TimPN

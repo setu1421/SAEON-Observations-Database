@@ -332,7 +332,7 @@ namespace SAEON.Observations.Data
 				colvarId.ColumnName = "ID";
 				colvarId.DataType = DbType.Int32;
 				colvarId.MaxLength = 0;
-				colvarId.AutoIncrement = false;
+				colvarId.AutoIncrement = true;
 				colvarId.IsNullable = false;
 				colvarId.IsPrimaryKey = true;
 				colvarId.IsForeignKey = false;
@@ -619,7 +619,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,int varId,byte[] varRowVersion,DateTime? varValueDay)
+		public static void Insert(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,DateTime? varValueDay)
 		{
 			Observation item = new Observation();
 			
@@ -652,8 +652,6 @@ namespace SAEON.Observations.Data
 			item.AddedAt = varAddedAt;
 			
 			item.UpdatedAt = varUpdatedAt;
-			
-			item.Id = varId;
 			
 			item.RowVersion = varRowVersion;
 			

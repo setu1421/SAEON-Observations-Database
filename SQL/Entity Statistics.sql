@@ -13,6 +13,50 @@
   (Select count(PhenomenonOfferingID) from Observation) ObservationsOfferings,
   (Select count(PhenomenonUOMID) from Observation) ObservationsUnitsOfMeasure
 Select
+  Phenomenon.Name Phenomenon, count(*) Count
+from
+  Phenomenon
+  inner join PhenomenonOffering
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+group by
+  Phenomenon.Name
+order by
+  Count(*) desc, Phenomenon.Name
+Select
+  Phenomenon.Name Phenomenon, Offering.Name Offering
+from
+  Phenomenon
+  inner join PhenomenonOffering
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+order by
+  Phenomenon.Name, Offering.Name
+Select
+  Phenomenon.Name Phenomenon, UnitOfMeasure.Unit unitOfMeasure
+from
+  Phenomenon
+  inner join PhenomenonUOM
+    on (PhenomenonUOM.PhenomenonID = Phenomenon.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+order by
+  Phenomenon.Name, UnitOfMeasure.Unit
+Select
+  Phenomenon.Name Phenomenon, Offering.Name Offering, UnitOfMeasure.Unit unitOfMeasure
+from
+  Phenomenon
+  inner join PhenomenonOffering
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (PhenomenonUOM.PhenomenonID = Phenomenon.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+order by
+  Phenomenon.Name, Offering.Name, UnitOfMeasure.Unit
+Select
   Offering.Name, UnitOfMeasure.Unit, count(*) Count
 from
   Observation
@@ -27,6 +71,6 @@ from
 group by
   Offering.Name, UnitOfMeasure.Unit
 order by
-  Offering.Name, UnitOfMeasure.Unit
+  Count(*) desc, Offering.Name, UnitOfMeasure.Unit
 
 
