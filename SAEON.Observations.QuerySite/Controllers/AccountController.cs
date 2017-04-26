@@ -18,13 +18,13 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Authorize]
         public ActionResult LogIn()
         {
-            return this.Redirect("/");
+            return Redirect("/");
         }
 
         public ActionResult LogOut()
         {
-            this.Request.GetOwinContext().Authentication.SignOut();
-            return this.Redirect("/");
+            Request.GetOwinContext().Authentication.SignOut();
+            return Redirect("/");
         }
 
         [Authorize, Route("Claims")]
@@ -41,7 +41,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Authorize]
         public async Task<ActionResult> CallApi()
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 var token = (User as ClaimsPrincipal).FindFirst("access_token").Value;
                 var client = new HttpClient();

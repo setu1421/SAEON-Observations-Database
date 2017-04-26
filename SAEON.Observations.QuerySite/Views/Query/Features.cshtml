@@ -13,14 +13,15 @@
     .ClientSideEvents(events => events
         .NodeCheck("onUpdateSelectedFeatures")
         .NodeUncheck("onUpdateSelectedFeatures")
-        .Ready("onTreeViewFeaturesReady"))
+        .LoadSuccess("onTreeViewFeaturesLoad")
+        .LoadError("onTreeViewFeaturesLoad")
+        )
     .ShowCheckbox(true)
 )
 <script type="text/javascript">
-    function onTreeViewFeaturesReady() {
-        EnableButtons();
-        var wp = $("#waiting").data("ejWaitingPopup");
-        wp.hide();
+    function onTreeViewFeaturesLoad() {
+        HideWaiting();
+        EnableButtons
     }
     function onUpdateSelectedFeatures() {
         treeObj = $("#treeViewFeatures").data('ejTreeView');
@@ -36,6 +37,6 @@
                 $('#PartialSelectedFeatures').html(data);
                 EnableButtons();
             })
-            .fail(function () { alert("Oops"); });
+            .fail(function () { alert("Error in UpdateSelectedFeatures"); });
     }
 </script>

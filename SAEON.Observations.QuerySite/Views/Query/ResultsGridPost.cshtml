@@ -2,7 +2,7 @@
 @using SAEON.Observations.QuerySite.Models
 @model QueryModel
 @(Html.EJ().Grid<object>("gridResults")
-    .Datasource(Model.QueryResults.DataAsJson)
+    .Datasource(ds => ds.URL("/Query/GetResultsGridData").Adaptor(AdaptorType.WebApiAdaptor))
     .AllowPaging()
     .AllowResizing()
     .AllowScrolling()

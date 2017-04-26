@@ -42,10 +42,7 @@
                     map.fitBounds(bounds);
                 }
             })
-            .fail(function (jqxhr, textStatus, error) {
-                var err = textStatus + ", " + error;
-                alert(err);
-            });
+            .fail(function () { alert('Error in GetMapPoints'); });
     }
 </script>
 <script async defer

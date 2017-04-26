@@ -27,7 +27,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         public virtual async Task<ActionResult> Index()
         {
-            using (Logging.MethodCall<TEntity>(this.GetType()))
+            using (Logging.MethodCall<TEntity>(GetType()))
             {
                 try
                 {
@@ -65,7 +65,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Route("{id:guid}")]
         public virtual async Task<ActionResult> Details(Guid? id)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {
@@ -103,7 +103,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual ActionResult Create()
         {
-            using (Logging.MethodCall<TEntity>(this.GetType()))
+            using (Logging.MethodCall<TEntity>(GetType()))
             {
                 try
                 {
@@ -129,7 +129,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual async Task<ActionResult> Create(TEntity item)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Name", item?.Name }, { "Item", item } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Name", item?.Name }, { "Item", item } }))
             {
                 try
                 {
@@ -172,7 +172,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual async Task<ActionResult> Edit(Guid? id)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {
@@ -212,7 +212,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual async Task<ActionResult> Edit(TEntity delta)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", delta?.Id }, { "Delta", delta } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", delta?.Id }, { "Delta", delta } }))
             {
                 try
                 {
@@ -258,7 +258,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual async Task<ActionResult> Delete(Guid? id)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {
@@ -298,7 +298,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
             {
                 try
                 {

@@ -58,7 +58,8 @@ namespace SAEON.Observations.Core
     public class DataQueryOutput
     {
         public List<Series> Series { get; private set; } = new List<Series>();
-        public string DataAsJson { get; set; }
+        public string ResultsGridData { get; set; }
+        public string ResultsChartData { get; set; }
     }
 
 }

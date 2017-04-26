@@ -3,7 +3,7 @@
 @(
 Html.EJ().TreeView("treeViewLocations")
     .TreeViewFields(field => field
-        .Datasource(Model.Locations)
+        .Datasource(ds => ds.URL("/Query/GetLocations").Adaptor(AdaptorType.WebApiAdaptor))
         .Id("Key")
         .ParentId("ParentKey")
         .Text("Text")
@@ -36,6 +36,6 @@ Html.EJ().TreeView("treeViewLocations")
                 UpdateMap();
                 EnableButtons();
             })
-            .fail(function () {alert("Oops");});
+            .fail(function () { alert("Error in UpdateSelectedLocations");});
     }
 </script>

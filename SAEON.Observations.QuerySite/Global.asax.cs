@@ -24,7 +24,7 @@ namespace SAEON.Observations.QuerySite
                 .WriteTo.RollingFile(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite {Date}.txt"))
                 .WriteTo.Seq("http://localhost:5341/")
                 .CreateLogger();
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 try
                 {

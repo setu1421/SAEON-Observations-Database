@@ -63,7 +63,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                 OfferingId = data.OfferingId;
                 UnitOfMeasureId = data.UnitOfMeasureId;
                 Caption = $"{data.PhenomenonName}, {data.OfferingName}, {data.UnitOfMeasureSymbol}";
-                Name = $"Data_{data.PhenomenonCode}_{data.OfferingCode}_{data.UnitOfMeasureCode}";
+                Name = $"{data.PhenomenonCode}_{data.OfferingCode}_{data.UnitOfMeasureCode}";
             }
         }
 
@@ -172,8 +172,15 @@ namespace SAEON.Observations.WebAPI.Controllers
                     {
                         jArray.Add(JObject.FromObject(r));
                     }
-                    result.DataAsJson = jArray.ToString();
-                    Logging.Verbose("DataAsJSon: {DataAsJSon}" , result.DataAsJson);
+                    result.ResultsChartData = jArray.ToString();
+                    JObject jObject = JObject.FromObject(new
+                    {
+                        result = jArray,
+                        count = jArray.Count
+                    });
+                    result.ResultsGridData = jObject.ToString();
+                    //Logging.Verbose("GridResults: {GridResults}", result.ResultsGridData);
+                    //Logging.Verbose("ChartResults: {ChartResults}", result.ResultsChartData);
                     Logging.Verbose("Result: Cols: {cols} Rows: {rows}", result.Series.Count, rows.Count);
                     return result;
                 }

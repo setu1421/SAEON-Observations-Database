@@ -52,17 +52,17 @@ namespace SAEON.Observations.QuerySite.Controllers
         // GET: Query
         public async Task<ActionResult> Index()
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 var model = SessionModel;
                 if (model.Locations == null)
                 {
-                    model.Locations = await GetLocations();
+                    model.Locations = await GetLocationsList();
                 }
                 LoadMapPoints(model);
                 if (model.Features == null)
                 {
-                    model.Features = await GetFeatures();
+                    model.Features = await GetFeaturesList();
                 }
                 SessionModel = model;
                 //Logging.Verbose("Model: {@model}", model);
@@ -72,17 +72,17 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         public async Task<ActionResult> MapTest()
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 var model = SessionModel;
                 if (model.Locations == null)
                 {
-                    model.Locations = await GetLocations();
+                    model.Locations = await GetLocationsList();
                 }
                 LoadMapPoints(model);
                 if (model.Features == null)
                 {
-                    model.Features = await GetFeatures();
+                    model.Features = await GetFeaturesList();
                 }
                 SessionModel = model;
                 //Logging.Verbose("Model: {@model}", model);
@@ -155,7 +155,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         public JsonResult GetMapPoints()
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 try
                 {
@@ -175,15 +175,33 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region Locations
-        private async Task<List<Location>> GetLocations()
+        private async Task<List<Location>> GetLocationsList()
         {
             return (await GetList<Location>("Locations")).ToList();
+        }
+
+        [HttpGet]
+        public JsonResult GetLocations()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    return Json(model.Locations, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
         }
 
         [HttpPost]
         public PartialViewResult UpdateSelectedLocations(List<string> locations)
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 try
                 {
@@ -221,7 +239,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         public PartialViewResult UpdateLocationsMap()
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 try
                 {
@@ -238,15 +256,33 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region Features
-        private async Task<List<Feature>> GetFeatures()
+        private async Task<List<Feature>> GetFeaturesList()
         {
             return (await GetList<Feature>("Features")).ToList();
+        }
+
+        [HttpGet]
+        public JsonResult GetFeatures()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    return Json(model.Features, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
         }
 
         [HttpPost]
         public PartialViewResult UpdateSelectedFeatures(List<string> features)
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 try
                 {
@@ -285,7 +321,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpPost]
         public EmptyResult UpdateFilters(DateTime startDate, DateTime endDate)
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 try
                 {
@@ -311,7 +347,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         public async Task<EmptyResult> DataQuery()
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
             {
                 try
                 {
@@ -342,9 +378,27 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         #region ResultsGrid
         [HttpGet]
-        public PartialViewResult ResultsGrid()
+        public JsonResult GetResultsGridData()
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    return Json(model.QueryResults.ResultsGridData, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+        public PartialViewResult GetResultsGrid()
+        {
+            using (Logging.MethodCall(GetType()))
             {
                 try
                 {
@@ -363,9 +417,27 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         #region ResultsChart
         [HttpGet]
-        public PartialViewResult ResultsChart()
+        public JsonResult GetResultsChartData()
         {
-            using (Logging.MethodCall(this.GetType()))
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    return Json(model.QueryResults.ResultsChartData, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+        public PartialViewResult GetResultsChart()
+        {
+            using (Logging.MethodCall(GetType()))
             {
                 try
                 {
@@ -381,7 +453,6 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
         #endregion
-
 
     }
 }

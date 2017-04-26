@@ -491,7 +491,7 @@ public class ImportSchemaHelper : IDisposable
     {
         using (LogContext.PushProperty("Method", "ProcessSchema"))
         {
-            Log.Information("Version 1.16");
+            Log.Information("Version 1.17");
             try
             {
                 BuildSchemaDefinition();
@@ -698,12 +698,14 @@ public class ImportSchemaHelper : IDisposable
                                 var endDate = endDates.Min();
                                 if (startDate.HasValue && (rec.DateValue.Date < startDate.Value))
                                 {
-                                    Log.Verbose("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
+                                    Log.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
+                                    //Log.Verbose("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
                                     continue;
                                 }
                                 if (endDate.HasValue && (rec.DateValue.Date > endDate.Value))
                                 {
-                                    Log.Verbose("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
+                                    Log.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
+                                    //Log.Verbose("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
                                     continue;
                                 }
                                 rec.SensorID = sensor.Id;

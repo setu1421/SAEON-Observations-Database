@@ -25,7 +25,7 @@
     .Size(ButtonSize.Large)
     .ContentType(ContentType.TextAndImage)
     .PrefixIcon("e-icon e-search")
-    .Enabled(true)
+    .Enabled(false)
     .ClientSideEvents(e => e.Click("onSearchClick"))
 )
 @(Html.EJ()
@@ -41,10 +41,9 @@
 )
 <script type="text/javascript">
     function onSearchClick() {
-        var wp = $("#waiting").data("ejWaitingPopup");
-        wp.show();
-        var startDate = $("#StartDate").ejDatePicker('instance')._dateValue;
-        var endDate = $("#EndDate").ejDatePicker('instance')._dateValue;
+        ShowWaiting();
+        var startDate = $("#StartDate").ejDatePicker("instance")._dateValue;
+        var endDate = $("#EndDate").ejDatePicker("instance")._dateValue;
         $.ajax({
             url: "/Query/UpdateFilters",
             data: JSON.stringify({
@@ -53,57 +52,86 @@
             }),
             async: false,
             type: "POST",
-            contentType: "application/json; charset=utf-8",
+            contentType: "application/json",
             success: function () {
                 $.get("/Query/DataQuery")
-                    .done($.get("/Query/ResultsGrid")
-                        .done(function (data) {
-                            $('#PartialResultsGrid').html(data);
-                            $.get("/Query/ResultsChart")
-                                .done(function (data) {
-                                    $('#PartialResultsChart').html(data);
-                                    wp.hide();
-                                    EnableButtons();
-                                })
-                                .error(ErrorInFunc('Error in ResultsChart'))
-                        })
-                        .error(ErrorInFunc('Error in ResultsGrid'))
-                    )
-                    .error(ErrorInFunc('Error in DataQuery'))
-
+                    .done(function () {
+                        $.ajax({
+                            url: "/Query/GetResultsGrid",
+                            async: false,
+                            type: "GET",
+                            success: function (data) {
+                                $("#PartialResultsGrid").html(data);
+                                $.ajax({
+                                    url: "/Query/GetResultsChart",
+                                    async: false,
+                                    type: "GET",
+                                    success: function (data) {
+                                        $("#PartialResultsChart").html(data);
+                                        HideWaiting();
+                                        EnableButtons();
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        ErrorInFunc("Error in GetResultsChart Status: " + textStatus + " Error: " + errorThrown)
+                                    }
+                                });
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                ErrorInFunc("Error in GetResultsGrid Status: " + textStatus + " Error: " + errorThrown)
+                            }
+                        });
+                    })
+                    .error(function (jqXHR, textStatus, errorThrown) {
+                        ErrorInFunc("Error in DataQuery Status: " + textStatus + " Error: " + errorThrown)
+                    })
             },
-            error: ErrorInFunc('Error in UpdateFilters')
+            error: function (jqXHR, textStatus, errorThrown) {
+                ErrorInFunc("Error in UpdateFilters Status: " + textStatus + " Error: " + errorThrown);
+            }
         })
     }
     function ErrorInFunc(msg) {
-        var wp = $("#waiting").data("ejWaitingPopup");
-        wp.hide();
+        HideWaiting();
         alert(msg);
     }
+    function ShowWaiting() {
+        var wp = $("#waiting").data("ejWaitingPopup");
+        wp.show();
+    }
+    function HideWaiting() {
+        var wp = $("#waiting").data("ejWaitingPopup");
+        wp.hide();
+    }
     function EnableButtons() {
-        //treeObj = $("#treeViewLocations").data('ejTreeView');
-        //var checkedNodes = treeObj.getCheckedNodes();
-        //var selectedLocations = []
-        //for (i = 0; i < checkedNodes.length; i++) {
-        //    var checkedNode = checkedNodes[i];
-        //    var nodeData = treeObj.getNode(checkedNode);
-        //    selectedLocations.push(nodeData.id);
-        //}
-        //treeObj = $("#treeViewFeatures").data('ejTreeView');
-        //var checkedNodes = treeObj.getCheckedNodes();
-        //var selectedFeatures = []
-        //for (i = 0; i < checkedNodes.length; i++) {
-        //    var checkedNode = checkedNodes[i];
-        //    var nodeData = treeObj.getNode(checkedNode);
-        //    selectedFeatures.push(nodeData.id);
-        //}
-        //if ((selectedLocations.length > 0) & (selectedFeatures.length > 0)) {
-        //    $('#btnSaveQuery').removeClass('e-disable');
-        //    $('#btnSearch').removeClass('e-disable');
-        //}
-        //else {
-        //    $('#btnSaveQuery').addClass('e-disable')
-        //    $('#btnSearch').addClass('e-disable')
-        //}
+        treeObj = $("#treeViewLocations").data('ejTreeView');
+        var checkedNodes = treeObj.getCheckedNodes();
+        var selectedLocations = 0
+        for (i = 0; i < checkedNodes.length; i++) {
+            var checkedNode = checkedNodes[i];
+            var nodeData = treeObj.getNode(checkedNode);
+            if (nodeData.id.startsWith("STA~")) {
+                selectedLocations = selectedLocations + 1;
+            }
+        }
+        treeObj = $("#treeViewFeatures").data('ejTreeView');
+        var checkedNodes = treeObj.getCheckedNodes();
+        var selectedFeatures = 0
+        for (i = 0; i < checkedNodes.length; i++) {
+            var checkedNode = checkedNodes[i];
+            var nodeData = treeObj.getNode(checkedNode);
+            if (nodeData.id.startsWith("OFF~")) {
+                selectedFeatures = selectedFeatures + 1;
+            }
+        }
+        var btnSaveQuery = $("#btnSaveQuery").data("ejButton");
+        var btnSearch = $("#btnSearch").data("ejButton");
+        if ((selectedLocations > 0) & (selectedFeatures > 0)) {
+            btnSaveQuery.enable();
+            btnSearch.enable();
+        }
+        else {
+            btnSaveQuery.disable();
+            btnSearch.disable();
+        }
     }
 </script>

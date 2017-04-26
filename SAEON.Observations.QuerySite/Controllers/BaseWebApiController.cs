@@ -21,7 +21,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         public BaseWebApiController() : base()
         {
-            sessionModelKey = this.GetType().Name + "Model";
+            sessionModelKey = GetType().Name + "Model";
         }
 
         private HttpSessionState CurrentSession { get { return System.Web.HttpContext.Current.Session; } }
@@ -48,7 +48,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         protected async Task<IEnumerable<TEntity>> GetList<TEntity>(string resource)// where TEntity : BaseEntity
         {
-            using (Logging.MethodCall<TEntity>(this.GetType(), new ParameterList { { "Resource", resource } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Resource", resource } }))
             {
                 try
                 {
@@ -81,7 +81,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         protected async Task<TOutput> Post<TInput, TOutput>(string resource, TInput input)
         {
-            using (Logging.MethodCall<TOutput>(this.GetType(), new ParameterList { { "Resource", resource }, { "Input", input } }))
+            using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource }, { "Input", input } }))
             {
                 try
                 {
@@ -97,7 +97,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                         var url = $"{apiBaseUrl}/{resource}";
                         Logging.Verbose("Calling: {url}", url);
                         var response = await client.PostAsJsonAsync(url, input);
-                        Logging.Verbose("Response: {response}", response);
+                        //Logging.Verbose("Response: {response}", response);
+                        Logging.Verbose("Response: StatusCode: {StatusCode} ReasonPhrase: {ReasonPhrase}", response.StatusCode, response.ReasonPhrase);
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TOutput>();
                         //Logging.Verbose("Data: {@data}", data);
