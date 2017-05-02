@@ -54,7 +54,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             using (Logging.MethodCall(GetType()))
             {
-                var model = SessionModel;
+                var model = new QueryModel();
                 if (model.Locations == null)
                 {
                     model.Locations = await GetLocationsList();
@@ -162,7 +162,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var model = SessionModel;
                     Logging.Verbose("MapPoints: {count}", model.MapPoints.Count);
                     //Logging.Verbose("MapPoints: {count} {@list}", model.MapPoints.Count, model.MapPoints);
-                    return Json(model.MapPoints, JsonRequestBehavior.AllowGet);
+                    var result = Json(model.MapPoints, JsonRequestBehavior.AllowGet);
+                    result.MaxJsonLength = int.MaxValue;
+                    return result;
                 }
                 catch (Exception ex)
                 {
@@ -188,7 +190,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var model = SessionModel;
-                    return Json(model.Locations, JsonRequestBehavior.AllowGet);
+                    var result = Json(model.Locations, JsonRequestBehavior.AllowGet);
+                    result.MaxJsonLength = int.MaxValue;
+                    return result;
                 }
                 catch (Exception ex)
                 {
@@ -269,7 +273,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var model = SessionModel;
-                    return Json(model.Features, JsonRequestBehavior.AllowGet);
+                    var result = Json(model.Features, JsonRequestBehavior.AllowGet);
+                    result.MaxJsonLength = int.MaxValue;
+                    return result;
                 }
                 catch (Exception ex)
                 {
@@ -385,7 +391,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var model = SessionModel;
-                    return Json(model.QueryResults.ResultsGridData, JsonRequestBehavior.AllowGet);
+                    var result = Json(model.QueryResults.ResultsGridData, JsonRequestBehavior.AllowGet);
+                    result.MaxJsonLength = int.MaxValue;
+                    return result;
                 }
                 catch (Exception ex)
                 {
@@ -424,7 +432,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var model = SessionModel;
-                    return Json(model.QueryResults.ResultsChartData, JsonRequestBehavior.AllowGet);
+                    var result = Json(model.QueryResults.ResultsChartData, JsonRequestBehavior.AllowGet);
+                    result.MaxJsonLength = int.MaxValue;
+                    return result;
                 }
                 catch (Exception ex)
                 {

@@ -94,14 +94,6 @@
         HideWaiting();
         alert(msg);
     }
-    function ShowWaiting() {
-        var wp = $("#waiting").data("ejWaitingPopup");
-        wp.show();
-    }
-    function HideWaiting() {
-        var wp = $("#waiting").data("ejWaitingPopup");
-        wp.hide();
-    }
     function EnableButtons() {
         treeObj = $("#treeViewLocations").data('ejTreeView');
         var checkedNodes = treeObj.getCheckedNodes();

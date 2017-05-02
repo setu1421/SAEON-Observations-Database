@@ -13,15 +13,15 @@
     .ClientSideEvents(events => events
         .NodeCheck("onUpdateSelectedFeatures")
         .NodeUncheck("onUpdateSelectedFeatures")
-        .LoadSuccess("onTreeViewFeaturesLoad")
-        .LoadError("onTreeViewFeaturesLoad")
+        .Ready("onTreeViewFeaturesReady")
         )
     .ShowCheckbox(true)
 )
 <script type="text/javascript">
-    function onTreeViewFeaturesLoad() {
+    function onTreeViewFeaturesReady() {
         HideWaiting();
-        EnableButtons
+        //ShowLoading();
+        //UpdateMap(true);
     }
     function onUpdateSelectedFeatures() {
         treeObj = $("#treeViewFeatures").data('ejTreeView');
