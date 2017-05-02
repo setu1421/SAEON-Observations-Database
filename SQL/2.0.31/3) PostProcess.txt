@@ -1,2 +1,0 @@
-Select Max(ID)+1 from Observation;
-Alter Sequence ObservationsSequence Restart With MaxID

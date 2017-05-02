@@ -2,7 +2,16 @@
 CREATE VIEW [dbo].[vObservationsList]
 AS 
 SELECT 
-  Observation.*,
+--> Changed 2.0.31 20170502 TimPN
+  --Observation.*,
+  Observation.ID,
+  Observation.ImportBatchID,
+  Observation.ValueDate,
+  Observation.RawValue,
+  Observation.DataValue,
+  Observation.Comment,
+  Observation.CorrelationID,
+--< Changed 2.0.31 20170502 TimPN
   Sensor.Code SensorCode,
   Sensor.Name SensorName,
   Phenomenon.Code PhenomenonCode,

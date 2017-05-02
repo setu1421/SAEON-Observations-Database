@@ -29,8 +29,10 @@
        [dbo].[UserDownloads] (Table)
      Create
        [dbo].[DataLog].[IX_DataLog_ValueDay] (Index)
-       [dbo].[Observation].[IX_Observation_SensorID_ValueDate] (Index)
+       [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
+       [dbo].[Observation].[IX_Observation_AddedDate] (Index)
        [dbo].[Observation].[IX_Observation_ValueDate] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDateDesc] (Index)
        [dbo].[Observation].[IX_Observation_ValueDay] (Index)
      Alter
        [dbo].[UserQueries] (Table)
@@ -38,6 +40,7 @@
        [dbo].[vDataSchema] (View)
        [dbo].[vImportBatch] (View)
        [dbo].[vDownloads] (View)
+       [dbo].[vObservationsList] (View)
 
 ** Supporting actions
      Drop
@@ -102,17 +105,13 @@
        [dbo].[ImportBatch].[IX_ImportBatch_LogFileName] (Index)
        [dbo].[ImportBatch].[IX_ImportBatch_StatusID] (Index)
        [dbo].[ImportBatch].[IX_ImportBatch_StatusReasonID] (Index)
-       [dbo].[Observation].[IX_Observation] (Index)
-       [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
        [dbo].[Observation].[IX_Observation_SensorID] (Index)
        [dbo].[Observation].[IX_Observation_PhenomenonOfferingID] (Index)
        [dbo].[Observation].[IX_Observation_PhenomenonUOMID] (Index)
        [dbo].[Observation].[IX_Observation_UserId] (Index)
-       [dbo].[Observation].[IX_Observation_AddedDate] (Index)
        [dbo].[Observation].[IX_Observation_StatusID] (Index)
        [dbo].[Observation].[IX_Observation_StatusReasonID] (Index)
        [dbo].[Observation].[IX_Observation_CorrelationID] (Index)
-       [dbo].[Observation].[IX_Observation_SensorIDPhenomenonOfferingID] (Index)
        [dbo].[FK_DataLog_Sensor] (Foreign Key)
        [dbo].[FK_DataLog_Status] (Foreign Key)
        [dbo].[FK_DataLog_StatusReason] (Foreign Key)
@@ -154,7 +153,6 @@
        [dbo].[vSensor] (View)
        [dbo].[vObservationRoles] (View)
        [dbo].[vInventory] (View)
-       [dbo].[vObservationsList] (View)
        [dbo].[progress_Status_Raw] (Procedure)
 
 The column [dbo].[DataSchema].[HasHeaderRow] is being dropped, data loss could occur.

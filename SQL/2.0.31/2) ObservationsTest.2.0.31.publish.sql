@@ -50,6 +50,13 @@ USE [$(DatabaseName)];
 
 
 GO
+/*
+The column [dbo].[UserDownloads].[QueryURI] is being dropped, data loss could occur.
+
+The column [dbo].[UserDownloads].[QueryInput] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+*/
+
+GO
 PRINT N'The following operation was generated from a refactoring log file 918c74d0-40e9-42c0-93fd-69523ed88a2b';
 
 PRINT N'Rename [dbo].[UserQueries].[QueryURI] to QueryInput';
@@ -808,13 +815,65 @@ CREATE NONCLUSTERED INDEX [IX_ImportBatch_StatusReasonID]
 
 GO
 PRINT N'Starting rebuilding table [dbo].[Observation]...';
+
 GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDate]...';
+PRINT N'Creating [dbo].[Observation].[IX_Observation_ImportBatchID]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate]
-    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC)
+CREATE NONCLUSTERED INDEX [IX_Observation_ImportBatchID]
+    ON [dbo].[Observation]([ImportBatchID] ASC)
+    INCLUDE([ValueDate], [RawValue], [DataValue], [Comment], [CorrelationID])
+    ON [Observations];
+
+
+GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_SensorID]
+--    ON [dbo].[Observation]([SensorID] ASC)
+--    ON [Observations];
+
+
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_PhenomenonOfferingID]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_PhenomenonOfferingID]
+--    ON [dbo].[Observation]([PhenomenonOfferingID] ASC)
+--    ON [Observations];
+
+
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_PhenomenonUOMID]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_PhenomenonUOMID]
+--    ON [dbo].[Observation]([PhenomenonUOMID] ASC)
+--    ON [Observations];
+
+
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_UserId]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_UserId]
+--    ON [dbo].[Observation]([UserId] ASC)
+--    ON [Observations];
+
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_AddedDate]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_AddedDate]
+    ON [dbo].[Observation]([AddedDate] ASC)
     ON [Observations];
 
 
@@ -829,12 +888,52 @@ CREATE NONCLUSTERED INDEX [IX_Observation_ValueDate]
 
 
 GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDateDesc]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_ValueDateDesc]
+    ON [dbo].[Observation]([ValueDate] DESC)
+    ON [Observations];
+
+
+GO
 PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDay]...';
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Observation_ValueDay]
     ON [dbo].[Observation]([ValueDay] ASC);
+
+
+GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusID]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_StatusID]
+--    ON [dbo].[Observation]([StatusID] ASC)
+--    ON [Observations];
+
+
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusReasonID]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_StatusReasonID]
+--    ON [dbo].[Observation]([StatusReasonID] ASC)
+--    ON [Observations];
+
+
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_CorrelationID]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_CorrelationID]
+--    ON [dbo].[Observation]([CorrelationID] ASC)
+--    ON [Observations];
 
 
 GO
@@ -1791,7 +1890,7 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vInventory]';
 
 
 GO
-PRINT N'Refreshing [dbo].[vObservationsList]...';
+PRINT N'Altering [dbo].[vObservationsList]...';
 
 
 GO
@@ -1799,9 +1898,51 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vObservationsList]';
-
-
+--> Added 2.0.15 20161024 TimPN
+ALTER VIEW [dbo].[vObservationsList]
+AS 
+SELECT 
+--> Changed 2.0.31 20170502 TimPN
+  --Observation.*,
+  Observation.ID,
+  Observation.ImportBatchID,
+  Observation.ValueDate,
+  Observation.RawValue,
+  Observation.DataValue,
+  Observation.Comment,
+  Observation.CorrelationID,
+--< Changed 2.0.31 20170502 TimPN
+  Sensor.Code SensorCode,
+  Sensor.Name SensorName,
+  Phenomenon.Code PhenomenonCode,
+  Phenomenon.Name PhenomenonName,
+  Offering.Code OfferingCode,
+  Offering.Name OfferingName,
+  UnitOfMeasure.Code UnitOfMeasureCode,
+  UnitOfMeasure.Unit UnitOfMeasureUnit,
+  Status.Code StatusCode,
+  Status.Name StatusName,
+  StatusReason.Code StatusReasonCode,
+  StatusReason.Name StatusReasonName
+FROM
+  Observation
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join PhenomenonOffering
+    on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (Observation.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+  left join Status
+    on (Observation.StatusID = Status.ID)
+  left join StatusReason
+    on (Observation.StatusReasonID = StatusReason.ID)
+--> Added 2.0.15 20161024 TimPN
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 

@@ -88,18 +88,13 @@
 --< Added 2.0.13 20161010 TimPN
 --< Added 2.0.8 20160718 TimPN
 --< Removed 2.0.31 20170414 TimPN
---> Changed 2.0.3 20160503 TimPN
-GO
---CREATE INDEX [IX_Observation] ON [dbo].[Observation]([SensorProcedureID] ASC, [ValueDate] ASC, [RawValue])
-CREATE INDEX [IX_Observation] ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC, [RawValue])
---> Added 2.0.13 20161010 TimPN
-  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
---< Added 2.0.13 20161010 TimPN
---< Changed 2.0.3 20160503 TimPN
 GO
 --> Changed 20160329 TimPN
 --CREATE INDEX [IX_Observation_BatchID] ON [dbo].[Observation]([ImportBatchID])
 CREATE INDEX [IX_Observation_ImportBatchID] ON [dbo].[Observation]([ImportBatchID])
+--> Added 2.0.31 20170502 TimPN
+INCLUDE ([ValueDate],[RawValue],[DataValue],[Comment],[CorrelationID])
+--< Added 2.0.31 20170502 TimPN
 --> Added 2.0.13 20161010 TimPN
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 --< Added 2.0.13 20161010 TimPN
@@ -131,21 +126,15 @@ CREATE INDEX [IX_Observation_UserId] ON [dbo].[Observation] ([UserId])
 --< Added 2.0.0 20160406 TimPN
 --> Added 2.0.8 20160726 TimPN
 GO
-CREATE INDEX [IX_Observation_AddedDate] ON [dbo].[Observation] ([SensorID], [AddedDate])
---> Added 2.0.13 20161010 TimPN
-  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
---< Added 2.0.13 20161010 TimPN
---> Changed 2.0.31 20170423 TimPN
-GO
---CREATE INDEX [IX_Observation_ValueDate] ON [dbo].[Observation] ([SensorID], [ValueDate])
-CREATE INDEX [IX_Observation_SensorID_ValueDate] ON [dbo].[Observation] ([SensorID], [ValueDate])
---> Changed 2.0.31 20170423 TimPN
+CREATE INDEX [IX_Observation_AddedDate] ON [dbo].[Observation] ([AddedDate])
 --> Added 2.0.13 20161010 TimPN
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 --< Added 2.0.13 20161010 TimPN
 --> Added 2.0.31 20170423 TimPN
 GO
 CREATE INDEX [IX_Observation_ValueDate] ON [dbo].[Observation] ([ValueDate]) ON [Observations];
+GO
+CREATE INDEX [IX_Observation_ValueDateDesc] ON [dbo].[Observation] ([ValueDate] Desc) ON [Observations];
 GO
 CREATE INDEX [IX_Observation_ValueDay] ON [dbo].[Observation] ([ValueDay]);
 --< Added 2.0.31 20170423 TimPN
@@ -176,8 +165,8 @@ GO
 CREATE INDEX [IX_Observation_CorrelationID] ON [dbo].[Observation] ([CorrelationID]) ON [Observations];
 --< Added 2.0.15 20161024 TimPN
 --> Added 2.0.30 20170329 TimPN
-GO
-CREATE INDEX [IX_Observation_SensorIDPhenomenonOfferingID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID]) ON [Observations];
+--GO
+--CREATE INDEX [IX_Observation_SensorIDPhenomenonOfferingID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID]) ON [Observations];
 --< Added 2.0.30 20170329 TimPN
 --> Changed 2.0.15 20161102 TimPN
 GO

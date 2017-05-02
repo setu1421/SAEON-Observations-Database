@@ -17,8 +17,6 @@
 ** User actions
      Rename
        [dbo].[UserQueries].[QueryInput] (Column)
-     Drop
-       [dbo].[DF_Observation_ID] (Default Constraint)
      Table rebuild
        [dbo].[DataLog] (Table)
        [dbo].[Observation] (Table)

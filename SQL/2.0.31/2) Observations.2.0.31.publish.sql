@@ -49,7 +49,6 @@ GO
 USE [$(DatabaseName)];
 
 
-
 GO
 PRINT N'The following operation was generated from a refactoring log file 918c74d0-40e9-42c0-93fd-69523ed88a2b';
 
@@ -90,14 +89,6 @@ PRINT N'Dropping [dbo].[DF_DataLog_UpdatedAt]...';
 
 GO
 ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_UpdatedAt];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_Observation_ID]...';
-
-
-GO
-ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [DF_Observation_ID];
 
 
 GO
@@ -443,25 +434,43 @@ CREATE NONCLUSTERED INDEX [IX_DataLog_StatusReasonID]
 
 GO
 PRINT N'Starting rebuilding table [dbo].[Observation]...';
-GO
-
-PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDate]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate]
-    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC)
-    ON [Observations];
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDate]...';
 
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate]
+--    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC)
+--    ON [Observations];
+
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDateDesc]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDateDesc]
+--    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] Desc)
+--    ON [Observations];
 
 GO
 PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDate]...';
+
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Observation_ValueDate]
     ON [dbo].[Observation]([ValueDate] ASC)
     ON [Observations];
 
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDateDesc]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_ValueDateDesc]
+    ON [dbo].[Observation]([ValueDate] Desc)
+    ON [Observations];
 
 GO
 PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDay]...';
@@ -470,8 +479,6 @@ PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDay]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Observation_ValueDay]
     ON [dbo].[Observation]([ValueDay] ASC);
-
-
 
 GO
 PRINT N'Starting rebuilding table [dbo].[UserDownloads]...';
@@ -1126,7 +1133,7 @@ from
 --< Changed 2.0.31 20170423 TimPN
 where
   (Status.Name = 'Verified')
---< Ad
+--< Added 2.0.26 20170130 TimPN
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 

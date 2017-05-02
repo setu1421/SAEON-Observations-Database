@@ -57,17 +57,29 @@ namespace SAEON.Observations.Data{
                 schema.SchemaName = @"dbo";
                 //columns
                 
-                TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
-                colvarSensorID.ColumnName = "SensorID";
-                colvarSensorID.DataType = DbType.Guid;
-                colvarSensorID.MaxLength = 0;
-                colvarSensorID.AutoIncrement = false;
-                colvarSensorID.IsNullable = false;
-                colvarSensorID.IsPrimaryKey = false;
-                colvarSensorID.IsForeignKey = false;
-                colvarSensorID.IsReadOnly = false;
+                TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
+                colvarId.ColumnName = "ID";
+                colvarId.DataType = DbType.Int32;
+                colvarId.MaxLength = 0;
+                colvarId.AutoIncrement = false;
+                colvarId.IsNullable = false;
+                colvarId.IsPrimaryKey = false;
+                colvarId.IsForeignKey = false;
+                colvarId.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarSensorID);
+                schema.Columns.Add(colvarId);
+                
+                TableSchema.TableColumn colvarImportBatchID = new TableSchema.TableColumn(schema);
+                colvarImportBatchID.ColumnName = "ImportBatchID";
+                colvarImportBatchID.DataType = DbType.Guid;
+                colvarImportBatchID.MaxLength = 0;
+                colvarImportBatchID.AutoIncrement = false;
+                colvarImportBatchID.IsNullable = false;
+                colvarImportBatchID.IsPrimaryKey = false;
+                colvarImportBatchID.IsForeignKey = false;
+                colvarImportBatchID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarImportBatchID);
                 
                 TableSchema.TableColumn colvarValueDate = new TableSchema.TableColumn(schema);
                 colvarValueDate.ColumnName = "ValueDate";
@@ -117,66 +129,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarComment);
                 
-                TableSchema.TableColumn colvarPhenomenonOfferingID = new TableSchema.TableColumn(schema);
-                colvarPhenomenonOfferingID.ColumnName = "PhenomenonOfferingID";
-                colvarPhenomenonOfferingID.DataType = DbType.Guid;
-                colvarPhenomenonOfferingID.MaxLength = 0;
-                colvarPhenomenonOfferingID.AutoIncrement = false;
-                colvarPhenomenonOfferingID.IsNullable = false;
-                colvarPhenomenonOfferingID.IsPrimaryKey = false;
-                colvarPhenomenonOfferingID.IsForeignKey = false;
-                colvarPhenomenonOfferingID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarPhenomenonOfferingID);
-                
-                TableSchema.TableColumn colvarPhenomenonUOMID = new TableSchema.TableColumn(schema);
-                colvarPhenomenonUOMID.ColumnName = "PhenomenonUOMID";
-                colvarPhenomenonUOMID.DataType = DbType.Guid;
-                colvarPhenomenonUOMID.MaxLength = 0;
-                colvarPhenomenonUOMID.AutoIncrement = false;
-                colvarPhenomenonUOMID.IsNullable = false;
-                colvarPhenomenonUOMID.IsPrimaryKey = false;
-                colvarPhenomenonUOMID.IsForeignKey = false;
-                colvarPhenomenonUOMID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarPhenomenonUOMID);
-                
-                TableSchema.TableColumn colvarImportBatchID = new TableSchema.TableColumn(schema);
-                colvarImportBatchID.ColumnName = "ImportBatchID";
-                colvarImportBatchID.DataType = DbType.Guid;
-                colvarImportBatchID.MaxLength = 0;
-                colvarImportBatchID.AutoIncrement = false;
-                colvarImportBatchID.IsNullable = false;
-                colvarImportBatchID.IsPrimaryKey = false;
-                colvarImportBatchID.IsForeignKey = false;
-                colvarImportBatchID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarImportBatchID);
-                
-                TableSchema.TableColumn colvarStatusID = new TableSchema.TableColumn(schema);
-                colvarStatusID.ColumnName = "StatusID";
-                colvarStatusID.DataType = DbType.Guid;
-                colvarStatusID.MaxLength = 0;
-                colvarStatusID.AutoIncrement = false;
-                colvarStatusID.IsNullable = true;
-                colvarStatusID.IsPrimaryKey = false;
-                colvarStatusID.IsForeignKey = false;
-                colvarStatusID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarStatusID);
-                
-                TableSchema.TableColumn colvarStatusReasonID = new TableSchema.TableColumn(schema);
-                colvarStatusReasonID.ColumnName = "StatusReasonID";
-                colvarStatusReasonID.DataType = DbType.Guid;
-                colvarStatusReasonID.MaxLength = 0;
-                colvarStatusReasonID.AutoIncrement = false;
-                colvarStatusReasonID.IsNullable = true;
-                colvarStatusReasonID.IsPrimaryKey = false;
-                colvarStatusReasonID.IsForeignKey = false;
-                colvarStatusReasonID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarStatusReasonID);
-                
                 TableSchema.TableColumn colvarCorrelationID = new TableSchema.TableColumn(schema);
                 colvarCorrelationID.ColumnName = "CorrelationID";
                 colvarCorrelationID.DataType = DbType.Guid;
@@ -188,90 +140,6 @@ namespace SAEON.Observations.Data{
                 colvarCorrelationID.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarCorrelationID);
-                
-                TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
-                colvarUserId.ColumnName = "UserId";
-                colvarUserId.DataType = DbType.Guid;
-                colvarUserId.MaxLength = 0;
-                colvarUserId.AutoIncrement = false;
-                colvarUserId.IsNullable = false;
-                colvarUserId.IsPrimaryKey = false;
-                colvarUserId.IsForeignKey = false;
-                colvarUserId.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarUserId);
-                
-                TableSchema.TableColumn colvarAddedDate = new TableSchema.TableColumn(schema);
-                colvarAddedDate.ColumnName = "AddedDate";
-                colvarAddedDate.DataType = DbType.DateTime;
-                colvarAddedDate.MaxLength = 0;
-                colvarAddedDate.AutoIncrement = false;
-                colvarAddedDate.IsNullable = false;
-                colvarAddedDate.IsPrimaryKey = false;
-                colvarAddedDate.IsForeignKey = false;
-                colvarAddedDate.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarAddedDate);
-                
-                TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
-                colvarAddedAt.ColumnName = "AddedAt";
-                colvarAddedAt.DataType = DbType.DateTime;
-                colvarAddedAt.MaxLength = 0;
-                colvarAddedAt.AutoIncrement = false;
-                colvarAddedAt.IsNullable = true;
-                colvarAddedAt.IsPrimaryKey = false;
-                colvarAddedAt.IsForeignKey = false;
-                colvarAddedAt.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarAddedAt);
-                
-                TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
-                colvarUpdatedAt.ColumnName = "UpdatedAt";
-                colvarUpdatedAt.DataType = DbType.DateTime;
-                colvarUpdatedAt.MaxLength = 0;
-                colvarUpdatedAt.AutoIncrement = false;
-                colvarUpdatedAt.IsNullable = true;
-                colvarUpdatedAt.IsPrimaryKey = false;
-                colvarUpdatedAt.IsForeignKey = false;
-                colvarUpdatedAt.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarUpdatedAt);
-                
-                TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
-                colvarId.ColumnName = "ID";
-                colvarId.DataType = DbType.Int32;
-                colvarId.MaxLength = 0;
-                colvarId.AutoIncrement = false;
-                colvarId.IsNullable = false;
-                colvarId.IsPrimaryKey = false;
-                colvarId.IsForeignKey = false;
-                colvarId.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarId);
-                
-                TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
-                colvarRowVersion.ColumnName = "RowVersion";
-                colvarRowVersion.DataType = DbType.Binary;
-                colvarRowVersion.MaxLength = 0;
-                colvarRowVersion.AutoIncrement = false;
-                colvarRowVersion.IsNullable = false;
-                colvarRowVersion.IsPrimaryKey = false;
-                colvarRowVersion.IsForeignKey = false;
-                colvarRowVersion.IsReadOnly = true;
-                
-                schema.Columns.Add(colvarRowVersion);
-                
-                TableSchema.TableColumn colvarValueDay = new TableSchema.TableColumn(schema);
-                colvarValueDay.ColumnName = "ValueDay";
-                colvarValueDay.DataType = DbType.Date;
-                colvarValueDay.MaxLength = 0;
-                colvarValueDay.AutoIncrement = false;
-                colvarValueDay.IsNullable = true;
-                colvarValueDay.IsPrimaryKey = false;
-                colvarValueDay.IsForeignKey = false;
-                colvarValueDay.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarValueDay);
                 
                 TableSchema.TableColumn colvarSensorCode = new TableSchema.TableColumn(schema);
                 colvarSensorCode.ColumnName = "SensorCode";
@@ -467,17 +335,31 @@ namespace SAEON.Observations.Data{
 	    #region Props
 	    
           
-        [XmlAttribute("SensorID")]
+        [XmlAttribute("Id")]
         [Bindable(true)]
-        public Guid SensorID 
+        public int Id 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid>("SensorID");
+			    return GetColumnValue<int>("ID");
 		    }
             set 
 		    {
-			    SetColumnValue("SensorID", value);
+			    SetColumnValue("ID", value);
+            }
+        }
+	      
+        [XmlAttribute("ImportBatchID")]
+        [Bindable(true)]
+        public Guid ImportBatchID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("ImportBatchID");
+		    }
+            set 
+		    {
+			    SetColumnValue("ImportBatchID", value);
             }
         }
 	      
@@ -537,76 +419,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("PhenomenonOfferingID")]
-        [Bindable(true)]
-        public Guid PhenomenonOfferingID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("PhenomenonOfferingID");
-		    }
-            set 
-		    {
-			    SetColumnValue("PhenomenonOfferingID", value);
-            }
-        }
-	      
-        [XmlAttribute("PhenomenonUOMID")]
-        [Bindable(true)]
-        public Guid PhenomenonUOMID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("PhenomenonUOMID");
-		    }
-            set 
-		    {
-			    SetColumnValue("PhenomenonUOMID", value);
-            }
-        }
-	      
-        [XmlAttribute("ImportBatchID")]
-        [Bindable(true)]
-        public Guid ImportBatchID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("ImportBatchID");
-		    }
-            set 
-		    {
-			    SetColumnValue("ImportBatchID", value);
-            }
-        }
-	      
-        [XmlAttribute("StatusID")]
-        [Bindable(true)]
-        public Guid? StatusID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid?>("StatusID");
-		    }
-            set 
-		    {
-			    SetColumnValue("StatusID", value);
-            }
-        }
-	      
-        [XmlAttribute("StatusReasonID")]
-        [Bindable(true)]
-        public Guid? StatusReasonID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid?>("StatusReasonID");
-		    }
-            set 
-		    {
-			    SetColumnValue("StatusReasonID", value);
-            }
-        }
-	      
         [XmlAttribute("CorrelationID")]
         [Bindable(true)]
         public Guid? CorrelationID 
@@ -618,104 +430,6 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("CorrelationID", value);
-            }
-        }
-	      
-        [XmlAttribute("UserId")]
-        [Bindable(true)]
-        public Guid UserId 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid>("UserId");
-		    }
-            set 
-		    {
-			    SetColumnValue("UserId", value);
-            }
-        }
-	      
-        [XmlAttribute("AddedDate")]
-        [Bindable(true)]
-        public DateTime AddedDate 
-	    {
-		    get
-		    {
-			    return GetColumnValue<DateTime>("AddedDate");
-		    }
-            set 
-		    {
-			    SetColumnValue("AddedDate", value);
-            }
-        }
-	      
-        [XmlAttribute("AddedAt")]
-        [Bindable(true)]
-        public DateTime? AddedAt 
-	    {
-		    get
-		    {
-			    return GetColumnValue<DateTime?>("AddedAt");
-		    }
-            set 
-		    {
-			    SetColumnValue("AddedAt", value);
-            }
-        }
-	      
-        [XmlAttribute("UpdatedAt")]
-        [Bindable(true)]
-        public DateTime? UpdatedAt 
-	    {
-		    get
-		    {
-			    return GetColumnValue<DateTime?>("UpdatedAt");
-		    }
-            set 
-		    {
-			    SetColumnValue("UpdatedAt", value);
-            }
-        }
-	      
-        [XmlAttribute("Id")]
-        [Bindable(true)]
-        public int Id 
-	    {
-		    get
-		    {
-			    return GetColumnValue<int>("ID");
-		    }
-            set 
-		    {
-			    SetColumnValue("ID", value);
-            }
-        }
-	      
-        [XmlAttribute("RowVersion")]
-        [Bindable(true)]
-        public byte[] RowVersion 
-	    {
-		    get
-		    {
-			    return GetColumnValue<byte[]>("RowVersion");
-		    }
-            set 
-		    {
-			    SetColumnValue("RowVersion", value);
-            }
-        }
-	      
-        [XmlAttribute("ValueDay")]
-        [Bindable(true)]
-        public DateTime? ValueDay 
-	    {
-		    get
-		    {
-			    return GetColumnValue<DateTime?>("ValueDay");
-		    }
-            set 
-		    {
-			    SetColumnValue("ValueDay", value);
             }
         }
 	      
@@ -894,7 +608,9 @@ namespace SAEON.Observations.Data{
 	    {
 		    
 		    
-            public static string SensorID = @"SensorID";
+            public static string Id = @"ID";
+            
+            public static string ImportBatchID = @"ImportBatchID";
             
             public static string ValueDate = @"ValueDate";
             
@@ -904,31 +620,7 @@ namespace SAEON.Observations.Data{
             
             public static string Comment = @"Comment";
             
-            public static string PhenomenonOfferingID = @"PhenomenonOfferingID";
-            
-            public static string PhenomenonUOMID = @"PhenomenonUOMID";
-            
-            public static string ImportBatchID = @"ImportBatchID";
-            
-            public static string StatusID = @"StatusID";
-            
-            public static string StatusReasonID = @"StatusReasonID";
-            
             public static string CorrelationID = @"CorrelationID";
-            
-            public static string UserId = @"UserId";
-            
-            public static string AddedDate = @"AddedDate";
-            
-            public static string AddedAt = @"AddedAt";
-            
-            public static string UpdatedAt = @"UpdatedAt";
-            
-            public static string Id = @"ID";
-            
-            public static string RowVersion = @"RowVersion";
-            
-            public static string ValueDay = @"ValueDay";
             
             public static string SensorCode = @"SensorCode";
             
