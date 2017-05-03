@@ -306,5 +306,6 @@ $RECYCLE.BIN/
 
 # Application Data
 App_Data/
+connections.config
 connectionstrings.config
 machinekey.config

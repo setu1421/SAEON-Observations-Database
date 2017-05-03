@@ -3,26 +3,42 @@
     .Text("Load Query")
     .ShowRoundedCorner(true)
     .Type(ButtonType.Button)
-    .Size(ButtonSize.Large)
+    .Size(ButtonSize.Medium)
     .ContentType(ContentType.TextAndImage)
     .PrefixIcon("e-icon e-reload")
+    .ClientSideEvents(e => e.Click("onLoadQueryClick"))
 )
+@{
+    Html.EJ()
+        .Dialog("dialogLoadQuery")
+        .Title("Load query")
+        .ShowOnInit(false)
+        .ContentTemplate(@<p>Load a query</p>);
+}
 @(Html.EJ()
     .Button("btnSaveQuery")
     .Text("Save Query")
     .ShowRoundedCorner(true)
     .Type(ButtonType.Button)
-    .Size(ButtonSize.Large)
+    .Size(ButtonSize.Medium)
     .ContentType(ContentType.TextAndImage)
     .PrefixIcon("e-icon e-save")
     .Enabled(false)
+    .ClientSideEvents(e => e.Click("onSaveQueryClick"))
 )
+@{
+    Html.EJ()
+        .Dialog("dialogSaveQuery")
+        .Title("Save query")
+        .ShowOnInit(false)
+        .ContentTemplate(@<p>Save query</p>);
+}
 @(Html.EJ()
     .Button("btnSearch")
     .Text("Search")
     .ShowRoundedCorner(true)
     .Type(ButtonType.Button)
-    .Size(ButtonSize.Large)
+    .Size(ButtonSize.Medium)
     .ContentType(ContentType.TextAndImage)
     .PrefixIcon("e-icon e-search")
     .Enabled(false)
@@ -33,13 +49,19 @@
     .Text("Download")
     .ShowRoundedCorner(true)
     .Type(ButtonType.Button)
-    .Size(ButtonSize.Large)
+    .Size(ButtonSize.Medium)
     .ContentType(ContentType.TextAndImage)
     .PrefixIcon("e-icon e-dataexport")
     .Enabled(false)
-//.ClientSideEvents(e => e.Click("onDownloadClick"))
+    .ClientSideEvents(e => e.Click("onDownloadClick"))
 )
 <script type="text/javascript">
+    function onLoadQueryClick() {
+        $("#dialogLoadQuery").ejDialog("open");
+    }
+    function onSaveQueryClick() {
+        $("#dialogSaveQuery").ejDialog("open");
+    }
     function onSearchClick() {
         ShowWaiting();
         var startDate = $("#StartDate").ejDatePicker("instance")._dateValue;
@@ -89,6 +111,9 @@
                 ErrorInFunc("Error in UpdateFilters Status: " + textStatus + " Error: " + errorThrown);
             }
         })
+    }
+    function onDownloadClick() {
+
     }
     function ErrorInFunc(msg) {
         HideWaiting();
