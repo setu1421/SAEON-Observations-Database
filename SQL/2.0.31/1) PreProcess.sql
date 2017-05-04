@@ -26,12 +26,15 @@ Alter table Observation drop constraint DF_Observation_ID
 Set @Msg = Convert(varchar(100),GetDate(),113)+' Drop ID'
 RAISERROR(@msg, 0, 1) WITH NOWAIT
 Alter table Observation drop column ID
-Set @Msg = Convert(varchar(100),GetDate(),113)+' Add ID'
+--Set @Msg = Convert(varchar(100),GetDate(),113)+' Add ID'
+--RAISERROR(@msg, 0, 1) WITH NOWAIT
+--Alter table Observation add ID Int IDENTITY(1,1) not null;
+--Set @Msg = Convert(varchar(100),GetDate(),113)+' Add PK_Observation'
+--RAISERROR(@msg, 0, 1) WITH NOWAIT
+--Alter table Observation add Constraint PK_Observation Primary Key Clustered (ID) on Observations
+Set @Msg = Convert(varchar(100),GetDate(),113)+' Add ID and PK_Observation'
 RAISERROR(@msg, 0, 1) WITH NOWAIT
-Alter table Observation add ID Int IDENTITY(1,1) not null;
-Set @Msg = Convert(varchar(100),GetDate(),113)+' Add PK_Observation'
-RAISERROR(@msg, 0, 1) WITH NOWAIT
-Alter table Observation add Constraint PK_Observation Primary Key Clustered (ID)
+Alter table Observation add ID Int IDENTITY(1,1) not null Constraint PK_Observation Primary Key Clustered (ID) on Observations
 Set @Msg = Convert(varchar(100),GetDate(),113)+' Add RowVersion'
 RAISERROR(@msg, 0, 1) WITH NOWAIT
 Alter table Observation add RowVersion RowVersion not null

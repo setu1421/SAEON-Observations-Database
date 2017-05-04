@@ -435,24 +435,66 @@ CREATE NONCLUSTERED INDEX [IX_DataLog_StatusReasonID]
 GO
 PRINT N'Starting rebuilding table [dbo].[Observation]...';
 
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_ImportBatchID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_ImportBatchID]
+    ON [dbo].[Observation]([ImportBatchID] ASC)
+    INCLUDE([ValueDate], [RawValue], [DataValue], [Comment], [CorrelationID])
+    ON [Observations];
+
 
 --GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDate]...';
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID]...';
 
 
 --GO
---CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate]
---    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC)
+--CREATE NONCLUSTERED INDEX [IX_Observation_SensorID]
+--    ON [dbo].[Observation]([SensorID] ASC)
 --    ON [Observations];
 
+
 --GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDateDesc]...';
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_PhenomenonOfferingID]...';
 
 
 --GO
---CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDateDesc]
---    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] Desc)
+--CREATE NONCLUSTERED INDEX [IX_Observation_PhenomenonOfferingID]
+--    ON [dbo].[Observation]([PhenomenonOfferingID] ASC)
 --    ON [Observations];
+
+
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_PhenomenonUOMID]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_PhenomenonUOMID]
+--    ON [dbo].[Observation]([PhenomenonUOMID] ASC)
+--    ON [Observations];
+
+
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_UserId]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_UserId]
+--    ON [dbo].[Observation]([UserId] ASC)
+--    ON [Observations];
+
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_AddedDate]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_AddedDate]
+    ON [dbo].[Observation]([AddedDate] ASC)
+    ON [Observations];
+
 
 GO
 PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDate]...';
@@ -463,14 +505,16 @@ CREATE NONCLUSTERED INDEX [IX_Observation_ValueDate]
     ON [dbo].[Observation]([ValueDate] ASC)
     ON [Observations];
 
+
 GO
 PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDateDesc]...';
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Observation_ValueDateDesc]
-    ON [dbo].[Observation]([ValueDate] Desc)
+    ON [dbo].[Observation]([ValueDate] DESC)
     ON [Observations];
+
 
 GO
 PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDay]...';
@@ -479,6 +523,37 @@ PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDay]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Observation_ValueDay]
     ON [dbo].[Observation]([ValueDay] ASC);
+
+
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusID]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_StatusID]
+--    ON [dbo].[Observation]([StatusID] ASC)
+--    ON [Observations];
+
+
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusReasonID]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_StatusReasonID]
+--    ON [dbo].[Observation]([StatusReasonID] ASC)
+--    ON [Observations];
+
+
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_CorrelationID]...';
+
+
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_CorrelationID]
+--    ON [dbo].[Observation]([CorrelationID] ASC)
+--    ON [Observations];
+
 
 GO
 PRINT N'Starting rebuilding table [dbo].[UserDownloads]...';
@@ -750,6 +825,53 @@ BEGIN
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160708 TimPN
+GO
+PRINT N'Creating [dbo].[TR_Observation_Insert]...';
+
+
+GO
+CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]
+FOR INSERT
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = GETDATE(),
+        UpdatedAt = NULL
+    from
+        Observation src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+END
+GO
+PRINT N'Creating [dbo].[TR_Observation_Update]...';
+
+
+GO
+CREATE TRIGGER [dbo].[TR_Observation_Update] ON [dbo].[Observation]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+--> Changed 2.0.19 20161205 TimPN
+--		AddedAt = del.AddedAt,
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
+--< Changed 2.0.19 20161205 TimPN
+        UpdatedAt = GETDATE()
+    from
+        Observation src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+--< Changed 2.0.15 20161102 TimPN
+--< Added 2.0.8 20160718 TimPN
 GO
 PRINT N'Creating [dbo].[TR_UserDownloads_Insert]...';
 
@@ -1155,7 +1277,7 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vObservation]';
 
 
 GO
-PRINT N'Refreshing [dbo].[vObservationsList]...';
+PRINT N'Altering [dbo].[vObservationsList]...';
 
 
 GO
@@ -1163,9 +1285,51 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vObservationsList]';
-
-
+--> Added 2.0.15 20161024 TimPN
+ALTER VIEW [dbo].[vObservationsList]
+AS 
+SELECT 
+--> Changed 2.0.31 20170502 TimPN
+  --Observation.*,
+  Observation.ID,
+  Observation.ImportBatchID,
+  Observation.ValueDate,
+  Observation.RawValue,
+  Observation.DataValue,
+  Observation.Comment,
+  Observation.CorrelationID,
+--< Changed 2.0.31 20170502 TimPN
+  Sensor.Code SensorCode,
+  Sensor.Name SensorName,
+  Phenomenon.Code PhenomenonCode,
+  Phenomenon.Name PhenomenonName,
+  Offering.Code OfferingCode,
+  Offering.Name OfferingName,
+  UnitOfMeasure.Code UnitOfMeasureCode,
+  UnitOfMeasure.Unit UnitOfMeasureUnit,
+  Status.Code StatusCode,
+  Status.Name StatusName,
+  StatusReason.Code StatusReasonCode,
+  StatusReason.Name StatusReasonName
+FROM
+  Observation
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join PhenomenonOffering
+    on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (Observation.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+  left join Status
+    on (Observation.StatusID = Status.ID)
+  left join StatusReason
+    on (Observation.StatusReasonID = StatusReason.ID)
+--> Added 2.0.15 20161024 TimPN
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 

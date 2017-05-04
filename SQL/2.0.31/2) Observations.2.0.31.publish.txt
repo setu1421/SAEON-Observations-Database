@@ -23,13 +23,16 @@
        [dbo].[UserDownloads] (Table)
      Create
        [dbo].[DataLog].[IX_DataLog_ValueDay] (Index)
-       [dbo].[Observation].[IX_Observation_SensorID_ValueDate] (Index)
+       [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
+       [dbo].[Observation].[IX_Observation_AddedDate] (Index)
        [dbo].[Observation].[IX_Observation_ValueDate] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDateDesc] (Index)
        [dbo].[Observation].[IX_Observation_ValueDay] (Index)
      Alter
        [dbo].[UserQueries] (Table)
        [dbo].[vDataLog] (View)
        [dbo].[vDownloads] (View)
+       [dbo].[vObservationsList] (View)
 
 ** Supporting actions
      Drop
@@ -67,17 +70,13 @@
        [dbo].[DataLog].[IX_DataLog_StatusID] (Index)
        [dbo].[DataLog].[IX_DataLog_UserId] (Index)
        [dbo].[DataLog].[IX_DataLog_StatusReasonID] (Index)
-       [dbo].[Observation].[IX_Observation] (Index)
-       [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
        [dbo].[Observation].[IX_Observation_SensorID] (Index)
        [dbo].[Observation].[IX_Observation_PhenomenonOfferingID] (Index)
        [dbo].[Observation].[IX_Observation_PhenomenonUOMID] (Index)
        [dbo].[Observation].[IX_Observation_UserId] (Index)
-       [dbo].[Observation].[IX_Observation_AddedDate] (Index)
        [dbo].[Observation].[IX_Observation_StatusID] (Index)
        [dbo].[Observation].[IX_Observation_StatusReasonID] (Index)
        [dbo].[Observation].[IX_Observation_CorrelationID] (Index)
-       [dbo].[Observation].[IX_Observation_SensorIDPhenomenonOfferingID] (Index)
        [dbo].[FK_DataLog_DataSourceTransformation] (Foreign Key)
        [dbo].[FK_DataLog_ImportBatch] (Foreign Key)
        [dbo].[FK_DataLog_PhenomenonOffering] (Foreign Key)
@@ -102,7 +101,6 @@
      Refresh
        [dbo].[vInventory] (View)
        [dbo].[vObservation] (View)
-       [dbo].[vObservationsList] (View)
        [dbo].[vObservationRoles] (View)
        [dbo].[progress_Status_Raw] (Procedure)
 

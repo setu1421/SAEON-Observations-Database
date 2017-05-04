@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Observation] (
 --> Added 2.0.31 20170414 TimPN
     --[ID]		Int not null Constraint DF_Observation_ID Default (Next value for dbo.ObservationsSequence),
-    [ID]		Int Identity(1,1) not null,
+    [ID]		Int Identity(1,1) not null Constraint PK_Observation Primary Key Clustered (ID) on Observations,
 --< Added 2.0.31 20170414 TimPN
 --> Removed 2.0.31 20170414 TimPN
 --> Changed 2.0.8 20160720 TimPN
@@ -55,10 +55,9 @@
 --    CONSTRAINT [PK_Observation] PRIMARY KEY CLUSTERED ([ID]),
 --> Changed 2.0.13 20161011 TimPN
 --    CONSTRAINT [PK_Observation] PRIMARY KEY NONCLUSTERED ([ID]),
---> Changed 2.0.31 20170414 TimPN
+--> Removed 2.0.31 20170414 TimPN
 --    CONSTRAINT [PK_Observation] PRIMARY KEY NONCLUSTERED ([ID]) on [Observations],
-    CONSTRAINT [PK_Observation] PRIMARY KEY CLUSTERED ([ID]) on [Observations],
---< Changed 2.0.31 20170414 TimPN
+--< Removed 2.0.31 20170414 TimPN
 --< Changed 2.0.13 20161011 TimPN
 --< Changed 2.0.8 20160718 TimPN
     CONSTRAINT [FK_Observation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
