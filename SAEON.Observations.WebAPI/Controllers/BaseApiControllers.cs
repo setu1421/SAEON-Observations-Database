@@ -283,7 +283,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Name", item?.Name } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "item", item } }))
             {
                 try
                 {
@@ -295,7 +295,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                     }
                     if (!ModelState.IsValid)
                     {
-                        Logging.Error("{Name} ModelState.Invalid", item.Name);
+                        Logging.Error("ModelState.Invalid {ModelState}", ModelState);
                         return BadRequest(ModelState);
                     }
                     if (!IsEntityOk(item, true))
@@ -352,14 +352,14 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "id", id }, { "delta", delta} }))
             {
                 try
                 {
                     Logging.Verbose("Updating {id} {@delta}", id, delta);
                     if (!ModelState.IsValid)
                     {
-                        Logging.Error("{id} ModelState invalid", id);
+                        Logging.Error("ModelState.Invalid {ModelState}", ModelState);
                         return BadRequest(ModelState);
                     }
                     if (id != delta.Id)
@@ -404,14 +404,14 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> PutByName(string name, [FromBody]TEntity delta)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Name", name } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "name", name }, { "delta", delta } }))
             {
                 try
                 {
                     Logging.Verbose("Updating {id} {@delta}", name, delta);
                     if (!ModelState.IsValid)
                     {
-                        Logging.Error("{id} ModelState Invalid", name);
+                        Logging.Error("ModelState.Invalid {ModelState}", ModelState);
                         return BadRequest(ModelState);
                     }
                     if (name != delta.Name)

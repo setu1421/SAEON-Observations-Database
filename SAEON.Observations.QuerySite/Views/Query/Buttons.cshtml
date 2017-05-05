@@ -1,50 +1,52 @@
-﻿@(Html.EJ()
-    .Button("btnLoadQuery")
-    .Text("Load Query")
-    .ShowRoundedCorner(true)
-    .Type(ButtonType.Button)
-    .Size(ButtonSize.Medium)
-    .ContentType(ContentType.TextAndImage)
-    .PrefixIcon("e-icon e-reload")
-    .ClientSideEvents(e => e.Click("onLoadQueryClick"))
-)
+﻿@using SAEON.Observations.QuerySite.Models
+@model QueryModel
 @{
+    Html.EJ()
+        .Button("btnLoadQuery")
+        .Text("Load Query")
+        .ShowRoundedCorner(true)
+        .Type(ButtonType.Button)
+        .Size(ButtonSize.Medium)
+        .ContentType(ContentType.TextAndImage)
+        .PrefixIcon("e-icon e-reload")
+        .ClientSideEvents(e => e.Click("onLoadQueryClick"))
+        .Render();
     Html.EJ()
         .Dialog("dialogLoadQuery")
         .Title("Load query")
         .ShowOnInit(false)
-        .ContentTemplate(@<p>Load a query</p>);
-}
-@(Html.EJ()
-    .Button("btnSaveQuery")
-    .Text("Save Query")
-    .ShowRoundedCorner(true)
-    .Type(ButtonType.Button)
-    .Size(ButtonSize.Medium)
-    .ContentType(ContentType.TextAndImage)
-    .PrefixIcon("e-icon e-save")
-    .Enabled(false)
-    .ClientSideEvents(e => e.Click("onSaveQueryClick"))
-)
-@{
+        .ContentTemplate(@<p>Load a query</p>)
+    .Render();
+    Html.EJ()
+        .Button("btnSaveQuery")
+        .Text("Save Query")
+        .ShowRoundedCorner(true)
+        .Type(ButtonType.Button)
+        .Size(ButtonSize.Medium)
+        .ContentType(ContentType.TextAndImage)
+        .PrefixIcon("e-icon e-save")
+        .Enabled(false)
+        .ClientSideEvents(e => e.Click("onSaveQueryClick"))
+        .Render();
     Html.EJ()
         .Dialog("dialogSaveQuery")
         .Title("Save query")
         .ShowOnInit(false)
-        .ContentTemplate(@<p>Save query</p>);
-}
-@(Html.EJ()
-    .Button("btnSearch")
-    .Text("Search")
-    .ShowRoundedCorner(true)
-    .Type(ButtonType.Button)
-    .Size(ButtonSize.Medium)
-    .ContentType(ContentType.TextAndImage)
-    .PrefixIcon("e-icon e-search")
-    .Enabled(false)
-    .ClientSideEvents(e => e.Click("onSearchClick"))
-)
-@(Html.EJ()
+        .ContentType("ajax")
+        .ContentUrl("/Query/GetSaveQueryDialog")
+        .Render();
+    Html.EJ()
+        .Button("btnSearch")
+        .Text("Search")
+        .ShowRoundedCorner(true)
+        .Type(ButtonType.Button)
+        .Size(ButtonSize.Medium)
+        .ContentType(ContentType.TextAndImage)
+        .PrefixIcon("e-icon e-search")
+        .Enabled(false)
+        .ClientSideEvents(e => e.Click("onSearchClick"))
+        .Render();
+    Html.EJ()
     .Button("btnDownload")
     .Text("Download")
     .ShowRoundedCorner(true)
@@ -54,13 +56,21 @@
     .PrefixIcon("e-icon e-dataexport")
     .Enabled(false)
     .ClientSideEvents(e => e.Click("onDownloadClick"))
-)
+    .Render();
+}
 <script type="text/javascript">
     function onLoadQueryClick() {
+        DisableButtons();
         $("#dialogLoadQuery").ejDialog("open");
     }
     function onSaveQueryClick() {
+        DisableButtons();
         $("#dialogSaveQuery").ejDialog("open");
+    }
+    function onSaveQueryOkClick() {
+        $("#dialogSaveQuery").ejDialog("close");
+        EnableButtons();
+        alert("Saved");
     }
     function onSearchClick() {
         ShowWaiting();
@@ -140,6 +150,8 @@
                 selectedFeatures = selectedFeatures + 1;
             }
         }
+        var btnLoadQuery = $("#btnLoadQuery").data("ejButton");
+        btnLoadQuery.enable();
         var btnSaveQuery = $("#btnSaveQuery").data("ejButton");
         var btnSearch = $("#btnSearch").data("ejButton");
         if ((selectedLocations > 0) & (selectedFeatures > 0)) {
@@ -150,5 +162,17 @@
             btnSaveQuery.disable();
             btnSearch.disable();
         }
+        var btnDownload = $("#btnDownload").data("ejButton");
+        btnDownload.disable();
+    }
+    function DisableButtons() {
+        var btnLoadQuery = $("#btnLoadQuery").data("ejButton");
+        btnLoadQuery.disable();
+        var btnSaveQuery = $("#btnSaveQuery").data("ejButton");
+        btnSaveQuery.disable();
+        var btnSearch = $("#btnSearch").data("ejButton");
+        btnSearch.disable();
+        var btnDownload = $("#btnDownload").data("ejButton");
+        btnDownload.disable();
     }
 </script>

@@ -1,0 +1,56 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        @Html.EJ().MaskEdit("SaveName").WatermarkText("Name").Width("300px").ClientSideEvents(ev => ev.Change("onSaveNameChange"))
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @Html.EJ().MaskEdit("SaveDescription").WatermarkText("Description").Width("300px")
+    </div>
+</div>
+<div class="row ButtonRow">
+    <div class="col-md-12">
+        @{Html.EJ()
+            .Button("btnSave")
+            .Text("Save")
+            .ShowRoundedCorner(true)
+            .Type(ButtonType.Button)
+            .Size(ButtonSize.Medium)
+            .ContentType(ContentType.TextAndImage)
+            .PrefixIcon("e-icon e-save")
+            .Enabled(false)
+            .ClientSideEvents(e => e.Click("onSaveClick")).Render();
+        }
+    </div>
+</div>
+<script>
+    function onSaveNameChange() {
+        var saveName = $("#SaveName").val();
+        var btnSave = $("#btnSave").data("ejButton");
+        if (saveName == '') {
+            btnSave.disable()
+        }
+        else {
+            btnSave.enable()
+        }
+    }
+    function onSaveClick() {
+        $.ajax({
+            url: "/Query/SaveQuery",
+            data: JSON.stringify({
+                Name: $("#SaveName").val(),
+                Description: $("#SaveDescription").val()
+            }),
+            async: false,
+            type: "POST",
+            contentType: "application/json"
+        })
+            .done(function () {
+                alert("saved");
+            })
+            .error(function () {
+                alert("error");
+            });
+    }
+</script>
+@Html.EJ().ScriptManager()

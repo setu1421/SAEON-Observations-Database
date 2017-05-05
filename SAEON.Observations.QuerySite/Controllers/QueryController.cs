@@ -464,5 +464,46 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
         #endregion
 
+        #region SaveQueryDialog
+        [HttpGet]
+        public PartialViewResult GetSaveQueryDialog()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return PartialView("SaveQueryView", new SaveQueryModel());
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost]
+        public async Task<EmptyResult> SaveQuery(SaveQueryModel model)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    UserQuery userQuery = new UserQuery
+                    {
+                        Name = model.Name,
+                        Description = model.Description
+                    };
+                    var results = (await Post<UserQuery, UserQuery>("UserQueries", userQuery));
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
     }
 }

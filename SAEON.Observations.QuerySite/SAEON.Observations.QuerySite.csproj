@@ -814,6 +814,7 @@
     <Content Include="Views\Query\ResultsChartPost.cshtml" />
     <Content Include="Views\Query\LocationsMap.cshtml" />
     <Content Include="Views\Query\MapTest.cshtml" />
+    <Content Include="Views\Query\SaveQueryView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

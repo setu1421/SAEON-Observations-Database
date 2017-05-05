@@ -365,7 +365,7 @@ namespace SAEON.Observations.Core
         /// The URI of the original query that generated the download
         /// </summary>
         [StringLength(500)]
-        public string QueryURI { get; set; }
+        public string QueryInput { get; set; }
         /// <summary>
         /// URI of the user download
         /// </summary>
@@ -403,7 +403,7 @@ namespace SAEON.Observations.Core
         /// URI of the user query
         /// </summary>
         [Required, StringLength(500)]
-        public string QueryURI { get; set; }
+        public string QueryInput { get; set; }
         /// <summary>
         /// UserId of UserQuery
         /// </summary>

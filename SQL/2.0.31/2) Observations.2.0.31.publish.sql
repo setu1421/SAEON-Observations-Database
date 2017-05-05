@@ -825,53 +825,53 @@ BEGIN
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160708 TimPN
-GO
-PRINT N'Creating [dbo].[TR_Observation_Insert]...';
+--GO
+--PRINT N'Creating [dbo].[TR_Observation_Insert]...';
 
 
-GO
-CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]
-FOR INSERT
-AS
-BEGIN
-    SET NoCount ON
-    Update
-        src
-    set
-        AddedAt = GETDATE(),
-        UpdatedAt = NULL
-    from
-        Observation src
-        inner join inserted ins
-            on (ins.ID = src.ID)
-END
-GO
-PRINT N'Creating [dbo].[TR_Observation_Update]...';
+--GO
+--CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]
+--FOR INSERT
+--AS
+--BEGIN
+--    SET NoCount ON
+--    Update
+--        src
+--    set
+--        AddedAt = GETDATE(),
+--        UpdatedAt = NULL
+--    from
+--        Observation src
+--        inner join inserted ins
+--            on (ins.ID = src.ID)
+--END
+--GO
+--PRINT N'Creating [dbo].[TR_Observation_Update]...';
 
 
-GO
-CREATE TRIGGER [dbo].[TR_Observation_Update] ON [dbo].[Observation]
-FOR UPDATE
-AS
-BEGIN
-    SET NoCount ON
-    Update
-        src
-    set
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
-        UpdatedAt = GETDATE()
-    from
-        Observation src
-        inner join inserted ins
-            on (ins.ID = src.ID)
-        inner join deleted del
-            on (del.ID = src.ID)
-END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.8 20160718 TimPN
+--GO
+--CREATE TRIGGER [dbo].[TR_Observation_Update] ON [dbo].[Observation]
+--FOR UPDATE
+--AS
+--BEGIN
+--    SET NoCount ON
+--    Update
+--        src
+--    set
+----> Changed 2.0.19 20161205 TimPN
+----		AddedAt = del.AddedAt,
+--        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
+----< Changed 2.0.19 20161205 TimPN
+--        UpdatedAt = GETDATE()
+--    from
+--        Observation src
+--        inner join inserted ins
+--            on (ins.ID = src.ID)
+--        inner join deleted del
+--            on (del.ID = src.ID)
+--END
+----< Changed 2.0.15 20161102 TimPN
+----< Added 2.0.8 20160718 TimPN
 GO
 PRINT N'Creating [dbo].[TR_UserDownloads_Insert]...';
 
