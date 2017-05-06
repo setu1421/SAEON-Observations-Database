@@ -32,8 +32,39 @@
         .Dialog("dialogSaveQuery")
         .Title("Save query")
         .ShowOnInit(false)
-        .ContentType("ajax")
-        .ContentUrl("/Query/GetSaveQueryDialog")
+        .Width("auto")
+        .ContentTemplate(
+        @<text>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.EJ().MaskEdit("SaveName").WatermarkText("Name").Width("300px").ClientSideEvents(ev => ev.Change("onSaveNameChange"))
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.EJ().MaskEdit("SaveDescription").WatermarkText("Description").Width("500px")
+                </div>
+            </div>
+            <div class="row ErrorRow">
+                <div class="col-md-12" id="SaveError">
+                </div>
+            </div>
+            <div class="row ButtonRow">
+                <div class="col-md-12">
+                    @(Html.EJ()
+                        .Button("btnSave")
+                        .Text("Save")
+                        .ShowRoundedCorner(true)
+                        .Type(ButtonType.Button)
+                        .Size(ButtonSize.Medium)
+                        .ContentType(ContentType.TextAndImage)
+                        .PrefixIcon("e-icon e-save")
+                        .Enabled(false)
+                        .ClientSideEvents(e => e.Click("onSaveClick"))
+                    )
+                </div>
+            </div>
+        </text>)
         .Render();
     Html.EJ()
         .Button("btnSearch")
@@ -67,10 +98,45 @@
         DisableButtons();
         $("#dialogSaveQuery").ejDialog("open");
     }
+    function onSaveNameChange() {
+        var saveName = $("#SaveName").val();
+        var btnSave = $("#btnSave").data("ejButton");
+        if (saveName == "") {
+            btnSave.disable()
+        }
+        else {
+            btnSave.enable()
+        }
+    }
+    function onSaveClick() {
+        ShowWaiting();
+        $.ajax({
+            url: "/Query/SaveQuery",
+            data: JSON.stringify({
+                Name: $("#SaveName").val(),
+                Description: $("#SaveDescription").val()
+            }),
+            async: true,
+            type: "POST",
+            contentType: "application/json"
+        })
+            .done(function () {
+                onSaveQueryOkClick();
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                if (errorThrown == "Conflict") {
+                    $("#SaveError").text("A query with that name already exists!");
+                    HideWaiting();
+                }
+                else {
+                    ErrorInFunc("Error in onSaveClick Status: " + textStatus + " Error: " + errorThrown);
+                }
+            });
+    }
     function onSaveQueryOkClick() {
         $("#dialogSaveQuery").ejDialog("close");
+        HideWaiting();
         EnableButtons();
-        alert("Saved");
     }
     function onSearchClick() {
         ShowWaiting();

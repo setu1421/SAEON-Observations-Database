@@ -13,6 +13,7 @@ using System.Web.SessionState;
 namespace SAEON.Observations.QuerySite.Controllers
 {
     [Authorize]
+    [HandleError]
     public class BaseWebApiController : Controller
     {
         private static string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;
@@ -65,7 +66,10 @@ namespace SAEON.Observations.QuerySite.Controllers
                         Logging.Verbose("Calling: {url}", url);
                         var response = await client.GetAsync(url);
                         Logging.Verbose("Response: {response}", response);
-                        response.EnsureSuccessStatusCode();
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
+                        }
                         var data = await response.Content.ReadAsAsync<IEnumerable<TEntity>>();
                         Logging.Verbose("Data: {@data}", data);
                         return data;
@@ -99,7 +103,10 @@ namespace SAEON.Observations.QuerySite.Controllers
                         var response = await client.PostAsJsonAsync(url, input);
                         //Logging.Verbose("Response: {response}", response);
                         Logging.Verbose("Response: StatusCode: {StatusCode} ReasonPhrase: {ReasonPhrase}", response.StatusCode, response.ReasonPhrase);
-                        response.EnsureSuccessStatusCode();
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
+                        }
                         var data = await response.Content.ReadAsAsync<TOutput>();
                         //Logging.Verbose("Data: {@data}", data);
                         return data;

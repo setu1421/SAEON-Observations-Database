@@ -112,7 +112,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetById(Guid id)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
                 try
                 {
@@ -142,7 +142,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetByName(string name)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Name", name } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Name", name } }))
             {
                 try
                 {
@@ -275,6 +275,19 @@ namespace SAEON.Observations.WebAPI.Controllers
         protected virtual void SetEntity(ref TEntity item, bool isPost)
         { }
 
+        protected List<string> ModelStateErrors
+        {
+            get
+            {
+                return ModelState.Values.SelectMany(v => v.Errors).Select(v => v.ErrorMessage + " " + v.Exception).ToList();
+            }
+        }
+
+        protected List<string> GetValidationErrors(DbEntityValidationException ex)
+        {
+            return ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
+        }
+
         /// <summary>
         /// Create a TEntity
         /// </summary>
@@ -283,11 +296,11 @@ namespace SAEON.Observations.WebAPI.Controllers
         //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "item", item } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "item", item } }))
             {
                 try
                 {
-                    Logging.Verbose("Adding {Name} {@item}", item.Name, item);
+                    //Logging.Verbose("Adding {Name} {@item}", item.Name, item);
                     if (item == null)
                     {
                         Logging.Error("item cannot be null");
@@ -295,7 +308,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                     }
                     if (!ModelState.IsValid)
                     {
-                        Logging.Error("ModelState.Invalid {ModelState}", ModelState);
+                        Logging.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
                         return BadRequest(ModelState);
                     }
                     if (!IsEntityOk(item, true))
@@ -306,27 +319,28 @@ namespace SAEON.Observations.WebAPI.Controllers
                     try
                     {
                         SetEntity(ref item, true);
-                        Logging.Verbose("Adding {@item}", item);
+                        Logging.Verbose("Add {@item}", item);
                         db.Set<TEntity>().Add(item);
                         await db.SaveChangesAsync();
                     }
-                    catch (DbUpdateException)
+                    catch (DbEntityValidationException ex)
                     {
-                        if (await GetQuery().Where(i => i.Id == item.Id).AnyAsync())
+                        var validationErrors = GetValidationErrors(ex);
+                        Logging.Exception(ex, "Unable to add {Name} {EntityValidationErrors}", item.Name, validationErrors);
+                        return BadRequest($"Unable to add {item.Name} EntityValidationErrors: {string.Join("; ", validationErrors)}");
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        if (await GetQuery().Where(i => i.Name == item.Name).AnyAsync())
                         {
                             Logging.Error("{Name} conflict", item.Name);
                             return Conflict();
                         }
                         else
                         {
-                            throw;
+                            Logging.Exception(ex, "Unable to add {Name}", item.Name);
+                            return BadRequest(ex.Message);
                         }
-                    }
-                    catch (DbEntityValidationException ex)
-                    {
-                        var validationErrors = ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
-                        Logging.Exception(ex, "Unable to add {Name} {EntityValidationErrors}", item.Name, validationErrors);
-                        return BadRequest($"Unable to add {item.Name} EntityValidationErrors: {string.Join("; ", validationErrors)}");
                     }
                     var attr = (RoutePrefixAttribute)GetType().GetCustomAttributes(typeof(RoutePrefixAttribute), true)?[0];
                     var location = $"{attr?.Prefix ?? typeof(TEntity).Name}/{item.Id}";
@@ -352,14 +366,14 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "id", id }, { "delta", delta} }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "id", id }, { "delta", delta } }))
             {
                 try
                 {
                     Logging.Verbose("Updating {id} {@delta}", id, delta);
                     if (!ModelState.IsValid)
                     {
-                        Logging.Error("ModelState.Invalid {ModelState}", ModelState);
+                        Logging.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
                         return BadRequest(ModelState);
                     }
                     if (id != delta.Id)
@@ -378,12 +392,26 @@ namespace SAEON.Observations.WebAPI.Controllers
                         Logging.Error("{id} not found", id);
                         return NotFound();
                     }
-                    Logging.Verbose("Loaded {@item}", item);
-                    Mapper.Map(delta, item);
-                    Logging.Verbose("Mapped delta {@item}", item);
-                    SetEntity(ref item, false);
-                    Logging.Verbose("Set {@item}", item);
-                    await db.SaveChangesAsync();
+                    try
+                    {
+                        //Logging.Verbose("Loaded {@item}", item);
+                        Mapper.Map(delta, item);
+                        //Logging.Verbose("Mapped delta {@item}", item);
+                        SetEntity(ref item, false);
+                        Logging.Verbose("Set {@item}", item);
+                        await db.SaveChangesAsync();
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        var validationErrors = GetValidationErrors(ex);
+                        Logging.Exception(ex, "Unable to update {id} {EntityValidationErrors}", item.Id, validationErrors);
+                        return BadRequest($"Unable to update {item.Id} EntityValidationErrors: {string.Join("; ", validationErrors)}");
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        Logging.Exception(ex, "Unable to update {id}", id);
+                        return BadRequest(ex.Message);
+                    }
                     return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
@@ -411,7 +439,7 @@ namespace SAEON.Observations.WebAPI.Controllers
                     Logging.Verbose("Updating {id} {@delta}", name, delta);
                     if (!ModelState.IsValid)
                     {
-                        Logging.Error("ModelState.Invalid {ModelState}", ModelState);
+                        Logging.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
                         return BadRequest(ModelState);
                     }
                     if (name != delta.Name)
@@ -430,17 +458,31 @@ namespace SAEON.Observations.WebAPI.Controllers
                         Logging.Error("{name} not found", name);
                         return NotFound();
                     }
-                    Logging.Verbose("Loaded {@item}", item);
-                    Mapper.Map(delta, item);
-                    Logging.Verbose("Mapped delta {@item}", item);
-                    SetEntity(ref item, false);
-                    Logging.Verbose("Set {@item}", item);
-                    await db.SaveChangesAsync();
+                    try
+                    {
+                        //Logging.Verbose("Loaded {@item}", item);
+                        Mapper.Map(delta, item);
+                        //Logging.Verbose("Mapped delta {@item}", item);
+                        SetEntity(ref item, false);
+                        Logging.Verbose("Set {@item}", item);
+                        await db.SaveChangesAsync();
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        var validationErrors = GetValidationErrors(ex);
+                        Logging.Exception(ex, "Unable to update {Name} {EntityValidationErrors}", item.Name, validationErrors);
+                        return BadRequest($"Unable to update {item.Name} EntityValidationErrors: {string.Join("; ", validationErrors)}");
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        Logging.Exception(ex, "Unable to update {name}", name);
+                        return BadRequest(ex.Message);
+                    }
                     return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Unable to update {id}", name);
+                    Logging.Exception(ex, "Unable to update {name}", name);
                     throw;
                 }
             }
@@ -455,7 +497,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> DeleteById(Guid id)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
                 try
                 {
@@ -466,8 +508,23 @@ namespace SAEON.Observations.WebAPI.Controllers
                         Logging.Error("{id} not found", id);
                         return NotFound();
                     }
-                    db.Set<TEntity>().Remove(item);
-                    await db.SaveChangesAsync();
+                    try
+                    {
+                        db.Set<TEntity>().Remove(item);
+                        Logging.Verbose("Delete {@item}", item);
+                        await db.SaveChangesAsync();
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        var validationErrors = GetValidationErrors(ex);
+                        Logging.Exception(ex, "Unable to delete {id} {EntityValidationErrors}", item.Id, validationErrors);
+                        return BadRequest($"Unable to delete {item.Id} EntityValidationErrors: {string.Join("; ", validationErrors)}");
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        Logging.Exception(ex, "Unable to delete {id}", id);
+                        return BadRequest(ex.Message);
+                    }
                     return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)
@@ -487,7 +544,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> DeleteByName(string name)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Name", name } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Name", name } }))
             {
                 try
                 {
@@ -498,8 +555,23 @@ namespace SAEON.Observations.WebAPI.Controllers
                         Logging.Error("{name} not found", name);
                         return NotFound();
                     }
-                    db.Set<TEntity>().Remove(item);
-                    await db.SaveChangesAsync();
+                    try
+                    {
+                        db.Set<TEntity>().Remove(item);
+                        Logging.Verbose("Delete {@item}", item);
+                        await db.SaveChangesAsync();
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        var validationErrors = GetValidationErrors(ex);
+                        Logging.Exception(ex, "Unable to delete {Name} {EntityValidationErrors}", item.Name, validationErrors);
+                        return BadRequest($"Unable to delete {item.Name} EntityValidationErrors: {string.Join("; ", validationErrors)}");
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        Logging.Exception(ex, "Unable to delete {name}", name);
+                        return BadRequest(ex.Message);
+                    }
                     return StatusCode(HttpStatusCode.NoContent);
                 }
                 catch (Exception ex)

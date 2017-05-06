@@ -16,6 +16,7 @@ using System.Web.Mvc;
 namespace SAEON.Observations.QuerySite.Controllers
 {
     [Authorize]
+    [HandleError]
     public class BaseRestController<TEntity> : Controller where TEntity : BaseEntity, new()
     {
         private static string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;

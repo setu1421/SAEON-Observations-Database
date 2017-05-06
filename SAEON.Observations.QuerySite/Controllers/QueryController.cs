@@ -15,6 +15,7 @@ using System.Web.Mvc;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using System.Net.Mime;
+using Newtonsoft.Json.Linq;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
@@ -489,12 +490,23 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    UserQuery userQuery = new UserQuery
+                    var sessionModel = SessionModel;
+                    //Logging.Verbose("Model: {@model}", model);
+                    var input = new DataQueryInput
+                    {
+                        Locations = sessionModel.SelectedLocations.Select(i => i.Id).ToList(),
+                        Features = sessionModel.SelectedFeatures.Select(i => i.Id).ToList(),
+                        StartDate = sessionModel.StartDate,
+                        EndDate = sessionModel.EndDate
+                    };
+                    var userQuery = new UserQuery
                     {
                         Name = model.Name,
-                        Description = model.Description
+                        Description = model.Description,
+                        QueryInput = JObject.FromObject(input).ToString()
                     };
-                    var results = (await Post<UserQuery, UserQuery>("UserQueries", userQuery));
+                    //Logging.Verbose("UserQuery: {@UserQuery}", userQuery);
+                    await Post<UserQuery, UserQuery>("UserQueries", userQuery);
                     return null;
                 }
                 catch (Exception ex)
