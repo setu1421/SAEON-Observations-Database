@@ -30,6 +30,13 @@ namespace SAEON.Observations.QuerySite.Models
         [DisplayName("End Date")]
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
         public DataQueryOutput QueryResults { get; set; } = new DataQueryOutput();
+        public List<UserQuery> UserQueries { get; set; }
+    }
+
+    public class LoadQueryModel
+    {
+        [Required, StringLength(150)]
+        public string Name { get; set; }
     }
 
     public class SaveQueryModel

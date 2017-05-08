@@ -16,6 +16,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using System.Net.Mime;
 using Newtonsoft.Json.Linq;
+using System.Net;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
@@ -50,24 +51,27 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
+        private async Task<QueryModel> CreateSessionModel()
+        {
+            var sessionModel = new QueryModel()
+            {
+                Locations = await GetLocationsList(),
+                Features = await GetFeaturesList(),
+                UserQueries = await GetUserQueriesList()
+            };
+            LoadMapPoints(sessionModel);
+            return sessionModel;
+        }
+
         // GET: Query
         public async Task<ActionResult> Index()
         {
             using (Logging.MethodCall(GetType()))
             {
-                var model = new QueryModel();
-                if (model.Locations == null)
-                {
-                    model.Locations = await GetLocationsList();
-                }
-                LoadMapPoints(model);
-                if (model.Features == null)
-                {
-                    model.Features = await GetFeaturesList();
-                }
-                SessionModel = model;
+                var sessionModel = await CreateSessionModel();
+                SessionModel = sessionModel;
                 //Logging.Verbose("Model: {@model}", model);
-                return View(model);
+                return View(sessionModel);
             }
         }
 
@@ -75,19 +79,10 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             using (Logging.MethodCall(GetType()))
             {
-                var model = SessionModel;
-                if (model.Locations == null)
-                {
-                    model.Locations = await GetLocationsList();
-                }
-                LoadMapPoints(model);
-                if (model.Features == null)
-                {
-                    model.Features = await GetFeaturesList();
-                }
-                SessionModel = model;
+                var sessionModel = await CreateSessionModel();
+                SessionModel = sessionModel;
                 //Logging.Verbose("Model: {@model}", model);
-                return View(model);
+                return View(sessionModel);
             }
         }
 
@@ -160,10 +155,10 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var model = SessionModel;
-                    Logging.Verbose("MapPoints: {count}", model.MapPoints.Count);
+                    var sessionModel = SessionModel;
+                    Logging.Verbose("MapPoints: {count}", sessionModel.MapPoints.Count);
                     //Logging.Verbose("MapPoints: {count} {@list}", model.MapPoints.Count, model.MapPoints);
-                    var result = Json(model.MapPoints, JsonRequestBehavior.AllowGet);
+                    var result = Json(sessionModel.MapPoints, JsonRequestBehavior.AllowGet);
                     result.MaxJsonLength = int.MaxValue;
                     return result;
                 }
@@ -190,10 +185,44 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var model = SessionModel;
-                    var result = Json(model.Locations, JsonRequestBehavior.AllowGet);
+                    var sessionModel = SessionModel;
+                    var result = Json(sessionModel.Locations, JsonRequestBehavior.AllowGet);
                     result.MaxJsonLength = int.MaxValue;
                     return result;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+        public PartialViewResult GetLocationsHtml()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return PartialView("LocationsHtml", SessionModel);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+        public PartialViewResult GetSelectedLocationsHtml()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return PartialView("SelectedLocationsHtml", SessionModel);
                 }
                 catch (Exception ex)
                 {
@@ -211,27 +240,27 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     Logging.Verbose("SelectedLocations: {locations}", locations);
-                    var model = SessionModel;
+                    var sessionModel = SessionModel;
                     var selectedLocations = new List<Location>();
                     if (locations != null)
                     {
                         // Set IsCheck for all
-                        foreach (var location in model.Locations.Where(i => locations.Contains(i.Key)))
+                        foreach (var location in sessionModel.Locations.Where(i => locations.Contains(i.Key)))
                         {
                             location.IsChecked = true;
                         }
                         // Only select stations
                         var stations = locations.Where(l => l.StartsWith("STA~")).ToList();
                         Logging.Verbose("SelectedStations: {stations}", stations);
-                        selectedLocations = model.Locations.Where(l => stations.Contains(l.Key)).OrderBy(l => l.Name).ToList();
+                        selectedLocations = sessionModel.Locations.Where(l => stations.Contains(l.Key)).OrderBy(l => l.Name).ToList();
                     }
                     Logging.Verbose("SelectedLocations: {@locations}", selectedLocations);
-                    model.SelectedLocations.Clear();
-                    model.SelectedLocations.AddRange(selectedLocations);
-                    LoadMapPoints(model);
-                    SessionModel = model;
+                    sessionModel.SelectedLocations.Clear();
+                    sessionModel.SelectedLocations.AddRange(selectedLocations);
+                    LoadMapPoints(sessionModel);
+                    SessionModel = sessionModel;
                     //Logging.Verbose("Model: {@model}", model);
-                    return PartialView("SelectedLocationsPost", model);
+                    return GetSelectedLocationsHtml();
                 }
                 catch (Exception ex)
                 {
@@ -242,7 +271,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
-        public PartialViewResult UpdateLocationsMap()
+        public PartialViewResult GetLocationsMap()
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -273,10 +302,27 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var model = SessionModel;
-                    var result = Json(model.Features, JsonRequestBehavior.AllowGet);
+                    var sessionModel = SessionModel;
+                    var result = Json(sessionModel.Features, JsonRequestBehavior.AllowGet);
                     result.MaxJsonLength = int.MaxValue;
                     return result;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+        public PartialViewResult GetSelectedFeaturesHtml()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return PartialView("SelectedFeaturesHtml", SessionModel);
                 }
                 catch (Exception ex)
                 {
@@ -294,26 +340,26 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     Logging.Verbose("SelectedFeatures: {features}", features);
-                    var model = SessionModel;
+                    var sessionModel = SessionModel;
                     var selectedFeatures = new List<Feature>();
                     if (features != null)
                     {
                         // Set IsCheck for all
-                        foreach (var feature in model.Features.Where(i => features.Contains(i.Key)))
+                        foreach (var feature in sessionModel.Features.Where(i => features.Contains(i.Key)))
                         {
                             feature.IsChecked = true;
                         }
                         // Only select offerings
                         var offerings = features.Where(l => l.StartsWith("OFF~")).ToList();
                         Logging.Verbose("SelectedOfferings: {offerings}", offerings);
-                        selectedFeatures = model.Features.Where(l => offerings.Contains(l.Key)).OrderBy(l => l.Text).ToList();
+                        selectedFeatures = sessionModel.Features.Where(l => offerings.Contains(l.Key)).OrderBy(l => l.Text).ToList();
                     }
                     Logging.Verbose("SelectedFeatures: {@features}", selectedFeatures);
-                    model.SelectedFeatures.Clear();
-                    model.SelectedFeatures.AddRange(selectedFeatures);
-                    SessionModel = model;
+                    sessionModel.SelectedFeatures.Clear();
+                    sessionModel.SelectedFeatures.AddRange(selectedFeatures);
+                    SessionModel = sessionModel;
                     //Logging.Verbose("Model: {@model}", model);
-                    return PartialView("SelectedFeaturesPost", model);
+                    return GetSelectedFeaturesHtml();
                 }
                 catch (Exception ex)
                 {
@@ -325,6 +371,23 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region Filters
+        [HttpGet]
+        public PartialViewResult GetFiltersHtml()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return PartialView("FiltersHtml", SessionModel);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
         [HttpPost]
         public EmptyResult UpdateFilters(DateTime startDate, DateTime endDate)
         {
@@ -333,12 +396,11 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     Logging.Verbose("StartDate: {startDate} EndDate: {endDate}", startDate, endDate);
-                    var model = SessionModel;
-                    model.StartDate = startDate;
-                    model.EndDate = endDate;
-                    SessionModel = model;
+                    var sessionModel = SessionModel;
+                    sessionModel.StartDate = startDate;
+                    sessionModel.EndDate = endDate;
+                    SessionModel = sessionModel;
                     //Logging.Verbose("Model: {@model}", model);
-                    //return PartialView("Filters", model);
                     return null;
                 }
                 catch (Exception ex)
@@ -358,19 +420,19 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var model = SessionModel;
+                    var sessionModel = SessionModel;
                     //Logging.Verbose("Model: {@model}", model);
                     var input = new DataQueryInput
                     {
-                        Locations = model.SelectedLocations.Select(i => i.Id).ToList(),
-                        Features = model.SelectedFeatures.Select(i => i.Id).ToList(),
-                        StartDate = model.StartDate,
-                        EndDate = model.EndDate
+                        Locations = sessionModel.SelectedLocations.Select(i => i.Id).ToList(),
+                        Features = sessionModel.SelectedFeatures.Select(i => i.Id).ToList(),
+                        StartDate = sessionModel.StartDate,
+                        EndDate = sessionModel.EndDate
                     };
                     var results = (await Post<DataQueryInput, DataQueryOutput>("DataQuery", input));
                     //Logging.Verbose("Results: {@results}", results);
-                    model.QueryResults = results;
-                    SessionModel = model;
+                    sessionModel.QueryResults = results;
+                    SessionModel = sessionModel;
                     //Logging.Verbose("Model: {@model}", model);
                     return null;
                 }
@@ -391,8 +453,8 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var model = SessionModel;
-                    var result = Json(model.QueryResults.ResultsGridData, JsonRequestBehavior.AllowGet);
+                    var sessionModel = SessionModel;
+                    var result = Json(sessionModel.QueryResults.ResultsGridData, JsonRequestBehavior.AllowGet);
                     result.MaxJsonLength = int.MaxValue;
                     return result;
                 }
@@ -405,15 +467,15 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
-        public PartialViewResult GetResultsGrid()
+        public PartialViewResult GetResultsGridHtml()
         {
             using (Logging.MethodCall(GetType()))
             {
                 try
                 {
-                    var model = SessionModel;
+                    var sessionModel = SessionModel;
                     //Logging.Verbose("Model: {@model}", model);
-                    return PartialView("ResultsGridPost", model);
+                    return PartialView("ResultsGridHtml", sessionModel);
                 }
                 catch (Exception ex)
                 {
@@ -432,8 +494,8 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var model = SessionModel;
-                    var result = Json(model.QueryResults.ResultsChartData, JsonRequestBehavior.AllowGet);
+                    var sessionModel = SessionModel;
+                    var result = Json(sessionModel.QueryResults.ResultsChartData, JsonRequestBehavior.AllowGet);
                     result.MaxJsonLength = int.MaxValue;
                     return result;
                 }
@@ -446,15 +508,83 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
-        public PartialViewResult GetResultsChart()
+        public PartialViewResult GetResultsChartHtml()
         {
             using (Logging.MethodCall(GetType()))
             {
                 try
                 {
-                    var model = SessionModel;
+                    var sessionModel = SessionModel;
                     //Logging.Verbose("Model: {@model}", model);
-                    return PartialView("ResultsChartPost", model);
+                    return PartialView("ResultsChartHtml", sessionModel);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region LoadQueryDialog
+        private async Task<List<UserQuery>> GetUserQueriesList()
+        {
+            return (await GetList<UserQuery>("UserQueries")).ToList();
+        }
+
+        [HttpGet]
+        public JsonResult GetUserQueries()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var sessionModel = SessionModel;
+                    var result = Json(sessionModel.UserQueries, JsonRequestBehavior.AllowGet);
+                    result.MaxJsonLength = int.MaxValue;
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost]
+        public EmptyResult LoadQuery(LoadQueryModel model)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var sessionModel = SessionModel;
+                    //Logging.Verbose("Model: {@model}", model);
+                    var userQuery = sessionModel.UserQueries.FirstOrDefault(i => i.Name == model.Name);
+                    if (userQuery == null) throw new HttpException((int)HttpStatusCode.NotFound, $"UserQuery not found {model.Name}");
+                    var input = JsonConvert.DeserializeObject<DataQueryInput>(userQuery.QueryInput);
+                    // Locations
+                    var selectedLocations = sessionModel.Locations.Where(i => input.Locations.Contains(i.Id));
+                    Logging.Verbose("SelectedLocations: {@locations}", selectedLocations);
+                    sessionModel.SelectedLocations.Clear();
+                    sessionModel.SelectedLocations.AddRange(selectedLocations);
+                    LoadMapPoints(sessionModel);
+                    // Features
+                    var selectedFeatures = sessionModel.Features.Where(i => input.Features.Contains(i.Id));
+                    Logging.Verbose("SelectedFeatures: {@features}", selectedFeatures);
+                    sessionModel.SelectedFeatures.Clear();
+                    sessionModel.SelectedFeatures.AddRange(selectedFeatures);
+                    // Filters
+                    sessionModel.StartDate = input.StartDate;
+                    sessionModel.EndDate = input.EndDate;
+                    //var results = (await Post<DataQueryInput, DataQueryOutput>("DataQuery", input));
+                    //Logging.Verbose("Results: {@results}", results);
+                    //sessionModel.QueryResults = results;
+                    SessionModel = sessionModel;
+                    //Logging.Verbose("Model: {@model}", model);
+                    return null;
                 }
                 catch (Exception ex)
                 {
@@ -466,23 +596,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region SaveQueryDialog
-        [HttpGet]
-        public PartialViewResult GetSaveQueryDialog()
-        {
-            using (Logging.MethodCall(GetType()))
-            {
-                try
-                {
-                    return PartialView("SaveQueryView", new SaveQueryModel());
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex);
-                    throw;
-                }
-            }
-        }
-
         [HttpPost]
         public async Task<EmptyResult> SaveQuery(SaveQueryModel model)
         {
@@ -507,6 +620,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     };
                     //Logging.Verbose("UserQuery: {@UserQuery}", userQuery);
                     await Post<UserQuery, UserQuery>("UserQueries", userQuery);
+                    sessionModel.UserQueries = await GetUserQueriesList();
+                    SessionModel = sessionModel;
                     return null;
                 }
                 catch (Exception ex)

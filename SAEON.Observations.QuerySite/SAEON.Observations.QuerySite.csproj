@@ -800,21 +800,23 @@
     <Content Include="Views\UserQueries\Edit.cshtml" />
     <Content Include="Views\UserQueries\Index.cshtml" />
     <Content Include="Views\Query\SelectedLocations.cshtml" />
-    <Content Include="Views\Query\SelectedLocationsPost.cshtml" />
+    <Content Include="Views\Query\SelectedLocationsHtml.cshtml" />
     <Content Include="Views\Query\SelectedFeatures.cshtml" />
-    <Content Include="Views\Query\SelectedFeaturesPost.cshtml" />
+    <Content Include="Views\Query\SelectedFeaturesHtml.cshtml" />
     <Content Include="Views\Query\Locations.cshtml" />
     <Content Include="Views\Query\Features.cshtml" />
     <Content Include="Views\Query\Index.cshtml" />
     <Content Include="Views\Query\Filters.cshtml" />
     <Content Include="Views\Query\ResultsGrid.cshtml" />
-    <Content Include="Views\Query\ResultsGridPost.cshtml" />
+    <Content Include="Views\Query\ResultsGridHtml.cshtml" />
     <Content Include="Views\Query\ResultsChart.cshtml" />
     <Content Include="Views\Query\Buttons.cshtml" />
-    <Content Include="Views\Query\ResultsChartPost.cshtml" />
+    <Content Include="Views\Query\ResultsChartHtml.cshtml" />
     <Content Include="Views\Query\LocationsMap.cshtml" />
     <Content Include="Views\Query\MapTest.cshtml" />
-    <Content Include="Views\Query\SaveQueryView.cshtml" />
+    <Content Include="Views\Query\LocationsHtml.cshtml" />
+    <Content Include="Views\Query\FeaturesHtml.cshtml" />
+    <Content Include="Views\Query\FiltersHtml.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
