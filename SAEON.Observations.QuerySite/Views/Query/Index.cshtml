@@ -39,16 +39,19 @@
                                 @Html.Partial("Filters", Model)
                             </div>
                         </div>);
-                    tabs.Add().ID("ResultsTab").Text("Results").ContentTemplate(
+                    tabs.Add().ID("ResultsGridTab").Text("Results").ContentTemplate(
                         @<div class="row">
                             <div class="col-md-12" id="PartialResultsGrid">
-                                @Html.Partial("ResultsGrid", Model)
                             </div>
                         </div>);
-                    tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
+                    tabs.Add().ID("ResultsCardsTab").Text("Cards").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md-12" id="PartialResultsCards">
+                            </div>
+                        </div>);
+                    tabs.Add().ID("ResultsChartTab").Text("Chart").ContentTemplate(
                         @<div class="row">
                             <div class="col-md-12" id="PartialResultsChart">
-                                @Html.Partial("ResultsChart", Model)
                             </div>
                         </div>);
                 })
@@ -63,8 +66,9 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        //HideLoading();
-        //ShowWaiting();
+        $("#ResultsGridTab").addClass("hidden");
+        $("#ResultsCardsTab").addClass("hidden");
+        $("#ResultsChartTab").addClass("hidden");
     });
     function ShowWaiting() {
         var wp = $("#waiting").data("ejWaitingPopup");

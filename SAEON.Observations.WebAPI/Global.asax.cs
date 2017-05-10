@@ -26,6 +26,7 @@ namespace SAEON.Observations.WebAPI
             {
                 try
                 {
+                    Logging.Verbose("Starting application");
                     BootStrapper.Initialize();
                     AreaRegistration.RegisterAllAreas();
                     GlobalConfiguration.Configure(WebApiConfig.Register);

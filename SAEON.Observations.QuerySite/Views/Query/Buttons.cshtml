@@ -155,22 +155,27 @@
             type: "POST",
             contentType: "application/json",
             success: function () {
-                // LoadLocations
-                // LoadMap
-                // LoadFeatures
-                // DataQuery
-                $("#dialogLoadQuery").ejDialog("close");
-                HideWaiting();
-                EnableButtons();
+                $("#PartialLocations").load("/Query/GetLocationsHtml", function () {
+                    $("#PartialSelectedLocations").load("/Query/GetSelectedLocationsHtml", function () {
+                        $("#PartialFeatures").load("/Query/GetFeaturesHtml", function () {
+                            $("#PartialSelectedFeatures").load("/Query/GetSelectedFeaturesHtml", function () {
+                                $("#PartialFilters").load("/Query/GetFiltersHtml", function () {
+                                    UpdateMap();
+                                    $("PartialResultsGrid").text("");
+                                    $("PartialResultsCards").text("");
+                                    $("PartialResultsChart").text("");
+                                    HideResults();
+                                    $("#dialogLoadQuery").ejDialog("close");
+                                    HideWaiting();
+                                    EnableButtons();
+                                });
+                            });
+                        });
+                    });
+                });
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                if (errorThrown == "Not Found") {
-                    $("#LoadError").text("A query with that name does not exist!");
-                    HideWaiting();
-                }
-                else {
-                    ErrorInFunc("Error in onSaveClick Status: " + textStatus + " Error: " + errorThrown);
-                }
+                ErrorInFunc("Error in onLoadClick Status: " + textStatus + " Error: " + errorThrown);
             }
         });
     }
@@ -231,32 +236,17 @@
             success: function () {
                 $.get("/Query/DataQuery")
                     .done(function () {
-                        $.ajax({
-                            url: "/Query/GetResultsGridHtml",
-                            async: false,
-                            type: "GET",
-                            success: function (data) {
-                                $("#PartialResultsGrid").html(data);
-                                $.ajax({
-                                    url: "/Query/GetResultsChartHtml",
-                                    async: false,
-                                    type: "GET",
-                                    success: function (data) {
-                                        $("#PartialResultsChart").html(data);
-                                        HideWaiting();
-                                        EnableButtons();
-                                    },
-                                    error: function (jqXHR, textStatus, errorThrown) {
-                                        ErrorInFunc("Error in GetResultsChartHtml Status: " + textStatus + " Error: " + errorThrown)
-                                    }
+                        $("#PartialResultsGrid").load("/Query/GetResultsGridHtml", function () {
+                            $("#PartialResultsCards").load("/Query/GetResultsCardsHtml", function () {
+                                $("#PartialResultsChart").load("/Query/GetResultsChartHtml", function () {
+                                    ShowResults();
+                                    EnableButtons();
+                                    HideWaiting();
                                 });
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                ErrorInFunc("Error in GetResultsGridHtml Status: " + textStatus + " Error: " + errorThrown)
-                            }
+                            });
                         });
                     })
-                    .error(function (jqXHR, textStatus, errorThrown) {
+                    .fail(function (jqXHR, textStatus, errorThrown) {
                         ErrorInFunc("Error in DataQuery Status: " + textStatus + " Error: " + errorThrown)
                     })
             },
@@ -273,6 +263,10 @@
         alert(msg);
     }
     function EnableButtons() {
+        var btnLoadQuery = $("#btnLoadQuery").data("ejButton");
+        var btnSaveQuery = $("#btnSaveQuery").data("ejButton");
+        var btnSearch = $("#btnSearch").data("ejButton");
+        var btnDownload = $("#btnDownload").data("ejButton");
         treeObj = $("#treeViewLocations").data('ejTreeView');
         var checkedNodes = treeObj.getCheckedNodes();
         var selectedLocations = 0
@@ -293,10 +287,7 @@
                 selectedFeatures = selectedFeatures + 1;
             }
         }
-        var btnLoadQuery = $("#btnLoadQuery").data("ejButton");
         btnLoadQuery.enable();
-        var btnSaveQuery = $("#btnSaveQuery").data("ejButton");
-        var btnSearch = $("#btnSearch").data("ejButton");
         if ((selectedLocations > 0) & (selectedFeatures > 0)) {
             btnSaveQuery.enable();
             btnSearch.enable();
@@ -305,7 +296,6 @@
             btnSaveQuery.disable();
             btnSearch.disable();
         }
-        var btnDownload = $("#btnDownload").data("ejButton");
         btnDownload.disable();
     }
     function DisableButtons() {
@@ -317,5 +307,15 @@
         btnSearch.disable();
         var btnDownload = $("#btnDownload").data("ejButton");
         btnDownload.disable();
+    }
+    function ShowResults() {
+        $("#ResultsGridTab").removeClass("hidden");
+        $("#ResultsCardsTab").removeClass("hidden");
+        $("#ResultsChartTab").removeClass("hidden");
+    }
+    function HideResults() {
+        $("#ResultsGridTab").addClass("hidden");
+        $("#ResultsCardsTab").addClass("hidden");
+        $("#ResultsChartTab").addClass("hidden");
     }
 </script>

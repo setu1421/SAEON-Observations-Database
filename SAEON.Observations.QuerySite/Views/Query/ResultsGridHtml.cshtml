@@ -1,5 +1,4 @@
-﻿@using System.Data
-@using SAEON.Observations.QuerySite.Models
+﻿@using SAEON.Observations.QuerySite.Models
 @model QueryModel
 @(Html.EJ().Grid<object>("gridResults")
     .Datasource(ds => ds.URL("/Query/GetResultsGridData").Adaptor(AdaptorType.WebApiAdaptor))

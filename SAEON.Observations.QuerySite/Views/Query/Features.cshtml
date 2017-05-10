@@ -13,29 +13,23 @@
     .ClientSideEvents(events => events
         .NodeCheck("onUpdateSelectedFeatures")
         .NodeUncheck("onUpdateSelectedFeatures")
-        .Ready("onTreeViewFeaturesReady")
         )
     .ShowCheckbox(true)
 )
 <script type="text/javascript">
-    function onTreeViewFeaturesReady() {
-        HideWaiting();
-        //ShowLoading();
-        //UpdateMap(true);
-    }
     function onUpdateSelectedFeatures() {
         treeObj = $("#treeViewFeatures").data('ejTreeView');
-        var checkedNodes = treeObj.getCheckedNodes();
-        var selectedFeatures = []
-        for (i = 0; i < checkedNodes.length; i++) {
-            var checkedNode = checkedNodes[i];
-            var nodeData = treeObj.getNode(checkedNode);
-            selectedFeatures.push(nodeData.id);
+        var nodes = treeObj.getCheckedNodes();
+        var selected = []
+        for (i = 0; i < nodes.length; i++) {
+            var nodeData = treeObj.getNode(nodes[i]);
+            selected.push(nodeData.id);
         }
-        $.post("/Query/UpdateSelectedFeatures", { Features: selectedFeatures })
+        $.post("/Query/UpdateSelectedFeatures", { Features: selected })
             .done(function (data) {
                 $('#PartialSelectedFeatures').html(data);
                 EnableButtons();
+                HideResults();
             })
             .fail(function () { alert("Error in UpdateSelectedFeatures"); });
     }

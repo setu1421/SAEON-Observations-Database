@@ -316,6 +316,23 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
+        public PartialViewResult GetFeaturesHtml()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return PartialView("FeaturesHtml", SessionModel);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
         public PartialViewResult GetSelectedFeaturesHtml()
         {
             using (Logging.MethodCall(GetType()))
@@ -429,6 +446,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         StartDate = sessionModel.StartDate,
                         EndDate = sessionModel.EndDate
                     };
+                    Logging.Verbose("DataQueryInput: {@input}", input);
                     var results = (await Post<DataQueryInput, DataQueryOutput>("DataQuery", input));
                     //Logging.Verbose("Results: {@results}", results);
                     sessionModel.QueryResults = results;
@@ -476,6 +494,27 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var sessionModel = SessionModel;
                     //Logging.Verbose("Model: {@model}", model);
                     return PartialView("ResultsGridHtml", sessionModel);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region ResultsCards
+        [HttpGet]
+        public PartialViewResult GetResultsCardsHtml()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var sessionModel = SessionModel;
+                    //Logging.Verbose("Model: {@model}", model);
+                    return PartialView("ResultsCardsHtml", sessionModel);
                 }
                 catch (Exception ex)
                 {
@@ -570,18 +609,24 @@ namespace SAEON.Observations.QuerySite.Controllers
                     Logging.Verbose("SelectedLocations: {@locations}", selectedLocations);
                     sessionModel.SelectedLocations.Clear();
                     sessionModel.SelectedLocations.AddRange(selectedLocations);
+                    foreach (var location in selectedLocations)
+                    {
+                        location.IsChecked = true;
+                    }
                     LoadMapPoints(sessionModel);
                     // Features
                     var selectedFeatures = sessionModel.Features.Where(i => input.Features.Contains(i.Id));
                     Logging.Verbose("SelectedFeatures: {@features}", selectedFeatures);
                     sessionModel.SelectedFeatures.Clear();
                     sessionModel.SelectedFeatures.AddRange(selectedFeatures);
+                    foreach (var feature in selectedFeatures)
+                    {
+                        feature.IsChecked = true;
+                    }
                     // Filters
                     sessionModel.StartDate = input.StartDate;
                     sessionModel.EndDate = input.EndDate;
-                    //var results = (await Post<DataQueryInput, DataQueryOutput>("DataQuery", input));
-                    //Logging.Verbose("Results: {@results}", results);
-                    //sessionModel.QueryResults = results;
+                    sessionModel.QueryResults = new DataQueryOutput();
                     SessionModel = sessionModel;
                     //Logging.Verbose("Model: {@model}", model);
                     return null;
