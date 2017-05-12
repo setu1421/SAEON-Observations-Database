@@ -48,6 +48,10 @@ Copyright (C) Microsoft Corporation. All rights reserved.
       <Project>{5E1C5955-EE32-4FC2-9B18-A3E505DD278D}</Project>
       <Name>SAEON.Observations.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SAEON.SubSonic\SubSonic\SAEON.SubSonic.csproj">
+      <Project>{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}</Project>
+      <Name>SAEON.SubSonic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(_WebPublishTargetsPath)\Web\Microsoft.WebSite.Publishing.targets" />
 </Project>

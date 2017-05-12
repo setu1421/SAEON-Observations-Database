@@ -202,22 +202,6 @@
                                                     <Click OnEvent="SetSelectedClick" />
                                                 </DirectEvents>
                                             </ext:Button>
-                                            <ext:Button ID="btnSetWithout" runat="server" Icon="ShieldAdd" Text="Set without" ClientIDMode="Static" Disabled="true">
-                                                <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip3" runat="server" Html="Set without status" />
-                                                </ToolTips>
-                                                <DirectEvents>
-                                                    <Click OnEvent="SetWithoutClick" />
-                                                </DirectEvents>
-                                            </ext:Button>
-                                            <ext:Button ID="btnSetAll" runat="server" Icon="ShieldAdd" Text="Set all" ClientIDMode="Static" Disabled="true">
-                                                <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip4" runat="server" Html="Set all" />
-                                                </ToolTips>
-                                                <DirectEvents>
-                                                    <Click OnEvent="SetAllClick" />
-                                                </DirectEvents>
-                                            </ext:Button>
                                             <ext:Button ID="btnClearSelected" runat="server" Icon="ShieldDelete" Text="Clear selected" ClientIDMode="Static" Disabled="true">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip5" runat="server" Html="Clear selected" />
@@ -226,12 +210,30 @@
                                                     <Click OnEvent="ClearSelectedClick" />
                                                 </DirectEvents>
                                             </ext:Button>
+                                            <ext:ToolbarSeparator Width="10" />
+                                            <ext:Button ID="btnSetAll" runat="server" Icon="ShieldAdd" Text="Set all" ClientIDMode="Static" Disabled="true">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip4" runat="server" Html="Set all" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="SetAllClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
                                             <ext:Button ID="btnClearAll" runat="server" Icon="ShieldDelete" Text="Clear all" ClientIDMode="Static" Disabled="true">
                                                 <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip7" runat="server" Html="Cleat all" />
+                                                    <ext:ToolTip ID="ToolTip7" runat="server" Html="Clear all" />
                                                 </ToolTips>
                                                 <DirectEvents>
                                                     <Click OnEvent="ClearAllClick" />
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            <ext:ToolbarSeparator Width="10" />
+                                            <ext:Button ID="btnSetWithout" runat="server" Icon="ShieldAdd" Text="Set without" ClientIDMode="Static" Disabled="true">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip3" runat="server" Html="Set without status" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="SetWithoutClick" />
                                                 </DirectEvents>
                                             </ext:Button>
                                             <%-- 
