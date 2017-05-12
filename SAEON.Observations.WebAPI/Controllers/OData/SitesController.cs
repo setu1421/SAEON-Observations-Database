@@ -3,15 +3,15 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Routing;
-using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     /// <summary>
     /// Sites
     /// </summary>
     [ODataRoutePrefix("Sites")]
-    public class SitesODataController : BaseODataController<Site>
+    public class SitesController : BaseODataController<Site>
     {
         /// <summary>
         /// All Sites

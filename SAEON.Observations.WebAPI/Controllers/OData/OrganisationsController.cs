@@ -1,20 +1,17 @@
-﻿using SAEON.Observations.Core;
+﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Http;
-using System.Web.Mvc;
 using System.Web.OData;
 using System.Web.OData.Routing;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     /// <summary>
     /// Organisations
     /// </summary>
     [ODataRoutePrefix("Organisations")]
-    public class OrganisationsODataController : BaseODataController<Organisation>
+    public class OrganisationsController : BaseODataController<Organisation>
     {
         /// <summary>
         /// All Organisations

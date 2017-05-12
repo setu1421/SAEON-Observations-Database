@@ -1,11 +1,11 @@
 ﻿using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     public static class FeaturesHelper
     {

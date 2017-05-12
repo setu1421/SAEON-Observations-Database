@@ -10,10 +10,8 @@ using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Helpers;
 
 [assembly: OwinStartupAttribute(typeof(SAEON.Observations.QuerySite.Startup))]

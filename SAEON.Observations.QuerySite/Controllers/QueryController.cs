@@ -1,22 +1,15 @@
-﻿using geoG = GeoJSON.Net.Geometry;
-using geoF = GeoJSON.Net.Feature;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using SAEON.Observations.QuerySite.Models;
-using Syncfusion.JavaScript;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Converters;
-using System.Net.Mime;
-using Newtonsoft.Json.Linq;
-using System.Net;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {

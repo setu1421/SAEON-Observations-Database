@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SAEON.Observations.Core;
-using System;
+using SAEON.Observations.Core.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;

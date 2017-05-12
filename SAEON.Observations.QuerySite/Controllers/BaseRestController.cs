@@ -1,16 +1,11 @@
-﻿using IdentityModel.Client;
-using Newtonsoft.Json;
-using SAEON.Observations.Core;
+﻿using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers

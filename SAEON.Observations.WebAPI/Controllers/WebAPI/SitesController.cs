@@ -1,20 +1,20 @@
-﻿using SAEON.Observations.Core;
+﻿using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Linq.Expressions;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
 
     /// <summary>
     /// Sites
     /// </summary>
     [RoutePrefix("Sites")]
-    public class SitesApiController : BaseApiController<Site>
+    public class SitesController : BaseApiController<Site>
     {
         protected override List<Expression<Func<Site, object>>> GetIncludes()
         {

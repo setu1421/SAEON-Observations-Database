@@ -1,4 +1,5 @@
 ﻿using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,13 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     /// <summary>
     /// Sensors
     /// </summary>
     [RoutePrefix("Sensors")]
-    public class SensorsApiController : BaseApiController<Sensor>
+    public class SensorsController : BaseApiController<Sensor>
     {
         protected override List<Expression<Func<Sensor, object>>> GetIncludes()
         {

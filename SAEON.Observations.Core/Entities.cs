@@ -7,7 +7,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace SAEON.Observations.Core
+namespace SAEON.Observations.Core.Entities
 {
     /// <summary>
     /// Base for entities

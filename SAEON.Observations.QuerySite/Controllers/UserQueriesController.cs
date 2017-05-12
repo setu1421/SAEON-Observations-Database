@@ -1,9 +1,5 @@
-﻿using SAEON.Observations.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using SAEON.Observations.Core.Entities;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers

@@ -1,4 +1,4 @@
-﻿using SAEON.Observations.Core;
+﻿using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     /// <summary>
     /// Offerings
     /// </summary>
     [RoutePrefix("Offerings")]
-    public class OfferingsApiController : BaseApiController<Offering>
+    public class OfferingsController : BaseApiController<Offering>
     {
         protected override List<Expression<Func<Offering, object>>> GetIncludes()
         {

@@ -1,19 +1,20 @@
-﻿using System;
+﻿using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web.Http;
 using System.Web.OData;
 using System.Web.OData.Routing;
-using SAEON.Observations.Core;
-using System.Linq.Expressions;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     /// <summary>
     /// Logged in users can save frequently used queries in the QueryUserQuery for later use
     /// </summary>
     [ODataRoutePrefix("UserQueries")]
-    public class UserQueriesODataController : BaseODataController<UserQuery>
+    public class UserQueriesController : BaseODataController<UserQuery>
     {
 
         protected override List<Expression<Func<UserQuery, bool>>> GetWheres()

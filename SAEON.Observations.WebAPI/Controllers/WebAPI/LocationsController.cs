@@ -1,11 +1,12 @@
 ﻿using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("Locations")]
     [ApiExplorerSettings(IgnoreApi = true)]

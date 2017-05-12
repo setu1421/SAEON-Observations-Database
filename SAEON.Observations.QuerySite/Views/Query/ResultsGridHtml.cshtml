@@ -3,6 +3,7 @@
 @(Html.EJ().Grid<object>("gridResults")
     .Datasource(ds => ds.URL("/Query/GetResultsGridData").Adaptor(AdaptorType.WebApiAdaptor))
     .AllowPaging()
+    .PageSettings(p => p.PageSize(50))
     .AllowResizing()
     .AllowScrolling()
     .AllowSorting()

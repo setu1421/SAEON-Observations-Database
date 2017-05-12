@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Serilog;
-using Serilog.Context;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Data.Entity;
 

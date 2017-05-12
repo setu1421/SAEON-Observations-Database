@@ -1,22 +1,20 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Dynamic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("DataQuery")]
-    //[ApiExplorerSettings(IgnoreApi = true)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     public class DataQueryController : ApiController
     {

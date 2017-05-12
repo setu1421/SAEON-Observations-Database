@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,12 +9,11 @@ using System.Data.Entity.Validation;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
 
     [Authorize]

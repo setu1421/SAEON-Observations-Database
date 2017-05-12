@@ -24,6 +24,7 @@ namespace SAEON.Observations.WebAPI
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/Observations.css"));
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using Serilog;
 using Serilog.Context;
 using System;
@@ -10,7 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.OData;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]

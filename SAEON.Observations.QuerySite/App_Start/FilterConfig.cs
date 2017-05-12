@@ -1,5 +1,4 @@
 ﻿using SAEON.Observations.QuerySite.ErrorHandler;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite

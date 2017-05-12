@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace SAEON.Observations.QuerySite
 {
@@ -36,6 +35,7 @@ namespace SAEON.Observations.QuerySite
                             "~/Scripts/ej/ej.unobtrusive.min.js"));
             bundles.Add(new StyleBundle("~/bundles/ejstyles").Include(
                       "~/ejThemes/flat-saffron/ej.web.all.min.css"));
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

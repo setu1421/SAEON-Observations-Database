@@ -1,4 +1,4 @@
-﻿using SAEON.Observations.Core;
+﻿using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace SAEON.Observations.WebAPI.Controllers
+namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     /// <summary>
     /// UnitOfMeasures
     /// </summary>
     [RoutePrefix("UnitsOfMeasure")]
-    public class UnitsOfMeasureApiController : BaseApiController<UnitOfMeasure>
+    public class UnitsOfMeasureController : BaseApiController<UnitOfMeasure>
     {
         protected override List<Expression<Func<UnitOfMeasure, object>>> GetIncludes()
         {
