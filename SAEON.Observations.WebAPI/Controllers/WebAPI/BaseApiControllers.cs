@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Web.Http;
 using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
@@ -17,6 +18,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
 
     [Authorize]
+    [ApiVersion("1.0")]
     public abstract class BaseApiController<TEntity> : ApiController where TEntity : BaseEntity
     {
         protected ObservationsDbContext db = null;

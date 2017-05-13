@@ -38,5 +38,6 @@ namespace SAEON.Observations.WebAPI.Controllers
         {
             return View();
         }
+
     }
 }

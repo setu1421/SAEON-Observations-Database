@@ -48,6 +48,7 @@ namespace SAEON.Observations.WebAPI
 
                     // web api configuration
                     var config = new HttpConfiguration();
+                    config.AddApiVersioning(o => o.AssumeDefaultVersionWhenUnspecified = true);
                     WebApiConfig.Register(config);
                     app.UseWebApi(config);
                 }

@@ -1,4 +1,5 @@
-﻿using SAEON.Observations.Core;
+﻿using Microsoft.Web.Http;
+using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using Serilog;
 using Serilog.Context;
@@ -15,6 +16,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
+    [ApiVersion("1.0")]
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {
         protected ObservationsDbContext db = new ObservationsDbContext();
