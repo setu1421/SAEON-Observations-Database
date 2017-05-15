@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Phenomenona
     /// </summary>
     [ODataRoutePrefix("Phenomena")]
-    public class PhenomenaController : BaseODataController<Phenomenon>
+    public class PhenomenaODataController : BaseODataController<Phenomenon>
     {
         // GET: odata/Phenomena
         /// <summary>

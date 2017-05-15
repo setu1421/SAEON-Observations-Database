@@ -14,7 +14,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Users have to be logged in to download data in the QuerySite. Any downloads are saved for later re-downloads.
     /// </summary>
     [ODataRoutePrefix("UserDownloads")]
-    public class UserDownloadsController : BaseODataController<UserDownload>
+    public class UserDownloadsODataController : BaseODataController<UserDownload>
     {
         protected override List<Expression<Func<UserDownload, bool>>> GetWheres()
         {

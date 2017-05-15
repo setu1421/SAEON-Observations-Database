@@ -13,7 +13,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     /// Sensors
     /// </summary>
     [RoutePrefix("Sensors")]
-    public class SensorsController : BaseApiController<Sensor>
+    public class SensorsApiController : BaseApiController<Sensor>
     {
         protected override List<Expression<Func<Sensor, object>>> GetIncludes()
         {

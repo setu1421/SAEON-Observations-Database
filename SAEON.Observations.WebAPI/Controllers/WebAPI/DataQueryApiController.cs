@@ -16,11 +16,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("DataQuery")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
-    public class DataQueryController : ApiController
+    public class DataQueryApiController : ApiController
     {
         protected ObservationsDbContext db = null;
 
-        public DataQueryController() : base()
+        public DataQueryApiController() : base()
         {
             using (Logging.MethodCall(GetType()))
             {

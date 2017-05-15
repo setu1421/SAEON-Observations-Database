@@ -130,7 +130,7 @@
                     <ext:Panel ID="pnlEast" runat="server" Width="600" ClientIDMode="Static" Layout="AnchorLayout">
                         <Items>
                             <ext:Panel ID="pnlSites" runat="server" ClientIDMode="Static" Title="Sites" AnchorHorizontal="100%" AnchorVertical="33%">
-                                <TopBar>
+<%--                                <TopBar>
                                     <ext:Toolbar ID="Toolbar3" runat="server">
                                         <Items>
                                             <ext:Button ID="LinkSite" runat="server" Icon="LinkAdd" Text="Link Site">
@@ -143,7 +143,7 @@
                                             </ext:Button>
                                         </Items>
                                     </ext:Toolbar>
-                                </TopBar>
+                                </TopBar>--%>
                                 <Items>
                                     <ext:GridPanel ID="SiteLinksGrid" runat="server" Border="false" ClientIDMode="Static" Layout="FitLayout" Height="300">
                                         <Store>
@@ -177,12 +177,12 @@
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="150">
+<%--                                                <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
                                                     </Commands>
-                                                </ext:CommandColumn>
+                                                </ext:CommandColumn>--%>
                                             </Columns>
                                         </ColumnModel>
                                         <SelectionModel>
@@ -197,7 +197,7 @@
                                 </Items>
                             </ext:Panel>
                             <ext:Panel ID="pnlStations" runat="server" ClientIDMode="Static" Title="Stations" AnchorHorizontal="100%" AnchorVertical="33%">
-                                <TopBar>
+<%--                                <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
                                             <ext:Button ID="LinkStation" runat="server" Icon="LinkAdd" Text="Link Station">
@@ -210,7 +210,7 @@
                                             </ext:Button>
                                         </Items>
                                     </ext:Toolbar>
-                                </TopBar>
+                                </TopBar>--%>
                                 <Items>
                                     <ext:GridPanel ID="StationLinksGrid" runat="server" Border="false" ClientIDMode="Static" Height="300">
                                         <Store>
@@ -244,12 +244,12 @@
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="150">
+<%--                                                <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
                                                     </Commands>
-                                                </ext:CommandColumn>
+                                                </ext:CommandColumn>--%>
                                             </Columns>
                                         </ColumnModel>
                                         <SelectionModel>
@@ -264,7 +264,7 @@
                                 </Items>
                             </ext:Panel>
                             <ext:Panel ID="pnlInstruments" runat="server" ClientIDMode="Static" Title="Instruments" AnchorHorizontal="100%" AnchorVertical="33%">
-                                <TopBar>
+<%--                                <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
                                             <ext:Button ID="LinkInstrument" runat="server" Icon="LinkAdd" Text="Link Instrument">
@@ -277,7 +277,7 @@
                                             </ext:Button>
                                         </Items>
                                     </ext:Toolbar>
-                                </TopBar>
+                                </TopBar>--%>
                                 <Items>
                                     <ext:GridPanel ID="InstrumentLinksGrid" runat="server" Border="false" ClientIDMode="Static" Height="300">
                                         <Store>
@@ -311,12 +311,12 @@
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="150">
+<%--                                                <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
                                                     </Commands>
-                                                </ext:CommandColumn>
+                                                </ext:CommandColumn>--%>
                                             </Columns>
                                         </ColumnModel>
                                         <SelectionModel>

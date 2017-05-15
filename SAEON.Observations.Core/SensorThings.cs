@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using geoF = GeoJSON.Net.Feature;
+using geoG = GeoJSON.Net.Geometry;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections;
+using Newtonsoft.Json.Linq;
 
 namespace SAEON.Observations.Core.SensorThings
 {
@@ -47,12 +48,19 @@ namespace SAEON.Observations.Core.SensorThings
         public DateTime? End { get; set; }
     }
 
-    public class GeometryPoint
+    public class LatLong
     {
         [Required]
-        public decimal Latitude { get; set; }
+        public double Latitude { get; set; }
         [Required]
-        public decimal Longitude { get; set; }
+        public double Longitude { get; set; }
+
+        public LatLong() { }
+        public LatLong(double latitude, double longitude)
+        {
+            Latitude = latitude;
+            Longitude = longitude;
+        }
     }
 
     public class UnitOfMeasurement
@@ -64,6 +72,15 @@ namespace SAEON.Observations.Core.SensorThings
         [Url, Required]
         public string Definition { get; set; }
     }
+
+    public class Property
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
+    }
+
+    public class PropertyList : List<Property> { }
+
     #endregion
 
     public class BaseSensorThingEntity
@@ -72,24 +89,19 @@ namespace SAEON.Observations.Core.SensorThings
         public Guid Id { get; set; }
         //[Url, NotMapped]
         //public string SelfLink { get; set; }
-        //[Url, NotMapped]
-        //public List<string> NavigationLinks { get; set; } = new List<string>();
-        //public Dictionary<string, object> SensorThingsProperties { get; set; } = new Dictionary<string, object>();
+        [Url, NotMapped]
+        protected List<string> NavigationLinks { get; private set; } = new List<string>();
+        public Dictionary<string, object> SensorThingsProperties { get; private set; } = new Dictionary<string, object>();
 
-        public BaseSensorThingEntity()
+        public virtual void GenerateSensorThingsProperties()
         {
-            GenerateSensorThingsProperties();
-        }
-
-        protected virtual void GenerateSensorThingsProperties()
-        {
-            //SensorThingsProperties.Clear();
-            //SensorThingsProperties.Add("@iot.id",Id);
-            //SensorThingsProperties.Add("@iot.selfLink", $"{SensorThings.BaseUrl}/{GetType()}s({Id})");
-            //foreach (var link in NavigationLinks)
-            //{
-            //    SensorThingsProperties.Add($"{link}@iot.navigationLink", $"{GetType()}s({Id})/{link}");
-            //}
+            SensorThingsProperties.Clear();
+            SensorThingsProperties.Add("iot_id", Id);
+            SensorThingsProperties.Add("iot_selfLink", $"{SensorThings.BaseUrl}/{GetType().Name}s({Id})");
+            foreach (var link in NavigationLinks)
+            {
+                SensorThingsProperties.Add($"{link}_iot_navigationLink", $"{GetType().Name}s({Id})/{link}");
+            }
         }
     }
 
@@ -103,36 +115,58 @@ namespace SAEON.Observations.Core.SensorThings
 
     public class Thing : BaseNamedSensorThingEntity
     {
-        //[NotMapped]
-        //public Dictionary<string, string> Properties { get; set; }
-        public Dictionary<string, object> SensorThingsProperties { get; set; } = new Dictionary<string, object>();
-        protected override void GenerateSensorThingsProperties()
-        {
-            base.GenerateSensorThingsProperties();
-            SensorThingsProperties.Clear();
-            SensorThingsProperties.Add("@iot.id", Id);
-            SensorThingsProperties.Add("@iot.selfLink", $"{SensorThings.BaseUrl}/{GetType()}s({Id})");
-        }
-    }
+        public PropertyList Properties { get; private set; } = new PropertyList();
+        //public Dictionary<string,string> Properties { get; private set; } = new Dictionary<string, string>();
 
-    public class Thing2 
-    {
-        [Key]
-        public Guid Id { get; set; }
-        [Required]
-        public string Name { get; set; }
-        [Required]
-        public string Description { get; set; }
-        //public Dictionary<string, string> Properties { get; set; }
-        public Dictionary<string, object> SensorThingsProperties { get; set; } = new Dictionary<string, object>();
+        public Thing() : base()
+        {
+            NavigationLinks.Add("Locations");
+            NavigationLinks.Add("HistoricalLocations");
+            NavigationLinks.Add("DataStreams");
+        }
+
+        public void AddProperty(string key, object value)
+        {
+            if (value == null) return;
+            Properties.Add(new Property { Key = key, Value = value.ToString() });
+            //Properties.Add(key, value.ToString());
+        }
+
+        public List<Location> Locations { get; private set; } = new List<Location>();
+        public List<Location> HistoricalLocations { get; private set; } = new List<Location>();
     }
 
     public class Location : BaseNamedSensorThingEntity
     {
         [Required]
         public string EncodingType { get; set; }
-        [Required, NotMapped]
-        public GeometryPoint Point { get; set; }
+        [NotMapped]
+        public double? Elevation { get; set; } = null;
+        [NotMapped]
+        public LatLong Point { get; set; }
+        [NotMapped]
+        public BoundingBox BoundingBox { get; set; }
+        public geoF.Feature location { get; set; }
+
+        public Location() : base()
+        {
+            NavigationLinks.Add("Things");
+            NavigationLinks.Add("HistoricalLocations");
+        }
+
+        public override void GenerateSensorThingsProperties()
+        {
+            base.GenerateSensorThingsProperties();
+            if (Point != null)
+            {
+                EncodingType = ValueCodes.GeoJson;
+                var point = new geoG.Point(new geoG.GeographicPosition(Point.Latitude, Point.Longitude, Elevation));
+                location = new geoF.Feature(point, null);
+            }
+        }
+
+        public List<Thing> Things { get; private set; } = new List<Thing>();
+        public List<Location> HistoricalLocations { get; private set; } = new List<Location>();
     }
 
     public class HistoricalLocation : BaseSensorThingEntity

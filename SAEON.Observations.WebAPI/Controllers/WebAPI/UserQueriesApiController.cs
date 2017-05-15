@@ -14,7 +14,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     /// Logged in users can save frequently used queries in the QueryUserQuery for later use
     /// </summary>
     [RoutePrefix("UserQueries")]
-    public class UserQueriesController : BaseApiWriteController<UserQuery>
+    public class UserQueriesApiController : BaseApiWriteController<UserQuery>
     {
         protected override List<Expression<Func<UserQuery, bool>>> GetWheres()
         {

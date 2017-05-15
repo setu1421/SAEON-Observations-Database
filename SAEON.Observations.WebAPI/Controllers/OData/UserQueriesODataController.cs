@@ -14,7 +14,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Logged in users can save frequently used queries in the QueryUserQuery for later use
     /// </summary>
     [ODataRoutePrefix("UserQueries")]
-    public class UserQueriesController : BaseODataController<UserQuery>
+    public class UserQueriesODataController : BaseODataController<UserQuery>
     {
 
         protected override List<Expression<Func<UserQuery, bool>>> GetWheres()
