@@ -8,24 +8,24 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("Locations")]
+    [RoutePrefix("Features")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
-    public class LocationsApiController : ApiController
+    public class FeaturesController : ApiController
     {
         ObservationsDbContext db = new ObservationsDbContext();
 
         [HttpGet]
         [Route]
-        public IQueryable<Location> GetAll()
+        public IQueryable<Feature> GetAll()
         {
-            using (Logging.MethodCall<Location>(GetType()))
+            using (Logging.MethodCall<Feature>(GetType()))
             {
                 try
                 {
                     Logging.Verbose("Request.Uri: {uri}", Request.RequestUri);
                     Logging.Verbose("QueryString: {querystring}", string.Join(", ", Request.GetQueryNameValuePairs().Select(kv => $"{kv.Key}: {kv.Value}")));
-                    return LocationsHelper.GetLocations(db);
+                    return FeaturesHelper.GetFeatures(db);
                 }
                 catch (Exception ex)
                 {

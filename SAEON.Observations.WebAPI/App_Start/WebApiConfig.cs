@@ -1,7 +1,6 @@
 ﻿using Microsoft.OData.Edm;
 using Newtonsoft.Json;
 using SAEON.Observations.Core;
-using SAEON.Observations.Core.Entities;
 using SAEON.Observations.WebAPI.Controllers.SensorThingsAPI;
 using System;
 using System.Collections.Generic;
@@ -14,6 +13,7 @@ using System.Web.OData.Builder;
 using System.Web.OData.Extensions;
 using System.Web.OData.Routing;
 using System.Web.OData.Routing.Conventions;
+using ef = SAEON.Observations.Core.Entities;
 using sos = SAEON.Observations.Core.SensorThings;
 
 namespace SAEON.Observations.WebAPI
@@ -101,26 +101,29 @@ namespace SAEON.Observations.WebAPI
             // Entities
             ODataConventionModelBuilder odataModelBuilder = new ODataConventionModelBuilder();
             odataModelBuilder.EntitySet<Feature>("Features");
-            odataModelBuilder.EntitySet<Instrument>("Instruments");
+            odataModelBuilder.EntitySet<ef.Instrument>("Instruments");
             odataModelBuilder.EntitySet<Location>("Locations");
-            odataModelBuilder.EntitySet<Offering>("Offerings");
-            odataModelBuilder.EntitySet<Organisation>("Organisations");
-            odataModelBuilder.EntitySet<Phenomenon>("Phenomena");
-            odataModelBuilder.EntitySet<Sensor>("Sensors");
-            odataModelBuilder.EntitySet<Site>("Sites");
-            odataModelBuilder.EntitySet<Station>("Stations");
-            odataModelBuilder.EntitySet<UnitOfMeasure>("UnitsOfMeasure");
-            odataModelBuilder.EntitySet<UserDownload>("UserDownloads");
-            odataModelBuilder.EntitySet<UserQuery>("UserQueries");
+            odataModelBuilder.EntitySet<ef.Offering>("Offerings");
+            odataModelBuilder.EntitySet<ef.Organisation>("Organisations");
+            odataModelBuilder.EntitySet<ef.Phenomenon>("Phenomena");
+            odataModelBuilder.EntitySet<ef.Sensor>("Sensors");
+            odataModelBuilder.EntitySet<ef.Site>("Sites");
+            odataModelBuilder.EntitySet<ef.Station>("Stations");
+            odataModelBuilder.EntitySet<ef.UnitOfMeasure>("UnitsOfMeasure");
+            odataModelBuilder.EntitySet<ef.UserDownload>("UserDownloads");
+            odataModelBuilder.EntitySet<ef.UserQuery>("UserQueries");
             config.MapControllerBoundODataServiceRoute("OData", "OData", odataModelBuilder.GetEdmModel());
 
             // SensorThings
             ODataConventionModelBuilder sensorThingsModelBuilder = new ODataConventionModelBuilder();
-            //Type kvpType = typeof(KeyValuePair<string, string>);
-            //var kvpEdmType = sensorThingsModelBuilder.AddComplexType(kvpType);
-            //kvpEdmType.AddProperty(kvpType.GetProperty("Key"));
-            //kvpEdmType.AddProperty(kvpType.GetProperty("Value"));
             sensorThingsModelBuilder.EntitySet<sos.Thing>("Things");
+            sensorThingsModelBuilder.EntitySet<sos.Location>("Locations");
+            sensorThingsModelBuilder.EntitySet<sos.HistoricalLocation>("HistoricalLocations");
+            sensorThingsModelBuilder.EntitySet<sos.DataStream>("DataStreams");
+            sensorThingsModelBuilder.EntitySet<sos.Sensor>("Sensors");
+            sensorThingsModelBuilder.EntitySet<sos.ObservedProperty>("ObservedProperties");
+            sensorThingsModelBuilder.EntitySet<sos.Observation>("Observations");
+            sensorThingsModelBuilder.EntitySet<sos.FeatureOfInterest>("FeaturesOfInterest");
             config.MapControllerBoundODataServiceRoute("SensorThings", "SensorThings", sensorThingsModelBuilder.GetEdmModel());
 
             SensorThingsHelper.Load();

@@ -58,7 +58,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [EnableQuery, ODataRoute("({id})/Stations")]
         public IQueryable<Station> GetStations([FromODataUri] Guid id)
         {
-            return GetMany<Station>(id, s => s.Stations, i => i.Instruments);
+            return GetMany(id, s => s.Stations, i => i.Instruments);
         }
 
         // GET: odata/Instruments(5)/Sensors
@@ -70,7 +70,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [EnableQuery, ODataRoute("({id})/Sensors")]
         public IQueryable<Sensor> GetSensors([FromODataUri] Guid id)
         {
-            return GetMany<Sensor>(id, s => s.Sensors, i => i.Instruments);
+            return GetMany(id, s => s.Sensors, i => i.Instruments);
         }
 
     }

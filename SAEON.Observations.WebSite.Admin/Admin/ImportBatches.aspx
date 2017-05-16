@@ -233,7 +233,23 @@
                                                     <ext:ToolTip ID="ToolTip3" runat="server" Html="Set without status" />
                                                 </ToolTips>
                                                 <DirectEvents>
-                                                    <Click OnEvent="SetWithoutClick" />
+                                                    <Click OnEvent="SetWithoutClick">
+                                                        <ExtraParams>
+                                                            <ext:Parameter
+                                                                Name="count"
+                                                                Value="ObservationsGrid.getStore().getCount()"
+                                                                Mode="Raw" />
+                                                        </ExtraParams>
+                                                    </Click>
+                                                </DirectEvents>
+                                            </ext:Button>
+                                            <ext:ToolbarSeparator Width="10" />
+                                            <ext:Button ID="Button4" runat="server" Icon="ShieldAdd" Text="Test" ClientIDMode="Static">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip6" runat="server" Html="Test" />
+                                                </ToolTips>
+                                                <DirectEvents>
+                                                    <Click OnEvent="SetTestClick" />
                                                 </DirectEvents>
                                             </ext:Button>
                                             <%-- 
@@ -266,8 +282,8 @@
                                                             <ext:RecordField Name="UnitOfMeasureUnit" Type="Auto" />
                                                             <ext:RecordField Name="ValueDate" Type="Date" />
                                                             <ext:RecordField Name="RawValue" Type="Float" UseNull="true" />
-                                                            <ext:RecordField Name="DataValue" Type="Float" UseNull="true"/>
-                                                            <ext:RecordField Name="StatusName" Type="Auto"/>
+                                                            <ext:RecordField Name="DataValue" Type="Float" UseNull="true" />
+                                                            <ext:RecordField Name="StatusName" Type="Auto" />
                                                             <ext:RecordField Name="StatusReasonName" Type="Auto" />
                                                             <ext:RecordField Name="Comment" Type="Auto" />
                                                             <ext:RecordField Name="CorrelationID" Type="Auto" />
@@ -330,7 +346,7 @@
                                             </ext:GridFilters>
                                         </Plugins>
                                         <BottomBar>
-                                            <ext:PagingToolbar ID="PagingToolbarObservations" runat="server" ClientIDMode="Static" PageSize="250" EmptyMsg="No data found"/>
+                                            <ext:PagingToolbar ID="PagingToolbarObservations" runat="server" ClientIDMode="Static" PageSize="250" EmptyMsg="No data found" />
                                         </BottomBar>
                                     </ext:GridPanel>
                                 </Items>

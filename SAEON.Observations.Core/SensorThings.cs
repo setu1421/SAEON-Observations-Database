@@ -1,12 +1,9 @@
-﻿using geoF = GeoJSON.Net.Feature;
-using geoG = GeoJSON.Net.Geometry;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using SAEON.Observations.Core.GeoJSON;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections;
-using Newtonsoft.Json.Linq;
 
 namespace SAEON.Observations.Core.SensorThings
 {
@@ -48,21 +45,6 @@ namespace SAEON.Observations.Core.SensorThings
         public DateTime? End { get; set; }
     }
 
-    public class LatLong
-    {
-        [Required]
-        public double Latitude { get; set; }
-        [Required]
-        public double Longitude { get; set; }
-
-        public LatLong() { }
-        public LatLong(double latitude, double longitude)
-        {
-            Latitude = latitude;
-            Longitude = longitude;
-        }
-    }
-
     public class UnitOfMeasurement
     {
         [Required]
@@ -86,21 +68,21 @@ namespace SAEON.Observations.Core.SensorThings
     public class BaseSensorThingEntity
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid id { get; set; }
         //[Url, NotMapped]
         //public string SelfLink { get; set; }
         [Url, NotMapped]
-        protected List<string> NavigationLinks { get; private set; } = new List<string>();
-        public Dictionary<string, object> SensorThingsProperties { get; private set; } = new Dictionary<string, object>();
+        protected List<string> NavigationLinks { get; set; } = new List<string>();
+        public Dictionary<string, object> SensorThingsProperties { get; set; } = new Dictionary<string, object>();
 
         public virtual void GenerateSensorThingsProperties()
         {
             SensorThingsProperties.Clear();
-            SensorThingsProperties.Add("iot_id", Id);
-            SensorThingsProperties.Add("iot_selfLink", $"{SensorThings.BaseUrl}/{GetType().Name}s({Id})");
+            SensorThingsProperties.Add("iot_id", id);
+            SensorThingsProperties.Add("iot_selfLink", $"{SensorThings.BaseUrl}/{GetType().Name}s({id})");
             foreach (var link in NavigationLinks)
             {
-                SensorThingsProperties.Add($"{link}_iot_navigationLink", $"{GetType().Name}s({Id})/{link}");
+                SensorThingsProperties.Add($"{link}_iot_navigationLink", $"{GetType().Name}s({id})/{link}");
             }
         }
     }
@@ -108,15 +90,15 @@ namespace SAEON.Observations.Core.SensorThings
     public class BaseNamedSensorThingEntity : BaseSensorThingEntity
     {
         [Required]
-        public string Name { get; set; }
+        public string name { get; set; }
         [Required]
-        public string Description { get; set; }
+        public string description { get; set; }
     }
 
     public class Thing : BaseNamedSensorThingEntity
     {
-        public PropertyList Properties { get; private set; } = new PropertyList();
-        //public Dictionary<string,string> Properties { get; private set; } = new Dictionary<string, string>();
+        public PropertyList properties { get; set; } = new PropertyList();
+        //public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
 
         public Thing() : base()
         {
@@ -128,25 +110,25 @@ namespace SAEON.Observations.Core.SensorThings
         public void AddProperty(string key, object value)
         {
             if (value == null) return;
-            Properties.Add(new Property { Key = key, Value = value.ToString() });
-            //Properties.Add(key, value.ToString());
+            properties.Add(new Property { Key = key, Value = value.ToString() });
+            //properties.Add(key, value.ToString());
         }
 
-        public List<Location> Locations { get; private set; } = new List<Location>();
-        public List<Location> HistoricalLocations { get; private set; } = new List<Location>();
+        public List<Location> Locations { get; set; } = new List<Location>();
+        public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
     }
 
     public class Location : BaseNamedSensorThingEntity
     {
         [Required]
-        public string EncodingType { get; set; }
+        public string encodingType { get; set; } = ValueCodes.GeoJson;
         [NotMapped]
         public double? Elevation { get; set; } = null;
         [NotMapped]
-        public LatLong Point { get; set; }
+        public Coordinate Coordinate { get; set; } = null;
         [NotMapped]
         public BoundingBox BoundingBox { get; set; }
-        public geoF.Feature location { get; set; }
+        public FeatureGeometryPoint location { get; set; }
 
         public Location() : base()
         {
@@ -157,23 +139,36 @@ namespace SAEON.Observations.Core.SensorThings
         public override void GenerateSensorThingsProperties()
         {
             base.GenerateSensorThingsProperties();
-            if (Point != null)
+            if (Coordinate != null)
             {
-                EncodingType = ValueCodes.GeoJson;
-                var point = new geoG.Point(new geoG.GeographicPosition(Point.Latitude, Point.Longitude, Elevation));
-                location = new geoF.Feature(point, null);
+                location = new FeatureGeometryPoint(Coordinate);
             }
         }
 
-        public List<Thing> Things { get; private set; } = new List<Thing>();
-        public List<Location> HistoricalLocations { get; private set; } = new List<Location>();
+        public List<Thing> Things { get; set; } = new List<Thing>();
+        public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
     }
 
     public class HistoricalLocation : BaseSensorThingEntity
     {
+        private DateTime _time;
         [Required, NotMapped]
-        public DateTime Time { get; set; }
+        public DateTime Time { get { return _time;
+            } set {
+                _time = value;
+                time = value.ToString("o");
+            } }
+        [Required]
+        public string time { get; set; } = null;
 
+        public HistoricalLocation() : base()
+        {
+            NavigationLinks.Add("Location");
+            NavigationLinks.Add("Things");
+        }
+
+        public Thing Thing { get; set; }
+        public List<Location> Locations { get; set; } = new List<Location>();
     }
 
     public class DataStream : BaseNamedSensorThingEntity

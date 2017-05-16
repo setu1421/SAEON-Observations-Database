@@ -62,9 +62,6 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="GeoJSON.Net, Version=0.1.55.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GeoJSON.Net.0.1.56\lib\portable-net40+sl5+wp80+win8+wpa81\GeoJSON.Net.dll</HintPath>
-    </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\IdentityModel.1.13.1\lib\net45\IdentityModel.dll</HintPath>
     </Reference>
@@ -301,35 +298,37 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\SensorThingsAPI\BaseSensorThingsControllers.cs" />
+    <Compile Include="Controllers\SensorThingsAPI\HistoricalLocationsSOSController.cs" />
+    <Compile Include="Controllers\SensorThingsAPI\LocationsSOSController.cs" />
     <Compile Include="Controllers\SensorThingsAPI\SensorThingsHelper.cs" />
     <Compile Include="Controllers\SensorThingsAPI\ThingsSOSController.cs" />
     <Compile Include="Controllers\WebAPI\BaseApiControllers.cs" />
     <Compile Include="Controllers\OData\BaseODataControllers.cs" />
     <Compile Include="Controllers\WebAPI\DataQueryApiController.cs" />
-    <Compile Include="Controllers\WebAPI\FeaturesApiController.cs" />
+    <Compile Include="Controllers\WebAPI\FeaturesController.cs" />
     <Compile Include="Controllers\WebAPI\FeaturesHelper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\WebAPI\InstrumentsApiController.cs" />
+    <Compile Include="Controllers\WebAPI\InstrumentsController.cs" />
     <Compile Include="Controllers\OData\InstrumentsODataController.cs" />
-    <Compile Include="Controllers\WebAPI\LocationsApiController.cs" />
+    <Compile Include="Controllers\WebAPI\LocationsController.cs" />
     <Compile Include="Controllers\WebAPI\LocationsHelper.cs" />
-    <Compile Include="Controllers\WebAPI\OfferingsApiController.cs" />
+    <Compile Include="Controllers\WebAPI\OfferingsController.cs" />
     <Compile Include="Controllers\OData\OfferingsODataController.cs" />
-    <Compile Include="Controllers\WebAPI\OrganisationsApiController.cs" />
+    <Compile Include="Controllers\WebAPI\OrganisationsController.cs" />
     <Compile Include="Controllers\OData\OrganisationsODataController.cs" />
-    <Compile Include="Controllers\WebAPI\PhenomenaApiController.cs" />
+    <Compile Include="Controllers\WebAPI\PhenomenaController.cs" />
     <Compile Include="Controllers\OData\PhenomenaODataController.cs" />
-    <Compile Include="Controllers\WebAPI\SensorsApiController.cs" />
+    <Compile Include="Controllers\WebAPI\SensorsController.cs" />
     <Compile Include="Controllers\OData\SensorsODataContoller.cs" />
-    <Compile Include="Controllers\WebAPI\SitesApiController.cs" />
+    <Compile Include="Controllers\WebAPI\SitesController.cs" />
     <Compile Include="Controllers\OData\SitesODataController.cs" />
-    <Compile Include="Controllers\WebAPI\StationsApiController.cs" />
+    <Compile Include="Controllers\WebAPI\StationsController.cs" />
     <Compile Include="Controllers\OData\StationsODataController.cs" />
-    <Compile Include="Controllers\WebAPI\UnitsOfMeasureApiController.cs" />
+    <Compile Include="Controllers\WebAPI\UnitsOfMeasureController.cs" />
     <Compile Include="Controllers\OData\UnitsOfMeasureODataController.cs" />
-    <Compile Include="Controllers\WebAPI\UserDownloadsApiController.cs" />
+    <Compile Include="Controllers\WebAPI\UserDownloadsController.cs" />
     <Compile Include="Controllers\OData\UserDownloadsODataController.cs" />
-    <Compile Include="Controllers\WebAPI\UserQueriesApiController.cs" />
+    <Compile Include="Controllers\WebAPI\UserQueriesController.cs" />
     <Compile Include="Controllers\OData\UserQueriesODataController.cs" />
     <Compile Include="ErrorHandler\AiHandleErrorAttribute.cs" />
     <Compile Include="Filters\ValidateModelAttribute.cs" />

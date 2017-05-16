@@ -1,7 +1,5 @@
 ﻿using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
-using Serilog;
-using Serilog.Context;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -69,6 +67,11 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return query;
         }
 
+        /// <summary>
+        /// Get all entities
+        /// </summary>
+        /// <returns>ListOf(TEntity)</returns>
+        // GET: odata/TEntity
         //[EnableQuery, ODataRoute] Required in derived class
         public virtual IQueryable<TEntity> GetAll()
         {
@@ -86,6 +89,12 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             }
         }
 
+        /// <summary>
+        /// Get TEntity by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>TEntity</returns>
+        // GET: odata/TEntity(5)
         //[EnableQuery, ODataRoute("({id})")] Required in derived class
         public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
         {
@@ -103,6 +112,12 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             }
         }
 
+        /// <summary>
+        /// Get TEntity by Name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>TEntity</returns>
+        // GET: odata/TEntity(abc)
         //[EnableQuery, ODataRoute("({name})")] Required in derived class 
         public virtual SingleResult<TEntity> GetByName([FromODataUri] string name)
         {

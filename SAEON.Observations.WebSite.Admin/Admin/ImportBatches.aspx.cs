@@ -1014,6 +1014,14 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
+    protected void SetTestClick(object sender, DirectEventArgs e)
+    {
+        var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+        var count = int.Parse(e.ExtraParams["count"]);
+
+        MessageBoxes.Info("Info", $"Count: {count} Selected: {sm.SelectedRows.Count}");
+    }
+
     protected void SetAllClick(object sender, DirectEventArgs e)
     {
         if (cbStatus.SelectedItem.Text == "Verified")
