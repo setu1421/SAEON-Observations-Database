@@ -14,9 +14,9 @@ using Thinktecture.IdentityModel.WebApi;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("DataQuery")]
+    [RoutePrefix("DataQueries")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ResourceAuthorize("Observations.QuerySite", "DataQuery")]
+    [ResourceAuthorize("Observations.QuerySite", "DataQueries")]
     public class DataQueriesController : ApiController
     {
         protected ObservationsDbContext db = null;

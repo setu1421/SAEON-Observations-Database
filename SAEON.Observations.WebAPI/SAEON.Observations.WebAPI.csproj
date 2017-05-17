@@ -319,6 +319,7 @@
     <Compile Include="Controllers\SensorThingsAPI\ThingsSOSController.cs" />
     <Compile Include="Controllers\WebAPI\BaseApiControllers.cs" />
     <Compile Include="Controllers\OData\BaseODataControllers.cs" />
+    <Compile Include="Controllers\WebAPI\ClaimsController.cs" />
     <Compile Include="Controllers\WebAPI\DataDownloadsController.cs" />
     <Compile Include="Controllers\WebAPI\DataQueriesController.cs" />
     <Compile Include="Controllers\WebAPI\FeaturesController.cs" />
@@ -443,6 +444,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Claims\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

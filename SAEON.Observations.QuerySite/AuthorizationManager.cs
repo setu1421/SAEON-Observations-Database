@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAEON.Observations.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,37 +12,52 @@ namespace SAEON.Observations.QuerySite
     {
         public override Task<bool> CheckAccessAsync(ResourceAuthorizationContext context)
         {
-            switch (context.Resource.First().Value)
+            using (Logging.MethodCall(GetType()))
             {
-                case "DataQueries":
-                case "DataDownloads":
-                    return AuthorizeQuerySite(context);
-                case "DataGaps":
-                    return AuthorizeAdmin(context);
-                default:
-                    return Nok();
+                Logging.Verbose("Resource: {resource}", context.Resource.First().Value);
+                Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => i.Value)));
+                switch (context.Resource.First().Value)
+                {
+                    case "DataQueries":
+                    case "DataDownloads":
+                        return AuthorizeQuerySite(context);
+                    case "DataGaps":
+                        return AuthorizeAdmin(context);
+                    default:
+                        return Nok();
+                }
             }
         }
 
         private Task<bool> AuthorizeQuerySite(ResourceAuthorizationContext context)
         {
-            switch (context.Action.First().Value)
+            using (Logging.MethodCall(GetType()))
             {
-                case "Observations.QuerySite":
-                    return Eval(context.Principal.HasClaim("role", "Observations.QuerySite"));
-                default:
-                    return Nok();
+                Logging.Verbose("Action: {action}", context.Action.First().Value);
+                Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => i.Value)));
+                switch (context.Action.First().Value)
+                {
+                    case "Observations.QuerySite":
+                        return Eval(context.Principal.HasClaim("role", "Observations.QuerySite"));
+                    default:
+                        return Nok();
+                }
             }
         }
 
         private Task<bool> AuthorizeAdmin(ResourceAuthorizationContext context)
         {
-            switch (context.Action.First().Value)
+            using (Logging.MethodCall(GetType()))
             {
-                case "Observations.DataGaps":
-                    return Eval(context.Principal.HasClaim("role", "Observations.Admin"));
-                default:
-                    return Nok();
+                Logging.Verbose("Action: {action}", context.Action.First().Value);
+                Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => i.Value)));
+                switch (context.Action.First().Value)
+                {
+                    case "Observations.DataGaps":
+                        return Eval(context.Principal.HasClaim("role", "Observations.Admin"));
+                    default:
+                        return Nok();
+                }
             }
         }
     }

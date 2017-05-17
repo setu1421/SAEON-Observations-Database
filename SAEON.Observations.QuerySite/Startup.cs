@@ -62,6 +62,8 @@ namespace SAEON.Observations.QuerySite
 
                                 identity.AddClaims(userInfo.GetClaimsIdentity().Claims);
 
+                                //identity.AddClaim(new Claim("client_id", n.ProtocolMessage.ClientId));
+
                                 // keep the id_token for logout
                                 identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
 

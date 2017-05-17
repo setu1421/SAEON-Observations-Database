@@ -440,7 +440,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         EndDate = sessionModel.EndDate
                     };
                     Logging.Verbose("DataQueryInput: {@input}", input);
-                    var results = (await Post<DataQueryInput, DataQueryOutput>("DataQuery", input));
+                    var results = (await Post<DataQueryInput, DataQueryOutput>("DataQueries", input));
                     //Logging.Verbose("Results: {@results}", results);
                     sessionModel.QueryResults = results;
                     SessionModel = sessionModel;

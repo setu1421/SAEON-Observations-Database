@@ -33,7 +33,7 @@ namespace SAEON.Observations.WebAPI
                     app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
                     {
                         Authority = Properties.Settings.Default.IdentityServer,
-                        RequiredScopes = new[] { "SAEON.Observations.WebAPI" }
+                        RequiredScopes = new[] { "SAEON.Observations.WebAPI" },
                     });
 
                     // add app local claims per request

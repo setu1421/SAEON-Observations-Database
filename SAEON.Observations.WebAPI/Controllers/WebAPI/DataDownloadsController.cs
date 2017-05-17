@@ -14,7 +14,7 @@ using Thinktecture.IdentityModel.WebApi;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("DataDownload")]
+    [RoutePrefix("DataDownloads")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ResourceAuthorize("Observations.QuerySite", "DataDownloads")]
     public class DataDownloadsController : ApiController

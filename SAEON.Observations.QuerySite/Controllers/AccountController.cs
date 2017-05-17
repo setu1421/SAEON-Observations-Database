@@ -43,7 +43,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 var token = (User as ClaimsPrincipal).FindFirst("access_token").Value;
                 var client = new HttpClient();
                 client.SetBearerToken(token);
-                var result = await client.GetStringAsync("http://localhost:63378/sites");
+                var result = await client.GetStringAsync("http://localhost:63378/claims");
                 ViewBag.Json = JArray.Parse(result.ToString());
                 return View("ShowApiResult");
             }
