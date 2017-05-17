@@ -13,6 +13,11 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
         public static List<sos.Thing> Things = new List<sos.Thing>();
         public static List<sos.Location> Locations = new List<sos.Location>();
         public static List<sos.HistoricalLocation> HistoricalLocations = new List<sos.HistoricalLocation>();
+        public static List<sos.DataStream> DataStreams = new List<sos.DataStream>();
+        public static List<sos.Sensor> Sensors = new List<sos.Sensor>();
+        public static List<sos.ObservedProperty> ObservedProperties = new List<sos.ObservedProperty>();
+        public static List<sos.Observation> Observations = new List<sos.Observation>();
+        public static List<sos.FeatureOfInterest> FeaturesOfInterest = new List<sos.FeatureOfInterest>();
 
         private static sos.Location AddLocation(string name, string description, double latitude, double longitude, int? elevation)
         {
@@ -24,7 +29,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                     id = Guid.NewGuid(),
                     name = name,
                     description = description,
-                    Coordinate = new Coordinate { Latitude = latitude, Longitude = longitude, Elevation = elevation }
+                    Coordinate = new GeoJSONCoordinate { Latitude = latitude, Longitude = longitude, Elevation = elevation }
                 };
                 location.GenerateSensorThingsProperties();
                 Locations.Add(location);

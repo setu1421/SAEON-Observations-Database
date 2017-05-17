@@ -88,7 +88,33 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select TRelated</param>
-        /// <param name="include">Lamda to include TRelated.ListOf(TEntrity)</param>
+        /// <param name="include">Lamda to include TRelated.TEntity</param>
+        /// <returns>SingleResultOf(TRelated)</returns>
+        // GET: odata/TEntity(5)/TRelated
+        //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
+        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseSensorThingEntity
+        {
+            using (Logging.MethodCall<SingleResult<TRelated>>(GetType()))
+            {
+                try
+                {
+                    return SingleResult.Create(GetQuery(i => (i.id == id)).Select(select).Include(include));
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Related Entity TEntity.TRelated
+        /// </summary>
+        /// <typeparam name="TRelated"></typeparam>
+        /// <param name="id">Id of TEntity</param>
+        /// <param name="select">Lambda to select TRelated</param>
+        /// <param name="include">Lamda to include TRelated.ListOf(TEntity)</param>
         /// <returns>SingleResultOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class

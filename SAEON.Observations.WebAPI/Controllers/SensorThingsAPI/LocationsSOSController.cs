@@ -30,7 +30,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             return base.GetById(id);
         }
 
-        [EnableQuery, ODataRoute("({id})/Locations")]
+        [EnableQuery, ODataRoute("({id})/Things")]
         public IQueryable<Thing> GetLocations([FromODataUri] Guid id)
         {
             return GetMany(id, s => s.Things, i => i.Locations);

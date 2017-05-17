@@ -71,16 +71,17 @@ namespace SAEON.Observations.WebAPI
                    select t;
         }
 
-        public static ODataRoute MapControllerBoundODataServiceRoute(this HttpConfiguration configuration, string routeName, string routePrefix, 
+        public static ODataRoute MapControllerBoundODataServiceRoute(this HttpConfiguration configuration, string routeName, string routePrefix,
             IEdmModel model)
         {
-            var controllers = GetTypesWith<ODataRouteNameAttribute>(true).Where(c => {
-                var attr = (ODataRouteNameAttribute)c.GetCustomAttributes(typeof(ODataRouteNameAttribute),true).FirstOrDefault();
+            var controllers = GetTypesWith<ODataRouteNameAttribute>(true).Where(c =>
+            {
+                var attr = (ODataRouteNameAttribute)c.GetCustomAttributes(typeof(ODataRouteNameAttribute), true).FirstOrDefault();
                 return attr?.Name.Equals(routeName, StringComparison.CurrentCultureIgnoreCase) ?? false;
             });
             var conventions = ODataRoutingConventions.CreateDefault();
             conventions.Insert(0, new ControllerBoundAttributeRoutingConvention(routeName, configuration, controllers));
-            return configuration.MapODataServiceRoute(routeName,routePrefix,model,new DefaultODataPathHandler(),conventions);
+            return configuration.MapODataServiceRoute(routeName, routePrefix, model, new DefaultODataPathHandler(), conventions);
         }
     }
 
@@ -99,7 +100,7 @@ namespace SAEON.Observations.WebAPI
             config.Filter().Expand().Select().OrderBy().MaxTop(null).Count();
 
             // Entities
-            ODataConventionModelBuilder odataModelBuilder = new ODataConventionModelBuilder();
+            ODataConventionModelBuilder odataModelBuilder = new ODataConventionModelBuilder { ContainerName = "Observations" };
             odataModelBuilder.EntitySet<Feature>("Features");
             odataModelBuilder.EntitySet<ef.Instrument>("Instruments");
             odataModelBuilder.EntitySet<Location>("Locations");
@@ -115,7 +116,7 @@ namespace SAEON.Observations.WebAPI
             config.MapControllerBoundODataServiceRoute("OData", "OData", odataModelBuilder.GetEdmModel());
 
             // SensorThings
-            ODataConventionModelBuilder sensorThingsModelBuilder = new ODataConventionModelBuilder();
+            ODataConventionModelBuilder sensorThingsModelBuilder = new ODataConventionModelBuilder { ContainerName = "SensorThings" };
             sensorThingsModelBuilder.EntitySet<sos.Thing>("Things");
             sensorThingsModelBuilder.EntitySet<sos.Location>("Locations");
             sensorThingsModelBuilder.EntitySet<sos.HistoricalLocation>("HistoricalLocations");

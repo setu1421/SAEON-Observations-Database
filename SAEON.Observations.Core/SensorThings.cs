@@ -28,6 +28,10 @@ namespace SAEON.Observations.Core.SensorThings
         public decimal Right { get; set; }
         [Required]
         public decimal Top { get; set; }
+
+        //public override string ToString()
+        //{
+        //}
     }
 
     public class TimeInterval
@@ -36,6 +40,11 @@ namespace SAEON.Observations.Core.SensorThings
         public DateTime Start { get; set; }
         [Required]
         public DateTime End { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Start.ToString("o")}/{End.ToString("o")}";
+        }
     }
 
     public class TimeOrInterval
@@ -43,22 +52,32 @@ namespace SAEON.Observations.Core.SensorThings
         [Required]
         public DateTime Start { get; set; }
         public DateTime? End { get; set; }
+
+        public override string ToString()
+        {
+            var result = $"{Start.ToString("o")}";
+            if (End.HasValue)
+            {
+                result += $"/{End.Value.ToString("o")}";
+            }
+            return result;
+        }
     }
 
     public class UnitOfMeasurement
     {
         [Required]
-        public string Name { get; set; }
+        public string name { get; set; }
         [Required]
-        public string Symbol { get; set; }
+        public string symbol { get; set; }
         [Url, Required]
-        public string Definition { get; set; }
+        public string definition { get; set; }
     }
 
     public class Property
     {
-        public string Key { get; set; }
-        public string Value { get; set; }
+        public string key { get; set; }
+        public string value { get; set; }
     }
 
     public class PropertyList : List<Property> { }
@@ -110,12 +129,14 @@ namespace SAEON.Observations.Core.SensorThings
         public void AddProperty(string key, object value)
         {
             if (value == null) return;
-            properties.Add(new Property { Key = key, Value = value.ToString() });
+            properties.Add(new Property { key = key, value = value.ToString() });
             //properties.Add(key, value.ToString());
         }
 
+        // Navigation
         public List<Location> Locations { get; set; } = new List<Location>();
         public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
+        public List<DataStream> DataStreams { get; set; } = new List<DataStream>();
     }
 
     public class Location : BaseNamedSensorThingEntity
@@ -125,10 +146,10 @@ namespace SAEON.Observations.Core.SensorThings
         [NotMapped]
         public double? Elevation { get; set; } = null;
         [NotMapped]
-        public Coordinate Coordinate { get; set; } = null;
+        public GeoJSONCoordinate Coordinate { get; set; } = null;
         [NotMapped]
         public BoundingBox BoundingBox { get; set; }
-        public FeatureGeometryPoint location { get; set; }
+        public GeoJSONFeatureGeometryPoint location { get; set; }
 
         public Location() : base()
         {
@@ -141,10 +162,11 @@ namespace SAEON.Observations.Core.SensorThings
             base.GenerateSensorThingsProperties();
             if (Coordinate != null)
             {
-                location = new FeatureGeometryPoint(Coordinate);
+                location = new GeoJSONFeatureGeometryPoint(Coordinate);
             }
         }
 
+        // Navigation
         public List<Thing> Things { get; set; } = new List<Thing>();
         public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
     }
@@ -163,26 +185,54 @@ namespace SAEON.Observations.Core.SensorThings
 
         public HistoricalLocation() : base()
         {
+            NavigationLinks.Add("Thing");
             NavigationLinks.Add("Location");
-            NavigationLinks.Add("Things");
         }
 
+        // Navigation
         public Thing Thing { get; set; }
         public List<Location> Locations { get; set; } = new List<Location>();
     }
 
     public class DataStream : BaseNamedSensorThingEntity
     {
-        [Required, NotMapped]
-        public UnitOfMeasurement UnitOfMeasure { get; set; }
         [Required]
-        public string ObservationType { get; set; }
+        public UnitOfMeasurement unitOfMeasurement { get; set; }
+        [Required]
+        public string observationType { get; set; }
         [NotMapped]
-        public BoundingBox ObservedArea { get; set; }
+        public GeoJSONPolygon observedArea { get; set; }
         [NotMapped]
-        public TimeInterval PhenomenonTime { get; set; }
+        public TimeInterval phenomenonTime { get; set; }
         [NotMapped]
-        public TimeInterval ResultTime { get; set; }
+        public TimeInterval resultTime { get; set; }
+
+        public DataStream() : base()
+        {
+            NavigationLinks.Add("Thing");
+            NavigationLinks.Add("Sensor");
+            NavigationLinks.Add("ObservedProerties");
+            NavigationLinks.Add("Observations");
+        }
+
+        public override void GenerateSensorThingsProperties()
+        {
+            base.GenerateSensorThingsProperties();
+            if (phenomenonTime != null)
+            {
+                SensorThingsProperties.Add("phenomenonTime", phenomenonTime.ToString());
+            }
+            if (resultTime != null)
+            {
+                SensorThingsProperties.Add("resultTime", resultTime.ToString());
+            }
+        }
+
+        // Navigation
+        public Thing Thing { get; set; }
+        public Sensor Sensor { get; set; }
+        public ObservedProperty ObservedProperty { get; set; }
+        public List<Observation> Observations { get; set; }
     }
 
     public class Sensor : BaseNamedSensorThingEntity
@@ -191,12 +241,27 @@ namespace SAEON.Observations.Core.SensorThings
         public string EncodingType { get; set; }
         [Required]
         public string Metadata { get; set; }
+
+        public Sensor() : base()
+        {
+            NavigationLinks.Add("DataStreams");
+        }
+
+        // Navigation
+        public List<DataStream> DataStreams { get; set; }
     }
 
     public class ObservedProperty : BaseNamedSensorThingEntity
     {
         [Required, Url]
         public string Definition { get; set; }
+
+        public ObservedProperty() : base()
+        {
+            NavigationLinks.Add("DataStream");
+        }
+        // Navigation
+        public DataStream DataStream { get; set; }
     }
 
     public class Observation : BaseSensorThingEntity
@@ -211,6 +276,15 @@ namespace SAEON.Observations.Core.SensorThings
         [NotMapped]
         public TimeInterval ValidTime { get; set; }
         public List<string> Parameters { get; set; }
+
+        public Observation() : base()
+        {
+            NavigationLinks.Add("DataStream");
+            NavigationLinks.Add("FeatureOfInterest");
+        }
+        // Navigation
+        public DataStream DataStream { get; set; }
+        public FeatureOfInterest FeatureOfInterest { get; set; }
     }
 
     public class FeatureOfInterest : BaseNamedSensorThingEntity
@@ -219,5 +293,12 @@ namespace SAEON.Observations.Core.SensorThings
         public string EncodingType { get; set; }
         [Required]
         public string Feature { get; set; }
+
+        public FeatureOfInterest() : base()
+        {
+            NavigationLinks.Add("Observations");
+        }
+        // Navigation
+        public List<Observation> Observations { get; set; }
     }
 }

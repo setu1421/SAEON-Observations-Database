@@ -298,8 +298,13 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\SensorThingsAPI\BaseSensorThingsControllers.cs" />
+    <Compile Include="Controllers\SensorThingsAPI\DataStreamsSOSController.cs" />
+    <Compile Include="Controllers\SensorThingsAPI\FeaturesOfInterestSOSController.cs" />
     <Compile Include="Controllers\SensorThingsAPI\HistoricalLocationsSOSController.cs" />
     <Compile Include="Controllers\SensorThingsAPI\LocationsSOSController.cs" />
+    <Compile Include="Controllers\SensorThingsAPI\ObservationsSOSController.cs" />
+    <Compile Include="Controllers\SensorThingsAPI\ObservedPropertiesSOSController.cs" />
+    <Compile Include="Controllers\SensorThingsAPI\SensorSOSController.cs" />
     <Compile Include="Controllers\SensorThingsAPI\SensorThingsHelper.cs" />
     <Compile Include="Controllers\SensorThingsAPI\ThingsSOSController.cs" />
     <Compile Include="Controllers\WebAPI\BaseApiControllers.cs" />

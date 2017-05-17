@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace SAEON.Observations.Core.GeoJSON
 {
-    public class Coordinate
+    public class GeoJSONCoordinate
     {
         public double Longitude { get; set; }
         public double Latitude { get; set; }
@@ -21,14 +22,23 @@ namespace SAEON.Observations.Core.GeoJSON
             }
             return result;
         }
+
+        public override string ToString()
+        {
+            var result = $"[{Longitude},{Latitude}";
+            if (Elevation.HasValue)
+                result += $",{Elevation.Value}";
+            result += "]";
+            return result;
+        }
     }
 
-    public class GeometryPoint
+    public class GeoJSONGeometryPoint
     {
         public string type { get; set; } = "Point";
-        private Coordinate coordinate;
+        private GeoJSONCoordinate coordinate;
         [NotMapped]
-        public Coordinate Coordinate
+        public GeoJSONCoordinate Coordinate
         {
             get { return coordinate; }
             set
@@ -40,15 +50,30 @@ namespace SAEON.Observations.Core.GeoJSON
         public List<Double> coordinates { get; set; }
     }
 
-    public class FeatureGeometryPoint
+    public class GeoJSONFeatureGeometryPoint
     {
         public string type { get; set; } = "Feature";
-        public GeometryPoint geometry { get; set; } = new GeometryPoint();
+        public GeoJSONGeometryPoint geometry { get; set; } = new GeoJSONGeometryPoint();
 
-        public FeatureGeometryPoint() { }
-        public FeatureGeometryPoint(Coordinate coordinate)
+        public GeoJSONFeatureGeometryPoint() { }
+        public GeoJSONFeatureGeometryPoint(GeoJSONCoordinate coordinate)
         {
             geometry.Coordinate = coordinate;
+        }
+    }
+
+    public class GeoJSONPolygon
+    {
+        public string type { get; set; } = "Polygon";
+        [NotMapped]
+        private List<GeoJSONCoordinate> coordinatesList { get; set; } = new List<GeoJSONCoordinate>();
+        public List<string> coordinates { get; set; }
+
+        public void AddCoordinate(GeoJSONCoordinate coordinate)
+        {
+            coordinatesList.Add(coordinate);
+            coordinates.Clear();
+            coordinates.AddRange(coordinatesList.Select(i => i.ToString()));
         }
     }
 }
