@@ -62,4 +62,16 @@ namespace SAEON.Observations.Core
         public string ResultsChartData { get; set; }
     }
 
+    public class DataDownloadInput
+    {
+        public List<Guid> Locations { get; set; }
+        public List<Guid> Features { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
+
+    public class DataDownloadOutput
+    {
+    }
+
 }

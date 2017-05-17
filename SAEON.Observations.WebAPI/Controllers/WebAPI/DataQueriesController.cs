@@ -10,17 +10,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Thinktecture.IdentityModel.WebApi;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("DataQuery")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Authorize]
-    public class DataQueryApiController : ApiController
+    [ResourceAuthorize("Observations.QuerySite", "DataQuery")]
+    public class DataQueriesController : ApiController
     {
         protected ObservationsDbContext db = null;
 
-        public DataQueryApiController() : base()
+        public DataQueriesController() : base()
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -66,7 +67,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
         [HttpPost]
-        //[Route("{stationIds}/{phenomenonOfferingIds}/{startDate:datetime?}/{enddate:datetime?}")]
         [Route]
         public async Task<DataQueryOutput> DataQuery(DataQueryInput input)
         {

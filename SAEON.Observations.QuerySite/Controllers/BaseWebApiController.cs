@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.SessionState;
+using Thinktecture.IdentityModel.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
     [Authorize]
-    [HandleError]
+    [HandleError, HandleForbidden]
     public class BaseWebApiController : Controller
     {
         private static string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;

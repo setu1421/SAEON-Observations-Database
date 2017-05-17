@@ -256,6 +256,15 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Thinktecture.IdentityModel.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Thinktecture.IdentityModel.Core.1.4.0\lib\net45\Thinktecture.IdentityModel.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Thinktecture.IdentityModel.Owin.ResourceAuthorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Thinktecture.IdentityModel.Owin.ResourceAuthorization.1.1.0\lib\net45\Thinktecture.IdentityModel.Owin.ResourceAuthorization.dll</HintPath>
+    </Reference>
+    <Reference Include="Thinktecture.IdentityModel.Owin.ResourceAuthorization.WebApi, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Thinktecture.IdentityModel.Owin.ResourceAuthorization.WebApi.3.0.0\lib\net45\Thinktecture.IdentityModel.Owin.ResourceAuthorization.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
@@ -297,6 +306,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="AuthorizationManager.cs" />
     <Compile Include="Controllers\SensorThingsAPI\BaseSensorThingsControllers.cs" />
     <Compile Include="Controllers\SensorThingsAPI\DataStreamsSOSController.cs" />
     <Compile Include="Controllers\SensorThingsAPI\FeaturesOfInterestSOSController.cs" />
@@ -309,7 +319,8 @@
     <Compile Include="Controllers\SensorThingsAPI\ThingsSOSController.cs" />
     <Compile Include="Controllers\WebAPI\BaseApiControllers.cs" />
     <Compile Include="Controllers\OData\BaseODataControllers.cs" />
-    <Compile Include="Controllers\WebAPI\DataQueryApiController.cs" />
+    <Compile Include="Controllers\WebAPI\DataDownloadsController.cs" />
+    <Compile Include="Controllers\WebAPI\DataQueriesController.cs" />
     <Compile Include="Controllers\WebAPI\FeaturesController.cs" />
     <Compile Include="Controllers\WebAPI\FeaturesHelper.cs" />
     <Compile Include="Controllers\HomeController.cs" />

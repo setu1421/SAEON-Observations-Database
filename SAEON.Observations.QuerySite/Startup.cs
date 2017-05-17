@@ -30,6 +30,7 @@ namespace SAEON.Observations.QuerySite
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
                     JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
                     app.UseCors(CorsOptions.AllowAll);
+                    app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
                         AuthenticationType = "Cookies"
@@ -70,6 +71,8 @@ namespace SAEON.Observations.QuerySite
                                 // keep track of access token expiration
                                 identity.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
 
+                                identity.AddClaim(new Claim("role", "Observations.QuerySite"));
+
                                 n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
                             },
                             SecurityTokenValidated = async n =>
@@ -93,6 +96,8 @@ namespace SAEON.Observations.QuerySite
 
                                 // add some other app specific claim
                                 identity.AddClaim(new Claim("app_specific", "some data"));
+
+                                identity.AddClaim(new Claim("role", "Observations.QuerySite"));
 
                                 n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
                             },

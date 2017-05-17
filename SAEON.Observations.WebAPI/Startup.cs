@@ -46,6 +46,8 @@ namespace SAEON.Observations.WebAPI
                         return Task.FromResult(appPrincipal);
                     });
 
+                    app.UseResourceAuthorization(new AuthorizationManager());
+
                     // web api configuration
                     var config = new HttpConfiguration();
                     WebApiConfig.Register(config);

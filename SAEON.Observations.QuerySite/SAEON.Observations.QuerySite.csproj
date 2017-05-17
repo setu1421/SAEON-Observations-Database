@@ -134,35 +134,45 @@
     <Reference Include="Serilog.Sinks.Seq, Version=3.2.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.Seq.3.2.0\lib\net45\Serilog.Sinks.Seq.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Compression.Base, Version=15.1450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.1.0.41\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Compression.Base, Version=15.2450.0.40, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.2.0.40\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.DocIO.Base, Version=15.1450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.1.0.41\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.DocIO.Base, Version=15.2450.0.40, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.2.0.40\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.EJ, Version=15.1450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.15.1.0.41\lib\net45\Syncfusion.EJ.dll</HintPath>
+    <Reference Include="Syncfusion.EJ, Version=15.2450.0.40, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.15.2.0.40\lib\net45\Syncfusion.EJ.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.EJ.Export, Version=15.1450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.15.1.0.41\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.Export, Version=15.2450.0.40, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.15.2.0.40\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.EJ.MVC, Version=15.1500.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.15.1.0.41\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.MVC, Version=15.2500.0.40, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.15.2.0.40\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Linq.Base, Version=15.1450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.15.1.0.41\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Linq.Base, Version=15.2450.0.40, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.15.2.0.40\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.OfficeChart.Base, Version=15.1450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.1.0.41\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
+    <Reference Include="Syncfusion.OfficeChart.Base, Version=15.2450.0.40, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.2.0.40\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base, Version=15.1450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.1.0.41\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Pdf.Base, Version=15.2450.0.40, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.2.0.40\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Presentation.Base, Version=15.1450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.1.0.41\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Presentation.Base, Version=15.2450.0.40, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.2.0.40\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.XlsIO.Base, Version=15.1450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.1.0.41\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.XlsIO.Base, Version=15.2450.0.40, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.2.0.40\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -228,6 +238,15 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Thinktecture.IdentityModel.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Thinktecture.IdentityModel.Core.1.4.0\lib\net45\Thinktecture.IdentityModel.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Thinktecture.IdentityModel.Owin.ResourceAuthorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Thinktecture.IdentityModel.Owin.ResourceAuthorization.1.1.0\lib\net45\Thinktecture.IdentityModel.Owin.ResourceAuthorization.dll</HintPath>
+    </Reference>
+    <Reference Include="Thinktecture.IdentityModel.Owin.ResourceAuthorization.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Thinktecture.IdentityModel.Owin.ResourceAuthorization.Mvc.2.0.0\lib\net45\Thinktecture.IdentityModel.Owin.ResourceAuthorization.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
@@ -236,9 +255,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="AuthorizationManager.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseRestController.cs" />
     <Compile Include="Controllers\BaseWebApiController.cs" />
+    <Compile Include="Controllers\DataGapsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\UserDownloadsController.cs" />
@@ -534,10 +555,13 @@
     <Content Include="Content\ej\web\material\images\waitingpopup.gif" />
     <Content Include="Content\ej\web\office-365\ej.theme.min.css" />
     <Content Include="Content\ej\web\office-365\ej.web.all.min.css" />
+    <Content Include="Content\ej\web\office-365\icons\ejicons.svg" />
     <Content Include="Content\ej\web\office-365\images\ajax-loader.gif" />
     <Content Include="Content\ej\web\office-365\images\checkedtick.png" />
     <Content Include="Content\ej\web\office-365\images\drop-sibling.png" />
-    <Content Include="Content\ej\web\office-365\images\rating-star.png" />
+    <Content Include="Content\ej\web\office-365\images\Rating_Active.png" />
+    <Content Include="Content\ej\web\office-365\images\Rating_Clear.png" />
+    <Content Include="Content\ej\web\office-365\images\Rating_Default.png" />
     <Content Include="Content\ej\web\office-365\images\rotator-icon.png" />
     <Content Include="Content\ej\web\office-365\images\slider-tick.png" />
     <Content Include="Content\ej\web\office-365\images\waitingpopup.gif" />
@@ -562,6 +586,9 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Connected Services\Application Insights\ConnectedService.json" />
     <Content Include="MachineKey.config" />
+    <Content Include="Content\ej\web\office-365\icons\ejicons.woff" />
+    <Content Include="Content\ej\web\office-365\icons\ejicons.ttf" />
+    <Content Include="Content\ej\web\office-365\icons\ejicons.eot" />
     <Content Include="Content\ej\web\office-365\ej.theme.less" />
     <Content Include="Content\ej\web\material\icons\ejicons.woff" />
     <Content Include="Content\ej\web\material\icons\ejicons.ttf" />
@@ -646,6 +673,7 @@
     <None Include="Scripts\ej\web\ej.web.all-vsdoc.js" />
     <Content Include="Scripts\ej\i18n\ej.culture.ar-AE.min.js" />
     <Content Include="Scripts\ej\i18n\ej.culture.de-DE.min.js" />
+    <Content Include="Scripts\ej\i18n\ej.culture.en-GB.min.js" />
     <Content Include="Scripts\ej\i18n\ej.culture.en-US.min.js" />
     <Content Include="Scripts\ej\i18n\ej.culture.es-ES.min.js" />
     <Content Include="Scripts\ej\i18n\ej.culture.fr-FR.min.js" />
@@ -653,6 +681,7 @@
     <Content Include="Scripts\ej\i18n\ej.culture.zh-CN.min.js" />
     <Content Include="Scripts\ej\l10n\ej.localetexts.ar-AE.min.js" />
     <Content Include="Scripts\ej\l10n\ej.localetexts.de-DE.min.js" />
+    <Content Include="Scripts\ej\l10n\ej.localetexts.en-GB.min.js" />
     <Content Include="Scripts\ej\l10n\ej.localetexts.en-US.min.js" />
     <Content Include="Scripts\ej\l10n\ej.localetexts.es-ES.min.js" />
     <Content Include="Scripts\ej\l10n\ej.localetexts.fr-FR.min.js" />
@@ -819,6 +848,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\DataGaps\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

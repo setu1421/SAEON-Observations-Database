@@ -7,11 +7,12 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Thinktecture.IdentityModel.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
     [Authorize]
-    [HandleError]
+    [HandleError, HandleForbidden]
     public class BaseRestController<TEntity> : Controller where TEntity : BaseEntity, new()
     {
         private static string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;
