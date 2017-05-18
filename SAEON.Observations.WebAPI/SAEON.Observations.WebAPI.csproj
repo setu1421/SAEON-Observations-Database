@@ -348,6 +348,7 @@
     <Compile Include="Controllers\WebAPI\UserQueriesController.cs" />
     <Compile Include="Controllers\OData\UserQueriesODataController.cs" />
     <Compile Include="ErrorHandler\AiHandleErrorAttribute.cs" />
+    <Compile Include="Filters\ClaimsAuthorizationAttribute.cs" />
     <Compile Include="Filters\ValidateModelAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

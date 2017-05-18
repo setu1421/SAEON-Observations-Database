@@ -19,7 +19,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         public IQueryable<string> GetAll()
         {
             var cp = (ClaimsPrincipal)User;
-            return cp.Claims.Select(i => $"{i.Subject} = {i.Value}").AsQueryable();
+            return cp.Claims.Select(i => $"{i.Type} = {i.Value}").AsQueryable();
         }
 
     }

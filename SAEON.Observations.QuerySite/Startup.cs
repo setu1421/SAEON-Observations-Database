@@ -59,6 +59,7 @@ namespace SAEON.Observations.QuerySite
 
                                 var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo"), n.ProtocolMessage.AccessToken);
                                 var userInfo = await userInfoClient.GetAsync();
+                                Logging.Verbose("Claims1: {claims}", userInfo.Claims);
 
                                 identity.AddClaims(userInfo.GetClaimsIdentity().Claims);
 

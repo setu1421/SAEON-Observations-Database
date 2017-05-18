@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
+using SAEON.Observations.WebAPI.Filters;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,7 +17,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("DataQueries")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ResourceAuthorize("Observations.QuerySite", "DataQueries")]
+    //[ResourceAuthorize("Observations.QuerySite", "DataQueries")]
+    [ClaimsAuthorization("client_id","SAEON.Observations.QuerySite")]
     public class DataQueriesController : ApiController
     {
         protected ObservationsDbContext db = null;
