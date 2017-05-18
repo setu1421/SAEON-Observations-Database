@@ -298,10 +298,10 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             switch (cbSchemaColumnType.SelectedItem.Text)
             {
                 case "Date":
-                    schemaColumn.Format = tfFormat.Text.Trim();
+                    schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
                     break;
                 case "Time":
-                    schemaColumn.Format = tfFormat.Text.Trim();
+                    schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
                     break;
                 case "Offering":
                     schemaColumn.PhenomenonID = Utilities.MakeGuid(cbPhenomenon.Value);
@@ -425,10 +425,10 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     {
         SchemaColumnFormPanel.ClearInvalid();
         bool hidden = true;
-        tfFormat.AllowBlank = true;
-        tfFormat.ClearInvalid();
-        tfFormat.MarkAsValid();
-        tfFormat.Hidden = hidden;
+        cbFormat.AllowBlank = true;
+        cbFormat.ClearInvalid();
+        cbFormat.MarkAsValid();
+        cbFormat.Hidden = hidden;
         cbPhenomenon.AllowBlank = true;
         cbPhenomenon.ForceSelection = false;
         cbPhenomenon.ClearInvalid();
@@ -452,12 +452,12 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         switch (cbSchemaColumnType.SelectedItem.Text)
         {
             case "Date":
-                tfFormat.AllowBlank = false;
-                tfFormat.Hidden = false;
+                cbFormat.AllowBlank = false;
+                cbFormat.Hidden = false;
                 break;
             case "Time":
-                tfFormat.AllowBlank = false;
-                tfFormat.Hidden = false;
+                cbFormat.AllowBlank = false;
+                cbFormat.Hidden = false;
                 break;
             case "Ignore":
                 break;

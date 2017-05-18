@@ -277,7 +277,7 @@
                                                 <ext:Column Header="Name" DataIndex="Name" Width="200" />
                                                 <ext:Column Header="Type" DataIndex="SchemaColumnTypeName" Width="100" />
                                                 <ext:Column Header="Width" DataIndex="Width" Width="50" Hideable="true" />
-                                                <ext:Column Header="Format" DataIndex="Format" Width="75" />
+                                                <ext:Column Header="Format" DataIndex="Format" Width="150" />
                                                 <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                                 <ext:Column Header="Unit of measure" DataIndex="UnitOfMeasureUnit" Width="150" />
@@ -584,10 +584,36 @@
                     </ext:Container>
                     <ext:Container ID="ctFormat" runat="server" LabelAlign="Top" Layout="Form">
                         <Items>
-                            <ext:TextField ID="tfFormat" runat="server" IsRemoteValidation="true" ClientIDMode="Static" MsgTarget="Side" MaxLength="50"
+<%--                            <ext:TextField ID="tfFormat" runat="server" IsRemoteValidation="true" ClientIDMode="Static" MsgTarget="Side" MaxLength="50"
                                 AllowBlank="false" FieldLabel="Format" DataIndex="Format" EmptyText="Enter a format" AnchorHorizontal="95%">
                                 <RemoteValidation OnValidation="ValidateColumnField" />
-                            </ext:TextField>
+                            </ext:TextField>--%>
+                            <ext:ComboBox ID="cbFormat"  runat="server" IsRemoteValidation="true" ClientIDMode="Static" MsgTarget="Side" 
+                                TriggerAction="All" Editable="true" TypeAhead="true" ForceSelection="false" AllowBlank="false" FieldLabel="Format" 
+                                DataIndex="Format" EmptyText="Enter a format" AnchorHorizontal="95%" >
+                                <RemoteValidation OnValidation="ValidateColumnField" />
+                                <Items>
+                                    <ext:ListItem Text="d/M/yyyy (21 Sep 2017 13:14:15 -> 21/9/2017)" Value="d/M/yyyy" />
+                                    <ext:ListItem Text="dd/MM/yy HH:mm:ss (21 Sep 2017 13:14:15 -> 21/09/17 13:14:15)" Value="dd/MM/yy HH:mm:ss" />
+                                    <ext:ListItem Text="ddMMyy (21 Sep 2017 13:14:15 -> 210917)" Value="ddMMyy" />
+                                    <ext:ListItem Text="HH:mm (21 Sep 2017 13:14:15 -> 13:14)" Value="HH:mm" />
+                                    <ext:ListItem Text="hh:mm t (21 Sep 2017 13:14:15 -> 01:14 P)" Value="hh:mm t" />
+                                    <ext:ListItem Text="hh:mm tt (21 Sep 2017 13:14:15 -> 01:14 PM)" Value="hh:mm tt" />
+                                    <ext:ListItem Text="HH:mm:ss (21 Sep 2017 13:14:15 -> 13:14:15)" Value="HH:mm:ss" />
+                                    <ext:ListItem Text="hh:mm:ss tt (21 Sep 2017 13:14:15 -> 01:14:15 PM)" Value="hh:mm:ss tt" />
+                                    <ext:ListItem Text="HHmm (21 Sep 2017 13:14:15 -> 1314)" Value="HHmm" />
+                                    <ext:ListItem Text="MM/dd/yy HH:mm:ss (21 Sep 2017 13:14:15 -> 09/21/17)" Value="MM/dd/yy HH:mm:ss" />
+                                    <ext:ListItem Text="MM/dd/yy hh:mm:ss AM/PM (21 Sep 2017 13:14:15 -> 09/21/17 01:14:15 PM)" Value="MM/dd/yy hh:mm:ss AM/PM" />
+                                    <ext:ListItem Text="yy/MM/dd (21 Sep 2017 13:14:15 -> 17/09/21)" Value="yy/MM/dd" />
+                                    <ext:ListItem Text="yyMMdd (21 Sep 2017 13:14:15 -> 170921)" Value="yyMMdd" />
+                                    <ext:ListItem Text="yyyy/MM/dd (21 Sep 2017 13:14:15 -> 2017/09/21)" Value="yyyy/MM/dd" />
+                                    <ext:ListItem Text="yyyy/MM/dd HH:mm (21 Sep 2017 13:14:15 -> 2017/09/21 13:14)" Value="yyyy/MM/dd HH:mm" />
+                                    <ext:ListItem Text="yyyy/mm/dd HH:mm:ss (21 Sep 2017 13:14:15 -> 2017/09/21 13:14:15)" Value="yyyy/mm/dd HH:mm:ss" />
+                                    <ext:ListItem Text="yyyyMMdd (21 Sep 2017 13:14:15 -> 20170921)" Value="yyyyMMdd" />
+                                    <ext:ListItem Text="yyyy-MM-dd (21 Sep 2017 13:14:15 -> 2017-09-21)" Value="yyyy-MM-dd" />
+                                    <ext:ListItem Text="yyyy-MM-dd HH:mm:ss (21 Sep 2017 13:14:15 -> 2017-09-21 13:14:15)" Value="yyyy-MM-dd HH:mm:ss" />
+                                </Items>
+                            </ext:ComboBox>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container19" runat="server" LabelAlign="Top" Layout="Form">
