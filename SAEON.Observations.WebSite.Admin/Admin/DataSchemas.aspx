@@ -608,9 +608,10 @@
                                     <ext:ListItem Text="yyMMdd (21 Sep 2017 13:14:15 -> 170921)" Value="yyMMdd" />
                                     <ext:ListItem Text="yyyy/MM/dd (21 Sep 2017 13:14:15 -> 2017/09/21)" Value="yyyy/MM/dd" />
                                     <ext:ListItem Text="yyyy/MM/dd HH:mm (21 Sep 2017 13:14:15 -> 2017/09/21 13:14)" Value="yyyy/MM/dd HH:mm" />
-                                    <ext:ListItem Text="yyyy/mm/dd HH:mm:ss (21 Sep 2017 13:14:15 -> 2017/09/21 13:14:15)" Value="yyyy/mm/dd HH:mm:ss" />
+                                    <ext:ListItem Text="yyyy/MM/dd HH:mm:ss (21 Sep 2017 13:14:15 -> 2017/09/21 13:14:15)" Value="yyyy/MM/dd HH:mm:ss" />
                                     <ext:ListItem Text="yyyyMMdd (21 Sep 2017 13:14:15 -> 20170921)" Value="yyyyMMdd" />
                                     <ext:ListItem Text="yyyy-MM-dd (21 Sep 2017 13:14:15 -> 2017-09-21)" Value="yyyy-MM-dd" />
+                                    <ext:ListItem Text="yyyy-MM-dd HH:mm (21 Sep 2017 13:14:15 -> 2017-09-21 13:14)" Value="yyyy-MM-dd HH:mm" />
                                     <ext:ListItem Text="yyyy-MM-dd HH:mm:ss (21 Sep 2017 13:14:15 -> 2017-09-21 13:14:15)" Value="yyyy-MM-dd HH:mm:ss" />
                                 </Items>
                             </ext:ComboBox>
