@@ -550,6 +550,12 @@
     <Build Include="dbo\Views\vDownloads.sql" />
     <Build Include="dbo\Views\vSensorDates.sql" />
     <Build Include="Scripts\ObservationsSequence.sql" />
+    <Build Include="dbo\Views\vInventoryTotals.sql" />
+    <Build Include="dbo\Views\vInventoryStations.sql" />
+    <Build Include="dbo\Views\vInventoryPhenomena.sql" />
+    <Build Include="dbo\Views\vInventoryInstruments.sql" />
+    <Build Include="dbo\Views\vInventoryYears.sql" />
+    <Build Include="dbo\Views\vInventoryOrganisations.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

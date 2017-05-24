@@ -17,6 +17,10 @@
 --> Added 2.0.31 20170423 TimPN
     [ValueDay]             as Cast(ValueDate as Date),
 --< Added 2.0.31 20170423 TimPN
+--> Added 2.0.32 20170524 TimPN
+    [ValueYear]             as Year(ValueDate),
+    [ValueDecade]           as Year(ValueDate) / 10,
+--> Added 2.0.32 20170524 TimPN
     [RawValue]              FLOAT (53)       NULL,
     [DataValue]             FLOAT (53)       NULL,
 --> Changed 2.0.10 20160901 TimPN
@@ -137,6 +141,12 @@ CREATE INDEX [IX_Observation_ValueDateDesc] ON [dbo].[Observation] ([ValueDate] 
 GO
 CREATE INDEX [IX_Observation_ValueDay] ON [dbo].[Observation] ([ValueDay]);
 --< Added 2.0.31 20170423 TimPN
+GO
+CREATE INDEX [IX_Observation_ValueYear] ON [dbo].[Observation] ([ValueYear]);
+GO
+CREATE INDEX [IX_Observation_ValueDecade] ON [dbo].[Observation] ([ValueDecade]);
+--> Added 2.0.32 20170524 TimPN
+--< Added 2.0.32 20170524 TimPN
 --< Added 2.0.8 20160726 TimPN
 --> Added 2.0.9 20160823 TimPN
 GO
