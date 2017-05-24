@@ -42,8 +42,8 @@ namespace SAEON.Observations.Core
 
     public class DataQueryInput
     {
-        public List<Guid> Locations { get; set; }
-        public List<Guid> Features { get; set; }
+        public List<Guid> Stations { get; set; }
+        public List<Guid> Offerings { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
     }
@@ -58,20 +58,34 @@ namespace SAEON.Observations.Core
     public class DataQueryOutput
     {
         public List<Series> Series { get; private set; } = new List<Series>();
-        public string ResultsGridData { get; set; }
-        public string ResultsChartData { get; set; }
+        public List<ExpandoObject> Data { get; private set; } = new List<ExpandoObject>();
     }
 
-    public class DataDownloadInput
+    public class DataDownloadInput : DataQueryInput
     {
-        public List<Guid> Locations { get; set; }
-        public List<Guid> Features { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
     }
 
     public class DataDownloadOutput
     {
     }
 
+    public class InventoryInput
+    {
+        public Guid? UserQuery { get; set; }
+        public bool? Full { get; set; }
+        public bool? Statistics { get; set; }
+    }
+
+    public class TotalItem
+    {
+        public string Name { get; set; }
+        public int Count { get; set; }
+    }
+
+    public class InventoryOutput
+    {
+        public bool Success { get; set; }
+        public List<string> ErrorMessage { get; private set; } = new List<string>();
+        public List<TotalItem> TotalRecords { get; private set; } = new List<TotalItem>();
+    }
 }

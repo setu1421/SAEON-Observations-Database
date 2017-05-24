@@ -14,36 +14,15 @@ using Thinktecture.IdentityModel.WebApi;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("DataDownloads")]
+    [RoutePrefix("DataDownload")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ResourceAuthorize("Observations.QuerySite", "DataDownloads")]
-    public class DataDownloadsController : ApiController
+    //[ResourceAuthorize("Observations.QuerySite", "DataDownload")]
+    //[ClaimsAuthorization("client_id","SAEON.Observations.QuerySite")]
+    public class DataDownloadController : BaseController
     {
-        protected ObservationsDbContext db = null;
-
-        public DataDownloadsController() : base()
+        public DataDownloadController() : base()
         {
-            using (Logging.MethodCall(GetType()))
-            {
-                db = new ObservationsDbContext();
-                db.Configuration.AutoDetectChangesEnabled = false;
-                db.Database.CommandTimeout = 0;
-            }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            using (Logging.MethodCall(GetType()))
-            {
-                if (disposing)
-                {
-                    if (db != null)
-                    {
-                        db.Dispose();
-                    }
-                }
-                base.Dispose(disposing);
-            }
+            db.Database.CommandTimeout = 0;
         }
 
         [HttpPost]
@@ -56,13 +35,13 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 {
                     Logging.Verbose("Input: {@input}", input);
                     if (input == null) throw new ArgumentNullException("input");
-                    if (input.Locations == null) throw new ArgumentNullException("input.Locations");
-                    if (!input.Locations.Any()) throw new ArgumentOutOfRangeException("input.Locations");
-                    if (input.Features == null) throw new ArgumentNullException("input.Features");
-                    if (!input.Features.Any()) throw new ArgumentOutOfRangeException("input.Features");
+                    if (input.Stations == null) throw new ArgumentNullException("input.Stations");
+                    if (!input.Stations.Any()) throw new ArgumentOutOfRangeException("input.Stations");
+                    if (input.Offerings == null) throw new ArgumentNullException("input.Offerings");
+                    if (!input.Offerings.Any()) throw new ArgumentOutOfRangeException("input.Offerings");
                     var dataList = await db.VDownloads
-                        .Where(i => input.Locations.Contains(i.StationId))
-                        .Where(i => input.Features.Contains(i.PhenomenonOfferingId))
+                        .Where(i => input.Stations.Contains(i.StationId))
+                        .Where(i => input.Offerings.Contains(i.PhenomenonOfferingId))
                         .Where(i => i.Date >= input.StartDate)
                         .Where(i => i.Date <= input.EndDate)
                         .OrderBy(i => i.SiteName)

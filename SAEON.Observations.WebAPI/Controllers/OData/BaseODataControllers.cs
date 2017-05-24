@@ -16,7 +16,14 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     [ODataRouteName("OData")]
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {
-        protected ObservationsDbContext db = new ObservationsDbContext();
+        protected ObservationsDbContext db = null;
+
+        public BaseODataController()
+        {
+            db = new ObservationsDbContext();
+            db.Configuration.AutoDetectChangesEnabled = false;
+            db.Database.CommandTimeout = 30 * 60;
+        }
 
         protected override void Dispose(bool disposing)
         {

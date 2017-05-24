@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using SAEON.Observations.WebAPI.Filters;
@@ -15,15 +16,15 @@ using Thinktecture.IdentityModel.WebApi;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("DataQueries")]
+    [RoutePrefix("DataQuery")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    //[ResourceAuthorize("Observations.QuerySite", "DataQueries")]
-    [ClaimsAuthorization("client_id","SAEON.Observations.QuerySite")]
-    public class DataQueriesController : ApiController
+    //[ResourceAuthorize("Observations.QuerySite", "DataQuery")]
+    //[ClaimsAuthorization("client_id","SAEON.Observations.QuerySite")]
+    public class DataQueryController : ApiController
     {
         protected ObservationsDbContext db = null;
 
-        public DataQueriesController() : base()
+        public DataQueryController() : base()
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -78,13 +79,13 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 {
                     Logging.Verbose("Input: {@input}", input);
                     if (input == null) throw new ArgumentNullException("input");
-                    if (input.Locations == null) throw new ArgumentNullException("input.Locations");
-                    if (!input.Locations.Any()) throw new ArgumentOutOfRangeException("input.Locations");
-                    if (input.Features == null) throw new ArgumentNullException("input.Features");
-                    if (!input.Features.Any()) throw new ArgumentOutOfRangeException("input.Features");
+                    if (input.Stations == null) throw new ArgumentNullException("input.Stations");
+                    if (!input.Stations.Any()) throw new ArgumentOutOfRangeException("input.Stations");
+                    if (input.Offerings == null) throw new ArgumentNullException("input.Offerings");
+                    if (!input.Offerings.Any()) throw new ArgumentOutOfRangeException("input.Offerings");
                     var dataList = await db.VDownloads
-                        .Where(i => input.Locations.Contains(i.StationId))
-                        .Where(i => input.Features.Contains(i.PhenomenonOfferingId))
+                        .Where(i => input.Stations.Contains(i.StationId))
+                        .Where(i => input.Offerings.Contains(i.PhenomenonOfferingId))
                         .Where(i => i.Date >= input.StartDate)
                         .Where(i => i.Date <= input.EndDate)
                         .OrderBy(i => i.SiteName)
@@ -99,8 +100,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     string lastInstrument = null;
                     DateTime? lastDate = null;
                     var features = new List<Feature>();
-                    var result = new DataQueryOutput();
-                    result.Series.Add(new Series { ColumnName = "Date", Caption = "Date" });
+                    var output = new DataQueryOutput();
+                    output.Series.Add(new Series { ColumnName = "Date", Caption = "Date" });
                     List<ExpandoObject> rows = new List<ExpandoObject>();
                     dynamic row = null;
                     bool isNewRow = false;
@@ -146,7 +147,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                         if (!features.Any(i => i.Name == feature.Name))
                         {
                             features.Add(feature);
-                            result.Series.Add(new Series { ColumnName = feature.Name, Caption = feature.Caption, IsFeature = true });
+                            output.Series.Add(new Series { ColumnName = feature.Name, Caption = feature.Caption, IsFeature = true });
                             //Logging.Verbose("Adding {name} {caption}", col.ColumnName, col.Caption);
                         }
                         var r = row as IDictionary<string, object>;
@@ -167,22 +168,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                             }
                         }
                     }
-                    var jArray = new JArray();
-                    foreach (var r in rows)
-                    {
-                        jArray.Add(JObject.FromObject(r));
-                    }
-                    result.ResultsChartData = jArray.ToString();
-                    JObject jObject = JObject.FromObject(new
-                    {
-                        result = jArray,
-                        count = jArray.Count
-                    });
-                    result.ResultsGridData = jObject.ToString();
-                    //Logging.Verbose("GridResults: {GridResults}", result.ResultsGridData);
-                    //Logging.Verbose("ChartResults: {ChartResults}", result.ResultsChartData);
-                    Logging.Verbose("Result: Cols: {cols} Rows: {rows}", result.Series.Count, rows.Count);
-                    return result;
+                    output.Data.AddRange(rows);
+                    //Logging.Verbose("Data: {Data}", result.Data);
+                    Logging.Verbose("Result: Cols: {cols} Rows: {rows}", output.Series.Count, rows.Count);
+                    return output;
                 }
                 catch (Exception ex)
                 {

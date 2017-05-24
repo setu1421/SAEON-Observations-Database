@@ -17,29 +17,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
 
     [Authorize]
-    public abstract class BaseApiController<TEntity> : ApiController where TEntity : BaseEntity
+    public abstract class BaseApiController<TEntity> : BaseController where TEntity : BaseEntity
     {
-        protected ObservationsDbContext db = null;
-
-        public BaseApiController() : base()
-        {
-            db = new ObservationsDbContext();
-            db.Configuration.AutoDetectChangesEnabled = false;
-
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (db != null)
-                {
-                    db.Dispose();
-                }
-            }
-            base.Dispose(disposing);
-        }
-
         /// <summary>
         /// Overwrite to filter entities
         /// </summary>

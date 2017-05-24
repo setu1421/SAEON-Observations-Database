@@ -24,7 +24,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 try
                 {
                     Logging.Verbose("Request.Uri: {uri}", Request.RequestUri);
-                    Logging.Verbose("QueryString: {querystring}", string.Join(", ", Request.GetQueryNameValuePairs().Select(kv => $"{kv.Key}: {kv.Value}")));
+                    //Logging.Verbose("QueryString: {querystring}", string.Join(", ", Request.GetQueryNameValuePairs().Select(kv => $"{kv.Key}: {kv.Value}")));
                     return FeaturesHelper.GetFeatures(db);
                 }
                 catch (Exception ex)

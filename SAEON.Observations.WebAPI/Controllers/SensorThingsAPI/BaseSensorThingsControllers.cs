@@ -15,7 +15,14 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
     [ODataRouteName("SensorThings")]
     public class BaseSensorThingsControllers<TEntity> : ODataController where TEntity : BaseSensorThingEntity
     {
-        protected ObservationsDbContext db = new ObservationsDbContext();
+        protected ObservationsDbContext db = null;
+
+        public BaseSensorThingsControllers()
+        {
+            db = new ObservationsDbContext();
+            db.Configuration.AutoDetectChangesEnabled = false;
+            db.Database.CommandTimeout = 30 * 60;
+        }
 
         protected override void Dispose(bool disposing)
         {
