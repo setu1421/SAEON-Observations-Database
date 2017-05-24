@@ -93,7 +93,3 @@
        [dbo].[vObservationsList] (View)
        [dbo].[vObservationRoles] (View)
        [dbo].[progress_Status_Raw] (Procedure)
-
-The source's object [Documents] is different than the target's version of the object but the target object will not be updated.
-The object [Documents] already exists in database with a different definition and will not be altered.
-

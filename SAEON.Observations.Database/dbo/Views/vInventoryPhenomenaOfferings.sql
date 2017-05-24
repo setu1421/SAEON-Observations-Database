@@ -1,5 +1,5 @@
 ﻿--> Added 20170523 2.0.32 TimPN
-CREATE VIEW [dbo].[vInventoryPhenomena]
+CREATE VIEW [dbo].[vInventoryPhenomenaOfferings]
 AS
 Select
   Phenomenon.Name Phenomenon, Offering.Name Offering, Status.Name Status, count(*) Count

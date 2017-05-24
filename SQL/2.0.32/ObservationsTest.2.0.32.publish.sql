@@ -890,7 +890,7 @@ GO
 CREATE VIEW [dbo].[vInventoryInstruments]
 AS 
 Select
-  Instrument.Name Instrument, Status.Name Status, Count(*) Count
+  Instrument.Name, Status.Name Status, Count(*) Count
 from
   Observation
   left join Status
@@ -925,7 +925,7 @@ GO
 CREATE VIEW [dbo].[vInventoryOrganisations]
 AS 
 Select
-  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Organisation,
+  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Name,
   Status.Name Status, Count(*) Count
 from
   Observation
@@ -978,7 +978,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Creating [dbo].[vInventoryPhenomena]...';
+PRINT N'Creating [dbo].[vInventoryPhenomenaOfferings]...';
 
 
 GO
@@ -987,10 +987,10 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 --> Added 20170523 2.0.32 TimPN
-CREATE VIEW [dbo].[vInventoryPhenomena]
+CREATE VIEW [dbo].[vInventoryPhenomenaOfferings]
 AS
 Select
-  Phenomenon.Name Phenomenon, Offering.Name Offering, Status.Name Status, count(*) Count
+  Phenomenon.Name, Offering.Name Offering, Status.Name Status, count(*) Count
 from  
   Observation
   left join Status
@@ -1091,13 +1091,13 @@ GO
 CREATE VIEW [dbo].[vInventoryYears]
 AS 
 Select
-  YEAR(Observation.ValueDate) Year, Status.Name Status, Count(*) Count
+  Observation.ValueYear Year, Status.Name Status, Count(*) Count
 from
   Observation
   left join Status
     on (Observation.StatusID = Status.ID)
 group by
-  YEAR(Observation.ValueDate), Status.Name
+  Observation.ValueYear, Status.Name
 --< Added 20170523 2.0.32 TimPN
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;

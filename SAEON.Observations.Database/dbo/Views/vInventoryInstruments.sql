@@ -2,7 +2,7 @@
 CREATE VIEW [dbo].[vInventoryInstruments]
 AS 
 Select
-  Instrument.Name Instrument, Status.Name Status, Count(*) Count
+  Instrument.Name, Status.Name Status, Count(*) Count
 from
   Observation
   left join Status

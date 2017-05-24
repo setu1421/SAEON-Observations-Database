@@ -2,7 +2,7 @@
 CREATE VIEW [dbo].[vInventoryOrganisations]
 AS 
 Select
-  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Organisation,
+  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Name,
   Status.Name Status, Count(*) Count
 from
   Observation

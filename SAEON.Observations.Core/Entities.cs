@@ -141,8 +141,8 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// <summary>
         /// Description of the Phenomenon
- 
-            /// </summary>
+
+        /// </summary>
         [StringLength(5000)]
         public string Description { get; set; }
         /// <summary>
@@ -425,7 +425,7 @@ namespace SAEON.Observations.Core.Entities
     /// Obvservation for Download entity
     /// </summary>
     [Table("vDownloads")]
-    public class VDownload
+    public class Download
     {
         [Key]
         public int Id { get; set; }
@@ -475,6 +475,86 @@ namespace SAEON.Observations.Core.Entities
         public Guid? CorrelationId { get; set; }
     }
 
+    /// <summary>
+    /// Inventory Totals
+    /// </summary>
+    [Table("vInventoryTotals")]
+    public class InventoryTotal
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Status { get; set; }
+        public int Count { get; set; }
+    }
+
+    /// <summary>
+    /// Inventory Stations
+    /// </summary>
+    [Table("vInventoryStations")]
+    public class InventoryStation
+    {
+        [Key]
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public string Status { get; set; }
+        public int Count { get; set; }
+    }
+
+    /// <summary>
+    /// Inventory Phenomena Offerings
+    /// </summary>
+    [Table("vInventoryPhenomenaOfferings")]
+    public class InventoryPhenomenonOffering
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Phenomenon { get; set; }
+        public string Offering { get; set; }
+        public string Status { get; set; }
+        public int Count { get; set; }
+    }
+
+    /// <summary>
+    /// Inventory Instruments
+    /// </summary>
+    [Table("vInventoryInstruments")]
+    public class InventoryInstrument
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Status { get; set; }
+        public int Count { get; set; }
+    }
+
+    /// <summary>
+    /// Inventory Years
+    /// </summary>
+    [Table("vInventoryYears")]
+    public class InventoryYear
+    {
+        [Key]
+        public int Id { get; set; }
+        public int Year { get; set; }
+        public string Status { get; set; }
+        public int Count { get; set; }
+    }
+
+    /// <summary>
+    /// Inventory Organisations
+    /// </summary>
+    [Table("vInventoryOrganisations")]
+    public class InventoryOrganisation
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Status { get; set; }
+        public int Count { get; set; }
+    }
+
     public class ObservationsDbContext : DbContext
     {
         public ObservationsDbContext() : base("Observations")
@@ -485,6 +565,12 @@ namespace SAEON.Observations.Core.Entities
         }
 
         public DbSet<Instrument> Instruments { get; set; }
+        public DbSet<InventoryTotal> InventoryTotals { get; set; }
+        public DbSet<InventoryStation> InventoryStations { get; set; }
+        public DbSet<InventoryInstrument> InventoryInstruments { get; set; }
+        public DbSet<InventoryPhenomenonOffering> InventoryPhenomenaOfferings { get; set; }
+        public DbSet<InventoryYear> InventoryYears { get; set; }
+        public DbSet<InventoryOrganisation> InventoryOrganisations { get; set; }
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }
@@ -495,7 +581,7 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
-        public DbSet<VDownload> VDownloads { get; set; }
+        public DbSet<Download> Downloads { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

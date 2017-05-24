@@ -552,7 +552,7 @@
     <Build Include="Scripts\ObservationsSequence.sql" />
     <Build Include="dbo\Views\vInventoryTotals.sql" />
     <Build Include="dbo\Views\vInventoryStations.sql" />
-    <Build Include="dbo\Views\vInventoryPhenomena.sql" />
+    <Build Include="dbo\Views\vInventoryPhenomenaOfferings.sql" />
     <Build Include="dbo\Views\vInventoryInstruments.sql" />
     <Build Include="dbo\Views\vInventoryYears.sql" />
     <Build Include="dbo\Views\vInventoryOrganisations.sql" />
