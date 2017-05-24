@@ -6,11 +6,14 @@
 <script>
     var markers = [];
     var map;
-    function UpdateMap() {
+    function initMap() {
         map = new google.maps.Map(document.getElementById('mapLocations'), {
             zoom: 5,
             center: { lat: -28.7238579, lng: 24.6531662 }
         });
+        UpdateMap(true);
+    }
+    function UpdateMap(isInit) {
         $.getJSON("/Query/GetMapPoints")
             .done(function (json) {
                 for (var i = 0; i < markers.length; i++) {
@@ -35,13 +38,15 @@
                         marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
                     }
                 }
-                map.fitBounds(bounds);
+                if (isInit) {
+                    map.fitBounds(bounds);
+                }
             })
             .fail(function () { alert('Error in GetMapPoints'); });
     }
 </script>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcCAczkNZZUu5DfM78-7cpBrAnwyEy_Tg&callback=UpdateMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcCAczkNZZUu5DfM78-7cpBrAnwyEy_Tg&callback=initMap">
 </script>
 
 

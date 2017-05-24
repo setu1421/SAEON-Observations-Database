@@ -7,7 +7,7 @@
     @Html.EJ().WaitingPopup("waiting").Text("Please wait...").ShowOnInit(false)
     <div class="row">
         <div class="col-md-12">
-            @{Html.EJ().Tab("InventoryTabs").Items(tabs =>
+            @(Html.EJ().Tab("InventoryTabs").Items(tabs =>
                 {
                 tabs.Add().ID("LocationsTab").Text("Where").ContentTemplate(
                     @<div class="row">
@@ -39,7 +39,8 @@
                             </div>
                         </div>);
                 })
-            .Render();}
+                .ClientSideEvents(ev => ev.ItemActive("onTabItemActive"))
+                )
         </div>
     </div>
     <div class="row ButtonRow">
@@ -59,6 +60,9 @@
     function HideWaiting() {
         var wp = $("#waiting").data("ejWaitingPopup");
         wp.hide();
+    }
+    function onTabItemActive() {
+        alert("Active");
     }
 </script>
 <style type="text/css" class="cssStyles">
