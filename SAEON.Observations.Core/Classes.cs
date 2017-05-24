@@ -71,14 +71,57 @@ namespace SAEON.Observations.Core
 
     public class InventoryInput
     {
+        public List<Guid> Stations { get; set; }
+        public List<Guid> Offerings { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public Guid? UserQuery { get; set; }
         public bool? Full { get; set; }
         public bool? Statistics { get; set; }
     }
 
-    public class TotalItem
+    public class InventoryTotalItem
+    {
+        public string Status { get; set; }
+        public int Count { get; set; }
+    }
+
+    public class InventoryStationItem
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public string Status { get; set; }
+        public int Count { get; set; }
+    }
+
+    public class InventoryPhenomenonOfferingItem
+    {
+        public string Phenomenon { get; set; }
+        public string Offering { get; set; }
+        public string Status { get; set; }
+        public int Count { get; set; }
+    }
+
+    public class InventoryInstrumentItem
     {
         public string Name { get; set; }
+        public string Status { get; set; }
+        public int Count { get; set; }
+    }
+
+    public class InventoryYearItem
+    {
+        public int Year { get; set; }
+        public string Status { get; set; }
+        public int Count { get; set; }
+    }
+
+    public class InventoryOrganisationItem
+    {
+        public string Name { get; set; }
+        public string Status { get; set; }
         public int Count { get; set; }
     }
 
@@ -86,6 +129,11 @@ namespace SAEON.Observations.Core
     {
         public bool Success { get; set; }
         public List<string> ErrorMessage { get; private set; } = new List<string>();
-        public List<TotalItem> TotalRecords { get; private set; } = new List<TotalItem>();
+        public List<InventoryTotalItem> TotalRecords { get; private set; } = new List<InventoryTotalItem>();
+        public List<InventoryStationItem> Stations { get; private set; } = new List<InventoryStationItem>();
+        public List<InventoryInstrumentItem> Instruments { get; private set; } = new List<InventoryInstrumentItem>();
+        public List<InventoryPhenomenonOfferingItem> PhenomenaOfferings { get; private set; } = new List<InventoryPhenomenonOfferingItem>();
+        public List<InventoryYearItem> Years { get; private set; } = new List<InventoryYearItem>();
+        public List<InventoryOrganisationItem> Organisations { get; private set; } = new List<InventoryOrganisationItem>();
     }
 }

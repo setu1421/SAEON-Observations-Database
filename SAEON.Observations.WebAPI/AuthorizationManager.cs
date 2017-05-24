@@ -16,27 +16,28 @@ namespace SAEON.Observations.WebAPI
             {
                 Logging.Verbose("Resource: {resource}", context.Resource.First().Value);
                 //Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => i.Value)));
+                if (!context.Principal.Identity.IsAuthenticated) return Nok();
                 switch (context.Resource.First().Value)
                 {
-                    case "DataQueries":
-                    case "DataDownloads":
-                        return AuthorizeQuerySite(context);
+                    case "DataGaps":
+                    case "Inventory":
+                        return AuthorizeAdmin(context);
                     default:
                         return Nok();
                 }
             }
         }
 
-        private Task<bool> AuthorizeQuerySite(ResourceAuthorizationContext context)
+        private Task<bool> AuthorizeAdmin(ResourceAuthorizationContext context)
         {
             using (Logging.MethodCall(GetType()))
             {
                 Logging.Verbose("Action: {action}", context.Action.First().Value);
-                //Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => i.Value)));
+                Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => i.Value)));
                 switch (context.Action.First().Value)
                 {
-                    case "Observations.QuerySite":
-                        return Eval(context.Principal.HasClaim("role", "Observations.QuerySite"));
+                    case "Observations.Admin":
+                        return Eval(context.Principal.HasClaim("role", "Observations.Admin"));
                     default:
                         return Nok();
                 }

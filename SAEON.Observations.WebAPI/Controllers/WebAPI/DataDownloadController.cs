@@ -39,7 +39,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     if (!input.Stations.Any()) throw new ArgumentOutOfRangeException("input.Stations");
                     if (input.Offerings == null) throw new ArgumentNullException("input.Offerings");
                     if (!input.Offerings.Any()) throw new ArgumentOutOfRangeException("input.Offerings");
-                    var dataList = await db.VDownloads
+                    var dataList = await db.Downloads
                         .Where(i => input.Stations.Contains(i.StationId))
                         .Where(i => input.Offerings.Contains(i.PhenomenonOfferingId))
                         .Where(i => i.Date >= input.StartDate)

@@ -1,6 +1,7 @@
 ﻿using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Claims;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -16,29 +17,12 @@ namespace SAEON.Observations.QuerySite
             {
                 Logging.Verbose("Resource: {resource}", context.Resource.First().Value);
                 //Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => i.Value)));
+                if (!context.Principal.Identity.IsAuthenticated) return Nok();
                 switch (context.Resource.First().Value)
                 {
-                    case "DataQueries":
-                    case "DataDownloads":
-                        return AuthorizeQuerySite(context);
                     case "DataGaps":
+                    case "Inventory":
                         return AuthorizeAdmin(context);
-                    default:
-                        return Nok();
-                }
-            }
-        }
-
-        private Task<bool> AuthorizeQuerySite(ResourceAuthorizationContext context)
-        {
-            using (Logging.MethodCall(GetType()))
-            {
-                Logging.Verbose("Action: {action}", context.Action.First().Value);
-                //Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => i.Value)));
-                switch (context.Action.First().Value)
-                {
-                    case "Observations.QuerySite":
-                        return Eval(context.Principal.HasClaim("role", "Observations.QuerySite"));
                     default:
                         return Nok();
                 }
@@ -50,10 +34,10 @@ namespace SAEON.Observations.QuerySite
             using (Logging.MethodCall(GetType()))
             {
                 Logging.Verbose("Action: {action}", context.Action.First().Value);
-                //Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => i.Value)));
+                Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => $"{i.Type}: {i.Value}")));
                 switch (context.Action.First().Value)
                 {
-                    case "Observations.DataGaps":
+                    case "Observations.Admin":
                         return Eval(context.Principal.HasClaim("role", "Observations.Admin"));
                     default:
                         return Nok();

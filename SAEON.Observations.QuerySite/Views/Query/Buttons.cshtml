@@ -233,38 +233,21 @@
     }
     function onSearchClick() {
         ShowWaiting();
-        var startDate = $("#StartDate").ejDatePicker("instance")._dateValue;
-        var endDate = $("#EndDate").ejDatePicker("instance")._dateValue;
-        $.ajax({
-            url: "/Query/UpdateFilters",
-            data: JSON.stringify({
-                StartDate: startDate,
-                EndDate: endDate
-            }),
-            async: false,
-            type: "POST",
-            contentType: "application/json",
-            success: function () {
-                $.get("/Query/DataQuery")
-                    .done(function () {
-                        $("#PartialTable").load("/Query/GetTableHtml", function () {
-                            $("#PartialCards").load("/Query/GetCardsHtml", function () {
-                                $("#PartialChart").load("/Query/GetChartHtml", function () {
-                                    ShowResults();
-                                    EnableButtons();
-                                    HideWaiting();
-                                });
-                            });
+        $.get("/Query/GetData")
+            .done(function () {
+                $("#PartialTable").load("/Query/GetTableHtml", function () {
+                    $("#PartialCards").load("/Query/GetCardsHtml", function () {
+                        $("#PartialChart").load("/Query/GetChartHtml", function () {
+                            ShowResults();
+                            EnableButtons();
+                            HideWaiting();
                         });
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                        ErrorInFunc("Error in DataQuery Status: " + textStatus + " Error: " + errorThrown)
-                    })
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                ErrorInFunc("Error in UpdateFilters Status: " + textStatus + " Error: " + errorThrown);
-            }
-        })
+                    });
+                });
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                ErrorInFunc("Error in GetData Status: " + textStatus + " Error: " + errorThrown)
+            });
     }
     function onDownloadClick() {
 
@@ -274,9 +257,6 @@
         alert(msg);
     }
     function EnableButtons() {
-        $('#StationsMapTab').click(function (e) {
-            UpdateMap();
-        });
         var btnLoadQuery = $("#btnLoadQuery").data("ejButton");
         var btnSaveQuery = $("#btnSaveQuery").data("ejButton");
         var btnSearch = $("#btnSearch").data("ejButton");

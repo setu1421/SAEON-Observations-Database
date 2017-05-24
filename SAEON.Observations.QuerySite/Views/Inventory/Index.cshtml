@@ -1,0 +1,79 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model InventoryModel
+@{
+    ViewBag.Title = "Inventory";
+}
+<div id="waiting">
+    @Html.EJ().WaitingPopup("waiting").Text("Please wait...").ShowOnInit(false)
+    <div class="row">
+        <div class="col-md-12">
+            @{Html.EJ().Tab("InventoryTabs").Items(tabs =>
+                {
+                tabs.Add().ID("LocationsTab").Text("Where").ContentTemplate(
+                    @<div class="row">
+                        <div class="col-md-6" id="PartialLocations">
+                            @Html.Partial("Locations", Model)
+                        </div>
+                        <div class="col-md-6" id="PartialSelectedLocations">
+                            @Html.Partial("SelectedLocations", Model)
+                        </div>
+                    </div>);
+                    tabs.Add().ID("FeaturesTab").Text("What").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md-6" id="PartialFeatures">
+                                @Html.Partial("Features", Model)
+                            </div>
+                            <div class="col-md-6" id="PartialSelectedFeatures">
+                                @Html.Partial("SelectedFeatures", Model)
+                            </div>
+                        </div>);
+                    tabs.Add().ID("FiltersTab").Text("When").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md-12" id="PartialFilters">
+                                @Html.Partial("Filters", Model)
+                            </div>
+                        </div>);
+                    tabs.Add().ID("ResultsTab").Text("Results").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md-12" id="PartialResults">
+                            </div>
+                        </div>);
+                })
+            .Render();}
+        </div>
+    </div>
+    <div class="row ButtonRow">
+        <div class="col-md-12" id="PartialButtons">
+            @Html.Partial("Buttons", Model)
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#ResultsTab").addClass("hidden");
+    });
+    function ShowWaiting() {
+        var wp = $("#waiting").data("ejWaitingPopup");
+        wp.show();
+    }
+    function HideWaiting() {
+        var wp = $("#waiting").data("ejWaitingPopup");
+        wp.hide();
+    }
+</script>
+<style type="text/css" class="cssStyles">
+    #target {
+        margin: 0 auto;
+    }
+
+    #target_WaitingPopup .e-image {
+        display: block;
+        height: 100px;
+    }
+
+    #popup {
+        height: auto;
+        width: auto;
+        margin-top: 100px;
+    }
+</style>

@@ -1,5 +1,5 @@
 ﻿@using SAEON.Observations.QuerySite.Models
-@model QueryModel
+@model InventoryModel
 <div class="row">
     <div class="col-md-2">
         @Html.LabelFor(i => i.StartDate)
@@ -21,7 +21,7 @@
         var startDate = $("#StartDate").ejDatePicker("instance")._dateValue;
         var endDate = $("#EndDate").ejDatePicker("instance")._dateValue;
         $.ajax({
-            url: "/Query/UpdateFilters",
+            url: "/Inventory/UpdateFilters",
             data: JSON.stringify({
                 StartDate: startDate,
                 EndDate: endDate

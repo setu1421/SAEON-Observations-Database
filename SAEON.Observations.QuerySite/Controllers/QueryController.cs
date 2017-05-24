@@ -18,29 +18,6 @@ using System.Web.Script.Serialization;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
-    public class ExpandoJSONConverter : JavaScriptConverter
-    {
-        public override object Deserialize(IDictionary<string, object> dictionary, Type type, JavaScriptSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-        public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
-        {
-            var result = new Dictionary<string, object>();
-            var dictionary = obj as IDictionary<string, object>;
-            foreach (var item in dictionary)
-                result.Add(item.Key, item.Value);
-            return result;
-        }
-        public override IEnumerable<Type> SupportedTypes
-        {
-            get
-            {
-                return new ReadOnlyCollection<Type>(new Type[] { typeof(System.Dynamic.ExpandoObject) });
-            }
-        }
-    }
-
     [Authorize]
     public class QueryController : BaseWebApiController
     {
@@ -465,9 +442,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
         #endregion
 
-        #region DataQuery
+        #region Data
         [HttpGet]
-        public async Task<EmptyResult> DataQuery()
+        public async Task<EmptyResult> GetData()
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -482,10 +459,10 @@ namespace SAEON.Observations.QuerySite.Controllers
                         StartDate = sessionModel.StartDate,
                         EndDate = sessionModel.EndDate
                     };
-                    Logging.Verbose("DataQueryInput: {@input}", input);
-                    var results = (await Post<DataQueryInput, DataQueryOutput>("DataQueries", input));
+                    Logging.Verbose("Input: {@input}", input);
+                    var results = (await Post<DataQueryInput, DataQueryOutput>("DataQuery", input));
                     //Logging.Verbose("Results: {@results}", results);
-                    sessionModel.QueryResults = results;
+                    sessionModel.Results = results;
                     SessionModel = sessionModel;
                     //Logging.Verbose("Model: {@model}", model);
                     return null;
@@ -508,9 +485,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var sessionModel = SessionModel;
-                    int count = sessionModel.QueryResults.Data.Count;
+                    int count = sessionModel.Results.Data.Count;
                     DataOperations operation = new DataOperations();
-                    var data = operation.Execute(sessionModel.QueryResults.Data, dm);
+                    var data = operation.Execute(sessionModel.Results.Data, dm);
                     return Content(JsonConvert.SerializeObject(new { result = data, count = count }), "application/json");
                 }
                 catch (Exception ex)
@@ -571,7 +548,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var sessionModel = SessionModel;
-                    return Content(JsonConvert.SerializeObject(sessionModel.QueryResults.Data), "application/json");
+                    return Content(JsonConvert.SerializeObject(sessionModel.Results.Data), "application/json");
                 }
                 catch (Exception ex)
                 {
@@ -661,7 +638,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     // Filters
                     sessionModel.StartDate = input.StartDate;
                     sessionModel.EndDate = input.EndDate;
-                    sessionModel.QueryResults = new DataQueryOutput();
+                    sessionModel.Results = new DataQueryOutput();
                     SessionModel = sessionModel;
                     //Logging.Verbose("Model: {@model}", model);
                     return null;
