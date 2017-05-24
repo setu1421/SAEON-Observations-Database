@@ -16,6 +16,7 @@
         .Title("Load query")
         .ShowOnInit(false)
         .Width("auto")
+        .ClientSideEvents(ev => ev.Close("onLoadQueryClose"))
         .ContentTemplate(
         @<text>
             <div class="row">
@@ -68,6 +69,7 @@
         .Title("Save query")
         .ShowOnInit(false)
         .Width("auto")
+        .ClientSideEvents(ev => ev.Close("onSaveQueryClose"))
         .ContentTemplate(
         @<text>
             <div class="row">
@@ -161,9 +163,9 @@
                             $("#PartialSelectedFeatures").load("/Query/GetSelectedFeaturesHtml", function () {
                                 $("#PartialFilters").load("/Query/GetFiltersHtml", function () {
                                     UpdateMap();
-                                    $("PartialResultsGrid").text("");
-                                    $("PartialResultsCards").text("");
-                                    $("PartialResultsChart").text("");
+                                    $("PartialTable").text("");
+                                    $("PartialCards").text("");
+                                    $("PartialChart").text("");
                                     HideResults();
                                     $("#dialogLoadQuery").ejDialog("close");
                                     HideWaiting();
@@ -178,6 +180,11 @@
                 ErrorInFunc("Error in onLoadClick Status: " + textStatus + " Error: " + errorThrown);
             }
         });
+    }
+    function onLoadQueryClose()
+    {
+        HideWaiting();
+        EnableButtons();
     }
     function onSaveQueryClick() {
         DisableButtons();
@@ -220,6 +227,10 @@
                 }
             });
     }
+    function onSaveQueryClose() {
+        HideWaiting();
+        EnableButtons();
+    }
     function onSearchClick() {
         ShowWaiting();
         var startDate = $("#StartDate").ejDatePicker("instance")._dateValue;
@@ -236,9 +247,9 @@
             success: function () {
                 $.get("/Query/DataQuery")
                     .done(function () {
-                        $("#PartialResultsGrid").load("/Query/GetResultsGridHtml", function () {
-                            $("#PartialResultsCards").load("/Query/GetResultsCardsHtml", function () {
-                                $("#PartialResultsChart").load("/Query/GetResultsChartHtml", function () {
+                        $("#PartialTable").load("/Query/GetTableHtml", function () {
+                            $("#PartialCards").load("/Query/GetCardsHtml", function () {
+                                $("#PartialChart").load("/Query/GetChartHtml", function () {
                                     ShowResults();
                                     EnableButtons();
                                     HideWaiting();
@@ -263,6 +274,9 @@
         alert(msg);
     }
     function EnableButtons() {
+        $('#StationsMapTab').click(function (e) {
+            UpdateMap();
+        });
         var btnLoadQuery = $("#btnLoadQuery").data("ejButton");
         var btnSaveQuery = $("#btnSaveQuery").data("ejButton");
         var btnSearch = $("#btnSearch").data("ejButton");
@@ -309,13 +323,13 @@
         btnDownload.disable();
     }
     function ShowResults() {
-        $("#ResultsGridTab").removeClass("hidden");
-        $("#ResultsCardsTab").removeClass("hidden");
-        $("#ResultsChartTab").removeClass("hidden");
+        $("#TableTab").removeClass("hidden");
+        $("#CardsTab").removeClass("hidden");
+        $("#ChartTab").removeClass("hidden");
     }
     function HideResults() {
-        $("#ResultsGridTab").addClass("hidden");
-        $("#ResultsCardsTab").addClass("hidden");
-        $("#ResultsChartTab").addClass("hidden");
+        $("#TableTab").addClass("hidden");
+        $("#CardsTab").addClass("hidden");
+        $("#ChartTab").addClass("hidden");
     }
 </script>

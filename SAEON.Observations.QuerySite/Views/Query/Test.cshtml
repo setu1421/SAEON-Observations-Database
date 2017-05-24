@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Test";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @{Html.EJ().Splitter("outterSplitter").PaneProperties(p =>
+
+            {
+
+            p.Add().ContentTemplate(@<div>Left</div>).PaneSize("200");
+
+            p.Add().ContentTemplate(@<div>Right</div>).Collapsible(false);
+            }).Height("400").Width("100%").EnableAutoResize(true).Render();}
+    </div>
+</div>

@@ -11,7 +11,7 @@
         {
             sr.Name(s.Caption)
             .Type(SeriesType.Line)
-            .DataSource(ds => ds.URL("/Query/GetResultsChartData").Adaptor(AdaptorType.WebApiAdaptor))
+            .DataSource(ds => ds.URL("/Query/GetChartData"))
             .XName("Date")
             .YName(s.ColumnName)
             .EmptyPointSettings(e => e.Visible(true).DisplayMode(ChartEmptyPointMode.Gap))
@@ -19,13 +19,14 @@
         }
     })
     .Legend(lgn => lgn.Visible(true))
-    .Size(sz => sz.Width("1000px").Height("800px"))
+    .Size(sz => sz.Width("1000").Height("400"))
+    //.EnableCanvasRendering(true)
+    .IsResponsive(true)
     .Zooming(zm => zm
         .Enable(true)
         .EnableMouseWheel(true)
         .EnablePinching(true)
         .EnableScrollbar(true)
     )
-    .IsResponsive(true)
 )
 @Html.EJ().ScriptManager()

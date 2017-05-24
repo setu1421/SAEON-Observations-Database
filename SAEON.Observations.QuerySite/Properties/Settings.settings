@@ -8,5 +8,8 @@
     <Setting Name="WebAPIUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://localhost:63378</Value>
     </Setting>
+    <Setting Name="QuerySiteUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://localhost:50160</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

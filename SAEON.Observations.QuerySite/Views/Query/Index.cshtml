@@ -7,57 +7,71 @@
     @Html.EJ().WaitingPopup("waiting").Text("Please wait...").ShowOnInit(false)
     <div class="row">
         <div class="col-md-12">
-            @{Html.EJ().Tab("QueryTabs").Items(tabs =>
+            @{Html.EJ().Splitter("splitterQuery").Height("500").Width("100%").EnableAutoResize(true)
+                .PaneProperties(p =>
                 {
-                tabs.Add().ID("LocationsTab").Text("Locations").ContentTemplate(
-                    @<div class="row">
-                        <div class="col-md-6" id="PartialLocations">
-                            @Html.Partial("Locations", Model)
-                        </div>
-                        <div class="col-md-6" id="PartialSelectedLocations">
-                            @Html.Partial("SelectedLocations", Model)
-                        </div>
-                    </div>);
-                    tabs.Add().ID("LocationsMapTab").Text("Map").ContentTemplate(
-                        @<div class="row">
-                            <div class="col-md-12" id="PartialLocationsMap">
-                                @Html.Partial("LocationsMap", Model)
-                            </div>
-                        </div>);
-                    tabs.Add().ID("FeaturesTab").Text("Features").ContentTemplate(
-                        @<div class="row">
-                            <div class="col-md-6" id="PartialFeatures">
-                                @Html.Partial("Features", Model)
-                            </div>
-                            <div class="col-md-6" id="PartialSelectedFeatures">
-                                @Html.Partial("SelectedFeatures", Model)
-                            </div>
-                        </div>);
-                    tabs.Add().ID("FiltersTab").Text("Filters").ContentTemplate(
-                        @<div class="row">
-                            <div class="col-md-12" id="PartialFilters">
-                                @Html.Partial("Filters", Model)
-                            </div>
-                        </div>);
-                    tabs.Add().ID("ResultsGridTab").Text("Results").ContentTemplate(
-                        @<div class="row">
-                            <div class="col-md-12" id="PartialResultsGrid">
-                            </div>
-                        </div>);
-                    tabs.Add().ID("ResultsCardsTab").Text("Cards").ContentTemplate(
-                        @<div class="row">
-                            <div class="col-md-12" id="PartialResultsCards">
-                            </div>
-                        </div>);
-                    tabs.Add().ID("ResultsChartTab").Text("Chart").ContentTemplate(
-                        @<div class="row">
-                            <div class="col-md-12" id="PartialResultsChart">
-                            </div>
-                        </div>);
-                })
-            .Render();}
+                    p.Add().ContentTemplate(@<div>@FiltersTab()</div>).PaneSize("50%").Collapsible(true);
+                    p.Add().ContentTemplate(@<div>@ResultsTab()</div>).Collapsible(false).MinSize("300").PaneSize("50%");
+                }).Render();}
         </div>
     </div>
+    @helper FiltersTab()
+    {
+    @Html.EJ().Tab("FiltersTabs").Items(tabs =>
+{
+tabs.Add().ID("LocationsTab").Text("Where").ContentTemplate(
+    @<div class="row">
+        <div class="col-md-6" id="PartialLocations">
+            @Html.Partial("Locations", Model)
+        </div>
+        <div class="col-md-6" id="PartialSelectedLocations">
+            @Html.Partial("SelectedLocations", Model)
+        </div>
+    </div>);
+tabs.Add().ID("FeaturesTab").Text("What").ContentTemplate(
+    @<div class="row">
+        <div class="col-md-6" id="PartialFeatures">
+            @Html.Partial("Features", Model)
+        </div>
+        <div class="col-md-6" id="PartialSelectedFeatures">
+            @Html.Partial("SelectedFeatures", Model)
+        </div>
+    </div>);
+tabs.Add().ID("FiltersTab").Text("When").ContentTemplate(
+    @<div class="row">
+        <div class="col-md-12" id="PartialFilters">
+            @Html.Partial("Filters", Model)
+        </div>
+    </div>);
+})
+}
+    @helper ResultsTab()
+    {
+    @Html.EJ().Tab("ResultsTabs").Items(tabs =>
+{
+tabs.Add().ID("StationsMapTab").Text("Stations").ContentTemplate(
+    @<div class="row">
+        <div class="col-md-12" id="PartialStationsMap">
+            @Html.Partial("StationsMap", Model)
+        </div>
+    </div>);
+tabs.Add().ID("TableTab").Text("Table").ContentTemplate(
+    @<div class="row">
+        <div class="col-md-12" id="PartialTable">
+        </div>
+    </div>);
+tabs.Add().ID("CardsTab").Text("Cards").ContentTemplate(
+    @<div class="row">
+        <div class="col-md-12" id="PartialCards">
+        </div>
+    </div>);
+tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
+    @<div class="row">
+        <div class="col-md-12" id="PartialChart">
+        </div>
+    </div>);
+})
+}
     <div class="row ButtonRow">
         <div class="col-md-12" id="PartialButtons">
             @Html.Partial("Buttons", Model)
@@ -66,9 +80,12 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        $("#ResultsGridTab").addClass("hidden");
-        $("#ResultsCardsTab").addClass("hidden");
-        $("#ResultsChartTab").addClass("hidden");
+        $("#TableTab").addClass("hidden");
+        $("#CardsTab").addClass("hidden");
+        $("#ChartTab").addClass("hidden");
+        $('#StationsMapTab').click(function (e) {
+            UpdateMap();
+        });
     });
     function ShowWaiting() {
         var wp = $("#waiting").data("ejWaitingPopup");

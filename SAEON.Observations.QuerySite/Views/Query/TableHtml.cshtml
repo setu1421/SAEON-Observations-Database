@@ -1,7 +1,8 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model QueryModel
 @(Html.EJ().Grid<object>("gridResults")
-    .Datasource(ds => ds.URL("/Query/GetResultsGridData").Adaptor(AdaptorType.WebApiAdaptor))
+    .Datasource(ds => ds.URL("/Query/GetTableData").Adaptor(AdaptorType.UrlAdaptor))
+    .IsResponsive(true)
     .AllowPaging()
     .PageSettings(p => p.PageSize(50))
     .AllowResizing()

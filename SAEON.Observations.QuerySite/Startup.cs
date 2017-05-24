@@ -43,7 +43,7 @@ namespace SAEON.Observations.QuerySite
                         Scope = "openid profile roles SAEON.Observations.WebAPI",
                         //ResponseType = "code id_token token",
                         ResponseType = "id_token token code",
-                        RedirectUri = "http://localhost:50160/",
+                        RedirectUri = Properties.Settings.Default.QuerySiteUrl,
                         //TokenValidationParameters = new TokenValidationParameters
                         //{
                         //    NameClaimType = "name",

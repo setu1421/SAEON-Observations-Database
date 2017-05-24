@@ -30,6 +30,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     using (var client = new HttpClient())
                     {
+                        client.Timeout = TimeSpan.FromMinutes(30);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                         var user = User as ClaimsPrincipal;
@@ -40,7 +41,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<IEnumerable<TEntity>>();
-                        Logging.Verbose("Data: {data}", data);
+                        //Logging.Verbose("Data: {data}", data);
                         return View(data);
                     }
                 }
@@ -78,7 +79,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
-                        Logging.Verbose("Data: {data}", data);
+                        //Logging.Verbose("Data: {data}", data);
                         return View(data);
                     }
                 }
