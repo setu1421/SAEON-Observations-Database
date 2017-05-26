@@ -1,4 +1,7 @@
-﻿using SAEON.Observations.Core;
+﻿using Newtonsoft.Json;
+using SAEON.Observations.Core;
+using Syncfusion.JavaScript;
+using Syncfusion.JavaScript.DataSources;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -82,6 +85,23 @@ namespace SAEON.Observations.QuerySite.Controllers
                     throw;
                 }
             }
+        }
+
+        [HttpPost]
+        protected ContentResult GetListAsContent<TEntity>(List<TEntity> list, DataManager dm)
+        {
+            DataOperations operation = new DataOperations();
+            var data = operation.Execute(list, dm);
+            Logging.Verbose("Data: {@data}", data);
+            return Content(JsonConvert.SerializeObject(new { result = data, count = list.Count }, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), "application/json");
+        }
+
+        [HttpGet]
+        public JsonResult GetListAsJson<TEntity>(List<TEntity> list)
+        {
+            var result = Json(list, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = int.MaxValue;
+            return result;
         }
 
         protected async Task<TOutput> Post<TInput, TOutput>(string resource, TInput input)

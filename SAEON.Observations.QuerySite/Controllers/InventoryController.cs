@@ -1,10 +1,10 @@
 ﻿using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
+using Syncfusion.JavaScript;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Thinktecture.IdentityModel.Mvc;
 
@@ -44,6 +44,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 var sessionModel = await CreateSessionModel();
                 SessionModel = sessionModel;
+                await GetData();
                 //Logging.Verbose("Model: {@model}", model);
                 return View(sessionModel);
             }
@@ -307,11 +308,119 @@ namespace SAEON.Observations.QuerySite.Controllers
                     };
                     Logging.Verbose("Input: {@input}", input);
                     var results = (await Post<InventoryInput, InventoryOutput>("Inventory", input));
-                    //Logging.Verbose("Results: {@results}", results);
+                    Logging.Verbose("Results: {@results}", results);
                     sessionModel.Results = results;
                     SessionModel = sessionModel;
                     //Logging.Verbose("Model: {@model}", model);
                     return null;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region Totals
+        public ContentResult GetTotals(DataManager dm)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return GetListAsContent<InventoryTotalItem>(SessionModel.Results.Totals, dm);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region Stations
+        public ContentResult GetStations(DataManager dm)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return GetListAsContent<InventoryStationItem>(SessionModel.Results.Stations, dm);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region Phenomena
+        public ContentResult GetPhenomena(DataManager dm)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return GetListAsContent<InventoryPhenomenonOfferingItem>(SessionModel.Results.PhenomenaOfferings, dm);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region Instruments
+        public ContentResult GetInstruments(DataManager dm)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return GetListAsContent<InventoryInstrumentItem>(SessionModel.Results.Instruments, dm);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region Years
+        public ContentResult GetYears(DataManager dm)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return GetListAsContent<InventoryYearItem>(SessionModel.Results.Years, dm);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region Organisations
+        public ContentResult GetOrganisations(DataManager dm)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return GetListAsContent<InventoryOrganisationItem>(SessionModel.Results.Organisations, dm);
                 }
                 catch (Exception ex)
                 {

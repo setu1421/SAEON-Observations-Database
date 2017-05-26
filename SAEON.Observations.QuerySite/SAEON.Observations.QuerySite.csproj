@@ -843,7 +843,7 @@
     <Content Include="Views\Query\CardsHtml.cshtml" />
     <Content Include="Views\Query\IndexOld.cshtml" />
     <Content Include="Views\Query\Test.cshtml" />
-    <Content Include="Views\Inventory\Index.cshtml" />
+    <Content Include="Views\Inventory\IndexNew.cshtml" />
     <Content Include="Views\Shared\_QueryPartial.cshtml" />
     <Content Include="Views\Shared\Forbidden.cshtml" />
     <Content Include="Views\Inventory\Features.cshtml" />
@@ -857,6 +857,13 @@
     <Content Include="Views\Inventory\SelectedLocations.cshtml" />
     <Content Include="Views\Inventory\SelectedLocationsHtml.cshtml" />
     <Content Include="Views\Inventory\Buttons.cshtml" />
+    <Content Include="Views\Inventory\Index.cshtml" />
+    <Content Include="Views\Inventory\Totals.cshtml" />
+    <Content Include="Views\Inventory\Stations.cshtml" />
+    <Content Include="Views\Inventory\Phenomena.cshtml" />
+    <Content Include="Views\Inventory\Instruments.cshtml" />
+    <Content Include="Views\Inventory\Years.cshtml" />
+    <Content Include="Views\Inventory\Organisations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

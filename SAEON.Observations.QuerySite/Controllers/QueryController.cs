@@ -168,12 +168,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var sessionModel = SessionModel;
-                    Logging.Verbose("MapPoints: {count}", sessionModel.MapPoints.Count);
-                    //Logging.Verbose("MapPoints: {count} {@list}", model.MapPoints.Count, model.MapPoints);
-                    var result = Json(sessionModel.MapPoints, JsonRequestBehavior.AllowGet);
-                    result.MaxJsonLength = int.MaxValue;
-                    return result;
+                    return GetListAsJson(SessionModel.MapPoints);
                 }
                 catch (Exception ex)
                 {
@@ -198,10 +193,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var sessionModel = SessionModel;
-                    var result = Json(sessionModel.Locations, JsonRequestBehavior.AllowGet);
-                    result.MaxJsonLength = int.MaxValue;
-                    return result;
+                    return GetListAsJson(SessionModel.Locations);
                 }
                 catch (Exception ex)
                 {
@@ -315,10 +307,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var sessionModel = SessionModel;
-                    var result = Json(sessionModel.Features, JsonRequestBehavior.AllowGet);
-                    result.MaxJsonLength = int.MaxValue;
-                    return result;
+                    return GetListAsJson(SessionModel.Features);
                 }
                 catch (Exception ex)
                 {
@@ -484,11 +473,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var sessionModel = SessionModel;
-                    int count = sessionModel.Results.Data.Count;
-                    DataOperations operation = new DataOperations();
-                    var data = operation.Execute(sessionModel.Results.Data, dm);
-                    return Content(JsonConvert.SerializeObject(new { result = data, count = count }), "application/json");
+                    return GetListAsContent(SessionModel.Results.Data, dm);
                 }
                 catch (Exception ex)
                 {
@@ -591,10 +576,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var sessionModel = SessionModel;
-                    var result = Json(sessionModel.UserQueries, JsonRequestBehavior.AllowGet);
-                    result.MaxJsonLength = int.MaxValue;
-                    return result;
+                    return GetListAsJson(SessionModel.UserQueries);
                 }
                 catch (Exception ex)
                 {

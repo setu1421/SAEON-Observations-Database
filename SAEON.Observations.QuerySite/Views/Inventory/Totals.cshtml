@@ -1,0 +1,23 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model InventoryModel
+@(Html.EJ().Grid<object>("gridTotals")
+    .Datasource(ds => ds.URL("/Inventory/GetTotals").Adaptor(AdaptorType.UrlAdaptor))
+    .IsResponsive(true)
+    .AllowPaging()
+    .PageSettings(p => p.PageSize(50))
+    .AllowResizing()
+    .AllowScrolling()
+    .AllowSorting()
+    .AllowResizeToFit()
+    .Columns(col =>
+    {
+        col.Field("Status").HeaderText("Status").Add();
+        col.Field("Count").HeaderText("Count").HeaderTextAlign(TextAlign.Right).Format("{0:n0}").TextAlign(TextAlign.Right).Add();
+        col.Field("Minimum").HeaderText("Minimum").HeaderTextAlign(TextAlign.Right).Format("{0:n3}").TextAlign(TextAlign.Right).Add();
+        col.Field("Maximum").HeaderText("Maximum").HeaderTextAlign(TextAlign.Right).Format("{0:n3}").TextAlign(TextAlign.Right).Add();
+        col.Field("Average").HeaderText("Average").HeaderTextAlign(TextAlign.Right).Format("{0:n3}").TextAlign(TextAlign.Right).Add();
+        col.Field("StandardDeviation").HeaderText("Std Dev").HeaderTextAlign(TextAlign.Right).Format("{0:n3}").TextAlign(TextAlign.Right).Add();
+        col.Field("Variance").HeaderText("Variance").HeaderTextAlign(TextAlign.Right).Format("{0:n3}").TextAlign(TextAlign.Right).Add();
+    })
+)
+

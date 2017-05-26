@@ -1,4 +1,5 @@
-﻿using SAEON.Observations.Core;
+﻿using AutoMapper;
+using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Data.Entity;
@@ -42,16 +43,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             }
         }
 
-        private readonly string totalsSql =
-            "Select" + Environment.NewLine +
-            "  Status.Name, count(*) Count" + Environment.NewLine +
-            "from" + Environment.NewLine +
-            "  Observation" + Environment.NewLine +
-            "  left join Status" + Environment.NewLine +
-            "    on(Observation.StatusID = Status.ID)" + Environment.NewLine +
-            "group by" + Environment.NewLine +
-            "  Status.Name";
-
         [HttpPost]
         [Route]
         public async Task<InventoryOutput> Inventory(InventoryInput input)
@@ -64,37 +55,37 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     if (input == null) throw new ArgumentNullException("input");
                     var output = new InventoryOutput();
                     output.Success = true;
-                    output.TotalRecords.AddRange(await db.InventoryTotals
+                    output.Totals.AddRange((await db.InventoryTotals
                         .OrderBy(i => i.Status)
-                        .Select(i => new InventoryTotalItem { Status = i.Status, Count = i.Count })
-                        .ToListAsync());
-                    output.Stations.AddRange(await db.InventoryStations
+                        .ToListAsync())
+                        .Select(i => Mapper.Map<InventoryTotalItem>(i)));
+                    output.Stations.AddRange((await db.InventoryStations
                         .OrderBy(i => i.Name)
                         .ThenBy(i => i.Status)
-                        .Select(i => new InventoryStationItem { Name = i.Name, Id = i.Id, Latitude = i.Latitude, Longitude = i.Longitude, Status = i.Status, Count = i.Count })
-                        .ToListAsync());
-                    output.PhenomenaOfferings.AddRange(await db.InventoryPhenomenaOfferings
+                        .ToListAsync())
+                        .Select(i => Mapper.Map<InventoryStationItem>(i)));
+                    output.PhenomenaOfferings.AddRange((await db.InventoryPhenomenaOfferings
                         .OrderBy(i => i.Phenomenon)
                         .OrderBy(i => i.Offering)
                         .ThenBy(i => i.Status)
-                        .Select(i => new InventoryPhenomenonOfferingItem { Phenomenon = i.Phenomenon, Offering = i.Offering, Status = i.Status, Count = i.Count })
-                        .ToListAsync());
-                    output.Instruments.AddRange(await db.InventoryInstruments
+                        .ToListAsync())
+                        .Select(i => Mapper.Map<InventoryPhenomenonOfferingItem>(i)));
+                    output.Instruments.AddRange((await db.InventoryInstruments
                         .OrderBy(i => i.Name)
                         .ThenBy(i => i.Status)
-                        .Select(i => new InventoryInstrumentItem { Name = i.Name, Status = i.Status, Count = i.Count })
-                        .ToListAsync());
-                    output.Years.AddRange(await db.InventoryYears
+                        .ToListAsync())
+                        .Select(i => Mapper.Map<InventoryInstrumentItem>(i)));
+                    output.Years.AddRange((await db.InventoryYears
                         .OrderBy(i => i.Year)
                         .ThenBy(i => i.Status)
-                        .Select(i => new InventoryYearItem { Year = i.Year, Status = i.Status, Count = i.Count })
-                        .ToListAsync());
-                    output.Organisations.AddRange(await db.InventoryOrganisations
+                        .ToListAsync())
+                        .Select(i => Mapper.Map<InventoryYearItem>(i)));
+                    output.Organisations.AddRange((await db.InventoryOrganisations
                         .OrderBy(i => i.Name)
                         .ThenBy(i => i.Status)
-                        .Select(i => new InventoryOrganisationItem { Name = i.Name, Status = i.Status, Count = i.Count })
-                        .ToListAsync());
-                    Logging.Verbose("Output: {@output}", output);
+                        .ToListAsync())
+                        .Select(i => Mapper.Map<InventoryOrganisationItem>(i)));
+                    //Logging.Verbose("Output: {@output}", output);
                     return output;
                 }
                 catch (Exception ex)

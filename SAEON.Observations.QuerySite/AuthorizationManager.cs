@@ -34,7 +34,7 @@ namespace SAEON.Observations.QuerySite
             using (Logging.MethodCall(GetType()))
             {
                 Logging.Verbose("Action: {action}", context.Action.First().Value);
-                Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => $"{i.Type}: {i.Value}")));
+                //Logging.Verbose("Claims: {claims}", string.Join("; ", context.Principal.Claims.Select(i => $"{i.Type}: {i.Value}")));
                 switch (context.Action.First().Value)
                 {
                     case "Observations.Admin":

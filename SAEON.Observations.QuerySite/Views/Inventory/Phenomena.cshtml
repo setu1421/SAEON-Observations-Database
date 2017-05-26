@@ -1,0 +1,26 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model InventoryModel
+@(Html.EJ().Grid<object>
+    ("gridPhenomena")
+    .Datasource(ds => ds.URL("/Inventory/GetPhenomena").Adaptor(AdaptorType.UrlAdaptor))
+    .IsResponsive(true)
+    .AllowPaging()
+    .PageSettings(p => p.PageSize(50))
+    .AllowResizing()
+    .AllowScrolling()
+    .AllowSorting()
+    .AllowResizeToFit()
+    .Columns(col =>
+    {
+        col.Field("Phenomenon").HeaderText("Phenomenon").Add();
+        col.Field("Offering").HeaderText("Offering").Add();
+        col.Field("Status").HeaderText("Status").Add();
+        col.Field("Count").HeaderText("Count").Format("{0:n0}").Add();
+        col.Field("Minimum").HeaderText("Minimum").Format("{0:n3}").Add();
+        col.Field("Maximum").HeaderText("Maximum").Format("{0:n3}").Add();
+        col.Field("Average").HeaderText("Average").Format("{0:n3}").Add();
+        col.Field("StandardDeviation").HeaderText("Standard Deviation").Format("{0:n3}").Add();
+        col.Field("Variance").HeaderText("Variance").Format("{0:n3}").Add();
+    })
+)
+

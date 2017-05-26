@@ -10,7 +10,7 @@
     .AllowSorting()
     .Columns(col =>
     {
-        foreach (var s in Model.QueryResults.Series)
+        foreach (var s in Model.Results.Series)
         {
             col.Field(s.ColumnName).HeaderText(s.Caption).Add();
         }
