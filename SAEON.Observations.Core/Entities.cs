@@ -475,84 +475,109 @@ namespace SAEON.Observations.Core.Entities
         public Guid? CorrelationId { get; set; }
     }
 
+    public class InventoryBase 
+    {
+        [Key]
+        public string SurrogateKey { get; set; }
+    }
+
     /// <summary>
     /// Inventory Totals
     /// </summary>
     [Table("vInventoryTotals")]
-    public class InventoryTotal
+    public class InventoryTotal : InventoryBase
     {
-        [Key]
-        public int Id { get; set; }
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     /// <summary>
     /// Inventory Stations
     /// </summary>
     [Table("vInventoryStations")]
-    public class InventoryStation
+    public class InventoryStation : InventoryBase
     {
-        [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     /// <summary>
     /// Inventory Phenomena Offerings
     /// </summary>
     [Table("vInventoryPhenomenaOfferings")]
-    public class InventoryPhenomenonOffering
+    public class InventoryPhenomenonOffering : InventoryBase
     {
-        [Key]
-        public int Id { get; set; }
         public string Phenomenon { get; set; }
         public string Offering { get; set; }
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     /// <summary>
     /// Inventory Instruments
     /// </summary>
     [Table("vInventoryInstruments")]
-    public class InventoryInstrument
+    public class InventoryInstrument : InventoryBase
     {
-        [Key]
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     /// <summary>
     /// Inventory Years
     /// </summary>
     [Table("vInventoryYears")]
-    public class InventoryYear
+    public class InventoryYear : InventoryBase
     {
-        [Key]
-        public int Id { get; set; }
         public int Year { get; set; }
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     /// <summary>
     /// Inventory Organisations
     /// </summary>
     [Table("vInventoryOrganisations")]
-    public class InventoryOrganisation
+    public class InventoryOrganisation : InventoryBase
     {
-        [Key]
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     public class ObservationsDbContext : DbContext

@@ -890,7 +890,9 @@ GO
 CREATE VIEW [dbo].[vInventoryInstruments]
 AS 
 Select
-  Instrument.Name, Status.Name Status, Count(*) Count
+  Instrument.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Instrument.Name, Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from
   Observation
   left join Status
@@ -925,8 +927,9 @@ GO
 CREATE VIEW [dbo].[vInventoryOrganisations]
 AS 
 Select
-  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Name,
-  Status.Name Status, Count(*) Count
+  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name)+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Name,  Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from
   Observation
   left join Status
@@ -990,7 +993,9 @@ GO
 CREATE VIEW [dbo].[vInventoryPhenomenaOfferings]
 AS
 Select
-  Phenomenon.Name, Offering.Name Offering, Status.Name Status, count(*) Count
+  Phenomenon.Name+'~'+Offering.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Phenomenon.Name Phenomenon, Offering.Name Offering, Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from  
   Observation
   left join Status
@@ -1023,7 +1028,9 @@ GO
 CREATE VIEW [dbo].[vInventoryStations]
 AS
 Select
-  Station.ID, Station.Name, Station.Latitude, Station.Longitude, Status.Name Status, Count(*) Count
+  Station.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Station.ID, Station.Name, Station.Latitude, Station.Longitude, Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from  
   Observation
   left join Status
@@ -1066,7 +1073,9 @@ GO
 CREATE VIEW [dbo].[vInventoryTotals]
 AS 
 Select
-  Status.Name Status, Count(*) Count
+  IsNull(Status.Name,'') SurrogateKey,
+  Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from  
   Observation
   left join Status
@@ -1091,7 +1100,9 @@ GO
 CREATE VIEW [dbo].[vInventoryYears]
 AS 
 Select
-  Observation.ValueYear Year, Status.Name Status, Count(*) Count
+  Cast(Observation.ValueYear as VarChar(10))+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Observation.ValueYear Year, Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from
   Observation
   left join Status

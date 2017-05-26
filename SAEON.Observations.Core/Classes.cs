@@ -83,7 +83,12 @@ namespace SAEON.Observations.Core
     public class InventoryTotalItem
     {
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     public class InventoryStationItem
@@ -93,7 +98,12 @@ namespace SAEON.Observations.Core
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     public class InventoryPhenomenonOfferingItem
@@ -101,35 +111,55 @@ namespace SAEON.Observations.Core
         public string Phenomenon { get; set; }
         public string Offering { get; set; }
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     public class InventoryInstrumentItem
     {
         public string Name { get; set; }
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     public class InventoryYearItem
     {
         public int Year { get; set; }
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     public class InventoryOrganisationItem
     {
         public string Name { get; set; }
         public string Status { get; set; }
-        public int Count { get; set; }
+        public int? Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
     }
 
     public class InventoryOutput
     {
         public bool Success { get; set; }
         public List<string> ErrorMessage { get; private set; } = new List<string>();
-        public List<InventoryTotalItem> TotalRecords { get; private set; } = new List<InventoryTotalItem>();
+        public List<InventoryTotalItem> Totals { get; private set; } = new List<InventoryTotalItem>();
         public List<InventoryStationItem> Stations { get; private set; } = new List<InventoryStationItem>();
         public List<InventoryInstrumentItem> Instruments { get; private set; } = new List<InventoryInstrumentItem>();
         public List<InventoryPhenomenonOfferingItem> PhenomenaOfferings { get; private set; } = new List<InventoryPhenomenonOfferingItem>();

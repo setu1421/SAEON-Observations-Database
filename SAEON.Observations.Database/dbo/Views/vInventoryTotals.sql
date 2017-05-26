@@ -2,7 +2,9 @@
 CREATE VIEW [dbo].[vInventoryTotals]
 AS 
 Select
-  Status.Name Status, Count(*) Count
+  IsNull(Status.Name,'') SurrogateKey,
+  Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from  
   Observation
   left join Status

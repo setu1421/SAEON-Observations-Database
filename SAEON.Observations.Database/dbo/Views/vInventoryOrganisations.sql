@@ -2,8 +2,9 @@
 CREATE VIEW [dbo].[vInventoryOrganisations]
 AS 
 Select
-  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Name,
-  Status.Name Status, Count(*) Count
+  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name)+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Name,  Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from
   Observation
   left join Status

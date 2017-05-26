@@ -2,7 +2,9 @@
 CREATE VIEW [dbo].[vInventoryYears]
 AS 
 Select
-  Observation.ValueYear Year, Status.Name Status, Count(*) Count
+  Cast(Observation.ValueYear as VarChar(10))+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Observation.ValueYear Year, Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from
   Observation
   left join Status

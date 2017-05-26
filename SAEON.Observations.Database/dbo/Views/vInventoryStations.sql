@@ -2,7 +2,9 @@
 CREATE VIEW [dbo].[vInventoryStations]
 AS
 Select
-  Station.ID, Station.Name, Station.Latitude, Station.Longitude, Status.Name Status, Count(*) Count
+  Station.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Station.ID, Station.Name, Station.Latitude, Station.Longitude, Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from  
   Observation
   left join Status

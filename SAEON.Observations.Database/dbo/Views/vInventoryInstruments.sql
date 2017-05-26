@@ -2,7 +2,9 @@
 CREATE VIEW [dbo].[vInventoryInstruments]
 AS 
 Select
-  Instrument.Name, Status.Name Status, Count(*) Count
+  Instrument.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Instrument.Name, Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from
   Observation
   left join Status

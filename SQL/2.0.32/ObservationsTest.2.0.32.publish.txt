@@ -18,7 +18,7 @@
        [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
        [dbo].[vInventoryInstruments] (View)
        [dbo].[vInventoryOrganisations] (View)
-       [dbo].[vInventoryPhenomena] (View)
+       [dbo].[vInventoryPhenomenaOfferings] (View)
        [dbo].[vInventoryStations] (View)
        [dbo].[vInventoryTotals] (View)
        [dbo].[vInventoryYears] (View)

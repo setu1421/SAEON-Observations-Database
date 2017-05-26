@@ -2,7 +2,9 @@
 CREATE VIEW [dbo].[vInventoryPhenomenaOfferings]
 AS
 Select
-  Phenomenon.Name Phenomenon, Offering.Name Offering, Status.Name Status, count(*) Count
+  Phenomenon.Name+'~'+Offering.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Phenomenon.Name Phenomenon, Offering.Name Offering, Status.Name Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from  
   Observation
   left join Status
