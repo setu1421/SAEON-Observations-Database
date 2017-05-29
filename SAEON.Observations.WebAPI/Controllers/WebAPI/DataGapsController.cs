@@ -1,4 +1,5 @@
 ﻿using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,19 +12,19 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("DataQuery")]
+    [RoutePrefix("DataGaps")]
     [ApiExplorerSettings(IgnoreApi = true)]
     //[ClaimsAuthorization("client_id","SAEON.Observations.QuerySite")]
-    public class DataQueryController : BaseController
+    public class DataGapsController : BaseController
     {
-        public DataQueryController() : base()
+        public DataGapsController() : base()
         {
             db.Database.CommandTimeout = 0;
         }
 
         [HttpPost]
         [Route]
-        public async Task<DataQueryOutput> Execute(DataQueryInput input)
+        public async Task<DataGapsOutput> Execute(DataGapsInput input)
         {
             using (Logging.MethodCall(GetType(), new ParameterList { { "Params", input } }))
             {
@@ -35,7 +36,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     if (!input.Stations.Any()) throw new ArgumentOutOfRangeException("input.Stations");
                     if (input.PhenomenaOfferings == null) throw new ArgumentNullException("input.PhenomenaOfferings");
                     if (!input.PhenomenaOfferings.Any()) throw new ArgumentOutOfRangeException("input.PhenomenaOfferings");
-                    var dataList = await db.vApiDataQueries
+                    var dataList = await db.vApiDataGaps
                         .Where(i => input.Stations.Contains(i.StationId))
                         .Where(i => input.PhenomenaOfferings.Contains(i.PhenomenonOfferingId))
                         .Where(i => i.ValueDay >= input.StartDate)
@@ -49,15 +50,16 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     string lastSite = null;
                     string lastStation = null;
                     DateTime? lastDate = null;
-                    var output = new DataQueryOutput();
+                    var output = new DataGapsOutput();
                     // Series
                     // Date series
                     output.Series.Add(new DataSeries { Name = "Date", Caption = "Date" });
                     // Feature series
-                    var features = dataList.Select(i => new DataFeature { Caption = i.FeatureCaption, Name = i.FeatureName }).Distinct().ToList();
+                    var basefeatures = dataList.Select(i => new DataFeature { Caption = i.FeatureCaption, Name = i.FeatureName }).Distinct().ToList();
+                    var features = dataList.Select(i => new DataFeature { Caption = i.FeatureCaption, Name = i.FeatureName, Status = i.Status }).Distinct().ToList();
                     foreach (var feature in features)
                     {
-                        output.Series.Add(new DataSeries { Name = feature.Name, Caption = feature.Caption, IsFeature = true });
+                        output.Series.Add(new DataSeries { Name = feature.Name + "_" + feature.Status.Replace(" ", ""), Caption = $"{ basefeatures.IndexOf(basefeatures.Where(i => i.Name == feature.Name).FirstOrDefault()) + 1}-{feature.Caption}", IsFeature = true, Status = feature.Status });
                     }
                     // Rows
                     List<ExpandoObject> rows = new List<ExpandoObject>();
@@ -99,15 +101,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                             rows.Add(row);
                             isNewRow = false;
                         }
-                        double? oldValue = (double?)rowFeatures[data.FeatureName];
-                        if (oldValue.HasValue && data.Value.HasValue)
-                        {
-                            rowFeatures[data.FeatureName] = data.Value + oldValue.Value;
-                        }
-                        else if (!oldValue.HasValue && data.Value.HasValue)
-                        {
-                            rowFeatures[data.FeatureName] = data.Value;
-                        }
+                        rowFeatures[data.FeatureName + "_" + data.Status.Replace(" ","")] = basefeatures.IndexOf(basefeatures.Where(i => i.Name == data.FeatureName).FirstOrDefault()) + 1;
                     }
                     output.Data.AddRange(rows);
                     //Logging.Verbose("Data: {Data}", result.Data);

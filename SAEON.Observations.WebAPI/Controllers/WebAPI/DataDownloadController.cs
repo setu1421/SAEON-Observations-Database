@@ -16,7 +16,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("DataDownload")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    //[ResourceAuthorize("Observations.QuerySite", "DataDownload")]
     //[ClaimsAuthorization("client_id","SAEON.Observations.QuerySite")]
     public class DataDownloadController : BaseController
     {
@@ -37,17 +36,18 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     if (input == null) throw new ArgumentNullException("input");
                     if (input.Stations == null) throw new ArgumentNullException("input.Stations");
                     if (!input.Stations.Any()) throw new ArgumentOutOfRangeException("input.Stations");
-                    if (input.Offerings == null) throw new ArgumentNullException("input.Offerings");
-                    if (!input.Offerings.Any()) throw new ArgumentOutOfRangeException("input.Offerings");
-                    var dataList = await db.Downloads
+                    if (input.PhenomenaOfferings == null) throw new ArgumentNullException("input.PhenomenaOfferings");
+                    if (!input.PhenomenaOfferings.Any()) throw new ArgumentOutOfRangeException("input.PhenomenaOfferings");
+                    var dataList = await db.vApiDataDownloads
                         .Where(i => input.Stations.Contains(i.StationId))
-                        .Where(i => input.Offerings.Contains(i.PhenomenonOfferingId))
-                        .Where(i => i.Date >= input.StartDate)
-                        .Where(i => i.Date <= input.EndDate)
+                        .Where(i => input.PhenomenaOfferings.Contains(i.PhenomenonOfferingId))
+                        .Where(i => i.ValueDay >= input.StartDate)
+                        .Where(i => i.ValueDay <= input.EndDate)
                         .OrderBy(i => i.SiteName)
                         .ThenBy(i => i.StationName)
-                        .ThenBy(i => i.InstrumentName)
-                        .ThenBy(i => i.Date)
+                        //.ThenBy(i => i.InstrumentName)
+                        //.ThenBy(i => i.SensorName)
+                        .ThenBy(i => i.ValueDate)
                         .ToListAsync();
                     Logging.Verbose("DataList: {count}", dataList.Count);
                     var result = new DataDownloadOutput();

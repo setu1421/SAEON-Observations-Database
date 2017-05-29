@@ -40,35 +40,79 @@ namespace SAEON.Observations.Core
     public class Feature : TreeNode { }
     public class Location : TreeNode { }
 
+    #region DataQuery
     public class DataQueryInput
     {
         public List<Guid> Stations { get; set; }
-        public List<Guid> Offerings { get; set; }
+        public List<Guid> PhenomenaOfferings { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
     }
 
-    public class Series
+    public class DataSeries
     {
         public string Caption { get; set; }
-        public string ColumnName { get; set; }
+        public string Name { get; set; }
         public bool IsFeature { get; set; }
+        public string Status { get; set; }
+    }
+
+    public class DataFeature
+    {
+        public string Caption { get; set; }
+        public string Name { get; set; }
+        public string Status { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            if (!(obj is DataFeature feature)) return false;
+            return Equals(feature);
+        }
+
+        public bool Equals(DataFeature feature)
+        {
+            if (feature == null) return false;
+            return
+                (Name == feature.Name) &&
+                (Status == feature.Status);
+        }
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                const int HashingBase = (int)2166136261;
+                const int HashingMultiplier = 16777619;
+                int hash = HashingBase;
+                hash = (hash * HashingMultiplier) ^ (!Object.ReferenceEquals(null, Name) ? Name.GetHashCode() : 0);
+                hash = (hash * HashingMultiplier) ^ (!Object.ReferenceEquals(null, Status) ? Status.GetHashCode() : 0);
+                return hash;
+            }
+        }
     }
 
     public class DataQueryOutput
     {
-        public List<Series> Series { get; private set; } = new List<Series>();
+        public List<DataSeries> Series { get; private set; } = new List<DataSeries>();
         public List<ExpandoObject> Data { get; private set; } = new List<ExpandoObject>();
     }
+    #endregion
 
-    public class DataDownloadInput : DataQueryInput
-    {
-    }
+    #region DataDowload
+    public class DataDownloadInput : DataQueryInput { }
 
     public class DataDownloadOutput
     {
     }
+    #endregion DataDownload
 
+    #region DataGaps
+    public class DataGapsInput : DataQueryInput { }
+
+    public class DataGapsOutput : DataQueryOutput { }
+    #endregion
+
+    #region Inventory
     public class InventoryInput
     {
         public List<Guid> Stations { get; set; }
@@ -166,4 +210,5 @@ namespace SAEON.Observations.Core
         public List<InventoryYearItem> Years { get; private set; } = new List<InventoryYearItem>();
         public List<InventoryOrganisationItem> Organisations { get; private set; } = new List<InventoryOrganisationItem>();
     }
+    #endregion
 }

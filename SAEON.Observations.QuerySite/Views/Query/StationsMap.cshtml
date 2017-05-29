@@ -41,6 +41,9 @@
                 if (isInit) {
                     map.fitBounds(bounds);
                 }
+                var center = map.getCenter();
+                google.maps.event.trigger(map, "resize");
+                map.setCenter(center); 
             })
             .fail(function () { alert('Error in GetMapPoints'); });
     }

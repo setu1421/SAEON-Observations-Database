@@ -1,0 +1,10 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model DataGapsModel
+@(Html.EJ()
+    .ListView("listViewSelectedLocations")
+    //.AutoAdjustHeight(true)
+    //.AutoAdjustScrollHeight(true)
+    .ShowHeader(true)
+    .HeaderTitle("Selected")
+    .DataSource(Model.SelectedLocations)
+    .FieldSettings(fs => fs.Text("Name")))

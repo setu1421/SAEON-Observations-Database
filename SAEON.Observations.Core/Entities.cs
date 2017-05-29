@@ -421,22 +421,39 @@ namespace SAEON.Observations.Core.Entities
         public string UpdatedBy { get; set; }
     }
 
-    /// <summary>
-    /// Obvservation for Download entity
-    /// </summary>
-    [Table("vDownloads")]
-    public class Download
+    public class vApiDataBase
     {
         [Key]
         public int Id { get; set; }
+        public string SiteName { get; set; }
+        public Guid StationId { get; set; }
+        public string StationName { get; set; }
+        public Guid PhenomenonId { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public Guid PhenomenonOfferingId { get; set; }
+        public Guid OfferingId { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        public Guid UnitOfMeasureId { get; set; }
+        public string UnitOfMeasureCode { get; set; }
+        public string UnitOfMeasureUnit { get; set; }
+        public string UnitOfMeasureSymbol { get; set; }
+        public string FeatureCaption { get; set; }
+        public string FeatureName { get; set; }
+        public DateTime ValueDate { get; set; }
+        public DateTime ValueDay { get; set; }
+        public double? Value { get; set; }
+    }
+
+    [Table("vApiDataDownload")]
+    public class vApiDataDownload : vApiDataBase
+    {
         public Guid SiteID { get; set; }
         public string SiteCode { get; set; }
-        public string SiteName { get; set; }
         public string SiteDescription { get; set; }
         public string SiteUrl { get; set; }
-        public Guid StationId { get; set; }
         public string StationCode { get; set; }
-        public string StationName { get; set; }
         public string StationDescription { get; set; }
         public string StationUrl { get; set; }
         public double? StationLatitude { get; set; }
@@ -444,38 +461,34 @@ namespace SAEON.Observations.Core.Entities
         public int? StationElevation { get; set; }
         public Guid InstrumentId { get; set; }
         public string InstrumentCode { get; set; }
-        public string InstrumentName { get; set; }
         public string InstrumentDescription { get; set; }
         public string InstrumentUrl { get; set; }
         public string SensorCode { get; set; }
-        public string SensorName { get; set; }
         public string SensorDescription { get; set; }
         public string SensorUrl { get; set; }
-        public Guid PhenomenonId { get; set; }
-        public string PhenomenonCode { get; set; }
-        public string PhenomenonName { get; set; }
         public string PhenomenonDescription { get; set; }
         public string PhenomenonUrl { get; set; }
-        public Guid PhenomenonOfferingId { get; set; }
-        public Guid OfferingId { get; set; }
-        public string OfferingCode { get; set; }
-        public string OfferingName { get; set; }
         public string OfferingDescription { get; set; }
-        public Guid UnitOfMeasureId { get; set; }
-        public string UnitOfMeasureCode { get; set; }
-        public string UnitOfMeasureUnit { get; set; }
-        public string UnitOfMeasureSymbol { get; set; }
-        public string Feature { get; set; }
-        [Column("ValueDate")]
-        public DateTime Date { get; set; }
-        //public double? RawValue { get; set; }
-        [Column("DataValue")]
-        public double? Value { get; set; }
         public string Comment { get; set; }
         public Guid? CorrelationId { get; set; }
     }
 
-    public class InventoryBase 
+    [Table("vApiDataGaps")]
+    public class vApiDataGap : vApiDataBase
+    {
+        public string Status { get; set; }
+    }
+
+    [Table("vApiDataQuery")]
+    public class vApiDataQuery : vApiDataBase { }
+
+    [Table("vApiInventory")]
+    public class vApiInventory : vApiDataBase
+    {
+        public string Status { get; set; }
+    }
+
+    public class InventoryBase
     {
         [Key]
         public string SurrogateKey { get; set; }
@@ -606,7 +619,10 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
-        public DbSet<Download> Downloads { get; set; }
+        public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
+        public DbSet<vApiDataGap> vApiDataGaps { get; set; }
+        public DbSet<vApiDataQuery> vApiDataQueries { get; set; }
+        public DbSet<vApiInventory> vApiInventory { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

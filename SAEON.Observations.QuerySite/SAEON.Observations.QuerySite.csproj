@@ -270,6 +270,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\InventoryModels.cs" />
+    <Compile Include="Models\DataGapsModels.cs" />
     <Compile Include="Models\QueryModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -864,10 +865,22 @@
     <Content Include="Views\Inventory\Instruments.cshtml" />
     <Content Include="Views\Inventory\Years.cshtml" />
     <Content Include="Views\Inventory\Organisations.cshtml" />
+    <Content Include="Views\DataGaps\Buttons.cshtml" />
+    <Content Include="Views\DataGaps\Features.cshtml" />
+    <Content Include="Views\DataGaps\FeaturesHtml.cshtml" />
+    <Content Include="Views\DataGaps\Filters.cshtml" />
+    <Content Include="Views\DataGaps\FiltersHtml.cshtml" />
+    <Content Include="Views\DataGaps\Index.cshtml" />
+    <Content Include="Views\DataGaps\Locations.cshtml" />
+    <Content Include="Views\DataGaps\LocationsHtml.cshtml" />
+    <Content Include="Views\DataGaps\SelectedFeatures.cshtml" />
+    <Content Include="Views\DataGaps\SelectedFeaturesHtml.cshtml" />
+    <Content Include="Views\DataGaps\SelectedLocations.cshtml" />
+    <Content Include="Views\DataGaps\SelectedLocationsHtml.cshtml" />
+    <Content Include="Views\DataGaps\ChartHtml.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\DataGaps\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

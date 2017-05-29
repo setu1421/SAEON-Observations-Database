@@ -1,11 +1,11 @@
 ﻿@using SAEON.Observations.QuerySite.Models
-@model QueryModel
+@model DataGapsModel
 <div class="row">
     <div class="col-md-2">
         @Html.LabelFor(i => i.StartDate)
     </div>
     <div class="col-md-10">
-        @Html.EJ().DatePickerFor(i => i.StartDate).DateFormat("dd MMM yyyy").ClientSideEvents(ev => ev.Change("onUpdateFilters"))
+        @Html.EJ().DatePickerFor(i => i.StartDate).StartLevel(Period.Year).DepthLevel(Period.Year).DateFormat("MMM yyyy").ClientSideEvents(ev => ev.Change("onUpdateFilters"))
     </div>
 </div>
 <div class="row">
@@ -13,7 +13,7 @@
         @Html.LabelFor(i => i.EndDate)
     </div>
     <div class="col-md-10">
-        @Html.EJ().DatePickerFor(i => i.EndDate).DateFormat("dd MMM yyyy").ClientSideEvents(ev => ev.Change("onUpdateFilters"))
+        @Html.EJ().DatePickerFor(i => i.EndDate).StartLevel(Period.Year).DepthLevel(Period.Year).DateFormat("MMM yyyy").ClientSideEvents(ev => ev.Change("onUpdateFilters"))
     </div>
 </div>
 <script type="text/javascript">
@@ -21,7 +21,7 @@
         var startDate = $("#StartDate").ejDatePicker("instance").getValue();
         var endDate = $("#EndDate").ejDatePicker("instance").getValue();
         $.ajax({
-            url: "/Query/UpdateFilters",
+            url: "/DataGaps/UpdateFilters",
             data: JSON.stringify({
                 StartDate: startDate,
                 EndDate: endDate

@@ -444,7 +444,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var input = new DataQueryInput
                     {
                         Stations = sessionModel.SelectedLocations.Select(i => i.Id).ToList(),
-                        Offerings = sessionModel.SelectedFeatures.Select(i => i.Id).ToList(),
+                        PhenomenaOfferings = sessionModel.SelectedFeatures.Select(i => i.Id).ToList(),
                         StartDate = sessionModel.StartDate,
                         EndDate = sessionModel.EndDate
                     };
@@ -532,8 +532,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var sessionModel = SessionModel;
-                    return Content(JsonConvert.SerializeObject(sessionModel.Results.Data), "application/json");
+                    return GetListAsContent(SessionModel.Results.Data);
                 }
                 catch (Exception ex)
                 {
@@ -609,7 +608,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     }
                     LoadMapPoints(sessionModel);
                     // Features
-                    var selectedFeatures = sessionModel.Features.Where(i => input.Offerings.Contains(i.Id));
+                    var selectedFeatures = sessionModel.Features.Where(i => input.PhenomenaOfferings.Contains(i.Id));
                     Logging.Verbose("SelectedFeatures: {@features}", selectedFeatures);
                     sessionModel.SelectedFeatures.Clear();
                     sessionModel.SelectedFeatures.AddRange(selectedFeatures);
@@ -647,7 +646,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var input = new DataQueryInput
                     {
                         Stations = sessionModel.SelectedLocations.Select(i => i.Id).ToList(),
-                        Offerings = sessionModel.SelectedFeatures.Select(i => i.Id).ToList(),
+                        PhenomenaOfferings = sessionModel.SelectedFeatures.Select(i => i.Id).ToList(),
                         StartDate = sessionModel.StartDate,
                         EndDate = sessionModel.EndDate
                     };

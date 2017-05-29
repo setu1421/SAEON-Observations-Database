@@ -7,14 +7,13 @@
     .PrimaryYAxis(py => py.ValueType(AxisValueType.Double))
     .Series(sr =>
     {
-        foreach (var s in Model.QueryResults.Series.Where(i => i.IsFeature))
+        foreach (var s in Model.Results.Series.Where(i => i.IsFeature))
         {
             sr.Name(s.Caption)
             .Type(SeriesType.Line)
             .DataSource(ds => ds.URL("/Query/GetChartData"))
             .XName("Date")
-            .YName(s.ColumnName)
-            .EmptyPointSettings(e => e.Visible(true).DisplayMode(ChartEmptyPointMode.Gap))
+            .YName(s.Name)
             .Add();
         }
     })

@@ -92,8 +92,13 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             DataOperations operation = new DataOperations();
             var data = operation.Execute(list, dm);
-            Logging.Verbose("Data: {@data}", data);
             return Content(JsonConvert.SerializeObject(new { result = data, count = list.Count }, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), "application/json");
+        }
+
+        [HttpPost]
+        protected ContentResult GetListAsContent<TEntity>(List<TEntity> list)
+        {
+            return Content(JsonConvert.SerializeObject(list, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), "application/json");
         }
 
         [HttpGet]

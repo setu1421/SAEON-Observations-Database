@@ -29,7 +29,6 @@ Html.EJ().TreeView("treeViewLocations")
         $.post("/Inventory/UpdateSelectedLocations", { Locations: selected })
             .done(function (data) {
                 $('#PartialSelectedLocations').html(data);
-                UpdateMap();
                 EnableButtons();
                 HideResults();
             })
