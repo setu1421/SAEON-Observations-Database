@@ -48,6 +48,14 @@ IF (SELECT is_default
 GO
 USE [$(DatabaseName)];
 
+GO
+PRINT N'Dropping [dbo].[vDownloads]...';
+
+GO
+DROP VIEW [dbo].vDownLoads;
+
+GO
+PRINT N'Dropping [dbo].[DF_DataLog_ID]...';
 
 GO
 PRINT N'Dropping [dbo].[DF_DataLog_ID]...';
@@ -822,22 +830,6 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vDataLog]';
 
 
 GO
-PRINT N'Refreshing [dbo].[vDownloads]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vDownloads]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
 PRINT N'Refreshing [dbo].[vInventory]...';
 
 
@@ -878,6 +870,342 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vObservationRoles]';
 
 
 GO
+PRINT N'Creating [dbo].[vApiDataDownload]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+--> Added 2.0.32 20170527 TimPN
+CREATE VIEW [dbo].[vApiDataDownload]
+AS
+Select
+  Observation.ID,
+  Site.ID SiteID,
+  Site.Code SiteCode,
+  Site.Name SiteName,
+  Site.Description SiteDescription,
+  Site.Url SiteUrl,
+  Station.ID StationID,
+  Station.Code StationCode,
+  Station.Name StationName,
+  Station.Description StationDescription,
+  Station.Url StationUrl,
+  Station.Latitude StationLatitude,
+  Station.Longitude StationLongitude,
+  Station.Elevation StationElevation,
+  Instrument.ID InstrumentID,
+  Instrument.Code InstrumentCode,
+  Instrument.Name InstrumentName,
+  Instrument.Description InstrumentDescription,
+  Instrument.Url InstrumentUrl,
+  Sensor.ID SensorID,
+  Sensor.Code SensorCode,
+  Sensor.Name SensorName,
+  Sensor.Description SensorDescription,
+  Sensor.Url SensorUrl,
+  Phenomenon.ID PhenomenonID,
+  Phenomenon.Code PhenomenonCode,
+  Phenomenon.Name PhenomenonName,
+  Phenomenon.Description PhenomenonDescription,
+  Phenomenon.Url PhenomenonUrl,
+  PhenomenonOffering.ID PhenomenonOfferingID,
+  Offering.ID OfferingID,
+  Offering.Code OfferingCode,
+  Offering.Name OfferingName,
+  Offering.Description OfferingDescription,
+  PhenomenonUOM.ID PhenomenonUnitOfMeasureID,
+  UnitOfMeasure.ID UnitOfMeasureID,
+  UnitOfMeasure.Code UnitOfMeasureCode,
+  UnitOfMeasure.Unit UnitOfMeasureUnit,
+  UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  Phenomenon.Name + ', ' + Offering.Name + ', ' + UnitOfMeasure.UnitSymbol FeatureCaption,
+  Replace(Phenomenon.Name + '_' + Offering.Name + '_' + UnitOfMeasure.Unit,' ','') FeatureName,
+  Observation.ValueDate,
+  Observation.ValueDay,
+  Observation.DataValue Value,
+  Observation.Comment,
+  Observation.CorrelationID,
+  IsNull(Status.Name, 'No Status') Status
+from
+  Observation
+  inner join Status
+    on (Observation.StatusID = Status.ID)
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join PhenomenonOffering
+    on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (Observation.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) and
+       ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (Observation.ValueDay <= Instrument_Sensor.EndDate))
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+       ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate )) and
+       ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID) and
+       ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+       ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+  inner join Station
+    on (Station_Instrument.StationID = Station.ID) and
+       ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
+       ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  inner join Site
+    on (Station.SiteID = Site.ID) and
+       ((Site.StartDate is null) or (Observation.ValueDay >= Site.StartDate)) and
+       ((Site.EndDate is null) or (Observation.ValueDay <= Site.EndDate))
+where
+  (Status.Name = 'Verified')
+--< Added 2.0.32 20170527 TimPN
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vApiDataGaps]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+--> Added 2.0.32 20170527 TimPN
+CREATE VIEW [dbo].[vApiDataGaps]
+AS
+Select
+  Observation.ID,
+  Site.Name SiteName,
+  Station.ID StationID,
+  Station.Name StationName,
+  Phenomenon.ID PhenomenonID,
+  Phenomenon.Code PhenomenonCode,
+  Phenomenon.Name PhenomenonName,
+  PhenomenonOffering.ID PhenomenonOfferingID,
+  Offering.ID OfferingID,
+  Offering.Code OfferingCode,
+  Offering.Name OfferingName,
+  PhenomenonUOM.ID PhenomenonUnitOfMeasureID,
+  UnitOfMeasure.ID UnitOfMeasureID,
+  UnitOfMeasure.Code UnitOfMeasureCode,
+  UnitOfMeasure.Unit UnitOfMeasureUnit,
+  UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  Phenomenon.Name + ', ' + Offering.Name + ', ' + UnitOfMeasure.UnitSymbol FeatureCaption,
+  Replace(Phenomenon.Name + '_' + Offering.Name + '_' + UnitOfMeasure.Unit,' ','') FeatureName,
+  Observation.ValueDate,
+  Observation.ValueDay,
+  Observation.DataValue Value,
+  Status = case 
+    when Status.Name is Null then 'No Status'
+	when Status.Name = 'Verified' then Status.Name
+	when Status.Name = 'Unverified' then Status.Name
+	else 'Being verified'
+  end 
+from
+  Observation
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join PhenomenonOffering
+    on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (Observation.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) and
+       ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (Observation.ValueDay <= Instrument_Sensor.EndDate))
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+       ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate )) and
+       ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID) and
+       ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+       ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+  inner join Station
+    on (Station_Instrument.StationID = Station.ID) and
+       ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
+       ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  inner join Site
+    on (Station.SiteID = Site.ID) and
+       ((Site.StartDate is null) or (Observation.ValueDay >= Site.StartDate)) and
+       ((Site.EndDate is null) or (Observation.ValueDay <= Site.EndDate))
+  left join Status
+    on (Observation.StatusID = Status.ID)
+--> Added 2.0.32 20170527 TimPN
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vApiDataQuery]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+--> Added 2.0.32 20170527 TimPN
+CREATE VIEW [dbo].[vApiDataQuery]
+AS
+Select
+  Observation.ID,
+  Site.Name SiteName,
+  Station.ID StationID,
+  Station.Name StationName,
+  Phenomenon.ID PhenomenonID,
+  Phenomenon.Code PhenomenonCode,
+  Phenomenon.Name PhenomenonName,
+  PhenomenonOffering.ID PhenomenonOfferingID,
+  Offering.ID OfferingID,
+  Offering.Code OfferingCode,
+  Offering.Name OfferingName,
+  PhenomenonUOM.ID PhenomenonUnitOfMeasureID,
+  UnitOfMeasure.ID UnitOfMeasureID,
+  UnitOfMeasure.Code UnitOfMeasureCode,
+  UnitOfMeasure.Unit UnitOfMeasureUnit,
+  UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  Phenomenon.Name + ', ' + Offering.Name + ', ' + UnitOfMeasure.UnitSymbol FeatureCaption,
+  Replace(Phenomenon.Name + '_' + Offering.Name + '_' + UnitOfMeasure.Unit,' ','') FeatureName,
+  Observation.ValueDate,
+  Observation.ValueDay,
+  Observation.DataValue Value,
+  IsNull(Status.Name, 'No Status') Status
+from
+  Observation
+  inner join Status
+    on (Observation.StatusID = Status.ID)
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join PhenomenonOffering
+    on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (Observation.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) and
+       ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (Observation.ValueDay <= Instrument_Sensor.EndDate))
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+       ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate )) and
+       ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID) and
+       ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+       ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+  inner join Station
+    on (Station_Instrument.StationID = Station.ID) and
+       ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
+       ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  inner join Site
+    on (Station.SiteID = Site.ID) and
+       ((Site.StartDate is null) or (Observation.ValueDay >= Site.StartDate)) and
+       ((Site.EndDate is null) or (Observation.ValueDay <= Site.EndDate))
+where
+  (Status.Name = 'Verified')
+--> Added 2.0.32 20170527 TimPN
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vApiInventory]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+--> Added 2.0.32 20170527 TimPN
+CREATE VIEW [dbo].[vApiInventory]
+AS
+Select
+  Observation.ID,
+  Site.Name SiteName,
+  Station.ID StationID,
+  Station.Name StationName,
+  Phenomenon.ID PhenomenonID,
+  Phenomenon.Code PhenomenonCode,
+  Phenomenon.Name PhenomenonName,
+  PhenomenonOffering.ID PhenomenonOfferingID,
+  Offering.ID OfferingID,
+  Offering.Code OfferingCode,
+  Offering.Name OfferingName,
+  PhenomenonUOM.ID PhenomenonUnitOfMeasureID,
+  UnitOfMeasure.ID UnitOfMeasureID,
+  UnitOfMeasure.Code UnitOfMeasureCode,
+  UnitOfMeasure.Unit UnitOfMeasureUnit,
+  UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  Replace(Phenomenon.Name + '_' + Offering.Name + '_' + UnitOfMeasure.Unit,' ','') FeatureName,
+  Observation.ValueDate Date,
+  Observation.DataValue Value,
+  IsNull(Status.Name, 'No Status') Status
+from
+  Observation
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join PhenomenonOffering
+    on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (Observation.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) and
+       ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (Observation.ValueDay <= Instrument_Sensor.EndDate))
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+       ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate )) and
+       ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID) and
+       ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+       ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+  inner join Station
+    on (Station_Instrument.StationID = Station.ID) and
+       ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
+       ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  inner join Site
+    on (Station.SiteID = Site.ID) and
+       ((Site.StartDate is null) or (Observation.ValueDay >= Site.StartDate)) and
+       ((Site.EndDate is null) or (Observation.ValueDay <= Site.EndDate))
+  left join Status
+    on (Observation.StatusID = Status.ID)
+--> Added 2.0.32 20170527 TimPN
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Creating [dbo].[vInventoryInstruments]...';
 
 
@@ -891,12 +1219,11 @@ CREATE VIEW [dbo].[vInventoryInstruments]
 AS 
 Select
   Instrument.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
-  Instrument.Name, Status.Name Status, 
+  --Station.ID StationID, PhenomenonOffering.ID PhenomenonOfferingID, 
+  Instrument.Name, IsNull(Status.Name,'No status') Status, 
   Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from
   Observation
-  left join Status
-    on (Observation.StatusID = Status.ID)
   inner join Sensor
     on (Observation.SensorID = Sensor.ID)
   inner join Instrument_Sensor
@@ -907,6 +1234,18 @@ from
     on (Instrument_Sensor.InstrumentID = Instrument.ID) and
        ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate )) and
        ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+  --inner join Station_Instrument
+  --  on (Station_Instrument.InstrumentID = Instrument.ID) and
+  --     ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+  --     ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+  --inner join Station
+  --  on (Station_Instrument.StationID = Station.ID) and
+  --     ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
+  --     ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  --inner join PhenomenonOffering
+  --  on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  left join Status
+    on (Observation.StatusID = Status.ID)
 group by
   Instrument.Name, Status.Name
 --< Added 20170523 2.0.32 TimPN
@@ -928,12 +1267,11 @@ CREATE VIEW [dbo].[vInventoryOrganisations]
 AS 
 Select
   Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name)+'~'+IsNull(Status.Name,'') SurrogateKey,
-  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Name,  Status.Name Status, 
+  --Station.ID StationID, PhenomenonOffering.ID PhenomenonOfferingID, 
+  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Name, IsNull(Status.Name,'No status') Status, 
   Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from
   Observation
-  left join Status
-    on (Observation.StatusID = Status.ID)
   inner join Sensor
     on (Observation.SensorID = Sensor.ID)
   inner join Instrument_Sensor
@@ -952,6 +1290,8 @@ from
     on (Station_Instrument.StationID = Station.ID) and
        ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
        ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  --inner join PhenomenonOffering
+  --  on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
   inner join Site
     on (Station.SiteID = Site.ID)
   left join Organisation_Site
@@ -972,6 +1312,8 @@ from
        ((Organisation_Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
   left join Organisation InstrumentOrganisation
     on (Organisation_Instrument.OrganisationID = InstrumentOrganisation.ID)  		
+  left join Status
+    on (Observation.StatusID = Status.ID)
 group by
   Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name),
   Status.Name
@@ -994,20 +1336,37 @@ CREATE VIEW [dbo].[vInventoryPhenomenaOfferings]
 AS
 Select
   Phenomenon.Name+'~'+Offering.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
-  Phenomenon.Name Phenomenon, Offering.Name Offering, Status.Name Status, 
+  --Station.ID StationID, PhenomenonOffering.ID PhenomenonOfferingID, 
+  Phenomenon.Name Phenomenon, Offering.Name Offering, IsNull(Status.Name,'No status') Status, 
   Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from  
   Observation
-  left join Status
-    on (Observation.StatusID = Status.ID)
   inner join Sensor
     on (Observation.SensorID = Sensor.ID)
+  --inner join Instrument_Sensor
+  --  on (Instrument_Sensor.SensorID = Sensor.ID) and
+  --     ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
+  --     ((Instrument_Sensor.EndDate is null) or (Observation.ValueDay <= Instrument_Sensor.EndDate))
+  --inner join Instrument
+  --  on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+  --     ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate )) and
+  --     ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+  --inner join Station_Instrument
+  --  on (Station_Instrument.InstrumentID = Instrument.ID) and
+  --     ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+  --     ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+  --inner join Station
+  --  on (Station_Instrument.StationID = Station.ID) and
+  --     ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
+  --     ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
   inner join PhenomenonOffering
     on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
   inner join Phenomenon
     on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
   inner join Offering
     on (PhenomenonOffering.OfferingID = Offering.ID)
+  left join Status
+    on (Observation.StatusID = Status.ID)
 group by 
   Phenomenon.Name, Offering.Name, Status.Name
 --< Added 20170523 2.0.32 TimPN
@@ -1029,12 +1388,11 @@ CREATE VIEW [dbo].[vInventoryStations]
 AS
 Select
   Station.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
-  Station.ID, Station.Name, Station.Latitude, Station.Longitude, Status.Name Status, 
+  --Station.ID StationID, PhenomenonOffering.ID PhenomenonOfferingID, 
+  Station.ID, Station.Name, Station.Latitude, Station.Longitude, IsNull(Status.Name,'No status') Status, 
   Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from  
   Observation
-  left join Status
-    on (Observation.StatusID = Status.ID)
   inner join Sensor
     on (Observation.SensorID = Sensor.ID)
   inner join Instrument_Sensor
@@ -1053,6 +1411,10 @@ from
     on (Station_Instrument.StationID = Station.ID) and
        ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
        ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  --inner join PhenomenonOffering
+  --  on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  left join Status
+    on (Observation.StatusID = Status.ID)
 group by 
   Station.ID, Station.Name, Station.Latitude, Station.Longitude, Status.Name
 --< Added 20170523 2.0.32 TimPN
@@ -1074,10 +1436,31 @@ CREATE VIEW [dbo].[vInventoryTotals]
 AS 
 Select
   IsNull(Status.Name,'') SurrogateKey,
-  Status.Name Status, 
+  --Station.ID StationID, PhenomenonOffering.ID PhenomenonOfferingID, 
+  IsNull(Status.Name,'No status') Status, 
   Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from  
   Observation
+  --inner join Sensor
+  --  on (Observation.SensorID = Sensor.ID)
+  --inner join Instrument_Sensor
+  --  on (Instrument_Sensor.SensorID = Sensor.ID) and
+  --     ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
+  --     ((Instrument_Sensor.EndDate is null) or (Observation.ValueDay <= Instrument_Sensor.EndDate))
+  --inner join Instrument
+  --  on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+  --     ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate )) and
+  --     ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+  --inner join Station_Instrument
+  --  on (Station_Instrument.InstrumentID = Instrument.ID) and
+  --     ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+  --     ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+  --inner join Station
+  --  on (Station_Instrument.StationID = Station.ID) and
+  --     ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
+  --     ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  --inner join PhenomenonOffering
+  --  on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
   left join Status
     on (Observation.StatusID = Status.ID)
 group by 
@@ -1101,10 +1484,31 @@ CREATE VIEW [dbo].[vInventoryYears]
 AS 
 Select
   Cast(Observation.ValueYear as VarChar(10))+'~'+IsNull(Status.Name,'') SurrogateKey,
-  Observation.ValueYear Year, Status.Name Status, 
+  --Station.ID StationID, PhenomenonOffering.ID PhenomenonOfferingID, 
+  Observation.ValueYear Year, IsNull(Status.Name,'No status') Status, 
   Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from
   Observation
+  --inner join Sensor
+  --  on (Observation.SensorID = Sensor.ID)
+  --inner join Instrument_Sensor
+  --  on (Instrument_Sensor.SensorID = Sensor.ID) and
+  --     ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
+  --     ((Instrument_Sensor.EndDate is null) or (Observation.ValueDay <= Instrument_Sensor.EndDate))
+  --inner join Instrument
+  --  on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+  --     ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate )) and
+  --     ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+  --inner join Station_Instrument
+  --  on (Station_Instrument.InstrumentID = Instrument.ID) and
+  --     ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+  --     ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+  --inner join Station
+  --  on (Station_Instrument.StationID = Station.ID) and
+  --     ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
+  --     ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  --inner join PhenomenonOffering
+  --  on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
   left join Status
     on (Observation.StatusID = Status.ID)
 group by

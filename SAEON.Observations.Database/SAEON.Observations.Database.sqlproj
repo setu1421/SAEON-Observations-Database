@@ -547,7 +547,7 @@
     <Build Include="Scripts\PrimaryFileGroup.sql" />
     <Build Include="dbo\Tables\UserQueries.sql" />
     <Build Include="dbo\Tables\UserDownloads.sql" />
-    <Build Include="dbo\Views\vDownloads.sql" />
+    <Build Include="dbo\Views\vApiDataDownload.sql" />
     <Build Include="dbo\Views\vSensorDates.sql" />
     <Build Include="Scripts\ObservationsSequence.sql" />
     <Build Include="dbo\Views\vInventoryTotals.sql" />
@@ -556,6 +556,9 @@
     <Build Include="dbo\Views\vInventoryInstruments.sql" />
     <Build Include="dbo\Views\vInventoryYears.sql" />
     <Build Include="dbo\Views\vInventoryOrganisations.sql" />
+    <Build Include="dbo\Views\vApiDataQuery.sql" />
+    <Build Include="dbo\Views\vApiDataGaps.sql" />
+    <Build Include="dbo\Views\vApiInventory.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

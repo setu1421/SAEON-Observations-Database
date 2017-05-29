@@ -3,12 +3,11 @@ CREATE VIEW [dbo].[vInventoryOrganisations]
 AS 
 Select
   Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name)+'~'+IsNull(Status.Name,'') SurrogateKey,
-  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Name,  Status.Name Status, 
+  --Station.ID StationID, PhenomenonOffering.ID PhenomenonOfferingID, 
+  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Name, IsNull(Status.Name,'No status') Status, 
   Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from
   Observation
-  left join Status
-    on (Observation.StatusID = Status.ID)
   inner join Sensor
     on (Observation.SensorID = Sensor.ID)
   inner join Instrument_Sensor
@@ -27,6 +26,8 @@ from
     on (Station_Instrument.StationID = Station.ID) and
        ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
        ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  --inner join PhenomenonOffering
+  --  on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
   inner join Site
     on (Station.SiteID = Site.ID)
   left join Organisation_Site
@@ -47,6 +48,8 @@ from
        ((Organisation_Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
   left join Organisation InstrumentOrganisation
     on (Organisation_Instrument.OrganisationID = InstrumentOrganisation.ID)  		
+  left join Status
+    on (Observation.StatusID = Status.ID)
 group by
   Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name),
   Status.Name

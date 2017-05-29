@@ -16,6 +16,10 @@
      Create
        [dbo].[Observation].[IX_Observation_ValueYear] (Index)
        [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[vApiDataGaps] (View)
+       [dbo].[vApiDownload] (View)
+       [dbo].[vApiInventory] (View)
+       [dbo].[vApiQuery] (View)
        [dbo].[vInventoryInstruments] (View)
        [dbo].[vInventoryOrganisations] (View)
        [dbo].[vInventoryPhenomenaOfferings] (View)
@@ -87,9 +91,11 @@
        [dbo].[TR_Observation_Update] (Trigger)
      Refresh
        [dbo].[vDataLog] (View)
-       [dbo].[vDownloads] (View)
        [dbo].[vInventory] (View)
        [dbo].[vObservation] (View)
        [dbo].[vObservationsList] (View)
        [dbo].[vObservationRoles] (View)
        [dbo].[progress_Status_Raw] (Procedure)
+
+If this deployment is executed, changes to [dbo].[Observation] might introduce run-time errors in [dbo].[vDownloads].
+
