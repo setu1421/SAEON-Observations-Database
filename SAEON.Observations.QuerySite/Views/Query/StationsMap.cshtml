@@ -47,6 +47,9 @@
             })
             .fail(function () { alert('Error in GetMapPoints'); });
     }
+    $(window).resize(function () {
+        UpdateMap();
+    });
 </script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcCAczkNZZUu5DfM78-7cpBrAnwyEy_Tg&callback=initMap">

@@ -2,6 +2,7 @@
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -19,6 +20,14 @@ namespace SAEON.Observations.QuerySite.Controllers
         //private static string identityUrl = Properties.Settings.Default.IdentityServerUrl;
         private string resource = null;
         protected string Resource { get { return resource; } set { resource = value; } }
+
+        protected List<string> ModelStateErrors
+        {
+            get
+            {
+                return ModelState.Values.SelectMany(v => v.Errors).Select(v => v.ErrorMessage + " " + v.Exception).ToList();
+            }
+        }
 
         // GET: TEntity
         [HttpGet]
@@ -133,6 +142,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     if (!ModelState.IsValid)
                     {
+                        Logging.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
                         return View(item);
                     }
                     else
@@ -216,6 +226,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     if (!ModelState.IsValid)
                     {
+                        Logging.Error("ModelState.Invalid {ModelStateErrors}", ModelStateErrors);
                         return View(delta);
                     }
                     else

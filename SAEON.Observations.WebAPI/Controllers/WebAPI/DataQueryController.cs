@@ -35,6 +35,19 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     if (!input.Stations.Any()) throw new ArgumentOutOfRangeException("input.Stations");
                     if (input.PhenomenaOfferings == null) throw new ArgumentNullException("input.PhenomenaOfferings");
                     if (!input.PhenomenaOfferings.Any()) throw new ArgumentOutOfRangeException("input.PhenomenaOfferings");
+                    var output = new DataQueryOutput();
+                    foreach (var station in await db.Stations.Where(i => input.Stations
+                        .Contains(i.Id))
+                        .Include(i => i.Site)
+                        .Include(i => i.Instruments.Select(j => j.Sensors.Select(s => s.Phenomenon)))
+                        .OrderBy(i => i.Name)
+                        .ToListAsync())
+                    {
+                        var card = new Card { Site = station.Site.Name, Station = station.Name };
+                        card.Instruments.AddRange(station.Instruments.OrderBy(i => i.Name).Select(i => new CardInstrument { Name = i.Name }));
+                        card.Phenomena.AddRange(station.Instruments.SelectMany(i => i.Sensors).Select(s => s.Phenomenon).Select(i => new CardPhenomenon { Name = i.Name }));
+                        output.Cards.Add(card);
+                    }
                     var dataList = await db.vApiDataQueries
                         .Where(i => input.Stations.Contains(i.StationId))
                         .Where(i => input.PhenomenaOfferings.Contains(i.PhenomenonOfferingId))
@@ -49,7 +62,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     string lastSite = null;
                     string lastStation = null;
                     DateTime? lastDate = null;
-                    var output = new DataQueryOutput();
                     // Series
                     // Date series
                     output.Series.Add(new DataSeries { Name = "Date", Caption = "Date" });

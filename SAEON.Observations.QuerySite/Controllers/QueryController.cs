@@ -453,6 +453,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     //Logging.Verbose("Results: {@results}", results);
                     sessionModel.Results = results;
                     SessionModel = sessionModel;
+                    Logging.Verbose("Cards: {@cards}", results.Cards);
                     //Logging.Verbose("Model: {@model}", model);
                     return null;
                 }

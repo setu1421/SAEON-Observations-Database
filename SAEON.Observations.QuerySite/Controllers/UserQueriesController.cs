@@ -11,14 +11,15 @@ namespace SAEON.Observations.QuerySite.Controllers
             Resource = "UserQueries";
         }
 
-        public override Task<ActionResult> Create([Bind(Include = "UserId,Name,Description,QueryInput")]UserQuery item)
+        //public override async Task<ActionResult> Create([Bind(Include = "UserId,Name,Description,QueryInput")]UserQuery item)
+        //{
+        //    return await base.Create(item);
+        //}
+
+        public override async Task<ActionResult> Edit([Bind(Include = "Id,UserId,Name,Description,QueryInput")] UserQuery delta)
         {
-            return base.Create(item);
+            return await base.Edit(delta);
         }
 
-        public override Task<ActionResult> Edit([Bind(Include = "Id,UserId,Name,Description,QueryInput")] UserQuery delta)
-        {
-            return base.Edit(delta);
-        }
     }
 }

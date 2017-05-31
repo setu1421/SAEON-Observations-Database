@@ -5,6 +5,8 @@
     .IsResponsive(true)
     .AllowPaging()
     .PageSettings(p => p.PageSize(50))
+    .AllowFiltering()
+    .FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
     .AllowResizing()
     .AllowScrolling()
     .AllowSorting()

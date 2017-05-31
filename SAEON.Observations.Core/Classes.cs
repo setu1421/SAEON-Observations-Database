@@ -91,8 +91,27 @@ namespace SAEON.Observations.Core
         }
     }
 
+    public class CardInstrument
+    {
+        public string Name { get; set; }
+    }
+
+    public class CardPhenomenon
+    {
+        public string Name { get; set; }
+    }
+
+    public class Card
+    {
+        public string Site { get; set; }
+        public string Station { get; set; }
+        public List<CardInstrument> Instruments { get; private set; } = new List<CardInstrument>();
+        public List<CardPhenomenon> Phenomena { get; private set; } = new List<CardPhenomenon>();
+    }
+
     public class DataQueryOutput
     {
+        public List<Card> Cards { get; private set; } = new List<Card>();
         public List<DataSeries> Series { get; private set; } = new List<DataSeries>();
         public List<ExpandoObject> Data { get; private set; } = new List<ExpandoObject>();
     }

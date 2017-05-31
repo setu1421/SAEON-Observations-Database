@@ -1,3 +1,21 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model QueryModel
+<div class="row">
+    @foreach (var card in Model.Results.Cards)
+    {
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">@card.Site</div>
+                <div class="panel-body">
+                    @(Html.EJ().Accordion("accordianCard").Width("400").Height("250").EnableMultipleOpen(false).Items(data =>
+                        {
+                            data.Add().Text("Instruments").ContentTemplate(@<div>@Html.EJ().ListView("listviewInstruments").ShowHeader(false).Width(400).DataSource(card.Instruments.AsEnumerable()).FieldSettings(fs => fs.Text("Name"))</div>);
+                            data.Add().Text("Phenomena").ContentTemplate(@<div>@Html.EJ().ListView("listviewPhenomena").ShowHeader(false).Width(400).DataSource(card.Phenomena.AsEnumerable()).FieldSettings(fs => fs.Text("Name"))</div>);
+                        })
+                    )
+                </div>
+            </div>
+        </div>
+    }
+</div>
 @Html.EJ().ScriptManager()

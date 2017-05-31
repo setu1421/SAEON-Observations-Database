@@ -684,6 +684,8 @@ public class ImportSchemaHelper : IDisposable
                         {
                             // Find sensor based on Datevalue
                             bool found = false;
+                            bool foundTooEarly = false;
+                            bool foundTooLate = false;
                             if (def.Sensors.Count > 1)
                             {
                                 Log.Verbose("Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
@@ -700,12 +702,14 @@ public class ImportSchemaHelper : IDisposable
                                 {
                                     Log.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
                                     //Log.Verbose("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
+                                    foundTooEarly = true;
                                     continue;
                                 }
                                 if (endDate.HasValue && (rec.DateValue.Date > endDate.Value))
                                 {
                                     Log.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
                                     //Log.Verbose("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
+                                    foundTooLate = true;
                                     continue;
                                 }
                                 rec.SensorID = sensor.Id;
@@ -714,6 +718,7 @@ public class ImportSchemaHelper : IDisposable
                             }
                             if (!found)
                             {
+                                if (foundTooEarly || foundTooLate) continue; // Ignore 
                                 Log.Error("Sensor not found Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
                                 rec.SensorNotFound = true;
                                 rec.SensorID = def.Sensors.FirstOrDefault()?.Id;
