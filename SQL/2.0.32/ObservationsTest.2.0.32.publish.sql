@@ -57,9 +57,6 @@ DROP VIEW [dbo].vDownLoads;
 GO
 PRINT N'Dropping [dbo].[DF_DataLog_ID]...';
 
-GO
-PRINT N'Dropping [dbo].[DF_DataLog_ID]...';
-
 
 GO
 ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_ID];
