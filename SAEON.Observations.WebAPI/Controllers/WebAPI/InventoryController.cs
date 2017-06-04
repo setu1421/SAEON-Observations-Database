@@ -13,7 +13,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("Inventory")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ResourceAuthorize("Observations.Admin", "Inventory")]
+    //[ResourceAuthorize("Observations.Admin", "Inventory")]
     public class InventoryController : ApiController
     {
         protected ObservationsDbContext db = null;

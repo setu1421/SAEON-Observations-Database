@@ -1,9 +1,9 @@
 ﻿@using SAEON.Observations.QuerySite.Models
-@model DataGapsModel
+@model SpacialCoverageModel
 @(
 Html.EJ().TreeView("treeViewLocations")
     .TreeViewFields(field => field
-        .Datasource(ds => ds.URL("/DataGaps/GetLocations").Adaptor(AdaptorType.WebApiAdaptor))
+        .Datasource(ds => ds.URL("/SpacialCoverage/GetLocations").Adaptor(AdaptorType.WebApiAdaptor))
         .Id("Key")
         .ParentId("ParentKey")
         .Text("Text")
@@ -27,7 +27,7 @@ Html.EJ().TreeView("treeViewLocations")
             var nodeData = treeObj.getNode(nodes[i]);
             selected.push(nodeData.id);
         }
-        $.post("/DataGaps/UpdateSelectedLocations", { Locations: selected })
+        $.post("/SpacialCoverage/UpdateSelectedLocations", { Locations: selected })
             .done(function (data) {
                 $('#PartialSelectedLocations').html(data);
                 EnableButtons();

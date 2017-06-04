@@ -1,23 +1,23 @@
 ﻿@using SAEON.Observations.QuerySite.Models
-@model DataGapsModel
+@model SpacialCoverageModel
 @{
-    ViewBag.Title = "Data Gaps";
+    ViewBag.Title = "Spacial coverage";
 }
 <div id="waiting">
     @Html.EJ().WaitingPopup("waiting").Text("Please wait...").ShowOnInit(false)
     <div class="row">
         <div class="col-md-12">
-            @(Html.EJ().Tab("DataGapsTabs").Items(tabs =>
+            @(Html.EJ().Tab("SpacialCoverageTabs").Items(tabs =>
                 {
-                tabs.Add().ID("LocationsTab").Text("Where").ContentTemplate(
-                    @<div class="row">
-                        <div class="col-md-6" id="PartialLocations">
-                            @Html.Partial("Locations", Model)
-                        </div>
-                        <div class="col-md-6" id="PartialSelectedLocations">
-                            @Html.Partial("SelectedLocations", Model)
-                        </div>
-                    </div>);
+                    tabs.Add().ID("LocationsTab").Text("Where").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md-6" id="PartialLocations">
+                                @Html.Partial("Locations", Model)
+                            </div>
+                            <div class="col-md-6" id="PartialSelectedLocations">
+                                @Html.Partial("SelectedLocations", Model)
+                            </div>
+                        </div>);
                     tabs.Add().ID("FeaturesTab").Text("What").ContentTemplate(
                         @<div class="row">
                             <div class="col-md-6" id="PartialFeatures">
@@ -33,13 +33,15 @@
                                 @Html.Partial("Filters", Model)
                             </div>
                         </div>);
-                    tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
+                    tabs.Add().ID("MapTab").Text("Map").ContentTemplate(
                         @<div class="row">
-                            <div class="col-md-12" id="PartialChart">
+                            <div class="col-md-12" id="PartialMap">
+                                @Html.Partial("StationsMap", Model)
                             </div>
                         </div>);
                 })
-                )
+                .ClientSideEvents(ev => ev.ItemActive("onTabActive"))
+            )
         </div>
     </div>
     <div class="row ButtonRow">
@@ -49,9 +51,6 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(function () {
-        $("#ChartTab").addClass("hidden");
-    });
     function ShowWaiting() {
         var wp = $("#waiting").data("ejWaitingPopup");
         wp.show();
@@ -59,6 +58,16 @@
     function HideWaiting() {
         var wp = $("#waiting").data("ejWaitingPopup");
         wp.hide();
+    }
+    var mapVisible = false;
+    function onTabActive() {
+        if (!mapVisible) {
+            var tab = $("#SpacialCoverageTabs").data("ejTab");
+            if (tab.selectedItemIndex() == 3) {
+                UpdateMap();
+                mapVisible = true;
+            }
+        }
     }
 </script>
 <style type="text/css" class="cssStyles">

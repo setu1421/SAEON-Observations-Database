@@ -557,8 +557,9 @@
     <Build Include="dbo\Views\vInventoryYears.sql" />
     <Build Include="dbo\Views\vInventoryOrganisations.sql" />
     <Build Include="dbo\Views\vApiDataQuery.sql" />
-    <Build Include="dbo\Views\vApiDataGaps.sql" />
+    <Build Include="dbo\Views\vApiTemporalCoverage.sql" />
     <Build Include="dbo\Views\vApiInventory.sql" />
+    <Build Include="dbo\Views\vApiSpacialCoverage.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

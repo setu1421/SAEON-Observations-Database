@@ -473,12 +473,6 @@ namespace SAEON.Observations.Core.Entities
         public Guid? CorrelationId { get; set; }
     }
 
-    [Table("vApiDataGaps")]
-    public class vApiDataGap : vApiDataBase
-    {
-        public string Status { get; set; }
-    }
-
     [Table("vApiDataQuery")]
     public class vApiDataQuery : vApiDataBase { }
 
@@ -593,6 +587,21 @@ namespace SAEON.Observations.Core.Entities
         public double? Variance { get; set; }
     }
 
+    [Table("vApiSpacialCoverage")]
+    public class vApiSpacialCoverage : vApiDataBase
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public string Status { get; set; }
+    }
+
+    [Table("vApiTemporalCoverage")]
+    public class vApiTemporalCoverage : vApiDataBase
+    {
+        public string Status { get; set; }
+    }
+
     public class ObservationsDbContext : DbContext
     {
         public ObservationsDbContext() : base("Observations")
@@ -620,9 +629,10 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
         public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
-        public DbSet<vApiDataGap> vApiDataGaps { get; set; }
         public DbSet<vApiDataQuery> vApiDataQueries { get; set; }
         public DbSet<vApiInventory> vApiInventory { get; set; }
+        public DbSet<vApiSpacialCoverage> vApiSpacialCoverages { get; set; }
+        public DbSet<vApiTemporalCoverage> vApiTemporalCoverages { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

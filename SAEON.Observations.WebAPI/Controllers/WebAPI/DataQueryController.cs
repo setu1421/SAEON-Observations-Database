@@ -64,16 +64,19 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     DateTime? lastDate = null;
                     // Series
                     // Date series
+                    output.DataTable.Columns.Add("Date", typeof(DateTime));
                     output.Series.Add(new DataSeries { Name = "Date", Caption = "Date" });
                     // Feature series
                     var features = dataList.Select(i => new DataFeature { Caption = i.FeatureCaption, Name = i.FeatureName }).Distinct().ToList();
                     foreach (var feature in features)
                     {
+                        output.DataTable.Columns.Add(feature.Name, typeof(double)).Caption = feature.Caption;
                         output.Series.Add(new DataSeries { Name = feature.Name, Caption = feature.Caption, IsFeature = true });
                     }
                     // Rows
                     List<ExpandoObject> rows = new List<ExpandoObject>();
                     dynamic row = null;
+                    DataRow dataRow = null;
                     IDictionary<string, object> rowFeatures = null;
                     bool isNewRow = false;
                     foreach (var data in dataList)
@@ -109,6 +112,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                                 rowFeatures.Add(feature.Name, new double?());
                             }
                             rows.Add(row);
+                            dataRow = output.DataTable.Rows.Add();
+                            dataRow["Date"] = data.ValueDate;
                             isNewRow = false;
                         }
                         double? oldValue = (double?)rowFeatures[data.FeatureName];
@@ -120,6 +125,16 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                         {
                             rowFeatures[data.FeatureName] = data.Value;
                         }
+                        if (dataRow.IsNull(data.FeatureName))
+                        {
+                            if (data.Value.HasValue)
+                                dataRow[data.FeatureName] = data.Value.Value;
+                        }
+                        else
+                        {
+                            dataRow[data.FeatureName] = (double)dataRow[data.FeatureName] + data.Value.Value;
+                        }
+                            
                     }
                     output.Data.AddRange(rows);
                     //Logging.Verbose("Data: {Data}", result.Data);

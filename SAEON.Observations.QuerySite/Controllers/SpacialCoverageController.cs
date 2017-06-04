@@ -1,58 +1,52 @@
 ﻿using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
-using Syncfusion.JavaScript;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Thinktecture.IdentityModel.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
-    [Authorize]
-    [ResourceAuthorize("Observations.Admin", "Inventory")]
-    public class InventoryController : BaseWebApiController
+    [ResourceAuthorize("Observations.Admin", "SpacialCoverage")]
+    public class SpacialCoverageController : BaseWebApiController
     {
-
-        private InventoryModel SessionModel
+        private SpacialCoverageModel SessionModel
         {
             get
             {
-                return GetSessionModel<InventoryModel>();
+                return GetSessionModel<SpacialCoverageModel>();
             }
             set
             {
-                SetSessionModel<InventoryModel>(value);
+                SetSessionModel<SpacialCoverageModel>(value);
             }
         }
 
-        //private async Task<InventoryModel> CreateSessionModel()
-        private InventoryModel CreateSessionModel()
+        private async Task<SpacialCoverageModel> CreateSessionModel()
         {
-            var sessionModel = new InventoryModel()
+            var sessionModel = new SpacialCoverageModel()
             {
-                //Locations = await GetLocationsList(),
-                //Features = await GetFeaturesList(),
+                Locations = await GetLocationsList(),
+                Features = await GetFeaturesList(),
             };
             return sessionModel;
         }
 
-        // GET: Inventory
-        //public async Task<ActionResult> Index()
+        // GET: Query
         public async Task<ActionResult> Index()
         {
             using (Logging.MethodCall(GetType()))
             {
-                var sessionModel = /*await*/ CreateSessionModel();
+                var sessionModel = await CreateSessionModel();
                 SessionModel = sessionModel;
-                await GetData();
                 //Logging.Verbose("Model: {@model}", model);
                 return View(sessionModel);
             }
         }
 
-/*
         #region Locations
         private async Task<List<Location>> GetLocationsList()
         {
@@ -66,10 +60,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var sessionModel = SessionModel;
-                    var result = Json(sessionModel.Locations, JsonRequestBehavior.AllowGet);
-                    result.MaxJsonLength = int.MaxValue;
-                    return result;
+                    return GetListAsJson(SessionModel.Locations);
                 }
                 catch (Exception ex)
                 {
@@ -149,11 +140,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-
         #endregion
-*/
 
-/*
         #region Features
         private async Task<List<Feature>> GetFeaturesList()
         {
@@ -167,10 +155,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var sessionModel = SessionModel;
-                    var result = Json(sessionModel.Features, JsonRequestBehavior.AllowGet);
-                    result.MaxJsonLength = int.MaxValue;
-                    return result;
+                    return GetListAsJson(SessionModel.Features);
                 }
                 catch (Exception ex)
                 {
@@ -251,9 +236,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
         #endregion
-*/
 
-/*
         #region Filters
         [HttpGet]
         public PartialViewResult GetFiltersHtml()
@@ -279,7 +262,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    Logging.Verbose("StartDate: {startDate} EndDate: {endDate}", startDate, endDate);
+                    Logging.Verbose("StartDate: {startDate}", startDate);
                     var sessionModel = SessionModel;
                     sessionModel.StartDate = startDate;
                     sessionModel.EndDate = endDate;
@@ -295,7 +278,6 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
         #endregion
-*/
 
         #region Data
         [HttpGet]
@@ -307,16 +289,16 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var sessionModel = SessionModel;
                     //Logging.Verbose("Model: {@model}", model);
-                    var input = new InventoryInput
+                    var input = new SpacialCoverageInput
                     {
                         Stations = sessionModel.SelectedLocations.Select(i => i.Id).ToList(),
-                        Offerings = sessionModel.SelectedFeatures.Select(i => i.Id).ToList(),
-                        StartDate = sessionModel.StartDate,
-                        EndDate = sessionModel.EndDate
+                        PhenomenaOfferings = sessionModel.SelectedFeatures.Select(i => i.Id).ToList(),
+                        StartDate = new DateTime(sessionModel.StartDate.Year, sessionModel.StartDate.Month, 1),
+                        EndDate = new DateTime(sessionModel.EndDate.Year, sessionModel.EndDate.Month, 1).AddMonths(1).AddDays(-1)
                     };
                     Logging.Verbose("Input: {@input}", input);
-                    var results = (await Post<InventoryInput, InventoryOutput>("Inventory", input));
-                    Logging.Verbose("Results: {@results}", results);
+                    var results = (await Post<SpacialCoverageInput, SpacialCoverageOutput>("SpacialCoverage", input));
+                    //Logging.Verbose("Results: {@results}", results);
                     sessionModel.Results = results;
                     SessionModel = sessionModel;
                     //Logging.Verbose("Model: {@model}", model);
@@ -331,15 +313,15 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
         #endregion
 
-/*
-        #region Totals
-        public ContentResult GetTotals(DataManager dm)
+        #region Map
+        [HttpGet]
+        public PartialViewResult GetStationsMap()
         {
             using (Logging.MethodCall(GetType()))
             {
                 try
                 {
-                    return GetListAsContent<InventoryTotalItem>(SessionModel.Results.Totals, dm);
+                    return PartialView("StationsMap");
                 }
                 catch (Exception ex)
                 {
@@ -349,96 +331,5 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
         #endregion
-
-        #region Stations
-        public ContentResult GetStations(DataManager dm)
-        {
-            using (Logging.MethodCall(GetType()))
-            {
-                try
-                {
-                    return GetListAsContent<InventoryStationItem>(SessionModel.Results.Stations, dm);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex);
-                    throw;
-                }
-            }
-        }
-        #endregion
-
-        #region Phenomena
-        public ContentResult GetPhenomena(DataManager dm)
-        {
-            using (Logging.MethodCall(GetType()))
-            {
-                try
-                {
-                    return GetListAsContent<InventoryPhenomenonOfferingItem>(SessionModel.Results.PhenomenaOfferings, dm);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex);
-                    throw;
-                }
-            }
-        }
-        #endregion
-
-        #region Instruments
-        public ContentResult GetInstruments(DataManager dm)
-        {
-            using (Logging.MethodCall(GetType()))
-            {
-                try
-                {
-                    return GetListAsContent<InventoryInstrumentItem>(SessionModel.Results.Instruments, dm);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex);
-                    throw;
-                }
-            }
-        }
-        #endregion
-
-        #region Years
-        public ContentResult GetYears(DataManager dm)
-        {
-            using (Logging.MethodCall(GetType()))
-            {
-                try
-                {
-                    return GetListAsContent<InventoryYearItem>(SessionModel.Results.Years, dm);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex);
-                    throw;
-                }
-            }
-        }
-        #endregion
-
-        #region Organisations
-        public ContentResult GetOrganisations(DataManager dm)
-        {
-            using (Logging.MethodCall(GetType()))
-            {
-                try
-                {
-                    return GetListAsContent<InventoryOrganisationItem>(SessionModel.Results.Organisations, dm);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex);
-                    throw;
-                }
-            }
-        }
-        #endregion
-*/
     }
 }

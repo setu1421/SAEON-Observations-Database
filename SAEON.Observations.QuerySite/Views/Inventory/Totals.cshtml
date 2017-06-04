@@ -1,7 +1,8 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model InventoryModel
 @(Html.EJ().Grid<object>("gridTotals")
-    .Datasource(ds => ds.URL("/Inventory/GetTotals").Adaptor(AdaptorType.UrlAdaptor))
+    //.Datasource(ds => ds.URL("/Inventory/GetTotals").Adaptor(AdaptorType.UrlAdaptor))
+    .Datasource(Model.Results.Totals)
     .IsResponsive(true)
     .AllowPaging()
     .PageSettings(p => p.PageSize(50))

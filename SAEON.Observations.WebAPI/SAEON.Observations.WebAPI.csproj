@@ -322,7 +322,8 @@
     <Compile Include="Controllers\WebAPI\BaseController.cs" />
     <Compile Include="Controllers\WebAPI\ClaimsController.cs" />
     <Compile Include="Controllers\WebAPI\DataDownloadController.cs" />
-    <Compile Include="Controllers\WebAPI\DataGapsController.cs" />
+    <Compile Include="Controllers\WebAPI\SpacialCoverageController.cs" />
+    <Compile Include="Controllers\WebAPI\TemporalCoverageController.cs" />
     <Compile Include="Controllers\WebAPI\DataQueryController.cs" />
     <Compile Include="Controllers\WebAPI\FeaturesController.cs" />
     <Compile Include="Controllers\WebAPI\FeaturesHelper.cs" />

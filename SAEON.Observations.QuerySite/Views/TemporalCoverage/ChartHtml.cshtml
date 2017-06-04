@@ -1,7 +1,7 @@
 ﻿@using System.Data
 @using SAEON.Observations.QuerySite.Models
 @using Syncfusion.JavaScript.DataVisualization
-@model DataGapsModel
+@model TemporalCoverageModel
 @(Html.EJ().Chart("chartResults")
     .PrimaryXAxis(px => px.ValueType(AxisValueType.Datetime).LabelFormat("dd MMM yyyy"))
     .PrimaryYAxis(py => py.ValueType(AxisValueType.Double))
@@ -12,27 +12,27 @@
             sr.Name(s.Caption)
             .YAxisName(s.Caption)
             .Type(SeriesType.Scatter)
-            .DataSource(ds => ds.URL("/DataGaps/GetChartData"))
+            .DataSource(ds => ds.URL("/TemporalCoverage/GetChartData"))
             .XName("Date")
             .YName(s.Name)
-            .Fill("#00ff00")
+            .Fill("#008000")
             .Add();
         }
         foreach (var s in Model.Results.Series.Where(i => i.IsFeature && (i.Status == "Being Verified")))
         {
             sr.Name(s.Caption)
             .Type(SeriesType.Scatter)
-            .DataSource(ds => ds.URL("/DataGaps/GetChartData"))
+            .DataSource(ds => ds.URL("/TemporalCoverage/GetChartData"))
             .XName("Date")
             .YName(s.Name)
-            .Fill("#ff6600")
+            .Fill("Orange")
             .Add();
         }
         foreach (var s in Model.Results.Series.Where(i => i.IsFeature && (i.Status == "Unverified")))
         {
             sr.Name(s.Caption)
             .Type(SeriesType.Scatter)
-            .DataSource(ds => ds.URL("/DataGaps/GetChartData"))
+            .DataSource(ds => ds.URL("/TemporalCoverage/GetChartData"))
             .XName("Date")
             .YName(s.Name)
             .Fill("#ff0000")
@@ -42,7 +42,7 @@
         {
             sr.Name(s.Caption)
             .Type(SeriesType.Scatter)
-            .DataSource(ds => ds.URL("/DataGaps/GetChartData"))
+            .DataSource(ds => ds.URL("/TemporalCoverage/GetChartData"))
             .XName("Date")
             .YName(s.Name)
             .Fill("#808080")

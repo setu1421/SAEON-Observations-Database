@@ -1,0 +1,49 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model SpacialCoverageModel
+<div class="row">
+    <div class="col-md-12">
+        <div id="mapLocations" style="height:400px; width:100%"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    var markers = [];
+    var map;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('mapLocations'), {
+            zoom: 5,
+            center: { lat: -28.7238579, lng: 24.6531662 }
+        });
+        UpdateMap(true);
+    }
+    function UpdateMap(isInit) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+        var bounds = new google.maps.LatLngBounds();
+        function addPin(latitude, longitude, name) {
+            var marker = new google.maps.Marker({
+                position: { lat: location.Latitude, lng: location.Longitude },
+                map: map,
+                title: location.Title
+            });
+            markers.push(marker);
+            bounds.extend(marker.position);
+        }
+        @foreach (var item in Model.Results.Stations) {
+            @:addPin(@item.Latitude.ToString("F6", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")), @item.Longitude.ToString("F6", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")), @Html.Raw($"'{item.Name}'"))
+        }
+        if (isInit) {
+            map.fitBounds(bounds);
+        }
+        var center = map.getCenter();
+        google.maps.event.trigger(map, "resize");
+        map.setCenter(center);
+    }
+    $(window).resize(function () {
+        UpdateMap();
+    });
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcCAczkNZZUu5DfM78-7cpBrAnwyEy_Tg&callback=initMap">
+</script>

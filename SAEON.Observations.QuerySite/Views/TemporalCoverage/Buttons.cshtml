@@ -1,5 +1,5 @@
 ﻿@using SAEON.Observations.QuerySite.Models
-@model DataGapsModel
+@model TemporalCoverageModel
 @{
     Html.EJ()
         .Button("btnSearch")
@@ -16,9 +16,9 @@
 <script type="text/javascript">
     function onSearchClick() {
         ShowWaiting();
-        $.get("/DataGaps/GetData")
+        $.get("/TemporalCoverage/GetData")
             .done(function () {
-                $("#PartialChart").load("/DataGaps/GetChartHtml", function () {
+                $("#PartialChart").load("/TemporalCoverage/GetChartHtml", function () {
                     ShowResults();
                     EnableButtons();
                     HideWaiting();
@@ -66,8 +66,6 @@
         btnSearch.disable();
     }
     function ShowResults() {
-        $("#TableTab").removeClass("hidden");
-        $("#CardsTab").removeClass("hidden");
         $("#ChartTab").removeClass("hidden");
     }
     function HideResults() {

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using SAEON.Observations.Core;
+﻿using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
@@ -11,24 +10,24 @@ using Thinktecture.IdentityModel.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
-    [ResourceAuthorize("Observations.Admin", "DataGaps")]
-    public class DataGapsController : BaseWebApiController
+    [ResourceAuthorize("Observations.Admin", "TemporalCoverage")]
+    public class TemporalCoverageController : BaseWebApiController
     {
-        private DataGapsModel SessionModel
+        private TemporalCoverageModel SessionModel
         {
             get
             {
-                return GetSessionModel<DataGapsModel>();
+                return GetSessionModel<TemporalCoverageModel>();
             }
             set
             {
-                SetSessionModel<DataGapsModel>(value);
+                SetSessionModel<TemporalCoverageModel>(value);
             }
         }
 
-        private async Task<DataGapsModel> CreateSessionModel()
+        private async Task<TemporalCoverageModel> CreateSessionModel()
         {
-            var sessionModel = new DataGapsModel()
+            var sessionModel = new TemporalCoverageModel()
             {
                 Locations = await GetLocationsList(),
                 Features = await GetFeaturesList(),
@@ -290,7 +289,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var sessionModel = SessionModel;
                     //Logging.Verbose("Model: {@model}", model);
-                    var input = new DataGapsInput
+                    var input = new TemporalCoverageInput
                     {
                         Stations = sessionModel.SelectedLocations.Select(i => i.Id).ToList(),
                         PhenomenaOfferings = sessionModel.SelectedFeatures.Select(i => i.Id).ToList(),
@@ -298,7 +297,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         EndDate = new DateTime(sessionModel.EndDate.Year, sessionModel.EndDate.Month, 1).AddMonths(1).AddDays(-1)
                     };
                     Logging.Verbose("Input: {@input}", input);
-                    var results = (await Post<DataGapsInput, DataGapsOutput>("DataGaps", input));
+                    var results = (await Post<TemporalCoverageInput, TemporalCoverageOutput>("TemporalCoverage", input));
                     //Logging.Verbose("Results: {@results}", results);
                     sessionModel.Results = results;
                     SessionModel = sessionModel;

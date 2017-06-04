@@ -7,7 +7,7 @@
     @Html.EJ().WaitingPopup("waiting").Text("Please wait...").ShowOnInit(true)
     <div class="row">
         <div class="col-md-12">
-            @{Html.EJ().Accordion("accordianInventory").Width("100%").EnableMultipleOpen(true).Items(data =>
+            @{Html.EJ().Accordion("accordianInventory").Width("100%").EnableMultipleOpen(false).Items(data =>
                 {
                     data.Add().Text("Totals").ContentTemplate(@<div>@Html.Partial("Totals", Model)</div>);
                     data.Add().Text("Stations").ContentTemplate(@<div>@Html.Partial("Stations", Model)</div>);
@@ -17,7 +17,7 @@
                     data.Add().Text("Organisations").ContentTemplate(@<div>@Html.Partial("Organisations", Model)</div>);
                 })
                 .Render();
-            }
+}
         </div>
     </div>
     @*<div class="row ButtonRow">

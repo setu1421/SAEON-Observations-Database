@@ -2,7 +2,7 @@
 @model InventoryModel
 @(Html.EJ().Grid<object>
     ("gridOrganisations")
-    .Datasource(ds => ds.URL("/Inventory/GetOrganisations").Adaptor(AdaptorType.UrlAdaptor))
+    .Datasource(Model.Results.Organisations)
     .IsResponsive(true)
     .AllowPaging()
     .PageSettings(p => p.PageSize(50))
@@ -22,11 +22,11 @@
         col.Field("StandardDeviation").HeaderText("Std Dev").HeaderTextAlign(TextAlign.Right).Format("{0:n3}").TextAlign(TextAlign.Right).Add();
         col.Field("Variance").HeaderText("Variance").HeaderTextAlign(TextAlign.Right).Format("{0:n3}").TextAlign(TextAlign.Right).Add();
     })
-)
-<script type="text/javascript">
+)<script type="text/javascript">
     function onTotalsDataBound() {
         HideWaiting();
     }
 </script>
+
 
 

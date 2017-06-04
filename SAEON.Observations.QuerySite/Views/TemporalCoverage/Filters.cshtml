@@ -1,5 +1,5 @@
 ﻿@using SAEON.Observations.QuerySite.Models
-@model DataGapsModel
+@model TemporalCoverageModel
 <div class="row">
     <div class="col-md-2">
         @Html.LabelFor(i => i.StartDate)
@@ -21,7 +21,7 @@
         var startDate = $("#StartDate").ejDatePicker("instance").getValue();
         var endDate = $("#EndDate").ejDatePicker("instance").getValue();
         $.ajax({
-            url: "/DataGaps/UpdateFilters",
+            url: "/TemporalCoverage/UpdateFilters",
             data: JSON.stringify({
                 StartDate: startDate,
                 EndDate: endDate

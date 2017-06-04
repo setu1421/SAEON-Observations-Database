@@ -1,7 +1,8 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model QueryModel
 @(Html.EJ().Grid<object>("gridResults")
-    .Datasource(ds => ds.URL("/Query/GetTableData").Adaptor(AdaptorType.UrlAdaptor))
+    //.Datasource(ds => ds.URL("/Query/GetTableData").Adaptor(AdaptorType.UrlAdaptor))
+    .Datasource(Model.Results.DataTable)
     .IsResponsive(true)
     .AllowPaging()
     .PageSettings(p => p.PageSize(50))
@@ -14,7 +15,10 @@
     {
         foreach (var s in Model.Results.Series)
         {
-            col.Field(s.Name).HeaderText(s.Caption).Add();
+            if (s.Name == "Date")
+                col.Field(s.Name).HeaderText(s.Caption).Format("{0:dd MMM yyyy").Add();
+            else
+                col.Field(s.Name).HeaderText(s.Caption).Add();
         }
     })
 )

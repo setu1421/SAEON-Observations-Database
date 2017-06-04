@@ -20,8 +20,9 @@ namespace SAEON.Observations.QuerySite
                 if (!context.Principal.Identity.IsAuthenticated) return Nok();
                 switch (context.Resource.First().Value)
                 {
-                    case "DataGaps":
                     case "Inventory":
+                    case "SpacialCoverage":
+                    case "TemporalCoverage":
                         return AuthorizeAdmin(context);
                     default:
                         return Nok();

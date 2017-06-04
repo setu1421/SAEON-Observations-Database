@@ -259,10 +259,11 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseRestController.cs" />
     <Compile Include="Controllers\BaseWebApiController.cs" />
-    <Compile Include="Controllers\DataGapsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
+    <Compile Include="Controllers\SpacialCoverageController.cs" />
+    <Compile Include="Controllers\TemporalCoverageController.cs" />
     <Compile Include="Controllers\UserDownloadsController.cs" />
     <Compile Include="Controllers\UserQueriesController.cs" />
     <Compile Include="ErrorHandler\AiHandleErrorAttribute.cs" />
@@ -270,7 +271,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\InventoryModels.cs" />
-    <Compile Include="Models\DataGapsModels.cs" />
+    <Compile Include="Models\SpacialCoverageModels.cs" />
+    <Compile Include="Models\TemporalCoverageModels.cs" />
     <Compile Include="Models\QueryModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -845,19 +847,19 @@
     <Content Include="Views\Query\IndexOld.cshtml" />
     <Content Include="Views\Query\Test.cshtml" />
     <Content Include="Views\Inventory\IndexNew.cshtml" />
-    <Content Include="Views\Shared\_QueryPartial.cshtml" />
+    <Content Include="Views\Shared\_AdminPartial.cshtml" />
     <Content Include="Views\Shared\Forbidden.cshtml" />
-    <Content Include="Views\Inventory\Features.cshtml" />
-    <Content Include="Views\Inventory\FeaturesHtml.cshtml" />
-    <Content Include="Views\Inventory\Filters.cshtml" />
-    <Content Include="Views\Inventory\FiltersHtml.cshtml" />
-    <Content Include="Views\Inventory\Locations.cshtml" />
-    <Content Include="Views\Inventory\LocationsHtml.cshtml" />
-    <Content Include="Views\Inventory\SelectedFeatures.cshtml" />
-    <Content Include="Views\Inventory\SelectedFeaturesHtml.cshtml" />
-    <Content Include="Views\Inventory\SelectedLocations.cshtml" />
-    <Content Include="Views\Inventory\SelectedLocationsHtml.cshtml" />
-    <Content Include="Views\Inventory\Buttons.cshtml" />
+    <Content Include="Views\Inventory\vNext\Features.cshtml" />
+    <Content Include="Views\Inventory\vNext\FeaturesHtml.cshtml" />
+    <Content Include="Views\Inventory\vNext\Filters.cshtml" />
+    <Content Include="Views\Inventory\vNext\FiltersHtml.cshtml" />
+    <Content Include="Views\Inventory\vNext\Locations.cshtml" />
+    <Content Include="Views\Inventory\vNext\LocationsHtml.cshtml" />
+    <Content Include="Views\Inventory\vNext\SelectedFeatures.cshtml" />
+    <Content Include="Views\Inventory\vNext\SelectedFeaturesHtml.cshtml" />
+    <Content Include="Views\Inventory\vNext\SelectedLocations.cshtml" />
+    <Content Include="Views\Inventory\vNext\SelectedLocationsHtml.cshtml" />
+    <Content Include="Views\Inventory\vNext\Buttons.cshtml" />
     <Content Include="Views\Inventory\Index.cshtml" />
     <Content Include="Views\Inventory\Totals.cshtml" />
     <Content Include="Views\Inventory\Stations.cshtml" />
@@ -865,22 +867,36 @@
     <Content Include="Views\Inventory\Instruments.cshtml" />
     <Content Include="Views\Inventory\Years.cshtml" />
     <Content Include="Views\Inventory\Organisations.cshtml" />
-    <Content Include="Views\DataGaps\Buttons.cshtml" />
-    <Content Include="Views\DataGaps\Features.cshtml" />
-    <Content Include="Views\DataGaps\FeaturesHtml.cshtml" />
-    <Content Include="Views\DataGaps\Filters.cshtml" />
-    <Content Include="Views\DataGaps\FiltersHtml.cshtml" />
-    <Content Include="Views\DataGaps\Index.cshtml" />
-    <Content Include="Views\DataGaps\Locations.cshtml" />
-    <Content Include="Views\DataGaps\LocationsHtml.cshtml" />
-    <Content Include="Views\DataGaps\SelectedFeatures.cshtml" />
-    <Content Include="Views\DataGaps\SelectedFeaturesHtml.cshtml" />
-    <Content Include="Views\DataGaps\SelectedLocations.cshtml" />
-    <Content Include="Views\DataGaps\SelectedLocationsHtml.cshtml" />
-    <Content Include="Views\DataGaps\ChartHtml.cshtml" />
+    <Content Include="Views\TemporalCoverage\Buttons.cshtml" />
+    <Content Include="Views\TemporalCoverage\Features.cshtml" />
+    <Content Include="Views\TemporalCoverage\FeaturesHtml.cshtml" />
+    <Content Include="Views\TemporalCoverage\Filters.cshtml" />
+    <Content Include="Views\TemporalCoverage\FiltersHtml.cshtml" />
+    <Content Include="Views\TemporalCoverage\Index.cshtml" />
+    <Content Include="Views\TemporalCoverage\Locations.cshtml" />
+    <Content Include="Views\TemporalCoverage\LocationsHtml.cshtml" />
+    <Content Include="Views\TemporalCoverage\SelectedFeatures.cshtml" />
+    <Content Include="Views\TemporalCoverage\SelectedFeaturesHtml.cshtml" />
+    <Content Include="Views\TemporalCoverage\SelectedLocations.cshtml" />
+    <Content Include="Views\TemporalCoverage\SelectedLocationsHtml.cshtml" />
+    <Content Include="Views\TemporalCoverage\ChartHtml.cshtml" />
+    <Content Include="Views\SpacialCoverage\Buttons.cshtml" />
+    <Content Include="Views\SpacialCoverage\StationsMap.cshtml" />
+    <Content Include="Views\SpacialCoverage\Features.cshtml" />
+    <Content Include="Views\SpacialCoverage\FeaturesHtml.cshtml" />
+    <Content Include="Views\SpacialCoverage\Filters.cshtml" />
+    <Content Include="Views\SpacialCoverage\FiltersHtml.cshtml" />
+    <Content Include="Views\SpacialCoverage\Index.cshtml" />
+    <Content Include="Views\SpacialCoverage\Locations.cshtml" />
+    <Content Include="Views\SpacialCoverage\LocationsHtml.cshtml" />
+    <Content Include="Views\SpacialCoverage\SelectedFeatures.cshtml" />
+    <Content Include="Views\SpacialCoverage\SelectedFeaturesHtml.cshtml" />
+    <Content Include="Views\SpacialCoverage\SelectedLocations.cshtml" />
+    <Content Include="Views\SpacialCoverage\SelectedLocationsHtml.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\DataGaps\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

@@ -1,5 +1,5 @@
 ﻿--> Added 2.0.32 20170527 TimPN
-CREATE VIEW [dbo].[vApiDataGaps]
+CREATE VIEW [dbo].[vApiTemporalCoverage]
 AS
 Select
   Observation.ID,
@@ -27,7 +27,7 @@ Select
     when Status.Name is Null then 'No Status'
 	when Status.Name = 'Verified' then Status.Name
 	when Status.Name = 'Unverified' then Status.Name
-	else 'Being verified'
+	else 'Being Verified'
   end 
 from
   Observation

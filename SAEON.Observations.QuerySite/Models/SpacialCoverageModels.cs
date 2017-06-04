@@ -7,7 +7,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SAEON.Observations.QuerySite.Models
 {
-    public class DataGapsModel
+    public class SpacialMapPoint
+    {
+        public string Title { get; set; }
+        public string Url { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public SpacialStatus Status { get; set; }
+    }
+
+    public class SpacialCoverageModel
     {
         public List<Feature> Features { get; set; }
         public List<Feature> SelectedFeatures { get; private set; } = new List<Feature>();
@@ -17,7 +27,7 @@ namespace SAEON.Observations.QuerySite.Models
         public DateTime StartDate { get; set; } = new DateTime(DateTime.Now.Year,DateTime.Now.Month,1);
         [DisplayName("End Date")]
         public DateTime EndDate { get; set; } = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1).AddDays(-1);
-        public DataGapsOutput Results { get; set; } = new DataGapsOutput();
+        public SpacialCoverageOutput Results { get; set; } = new SpacialCoverageOutput();
     }
 
 }

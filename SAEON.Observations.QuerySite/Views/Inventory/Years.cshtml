@@ -2,7 +2,8 @@
 @model InventoryModel
 @(Html.EJ().Grid<object>
     ("gridYears")
-    .Datasource(ds => ds.URL("/Inventory/GetYears").Adaptor(AdaptorType.UrlAdaptor))
+    //.Datasource(ds => ds.URL("/Inventory/GetYears").Adaptor(AdaptorType.UrlAdaptor))
+    .Datasource(Model.Results.Years)
     .IsResponsive(true)
     .AllowPaging()
     .PageSettings(p => p.PageSize(50))

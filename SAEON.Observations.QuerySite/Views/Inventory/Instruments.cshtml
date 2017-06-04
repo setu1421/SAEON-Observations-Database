@@ -2,7 +2,7 @@
 @model InventoryModel
 @(Html.EJ().Grid<object>
     ("gridInstruments")
-    .Datasource(ds => ds.URL("/Inventory/GetInstruments").Adaptor(AdaptorType.UrlAdaptor))
+    .Datasource(Model.Results.Instruments)
     .IsResponsive(true)
     .AllowPaging()
     .PageSettings(p => p.PageSize(50))

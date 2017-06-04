@@ -12,19 +12,19 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("DataGaps")]
+    [RoutePrefix("TemporalCoverage")]
     [ApiExplorerSettings(IgnoreApi = true)]
     //[ClaimsAuthorization("client_id","SAEON.Observations.QuerySite")]
-    public class DataGapsController : BaseController
+    public class TemporalCoverageController : BaseController
     {
-        public DataGapsController() : base()
+        public TemporalCoverageController() : base()
         {
             db.Database.CommandTimeout = 0;
         }
 
         [HttpPost]
         [Route]
-        public async Task<DataGapsOutput> Execute(DataGapsInput input)
+        public async Task<TemporalCoverageOutput> Execute(TemporalCoverageInput input)
         {
             using (Logging.MethodCall(GetType(), new ParameterList { { "Params", input } }))
             {
@@ -36,7 +36,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     if (!input.Stations.Any()) throw new ArgumentOutOfRangeException("input.Stations");
                     if (input.PhenomenaOfferings == null) throw new ArgumentNullException("input.PhenomenaOfferings");
                     if (!input.PhenomenaOfferings.Any()) throw new ArgumentOutOfRangeException("input.PhenomenaOfferings");
-                    var dataList = await db.vApiDataGaps
+                    var dataList = await db.vApiTemporalCoverages
                         .Where(i => input.Stations.Contains(i.StationId))
                         .Where(i => input.PhenomenaOfferings.Contains(i.PhenomenonOfferingId))
                         .Where(i => i.ValueDay >= input.StartDate)
@@ -50,7 +50,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     string lastSite = null;
                     string lastStation = null;
                     DateTime? lastDate = null;
-                    var output = new DataGapsOutput();
+                    var output = new TemporalCoverageOutput();
                     // Series
                     // Date series
                     output.Series.Add(new DataSeries { Name = "Date", Caption = "Date" });
@@ -59,7 +59,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     var features = dataList.Select(i => new DataFeature { Caption = i.FeatureCaption, Name = i.FeatureName, Status = i.Status }).Distinct().ToList();
                     foreach (var feature in features)
                     {
-                        output.Series.Add(new DataSeries { Name = feature.Name + "_" + feature.Status.Replace(" ", ""), Caption = $"{ basefeatures.IndexOf(basefeatures.Where(i => i.Name == feature.Name).FirstOrDefault()) + 1}-{feature.Caption}", IsFeature = true, Status = feature.Status });
+                        output.Series.Add(new DataSeries { Name = feature.Name + "_" + feature.Status.Replace(" ", ""), Caption = $"{ basefeatures.IndexOf(basefeatures.Where(i => i.Name == feature.Name).FirstOrDefault()) + 1}-{feature.Caption}-{feature.Status}", IsFeature = true, Status = feature.Status });
                     }
                     // Rows
                     List<ExpandoObject> rows = new List<ExpandoObject>();
@@ -94,9 +94,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 #pragma warning restore IDE0017 // Simplify object initialization
                             row.Date = data.ValueDate;
                             rowFeatures = row as IDictionary<string, object>;
-                            foreach (var feature in features)
+                            foreach (var series in output.Series.Where(i=> i.IsFeature))
                             {
-                                rowFeatures.Add(feature.Name, new double?());
+                                rowFeatures.Add(series.Name, new double?());
                             }
                             rows.Add(row);
                             isNewRow = false;

@@ -467,7 +467,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region Table
-        //[HttpGet]
+        [HttpPost]
         public ContentResult GetTableData(DataManager dm)
         {
             using (Logging.MethodCall(GetType()))

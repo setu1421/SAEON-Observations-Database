@@ -2,7 +2,8 @@
 @model InventoryModel
 @(Html.EJ().Grid<object>
     ("gridPhenomena")
-    .Datasource(ds => ds.URL("/Inventory/GetPhenomena").Adaptor(AdaptorType.UrlAdaptor))
+    //.Datasource(ds => ds.URL("/Inventory/GetPhenomena").Adaptor(AdaptorType.UrlAdaptor))
+    .Datasource(Model.Results.PhenomenaOfferings)
     .IsResponsive(true)
     .AllowPaging()
     .PageSettings(p => p.PageSize(50))

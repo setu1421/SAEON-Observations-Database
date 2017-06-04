@@ -50,6 +50,8 @@ from
     on (Organisation_Instrument.OrganisationID = InstrumentOrganisation.ID)  		
   left join Status
     on (Observation.StatusID = Status.ID)
+where 
+  (Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) is not null)
 group by
   Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name),
   Status.Name

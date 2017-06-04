@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -77,6 +78,7 @@ namespace SAEON.Observations.Core
                 (Name == feature.Name) &&
                 (Status == feature.Status);
         }
+
         public override int GetHashCode()
         {
             unchecked
@@ -113,7 +115,9 @@ namespace SAEON.Observations.Core
     {
         public List<Card> Cards { get; private set; } = new List<Card>();
         public List<DataSeries> Series { get; private set; } = new List<DataSeries>();
+        public DataTable DataTable { get; private set; } = new DataTable("Data");
         public List<ExpandoObject> Data { get; private set; } = new List<ExpandoObject>();
+        //public string DataAsJson { get { return JsonConvert.SerializeObject(Data, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }); }  }
     }
     #endregion
 
@@ -125,10 +129,70 @@ namespace SAEON.Observations.Core
     }
     #endregion DataDownload
 
-    #region DataGaps
-    public class DataGapsInput : DataQueryInput { }
+    #region SpacialCoverage
+    public class SpacialCoverageInput : DataQueryInput { }
 
-    public class DataGapsOutput : DataQueryOutput { }
+    public enum SpacialStatus
+    {
+        NoStatus,
+        Unverified,
+        BeingVerified,
+        Verified
+    }
+
+    public class SpacialStation
+    {
+        public string Name { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public SpacialStatus Status { get; set; }
+        public int NoStatus { get; set; }
+        public int Unverified { get; set; }
+        public int BeingVerified { get; set; }
+        public int Verified { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            if (!(obj is SpacialStation spacialStation)) return false;
+            return Equals(spacialStation);
+        }
+
+        public bool Equals(SpacialStation spacialStation)
+        {
+            if (spacialStation == null) return false;
+            return
+                (Name == spacialStation.Name);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                const int HashingBase = (int)2166136261;
+                const int HashingMultiplier = 16777619;
+                int hash = HashingBase;
+                hash = (hash * HashingMultiplier) ^ (!Object.ReferenceEquals(null, Name) ? Name.GetHashCode() : 0);
+                return hash;
+            }
+        }
+    }
+
+    public class SpacialCoverageOutput
+    {
+        public List<SpacialStation> Stations { get; private set; } = new List<SpacialStation>(); 
+    }
+    #endregion
+
+    #region TemporalCoverage
+    public class TemporalCoverageInput : DataQueryInput { }
+
+    public class TemporalCoverageOutput
+    {
+        public List<DataSeries> Series { get; private set; } = new List<DataSeries>();
+        public List<ExpandoObject> Data { get; private set; } = new List<ExpandoObject>();
+    }
     #endregion
 
     #region Inventory
