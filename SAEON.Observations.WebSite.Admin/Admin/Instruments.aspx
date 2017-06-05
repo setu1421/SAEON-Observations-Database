@@ -678,7 +678,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy" >
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -690,7 +690,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfOrganisationEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy" >
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -737,7 +737,7 @@
                         <Items>
                             <ext:ComboBox ID="cbStation" runat="server" StoreID="StationStore" Editable="true" DisplayField="Name"
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
-                                AllowBlank="false" DataIndex="StationID" EmptyText="Select Station"
+                                AllowBlank="false" DataIndex="StationID" EmptyText="Select Station" 
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                                 <Triggers>
                                     <ext:FieldTrigger Icon="Clear" />
@@ -756,7 +756,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfStationStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy" >
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -814,8 +814,8 @@
                         </Defaults>
                         <Items>
                             <ext:ComboBox ID="cbSensor" runat="server" StoreID="SensorStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
-                                AllowBlank="false" DataIndex="SensorID" EmptyText="Select Sensor"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" 
+                                AllowBlank="false" DataIndex="SensorID" EmptyText="Select Sensor" 
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                                 <Triggers>
                                     <ext:FieldTrigger Icon="Clear" />
@@ -834,7 +834,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfSensorStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy" >
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -852,7 +852,7 @@
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="btnSensorLinkSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
+                    <ext:Button ID="btnSensorLinkSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static" >
                         <DirectEvents>
                             <Click OnEvent="SensorLinkSave">
                                 <EventMask ShowMask="true" />
@@ -861,10 +861,20 @@
                     </ext:Button>
                 </Buttons>
                 <BottomBar>
-                    <ext:StatusBar ID="StatusBar4" runat="server" Height="25" />
+                    <ext:StatusBar ID="StatusBar4" runat="server" Height="25" >
+                        <Plugins>
+                            <ext:ValidationStatus
+                                runat="server"
+                                FormPanelID="SensorLinkFormPanel"
+                                ValidIcon="Accept"
+                                ErrorIcon="Exclamation" />
+                        </Plugins>
+
+                        </ext:StatusBar>
                 </BottomBar>
                 <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                    <ClientValidation Handler="#{btnSensorLinkSave}.setDisabled(!valid);" />
+                <%--<ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />--%>
                 </Listeners>
             </ext:FormPanel>
         </Content>
@@ -912,7 +922,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfDataSourceStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy" >
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
@@ -924,7 +934,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfDataSourceEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy" >
                             </ext:DateField>
                         </Items>
                     </ext:Panel>

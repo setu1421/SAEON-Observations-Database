@@ -281,10 +281,30 @@ public partial class Admin_DataSources : System.Web.UI.Page
         }
     }
 
+    private bool InstrumentLinkOk()
+    {
+        RowSelectionModel masterRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        InstrumentDataSourceCollection col = new InstrumentDataSourceCollection()
+            .Where(InstrumentDataSource.Columns.DataSourceID, masterID)
+            .Where(InstrumentDataSource.Columns.InstrumentID, cbInstrument.SelectedItem.Value);
+        if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
+            col.Where(InstrumentDataSource.Columns.StartDate, dfInstrumentStartDate.SelectedDate);
+        if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
+            col.Where(InstrumentDataSource.Columns.EndDate, dfInstrumentEndDate.SelectedDate);
+        col.Load();
+        return !col.Any();
+    }
+
     protected void InstrumentLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
+            if (!InstrumentLinkOk())
+            {
+                MessageBoxes.Error("Error", "Instrument is already linked");
+                return;
+            }
             RowSelectionModel masterRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             InstrumentDataSource instrumentDataSource = new InstrumentDataSource(Utilities.MakeGuid(InstrumentLinkID.Value));

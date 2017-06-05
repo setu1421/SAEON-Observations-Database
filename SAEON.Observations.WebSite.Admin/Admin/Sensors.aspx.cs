@@ -208,10 +208,30 @@ public partial class Admin_Sensors : System.Web.UI.Page
         }
     }
 
+    private bool InstrumentLinkOk()
+    {
+        RowSelectionModel masterRow = SensorsGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        InstrumentSensorCollection col = new InstrumentSensorCollection()
+            .Where(InstrumentSensor.Columns.SensorID, masterID)
+            .Where(InstrumentSensor.Columns.InstrumentID, cbInstrument.SelectedItem.Value);
+        if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
+            col.Where(InstrumentSensor.Columns.StartDate, dfInstrumentStartDate.SelectedDate);
+        if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
+            col.Where(InstrumentSensor.Columns.EndDate, dfInstrumentEndDate.SelectedDate);
+        col.Load();
+        return !col.Any();
+    }
+
     protected void InstrumentLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
+            if (!InstrumentLinkOk())
+            {
+                MessageBoxes.Error("Error", "Instrument is already linked");
+                return;
+            }
             RowSelectionModel masterRow = SensorsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(InstrumentLinkID.Value));

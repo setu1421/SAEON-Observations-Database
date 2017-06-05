@@ -654,7 +654,7 @@
                     </ext:Panel>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="btnOrganisationLinkSave" runat="server" Text="Save Organisation Link" FormBind="true" Icon="Accept" ClientIDMode="Static">
+                    <ext:Button ID="btnOrganisationLinkSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="OrganisationLinkSave">
                                 <EventMask ShowMask="true" />

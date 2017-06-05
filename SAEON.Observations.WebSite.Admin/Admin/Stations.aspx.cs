@@ -171,10 +171,30 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
+    private bool OrganisationLinkOk()
+    {
+        RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        OrganisationStationCollection col = new OrganisationStationCollection()
+            .Where(OrganisationStation.Columns.StationID, masterID)
+            .Where(OrganisationStation.Columns.OrganisationID, cbOrganisation.SelectedItem.Value);
+        if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
+            col.Where(OrganisationStation.Columns.StartDate, dfOrganisationStartDate.SelectedDate);
+        if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
+            col.Where(OrganisationStation.Columns.EndDate, dfOrganisationEndDate.SelectedDate);
+        col.Load();
+        return !col.Any();
+    }
+
     protected void OrganisationLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
+            if (!OrganisationLinkOk())
+            {
+                MessageBoxes.Error("Error", "Organisation is already linked");
+                return;
+            }
             RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             OrganisationStation stationOrganisation = new OrganisationStation(Utilities.MakeGuid(OrganisationLinkID.Value));
@@ -257,10 +277,30 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
+    private bool ProjectLinkOk()
+    {
+        RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        ProjectStationCollection col = new ProjectStationCollection()
+            .Where(ProjectStation.Columns.StationID, masterID)
+            .Where(ProjectStation.Columns.ProjectID, cbProject.SelectedItem.Value);
+        if (!String.IsNullOrEmpty(dfProjectStartDate.Text) && (dfProjectStartDate.SelectedDate.Year >= 1900))
+            col.Where(ProjectStation.Columns.StartDate, dfProjectStartDate.SelectedDate);
+        if (!String.IsNullOrEmpty(dfProjectEndDate.Text) && (dfProjectEndDate.SelectedDate.Year >= 1900))
+            col.Where(ProjectStation.Columns.EndDate, dfProjectEndDate.SelectedDate);
+        col.Load();
+        return !col.Any();
+    }
+
     protected void ProjectLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
+            if (!ProjectLinkOk())
+            {
+                MessageBoxes.Error("Error", "Project is already linked");
+                return;
+            }
             RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             ProjectStation projectStation = new ProjectStation(Utilities.MakeGuid(ProjectLinkID.Value));
@@ -344,10 +384,30 @@ public partial class Admin_Stations : System.Web.UI.Page
         }
     }
 
+    private bool InstrumentLinkOk()
+    {
+        RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        StationInstrumentCollection col = new StationInstrumentCollection()
+            .Where(StationInstrument.Columns.StationID, masterID)
+            .Where(StationInstrument.Columns.InstrumentID, cbInstrument.SelectedItem.Value);
+        if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
+            col.Where(StationInstrument.Columns.StartDate, dfInstrumentStartDate.SelectedDate);
+        if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
+            col.Where(StationInstrument.Columns.EndDate, dfInstrumentEndDate.SelectedDate);
+        col.Load();
+        return !col.Any();
+    }
+
     protected void InstrumentLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
+            if (!InstrumentLinkOk())
+            {
+                MessageBoxes.Error("Error", "Instrument is already linked");
+                return;
+            }
             RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(InstrumentLinkID.Value));

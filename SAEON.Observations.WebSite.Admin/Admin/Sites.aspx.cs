@@ -146,10 +146,30 @@ public partial class Admin_Sites : System.Web.UI.Page
         }
     }
 
+    private bool OrganisationLinkOk()
+    {
+        RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        da.OrganisationSiteCollection col = new da.OrganisationSiteCollection()
+            .Where(da.OrganisationSite.Columns.SiteID, masterID)
+            .Where(da.OrganisationSite.Columns.OrganisationID, cbOrganisation.SelectedItem.Value);
+        if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
+            col.Where(da.OrganisationSite.Columns.StartDate, dfOrganisationStartDate.SelectedDate);
+        if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
+            col.Where(da.OrganisationSite.Columns.EndDate, dfOrganisationEndDate.SelectedDate);
+        col.Load();
+        return !col.Any();
+    }
+
     protected void OrganisationLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
+            if (!OrganisationLinkOk())
+            {
+                MessageBoxes.Error("Error", "Organisation is already linked");
+                return;
+            }
             RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             da.OrganisationSite siteOrganisation = new da.OrganisationSite(Utilities.MakeGuid(OrganisationLinkID.Value));

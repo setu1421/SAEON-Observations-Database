@@ -1,13 +1,10 @@
 ﻿using Ext.Net;
+using oc = SAEON.Observations.Core;
 using SAEON.Observations.Data;
 using Serilog;
-using SubSonic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class Admin_Instruments : System.Web.UI.Page
 {
@@ -56,7 +53,6 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
-
         InstrumentCollection col = new InstrumentCollection();
 
         string checkColumn = String.Empty,
@@ -151,7 +147,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
     #endregion
 
     #region Organisations
-        protected void OrganisationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void OrganisationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
         {
@@ -176,10 +172,30 @@ public partial class Admin_Instruments : System.Web.UI.Page
         }
     }
 
+    private bool OrganisationLinkOk()
+    {
+        RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        OrganisationInstrumentCollection col = new OrganisationInstrumentCollection()
+            .Where(OrganisationInstrument.Columns.InstrumentID, masterID)
+            .Where(OrganisationInstrument.Columns.OrganisationID, cbOrganisation.SelectedItem.Value);
+        if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
+            col.Where(OrganisationInstrument.Columns.StartDate, dfOrganisationStartDate.SelectedDate);
+        if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
+            col.Where(OrganisationInstrument.Columns.EndDate, dfOrganisationEndDate.SelectedDate);
+        col.Load();
+        return !col.Any();
+    }
+
     protected void OrganisationLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
+            if (!OrganisationLinkOk())
+            {
+                MessageBoxes.Error("Error", "Organisation is already linked");
+                return;
+            }
             RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             OrganisationInstrument organisationInstrument = new OrganisationInstrument(Utilities.MakeGuid(OrganisationLinkID.Value));
@@ -273,10 +289,30 @@ public partial class Admin_Instruments : System.Web.UI.Page
         }
     }
 
+    private bool StationLinkOk()
+    {
+        RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        StationInstrumentCollection col = new StationInstrumentCollection()
+            .Where(StationInstrument.Columns.InstrumentID, masterID)
+            .Where(StationInstrument.Columns.StationID, cbStation.SelectedItem.Value);
+        if (!String.IsNullOrEmpty(dfStationStartDate.Text) && (dfStationStartDate.SelectedDate.Year >= 1900))
+            col.Where(StationInstrument.Columns.StartDate, dfStationStartDate.SelectedDate);
+        if (!String.IsNullOrEmpty(dfStationEndDate.Text) && (dfStationEndDate.SelectedDate.Year >= 1900))
+            col.Where(StationInstrument.Columns.EndDate, dfStationEndDate.SelectedDate);
+        col.Load();
+        return !col.Any();
+    }
+
     protected void StationLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
+            if (!StationLinkOk())
+            {
+                MessageBoxes.Error("Error", "Station is already linked");
+                return;
+            }
             RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(StationLinkID.Value));
@@ -367,10 +403,30 @@ public partial class Admin_Instruments : System.Web.UI.Page
         }
     }
 
+    private bool DataSourceLinkOk()
+    {
+        RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        InstrumentDataSourceCollection col = new InstrumentDataSourceCollection()
+            .Where(InstrumentDataSource.Columns.InstrumentID, masterID)
+            .Where(InstrumentDataSource.Columns.DataSourceID, cbDataSource.SelectedItem.Value);
+        if (!String.IsNullOrEmpty(dfDataSourceStartDate.Text) && (dfDataSourceStartDate.SelectedDate.Year >= 1900))
+            col.Where(InstrumentDataSource.Columns.StartDate, dfDataSourceStartDate.SelectedDate);
+        if (!String.IsNullOrEmpty(dfDataSourceEndDate.Text) && (dfDataSourceEndDate.SelectedDate.Year >= 1900))
+            col.Where(InstrumentDataSource.Columns.EndDate, dfDataSourceEndDate.SelectedDate);
+        col.Load();
+        return !col.Any();
+    }
+
     protected void DataSourceLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
+            if (!DataSourceLinkOk())
+            {
+                MessageBoxes.Error("Error", "Data Source is already linked");
+                return;
+            }
             RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             InstrumentDataSource instrumentDataSource = new InstrumentDataSource(Utilities.MakeGuid(DataSourceLinkID.Value));
@@ -461,10 +517,31 @@ public partial class Admin_Instruments : System.Web.UI.Page
         }
     }
 
+    private bool SensorLinkOk()
+    {
+        RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        InstrumentSensorCollection col = new InstrumentSensorCollection()
+            .Where(InstrumentSensor.Columns.InstrumentID, masterID)
+            .Where(InstrumentSensor.Columns.SensorID, cbSensor.SelectedItem.Value);
+        if (!String.IsNullOrEmpty(dfSensorStartDate.Text) && (dfSensorStartDate.SelectedDate.Year >= 1900))
+            col.Where(InstrumentSensor.Columns.StartDate, dfSensorStartDate.SelectedDate);
+        if (!String.IsNullOrEmpty(dfSensorEndDate.Text) && (dfSensorEndDate.SelectedDate.Year >= 1900))
+            col.Where(InstrumentSensor.Columns.EndDate, dfSensorEndDate.SelectedDate);
+        col.Load();
+        return !col.Any();
+    }
+
     protected void SensorLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
+            if (!SensorLinkOk())
+            {
+                MessageBoxes.Error("Error", "Sensor is already linked");
+                return;
+            }
+
             RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(SensorLinkID.Value));

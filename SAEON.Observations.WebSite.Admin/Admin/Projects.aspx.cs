@@ -142,10 +142,30 @@ public partial class Admin_Projects : System.Web.UI.Page
         }
     }
 
+    private bool StationLinkOk()
+    {
+        RowSelectionModel masterRow = ProjectsGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        ProjectStationCollection col = new ProjectStationCollection()
+            .Where(ProjectStation.Columns.ProjectID, masterID)
+            .Where(ProjectStation.Columns.StationID, cbStation.SelectedItem.Value);
+        if (!String.IsNullOrEmpty(dfStationStartDate.Text) && (dfStationStartDate.SelectedDate.Year >= 1900))
+            col.Where(ProjectStation.Columns.StartDate, dfStationStartDate.SelectedDate);
+        if (!String.IsNullOrEmpty(dfStationEndDate.Text) && (dfStationEndDate.SelectedDate.Year >= 1900))
+            col.Where(ProjectStation.Columns.EndDate, dfStationEndDate.SelectedDate);
+        col.Load();
+        return !col.Any();
+    }
+
     protected void StationLinkSave(object sender, DirectEventArgs e)
     {
         try
         {
+            if (!StationLinkOk())
+            {
+                MessageBoxes.Error("Error", "Station is already linked");
+                return;
+            }
             RowSelectionModel masterRow = ProjectsGrid.SelectionModel.Primary as RowSelectionModel;
             var masterID = new Guid(masterRow.SelectedRecordID);
             ProjectStation projectStation = new ProjectStation(Utilities.MakeGuid(ProjectStationLinkID.Value));
