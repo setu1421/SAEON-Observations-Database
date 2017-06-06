@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SAEON.Observations.Database", "SAEON.Observations.Database\SAEON.Observations.Database.sqlproj", "{AC68EB6A-31BD-407E-9B65-558E900AEF61}"
 EndProject
@@ -17,7 +17,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.Observations.WebSite.
 		SccLocalPath = "SAK"
 		SccProvider = "SAK"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
-		ProjectReferences = "{5e1c5955-ee32-4fc2-9b18-a3e505dd278d}|SAEON.Observations.Data.dll;{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}|SubSonic.dll;"
+		ProjectReferences = "{5e1c5955-ee32-4fc2-9b18-a3e505dd278d}|SAEON.Observations.Data.dll;{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}|SubSonic.dll;{e3791465-ccce-4e02-af9f-8f677148fee1}|SAEON.Observations.Core.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_54378"
 		Debug.AspNetCompiler.PhysicalPath = "SAEON.Observations.WebSite.Admin\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54378\"

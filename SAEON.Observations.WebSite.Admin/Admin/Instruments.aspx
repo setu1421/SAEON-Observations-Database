@@ -863,18 +863,16 @@
                 <BottomBar>
                     <ext:StatusBar ID="StatusBar4" runat="server" Height="25" >
                         <Plugins>
-                            <ext:ValidationStatus
+<%--                            <ext:ValidationStatus
                                 runat="server"
                                 FormPanelID="SensorLinkFormPanel"
                                 ValidIcon="Accept"
-                                ErrorIcon="Exclamation" />
+                                ErrorIcon="Exclamation" />--%>
                         </Plugins>
-
                         </ext:StatusBar>
                 </BottomBar>
                 <Listeners>
-                    <ClientValidation Handler="#{btnSensorLinkSave}.setDisabled(!valid);" />
-                <%--<ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />--%>
+                <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
                 </Listeners>
             </ext:FormPanel>
         </Content>

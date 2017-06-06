@@ -243,7 +243,7 @@
                                                     </Click>
                                                 </DirectEvents>
                                             </ext:Button>
-                                            <ext:ToolbarSeparator Width="10" />
+<%--                                            <ext:ToolbarSeparator Width="10" />
                                             <ext:Button ID="Button4" runat="server" Icon="ShieldAdd" Text="Test" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip6" runat="server" Html="Test" />
@@ -251,7 +251,7 @@
                                                 <DirectEvents>
                                                     <Click OnEvent="SetTestClick" />
                                                 </DirectEvents>
-                                            </ext:Button>
+                                            </ext:Button>--%>
                                             <%-- 
                                             <ext:Button ID="btnAddObservation" runat="server" Icon="Add" Text="Add Observation">
                                                 <ToolTips>
