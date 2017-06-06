@@ -7,11 +7,11 @@
         var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
             //VisCols.setValue(Ext.encode(ContentPlaceHolder1_OrganisationGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-            var viscolsNew = makenewJsonForExport(ContentPlaceHolder1_OrganisationGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            var viscolsNew = makenewJsonForExport(OrganisationsGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
-            ContentPlaceHolder1_OrganisationGrid.submitData(false);
+            OrganisationsGrid.submitData(false);
         };
     </script>
 </asp:Content>

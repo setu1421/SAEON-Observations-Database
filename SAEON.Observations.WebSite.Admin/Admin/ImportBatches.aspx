@@ -325,7 +325,7 @@
                                         <SelectionModel>
                                             <ext:CheckboxSelectionModel runat="server">
                                                 <DirectEvents>
-                                                    <SelectionChange OnEvent="EnableButtons" />
+                                                    <SelectionChange OnEvent="EnableButtons" Buffer="100"/>
                                                 </DirectEvents>
                                             </ext:CheckboxSelectionModel>
                                         </SelectionModel>

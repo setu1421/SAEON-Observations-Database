@@ -1,19 +1,19 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Offering.aspx.cs" Inherits="_Offering"  MasterPageFile="~/Site.master" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Offerings.aspx.cs" Inherits="_Offerings"  MasterPageFile="~/Site.master" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/Offering.js"></script>
+    <script type="text/javascript" src="../JS/Offerings.js"></script>
 	<script type="text/javascript" src="../JS/generic.js"></script>
 	<script type="text/javascript">
 		var submitValue = function (format)
 		{
 			GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
 			//VisCols.setValue(Ext.encode(ContentPlaceHolder1_OfferingGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-			var viscolsNew = makenewJsonForExport(ContentPlaceHolder1_OfferingGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+			var viscolsNew = makenewJsonForExport(OfferingGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
 			VisCols.setValue(viscolsNew);
 			FormatType.setValue(format);
 			SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
 
-			ContentPlaceHolder1_OfferingGrid.submitData(false);
+			OfferingGrid.submitData(false);
 		};
 	</script>
 </asp:Content>
@@ -54,7 +54,7 @@
                     </ext:Toolbar>
                 </TopBar>
                 <Items>
-                    <ext:GridPanel ID="OfferingGrid" runat="server" Border="false">
+                    <ext:GridPanel ID="OfferingGrid" runat="server" Border="false" ClientIDMode="Static">
                         <Store>
                             <ext:Store ID="Store2" runat="server" RemoteSort="true" OnRefreshData="OfferingStore_RefreshData" OnSubmitData="OfferingStore_Submit">
                                 <Proxy>

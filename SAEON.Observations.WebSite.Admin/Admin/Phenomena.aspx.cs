@@ -12,16 +12,16 @@ using System.Xml.Xsl;
 /// Summary description for _Phenomenon
 /// </summary>
 
-public partial class _Phenomenon : System.Web.UI.Page
+public partial class _Phenomena : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
 
     }
 
-    protected void PhenomenonStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void PhenomenaGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.PhenomenonGrid.GetStore().DataSource = PhenomenonRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        PhenomenaGridStore.DataSource = PhenomenonRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -57,6 +57,7 @@ public partial class _Phenomenon : System.Web.UI.Page
         else
             e.Success = true;
     }
+
     protected void Save(object sender, DirectEventArgs e)
     {
 
@@ -78,9 +79,9 @@ public partial class _Phenomenon : System.Web.UI.Page
 
         phenom.Save();
 
-        PhenomenonGrid.DataBind();
+        PhenomenaGrid.DataBind();
 
-        this.DetailWindow.Hide();
+        DetailWindow.Hide();
     }
 
     protected void PhenomenonUOMGrid_RefreshData(object sender, StoreRefreshDataEventArgs e)
@@ -97,8 +98,8 @@ public partial class _Phenomenon : System.Web.UI.Page
                       .Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(Id)
                       .ExecuteAsCollection<UnitOfMeasureCollection>();
 
-            this.PhenomenonUOMGrid.GetStore().DataSource = uomCol;
-            this.PhenomenonUOMGrid.GetStore().DataBind();
+            PhenomenonUOMGrid.GetStore().DataSource = uomCol;
+            PhenomenonUOMGrid.GetStore().DataBind();
         }
     }
 
@@ -137,8 +138,8 @@ public partial class _Phenomenon : System.Web.UI.Page
                      .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
                      .ExecuteAsCollection<OfferingCollection>();
 
-            this.PhenomenonOfferingGrid.GetStore().DataSource = offeringCol;
-            this.PhenomenonOfferingGrid.GetStore().DataBind();
+            PhenomenonOfferingGrid.GetStore().DataSource = offeringCol;
+            PhenomenonOfferingGrid.GetStore().DataBind();
         }
     }
 
@@ -167,8 +168,8 @@ public partial class _Phenomenon : System.Web.UI.Page
 
         //if (UnitOfMeasureGrid.GetStore().co.Items.Count > 0)
         //{
-        RowSelectionModel sm = this.UnitOfMeasureGrid.SelectionModel.Primary as RowSelectionModel;
-        RowSelectionModel phenomenonrow = this.PhenomenonGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel sm = UnitOfMeasureGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel phenomenonrow = PhenomenaGrid.SelectionModel.Primary as RowSelectionModel;
 
         string PhenomenonID = phenomenonrow.SelectedRecordID;
 
@@ -202,8 +203,8 @@ public partial class _Phenomenon : System.Web.UI.Page
     protected void AcceptOfferingButton_Click(object sender, DirectEventArgs e)
     {
 
-        RowSelectionModel sm = this.OfferingGrid.SelectionModel.Primary as RowSelectionModel;
-        RowSelectionModel phenomenonrow = this.PhenomenonGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel sm = OfferingGrid.SelectionModel.Primary as RowSelectionModel;
+        RowSelectionModel phenomenonrow = PhenomenaGrid.SelectionModel.Primary as RowSelectionModel;
 
         string PhenomenonID = phenomenonrow.SelectedRecordID;
 
@@ -233,7 +234,7 @@ public partial class _Phenomenon : System.Web.UI.Page
         }
     }
 
-    protected void PhenomenonStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    protected void PhenomenaGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {
         string type = FormatType.Text;
         string visCols = VisCols.Value.ToString();
@@ -326,6 +327,7 @@ public partial class _Phenomenon : System.Web.UI.Page
             else 
             {
                 Phenomenon.Delete(phen.Id);
+                PhenomenaGrid.DataBind();
             }
         }
     }

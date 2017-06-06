@@ -10,6 +10,7 @@ using System.Web.Script.Serialization;
 using System.Web;
 using System.Xml.Xsl;
 using System.Xml;
+using SAEON.Observations.Core;
 
 /// <summary>
 /// Summary description for BaseRepository
@@ -232,29 +233,35 @@ public class BaseRepository
         //ser.MaxJsonLength = 2147483647;
         //object o = ser.DeserializeObject(js);
         //object b = ((Dictionary<string, object>)(((Dictionary<string, object>)o)["set"]))["a"];
-    
+
         //js = ser.Serialize(b);
 
-        DataTable dt = q.ExecuteDataSet().Tables[0];
-
-        for (int k = 0; k < dt.Columns.Count; k++)
+        try
         {
-            for (int j = 0; j < colms.Length; j++)
+            DataTable dt = q.ExecuteDataSet().Tables[0];
+            for (int k = 0; k < dt.Columns.Count; k++)
             {
-                if (colms[j].ToLower() == dt.Columns[k].ToString().ToLower())
+                for (int j = 0; j < colms.Length; j++)
                 {
-                    dt.Columns[k].ColumnName = colmsDisplayNames[j];
+                    if (colms[j].ToLower() == dt.Columns[k].ToString().ToLower())
+                    {
+                        dt.Columns[k].ColumnName = colmsDisplayNames[j];
+                    }
                 }
             }
+
+            JavaScriptSerializer ser = new JavaScriptSerializer();
+            ser.MaxJsonLength = 2147483647;
+
+            string js = JsonConvert.SerializeObject(dt);
+
+            return js;
         }
-
-        JavaScriptSerializer ser = new JavaScriptSerializer();
-        ser.MaxJsonLength = 2147483647;
-
-        string js = JsonConvert.SerializeObject(dt);
-
-
-        return js;
+        catch (Exception ex)
+        {
+            Logging.Exception(ex);
+            throw;
+        }
     }
 
     public static void doExport(string type, string js)

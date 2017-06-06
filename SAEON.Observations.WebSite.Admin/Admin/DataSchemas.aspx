@@ -12,12 +12,11 @@
         var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
             //VisCols.setValue(Ext.encode(ContentPlaceHolder1_DataSchemaGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-            var viscolsNew = makenewJsonForExport(ContentPlaceHolder1_DataSchemaGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            var viscolsNew = makenewJsonForExport(DataSchemasGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
-
-            ContentPlaceHolder1_DataSchemaGrid.submitData(false);
+            DataSchemasGrid.submitData(false);
         };
 
     </script>
@@ -108,7 +107,7 @@
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="DataSchemasGrid" runat="server" Border="false">
+                            <ext:GridPanel ID="DataSchemasGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
                                     <ext:Store ID="DataSchemasGridStore" runat="server" RemoteSort="true" OnRefreshData="DataSchemasGridStore_RefreshData"
                                         OnSubmitData="DataSchemasGridStore_Submit">

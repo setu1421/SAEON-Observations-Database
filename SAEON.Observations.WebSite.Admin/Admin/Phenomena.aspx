@@ -1,19 +1,18 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Phenomenon.aspx.cs" Inherits="_Phenomenon"
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Phenomena.aspx.cs" Inherits="_Phenomena"
     MasterPageFile="~/Site.master" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/Phenomenon.js"></script>
+    <script type="text/javascript" src="../JS/Phenomena.js"></script>
     <script type="text/javascript" src="../JS/generic.js"></script>
     <script type="text/javascript">
         var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
-            //VisCols.setValue(Ext.encode(ContentPlaceHolder1_PhenomenonGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-            var viscolsNew = makenewJsonForExport(ContentPlaceHolder1_PhenomenonGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            //VisCols.setValue(Ext.encode(ContentPlaceHolder1_PhenomenaGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
+            var viscolsNew = makenewJsonForExport(PhenomenaGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
-
-            ContentPlaceHolder1_PhenomenonGrid.submitData(false);
+            PhenomenaGrid.submitData(false);
         };
     </script>
 </asp:Content>
@@ -53,10 +52,10 @@
                             </ext:Toolbar>
                         </TopBar>
                         <Items>
-                            <ext:GridPanel ID="PhenomenonGrid" runat="server" Border="false">
+                            <ext:GridPanel ID="PhenomenaGrid" runat="server" Border="false" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="Store2" runat="server" RemoteSort="true" OnRefreshData="PhenomenonStore_RefreshData"
-                                        OnSubmitData="PhenomenonStore_Submit">
+                                    <ext:Store ID="PhenomenaGridStore" runat="server" RemoteSort="true" OnRefreshData="PhenomenaGridStore_RefreshData"
+                                        OnSubmitData="PhenomenaGridStore_Submit">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -98,7 +97,7 @@
                                 <SelectionModel>
                                     <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" SingleSelect="true">
                                         <Listeners>
-                                            <RowSelect Fn="PhenomenonRowSelect" Buffer="250" />
+                                            <RowSelect Fn="PhenomenaRowSelect" Buffer="250" />
                                         </Listeners>
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
@@ -144,7 +143,7 @@
                                             <ext:ToolTip ID="ToolTip3" runat="server" Html="Add" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{PhenomenonGrid}') && #{PhenomenonGrid}.getSelectionModel().hasSelection()){#{OfferingGridStore}.reload();#{AvailableOfferingsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a phenomenon.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{PhenomenaGrid}') && #{PhenomenaGrid}.getSelectionModel().hasSelection()){#{OfferingGridStore}.reload();#{AvailableOfferingsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a phenomenon.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
@@ -169,7 +168,7 @@
                                             </ext:JsonReader>
                                         </Reader>
                                         <BaseParams>
-                                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenonGrid}') && #{PhenomenonGrid}.getSelectionModel().hasSelection() ? #{PhenomenonGrid}.getSelectionModel().getSelected().id : -1"
+                                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenaGrid}') && #{PhenomenaGrid}.getSelectionModel().hasSelection() ? #{PhenomenaGrid}.getSelectionModel().getSelected().id : -1"
                                                 Mode="Raw" />
                                         </BaseParams>
                                     </ext:Store>
@@ -198,7 +197,7 @@
                                         <ExtraParams>
                                             <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
                                             <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
-                                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenonGrid}') && #{PhenomenonGrid}.getSelectionModel().hasSelection() ? #{PhenomenonGrid}.getSelectionModel().getSelected().id : -1"
+                                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenaGrid}') && #{PhenomenaGrid}.getSelectionModel().hasSelection() ? #{PhenomenaGrid}.getSelectionModel().getSelected().id : -1"
                                                 Mode="Raw" />
                                         </ExtraParams>
                                     </Command>
@@ -218,7 +217,7 @@
                                             <ext:ToolTip ID="ToolTip2" runat="server" Html="Add" />
                                         </ToolTips>
                                         <Listeners>
-                                            <Click Handler="if(Ext.getCmp('#{PhenomenonGrid}') && #{PhenomenonGrid}.getSelectionModel().hasSelection()){#{Store3}.reload();#{AvailableUnitsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a phenomenon.')}" />
+                                            <Click Handler="if(Ext.getCmp('#{PhenomenaGrid}') && #{PhenomenaGrid}.getSelectionModel().hasSelection()){#{Store3}.reload();#{AvailableUnitsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a phenomenon.')}" />
                                         </Listeners>
                                     </ext:Button>
                                 </Items>
@@ -242,7 +241,7 @@
                                             </ext:JsonReader>
                                         </Reader>
                                         <BaseParams>
-                                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenonGrid}') && #{PhenomenonGrid}.getSelectionModel().hasSelection() ? #{PhenomenonGrid}.getSelectionModel().getSelected().id : -1"
+                                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenaGrid}') && #{PhenomenaGrid}.getSelectionModel().hasSelection() ? #{PhenomenaGrid}.getSelectionModel().getSelected().id : -1"
                                                 Mode="Raw" />
                                         </BaseParams>
                                     </ext:Store>
@@ -271,7 +270,7 @@
                                         <ExtraParams>
                                             <ext:Parameter Name="type" Value="params[0]" Mode="Raw" />
                                             <ext:Parameter Name="id" Value="record.id" Mode="Raw" />
-                                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenonGrid}') && #{PhenomenonGrid}.getSelectionModel().hasSelection() ? #{PhenomenonGrid}.getSelectionModel().getSelected().id : -1"
+                                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenaGrid}') && #{PhenomenaGrid}.getSelectionModel().hasSelection() ? #{PhenomenaGrid}.getSelectionModel().getSelected().id : -1"
                                                 Mode="Raw" />
                                         </ExtraParams>
                                     </Command>
@@ -390,7 +389,7 @@
                             </ext:JsonReader>
                         </Reader>
                         <BaseParams>
-                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenonGrid}') && #{PhenomenonGrid}.getSelectionModel().hasSelection() ? #{PhenomenonGrid}.getSelectionModel().getSelected().id : -1"
+                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenaGrid}') && #{PhenomenaGrid}.getSelectionModel().hasSelection() ? #{PhenomenaGrid}.getSelectionModel().getSelected().id : -1"
                                 Mode="Raw" />
                         </BaseParams>
                     </ext:Store>
@@ -442,7 +441,7 @@
                             </ext:JsonReader>
                         </Reader>
                         <BaseParams>
-                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenonGrid}') && #{PhenomenonGrid}.getSelectionModel().hasSelection() ? #{PhenomenonGrid}.getSelectionModel().getSelected().id : -1"
+                            <ext:Parameter Name="PhenomenonID" Value="Ext.getCmp('#{PhenomenaGrid}') && #{PhenomenaGrid}.getSelectionModel().hasSelection() ? #{PhenomenaGrid}.getSelectionModel().getSelected().id : -1"
                                 Mode="Raw" />
                         </BaseParams>
                     </ext:Store>

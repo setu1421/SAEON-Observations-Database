@@ -8,12 +8,11 @@
         var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
             //VisCols.setValue(Ext.encode(ContentPlaceHolder1_SensorGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-            var viscolsNew = makenewJsonForExport(ContentPlaceHolder1_SensorGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            var viscolsNew = makenewJsonForExport(SensorsGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
-
-            ContentPlaceHolder1_SensorGrid.submitData(false);
+            SensorsGrid.submitData(false);
         };
     </script>
 </asp:Content>

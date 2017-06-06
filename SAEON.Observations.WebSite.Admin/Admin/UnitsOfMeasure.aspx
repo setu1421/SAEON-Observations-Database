@@ -1,7 +1,7 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="UnitofMeasure.aspx.cs" Inherits="_UnitofMeasure" MasterPageFile="~/Site.master" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="UnitsOfMeasure.aspx.cs" Inherits="_UnitsOfMeasure" MasterPageFile="~/Site.master" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript" src="../JS/UnitofMeasure.js"></script>
+    <script type="text/javascript" src="../JS/UnitsOfMeasure.js"></script>
 	<script type="text/javascript" src="../JS/generic.js"></script>
 	
 	<script type="text/javascript">
@@ -9,12 +9,12 @@
 		{
 			GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
 			//VisCols.setValue(Ext.encode(ContentPlaceHolder1_UnitOfMeasureGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-			var viscolsNew = makenewJsonForExport(ContentPlaceHolder1_UnitOfMeasureGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+			var viscolsNew = makenewJsonForExport(UnitOfMeasureGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
 			VisCols.setValue(viscolsNew);
 			FormatType.setValue(format);
 			SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
 
-			ContentPlaceHolder1_UnitOfMeasureGrid.submitData(false);
+			UnitOfMeasureGrid.submitData(false);
 		};
 	</script>
 </asp:Content>
@@ -55,7 +55,7 @@
                     </ext:Toolbar>
                 </TopBar>
                 <Items>
-                    <ext:GridPanel ID="UnitOfMeasureGrid" runat="server" Border="false">
+                    <ext:GridPanel ID="UnitOfMeasureGrid" runat="server" Border="false" ClientIDMode="Static">
                         <Store>
                             <ext:Store ID="Store2" runat="server" RemoteSort="true" OnRefreshData="UnitOfMeasureStore_RefreshData" OnSubmitData="UnitOfMeasureStore_Submit">
                                 <Proxy>
