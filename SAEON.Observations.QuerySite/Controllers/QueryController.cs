@@ -153,11 +153,11 @@ namespace SAEON.Observations.QuerySite.Controllers
             var u = model.Locations
                 .Where(i => i.Latitude.HasValue && i.Longitude.HasValue)
                 .Except(model.SelectedLocations.Where(i => i.Latitude.HasValue && i.Longitude.HasValue))
-                .Select(i => new MapPoint { Title = i.Name, Url = i.Url, Latitude = i.Latitude.Value, Longitude = i.Longitude.Value, Elevation = i.Elevation });
+                .Select(i => new QueryMapPoint { Title = i.Name, Url = i.Url, Latitude = i.Latitude.Value, Longitude = i.Longitude.Value, Elevation = i.Elevation });
             model.MapPoints.AddRange(u);
             var s = model.SelectedLocations
                 .Where(i => i.Latitude.HasValue && i.Longitude.HasValue)
-                .Select(i => new MapPoint { Title = i.Name, Url = i.Url, Latitude = i.Latitude.Value, Longitude = i.Longitude.Value, Elevation = i.Elevation, IsSelected = true });
+                .Select(i => new QueryMapPoint { Title = i.Name, Url = i.Url, Latitude = i.Latitude.Value, Longitude = i.Longitude.Value, Elevation = i.Elevation, IsSelected = true });
             model.MapPoints.AddRange(s);
         }
 

@@ -18,21 +18,3 @@
     .ShowCheckbox(true)
     .AllowMultiSelection(false)
 )
-<script type="text/javascript">
-    function onUpdateSelectedFeatures() {
-        treeObj = $("#treeViewFeatures").data('ejTreeView');
-        var nodes = treeObj.getCheckedNodes();
-        var selected = []
-        for (i = 0; i < nodes.length; i++) {
-            var nodeData = treeObj.getNode(nodes[i]);
-            selected.push(nodeData.id);
-        }
-        $.post("/SpacialCoverage/UpdateSelectedFeatures", { Features: selected })
-            .done(function (data) {
-                $('#PartialSelectedFeatures').html(data);
-                EnableButtons();
-                HideResults();
-            })
-            .fail(function () { alert("Error in UpdateSelectedFeatures"); });
-    }
-</script>

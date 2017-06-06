@@ -40,7 +40,9 @@
                         }
                     }
                     if (isInit) {
-                        map.fitBounds(bounds);
+                        if (markers.length > 0) {
+                            map.fitBounds(bounds);
+                        }
                     }
                     var center = map.getCenter();
                     google.maps.event.trigger(map, "resize");

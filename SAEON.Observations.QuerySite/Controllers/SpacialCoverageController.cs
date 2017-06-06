@@ -315,6 +315,26 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         #region Map
         [HttpGet]
+        public JsonResult GetMapPoints()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var sessionModel = SessionModel;
+                    List<SpacialMapPoint> mapPoints = new List<SpacialMapPoint>();
+                    sessionModel.Results.Stations.Select(i => new SpacialMapPoint { Title = i.Name, Latitude = i.Latitude, Longitude = i.Longitude, Elevation = i.Elevation, Url = i.Url, Status = i.Status });
+                    return GetListAsJson(SessionModel.MapPoints);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
         public PartialViewResult GetStationsMap()
         {
             using (Logging.MethodCall(GetType()))

@@ -16,22 +16,3 @@
         @Html.EJ().DatePickerFor(i => i.EndDate).StartLevel(Period.Year).DepthLevel(Period.Year).DateFormat("MMM yyyy").ClientSideEvents(ev => ev.Change("onUpdateFilters"))
     </div>
 </div>
-<script type="text/javascript">
-    function onUpdateFilters() {
-        var startDate = $("#StartDate").ejDatePicker("instance").getValue();
-        var endDate = $("#EndDate").ejDatePicker("instance").getValue();
-        $.ajax({
-            url: "/SpacialCoverage/UpdateFilters",
-            data: JSON.stringify({
-                StartDate: startDate,
-                EndDate: endDate
-            }),
-            async: false,
-            type: "POST",
-            contentType: "application/json",
-            error: function (jqXHR, textStatus, errorThrown) {
-                ErrorInFunc("Error in UpdateFilters Status: " + textStatus + " Error: " + errorThrown);
-            }
-        })
-    }
-</script>

@@ -798,6 +798,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Views\SpacialCoverage\SpacialCoverage.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -881,7 +882,7 @@
     <Content Include="Views\TemporalCoverage\SelectedLocationsHtml.cshtml" />
     <Content Include="Views\TemporalCoverage\ChartHtml.cshtml" />
     <Content Include="Views\SpacialCoverage\Buttons.cshtml" />
-    <Content Include="Views\SpacialCoverage\StationsMap.cshtml" />
+    <Content Include="Views\SpacialCoverage\CoverageMap.cshtml" />
     <Content Include="Views\SpacialCoverage\Features.cshtml" />
     <Content Include="Views\SpacialCoverage\FeaturesHtml.cshtml" />
     <Content Include="Views\SpacialCoverage\Filters.cshtml" />
