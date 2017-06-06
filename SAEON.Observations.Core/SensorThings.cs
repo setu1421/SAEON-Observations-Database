@@ -16,6 +16,8 @@ namespace SAEON.Observations.Core.SensorThings
     public static class ValueCodes
     {
         public static readonly string GeoJson = "application/vnd.geo+json";
+        public static readonly string Pdf = "application/pdf";
+        public static readonly string OM_Measurement = "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement";
     }
 
     public class BoundingBox
@@ -136,13 +138,13 @@ namespace SAEON.Observations.Core.SensorThings
         // Navigation
         public List<Location> Locations { get; set; } = new List<Location>();
         public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
-        public List<DataStream> DataStreams { get; set; } = new List<DataStream>();
+        public List<DataStream> DataStreams { get; private set; } = new List<DataStream>();
     }
 
     public class Location : BaseNamedSensorThingEntity
     {
         [Required]
-        public string encodingType { get; set; } = ValueCodes.GeoJson;
+        public string encodingType { get; private set; } = ValueCodes.GeoJson;
         [NotMapped]
         public double? Elevation { get; set; } = null;
         [NotMapped]
@@ -238,9 +240,9 @@ namespace SAEON.Observations.Core.SensorThings
     public class Sensor : BaseNamedSensorThingEntity
     {
         [Required]
-        public string EncodingType { get; set; }
+        public string encodingType { get; set; }
         [Required]
-        public string Metadata { get; set; }
+        public string metadata { get; set; }
 
         public Sensor() : base()
         {
@@ -248,13 +250,13 @@ namespace SAEON.Observations.Core.SensorThings
         }
 
         // Navigation
-        public List<DataStream> DataStreams { get; set; }
+        public List<DataStream> DataStreams { get; private set; } = new List<DataStream>();
     }
 
     public class ObservedProperty : BaseNamedSensorThingEntity
     {
         [Required, Url]
-        public string Definition { get; set; }
+        public string definition { get; set; }
 
         public ObservedProperty() : base()
         {
@@ -290,13 +292,23 @@ namespace SAEON.Observations.Core.SensorThings
     public class FeatureOfInterest : BaseNamedSensorThingEntity
     {
         [Required]
-        public string EncodingType { get; set; }
-        [Required]
-        public string Feature { get; set; }
+        public string encodingType { get; private set; } = ValueCodes.GeoJson;
+        [NotMapped]
+        public GeoJSONCoordinate Coordinate { get; set; } = null;
+        public GeoJSONFeatureGeometryPoint feature { get; set; }
 
         public FeatureOfInterest() : base()
         {
             NavigationLinks.Add("Observations");
+        }
+
+        public override void GenerateSensorThingsProperties()
+        {
+            base.GenerateSensorThingsProperties();
+            if (Coordinate != null)
+            {
+                feature = new GeoJSONFeatureGeometryPoint(Coordinate);
+            }
         }
         // Navigation
         public List<Observation> Observations { get; set; }

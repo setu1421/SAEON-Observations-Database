@@ -14,6 +14,8 @@
        [dbo].[DataLog] (Table)
        [dbo].[Observation] (Table)
      Create
+       [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_PhenomenonUOMID] (Index)
        [dbo].[Observation].[IX_Observation_ValueYear] (Index)
        [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
        [dbo].[vApiDataDownload] (View)
@@ -27,6 +29,7 @@
        [dbo].[vInventoryStations] (View)
        [dbo].[vInventoryTotals] (View)
        [dbo].[vInventoryYears] (View)
+       [dbo].[vSensorThingsDatastreams] (View)
 
 ** Supporting actions
      Drop

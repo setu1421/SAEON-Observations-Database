@@ -111,6 +111,12 @@ CREATE INDEX [IX_Observation_SensorID] ON [dbo].[Observation] ([SensorID])
   WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Observations];
 --< Added 2.0.13 20161010 TimPN
 --< Changed 2.0.3 20160503 TimPN
+--> Added 2.0.32 20170606 TimPN
+GO
+CREATE INDEX [IX_Observation_SensorID_PhenomenonOfferingID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID]) ON [Observations];
+GO
+CREATE INDEX [IX_Observation_SensorID_PhenomenonUOMID] ON [dbo].[Observation] ([SensorID],[PhenomenonUOMID]) ON [Observations];
+--> Added 2.0.32 20170606 TimPN
 GO
 CREATE INDEX [IX_Observation_PhenomenonOfferingID] ON [dbo].[Observation] ([PhenomenonOfferingID])
 --> Added 2.0.13 20161010 TimPN

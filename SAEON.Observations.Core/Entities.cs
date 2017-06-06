@@ -602,6 +602,20 @@ namespace SAEON.Observations.Core.Entities
         public string Status { get; set; }
     }
 
+    [Table("vSensorThingsDatastreams")]
+    public class vSensorThingsDatastream
+    {
+        [Key]
+        public Guid Id { get; set; }
+        public Guid SensorId { get; set; }
+        public string Sensor { get; set; }
+        public string Phenomenon { get; set; }
+        public string Offering { get; set; }
+        public string Unit { get; set; }
+        public string Symbol { get; set; }
+        public string Url { get; set; }
+    }
+
     public class ObservationsDbContext : DbContext
     {
         public ObservationsDbContext() : base("Observations")
@@ -633,6 +647,7 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<vApiInventory> vApiInventory { get; set; }
         public DbSet<vApiSpacialCoverage> vApiSpacialCoverages { get; set; }
         public DbSet<vApiTemporalCoverage> vApiTemporalCoverages { get; set; }
+        public DbSet<vSensorThingsDatastream> vSensorThingsDatastreams { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

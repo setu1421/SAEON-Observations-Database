@@ -473,6 +473,26 @@ CREATE NONCLUSTERED INDEX [IX_Observation_SensorID]
 
 
 GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_PhenomenonOfferingID]
+    ON [dbo].[Observation]([SensorID] ASC, [PhenomenonOfferingID] ASC)
+    ON [Observations];
+
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_PhenomenonUOMID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_PhenomenonUOMID]
+    ON [dbo].[Observation]([SensorID] ASC, [PhenomenonUOMID] ASC)
+    ON [Observations];
+
+
+GO
 PRINT N'Creating [dbo].[Observation].[IX_Observation_PhenomenonOfferingID]...';
 
 
@@ -1140,6 +1160,7 @@ Select
   Station.Name StationName,
   Station.Latitude,
   Station.Longitude,
+  Station.Elevation,
   Phenomenon.ID PhenomenonID,
   Phenomenon.Code PhenomenonCode,
   Phenomenon.Name PhenomenonName,
@@ -1598,6 +1619,39 @@ from
 group by
   Observation.ValueYear, Status.Name
 --< Added 20170523 2.0.32 TimPN
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vSensorThingsDatastreams]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+--> Added 2.0.32 20170606 TimPN
+CREATE VIEW [dbo].[vSensorThingsDatastreams]
+AS
+Select distinct
+  PhenomenonOffering.ID, Sensor.ID SensorID, Sensor.Name Sensor, Phenomenon.Name Phenomenon, Offering.Name Offering, UnitOfMeasure.Unit, UnitOfMeasure.UnitSymbol Symbol, Phenomenon.Url
+from
+  Observation
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join PhenomenonOffering
+    on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (Observation.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+--< Added 2.0.32 20170606 TimPN
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 

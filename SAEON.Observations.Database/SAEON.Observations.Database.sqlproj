@@ -560,6 +560,7 @@
     <Build Include="dbo\Views\vApiTemporalCoverage.sql" />
     <Build Include="dbo\Views\vApiInventory.sql" />
     <Build Include="dbo\Views\vApiSpacialCoverage.sql" />
+    <Build Include="dbo\Views\vSensorThingsDatastreams.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

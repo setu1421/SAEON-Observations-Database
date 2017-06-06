@@ -41,7 +41,23 @@ namespace SAEON.Observations.Core
     public class Feature : TreeNode { }
     public class Location : TreeNode { }
 
+    #region Maps
+    public class MapPoint
+    {
+        public string Title { get; set; }
+        public string Url { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double? Elevation { get; set; }
+    }
+    #endregion
+
     #region DataQuery
+    public class QueryMapPoint : MapPoint
+    {
+        public bool IsSelected { get; set; }
+    }
+
     public class DataQueryInput
     {
         public List<Guid> Stations { get; set; }
@@ -117,7 +133,6 @@ namespace SAEON.Observations.Core
         public List<DataSeries> Series { get; private set; } = new List<DataSeries>();
         public DataTable DataTable { get; private set; } = new DataTable("Data");
         public List<ExpandoObject> Data { get; private set; } = new List<ExpandoObject>();
-        //public string DataAsJson { get { return JsonConvert.SerializeObject(Data, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }); }  }
     }
     #endregion
 
@@ -140,12 +155,18 @@ namespace SAEON.Observations.Core
         Verified
     }
 
+    public class SpacialMapPoint : MapPoint
+    {
+        public SpacialStatus Status { get; set; }
+    }
+
     public class SpacialStation
     {
         public string Name { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double? Elevation { get; set; }
+        public string Url { get; set; }
         public SpacialStatus Status { get; set; }
         public int NoStatus { get; set; }
         public int Unverified { get; set; }
@@ -181,7 +202,7 @@ namespace SAEON.Observations.Core
 
     public class SpacialCoverageOutput
     {
-        public List<SpacialStation> Stations { get; private set; } = new List<SpacialStation>(); 
+        public List<SpacialStation> Stations { get; private set; } = new List<SpacialStation>();
     }
     #endregion
 
