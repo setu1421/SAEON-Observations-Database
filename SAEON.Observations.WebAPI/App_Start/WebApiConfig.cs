@@ -120,7 +120,7 @@ namespace SAEON.Observations.WebAPI
             sensorThingsModelBuilder.EntitySet<sos.Thing>("Things");
             sensorThingsModelBuilder.EntitySet<sos.Location>("Locations");
             sensorThingsModelBuilder.EntitySet<sos.HistoricalLocation>("HistoricalLocations");
-            sensorThingsModelBuilder.EntitySet<sos.DataStream>("DataStreams");
+            sensorThingsModelBuilder.EntitySet<sos.Datastream>("Datastreams");
             sensorThingsModelBuilder.EntitySet<sos.Sensor>("Sensors");
             sensorThingsModelBuilder.EntitySet<sos.ObservedProperty>("ObservedProperties");
             sensorThingsModelBuilder.EntitySet<sos.Observation>("Observations");

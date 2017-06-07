@@ -125,7 +125,7 @@ namespace SAEON.Observations.Core.SensorThings
         {
             NavigationLinks.Add("Locations");
             NavigationLinks.Add("HistoricalLocations");
-            NavigationLinks.Add("DataStreams");
+            NavigationLinks.Add("Datastreams");
         }
 
         public void AddProperty(string key, object value)
@@ -138,7 +138,7 @@ namespace SAEON.Observations.Core.SensorThings
         // Navigation
         public List<Location> Locations { get; set; } = new List<Location>();
         public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
-        public List<DataStream> DataStreams { get; private set; } = new List<DataStream>();
+        public List<Datastream> Datastreams { get; private set; } = new List<Datastream>();
     }
 
     public class Location : BaseNamedSensorThingEntity
@@ -196,7 +196,7 @@ namespace SAEON.Observations.Core.SensorThings
         public List<Location> Locations { get; set; } = new List<Location>();
     }
 
-    public class DataStream : BaseNamedSensorThingEntity
+    public class Datastream : BaseNamedSensorThingEntity
     {
         [Required]
         public UnitOfMeasurement unitOfMeasurement { get; set; }
@@ -209,7 +209,7 @@ namespace SAEON.Observations.Core.SensorThings
         [NotMapped]
         public TimeInterval resultTime { get; set; }
 
-        public DataStream() : base()
+        public Datastream() : base()
         {
             NavigationLinks.Add("Thing");
             NavigationLinks.Add("Sensor");
@@ -246,11 +246,11 @@ namespace SAEON.Observations.Core.SensorThings
 
         public Sensor() : base()
         {
-            NavigationLinks.Add("DataStreams");
+            NavigationLinks.Add("Datastreams");
         }
 
         // Navigation
-        public List<DataStream> DataStreams { get; private set; } = new List<DataStream>();
+        public List<Datastream> Datastreams { get; private set; } = new List<Datastream>();
     }
 
     public class ObservedProperty : BaseNamedSensorThingEntity
@@ -260,10 +260,10 @@ namespace SAEON.Observations.Core.SensorThings
 
         public ObservedProperty() : base()
         {
-            NavigationLinks.Add("DataStream");
+            NavigationLinks.Add("Datastream");
         }
         // Navigation
-        public DataStream DataStream { get; set; }
+        public Datastream Datastream { get; set; }
     }
 
     public class Observation : BaseSensorThingEntity
@@ -281,11 +281,11 @@ namespace SAEON.Observations.Core.SensorThings
 
         public Observation() : base()
         {
-            NavigationLinks.Add("DataStream");
+            NavigationLinks.Add("Datastream");
             NavigationLinks.Add("FeatureOfInterest");
         }
         // Navigation
-        public DataStream DataStream { get; set; }
+        public Datastream Datastream { get; set; }
         public FeatureOfInterest FeatureOfInterest { get; set; }
     }
 

@@ -42,10 +42,10 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             return GetMany(id, s => s.HistoricalLocations, i => i.Thing);
         }
 
-        [EnableQuery, ODataRoute("({id})/DataStreams")]
-        public IQueryable<DataStream> GetDataStreams([FromODataUri] Guid id)
+        [EnableQuery, ODataRoute("({id})/Datastreams")]
+        public IQueryable<Datastream> GetDatastreams([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.DataStreams, i => i.Thing);
+            return GetMany(id, s => s.Datastreams, i => i.Thing);
         }
     }
 }

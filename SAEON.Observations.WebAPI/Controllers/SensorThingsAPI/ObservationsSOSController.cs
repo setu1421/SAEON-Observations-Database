@@ -31,9 +31,9 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
         }
 
         [EnableQuery, ODataRoute("({id})/DataSteam")]
-        public SingleResult<DataStream> GetDataStream([FromODataUri] Guid id)
+        public SingleResult<Datastream> GetDatastream([FromODataUri] Guid id)
         {
-            return GetSingle(id, s => s.DataStream, i => i.Observations);
+            return GetSingle(id, s => s.Datastream, i => i.Observations);
         }
 
         [EnableQuery, ODataRoute("({id})/FeatureOfInterest")]

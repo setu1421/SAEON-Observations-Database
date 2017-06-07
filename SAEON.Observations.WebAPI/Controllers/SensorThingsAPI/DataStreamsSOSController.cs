@@ -8,24 +8,24 @@ using System.Web.OData.Routing;
 
 namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
 {
-    [ODataRoutePrefix("DataStreams")]
-    public class DataStreamsSOSController : BaseSensorThingsControllers<DataStream>
+    [ODataRoutePrefix("Datastreams")]
+    public class DatastreamsSOSController : BaseSensorThingsControllers<Datastream>
     {
-        protected override List<DataStream> GetList()
+        protected override List<Datastream> GetList()
         {
             var result = base.GetList();
-            result.AddRange(SensorThingsHelper.DataStreams);
+            result.AddRange(SensorThingsHelper.Datastreams);
             return result;
         }
 
         [EnableQuery, ODataRoute]
-        public override IQueryable<DataStream> GetAll()
+        public override IQueryable<Datastream> GetAll()
         {
             return base.GetAll();
         }
 
         [EnableQuery, ODataRoute("({id})")]
-        public override SingleResult<DataStream> GetById([FromODataUri] Guid id)
+        public override SingleResult<Datastream> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
         }
@@ -33,25 +33,25 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
         [EnableQuery, ODataRoute("({id})/Thing")]
         public SingleResult<Thing> GetLocations([FromODataUri] Guid id)
         {
-            return GetSingle(id, s => s.Thing, i => i.DataStreams);
+            return GetSingle(id, s => s.Thing, i => i.Datastreams);
         }
 
         [EnableQuery, ODataRoute("({id})/Sensor")]
         public SingleResult<Sensor> GetSensor([FromODataUri] Guid id)
         {
-            return GetSingle(id, s => s.Sensor, i => i.DataStreams);
+            return GetSingle(id, s => s.Sensor, i => i.Datastreams);
         }
 
         [EnableQuery, ODataRoute("({id})/ObservedProperty")]
         public SingleResult<ObservedProperty> GetObservedProperty([FromODataUri] Guid id)
         {
-            return GetSingle(id, s => s.ObservedProperty, i => i.DataStream);
+            return GetSingle(id, s => s.ObservedProperty, i => i.Datastream);
         }
 
         [EnableQuery, ODataRoute("({id})/Observations")]
         public IQueryable<Observation> GetObservationss([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Observations, i => i.DataStream);
+            return GetMany(id, s => s.Observations, i => i.Datastream);
         }
 
     }

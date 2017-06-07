@@ -14,7 +14,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
         public static List<sos.Thing> Things = new List<sos.Thing>();
         public static List<sos.Location> Locations = new List<sos.Location>();
         public static List<sos.HistoricalLocation> HistoricalLocations = new List<sos.HistoricalLocation>();
-        public static List<sos.DataStream> DataStreams = new List<sos.DataStream>();
+        public static List<sos.Datastream> Datastreams = new List<sos.Datastream>();
         public static List<sos.Sensor> Sensors = new List<sos.Sensor>();
         public static List<sos.ObservedProperty> ObservedProperties = new List<sos.ObservedProperty>();
         public static List<sos.Observation> Observations = new List<sos.Observation>();
@@ -43,7 +43,9 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             var observedProperty = ObservedProperties.FirstOrDefault(i => i.id == datastream.Id);
             if (observedProperty == null)
             {
-                observedProperty = new sos.ObservedProperty { id = datastream.Id, name = $"{datastream.Phenomenon} {datastream.Offering}", definition = datastream.Url };
+                observedProperty = new sos.ObservedProperty { id = datastream.Id, name = $"{datastream.Phenomenon} {datastream.Offering}",
+                    description = $"{datastream.Phenomenon} {datastream.Offering} {datastream.Unit} {datastream.Symbol}",
+                    definition = string.IsNullOrEmpty(datastream.Url) ? "http://www.saeon.ac.za" : datastream.Url };
                 observedProperty.GenerateSensorThingsProperties();
                 ObservedProperties.Add(observedProperty);
             }
@@ -141,23 +143,24 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                             }
                             sosSensor.GenerateSensorThingsProperties();
                             Sensors.Add(sosSensor);
-                            foreach (var datastream in db.vSensorThingsDatastreams.Where(i => i.SensorId == sensor.Id).OrderBy(i => i.Phenomenon).ThenBy(i => i.Offering).ThenBy(i => i.Unit))
+                            foreach (var Datastream in db.vSensorThingsDatastreams.Where(i => i.SensorId == sensor.Id).OrderBy(i => i.Phenomenon).ThenBy(i => i.Offering).ThenBy(i => i.Unit))
                             {
-                                var sosDatastream = new sos.DataStream
+                                var sosDatastream = new sos.Datastream
                                 {
-                                    id = datastream.SensorId,
-                                    name = $"{datastream.Phenomenon} {datastream.Offering} {datastream.Unit}",
-                                    description = $"{datastream.Phenomenon} {datastream.Offering} {datastream.Unit}",
-                                    unitOfMeasurement = new sos.UnitOfMeasurement { name = datastream.Unit, symbol = datastream.Symbol },
+                                    id = Datastream.SensorId,
+                                    name = $"{Datastream.Phenomenon} {Datastream.Offering} {Datastream.Unit}",
+                                    description = $"{Datastream.Phenomenon} {Datastream.Offering} {Datastream.Unit}",
+                                    unitOfMeasurement = new sos.UnitOfMeasurement { name = Datastream.Unit, symbol = Datastream.Symbol, definition="http://www.saeon.ac.za" },
                                     observationType = sos.ValueCodes.OM_Measurement
                                 };
                                 sosDatastream.GenerateSensorThingsProperties();
+                                Datastreams.Add(sosDatastream);
                                 sosDatastream.Thing = thing;
-                                thing.DataStreams.Add(sosDatastream);
+                                thing.Datastreams.Add(sosDatastream);
                                 sosDatastream.Sensor = sosSensor;
-                                sosSensor.DataStreams.Add(sosDatastream);
-                                var sosObservedProperty = AddObservedProperty(datastream);
-                                sosObservedProperty.DataStream = sosDatastream;
+                                sosSensor.Datastreams.Add(sosDatastream);
+                                var sosObservedProperty = AddObservedProperty(Datastream);
+                                sosObservedProperty.Datastream = sosDatastream;
                                 sosDatastream.ObservedProperty = sosObservedProperty;
                             }
                         }

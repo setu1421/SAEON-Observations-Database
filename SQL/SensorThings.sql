@@ -1,5 +1,5 @@
 Select distinct
-  PhenomenonOffering.ID, Sensor.ID SensorID, Sensor.Name Sensor, Phenomenon.Name Phenomenon, Offering.Name Offering, UnitOfMeasure.Unit, UnitOfMeasure.UnitSymbol Symbol
+  PhenomenonOffering.ID, Sensor.ID SensorID, Sensor.Name Sensor, Phenomenon.Name Phenomenon, Offering.Name Offering, UnitOfMeasure.Unit, UnitOfMeasure.UnitSymbol Symbol, Phenomenon.Url
 from
   Observation
   inner join Sensor
