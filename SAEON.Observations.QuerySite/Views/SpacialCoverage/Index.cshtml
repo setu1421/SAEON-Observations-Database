@@ -3,7 +3,8 @@
 @{
     ViewBag.Title = "Spacial coverage";
 }
-<script src="~/Views/SpacialCoverage/SpacialCoverage.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcCAczkNZZUu5DfM78-7cpBrAnwyEy_Tg&callback=initMap"></script>
+<script src="~/Scripts/SpacialCoverage.js"></script>
 <div id="waiting">
     @Html.EJ().WaitingPopup("waiting").Text("Please wait...").ShowOnInit(false)
     <div class="row">
@@ -37,7 +38,7 @@
                     tabs.Add().ID("MapTab").Text("Map").ContentTemplate(
                         @<div class="row">
                             <div class="col-md-12" id="PartialMap">
-                                @Html.Partial("CoverageMap", Model)
+                                @Html.Partial("CoverageMap")
                             </div>
                         </div>);
                 })
@@ -51,6 +52,11 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(window).resize(function () {
+        UpdateMap();
+    });
+</script>
 <style type="text/css" class="cssStyles">
     #target {
         margin: 0 auto;

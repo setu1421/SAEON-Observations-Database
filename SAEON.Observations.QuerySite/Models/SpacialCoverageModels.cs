@@ -13,7 +13,6 @@ namespace SAEON.Observations.QuerySite.Models
         public List<Feature> SelectedFeatures { get; private set; } = new List<Feature>();
         public List<Location> Locations { get; set; }
         public List<Location> SelectedLocations { get; private set; } = new List<Location>();
-        public List<SpacialMapPoint> MapPoints { get; private set; } = new List<SpacialMapPoint>();
         [DisplayName("Start Date")]
         public DateTime StartDate { get; set; } = new DateTime(DateTime.Now.Year,DateTime.Now.Month,1);
         [DisplayName("End Date")]

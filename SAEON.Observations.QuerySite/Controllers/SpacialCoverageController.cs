@@ -323,8 +323,17 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var sessionModel = SessionModel;
                     List<SpacialMapPoint> mapPoints = new List<SpacialMapPoint>();
-                    sessionModel.Results.Stations.Select(i => new SpacialMapPoint { Title = i.Name, Latitude = i.Latitude, Longitude = i.Longitude, Elevation = i.Elevation, Url = i.Url, Status = i.Status });
-                    return GetListAsJson(SessionModel.MapPoints);
+                    mapPoints.AddRange(sessionModel.Results.Stations.Select(i =>
+                        new SpacialMapPoint
+                        {
+                            Title = i.Name,
+                            Latitude = i.Latitude,
+                            Longitude = i.Longitude,
+                            Elevation = i.Elevation,
+                            Url = i.Url,
+                            Status = i.Status
+                        }));
+                    return GetListAsJson(mapPoints);
                 }
                 catch (Exception ex)
                 {
