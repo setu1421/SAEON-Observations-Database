@@ -1,8 +1,7 @@
-﻿using SAEON.Observations.Core;
+﻿using SAEON.Logs;
+using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
-using Syncfusion.JavaScript;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;

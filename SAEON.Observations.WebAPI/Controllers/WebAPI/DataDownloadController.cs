@@ -1,16 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using SAEON.Logs;
 using SAEON.Observations.Core;
-using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Thinktecture.IdentityModel.WebApi;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {

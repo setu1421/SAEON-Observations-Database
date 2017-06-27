@@ -1,10 +1,5 @@
-﻿using SAEON.Observations.Core;
+﻿using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI

@@ -1,4 +1,4 @@
-﻿using SAEON.Observations.Core;
+﻿using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using SAEON.Observations.Core.SensorThings;
 using System;
@@ -7,7 +7,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Http;
-using System.Web.Http.Description;
 using System.Web.OData;
 
 namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI

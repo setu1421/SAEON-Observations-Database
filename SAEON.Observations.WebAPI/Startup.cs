@@ -2,15 +2,13 @@
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Owin;
+using SAEON.Logs;
 using SAEON.Observations.Core;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Helpers;
 using System.Web.Http;
 

@@ -1,16 +1,14 @@
-﻿using System;
+﻿using Ext.Net;
+using Newtonsoft.Json;
+using SAEON.Logs;
+using SubSonic;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using Ext.Net;
-using SubSonic;
-using SAEON.Observations.Data;
-using Newtonsoft.Json;
-using System.Web.Script.Serialization;
 using System.Web;
-using System.Xml.Xsl;
+using System.Web.Script.Serialization;
 using System.Xml;
-using SAEON.Observations.Core;
+using System.Xml.Xsl;
 
 /// <summary>
 /// Summary description for BaseRepository

@@ -1,4 +1,5 @@
-﻿using SAEON.Observations.Core;
+﻿using SAEON.Logs;
+using SAEON.Observations.Core;
 using Serilog;
 using System;
 using System.Web.Hosting;

@@ -1,10 +1,6 @@
-﻿using SAEON.Observations.Core;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Claims;
+﻿using SAEON.Logs;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using Thinktecture.IdentityModel.Owin.ResourceAuthorization;
 
 namespace SAEON.Observations.QuerySite

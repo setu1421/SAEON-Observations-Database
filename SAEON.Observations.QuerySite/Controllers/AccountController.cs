@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using SAEON.Observations.Core;
+using SAEON.Logs;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;

@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using SAEON.Observations.Core;
+using SAEON.Logs;
 using Syncfusion.JavaScript;
 using Syncfusion.JavaScript.DataSources;
 using System;

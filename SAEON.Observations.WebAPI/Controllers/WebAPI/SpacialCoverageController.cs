@@ -1,10 +1,8 @@
-﻿using SAEON.Observations.Core;
-using SAEON.Observations.Core.Entities;
+﻿using SAEON.Logs;
+using SAEON.Observations.Core;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;

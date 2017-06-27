@@ -1,4 +1,5 @@
-﻿using SAEON.Observations.Core;
+﻿using SAEON.Logs;
+using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
 using System.Data;

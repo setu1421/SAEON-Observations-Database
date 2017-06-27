@@ -6,6 +6,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
+using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
 using System.Collections.Generic;
@@ -59,7 +60,6 @@ namespace SAEON.Observations.QuerySite
 
                                 var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo"), n.ProtocolMessage.AccessToken);
                                 var userInfo = await userInfoClient.GetAsync();
-                                Logging.Verbose("Claims1: {claims}", userInfo.Claims);
 
                                 identity.AddClaims(userInfo.GetClaimsIdentity().Claims);
 
