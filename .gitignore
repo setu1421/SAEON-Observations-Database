@@ -309,3 +309,5 @@ App_Data/
 connections.config
 connectionstrings.config
 machinekey.config
+connectionstrings.json
+machinekey.json
