@@ -47,6 +47,9 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataLog_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataLog_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160708 TimPN
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_DataLog] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataLog_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_DataLog_DataSourceTransformation] FOREIGN KEY ([DataSourceTransformationID]) REFERENCES [dbo].[DataSourceTransformation] ([ID]),

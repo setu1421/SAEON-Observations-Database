@@ -15,6 +15,9 @@ CREATE TABLE [dbo].[Project_Station]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Project_Station_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Project_Station__UpdatedAt] DEFAULT GetDate(), 
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Project_Station] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_Project_Station] UNIQUE ([ProjectID],[StationID],[StartDate],[EndDate]),
     CONSTRAINT [FK_Project_Station_ProjectID] FOREIGN KEY ([ProjectID]) REFERENCES [dbo].[Project] ([ID]),

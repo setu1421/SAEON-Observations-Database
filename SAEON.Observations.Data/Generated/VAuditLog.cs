@@ -117,6 +117,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarUpdatedAt);
                 
+                TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
+                colvarRowVersion.ColumnName = "RowVersion";
+                colvarRowVersion.DataType = DbType.Binary;
+                colvarRowVersion.MaxLength = 0;
+                colvarRowVersion.AutoIncrement = false;
+                colvarRowVersion.IsNullable = false;
+                colvarRowVersion.IsPrimaryKey = false;
+                colvarRowVersion.IsForeignKey = false;
+                colvarRowVersion.IsReadOnly = true;
+                
+                schema.Columns.Add(colvarRowVersion);
+                
                 TableSchema.TableColumn colvarUserName = new TableSchema.TableColumn(schema);
                 colvarUserName.ColumnName = "UserName";
                 colvarUserName.DataType = DbType.String;
@@ -249,6 +261,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("RowVersion")]
+        [Bindable(true)]
+        public byte[] RowVersion 
+	    {
+		    get
+		    {
+			    return GetColumnValue<byte[]>("RowVersion");
+		    }
+            set 
+		    {
+			    SetColumnValue("RowVersion", value);
+            }
+        }
+	      
         [XmlAttribute("UserName")]
         [Bindable(true)]
         public string UserName 
@@ -279,6 +305,8 @@ namespace SAEON.Observations.Data{
             public static string AddedAt = @"AddedAt";
             
             public static string UpdatedAt = @"UpdatedAt";
+            
+            public static string RowVersion = @"RowVersion";
             
             public static string UserName = @"UserName";
             

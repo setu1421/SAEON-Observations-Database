@@ -15,6 +15,9 @@ CREATE TABLE [dbo].[Instrument_DataSource]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Instrument_DataSource_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Instrument_DataSource_UpdatedAt] DEFAULT GetDate(), 
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Instrument_DataSource] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Instrument_DataSource_Instrument] FOREIGN KEY ([InstrumentID]) REFERENCES [dbo].[Instrument] ([ID]),
     CONSTRAINT [FK_Instrument_DataSource_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]),

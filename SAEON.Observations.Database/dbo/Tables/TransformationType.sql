@@ -11,6 +11,9 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_TransformationType_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_TransformationType_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160718 TimPN
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_TransformationType] PRIMARY KEY CLUSTERED ([ID]),
 --> Added 2.0.0 20160406 TimPN
     CONSTRAINT [UX_TransformationType_Code] UNIQUE ([Code]),

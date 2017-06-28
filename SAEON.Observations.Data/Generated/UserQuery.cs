@@ -246,6 +246,19 @@ namespace SAEON.Observations.Data
 				colvarUpdatedBy.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarUpdatedBy);
 				
+				TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
+				colvarRowVersion.ColumnName = "RowVersion";
+				colvarRowVersion.DataType = DbType.Binary;
+				colvarRowVersion.MaxLength = 0;
+				colvarRowVersion.AutoIncrement = false;
+				colvarRowVersion.IsNullable = false;
+				colvarRowVersion.IsPrimaryKey = false;
+				colvarRowVersion.IsForeignKey = false;
+				colvarRowVersion.IsReadOnly = true;
+				colvarRowVersion.DefaultSetting = @"";
+				colvarRowVersion.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarRowVersion);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -327,6 +340,14 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<string>(Columns.UpdatedBy); }
 			set { SetColumnValue(Columns.UpdatedBy, value); }
 		}
+		  
+		[XmlAttribute("RowVersion")]
+		[Bindable(true)]
+		public byte[] RowVersion 
+		{
+			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
+			set { SetColumnValue(Columns.RowVersion, value); }
+		}
 		
 		#endregion
 		
@@ -347,7 +368,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy)
+		public static void Insert(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion)
 		{
 			UserQuery item = new UserQuery();
 			
@@ -369,6 +390,8 @@ namespace SAEON.Observations.Data
 			
 			item.UpdatedBy = varUpdatedBy;
 			
+			item.RowVersion = varRowVersion;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -379,7 +402,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy)
+		public static void Update(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion)
 		{
 			UserQuery item = new UserQuery();
 			
@@ -400,6 +423,8 @@ namespace SAEON.Observations.Data
 				item.UpdatedAt = varUpdatedAt;
 			
 				item.UpdatedBy = varUpdatedBy;
+			
+				item.RowVersion = varRowVersion;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -477,6 +502,13 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn RowVersionColumn
+        {
+            get { return Schema.Columns[9]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -490,6 +522,7 @@ namespace SAEON.Observations.Data
 			 public static string AddedBy = @"AddedBy";
 			 public static string UpdatedAt = @"UpdatedAt";
 			 public static string UpdatedBy = @"UpdatedBy";
+			 public static string RowVersion = @"RowVersion";
 						
 		}
 		#endregion

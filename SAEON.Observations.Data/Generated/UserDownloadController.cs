@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string UserId,string Name,string Description,string QueryInput,string DownloadURI,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy)
+	    public void Insert(Guid Id,string UserId,string Name,string Description,string QueryInput,string DownloadURI,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
 	    {
 		    UserDownload item = new UserDownload();
 		    
@@ -104,6 +104,8 @@ namespace SAEON.Observations.Data
             
             item.UpdatedBy = UpdatedBy;
             
+            item.RowVersion = RowVersion;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -112,7 +114,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string UserId,string Name,string Description,string QueryInput,string DownloadURI,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy)
+	    public void Update(Guid Id,string UserId,string Name,string Description,string QueryInput,string DownloadURI,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
 	    {
 		    UserDownload item = new UserDownload();
 	        item.MarkOld();
@@ -137,6 +139,8 @@ namespace SAEON.Observations.Data
 			item.UpdatedAt = UpdatedAt;
 				
 			item.UpdatedBy = UpdatedBy;
+				
+			item.RowVersion = RowVersion;
 				
 	        item.Save(UserName);
 	    }

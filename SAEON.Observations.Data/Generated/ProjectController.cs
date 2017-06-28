@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid? ProgrammeID,string Code,string Name,string Description,string Url,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,Guid? ProgrammeID,string Code,string Name,string Description,string Url,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    Project item = new Project();
 		    
@@ -106,6 +106,8 @@ namespace SAEON.Observations.Data
             
             item.UpdatedAt = UpdatedAt;
             
+            item.RowVersion = RowVersion;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -114,7 +116,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid? ProgrammeID,string Code,string Name,string Description,string Url,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,Guid? ProgrammeID,string Code,string Name,string Description,string Url,DateTime? StartDate,DateTime? EndDate,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    Project item = new Project();
 	        item.MarkOld();
@@ -141,6 +143,8 @@ namespace SAEON.Observations.Data
 			item.AddedAt = AddedAt;
 				
 			item.UpdatedAt = UpdatedAt;
+				
+			item.RowVersion = RowVersion;
 				
 	        item.Save(UserName);
 	    }

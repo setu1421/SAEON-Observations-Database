@@ -13,6 +13,9 @@ Create Table [dbo].[UserQueries]
     [AddedBy] NVarChar(128) not Null,
     [UpdatedAt] DateTime null Constraint [DF_UserQueries_UpdatedAt] Default GetDate(), 
     [UpdatedBy] NVarChar(128) not Null,
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     Constraint [PK_UserQueries] Primary Key Clustered ([ID]),
 --> Removed 20170301
 --    Constraint [FK_UserQueries_AspNetUsers_UserId] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),

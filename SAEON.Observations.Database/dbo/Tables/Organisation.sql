@@ -11,6 +11,9 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Organisation_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Organisation_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.4 20160509 TimPN
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Organisation] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Organisation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --> Changed 20160329 TimPN

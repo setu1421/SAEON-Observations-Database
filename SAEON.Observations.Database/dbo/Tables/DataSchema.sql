@@ -19,6 +19,9 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataSchema_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSchema_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160715 TimPN
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_DataSchema] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSchema_DataSourceType] FOREIGN KEY ([DataSourceTypeID]) REFERENCES [dbo].[DataSourceType] ([ID]),
 --> Added 2.0.0 20160406 TimPN

@@ -11,6 +11,9 @@ CREATE TABLE [dbo].[AuditLog]
 --> Added 2.0.3 20160421 TimPN
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_AuditLog_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.3 20160421 TimPN
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_AuditLog] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_AuditLog_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )

@@ -6,7 +6,10 @@
     [Url]           VARCHAR (250)    NULL,
     [Latitude]      FLOAT (53)       NULL,
     [Longitude]     FLOAT (53)       NULL,
-    [Elevation]     INT              NULL,
+--> Changed 2.0.33 20170628 TimPN
+--    [Elevation]     INT              NULL,
+    [Elevation] Float Null,
+--< Changed 2.0.33 20170628 TimPN
 --> Changed 2.0.3 20160426 TimPN
 --    [ProjectSiteID] UNIQUEIDENTIFIER NOT NULL,
     [ProjectSiteID] UNIQUEIDENTIFIER NULL,
@@ -30,6 +33,9 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Station_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Station_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.3 20160421 TimPN
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PKStation] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Station_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_Station_ProjectSite] FOREIGN KEY ([ProjectSiteID]) REFERENCES [dbo].[ProjectSite] ([ID]),

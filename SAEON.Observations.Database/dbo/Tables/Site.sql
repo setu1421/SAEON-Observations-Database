@@ -19,6 +19,9 @@ CREATE TABLE [dbo].[Site]
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Site_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Site_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.3 20160421 TimPN
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Site] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_Site_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_Site_Name] UNIQUE ([Name]),

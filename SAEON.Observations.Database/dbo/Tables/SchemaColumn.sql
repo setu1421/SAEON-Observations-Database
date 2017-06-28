@@ -16,6 +16,9 @@ CREATE TABLE [dbo].[SchemaColumn]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumn_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumn_UpdatedAt] DEFAULT GetDate(), 
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_SchemaColumn] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_SchemaColumn_DataSchema] FOREIGN KEY ([DataSchemaID]) REFERENCES [dbo].[DataSchema] ([ID]),
     CONSTRAINT [FK_SchemaColumn_SchemaColumnType] FOREIGN KEY ([SchemaColumnTypeID]) REFERENCES [dbo].[SchemaColumnType] ([ID]),

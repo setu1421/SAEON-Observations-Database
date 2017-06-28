@@ -116,6 +116,9 @@
                                                     <ext:RecordField Name="Name" Type="String" />
                                                     <ext:RecordField Name="Description" Type="String" />
                                                     <ext:RecordField Name="Url" Type="String" />
+                                                    <ext:RecordField Name="Latitude" Type="Auto" />
+                                                    <ext:RecordField Name="Longitude" Type="Auto" />
+                                                    <ext:RecordField Name="Elevation" Type="Auto" />
                                                     <ext:RecordField Name="StartDate" Type="Date" />
                                                     <ext:RecordField Name="EndDate" Type="Date" />
                                                     <ext:RecordField Name="LastUpdate" Type="Date" />
@@ -137,6 +140,10 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="200" />
+                                        <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
+                                        <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
+                                        <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" />
+                                        <ext:Column Header="Elevation" DataIndex="Elevation" Width="70" Groupable="false" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="200" />
@@ -571,6 +578,31 @@
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
+                    <ext:Container ID="Container4" runat="server" Layout="Column" Height="50" Margins="10px 0px 0px 0px">
+                        <Items>
+                            <ext:Container ID="Container8" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
+                                <Items>
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLatitude" DataIndex="Latitude"
+                                        MaxLength="150" runat="server" FieldLabel="Latitude" AnchorHorizontal="90%">
+                                    </ext:NumberField>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container ID="Container9" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
+                                <Items>
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLongitude" DataIndex="Longitude"
+                                        MaxLength="150" runat="server" FieldLabel="Longitude" AnchorHorizontal="90%">
+                                    </ext:NumberField>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container ID="Container10" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
+                                <Items>
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="2" ID="nfElevation" DataIndex="Elevation" MaxLength="7"
+                                        runat="server" FieldLabel="Elevation" AnchorHorizontal="90%">
+                                    </ext:NumberField>
+                                </Items>
+                            </ext:Container>
+                        </Items>
+                    </ext:Container>
                     <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />

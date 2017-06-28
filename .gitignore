@@ -309,5 +309,5 @@ App_Data/
 connections.config
 connectionstrings.config
 machinekey.config
+smtp.config
 connectionstrings.json
-machinekey.json

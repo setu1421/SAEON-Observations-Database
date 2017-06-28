@@ -151,6 +151,7 @@
                                         <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
                                         <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
                                         <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" />
+                                        <ext:Column Header="Elevation" DataIndex="Elevation" Width="70" Groupable="false" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:CommandColumn Width="75" Groupable="false">
@@ -522,7 +523,7 @@
                             </ext:Container>
                             <ext:Container ID="Container10" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
                                 <Items>
-                                    <ext:NumberField AllowDecimals="false" ID="nfElevation" DataIndex="Elevation" MaxLength="7"
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="2" ID="nfElevation" DataIndex="Elevation" MaxLength="7"
                                         runat="server" FieldLabel="Elevation" AnchorHorizontal="90%">
                                     </ext:NumberField>
                                 </Items>

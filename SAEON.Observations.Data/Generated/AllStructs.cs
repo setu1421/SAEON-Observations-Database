@@ -410,8 +410,6 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VDataSourceTransformation = @"vDataSourceTransformation";
         
-		public static readonly string VDownload = @"vDownloads";
-        
 		public static readonly string VImportBatch = @"vImportBatch";
         
 		public static readonly string VInstrumentDataSource = @"vInstrumentDataSource";
@@ -421,6 +419,18 @@ namespace SAEON.Observations.Data
 		public static readonly string VInstrumentSensor = @"vInstrumentSensor";
         
 		public static readonly string VInventory = @"vInventory";
+        
+		public static readonly string VInventoryInstrument = @"vInventoryInstruments";
+        
+		public static readonly string VInventoryOrganisation = @"vInventoryOrganisations";
+        
+		public static readonly string VInventoryPhenomenaOffering = @"vInventoryPhenomenaOfferings";
+        
+		public static readonly string VInventoryStation = @"vInventoryStations";
+        
+		public static readonly string VInventoryTotal = @"vInventoryTotals";
+        
+		public static readonly string VInventoryYear = @"vInventoryYears";
         
 		public static readonly string VModuleRoleModule = @"vModuleRoleModule";
         

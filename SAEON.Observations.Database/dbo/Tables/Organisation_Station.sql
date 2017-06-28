@@ -16,6 +16,9 @@ CREATE TABLE [dbo].[Organisation_Station]
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Station_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Station_UpdatedAt] DEFAULT GetDate(), 
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Organisation_Station] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Organisation_Station_Organisation] FOREIGN KEY ([OrganisationID]) REFERENCES [dbo].[Organisation] ([ID]),
     CONSTRAINT [FK_Organisation_Station_Station] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]),

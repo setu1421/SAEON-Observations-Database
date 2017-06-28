@@ -8,6 +8,9 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_UnitOfMeasure_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_UnitOfMeasure_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160718 TimPN
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_UnitOfMeasure] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_UnitOfMeasure_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 --> Changed 20160329 TimPN

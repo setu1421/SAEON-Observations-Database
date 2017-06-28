@@ -8,6 +8,9 @@ CREATE TABLE [dbo].[StatusReason]
     [UserId] UNIQUEIDENTIFIER NOT NULL, 
     [AddedAt] DATETIME NULL CONSTRAINT [DF_StatusReason_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_StatusReason_UpdatedAt] DEFAULT GetDate(), 
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_StatusReason] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_StatusReason_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_StatusReason_Name] UNIQUE ([Name]),

@@ -14,6 +14,9 @@ Create Table [dbo].[UserDownloads]
     [AddedBy] NVarChar(128) not Null,
     [UpdatedAt] DateTime null Constraint [DF_UserDownloads_UpdatedAt] Default GetDate(), 
     [UpdatedBy] NVarChar(128) not Null,
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     Constraint [PK_UserDownloads] Primary Key Clustered ([ID]),
 --> Removed 20170301
 --    Constraint [FK_UserDownloads_AspNetUsers_UserId] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),

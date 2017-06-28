@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid DataSchemaID,int Number,string Name,Guid SchemaColumnTypeID,int? Width,string Format,Guid? PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,string EmptyValue,string FixedTime,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,Guid DataSchemaID,int Number,string Name,Guid SchemaColumnTypeID,int? Width,string Format,Guid? PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,string EmptyValue,string FixedTime,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    SchemaColumn item = new SchemaColumn();
 		    
@@ -114,6 +114,8 @@ namespace SAEON.Observations.Data
             
             item.UpdatedAt = UpdatedAt;
             
+            item.RowVersion = RowVersion;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -122,7 +124,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid DataSchemaID,int Number,string Name,Guid SchemaColumnTypeID,int? Width,string Format,Guid? PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,string EmptyValue,string FixedTime,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,Guid DataSchemaID,int Number,string Name,Guid SchemaColumnTypeID,int? Width,string Format,Guid? PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,string EmptyValue,string FixedTime,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    SchemaColumn item = new SchemaColumn();
 	        item.MarkOld();
@@ -157,6 +159,8 @@ namespace SAEON.Observations.Data
 			item.AddedAt = AddedAt;
 				
 			item.UpdatedAt = UpdatedAt;
+				
+			item.RowVersion = RowVersion;
 				
 	        item.Save(UserName);
 	    }

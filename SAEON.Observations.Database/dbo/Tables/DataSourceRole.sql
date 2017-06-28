@@ -13,6 +13,9 @@
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataSourceRole_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSourceRole_UpdatedAt] DEFAULT GetDate(), 
 --< Added 2.0.8 20160715 TimPN
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_DataSourceRole] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSourceRole_aspnet_Roles] FOREIGN KEY ([RoleId]) REFERENCES [dbo].[aspnet_Roles] ([RoleId]),
     CONSTRAINT [FK_DataSourceRole_DataSource] FOREIGN KEY ([DataSourceID]) REFERENCES [dbo].[DataSource] ([ID]),

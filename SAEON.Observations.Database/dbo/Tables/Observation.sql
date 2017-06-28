@@ -20,7 +20,10 @@
 --> Added 2.0.32 20170524 TimPN
     [ValueYear]             as Year(ValueDate),
     [ValueDecade]           as Year(ValueDate) / 10,
---> Added 2.0.32 20170524 TimPN
+--< Added 2.0.32 20170524 TimPN
+--> Added 2.0.33 20170628 TimPN
+	[TextValue] VarChar(10) Null,
+--< Added 2.0.33 20170628 TimPN
     [RawValue]              FLOAT (53)       NULL,
     [DataValue]             FLOAT (53)       NULL,
 --> Changed 2.0.10 20160901 TimPN
@@ -46,13 +49,16 @@
 --> Added 2.0.15 20161024 TimPN
     [CorrelationID] UNIQUEIDENTIFIER NULL,
 --< Added 2.0.15 20161024 TimPN
+--> Added 2.0.33 20170628 TimPN
+	[Elevation] Float Null,
+--< Added 2.0.33 20170628 TimPN
     [UserId]                UNIQUEIDENTIFIER NOT NULL,
     [AddedDate]             DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
 --> Added 2.0.8 20160718 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate(), 
 --> Added 2.0.31 20170414 TimPN
-    [RowVersion] RowVersion not null
+    [RowVersion] RowVersion not null,
 --< Added 2.0.31 20170414 TimPN
 --< Added 2.0.8 20160718 TimPN
 --> Changed 2.0.8 20160718 TimPN
@@ -183,6 +189,10 @@ CREATE INDEX [IX_Observation_CorrelationID] ON [dbo].[Observation] ([Correlation
 --GO
 --CREATE INDEX [IX_Observation_SensorIDPhenomenonOfferingID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID]) ON [Observations];
 --< Added 2.0.30 20170329 TimPN
+--> Added 2.0.33 20170628 TimPN
+GO
+CREATE INDEX [IX_Observation_Elevation] ON [dbo].[Observation] ([Elevation]) ON [Observations];
+--< Added 2.0.33 20170628 TimPN
 --> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]

@@ -117,6 +117,42 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarEndDate);
                 
+                TableSchema.TableColumn colvarLatitude = new TableSchema.TableColumn(schema);
+                colvarLatitude.ColumnName = "Latitude";
+                colvarLatitude.DataType = DbType.Double;
+                colvarLatitude.MaxLength = 0;
+                colvarLatitude.AutoIncrement = false;
+                colvarLatitude.IsNullable = true;
+                colvarLatitude.IsPrimaryKey = false;
+                colvarLatitude.IsForeignKey = false;
+                colvarLatitude.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarLatitude);
+                
+                TableSchema.TableColumn colvarLongitude = new TableSchema.TableColumn(schema);
+                colvarLongitude.ColumnName = "Longitude";
+                colvarLongitude.DataType = DbType.Double;
+                colvarLongitude.MaxLength = 0;
+                colvarLongitude.AutoIncrement = false;
+                colvarLongitude.IsNullable = true;
+                colvarLongitude.IsPrimaryKey = false;
+                colvarLongitude.IsForeignKey = false;
+                colvarLongitude.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarLongitude);
+                
+                TableSchema.TableColumn colvarElevation = new TableSchema.TableColumn(schema);
+                colvarElevation.ColumnName = "Elevation";
+                colvarElevation.DataType = DbType.Double;
+                colvarElevation.MaxLength = 0;
+                colvarElevation.AutoIncrement = false;
+                colvarElevation.IsNullable = true;
+                colvarElevation.IsPrimaryKey = false;
+                colvarElevation.IsForeignKey = false;
+                colvarElevation.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarElevation);
+                
                 TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
                 colvarUserId.ColumnName = "UserId";
                 colvarUserId.DataType = DbType.Guid;
@@ -152,6 +188,18 @@ namespace SAEON.Observations.Data{
                 colvarUpdatedAt.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarUpdatedAt);
+                
+                TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
+                colvarRowVersion.ColumnName = "RowVersion";
+                colvarRowVersion.DataType = DbType.Binary;
+                colvarRowVersion.MaxLength = 0;
+                colvarRowVersion.AutoIncrement = false;
+                colvarRowVersion.IsNullable = false;
+                colvarRowVersion.IsPrimaryKey = false;
+                colvarRowVersion.IsForeignKey = false;
+                colvarRowVersion.IsReadOnly = true;
+                
+                schema.Columns.Add(colvarRowVersion);
                 
                 TableSchema.TableColumn colvarStationCode = new TableSchema.TableColumn(schema);
                 colvarStationCode.ColumnName = "StationCode";
@@ -321,6 +369,48 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("Latitude")]
+        [Bindable(true)]
+        public double? Latitude 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("Latitude");
+		    }
+            set 
+		    {
+			    SetColumnValue("Latitude", value);
+            }
+        }
+	      
+        [XmlAttribute("Longitude")]
+        [Bindable(true)]
+        public double? Longitude 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("Longitude");
+		    }
+            set 
+		    {
+			    SetColumnValue("Longitude", value);
+            }
+        }
+	      
+        [XmlAttribute("Elevation")]
+        [Bindable(true)]
+        public double? Elevation 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("Elevation");
+		    }
+            set 
+		    {
+			    SetColumnValue("Elevation", value);
+            }
+        }
+	      
         [XmlAttribute("UserId")]
         [Bindable(true)]
         public Guid UserId 
@@ -360,6 +450,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("UpdatedAt", value);
+            }
+        }
+	      
+        [XmlAttribute("RowVersion")]
+        [Bindable(true)]
+        public byte[] RowVersion 
+	    {
+		    get
+		    {
+			    return GetColumnValue<byte[]>("RowVersion");
+		    }
+            set 
+		    {
+			    SetColumnValue("RowVersion", value);
             }
         }
 	      
@@ -436,11 +540,19 @@ namespace SAEON.Observations.Data{
             
             public static string EndDate = @"EndDate";
             
+            public static string Latitude = @"Latitude";
+            
+            public static string Longitude = @"Longitude";
+            
+            public static string Elevation = @"Elevation";
+            
             public static string UserId = @"UserId";
             
             public static string AddedAt = @"AddedAt";
             
             public static string UpdatedAt = @"UpdatedAt";
+            
+            public static string RowVersion = @"RowVersion";
             
             public static string StationCode = @"StationCode";
             

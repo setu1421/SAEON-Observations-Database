@@ -17,9 +17,17 @@ CREATE TABLE [dbo].[Instrument]
 --    [EndDate]        DATETIME         NULL,
     [EndDate]        DATE         NULL,
 --< Changed 2.0.22 20170111 TimPN
+--> Added 2.0.33 20170628 TimPN
+    [Latitude] Float Null,
+    [Longitude] Float Null,
+    [Elevation] Float Null,
+--< Added 2.0.33 20170628 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Instrument_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Instrument_UpdatedAt] DEFAULT GetDate(), 
+--> Added 2.0.33 20170628 TimPN
+    [RowVersion] RowVersion not null,
+--< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Instrument] PRIMARY KEY CLUSTERED ([ID]),
 --> Removed 2.0.9 20160824 TimPN
 --    CONSTRAINT [FK_Instrument_Station] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]),

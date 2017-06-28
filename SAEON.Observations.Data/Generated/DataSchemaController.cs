@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,bool? HasColumnNames,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Insert(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,bool? HasColumnNames,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    DataSchema item = new DataSchema();
 		    
@@ -116,6 +116,8 @@ namespace SAEON.Observations.Data
             
             item.UpdatedAt = UpdatedAt;
             
+            item.RowVersion = RowVersion;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -124,7 +126,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,bool? HasColumnNames,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex,DateTime? AddedAt,DateTime? UpdatedAt)
+	    public void Update(Guid Id,string Code,string Name,string Description,Guid DataSourceTypeID,int IgnoreFirst,bool? HasColumnNames,int IgnoreLast,string Condition,string DataSchemaX,Guid UserId,string Delimiter,string SplitSelector,int? SplitIndex,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    DataSchema item = new DataSchema();
 	        item.MarkOld();
@@ -161,6 +163,8 @@ namespace SAEON.Observations.Data
 			item.AddedAt = AddedAt;
 				
 			item.UpdatedAt = UpdatedAt;
+				
+			item.RowVersion = RowVersion;
 				
 	        item.Save(UserName);
 	    }
