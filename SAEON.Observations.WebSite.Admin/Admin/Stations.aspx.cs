@@ -82,23 +82,36 @@ public partial class Admin_Stations : System.Web.UI.Page
             station.SiteID = Utilities.MakeGuid(cbSite.SelectedItem.Value.Trim());
             station.Description = tfDescription.Text.Trim();
 
-            if (!string.IsNullOrEmpty(nfLatitude.Text))
-                station.Latitude = Double.Parse(nfLatitude.Text);
+            //if (!string.IsNullOrEmpty(nfLatitude.Text))
+            //    station.Latitude = Double.Parse(nfLatitude.Text);
 
-            if (!string.IsNullOrEmpty(nfLongitude.Text))
-                station.Longitude = Double.Parse(nfLongitude.Text);
+            //if (!string.IsNullOrEmpty(nfLongitude.Text))
+            //    station.Longitude = Double.Parse(nfLongitude.Text);
 
-            if (!string.IsNullOrEmpty(nfElevation.Text))
-                station.Elevation = Int32.Parse(nfElevation.Text);
+            //if (!string.IsNullOrEmpty(nfElevation.Text))
+            //    station.Elevation = Int32.Parse(nfElevation.Text);
+
+            if (nfLatitude.IsEmpty)
+                station.Latitude = null;
+            else
+                station.Latitude = nfLatitude.Number;
+            if (nfLongitude.IsEmpty)
+                station.Longitude = null;
+            else
+                station.Longitude = nfLongitude.Number;
+            if (nfElevation.IsEmpty)
+                station.Elevation = null;
+            else
+                station.Elevation = nfElevation.Number;
 
             if (!string.IsNullOrEmpty(tfUrl.Text))
                 station.Url = tfUrl.Text;
 
-            if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+            if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
                 station.StartDate = dfStartDate.SelectedDate;
             else
                 station.StartDate = null;
-            if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+            if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
                 station.EndDate = dfEndDate.SelectedDate;
             else
                 station.EndDate = null;
@@ -183,7 +196,8 @@ public partial class Admin_Stations : System.Web.UI.Page
         if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
             col.Where(OrganisationStation.Columns.EndDate, dfOrganisationEndDate.SelectedDate);
         col.Load();
-        return !col.Any();
+        var id = Utilities.MakeGuid(OrganisationLinkID.Value);
+        return !col.Any(i => i.Id != id);
     }
 
     protected void OrganisationLinkSave(object sender, DirectEventArgs e)
@@ -289,7 +303,8 @@ public partial class Admin_Stations : System.Web.UI.Page
         if (!String.IsNullOrEmpty(dfProjectEndDate.Text) && (dfProjectEndDate.SelectedDate.Year >= 1900))
             col.Where(ProjectStation.Columns.EndDate, dfProjectEndDate.SelectedDate);
         col.Load();
-        return !col.Any();
+        var id = Utilities.MakeGuid(ProjectLinkID.Value);
+        return !col.Any(i => i.Id != id);
     }
 
     protected void ProjectLinkSave(object sender, DirectEventArgs e)
@@ -391,12 +406,13 @@ public partial class Admin_Stations : System.Web.UI.Page
         StationInstrumentCollection col = new StationInstrumentCollection()
             .Where(StationInstrument.Columns.StationID, masterID)
             .Where(StationInstrument.Columns.InstrumentID, cbInstrument.SelectedItem.Value);
-        if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
+        if (!dfInstrumentStartDate.IsEmpty && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
             col.Where(StationInstrument.Columns.StartDate, dfInstrumentStartDate.SelectedDate);
-        if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
+        if (!dfInstrumentEndDate.IsEmpty && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
             col.Where(StationInstrument.Columns.EndDate, dfInstrumentEndDate.SelectedDate);
         col.Load();
-        return !col.Any();
+        var id = Utilities.MakeGuid(InstrumentLinkID.Value);
+        return !col.Any(i => i.Id != id);
     }
 
     protected void InstrumentLinkSave(object sender, DirectEventArgs e)
@@ -413,11 +429,23 @@ public partial class Admin_Stations : System.Web.UI.Page
             StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(InstrumentLinkID.Value));
             stationInstrument.StationID = masterID;
             stationInstrument.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
+            if (nfInstrumentLatitude.IsEmpty)
+                stationInstrument.Latitude = null;
+            else
+                stationInstrument.Latitude = nfInstrumentLatitude.Number;
+            if (nfInstrumentLongitude.IsEmpty)
+                stationInstrument.Longitude = null;
+            else
+                stationInstrument.Longitude = nfInstrumentLongitude.Number;
+            if (nfInstrumentElevation.IsEmpty)
+                stationInstrument.Elevation = null;
+            else
+                stationInstrument.Elevation = nfInstrumentElevation.Number;
+            if (!dfInstrumentStartDate.IsEmpty && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
                 stationInstrument.StartDate = dfInstrumentStartDate.SelectedDate;
             else
                 stationInstrument.StartDate = null;
-            if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
+            if (!dfInstrumentEndDate.IsEmpty && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
                 stationInstrument.EndDate = dfInstrumentEndDate.SelectedDate;
             else
                 stationInstrument.EndDate = null;
@@ -428,6 +456,9 @@ public partial class Admin_Stations : System.Web.UI.Page
                 { "StationCode", stationInstrument.Station.Code },
                 { "InstrumentID", stationInstrument.InstrumentID},
                 { "InstrumentCode", stationInstrument.Instrument.Code},
+                { "Latitude", stationInstrument?.Latitude},
+                { "Longitude", stationInstrument?.Longitude },
+                { "Elevation", stationInstrument?.Elevation },
                 { "StartDate", stationInstrument?.StartDate },
                 { "EndDate", stationInstrument?.EndDate}
             });

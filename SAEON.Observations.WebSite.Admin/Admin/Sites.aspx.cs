@@ -80,11 +80,11 @@ public partial class Admin_Sites : System.Web.UI.Page
             if (string.IsNullOrEmpty(site.Name)) site.Name = null;
             site.Description = tfDescription.Text.Trim();
             site.Url = tfUrl.Text.Trim();
-            if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+            if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
                 site.StartDate = dfStartDate.SelectedDate;
             else
                 site.StartDate = null;
-            if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+            if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
                 site.EndDate = dfEndDate.SelectedDate;
             else
                 site.EndDate = null;
@@ -158,7 +158,8 @@ public partial class Admin_Sites : System.Web.UI.Page
         if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
             col.Where(da.OrganisationSite.Columns.EndDate, dfOrganisationEndDate.SelectedDate);
         col.Load();
-        return !col.Any();
+        var id = Utilities.MakeGuid(OrganisationLinkID.Value);
+        return !col.Any(i => i.Id != id);
     }
 
     protected void OrganisationLinkSave(object sender, DirectEventArgs e)
@@ -176,11 +177,11 @@ public partial class Admin_Sites : System.Web.UI.Page
             siteOrganisation.SiteID = masterID;
             siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
             siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
+            if (!dfOrganisationStartDate.IsEmpty && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
                 siteOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
             else
                 siteOrganisation.StartDate = null;
-            if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
+            if (!dfOrganisationEndDate.IsEmpty && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
                 siteOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
             else
                 siteOrganisation.EndDate = null;

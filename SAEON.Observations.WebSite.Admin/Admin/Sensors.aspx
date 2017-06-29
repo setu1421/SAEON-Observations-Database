@@ -235,7 +235,7 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="505" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="460" Closable="true"
         Hidden="true" Collapsible="false" Title="Sensor Detail" Maximizable="false"
         Layout="Fit" ClientIDMode="Static">
         <Content>
@@ -348,7 +348,7 @@
                         LabelAlign="Top">
                         <Items>
                             <ext:ComboBox ID="cbDataSource" runat="server" DataIndex="DataSourceID" DisplayField="Name"
-                                TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="DataSource" EmptyText="Please select" AnchorHorizontal="95%"
+                                TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="Data Source" EmptyText="Please select" AnchorHorizontal="95%"
                                 TriggerAction="All" MsgTarget="Side" AllowBlank="false" BlankText="DataSource is required" ClientIDMode="Static">
                                 <Store>
                                     <ext:Store ID="storeDataSource" runat="server">
@@ -378,7 +378,7 @@
                     <ext:Panel ID="Panel9" runat="server" Border="false" Header="false" Layout="Form"
                         LabelAlign="Top">
                         <Items>
-                            <ext:ComboBox ID="cbDataSchema" runat="server" Editable="true" ValueField="Id" DisplayField="Name"
+                            <ext:ComboBox ID="cbDataSchema" runat="server" Editable="true" ValueField="Id" DisplayField="Name" 
                                 TypeAhead="true" Mode="Local" AllowBlank="true" BlankText="Data Schema is required for the selected Data Source"
                                 TriggerAction="All" DataIndex="DataSchemaID" EmptyText="Select Data Schema" SelectOnFocus="true" MsgTarget="Side"
                                 FieldLabel="Data Schema" AnchorHorizontal="95%" ClientIDMode="Static">
@@ -422,7 +422,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="InstrumentLinkWindow" runat="server" Width="450" Height="300" Closable="true"
+    <ext:Window ID="InstrumentLinkWindow" runat="server" Width="450" Height="260" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Instrument"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
@@ -445,7 +445,7 @@
                         </Defaults>
                         <Items>
                             <ext:ComboBox ID="cbInstrument" runat="server" StoreID="InstrumentStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" FieldLabel="Instrument"
                                 AllowBlank="false" DataIndex="InstrumentID" EmptyText="Select Instrument"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                             </ext:ComboBox>

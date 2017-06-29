@@ -238,7 +238,7 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="455" Closable="true"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="500" Closable="true"
         Hidden="true" Collapsible="false" Title="Project Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
@@ -370,7 +370,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="StationLinkWindow" runat="server" Width="450" Height="300" Closable="true"
+    <ext:Window ID="StationLinkWindow" runat="server" Width="450" Height="260" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Station"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
@@ -393,7 +393,7 @@
                         </Defaults>
                         <Items>
                             <ext:ComboBox ID="cbStation" runat="server" StoreID="StationStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" FieldLabel="Station"
                                 AllowBlank="false" DataIndex="StationID" EmptyText="Select Station"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                                 <Triggers>

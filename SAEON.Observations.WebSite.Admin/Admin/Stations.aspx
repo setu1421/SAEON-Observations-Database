@@ -241,6 +241,9 @@
                                                             <ext:RecordField Name="InstrumentID" Type="Auto" />
                                                             <ext:RecordField Name="InstrumentCode" Type="Auto" />
                                                             <ext:RecordField Name="InstrumentName" Type="Auto" />
+                                                            <ext:RecordField Name="Latitude" Type="Auto" />
+                                                            <ext:RecordField Name="Longitude" Type="Auto" />
+                                                            <ext:RecordField Name="Elevation" Type="Auto" />
                                                             <ext:RecordField Name="StartDate" Type="Date" />
                                                             <ext:RecordField Name="EndDate" Type="Date" />
                                                         </Fields>
@@ -256,6 +259,9 @@
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="InstrumentCode" Width="200" />
                                                 <ext:Column Header="Name" DataIndex="InstrumentName" Width="200" />
+                                                <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" />
+                                                <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" />
+                                                <ext:Column Header="Elevation" DataIndex="Elevation" Width="70" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="150">
@@ -596,7 +602,7 @@
                         </Defaults>
                         <Items>
                             <ext:ComboBox ID="cbOrganisation" runat="server" StoreID="OrganisationStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" FieldLabel="Organisation"
                                 AllowBlank="false" DataIndex="OrganisationID" EmptyText="Select Organisation"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                                 <Triggers>
@@ -617,7 +623,7 @@
                         </Defaults>
                         <Items>
                             <ext:ComboBox ID="cbOrganisationRole" runat="server" StoreID="OrganisationRoleStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" FieldLabel="Role"
                                 AllowBlank="false" DataIndex="OrganisationRoleID" EmptyText="Select Role"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                                 <Triggers>
@@ -672,7 +678,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="ProjectLinkWindow" runat="server" Width="450" Height="300" Closable="true"
+    <ext:Window ID="ProjectLinkWindow" runat="server" Width="450" Height="260" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Project"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
@@ -695,7 +701,7 @@
                         </Defaults>
                         <Items>
                             <ext:ComboBox ID="cbProject" runat="server" StoreID="ProjectStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" FieldLabel="Project"
                                 AllowBlank="false" DataIndex="ProjectID" EmptyText="Select Project"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                                 <Triggers>
@@ -750,7 +756,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="InstrumentLinkWindow" runat="server" Width="450" Height="300" Closable="true"
+    <ext:Window ID="InstrumentLinkWindow" runat="server" Width="450" Height="310" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Instrument"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
@@ -758,12 +764,11 @@
         </Listeners>
         <Content>
             <ext:FormPanel ID="InstrumentLinkFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
+                MonitorResize="true" Padding="10" Width="440" Height="250" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
-                    <ext:Hidden ID="InstrumentLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
-                    </ext:Hidden>
+                    <ext:Hidden ID="InstrumentLinkID" DataIndex="Id" runat="server" ClientIDMode="Static" />
                     <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">
                         <Defaults>
@@ -773,7 +778,7 @@
                         </Defaults>
                         <Items>
                             <ext:ComboBox ID="cbInstrument" runat="server" StoreID="InstrumentStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" FieldLabel="Instrument"
                                 AllowBlank="false" DataIndex="InstrumentID" EmptyText="Select Instrument"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                                 <Triggers>
@@ -785,6 +790,31 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
+                    <ext:Container ID="Container5" runat="server" Layout="Column" Height="50" Margins="10px 0px 0px 0px">
+                        <Items>
+                            <ext:Container ID="Container6" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
+                                <Items>
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfInstrumentLatitude" DataIndex="Latitude"
+                                        MaxLength="150" runat="server" FieldLabel="Latitude" AnchorHorizontal="90%">
+                                    </ext:NumberField>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container ID="Container7" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
+                                <Items>
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfInstrumentLongitude" DataIndex="Longitude"
+                                        MaxLength="150" runat="server" FieldLabel="Longitude" AnchorHorizontal="90%">
+                                    </ext:NumberField>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container ID="Container11" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".33">
+                                <Items>
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="2" ID="nfInstrumentElevation" DataIndex="Elevation" MaxLength="7"
+                                        runat="server" FieldLabel="Elevation" AnchorHorizontal="90%">
+                                    </ext:NumberField>
+                                </Items>
+                            </ext:Container>
+                        </Items>
+                    </ext:Container>
                     <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />

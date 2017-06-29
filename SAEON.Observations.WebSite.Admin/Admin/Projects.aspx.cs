@@ -154,7 +154,8 @@ public partial class Admin_Projects : System.Web.UI.Page
         if (!String.IsNullOrEmpty(dfStationEndDate.Text) && (dfStationEndDate.SelectedDate.Year >= 1900))
             col.Where(ProjectStation.Columns.EndDate, dfStationEndDate.SelectedDate);
         col.Load();
-        return !col.Any();
+        var id = Utilities.MakeGuid(ProjectStationLinkID.Value);
+        return !col.Any(i => i.Id != id);
     }
 
     protected void StationLinkSave(object sender, DirectEventArgs e)

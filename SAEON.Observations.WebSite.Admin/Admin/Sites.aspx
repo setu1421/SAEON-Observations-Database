@@ -465,7 +465,7 @@
                         </Defaults>
                         <Items>
                             <ext:ComboBox ID="cbOrganisation" runat="server" StoreID="OrganisationStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" FieldLabel="Organisation"
                                 AllowBlank="false" DataIndex="OrganisationID" EmptyText="Select Organisation"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                                 <Triggers>
@@ -486,7 +486,7 @@
                         </Defaults>
                         <Items>
                             <ext:ComboBox ID="cbOrganisationRole" runat="server" StoreID="OrganisationRoleStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
+                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" FieldLabel="Role"
                                 AllowBlank="false" DataIndex="OrganisationRoleID" EmptyText="Select Role"
                                 SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
                                 <Triggers>

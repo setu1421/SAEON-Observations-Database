@@ -104,11 +104,24 @@ public partial class Admin_Instruments : System.Web.UI.Page
             if (!string.IsNullOrEmpty(tfUrl.Text))
                 instrument.Url = tfUrl.Text;
 
-            if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+            if (nfLatitude.IsEmpty)
+                instrument.Latitude = null;
+            else
+                instrument.Latitude = nfLatitude.Number;
+            if (nfLongitude.IsEmpty)
+                instrument.Longitude = null;
+            else
+                instrument.Longitude = nfLongitude.Number;
+            if (nfElevation.IsEmpty)
+                instrument.Elevation = null;
+            else
+                instrument.Elevation = nfElevation.Number;
+
+            if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
                 instrument.StartDate = dfStartDate.SelectedDate;
             else
                 instrument.StartDate = null;
-            if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+            if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
                 instrument.EndDate = dfEndDate.SelectedDate;
             else
                 instrument.EndDate = null;
@@ -183,7 +196,8 @@ public partial class Admin_Instruments : System.Web.UI.Page
         if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
             col.Where(OrganisationInstrument.Columns.EndDate, dfOrganisationEndDate.SelectedDate);
         col.Load();
-        return !col.Any();
+        var id = Utilities.MakeGuid(OrganisationLinkID.Value);
+        return !col.Any(i => i.Id != id);
     }
 
     protected void OrganisationLinkSave(object sender, DirectEventArgs e)
@@ -295,12 +309,13 @@ public partial class Admin_Instruments : System.Web.UI.Page
         StationInstrumentCollection col = new StationInstrumentCollection()
             .Where(StationInstrument.Columns.InstrumentID, masterID)
             .Where(StationInstrument.Columns.StationID, cbStation.SelectedItem.Value);
-        if (!String.IsNullOrEmpty(dfStationStartDate.Text) && (dfStationStartDate.SelectedDate.Year >= 1900))
+        if (!dfStationStartDate.IsEmpty && (dfStationStartDate.SelectedDate.Year >= 1900))
             col.Where(StationInstrument.Columns.StartDate, dfStationStartDate.SelectedDate);
-        if (!String.IsNullOrEmpty(dfStationEndDate.Text) && (dfStationEndDate.SelectedDate.Year >= 1900))
+        if (!dfStationEndDate.IsEmpty && (dfStationEndDate.SelectedDate.Year >= 1900))
             col.Where(StationInstrument.Columns.EndDate, dfStationEndDate.SelectedDate);
         col.Load();
-        return !col.Any();
+        var id = Utilities.MakeGuid(StationLinkID.Value);
+        return !col.Any(i => i.Id != id);
     }
 
     protected void StationLinkSave(object sender, DirectEventArgs e)
@@ -317,11 +332,23 @@ public partial class Admin_Instruments : System.Web.UI.Page
             StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(StationLinkID.Value));
             stationInstrument.InstrumentID = masterID;
             stationInstrument.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfStationStartDate.Text) && (dfStationStartDate.SelectedDate.Year >= 1900))
+            if (nfStationLatitude.IsEmpty)
+                stationInstrument.Latitude = null;
+            else
+                stationInstrument.Latitude = nfStationLatitude.Number;
+            if (nfStationLongitude.IsEmpty)
+                stationInstrument.Longitude = null;
+            else
+                stationInstrument.Longitude = nfStationLongitude.Number;
+            if (nfStationElevation.IsEmpty)
+                stationInstrument.Elevation = null;
+            else
+                stationInstrument.Elevation = nfStationElevation.Number;
+            if (!dfStationStartDate.IsEmpty && (dfStationStartDate.SelectedDate.Year >= 1900))
                 stationInstrument.StartDate = dfStationStartDate.SelectedDate;
             else
                 stationInstrument.StartDate = null;
-            if (!String.IsNullOrEmpty(dfStationEndDate.Text) && (dfStationEndDate.SelectedDate.Year >= 1900))
+            if (!dfStationEndDate.IsEmpty && (dfStationEndDate.SelectedDate.Year >= 1900))
                 stationInstrument.EndDate = dfStationEndDate.SelectedDate;
             else
                 stationInstrument.EndDate = null;
@@ -332,6 +359,9 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 { "InstrumentCode", stationInstrument.Instrument.Code },
                 { "StationID", stationInstrument.StationID},
                 { "StationCode", stationInstrument.Station.Code},
+                { "Latitude", stationInstrument?.Latitude},
+                { "Longitude", stationInstrument?.Longitude },
+                { "Elevation", stationInstrument?.Elevation },
                 { "StartDate", stationInstrument?.StartDate },
                 { "EndDate", stationInstrument?.EndDate}
             });
@@ -414,7 +444,8 @@ public partial class Admin_Instruments : System.Web.UI.Page
         if (!String.IsNullOrEmpty(dfDataSourceEndDate.Text) && (dfDataSourceEndDate.SelectedDate.Year >= 1900))
             col.Where(InstrumentDataSource.Columns.EndDate, dfDataSourceEndDate.SelectedDate);
         col.Load();
-        return !col.Any();
+        var id = Utilities.MakeGuid(DataSourceLinkID.Value);
+        return !col.Any(i => i.Id != id);
     }
 
     protected void DataSourceLinkSave(object sender, DirectEventArgs e)
@@ -528,7 +559,8 @@ public partial class Admin_Instruments : System.Web.UI.Page
         if (!String.IsNullOrEmpty(dfSensorEndDate.Text) && (dfSensorEndDate.SelectedDate.Year >= 1900))
             col.Where(InstrumentSensor.Columns.EndDate, dfSensorEndDate.SelectedDate);
         col.Load();
-        return !col.Any();
+        var id = Utilities.MakeGuid(SensorLinkID.Value);
+        return !col.Any(i => i.Id != id);
     }
 
     protected void SensorLinkSave(object sender, DirectEventArgs e)

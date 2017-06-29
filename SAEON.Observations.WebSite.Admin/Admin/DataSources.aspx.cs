@@ -293,7 +293,8 @@ public partial class Admin_DataSources : System.Web.UI.Page
         if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
             col.Where(InstrumentDataSource.Columns.EndDate, dfInstrumentEndDate.SelectedDate);
         col.Load();
-        return !col.Any();
+        var id = Utilities.MakeGuid(InstrumentLinkID.Value);
+        return !col.Any(i => i.Id != id);
     }
 
     protected void InstrumentLinkSave(object sender, DirectEventArgs e)
