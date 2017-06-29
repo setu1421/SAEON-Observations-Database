@@ -1,6 +1,6 @@
 ﻿using Ext.Net;
+using SAEON.Logs;
 using SAEON.Observations.Data;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,60 +86,63 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            Instrument instrument = new Instrument();
+            try
+            {
+                Instrument instrument = new Instrument();
 
-            if (String.IsNullOrEmpty(tfID.Text))
-                instrument.Id = Guid.NewGuid();
-            else
-                instrument = new Instrument(tfID.Text.Trim());
+                if (String.IsNullOrEmpty(tfID.Text))
+                    instrument.Id = Guid.NewGuid();
+                else
+                    instrument = new Instrument(tfID.Text.Trim());
 
-            if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                instrument.Code = tfCode.Text.Trim();
-            if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                instrument.Name = tfName.Text.Trim();
-            instrument.Description = tfDescription.Text.Trim();
+                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
+                    instrument.Code = tfCode.Text.Trim();
+                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
+                    instrument.Name = tfName.Text.Trim();
+                instrument.Description = tfDescription.Text.Trim();
 
-            if (!string.IsNullOrEmpty(tfUrl.Text))
-                instrument.Url = tfUrl.Text;
+                if (!string.IsNullOrEmpty(tfUrl.Text))
+                    instrument.Url = tfUrl.Text;
 
-            if (nfLatitude.IsEmpty)
-                instrument.Latitude = null;
-            else
-                instrument.Latitude = nfLatitude.Number;
-            if (nfLongitude.IsEmpty)
-                instrument.Longitude = null;
-            else
-                instrument.Longitude = nfLongitude.Number;
-            if (nfElevation.IsEmpty)
-                instrument.Elevation = null;
-            else
-                instrument.Elevation = nfElevation.Number;
+                if (nfLatitude.IsEmpty)
+                    instrument.Latitude = null;
+                else
+                    instrument.Latitude = nfLatitude.Number;
+                if (nfLongitude.IsEmpty)
+                    instrument.Longitude = null;
+                else
+                    instrument.Longitude = nfLongitude.Number;
+                if (nfElevation.IsEmpty)
+                    instrument.Elevation = null;
+                else
+                    instrument.Elevation = nfElevation.Number;
 
-            if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
-                instrument.StartDate = dfStartDate.SelectedDate;
-            else
-                instrument.StartDate = null;
-            if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
-                instrument.EndDate = dfEndDate.SelectedDate;
-            else
-                instrument.EndDate = null;
+                if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
+                    instrument.StartDate = dfStartDate.SelectedDate;
+                else
+                    instrument.StartDate = null;
+                if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
+                    instrument.EndDate = dfEndDate.SelectedDate;
+                else
+                    instrument.EndDate = null;
 
-            instrument.UserId = AuthHelper.GetLoggedInUserId;
+                instrument.UserId = AuthHelper.GetLoggedInUserId;
 
-            instrument.Save();
-            Auditing.Log("Instruments.Save", new Dictionary<string, object> {
+                instrument.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "ID", instrument.Id }, { "Code", instrument.Code }, { "Name", instrument.Name } });
 
-            InstrumentsGrid.DataBind();
+                InstrumentsGrid.DataBind();
 
-            DetailWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Instruments.Save");
-            MessageBoxes.Error(ex, "Error", "Unable to save instrument");
+                DetailWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to save instrument");
+            }
         }
     }
 
@@ -202,30 +205,32 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
     protected void OrganisationLinkSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            if (!OrganisationLinkOk())
+            try
             {
-                MessageBoxes.Error("Error", "Organisation is already linked");
-                return;
-            }
-            RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            OrganisationInstrument organisationInstrument = new OrganisationInstrument(Utilities.MakeGuid(OrganisationLinkID.Value));
-            organisationInstrument.InstrumentID = masterID;
-            organisationInstrument.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
-            organisationInstrument.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
-                organisationInstrument.StartDate = dfOrganisationStartDate.SelectedDate;
-            else
-                organisationInstrument.StartDate = null;
-            if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
-                organisationInstrument.EndDate = dfOrganisationEndDate.SelectedDate;
-            else
-                organisationInstrument.EndDate = null;
-            organisationInstrument.UserId = AuthHelper.GetLoggedInUserId;
-            organisationInstrument.Save();
-            Auditing.Log("Instruments.AddOrganisationLink", new Dictionary<string, object> {
+                if (!OrganisationLinkOk())
+                {
+                    MessageBoxes.Error("Error", "Organisation is already linked");
+                    return;
+                }
+                RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                OrganisationInstrument organisationInstrument = new OrganisationInstrument(Utilities.MakeGuid(OrganisationLinkID.Value));
+                organisationInstrument.InstrumentID = masterID;
+                organisationInstrument.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
+                organisationInstrument.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+                if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
+                    organisationInstrument.StartDate = dfOrganisationStartDate.SelectedDate;
+                else
+                    organisationInstrument.StartDate = null;
+                if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
+                    organisationInstrument.EndDate = dfOrganisationEndDate.SelectedDate;
+                else
+                    organisationInstrument.EndDate = null;
+                organisationInstrument.UserId = AuthHelper.GetLoggedInUserId;
+                organisationInstrument.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "InstrumentID", organisationInstrument.InstrumentID },
                 { "InstrumentCode", organisationInstrument.Instrument.Code },
                 { "OrganisationID", organisationInstrument.OrganisationID},
@@ -235,13 +240,14 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 { "StartDate", organisationInstrument?.StartDate },
                 { "EndDate", organisationInstrument?.EndDate}
             });
-            OrganisationLinksGrid.DataBind();
-            OrganisationLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Instruments.LinkOrganisation_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link organisation");
+                OrganisationLinksGrid.DataBind();
+                OrganisationLinkWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link organisation");
+            }
         }
     }
 
@@ -257,16 +263,19 @@ public partial class Admin_Instruments : System.Web.UI.Page
     [DirectMethod]
     public void DeleteOrganisationLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
         {
-            OrganisationInstrument.Delete(aID);
-            Auditing.Log("Instruments.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", aID } });
-            OrganisationLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Instruments.DeleteOrganisationLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
+            try
+            {
+                OrganisationInstrument.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                OrganisationLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
+            }
         }
     }
 
@@ -280,24 +289,27 @@ public partial class Admin_Instruments : System.Web.UI.Page
     #region Stations
     protected void StationLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
+        using (Logging.MethodCall(GetType()))
         {
-            Guid Id = Guid.Parse(e.Parameters["InstrumentID"].ToString());
-            try
+            if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
             {
-                VStationInstrumentCollection col = new VStationInstrumentCollection()
-                    .Where(VStationInstrument.Columns.InstrumentID, Id)
-                    .OrderByAsc(VStationInstrument.Columns.StartDate)
-                    .OrderByAsc(VStationInstrument.Columns.EndDate)
-                    .OrderByAsc(VStationInstrument.Columns.StationName)
-                    .Load();
-                StationLinksGrid.GetStore().DataSource = col;
-                StationLinksGrid.GetStore().DataBind();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Instruments.StationLinksGridStore_RefreshData");
-                MessageBoxes.Error(ex, "Error", "Unable to refresh sensors grid");
+                Guid Id = Guid.Parse(e.Parameters["InstrumentID"].ToString());
+                try
+                {
+                    VStationInstrumentCollection col = new VStationInstrumentCollection()
+                        .Where(VStationInstrument.Columns.InstrumentID, Id)
+                        .OrderByAsc(VStationInstrument.Columns.StartDate)
+                        .OrderByAsc(VStationInstrument.Columns.EndDate)
+                        .OrderByAsc(VStationInstrument.Columns.StationName)
+                        .Load();
+                    StationLinksGrid.GetStore().DataSource = col;
+                    StationLinksGrid.GetStore().DataBind();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    MessageBoxes.Error(ex, "Error", "Unable to refresh sensors grid");
+                }
             }
         }
     }
@@ -320,41 +332,43 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
     protected void StationLinkSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            if (!StationLinkOk())
+            try
             {
-                MessageBoxes.Error("Error", "Station is already linked");
-                return;
-            }
-            RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(StationLinkID.Value));
-            stationInstrument.InstrumentID = masterID;
-            stationInstrument.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
-            if (nfStationLatitude.IsEmpty)
-                stationInstrument.Latitude = null;
-            else
-                stationInstrument.Latitude = nfStationLatitude.Number;
-            if (nfStationLongitude.IsEmpty)
-                stationInstrument.Longitude = null;
-            else
-                stationInstrument.Longitude = nfStationLongitude.Number;
-            if (nfStationElevation.IsEmpty)
-                stationInstrument.Elevation = null;
-            else
-                stationInstrument.Elevation = nfStationElevation.Number;
-            if (!dfStationStartDate.IsEmpty && (dfStationStartDate.SelectedDate.Year >= 1900))
-                stationInstrument.StartDate = dfStationStartDate.SelectedDate;
-            else
-                stationInstrument.StartDate = null;
-            if (!dfStationEndDate.IsEmpty && (dfStationEndDate.SelectedDate.Year >= 1900))
-                stationInstrument.EndDate = dfStationEndDate.SelectedDate;
-            else
-                stationInstrument.EndDate = null;
-            stationInstrument.UserId = AuthHelper.GetLoggedInUserId;
-            stationInstrument.Save();
-            Auditing.Log("Instruments.AddStationLink", new Dictionary<string, object> {
+                if (!StationLinkOk())
+                {
+                    MessageBoxes.Error("Error", "Station is already linked");
+                    return;
+                }
+                RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(StationLinkID.Value));
+                stationInstrument.InstrumentID = masterID;
+                stationInstrument.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
+                if (nfStationLatitude.IsEmpty)
+                    stationInstrument.Latitude = null;
+                else
+                    stationInstrument.Latitude = nfStationLatitude.Number;
+                if (nfStationLongitude.IsEmpty)
+                    stationInstrument.Longitude = null;
+                else
+                    stationInstrument.Longitude = nfStationLongitude.Number;
+                if (nfStationElevation.IsEmpty)
+                    stationInstrument.Elevation = null;
+                else
+                    stationInstrument.Elevation = nfStationElevation.Number;
+                if (!dfStationStartDate.IsEmpty && (dfStationStartDate.SelectedDate.Year >= 1900))
+                    stationInstrument.StartDate = dfStationStartDate.SelectedDate;
+                else
+                    stationInstrument.StartDate = null;
+                if (!dfStationEndDate.IsEmpty && (dfStationEndDate.SelectedDate.Year >= 1900))
+                    stationInstrument.EndDate = dfStationEndDate.SelectedDate;
+                else
+                    stationInstrument.EndDate = null;
+                stationInstrument.UserId = AuthHelper.GetLoggedInUserId;
+                stationInstrument.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "InstrumentID", stationInstrument.InstrumentID },
                 { "InstrumentCode", stationInstrument.Instrument.Code },
                 { "StationID", stationInstrument.StationID},
@@ -365,13 +379,14 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 { "StartDate", stationInstrument?.StartDate },
                 { "EndDate", stationInstrument?.EndDate}
             });
-            StationLinksGrid.DataBind();
-            StationLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Instruments.LinkStation_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link station");
+                StationLinksGrid.DataBind();
+                StationLinkWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link station");
+            }
         }
     }
 
@@ -387,16 +402,19 @@ public partial class Admin_Instruments : System.Web.UI.Page
     [DirectMethod]
     public void DeleteStationLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
         {
-            StationInstrument.Delete(aID);
-            Auditing.Log("Instruments.DeleteStationLink", new Dictionary<string, object> { { "ID", aID } });
-            StationLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Instruments.DeleteStationLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete station link");
+            try
+            {
+                StationInstrument.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                StationLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete station link");
+            }
         }
     }
 
@@ -410,24 +428,27 @@ public partial class Admin_Instruments : System.Web.UI.Page
     #region DataSources
     protected void DataSourceLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
+        using (Logging.MethodCall(GetType()))
         {
-            Guid Id = Guid.Parse(e.Parameters["InstrumentID"].ToString());
-            try
+            if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
             {
-                VInstrumentDataSourceCollection col = new VInstrumentDataSourceCollection()
-                    .Where(VInstrumentDataSource.Columns.InstrumentID, Id)
-                    .OrderByAsc(VInstrumentDataSource.Columns.StartDate)
-                    .OrderByAsc(VInstrumentDataSource.Columns.EndDate)
-                    .OrderByAsc(VInstrumentDataSource.Columns.DataSourceName)
-                    .Load();
-                DataSourceLinksGrid.GetStore().DataSource = col;
-                DataSourceLinksGrid.GetStore().DataBind();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Instruments.DataSourceLinksGridStore_RefreshData");
-                MessageBoxes.Error(ex, "Error", "Unable to refresh DataSources grid");
+                Guid Id = Guid.Parse(e.Parameters["InstrumentID"].ToString());
+                try
+                {
+                    VInstrumentDataSourceCollection col = new VInstrumentDataSourceCollection()
+                        .Where(VInstrumentDataSource.Columns.InstrumentID, Id)
+                        .OrderByAsc(VInstrumentDataSource.Columns.StartDate)
+                        .OrderByAsc(VInstrumentDataSource.Columns.EndDate)
+                        .OrderByAsc(VInstrumentDataSource.Columns.DataSourceName)
+                        .Load();
+                    DataSourceLinksGrid.GetStore().DataSource = col;
+                    DataSourceLinksGrid.GetStore().DataBind();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    MessageBoxes.Error(ex, "Error", "Unable to refresh DataSources grid");
+                }
             }
         }
     }
@@ -450,29 +471,31 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
     protected void DataSourceLinkSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            if (!DataSourceLinkOk())
+            try
             {
-                MessageBoxes.Error("Error", "Data Source is already linked");
-                return;
-            }
-            RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            InstrumentDataSource instrumentDataSource = new InstrumentDataSource(Utilities.MakeGuid(DataSourceLinkID.Value));
-            instrumentDataSource.InstrumentID = masterID;
-            instrumentDataSource.DataSourceID = new Guid(cbDataSource.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfDataSourceStartDate.Text) && (dfDataSourceStartDate.SelectedDate.Year >= 1900))
-                instrumentDataSource.StartDate = dfDataSourceStartDate.SelectedDate;
-            else
-                instrumentDataSource.StartDate = null;
-            if (!String.IsNullOrEmpty(dfDataSourceEndDate.Text) && (dfDataSourceEndDate.SelectedDate.Year >= 1900))
-                instrumentDataSource.EndDate = dfDataSourceEndDate.SelectedDate;
-            else
-                instrumentDataSource.EndDate = null;
-            instrumentDataSource.UserId = AuthHelper.GetLoggedInUserId;
-            instrumentDataSource.Save();
-            Auditing.Log("Instruments.AddDataSourceLink", new Dictionary<string, object> {
+                if (!DataSourceLinkOk())
+                {
+                    MessageBoxes.Error("Error", "Data Source is already linked");
+                    return;
+                }
+                RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                InstrumentDataSource instrumentDataSource = new InstrumentDataSource(Utilities.MakeGuid(DataSourceLinkID.Value));
+                instrumentDataSource.InstrumentID = masterID;
+                instrumentDataSource.DataSourceID = new Guid(cbDataSource.SelectedItem.Value.Trim());
+                if (!String.IsNullOrEmpty(dfDataSourceStartDate.Text) && (dfDataSourceStartDate.SelectedDate.Year >= 1900))
+                    instrumentDataSource.StartDate = dfDataSourceStartDate.SelectedDate;
+                else
+                    instrumentDataSource.StartDate = null;
+                if (!String.IsNullOrEmpty(dfDataSourceEndDate.Text) && (dfDataSourceEndDate.SelectedDate.Year >= 1900))
+                    instrumentDataSource.EndDate = dfDataSourceEndDate.SelectedDate;
+                else
+                    instrumentDataSource.EndDate = null;
+                instrumentDataSource.UserId = AuthHelper.GetLoggedInUserId;
+                instrumentDataSource.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "InstrumentID", instrumentDataSource.InstrumentID },
                 { "InstrumentCode", instrumentDataSource.Instrument.Code },
                 { "DataSourceID", instrumentDataSource.DataSourceID},
@@ -480,13 +503,14 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 { "StartDate", instrumentDataSource?.StartDate },
                 { "EndDate", instrumentDataSource?.EndDate}
             });
-            DataSourceLinksGrid.DataBind();
-            DataSourceLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Instruments.LinkDataSource_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link DataSource");
+                DataSourceLinksGrid.DataBind();
+                DataSourceLinkWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link DataSource");
+            }
         }
     }
 
@@ -502,16 +526,19 @@ public partial class Admin_Instruments : System.Web.UI.Page
     [DirectMethod]
     public void DeleteDataSourceLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
         {
-            InstrumentDataSource.Delete(aID);
-            Auditing.Log("Instruments.DeleteDataSourceLink", new Dictionary<string, object> { { "ID", aID } });
-            DataSourceLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Instruments.DeleteDataSourceLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete DataSource link");
+            try
+            {
+                InstrumentDataSource.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                DataSourceLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete DataSource link");
+            }
         }
     }
 
@@ -525,24 +552,27 @@ public partial class Admin_Instruments : System.Web.UI.Page
     #region Sensors
     protected void SensorLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
+        using (Logging.MethodCall(GetType()))
         {
-            Guid Id = Guid.Parse(e.Parameters["InstrumentID"].ToString());
-            try
+            if (e.Parameters["InstrumentID"] != null && e.Parameters["InstrumentID"].ToString() != "-1")
             {
-                VInstrumentSensorCollection col = new VInstrumentSensorCollection()
-                    .Where(VInstrumentSensor.Columns.InstrumentID, Id)
-                    .OrderByAsc(VInstrumentSensor.Columns.StartDate)
-                    .OrderByAsc(VInstrumentSensor.Columns.EndDate)
-                    .OrderByAsc(VInstrumentSensor.Columns.SensorName)
-                    .Load();
-                SensorLinksGrid.GetStore().DataSource = col;
-                SensorLinksGrid.GetStore().DataBind();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Instruments.SensorLinksGridStore_RefreshData");
-                MessageBoxes.Error(ex, "Error", "Unable to refresh sensors grid");
+                Guid Id = Guid.Parse(e.Parameters["InstrumentID"].ToString());
+                try
+                {
+                    VInstrumentSensorCollection col = new VInstrumentSensorCollection()
+                        .Where(VInstrumentSensor.Columns.InstrumentID, Id)
+                        .OrderByAsc(VInstrumentSensor.Columns.StartDate)
+                        .OrderByAsc(VInstrumentSensor.Columns.EndDate)
+                        .OrderByAsc(VInstrumentSensor.Columns.SensorName)
+                        .Load();
+                    SensorLinksGrid.GetStore().DataSource = col;
+                    SensorLinksGrid.GetStore().DataBind();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    MessageBoxes.Error(ex, "Error", "Unable to refresh sensors grid");
+                }
             }
         }
     }
@@ -565,30 +595,32 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
     protected void SensorLinkSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            if (!SensorLinkOk())
+            try
             {
-                MessageBoxes.Error("Error", "Sensor is already linked");
-                return;
-            }
+                if (!SensorLinkOk())
+                {
+                    MessageBoxes.Error("Error", "Sensor is already linked");
+                    return;
+                }
 
-            RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(SensorLinkID.Value));
-            instrumentSensor.InstrumentID = masterID;
-            instrumentSensor.SensorID = new Guid(cbSensor.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfSensorStartDate.Text) && (dfSensorStartDate.SelectedDate.Year >= 1900))
-                instrumentSensor.StartDate = dfSensorStartDate.SelectedDate;
-            else
-                instrumentSensor.StartDate = null;
-            if (!String.IsNullOrEmpty(dfSensorEndDate.Text) && (dfSensorEndDate.SelectedDate.Year >= 1900))
-                instrumentSensor.EndDate = dfSensorEndDate.SelectedDate;
-            else
-                instrumentSensor.EndDate = null;
-            instrumentSensor.UserId = AuthHelper.GetLoggedInUserId;
-            instrumentSensor.Save();
-            Auditing.Log("Instruments.AddSensorLink", new Dictionary<string, object> {
+                RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(SensorLinkID.Value));
+                instrumentSensor.InstrumentID = masterID;
+                instrumentSensor.SensorID = new Guid(cbSensor.SelectedItem.Value.Trim());
+                if (!String.IsNullOrEmpty(dfSensorStartDate.Text) && (dfSensorStartDate.SelectedDate.Year >= 1900))
+                    instrumentSensor.StartDate = dfSensorStartDate.SelectedDate;
+                else
+                    instrumentSensor.StartDate = null;
+                if (!String.IsNullOrEmpty(dfSensorEndDate.Text) && (dfSensorEndDate.SelectedDate.Year >= 1900))
+                    instrumentSensor.EndDate = dfSensorEndDate.SelectedDate;
+                else
+                    instrumentSensor.EndDate = null;
+                instrumentSensor.UserId = AuthHelper.GetLoggedInUserId;
+                instrumentSensor.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "InstrumentID", instrumentSensor.InstrumentID },
                 { "InstrumentCode", instrumentSensor.Instrument.Code },
                 { "SensorID", instrumentSensor.SensorID},
@@ -596,13 +628,14 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 { "StartDate", instrumentSensor?.StartDate },
                 { "EndDate", instrumentSensor?.EndDate}
             });
-            SensorLinksGrid.DataBind();
-            SensorLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Instruments.LinkSensor_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link sensor");
+                SensorLinksGrid.DataBind();
+                SensorLinkWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link sensor");
+            }
         }
     }
 
@@ -618,16 +651,19 @@ public partial class Admin_Instruments : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSensorLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
         {
-            InstrumentSensor.Delete(aID);
-            Auditing.Log("Instruments.DeleteSensorLink", new Dictionary<string, object> { { "ID", aID } });
-            SensorLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Instruments.DeleteSensorLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete sensor link");
+            try
+            {
+                InstrumentSensor.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                SensorLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete sensor link");
+            }
         }
     }
 

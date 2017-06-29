@@ -1,10 +1,9 @@
 ﻿using Ext.Net;
-using da = SAEON.Observations.Data;
+using SAEON.Logs;
+using SubSonic;
 using System;
 using System.Linq;
-using SubSonic;
-using Serilog;
-using System.Collections.Generic;
+using da = SAEON.Observations.Data;
 
 public partial class Admin_Sites : System.Web.UI.Page
 {
@@ -50,9 +49,9 @@ public partial class Admin_Sites : System.Web.UI.Page
 
         if (!string.IsNullOrEmpty(checkColumn))
             if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new da.SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
-        else
-            col = new da.SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(da.Site.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+                col = new da.SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            else
+                col = new da.SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(da.Site.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
         if (col.Count > 0)
         {
@@ -66,41 +65,44 @@ public partial class Admin_Sites : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            da.Site site = new da.Site();
-            if (String.IsNullOrEmpty(tfID.Text))
-                site.Id = Guid.NewGuid();
-            else
-                site = new da.Site(tfID.Text.Trim());
-            if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                site.Code = tfCode.Text.Trim();
-            if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                site.Name = tfName.Text.Trim();
-            if (string.IsNullOrEmpty(site.Name)) site.Name = null;
-            site.Description = tfDescription.Text.Trim();
-            site.Url = tfUrl.Text.Trim();
-            if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
-                site.StartDate = dfStartDate.SelectedDate;
-            else
-                site.StartDate = null;
-            if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
-                site.EndDate = dfEndDate.SelectedDate;
-            else
-                site.EndDate = null;
-            site.UserId = AuthHelper.GetLoggedInUserId;
+            try
+            {
+                da.Site site = new da.Site();
+                if (String.IsNullOrEmpty(tfID.Text))
+                    site.Id = Guid.NewGuid();
+                else
+                    site = new da.Site(tfID.Text.Trim());
+                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
+                    site.Code = tfCode.Text.Trim();
+                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
+                    site.Name = tfName.Text.Trim();
+                if (string.IsNullOrEmpty(site.Name)) site.Name = null;
+                site.Description = tfDescription.Text.Trim();
+                site.Url = tfUrl.Text.Trim();
+                if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
+                    site.StartDate = dfStartDate.SelectedDate;
+                else
+                    site.StartDate = null;
+                if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
+                    site.EndDate = dfEndDate.SelectedDate;
+                else
+                    site.EndDate = null;
+                site.UserId = AuthHelper.GetLoggedInUserId;
 
-            site.Save();
-            Auditing.Log("Sites.Save", new Dictionary<string, object> { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
+                site.Save();
+                Auditing.Log(GetType(), new ParameterList { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
 
-            SitesGrid.DataBind();
+                SitesGrid.DataBind();
 
-            DetailWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Sites.Save");
-            MessageBoxes.Error(ex, "Error", "Unable to save site");
+                DetailWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to save site");
+            }
         }
     }
 
@@ -164,30 +166,32 @@ public partial class Admin_Sites : System.Web.UI.Page
 
     protected void OrganisationLinkSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            if (!OrganisationLinkOk())
+            try
             {
-                MessageBoxes.Error("Error", "Organisation is already linked");
-                return;
-            }
-            RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            da.OrganisationSite siteOrganisation = new da.OrganisationSite(Utilities.MakeGuid(OrganisationLinkID.Value));
-            siteOrganisation.SiteID = masterID;
-            siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
-            siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
-            if (!dfOrganisationStartDate.IsEmpty && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
-                siteOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
-            else
-                siteOrganisation.StartDate = null;
-            if (!dfOrganisationEndDate.IsEmpty && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
-                siteOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
-            else
-                siteOrganisation.EndDate = null;
-            siteOrganisation.UserId = AuthHelper.GetLoggedInUserId;
-            siteOrganisation.Save();
-            Auditing.Log("Sites.AddOrganisationLink", new Dictionary<string, object> {
+                if (!OrganisationLinkOk())
+                {
+                    MessageBoxes.Error("Error", "Organisation is already linked");
+                    return;
+                }
+                RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                da.OrganisationSite siteOrganisation = new da.OrganisationSite(Utilities.MakeGuid(OrganisationLinkID.Value));
+                siteOrganisation.SiteID = masterID;
+                siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
+                siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+                if (!dfOrganisationStartDate.IsEmpty && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
+                    siteOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
+                else
+                    siteOrganisation.StartDate = null;
+                if (!dfOrganisationEndDate.IsEmpty && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
+                    siteOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
+                else
+                    siteOrganisation.EndDate = null;
+                siteOrganisation.UserId = AuthHelper.GetLoggedInUserId;
+                siteOrganisation.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "SiteID", siteOrganisation.SiteID },
                 { "SiteCode", siteOrganisation.Site.Code },
                 { "OrganisationID", siteOrganisation.OrganisationID},
@@ -197,13 +201,14 @@ public partial class Admin_Sites : System.Web.UI.Page
                 { "StartDate", siteOrganisation?.StartDate },
                 { "EndDate", siteOrganisation?.EndDate}
             });
-            OrganisationLinksGrid.DataBind();
-            OrganisationLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Sites.LinkOrganisation_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link organisation");
+                OrganisationLinksGrid.DataBind();
+                OrganisationLinkWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link organisation");
+            }
         }
     }
 
@@ -219,16 +224,19 @@ public partial class Admin_Sites : System.Web.UI.Page
     [DirectMethod]
     public void DeleteOrganisationLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
         {
-            da.OrganisationSite.Delete(aID);
-            Auditing.Log("Sites.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", aID } });
-            OrganisationLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Sites.DeleteOrganisationLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
+            try
+            {
+                da.OrganisationSite.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                OrganisationLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
+            }
         }
     }
 
@@ -280,40 +288,43 @@ public partial class Admin_Sites : System.Web.UI.Page
 
     protected void StationLinksSave(object sender, DirectEventArgs e)
     {
-        RowSelectionModel sm = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
-        RowSelectionModel siteRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
+        using (Logging.MethodCall(GetType()))
+        {
+            RowSelectionModel sm = AvailableStationsGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel siteRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
 
-        string siteID = siteRow.SelectedRecordID;
-        if (sm.SelectedRows.Count > 0)
-        {
-            foreach (SelectedRow row in sm.SelectedRows)
+            string siteID = siteRow.SelectedRecordID;
+            if (sm.SelectedRows.Count > 0)
             {
-                da.Station station = new da.Station(row.RecordID);
-                if (station != null)
-                    try
-                    {
-                        station.SiteID = new Guid(siteID);
-                        station.UserId = AuthHelper.GetLoggedInUserId;
-                        station.Save();
-                        Auditing.Log("Sites.AddStationLink", new Dictionary<string, object> {
-                                { "SiteID", station.SiteID},
-                                { "SiteCode", station.Site.Code},
-                                { "StationID", station.Id },
-                                { "StationCode", station.Code }
-                            });
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Sites.LinkStation_Click");
-                        MessageBoxes.Error(ex, "Error", "Unable to link station");
-                    }
+                foreach (SelectedRow row in sm.SelectedRows)
+                {
+                    da.Station station = new da.Station(row.RecordID);
+                    if (station != null)
+                        try
+                        {
+                            station.SiteID = new Guid(siteID);
+                            station.UserId = AuthHelper.GetLoggedInUserId;
+                            station.Save();
+                            Auditing.Log(GetType(), new ParameterList {
+                            { "SiteID", station.SiteID},
+                            { "SiteCode", station.Site.Code},
+                            { "StationID", station.Id },
+                            { "StationCode", station.Code }
+                        });
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Exception(ex);
+                            MessageBoxes.Error(ex, "Error", "Unable to link station");
+                        }
+                }
+                StationLinksGridStore.DataBind();
+                AvailableStationsWindow.Hide();
             }
-            StationLinksGridStore.DataBind();
-            AvailableStationsWindow.Hide();
-        }
-        else
-        {
-            MessageBoxes.Error("Invalid Selection", "Select at least one station");
+            else
+            {
+                MessageBoxes.Error("Invalid Selection", "Select at least one station");
+            }
         }
     }
 

@@ -1,20 +1,13 @@
 ﻿using Ext.Net;
+using SAEON.Logs;
 using SAEON.Observations.Data;
-using Serilog;
-using Serilog.Context;
 using SubSonic;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Transactions;
-using System.Web;
-using System.Web.Configuration;
-using System.Web.Hosting;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class Admin_ImportBatches : System.Web.UI.Page
 {
@@ -64,7 +57,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     #region Import Batches
     protected void ImportBatchesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (LogContext.PushProperty("Method", "ImportBatchesGridStore_RefreshData"))
+        using (Logging.MethodCall(GetType()))
         {
             try
             {
@@ -73,7 +66,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "An exception occured");
+                Logging.Exception(ex);
                 throw;
             }
         }
@@ -92,7 +85,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
     protected void UploadClick(object sender, DirectEventArgs e)
     {
-        using (LogContext.PushProperty("Method", "UploadClick"))
+        using (Logging.MethodCall(GetType()))
+        {
             try
             {
                 Guid DataSourceId = new Guid(cbDataSource.SelectedItem.Value);
@@ -153,7 +147,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 {
                     try
                     {
-                        Log.Information("Start");
+                        Logging.Information("Start");
                         using (TransactionScope ts = Utilities.NewTransactionScope())
                         {
                             using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
@@ -163,7 +157,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                                 if (values.FirstOrDefault(t => t.IsValid) == null)
                                 {
-                                    Log.Verbose("Error: IsValid: {count}", values.Where(t => !t.IsValid).Count());
+                                    Logging.Verbose("Error: IsValid: {count}", values.Where(t => !t.IsValid).Count());
                                     batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
                                 }
                                 else
@@ -213,7 +207,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     else
                                     {
                                         //
-                                        Log.Verbose("Error: IsValid: {isValid} TotalDuplicate: {totalDuplicate}", schval.IsValid, totalDuplicate);
+                                        Logging.Verbose("Error: IsValid: {isValid} TotalDuplicate: {totalDuplicate}", schval.IsValid, totalDuplicate);
                                         batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
                                         batch.Save();
                                         //
@@ -282,16 +276,16 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         }
                                         catch (Exception ex)
                                         {
-                                            Log.Error(ex, "Unable to add DataLog");
+                                            Logging.Exception(ex, "Unable to add DataLog");
                                             throw;
                                         }
                                     }
                                 }
-                                Auditing.Log("Importbatches.UploadClick", new Dictionary<string, object> {
+                                Auditing.Log(GetType(), new ParameterList {
                                     { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status} });
                             }
                             ts.Complete();
-                            Log.Information("Finish");
+                            Logging.Information("Finish");
                         }
 
                         ObservationsGridStore.DataBind();
@@ -304,7 +298,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     }
                     catch (Exception Ex)
                     {
-                        Log.Error(Ex, "An error occured while importing values");
+                        Logging.Exception(Ex, "An error occured while importing values");
                         X.Msg.Show(new MessageBoxConfig
                         {
                             Buttons = MessageBox.Button.OK,
@@ -327,7 +321,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to save import batch");
+                Logging.Exception(ex, "Unable to save import batch");
                 List<object> errors = new List<object>
                 {
                     new { ErrorMessage = ex.Message, LineNo = 1, RecordString = "" }
@@ -336,6 +330,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 ErrorGridStore.DataBind();
                 X.Msg.Hide();
             }
+        }
     }
 
     protected bool isDuplicateOfNull(SchemaValue schval, Guid batchid)
@@ -505,7 +500,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     /// <param name="e"></param>
     protected void SaveObservation(object sender, DirectEventArgs e)
     {
-        using (LogContext.PushProperty("Method", "SaveObservation"))
+        using (Logging.MethodCall(GetType()))
+        {
             try
             {
                 RowSelectionModel batchRow = ImportBatchesGrid.SelectionModel.Primary as RowSelectionModel;
@@ -589,10 +585,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to save observation");
+                Logging.Exception(ex, "Unable to save observation");
                 throw;
             }
-
+        }
         //}
         //catch (Exception Ex)
         //{
@@ -631,7 +627,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void DeleteBatch(Guid ImportBatchId)
     {
-        using (LogContext.PushProperty("Method", "DeleteBatch"))
+        using (Logging.MethodCall(GetType(),new ParameterList { { "ImportBatchID", ImportBatchId} }))
+        {
             try
             {
                 using (TransactionScope ts = Utilities.NewTransactionScope())
@@ -652,9 +649,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to delete batch");
+                Logging.Exception(ex, "Unable to delete batch");
                 throw;
             }
+        }
     }
 
 
@@ -679,7 +677,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void MoveBatch(Guid ImportBatchId)
     {
-        using (LogContext.PushProperty("Method", "MoveBatch"))
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", ImportBatchId } }))
+        {
             try
             {
                 ObservationCollection col = new ObservationCollection().Where(Observation.Columns.ImportBatchID, ImportBatchId).Load();
@@ -718,9 +717,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to move batch");
+                Logging.Exception(ex, "Unable to move batch");
                 throw;
             }
+        }
     }
 
     [DirectMethod]
@@ -744,7 +744,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void DeleteEntry(Guid Id)
     {
-        using (LogContext.PushProperty("Method", "DeleteEntry"))
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", Id } }))
+        {
             try
             {
                 using (TransactionScope ts = Utilities.NewTransactionScope())
@@ -778,9 +779,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to delete entry");
+                Logging.Exception(ex, "Unable to delete entry");
                 throw;
             }
+        }
     }
 
     protected void ImportBatchesGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
@@ -817,7 +819,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void MoveToObservation(Guid Id)
     {
-        using (LogContext.PushProperty("Method", "MoveToObservation"))
+        using (Logging.MethodCall(GetType(), new ParameterList { { "Id", Id } }))
+        {
             try
             {
                 using (TransactionScope ts = Utilities.NewTransactionScope())
@@ -854,16 +857,17 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to move to observation");
+                Logging.Exception(ex, "Unable to move to observation");
                 throw;
             }
+        }
     }
     #endregion
 
     #region Observations
     protected void ObservationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        using (LogContext.PushProperty("Method", "ObservationsGridStore_RefreshData"))
+        using (Logging.MethodCall(GetType()))
         {
             try
             {
@@ -884,7 +888,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "ImportBatches.ObservationsGridStore_RefreshData");
+                        Logging.Exception(ex);
                         MessageBoxes.Error(ex, "Error", "Unable to refresh Observations grid");
                     }
                 }
@@ -892,7 +896,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "An exception occured");
+                Logging.Exception(ex);
                 throw;
             }
         }
@@ -920,7 +924,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void SetSelected()
     {
-        using (LogContext.PushProperty("Method", "SetSelected"))
+        using (Logging.MethodCall(GetType()))
         {
             try
             {
@@ -943,10 +947,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to set status and reason to the selected observations");
+                Logging.Exception(ex, "Unable to set status and reason to the selected observations");
                 MessageBoxes.Error(ex, "Error", "Unable to set status and reason to the selected observations");
             }
         }
+    
     }
 
     protected void SetWithoutClick(object sender, DirectEventArgs e)
@@ -970,7 +975,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void SetWithout()
     {
-        using (LogContext.PushProperty("Method", "SetWithout"))
+        using (Logging.MethodCall(GetType()))
         {
             try
             {
@@ -1008,7 +1013,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to set status and reason to the observations without status");
+                Logging.Exception(ex, "Unable to set status and reason to the observations without status");
                 MessageBoxes.Error(ex, "Error", "Unable to set status and reason to the observations without status");
             }
         }
@@ -1043,7 +1048,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void SetAll()
     {
-        using (LogContext.PushProperty("Method", "SetAll"))
+        using (Logging.MethodCall(GetType()))
         {
             try
             {
@@ -1079,7 +1084,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to set status and reason to all observations");
+                Logging.Exception(ex, "Unable to set status and reason to all observations");
                 MessageBoxes.Error(ex, "Error", "Unable to set status and reason to all observations");
             }
         }
@@ -1096,7 +1101,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void ClearSelected()
     {
-        using (LogContext.PushProperty("Method", "ClearSelected"))
+        using (Logging.MethodCall(GetType()))
         {
             try
             {
@@ -1116,7 +1121,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to clear status and reason on the selected observations");
+                Logging.Exception(ex, "Unable to clear status and reason on the selected observations");
                 MessageBoxes.Error(ex, "Error", "Unable to clear status and reason on the selected observations");
             }
         }
@@ -1133,7 +1138,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void ClearAll()
     {
-        using (LogContext.PushProperty("Method", "ClearAll"))
+        using (Logging.MethodCall(GetType()))
         {
             try
             {
@@ -1158,7 +1163,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to clear status and reason on all observations");
+                Logging.Exception(ex, "Unable to clear status and reason on all observations");
                 MessageBoxes.Error(ex, "Error", "Unable to clear status and reason on all observations");
             }
         }

@@ -1,4 +1,5 @@
-﻿using SAEON.Observations.Data;
+﻿using SAEON.Logs;
+using SAEON.Observations.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,65 +11,30 @@ using System.Web;
 /// </summary>
 public static class Auditing
 {
-    public static string MethodCall(string name, Dictionary<string,object> parameters)
+    public static void Log(Type type, ParameterList parameters = null, [CallerMemberName] string methodName = "")
     {
-        string result = name+"(";
-        bool isFirst = true;
-        foreach (var kvPair in parameters)
-        {
-            if (!isFirst) result += ", ";
-            isFirst = false;
-            result += kvPair.Key + "=";
-            if (kvPair.Value == null)
-                result += "Null";
-            else if (kvPair.Value is string)
-                result += string.Format("'{0}'", kvPair.Value ?? "");
-            //else if (kvPair.Value is Guid)
-            //    result += string.Format("{0}", kvPair.Value);
-            else
-                result += kvPair.Value.ToString();
-        }
-        result += ")";
-        return result;
-    }
-
-    //public static void Log(string description, params object[] values)
-    //{
-    //    try
-    //    {
-    //        AuditLog auditLog = new AuditLog();
-    //        auditLog.Description = string.Format(description,values);
-    //        auditLog.UserId = AuthHelper.GetLoggedInUserId;
-    //        auditLog.Save();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Serilog.Log.Error(ex, "Log({0})", string.Format(description, values));
-    //    }
-    //}
-
-    public static void Log(string methodName, Dictionary<string, object> methodParameters)
-    {
-        try
-        {
-            AuditLog auditLog = new AuditLog();
-            auditLog.AddedAt = null;
-            auditLog.UpdatedAt = null;                
-            auditLog.Description = Auditing.MethodCall(methodName, methodParameters);
-            auditLog.UserId = AuthHelper.GetLoggedInUserId;
-            auditLog.Save();
-        }
-        catch (Exception ex)
+        using (Logging.MethodCall(typeof(Auditing), new ParameterList { { "methodName", methodName }, { "parameters", parameters } }))
         {
             try
             {
-                Serilog.Log.Error(ex, "Log({MethodCall})", Auditing.MethodCall(methodName, methodParameters));
+                AuditLog auditLog = new AuditLog();
+                auditLog.AddedAt = null;
+                auditLog.UpdatedAt = null;
+                auditLog.Description = Logging.MethodSignature(type, methodName, parameters);
+                auditLog.UserId = AuthHelper.GetLoggedInUserId;
+                auditLog.Save();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Serilog.Log.Error(ex, "Log({methodName})", methodName);
+                try
+                {
+                    Logging.Exception(ex);
+                }
+                catch (Exception)
+                {
+                    Logging.Exception(ex, "Log({methodName})", methodName);
+                }
             }
-
         }
     }
 

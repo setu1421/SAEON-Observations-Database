@@ -1,6 +1,6 @@
 ﻿using Ext.Net;
+using SAEON.Logs;
 using SAEON.Observations.Data;
-using Serilog;
 using SubSonic;
 using System;
 using System.Collections.Generic;
@@ -82,58 +82,61 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-
-            DataSchema schema = new DataSchema();
-
-            if (String.IsNullOrEmpty(tfID.Text))
-                schema.Id = Guid.NewGuid();
-            else
-                schema = new DataSchema(tfID.Text.Trim());
-            schema.Code = Utilities.NullIfEmpty(tfCode.Text);
-            schema.Name = Utilities.NullIfEmpty(tfName.Text);
-            schema.Description = Utilities.NullIfEmpty(tfDescription.Text);
-
-            if (!String.IsNullOrEmpty(nfIgnoreFirst.Text))
-                schema.IgnoreFirst = Int32.Parse(nfIgnoreFirst.Text);
-            else
-                schema.IgnoreFirst = 0;
-
-            if (!String.IsNullOrEmpty(nfIgnoreLast.Text))
-                schema.IgnoreLast = Int32.Parse(nfIgnoreLast.Text);
-            else
-                schema.IgnoreLast = 0;
-
-            schema.Condition = Utilities.NullIfEmpty(tfCondition.Text);
-
-            if (!String.IsNullOrEmpty(tfSplit.Text))
+            try
             {
-                schema.SplitSelector = tfSplit.Text;
-                schema.SplitIndex = int.Parse(nfSplitIndex.Value.ToString());
-            }
-            else
-            {
-                schema.SplitSelector = null;
-                schema.SplitIndex = null;
-            }
 
-            schema.DataSourceTypeID = new Guid(cbDataSourceType.SelectedItem.Value);
-            schema.HasColumnNames = cbHasColumnNames.Checked;
-            schema.Delimiter = cbDelimiter.SelectedItem.Value;
+                DataSchema schema = new DataSchema();
 
-            schema.UserId = AuthHelper.GetLoggedInUserId;
-            schema.Save();
-            Auditing.Log("DataSchema.Save", new Dictionary<string, object> {
+                if (String.IsNullOrEmpty(tfID.Text))
+                    schema.Id = Guid.NewGuid();
+                else
+                    schema = new DataSchema(tfID.Text.Trim());
+                schema.Code = Utilities.NullIfEmpty(tfCode.Text);
+                schema.Name = Utilities.NullIfEmpty(tfName.Text);
+                schema.Description = Utilities.NullIfEmpty(tfDescription.Text);
+
+                if (!String.IsNullOrEmpty(nfIgnoreFirst.Text))
+                    schema.IgnoreFirst = Int32.Parse(nfIgnoreFirst.Text);
+                else
+                    schema.IgnoreFirst = 0;
+
+                if (!String.IsNullOrEmpty(nfIgnoreLast.Text))
+                    schema.IgnoreLast = Int32.Parse(nfIgnoreLast.Text);
+                else
+                    schema.IgnoreLast = 0;
+
+                schema.Condition = Utilities.NullIfEmpty(tfCondition.Text);
+
+                if (!String.IsNullOrEmpty(tfSplit.Text))
+                {
+                    schema.SplitSelector = tfSplit.Text;
+                    schema.SplitIndex = int.Parse(nfSplitIndex.Value.ToString());
+                }
+                else
+                {
+                    schema.SplitSelector = null;
+                    schema.SplitIndex = null;
+                }
+
+                schema.DataSourceTypeID = new Guid(cbDataSourceType.SelectedItem.Value);
+                schema.HasColumnNames = cbHasColumnNames.Checked;
+                schema.Delimiter = cbDelimiter.SelectedItem.Value;
+
+                schema.UserId = AuthHelper.GetLoggedInUserId;
+                schema.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "ID", schema.Id }, { "Code", schema.Code }, { "Name", schema.Name } });
-            DataSchemasGrid.DataBind();
+                DataSchemasGrid.DataBind();
 
-            DetailWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Instruments.Save");
-            MessageBoxes.Error(ex, "Error", "Unable to save instrument");
+                DetailWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to save instrument");
+            }
         }
     }
 
@@ -185,27 +188,30 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSchema(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID} }))
         {
-            using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+            try
             {
-                using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
                 {
-                    SchemaColumnCollection cols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, aID).Load();
-                    foreach (var col in cols)
-                        SchemaColumn.Delete(col.Id);
-                    DataSchema.Delete(aID);
+                    using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
+                    {
+                        SchemaColumnCollection cols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, aID).Load();
+                        foreach (var col in cols)
+                            SchemaColumn.Delete(col.Id);
+                        DataSchema.Delete(aID);
+                    }
+                    ts.Complete();
                 }
-                ts.Complete();
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                DataSchemasGrid.DataBind();
+                SchemaColumnsGrid.DataBind();
             }
-            Auditing.Log("DataSchemas.Delete", new Dictionary<string, object> { { "ID", aID } });
-            DataSchemasGrid.DataBind();
-            SchemaColumnsGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DataSchemas.Delete({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete Schema");
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete Schema");
+            }
         }
     }
 
@@ -214,22 +220,25 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     #region Schema Columns
     protected void SchemaColumnsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["DataSchemaID"] != null && e.Parameters["DataSchemaID"].ToString() != "-1")
+        using (Logging.MethodCall(GetType()))
         {
-            Guid Id = Guid.Parse(e.Parameters["DataSchemaID"].ToString());
-            try
+            if (e.Parameters["DataSchemaID"] != null && e.Parameters["DataSchemaID"].ToString() != "-1")
             {
-                VSchemaColumnCollection col = new VSchemaColumnCollection()
-                    .Where(VSchemaColumn.Columns.DataSchemaID, Id)
-                    .OrderByAsc(VSchemaColumn.Columns.Number)
-                    .Load();
-                SchemaColumnsGrid.GetStore().DataSource = col;
-                SchemaColumnsGrid.GetStore().DataBind();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "DataSchemas.SchemaColumnsGridStore_RefreshData");
-                MessageBoxes.Error(ex, "Error", "Unable to refresh SchemaColumns grid");
+                Guid Id = Guid.Parse(e.Parameters["DataSchemaID"].ToString());
+                try
+                {
+                    VSchemaColumnCollection col = new VSchemaColumnCollection()
+                        .Where(VSchemaColumn.Columns.DataSchemaID, Id)
+                        .OrderByAsc(VSchemaColumn.Columns.Number)
+                        .Load();
+                    SchemaColumnsGrid.GetStore().DataSource = col;
+                    SchemaColumnsGrid.GetStore().DataBind();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    MessageBoxes.Error(ex, "Error", "Unable to refresh SchemaColumns grid");
+                }
             }
         }
     }
@@ -269,58 +278,60 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void SchemaColumnSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            SchemaColumn schemaColumn = new SchemaColumn(Utilities.MakeGuid(SchemaColumnID.Value));
-            schemaColumn.DataSchemaID = masterID;
-            SqlQuery qry = new Select(Aggregate.Max(SchemaColumn.Columns.Number))
-                .From(SchemaColumn.Schema)
-                .Where(SchemaColumn.Columns.DataSchemaID).IsEqualTo(masterID);
-            if (Utilities.MakeGuid(SchemaColumnID.Value) == Guid.Empty) schemaColumn.Number = qry.ExecuteScalar<int>() + 1;
-            schemaColumn.Name = Utilities.NullIfEmpty(tfColumnName.Text);
-            schemaColumn.SchemaColumnTypeID = new Guid(cbSchemaColumnType.SelectedItem.Value.Trim());
-            DataSchema schema = new DataSchema(masterID);
-            DataSourceType dataSourceType = new DataSourceType(schema.DataSourceTypeID);
-            if (dataSourceType.Code == "CSV")
-                schemaColumn.Width = null;
-            else if (string.IsNullOrEmpty(nfWidth.Text.Trim()))
-                schemaColumn.Width = null;
-            else
-                schemaColumn.Width = int.Parse(nfWidth.Text.Trim());
-            schemaColumn.Format = null;
-            schemaColumn.PhenomenonID = null;
-            schemaColumn.PhenomenonOfferingID = null;
-            schemaColumn.PhenomenonUOMID = null;
-            schemaColumn.EmptyValue = null;
-            schemaColumn.FixedTime = null;
-            switch (cbSchemaColumnType.SelectedItem.Text)
+            try
             {
-                case "Date":
-                    schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
-                    break;
-                case "Time":
-                    schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
-                    break;
-                case "Offering":
-                    schemaColumn.PhenomenonID = Utilities.MakeGuid(cbPhenomenon.Value);
-                    schemaColumn.PhenomenonOfferingID = Utilities.MakeGuid(cbOffering.Value);
-                    schemaColumn.PhenomenonUOMID = Utilities.MakeGuid(cbUnitOfMeasure.Value);
-                    schemaColumn.EmptyValue = Utilities.NullIfEmpty(tfEmptyValue.Text);
-                    break;
-                case "Fixed Time":
-                    schemaColumn.PhenomenonID = Utilities.MakeGuid(cbPhenomenon.Value);
-                    schemaColumn.PhenomenonOfferingID = Utilities.MakeGuid(cbOffering.Value);
-                    schemaColumn.PhenomenonUOMID = Utilities.MakeGuid(cbUnitOfMeasure.Value);
-                    schemaColumn.EmptyValue = Utilities.NullIfEmpty(tfEmptyValue.Text);
-                    if (!string.IsNullOrEmpty(ttFixedTime.Text.Trim()))
-                        schemaColumn.FixedTime = ttFixedTime.SelectedTime.ToString();
-                    break;
-            }
-            schemaColumn.UserId = AuthHelper.GetLoggedInUserId;
-            schemaColumn.Save();
-            Auditing.Log("DataSchemas.SchemaColumn", new Dictionary<string, object> {
+                RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                SchemaColumn schemaColumn = new SchemaColumn(Utilities.MakeGuid(SchemaColumnID.Value));
+                schemaColumn.DataSchemaID = masterID;
+                SqlQuery qry = new Select(Aggregate.Max(SchemaColumn.Columns.Number))
+                    .From(SchemaColumn.Schema)
+                    .Where(SchemaColumn.Columns.DataSchemaID).IsEqualTo(masterID);
+                if (Utilities.MakeGuid(SchemaColumnID.Value) == Guid.Empty) schemaColumn.Number = qry.ExecuteScalar<int>() + 1;
+                schemaColumn.Name = Utilities.NullIfEmpty(tfColumnName.Text);
+                schemaColumn.SchemaColumnTypeID = new Guid(cbSchemaColumnType.SelectedItem.Value.Trim());
+                DataSchema schema = new DataSchema(masterID);
+                DataSourceType dataSourceType = new DataSourceType(schema.DataSourceTypeID);
+                if (dataSourceType.Code == "CSV")
+                    schemaColumn.Width = null;
+                else if (string.IsNullOrEmpty(nfWidth.Text.Trim()))
+                    schemaColumn.Width = null;
+                else
+                    schemaColumn.Width = int.Parse(nfWidth.Text.Trim());
+                schemaColumn.Format = null;
+                schemaColumn.PhenomenonID = null;
+                schemaColumn.PhenomenonOfferingID = null;
+                schemaColumn.PhenomenonUOMID = null;
+                schemaColumn.EmptyValue = null;
+                schemaColumn.FixedTime = null;
+                switch (cbSchemaColumnType.SelectedItem.Text)
+                {
+                    case "Date":
+                        schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
+                        break;
+                    case "Time":
+                        schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
+                        break;
+                    case "Offering":
+                        schemaColumn.PhenomenonID = Utilities.MakeGuid(cbPhenomenon.Value);
+                        schemaColumn.PhenomenonOfferingID = Utilities.MakeGuid(cbOffering.Value);
+                        schemaColumn.PhenomenonUOMID = Utilities.MakeGuid(cbUnitOfMeasure.Value);
+                        schemaColumn.EmptyValue = Utilities.NullIfEmpty(tfEmptyValue.Text);
+                        break;
+                    case "Fixed Time":
+                        schemaColumn.PhenomenonID = Utilities.MakeGuid(cbPhenomenon.Value);
+                        schemaColumn.PhenomenonOfferingID = Utilities.MakeGuid(cbOffering.Value);
+                        schemaColumn.PhenomenonUOMID = Utilities.MakeGuid(cbUnitOfMeasure.Value);
+                        schemaColumn.EmptyValue = Utilities.NullIfEmpty(tfEmptyValue.Text);
+                        if (!string.IsNullOrEmpty(ttFixedTime.Text.Trim()))
+                            schemaColumn.FixedTime = ttFixedTime.SelectedTime.ToString();
+                        break;
+                }
+                schemaColumn.UserId = AuthHelper.GetLoggedInUserId;
+                schemaColumn.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "DataSchemaID", schemaColumn.DataSchemaID },
                 { "DataSchemaCode", schemaColumn.DataSchema.Code },
                 { "Name", schemaColumn.Name },
@@ -336,13 +347,14 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 { "EmptyValue", schemaColumn.EmptyValue },
                 { "FixedTime", schemaColumn.FixedTime }
             });
-            SchemaColumnsGrid.DataBind();
-            SchemaColumnWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DataSchemas.SchemaColumn_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to  SchemaColumn");
+                SchemaColumnsGrid.DataBind();
+                SchemaColumnWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to  SchemaColumn");
+            }
         }
     }
 
@@ -358,16 +370,19 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSchemaColumn(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(),new ParameterList { { "aID", aID} }))
         {
-            SchemaColumn.Delete(aID);
-            Auditing.Log("DataSchemas.DeleteSchemaColumn", new Dictionary<string, object> { { "ID", aID } });
-            SchemaColumnsGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DataSchemas.DeleteSchemaColumn({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete SchemaColumn");
+            try
+            {
+                SchemaColumn.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                SchemaColumnsGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete SchemaColumn");
+            }
         }
     }
 
@@ -496,82 +511,88 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void SchemaColumnUp(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
         {
-            SchemaColumnCollection col = new SchemaColumnCollection().Where("DataSchemaID", new SchemaColumn(aID).DataSchemaID).OrderByAsc("Number").Load();
-            SchemaColumn col1 = col.FirstOrDefault(c => c.Id == aID);
-            SchemaColumn col2 = col.ElementAtOrDefault(col.IndexOf(col1) - 1);
-            if (col2 == null)
+            try
             {
-                col1.Number--;
-                col1.Save();
-            }
-            else
-                using (var ts = new TransactionScope())
+                SchemaColumnCollection col = new SchemaColumnCollection().Where("DataSchemaID", new SchemaColumn(aID).DataSchemaID).OrderByAsc("Number").Load();
+                SchemaColumn col1 = col.FirstOrDefault(c => c.Id == aID);
+                SchemaColumn col2 = col.ElementAtOrDefault(col.IndexOf(col1) - 1);
+                if (col2 == null)
                 {
-                    using (new SharedDbConnectionScope())
-                    {
-                        int old1 = col1.Number;
-                        int old2 = col2.Number;
-                        col1.Number = int.MinValue;
-                        col1.Save();
-                        col2.Number = int.MaxValue;
-                        col2.Save();
-                        col1.Number = old2;
-                        col1.Save();
-                        col2.Number = old1;
-                        col2.Save();
-                    }
-                    ts.Complete();
+                    col1.Number--;
+                    col1.Save();
                 }
-            Auditing.Log("DataSchemas.SchemaColumnUp", new Dictionary<string, object> { { "ID", aID } });
-            SchemaColumnsGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DataSchemas.SchemaColumnUp({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to move SchemaColumn up");
+                else
+                    using (var ts = new TransactionScope())
+                    {
+                        using (new SharedDbConnectionScope())
+                        {
+                            int old1 = col1.Number;
+                            int old2 = col2.Number;
+                            col1.Number = int.MinValue;
+                            col1.Save();
+                            col2.Number = int.MaxValue;
+                            col2.Save();
+                            col1.Number = old2;
+                            col1.Save();
+                            col2.Number = old1;
+                            col2.Save();
+                        }
+                        ts.Complete();
+                    }
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                SchemaColumnsGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to move SchemaColumn up");
+            }
         }
     }
 
     [DirectMethod]
     public void SchemaColumnDown(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
         {
-            SchemaColumnCollection col = new SchemaColumnCollection().Where("DataSchemaID", new SchemaColumn(aID).DataSchemaID).OrderByAsc("Number").Load();
-            SchemaColumn col1 = col.FirstOrDefault(c => c.Id == aID);
-            SchemaColumn col2 = col.ElementAtOrDefault(col.IndexOf(col1) + 1);
-            if (col2 == null)
+            try
             {
-                col1.Number++;
-                col1.Save();
-            }
-            else
-                using (var ts = new TransactionScope())
+                SchemaColumnCollection col = new SchemaColumnCollection().Where("DataSchemaID", new SchemaColumn(aID).DataSchemaID).OrderByAsc("Number").Load();
+                SchemaColumn col1 = col.FirstOrDefault(c => c.Id == aID);
+                SchemaColumn col2 = col.ElementAtOrDefault(col.IndexOf(col1) + 1);
+                if (col2 == null)
                 {
-                    using (new SharedDbConnectionScope())
-                    {
-                        int old1 = col1.Number;
-                        int old2 = col2.Number;
-                        col1.Number = int.MinValue;
-                        col1.Save();
-                        col2.Number = int.MaxValue;
-                        col2.Save();
-                        col1.Number = old2;
-                        col1.Save();
-                        col2.Number = old1;
-                        col2.Save();
-                    }
-                    ts.Complete();
+                    col1.Number++;
+                    col1.Save();
                 }
-            Auditing.Log("DataSchemas.SchemaColumnDown", new Dictionary<string, object> { { "ID", aID } });
-            SchemaColumnsGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DataSchemas.SchemaColumnDown({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to move SchemaColumn down");
+                else
+                    using (var ts = new TransactionScope())
+                    {
+                        using (new SharedDbConnectionScope())
+                        {
+                            int old1 = col1.Number;
+                            int old2 = col2.Number;
+                            col1.Number = int.MinValue;
+                            col1.Save();
+                            col2.Number = int.MaxValue;
+                            col2.Save();
+                            col1.Number = old2;
+                            col1.Save();
+                            col2.Number = old1;
+                            col2.Save();
+                        }
+                        ts.Complete();
+                    }
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                SchemaColumnsGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to move SchemaColumn down");
+            }
         }
     }
     #endregion
@@ -579,22 +600,25 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     #region Data Sources
     protected void DataSourcesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["DataSchemaID"] != null && e.Parameters["DataSchemaID"].ToString() != "-1")
+        using (Logging.MethodCall(GetType()))
         {
-            Guid Id = Guid.Parse(e.Parameters["DataSchemaID"].ToString());
-            try
+            if (e.Parameters["DataSchemaID"] != null && e.Parameters["DataSchemaID"].ToString() != "-1")
             {
-                DataSourceCollection col = new DataSourceCollection()
-                    .Where(DataSource.Columns.DataSchemaID, Id)
-                    .OrderByAsc(DataSource.Columns.Name)
-                    .Load();
-                DataSourcesGrid.GetStore().DataSource = col;
-                DataSourcesGrid.GetStore().DataBind();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "DataSchemas.DataSourceGridStore_RefreshData");
-                MessageBoxes.Error(ex, "Error", "Unable to refresh DataSources grid");
+                Guid Id = Guid.Parse(e.Parameters["DataSchemaID"].ToString());
+                try
+                {
+                    DataSourceCollection col = new DataSourceCollection()
+                        .Where(DataSource.Columns.DataSchemaID, Id)
+                        .OrderByAsc(DataSource.Columns.Name)
+                        .Load();
+                    DataSourcesGrid.GetStore().DataSource = col;
+                    DataSourcesGrid.GetStore().DataBind();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    MessageBoxes.Error(ex, "Error", "Unable to refresh DataSources grid");
+                }
             }
         }
     }
@@ -611,18 +635,21 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteDataSource(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
         {
-            DataSource dataSource = new DataSource(aID);
-            dataSource.DataSchemaID = null;
-            dataSource.Save();
-            Auditing.Log("DataSchemas.DeleteDataSource", new Dictionary<string, object> { { "ID", aID } });
-            DataSourcesGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DataSchemas.DeleteDataSource({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete DataSource");
+            try
+            {
+                DataSource dataSource = new DataSource(aID);
+                dataSource.DataSchemaID = null;
+                dataSource.Save();
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                DataSourcesGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete DataSource");
+            }
         }
     }
 
@@ -647,41 +674,44 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void DataSourceLinksSave(object sender, DirectEventArgs e)
     {
-        RowSelectionModel sm = AvailableDataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
-        RowSelectionModel DataSchemaRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
-
-        string DataSchemaID = DataSchemaRow.SelectedRecordID;
-        if (sm.SelectedRows.Count > 0)
+        using (Logging.MethodCall(GetType()))
         {
-            foreach (SelectedRow row in sm.SelectedRows)
+            RowSelectionModel sm = AvailableDataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel DataSchemaRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+
+            string DataSchemaID = DataSchemaRow.SelectedRecordID;
+            if (sm.SelectedRows.Count > 0)
             {
-                DataSource dataSource = new DataSource(row.RecordID);
-                if (dataSource != null)
-                    try
-                    {
-                        dataSource.DataSchemaID = new Guid(DataSchemaID);
-                        dataSource.UserId = AuthHelper.GetLoggedInUserId;
-                        dataSource.Save();
-                        Auditing.Log("DataSchemas.AddDataSourceLink", new Dictionary<string, object> {
+                foreach (SelectedRow row in sm.SelectedRows)
+                {
+                    DataSource dataSource = new DataSource(row.RecordID);
+                    if (dataSource != null)
+                        try
+                        {
+                            dataSource.DataSchemaID = new Guid(DataSchemaID);
+                            dataSource.UserId = AuthHelper.GetLoggedInUserId;
+                            dataSource.Save();
+                            Auditing.Log(GetType(), new ParameterList {
                                 { "DataSchemaID", dataSource.DataSchemaID},
                                 { "DataSchemaCode", dataSource.DataSchema.Code},
                                 { "DataSourceID", dataSource.Id },
                                 { "DataSourceCode", dataSource.Code }
                             });
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "DataSchemas.LinkDataSource_Click");
-                        MessageBoxes.Error(ex, "Error", "Unable to link DataSource");
-                    }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Exception(ex);
+                            MessageBoxes.Error(ex, "Error", "Unable to link DataSource");
+                        }
+                }
+                DataSourcesGridStore.DataBind();
+                AvailableDataSourcesWindow.Hide();
+                tfColumnName.Disabled = false;
             }
-            DataSourcesGridStore.DataBind();
-            AvailableDataSourcesWindow.Hide();
-            tfColumnName.Disabled = false;
-        }
-        else
-        {
-            MessageBoxes.Error("Invalid Selection", "Select at least one DataSource");
+            else
+            {
+                MessageBoxes.Error("Invalid Selection", "Select at least one DataSource");
+            }
         }
     }
 

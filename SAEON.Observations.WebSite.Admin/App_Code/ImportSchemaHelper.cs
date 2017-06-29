@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using FileHelpers;
+﻿using FileHelpers;
 using FileHelpers.Dynamic;
-using System.IO;
-using System.Data;
-using SubSonic;
-using System.Globalization;
-using System.Text;
 using NCalc;
+using SAEON.Logs;
 using SAEON.Observations.Data;
-using Serilog;
-using Serilog.Context;
+using SubSonic;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Web.Configuration;
 using System.Web.Hosting;
 
@@ -328,7 +326,7 @@ public class ImportSchemaHelper : IDisposable
             docNamePrefix = docNamePrefix.Replace(c, '_');
         SaveDocument("Source.txt", data);
         dtResults = engine.ReadStringAsDT(data);
-        //Log.Information(dtResults.Dump());
+        //Logging.Information(dtResults.Dump());
         dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
         using (StringWriter sw = new StringWriter())
         {
@@ -489,9 +487,9 @@ public class ImportSchemaHelper : IDisposable
     /// </summary>
     public void ProcessSchema()
     {
-        using (LogContext.PushProperty("Method", "ProcessSchema"))
+        using (Logging.MethodCall(GetType()))
         {
-            Log.Information("Version 1.17");
+            Logging.Information("Version 1.18");
             try
             {
                 BuildSchemaDefinition();
@@ -549,7 +547,7 @@ public class ImportSchemaHelper : IDisposable
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unprocessed");
+                Logging.Exception(ex, "Unprocessed");
                 throw;
             }
         }
@@ -561,11 +559,11 @@ public class ImportSchemaHelper : IDisposable
     /// <param name="dr"></param>
     void ProcessRow(DataRow dr)
     {
-        using (LogContext.PushProperty("Method", "ProcessRow"))
+        using (Logging.MethodCall(GetType()))
         {
             try
             {
-                Log.Verbose(dr.Dump());
+                //Logging.Verbose(dr.Dump());
                 DateTime dttme = DateTime.MinValue,
                 dt = DateTime.MinValue,
                 tm = DateTime.MinValue;
@@ -688,7 +686,7 @@ public class ImportSchemaHelper : IDisposable
                             bool foundTooLate = false;
                             if (def.Sensors.Count > 1)
                             {
-                                Log.Verbose("Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
+                                Logging.Verbose("Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
                             }
                             foreach (var sensor in def.Sensors)
                             {
@@ -700,15 +698,15 @@ public class ImportSchemaHelper : IDisposable
                                 var endDate = endDates.Min();
                                 if (startDate.HasValue && (rec.DateValue.Date < startDate.Value))
                                 {
-                                    Log.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
-                                    //Log.Verbose("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
+                                    Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
+                                    //Logging.Verbose("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
                                     foundTooEarly = true;
                                     continue;
                                 }
                                 if (endDate.HasValue && (rec.DateValue.Date > endDate.Value))
                                 {
-                                    Log.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
-                                    //Log.Verbose("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
+                                    Logging.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
+                                    //Logging.Verbose("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
                                     foundTooLate = true;
                                     continue;
                                 }
@@ -719,7 +717,7 @@ public class ImportSchemaHelper : IDisposable
                             if (!found)
                             {
                                 if (foundTooEarly || foundTooLate) continue; // Ignore 
-                                Log.Error("Sensor not found Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
+                                Logging.Error("Sensor not found Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
                                 rec.SensorNotFound = true;
                                 rec.SensorID = def.Sensors.FirstOrDefault()?.Id;
                                 rec.InvalidStatuses.Add(Status.SensorNotFound);
@@ -770,7 +768,7 @@ public class ImportSchemaHelper : IDisposable
                                 }
                                 catch (Exception ex)
                                 {
-                                    Log.Error(ex, "RawValue: {RawValue} DataRow: {Dump}", RawValue, dr.Dump());
+                                    Logging.Exception(ex, "RawValue: {RawValue} DataRow: {Dump}", RawValue, dr.Dump());
                                 }
                             }
                             else
@@ -794,7 +792,7 @@ public class ImportSchemaHelper : IDisposable
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "DataRow: {Dump}", dr.Dump());
+                Logging.Exception(ex, "DataRow: {Dump}", dr.Dump());
                 throw;
             }
         }
@@ -805,7 +803,7 @@ public class ImportSchemaHelper : IDisposable
     /// </summary>
     void TransformValue(Guid dtid, ref SchemaValue rec, bool isEmpty = false)
     {
-        using (LogContext.PushProperty("Method", "TransformValue"))
+        using (Logging.MethodCall(GetType()))
         {
             try
             {
@@ -908,7 +906,7 @@ public class ImportSchemaHelper : IDisposable
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "dtid: {dtid} rec: {@rec})", dtid, rec);
+                Logging.Exception(ex, "dtid: {dtid} rec: {@rec})", dtid, rec);
                 throw;
             }
         }

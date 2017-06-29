@@ -1,13 +1,8 @@
 ﻿using Ext.Net;
+using SAEON.Logs;
 using SAEON.Observations.Data;
-using Serilog;
 using SubSonic;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class Admin_Programmes : System.Web.UI.Page
 {
@@ -65,40 +60,43 @@ public partial class Admin_Programmes : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            Programme programme = new Programme();
-            if (String.IsNullOrEmpty(tfID.Text))
-                programme.Id = Guid.NewGuid();
-            else
-                programme = new Programme(tfID.Text.Trim());
-            if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                programme.Code = tfCode.Text.Trim();
-            if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                programme.Name = tfName.Text.Trim();
-            programme.Description = tfDescription.Text.Trim();
-            programme.Url = tfUrl.Text.Trim();
-            if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
-                programme.StartDate = dfStartDate.SelectedDate;
-            else
-                programme.StartDate = null;
-            if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
-                programme.EndDate = dfEndDate.SelectedDate;
-            else
-                programme.EndDate = null;
-            programme.UserId = AuthHelper.GetLoggedInUserId;
+            try
+            {
+                Programme programme = new Programme();
+                if (String.IsNullOrEmpty(tfID.Text))
+                    programme.Id = Guid.NewGuid();
+                else
+                    programme = new Programme(tfID.Text.Trim());
+                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
+                    programme.Code = tfCode.Text.Trim();
+                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
+                    programme.Name = tfName.Text.Trim();
+                programme.Description = tfDescription.Text.Trim();
+                programme.Url = tfUrl.Text.Trim();
+                if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+                    programme.StartDate = dfStartDate.SelectedDate;
+                else
+                    programme.StartDate = null;
+                if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+                    programme.EndDate = dfEndDate.SelectedDate;
+                else
+                    programme.EndDate = null;
+                programme.UserId = AuthHelper.GetLoggedInUserId;
 
-            programme.Save();
-            Auditing.Log("Programmes.Save", new Dictionary<string, object> { { "ID", programme.Id }, { "Code", programme.Code }, { "Name", programme.Name } });
+                programme.Save();
+                Auditing.Log(GetType(), new ParameterList { { "ID", programme.Id }, { "Code", programme.Code }, { "Name", programme.Name } });
 
-            ProgrammesGrid.DataBind();
+                ProgrammesGrid.DataBind();
 
-            DetailWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Programmes.Save");
-            MessageBoxes.Error(ex, "Error", "Unable to save programme");
+                DetailWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to save programme");
+            }
         }
     }
 
@@ -158,40 +156,43 @@ public partial class Admin_Programmes : System.Web.UI.Page
 
     protected void ProjectLinksSave(object sender, DirectEventArgs e)
     {
-        RowSelectionModel sm = AvailableProjectsGrid.SelectionModel.Primary as RowSelectionModel;
-        RowSelectionModel programmeRow = ProgrammesGrid.SelectionModel.Primary as RowSelectionModel;
-
-        string programmeID = programmeRow.SelectedRecordID;
-        if (sm.SelectedRows.Count > 0)
+        using (Logging.MethodCall(GetType()))
         {
-            foreach (SelectedRow row in sm.SelectedRows)
+            RowSelectionModel sm = AvailableProjectsGrid.SelectionModel.Primary as RowSelectionModel;
+            RowSelectionModel programmeRow = ProgrammesGrid.SelectionModel.Primary as RowSelectionModel;
+
+            string programmeID = programmeRow.SelectedRecordID;
+            if (sm.SelectedRows.Count > 0)
             {
-                Project project = new Project(row.RecordID);
-                if (project != null)
-                    try
-                    {
-                        project.ProgrammeID = new Guid(programmeID);
-                        project.UserId = AuthHelper.GetLoggedInUserId;
-                        project.Save();
-                        Auditing.Log("Programmes.AddProjectLink", new Dictionary<string, object> {
+                foreach (SelectedRow row in sm.SelectedRows)
+                {
+                    Project project = new Project(row.RecordID);
+                    if (project != null)
+                        try
+                        {
+                            project.ProgrammeID = new Guid(programmeID);
+                            project.UserId = AuthHelper.GetLoggedInUserId;
+                            project.Save();
+                            Auditing.Log(GetType(), new ParameterList {
                                 { "ProgrammeID", project.ProgrammeID},
                                 { "ProgrammeCode", project.Programme.Code},
                                 { "ProjectID", project.Id },
                                 { "ProjectCode", project.Code }
                             });
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex, "Programme.LinkProject_Click");
-                        MessageBoxes.Error(ex, "Error", "Unable to link programme");
-                    }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Exception(ex);
+                            MessageBoxes.Error(ex, "Error", "Unable to link programme");
+                        }
+                }
+                ProjectLinksGridStore.DataBind();
+                AvailableProjectsWindow.Hide();
             }
-            ProjectLinksGridStore.DataBind();
-            AvailableProjectsWindow.Hide();
-        }
-        else
-        {
-            MessageBoxes.Error("Invalid Selection", "Select at least one project");
+            else
+            {
+                MessageBoxes.Error("Invalid Selection", "Select at least one project");
+            }
         }
     }
 
@@ -240,17 +241,20 @@ public partial class Admin_Programmes : System.Web.UI.Page
     [DirectMethod]
     public void DeleteProjectLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
         {
-            Project project = new Project(aID);
-            project.ProgrammeID = null;
-            project.Save();
-            ProjectLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Programmes.DeleteProjectLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete project link");
+            try
+            {
+                Project project = new Project(aID);
+                project.ProgrammeID = null;
+                project.Save();
+                ProjectLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete project link");
+            }
         }
     }
 

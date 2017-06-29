@@ -146,7 +146,7 @@
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" Groupable="false" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" Groupable="false" />
-                                        <ext:Column Header="Site" DataIndex="SiteName" Width="100" />
+                                        <ext:Column Header="Site" DataIndex="SiteName" Width="200" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="200" Groupable="false" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
                                         <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />

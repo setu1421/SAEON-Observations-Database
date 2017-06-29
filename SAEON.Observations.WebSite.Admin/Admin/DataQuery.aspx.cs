@@ -1,8 +1,7 @@
 ﻿using Ext.Net;
 using Newtonsoft.Json;
+using SAEON.Logs;
 using SAEON.Observations.Data;
-using Serilog;
-using Serilog.Context;
 using SubSonic;
 using System;
 using System.Collections.Generic;
@@ -40,7 +39,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     protected void NodeLoad(object sender, NodeLoadEventArgs e)
     {
-        using (LogContext.PushProperty("Method", $"NodeLoad({e.NodeID})"))
+        using (Logging.MethodCall(GetType(),new ParameterList { { "NodeID", e.NodeID} }))
             try
             {
                 if (e.NodeID.StartsWith("Organisations"))
@@ -51,10 +50,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .Distinct()
                         .OrderAsc(Organisation.Columns.Name)
                         .ExecuteAsCollection<OrganisationCollection>();
-                    Log.Verbose("Organisations: {count}", col.Count());
+                    Logging.Verbose("Organisations: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Log.Verbose("Organisation: {name}", item.Name);
+                        Logging.Verbose("Organisation: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Organisation_" + item.Id.ToString(), item.Name, Icon.ResultsetNext);
                         e.Nodes.Add(node);
                         var q = new Query(OrganisationSite.Schema).AddWhere(OrganisationSite.Columns.OrganisationID, item.Id).GetCount(OrganisationSite.Columns.SiteID);
@@ -81,10 +80,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .OrderAsc(SAEON.Observations.Data.Site.Columns.Name)
                         .Distinct()
                         .ExecuteAsCollection<SiteCollection>();
-                    Log.Verbose("Sites: {count}", col.Count());
+                    Logging.Verbose("Sites: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Log.Verbose("Site: {name}", item.Name);
+                        Logging.Verbose("Site: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Site_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
@@ -114,10 +113,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .OrderAsc(Station.Columns.Name)
                         .Distinct()
                         .ExecuteAsCollection<StationCollection>();
-                    Log.Verbose("Stations: {count}", col.Count());
+                    Logging.Verbose("Stations: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Log.Verbose("Station: {name}", item.Name);
+                        Logging.Verbose("Station: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Station_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
@@ -148,10 +147,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .OrderAsc(Instrument.Columns.Name)
                         .Distinct()
                         .ExecuteAsCollection<InstrumentCollection>();
-                    Log.Verbose("Instruments: {count}", col.Count());
+                    Logging.Verbose("Instruments: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Log.Verbose("Instrument: {name}", item.Name);
+                        Logging.Verbose("Instrument: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Instrument_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False
@@ -182,10 +181,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         .OrderAsc(Instrument.Columns.Name)
                         .Distinct()
                         .ExecuteAsCollection<SensorCollection>();
-                    Log.Verbose("Sensors: {count}", col.Count());
+                    Logging.Verbose("Sensors: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Log.Verbose("Sensor: {name}", item.Name);
+                        Logging.Verbose("Sensor: {name}", item.Name);
                         AsyncTreeNode node = new AsyncTreeNode("Sensor_" + item.Id.ToString() + "|" + e.NodeID, item.Name)
                         {
                             Icon = Icon.ResultsetNext,
@@ -217,10 +216,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     var phenomenon = new Phenomenon(e.NodeID.Split('|')[0].Split('_')[1]);
                     var items = e.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
                     var col = GetPhenomenonOfferings(items.Where(i => i.Item1 == "Sensor").Select(i => Utilities.MakeGuid(i.Item2)).First());
-                    Log.Verbose("Offerings: {count}", col.Count());
+                    Logging.Verbose("Offerings: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Log.Verbose("Phenomenon: {phenomenon} Offering: {offering}", item.Phenomenon.Name, item.Offering.Name);
+                        Logging.Verbose("Phenomenon: {phenomenon} Offering: {offering}", item.Phenomenon.Name, item.Offering.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Offering_" + item.Id.ToString() + "|" + e.NodeID, item.Offering.Name, Icon.ResultsetNext)
                         {
                             Checked = ThreeStateBool.False,
@@ -232,7 +231,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Unable to load node {nodeID}", e.NodeID);
+                Logging.Exception(ex, "Unable to load node {nodeID}", e.NodeID);
                 throw;
             }
     }
@@ -283,7 +282,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         if (FilterTree.CheckedNodes == null)
         {
             //this.ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix], fromDate, ToDate);
-            this.ObservationsGrid.GetStore().DataSource = null;
+            ObservationsGrid.GetStore().DataSource = null;
         }
         else
         {
@@ -296,7 +295,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item2), Type = items[0].Item1 });
             }
 
-            //Log.Information("Items: {@QueryDataClassList}", QueryDataClassList);
+            //Logging.Information("Items: {@QueryDataClassList}", QueryDataClassList);
 
             #region buildQ
             foreach (QueryDataClass item in QueryDataClassList)
@@ -308,7 +307,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 //Sensor Sensor = new Sensor();
                 //Station station = new Station();
                 List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                //Log.Information("Items: {@items}", items);
+                //Logging.Information("Items: {@items}", items);
                 PhenomenonOffering offering = null;
                 Phenomenon phenomenon = null;
                 Sensor sensor = null;
@@ -396,8 +395,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
             #endregion buildQ
             //DataQueryRepository.qPage(ref q, ref e);
-            //Log.Information("SQL: {sql}", q.BuildSqlStatement());
-            this.ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedFilteredList(e, e.Parameters[this.GridFilters1.ParamPrefix], ref q);
+            //Logging.Information("SQL: {sql}", q.BuildSqlStatement());
+            ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedFilteredList(e, e.Parameters[GridFilters1.ParamPrefix], ref q);
         }
     }
 
@@ -443,7 +442,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 var items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
                 QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item2), Type = items[0].Item1 });
             }
-            //Log.Information("Items: {@QueryDataClassList}", QueryDataClassList);
+            //Logging.Information("Items: {@QueryDataClassList}", QueryDataClassList);
 
             #region buildQ
             foreach (QueryDataClass item in QueryDataClassList)
@@ -451,7 +450,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
                 int count = 0;
                 List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                //Log.Information("Items: {@items}", items);
+                //Logging.Information("Items: {@items}", items);
                 PhenomenonOffering offering = null;
                 Phenomenon phenomenon = null;
                 Sensor sensor = null;
@@ -610,7 +609,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
         }
 
-        //Log.Information("SQL: {sql}", q.BuildSqlStatement());
+        //Logging.Information("SQL: {sql}", q.BuildSqlStatement());
         DataTable dt = q.ExecuteDataSet().Tables[0];
 
         for (int k = 0; k < dt.Columns.Count; k++)

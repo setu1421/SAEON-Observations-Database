@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Ext.Net;
+using SAEON.Logs;
+using SAEON.Observations.Data;
+using SubSonic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Ext.Net;
-using SubSonic;
-using SAEON.Observations.Data;
-using System.Web.Security;
-using Serilog;
-using System.Transactions;
 
 /// <summary>
 /// Summary description for OfferingRepository
@@ -35,7 +32,7 @@ public class DataQueryRepository : BaseRepository
             .Where(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
 
         GetPagedQuery(ref q, e, paramPrefix);
-        Log.Verbose("GetPagedList SQL: {sql}", q.BuildSqlStatement());
+        //Logging.Verbose("GetPagedList SQL: {sql}", q.BuildSqlStatement());
         VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
         return col.ToList<object>();
     }
@@ -170,7 +167,7 @@ public class DataQueryRepository : BaseRepository
         storeRefreshDataEventArgs.Total = total;
 
         int currenPage = storeRefreshDataEventArgs.Start / storeRefreshDataEventArgs.Limit + 1;
-        Log.Verbose("CurrentPage: {currentPage} Start: {Start} Limit: {Limit} Total: {total}", currenPage, storeRefreshDataEventArgs.Start, storeRefreshDataEventArgs.Limit, total);
+        //Logging.Verbose("CurrentPage: {currentPage} Start: {Start} Limit: {Limit} Total: {total}", currenPage, storeRefreshDataEventArgs.Start, storeRefreshDataEventArgs.Limit, total);
         if (storeRefreshDataEventArgs.Limit > total)
             q.Paged(currenPage, total);
         else

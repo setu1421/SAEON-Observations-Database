@@ -1,10 +1,11 @@
 ﻿using Ext.Net;
 using NCalc;
 using Newtonsoft.Json;
+using SAEON.Logs;
 using SAEON.Observations.Data;
-using Serilog;
 using SubSonic;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
@@ -159,92 +160,98 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            DataSource ds = new DataSource();
-
-            if (String.IsNullOrEmpty(tfID.Text))
-                ds.Id = Guid.NewGuid();
-            else
-                ds = new DataSource(tfID.Text.Trim());
-
-            ds.Code = tfCode.Text.Trim();
-            ds.Name = tfName.Text.Trim();
-            ds.Description = tfDescription.Text.Trim();
-            ds.Url = tfUrl.Text;
-            //ds.DataSourceTypeID = new Guid(cbDataSourceType.SelectedItem.Value);
-            //ds.DefaultNullValue = Int64.Parse(nfDefaultValue.Value.ToString());
-
-            ds.UpdateFreq = int.Parse(cbUpdateFrequency.SelectedItem.Value);
-
-            if (cbDataSchema.SelectedItem.Value == null)
-                ds.DataSchemaID = null;
-            else
+            try
             {
-                SensorCollection col = new Select().From(Sensor.Schema)
-                    .Where(Sensor.Columns.DataSourceID).IsEqualTo(ds.Id)
-                    .And(Sensor.Columns.DataSchemaID).IsNotNull()
-                    .ExecuteAsCollection<SensorCollection>();
+                DataSource ds = new DataSource();
 
-                if (!col.Any())
-                {
-                    ds.DataSchemaID = Guid.Parse(cbDataSchema.SelectedItem.Value);
-                }
+                if (String.IsNullOrEmpty(tfID.Text))
+                    ds.Id = Guid.NewGuid();
+                else
+                    ds = new DataSource(tfID.Text.Trim());
+
+                ds.Code = tfCode.Text.Trim();
+                ds.Name = tfName.Text.Trim();
+                ds.Description = tfDescription.Text.Trim();
+                ds.Url = tfUrl.Text;
+                //ds.DataSourceTypeID = new Guid(cbDataSourceType.SelectedItem.Value);
+                //ds.DefaultNullValue = Int64.Parse(nfDefaultValue.Value.ToString());
+
+                ds.UpdateFreq = int.Parse(cbUpdateFrequency.SelectedItem.Value);
+
+                if (cbDataSchema.SelectedItem.Value == null)
+                    ds.DataSchemaID = null;
                 else
                 {
-                    Log.Verbose($"DirectCall.DeleteSensorSchemas(\"{ds.Id.ToString()}\",{{ eventMask: {{ showMask: true}}}});");
-                    MessageBoxes.Confirm("Confirm",
-                        $"DirectCall.DeleteSensorSchemas(\"{ds.Id.ToString()}\",{{ eventMask: {{ showMask: true}}}});",
-                        $"This data source can't have a data schema because sensor{(col.Count > 1 ? "s" : "")} {string.Join(", ", col)} are already linked to a data schema. Clear the schema from these sensor{(col.Count > 1 ? "s" : "")}?");
-                    return;
+                    SensorCollection col = new Select().From(Sensor.Schema)
+                        .Where(Sensor.Columns.DataSourceID).IsEqualTo(ds.Id)
+                        .And(Sensor.Columns.DataSchemaID).IsNotNull()
+                        .ExecuteAsCollection<SensorCollection>();
+
+                    if (!col.Any())
+                    {
+                        ds.DataSchemaID = Guid.Parse(cbDataSchema.SelectedItem.Value);
+                    }
+                    else
+                    {
+                        //Logging.Verbose($"DirectCall.DeleteSensorSchemas(\"{ds.Id.ToString()}\",{{ eventMask: {{ showMask: true}}}});");
+                        MessageBoxes.Confirm("Confirm",
+                            $"DirectCall.DeleteSensorSchemas(\"{ds.Id.ToString()}\",{{ eventMask: {{ showMask: true}}}});",
+                            $"This data source can't have a data schema because sensor{(col.Count > 1 ? "s" : "")} {string.Join(", ", col)} are already linked to a data schema. Clear the schema from these sensor{(col.Count > 1 ? "s" : "")}?");
+                        return;
+                    }
                 }
-            }
 
 
-            if (StartDate.SelectedDate.Date.Year < 1900)
-                ds.StartDate = null;
-            else
-                ds.StartDate = StartDate.SelectedDate;
-            if (EndDate.SelectedDate.Date.Year < 1900)
-                ds.EndDate = null;
-            else
-                ds.EndDate = EndDate.SelectedDate;
+                if (StartDate.SelectedDate.Date.Year < 1900)
+                    ds.StartDate = null;
+                else
+                    ds.StartDate = StartDate.SelectedDate;
+                if (EndDate.SelectedDate.Date.Year < 1900)
+                    ds.EndDate = null;
+                else
+                    ds.EndDate = EndDate.SelectedDate;
 
-            ds.UserId = AuthHelper.GetLoggedInUserId;
+                ds.UserId = AuthHelper.GetLoggedInUserId;
 
-            ds.Save();
-            Auditing.Log("DataSources.Save", new Dictionary<string, object> {
+                ds.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "ID", ds.Id }, { "Code", ds.Code }, { "Name", ds.Name } });
-            DataSourcesGrid.DataBind();
+                DataSourcesGrid.DataBind();
 
-            DetailWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Unable to save data source");
-            throw;
+                DetailWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                throw;
+            }
         }
     }
 
     [DirectMethod]
-    public void DeleteSensorSchemas(Guid aId)
+    public void DeleteSensorSchemas(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
         {
-            SensorCollection col = new Select().From(Sensor.Schema)
-                .Where(Sensor.Columns.DataSourceID).IsEqualTo(aId)
-                .And(Sensor.Columns.DataSchemaID).IsNotNull()
-                .ExecuteAsCollection<SensorCollection>();
-            foreach (var sensor in col)
+            try
             {
-                sensor.DataSchemaID = null;
-                sensor.Save();
+                SensorCollection col = new Select().From(Sensor.Schema)
+                    .Where(Sensor.Columns.DataSourceID).IsEqualTo(aID)
+                    .And(Sensor.Columns.DataSchemaID).IsNotNull()
+                    .ExecuteAsCollection<SensorCollection>();
+                foreach (var sensor in col)
+                {
+                    sensor.DataSchemaID = null;
+                    sensor.Save();
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Unable to delete sensor schemas");
-            throw;
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                throw;
+            }
         }
     }
 
@@ -299,29 +306,31 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void InstrumentLinkSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            if (!InstrumentLinkOk())
+            try
             {
-                MessageBoxes.Error("Error", "Instrument is already linked");
-                return;
-            }
-            RowSelectionModel masterRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            InstrumentDataSource instrumentDataSource = new InstrumentDataSource(Utilities.MakeGuid(InstrumentLinkID.Value));
-            instrumentDataSource.DataSourceID = masterID;
-            instrumentDataSource.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
-            if (dfInstrumentStartDate.SelectedDate.Year < 1900)
-                instrumentDataSource.StartDate = null;
-            else
-                instrumentDataSource.StartDate = dfInstrumentStartDate.SelectedDate;
-            if (dfInstrumentEndDate.SelectedDate.Year < 1900)
-                instrumentDataSource.EndDate = null;
-            else
-                instrumentDataSource.EndDate = dfInstrumentEndDate.SelectedDate;
-            instrumentDataSource.UserId = AuthHelper.GetLoggedInUserId;
-            instrumentDataSource.Save();
-            Auditing.Log("DataSources.AddInstrumentLink", new Dictionary<string, object> {
+                if (!InstrumentLinkOk())
+                {
+                    MessageBoxes.Error("Error", "Instrument is already linked");
+                    return;
+                }
+                RowSelectionModel masterRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                InstrumentDataSource instrumentDataSource = new InstrumentDataSource(Utilities.MakeGuid(InstrumentLinkID.Value));
+                instrumentDataSource.DataSourceID = masterID;
+                instrumentDataSource.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
+                if (dfInstrumentStartDate.SelectedDate.Year < 1900)
+                    instrumentDataSource.StartDate = null;
+                else
+                    instrumentDataSource.StartDate = dfInstrumentStartDate.SelectedDate;
+                if (dfInstrumentEndDate.SelectedDate.Year < 1900)
+                    instrumentDataSource.EndDate = null;
+                else
+                    instrumentDataSource.EndDate = dfInstrumentEndDate.SelectedDate;
+                instrumentDataSource.UserId = AuthHelper.GetLoggedInUserId;
+                instrumentDataSource.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "DataSourceID", instrumentDataSource.DataSourceID },
                 { "DataSourceCode", instrumentDataSource.DataSource.Code },
                 { "InstrumentID", instrumentDataSource.InstrumentID},
@@ -329,13 +338,14 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 { "StartDate", instrumentDataSource?.StartDate },
                 { "EndDate", instrumentDataSource?.EndDate}
             });
-            InstrumentLinksGrid.DataBind();
-            InstrumentLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DataSources.LinkInstrument_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link instrument");
+                InstrumentLinksGrid.DataBind();
+                InstrumentLinkWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link instrument");
+            }
         }
     }
 
@@ -351,16 +361,19 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void DeleteInstrumentLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
         {
-            InstrumentDataSource.Delete(aID);
-            Auditing.Log("DataSources.DeleteInstrumentLink", new Dictionary<string, object> { { "ID", aID } });
-            InstrumentLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DataSources.DeleteInstrumentLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete instrument link");
+            try
+            {
+                InstrumentDataSource.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                InstrumentLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete instrument link");
+            }
         }
     }
 
@@ -374,122 +387,127 @@ public partial class Admin_DataSources : System.Web.UI.Page
     #region Data Source Transformations
     protected void TransformationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
+        using (Logging.MethodCall(GetType()))
         {
-
-            try
+            if (e.Parameters["DataSourceID"] != null && e.Parameters["DataSourceID"].ToString() != "-1")
             {
-                Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
 
-                VDataSourceTransformationCollection trCol = new VDataSourceTransformationCollection()
-                    .Where(VDataSourceTransformation.Columns.DataSourceID, Id)
-                    .OrderByAsc(VDataSourceTransformation.Columns.Iorder)
-                    .OrderByAsc(VDataSourceTransformation.Columns.Rank)
-                    .Load();
+                try
+                {
+                    Guid Id = Guid.Parse(e.Parameters["DataSourceID"].ToString());
 
-                TransformationsGrid.GetStore().DataSource = trCol;
-                TransformationsGrid.GetStore().DataBind();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Unable to load transformations");
-                throw;
+                    VDataSourceTransformationCollection trCol = new VDataSourceTransformationCollection()
+                        .Where(VDataSourceTransformation.Columns.DataSourceID, Id)
+                        .OrderByAsc(VDataSourceTransformation.Columns.Iorder)
+                        .OrderByAsc(VDataSourceTransformation.Columns.Rank)
+                        .Load();
+
+                    TransformationsGrid.GetStore().DataSource = trCol;
+                    TransformationsGrid.GetStore().DataBind();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
             }
         }
     }
 
     protected void SaveTransformation(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-
-            RowSelectionModel masterRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            DataSourceTransformation dstransform = null;
-            if (String.IsNullOrEmpty(tfTransID.Text))
-            {
-                dstransform = new DataSourceTransformation();
-            }
-            else
-            {
-                dstransform = new DataSourceTransformation(tfTransID.Text.Trim());
-            }
-
-            // --> Removed 20170126 TimPN
-            ////Check for outdated Transforms
-            //SqlQuery q = new Select().From<DataSourceTransformation>()
-            //            .Where(DataSourceTransformation.TransformationTypeIDColumn).IsEqualTo(cbTransformType.SelectedItem.Value)
-            //            .And(DataSourceTransformation.PhenomenonIDColumn).IsEqualTo(cbPhenomenon.SelectedItem.Value)
-            //            .And(DataSourceTransformation.DataSourceIDColumn).IsEqualTo(datasourceRow.SelectedRecordID)
-            //            .AndExpression(DataSourceTransformation.EndDateColumn.QualifiedName).IsNull().Or(DataSourceTransformation.EndDateColumn).IsGreaterThanOrEqualTo(dfTransStart.SelectedDate).CloseExpression();
-
-            //if (String.IsNullOrEmpty(tfTransID.Text))
-            //    dstransform.Id = Guid.NewGuid();
-            //else
-            //{
-            //    dstransform = new DataSourceTransformation(tfTransID.Text.Trim());
-            //    q = q.And(DataSourceTransformation.IdColumn).IsNotEqualTo(dstransform.Id);
-            //}
-            //DataSourceTransformationCollection OutdatedItems = q.ExecuteAsCollection<DataSourceTransformationCollection>();
-            // --< Removed 20170126 TimPN
-
-            // --> Removed 20170126 TimPN
-            //foreach (var item in OutdatedItems)
-            //{
-            //    item.EndDate = dfTransStart.SelectedDate.Date;
-            //    item.Save();
-            //}
-            // --< Removed 20170126 TimPN
-
-            dstransform.DataSourceID = masterID;
-            dstransform.TransformationTypeID = new Guid(cbTransformType.SelectedItem.Value);
-            dstransform.PhenomenonID = new Guid(cbPhenomenon.SelectedItem.Value);
-
-            if (cbOffering.SelectedItem.Value != null)
-                dstransform.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
-            else
-                dstransform.PhenomenonOfferingID = null;
-
-            if (cbUnitofMeasure.SelectedItem.Value != null)
-                dstransform.PhenomenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);
-            else
-                dstransform.PhenomenonUOMID = null;
-
-            //9ca36c10-cbad-4862-9f28-591acab31237 = Quality Control on Values
-            if (new Guid(cbTransformType.SelectedItem.Value) != new Guid("9ca36c10-cbad-4862-9f28-591acab31237"))
+            try
             {
 
-                if (sbNewOffering.SelectedItem.Value != null)
-                    dstransform.NewPhenomenonOfferingID = new Guid(sbNewOffering.SelectedItem.Value);
+                RowSelectionModel masterRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                DataSourceTransformation dstransform = null;
+                if (String.IsNullOrEmpty(tfTransID.Text))
+                {
+                    dstransform = new DataSourceTransformation();
+                }
                 else
+                {
+                    dstransform = new DataSourceTransformation(tfTransID.Text.Trim());
+                }
+
+                // --> Removed 20170126 TimPN
+                ////Check for outdated Transforms
+                //SqlQuery q = new Select().From<DataSourceTransformation>()
+                //            .Where(DataSourceTransformation.TransformationTypeIDColumn).IsEqualTo(cbTransformType.SelectedItem.Value)
+                //            .And(DataSourceTransformation.PhenomenonIDColumn).IsEqualTo(cbPhenomenon.SelectedItem.Value)
+                //            .And(DataSourceTransformation.DataSourceIDColumn).IsEqualTo(datasourceRow.SelectedRecordID)
+                //            .AndExpression(DataSourceTransformation.EndDateColumn.QualifiedName).IsNull().Or(DataSourceTransformation.EndDateColumn).IsGreaterThanOrEqualTo(dfTransStart.SelectedDate).CloseExpression();
+
+                //if (String.IsNullOrEmpty(tfTransID.Text))
+                //    dstransform.Id = Guid.NewGuid();
+                //else
+                //{
+                //    dstransform = new DataSourceTransformation(tfTransID.Text.Trim());
+                //    q = q.And(DataSourceTransformation.IdColumn).IsNotEqualTo(dstransform.Id);
+                //}
+                //DataSourceTransformationCollection OutdatedItems = q.ExecuteAsCollection<DataSourceTransformationCollection>();
+                // --< Removed 20170126 TimPN
+
+                // --> Removed 20170126 TimPN
+                //foreach (var item in OutdatedItems)
+                //{
+                //    item.EndDate = dfTransStart.SelectedDate.Date;
+                //    item.Save();
+                //}
+                // --< Removed 20170126 TimPN
+
+                dstransform.DataSourceID = masterID;
+                dstransform.TransformationTypeID = new Guid(cbTransformType.SelectedItem.Value);
+                dstransform.PhenomenonID = new Guid(cbPhenomenon.SelectedItem.Value);
+
+                if (cbOffering.SelectedItem.Value != null)
+                    dstransform.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
+                else
+                    dstransform.PhenomenonOfferingID = null;
+
+                if (cbUnitofMeasure.SelectedItem.Value != null)
+                    dstransform.PhenomenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);
+                else
+                    dstransform.PhenomenonUOMID = null;
+
+                //9ca36c10-cbad-4862-9f28-591acab31237 = Quality Control on Values
+                if (new Guid(cbTransformType.SelectedItem.Value) != new Guid("9ca36c10-cbad-4862-9f28-591acab31237"))
+                {
+
+                    if (sbNewOffering.SelectedItem.Value != null)
+                        dstransform.NewPhenomenonOfferingID = new Guid(sbNewOffering.SelectedItem.Value);
+                    else
+                        dstransform.NewPhenomenonOfferingID = null;
+
+                    if (sbNewUoM.SelectedItem.Value != null)
+                        dstransform.NewPhenomenonUOMID = new Guid(sbNewUoM.SelectedItem.Value);
+                    else
+                        dstransform.NewPhenomenonUOMID = null;
+                }
+                else
+                {
                     dstransform.NewPhenomenonOfferingID = null;
-
-                if (sbNewUoM.SelectedItem.Value != null)
-                    dstransform.NewPhenomenonUOMID = new Guid(sbNewUoM.SelectedItem.Value);
-                else
                     dstransform.NewPhenomenonUOMID = null;
-            }
-            else
-            {
-                dstransform.NewPhenomenonOfferingID = null;
-                dstransform.NewPhenomenonUOMID = null;
-            }
-            //
+                }
+                //
 
-            if (dfTransStart.SelectedDate.Year < 1900)
-            {
-                dstransform.StartDate = null;
-            }
-            else
-                dstransform.StartDate = dfTransStart.SelectedDate;
-            if (dfTransEnd.SelectedDate.Year < 1900)
-                dstransform.EndDate = null;
-            else
-                dstransform.EndDate = dfTransEnd.SelectedDate;
-            dstransform.Definition = tfDefinition.Text.Trim().ToLower();
-            dstransform.Rank = (int)tfRank.Number;
-            dstransform.Save();
-            Auditing.Log("DataSources.SaveTransformation", new Dictionary<string, object> {
+                if (dfTransStart.SelectedDate.Year < 1900)
+                {
+                    dstransform.StartDate = null;
+                }
+                else
+                    dstransform.StartDate = dfTransStart.SelectedDate;
+                if (dfTransEnd.SelectedDate.Year < 1900)
+                    dstransform.EndDate = null;
+                else
+                    dstransform.EndDate = dfTransEnd.SelectedDate;
+                dstransform.Definition = tfDefinition.Text.Trim().ToLower();
+                dstransform.Rank = (int)tfRank.Number;
+                dstransform.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "DataSourceID", dstransform.DataSourceID},
                 { "DataSourceCode", dstransform.DataSource.Code},
                 { "TransformationTypeID", dstransform.TransformationTypeID},
@@ -507,15 +525,16 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 {"Rank", dstransform.Rank }
                 });
 
-            TransformationsGrid.GetStore().DataBind();
+                TransformationsGrid.GetStore().DataBind();
 
-            TransformationDetailWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Unable to save transformation");
-            MessageBoxes.Error(ex, "Error", "Unable to save transformation");
-            throw;
+                TransformationDetailWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to save transformation");
+                throw;
+            }
         }
     }
 
@@ -531,16 +550,19 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void DeleteTransformation(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
         {
-            DataSourceTransformation.Delete(aID);
-            Auditing.Log("DataSource.DeleteTransformation", new Dictionary<string, object> { { "ID", aID } });
-            TransformationsGrid.GetStore().DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DataSource.DeleteTransform({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete transformation");
+            try
+            {
+                DataSourceTransformation.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                TransformationsGrid.GetStore().DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete transformation");
+            }
         }
     }
 
@@ -670,23 +692,25 @@ public partial class Admin_DataSources : System.Web.UI.Page
     #region Roles
     protected void SaveRoleDetail(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            DataSourceRole dsRole = new DataSourceRole(hiddenRoleDetail.Text);
+            try
+            {
+                DataSourceRole dsRole = new DataSourceRole(hiddenRoleDetail.Text);
 
-            if (dfRoleDetailStart.SelectedDate.Year < 1900)
-                dsRole.DateStart = null;
-            else
-                dsRole.DateStart = dfRoleDetailStart.SelectedDate;
-            if (dfRoleDetailEnd.SelectedDate.Year < 1900)
-                dsRole.DateEnd = null;
-            else
-                dsRole.DateEnd = dfRoleDetailEnd.SelectedDate;
-            dsRole.IsRoleReadOnly = cbIsRoleReadOnly.Checked;
+                if (dfRoleDetailStart.SelectedDate.Year < 1900)
+                    dsRole.DateStart = null;
+                else
+                    dsRole.DateStart = dfRoleDetailStart.SelectedDate;
+                if (dfRoleDetailEnd.SelectedDate.Year < 1900)
+                    dsRole.DateEnd = null;
+                else
+                    dsRole.DateEnd = dfRoleDetailEnd.SelectedDate;
+                dsRole.IsRoleReadOnly = cbIsRoleReadOnly.Checked;
 
-            dsRole.Save();
+                dsRole.Save();
 
-            Auditing.Log("DataSources.SaveRoleDetail", new Dictionary<string, object> {
+                Auditing.Log(GetType(), new ParameterList {
                 { "DataSourceID", dsRole.DataSourceID},
                 { "DataSourceCode", dsRole.DataSource.Code},
                 { "RoleID", dsRole.RoleId },
@@ -695,15 +719,16 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 { "DateEnd", dsRole.DateEnd},
                 { "IsReadOnly", dsRole.IsRoleReadOnly }
                             });
-            RolesGrid.GetStore().DataBind();
+                RolesGrid.GetStore().DataBind();
 
-            RoleDetailWindow.Hide();
+                RoleDetailWindow.Hide();
 
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Unable to save role detail");
-            MessageBoxes.Error(ex, "Error", "Unable to save role detail");
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to save role detail");
+            }
         }
     }
 
@@ -741,44 +766,47 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void RoleLinksSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            RowSelectionModel sm = AvailableRolesGrid.SelectionModel.Primary as RowSelectionModel;
-            RowSelectionModel dataSourceRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
+            try
+            {
+                RowSelectionModel sm = AvailableRolesGrid.SelectionModel.Primary as RowSelectionModel;
+                RowSelectionModel dataSourceRow = DataSourcesGrid.SelectionModel.Primary as RowSelectionModel;
 
-            string dataSourceID = dataSourceRow.SelectedRecordID;
-            if (sm.SelectedRows.Count == 0)
-            {
-                MessageBoxes.Error("Invalid Selection", "Select at least one data source");
-            }
-            else
-            {
-                foreach (SelectedRow row in sm.SelectedRows)
+                string dataSourceID = dataSourceRow.SelectedRecordID;
+                if (sm.SelectedRows.Count == 0)
                 {
-                    AspnetRole aspRole = new AspnetRole(row.RecordID);
-                    DataSourceRole role = new DataSourceRole();
-                    role.DataSourceID = Utilities.MakeGuid(dataSourceID);
-                    role.RoleId = aspRole.RoleId;
-                    role.RoleName = aspRole.RoleName;
-                    role.IsRoleReadOnly = false;
-                    role.UserId = AuthHelper.GetLoggedInUserId;
-                    role.Save();
-                    Auditing.Log("DataSources.AddRoleLink", new Dictionary<string, object> {
+                    MessageBoxes.Error("Invalid Selection", "Select at least one data source");
+                }
+                else
+                {
+                    foreach (SelectedRow row in sm.SelectedRows)
+                    {
+                        AspnetRole aspRole = new AspnetRole(row.RecordID);
+                        DataSourceRole role = new DataSourceRole();
+                        role.DataSourceID = Utilities.MakeGuid(dataSourceID);
+                        role.RoleId = aspRole.RoleId;
+                        role.RoleName = aspRole.RoleName;
+                        role.IsRoleReadOnly = false;
+                        role.UserId = AuthHelper.GetLoggedInUserId;
+                        role.Save();
+                        Auditing.Log(GetType(), new ParameterList {
                                 { "DataSourceID", role.DataSourceID},
                                 { "DataSourceCode", role.DataSource.Code},
                                 { "RoleID", role.RoleId },
                                 { "RoleName", role.AspnetRole.RoleName }
                             });
+                    }
+                    RolesGridStore.DataBind();
+                    AvailableRolesGridStore.DataBind();
+                    AvailableRolesWindow.Hide();
                 }
-                RolesGridStore.DataBind();
-                AvailableRolesGridStore.DataBind();
-                AvailableRolesWindow.Hide();
             }
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DataSources.LinkRole_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link role");
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link role");
+            }
         }
     }
 
@@ -850,16 +878,19 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void DeleteRoleLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
         {
-            DataSourceRole.Delete(aID);
-            Auditing.Log("DataSource.DeleteRoleLink", new Dictionary<string, object> { { "ID", aID } });
-            RolesGridStore.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "DataSource.DeleteRoleLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete role link");
+            try
+            {
+                DataSourceRole.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                RolesGridStore.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete role link");
+            }
         }
     }
 

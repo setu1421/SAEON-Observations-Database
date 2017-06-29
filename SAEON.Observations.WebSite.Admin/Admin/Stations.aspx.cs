@@ -1,10 +1,8 @@
 ﻿using Ext.Net;
+using SAEON.Logs;
 using SAEON.Observations.Data;
 using System;
 using System.Linq;
-using SubSonic;
-using Serilog;
-using System.Collections.Generic;
 
 public partial class Admin_Stations : System.Web.UI.Page
 {
@@ -66,69 +64,72 @@ public partial class Admin_Stations : System.Web.UI.Page
     }
     protected void Save(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            Station station = new Station();
+            try
+            {
+                Station station = new Station();
 
-            if (String.IsNullOrEmpty(tfID.Text))
-                station.Id = Guid.NewGuid();
-            else
-                station = new Station(tfID.Text.Trim());
+                if (String.IsNullOrEmpty(tfID.Text))
+                    station.Id = Guid.NewGuid();
+                else
+                    station = new Station(tfID.Text.Trim());
 
-            if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                station.Code = tfCode.Text.Trim();
-            if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                station.Name = tfName.Text.Trim();
-            station.SiteID = Utilities.MakeGuid(cbSite.SelectedItem.Value.Trim());
-            station.Description = tfDescription.Text.Trim();
+                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
+                    station.Code = tfCode.Text.Trim();
+                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
+                    station.Name = tfName.Text.Trim();
+                station.SiteID = Utilities.MakeGuid(cbSite.SelectedItem.Value.Trim());
+                station.Description = tfDescription.Text.Trim();
 
-            //if (!string.IsNullOrEmpty(nfLatitude.Text))
-            //    station.Latitude = Double.Parse(nfLatitude.Text);
+                //if (!string.IsNullOrEmpty(nfLatitude.Text))
+                //    station.Latitude = Double.Parse(nfLatitude.Text);
 
-            //if (!string.IsNullOrEmpty(nfLongitude.Text))
-            //    station.Longitude = Double.Parse(nfLongitude.Text);
+                //if (!string.IsNullOrEmpty(nfLongitude.Text))
+                //    station.Longitude = Double.Parse(nfLongitude.Text);
 
-            //if (!string.IsNullOrEmpty(nfElevation.Text))
-            //    station.Elevation = Int32.Parse(nfElevation.Text);
+                //if (!string.IsNullOrEmpty(nfElevation.Text))
+                //    station.Elevation = Int32.Parse(nfElevation.Text);
 
-            if (nfLatitude.IsEmpty)
-                station.Latitude = null;
-            else
-                station.Latitude = nfLatitude.Number;
-            if (nfLongitude.IsEmpty)
-                station.Longitude = null;
-            else
-                station.Longitude = nfLongitude.Number;
-            if (nfElevation.IsEmpty)
-                station.Elevation = null;
-            else
-                station.Elevation = nfElevation.Number;
+                if (nfLatitude.IsEmpty)
+                    station.Latitude = null;
+                else
+                    station.Latitude = nfLatitude.Number;
+                if (nfLongitude.IsEmpty)
+                    station.Longitude = null;
+                else
+                    station.Longitude = nfLongitude.Number;
+                if (nfElevation.IsEmpty)
+                    station.Elevation = null;
+                else
+                    station.Elevation = nfElevation.Number;
 
-            if (!string.IsNullOrEmpty(tfUrl.Text))
-                station.Url = tfUrl.Text;
+                if (!string.IsNullOrEmpty(tfUrl.Text))
+                    station.Url = tfUrl.Text;
 
-            if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
-                station.StartDate = dfStartDate.SelectedDate;
-            else
-                station.StartDate = null;
-            if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
-                station.EndDate = dfEndDate.SelectedDate;
-            else
-                station.EndDate = null;
-            station.UserId = AuthHelper.GetLoggedInUserId;
+                if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
+                    station.StartDate = dfStartDate.SelectedDate;
+                else
+                    station.StartDate = null;
+                if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
+                    station.EndDate = dfEndDate.SelectedDate;
+                else
+                    station.EndDate = null;
+                station.UserId = AuthHelper.GetLoggedInUserId;
 
-            station.Save();
-            Auditing.Log("Stations.Save", new Dictionary<string, object> {
+                station.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
 
-            StationsGrid.DataBind();
+                StationsGrid.DataBind();
 
-            DetailWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Stations.Save");
-            MessageBoxes.Error(ex, "Error", "Unable to save station");
+                DetailWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to save station");
+            }
         }
     }
 
@@ -202,26 +203,28 @@ public partial class Admin_Stations : System.Web.UI.Page
 
     protected void OrganisationLinkSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            if (!OrganisationLinkOk())
+            try
             {
-                MessageBoxes.Error("Error", "Organisation is already linked");
-                return;
-            }
-            RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            OrganisationStation stationOrganisation = new OrganisationStation(Utilities.MakeGuid(OrganisationLinkID.Value));
-            stationOrganisation.StationID = masterID;
-            stationOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
-            stationOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
-                stationOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
-            if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
-                stationOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
-            stationOrganisation.UserId = AuthHelper.GetLoggedInUserId;
-            stationOrganisation.Save();
-            Auditing.Log("Stations.AddOrganisationLink", new Dictionary<string, object> {
+                if (!OrganisationLinkOk())
+                {
+                    MessageBoxes.Error("Error", "Organisation is already linked");
+                    return;
+                }
+                RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                OrganisationStation stationOrganisation = new OrganisationStation(Utilities.MakeGuid(OrganisationLinkID.Value));
+                stationOrganisation.StationID = masterID;
+                stationOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
+                stationOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+                if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
+                    stationOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
+                if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
+                    stationOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
+                stationOrganisation.UserId = AuthHelper.GetLoggedInUserId;
+                stationOrganisation.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "StationID", stationOrganisation.StationID },
                 { "StationCode", stationOrganisation.Station.Code },
                 { "OrganisationID", stationOrganisation.OrganisationID},
@@ -231,13 +234,14 @@ public partial class Admin_Stations : System.Web.UI.Page
                 { "StartDate", stationOrganisation?.StartDate },
                 { "EndDate", stationOrganisation?.EndDate}
             });
-            OrganisationLinksGrid.DataBind();
-            OrganisationLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Stations.LinkOrganisation_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link organisation");
+                OrganisationLinksGrid.DataBind();
+                OrganisationLinkWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link organisation");
+            }
         }
     }
 
@@ -253,16 +257,19 @@ public partial class Admin_Stations : System.Web.UI.Page
     [DirectMethod]
     public void DeleteOrganisationLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
         {
-            OrganisationStation.Delete(aID);
-            Auditing.Log("Stations.DeleteOrganisationLink", new Dictionary<string, object> { { "ID", aID } });
-            OrganisationLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Stations.DeleteOrganisationLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
+            try
+            {
+                OrganisationStation.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                OrganisationLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete organisation link");
+            }
         }
     }
 
@@ -309,29 +316,31 @@ public partial class Admin_Stations : System.Web.UI.Page
 
     protected void ProjectLinkSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            if (!ProjectLinkOk())
+            try
             {
-                MessageBoxes.Error("Error", "Project is already linked");
-                return;
-            }
-            RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            ProjectStation projectStation = new ProjectStation(Utilities.MakeGuid(ProjectLinkID.Value));
-            projectStation.StationID = masterID;
-            projectStation.ProjectID = new Guid(cbProject.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfProjectStartDate.Text) && (dfProjectStartDate.SelectedDate.Year >= 1900))
-                projectStation.StartDate = dfProjectStartDate.SelectedDate;
-            else
-                projectStation.StartDate = null;
-            if (!String.IsNullOrEmpty(dfProjectEndDate.Text) && (dfProjectEndDate.SelectedDate.Year >= 1900))
-                projectStation.EndDate = dfProjectEndDate.SelectedDate;
-            else
-                projectStation.EndDate = null;
-            projectStation.UserId = AuthHelper.GetLoggedInUserId;
-            projectStation.Save();
-            Auditing.Log("Stations.AddProjectLink", new Dictionary<string, object> {
+                if (!ProjectLinkOk())
+                {
+                    MessageBoxes.Error("Error", "Project is already linked");
+                    return;
+                }
+                RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                ProjectStation projectStation = new ProjectStation(Utilities.MakeGuid(ProjectLinkID.Value));
+                projectStation.StationID = masterID;
+                projectStation.ProjectID = new Guid(cbProject.SelectedItem.Value.Trim());
+                if (!String.IsNullOrEmpty(dfProjectStartDate.Text) && (dfProjectStartDate.SelectedDate.Year >= 1900))
+                    projectStation.StartDate = dfProjectStartDate.SelectedDate;
+                else
+                    projectStation.StartDate = null;
+                if (!String.IsNullOrEmpty(dfProjectEndDate.Text) && (dfProjectEndDate.SelectedDate.Year >= 1900))
+                    projectStation.EndDate = dfProjectEndDate.SelectedDate;
+                else
+                    projectStation.EndDate = null;
+                projectStation.UserId = AuthHelper.GetLoggedInUserId;
+                projectStation.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "StationID", projectStation.StationID },
                 { "StationCode", projectStation.Station.Code },
                 { "ProjectID", projectStation.ProjectID},
@@ -339,13 +348,14 @@ public partial class Admin_Stations : System.Web.UI.Page
                 { "StartDate", projectStation?.StartDate },
                 { "EndDate", projectStation?.EndDate}
             });
-            ProjectLinksGrid.DataBind();
-            ProjectLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Stations.LinkProject_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link Project");
+                ProjectLinksGrid.DataBind();
+                ProjectLinkWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link Project");
+            }
         }
     }
 
@@ -361,16 +371,19 @@ public partial class Admin_Stations : System.Web.UI.Page
     [DirectMethod]
     public void DeleteProjectLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
         {
-            ProjectStation.Delete(aID);
-            Auditing.Log("Stations.DeleteProjectLink", new Dictionary<string, object> { { "ID", aID } });
-            ProjectLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Stations.DeleteProjectLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete Project link");
+            try
+            {
+                ProjectStation.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                ProjectLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete Project link");
+            }
         }
     }
 
@@ -417,41 +430,43 @@ public partial class Admin_Stations : System.Web.UI.Page
 
     protected void InstrumentLinkSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            if (!InstrumentLinkOk())
+            try
             {
-                MessageBoxes.Error("Error", "Instrument is already linked");
-                return;
-            }
-            RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(InstrumentLinkID.Value));
-            stationInstrument.StationID = masterID;
-            stationInstrument.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
-            if (nfInstrumentLatitude.IsEmpty)
-                stationInstrument.Latitude = null;
-            else
-                stationInstrument.Latitude = nfInstrumentLatitude.Number;
-            if (nfInstrumentLongitude.IsEmpty)
-                stationInstrument.Longitude = null;
-            else
-                stationInstrument.Longitude = nfInstrumentLongitude.Number;
-            if (nfInstrumentElevation.IsEmpty)
-                stationInstrument.Elevation = null;
-            else
-                stationInstrument.Elevation = nfInstrumentElevation.Number;
-            if (!dfInstrumentStartDate.IsEmpty && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
-                stationInstrument.StartDate = dfInstrumentStartDate.SelectedDate;
-            else
-                stationInstrument.StartDate = null;
-            if (!dfInstrumentEndDate.IsEmpty && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
-                stationInstrument.EndDate = dfInstrumentEndDate.SelectedDate;
-            else
-                stationInstrument.EndDate = null;
-            stationInstrument.UserId = AuthHelper.GetLoggedInUserId;
-            stationInstrument.Save();
-            Auditing.Log("Stations.AddInstrumentLink", new Dictionary<string, object> {
+                if (!InstrumentLinkOk())
+                {
+                    MessageBoxes.Error("Error", "Instrument is already linked");
+                    return;
+                }
+                RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(InstrumentLinkID.Value));
+                stationInstrument.StationID = masterID;
+                stationInstrument.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
+                if (nfInstrumentLatitude.IsEmpty)
+                    stationInstrument.Latitude = null;
+                else
+                    stationInstrument.Latitude = nfInstrumentLatitude.Number;
+                if (nfInstrumentLongitude.IsEmpty)
+                    stationInstrument.Longitude = null;
+                else
+                    stationInstrument.Longitude = nfInstrumentLongitude.Number;
+                if (nfInstrumentElevation.IsEmpty)
+                    stationInstrument.Elevation = null;
+                else
+                    stationInstrument.Elevation = nfInstrumentElevation.Number;
+                if (!dfInstrumentStartDate.IsEmpty && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
+                    stationInstrument.StartDate = dfInstrumentStartDate.SelectedDate;
+                else
+                    stationInstrument.StartDate = null;
+                if (!dfInstrumentEndDate.IsEmpty && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
+                    stationInstrument.EndDate = dfInstrumentEndDate.SelectedDate;
+                else
+                    stationInstrument.EndDate = null;
+                stationInstrument.UserId = AuthHelper.GetLoggedInUserId;
+                stationInstrument.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "StationID", stationInstrument.StationID },
                 { "StationCode", stationInstrument.Station.Code },
                 { "InstrumentID", stationInstrument.InstrumentID},
@@ -462,13 +477,14 @@ public partial class Admin_Stations : System.Web.UI.Page
                 { "StartDate", stationInstrument?.StartDate },
                 { "EndDate", stationInstrument?.EndDate}
             });
-            InstrumentLinksGrid.DataBind();
-            InstrumentLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Stations.LinkInstrument_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link instrument");
+                InstrumentLinksGrid.DataBind();
+                InstrumentLinkWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link instrument");
+            }
         }
     }
 
@@ -484,16 +500,19 @@ public partial class Admin_Stations : System.Web.UI.Page
     [DirectMethod]
     public void DeleteInstrumentLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
         {
-            StationInstrument.Delete(aID);
-            Auditing.Log("Stations.DeleteInstrumentLink", new Dictionary<string, object> { { "ID", aID } });
-            InstrumentLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Stations.DeleteInstrumentLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete instrument link");
+            try
+            {
+                StationInstrument.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                InstrumentLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete instrument link");
+            }
         }
     }
 

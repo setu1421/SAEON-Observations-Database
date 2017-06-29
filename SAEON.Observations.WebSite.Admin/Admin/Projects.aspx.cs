@@ -1,13 +1,8 @@
 ﻿using Ext.Net;
+using SAEON.Logs;
 using SAEON.Observations.Data;
-using Serilog;
-using SubSonic;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class Admin_Projects : System.Web.UI.Page
 {
@@ -67,44 +62,47 @@ public partial class Admin_Projects : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            Project project = new Project();
-            if (String.IsNullOrEmpty(tfID.Text))
-                project.Id = Guid.NewGuid();
-            else
-                project = new Project(tfID.Text.Trim());
-            if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                project.Code = tfCode.Text.Trim();
-            if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                project.Name = tfName.Text.Trim();
-            if (cbProgramme.SelectedItem.Value == null)
-                project.ProgrammeID = null;
-            else
-                project.ProgrammeID = Utilities.MakeGuid(cbProgramme.SelectedItem.Value.Trim());
-            project.Description = tfDescription.Text.Trim();
-            project.Url = tfUrl.Text.Trim();
-            if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
-                project.StartDate = dfStartDate.SelectedDate;
-            else
-                project.StartDate = null;
-            if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
-                project.EndDate = dfEndDate.SelectedDate;
-            else
-                project.EndDate = null;
-            project.UserId = AuthHelper.GetLoggedInUserId;
+            try
+            {
+                Project project = new Project();
+                if (String.IsNullOrEmpty(tfID.Text))
+                    project.Id = Guid.NewGuid();
+                else
+                    project = new Project(tfID.Text.Trim());
+                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
+                    project.Code = tfCode.Text.Trim();
+                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
+                    project.Name = tfName.Text.Trim();
+                if (cbProgramme.SelectedItem.Value == null)
+                    project.ProgrammeID = null;
+                else
+                    project.ProgrammeID = Utilities.MakeGuid(cbProgramme.SelectedItem.Value.Trim());
+                project.Description = tfDescription.Text.Trim();
+                project.Url = tfUrl.Text.Trim();
+                if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+                    project.StartDate = dfStartDate.SelectedDate;
+                else
+                    project.StartDate = null;
+                if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+                    project.EndDate = dfEndDate.SelectedDate;
+                else
+                    project.EndDate = null;
+                project.UserId = AuthHelper.GetLoggedInUserId;
 
-            project.Save();
-            Auditing.Log("Projects.Save", new Dictionary<string, object> { { "ID", project.Id }, { "Code", project.Code }, { "Name", project.Name } });
+                project.Save();
+                Auditing.Log(GetType(), new ParameterList { { "ID", project.Id }, { "Code", project.Code }, { "Name", project.Name } });
 
-            ProjectsGrid.DataBind();
+                ProjectsGrid.DataBind();
 
-            DetailWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Projects.Save");
-            MessageBoxes.Error(ex, "Error", "Unable to save project");
+                DetailWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to save project");
+            }
         }
     }
 
@@ -160,25 +158,27 @@ public partial class Admin_Projects : System.Web.UI.Page
 
     protected void StationLinkSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            if (!StationLinkOk())
+            try
             {
-                MessageBoxes.Error("Error", "Station is already linked");
-                return;
-            }
-            RowSelectionModel masterRow = ProjectsGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            ProjectStation projectStation = new ProjectStation(Utilities.MakeGuid(ProjectStationLinkID.Value));
-            projectStation.ProjectID = masterID;
-            projectStation.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfStationStartDate.Text) && (dfStationStartDate.SelectedDate.Year >= 1900))
-                projectStation.StartDate = dfStationStartDate.SelectedDate;
-            if (!String.IsNullOrEmpty(dfStationEndDate.Text) && (dfStationEndDate.SelectedDate.Year >= 1900))
-                projectStation.EndDate = dfStationEndDate.SelectedDate;
-            projectStation.UserId = AuthHelper.GetLoggedInUserId;
-            projectStation.Save();
-            Auditing.Log("Projects.AddStationLink", new Dictionary<string, object> {
+                if (!StationLinkOk())
+                {
+                    MessageBoxes.Error("Error", "Station is already linked");
+                    return;
+                }
+                RowSelectionModel masterRow = ProjectsGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                ProjectStation projectStation = new ProjectStation(Utilities.MakeGuid(ProjectStationLinkID.Value));
+                projectStation.ProjectID = masterID;
+                projectStation.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
+                if (!String.IsNullOrEmpty(dfStationStartDate.Text) && (dfStationStartDate.SelectedDate.Year >= 1900))
+                    projectStation.StartDate = dfStationStartDate.SelectedDate;
+                if (!String.IsNullOrEmpty(dfStationEndDate.Text) && (dfStationEndDate.SelectedDate.Year >= 1900))
+                    projectStation.EndDate = dfStationEndDate.SelectedDate;
+                projectStation.UserId = AuthHelper.GetLoggedInUserId;
+                projectStation.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "ProjectID", projectStation.ProjectID },
                 { "ProjectCode", projectStation.Project.Name },
                 { "StationID", projectStation.StationID},
@@ -186,13 +186,14 @@ public partial class Admin_Projects : System.Web.UI.Page
                 { "StartDate", projectStation?.StartDate },
                 { "EndDate", projectStation?.EndDate}
             });
-            StationLinksGrid.DataBind();
-            StationLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Projects.LinkStation_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link station");
+                StationLinksGrid.DataBind();
+                StationLinkWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link station");
+            }
         }
     }
 
@@ -208,16 +209,19 @@ public partial class Admin_Projects : System.Web.UI.Page
     [DirectMethod]
     public void DeleteStationLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
         {
-            ProjectStation.Delete(aID);
-            Auditing.Log("Projects.DeleteStationLink", new Dictionary<string, object> { { "ID", aID } });
-            StationLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Projects.DeleteStationLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete station link");
+            try
+            {
+                ProjectStation.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                StationLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete station link");
+            }
         }
     }
 

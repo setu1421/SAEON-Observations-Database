@@ -1,14 +1,10 @@
 ﻿using Ext.Net;
+using SAEON.Logs;
 using SAEON.Observations.Data;
-using Serilog;
 using SubSonic;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class Admin_Sensors : System.Web.UI.Page
 {
@@ -100,72 +96,75 @@ public partial class Admin_Sensors : System.Web.UI.Page
 
     protected void Save(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-
-            Sensor sens = new Sensor();
-
-            if (String.IsNullOrEmpty(tfID.Text))
-                sens.Id = Guid.NewGuid();
-            else
-                sens = new Sensor(tfID.Text.Trim());
-
-            sens.Code = tfCode.Text.Trim();
-            sens.Name = tfName.Text.Trim();
-            sens.Description = tfDescription.Text.Trim();
-            sens.UserId = AuthHelper.GetLoggedInUserId;
-            sens.Url = tfUrl.Text.Trim();
-            //sens.StationID = Guid.Parse(cbStation.SelectedItem.Value);
-            sens.PhenomenonID = Guid.Parse(cbPhenomenon.SelectedItem.Value);
-            sens.DataSourceID = Guid.Parse(cbDataSource.SelectedItem.Value);
-
-            if (cbDataSchema.SelectedItem.Value != null)
+            try
             {
-                //test if dataschema is valid (linked to test in datasource files)
-                bool isValid = true;
-                string dataSourceName = "";
 
-                if (sens.DataSource.DataSchemaID != null)
-                {
-                    isValid = false;
-                    dataSourceName = sens.DataSource.Name;
-                }
+                Sensor sens = new Sensor();
 
-                //
-                if (isValid)
+                if (String.IsNullOrEmpty(tfID.Text))
+                    sens.Id = Guid.NewGuid();
+                else
+                    sens = new Sensor(tfID.Text.Trim());
+
+                sens.Code = tfCode.Text.Trim();
+                sens.Name = tfName.Text.Trim();
+                sens.Description = tfDescription.Text.Trim();
+                sens.UserId = AuthHelper.GetLoggedInUserId;
+                sens.Url = tfUrl.Text.Trim();
+                //sens.StationID = Guid.Parse(cbStation.SelectedItem.Value);
+                sens.PhenomenonID = Guid.Parse(cbPhenomenon.SelectedItem.Value);
+                sens.DataSourceID = Guid.Parse(cbDataSource.SelectedItem.Value);
+
+                if (cbDataSchema.SelectedItem.Value != null)
                 {
-                    sens.DataSchemaID = Guid.Parse(cbDataSchema.SelectedItem.Value);
+                    //test if dataschema is valid (linked to test in datasource files)
+                    bool isValid = true;
+                    string dataSourceName = "";
+
+                    if (sens.DataSource.DataSchemaID != null)
+                    {
+                        isValid = false;
+                        dataSourceName = sens.DataSource.Name;
+                    }
+
+                    //
+                    if (isValid)
+                    {
+                        sens.DataSchemaID = Guid.Parse(cbDataSchema.SelectedItem.Value);
+                    }
+                    else
+                    {
+                        X.Msg.Show(new MessageBoxConfig
+                        {
+                            Title = "Invalid Data Source",
+                            //Message = "The selected data schema is already linked to a sensor that is linked to this data source.",
+                            Message = "This sensor cant have a data schema because its data source (" + dataSourceName + ") is already linked to a data schema",
+                            Buttons = MessageBox.Button.OK,
+                            Icon = MessageBox.Icon.ERROR
+                        });
+
+                        return;
+                    }
                 }
                 else
-                {
-                    X.Msg.Show(new MessageBoxConfig
-                    {
-                        Title = "Invalid Data Source",
-                        //Message = "The selected data schema is already linked to a sensor that is linked to this data source.",
-                        Message = "This sensor cant have a data schema because its data source (" + dataSourceName + ") is already linked to a data schema",
-                        Buttons = MessageBox.Button.OK,
-                        Icon = MessageBox.Icon.ERROR
-                    });
+                    sens.DataSchemaID = null;
 
-                    return;
-                }
-            }
-            else
-                sens.DataSchemaID = null;
-
-            sens.Save();
-            Auditing.Log("Sensors.Save", new Dictionary<string, object> {
+                sens.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "ID", sens.Id }, { "Code", sens.Code }, { "Name", sens.Name } });
 
 
-            SensorsGrid.DataBind();
+                SensorsGrid.DataBind();
 
-            DetailWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Sensors.Save");
-            MessageBoxes.Error(ex, "Error", "Unable to save sensor");
+                DetailWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to save sensor");
+            }
         }
     }
 
@@ -186,24 +185,27 @@ public partial class Admin_Sensors : System.Web.UI.Page
     #region Instruments
     protected void InstrumentLinksGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        if (e.Parameters["SensorID"] != null && e.Parameters["SensorID"].ToString() != "-1")
+        using (Logging.MethodCall(GetType()))
         {
-            Guid Id = Guid.Parse(e.Parameters["SensorID"].ToString());
-            try
+            if (e.Parameters["SensorID"] != null && e.Parameters["SensorID"].ToString() != "-1")
             {
-                VInstrumentSensorCollection col = new VInstrumentSensorCollection()
-                    .Where(VInstrumentSensor.Columns.SensorID, Id)
-                    .OrderByAsc(VInstrumentSensor.Columns.StartDate)
-                    .OrderByAsc(VInstrumentSensor.Columns.EndDate)
-                    .OrderByAsc(VInstrumentSensor.Columns.InstrumentName)
-                    .Load();
-                InstrumentLinksGrid.GetStore().DataSource = col;
-                InstrumentLinksGrid.GetStore().DataBind();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Sensors.InstrumentLinksGridStore_RefreshData");
-                MessageBoxes.Error(ex, "Error", "Unable to refresh instruments grid");
+                Guid Id = Guid.Parse(e.Parameters["SensorID"].ToString());
+                try
+                {
+                    VInstrumentSensorCollection col = new VInstrumentSensorCollection()
+                        .Where(VInstrumentSensor.Columns.SensorID, Id)
+                        .OrderByAsc(VInstrumentSensor.Columns.StartDate)
+                        .OrderByAsc(VInstrumentSensor.Columns.EndDate)
+                        .OrderByAsc(VInstrumentSensor.Columns.InstrumentName)
+                        .Load();
+                    InstrumentLinksGrid.GetStore().DataSource = col;
+                    InstrumentLinksGrid.GetStore().DataBind();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    MessageBoxes.Error(ex, "Error", "Unable to refresh instruments grid");
+                }
             }
         }
     }
@@ -226,29 +228,31 @@ public partial class Admin_Sensors : System.Web.UI.Page
 
     protected void InstrumentLinkSave(object sender, DirectEventArgs e)
     {
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            if (!InstrumentLinkOk())
+            try
             {
-                MessageBoxes.Error("Error", "Instrument is already linked");
-                return;
-            }
-            RowSelectionModel masterRow = SensorsGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(InstrumentLinkID.Value));
-            instrumentSensor.SensorID = masterID;
-            instrumentSensor.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
-            if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
-                instrumentSensor.StartDate = dfInstrumentStartDate.SelectedDate;
-            else
-                instrumentSensor.StartDate = null;
-            if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
-                instrumentSensor.EndDate = dfInstrumentEndDate.SelectedDate;
-            else
-                instrumentSensor.EndDate = null;
-            instrumentSensor.UserId = AuthHelper.GetLoggedInUserId;
-            instrumentSensor.Save();
-            Auditing.Log("Sensors.AddInstrumentLink", new Dictionary<string, object> {
+                if (!InstrumentLinkOk())
+                {
+                    MessageBoxes.Error("Error", "Instrument is already linked");
+                    return;
+                }
+                RowSelectionModel masterRow = SensorsGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(InstrumentLinkID.Value));
+                instrumentSensor.SensorID = masterID;
+                instrumentSensor.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
+                if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
+                    instrumentSensor.StartDate = dfInstrumentStartDate.SelectedDate;
+                else
+                    instrumentSensor.StartDate = null;
+                if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
+                    instrumentSensor.EndDate = dfInstrumentEndDate.SelectedDate;
+                else
+                    instrumentSensor.EndDate = null;
+                instrumentSensor.UserId = AuthHelper.GetLoggedInUserId;
+                instrumentSensor.Save();
+                Auditing.Log(GetType(), new ParameterList {
                 { "SensorID", instrumentSensor.SensorID },
                 { "SensorCode", instrumentSensor.Sensor.Code },
                 { "InstrumentID", instrumentSensor.InstrumentID},
@@ -256,13 +260,14 @@ public partial class Admin_Sensors : System.Web.UI.Page
                 { "StartDate", instrumentSensor?.StartDate },
                 { "EndDate", instrumentSensor?.EndDate}
             });
-            InstrumentLinksGrid.DataBind();
-            InstrumentLinkWindow.Hide();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Sensors.LinkInstrument_Click");
-            MessageBoxes.Error(ex, "Error", "Unable to link sensor");
+                InstrumentLinksGrid.DataBind();
+                InstrumentLinkWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to link sensor");
+            }
         }
     }
 
@@ -278,16 +283,19 @@ public partial class Admin_Sensors : System.Web.UI.Page
     [DirectMethod]
     public void DeleteInstrumentLink(Guid aID)
     {
-        try
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
         {
-            InstrumentSensor.Delete(aID);
-            Auditing.Log("Sensors.DeleteInstrumentLink", new Dictionary<string, object> { { "ID", aID } });
-            InstrumentLinksGrid.DataBind();
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Sensors.DeleteInstrumentLink({aID})", aID);
-            MessageBoxes.Error(ex, "Error", "Unable to delete instrument link");
+            try
+            {
+                InstrumentSensor.Delete(aID);
+                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                InstrumentLinksGrid.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error(ex, "Error", "Unable to delete instrument link");
+            }
         }
     }
 
