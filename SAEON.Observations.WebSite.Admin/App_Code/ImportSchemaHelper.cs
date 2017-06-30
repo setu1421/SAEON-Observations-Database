@@ -744,6 +744,7 @@ public class ImportSchemaHelper : IDisposable
                         else
                         {
                             rec.FieldRawValue = RawValue;
+                            rec.TextValue = RawValue;
                             rec.RawValue = null;
                             Double dvalue = -1;
 
@@ -1072,6 +1073,7 @@ public class SchemaValue
     public Guid? RawPhenomenonUOMID { get; set; }
 
     public Guid CorrelationID { get; set; }
+    public string TextValue { get; set; }
 
     /// <summary>
     /// 

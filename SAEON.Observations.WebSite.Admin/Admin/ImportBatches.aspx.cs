@@ -200,6 +200,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                                 Obrecord.Comment = schval.Comment;
 
                                             Obrecord.CorrelationID = schval.CorrelationID;
+                                            if (!string.IsNullOrEmpty(schval.TextValue)) Obrecord.TextValue = schval.TextValue;
                                             Obrecord.Save();
                                         }
 
