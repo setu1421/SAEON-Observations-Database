@@ -58,8 +58,7 @@ Update Module set Url = @UrlPrefix+'/Admin/DataSources' where Name like 'Data So
 Update Module set Url = @UrlPrefix+'/Admin/DataSchemas' where Name like 'Data Schemas'
 Update Module set Url = @UrlPrefix+'/Admin/ImportBatches' where Name like 'Import Batches'
 Update Module set Url = @UrlPrefix+'/Admin/Phenomena', Name = 'Phenomena' where Name like 'Phenomenon'
-Update Module set Url = @UrlPrefix+'/Admin/Offerings', Name = 'Offerings' where Name like 'Offering'
-Update Module set Url = @UrlPrefix+'/Admin/Offerings', Name = 'Offerings' where Name like 'Offerings'
+Update Module set Url = @UrlPrefix+'/Admin/Offerings', Name = 'Offerings' where Name like 'Offering%'
 Update Module set Url = @UrlPrefix+'/Admin/UnitsOfMeasure', Name = 'Units Of Measure' where Name like 'Unit of measure'
 -- Deletes
 Delete RoleModule from RoleModule inner join Module on (RoleModule.ModuleID = Module.ID) where Module.Name like 'Projects/Sites'

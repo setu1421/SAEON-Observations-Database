@@ -50,14 +50,6 @@ USE [$(DatabaseName)];
 
 
 GO
-PRINT N'Dropping [dbo].[DF_DataLog_ID]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_ID];
-
-
-GO
 PRINT N'Dropping [dbo].[DF_DataLog_ImportDate]...';
 
 
@@ -71,6 +63,14 @@ PRINT N'Dropping [dbo].[DF_DataLog_AddedAt]...';
 
 GO
 ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_AddedAt];
+
+
+GO
+PRINT N'Dropping [dbo].[DF_DataLog_ID]...';
+
+
+GO
+ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_ID];
 
 
 GO
