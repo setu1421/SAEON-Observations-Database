@@ -498,11 +498,6 @@
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Panel4" runat="server" Layout="Form" LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
-                            <ext:Parameter Name="BlankText" Value="Description is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" IsRemoteValidation="true"
                                 AllowBlank="false" BlankText="Description is required" MsgTarget="Side" FieldLabel="Description"

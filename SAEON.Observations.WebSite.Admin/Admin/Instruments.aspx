@@ -529,14 +529,10 @@
                     </ext:Hidden>
                     <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
-                            <ext:Parameter Name="blankText" Value="Code is a required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
                         <Items>
                             <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
-                                runat="server" FieldLabel="Code" AnchorHorizontal="95%" ClientIDMode="Static">
+                                runat="server" FieldLabel="Code" AnchorHorizontal="95%" ClientIDMode="Static"
+                                AllowBlank="false" BlankText="Code is a required" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField">
                                     <ExtraParams>
                                         <ext:Parameter Name="id" Value="1" Mode="Raw" />
@@ -547,27 +543,19 @@
                     </ext:Panel>
                     <ext:Panel ID="Panel15" runat="server" Border="false" Header="false" Layout="FormLayout"
                         LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Name is a required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
                         <Items>
                             <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
-                                runat="server" FieldLabel="Name" AnchorHorizontal="95%" ClientIDMode="Static">
+                                runat="server" FieldLabel="Name" AnchorHorizontal="95%" ClientIDMode="Static"
+                                AllowBlank="false" BlankText="Name is a required" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
                     <ext:Panel ID="Panel16" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Description is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
-                                FieldLabel="Description" AnchorHorizontal="95%" ClientIDMode="Static">
+                                FieldLabel="Description" AnchorHorizontal="95%" ClientIDMode="Static"
+                                AllowBlank="false" BlankText="Description is a required" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
