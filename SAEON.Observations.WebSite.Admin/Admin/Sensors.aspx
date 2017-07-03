@@ -235,62 +235,58 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="460" Closable="true"
-        Hidden="true" Collapsible="false" Title="Sensor Detail" Maximizable="false"
-        Layout="Fit" ClientIDMode="Static">
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="500" Closable="true"
+        Hidden="true" Collapsible="false" Title="Sensor Detail" Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" ButtonAlign="Right"
-                Layout="RowLayout" ClientIDMode="Static">
+                MonitorResize="true" Padding="10" ButtonAlign="Right" LabelAlign="Top" Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server">
                     </ext:Hidden>
-                    <ext:Container ID="Container1" runat="server" Layout="Column" Height="50">
+                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
-                            <ext:Container ID="Container2" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
-                                <Items>
-                                    <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
-                                        runat="server" FieldLabel="Code" AnchorHorizontal="90%" ClientIDMode="Static"
-                                        MsgTarget="Side" AllowBlank="false" BlankText="Code is a required">
-                                        <RemoteValidation OnValidation="ValidateField" />
-                                    </ext:TextField>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container5" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
-                                <Items>
-                                    <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
-                                        runat="server" FieldLabel="Name" AnchorHorizontal="90%" ClientIDMode="Static"
-                                        MsgTarget="Side" AllowBlank="false" BlankText="Name is a required">
-                                        <RemoteValidation OnValidation="ValidateField" />
-                                    </ext:TextField>
-                                </Items>
-                            </ext:Container>
-                        </Items>
-                    </ext:Container>
-                    <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
-                        <Items>
-                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="250" IsRemoteValidation="false" ClientIDMode="Static"
-                                runat="server" FieldLabel="URL" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false"
-                                BlankText="Url is a required">
+                            <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
+                                runat="server" FieldLabel="Code" AnchorHorizontal="96%" ClientIDMode="Static"
+                                AllowBlank="false" BlankText="Code is a required" MsgTarget="Side">
+                                <RemoteValidation OnValidation="ValidateField">
+                                    <ExtraParams>
+                                        <ext:Parameter Name="id" Value="1" Mode="Raw" />
+                                    </ExtraParams>
+                                </RemoteValidation>
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                    <ext:Panel ID="Panel15" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
+                                runat="server" FieldLabel="Name" AnchorHorizontal="96%" ClientIDMode="Static"
+                                AllowBlank="false" BlankText="Name is a required" MsgTarget="Side">
+                                <RemoteValidation OnValidation="ValidateField" />
+                            </ext:TextField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel16" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
-                                FieldLabel="Description" AnchorHorizontal="95%" ClientIDMode="Static"
+                                FieldLabel="Description" AnchorHorizontal="96%" ClientIDMode="Static"
                                 AllowBlank="false" BlankText="Description is a required" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>
-<%--                    <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
+                    <ext:Panel ID="Panel17" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="150" runat="server"
+                                FieldLabel="Url" AnchorHorizontal="96%">
+                            </ext:TextField>
+                        </Items>
+                    </ext:Panel>
+                    <%--                    <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="Form"
+                        >
                         <Items>
                             <ext:ComboBox ID="cbStation" runat="server" DataIndex="StationID" DisplayField="Name" ClientIDMode="Static"
-                                TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="Station" EmptyText="Please select" AnchorHorizontal="95%"
+                                TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="Station" EmptyText="Please select" AnchorHorizontal="96%"
                                 TriggerAction="All" MsgTarget="Side" AllowBlank="false" BlankText="Station is required">
                                 <Store>
                                     <ext:Store ID="storeStation" runat="server">
@@ -313,11 +309,10 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>--%>
-                    <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
+                    <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbPhenomenon" runat="server" DataIndex="PhenomenonID" DisplayField="Name" ClientIDMode="Static"
-                                TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="Phenomenon" EmptyText="Please select" AnchorHorizontal="95%"
+                                TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="Phenomenon" EmptyText="Please select" AnchorHorizontal="96%"
                                 TriggerAction="All" MsgTarget="Side" AllowBlank="false" BlankText="Phenomenon is required">
                                 <Store>
                                     <ext:Store ID="storePhenomenon" runat="server">
@@ -340,11 +335,10 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel7" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
+                    <ext:Panel ID="Panel7" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbDataSource" runat="server" DataIndex="DataSourceID" DisplayField="Name"
-                                TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="Data Source" EmptyText="Please select" AnchorHorizontal="95%"
+                                TypeAhead="true" Mode="Local" ValueField="ID" FieldLabel="Data Source" EmptyText="Please select" AnchorHorizontal="96%"
                                 TriggerAction="All" MsgTarget="Side" AllowBlank="false" BlankText="DataSource is required" ClientIDMode="Static">
                                 <Store>
                                     <ext:Store ID="storeDataSource" runat="server">
@@ -371,13 +365,12 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel9" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
+                    <ext:Panel ID="Panel9" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbDataSchema" runat="server" Editable="true" ValueField="Id" DisplayField="Name" 
+                            <ext:ComboBox ID="cbDataSchema" runat="server" Editable="true" ValueField="Id" DisplayField="Name"
                                 TypeAhead="true" Mode="Local" AllowBlank="true" BlankText="Data Schema is required for the selected Data Source"
                                 TriggerAction="All" DataIndex="DataSchemaID" EmptyText="Select Data Schema" SelectOnFocus="true" MsgTarget="Side"
-                                FieldLabel="Data Schema" AnchorHorizontal="95%" ClientIDMode="Static">
+                                FieldLabel="Data Schema" AnchorHorizontal="96%" ClientIDMode="Static">
                                 <Store>
                                     <ext:Store ID="DataSchemaStore" runat="server">
                                         <Reader>
@@ -432,8 +425,7 @@
                 <Items>
                     <ext:Hidden ID="InstrumentLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
-                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="FormLayout"
-                        LabelAlign="Top">
+                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
                             <ext:Parameter Name="blankText" Value="Instrument is a required" Mode="Value" />
@@ -443,11 +435,11 @@
                             <ext:ComboBox ID="cbInstrument" runat="server" StoreID="InstrumentStore" Editable="true" DisplayField="Name"
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" FieldLabel="Instrument"
                                 AllowBlank="false" DataIndex="InstrumentID" EmptyText="Select Instrument"
-                                SelectOnFocus="true" AnchorHorizontal="95%" ClientIDMode="Static">
+                                SelectOnFocus="true" AnchorHorizontal="96%" ClientIDMode="Static">
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
                             <ext:Parameter Name="blankText" Value="Start Date is required" Mode="Value" />
@@ -455,11 +447,11 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfInstrumentStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel10" runat="server" Border="false" Header="false" Layout="FormLayout" LabelAlign="Top">
+                    <ext:Panel ID="Panel10" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Defaults>
                             <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
                             <ext:Parameter Name="blankText" Value="End Date is required" Mode="Value" />
@@ -467,7 +459,7 @@
                         </Defaults>
                         <Items>
                             <ext:DateField ID="dfInstrumentEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="95%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>

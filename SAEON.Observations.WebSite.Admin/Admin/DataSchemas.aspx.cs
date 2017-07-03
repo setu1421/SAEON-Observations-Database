@@ -34,37 +34,35 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
-
         DataSchemaCollection col = new DataSchemaCollection();
+        string checkColumn = String.Empty;
+        string errorMessage = String.Empty;
+        e.Success = true;
 
-        string checkColumn = String.Empty,
-               errorMessage = String.Empty;
-
-        if (e.ID == "tfCode")
+        if (e.ID == "tfCode" || e.ID == "tfName")
         {
-            checkColumn = DataSchema.Columns.Code;
-            errorMessage = "The specified Data Schema Code already exists";
-        }
-        else if (e.ID == "tfName")
-        {
-            checkColumn = DataSchema.Columns.Name;
-            errorMessage = "The specified Data Schema Name already exists";
+            if (e.ID == "tfCode")
+            {
+                checkColumn = DataSchema.Columns.Code;
+                errorMessage = "The specified Data Schema Code already exists";
+            }
+            else if (e.ID == "tfName")
+            {
+                checkColumn = DataSchema.Columns.Name;
+                errorMessage = "The specified Data Schema Name already exists";
+            }
 
-        }
-
-        if (!string.IsNullOrEmpty(checkColumn))
-            if (string.IsNullOrEmpty(tfID.Text.ToString()))
+            if (tfID.IsEmpty)
                 col = new DataSchemaCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
             else
                 col = new DataSchemaCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(DataSchema.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
-        if (col.Count > 0)
-        {
-            e.Success = false;
-            e.ErrorMessage = errorMessage;
+            if (col.Count > 0)
+            {
+                e.Success = false;
+                e.ErrorMessage = errorMessage;
+            }
         }
-        else
-            e.Success = true;
     }
 
     protected void DataSchemasGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
@@ -188,7 +186,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSchema(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID} }))
+        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
         {
             try
             {
@@ -370,7 +368,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSchemaColumn(Guid aID)
     {
-        using (Logging.MethodCall(GetType(),new ParameterList { { "aID", aID} }))
+        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
         {
             try
             {

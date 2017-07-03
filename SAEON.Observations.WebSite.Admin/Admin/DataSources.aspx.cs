@@ -48,23 +48,36 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
-
         DataSourceCollection col = new DataSourceCollection();
+        string checkColumn = String.Empty;
+        string errorMessage = String.Empty;
+        e.Success = true;
 
-        string checkColumn = String.Empty,
-               errorMessage = String.Empty;
-
-        if (e.ID == "tfCode")
+        if (e.ID == "tfCode" || e.ID == "tfName")
         {
-            checkColumn = DataSource.Columns.Code;
-            errorMessage = "The specified DataSource Code already exists";
-        }
-        else if (e.ID == "tfName")
-        {
-            checkColumn = DataSource.Columns.Name;
-            errorMessage = "The specified DataSource Name already exists";
+            if (e.ID == "tfCode")
+            {
+                checkColumn = DataSource.Columns.Code;
+                errorMessage = "The specified DataSource Code already exists";
+            }
+            else if (e.ID == "tfName")
+            {
+                checkColumn = DataSource.Columns.Name;
+                errorMessage = "The specified DataSource Name already exists";
 
+            }
+            if (tfID.IsEmpty)
+                col = new DataSourceCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            else
+                col = new DataSourceCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(DataSource.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+
+            if (col.Count > 0)
+            {
+                e.Success = false;
+                e.ErrorMessage = errorMessage;
+            }
         }
+
         //else if (e.ID == "ContentPlaceHolder1_tfUrl")
         //{
         //    checkColumn = DataSource.Columns.Url;
@@ -82,21 +95,6 @@ public partial class Admin_DataSources : System.Web.UI.Page
         //}
 
 
-        if (e.ID == "tfCode" || e.ID == "tfName")
-        {
-            if (String.IsNullOrEmpty(tfID.Text.ToString()))
-                col = new DataSourceCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
-            else
-                col = new DataSourceCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(DataSource.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
-
-            if (col.Count > 0)
-            {
-                e.Success = false;
-                e.ErrorMessage = errorMessage;
-            }
-            else
-                e.Success = true;
-        }
         //else if (e.ID == "ContentPlaceHolder1_tfUrl")
         //{
         //    if (cbUpdateFrequency.SelectedItem.Text == "Ad-Hoc")
@@ -154,8 +152,6 @@ public partial class Admin_DataSources : System.Web.UI.Page
         //        }
         //    }
         //}
-
-
     }
 
     protected void Save(object sender, DirectEventArgs e)
@@ -204,14 +200,14 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 }
 
 
-                if (StartDate.SelectedDate.Date.Year < 1900)
+                if (dfStartDate.SelectedDate.Date.Year < 1900)
                     ds.StartDate = null;
                 else
-                    ds.StartDate = StartDate.SelectedDate;
-                if (EndDate.SelectedDate.Date.Year < 1900)
+                    ds.StartDate = dfStartDate.SelectedDate;
+                if (dfEndDate.SelectedDate.Date.Year < 1900)
                     ds.EndDate = null;
                 else
-                    ds.EndDate = EndDate.SelectedDate;
+                    ds.EndDate = dfEndDate.SelectedDate;
 
                 ds.UserId = AuthHelper.GetLoggedInUserId;
 

@@ -1,27 +1,26 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Offerings.aspx.cs" Inherits="_Offerings"  MasterPageFile="~/Site.master" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Offerings.aspx.cs" Inherits="_Offerings" MasterPageFile="~/Site.master" %>
 
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript" src="../JS/Offerings.js"></script>
-	<script type="text/javascript" src="../JS/generic.js"></script>
-	<script type="text/javascript">
-		var submitValue = function (format)
-		{
-			GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
-			//VisCols.setValue(Ext.encode(ContentPlaceHolder1_OfferingGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
-			var viscolsNew = makenewJsonForExport(OfferingGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
-			VisCols.setValue(viscolsNew);
-			FormatType.setValue(format);
-			SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
+    <script type="text/javascript" src="../JS/generic.js"></script>
+    <script type="text/javascript">
+        var submitValue = function (format) {
+            GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
+            //VisCols.setValue(Ext.encode(ContentPlaceHolder1_OfferingGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
+            var viscolsNew = makenewJsonForExport(OfferingGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            VisCols.setValue(viscolsNew);
+            FormatType.setValue(format);
+            SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
 
-			OfferingGrid.submitData(false);
-		};
-	</script>
+            OfferingGrid.submitData(false);
+        };
+    </script>
 </asp:Content>
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="ContentPlaceHolder1">
-	<ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
-	<ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
-	<ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
-	<ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="Viewport1" runat="server" Layout="Fit">
         <Items>
             <ext:Panel ID="Panel1" runat="server" Title="Offerings" Layout="FitLayout" Hidden="false">
@@ -36,15 +35,15 @@
                                     <Click Fn="New" />
                                 </Listeners>
                             </ext:Button>
-							<ext:ToolbarFill ID="ToolbarFill1" runat="server" />
+                            <ext:ToolbarFill ID="ToolbarFill1" runat="server" />
                             <ext:Button ID="Button2" runat="server" Text="To Excel"
                                 Icon="PageExcel">
                                 <Listeners>
                                     <Click Handler="submitValue('exc');" />
                                 </Listeners>
-										
+
                             </ext:Button>
-                            <ext:Button ID="Button3" runat="server" Text="To CSV"  
+                            <ext:Button ID="Button3" runat="server" Text="To CSV"
                                 Icon="PageAttach">
                                 <Listeners>
                                     <Click Handler="submitValue('csv');" />
@@ -77,7 +76,7 @@
                                     <ext:Parameter Name="dir" Value="" />
                                 </BaseParams>
                                 <SortInfo Field="Name" Direction="ASC" />
-								<DirectEventConfig IsUpload="true" />
+                                <DirectEventConfig IsUpload="true" />
                             </ext:Store>
                         </Store>
                         <ColumnModel ID="ColumnModel1" runat="server">
@@ -117,55 +116,36 @@
             </ext:Panel>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="450" Height="400" Closable="true"
-        Hidden="true" Collapsible="false" Title="Offering Detail" Maximizable="false"
-        Layout="Fit" ClientIDMode="Static">
+    <ext:Window ID="DetailWindow" runat="server" Width="450" Height="300" Closable="true"
+        Hidden="true" Collapsible="false" Title="Offering Detail" Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
+                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right" LabelAlign="Top"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server">
                     </ext:Hidden>
-                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
-                            <ext:Parameter Name="blankText" Value="Code is a required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
+                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
-                            <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
-                                runat="server" FieldLabel="Code" AnchorHorizontal="95%" ClientIDMode="Static">
+                            <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50" AllowBlank="false" BlankText="Code is a required"
+                                runat="server" FieldLabel="Code" AnchorHorizontal="96%" ClientIDMode="Static" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Name is a required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
+                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
-                            <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
-                                runat="server" FieldLabel="Name" AnchorHorizontal="95%" ClientIDMode="Static">
+                            <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true" AllowBlank="false" BlankText="Name is a required"
+                                runat="server" FieldLabel="Name" AnchorHorizontal="96%" ClientIDMode="Static" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Description is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
+                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server"
-                                FieldLabel="Description" AnchorHorizontal="95%">
+                                FieldLabel="Description" AnchorHorizontal="96%">
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>

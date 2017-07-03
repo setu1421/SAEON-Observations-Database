@@ -57,11 +57,10 @@ public partial class Admin_Sensors : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
-
         SensorCollection col = new SensorCollection();
-
-        string checkColumn = String.Empty,
-               errorMessage = String.Empty;
+        string checkColumn = String.Empty;
+        string errorMessage = String.Empty;
+        e.Success = true;
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -69,6 +68,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
             {
                 checkColumn = Sensor.Columns.Code;
                 errorMessage = "The specified Sensor Code already exists";
+                col = new SensorCollection().Where(Sensor.Columns.Code, e.Value.ToString().Trim()).Where(Offering.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
             }
             else if (e.ID == "tfName")
             {
@@ -77,21 +77,17 @@ public partial class Admin_Sensors : System.Web.UI.Page
 
             }
 
-                if (String.IsNullOrEmpty(tfID.Text.ToString()))
-                    col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
-                else
-                    col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Offering.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+            if (tfID.IsEmpty)
+                col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            else
+                col = new SensorCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Offering.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
             if (col.Count > 0)
             {
                 e.Success = false;
                 e.ErrorMessage = errorMessage;
             }
-            else
-                e.Success = true;
         }
-        else
-            e.Success = true;
     }
 
     protected void Save(object sender, DirectEventArgs e)

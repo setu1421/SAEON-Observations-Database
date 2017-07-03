@@ -282,68 +282,47 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="450" Height="400" Closable="true"
-        Hidden="true" Collapsible="false" Title="Phenomenon Detail" Maximizable="false"
-        Layout="Fit" ClientIDMode="Static">
+    <ext:Window ID="DetailWindow" runat="server" Width="450" Height="350" Closable="true"
+        Hidden="true" Collapsible="false" Title="Phenomenon Detail" Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
-                Layout="RowLayout" ClientIDMode="Static">
+                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right" LabelAlign="Top" Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
-                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Value" />
-                            <ext:Parameter Name="blankText" Value="Code is a required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
+                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
-                            <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
-                                runat="server" FieldLabel="Code" AnchorHorizontal="95%" ClientIDMode="Static">
+                            <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50" AllowBlank="false" BlankText="Code is a required" MsgTarget="Side"
+                                runat="server" FieldLabel="Code" AnchorHorizontal="96%" ClientIDMode="Static">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Name is a required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
+                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
-                            <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
-                                runat="server" FieldLabel="Name" AnchorHorizontal="95%" ClientIDMode="Static">
+                            <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true" AllowBlank="false" BlankText="Name is a required"
+                                runat="server" FieldLabel="Name" AnchorHorizontal="96%" ClientIDMode="Static" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
+                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form">
+                        <Items>
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" FieldLabel="Description"
+                                AnchorHorizontal="96%">
+                            </ext:TextArea>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="150" runat="server" FieldLabel="Url"
-                                AnchorHorizontal="95%">
+                                AnchorHorizontal="96%">
                                 <ToolTips>
                                     <ext:ToolTip Html="Lookup latest SensorWeb ID" ID="rfUrlToolip" runat="server">
                                     </ext:ToolTip>
                                 </ToolTips>
                             </ext:TextField>
-                        </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="false" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Description is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
-                        <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" FieldLabel="Description"
-                                AnchorHorizontal="95%">
-                            </ext:TextArea>
                         </Items>
                     </ext:Panel>
                 </Items>
@@ -418,7 +397,7 @@
         </Items>
     </ext:Window>
     <ext:Window ID="AvailableOfferingsWindow" runat="server" Collapsible="false" Maximizable="false"
-        Title="Available Offerings" Width="620" Height="300" X="50" Y="50" 
+        Title="Available Offerings" Width="620" Height="300" X="50" Y="50"
         Layout="FitLayout" Hidden="true" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="CloseAvailableOffering" />

@@ -26,36 +26,36 @@ public partial class _UnitsOfMeasure : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
-
         UnitOfMeasureCollection col = new UnitOfMeasureCollection();
+        string checkColumn = String.Empty;
+        string errorMessage = String.Empty;
+        e.Success = true;
 
-        string checkColumn = String.Empty,
-               errorMessage = String.Empty;
-
-        if (e.ID == "tfCode")
+        if (e.ID == "tfCode" || e.ID == "tfName")
         {
-            checkColumn = UnitOfMeasure.Columns.Code;
-            errorMessage = "The specified Unit Code already exists";
-        }
-        else if (e.ID == "tfUnit")
-        {
-            checkColumn = UnitOfMeasure.Columns.Unit;
-            errorMessage = "The specified Unit already exists";
+            if (e.ID == "tfCode")
+            {
+                checkColumn = UnitOfMeasure.Columns.Code;
+                errorMessage = "The specified Unit Code already exists";
+            }
+            else if (e.ID == "tfUnit")
+            {
+                checkColumn = UnitOfMeasure.Columns.Unit;
+                errorMessage = "The specified Unit already exists";
 
-        }
+            }
 
-        if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new UnitOfMeasureCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
-        else
-            col = new UnitOfMeasureCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(UnitOfMeasure.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+            if (tfID.IsEmpty)
+                col = new UnitOfMeasureCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            else
+                col = new UnitOfMeasureCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(UnitOfMeasure.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
-        if (col.Count > 0)
-        {
-            e.Success = false;
-            e.ErrorMessage = errorMessage;
+            if (col.Count > 0)
+            {
+                e.Success = false;
+                e.ErrorMessage = errorMessage;
+            }
         }
-        else
-            e.Success = true;
     }
     protected void Save(object sender, DirectEventArgs e)
     {

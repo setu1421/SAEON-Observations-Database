@@ -32,35 +32,35 @@ public partial class Admin_Stations : System.Web.UI.Page
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
         StationCollection col = new StationCollection();
+        string checkColumn = String.Empty;
+        string errorMessage = String.Empty;
+        e.Success = true;
 
-        string checkColumn = String.Empty,
-               errorMessage = String.Empty;
-
-        if (e.ID == "tfCode")
+        if (e.ID == "tfCode" || e.ID == "tfName")
         {
-            checkColumn = Station.Columns.Code;
-            errorMessage = "The specified Station Code already exists";
-        }
-        else if (e.ID == "tfName")
-        {
-            checkColumn = Station.Columns.Name;
-            errorMessage = "The specified Station Name already exists";
+            if (e.ID == "tfCode")
+            {
+                checkColumn = Station.Columns.Code;
+                errorMessage = "The specified Station Code already exists";
+            }
+            else if (e.ID == "tfName")
+            {
+                checkColumn = Station.Columns.Name;
+                errorMessage = "The specified Station Name already exists";
 
-        }
+            }
 
-        if (!string.IsNullOrEmpty(checkColumn))
-            if (String.IsNullOrEmpty(tfID.Text.ToString()))
+            if (tfID.IsEmpty)
                 col = new StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
             else
                 col = new StationCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Station.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
-        if (col.Count > 0)
-        {
-            e.Success = false;
-            e.ErrorMessage = errorMessage;
+            if (col.Count > 0)
+            {
+                e.Success = false;
+                e.ErrorMessage = errorMessage;
+            }
         }
-        else
-            e.Success = true;
     }
     protected void Save(object sender, DirectEventArgs e)
     {

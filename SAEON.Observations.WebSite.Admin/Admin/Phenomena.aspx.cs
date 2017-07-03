@@ -26,36 +26,36 @@ public partial class _Phenomena : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
-
         PhenomenonCollection col = new PhenomenonCollection();
+        string checkColumn = String.Empty;
+        string errorMessage = String.Empty;
+        e.Success = true;
 
-        string checkColumn = String.Empty,
-               errorMessage = String.Empty;
-
-        if (e.ID == "tfCode")
+        if (e.ID == "tfCode" || e.ID == "tfName")
         {
-            checkColumn = Phenomenon.Columns.Code;
-            errorMessage = "The specified Phenomenon Code already exists";
-        }
-        else if (e.ID == "tfName")
-        {
-            checkColumn = Phenomenon.Columns.Name;
-            errorMessage = "The specified Phenomenon Name already exists";
+            if (e.ID == "tfCode")
+            {
+                checkColumn = Phenomenon.Columns.Code;
+                errorMessage = "The specified Phenomenon Code already exists";
+            }
+            else if (e.ID == "tfName")
+            {
+                checkColumn = Phenomenon.Columns.Name;
+                errorMessage = "The specified Phenomenon Name already exists";
 
-        }
+            }
 
-        if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new PhenomenonCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
-        else
-            col = new PhenomenonCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Phenomenon.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+            if (tfID.IsEmpty)
+                col = new PhenomenonCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            else
+                col = new PhenomenonCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Phenomenon.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
-        if (col.Count > 0)
-        {
-            e.Success = false;
-            e.ErrorMessage = errorMessage;
+            if (col.Count > 0)
+            {
+                e.Success = false;
+                e.ErrorMessage = errorMessage;
+            }
         }
-        else
-            e.Success = true;
     }
 
     protected void Save(object sender, DirectEventArgs e)

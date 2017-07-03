@@ -26,37 +26,36 @@ public partial class Admin_Projects : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
-
         ProjectCollection col = new ProjectCollection();
+        string checkColumn = String.Empty;
+        string errorMessage = String.Empty;
+        e.Success = true;
 
-        string checkColumn = String.Empty,
-               errorMessage = String.Empty;
-
-        if (e.ID == "tfCode")
+        if (e.ID == "tfCode" || e.ID == "tfName")
         {
-            checkColumn = Project.Columns.Code;
-            errorMessage = "The specified Project Code already exists";
-        }
-        else if (e.ID == "tfName")
-        {
-            checkColumn = Project.Columns.Name;
-            errorMessage = "The specified Project Name already exists";
+            if (e.ID == "tfCode")
+            {
+                checkColumn = Project.Columns.Code;
+                errorMessage = "The specified Project Code already exists";
+            }
+            else if (e.ID == "tfName")
+            {
+                checkColumn = Project.Columns.Name;
+                errorMessage = "The specified Project Name already exists";
 
-        }
+            }
 
-        if (!string.IsNullOrEmpty(checkColumn))
-            if (String.IsNullOrEmpty(tfID.Text.ToString()))
+            if (tfID.IsEmpty)
                 col = new ProjectCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
             else
                 col = new ProjectCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Project.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
-        if (col.Count > 0)
-        {
-            e.Success = false;
-            e.ErrorMessage = errorMessage;
+            if (col.Count > 0)
+            {
+                e.Success = false;
+                e.ErrorMessage = errorMessage;
+            }
         }
-        else
-            e.Success = true;
 
     }
 

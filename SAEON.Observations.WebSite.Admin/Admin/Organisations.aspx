@@ -130,7 +130,7 @@
                     <ext:Panel ID="pnlEast" runat="server" Width="600" ClientIDMode="Static" Layout="AnchorLayout">
                         <Items>
                             <ext:Panel ID="pnlSites" runat="server" ClientIDMode="Static" Title="Sites" AnchorHorizontal="100%" AnchorVertical="33%">
-<%--                                <TopBar>
+                                <%--                                <TopBar>
                                     <ext:Toolbar ID="Toolbar3" runat="server">
                                         <Items>
                                             <ext:Button ID="LinkSite" runat="server" Icon="LinkAdd" Text="Link Site">
@@ -177,7 +177,7 @@
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-<%--                                                <ext:CommandColumn Width="150">
+                                                <%--                                                <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
@@ -197,7 +197,7 @@
                                 </Items>
                             </ext:Panel>
                             <ext:Panel ID="pnlStations" runat="server" ClientIDMode="Static" Title="Stations" AnchorHorizontal="100%" AnchorVertical="33%">
-<%--                                <TopBar>
+                                <%--                                <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
                                             <ext:Button ID="LinkStation" runat="server" Icon="LinkAdd" Text="Link Station">
@@ -244,7 +244,7 @@
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-<%--                                                <ext:CommandColumn Width="150">
+                                                <%--                                                <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
@@ -264,7 +264,7 @@
                                 </Items>
                             </ext:Panel>
                             <ext:Panel ID="pnlInstruments" runat="server" ClientIDMode="Static" Title="Instruments" AnchorHorizontal="100%" AnchorVertical="33%">
-<%--                                <TopBar>
+                                <%--                                <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
                                             <ext:Button ID="LinkInstrument" runat="server" Icon="LinkAdd" Text="Link Instrument">
@@ -311,7 +311,7 @@
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
-<%--                                                <ext:CommandColumn Width="150">
+                                                <%--                                                <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
                                                         <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
@@ -345,21 +345,18 @@
         </Items>
     </ext:Viewport>
     <ext:Window ID="DetailWindow" runat="server" Width="800" Height="305" Closable="true"
-        Icon="ChartOrganisation" Hidden="true" Collapsible="false" Title="Organisation Detail"
-        Maximizable="false" Layout="Fit" ClientIDMode="Static">
+        Icon="ChartOrganisation" Hidden="true" Collapsible="false" Title="Organisation Detail"        Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
-            <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" ButtonAlign="Right"
-                Layout="RowLayout" ClientIDMode="Static">
+            <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true" LabelAlign="Top"
+                MonitorResize="true" Padding="10" ButtonAlign="Right" Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
-                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
+                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form" >
                         <Items>
                             <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
-                                runat="server" FieldLabel="Code" AnchorHorizontal="95%" ClientIDMode="Static"
+                                runat="server" FieldLabel="Code" AnchorHorizontal="96%" ClientIDMode="Static"
                                 AllowBlank="false" BlankText="Code is a required" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField">
                                     <ExtraParams>
@@ -369,21 +366,19 @@
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
+                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="Form" >
                         <Items>
                             <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
-                                runat="server" FieldLabel="Name" AnchorHorizontal="95%" ClientIDMode="Static"
+                                runat="server" FieldLabel="Name" AnchorHorizontal="96%" ClientIDMode="Static"
                                 AllowBlank="false" BlankText="Name is a required" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form"
-                        LabelAlign="Top">
+                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form" >
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
-                                FieldLabel="Description" AnchorHorizontal="95%" ClientIDMode="Static"
+                                FieldLabel="Description" AnchorHorizontal="96%" ClientIDMode="Static"
                                 AllowBlank="false" BlankText="Description is a required" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>

@@ -29,38 +29,36 @@ public partial class Admin_Sites : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
-
         da.SiteCollection col = new da.SiteCollection();
+        string checkColumn = String.Empty;
+        string errorMessage = String.Empty;
+        e.Success = true;
 
-        string checkColumn = String.Empty,
-               errorMessage = String.Empty;
-
-        if (e.ID == "tfCode")
+        if (e.ID == "tfCode" || e.ID == "tfName")
         {
-            checkColumn = da.Site.Columns.Code;
-            errorMessage = "The specified Site Code already exists";
-        }
-        else if (e.ID == "tfName")
-        {
-            checkColumn = da.Site.Columns.Name;
-            errorMessage = "The specified Site Name already exists";
+            if (e.ID == "tfCode")
+            {
+                checkColumn = da.Site.Columns.Code;
+                errorMessage = "The specified Site Code already exists";
+            }
+            else if (e.ID == "tfName")
+            {
+                checkColumn = da.Site.Columns.Name;
+                errorMessage = "The specified Site Name already exists";
 
-        }
+            }
 
-        if (!string.IsNullOrEmpty(checkColumn))
-            if (String.IsNullOrEmpty(tfID.Text.ToString()))
+            if (tfID.IsEmpty)
                 col = new da.SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
             else
                 col = new da.SiteCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(da.Site.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
-        if (col.Count > 0)
-        {
-            e.Success = false;
-            e.ErrorMessage = errorMessage;
+            if (col.Count > 0)
+            {
+                e.Success = false;
+                e.ErrorMessage = errorMessage;
+            }
         }
-        else
-            e.Success = true;
-
     }
 
     protected void Save(object sender, DirectEventArgs e)

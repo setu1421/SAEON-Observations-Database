@@ -20,37 +20,36 @@ public partial class _Offerings : System.Web.UI.Page
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
-
         OfferingCollection col = new OfferingCollection();
+        string checkColumn = String.Empty;
+        string errorMessage = String.Empty;
+        e.Success = true;
 
-        string checkColumn = String.Empty,
-               errorMessage = String.Empty;
-
-        if (e.ID == "tfCode")
+        if (e.ID == "tfCode" || e.ID == "tfName")
         {
-            checkColumn = Offering.Columns.Code;
-            errorMessage = "The specified Offering Code already exists";
+            if (e.ID == "tfCode")
+            {
+                checkColumn = Offering.Columns.Code;
+                errorMessage = "The specified Offering Code already exists";
+            }
+            else if (e.ID == "tfName")
+            {
+                checkColumn = Offering.Columns.Name;
+                errorMessage = "The specified Offering Name already exists";
+
+            }
+
+            if (tfID.IsEmpty)
+                col = new OfferingCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            else
+                col = new OfferingCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Offering.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+
+            if (col.Count > 0)
+            {
+                e.Success = false;
+                e.ErrorMessage = errorMessage;
+            }
         }
-        else if (e.ID == "tfName")
-        {
-            checkColumn = Offering.Columns.Name;
-            errorMessage = "The specified Offering Name already exists";
-
-        }
-
-        if (String.IsNullOrEmpty(tfID.Text.ToString()))
-            col = new OfferingCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
-        else
-            col = new OfferingCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Offering.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
-
-        if (col.Count > 0)
-        {
-            e.Success = false;
-            e.ErrorMessage = errorMessage;
-        }
-        else
-            e.Success = true;
-
     }
 
     protected void Save(object sender, DirectEventArgs e)

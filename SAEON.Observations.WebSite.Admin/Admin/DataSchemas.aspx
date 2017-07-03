@@ -392,29 +392,54 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="640" Height="420" Closable="true"
-        Hidden="true" Collapsible="false" Title="Data Schema Detail" Maximizable="false"
-        Layout="Fit" AutoScroll="true" ClientIDMode="Static">
+    <ext:Window ID="DetailWindow" runat="server" Width="640" Height="550" Closable="true"
+        Hidden="true" Collapsible="false" Title="Data Schema Detail" Maximizable="false" Layout="Fit" AutoScroll="true" ClientIDMode="Static">
         <Content>
-            <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
+            <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true" LabelAlign="Top"
                 MonitorResize="true" Padding="10" ButtonAlign="Right" Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server" ClientIDMode="Static" />
-                    <ext:Container ID="Container1" runat="server" Layout="Column" Height="100">
+                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
-                            <ext:Container ID="Container2" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                            <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
+                                runat="server" FieldLabel="Code" AnchorHorizontal="96%" ClientIDMode="Static"
+                                AllowBlank="false" BlankText="Code is a required" MsgTarget="Side">
+                                <RemoteValidation OnValidation="ValidateField">
+                                    <ExtraParams>
+                                        <ext:Parameter Name="id" Value="1" Mode="Raw" />
+                                    </ExtraParams>
+                                </RemoteValidation>
+                            </ext:TextField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel15" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
+                                runat="server" FieldLabel="Name" AnchorHorizontal="96%" ClientIDMode="Static"
+                                AllowBlank="false" BlankText="Name is a required" MsgTarget="Side">
+                                <RemoteValidation OnValidation="ValidateField" />
+                            </ext:TextField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel16" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
+                                FieldLabel="Description" AnchorHorizontal="96%" ClientIDMode="Static"
+                                AllowBlank="false" BlankText="Description is a required" MsgTarget="Side">
+                                <RemoteValidation OnValidation="ValidateField" />
+                            </ext:TextArea>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Container ID="Container2" runat="server" Layout="ColumnLayout" Height="50">
+                        <Items>
+                            <ext:Container ID="Container12" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
-                                    <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
-                                        runat="server" FieldLabel="Code" AnchorHorizontal="93%" AllowBlank="false" BlankText="Code is a required"
-                                        MsgTarget="Side" ClientIDMode="Static">
-                                        <RemoteValidation OnValidation="ValidateField" />
-                                    </ext:TextField>
                                     <ext:ComboBox ID="cbDataSourceType" runat="server" StoreID="DataSourceTypeStore" BlankText="Data Source Type is required"
                                         MsgTarget="Side" DisplayField="Description" ValueField="Id" TypeAhead="true"
                                         ForceSelection="true" TriggerAction="All" AllowBlank="false" DataIndex="DataSourceTypeID"
                                         EmptyText="Select Data Source Type" SelectOnFocus="true" FieldLabel="Data Source Type"
-                                        AnchorHorizontal="93%">
+                                        AnchorHorizontal="90%">
                                         <Listeners>
                                             <%--<Select Handler="#{cbDataSourceType}.getValue() == '25839703-3cb3-4c23-aca3-4399cc52ecde'?#{cbDelimiter}.allowBlank=false:#{cbDelimiter}.allowBlank=true;#{cbDelimiter}.clearValue();#{cbDelimiter}.clearInvalid();#{cbDelimiter}.markAsValid();" />--%>
                                         </Listeners>
@@ -424,17 +449,12 @@
                                     </ext:ComboBox>
                                 </Items>
                             </ext:Container>
-                            <ext:Container ID="Container3" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                            <ext:Container ID="Container13" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
-                                    <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
-                                        runat="server" FieldLabel="Name" AnchorHorizontal="93%" AllowBlank="false" BlankText="Name is a required"
-                                        MsgTarget="Side" ClientIDMode="Static">
-                                        <RemoteValidation OnValidation="ValidateField" />
-                                    </ext:TextField>
                                     <ext:ComboBox ID="cbDelimiter" runat="server" Editable="false" MsgTarget="Side" TypeAhead="true"
                                         ForceSelection="true" TriggerAction="All" DataIndex="Delimiter"
                                         EmptyText="Select Delimiter" SelectOnFocus="true" BlankText="Delimiter is required for this Source Type"
-                                        FieldLabel="Delimiter" AnchorHorizontal="93%" ClientIDMode="Static">
+                                        FieldLabel="Delimiter" AnchorHorizontal="90%" ClientIDMode="Static">
                                         <Items>
                                             <ext:ListItem Text="Comma Delimited (,)" Value="," />
                                             <ext:ListItem Text="Pipe Delimited (|)" Value="|" />
@@ -450,60 +470,48 @@
                                     </ext:ComboBox>
                                 </Items>
                             </ext:Container>
+                            <ext:Container ID="Container14" runat="server" Layout="Form" ColumnWidth=".04">
+                                <Items>
+                                </Items>
+                            </ext:Container>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container4" runat="server" Layout="Column" Height="50">
+                    <ext:Container ID="Container1" runat="server" Layout="ColumnLayout" Height="50">
                         <Items>
-                            <ext:Container ID="Container5" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                            <ext:Container ID="Container3" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
                                     <ext:NumberField AllowDecimals="false" ID="nfIgnoreFirst" DataIndex="IgnoreFirst" MinValue="0"
                                         MaxLength="10" runat="server" FieldLabel="Ignore first # of lines on import"
-                                        AnchorHorizontal="93%">
+                                        AnchorHorizontal="98%">
                                     </ext:NumberField>
                                 </Items>
                             </ext:Container>
-                            <ext:Container ID="Container6" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                            <ext:Container ID="Container15" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
                                     <ext:NumberField AllowDecimals="false" ID="nfIgnoreLast" DataIndex="IgnoreLast" MaxLength="10" MinValue="0"
-                                        runat="server" FieldLabel="Ignore last # of lines on import" AnchorHorizontal="95%">
+                                        runat="server" FieldLabel="Ignore last # of lines on import" AnchorHorizontal="100%">
                                     </ext:NumberField>
                                 </Items>
                             </ext:Container>
-                        </Items>
-                    </ext:Container>
-                    <ext:Container ID="Container10" runat="server" Layout="Column" Height="50">
-                        <Items>
-                            <ext:Container ID="Container11" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                            <ext:Container ID="Container20" runat="server" Layout="Form" ColumnWidth=".04">
                                 <Items>
-                                    <ext:TextArea ID="tfCondition" DataIndex="Condition" MaxLength="150" runat="server"
-                                        FieldLabel="Record Condition - Ignore fields that start with" AnchorHorizontal="93%"
-                                        MsgTarget="Side">
-                                    </ext:TextArea>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container12" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
-                                <Items>
-                                    <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server"
-                                        FieldLabel="Description" AnchorHorizontal="93%" AllowBlank="true" BlankText="Description is a required"
-                                        MsgTarget="Side" ClientIDMode="Static">
-                                    </ext:TextArea>
                                 </Items>
                             </ext:Container>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container7" runat="server" Layout="Column" Height="50">
+                    <ext:Container ID="Container4" runat="server" Layout="ColumnLayout" Height="50">
                         <Items>
-                            <ext:Container ID="Container8" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                            <ext:Container ID="Container5" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
                                     <ext:TextField ID="tfSplit" DataIndex="SplitSelector" MaxLength="150" runat="server"
-                                        FieldLabel="File Split Condition - Data Split" AnchorHorizontal="93%" MsgTarget="Side">
+                                        FieldLabel="File Split Condition - Data Split" AnchorHorizontal="98%" MsgTarget="Side">
                                     </ext:TextField>
                                 </Items>
                             </ext:Container>
-                            <ext:Container ID="Container9" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                            <ext:Container ID="Container6" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
                                     <ext:NumberField ID="nfSplitIndex" DataIndex="SplitIndex" MaxLength="150" runat="server"
-                                        FieldLabel="Data file Split Index" AnchorHorizontal="93%" AllowDecimals="true"
+                                        FieldLabel="Data file Split Index" AnchorHorizontal="100%" AllowDecimals="true"
                                         BlankText="Split index is required for a split data file" MsgTarget="Side">
                                         <Listeners>
                                             <Valid Handler="if(#{tfSplit}.getValue() == '') this.allowBlank = true;else this.allowBlank = false;" />
@@ -511,14 +519,29 @@
                                     </ext:NumberField>
                                 </Items>
                             </ext:Container>
+                            <ext:Container ID="Container21" runat="server" Layout="Form" ColumnWidth=".04">
+                                <Items>
+                                </Items>
+                            </ext:Container>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container17" runat="server" LabelAlign="Top" Layout="Form" ColumnWidth=".5">
+                    <ext:Container ID="Container10" runat="server" Layout="Column" Height="50">
                         <Items>
-                            <ext:Checkbox ID="cbHasColumnNames" DataIndex="HasColumnNames" runat="server" FieldLabel="Column Names"
-                                AnchorHorizontal="95%">
-                            </ext:Checkbox>
+                            <ext:Container ID="Container11" runat="server" Layout="Form" ColumnWidth="1">
+                                <Items>
+                                    <ext:TextField ID="tfCondition" DataIndex="Condition" MaxLength="150" runat="server"
+                                        FieldLabel="Record Condition - Ignore fields that start with" AnchorHorizontal="96%"
+                                        MsgTarget="Side">
+                                    </ext:TextField>
+                                </Items>
+                            </ext:Container>
                         </Items>
+                    </ext:Container>
+                    <ext:Container ID="Container17" runat="server" Layout="Form">
+                        <items>
+                            <ext:Checkbox ID="cbHasColumnNames" DataIndex="HasColumnNames" runat="server" FieldLabel="Column Names" AnchorHorizontal="96%" ColumnWidth="1">
+                            </ext:Checkbox>
+                        </items>
                     </ext:Container>
                 </Items>
                 <Buttons>
@@ -552,21 +575,21 @@
                 <LoadMask ShowMask="true" />
                 <Items>
                     <ext:Hidden ID="SchemaColumnID" DataIndex="Id" runat="server" ClientIDMode="Static" />
-                    <ext:Container ID="Container16" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container16" runat="server" Layout="Form">
                         <Items>
                             <ext:TextField ID="tfColumnName" DataIndex="Name" MaxLength="50" runat="server" IsRemoteValidation="true" ClientIDMode="Static"
-                                FieldLabel="Name" AnchorHorizontal="95%" MsgTarget="Side" AllowBlank="false" EmptyText="Enter a name"
+                                FieldLabel="Name" AnchorHorizontal="96%" MsgTarget="Side" AllowBlank="false" EmptyText="Enter a name"
                                 Regex="^[A-Za-z]+\w*$" RegexText="Name must start with a character and can only contain characters, numbers and underscores">
                                 <RemoteValidation OnValidation="ValidateColumnField" />
                             </ext:TextField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container18" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container18" runat="server" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbSchemaColumnType" runat="server" StoreID="SchemaColumnTypeStore" IsRemoteValidation="true" MsgTarget="Side"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" DisplayField="Name" DataIndex="SchemaColumnTypeID" FieldLabel="Column type" EmptyText="Select a column type"
-                                AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
+                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true">
                                 <RemoteValidation OnValidation="ValidateColumnField" />
                                 <DirectEvents>
                                     <Select OnEvent="cbSchemaColumnTypeSelect" />
@@ -574,22 +597,22 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="ctWidth" runat="server" LabelAlign="Top" Layout="Form" ClientIDMode="Static">
+                    <ext:Container ID="ctWidth" runat="server" Layout="Form" ClientIDMode="Static">
                         <Items>
                             <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server" AllowBlank="false" EmptyText="Enter a width" MsgTarget="Side"
-                                FieldLabel="Width" AnchorHorizontal="95%" AllowDecimals="false" MinValue="1">
+                                FieldLabel="Width" AnchorHorizontal="96%" AllowDecimals="false" MinValue="1">
                             </ext:NumberField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="ctFormat" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="ctFormat" runat="server" Layout="Form">
                         <Items>
-<%--                            <ext:TextField ID="tfFormat" runat="server" IsRemoteValidation="true" ClientIDMode="Static" MsgTarget="Side" MaxLength="50"
-                                AllowBlank="false" FieldLabel="Format" DataIndex="Format" EmptyText="Enter a format" AnchorHorizontal="95%">
+                            <%--                            <ext:TextField ID="tfFormat" runat="server" IsRemoteValidation="true" ClientIDMode="Static" MsgTarget="Side" MaxLength="50"
+                                AllowBlank="false" FieldLabel="Format" DataIndex="Format" EmptyText="Enter a format" AnchorHorizontal="96%">
                                 <RemoteValidation OnValidation="ValidateColumnField" />
                             </ext:TextField>--%>
-                            <ext:ComboBox ID="cbFormat"  runat="server" IsRemoteValidation="true" ClientIDMode="Static" MsgTarget="Side" 
-                                TriggerAction="All" Editable="true" TypeAhead="true" ForceSelection="false" AllowBlank="false" FieldLabel="Format" 
-                                DataIndex="Format" EmptyText="Enter a format" AnchorHorizontal="95%" >
+                            <ext:ComboBox ID="cbFormat" runat="server" IsRemoteValidation="true" ClientIDMode="Static" MsgTarget="Side"
+                                TriggerAction="All" Editable="true" TypeAhead="true" ForceSelection="false" AllowBlank="false" FieldLabel="Format"
+                                DataIndex="Format" EmptyText="Enter a format" AnchorHorizontal="96%">
                                 <RemoteValidation OnValidation="ValidateColumnField" />
                                 <Items>
                                     <ext:ListItem Text="d/M/yyyy (21 Sep 2017 13:14:15 -> 21/9/2017)" Value="d/M/yyyy" />
@@ -616,46 +639,46 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container19" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container19" runat="server" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbPhenomenon" runat="server" StoreID="PhenomenonStore" MsgTarget="Side" DisplayField="Name"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" FieldLabel="Phenomenon" DataIndex="PhenomenonID" EmptyText="Select a phenomenon" ValueNotFoundText="Select a phenomenon"
-                                AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
+                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true">
                                 <DirectEvents>
                                     <Select OnEvent="cbPhenomenonSelect" />
                                 </DirectEvents>
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container23" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container23" runat="server" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore" MsgTarget="Side" DisplayField="OfferingName"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" FieldLabel="Offering" DataIndex="PhenomenonOfferingID" EmptyText="Select an offering" ValueNotFoundText="Select an offering"
-                                AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
+                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true">
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container24" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container24" runat="server" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="UnitOfMeasureStore" MsgTarget="Side" DisplayField="UnitOfMeasureUnit"
                                 Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
                                 ValueField="Id" FieldLabel="Unit of measure" DataIndex="PhenomenonUOMID" EmptyText="Select a unit of measure" ValueNotFoundText="Select a unit of measure"
-                                AnchorHorizontal="95%" ClientIDMode="Static" FireSelectOnLoad="true">
+                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true">
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container25" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container25" runat="server" Layout="Form">
                         <Items>
-                            <ext:TextField ID="tfEmptyValue" DataIndex="EmptyValue" MaxLength="50" runat="server" FieldLabel="Empty Value" AnchorHorizontal="95%">
+                            <ext:TextField ID="tfEmptyValue" DataIndex="EmptyValue" MaxLength="50" runat="server" FieldLabel="Empty Value" AnchorHorizontal="96%">
                             </ext:TextField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container26" runat="server" LabelAlign="Top" Layout="Form">
+                    <ext:Container ID="Container26" runat="server" Layout="Form">
                         <Items>
                             <ext:TimeField ID="ttFixedTime" runat="server" DataIndex="FixedTime" FieldLabel="Fixed Time" MsgTarget="Side"
-                                EmptyText="Please select" AnchorHorizontal="95%" AllowBlank="false"
+                                EmptyText="Please select" AnchorHorizontal="96%" AllowBlank="false"
                                 BlankText="Fixed Time is required" ClientIDMode="Static" Format="H:mm" Increment="60">
                                 <Triggers>
                                     <ext:FieldTrigger Icon="Clear" />

@@ -53,35 +53,35 @@ public partial class Admin_Instruments : System.Web.UI.Page
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
         InstrumentCollection col = new InstrumentCollection();
+        string checkColumn = String.Empty;
+        string errorMessage = String.Empty;
+        e.Success = true;
 
-        string checkColumn = String.Empty,
-               errorMessage = String.Empty;
-
-        if (e.ID == "tfCode")
+        if (e.ID == "tfCode" || e.ID == "tfName")
         {
-            checkColumn = Instrument.Columns.Code;
-            errorMessage = "The specified Instrument Code already exists";
-        }
-        else if (e.ID == "tfName")
-        {
-            checkColumn = Instrument.Columns.Name;
-            errorMessage = "The specified Instrument Name already exists";
+            if (e.ID == "tfCode")
+            {
+                checkColumn = Instrument.Columns.Code;
+                errorMessage = "The specified Instrument Code already exists";
+            }
+            else if (e.ID == "tfName")
+            {
+                checkColumn = Instrument.Columns.Name;
+                errorMessage = "The specified Instrument Name already exists";
 
-        }
+            }
 
-        if (!string.IsNullOrEmpty(checkColumn))
-            if (String.IsNullOrEmpty(tfID.Text.ToString()))
+            if (tfID.IsEmpty)
                 col = new InstrumentCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
             else
                 col = new InstrumentCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(Instrument.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
 
-        if (col.Count > 0)
-        {
-            e.Success = false;
-            e.ErrorMessage = errorMessage;
+            if (col.Count > 0)
+            {
+                e.Success = false;
+                e.ErrorMessage = errorMessage;
+            }
         }
-        else
-            e.Success = true;
     }
 
     protected void Save(object sender, DirectEventArgs e)
