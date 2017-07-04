@@ -23,6 +23,8 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             SchemaColumnTypeStore.DataBind();
             PhenomenonStore.DataSource = new PhenomenonCollection().OrderByAsc(Phenomenon.Columns.Name).Load();
             PhenomenonStore.DataBind();
+            SchemaPickerStore.DataSource = new DataSchemaCollection().OrderByAsc(DataSchema.Columns.Name).Load();
+            SchemaPickerStore.DataBind();
         }
     }
 
@@ -30,6 +32,8 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     protected void DataSchemasGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         DataSchemasGrid.GetStore().DataSource = DataSchemRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
+        SchemaPickerStore.DataSource = new DataSchemaCollection().OrderByAsc(DataSchema.Columns.Name).Load();
+        SchemaPickerStore.DataBind();
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -127,6 +131,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 Auditing.Log(GetType(), new ParameterList {
                 { "ID", schema.Id }, { "Code", schema.Code }, { "Name", schema.Name } });
                 DataSchemasGrid.DataBind();
+                SchemaPickerStore.DataBind();
 
                 DetailWindow.Hide();
             }
@@ -148,6 +153,8 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         nfWidth.AllowBlank = nfWidth.Hidden;
         var cm = SchemaColumnsGrid.ColumnModel.Columns.FirstOrDefault(c => c.DataIndex == "Width").Hidden = nfWidth.Hidden;
         SetFields();
+        SchemaPickerStore.DataSource = new DataSchemaCollection().Where(DataSchema.Columns.Id, SubSonic.Comparison.NotEquals, masterID).OrderByAsc(DataSchema.Columns.Name).Load();
+        SchemaPickerStore.DataBind();
     }
 
     [DirectMethod]
@@ -204,6 +211,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
                 DataSchemasGrid.DataBind();
                 SchemaColumnsGrid.DataBind();
+                SchemaPickerStore.DataBind();
             }
             catch (Exception ex)
             {
@@ -713,5 +721,195 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         }
     }
 
+    #endregion
+
+    #region SchemaPicker
+    public void SchemaPickerOk(object sender, DirectEventArgs e)
+    {
+        RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        var schema = new DataSchema(masterID);
+        MessageBoxes.Confirm(
+           "Confirm Copy",
+           $"DirectCall.CopyDataSchema(\"{cbSchemaPickerID.SelectedItem.Value}\",{{ eventMask: {{ showMask: true}}}});",
+           $"Are you sure you want delete all {schema.Name} columns and copy columns from {cbSchemaPickerID.SelectedItem.Text}?");
+    }
+
+    [DirectMethod]
+    public void CopyDataSchema(Guid aId)
+    {
+        using (Logging.MethodCall(GetType()))
+        {
+            try
+            {
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+                {
+                    using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
+                    {
+                        RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+                        var masterID = new Guid(masterRow.SelectedRecordID);
+                        SchemaColumn.Delete(SchemaColumn.Columns.DataSchemaID, masterID);
+                        var oldSchemaCols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, aId).Load();
+                        foreach (var oldSchemaCol in oldSchemaCols)
+                        {
+                            var newSchemaCol = new SchemaColumn();
+                            newSchemaCol.DataSchemaID = masterID;
+                            newSchemaCol.Number = oldSchemaCol.Number;
+                            newSchemaCol.Name = oldSchemaCol.Name;
+                            newSchemaCol.SchemaColumnTypeID = oldSchemaCol.SchemaColumnTypeID;
+                            newSchemaCol.Width = oldSchemaCol.Width;
+                            newSchemaCol.Format = oldSchemaCol.Format;
+                            newSchemaCol.PhenomenonID = oldSchemaCol.PhenomenonID;
+                            newSchemaCol.PhenomenonOfferingID = oldSchemaCol.PhenomenonOfferingID;
+                            newSchemaCol.PhenomenonUOMID = oldSchemaCol.PhenomenonUOMID;
+                            newSchemaCol.EmptyValue = oldSchemaCol.EmptyValue;
+                            newSchemaCol.FixedTime = oldSchemaCol.FixedTime;
+                            newSchemaCol.UserId = AuthHelper.GetLoggedInUserId;
+                            newSchemaCol.Save();
+                            Auditing.Log(GetType(), new ParameterList {
+                                { "DataSchemaID", newSchemaCol.DataSchemaID },
+                                { "DataSchemaCode", newSchemaCol.DataSchema.Code },
+                                { "Name", newSchemaCol.Name },
+                                { "newSchemaColType", newSchemaCol.SchemaColumnType.Name },
+                                { "Width", newSchemaCol?.Width },
+                                { "Format", newSchemaCol.Format },
+                                { "PhenomenonID", newSchemaCol.PhenomenonID },
+                                { "PhenomenonCode", newSchemaCol?.Phenomenon?.Code },
+                                { "PhenomenonOfferingID", newSchemaCol.PhenomenonOfferingID },
+                                { "PhenomenonOfferingCode", newSchemaCol?.PhenomenonOffering?.Offering.Code },
+                                { "PhenomenonUnitOfMeasureID", newSchemaCol.PhenomenonUOMID },
+                                { "PhenomenonUnitOfMeasureCode", newSchemaCol?.PhenomenonUOM?.UnitOfMeasure.Code },
+                                { "EmptyValue", newSchemaCol.EmptyValue },
+                                { "FixedTime", newSchemaCol.FixedTime }
+                            });
+                        }
+                    }
+                    ts.Complete();
+                }
+                SchemaColumnsGrid.DataBind();
+                SchemaPickerWindow.Hide();
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error("Error", "Unable to copy schema");
+            }
+        }
+    }
+    #endregion
+
+    #region SchemaCopy
+    protected void ValidateSchemaCopyField(object sender, RemoteValidationEventArgs e)
+    {
+        DataSchemaCollection col = new DataSchemaCollection();
+        string checkColumn = String.Empty;
+        string errorMessage = String.Empty;
+        e.Success = true;
+
+        if (e.ID == "tfSchemaCopyCode" || e.ID == "tfSchemaCopyName")
+        {
+            if (e.ID == "tfSchemaCopyCode")
+            {
+                checkColumn = DataSchema.Columns.Code;
+                errorMessage = "The specified Data Schema Code already exists";
+            }
+            else if (e.ID == "tfSchemaCopyName")
+            {
+                checkColumn = DataSchema.Columns.Name;
+                errorMessage = "The specified Data Schema Name already exists";
+            }
+
+            col = new DataSchemaCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            if (col.Count > 0)
+            {
+                e.Success = false;
+                e.ErrorMessage = errorMessage;
+            }
+        }
+    }
+
+    [DirectMethod]
+    public void SetSchemaCopyFields()
+    {
+        SchemaCopyFormPanel.ClearInvalid();
+        tfSchemaCopyCode.MarkInvalid();
+        tfSchemaCopyName.MarkInvalid();
+        tfSchemaCopyDescription.MarkAsValid();
+    }
+
+    public void SchemaCopySave(object sender, DirectEventArgs e)
+    {
+        using (Logging.MethodCall(GetType()))
+        {
+            try
+            {
+                using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 15, 0)))
+                {
+                    using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
+                    {
+                        var masterID = new Guid(tfSchemaCopyID.Text);
+                        var oldSchema = new DataSchema(masterID);
+                        var newSchema = new DataSchema();
+                        newSchema.Code = tfSchemaCopyCode.Text.Trim();
+                        newSchema.Name = tfSchemaCopyName.Text.Trim();
+                        newSchema.Description = tfSchemaCopyDescription.Text.Trim();
+                        newSchema.DataSourceTypeID = oldSchema.DataSourceTypeID;
+                        newSchema.Delimiter = oldSchema.Delimiter;
+                        newSchema.IgnoreFirst = oldSchema.IgnoreFirst;
+                        newSchema.IgnoreLast = oldSchema.IgnoreLast;
+                        newSchema.Condition = oldSchema.Condition;
+                        newSchema.SplitIndex = oldSchema.SplitIndex;
+                        newSchema.SplitSelector = oldSchema.SplitSelector;
+                        newSchema.HasColumnNames = oldSchema.HasColumnNames;
+                        newSchema.UserId = AuthHelper.GetLoggedInUserId;
+                        newSchema.Save();
+                        Auditing.Log(GetType(), new ParameterList { { "ID", newSchema.Id }, { "Code", newSchema.Code }, { "Name", newSchema.Name } });
+                        var oldSchemaCols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, masterID).Load();
+                        foreach (var oldSchemaCol in oldSchemaCols)
+                        {
+                            var newSchemaCol = new SchemaColumn();
+                            newSchemaCol.DataSchemaID = newSchema.Id;
+                            newSchemaCol.Number = oldSchemaCol.Number;
+                            newSchemaCol.Name = oldSchemaCol.Name;
+                            newSchemaCol.SchemaColumnTypeID = oldSchemaCol.SchemaColumnTypeID;
+                            newSchemaCol.Width = oldSchemaCol.Width;
+                            newSchemaCol.Format = oldSchemaCol.Format;
+                            newSchemaCol.PhenomenonID = oldSchemaCol.PhenomenonID;
+                            newSchemaCol.PhenomenonOfferingID = oldSchemaCol.PhenomenonOfferingID;
+                            newSchemaCol.PhenomenonUOMID = oldSchemaCol.PhenomenonUOMID;
+                            newSchemaCol.EmptyValue = oldSchemaCol.EmptyValue;
+                            newSchemaCol.FixedTime = oldSchemaCol.FixedTime;
+                            newSchemaCol.UserId = AuthHelper.GetLoggedInUserId;
+                            newSchemaCol.Save();
+                            Auditing.Log(GetType(), new ParameterList {
+                                { "DataSchemaID", newSchemaCol.DataSchemaID },
+                                { "DataSchemaCode", newSchemaCol.DataSchema.Code },
+                                { "Name", newSchemaCol.Name },
+                                { "newSchemaColType", newSchemaCol.SchemaColumnType.Name },
+                                { "Width", newSchemaCol?.Width },
+                                { "Format", newSchemaCol.Format },
+                                { "PhenomenonID", newSchemaCol.PhenomenonID },
+                                { "PhenomenonCode", newSchemaCol?.Phenomenon?.Code },
+                                { "PhenomenonOfferingID", newSchemaCol.PhenomenonOfferingID },
+                                { "PhenomenonOfferingCode", newSchemaCol?.PhenomenonOffering?.Offering.Code },
+                                { "PhenomenonUnitOfMeasureID", newSchemaCol.PhenomenonUOMID },
+                                { "PhenomenonUnitOfMeasureCode", newSchemaCol?.PhenomenonUOM?.UnitOfMeasure.Code },
+                                { "EmptyValue", newSchemaCol.EmptyValue },
+                                { "FixedTime", newSchemaCol.FixedTime }
+                            });
+                        }
+                        ts.Complete();
+                    }
+                    DataSchemasGrid.DataBind();
+                    SchemaCopyWindow.Hide();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                MessageBoxes.Error("Error", "Unable to copy schema");
+            }
+        }
+    }
     #endregion
 }

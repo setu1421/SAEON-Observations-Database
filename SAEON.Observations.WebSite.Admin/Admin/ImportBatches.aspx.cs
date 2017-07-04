@@ -200,7 +200,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                                 Obrecord.Comment = schval.Comment;
 
                                             Obrecord.CorrelationID = schval.CorrelationID;
-                                            if (!string.IsNullOrEmpty(schval.TextValue)) Obrecord.TextValue = schval.TextValue;
+                                            if (string.IsNullOrEmpty(schval.TextValue))
+                                                Obrecord.TextValue = null;
+                                            else
+                                                Obrecord.TextValue = schval.TextValue;
                                             Obrecord.Save();
                                         }
 
@@ -628,7 +631,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void DeleteBatch(Guid ImportBatchId)
     {
-        using (Logging.MethodCall(GetType(),new ParameterList { { "ImportBatchID", ImportBatchId} }))
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", ImportBatchId } }))
         {
             try
             {
@@ -952,7 +955,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 MessageBoxes.Error(ex, "Error", "Unable to set status and reason to the selected observations");
             }
         }
-    
+
     }
 
     protected void SetWithoutClick(object sender, DirectEventArgs e)

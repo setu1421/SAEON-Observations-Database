@@ -15,6 +15,12 @@
         tfName.markAsValid();
 
         DetailWindow.show();
+    } else if (e === 'Copy') {
+        SchemaCopyFormPanel.getForm().reset();
+        SchemaCopyFormPanel.getForm().loadRecord(record);
+        SchemaCopyFormPanel.getForm().clearInvalid();
+        DirectCall.SetSchemaCopyFields();
+        SchemaCopyWindow.show();
     }
 }
 
@@ -84,5 +90,6 @@ function OnDataSourceCommand(e, record) {
         DirectCall.ConfirmDeleteDataSource(record.get('Id'), { eventMask: { showMask: true } });
     }
 }
+
 
 

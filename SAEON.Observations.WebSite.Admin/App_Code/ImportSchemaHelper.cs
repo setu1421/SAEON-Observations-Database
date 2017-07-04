@@ -489,7 +489,7 @@ public class ImportSchemaHelper : IDisposable
     {
         using (Logging.MethodCall(GetType()))
         {
-            Logging.Information("Version 1.18");
+            Logging.Information("Version 1.19");
             try
             {
                 BuildSchemaDefinition();
@@ -734,6 +734,7 @@ public class ImportSchemaHelper : IDisposable
                         else if (String.IsNullOrEmpty(RawValue) || def.IsEmptyValue && RawValue.Trim() == def.EmptyValue)
                         {
                             rec.FieldRawValue = RawValue;
+                            rec.TextValue = RawValue;
                             rec.RawValue = null; // dataSource.DefaultNullValue;
                             rec.DataValue = null; // dataSource.DefaultNullValue;
                             foreach (var transform in transformations.Where(t => def.DataSourceTransformationIDs.Contains(t.Id)))

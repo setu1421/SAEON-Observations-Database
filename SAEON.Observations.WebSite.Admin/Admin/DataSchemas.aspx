@@ -40,6 +40,16 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
+    <ext:Store ID="SchemaPickerStore" runat="server" AutoLoad="true">
+        <Reader>
+            <ext:JsonReader IDProperty="Id">
+                <Fields>
+                    <ext:RecordField Name="Id" Type="Auto" />
+                    <ext:RecordField Name="Name" Type="String" />
+                </Fields>
+            </ext:JsonReader>
+        </Reader>
+    </ext:Store>
     <ext:Store ID="PhenomenonStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
@@ -155,10 +165,11 @@
                                         <ext:Column Header="Ignore Last" DataIndex="IgnoreLast" Width="100" />
                                         <ext:CheckColumn Header="Column Names" DataIndex="HasColumnNames" Width="100" Tooltip="Column Names" />
                                         <ext:Column Header="Delimiter" DataIndex="Delimiter" Width="100" />
-                                        <ext:CommandColumn Width="150">
+                                        <ext:CommandColumn Width="200">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
                                                 <ext:GridCommand Icon="NoteDelete" CommandName="Delete" Text="Delete" />
+                                                <ext:GridCommand Icon="PageCopy" CommandName="Copy" Text="Copy" />
                                                 <%--<ext:GridCommand Icon="Zoom" CommandName="Preview" Text="Test" ToolTip-Text="Test" />--%>
                                             </Commands>
                                         </ext:CommandColumn>
@@ -215,12 +226,20 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnSchemaColumn" runat="server" Icon="Add" Text="Add Column" ClientIDMode="Static">
+                                            <ext:Button ID="btnAddSchemaColumn" runat="server" Icon="Add" Text="Add Column" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip4" runat="server" Html="Add" />
                                                 </ToolTips>
                                                 <Listeners>
                                                     <Click Handler="if(Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection()){#{SchemaColumnWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Data Schema.')}" />
+                                                </Listeners>
+                                            </ext:Button>
+                                            <ext:Button ID="btnCopySchemaColumns" runat="server" Icon="PageCopy" Text="Copy Columns" ClientIDMode="Static">
+                                                <ToolTips>
+                                                    <ext:ToolTip ID="ToolTip3" runat="server" Html="Copy columns" />
+                                                </ToolTips>
+                                                <Listeners>
+                                                    <Click Handler="if(Ext.getCmp('#{DataSchemasGrid}') && #{DataSchemasGrid}.getSelectionModel().hasSelection()){#{SchemaPickerWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a Data Schema.')}" />
                                                 </Listeners>
                                             </ext:Button>
                                             <%-- 
@@ -538,10 +557,10 @@
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container17" runat="server" Layout="Form">
-                        <items>
+                        <Items>
                             <ext:Checkbox ID="cbHasColumnNames" DataIndex="HasColumnNames" runat="server" FieldLabel="Column Names" AnchorHorizontal="96%" ColumnWidth="1">
                             </ext:Checkbox>
-                        </items>
+                        </Items>
                     </ext:Container>
                 </Items>
                 <Buttons>
@@ -774,6 +793,102 @@
                 </Buttons>
             </ext:GridPanel>
         </Items>
+    </ext:Window>
+    <ext:Window ID="SchemaPickerWindow" runat="server" Width="800" Height="150" Closable="true"
+        Hidden="true" Collapsible="false" Title="Pick schema" Maximizable="false" Layout="Fit" ClientIDMode="Static">
+        <Content>
+            <ext:FormPanel ID="SchemaPickerFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
+                MonitorResize="true" Padding="10" ButtonAlign="Right" Layout="RowLayout" ClientIDMode="Static">
+                <LoadMask ShowMask="true" />
+                <Items>
+                    <ext:Container ID="Container7" runat="server" Layout="Form">
+                        <Items>
+                            <ext:ComboBox ID="cbSchemaPickerID" runat="server" StoreID="SchemaPickerStore" MsgTarget="Side"
+                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
+                                ValueField="Id" DisplayField="Name" DataIndex="ID" FieldLabel="Data Schema" EmptyText="Select a data schema"
+                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true">
+                            </ext:ComboBox>
+                        </Items>
+                    </ext:Container>
+                </Items>
+                <Buttons>
+                    <ext:Button ID="btnSchemaPickerOk" runat="server" Text="Ok" FormBind="true" Icon="Accept" ClientIDMode="Static">
+                        <DirectEvents>
+                            <Click OnEvent="SchemaPickerOk">
+                                <EventMask ShowMask="true" />
+                            </Click>
+                        </DirectEvents>
+                    </ext:Button>
+                </Buttons>
+                <BottomBar>
+                    <ext:StatusBar ID="StatusBar3" runat="server" Height="25">
+                        <Plugins>
+                        </Plugins>
+                    </ext:StatusBar>
+                </BottomBar>
+                <Listeners>
+                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                </Listeners>
+            </ext:FormPanel>
+        </Content>
+    </ext:Window>
+    <ext:Window ID="SchemaCopyWindow" runat="server" Width="640" Height="300" Closable="true"
+        Hidden="true" Collapsible="false" Title="Copy Schema" Maximizable="false" Layout="Fit" AutoScroll="true" ClientIDMode="Static">
+        <Content>
+            <ext:FormPanel ID="SchemaCopyFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true" LabelAlign="Top"
+                MonitorResize="true" Padding="10" ButtonAlign="Right" Layout="RowLayout" ClientIDMode="Static">
+                <LoadMask ShowMask="true" />
+                <Items>
+                    <ext:Hidden ID="tfSchemaCopyID" DataIndex="Id" runat="server" ClientIDMode="Static" />
+                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:TextField ID="tfSchemaCopyCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
+                                runat="server" FieldLabel="Code" AnchorHorizontal="96%" ClientIDMode="Static"
+                                AllowBlank="false" BlankText="Code is a required" MsgTarget="Side">
+                                <RemoteValidation OnValidation="ValidateSchemaCopyField">
+                                    <ExtraParams>
+                                        <ext:Parameter Name="id" Value="1" Mode="Raw" />
+                                    </ExtraParams>
+                                </RemoteValidation>
+                            </ext:TextField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:TextField ID="tfSchemaCopyName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
+                                runat="server" FieldLabel="Name" AnchorHorizontal="96%" ClientIDMode="Static"
+                                AllowBlank="false" BlankText="Name is a required" MsgTarget="Side">
+                                <RemoteValidation OnValidation="ValidateSchemaCopyField" />
+                            </ext:TextField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:TextArea ID="tfSchemaCopyDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
+                                FieldLabel="Description" AnchorHorizontal="96%" ClientIDMode="Static"
+                                AllowBlank="false" BlankText="Description is a required" MsgTarget="Side">
+                                <RemoteValidation OnValidation="ValidateField" />
+                            </ext:TextArea>
+                        </Items>
+                    </ext:Panel>
+                </Items>
+                <Buttons>
+                    <ext:Button ID="btnSchemaCopySave" runat="server" Text="Save" FormBind="true">
+                        <DirectEvents>
+                            <Click OnEvent="SchemaCopySave" Method="POST">
+                                <EventMask ShowMask="true" />
+                            </Click>
+                        </DirectEvents>
+                    </ext:Button>
+                </Buttons>
+                <BottomBar>
+                    <ext:StatusBar ID="StatusBar4" runat="server" Height="25" />
+                </BottomBar>
+                <Listeners>
+                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                </Listeners>
+            </ext:FormPanel>
+        </Content>
     </ext:Window>
 </asp:Content>
 
