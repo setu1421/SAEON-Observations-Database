@@ -14,6 +14,26 @@ using System.Text;
 using System.Web.Configuration;
 using System.Web.Hosting;
 
+public static class StringExtensions
+{
+    public static bool IsQuoted(this string value)
+    {
+        return (value.StartsWith("\"") && value.EndsWith("\""));
+    }
+
+    public static string RemoveQuotes(this string value)
+    {
+        if (!value.IsQuoted())
+            return value;
+        else
+        {
+            value = value.Remove(0, 1);
+            value = value.Remove(value.Length - 1, 1);
+            return value;
+        }
+    }
+}
+
 /// <summary>
 /// Summary description for ImportSchema
 /// </summary>
@@ -48,7 +68,6 @@ public class ImportSchemaHelper : IDisposable
     // string Pass3File; // After processing
     // string Pass4File; // After 2nd R Call
 
-
     private List<string> LoadColumnNamesDelimited(DataSchema schema, string data)
     {
         List<string> result = new List<string>();
@@ -58,7 +77,10 @@ public class ImportSchemaHelper : IDisposable
         {
             throw new IndexOutOfRangeException("Column Names line greater than lines in source file");
         }
-        List<string> columnNames = lines[columnNamesLine].Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None).ToList();
+        List<string> columnNames = lines[columnNamesLine]
+            .Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None)
+            .Select(i => i.RemoveQuotes())
+            .ToList();
         List<string> badColumnNames = columnNames
             .GroupBy(x => x)
             .Where(g => g.Count() > 1)
@@ -81,7 +103,10 @@ public class ImportSchemaHelper : IDisposable
         {
             throw new IndexOutOfRangeException("Column Names line greater than lines in source file");
         }
-        List<string> columnNames = lines[columnNamesLine].Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None).ToList();
+        List<string> columnNames = lines[columnNamesLine]
+            .Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None)
+            .Select(i => i.RemoveQuotes())
+            .ToList();
         List<string> badColumnNames = columnNames
             .GroupBy(x => x)
             .Where(g => g.Count() > 1)
@@ -414,7 +439,7 @@ public class ImportSchemaHelper : IDisposable
                             SensorCollection colsens = new Select()
                                                                   .From(Sensor.Schema)
                                                                   .Where(Sensor.PhenomenonIDColumn).IsEqualTo(off.PhenomenonID)
-                                                                  .And(Sensor.DataSourceIDColumn).IsEqualTo(this.dataSource.Id)
+                                                                  .And(Sensor.DataSourceIDColumn).IsEqualTo(dataSource.Id)
                                                                   .ExecuteAsCollection<SensorCollection>();
                             if (colsens.Count() == 0)
                                 def.SensorNotFound = true;
@@ -745,13 +770,13 @@ public class ImportSchemaHelper : IDisposable
                         else
                         {
                             rec.FieldRawValue = RawValue;
-                            rec.TextValue = RawValue;
                             rec.RawValue = null;
                             Double dvalue = -1;
 
                             // Possibly do lookups here
                             if (!Double.TryParse(RawValue, out dvalue))
                             {
+                                rec.TextValue = RawValue;
                                 foreach (var transform in transformations.Where(t => t.TransformationType.Name == "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
                                 {
                                     TransformValue(transform.Id, ref rec);

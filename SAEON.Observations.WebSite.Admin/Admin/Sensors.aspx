@@ -103,8 +103,8 @@
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Code" DataIndex="Code" Width="100" />
-                                        <ext:Column Header="Name" DataIndex="Name" Width="150" />
+                                        <ext:Column Header="Code" DataIndex="Code" Width="200" />
+                                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="200" />
                                         <ext:Column Header="Source Name" DataIndex="DataSourceName" Width="200" />
                                         <ext:Column Header="Schema Name" DataIndex="DataSchemaName" Width="200" />

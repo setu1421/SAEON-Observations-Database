@@ -426,8 +426,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         //if (!ds.DataSchemaID.HasValue)
         //{
 
-        SensorCollection col = new SensorCollection().Where(Sensor.Columns.DataSourceID, DataSourceId)
-                                                                       .Where(Sensor.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null).Load();
+        SensorCollection col = new SensorCollection()
+            .Where(Sensor.Columns.DataSourceID, DataSourceId)
+            .Where(Sensor.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null)
+            .Load();
 
         ImportLogHelper logHelper = new ImportLogHelper();
 
