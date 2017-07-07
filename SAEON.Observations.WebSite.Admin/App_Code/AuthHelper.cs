@@ -60,6 +60,7 @@ public enum UpdateFrequency
     Monthly,
     Quarterly,
     Annually,
+    Hourly
 }
 
 public class listHelper
