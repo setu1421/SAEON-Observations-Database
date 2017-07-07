@@ -98,9 +98,6 @@
                                                     <ext:RecordField Name="Code" Type="String" />
                                                     <ext:RecordField Name="Name" Type="String" />
                                                     <ext:RecordField Name="Description" Type="String" />
-                                                    <ext:RecordField Name="Url" Type="String" />
-                                                    <ext:RecordField Name="StartDate" Type="Date" />
-                                                    <ext:RecordField Name="EndDate" Type="Date" />
                                                 </Fields>
                                             </ext:JsonReader>
                                         </Reader>
@@ -119,9 +116,6 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="200" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="200" />
-                                        <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                        <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
-                                        <ext:Column Header="Url" DataIndex="Url" Width="200" />
                                         <ext:CommandColumn Width="75">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />

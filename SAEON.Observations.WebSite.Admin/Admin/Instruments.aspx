@@ -268,7 +268,7 @@
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
-                            <ext:Panel ID="pnlDataSources" runat="server" Title="Data Sources" Layout="FitLayout"
+                            <ext:Panel ID="pnlDataSources" runat="server" Title="Data Sources" Layout="FitLayout" Hidden="true"
                                 Height="200" ClientIDMode="Static">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar5" runat="server">

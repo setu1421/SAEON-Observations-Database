@@ -477,13 +477,6 @@
                             </ext:TextField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container1" runat="server" Layout="Form">
-                        <Items>
-                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="150" runat="server" FieldLabel="Url"
-                                AnchorHorizontal="96%" MsgTarget="Side" ClientIDMode="Static">
-                            </ext:TextField>
-                        </Items>
-                    </ext:Container>
                     <ext:Container ID="Panel4" runat="server" Layout="Form">
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" IsRemoteValidation="true"
@@ -491,6 +484,13 @@
                                 AnchorHorizontal="96%" ClientIDMode="Static">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
+                        </Items>
+                    </ext:Container>
+                    <ext:Container ID="Container1" runat="server" Layout="Form">
+                        <Items>
+                            <ext:TextField ID="tfUrl" DataIndex="Url" MaxLength="150" runat="server" FieldLabel="Url"
+                                AnchorHorizontal="96%" MsgTarget="Side" ClientIDMode="Static">
+                            </ext:TextField>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container15" runat="server" Layout="Form">
