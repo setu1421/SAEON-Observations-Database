@@ -1,8 +1,22 @@
 select
   Instrument.Name,
   (
-  Select count(distinct SensorID) from Instrument_Sensor where InstrumentID = Instrument.ID
+  Select count(SensorID) from Instrument_Sensor where InstrumentID = Instrument.ID
   ) Sensors,
+  (
+  Select count(distinct SensorID) from Instrument_Sensor where InstrumentID = Instrument.ID
+  ) DistinctSensors,
+  (
+  Select 
+    count(DataSchemaID) 
+  from 
+    Instrument_Sensor 
+	inner join Sensor
+	  on (Instrument_Sensor.SensorID = Sensor.ID)
+
+  where 
+    (InstrumentID = Instrument.ID)
+  ) SensorSchemas,
   (
   Select 
     count(Distinct DataSchemaID) 
@@ -13,7 +27,7 @@ select
 
   where 
     (InstrumentID = Instrument.ID)
-  ) SensorSchemas,
+  ) DistinctSensorSchemas,
   (
   Select 
     count(Distinct DataSourceID) 

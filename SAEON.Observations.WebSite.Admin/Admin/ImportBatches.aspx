@@ -281,8 +281,10 @@
                                                             <ext:RecordField Name="OfferingName" Type="Auto" />
                                                             <ext:RecordField Name="UnitOfMeasureUnit" Type="Auto" />
                                                             <ext:RecordField Name="ValueDate" Type="Date" />
+                                                            <ext:RecordField Name="TextValue" Type="Auto"/>
                                                             <ext:RecordField Name="RawValue" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="DataValue" Type="Float" UseNull="true" />
+                                                            <ext:RecordField Name="Elevation" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="StatusName" Type="Auto" />
                                                             <ext:RecordField Name="StatusReasonName" Type="Auto" />
                                                             <ext:RecordField Name="Comment" Type="Auto" />
@@ -308,8 +310,10 @@
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
                                                 <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
+                                                <ext:Column Header="Text value" DataIndex="TextValue" Width="75" />
                                                 <ext:Column Header="Raw value" DataIndex="RawValue" Width="100" />
                                                 <ext:Column Header="Data value" DataIndex="DataValue" Width="100" />
+                                                <ext:Column Header="Elevation" DataIndex="Elevation" Width="100" />
                                                 <ext:Column Header="Status" DataIndex="StatusName" Width="150" />
                                                 <ext:Column Header="Reason" DataIndex="StatusReasonName" Width="150" />
                                                 <ext:Column Header="Correlation ID" DataIndex="CorrelationID" Width="150" />
