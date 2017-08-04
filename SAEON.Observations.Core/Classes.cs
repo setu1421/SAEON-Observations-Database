@@ -34,7 +34,7 @@ namespace SAEON.Observations.Core
         public object ImageProperty { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
-        public int? Elevation { get; set; }
+        public double? Elevation { get; set; }
         public string Url { get; set; }
     }
 

@@ -20,7 +20,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
         public static List<sos.Observation> Observations = new List<sos.Observation>();
         public static List<sos.FeatureOfInterest> FeaturesOfInterest = new List<sos.FeatureOfInterest>();
 
-        private static sos.Location AddLocation(Guid id, string name, string description, double latitude, double longitude, int? elevation)
+        private static sos.Location AddLocation(Guid id, string name, string description, double latitude, double longitude, double? elevation)
         {
             var location = Locations.FirstOrDefault(i => (i.name == name) && (i.description == description) && (i?.Coordinate.Latitude == latitude) && (i?.Coordinate.Longitude == longitude) && (!(elevation.HasValue && (i?.Coordinate?.Elevation.HasValue ?? false) || (i?.Coordinate.Elevation == elevation))));
             if (location == null)
@@ -131,6 +131,26 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                         thing.AddProperty("Url", instrument.Url);
                         thing.AddProperty("StartDate", instrument?.StartDate);
                         thing.AddProperty("EndDate", instrument?.EndDate);
+                        if (instrument.Latitude.HasValue && instrument.Longitude.HasValue)
+                        {
+                            var location = AddLocation(instrument.Id, instrument.Name, instrument.Description, instrument.Latitude.Value, instrument.Longitude.Value, instrument.Elevation);
+                            thing.Locations.Add(location);
+                            location.Things.Add(thing);
+                            var historicalLocation = new sos.HistoricalLocation { id = instrument.Id, Time = instrument?.StartDate ?? DateTime.Now };
+                            historicalLocation.GenerateSensorThingsProperties();
+                            historicalLocation.Locations.Add(location);
+                            historicalLocation.Thing = thing;
+                            thing.HistoricalLocations.Add(historicalLocation);
+                            var featureOfInterest = new sos.FeatureOfInterest
+                            {
+                                id = instrument.Id,
+                                name = instrument.Name,
+                                description = instrument.Description,
+                                Coordinate = new GeoJSONCoordinate { Latitude = instrument.Latitude.Value, Longitude = instrument.Longitude.Value, Elevation = instrument.Elevation }
+                            };
+                            featureOfInterest.GenerateSensorThingsProperties();
+                            FeaturesOfInterest.Add(featureOfInterest);
+                        }
                         thing.GenerateSensorThingsProperties();
                         Things.Add(thing);
                         foreach (var sensor in instrument.Sensors.OrderBy(i => i.Name))
@@ -143,26 +163,26 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                             }
                             sosSensor.GenerateSensorThingsProperties();
                             Sensors.Add(sosSensor);
-                            foreach (var Datastream in db.vSensorThingsDatastreams.Where(i => i.SensorId == sensor.Id).OrderBy(i => i.Phenomenon).ThenBy(i => i.Offering).ThenBy(i => i.Unit))
-                            {
-                                var sosDatastream = new sos.Datastream
-                                {
-                                    id = Datastream.SensorId,
-                                    name = $"{Datastream.Phenomenon} {Datastream.Offering} {Datastream.Unit}",
-                                    description = $"{Datastream.Phenomenon} {Datastream.Offering} {Datastream.Unit}",
-                                    unitOfMeasurement = new sos.UnitOfMeasurement { name = Datastream.Unit, symbol = Datastream.Symbol, definition="http://www.saeon.ac.za" },
-                                    observationType = sos.ValueCodes.OM_Measurement
-                                };
-                                sosDatastream.GenerateSensorThingsProperties();
-                                Datastreams.Add(sosDatastream);
-                                sosDatastream.Thing = thing;
-                                thing.Datastreams.Add(sosDatastream);
-                                sosDatastream.Sensor = sosSensor;
-                                sosSensor.Datastreams.Add(sosDatastream);
-                                var sosObservedProperty = AddObservedProperty(Datastream);
-                                sosObservedProperty.Datastream = sosDatastream;
-                                sosDatastream.ObservedProperty = sosObservedProperty;
-                            }
+                            //foreach (var Datastream in db.vSensorThingsDatastreams.Where(i => i.SensorId == sensor.Id).OrderBy(i => i.Phenomenon).ThenBy(i => i.Offering).ThenBy(i => i.Unit))
+                            //{
+                            //    var sosDatastream = new sos.Datastream
+                            //    {
+                            //        id = Datastream.SensorId,
+                            //        name = $"{Datastream.Phenomenon} {Datastream.Offering} {Datastream.Unit}",
+                            //        description = $"{Datastream.Phenomenon} {Datastream.Offering} {Datastream.Unit}",
+                            //        unitOfMeasurement = new sos.UnitOfMeasurement { name = Datastream.Unit, symbol = Datastream.Symbol, definition="http://www.saeon.ac.za" },
+                            //        observationType = sos.ValueCodes.OM_Measurement
+                            //    };
+                            //    sosDatastream.GenerateSensorThingsProperties();
+                            //    Datastreams.Add(sosDatastream);
+                            //    sosDatastream.Thing = thing;
+                            //    thing.Datastreams.Add(sosDatastream);
+                            //    sosDatastream.Sensor = sosSensor;
+                            //    sosSensor.Datastreams.Add(sosDatastream);
+                            //    var sosObservedProperty = AddObservedProperty(Datastream);
+                            //    sosObservedProperty.Datastream = sosDatastream;
+                            //    sosDatastream.ObservedProperty = sosObservedProperty;
+                            //}
                         }
                     }
                 }

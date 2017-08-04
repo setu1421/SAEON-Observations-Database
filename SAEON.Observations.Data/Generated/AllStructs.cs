@@ -396,6 +396,8 @@ namespace SAEON.Observations.Data
 		
 		public static readonly string ProgressProgressResolved = @"progress_Progress_Resolved";
         
+		public static readonly string VApiDataGap = @"vApiDataGaps";
+        
 		public static readonly string VAuditLog = @"vAuditLog";
         
 		public static readonly string VDataLog = @"vDataLog";

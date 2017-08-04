@@ -6,7 +6,7 @@
       <Value Profile="(Default)">https://localhost:44311/oauth2</Value>
     </Setting>
     <Setting Name="WebAPIUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://localhost:63378</Value>
+      <Value Profile="(Default)">http://localhost:53638</Value>
     </Setting>
     <Setting Name="QuerySiteUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://localhost:50160</Value>

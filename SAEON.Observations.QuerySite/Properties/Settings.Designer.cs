@@ -34,7 +34,7 @@ namespace SAEON.Observations.QuerySite.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:63378")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:53638")]
         public string WebAPIUrl {
             get {
                 return ((string)(this["WebAPIUrl"]));

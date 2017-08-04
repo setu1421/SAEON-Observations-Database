@@ -57,6 +57,18 @@ namespace SAEON.Observations.Core.Entities
         /// EndDate of the Instrument, null means always
         /// </summary>
         public DateTime? EndDate { get; set; }
+        /// <summary>
+        /// Latitude of the Instrument
+        /// </summary>
+        public double? Latitude { get; set; }
+        /// <summary>
+        /// Logitude of the Instrument
+        /// </summary>
+        public double? Longitude { get; set; }
+        /// <summary>
+        /// Elevation of the Instrument, positive above sea level, negative below sea level
+        /// </summary>
+        public double? Elevation { get; set; }
 
         // Navigation
         /// <summary>
@@ -318,7 +330,7 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Elevation of the Station, positive above sea level, negative below sea level
         /// </summary>
-        public int? Elevation { get; set; }
+        public double? Elevation { get; set; }
 
         // Navigation
 
