@@ -50,6 +50,7 @@ public class ImportSchemaHelper : IDisposable
     public List<SchemaValue> SchemaValues;
 
     Sensor Sensor = null;
+    ImportBatch batch = null;
 
     /// <summary>
     /// Gap Record Helper
@@ -129,6 +130,7 @@ public class ImportSchemaHelper : IDisposable
     {
         dataSource = ds;
         dataSchema = schema;
+        this.batch = batch;
         if (schema.DataSourceTypeID == new Guid(DataSourceType.CSV))
         {
             DelimitedClassBuilder cb = new DelimitedClassBuilder("ImportBatches", schema.Delimiter)
@@ -255,7 +257,6 @@ public class ImportSchemaHelper : IDisposable
                 if (columnsNotInSchema.Any())
                 {
                     batch.Issues += "Columns in data file but not in schema - " + string.Join(", ", columnsNotInSchema) + Environment.NewLine;
-
                 }
                 var columnsNotInDataFile = schema.SchemaColumnRecords().Select(c => c.Name.ToLower()).Except(cb.Fields.Select(f => f.FieldName.ToLower()));
                 if (columnsNotInDataFile.Any())
@@ -514,7 +515,7 @@ public class ImportSchemaHelper : IDisposable
     {
         using (Logging.MethodCall(GetType()))
         {
-            Logging.Information("Version 1.19");
+            Logging.Information("Version 1.20");
             try
             {
                 BuildSchemaDefinition();
@@ -724,6 +725,7 @@ public class ImportSchemaHelper : IDisposable
                                 if (startDate.HasValue && (rec.DateValue.Date < startDate.Value))
                                 {
                                     Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
+                                    batch.Issues += $"Date too early, ignoring! Sensor: {sensor.Name} StartDate: {startDate} Date: {rec.DateValue}" + Environment.NewLine;
                                     //Logging.Verbose("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
                                     foundTooEarly = true;
                                     continue;
@@ -731,6 +733,7 @@ public class ImportSchemaHelper : IDisposable
                                 if (endDate.HasValue && (rec.DateValue.Date > endDate.Value))
                                 {
                                     Logging.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
+                                    batch.Issues += $"Date too late, ignoring! Sensor: {sensor.Name} EndDate: {endDate} Date: {rec.DateValue}" + Environment.NewLine;
                                     //Logging.Verbose("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
                                     foundTooLate = true;
                                     continue;
