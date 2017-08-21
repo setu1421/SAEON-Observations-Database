@@ -328,8 +328,7 @@
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
-                            <ext:Panel ID="pnlInstruments" runat="server" Title="Instruments" Layout="FitLayout"
-                                Height="200" ClientIDMode="Static">
+                            <ext:Panel ID="pnlInstruments" runat="server" Title="Instruments" Layout="FitLayout" Hidden="true" Height="200" ClientIDMode="Static">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
