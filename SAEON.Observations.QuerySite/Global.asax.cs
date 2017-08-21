@@ -13,12 +13,11 @@ namespace SAEON.Observations.QuerySite
     {
         protected void Application_Start()
         {
-            Log.Logger = new LoggerConfiguration()
+            Logging
+                .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite {Date}.txt"))
                 .ReadFrom.AppSettings()
-                .Enrich.FromLogContext()
-                .WriteTo.RollingFile(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite {Date}.txt"))
                 .WriteTo.Seq("http://localhost:5341/")
-                .CreateLogger();
+                .Create();
             using (Logging.MethodCall(GetType()))
             {
                 try
