@@ -521,17 +521,6 @@ namespace SAEON.Observations.Data
 		
 		
 		/// <summary>
-		/// Returns a ProjectSite ActiveRecord object related to this Station
-		/// 
-		/// </summary>
-		public SAEON.Observations.Data.ProjectSite ProjectSite
-		{
-			get { return SAEON.Observations.Data.ProjectSite.FetchByID(this.ProjectSiteID); }
-			set { SetColumnValue("ProjectSiteID", value.Id); }
-		}
-		
-		
-		/// <summary>
 		/// Returns a Site ActiveRecord object related to this Station
 		/// 
 		/// </summary>

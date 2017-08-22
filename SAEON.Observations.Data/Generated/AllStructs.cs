@@ -50,8 +50,6 @@ namespace SAEON.Observations.Data
         
 		public static readonly string DataSource = @"DataSource";
         
-		public static readonly string DataSourceRoleOld = @"DataSourceRoleOld";
-        
 		public static readonly string DataSourceTransformation = @"DataSourceTransformation";
         
 		public static readonly string DataSourceType = @"DataSourceType";
@@ -91,8 +89,6 @@ namespace SAEON.Observations.Data
 		public static readonly string Project = @"Project";
         
 		public static readonly string ProjectStation = @"Project_Station";
-        
-		public static readonly string ProjectSite = @"ProjectSite";
         
 		public static readonly string RoleModule = @"RoleModule";
         
@@ -205,11 +201,6 @@ namespace SAEON.Observations.Data
             get { return DataService.GetSchema("DataSource", "ObservationsDB"); }
 		}
         
-		public static TableSchema.Table DataSourceRoleOld
-		{
-            get { return DataService.GetSchema("DataSourceRoleOld", "ObservationsDB"); }
-		}
-        
 		public static TableSchema.Table DataSourceTransformation
 		{
             get { return DataService.GetSchema("DataSourceTransformation", "ObservationsDB"); }
@@ -310,11 +301,6 @@ namespace SAEON.Observations.Data
             get { return DataService.GetSchema("Project_Station", "ObservationsDB"); }
 		}
         
-		public static TableSchema.Table ProjectSite
-		{
-            get { return DataService.GetSchema("ProjectSite", "ObservationsDB"); }
-		}
-        
 		public static TableSchema.Table RoleModule
 		{
             get { return DataService.GetSchema("RoleModule", "ObservationsDB"); }
@@ -399,13 +385,9 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VDataSource = @"vDataSource";
         
-		public static readonly string VDataSourceRoleOld = @"vDataSourceRoleOld";
-        
 		public static readonly string VDataSourceTransformation = @"vDataSourceTransformation";
         
 		public static readonly string VImportBatch = @"vImportBatch";
-        
-		public static readonly string VInstrumentDataSource = @"vInstrumentDataSource";
         
 		public static readonly string VInstrumentOrganisation = @"vInstrumentOrganisation";
         
@@ -429,8 +411,6 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VObservation = @"vObservation";
         
-		public static readonly string VObservationRolesOld = @"vObservationRolesOld";
-        
 		public static readonly string VObservationsList = @"vObservationsList";
         
 		public static readonly string VOrganisationInstrument = @"vOrganisationInstrument";
@@ -440,8 +420,6 @@ namespace SAEON.Observations.Data
 		public static readonly string VOrganisationStation = @"vOrganisationStation";
         
 		public static readonly string VProject = @"vProject";
-        
-		public static readonly string VProjectSite = @"vProjectSite";
         
 		public static readonly string VProjectStation = @"vProjectStation";
         

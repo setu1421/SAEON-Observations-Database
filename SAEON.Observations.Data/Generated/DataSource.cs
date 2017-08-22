@@ -490,10 +490,6 @@ namespace SAEON.Observations.Data
         }
         
 		
-		public SAEON.Observations.Data.DataSourceRoleOldCollection DataSourceRoleOldRecords()
-		{
-			return new SAEON.Observations.Data.DataSourceRoleOldCollection().Where(DataSourceRoleOld.Columns.DataSourceID, Id).Load();
-		}
 		public SAEON.Observations.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
 		{
 			return new SAEON.Observations.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.DataSourceID, Id).Load();

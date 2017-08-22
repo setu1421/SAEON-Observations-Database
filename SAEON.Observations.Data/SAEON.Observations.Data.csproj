@@ -124,8 +124,6 @@
     <Compile Include="Generated\ProgrammeController.cs" />
     <Compile Include="Generated\Project.cs" />
     <Compile Include="Generated\ProjectController.cs" />
-    <Compile Include="Generated\ProjectSite.cs" />
-    <Compile Include="Generated\ProjectSiteController.cs" />
     <Compile Include="Generated\ProjectStation.cs" />
     <Compile Include="Generated\ProjectStationController.cs" />
     <Compile Include="Generated\RoleModule.cs" />
@@ -159,7 +157,6 @@
     <Compile Include="Generated\VDataSourceTransformation.cs" />
     <Compile Include="Generated\VDownload.cs" />
     <Compile Include="Generated\VImportBatch.cs" />
-    <Compile Include="Generated\VInstrumentOrganisation.cs" />
     <Compile Include="Generated\VInstrumentSensor.cs" />
     <Compile Include="Generated\VInventory.cs" />
     <Compile Include="Generated\VModuleRoleModule.cs" />
@@ -169,7 +166,6 @@
     <Compile Include="Generated\VOrganisationSite.cs" />
     <Compile Include="Generated\VOrganisationStation.cs" />
     <Compile Include="Generated\VProject.cs" />
-    <Compile Include="Generated\VProjectSite.cs" />
     <Compile Include="Generated\VProjectStation.cs" />
     <Compile Include="Generated\VSchemaColumn.cs" />
     <Compile Include="Generated\VSensor.cs" />

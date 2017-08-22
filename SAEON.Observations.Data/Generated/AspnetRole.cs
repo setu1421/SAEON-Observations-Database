@@ -260,10 +260,6 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.AspnetUsersInRoleCollection().Where(AspnetUsersInRole.Columns.RoleId, RoleId).Load();
 		}
-		public SAEON.Observations.Data.DataSourceRoleOldCollection DataSourceRoleOldRecords()
-		{
-			return new SAEON.Observations.Data.DataSourceRoleOldCollection().Where(DataSourceRoleOld.Columns.RoleId, RoleId).Load();
-		}
 		public SAEON.Observations.Data.RoleModuleCollection RoleModuleRecords()
 		{
 			return new SAEON.Observations.Data.RoleModuleCollection().Where(RoleModule.Columns.RoleId, RoleId).Load();
