@@ -12,7 +12,9 @@
 --< Changed 2.0.33 20170628 TimPN
 --> Changed 2.0.3 20160426 TimPN
 --    [ProjectSiteID] UNIQUEIDENTIFIER NOT NULL,
-    [ProjectSiteID] UNIQUEIDENTIFIER NULL,
+--> Removed 2.0.34 TimPN 20170821
+--    [ProjectSiteID] UNIQUEIDENTIFIER NULL,
+--< Removed 2.0.34 TimPN 20170821
 --< Changed 2.0.3 20160426 TimPN
     [UserId]        UNIQUEIDENTIFIER NOT NULL,
 --> Added 2.0.2 20160407 TimPN
@@ -38,7 +40,9 @@
 --< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PKStation] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Station_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
-    CONSTRAINT [FK_Station_ProjectSite] FOREIGN KEY ([ProjectSiteID]) REFERENCES [dbo].[ProjectSite] ([ID]),
+--> Removed 2.0.34 TimPN 20170821
+--    CONSTRAINT [FK_Station_ProjectSite] FOREIGN KEY ([ProjectSiteID]) REFERENCES [dbo].[ProjectSite] ([ID]),
+--< Removed 2.0.34 TimPN 20170821
 --> Added 2.0.2 20160407 TimPN
     CONSTRAINT [FK_Station_Site] FOREIGN KEY ([SiteID]) REFERENCES [dbo].[Site] ([ID]),
 --< Added 2.0.2 20160407 TimPN
@@ -58,8 +62,10 @@
 --< Changed 2.0.0 20160329 TimPN
 );
 --> Added 2.0.0 20160406 TimPN
-GO
-CREATE INDEX [IX_Station_ProjectSiteID] ON [dbo].[Station] ([ProjectSiteID])
+--> Removed 2.0.34 TimPN 20170821
+--GO
+--CREATE INDEX [IX_Station_ProjectSiteID] ON [dbo].[Station] ([ProjectSiteID])
+--> Removed 2.0.34 TimPN 20170821
 GO
 CREATE INDEX [IX_Station_UserId] ON [dbo].[Station] ([UserId])
 --< Added 2.0.0 20160406 TimPN

@@ -153,18 +153,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarElevation);
                 
-                TableSchema.TableColumn colvarProjectSiteID = new TableSchema.TableColumn(schema);
-                colvarProjectSiteID.ColumnName = "ProjectSiteID";
-                colvarProjectSiteID.DataType = DbType.Guid;
-                colvarProjectSiteID.MaxLength = 0;
-                colvarProjectSiteID.AutoIncrement = false;
-                colvarProjectSiteID.IsNullable = true;
-                colvarProjectSiteID.IsPrimaryKey = false;
-                colvarProjectSiteID.IsForeignKey = false;
-                colvarProjectSiteID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarProjectSiteID);
-                
                 TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
                 colvarUserId.ColumnName = "UserId";
                 colvarUserId.DataType = DbType.Guid;
@@ -435,20 +423,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("ProjectSiteID")]
-        [Bindable(true)]
-        public Guid? ProjectSiteID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid?>("ProjectSiteID");
-		    }
-            set 
-		    {
-			    SetColumnValue("ProjectSiteID", value);
-            }
-        }
-	      
         [XmlAttribute("UserId")]
         [Bindable(true)]
         public Guid UserId 
@@ -597,8 +571,6 @@ namespace SAEON.Observations.Data{
             public static string Longitude = @"Longitude";
             
             public static string Elevation = @"Elevation";
-            
-            public static string ProjectSiteID = @"ProjectSiteID";
             
             public static string UserId = @"UserId";
             

@@ -277,7 +277,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         DateTime fromDate = FromFilter.SelectedDate;
         DateTime ToDate = ToFilter.SelectedDate;
 
-        SqlQuery q = new Select().From(VObservationRole.Schema);
+        SqlQuery q = new Select().From(VObservation.Schema);
 
         if (FilterTree.CheckedNodes == null)
         {
@@ -380,8 +380,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
                 if (count != 0)
                 {
-                    q.And(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
-                    if (fromDate.ToString() != "0001/01/01 00:00:00")
+                   if (fromDate.ToString() != "0001/01/01 00:00:00")
                     {
                         q.And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(fromDate.ToString());
                     }
@@ -430,7 +429,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         string[] colmsDisplayNames = colmsDisplayNamesL.ToArray();
 
 
-        SqlQuery q = new Select(colms).From(VObservationRole.Schema);
+        SqlQuery q = new Select(colms).From(VObservation.Schema);
 
         if (FilterTree.CheckedNodes != null)
         {
@@ -522,7 +521,6 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 }
                 if (count != 0)
                 {
-                    q.And(VObservationRole.Columns.RoleUserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
                     q.And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(dateFrom);
                     q.And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(dateTo.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
 

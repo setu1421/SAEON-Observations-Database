@@ -268,82 +268,6 @@
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
-                            <ext:Panel ID="pnlDataSources" runat="server" Title="Data Sources" Layout="FitLayout" Hidden="true"
-                                Height="200" ClientIDMode="Static">
-                                <TopBar>
-                                    <ext:Toolbar ID="Toolbar5" runat="server">
-                                        <Items>
-                                            <ext:Button ID="btnDataSourceLinkAdd" runat="server" Icon="LinkAdd" Text="Link DataSource" ClientIDMode="Static">
-                                                <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip5" runat="server" Html="Link" />
-                                                </ToolTips>
-                                                <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{InstrumentsGrid}') && #{InstrumentsGrid}.getSelectionModel().hasSelection()){#{DataSourceLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select an instrument.')}" />
-                                                </Listeners>
-                                            </ext:Button>
-                                            <%-- 
-                                            <ext:Button ID="btnAddDataSource" runat="server" Icon="Add" Text="Add DataSource">
-                                                <ToolTips>
-                                                    <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
-                                                </ToolTips>
-                                                <DirectEvents>
-                                                    <Click OnEvent="AddDataSourceClick" />
-                                                </DirectEvents>
-                                            </ext:Button>
-                                            --%>
-                                        </Items>
-                                    </ext:Toolbar>
-                                </TopBar>
-                                <Items>
-                                    <ext:GridPanel ID="DataSourceLinksGrid" runat="server" Border="false" ClientIDMode="Static">
-                                        <Store>
-                                            <ext:Store ID="DataSourceLinksGridStore" runat="server" OnRefreshData="DataSourceLinksGridStore_RefreshData">
-                                                <Proxy>
-                                                    <ext:PageProxy />
-                                                </Proxy>
-                                                <Reader>
-                                                    <ext:JsonReader IDProperty="Id">
-                                                        <Fields>
-                                                            <ext:RecordField Name="Id" Type="Auto" />
-                                                            <ext:RecordField Name="DataSourceID" Type="Auto" />
-                                                            <ext:RecordField Name="DataSourceCode" Type="Auto" />
-                                                            <ext:RecordField Name="DataSourceName" Type="Auto" />
-                                                            <ext:RecordField Name="StartDate" Type="Date" />
-                                                            <ext:RecordField Name="EndDate" Type="Date" />
-                                                        </Fields>
-                                                    </ext:JsonReader>
-                                                </Reader>
-                                                <BaseParams>
-                                                    <ext:Parameter Name="InstrumentID" Value="Ext.getCmp('#{InstrumentsGrid}') && #{InstrumentsGrid}.getSelectionModel().hasSelection() ? #{InstrumentsGrid}.getSelectionModel().getSelected().id : -1"
-                                                        Mode="Raw" />
-                                                </BaseParams>
-                                            </ext:Store>
-                                        </Store>
-                                        <ColumnModel ID="ColumnModel3" runat="server">
-                                            <Columns>
-                                                <ext:Column Header="Code" DataIndex="DataSourceCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="DataSourceName" Width="200" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="150">
-                                                    <Commands>
-                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
-                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
-                                                    </Commands>
-                                                </ext:CommandColumn>
-                                            </Columns>
-                                        </ColumnModel>
-                                        <SelectionModel>
-                                            <ext:RowSelectionModel ID="RowSelectionModel5" runat="server" SingleSelect="true">
-                                            </ext:RowSelectionModel>
-                                        </SelectionModel>
-                                        <LoadMask ShowMask="true" />
-                                        <Listeners>
-                                            <Command Fn="OnDataSourceLinkCommand" />
-                                        </Listeners>
-                                    </ext:GridPanel>
-                                </Items>
-                            </ext:Panel>
                             <ext:Panel ID="pnlStations" runat="server" Title="Stations" Layout="FitLayout"
                                 Height="200" ClientIDMode="Static">
                                 <TopBar>
@@ -737,7 +661,7 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
-                    <ext:Container ID="Container5" runat="server" Layout="Column" Height="50" >
+                    <ext:Container ID="Container5" runat="server" Layout="Column" Height="50">
                         <Items>
                             <ext:Container ID="Container6" runat="server" Layout="Form" ColumnWidth=".32">
                                 <Items>
@@ -861,66 +785,6 @@
                                 ErrorIcon="Exclamation" />--%>
                         </Plugins>
                     </ext:StatusBar>
-                </BottomBar>
-                <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
-                </Listeners>
-            </ext:FormPanel>
-        </Content>
-    </ext:Window>
-    <ext:Window ID="DataSourceLinkWindow" runat="server" Width="450" Height="260" Closable="true"
-        Hidden="true" Collapsible="false" Title="Link DataSource" Maximizable="false" Layout="Fit" ClientIDMode="Static">
-        <Listeners>
-            <Hide Fn="ClearDataSourceLinkForm" />
-        </Listeners>
-        <Content>
-            <ext:FormPanel ID="DataSourceLinkFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right" LabelAlign="Top" Layout="RowLayout" ClientIDMode="Static">
-                <LoadMask ShowMask="true" />
-                <Items>
-                    <ext:Hidden ID="DataSourceLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
-                    </ext:Hidden>
-                    <ext:Panel ID="Panel18" runat="server" Border="false" Header="false" Layout="FormLayout">
-                        <Items>
-                            <ext:ComboBox ID="cbDataSource" runat="server" StoreID="DataSourceStore" Editable="true" DisplayField="Name"
-                                ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" FieldLabel="Data source"
-                                AllowBlank="false" DataIndex="DataSourceID" EmptyText="Select DataSource"
-                                SelectOnFocus="true" AnchorHorizontal="96%" ClientIDMode="Static">
-                                <Triggers>
-                                    <ext:FieldTrigger Icon="Clear" />
-                                </Triggers>
-                                <Listeners>
-                                    <TriggerClick Handler="this.clearValue();this.focus();" />
-                                </Listeners>
-                            </ext:ComboBox>
-                        </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel19" runat="server" Border="false" Header="false" Layout="FormLayout">
-                        <Items>
-                            <ext:DateField ID="dfDataSourceStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
-                            </ext:DateField>
-                        </Items>
-                    </ext:Panel>
-                    <ext:Panel ID="Panel20" runat="server" Border="false" Header="false" Layout="FormLayout">
-                        <Items>
-                            <ext:DateField ID="dfDataSourceEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
-                            </ext:DateField>
-                        </Items>
-                    </ext:Panel>
-                </Items>
-                <Buttons>
-                    <ext:Button ID="btnDataSourceLinkSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
-                        <DirectEvents>
-                            <Click OnEvent="DataSourceLinkSave">
-                                <EventMask ShowMask="true" />
-                            </Click>
-                        </DirectEvents>
-                    </ext:Button>
-                </Buttons>
-                <BottomBar>
-                    <ext:StatusBar ID="StatusBar5" runat="server" Height="25" />
                 </BottomBar>
                 <Listeners>
                     <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />

@@ -155,6 +155,7 @@
     <Compile Include="Generated\VDataSourceTransformation.cs" />
     <Compile Include="Generated\VDownload.cs" />
     <Compile Include="Generated\VImportBatch.cs" />
+    <Compile Include="Generated\VInstrumentOrganisation.cs" />
     <Compile Include="Generated\VInstrumentSensor.cs" />
     <Compile Include="Generated\VInventory.cs" />
     <Compile Include="Generated\VModuleRoleModule.cs" />
@@ -176,7 +177,6 @@
     <Compile Include="Partials\DataSourceTransformation.cs" />
     <Compile Include="Partials\DataSourceType.cs" />
     <Compile Include="Partials\ImportBatch.cs" />
-    <Compile Include="Partials\Station.cs" />
     <Compile Include="Partials\Status.cs" />
     <Compile Include="Partials\TransformationType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

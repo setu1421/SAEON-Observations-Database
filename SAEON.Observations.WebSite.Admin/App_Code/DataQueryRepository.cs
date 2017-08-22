@@ -20,16 +20,7 @@ public class DataQueryRepository : BaseRepository
 
     public static List<object> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix, DateTime FromDate, DateTime ToDate)
     {
-        //string[] roles = Roles.GetRolesForUser();
-        //SqlQuery q = new Select().From(VObservation.Schema)
-        //    .InnerJoin(DataSourceRole.DataSourceIDColumn, VObservation.Schema.GetColumn("DataSourceID"))
-        //    .Where(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(FromDate)
-        //    .And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(ToDate)
-        //    .And(DataSourceRole.Columns.RoleName).In(roles)
-        //    .And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(DataSourceRole.Columns.DateStart)
-        //    .And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(DataSourceRole.Columns.DateEnd);
-        SqlQuery q = new Select().From(VObservationRole.Schema)
-            .Where(VObservationRole.Columns.UserId).IsEqualTo(AuthHelper.GetLoggedInUserId);
+        SqlQuery q = new Select().From(VObservation.Schema);
 
         GetPagedQuery(ref q, e, paramPrefix);
         //Logging.Verbose("GetPagedList SQL: {sql}", q.BuildSqlStatement());
