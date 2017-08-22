@@ -1,4 +1,6 @@
-﻿CREATE TABLE [dbo].[ProjectSite] (
+﻿--> Removed 2.0.34 TimPN 20170821
+/*
+CREATE TABLE [dbo].[ProjectSite] (
     [ID]             UNIQUEIDENTIFIER CONSTRAINT [DF_ProjectSite_ID] DEFAULT (newid()) NOT NULL,
     [Code]           VARCHAR (50)     NOT NULL,
     [Name]           VARCHAR (150)    NOT NULL,
@@ -23,4 +25,6 @@ CREATE INDEX [IX_ProjectSite_OrganisationID] ON [dbo].[ProjectSite] ([Organisati
 GO
 CREATE INDEX [IX_ProjectSite_UserID] ON [dbo].[ProjectSite] ([UserId])
 --< Added 2.0.0 20160406 TimPN
+*/
+--< Removed 2.0.34 TimPN 20170821
 

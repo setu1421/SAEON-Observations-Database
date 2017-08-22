@@ -242,7 +242,7 @@ namespace SAEON.Observations.Data
 				colvarProjectSiteID.IsReadOnly = false;
 				colvarProjectSiteID.DefaultSetting = @"";
 				
-					colvarProjectSiteID.ForeignKeyTableName = "ProjectSite";
+					colvarProjectSiteID.ForeignKeyTableName = "ProjectSiteOld";
 				schema.Columns.Add(colvarProjectSiteID);
 				
 				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
