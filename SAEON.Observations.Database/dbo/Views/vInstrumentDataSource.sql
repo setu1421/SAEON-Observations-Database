@@ -1,4 +1,6 @@
-﻿--> Added 2.0.9 20160727 TimPN
+﻿--> Removed 2.0.34 TimPN 20170821
+/*
+--> Added 2.0.9 20160727 TimPN
 CREATE VIEW [dbo].[vInstrumentDataSource] AS 
 SELECT 
   src.*, 
@@ -13,3 +15,5 @@ FROM
   inner join [DataSource]
     on (src.DataSourceID = [DataSource].ID)
 --< Added 2.0.9 20160727 TimPN
+*/
+--< Removed 2.0.34 TimPN 20170821

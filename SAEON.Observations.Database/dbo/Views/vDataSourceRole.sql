@@ -1,4 +1,6 @@
-﻿--> Added 2.0.14 20161011 TimPN
+﻿--> Removed 2.0.34 TimPN 20170821
+/*
+--> Added 2.0.14 20161011 TimPN
 CREATE VIEW [dbo].[vDataSourceRole]
 AS 
 SELECT 
@@ -14,3 +16,5 @@ FROM
   inner join aspnet_Roles
     on (DataSourceRole.RoleId = aspnet_Roles.RoleId)
 --< Added 2.0.14 20161011 TimPN
+*/
+--< Removed 2.0.34 TimPN 20170821

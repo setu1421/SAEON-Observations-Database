@@ -490,9 +490,9 @@ namespace SAEON.Observations.Data
         }
         
 		
-		public SAEON.Observations.Data.DataSourceRoleCollection DataSourceRoleRecords()
+		public SAEON.Observations.Data.DataSourceRoleOldCollection DataSourceRoleOldRecords()
 		{
-			return new SAEON.Observations.Data.DataSourceRoleCollection().Where(DataSourceRole.Columns.DataSourceID, Id).Load();
+			return new SAEON.Observations.Data.DataSourceRoleOldCollection().Where(DataSourceRoleOld.Columns.DataSourceID, Id).Load();
 		}
 		public SAEON.Observations.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
 		{
@@ -501,10 +501,6 @@ namespace SAEON.Observations.Data
 		public SAEON.Observations.Data.ImportBatchCollection ImportBatchRecords()
 		{
 			return new SAEON.Observations.Data.ImportBatchCollection().Where(ImportBatch.Columns.DataSourceID, Id).Load();
-		}
-		public SAEON.Observations.Data.InstrumentDataSourceCollection InstrumentDataSourceRecords()
-		{
-			return new SAEON.Observations.Data.InstrumentDataSourceCollection().Where(InstrumentDataSource.Columns.DataSourceID, Id).Load();
 		}
 		public SAEON.Observations.Data.SensorCollection SensorRecords()
 		{

@@ -15,13 +15,13 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
     /// <summary>
-    /// Controller class for DataSourceRole
+    /// Controller class for DataSourceRoleOld
     /// </summary>
     [System.ComponentModel.DataObject]
-    public partial class DataSourceRoleController
+    public partial class DataSourceRoleOldController
     {
         // Preload our schema..
-        DataSourceRole thisSchemaLoad = new DataSourceRole();
+        DataSourceRoleOld thisSchemaLoad = new DataSourceRoleOld();
         private string userName = String.Empty;
         protected string UserName
         {
@@ -42,36 +42,36 @@ namespace SAEON.Observations.Data
             }
         }
         [DataObjectMethod(DataObjectMethodType.Select, true)]
-        public DataSourceRoleCollection FetchAll()
+        public DataSourceRoleOldCollection FetchAll()
         {
-            DataSourceRoleCollection coll = new DataSourceRoleCollection();
-            Query qry = new Query(DataSourceRole.Schema);
+            DataSourceRoleOldCollection coll = new DataSourceRoleOldCollection();
+            Query qry = new Query(DataSourceRoleOld.Schema);
             coll.LoadAndCloseReader(qry.ExecuteReader());
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Select, false)]
-        public DataSourceRoleCollection FetchByID(object Id)
+        public DataSourceRoleOldCollection FetchByID(object Id)
         {
-            DataSourceRoleCollection coll = new DataSourceRoleCollection().Where("ID", Id).Load();
+            DataSourceRoleOldCollection coll = new DataSourceRoleOldCollection().Where("ID", Id).Load();
             return coll;
         }
 		
 		[DataObjectMethod(DataObjectMethodType.Select, false)]
-        public DataSourceRoleCollection FetchByQuery(Query qry)
+        public DataSourceRoleOldCollection FetchByQuery(Query qry)
         {
-            DataSourceRoleCollection coll = new DataSourceRoleCollection();
+            DataSourceRoleOldCollection coll = new DataSourceRoleOldCollection();
             coll.LoadAndCloseReader(qry.ExecuteReader()); 
             return coll;
         }
         [DataObjectMethod(DataObjectMethodType.Delete, true)]
         public bool Delete(object Id)
         {
-            return (DataSourceRole.Delete(Id) == 1);
+            return (DataSourceRoleOld.Delete(Id) == 1);
         }
         [DataObjectMethod(DataObjectMethodType.Delete, false)]
         public bool Destroy(object Id)
         {
-            return (DataSourceRole.Destroy(Id) == 1);
+            return (DataSourceRoleOld.Destroy(Id) == 1);
         }
         
         
@@ -82,7 +82,7 @@ namespace SAEON.Observations.Data
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
 	    public void Insert(Guid Id,Guid DataSourceID,Guid RoleId,DateTime? DateStart,DateTime? DateEnd,string RoleName,bool? IsRoleReadOnly,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
-		    DataSourceRole item = new DataSourceRole();
+		    DataSourceRoleOld item = new DataSourceRoleOld();
 		    
             item.Id = Id;
             
@@ -116,7 +116,7 @@ namespace SAEON.Observations.Data
         [DataObjectMethod(DataObjectMethodType.Update, true)]
 	    public void Update(Guid Id,Guid DataSourceID,Guid RoleId,DateTime? DateStart,DateTime? DateEnd,string RoleName,bool? IsRoleReadOnly,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
-		    DataSourceRole item = new DataSourceRole();
+		    DataSourceRoleOld item = new DataSourceRoleOld();
 	        item.MarkOld();
 	        item.IsLoaded = true;
 		    

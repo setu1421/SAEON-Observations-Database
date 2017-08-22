@@ -1,4 +1,6 @@
-﻿--> Added 2.0.9 20160727 TimPN
+﻿--> Removed 2.0.34 TimPN 20170821
+/*
+--> Added 2.0.9 20160727 TimPN
 CREATE TABLE [dbo].[Instrument_DataSource]
 (
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Instrument_DataSource_ID] DEFAULT newid(), 
@@ -74,3 +76,5 @@ BEGIN
 END
 --> Changed 2.0.15 20161102 TimPN
 --< Added 2.0.9 20160727 TimPN
+*/
+--< Removed 2.0.34 TimPN 20170821

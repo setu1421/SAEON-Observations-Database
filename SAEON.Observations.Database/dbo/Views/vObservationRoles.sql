@@ -1,4 +1,6 @@
-﻿--> Changed 2.0.3 20160503 TimPN
+﻿--> Removed 2.0.34 TimPN 20170821
+/*
+--> Changed 2.0.3 20160503 TimPN
 --Renamed SensorProcedure to Sensor
 --< Changed 2.0.3 20160503 TimPN
 CREATE VIEW [dbo].[vObservationRoles]
@@ -59,3 +61,5 @@ AS
            ((DataSourceRoles.DateEnd is null) or (vObservation.ValueDate <= DataSourceRoles.DateEnd))
 --< Changed 20170213 TimPN
 --< Changed 2.0.16 20161107 TimPN
+*/
+--< Removed 2.0.34 TimPN 20170821

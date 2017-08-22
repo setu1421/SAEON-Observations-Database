@@ -15,23 +15,23 @@ using SubSonic.Utilities;
 namespace SAEON.Observations.Data
 {
 	/// <summary>
-	/// Strongly-typed collection for the DataSourceRole class.
+	/// Strongly-typed collection for the DataSourceRoleOld class.
 	/// </summary>
     [Serializable]
-	public partial class DataSourceRoleCollection : ActiveList<DataSourceRole, DataSourceRoleCollection>
+	public partial class DataSourceRoleOldCollection : ActiveList<DataSourceRoleOld, DataSourceRoleOldCollection>
 	{	   
-		public DataSourceRoleCollection() {}
+		public DataSourceRoleOldCollection() {}
         
         /// <summary>
 		/// Filters an existing collection based on the set criteria. This is an in-memory filter
 		/// Thanks to developingchris for this!
         /// </summary>
-        /// <returns>DataSourceRoleCollection</returns>
-		public DataSourceRoleCollection Filter()
+        /// <returns>DataSourceRoleOldCollection</returns>
+		public DataSourceRoleOldCollection Filter()
         {
             for (int i = this.Count - 1; i > -1; i--)
             {
-                DataSourceRole o = this[i];
+                DataSourceRoleOld o = this[i];
                 foreach (SubSonic.Where w in this.wheres)
                 {
                     bool remove = false;
@@ -62,14 +62,14 @@ namespace SAEON.Observations.Data
 		
 	}
 	/// <summary>
-	/// This is an ActiveRecord class which wraps the DataSourceRole table.
+	/// This is an ActiveRecord class which wraps the DataSourceRoleOld table.
 	/// </summary>
 	[Serializable]
-	public partial class DataSourceRole : ActiveRecord<DataSourceRole>, IActiveRecord
+	public partial class DataSourceRoleOld : ActiveRecord<DataSourceRoleOld>, IActiveRecord
 	{
 		#region .ctors and Default Settings
 		
-		public DataSourceRole()
+		public DataSourceRoleOld()
 		{
 		  SetSQLProps();
 		  InitSetDefaults();
@@ -78,7 +78,7 @@ namespace SAEON.Observations.Data
 		
 		private void InitSetDefaults() { SetDefaults(); }
 		
-		public DataSourceRole(bool useDatabaseDefaults)
+		public DataSourceRoleOld(bool useDatabaseDefaults)
 		{
 			SetSQLProps();
 			if(useDatabaseDefaults)
@@ -86,14 +86,14 @@ namespace SAEON.Observations.Data
 			MarkNew();
 		}
         
-		public DataSourceRole(object keyID)
+		public DataSourceRoleOld(object keyID)
 		{
 			SetSQLProps();
 			InitSetDefaults();
 			LoadByKey(keyID);
 		}
 		 
-		public DataSourceRole(string columnName, object columnValue)
+		public DataSourceRoleOld(string columnName, object columnValue)
 		{
 			SetSQLProps();
 			InitSetDefaults();
@@ -121,7 +121,7 @@ namespace SAEON.Observations.Data
 			if(!IsSchemaInitialized)
 			{
 				//Schema declaration
-				TableSchema.Table schema = new TableSchema.Table("DataSourceRole", TableType.Table, DataService.GetInstance("ObservationsDB"));
+				TableSchema.Table schema = new TableSchema.Table("DataSourceRoleOld", TableType.Table, DataService.GetInstance("ObservationsDB"));
 				schema.Columns = new TableSchema.TableColumnCollection();
 				schema.SchemaName = @"dbo";
 				//columns
@@ -278,7 +278,7 @@ namespace SAEON.Observations.Data
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
-				DataService.Providers["ObservationsDB"].AddSchema("DataSourceRole",schema);
+				DataService.Providers["ObservationsDB"].AddSchema("DataSourceRoleOld",schema);
 			}
 		}
 		#endregion
@@ -381,7 +381,7 @@ namespace SAEON.Observations.Data
 		#region ForeignKey Properties
 		
 		/// <summary>
-		/// Returns a AspnetRole ActiveRecord object related to this DataSourceRole
+		/// Returns a AspnetRole ActiveRecord object related to this DataSourceRoleOld
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetRole AspnetRole
@@ -392,7 +392,7 @@ namespace SAEON.Observations.Data
 		
 		
 		/// <summary>
-		/// Returns a AspnetUser ActiveRecord object related to this DataSourceRole
+		/// Returns a AspnetUser ActiveRecord object related to this DataSourceRoleOld
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
@@ -403,7 +403,7 @@ namespace SAEON.Observations.Data
 		
 		
 		/// <summary>
-		/// Returns a DataSource ActiveRecord object related to this DataSourceRole
+		/// Returns a DataSource ActiveRecord object related to this DataSourceRoleOld
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.DataSource DataSource
@@ -429,7 +429,7 @@ namespace SAEON.Observations.Data
 		/// </summary>
 		public static void Insert(Guid varId,Guid varDataSourceID,Guid varRoleId,DateTime? varDateStart,DateTime? varDateEnd,string varRoleName,bool? varIsRoleReadOnly,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
-			DataSourceRole item = new DataSourceRole();
+			DataSourceRoleOld item = new DataSourceRoleOld();
 			
 			item.Id = varId;
 			
@@ -465,7 +465,7 @@ namespace SAEON.Observations.Data
 		/// </summary>
 		public static void Update(Guid varId,Guid varDataSourceID,Guid varRoleId,DateTime? varDateStart,DateTime? varDateEnd,string varRoleName,bool? varIsRoleReadOnly,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
-			DataSourceRole item = new DataSourceRole();
+			DataSourceRoleOld item = new DataSourceRoleOld();
 			
 				item.Id = varId;
 			

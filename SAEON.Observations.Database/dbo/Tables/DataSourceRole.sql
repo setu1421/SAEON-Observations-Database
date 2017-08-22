@@ -1,4 +1,6 @@
-﻿CREATE TABLE [dbo].[DataSourceRole] (
+﻿--> Removed 2.0.34 TimPN 20170821
+/*
+CREATE TABLE [dbo].[DataSourceRole] (
     [ID]             UNIQUEIDENTIFIER CONSTRAINT [DF_DataSourceRole_ID] DEFAULT (newid()) NOT NULL,
     [DataSourceID]   UNIQUEIDENTIFIER NOT NULL,
     [RoleId]         UNIQUEIDENTIFIER NOT NULL,
@@ -81,3 +83,5 @@ BEGIN
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160715 TimPN
+*/
+--< Removed 2.0.34 TimPN 20170821

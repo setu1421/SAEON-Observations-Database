@@ -86,8 +86,6 @@
     <Compile Include="Generated\DataSchemaController.cs" />
     <Compile Include="Generated\DataSource.cs" />
     <Compile Include="Generated\DataSourceController.cs" />
-    <Compile Include="Generated\DataSourceRole.cs" />
-    <Compile Include="Generated\DataSourceRoleController.cs" />
     <Compile Include="Generated\DataSourceTransformation.cs" />
     <Compile Include="Generated\DataSourceTransformationController.cs" />
     <Compile Include="Generated\DataSourceType.cs" />
@@ -158,17 +156,14 @@
     <Compile Include="Generated\VDataQuery.cs" />
     <Compile Include="Generated\VDataSchema.cs" />
     <Compile Include="Generated\VDataSource.cs" />
-    <Compile Include="Generated\VDataSourceRole.cs" />
     <Compile Include="Generated\VDataSourceTransformation.cs" />
     <Compile Include="Generated\VDownload.cs" />
     <Compile Include="Generated\VImportBatch.cs" />
-    <Compile Include="Generated\VInstrumentDataSource.cs" />
     <Compile Include="Generated\VInstrumentOrganisation.cs" />
     <Compile Include="Generated\VInstrumentSensor.cs" />
     <Compile Include="Generated\VInventory.cs" />
     <Compile Include="Generated\VModuleRoleModule.cs" />
     <Compile Include="Generated\VObservation.cs" />
-    <Compile Include="Generated\VObservationRole.cs" />
     <Compile Include="Generated\VObservationsList.cs" />
     <Compile Include="Generated\VOrganisationInstrument.cs" />
     <Compile Include="Generated\VOrganisationSite.cs" />
@@ -187,7 +182,6 @@
     <Compile Include="Partials\DataSourceTransformation.cs" />
     <Compile Include="Partials\DataSourceType.cs" />
     <Compile Include="Partials\ImportBatch.cs" />
-    <Compile Include="Partials\ProjectSite.cs" />
     <Compile Include="Partials\Station.cs" />
     <Compile Include="Partials\Status.cs" />
     <Compile Include="Partials\TransformationType.cs" />
