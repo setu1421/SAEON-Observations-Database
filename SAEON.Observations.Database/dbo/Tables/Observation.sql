@@ -22,7 +22,7 @@
     [ValueDecade]           as Year(ValueDate) / 10,
 --< Added 2.0.32 20170524 TimPN
 --> Added 2.0.33 20170628 TimPN
-	[TextValue] VarChar(10) Null,
+    [TextValue] VarChar(10) Null,
 --< Added 2.0.33 20170628 TimPN
     [RawValue]              FLOAT (53)       NULL,
     [DataValue]             FLOAT (53)       NULL,
@@ -50,7 +50,7 @@
     [CorrelationID] UNIQUEIDENTIFIER NULL,
 --< Added 2.0.15 20161024 TimPN
 --> Added 2.0.33 20170628 TimPN
-	[Elevation] Float Null,
+    [Elevation] Float Null,
 --< Added 2.0.33 20170628 TimPN
     [UserId]                UNIQUEIDENTIFIER NOT NULL,
     [AddedDate]             DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
@@ -87,6 +87,9 @@
     CONSTRAINT [FK_Observation_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]),
     CONSTRAINT [FK_Observation_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]),
 --< Added 2.0.9 20160823 TimPN
+--> Added 2.0.35 20170824 TimPN
+    CONSTRAINT [UX_Observation] UNIQUE ([SensorID], [ValueDate], [RawValue], [PhenomenonOfferingID], [PhenomenonUOMID]) on [Observations]
+--< Added 2.0.35 20170824 TimPN
 );
 --> Removed 2.0.31 20170414 TimPN
 --> Added 2.0.8 20160718 TimPN
@@ -233,4 +236,28 @@ BEGIN
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160718 TimPN
-
+/*
+--> Added 2.0.35 20170824 TimPN
+GO
+CREATE TRIGGER [dbo].[TR_Observation_DuplicateOfNull] ON [dbo].[Observation]
+FOR INSERT
+AS
+BEGIN
+  SET NoCount ON
+  if Exists(
+    Select
+      *
+    from
+      Inserted
+      inner join Observation
+        on (Inserted.SensorID = Observation.SensorID) and
+           (Inserted.ValueDate = Observation.ValueDate) and
+           (Inserted.PhenomenonOfferingID = Observation.PhenomenonOfferingID) and
+           (Inserted.PhenomenonUOMID = Observation.PhenomenonUOMID)
+      where
+        (Observation.RawValue is null) --and (Inserted.RawValue is not null)
+      )
+    Throw 55555, 'Duplicate of null', 1
+END
+--< Added 2.0.35 20170824 TimPN
+*/

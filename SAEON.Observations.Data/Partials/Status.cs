@@ -16,6 +16,8 @@ namespace SAEON.Observations.Data
         public const string UOMInvalid = "d9e0289e-02d5-4ee2-8134-8516476aa31a";
         public const string SensorNotFound = "dda15e09-c652-400e-9111-ebfc192363ff";
         public const string BatchRetracted = "302c69b6-f9d4-4d9f-82bb-a61cfc5dd80b";
+        public const string Duplicate = "0B03DCBF-DDD1-4FE1-95D9-3C80BEF2D643";
+        public const string DuplicateOfNull = "EDB0A37C-F68D-4693-8BA6-D14D1B4FABE8";
 
     }
 }

@@ -1,0 +1,108 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[DataLog]
+       [dbo].[Observation]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[DataLog] (Table)
+       [dbo].[Observation] (Table)
+     Create
+       [dbo].[TR_Observation_Update] (Trigger)
+
+** Supporting actions
+     Drop
+       [dbo].[DF_DataLog_ID] (Default Constraint)
+       [dbo].[DF_DataLog_ImportDate] (Default Constraint)
+       [dbo].[DF_DataLog_AddedAt] (Default Constraint)
+       [dbo].[DF_DataLog_UpdatedAt] (Default Constraint)
+       [dbo].[DF_Observation_AddedDate] (Default Constraint)
+       [dbo].[DF_Observation_AddedAt] (Default Constraint)
+       [dbo].[DF_Observation_UpdatedAt] (Default Constraint)
+       [dbo].[FK_DataLog_Sensor] (Foreign Key)
+       [dbo].[FK_DataLog_Status] (Foreign Key)
+       [dbo].[FK_DataLog_StatusReason] (Foreign Key)
+       [dbo].[FK_DataLog_aspnet_Users] (Foreign Key)
+       [dbo].[FK_DataLog_DataSourceTransformation] (Foreign Key)
+       [dbo].[FK_DataLog_ImportBatch] (Foreign Key)
+       [dbo].[FK_DataLog_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_DataLog_PhenomenonUOM] (Foreign Key)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+       [dbo].[FK_Observation_Status] (Foreign Key)
+       [dbo].[FK_Observation_StatusReason] (Foreign Key)
+       [dbo].[FK_Observation_aspnet_Users] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonUOM] (Foreign Key)
+       [dbo].[FK_Observation_Sensor] (Foreign Key)
+     Create
+       [dbo].[DataLog].[IX_DataLog_ImportBatchID] (Index)
+       [dbo].[DataLog].[IX_DataLog_SensorID] (Index)
+       [dbo].[DataLog].[IX_DataLog_ValueDay] (Index)
+       [dbo].[DataLog].[IX_DataLog_DataSourceTransformationID] (Index)
+       [dbo].[DataLog].[IX_DataLog_PhenomenonOfferingID] (Index)
+       [dbo].[DataLog].[IX_DataLog_PhenomenonUOMID] (Index)
+       [dbo].[DataLog].[IX_DataLog_StatusID] (Index)
+       [dbo].[DataLog].[IX_DataLog_UserId] (Index)
+       [dbo].[DataLog].[IX_DataLog_StatusReasonID] (Index)
+       [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_PhenomenonUOMID] (Index)
+       [dbo].[Observation].[IX_Observation_PhenomenonOfferingID] (Index)
+       [dbo].[Observation].[IX_Observation_PhenomenonUOMID] (Index)
+       [dbo].[Observation].[IX_Observation_UserId] (Index)
+       [dbo].[Observation].[IX_Observation_AddedDate] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDate] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDateDesc] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDay] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_StatusID] (Index)
+       [dbo].[Observation].[IX_Observation_StatusReasonID] (Index)
+       [dbo].[Observation].[IX_Observation_CorrelationID] (Index)
+       [dbo].[Observation].[IX_Observation_Elevation] (Index)
+       [dbo].[FK_DataLog_Sensor] (Foreign Key)
+       [dbo].[FK_DataLog_Status] (Foreign Key)
+       [dbo].[FK_DataLog_StatusReason] (Foreign Key)
+       [dbo].[FK_DataLog_aspnet_Users] (Foreign Key)
+       [dbo].[FK_DataLog_DataSourceTransformation] (Foreign Key)
+       [dbo].[FK_DataLog_ImportBatch] (Foreign Key)
+       [dbo].[FK_DataLog_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_DataLog_PhenomenonUOM] (Foreign Key)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+       [dbo].[FK_Observation_Status] (Foreign Key)
+       [dbo].[FK_Observation_StatusReason] (Foreign Key)
+       [dbo].[FK_Observation_aspnet_Users] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonUOM] (Foreign Key)
+       [dbo].[FK_Observation_Sensor] (Foreign Key)
+       [dbo].[TR_DataLog_Insert] (Trigger)
+       [dbo].[TR_DataLog_Update] (Trigger)
+       [dbo].[TR_Observation_Insert] (Trigger)
+     Refresh
+       [dbo].[vDataLog] (View)
+       [dbo].[vApiDataDownload] (View)
+       [dbo].[vApiDataQuery] (View)
+       [dbo].[vApiInventory] (View)
+       [dbo].[vApiSpacialCoverage] (View)
+       [dbo].[vApiTemporalCoverage] (View)
+       [dbo].[vInventory] (View)
+       [dbo].[vInventoryInstruments] (View)
+       [dbo].[vInventoryOrganisations] (View)
+       [dbo].[vInventoryPhenomenaOfferings] (View)
+       [dbo].[vInventoryStations] (View)
+       [dbo].[vInventoryTotals] (View)
+       [dbo].[vInventoryYears] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationsList] (View)
+       [dbo].[vSensorThingsDatastreams] (View)
+       [dbo].[progress_Status_Raw] (Procedure)
+
+If this deployment is executed, changes to [dbo].[vObservation] might introduce run-time errors in [dbo].[vObservationRolesOld].
+

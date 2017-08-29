@@ -65,7 +65,7 @@
     CONSTRAINT [FK_DataLog_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]),
 --< Added 2.0.9 20160823 TimPN
 --> Added 2.0.9 20160905 TimPN
-    CONSTRAINT [UX_DataLog] Unique ([ImportBatchID], [SensorID], [ImportDate], [ValueDate], [ValueTime], [PhenomenonOfferingID], [PhenomenonUOMID])
+    CONSTRAINT [UX_DataLog] Unique ([ImportBatchID], [SensorID], [ValueDate], [RawValue], [PhenomenonOfferingID], [PhenomenonUOMID])
 --> Added 2.0.9 20160905 TimPN
 );
 --> Added 2.0.0 20160406 TimPN

@@ -176,7 +176,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
                 ds.UpdateFreq = int.Parse(cbUpdateFrequency.SelectedItem.Value);
 
-                if (cbDataSchema.SelectedItem.Value == null)
+                if (cbDataSchema.IsEmpty)
                     ds.DataSchemaID = null;
                 else
                 {
