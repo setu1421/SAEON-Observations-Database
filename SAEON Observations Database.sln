@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SAEON.Observations.Database", "SAEON.Observations.Database\SAEON.Observations.Database.sqlproj", "{AC68EB6A-31BD-407E-9B65-558E900AEF61}"
 EndProject
@@ -18,21 +18,21 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.Observations.WebSite.
 		SccProvider = "SAK"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
 		ProjectReferences = "{5e1c5955-ee32-4fc2-9b18-a3e505dd278d}|SAEON.Observations.Data.dll;{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}|SubSonic.dll;"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_54378"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_54350"
 		Debug.AspNetCompiler.PhysicalPath = "SAEON.Observations.WebSite.Admin\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54378\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54350\"
 		Debug.AspNetCompiler.Updateable = "false"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_54378"
+		Release.AspNetCompiler.VirtualPath = "/localhost_54350"
 		Release.AspNetCompiler.PhysicalPath = "SAEON.Observations.WebSite.Admin\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54378\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54350\"
 		Release.AspNetCompiler.Updateable = "false"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "54378"
+		VWDPort = "54350"
 		SlnRelativePath = "SAEON.Observations.WebSite.Admin\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
@@ -136,5 +136,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CFA1C962-867C-4697-B5FE-585ACC8DE9A0}
 	EndGlobalSection
 EndGlobal

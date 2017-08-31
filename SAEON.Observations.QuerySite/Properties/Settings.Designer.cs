@@ -12,7 +12,7 @@ namespace SAEON.Observations.QuerySite.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.3.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,7 +25,7 @@ namespace SAEON.Observations.QuerySite.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:44311/oauth2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:44320/oauth2")]
         public string IdentityServerUrl {
             get {
                 return ((string)(this["IdentityServerUrl"]));
@@ -34,7 +34,7 @@ namespace SAEON.Observations.QuerySite.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:53638")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:54330")]
         public string WebAPIUrl {
             get {
                 return ((string)(this["WebAPIUrl"]));
@@ -43,7 +43,7 @@ namespace SAEON.Observations.QuerySite.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:50160")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:54340")]
         public string QuerySiteUrl {
             get {
                 return ((string)(this["QuerySiteUrl"]));
