@@ -31,10 +31,10 @@ namespace SAEON.Observations.QuerySite
             bundles.Add(new ScriptBundle("~/bundles/ejscripts").Include(
                            "~/Scripts/jsrender.min.js",
                            "~/Scripts/jquery.easing-1.3.min.js",
-                            "~/Scripts/ej/ej.web.all.min.js",
-                            "~/Scripts/ej/ej.unobtrusive.min.js"));
+                            "~/Scripts/ej/web/ej.web.all.min.js",
+                            "~/Scripts/ej/web/ej.unobtrusive.min.js"));
             bundles.Add(new StyleBundle("~/bundles/ejstyles").Include(
-                      "~/ejThemes/flat-saffron/ej.web.all.min.css"));
+                      "~/Content/ej/web/flat-saffron/ej.web.all.min.css"));
             BundleTable.EnableOptimizations = true;
         }
     }
