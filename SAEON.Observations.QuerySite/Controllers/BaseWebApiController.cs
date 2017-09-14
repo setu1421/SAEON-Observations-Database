@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SAEON.Logs;
+using SAEON.Observations.Core;
 using Syncfusion.JavaScript;
 using Syncfusion.JavaScript.DataSources;
 using System;
@@ -15,7 +16,6 @@ using Thinktecture.IdentityModel.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
-    //[Authorize]
     [HandleError, HandleForbidden]
     public class BaseWebApiController : Controller
     {
@@ -62,7 +62,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                         var user = User as ClaimsPrincipal;
-                        //Logging.Verbose("Claims: {claims}", string.Join("; ", user.GetClaims()));
+                        Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
                         var token = user.FindFirst("access_token").Value;
                         Logging.Verbose("Token: {token}", token);
                         client.SetBearerToken(token);

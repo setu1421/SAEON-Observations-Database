@@ -28,7 +28,7 @@
     </NuGetPackageImportStamp>
     <ApplicationInsightsResourceId>/subscriptions/6f3a7949-1ff7-4982-a860-ce7f90c8f13e/resourcegroups/SAEON/providers/microsoft.insights/components/SAEON.Observations.QuerySite</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/6f3a7949-1ff7-4982-a860-ce7f90c8f13e/resourcegroups/SAEON/providers/microsoft.insights/components/SAEON.Observations.QuerySite</ApplicationInsightsAnnotationResourceId>
-    <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -48,6 +48,19 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
@@ -80,8 +93,8 @@
     <Reference Include="Microsoft.ApplicationInsights, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.2.4.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationInsights.TraceListener, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.TraceListener.2.4.0\lib\net45\Microsoft.ApplicationInsights.TraceListener.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationInsights.TraceListener, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.TraceListener.2.4.1\lib\net45\Microsoft.ApplicationInsights.TraceListener.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
@@ -117,8 +130,8 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Logs, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Logs.1.0.3\lib\net452\SAEON.Logs.dll</HintPath>
+    <Reference Include="SAEON.Logs, Version=1.0.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Logs.1.0.6\lib\net452\SAEON.Logs.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.5.0\lib\net45\Serilog.dll</HintPath>
@@ -141,44 +154,44 @@
     <Reference Include="Serilog.Sinks.Seq, Version=3.3.3.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.Seq.3.3.3\lib\net45\Serilog.Sinks.Seq.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Compression.Base, Version=15.3450.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.26\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Compression.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.DocIO.Base, Version=15.3450.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.26\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.DocIO.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.EJ, Version=15.3450.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.26\lib\net45\Syncfusion.EJ.dll</HintPath>
+    <Reference Include="Syncfusion.EJ, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.29\lib\net45\Syncfusion.EJ.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.EJ.Export, Version=15.3450.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.26\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.Export, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.29\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.EJ.MVC, Version=15.3500.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.15.3.0.26\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.MVC, Version=15.3500.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.15.3.0.29\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Linq.Base, Version=15.3450.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.26\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Linq.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.29\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.OfficeChart.Base, Version=15.3450.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.26\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
+    <Reference Include="Syncfusion.OfficeChart.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base, Version=15.3450.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.26\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Pdf.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Presentation.Base, Version=15.3450.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.26\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Presentation.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.XlsIO.Base, Version=15.3450.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.26\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.XlsIO.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -371,6 +384,9 @@
     <Content Include="Content\ej\web\common-images\maps\Zoom-In_hover.png" />
     <Content Include="Content\ej\web\common-images\maps\Zoom-out.png" />
     <Content Include="Content\ej\web\common-images\maps\Zoom-out_hover.png" />
+    <Content Include="Content\ej\web\common-images\mediaplayer\basic_view_toolbar_bg.png" />
+    <Content Include="Content\ej\web\common-images\mediaplayer\header_bg.png" />
+    <Content Include="Content\ej\web\common-images\mediaplayer\thumbnail.png" />
     <Content Include="Content\ej\web\common-images\olapkpi\circle.png" />
     <Content Include="Content\ej\web\common-images\olapkpi\diamond.png" />
     <Content Include="Content\ej\web\common-images\olapkpi\down-arrow.png" />
@@ -747,6 +763,7 @@
     <Content Include="Scripts\ej\web\ej.listbox.min.js" />
     <Content Include="Scripts\ej\web\ej.listview.min.js" />
     <Content Include="Scripts\ej\web\ej.maskedit.min.js" />
+    <Content Include="Scripts\ej\web\ej.mediaplayer.min.js" />
     <Content Include="Scripts\ej\web\ej.menu.min.js" />
     <Content Include="Scripts\ej\web\ej.navigationdrawer.min.js" />
     <Content Include="Scripts\ej\web\ej.olap.base.min.js" />
@@ -809,7 +826,8 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\SpacialCoverage.js" />
+    <TypeScriptCompile Include="Scripts\Query.ts" />
+    <TypeScriptCompile Include="Scripts\SpacialCoverage.ts" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -905,6 +923,10 @@
     <Content Include="Views\SpacialCoverage\SelectedFeaturesHtml.cshtml" />
     <Content Include="Views\SpacialCoverage\SelectedLocations.cshtml" />
     <Content Include="Views\SpacialCoverage\SelectedLocationsHtml.cshtml" />
+    <TypeScriptCompile Include="Scripts\TemporalCoverage.ts" />
+    <TypeScriptCompile Include="Scripts\typings\google-maps\google-maps.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\googlemaps\google.maps.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
