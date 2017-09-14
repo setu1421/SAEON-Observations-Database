@@ -1,3 +1,4 @@
+﻿
 function ShowWaiting() {
     var wp = $("#waiting").data("ejWaitingPopup");
     wp.show();
@@ -65,9 +66,9 @@ function onUpdateSelectedLocations() {
     }
     $.post("/SpacialCoverage/UpdateSelectedLocations", { Locations: selected })
         .done(function (data) {
-        $('#PartialSelectedLocations').html(data);
-        EnableButtons();
-    })
+            $('#PartialSelectedLocations').html(data);
+            EnableButtons();
+        })
         .fail(function () { alert("Error in UpdateSelectedLocations"); });
 }
 function onUpdateSelectedFeatures() {
@@ -81,9 +82,9 @@ function onUpdateSelectedFeatures() {
     }
     $.post("/SpacialCoverage/UpdateSelectedFeatures", { Features: selected })
         .done(function (data) {
-        $('#PartialSelectedFeatures').html(data);
-        EnableButtons();
-    })
+            $('#PartialSelectedFeatures').html(data);
+            EnableButtons();
+        })
         .fail(function () { alert("Error in UpdateSelectedFeatures"); });
 }
 function onUpdateFilters() {
@@ -109,72 +110,71 @@ function onSearchClick() {
     ShowWaiting();
     $.get("/SpacialCoverage/GetData")
         .done(function () {
-        UpdateMap();
-        EnableButtons();
-        HideWaiting();
-    })
+            UpdateMap();
+            EnableButtons();
+            HideWaiting();
+        })
         .fail(function (jqXHR, textStatus, errorThrown) {
-        ErrorInFunc("Error in GetData Status: " + textStatus + " Error: " + errorThrown);
-    });
+            ErrorInFunc("Error in GetData Status: " + textStatus + " Error: " + errorThrown);
+        });
 }
 var markers = [];
 var map;
 function initMap() {
-    var opts = {
+    var opts: google.maps.MapOptions = {
         center: new google.maps.LatLng(-28.7238579, 124.6531662),
         zoom: 5
     };
     map = new google.maps.Map(document.getElementById('mapLocations'), opts);
     UpdateMap(true);
 }
-function UpdateMap(isInit) {
-    if (isInit === void 0) { isInit = false; }
+function UpdateMap(isInit:boolean = false) {
     $.getJSON("/SpacialCoverage/GetMapPoints")
         .done(function (json) {
-        for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(null);
-        }
-        markers = [];
-        var bounds = new google.maps.LatLngBounds();
-        var locations = json;
-        for (var i = 0; i < locations.length; i++) {
-            var location = locations[i];
-            var opts = {
-                position: new google.maps.LatLng(location.Latitude, location.Longitude),
-                map: map,
-                title: location.Title
-            };
-            var marker = new google.maps.Marker(opts);
-            markers.push(marker);
-            bounds.extend(marker.getPosition());
-            if (location.Status === 0) {
-                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
-                marker.setTitle(marker.getTitle() + " - No Status");
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
             }
-            else if (location.Status === 1) {
-                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
-                marker.setTitle(marker.getTitle() + " - Unverfied");
+            markers = [];
+            var bounds = new google.maps.LatLngBounds();
+            var locations = json;
+            for (var i = 0; i < locations.length; i++) {
+                var location = locations[i];
+                var opts: google.maps.MarkerOptions = {
+                    position: new google.maps.LatLng(location.Latitude, location.Longitude),
+                    map: map,
+                    title: location.Title
+                };
+                var marker = new google.maps.Marker(opts);
+                markers.push(marker);
+                bounds.extend(marker.getPosition());
+                if (location.Status === 0) {
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+                    marker.setTitle(marker.getTitle() + " - No Status");
+                }
+                else if (location.Status === 1) {
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                    marker.setTitle(marker.getTitle() + " - Unverfied");
+                }
+                else if (location.Status === 2) {
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/orange-dot.png');
+                    marker.setTitle(marker.getTitle() + " - Being Verified");
+                }
+                else {
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+                    marker.setTitle(marker.getTitle() + " - Verfied");
+                }
             }
-            else if (location.Status === 2) {
-                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/orange-dot.png');
-                marker.setTitle(marker.getTitle() + " - Being Verified");
+            if (isInit) {
+                if (markers.length > 0) {
+                    map.fitBounds(bounds);
+                }
+                var center = map.getCenter();
             }
             else {
-                marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
-                marker.setTitle(marker.getTitle() + " - Verfied");
+
             }
-        }
-        if (isInit) {
-            if (markers.length > 0) {
-                map.fitBounds(bounds);
-            }
-            var center = map.getCenter();
-        }
-        else {
-        }
-        google.maps.event.trigger(map, "resize");
-        map.setCenter(center);
-    })
+            google.maps.event.trigger(map, "resize");
+            map.setCenter(center);
+        })
         .fail(function () { alert('Error in GetMapPoints'); });
 }
-//# sourceMappingURL=SpacialCoverage.js.map
