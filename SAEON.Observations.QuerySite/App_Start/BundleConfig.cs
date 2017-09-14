@@ -34,7 +34,7 @@ namespace SAEON.Observations.QuerySite
                             "~/Scripts/ej/web/ej.web.all.min.js",
                             "~/Scripts/ej/web/ej.unobtrusive.min.js"));
             bundles.Add(new StyleBundle("~/bundles/ejstyles").Include(
-                      "~/Content/ej/web/flat-saffron/ej.web.all.min.css"));
+                      "~/Content/ej/web/bootstrap-theme/ej.web.all.min.css"));
             BundleTable.EnableOptimizations = true;
         }
     }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using IdentityModel.Client;
+using Newtonsoft.Json.Linq;
 using SAEON.Logs;
 using System.Net.Http;
 using System.Security.Claims;
@@ -24,26 +25,44 @@ namespace SAEON.Observations.QuerySite.Controllers
             return Redirect("/");
         }
 
-        [Authorize, Route("Claims")]
+        public ActionResult Register()
+        {
+            Logging.Information("ReturnUrl: {returnUrl}", Properties.Settings.Default.IdentityServerUrl + $"/Account/Register?returnUrl={Properties.Settings.Default.QuerySiteUrl}");
+            return Redirect(Properties.Settings.Default.IdentityServerUrl + $"/Account/Register?returnUrl={Properties.Settings.Default.QuerySiteUrl}");
+        }
+
+        //[Authorize]
         public ActionResult Claims()
         {
             ViewBag.Message = "Claims";
 
             var cp = (ClaimsPrincipal)User;
-            ViewData["access_token"] = cp.FindFirst("access_token").Value;
+            ViewData["access_token"] = cp?.FindFirst("access_token")?.Value;
 
             return View();
         }
 
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult> CallApi()
         {
             using (Logging.MethodCall(GetType()))
             {
-                var token = (User as ClaimsPrincipal).FindFirst("access_token").Value;
+                var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
+                if (token == null)
+                {
+                    var tokenClient = new TokenClient(Properties.Settings.Default.IdentityServerUrl + "/connect/token", "SAEON.Observations.QuerySite", "It6fWPU5J708");
+                    var tokenResponse = await tokenClient.RequestClientCredentialsAsync("SAEON.Observations.WebAPI");
+                    if (tokenResponse.IsError)
+                    {
+                        Logging.Error("Error: {error}", tokenResponse.Error);
+                        throw new HttpException(tokenResponse.Error);
+                    }
+                    token = tokenResponse.AccessToken;
+                }
+                Logging.Verbose("Token: {token}", token);
                 var client = new HttpClient();
                 client.SetBearerToken(token);
-                var result = await client.GetStringAsync("http://localhost:63378/claims");
+                var result = await client.GetStringAsync(Properties.Settings.Default.WebAPIUrl + "/claims");
                 ViewBag.Json = JArray.Parse(result.ToString());
                 return View("ShowApiResult");
             }

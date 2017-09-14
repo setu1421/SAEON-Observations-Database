@@ -25,15 +25,6 @@ namespace SAEON.Observations.QuerySite.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:44320/oauth2")]
-        public string IdentityServerUrl {
-            get {
-                return ((string)(this["IdentityServerUrl"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:54330")]
         public string WebAPIUrl {
             get {
@@ -47,6 +38,15 @@ namespace SAEON.Observations.QuerySite.Properties {
         public string QuerySiteUrl {
             get {
                 return ((string)(this["QuerySiteUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:44320")]
+        public string IdentityServerUrl {
+            get {
+                return ((string)(this["IdentityServerUrl"]));
             }
         }
     }

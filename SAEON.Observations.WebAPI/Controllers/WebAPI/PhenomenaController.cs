@@ -10,7 +10,6 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     /// <summary>
-    /// Phenomena
     /// </summary>
     [RoutePrefix("Phenomena")]
     public class PhenomenaController : BaseApiController<Phenomenon>
@@ -25,7 +24,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
         /// <summary>
-        /// all Phenomena
+        /// All Phenomena
         /// </summary>
         /// <returns>ListOf(Phenomenon)</returns>
         public override IQueryable<Phenomenon> GetAll()

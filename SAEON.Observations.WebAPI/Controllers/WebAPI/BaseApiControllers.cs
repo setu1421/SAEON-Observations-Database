@@ -16,7 +16,6 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
 
-    [Authorize]
     public abstract class BaseApiController<TEntity> : BaseController where TEntity : BaseEntity
     {
         /// <summary>
@@ -272,6 +271,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// </summary>
         /// <param name="item">The new TEntity </param>
         [HttpPost]
+        [ApiExplorerSettings(IgnoreApi = true)]
         //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
         {
@@ -341,6 +341,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the TEnity</param>
         /// <param name="delta">The new TEntity</param>
         [HttpPut]
+        [ApiExplorerSettings(IgnoreApi = true)]
         //[Route("{id:guid}")] Required in derived classes
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
@@ -407,6 +408,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the TEnity</param>
         /// <param name="delta">The new TEntity</param>
         [HttpPut]
+        [ApiExplorerSettings(IgnoreApi = true)]
         //[Route] Required in derived classes
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> PutByName(string name, [FromBody]TEntity delta)
@@ -472,6 +474,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// </summary>
         /// <param name="id">The Id of the TEntity</param>
         [HttpDelete]
+        [ApiExplorerSettings(IgnoreApi = true)]
         //[Route("{id:guid}")] Required in derived classes
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> DeleteById(Guid id)
@@ -519,6 +522,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// </summary>
         /// <param name="name">The Name of the TEntity</param>
         [HttpDelete]
+        [ApiExplorerSettings(IgnoreApi = true)]
         //[Route] Required in derived classes
         [ResponseType(typeof(void))]
         public virtual async Task<IHttpActionResult> DeleteByName(string name)

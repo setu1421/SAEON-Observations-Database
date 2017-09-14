@@ -5,12 +5,13 @@
         <ul class="dropdown-menu" role="menu">
             @if (Request.IsAuthenticated)
             {
-                <li>@Html.ActionLink(User.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage your account" })</li>
+                <li><p class="navbar-text">@User.GetUserName()</p></li>
+                @*<li class="disabled">@Html.ActionLink(User.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage your account" })</li>*@
                 @*<li>@Html.ActionLink("Change password", "ChangePassword", "Manage", routeValues: null, htmlAttributes: new { title = "Change your password" })</li>*@
                 <li>@Html.ActionLink("My Queries", "Index", "UserQueries")</li>
                 @*<li>@Html.ActionLink("My Downloads", "Index", "UserDownloads")</li>*@
-                @*<li>@Html.ActionLink("Claims", "Claims", "Account")</li>
-                <li>@Html.ActionLink("CallApi", "CallApi", "Account")</li>*@
+                <li>@Html.ActionLink("Claims", "Claims", "Account")</li>
+                <li>@Html.ActionLink("CallApi", "CallApi", "Account")</li>
                 <li>@Html.ActionLink("Logout", "LogOut", "Account", routeValues: null, htmlAttributes: new { title = "Log out" })</li>
             }
             else

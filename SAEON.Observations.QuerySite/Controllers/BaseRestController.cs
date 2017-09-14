@@ -12,7 +12,6 @@ using Thinktecture.IdentityModel.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
-    [Authorize]
     [HandleError, HandleForbidden]
     public class BaseRestController<TEntity> : Controller where TEntity : BaseEntity, new()
     {
@@ -133,7 +132,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual async Task<ActionResult> Create(TEntity item)
         {
             using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Name", item?.Name }, { "Item", item } }))
@@ -177,7 +175,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [Authorize]
-        //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual async Task<ActionResult> Edit(Guid? id)
         {
             using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
@@ -217,7 +214,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual async Task<ActionResult> Edit(TEntity delta)
         {
             using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", delta?.Id }, { "Delta", delta } }))
@@ -264,7 +260,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [Authorize]
-        //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual async Task<ActionResult> Delete(Guid? id)
         {
             using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
@@ -304,7 +299,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        //[Authorize(Roles = "Administrators, DataWriters")]
         public virtual async Task<ActionResult> DeleteConfirmed(Guid id)
         {
             using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))

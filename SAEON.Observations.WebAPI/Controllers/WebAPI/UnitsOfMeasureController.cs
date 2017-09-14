@@ -10,7 +10,6 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     /// <summary>
-    /// UnitOfMeasures
     /// </summary>
     [RoutePrefix("UnitsOfMeasure")]
     public class UnitsOfMeasureController : BaseApiController<UnitOfMeasure>
