@@ -12,7 +12,6 @@ using System.Web.OData;
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Authorize]
     [ODataRouteName("OData")]
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {

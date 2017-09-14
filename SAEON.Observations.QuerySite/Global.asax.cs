@@ -15,8 +15,6 @@ namespace SAEON.Observations.QuerySite
         {
             Logging
                 .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite {Date}.txt"))
-                .ReadFrom.AppSettings()
-                .WriteTo.Seq("http://localhost:5341/")
                 .Create();
             using (Logging.MethodCall(GetType()))
             {

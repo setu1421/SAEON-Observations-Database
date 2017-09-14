@@ -9,9 +9,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-
     /// <summary>
-    /// Sites
     /// </summary>
     [RoutePrefix("Sites")]
     public class SitesController : BaseApiController<Site>
@@ -25,7 +23,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
         /// <summary>
-        /// all Sites
+        /// All Sites
         /// </summary>
         /// <returns>ListOf(Site)</returns>
         public override IQueryable<Site> GetAll()

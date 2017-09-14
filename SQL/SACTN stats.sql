@@ -13,8 +13,7 @@ Select
     inner join Instrument
       on (Station_Instrument.InstrumentID = Instrument.ID)
     where 
-      (Station.Name like 'SACTN %') and
-      (Instrument.Name like 'SACTN %')
+      (Station.Name like 'SACTN %') and (Instrument.Name like 'SACTN %')
   ) StationsInstruments,
   (Select count(*) from Sensor where Name like 'SACTN %') Sensors,
   (
@@ -27,8 +26,7 @@ Select
     inner join Sensor
       on (Instrument_Sensor.SensorID = Sensor.ID)
     where 
-      (Instrument.Name like 'SACTN %') and
-      (Sensor.Name like 'SACTN %') 
+      (Instrument.Name like 'SACTN %') and (Sensor.Name like 'SACTN %') 
   ) InstrumentsSensors,
   (Select count(*) from DataSource where Name like 'SACTN %') DataSources,
   (
@@ -39,9 +37,30 @@ Select
     inner join DataSource
       on (Sensor.DataSourceID = DataSource.ID)
     where 
-      (Sensor.Name like 'SACTN %') and
-      (DataSource.Name like 'SACTN %') 
+      (Sensor.Name like 'SACTN %') and (DataSource.Name like 'SACTN %') 
   ) SensorsDataSources,
+  (
+  Select
+    Count(Distinct ImportBatch.ID)
+  from
+    ImportBatch
+    inner join DataSource
+      on (ImportBatch.DataSourceID = DataSource.ID)
+  where
+    (DataSource.Name like 'SACTN %')
+  ) ImportBatches,
+  (
+  Select
+    Count(*)
+  from
+    Observation
+    inner join ImportBatch
+      on (Observation.ImportBatchID = ImportBatch.ID)
+    inner join DataSource
+      on (ImportBatch.DataSourceID = DataSource.ID)
+  where
+    (DataSource.Name like 'SACTN %')
+  ) Observations,
   (Select count(*) from Sensor where (Name like 'SACTN %') and (Name like '% Annual %')) AnnualSensors,
   (Select count(*) from DataSource where Name like 'SACTN %' and (Name like '% Annual %')) AnnualDataSources,
   (

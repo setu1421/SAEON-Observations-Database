@@ -1,5 +1,6 @@
 ﻿using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
+using SAEON.Observations.WebAPI.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     /// Users have to be logged in to download data in the QuerySite. Any downloads are saved for later re-downloads.
     /// </summary>
     [RoutePrefix("UserDownloads")]
+    //[ClientIdAuthorize("SAEON.Observations.QuerySite")]
     public class UserDownloadsController : BaseApiWriteController<UserDownload>
     {
         protected override List<Expression<Func<UserDownload, bool>>> GetWheres()
@@ -107,6 +109,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="item">The UserDownload to be created</param>
         [ResponseType(typeof(UserDownload))]
         [Route]
+        [ClientId("SAEON.Observations.QuerySite")]
         public override async Task<IHttpActionResult> Post([FromBody]UserDownload item)
         {
             return await base.Post(item);
@@ -119,6 +122,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="delta">The new UserDownload</param>
         /// <returns></returns>
         [Route("{id:guid}")]
+        [ClientId("SAEON.Observations.QuerySite")]
         public override Task<IHttpActionResult> PutById(Guid id, [FromBody] UserDownload delta)
         {
             return base.PutById(id, delta);
@@ -131,6 +135,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="delta">The new UserDownload</param>
         /// <returns></returns>
         [Route]
+        [ClientId("SAEON.Observations.QuerySite")]
         public override Task<IHttpActionResult> PutByName(string name, [FromBody] UserDownload delta)
         {
             return base.PutByName(name, delta);
@@ -142,6 +147,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of UserDownload</param>
         /// <returns></returns>
         [Route("{id:guid}")]
+        [ClientId("SAEON.Observations.QuerySite")]
         public override Task<IHttpActionResult> DeleteById(Guid id)
         {
             return base.DeleteById(id);
@@ -153,6 +159,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">Name of UserDownload</param>
         /// <returns></returns>
         [Route]
+        [ClientId("SAEON.Observations.QuerySite")]
         public override Task<IHttpActionResult> DeleteByName(string name)
         {
             return base.DeleteByName(name);

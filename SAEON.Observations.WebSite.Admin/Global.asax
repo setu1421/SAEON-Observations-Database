@@ -1,22 +1,20 @@
 ﻿<%@ Application Language="C#" %>
+<%@ Import Namespace="SAEON.Logs" %>
 <%@ Import Namespace="Serilog" %>
 <%@ Import Namespace="Serilog.Settings.AppSettings" %>
-<%@ Import Namespace="Serilog.Sinks.RollingFile" %>
 <%@ Import Namespace="Serilog.Sinks.Seq" %>
 <%@ Import Namespace="System.Web.Hosting" %>
 <%@ Import Namespace="System.Web.Routing" %>
+<%@ Import Namespace="SAEON.Logs" %>
 
 <script RunAt="server">
 
     void Application_Start(object sender, EventArgs e)
     {
         // Code that runs on application startup
-        Log.Logger = new LoggerConfiguration()
-            .ReadFrom.AppSettings()
-            .Enrich.FromLogContext()
-            .WriteTo.RollingFile(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebSite.Admin-{Date}.txt"))
-            .WriteTo.Seq("http://localhost:5341/")
-            .CreateLogger();
+        Logging
+            .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebSite.Admin {Date}.txt"))
+            .Create();
         RouteConfig.RegisterRoutes(RouteTable.Routes);
         string docPath = System.Web.Configuration.WebConfigurationManager.AppSettings["DocumentsPath"];
         if (!string.IsNullOrEmpty(docPath))

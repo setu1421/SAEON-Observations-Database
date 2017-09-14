@@ -9,16 +9,24 @@
             in a number of offerings, like actual, cumulative, in a number of units, like °C and mm, that are saved in a database as observations.
         </p>
         <p>
-            You can access these observations through this @Html.ActionLink("API", "Index", "Help", new { area = "" }, null). You need to have registered on
-            the <a href="http://observations.saeon.nimbusservices.co.za">Observations Database</a> site. Once you have an account you can use 
-            <a href="https://www.getpostman.com/">Postman</a> to test the API. You can do a post to the
-            <a href="https://observationswebapi.saeon.nimbusservices.co.za/oauth2/connect/token">token endpoint</a> 
+            You can test the @Html.ActionLink("API", "Index", "Help", new { area = "" }, null) using <a href="https://www.getpostman.com/" target="_blank">Postman</a>.
+            You can use the built-in OAuth2 authorization using the following:
+            <ul>
+                <li>Auth URL: https://identity.saeon.ac.za/connect/authorize</li>
+                <li>Access Token URL: https://identity.saeon.ac.za/connect/token</li>
+                <li>Client ID: Postman</li>
+                <li>Client Secret: Postman</li>
+                <li>Scope: SAEON.Observations.WebAPI</li>
+                <li>Grant Type: Client credentials</li>
+            </ul>
+            You can then use the returned token in your calls.
+        </p>
+        @*<p>
+            You can manually do a post to the token endpoint https://identity.saeon.ac.za/connect/token
             to get an OAuth2 bearer token that you need to use for authorization in your API calls. The post needs the following:
             <ul>
                 <li>Content-Type: application/x-www-form-urlencoded</li>
                 <li>grant_type: client_credentials</li>
-                <li>username: (the email address you registered)</li>
-                <li>password: (the password you registered)</li>
                 <li>client_id: SAEON.Observations.WebAPI</li>
                 <li>client_secret: 81g5wyGSC89a</li>
                 <li>scope: SAEON.Observations.WebAPI</li>
@@ -36,6 +44,6 @@
             When you call the API you need to add an Authorization header like this:<br />
             Authorization:bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImVhbWFaY2ZCTVRiOW9V<br />
             Content-Type:application/json
-        </p>
+        </p>*@
     </div>
 </div>
