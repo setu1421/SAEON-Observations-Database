@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAEON.Observations.WebAPI.Filters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,7 +12,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("Claims")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Authorize]
+    [ClientId("SAEON.Observations.QuerySite")]
     public class ClaimsController : ApiController
     {
         [HttpGet]

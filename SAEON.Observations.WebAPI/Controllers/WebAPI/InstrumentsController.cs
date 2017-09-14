@@ -10,7 +10,6 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     /// <summary>
-    /// Instruments
     /// </summary>
     [RoutePrefix("Instruments")]
     public class InstrumentsController : BaseApiController<Instrument>
@@ -24,7 +23,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
         /// <summary>
-        /// all Instruments
+        /// All Instruments
         /// </summary>
         /// <returns>ListOf(Instrument)</returns>
         public override IQueryable<Instrument> GetAll()

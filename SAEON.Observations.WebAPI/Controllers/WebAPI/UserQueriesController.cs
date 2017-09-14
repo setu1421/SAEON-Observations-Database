@@ -1,5 +1,6 @@
 ﻿using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
+using SAEON.Observations.WebAPI.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     /// Logged in users can save frequently used queries in the QueryUserQuery for later use
     /// </summary>
     [RoutePrefix("UserQueries")]
+    [ClientId("SAEON.Observations.QuerySite")]
     public class UserQueriesController : BaseApiWriteController<UserQuery>
     {
         protected override List<Expression<Func<UserQuery, bool>>> GetWheres()
@@ -105,6 +107,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// Create a UserQuery for logged in user
         /// </summary>
         /// <param name="item">The UserQuery to be created</param>
+        [ClientId("SAEON.Observations.QuerySite")]
         [ResponseType(typeof(UserQuery))]
         [Route]
         public override async Task<IHttpActionResult> Post([FromBody]UserQuery item)
@@ -118,6 +121,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of UserQuery</param>
         /// <param name="delta">The new UserQuery</param>
         /// <returns></returns>
+        [ClientId("SAEON.Observations.QuerySite")]
         [Route("{id:guid}")]
         public override Task<IHttpActionResult> PutById(Guid id, [FromBody] UserQuery delta)
         {
@@ -130,6 +134,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">Name of UserQuery</param>
         /// <param name="delta">The new UserQuery</param>
         /// <returns></returns>
+        [ClientId("SAEON.Observations.QuerySite")]
         [Route]
         public override Task<IHttpActionResult> PutByName(string name, [FromBody] UserQuery delta)
         {
@@ -141,6 +146,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// </summary>
         /// <param name="id">Id of UserQuery</param>
         /// <returns></returns>
+        [ClientId("SAEON.Observations.QuerySite")]
         [Route("{id:guid}")]
         public override Task<IHttpActionResult> DeleteById(Guid id)
         {
@@ -152,6 +158,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// </summary>
         /// <param name="name">Name of UserQuery</param>
         /// <returns></returns>
+        [ClientId("SAEON.Observations.QuerySite")]
         [Route]
         public override Task<IHttpActionResult> DeleteByName(string name)
         {

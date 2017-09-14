@@ -121,8 +121,8 @@ namespace SAEON.Observations.WebAPI
                         .TokenUrl(Properties.Settings.Default.IdentityServer + "/connect/token")
                         .Scopes(scopes =>
                         {
-                            scopes.Add("Swagger", "Swagger");
-                            scopes.Add("SAEON.Observations.WebAPI", "SAEON observations WebAPI");
+                            //scopes.Add("Swagger", "Swagger");
+                            scopes.Add("SAEON.Observations.WebAPI", "SAEON Observations WebAPI");
                         });
 
 
