@@ -1,6 +1,6 @@
-﻿using SAEON.Logs;
+﻿using SAEON.AspNet.WebApi;
+using SAEON.Logs;
 using SAEON.Observations.Core;
-using SAEON.Observations.WebAPI.Filters;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +15,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("DataQuery")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ClientId("SAEON.Observations.QuerySite")]
+    [ClientAuthorization("SAEON.Observations.QuerySite")]
     public class DataQueryController : BaseController
     {
         public DataQueryController() : base()

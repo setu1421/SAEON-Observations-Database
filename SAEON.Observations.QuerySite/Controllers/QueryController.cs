@@ -15,7 +15,7 @@ using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class QueryController : BaseWebApiController
     {
 
@@ -563,7 +563,10 @@ namespace SAEON.Observations.QuerySite.Controllers
         #region LoadQueryDialog
         private async Task<List<UserQuery>> GetUserQueriesList()
         {
-            return (await GetList<UserQuery>("UserQueries")).ToList();
+            if (User.Identity.IsAuthenticated)
+                return (await GetList<UserQuery>("UserQueries")).ToList();
+            else
+                return new List<UserQuery>();
         }
 
         [HttpGet]

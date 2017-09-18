@@ -152,8 +152,11 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Logs, Version=1.0.0.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Logs.1.0.6\lib\net452\SAEON.Logs.dll</HintPath>
+    <Reference Include="SAEON.AspNet.WebApi, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.AspNet.WebApi.1.0.4\lib\net452\SAEON.AspNet.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="SAEON.Logs, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Logs.1.0.7\lib\net452\SAEON.Logs.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.5.0\lib\net45\Serilog.dll</HintPath>
@@ -265,15 +268,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="Thinktecture.IdentityModel.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Thinktecture.IdentityModel.Core.1.4.0\lib\net45\Thinktecture.IdentityModel.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Thinktecture.IdentityModel.Owin.ResourceAuthorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Thinktecture.IdentityModel.Owin.ResourceAuthorization.1.1.0\lib\net45\Thinktecture.IdentityModel.Owin.ResourceAuthorization.dll</HintPath>
-    </Reference>
-    <Reference Include="Thinktecture.IdentityModel.Owin.ResourceAuthorization.WebApi, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Thinktecture.IdentityModel.Owin.ResourceAuthorization.WebApi.3.0.0\lib\net45\Thinktecture.IdentityModel.Owin.ResourceAuthorization.WebApi.dll</HintPath>
-    </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
@@ -315,7 +309,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="AuthorizationManager.cs" />
     <Compile Include="Controllers\SensorThingsAPI\BaseSensorThingsControllers.cs" />
     <Compile Include="Controllers\SensorThingsAPI\DataStreamsSOSController.cs" />
     <Compile Include="Controllers\SensorThingsAPI\FeaturesOfInterestSOSController.cs" />
@@ -361,8 +354,6 @@
     <Compile Include="Controllers\WebAPI\UserQueriesController.cs" />
     <Compile Include="Controllers\OData\UserQueriesODataController.cs" />
     <Compile Include="ErrorHandler\AiHandleErrorAttribute.cs" />
-    <Compile Include="Filters\ClaimsAuthorizationAttribute.cs" />
-    <Compile Include="Filters\ClientIdAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -423,16 +414,16 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Images\Banner.jpg" />
     <Content Include="Images\Logo.png" />
     <Content Include="SAEON.ico" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\jquery-3.1.1.js" />
-    <Content Include="Scripts\jquery-3.1.1.min.js" />
-    <Content Include="Scripts\jquery-3.1.1.slim.js" />
-    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <None Include="Scripts\jquery-3.2.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.2.1.js" />
+    <Content Include="Scripts\jquery-3.2.1.min.js" />
+    <Content Include="Scripts\jquery-3.2.1.slim.js" />
+    <Content Include="Scripts\jquery-3.2.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
@@ -456,6 +447,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.2.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -464,12 +457,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

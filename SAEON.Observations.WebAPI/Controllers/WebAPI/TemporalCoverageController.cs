@@ -1,6 +1,6 @@
-﻿using SAEON.Logs;
+﻿using SAEON.AspNet.WebApi;
+using SAEON.Logs;
 using SAEON.Observations.Core;
-using SAEON.Observations.WebAPI.Filters;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,8 +15,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("TemporalCoverage")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ClientId("SAEON.Observations.QuerySite")]
-    //[ResourceAuthorize("Observations.Admin", "TemporalCoverage")]
+    [ClientAuthorization("SAEON.Observations.QuerySite")]
+    [RoleAuthorization("SAEON.Observations.Admin")]
     public class TemporalCoverageController : BaseController
     {
         public TemporalCoverageController() : base()

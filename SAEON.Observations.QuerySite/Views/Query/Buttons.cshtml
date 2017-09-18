@@ -10,6 +10,7 @@
         .ContentType(ContentType.TextAndImage)
         .PrefixIcon("e-icon e-reload")
         .ClientSideEvents(e => e.Click("onLoadQueryClick"))
+        .Enabled(Model.UserQueries.Count > 0)
         .Render();
     Html.EJ()
         .Dialog("dialogLoadQuery")

@@ -34,6 +34,7 @@ namespace SAEON.Observations.WebAPI
                         RequiredScopes = new[] { "SAEON.Observations.WebAPI" },
                     });
 
+                    /*
                     // add app local claims per request
                     app.UseClaimsTransformation(incoming =>
                     {
@@ -43,8 +44,7 @@ namespace SAEON.Observations.WebAPI
 
                         return Task.FromResult(appPrincipal);
                     });
-
-                    app.UseResourceAuthorization(new AuthorizationManager());
+                    */
 
                     // web api configuration
                     var config = new HttpConfiguration();
