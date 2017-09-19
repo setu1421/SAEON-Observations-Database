@@ -24,13 +24,13 @@ namespace SAEON.Observations.WebAPI
             {
                 try
                 {
-                    Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServer);
+                    Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
                     JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
                     app.UseCors(CorsOptions.AllowAll);
                     app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
                     {
-                        Authority = Properties.Settings.Default.IdentityServer,
+                        Authority = Properties.Settings.Default.IdentityServerUrl,
                         RequiredScopes = new[] { "SAEON.Observations.WebAPI" },
                     });
 
