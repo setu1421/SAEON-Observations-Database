@@ -282,6 +282,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseRestController.cs" />
     <Compile Include="Controllers\BaseWebApiController.cs" />
+    <Compile Include="Controllers\HealthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
@@ -293,6 +294,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\HealthModel.cs" />
     <Compile Include="Models\InventoryModels.cs" />
     <Compile Include="Models\SpacialCoverageModels.cs" />
     <Compile Include="Models\TemporalCoverageModels.cs" />
@@ -307,8 +309,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app_not_offline.htm" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\ej\mobile\android-theme\ej.mobile.android-core.min.css" />
@@ -614,8 +614,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Connected Services\Application Insights\ConnectedService.json" />
     <Content Include="MachineKey.config" />
     <Content Include="Content\ej\web\office-365\icons\ejicons.woff" />
@@ -828,6 +826,8 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Views\Home\HealthCheck.cshtml" />
+    <TypeScriptCompile Include="Scripts\Inventory.ts" />
     <TypeScriptCompile Include="Scripts\Query.ts" />
     <TypeScriptCompile Include="Scripts\SpacialCoverage.ts" />
     <Content Include="Web.config">
@@ -932,6 +932,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Health\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

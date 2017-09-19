@@ -1,1 +1,2 @@
-﻿
+﻿namespace TemporalCoverage {
+}
