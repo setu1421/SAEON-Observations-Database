@@ -131,11 +131,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     ImportDate = DateTime.Now
                 };
                 FileInfo fi;
-                if (!string.IsNullOrEmpty(LogFileUpload.PostedFile.FileName))
-                {
-                    fi = new FileInfo(LogFileUpload.PostedFile.FileName);
-                    batch.LogFileName = fi.Name;
-                }
+                //if (!string.IsNullOrEmpty(LogFileUpload.PostedFile.FileName))
+                //{
+                //    fi = new FileInfo(LogFileUpload.PostedFile.FileName);
+                //    batch.LogFileName = fi.Name;
+                //}
 
                 fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
@@ -588,15 +588,15 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             .Where(Sensor.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null)
             .Load();
 
-        ImportLogHelper logHelper = new ImportLogHelper();
+        //ImportLogHelper logHelper = new ImportLogHelper();
 
-        if (LogFileUpload.PostedFile.ContentLength > 0)
-        {
-            using (StreamReader reader = new StreamReader(LogFileUpload.PostedFile.InputStream))
-            {
-                logHelper.ReadLog(reader.ReadToEnd());
-            }
-        }
+        //if (LogFileUpload.PostedFile.ContentLength > 0)
+        //{
+        //    using (StreamReader reader = new StreamReader(LogFileUpload.PostedFile.InputStream))
+        //    {
+        //        logHelper.ReadLog(reader.ReadToEnd());
+        //    }
+        //}
 
         using (StreamReader reader = new StreamReader(DataFileUpload.PostedFile.InputStream))
         {
@@ -611,7 +611,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                     Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
                     //                   using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, sp, logHelper))
-                    ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, sp, logHelper);
+                    ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, sp/*, logHelper*/);
                     {
                         if (helper.Errors.Count > 0)
                         {
@@ -635,7 +635,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
 
                 //using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, null, logHelper))
-                ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, null, logHelper);
+                ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, null/*, logHelper*/);
                 {
                     if (helper.Errors.Count > 0)
                     {
