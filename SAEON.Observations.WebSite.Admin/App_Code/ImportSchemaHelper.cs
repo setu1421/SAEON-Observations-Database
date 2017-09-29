@@ -515,7 +515,7 @@ public class ImportSchemaHelper : IDisposable
     {
         using (Logging.MethodCall(GetType()))
         {
-            Logging.Information("Version 1.23");
+            Logging.Information("Version 1.24");
             try
             {
                 BuildSchemaDefinition();
@@ -725,10 +725,10 @@ public class ImportSchemaHelper : IDisposable
                                 if (startDate.HasValue && (rec.DateValue.Date < startDate.Value))
                                 {
                                     Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
-                                    if ((batch.Issues == null) || !batch.Issues.Contains("Date too early, ignoring!"))
-                                    {
-                                        batch.Issues += $"Date too early, ignoring!" + Environment.NewLine;
-                                    }
+                                    //if ((batch.Issues == null) || !batch.Issues.Contains("Date too early, ignoring!"))
+                                    //{
+                                    //    batch.Issues += $"Date too early, ignoring!" + Environment.NewLine;
+                                    //}
                                     //batch.Issues += $"Date too early, ignoring! Sensor: {sensor.Name} StartDate: {startDate} Date: {rec.DateValue}" + Environment.NewLine;
                                     //Logging.Verbose("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
                                     foundTooEarly = true;
@@ -737,10 +737,10 @@ public class ImportSchemaHelper : IDisposable
                                 if (endDate.HasValue && (rec.DateValue.Date > endDate.Value))
                                 {
                                     Logging.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
-                                    if ((batch.Issues == null) || !batch.Issues.Contains("Date too late, ignoring!"))
-                                    {
-                                        batch.Issues += $"Date too late, ignoring!" + Environment.NewLine;
-                                    }
+                                    //if ((batch.Issues == null) || !batch.Issues.Contains("Date too late, ignoring!"))
+                                    //{
+                                    //    batch.Issues += $"Date too late, ignoring!" + Environment.NewLine;
+                                    //}
                                     //batch.Issues += $"Date too late, ignoring! Sensor: {sensor.Name} EndDate: {endDate} Date: {rec.DateValue}" + Environment.NewLine;
                                     //Logging.Verbose("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
                                     foundTooLate = true;
