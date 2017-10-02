@@ -515,7 +515,6 @@ public class ImportSchemaHelper : IDisposable
     {
         using (Logging.MethodCall(GetType()))
         {
-            Logging.Information("Version 1.24");
             try
             {
                 BuildSchemaDefinition();

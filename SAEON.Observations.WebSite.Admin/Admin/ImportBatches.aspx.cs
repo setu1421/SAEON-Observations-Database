@@ -291,7 +291,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             Logging.Information("Finish");
                         }
 #else
-                        Logging.Information("Start DataSource: {dataSource} FileName: {fileName}", batch.FileName, batch.DataSource.Name);
+                        Logging.Information("Start Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.24, batch.DataSource.Name, batch.FileName);
                         duplicates = 0;
                         nullDuplicates = 0;
                         using (TransactionScope ts = Utilities.NewTransactionScope())
