@@ -139,7 +139,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                 fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
-                Logging.Information("Start Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.24, batch.DataSource.Name, batch.FileName);
+
+                Logging.Information("Import Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.25, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())
@@ -291,7 +292,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             Logging.Information("Finish");
                         }
 #else
-                        Logging.Information("Saving {count} observations.",values.Count);
+                        Logging.Information("Saving {count} observations.", values.Count);
                         duplicates = 0;
                         nullDuplicates = 0;
                         using (TransactionScope ts = Utilities.NewTransactionScope())
@@ -445,7 +446,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status} });
                             }
                             ts.Complete();
-                            Logging.Information("Finish");
+                            Logging.Information("Done");
                         }
 #endif
 
@@ -508,7 +509,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
         if (oCol.Count != 0)
         {
-            Logging.Error("nullDuplicates: {nullDuplicates}",++nullDuplicates);
+            Logging.Error("nullDuplicates: {nullDuplicates}", ++nullDuplicates);
             //delete this observation and move it do the datalog with the new value in and a status saying its a duplicate of a null that now has a value. 
             //check if this works with transformations 
             DataLog d = new DataLog()
