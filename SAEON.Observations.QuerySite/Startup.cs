@@ -111,6 +111,7 @@ namespace SAEON.Observations.QuerySite
                             }
                         },
                     });
+                    // Make sure WebAPI is available
                 }
                 catch (Exception ex)
                 {

@@ -1,4 +1,6 @@
-﻿using SAEON.Logs;
+﻿using IdentityModel.Client;
+using SAEON.Logs;
+using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -7,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Thinktecture.IdentityModel.Mvc;
 
@@ -28,6 +31,29 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
+        private async Task<HttpClient> GetClientAsync()
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
+            var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
+            if (token == null)
+            {
+                var tokenClient = new TokenClient(Properties.Settings.Default.IdentityServerUrl + "/connect/token", "SAEON.Observations.QuerySite", "It6fWPU5J708");
+                var tokenResponse = await tokenClient.RequestClientCredentialsAsync("SAEON.Observations.WebAPI");
+                if (tokenResponse.IsError)
+                {
+                    Logging.Error("Error: {error}", tokenResponse.Error);
+                    throw new HttpException(tokenResponse.Error);
+                }
+                token = tokenResponse.AccessToken;
+            }
+            Logging.Verbose("Token: {token}", token);
+            client.SetBearerToken(token);
+            return client;
+        }
+
         // GET: TEntity
         [HttpGet]
         public virtual async Task<ActionResult> Index()
@@ -36,15 +62,9 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = new HttpClient())
+                    using (var client = await GetClientAsync())
                     {
                         client.Timeout = TimeSpan.FromMinutes(30);
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var user = User as ClaimsPrincipal;
-                        var token = user.FindFirst("access_token").Value;
-                        Logging.Verbose("Token: {token}", token);
-                        client.SetBearerToken(token);
                         var response = await client.GetAsync($"{apiBaseUrl}/{Resource}");
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
@@ -71,18 +91,12 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Route("{id:guid}")]
         public virtual async Task<ActionResult> Details(Guid? id)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
                 try
                 {
-                    using (var client = new HttpClient())
+                    using (var client = await GetClientAsync())
                     {
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var user = User as ClaimsPrincipal;
-                        var token = user.FindFirst("access_token").Value;
-                        Logging.Verbose("Token: {token}", token);
-                        client.SetBearerToken(token);
                         var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
@@ -134,7 +148,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Authorize]
         public virtual async Task<ActionResult> Create(TEntity item)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Name", item?.Name }, { "Item", item } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Name", item?.Name }, { "Item", item } }))
             {
                 try
                 {
@@ -144,14 +158,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                         return View(item);
                     }
                     else
-                        using (var client = new HttpClient())
+                        using (var client = await GetClientAsync())
                         {
-                            client.DefaultRequestHeaders.Accept.Clear();
-                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                            var user = User as ClaimsPrincipal;
-                            var token = user.FindFirst("access_token").Value;
-                            Logging.Verbose("Token: {token}", token);
-                            client.SetBearerToken(token);
                             var response = await client.PostAsJsonAsync<TEntity>($"{apiBaseUrl}/{Resource}", item);
                             Logging.Verbose("Response: {response}", response);
                             response.EnsureSuccessStatusCode();
@@ -177,18 +185,12 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Authorize]
         public virtual async Task<ActionResult> Edit(Guid? id)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
                 try
                 {
-                    using (var client = new HttpClient())
+                    using (var client = await GetClientAsync())
                     {
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var user = User as ClaimsPrincipal;
-                        var token = user.FindFirst("access_token").Value;
-                        Logging.Verbose("Token: {token}", token);
-                        client.SetBearerToken(token);
                         var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
@@ -216,7 +218,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Authorize]
         public virtual async Task<ActionResult> Edit(TEntity delta)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", delta?.Id }, { "Delta", delta } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", delta?.Id }, { "Delta", delta } }))
             {
                 try
                 {
@@ -227,14 +229,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     }
                     else
                     {
-                        using (var client = new HttpClient())
+                        using (var client = await GetClientAsync())
                         {
-                            client.DefaultRequestHeaders.Accept.Clear();
-                            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                            var user = User as ClaimsPrincipal;
-                            var token = user.FindFirst("access_token").Value;
-                            Logging.Verbose("Token: {token}", token);
-                            client.SetBearerToken(token);
                             var response = await client.PutAsJsonAsync<TEntity>($"{apiBaseUrl}/{Resource}/{delta?.Id}", delta);
                             Logging.Verbose("Response: {response}", response);
                             response.EnsureSuccessStatusCode();
@@ -262,18 +258,12 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Authorize]
         public virtual async Task<ActionResult> Delete(Guid? id)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
                 try
                 {
-                    using (var client = new HttpClient())
+                    using (var client = await GetClientAsync())
                     {
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var user = User as ClaimsPrincipal;
-                        var token = user.FindFirst("access_token").Value;
-                        Logging.Verbose("Token: {token}", token);
-                        client.SetBearerToken(token);
                         var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
@@ -301,18 +291,12 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Authorize]
         public virtual async Task<ActionResult> DeleteConfirmed(Guid id)
         {
-            using (Logging.MethodCall<TEntity>(GetType(),new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
                 try
                 {
-                    using (var client = new HttpClient())
+                    using (var client = await GetClientAsync())
                     {
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var user = User as ClaimsPrincipal;
-                        var token = user.FindFirst("access_token").Value;
-                        Logging.Verbose("Token: {token}", token);
-                        client.SetBearerToken(token);
                         var response = await client.DeleteAsync($"{apiBaseUrl}/{Resource}/{id}");
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();

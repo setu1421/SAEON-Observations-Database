@@ -26,9 +26,18 @@ namespace SAEON.Observations.WebAPI.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:44320")]
-        public string IdentityServer {
+        public string IdentityServerUrl {
             get {
-                return ((string)(this["IdentityServer"]));
+                return ((string)(this["IdentityServerUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SensorThingsAPI {
+            get {
+                return ((bool)(this["SensorThingsAPI"]));
             }
         }
     }

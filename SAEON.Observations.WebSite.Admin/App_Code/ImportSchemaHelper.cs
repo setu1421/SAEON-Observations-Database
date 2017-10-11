@@ -55,7 +55,7 @@ public class ImportSchemaHelper : IDisposable
     /// <summary>
     /// Gap Record Helper
     /// </summary>
-    ImportLogHelper LogHelper = null;
+    //ImportLogHelper LogHelper = null;
 
     //public SchemaValues
 
@@ -126,7 +126,7 @@ public class ImportSchemaHelper : IDisposable
     /// </summary>
     /// <param name="schema"></param>
     /// <param name="InputStream"></param>
-    public ImportSchemaHelper(DataSource ds, DataSchema schema, string data, ImportBatch batch, Sensor obj = null, ImportLogHelper loghelper = null)
+    public ImportSchemaHelper(DataSource ds, DataSchema schema, string data, ImportBatch batch, Sensor obj = null/*, ImportLogHelper loghelper = null*/)
     {
         dataSource = ds;
         dataSchema = schema;
@@ -367,7 +367,7 @@ public class ImportSchemaHelper : IDisposable
 
         Sensor = obj;
 
-        LogHelper = loghelper;
+        //LogHelper = loghelper;
     }
 
     public void SaveDocument(string fileName, string text)
@@ -515,7 +515,6 @@ public class ImportSchemaHelper : IDisposable
     {
         using (Logging.MethodCall(GetType()))
         {
-            Logging.Information("Version 1.21");
             try
             {
                 BuildSchemaDefinition();
@@ -528,48 +527,48 @@ public class ImportSchemaHelper : IDisposable
 
                 //Add
 
-                if (this.LogHelper != null)
-                {
-                    List<SchemaDefinition> defs = schemaDefs.Where(t => t.IsOffering).ToList();
-                    List<DateTime> unprocesseddt = LogHelper.GetUnprocessedDates();
+                //if (this.LogHelper != null)
+                //{
+                //    List<SchemaDefinition> defs = schemaDefs.Where(t => t.IsOffering).ToList();
+                //    List<DateTime> unprocesseddt = LogHelper.GetUnprocessedDates();
 
 
-                    for (int b = 0; b < unprocesseddt.Count; b++)
-                    {
-                        for (int i = 0; i < defs.Count; i++)
-                        {
-                            SchemaDefinition def = defs[i];
+                //    for (int b = 0; b < unprocesseddt.Count; b++)
+                //    {
+                //        for (int i = 0; i < defs.Count; i++)
+                //        {
+                //            SchemaDefinition def = defs[i];
 
-                            SchemaValue rec = new SchemaValue()
-                            {
-                                DateValue = unprocesseddt[b],
-                                SensorNotFound = def.SensorNotFound,
-                                //SensorID = def.SensorID
-                                SensorID = def.Sensors.FirstOrDefault()?.Id
-                            };
-                            if (rec.SensorNotFound)
-                                rec.InvalidStatuses.Add(Status.SensorNotFound);
+                //            SchemaValue rec = new SchemaValue()
+                //            {
+                //                DateValue = unprocesseddt[b],
+                //                SensorNotFound = def.SensorNotFound,
+                //                //SensorID = def.SensorID
+                //                SensorID = def.Sensors.FirstOrDefault()?.Id
+                //            };
+                //            if (rec.SensorNotFound)
+                //                rec.InvalidStatuses.Add(Status.SensorNotFound);
 
-                            rec.InValidOffering = def.InValidOffering;
-                            rec.PhenomenonOfferingID = def.PhenomenonOfferingID;
+                //            rec.InValidOffering = def.InValidOffering;
+                //            rec.PhenomenonOfferingID = def.PhenomenonOfferingID;
 
-                            if (rec.InValidOffering)
-                                rec.InvalidStatuses.Add(Status.OfferingInvalid);
+                //            if (rec.InValidOffering)
+                //                rec.InvalidStatuses.Add(Status.OfferingInvalid);
 
-                            rec.InValidUOM = def.InValidUOM;
-                            rec.PhenomenonUOMID = def.PhenomenonUOMID;
-                            if (rec.InValidUOM)
-                                rec.InvalidStatuses.Add(Status.UOMInvalid);
+                //            rec.InValidUOM = def.InValidUOM;
+                //            rec.PhenomenonUOMID = def.PhenomenonUOMID;
+                //            if (rec.InValidUOM)
+                //                rec.InvalidStatuses.Add(Status.UOMInvalid);
 
-                            rec.RawValue = null;
-                            rec.DataValue = null;
+                //            rec.RawValue = null;
+                //            rec.DataValue = null;
 
 
-                            SchemaValues.Add(rec);
-                        }
-                    }
+                //            SchemaValues.Add(rec);
+                //        }
+                //    }
 
-                }
+                //}
             }
             catch (Exception ex)
             {
@@ -646,7 +645,7 @@ public class ImportSchemaHelper : IDisposable
                 //Add Row Comment
                 foreach (var df in schemaDefs.Where(t => t.IsComment))
                 {
-                    RowComment += dr[df.Index].ToString() + " ";
+                    RowComment += dr[df.Index].ToString() + "; ";
                 }
 
                 for (int i = 0; i < schemaDefs.Count; i++)
@@ -725,7 +724,11 @@ public class ImportSchemaHelper : IDisposable
                                 if (startDate.HasValue && (rec.DateValue.Date < startDate.Value))
                                 {
                                     Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
-                                    batch.Issues += $"Date too early, ignoring! Sensor: {sensor.Name} StartDate: {startDate} Date: {rec.DateValue}" + Environment.NewLine;
+                                    //if ((batch.Issues == null) || !batch.Issues.Contains("Date too early, ignoring!"))
+                                    //{
+                                    //    batch.Issues += $"Date too early, ignoring!" + Environment.NewLine;
+                                    //}
+                                    //batch.Issues += $"Date too early, ignoring! Sensor: {sensor.Name} StartDate: {startDate} Date: {rec.DateValue}" + Environment.NewLine;
                                     //Logging.Verbose("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
                                     foundTooEarly = true;
                                     continue;
@@ -733,7 +736,11 @@ public class ImportSchemaHelper : IDisposable
                                 if (endDate.HasValue && (rec.DateValue.Date > endDate.Value))
                                 {
                                     Logging.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
-                                    batch.Issues += $"Date too late, ignoring! Sensor: {sensor.Name} EndDate: {endDate} Date: {rec.DateValue}" + Environment.NewLine;
+                                    //if ((batch.Issues == null) || !batch.Issues.Contains("Date too late, ignoring!"))
+                                    //{
+                                    //    batch.Issues += $"Date too late, ignoring!" + Environment.NewLine;
+                                    //}
+                                    //batch.Issues += $"Date too late, ignoring! Sensor: {sensor.Name} EndDate: {endDate} Date: {rec.DateValue}" + Environment.NewLine;
                                     //Logging.Verbose("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
                                     foundTooLate = true;
                                     continue;
@@ -754,12 +761,13 @@ public class ImportSchemaHelper : IDisposable
 
                         string RawValue = dr[def.Index].ToString();
 
-                        if (!ErrorInDate && LogHelper != null && LogHelper.CheckRecordGap(rec.DateValue))
-                        {
-                            rec.RawValue = null;
-                            rec.DataValue = null;
-                        }
-                        else if (String.IsNullOrEmpty(RawValue) || def.IsEmptyValue && RawValue.Trim() == def.EmptyValue)
+                        //if (!ErrorInDate && LogHelper != null && LogHelper.CheckRecordGap(rec.DateValue))
+                        //{
+                        //    rec.RawValue = null;
+                        //    rec.DataValue = null;
+                        //}
+                        //else if (String.IsNullOrEmpty(RawValue) || def.IsEmptyValue && RawValue.Trim() == def.EmptyValue)
+                        if (String.IsNullOrEmpty(RawValue) || def.IsEmptyValue && RawValue.Trim() == def.EmptyValue)
                         {
                             rec.FieldRawValue = RawValue;
                             rec.TextValue = RawValue;

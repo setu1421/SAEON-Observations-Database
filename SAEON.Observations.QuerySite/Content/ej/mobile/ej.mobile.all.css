@@ -1,17 +1,19 @@
+@charset "UTF-8";
 /*!
 *  filename: ej.mobile.all.css
-*  version : 15.3.0.26
-*  Copyright Syncfusion Inc. 2001 - 2014. All rights reserved.
+*  version : 15.3.0.31
+*  Copyright Syncfusion Inc. 2001 - 2017. All rights reserved.
 *  Use of this code is subject to the terms of our license.
 *  A copy of the current license can be obtained at any time by e-mailing
 *  licensing@syncfusion.com. Any infringement will be prosecuted under
 *  applicable laws. 
 */
 
+@charset "UTF-8";
 /*!
 *  filename: ej.mobile.core.all.css
-*  version : 15.3.0.26
-*  Copyright Syncfusion Inc. 2001 - 2014. All rights reserved.
+*  version : 15.3.0.31
+*  Copyright Syncfusion Inc. 2001 - 2017. All rights reserved.
 *  Use of this code is subject to the terms of our license.
 *  A copy of the current license can be obtained at any time by e-mailing
 *  licensing@syncfusion.com. Any infringement will be prosecuted under
@@ -10458,10 +10460,11 @@ textarea.e-m-editor:-ms-input-placeholder {
   margin: 0px;
 }
 
+@charset "UTF-8";
 /*!
 *  filename: ej.mobile.ios7.css
-*  version : 15.3.0.26
-*  Copyright Syncfusion Inc. 2001 - 2014. All rights reserved.
+*  version : 15.3.0.31
+*  Copyright Syncfusion Inc. 2001 - 2017. All rights reserved.
 *  Use of this code is subject to the terms of our license.
 *  A copy of the current license can be obtained at any time by e-mailing
 *  licensing@syncfusion.com. Any infringement will be prosecuted under
@@ -11321,10 +11324,11 @@ textarea.e-m-editor:-ms-input-placeholder {
   border-color: rgba(0, 0, 0, 0.14);
 }
 
+@charset "UTF-8";
 /*!
 *  filename: ej.mobile.android.css
-*  version : 15.3.0.26
-*  Copyright Syncfusion Inc. 2001 - 2014. All rights reserved.
+*  version : 15.3.0.31
+*  Copyright Syncfusion Inc. 2001 - 2017. All rights reserved.
 *  Use of this code is subject to the terms of our license.
 *  A copy of the current license can be obtained at any time by e-mailing
 *  licensing@syncfusion.com. Any infringement will be prosecuted under
@@ -12142,10 +12146,11 @@ textarea.e-m-editor:-ms-input-placeholder {
   fill: rgba(51, 181, 229, 0.6);
 }
 
+@charset "UTF-8";
 /*!
 *  filename: ej.mobile.windows.css
-*  version : 15.3.0.26
-*  Copyright Syncfusion Inc. 2001 - 2014. All rights reserved.
+*  version : 15.3.0.31
+*  Copyright Syncfusion Inc. 2001 - 2017. All rights reserved.
 *  Use of this code is subject to the terms of our license.
 *  A copy of the current license can be obtained at any time by e-mailing
 *  licensing@syncfusion.com. Any infringement will be prosecuted under
@@ -13039,10 +13044,11 @@ textarea.e-m-editor:-ms-input-placeholder {
   stroke: black;
 }
 
+@charset "UTF-8";
 /*!
 *  filename: ej.mobile.flat-theme.css
-*  version : 15.3.0.26
-*  Copyright Syncfusion Inc. 2001 - 2014. All rights reserved.
+*  version : 15.3.0.31
+*  Copyright Syncfusion Inc. 2001 - 2017. All rights reserved.
 *  Use of this code is subject to the terms of our license.
 *  A copy of the current license can be obtained at any time by e-mailing
 *  licensing@syncfusion.com. Any infringement will be prosecuted under

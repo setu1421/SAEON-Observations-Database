@@ -1,7 +1,8 @@
+@charset "UTF-8";
 /*!
 *  filename: ej.theme.css
-*  version : 15.3.0.26
-*  Copyright Syncfusion Inc. 2001 - 2014. All rights reserved.
+*  version : 15.3.0.31
+*  Copyright Syncfusion Inc. 2001 - 2017. All rights reserved.
 *  Use of this code is subject to the terms of our license.
 *  A copy of the current license can be obtained at any time by e-mailing
 *  licensing@syncfusion.com. Any infringement will be prosecuted under
@@ -247,7 +248,7 @@
   
 }
 .e-grid .e-dlgBtns .e-button {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-weight: normal;
   font-size: 14px;
 }
@@ -2958,6 +2959,9 @@ input[type="text"].e-input {
   font-weight: normal;
   font-size: 14px;
 }
+.e-btn {
+  font-weight: 600;
+}
 .e-btn.e-select:focus {
   box-shadow: 0 0 2px lightgray;
 }
@@ -2969,7 +2973,8 @@ input[type="text"].e-input {
 .e-btn.e-txt.e-select,
 .e-tbtn.e-txt.e-select,
 .e-split-btn.e-txt.e-select {
-  font-family: Segoe UI Semibold;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
+  font-weight: 600;
 }
 .e-split-btn-hide {
   visibility: hidden;
@@ -4281,6 +4286,9 @@ input[type="text"].e-input {
   color: #666666;
   border-color: #c8c8c8;
 }
+.e-colorpicker .e-buttons .e-codeeditor .e-color-code {
+  
+}
 .e-colorwidget.e-split .e-in-wrap .e-select:hover,
 .e-colorwidget.e-split .e-color-container:hover {
   border-color: #c8c8c8;
@@ -4478,6 +4486,9 @@ input[type="text"].e-input {
 }
 .e-colorpicker .e-buttons .e-color-code:focus {
   border-color: #0078d7;
+}
+.e-colorpicker .e-buttons .e-codeeditor::before {
+  
 }
 .e-colorpicker .e-buttons .e-previous,
 .e-presetWrapper .e-presets-table .e-preset-row {
@@ -7830,7 +7841,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   color: #333333;
   line-height: 36px;
   padding: 0 12px !important;
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-size: 13px;
 }
 .e-wrap .e-listbox li {
@@ -10115,7 +10126,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 /*Theme Color*/
 
 .e-tab.e-js.e-widget {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   border: none;
 }
 .e-tab.e-js > .e-header > .e-item > .e-link,
@@ -12348,9 +12359,16 @@ input.e-fe-dialog-text:not(.e-textbox),
 .e-chkbox-wrap {
   display: inline-flex;
 }
+.e-chkbox-wrap.e-tb-cell {
+  display: table-cell;
+}
 .e-chkbox-wrap.e-tb-cell .e-text,
 .e-chkbox-wrap.e-tb-cell div {
   display: table-cell;
+  padding: 0px 5px 2px 5px;
+}
+.e-chkbox-wrap.e-check-small.e-tb-cell .e-text {
+  padding: 0px 5px 2px 5px;
 }
 .e-chkbox-wrap.e-focus div > span {
   box-shadow: 0 0 2px lightgray;
@@ -12721,7 +12739,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   background: #f4f4f4;
 }
 .e-groupbutton {
-  font-family: Segoe UI, Semibold;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-weight: 600;
   font-size: 14px;
   color: #333333;
@@ -13142,37 +13160,37 @@ input.e-fe-dialog-text:not(.e-textbox),
   margin-left: 25px;
 }
 .e-interactivelegend-title {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
 }
 .e-interactivelegend-leftlabel {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
 }
 .e-interactivelegend-rightlabel {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
 }
 .e-legend-rangestartlabel {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
 }
 .e-legend-rangeendlabel {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
 }
 .e-legendlabeltext {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
@@ -13218,7 +13236,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   font-size: 17px;
 }
 .e-labelStyle {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-size: 14px;
   white-space: nowrap;
 }
@@ -13230,7 +13248,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   height: 20px;
   text-align: center;
   font-size: 14px;
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-smartLabelStyle:hover {
   cursor: pointer;
@@ -13307,7 +13325,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 .e-treemap-leaflabel {
   font-size: 14px;
   font-weight: normal;
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   color: white;
 }
 .e-treemap-legendLabel {
@@ -13413,7 +13431,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotgrid table {
   /* office-365*/
-  font: 13px Segoe UI;
+  font: 13px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   color: #333333;
 }
 .e-pivotgrid .e-filterValues,
@@ -13481,6 +13499,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotgrid .e-pivotGridTable th,
 .e-pivotgrid .e-pivotGridTable td {
+  overflow: hidden;
   
 }
 .e-pivotgrid .e-pivotGridTable th,
@@ -13512,7 +13531,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   
 }
 .e-pivotgrid .summary {
-  font: 14px Segoe UI Semibold;
+  font: 14px Segoe UI, Helvetica Neue, Ubuntu, Arial Semibold;
   background-color: #eaeaea;
 }
 .e-pivotgrid .colheader,
@@ -13528,7 +13547,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 .e-pivotgrid .rowheader,
 .e-pivotgrid .calc {
   /*office-365*/
-  font: 13px Segoe UI Semibold;
+  font: 13px Segoe UI, Helvetica Neue, Ubuntu, Arial Semibold;
   color: #333333;
   padding: 6px 16px 6px 0px;
 }
@@ -13545,7 +13564,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 .e-pivotgrid .rowheader:hover,
 .e-pivotgrid .calc:hover {
   /*office-365*/
-  font: 13px Segoe UI Semibold;
+  font: 13px Segoe UI, Helvetica Neue, Ubuntu, Arial Semibold;
   color: #333333;
   padding: 6px 16px 6px 0px;
 }
@@ -13938,7 +13957,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   text-overflow: ellipsis;
 }
 .e-pivotgrid .e-drag {
-  font-family: Segoe UI Semilight;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial Semilight;
   font-size: 17px;
   font-weight: 300;
   padding: 9px 0px 9px 0px;
@@ -13961,7 +13980,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 .e-pivotgrid .columns,
 .e-pivotgrid .e-rows,
 .e-pivotgrid .emptyRows {
-  font-family: Segoe UI Semilight;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial Semilight;
   font-size: 17px;
   font-weight: 300;
 }
@@ -14114,7 +14133,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   
 }
 .e-pivotgrid .e-dlgCalculatedField label {
-  font: 12px Segoe UI;
+  font: 12px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   margin-right: 8px;
   margin-bottom: 20px;
   width: 80px;
@@ -14476,7 +14495,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   position: static;
 }
 .e-pivotschemadesigner {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   background: none repeat scroll 0 0 #f8f8f8;
   border: 1px solid #eaeaea;
   padding: 15px 5px 15px 15px;
@@ -14634,7 +14653,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   
 }
 .e-pivotschemadesigner .centerHead {
-  font: 14px Segoe UI;
+  font: 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   color: #333333;
   margin: 12px 0px;
 }
@@ -14677,7 +14696,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   
 }
 .e-pivotschemadesigner .headerText {
-  font: 17px Segoe UI Semilight;
+  font: 17px Segoe UI, Helvetica Neue, Ubuntu, Arial Semilight;
   color: #333333;
 }
 .e-pivotschemadesigner .subheadText {
@@ -14685,7 +14704,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   
 }
 .e-pivotschemadesigner .subheadText {
-  font: 14px Segoe UI;
+  font: 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   color: #333333;
 }
 .e-pivotschemadesigner .pivotLabel:hover {
@@ -14716,7 +14735,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotschemadesigner .pvtBtnDiv > .e-pvtBtn {
   height: 26px;
-  font: 14px Segoe UI;
+  font: 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-pivotschemadesigner .e-pivotButton > .e-pvtBtn {
   cursor: move;
@@ -14743,7 +14762,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   
 }
 .dragHover.e-btn.e-select {
-  font: 14px Segoe UI;
+  font: 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   padding: 0px 8px;
   background: #deecf9;
   color: #333333;
@@ -15086,7 +15105,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotschemadesigner .e-filterElementTag,
 .e-pivotgrid .e-filterElementTag {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-pivotschemadesigner .e-filterState:before,
 .e-pivotgrid .e-filterState:before {
@@ -15510,7 +15529,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   background: #deecf9;
   font-size: 14px;
   height: 26px;
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   color: #333333;
   padding: 0px 8px;
   width: auto !important;
@@ -15814,7 +15833,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotschemadesigner .e-pivotButton .e-btn.e-select {
   background: #f4f4f4;
-  font: 14px Segoe UI;
+  font: 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   color: #333333;
   padding: 0px 8px;
 }
@@ -15865,7 +15884,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 .e-pivotschemadesigner .e-pivotButton .e-pvtBtn:active {
   background-color: #eaeaea;
   color: #333333;
-  font: 14px Segoe UI;
+  font: 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-pivotschemadesigner .e-dropIndicator + .e-pvtBtn {
   
@@ -15875,7 +15894,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotgrid .summary.calc,
 .e-pivotgrid .summary.calc:hover {
-  font: 14px Segoe UI Semibold;
+  font: 14px Segoe UI, Helvetica Neue, Ubuntu, Arial Semibold;
   background-color: #eaeaea;
 }
 .e-pivotgrid table .e-expand.e-icon:before,
@@ -15904,7 +15923,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotschemadesigner .e-pivotHeader .headerText,
 .e-pivotschemadesigner .e-rPivotHeader .headerText {
-  font: 14px Segoe UI;
+  font: 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   color: #333333;
   margin-left: 8px;
 }
@@ -16038,7 +16057,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 .e-pivotgrid .conditionformatTbl label {
   margin: 0px 8px 0px 0px !important;
   padding-bottom: 15px;
-  font: 12px Segoe UI;
+  font: 12px Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-pivotgrid .conditionformatTbl .e-ddl {
   margin-right: 15px;
@@ -16191,6 +16210,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   margin-bottom: 0px !important;
 }
 .e-pivotgrid .curInput {
+  width: 100%;
   
 }
 .e-pivotgrid .e-memberEditorDiv.noChildNode .e-item div > .e-chkbox-wrap,
@@ -16450,6 +16470,26 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 .e-hoverCell {
   background-color: #eaeaea !important;
 }
+.e-pivotclient .e-collectionli:hover,
+.e-pivotclient .e-reportli:hover {
+  background: white !important;
+  border: none !important;
+  color: #666666 !important;
+  padding: 3px !important;
+  border-top: 4px !important;
+}
+.e-pivotclient .e-collectionli:hover,
+.e-pivotclient .e-reportli:hover {
+  padding: 7px !important;
+}
+.e-pivotclient .e-collectiondiv {
+  float: right;
+  margin-left: 6px;
+}
+.e-pivotclient .e-reportLbl,
+.e-pivotclient .e-collectionLbl {
+  margin-top: 2px;
+}
 .e-pivotclient .e-splitBtnUnique {
   height: auto !important;
 }
@@ -16624,7 +16664,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   background-color: white;
 }
 .e-pivotclient .e-outerTable {
-  font: normal 12px Segoe UI;
+  font: normal 12px Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-pivotclient .e-titleText {
   height: 50px;
@@ -16633,7 +16673,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   
 }
 .e-pivotclient .e-titleText {
-  font: normal 20px Segoe UI;
+  font: normal 20px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   line-height: 48px;
 }
 .e-pivotclient .e-titleText span {
@@ -16642,7 +16682,9 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 .e-pivotclient .e-toolbar.e-toolbarspan {
   height: 42px !important;
 }
-.e-pivotclient .e-reportCol {
+.e-pivotclient .e-reportCol,
+.e-pivotclient .e-collectionli,
+.e-pivotclient .e-reportli {
   padding: 7px !important;
 }
 .e-pivotclient .e-newReportImg:before {
@@ -16844,7 +16886,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   margin: 5px 7px 7px;
 }
 .e-pivotclient .clientTab {
-  font: bold 12px Segoe UI;
+  font: bold 12px Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-pivotclient .clientTab {
   margin-top: 6px !important;
@@ -16919,7 +16961,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   
 }
 .e-pivotclient .e-csHeader {
-  font: normal 14px Segoe UI;
+  font: normal 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   margin: 8px 0 8px 3px;
 }
 .e-pivotclient .e-cdbHeader,
@@ -16979,7 +17021,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 }
 .e-pivotclient .e-cubeName {
   padding: 7px 0 0 6px;
-  font: normal 14px Segoe UI;
+  font: normal 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-pivotclient .e-categoricalAxis,
 .e-pivotclient .e-rowAxis,
@@ -17075,7 +17117,8 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   cursor: pointer;
   color: #666666;
 }
-.e-pivotclient .reportList {
+.e-pivotclient .reportList,
+.e-pivotclient e-collectionlist {
   overflow: visible !important;
   
 }
@@ -17085,7 +17128,9 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 .e-pivotclient div.e-advancedFilterDlg {
   border: 1px solid #c8c8c8;
 }
-.e-pivotclient li.e-reportCol.e-hover {
+.e-pivotclient li.e-reportCol.e-hover,
+.e-pivotclient .e-collectionli.e-hover,
+.e-pivotclient .e-reportli.e-hover {
   background: none;
   border-color: transparent;
 }
@@ -17102,12 +17147,12 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 }
 .e-pivotclient .e-sortingDlg,
 .e-pivotclient .e-filteringDlg {
-  font: normal 14px Segoe UI !important;
+  font: normal 14px Segoe UI, Helvetica Neue, Ubuntu, Arial !important;
   font-weight: 400 !important;
 }
 .e-pivotclient .e-sortingDlg label,
 .e-pivotclient .e-filteringDlg label {
-  font: normal 14px Segoe UI !important;
+  font: normal 14px Segoe UI, Helvetica Neue, Ubuntu, Arial !important;
 }
 .e-pivotclient .e-sortDisable,
 .e-pivotclient .e-radioBtnDesc,
@@ -17261,10 +17306,14 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 .e-pivotclient .e-measureListLbl {
   margin-top: 3px;
 }
-.e-pivotclient .e-reportCol {
+.e-pivotclient .e-reportCol,
+.e-pivotclient .e-collectionli,
+.e-pivotclient .e-reportli {
   
 }
-.e-pivotclient .e-reportCol {
+.e-pivotclient .e-reportCol,
+.e-pivotclient .e-collectionli,
+.e-pivotclient .e-reportli {
   width: auto;
   height: 25px;
 }
@@ -17817,7 +17866,9 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 .e-pivotclient table.e-renameDBReportTbl tr td:first-child {
   padding-bottom: 15px;
 }
-.e-pivotclient e-reportCol {
+.e-pivotclient e-reportCol,
+.e-pivotclient .e-collectionli,
+.e-pivotclient .e-reportli {
   margin-left: 3px;
 }
 .e-pivotclient.e-rtl .e-reportDlg table td {
@@ -18435,7 +18486,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 }
 .e-pivotclient .e-dialog.e-calcMemberDialog .e-maskedit,
 .e-pivotclient .e-dialog.e-calcMemberDialog .textarea {
-  font: 14px Segoe UI !important;
+  font: 14px Segoe UI, Helvetica Neue, Ubuntu, Arial !important;
 }
 .e-pivotclient .e-dialog .e-memberPager {
   margin-top: 10px;
@@ -18602,7 +18653,11 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   
 }
 .e-pivotclient .e-toolbar .e-reportCol,
-.e-pivotclient .e-toolbar .e-reportCol.e-hover {
+.e-pivotclient .e-toolbar .e-reportCol.e-hover,
+.e-pivotclient .e-collectionli,
+.e-pivotclient .e-collectionli.e-hover,
+.e-pivotclient .e-reportli,
+.e-pivotclient .e-reportli.e-hover {
   
 }
 .e-pivotclient.e-rtl .e-splitBtn {
@@ -18621,10 +18676,14 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   
 }
 .e-pivotclient .e-toolbar > .e-horizontal > .e-reportCol.e-active,
-.e-pivotclient .e-toolbar > .e-horizontal > .e-reportCol.e-active > .reportList {
+.e-pivotclient .e-toolbar > .e-horizontal > .e-reportCol.e-active > .reportList,
+.e-pivotclient .e-toolbar > .e-horizontal > .e-collectionli.e-active,
+.e-pivotclient .e-toolbar > .e-horizontal > .e-collectionli.e-active > .e-collectionlist {
   
 }
-.e-pivotclient .e-toolbar > .e-horizontal > .e-reportCol.e-active:after {
+.e-pivotclient .e-toolbar > .e-horizontal > .e-reportCol.e-active:after,
+.e-pivotclient .e-toolbar > .e-horizontal > .e-collectionli.e-active:after,
+.e-pivotclient .e-toolbar > .e-horizontal > .e-reportli.e-active:after {
   
 }
 .e-pivotclient .e-SortFilterDlg.e-dialog > .e-header,
@@ -19031,7 +19090,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   background: #0078d7 !important;
 }
 .e-pivotchart {
-  font: normal 12px Segoe UI;
+  font: normal 12px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   border: 1px solid #c8c8c8;
   background-color: white;
   color: #212121;
@@ -19472,7 +19531,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   border-radius: 15px;
   margin-top: 20px;
   text-align: left;
-  font: 12px Segoe UI;
+  font: 12px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-stretch: condensed;
   text-decoration: none;
   line-height: 20px;
@@ -19566,7 +19625,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   outline: none;
   border: 1px solid #c8c8c8;
   text-indent: 2px;
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-size: 14px;
   height: 32px;
   width: 40px;
@@ -19653,7 +19712,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 }
 .e-pivotpager .e-pagerDiv {
   /* office-365*/
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-size: 14px;
   color: #333333;
 }
@@ -25026,7 +25085,7 @@ div.e-dlg-field-validation-error:before {
   
 }
 .e-lv.subpage {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   color: #333333;
   font-size: 13px;
   padding: 0;

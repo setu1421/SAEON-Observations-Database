@@ -23,8 +23,8 @@ function New() {
 
 function DataSourceRowSelect(e, record) {
     if (pnlSouth.isVisible()) {
-        InstrumentLinksGrid.getStore().reload();
-        RolesGrid.getStore().reload();
+        //InstrumentLinksGrid.getStore().reload();
+        //RolesGrid.getStore().reload();
         TransformationsGrid.getStore().reload();
     }
 }
@@ -58,7 +58,7 @@ function onTransformCommand(e, record) {
     if (e === 'Delete') {
         DirectCall.ConfirmDeleteTransformation(record.get('Id'), { eventMask: { showMask: true } });
     }
-    else if (e = "Edit") {
+    else if (e === "Edit") {
         TransformationDetailPanel.getForm().reset();
         TransformationDetailPanel.getForm().loadRecord(record);
         TransformationDetailPanel.getForm().clearInvalid();

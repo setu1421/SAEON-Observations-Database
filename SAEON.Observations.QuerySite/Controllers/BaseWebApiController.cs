@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using IdentityModel.Client;
+using Newtonsoft.Json;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using Syncfusion.JavaScript;
@@ -50,22 +51,38 @@ namespace SAEON.Observations.QuerySite.Controllers
             CurrentSession.Remove(sessionModelKey);
         }
 
+        private async Task<HttpClient> GetClientAsync()
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
+            var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
+            if (token == null)
+            {
+                var tokenClient = new TokenClient(Properties.Settings.Default.IdentityServerUrl + "/connect/token", "SAEON.Observations.QuerySite", "It6fWPU5J708");
+                var tokenResponse = await tokenClient.RequestClientCredentialsAsync("SAEON.Observations.WebAPI");
+                if (tokenResponse.IsError)
+                {
+                    Logging.Error("Error: {error}", tokenResponse.Error);
+                    throw new HttpException(tokenResponse.Error);
+                }
+                token = tokenResponse.AccessToken;
+            }
+            Logging.Verbose("Token: {token}", token);
+            client.SetBearerToken(token);
+            return client;
+        }
+
         protected async Task<IEnumerable<TEntity>> GetList<TEntity>(string resource)// where TEntity : BaseEntity
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Resource", resource } }))
             {
                 try
                 {
-                    using (var client = new HttpClient())
+                    using (var client = await GetClientAsync())
                     {
                         client.Timeout = TimeSpan.FromMinutes(30);
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var user = User as ClaimsPrincipal;
-                        Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
-                        var token = user.FindFirst("access_token").Value;
-                        Logging.Verbose("Token: {token}", token);
-                        client.SetBearerToken(token);
                         var url = $"{apiBaseUrl}/{resource}";
                         Logging.Verbose("Calling: {url}", url);
                         var response = await client.GetAsync(url);
@@ -115,15 +132,9 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = new HttpClient())
+                    using (var client = await GetClientAsync())
                     {
                         client.Timeout = TimeSpan.FromMinutes(30);
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var user = User as ClaimsPrincipal;
-                        var token = user.FindFirst("access_token").Value;
-                        Logging.Verbose("Token: {token}", token);
-                        client.SetBearerToken(token);
                         var url = $"{apiBaseUrl}/{resource}";
                         Logging.Verbose("Calling: {url}", url);
                         var response = await client.PostAsJsonAsync(url, input);

@@ -22,20 +22,19 @@ namespace SAEON.Observations.QuerySite
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
+            bundles.Add(new StyleBundle("~/bundles/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css",
                       "~/Content/site.css",
                       "~/Content/Observations.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/ejscripts").Include(
                            "~/Scripts/jsrender.min.js",
-                           "~/Scripts/jquery.easing-1.3.min.js",
+                           "~/Scripts/jquery.easing-{version}.min.js",
                             "~/Scripts/ej/web/ej.web.all.min.js",
-                            "~/Scripts/ej/web/ej.unobtrusive.min.js"));
-            bundles.Add(new StyleBundle("~/bundles/ejstyles").Include(
-                      "~/Content/ej/web/bootstrap-theme/ej.web.all.min.css"));
+                            "~/Scripts/ej/common/ej.unobtrusive.min.js"));
+
             BundleTable.EnableOptimizations = true;
+
         }
     }
 }

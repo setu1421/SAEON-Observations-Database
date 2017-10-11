@@ -1383,7 +1383,7 @@ jQuery.fn.ejChart = function (options) {
 ///Set the dataSource for all series. It can be an array of JSON objects or an instance of ej.DataManager.
 ///<br/>dataSource-any	default-null
 ///<br/><br/>
-///Specifies spline tension value for cardianal spline type. Value ranges from 0 to 1.
+///Specifies spline tension value for cardinal spline type. Value ranges from 0 to 1.
 ///<br/>cardinalSplineTension-number	default-0.5
 ///<br/><br/>
 ///Controls the size of the hole in doughnut series. Value ranges from 0 to 1
@@ -1474,7 +1474,7 @@ jQuery.fn.ejChart = function (options) {
 ///<br/>bubbleOptions-any	default-
 ///<br/><br/>
 ///Used for the calculation of the bubble radius based on the mode selected 
-///<br/>radiusMode-ej.datavisualization.Chart.RadiusMode|string	default-minmax
+///<br/>radiusMode-ej.datavisualization.Chart.RadiusMode|string	default-minMax
 ///<br/><br/>
 ///Used for the setting the minimum radius of the bubble
 ///<br/>minRadius-number	default-1
@@ -1665,7 +1665,7 @@ jQuery.fn.ejChart = function (options) {
 ///Controls the size of the second pie in pieOfPie series. Value ranges from 0 to 1.
 ///<br/>pieOfPieCoefficient-number	default-0.6
 ///<br/><br/>
-///Split Value of pieofpie series.
+///Split Value of pieOfPie series.
 ///<br/>splitValue-string	default-null
 ///<br/><br/>
 ///Distance between the two pie's in pieOfPie series.
@@ -1882,7 +1882,7 @@ jQuery.fn.ejChart = function (options) {
 ///<br/>visibleOnLegend-string	default-visible
 ///<br/><br/>
 ///Specifies the type of the trendline for the series.
-///<br/>type-string	default-linear. See TrendlinesType
+///<br/>type-ej.datavisualization.Chart.TrendlinesType|string	default-linear. See TrendlinesType
 ///<br/><br/>
 ///Name for the trendlines that is to be displayed in the legend text.
 ///<br/>name-string	default-trendline
@@ -3696,7 +3696,7 @@ jQuery.fn.ejChart = function (options) {
 ///Specifies the dataSource for the series. It can be an array of JSON objects or an instance of ej.DataManager.
 ///<br/>dataSource-any	default-null
 ///<br/><br/>
-///Specifies spline tension values for cardianal spline type.Value ranges from 0 to 1.
+///Specifies spline tension values for cardinal spline type.Value ranges from 0 to 1.
 ///<br/>cardinalSplineTension-number	default-0.5
 ///<br/><br/>
 ///Controls the size of the hole in doughnut series. Value ranges from 0 to 1.
@@ -3781,13 +3781,13 @@ jQuery.fn.ejChart = function (options) {
 ///<br/>splitMode-ej.datavisualization.Chart.SplitMode|string	default-value. See SplitMode
 ///<br/><br/>
 ///Quartile calculation has been performed in three different formulas to render the boxplot series .
-///<br/>boxPlotMode-ej.datavisualization.Chart.LabelPosition|string	default-exclusive
+///<br/>boxPlotMode-ej.datavisualization.Chart.LabelPosition|string	default-exclusive.See BoxPlotMode
 ///<br/><br/>
 ///Options for customizing the bubble options of the Bubble series
 ///<br/>bubbleOptions-any	default-
 ///<br/><br/>
 ///Used for the calculation of the bubble radius based on the mode selected
-///<br/>radiusMode-ej.datavisualization.Chart.RadiusMode|string	default-minmax .See RadiusMode
+///<br/>radiusMode-ej.datavisualization.Chart.RadiusMode|string	default-minMax .See RadiusMode
 ///<br/><br/>
 ///Used for the setting the minimum radius of the bubble
 ///<br/>minRadius-number	default-1
@@ -3981,7 +3981,7 @@ jQuery.fn.ejChart = function (options) {
 ///Controls the size of the second pie in pieOfPie series. Value ranges from 0 to 1.
 ///<br/>pieOfPieCoefficient-number	default-0.6
 ///<br/><br/>
-///Split Value of pieofpie series.
+///Split Value of pieOfPie series.
 ///<br/>splitValue-string	default-null
 ///<br/><br/>
 ///Distance between the two pie's in pieOfPie series.
@@ -7246,7 +7246,7 @@ jQuery.fn.ejDiagram = function (options) {
 ///Specifies the read method to get the created nodes from client side to the server side
 ///<br/>read-string	default-null
 ///<br/><br/>
-///Specifies the customfields to get the updated data from client side to the server side
+///Specifies the custom fields to get the updated data from client side to the server side
 ///<br/>customFields-Array&lt;any&gt;	default-[]
 ///<br/><br/>
 ///Defines the data source either as a collection of objects or as an instance of ej.DataManager
@@ -7258,16 +7258,16 @@ jQuery.fn.ejDiagram = function (options) {
 ///Sets the unique id of the connection data source item
 ///<br/>id-string	default-null
 ///<br/><br/>
-///Sets the sourcenode of the connection data source item
+///Sets the source node of the connection data source item
 ///<br/>sourceNode-string	default-null
 ///<br/><br/>
-///Sets the targetnode of the connection data source item
+///Sets the target node of the connection data source item
 ///<br/>targetNode-string	default-null
 ///<br/><br/>
-///Sets the sourcepoint-x value of the connection data source item
+///Sets the sourcePointX value of the connection data source item
 ///<br/>sourcePointX-string	default-null
 ///<br/><br/>
-///Sets the sourcePoint-y value of the connection data source item
+///Sets the sourcePointY value of the connection data source item
 ///<br/>sourcePointY-string	default-null
 ///<br/><br/>
 ///Sets the targetPoint-x value of the connection data source item
@@ -7291,7 +7291,7 @@ jQuery.fn.ejDiagram = function (options) {
 ///Specifies the read method which is used to get the data from client side to the server side
 ///<br/>read-string	default-null
 ///<br/><br/>
-///Specifies the customfields to get the updated data from client side to the server side
+///Specifies the custom fields to get the updated data from client side to the server side
 ///<br/>customFields-Array&lt;any&gt;	default-[]
 ///<br/><br/>
 ///Initializes the default values for nodes and connectors
@@ -7591,6 +7591,9 @@ jQuery.fn.ejDiagram = function (options) {
 ///Defines the different colors and the region of color transitions
 ///<br/>stops-Array&lt;any&gt;	default-[]
 ///<br/><br/>
+///Defines the type of gradient
+///<br/>type-string	default-linear
+///<br/><br/>
 ///Defines the left most position(relative to node) of the rectangular region that needs to be painted
 ///<br/>x1-number	default-0
 ///<br/><br/>
@@ -7605,6 +7608,9 @@ jQuery.fn.ejDiagram = function (options) {
 ///<br/><br/>
 ///Paints the node with radial color transitions. A focal point defines the beginning of the gradient, and a circle defines the end point of the gradient.
 ///<br/>RadialGradient-any	default-
+///<br/><br/>
+///Defines the type of gradient
+///<br/>type-string	default-radial
 ///<br/><br/>
 ///Defines the position of the outermost circle
 ///<br/>cx-number	default-0
@@ -8963,6 +8969,9 @@ jQuery.fn.ejDropDownList = function (options) {
 ///This property selects the item in the DropDownList when the item is entered in the Search textbox.
 ///<br/>enableFilterSearch-boolean	default-false
 ///<br/><br/>
+///The serverfiltering is to perform filter action when text is typed in the search box and filtering will be done based on the collection which contains the matched item from entire datasource. Serverfiltering will be done based on the entire items in DataSource.
+///<br/>enableServerFiltering-boolean	default-false
+///<br/><br/>
 ///Saves the current model value to the browser cookies for state maintenance. While refreshing the DropDownList control page, it retains the model value and it is applied from the browser cookies.
 ///<br/>enablePersistence-boolean	default-false
 ///<br/><br/>
@@ -9985,6 +9994,18 @@ cancelEditCell:function(){
 /// Send a cancel request to the edited cell in grid.
 /// </summary>
 },
+calculatePageSizeByParentHeight:function(containerHeight){
+/// <summary>
+/// Returns the total page size need to be displayed in grid based on the given container height. This method will also work when the property allowTextWrap as true only when wrap mode is header.
+/// </summary>
+/// <param name="containerHeight"	type="number">When passing the container height as integer or percentage, it will returns the page size that need to be displayed for grid. </param>
+},
+changePageSize:function(pageSize){
+/// <summary>
+/// It is used to change the number of records displayed per page in grid based on the given page size.
+/// </summary>
+/// <param name="pageSize"	type="number">When passing the page size, it will change the number of records displayed per page in grid. </param>
+},
 clearCellSelection:function(){
 /// <summary>
 /// It is used to clear all the cell selection.
@@ -10113,7 +10134,7 @@ filterColumn:function(fieldName, filterOperator, filterValue, predicate, matchca
 /// <summary>
 /// Send a filtering request to filter one column in grid.
 /// </summary>
-/// <param name="fieldName"	type="any[]">Pass the field name of the column</param>
+/// <param name="fieldName"	type="any[]|string">Pass the field name of the column</param>
 /// <param name="filterOperator"	type="string">string/integer/dateTime operator</param>
 /// <param name="filterValue"	type="string">Pass the value to be filtered in a column</param>
 /// <param name="predicate"	type="string">Pass the predicate as and/or</param>
@@ -10657,7 +10678,7 @@ jQuery.fn.ejGrid = function (options) {
 ///<br/>disableHtmlEncode-boolean	default-false
 ///<br/><br/>
 ///Gets or sets a value that indicates to display a column value as checkbox or string
-///<br/>displayAsCheckBox-boolean	default-true
+///<br/>displayAsCheckbox-boolean	default-true
 ///<br/><br/>
 ///Gets or sets a value that indicates to customize ejNumericTextbox of an editable column. See editingType
 ///<br/>editParams-any	default-
@@ -10757,6 +10778,9 @@ jQuery.fn.ejGrid = function (options) {
 ///<br/><br/>
 ///Used to get or set the sub menu items to the custom context menu item.
 ///<br/>subMenu-Array&lt;any&gt;	default-[]
+///<br/><br/>
+///Used to get or set the sub menu items to the custom context menu item using JsRender template.
+///<br/>template-string	default-null
 ///<br/><br/>
 ///Gets or sets a value that indicates whether to disable the default context menu items in the grid.
 ///<br/>disableDefaultItems-boolean	default-false
@@ -13557,7 +13581,46 @@ jQuery.fn.ejListView = function (options) {
 ///<br/>enablePersistence-boolean	default-false
 ///<br/><br/>
 ///Specifies the field settings to map the datasource.
-///<br/>fieldSettings-any	default-
+///<br/>fieldSettings-FieldSettings	default-
+///<br/><br/>
+///Defines the specific field name which contains Boolean values to specify whether the list items to be checked by default or not.
+///<br/>checked-boolean	default-
+///<br/><br/>
+///Defines the URL to be navigated while clicking the list item.
+///<br/>navigateUrl-string	default-
+///<br/><br/>
+///Defines the HTML attributes such as id, class, styles for the specific list item.
+///<br/>attributes-any	default-
+///<br/><br/>
+///Defines the specific field name which contains id values for the list items.
+///<br/>id-string	default-
+///<br/><br/>
+///Defines the URL for the image to be displayed in the list item.
+///<br/>imageUrl-string	default-
+///<br/><br/>
+///Defines the class name for image in that specific list items.
+///<br/>imageClass-string	default-
+///<br/><br/>
+///Specifies whether to prevent the selection of the list item.
+///<br/>preventSelection-boolean	default-
+///<br/><br/>
+///Specifies whether to retain the selection of the list item.
+///<br/>persistSelection-boolean	default-
+///<br/><br/>
+///To define the first level of list items.
+///<br/>primaryKey-string	default-
+///<br/><br/>
+///To define the child level of list items inside the parent items.
+///<br/>parentPrimaryKey-string	default-
+///<br/><br/>
+///Defines the specific field name in the data source to load the list with data.
+///<br/>text-string	default-
+///<br/><br/>
+///To trigger the mouseup event for specific list items.
+///<br/>mouseUP-string	default-
+///<br/><br/>
+///To trigger the mousedown event for specific list items.
+///<br/>mouseDown-string	default-
 ///<br/><br/>
 ///Contains the array of items to be added in ListView.
 ///<br/>items-Array&lt;any&gt;	default-[]
@@ -13987,7 +14050,7 @@ jQuery.fn.ejMap = function (options) {
 ///<br/>urlTemplate-string	default-&#39;http://a.tile.openstreetmap.org/level/tileX/tileY.png&#39;
 ///<br/><br/>
 ///Sublayer is the collection of shape Layer
-///<br/>sublayers-Array&lt;any&gt;	default-
+///<br/>subLayers-Array&lt;any&gt;	default-
 ///<br/><br/>
 ///to get the type of bing map.
 ///<br/>bingMapType-ej.datavisualization.Map.BingMapType|string	default-aerial
@@ -14301,6 +14364,9 @@ jQuery.fn.ejMaskEdit = function (options) {
 ///<br/><br/>
 ///Specify the inputMode for mask edit textbox control. See InputMode
 ///<br/>inputMode-ej.InputMode|string	default-ej.InputMode.Text
+///<br/><br/>
+///Defines the localization culture for MaskEdit.
+///<br/>locale-string	default-en-US
 ///<br/><br/>
 ///Specifies the input mask.
 ///<br/>maskFormat-string	default-null
@@ -15344,7 +15410,7 @@ jQuery.fn.ejPivotChart = function (options) {
 ///Allows the user to rotate the angle of PivotChart in 3D view.
 ///<br/>rotation-number	default-0
 ///<br/><br/>
-///Allows the user to enable/disable the control options of PivotChart.
+///Allows the user to enable/disable the context menu options in the PivotChart.
 ///<br/>enableContextMenu-boolean	default-false
 ///<br/><br/>
 ///Allows the user to set custom name for the methods at service-end, communicated on AJAX post.
@@ -16315,12 +16381,6 @@ jQuery.fn.ejPivotGrid = function (options) {
 ///Contains the collection of items to be included/excluded among the field members.
 ///<br/>values-Array&lt;any&gt;	default-[]
 ///<br/><br/>
-///Allows the user to group the field by date. This is applicable only when the format is set as "date".
-///<br/>groupByDate-any	default-{}
-///<br/><br/>
-///Contains the collection of formatString to group item from the field.
-///<br/>interval-Array&lt;any&gt;	default-[]
-///<br/><br/>
 ///Lists out the items to be arranged in rows section of PivotGrid.
 ///<br/>rows-Array&lt;any&gt;	default-[]
 ///<br/><br/>
@@ -16383,12 +16443,6 @@ jQuery.fn.ejPivotGrid = function (options) {
 ///<br/><br/>
 ///Contains the collection of items to be included/excluded among the field members.
 ///<br/>values-Array&lt;any&gt;	default-[]
-///<br/><br/>
-///Allows the user to group the field by date. This is applicable only when the format is set as "date".
-///<br/>groupByDate-any	default-{}
-///<br/><br/>
-///Contains the collection of formatString to group item from the field.
-///<br/>interval-Array&lt;any&gt;	default-[]
 ///<br/><br/>
 ///Lists out the items which supports calculation in PivotGrid.
 ///<br/>values-Array&lt;any&gt;	default-[]
@@ -17023,7 +17077,7 @@ jQuery.fn.ejPrint = function (options) {
 ///Specifies whether the URL of an external stylesheet can be included to customize and print that page.
 ///<br/>externalStyles-string	default-null
 ///<br/><br/>
-///Prepend a doctype to the document frame.
+///Prepend a docType to the document frame.
 ///<br/>docType-string	default-&amp;lt;!doctype html&amp;gt;
 ///<br/><br/>
 ///Specifies whether the global styles can be applied to the element to be printed.
@@ -19135,7 +19189,7 @@ executeCommand:function(cmdName, args, textnodeType){
 /// </summary>
 /// <param name="cmdName"	type="string">Command Name.</param>
 /// <param name="args"	type="any">Content to be inserted as argument.</param>
-/// <param name="textnodeType"	type="boolean">Boolean value to specify whether the argument is textnode or not, this is optional.</param>
+/// <param name="textnodeType"	type="boolean">Boolean value to specify whether the argument is textNode or not, this is optional.</param>
 },
 focus:function(){
 /// <summary>
@@ -19274,7 +19328,7 @@ jQuery.fn.ejRTE = function (options) {
 ///Based on the content size, its height is adjusted instead of adding the scrollbar.
 ///<br/>autoHeight-boolean	default-false
 ///<br/><br/>
-///This API holds configuration setting for paste clenaup behavior.
+///This API holds configuration setting for paste cleanup behavior.
 ///<br/>pasteCleanupSettings-PasteCleanupSettings	default-{ listConversion: false, cleanCSS: false,	removeStyles: false, cleanElements: false }
 ///<br/><br/>
 ///This API is used to convert the list elements pasted from word document to editor.
@@ -20690,6 +20744,12 @@ addToDictionary:function(customWord){
 /// </summary>
 /// <param name="customWord"	type="string">Word to add into the dictionary file</param>
 },
+getSuggestionWords:function(errorWord){
+/// <summary>
+/// Retrieves the possible suggestion words for the error word passed as an argument.
+/// </summary>
+/// <param name="errorWord"	type="string">Error word to get the suggestions</param>
+},
 };
 jQuery.fn.ejSpellCheck=function(){
 this.data("ejSpellCheck",new	ej.SpellCheck());
@@ -20757,6 +20817,9 @@ jQuery.fn.ejSpellCheck = function (options) {
 ///<br/><br/>
 ///It allows to spell check the multiple target HTML element's texts and correct its error words.
 ///<br/>controlsToValidate-string	default-null
+///<br/><br/>
+///When set to true, allows sending Asynchronous ajax request for checking the spelling errors.
+///<br/>enableAsync-boolean	default-true
 ///</summary>
 ///<param name="options" type="Object">
 ///The widget configuration options
@@ -22098,7 +22161,7 @@ jQuery.fn.ejSunburstChart = function (options) {
 ///Setting the format for the data displayed in the tooltip
 ///<br/>format-string	default-#point.x# : #point.y#
 ///<br/><br/>
-///Sets the opacity of the dispalyed tooltip
+///Sets the opacity of the displayed tooltip
 ///<br/>opacity-number	default-0.95
 ///<br/><br/>
 ///Options for customizing sunburst points.

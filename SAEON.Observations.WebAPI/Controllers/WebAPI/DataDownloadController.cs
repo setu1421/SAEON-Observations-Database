@@ -1,6 +1,6 @@
-﻿using SAEON.Logs;
+﻿using SAEON.AspNet.WebApi;
+using SAEON.Logs;
 using SAEON.Observations.Core;
-using SAEON.Observations.WebAPI.Filters;
 using System;
 using System.Data;
 using System.Data.Entity;
@@ -13,7 +13,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("DataDownload")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ClientId("SAEON.Observations.QuerySite")]
+    [Authorize]
+    [ClientAuthorization("SAEON.Observations.QuerySite")]
     public class DataDownloadController : BaseController
     {
         public DataDownloadController() : base()

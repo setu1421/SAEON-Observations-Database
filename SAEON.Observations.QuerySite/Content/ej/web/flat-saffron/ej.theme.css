@@ -1,7 +1,8 @@
+@charset "UTF-8";
 /*!
 *  filename: ej.theme.css
-*  version : 15.3.0.26
-*  Copyright Syncfusion Inc. 2001 - 2014. All rights reserved.
+*  version : 15.3.0.31
+*  Copyright Syncfusion Inc. 2001 - 2017. All rights reserved.
 *  Use of this code is subject to the terms of our license.
 *  A copy of the current license can be obtained at any time by e-mailing
 *  licensing@syncfusion.com. Any infringement will be prosecuted under
@@ -209,7 +210,7 @@
   
 }
 .e-grid .e-dlgBtns .e-button {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-weight: normal;
   font-size: 14px;
 }
@@ -2752,6 +2753,9 @@ input[type="text"].e-input {
   font-weight: normal;
   font-size: 14px;
 }
+.e-btn {
+  
+}
 .e-btn.e-select:focus {
   box-shadow: 0 0 2px #cbcbcb;
 }
@@ -3982,6 +3986,9 @@ input[type="text"].e-input {
   color: #686969;
   border-color: #c8c8c8;
 }
+.e-colorpicker .e-buttons .e-codeeditor .e-color-code {
+  
+}
 .e-colorwidget.e-split .e-in-wrap .e-select:hover,
 .e-colorwidget.e-split .e-color-container:hover {
   border-color: #c8c8c8;
@@ -4175,6 +4182,9 @@ input[type="text"].e-input {
   
 }
 .e-colorpicker .e-buttons .e-color-code:focus {
+  
+}
+.e-colorpicker .e-buttons .e-codeeditor::before {
   
 }
 .e-colorpicker .e-buttons .e-previous,
@@ -9222,7 +9232,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 /*Theme Color*/
 
 .e-tab.e-js.e-widget {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   border: none;
 }
 .e-tab.e-js > .e-header > .e-item > .e-link,
@@ -11340,9 +11350,16 @@ input.e-fe-dialog-text:not(.e-textbox),
 .e-chkbox-wrap {
   display: inline-flex;
 }
+.e-chkbox-wrap.e-tb-cell {
+  display: table-cell;
+}
 .e-chkbox-wrap.e-tb-cell .e-text,
 .e-chkbox-wrap.e-tb-cell div {
   display: table-cell;
+  padding: 0px 5px 2px 5px;
+}
+.e-chkbox-wrap.e-check-small.e-tb-cell .e-text {
+  padding: 0px 5px 2px 5px;
 }
 .e-chkbox-wrap.e-focus div > span {
   box-shadow: 0 0 2px #cbcbcb;
@@ -12044,37 +12061,37 @@ input.e-fe-dialog-text:not(.e-textbox),
   margin-left: 25px;
 }
 .e-interactivelegend-title {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
 }
 .e-interactivelegend-leftlabel {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
 }
 .e-interactivelegend-rightlabel {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
 }
 .e-legend-rangestartlabel {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
 }
 .e-legend-rangeendlabel {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
 }
 .e-legendlabeltext {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   pointer-events: none;
   text-align: left;
   position: absolute;
@@ -12120,7 +12137,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   font-size: 17px;
 }
 .e-labelStyle {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-size: 14px;
   white-space: nowrap;
 }
@@ -12132,7 +12149,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   height: 20px;
   text-align: center;
   font-size: 14px;
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-smartLabelStyle:hover {
   cursor: pointer;
@@ -12201,7 +12218,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 .e-treemap-leaflabel {
   font-size: 14px;
   font-weight: normal;
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   color: white;
 }
 .e-treemap-legendLabel {
@@ -12299,7 +12316,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotgrid table {
   /*other*/
-  font: 12px Segoe UI !important;
+  font: 12px Segoe UI, Helvetica Neue, Ubuntu, Arial !important;
   color: #333333;
 }
 .e-pivotgrid .e-filterValues,
@@ -12357,6 +12374,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotgrid .e-pivotGridTable th,
 .e-pivotgrid .e-pivotGridTable td {
+  overflow: hidden;
   
 }
 .e-pivotgrid .e-pivotGridTable th,
@@ -12760,7 +12778,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   color: #333333;
 }
 .e-pivotgrid .e-treeview .e-text {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-size: 12px;
   font-weight: bold;
 }
@@ -12808,7 +12826,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotgrid .e-drag {
   padding: 9px 0px 9px 0px;
-  font-family: 'Segoe UI';
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-size: 14px;
   font-weight: bold;
 }
@@ -12830,7 +12848,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 .e-pivotgrid .columns,
 .e-pivotgrid .e-rows,
 .e-pivotgrid .emptyRows {
-  font-family: 'Segoe UI';
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-size: 14px;
   font-weight: bold;
 }
@@ -13341,7 +13359,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotschemadesigner {
   /*other*/
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   background: none repeat scroll 0 0 white;
   border: 1px solid #c8c8c8;
   color: #333333;
@@ -13499,7 +13517,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotschemadesigner .centerHead {
   /*other*/
-  font: normal 14px Segoe UI;
+  font: normal 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   color: #333333;
   margin: 7px 10px;
 }
@@ -13550,7 +13568,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotschemadesigner .subheadText {
   /*other*/
-  font: normal 14px Segoe UI;
+  font: normal 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   color: #333333;
   padding-left: 10px;
 }
@@ -13789,7 +13807,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotschemadesigner .e-treeview .e-text {
   /*other*/
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-size: 12px;
   color: #333333;
   font-weight: bold;
@@ -13937,7 +13955,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-pivotschemadesigner .e-filterElementTag,
 .e-pivotgrid .e-filterElementTag {
-  font-family: Segoe UI;
+  font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-pivotschemadesigner .e-filterState:before,
 .e-pivotgrid .e-filterState:before {
@@ -14881,6 +14899,7 @@ input.e-fe-dialog-text:not(.e-textbox),
   
 }
 .e-pivotgrid .curInput {
+  width: 100%;
   
 }
 .e-pivotgrid .e-memberEditorDiv.noChildNode .e-item div > .e-chkbox-wrap,
@@ -15094,6 +15113,23 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 .e-hoverCell {
   background-color: #fcc680 !important;
 }
+.e-pivotclient .e-collectionli:hover,
+.e-pivotclient .e-reportli:hover {
+  background: #ececec !important;
+  border: none !important;
+  color: #686969 !important;
+  padding: 3px !important;
+  
+  border-top: 4px !important;
+}
+.e-pivotclient .e-collectiondiv {
+  float: right;
+  margin-left: 6px;
+}
+.e-pivotclient .e-reportLbl,
+.e-pivotclient .e-collectionLbl {
+  margin-top: 2px;
+}
 .e-pivotclient .e-splitBtnUnique {
   height: auto !important;
 }
@@ -15267,7 +15303,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   background-color: white;
 }
 .e-pivotclient .e-outerTable {
-  font: normal 12px Segoe UI;
+  font: normal 12px Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-pivotclient .e-titleText {
   height: 50px;
@@ -15276,7 +15312,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   
 }
 .e-pivotclient .e-titleText {
-  font: normal 20px Segoe UI;
+  font: normal 20px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   line-height: 48px;
 }
 .e-pivotclient .e-titleText span {
@@ -15285,7 +15321,9 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 .e-pivotclient .e-toolbar.e-toolbarspan {
   
 }
-.e-pivotclient .e-reportCol {
+.e-pivotclient .e-reportCol,
+.e-pivotclient .e-collectionli,
+.e-pivotclient .e-reportli {
   
 }
 .e-pivotclient .e-newReportImg:before {
@@ -15563,7 +15601,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   margin: 5px 7px 7px;
 }
 .e-pivotclient .clientTab {
-  font: bold 12px Segoe UI;
+  font: bold 12px Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-pivotclient .clientTab {
   margin-top: 6px !important;
@@ -15638,7 +15676,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   
 }
 .e-pivotclient .e-csHeader {
-  font: normal 14px Segoe UI;
+  font: normal 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   margin: 8px 0 8px 3px;
 }
 .e-pivotclient .e-cdbHeader,
@@ -15696,7 +15734,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 }
 .e-pivotclient .e-cubeName {
   padding: 7px 0 0 6px;
-  font: normal 14px Segoe UI;
+  font: normal 14px Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
 .e-pivotclient .e-categoricalAxis,
 .e-pivotclient .e-rowAxis,
@@ -15827,7 +15865,8 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   cursor: pointer;
   color: #282827;
 }
-.e-pivotclient .reportList {
+.e-pivotclient .reportList,
+.e-pivotclient e-collectionlist {
   overflow: visible !important;
   
 }
@@ -15837,7 +15876,9 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 .e-pivotclient div.e-advancedFilterDlg {
   border: 1px solid #c8c8c8;
 }
-.e-pivotclient li.e-reportCol.e-hover {
+.e-pivotclient li.e-reportCol.e-hover,
+.e-pivotclient .e-collectionli.e-hover,
+.e-pivotclient .e-reportli.e-hover {
   background: none;
   border-color: transparent;
 }
@@ -15854,7 +15895,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 }
 .e-pivotclient .e-sortingDlg,
 .e-pivotclient .e-filteringDlg {
-  font: bold 12px Segoe UI !important;
+  font: bold 12px Segoe UI, Helvetica Neue, Ubuntu, Arial !important;
 }
 .e-pivotclient .e-sortingDlg label,
 .e-pivotclient .e-filteringDlg label {
@@ -15998,10 +16039,14 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 .e-pivotclient .e-measureListLbl {
   margin-top: 3px;
 }
-.e-pivotclient .e-reportCol {
+.e-pivotclient .e-reportCol,
+.e-pivotclient .e-collectionli,
+.e-pivotclient .e-reportli {
   
 }
-.e-pivotclient .e-reportCol {
+.e-pivotclient .e-reportCol,
+.e-pivotclient .e-collectionli,
+.e-pivotclient .e-reportli {
   width: auto;
   height: 25px;
 }
@@ -16419,7 +16464,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   font-size: inherit !important;
 }
 .e-pivotclient .e-dialog {
-  font: bold 12px Segoe UI !important;
+  font: bold 12px Segoe UI, Helvetica Neue, Ubuntu, Arial !important;
   opacity: 1 !important;
 }
 .e-pivotclient .e-corner-all {
@@ -16526,7 +16571,9 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 .e-pivotclient table.e-renameDBReportTbl tr td:first-child {
   
 }
-.e-pivotclient e-reportCol {
+.e-pivotclient e-reportCol,
+.e-pivotclient .e-collectionli,
+.e-pivotclient .e-reportli {
   margin-left: 3px;
 }
 .e-pivotclient.e-rtl .e-reportDlg table td {
@@ -17131,7 +17178,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
 }
 .e-pivotclient .e-dialog.e-calcMemberDialog .e-maskedit,
 .e-pivotclient .e-dialog.e-calcMemberDialog .textarea {
-  font: 14px Segoe UI !important;
+  font: 14px Segoe UI, Helvetica Neue, Ubuntu, Arial !important;
 }
 .e-pivotclient .e-dialog .e-memberPager {
   margin-top: 10px;
@@ -17295,7 +17342,11 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   
 }
 .e-pivotclient .e-toolbar .e-reportCol,
-.e-pivotclient .e-toolbar .e-reportCol.e-hover {
+.e-pivotclient .e-toolbar .e-reportCol.e-hover,
+.e-pivotclient .e-collectionli,
+.e-pivotclient .e-collectionli.e-hover,
+.e-pivotclient .e-reportli,
+.e-pivotclient .e-reportli.e-hover {
   
 }
 .e-pivotclient.e-rtl .e-splitBtn {
@@ -17314,10 +17365,14 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   
 }
 .e-pivotclient .e-toolbar > .e-horizontal > .e-reportCol.e-active,
-.e-pivotclient .e-toolbar > .e-horizontal > .e-reportCol.e-active > .reportList {
+.e-pivotclient .e-toolbar > .e-horizontal > .e-reportCol.e-active > .reportList,
+.e-pivotclient .e-toolbar > .e-horizontal > .e-collectionli.e-active,
+.e-pivotclient .e-toolbar > .e-horizontal > .e-collectionli.e-active > .e-collectionlist {
   
 }
-.e-pivotclient .e-toolbar > .e-horizontal > .e-reportCol.e-active:after {
+.e-pivotclient .e-toolbar > .e-horizontal > .e-reportCol.e-active:after,
+.e-pivotclient .e-toolbar > .e-horizontal > .e-collectionli.e-active:after,
+.e-pivotclient .e-toolbar > .e-horizontal > .e-reportli.e-active:after {
   
 }
 .e-pivotclient .e-SortFilterDlg.e-dialog > .e-header,
@@ -17672,7 +17727,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   background: #f9920b !important;
 }
 .e-pivotchart {
-  font: normal 12px Segoe UI;
+  font: normal 12px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   border: 1px solid #c8c8c8;
   background-color: white;
   color: #333333;
@@ -18097,7 +18152,7 @@ e-pivotgrid .e-dialog .e-memberPager + div .e-btn.e-dialogCancelBtn,
   border-radius: 15px;
   margin-top: 20px;
   text-align: left;
-  font: 12px Segoe UI;
+  font: 12px Segoe UI, Helvetica Neue, Ubuntu, Arial;
   font-stretch: condensed;
   text-decoration: none;
   line-height: 20px;

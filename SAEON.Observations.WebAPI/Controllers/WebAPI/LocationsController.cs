@@ -1,7 +1,7 @@
-﻿using SAEON.Logs;
+﻿using SAEON.AspNet.WebApi;
+using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
-using SAEON.Observations.WebAPI.Filters;
 using System;
 using System.Linq;
 using System.Web.Http;
@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("Locations")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ClientId("SAEON.Observations.QuerySite")]
+    [ClientAuthorization("SAEON.Observations.QuerySite")]
     public class LocationsController : ApiController
     {
         ObservationsDbContext db = new ObservationsDbContext();
