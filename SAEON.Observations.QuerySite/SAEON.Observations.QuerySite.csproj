@@ -130,8 +130,8 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Logs, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Logs.1.0.7\lib\net452\SAEON.Logs.dll</HintPath>
+    <Reference Include="SAEON.Logs, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Logs.1.0.9\lib\net452\SAEON.Logs.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.5.0\lib\net45\Serilog.dll</HintPath>
@@ -140,7 +140,7 @@
       <HintPath>..\packages\Serilog.Formatting.Compact.1.0.0\lib\net45\Serilog.Formatting.Compact.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Settings.AppSettings, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Settings.AppSettings.2.1.0\lib\net45\Serilog.Settings.AppSettings.dll</HintPath>
+      <HintPath>..\packages\Serilog.Settings.AppSettings.2.1.2\lib\net45\Serilog.Settings.AppSettings.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Sinks.File, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.File.3.2.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
@@ -151,48 +151,38 @@
     <Reference Include="Serilog.Sinks.RollingFile, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.RollingFile.3.3.0\lib\net45\Serilog.Sinks.RollingFile.dll</HintPath>
     </Reference>
-    <Reference Include="Serilog.Sinks.Seq, Version=3.3.3.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.Seq.3.3.3\lib\net45\Serilog.Sinks.Seq.dll</HintPath>
+    <Reference Include="Serilog.Sinks.Seq, Version=3.4.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.Seq.3.4.0\lib\net45\Serilog.Sinks.Seq.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Compression.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Compression.Base, Version=15.3450.0.33, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.33\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.DocIO.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.DocIO.Base, Version=15.3450.0.33, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.33\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.29\lib\net45\Syncfusion.EJ.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.EJ, Version=15.3450.0.33, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.33\lib\net45\Syncfusion.EJ.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ.Export, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.29\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.EJ.Export, Version=15.3450.0.33, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.33\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ.MVC, Version=15.3500.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.15.3.0.29\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.EJ.MVC, Version=15.3500.0.33, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.15.3.0.33\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Linq.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.29\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Linq.Base, Version=15.3450.0.33, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.15.3.0.33\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.OfficeChart.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.OfficeChart.Base, Version=15.3450.0.33, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.33\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Pdf.Base, Version=15.3450.0.33, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.33\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Presentation.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.Presentation.Base, Version=15.3450.0.33, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.33\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.XlsIO.Base, Version=15.3450.0.29, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.29\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Syncfusion.XlsIO.Base, Version=15.3450.0.33, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.15.3.0.33\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -311,10 +301,15 @@
     <Content Include="app_not_offline.htm" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\ej\mobile\android-theme\ej.mobile.android-core.css" />
     <Content Include="Content\ej\mobile\android-theme\ej.mobile.android-core.min.css" />
+    <Content Include="Content\ej\mobile\android-theme\ej.mobile.android.css" />
     <Content Include="Content\ej\mobile\android-theme\ej.mobile.android.min.css" />
+    <Content Include="Content\ej\mobile\ej.mobile.all.css" />
     <Content Include="Content\ej\mobile\ej.mobile.all.min.css" />
+    <Content Include="Content\ej\mobile\flat-theme\ej.mobile.flat-core.css" />
     <Content Include="Content\ej\mobile\flat-theme\ej.mobile.flat-core.min.css" />
+    <Content Include="Content\ej\mobile\flat-theme\ej.mobile.flat-theme.css" />
     <Content Include="Content\ej\mobile\flat-theme\ej.mobile.flat-theme.min.css" />
     <Content Include="Content\ej\mobile\images\ejmmobilefonts.svg" />
     <Content Include="Content\ej\mobile\images\PullToRefresh\PtR_android_dark.GIF" />
@@ -337,10 +332,15 @@
     <Content Include="Content\ej\mobile\images\waitingpopup\waitingpopup_ios7.gif" />
     <Content Include="Content\ej\mobile\images\waitingpopup\waitingpopup_windows.GIF" />
     <Content Include="Content\ej\mobile\images\waitingpopup\waitingpopup_winrt.GIF" />
+    <Content Include="Content\ej\mobile\ios7-theme\ej.mobile.ios7-core.css" />
     <Content Include="Content\ej\mobile\ios7-theme\ej.mobile.ios7-core.min.css" />
+    <Content Include="Content\ej\mobile\ios7-theme\ej.mobile.ios7.css" />
     <Content Include="Content\ej\mobile\ios7-theme\ej.mobile.ios7.min.css" />
+    <Content Include="Content\ej\mobile\windows-theme\ej.mobile.windows-core.css" />
     <Content Include="Content\ej\mobile\windows-theme\ej.mobile.windows-core.min.css" />
+    <Content Include="Content\ej\mobile\windows-theme\ej.mobile.windows.css" />
     <Content Include="Content\ej\mobile\windows-theme\ej.mobile.windows.min.css" />
+    <Content Include="Content\ej\web\bootstrap-theme\ej.theme.css" />
     <Content Include="Content\ej\web\bootstrap-theme\ej.theme.min.css" />
     <Content Include="Content\ej\web\bootstrap-theme\ej.web.all.min.css" />
     <Content Include="Content\ej\web\bootstrap-theme\images\ajax-loader.gif" />
@@ -445,6 +445,7 @@
     <Content Include="Content\ej\web\common-images\tools\drop-sibling-rtl.png" />
     <Content Include="Content\ej\web\common-images\tools\file_icons.png" />
     <Content Include="Content\ej\web\common-images\tools\icons.svg" />
+    <Content Include="Content\ej\web\default-theme\ej.theme.css" />
     <Content Include="Content\ej\web\default-theme\ej.theme.min.css" />
     <Content Include="Content\ej\web\default-theme\ej.web.all.min.css" />
     <Content Include="Content\ej\web\default-theme\images\ajax-loader.gif" />
@@ -458,6 +459,7 @@
     <Content Include="Content\ej\web\ej.widgets.core.material.min.css" />
     <Content Include="Content\ej\web\ej.widgets.core.min.css" />
     <Content Include="Content\ej\web\ej.widgets.core.office-365.min.css" />
+    <Content Include="Content\ej\web\flat-azure-dark\ej.theme.css" />
     <Content Include="Content\ej\web\flat-azure-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-azure-dark\ej.web.all.min.css" />
     <Content Include="Content\ej\web\flat-azure-dark\images\ajax-loader.gif" />
@@ -467,6 +469,7 @@
     <Content Include="Content\ej\web\flat-azure-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-azure-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-azure-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\flat-lime-dark\ej.theme.css" />
     <Content Include="Content\ej\web\flat-lime-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-lime-dark\ej.web.all.min.css" />
     <Content Include="Content\ej\web\flat-lime-dark\images\ajax-loader.gif" />
@@ -476,6 +479,7 @@
     <Content Include="Content\ej\web\flat-lime-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-lime-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-lime-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\flat-lime\ej.theme.css" />
     <Content Include="Content\ej\web\flat-lime\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-lime\ej.web.all.min.css" />
     <Content Include="Content\ej\web\flat-lime\images\ajax-loader.gif" />
@@ -485,6 +489,7 @@
     <Content Include="Content\ej\web\flat-lime\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-lime\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-lime\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\flat-saffron-dark\ej.theme.css" />
     <Content Include="Content\ej\web\flat-saffron-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-saffron-dark\ej.web.all.min.css" />
     <Content Include="Content\ej\web\flat-saffron-dark\images\ajax-loader.gif" />
@@ -494,6 +499,7 @@
     <Content Include="Content\ej\web\flat-saffron-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-saffron-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-saffron-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\flat-saffron\ej.theme.css" />
     <Content Include="Content\ej\web\flat-saffron\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-saffron\ej.web.all.min.css" />
     <Content Include="Content\ej\web\flat-saffron\images\ajax-loader.gif" />
@@ -503,6 +509,7 @@
     <Content Include="Content\ej\web\flat-saffron\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-saffron\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-saffron\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-azure-dark\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-azure-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-azure-dark\ej.web.all.min.css" />
     <Content Include="Content\ej\web\gradient-azure-dark\images\ajax-loader.gif" />
@@ -512,6 +519,7 @@
     <Content Include="Content\ej\web\gradient-azure-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-azure-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-azure-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-azure\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-azure\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-azure\ej.web.all.min.css" />
     <Content Include="Content\ej\web\gradient-azure\images\ajax-loader.gif" />
@@ -521,6 +529,7 @@
     <Content Include="Content\ej\web\gradient-azure\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-azure\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-azure\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-lime-dark\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-lime-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-lime-dark\ej.web.all.min.css" />
     <Content Include="Content\ej\web\gradient-lime-dark\images\ajax-loader.gif" />
@@ -530,6 +539,7 @@
     <Content Include="Content\ej\web\gradient-lime-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-lime-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-lime-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-lime\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-lime\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-lime\ej.web.all.min.css" />
     <Content Include="Content\ej\web\gradient-lime\images\ajax-loader.gif" />
@@ -539,6 +549,7 @@
     <Content Include="Content\ej\web\gradient-lime\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-lime\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-lime\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-saffron-dark\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-saffron-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-saffron-dark\ej.web.all.min.css" />
     <Content Include="Content\ej\web\gradient-saffron-dark\images\ajax-loader.gif" />
@@ -548,6 +559,7 @@
     <Content Include="Content\ej\web\gradient-saffron-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-saffron-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-saffron-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-saffron\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-saffron\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-saffron\ej.web.all.min.css" />
     <Content Include="Content\ej\web\gradient-saffron\images\ajax-loader.gif" />
@@ -557,6 +569,7 @@
     <Content Include="Content\ej\web\gradient-saffron\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-saffron\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-saffron\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\high-contrast-01\ej.theme.css" />
     <Content Include="Content\ej\web\high-contrast-01\ej.theme.min.css" />
     <Content Include="Content\ej\web\high-contrast-01\ej.web.all.min.css" />
     <Content Include="Content\ej\web\high-contrast-01\images\ajax-loader.gif" />
@@ -566,6 +579,7 @@
     <Content Include="Content\ej\web\high-contrast-01\images\rotator-icon.png" />
     <Content Include="Content\ej\web\high-contrast-01\images\slider-tick.png" />
     <Content Include="Content\ej\web\high-contrast-01\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\high-contrast-02\ej.theme.css" />
     <Content Include="Content\ej\web\high-contrast-02\ej.theme.min.css" />
     <Content Include="Content\ej\web\high-contrast-02\ej.web.all.min.css" />
     <Content Include="Content\ej\web\high-contrast-02\images\ajax-loader.gif" />
@@ -575,6 +589,7 @@
     <Content Include="Content\ej\web\high-contrast-02\images\rotator-icon.png" />
     <Content Include="Content\ej\web\high-contrast-02\images\slider-tick.png" />
     <Content Include="Content\ej\web\high-contrast-02\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\material\ej.theme.css" />
     <Content Include="Content\ej\web\material\ej.theme.min.css" />
     <Content Include="Content\ej\web\material\ej.web.all.min.css" />
     <Content Include="Content\ej\web\material\icons\ejicons.svg" />
@@ -585,6 +600,7 @@
     <Content Include="Content\ej\web\material\images\rotator-icon.png" />
     <Content Include="Content\ej\web\material\images\slider-tick.png" />
     <Content Include="Content\ej\web\material\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\office-365\ej.theme.css" />
     <Content Include="Content\ej\web\office-365\ej.theme.min.css" />
     <Content Include="Content\ej\web\office-365\ej.web.all.min.css" />
     <Content Include="Content\ej\web\office-365\icons\ejicons.svg" />
@@ -668,6 +684,7 @@
     <Content Include="SAEON.ico" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <None Include="Scripts\ej\web\ej.web.all.min.intellisense.js" />
     <None Include="Scripts\ej\web\ej.web.all-vsdoc.js" />
     <Content Include="Scripts\ej\common\ej.core.min.js" />
@@ -805,7 +822,6 @@
     <Content Include="Scripts\ej\web\ej.uploadbox.min.js" />
     <Content Include="Scripts\ej\web\ej.waitingpopup.min.js" />
     <Content Include="Scripts\ej\web\ej.web.all.min.js" />
-    <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.2.1.slim.js" />

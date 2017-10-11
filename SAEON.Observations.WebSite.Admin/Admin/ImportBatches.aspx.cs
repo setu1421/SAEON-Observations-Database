@@ -139,6 +139,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                 fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
+                Logging.Information("Start Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.24, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())
@@ -146,7 +147,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     try
                     {
 #if OldImport
-                        Logging.Information("Start");
                         using (TransactionScope ts = Utilities.NewTransactionScope())
                         {
                             using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
@@ -291,7 +291,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             Logging.Information("Finish");
                         }
 #else
-                        Logging.Information("Start Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.24, batch.DataSource.Name, batch.FileName);
+                        Logging.Information("Saving {count} observations.",values.Count);
                         duplicates = 0;
                         nullDuplicates = 0;
                         using (TransactionScope ts = Utilities.NewTransactionScope())
@@ -459,7 +459,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     }
                     catch (Exception Ex)
                     {
-                        Logging.Exception(Ex, "An error occured while importing values");
+                        Logging.Exception(Ex, "An error occurred while importing values");
                         X.Msg.Show(new MessageBoxConfig
                         {
                             Buttons = MessageBox.Button.OK,
