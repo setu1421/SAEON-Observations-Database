@@ -50,3 +50,6 @@ body {
     color: red;
 }
 
+.body-content {
+    padding-right: 50px;
+}
