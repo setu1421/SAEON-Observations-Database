@@ -617,6 +617,14 @@ public class ImportSchemaHelper : IDisposable
                     {
                         ErrorInDate = true;
                         InvalidDateValue = sDateValue;
+                        try
+                        {
+                            dt = DateTime.ParseExact(sDateValue.ToUpper().Trim(), dtdef.Dateformat, null, DateTimeStyles.None);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Exception(ex);
+                        }
                     }
                 }
 
@@ -629,6 +637,14 @@ public class ImportSchemaHelper : IDisposable
                         {
                             ErrorInTime = true;
                             InvalidTimeValue = sTimeValue;
+                            try
+                            {
+                                tm = DateTime.ParseExact(sTimeValue.ToUpper().Trim(), tmdef.Timeformat, null, DateTimeStyles.None);
+                            }
+                            catch (Exception ex)
+                            {
+                                Logging.Exception(ex);
+                            }
                         }
                     }
                     else if (tmdef.IsFixedTime)
