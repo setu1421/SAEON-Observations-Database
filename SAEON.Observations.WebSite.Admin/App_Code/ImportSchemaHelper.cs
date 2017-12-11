@@ -624,6 +624,7 @@ public class ImportSchemaHelper : IDisposable
                         catch (Exception ex)
                         {
                             Logging.Exception(ex);
+                            throw;
                         }
                     }
                 }
@@ -644,6 +645,7 @@ public class ImportSchemaHelper : IDisposable
                             catch (Exception ex)
                             {
                                 Logging.Exception(ex);
+                                throw;
                             }
                         }
                     }
