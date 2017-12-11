@@ -727,7 +727,7 @@ public class ImportSchemaHelper : IDisposable
                             bool found = false;
                             bool foundTooEarly = false;
                             bool foundTooLate = false;
-                            if (def.Sensors.Count > 1)
+                            if (def.Sensors.Count > 0)
                             {
                                 Logging.Verbose("Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
                             }
