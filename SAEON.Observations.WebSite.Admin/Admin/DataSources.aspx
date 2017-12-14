@@ -504,7 +504,7 @@
                         </Items>
                     </ext:Container>
                     <%--=============--%>
-                    <ext:Panel ID="Panel2" runat="server" Layout="Form">
+                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:SelectBox ID="sbNewOffering" runat="server" DataIndex="NewPhenomenonOfferingID" DisplayField="Name"
                                 AllowBlank="true" BlankText="Offering is required" MsgTarget="Side" ForceSelection="false"
