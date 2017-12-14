@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <script type="text/javascript" src="../JS/ImportBatches.js"></script>
     <script type="text/javascript" src="../JS/generic.js"></script>
-    <script type="text/javascript" src="../Scripts/jquery-3.1.1.js"></script>
+    <%--<script type="text/javascript" src="../Scripts/jquery-3.2.1.js"></script>--%>
     <script type="text/javascript">
         var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
@@ -590,8 +590,8 @@
                             <ext:FileUploadField ID="DataFileUpload" runat="server" EmptyText="Select a File"
                                 AllowBlank="false" FieldLabel="Data File" ButtonText="" Icon="Zoom" BlankText="input file is required"
                                 ClientIDMode="Static" />
-                            <ext:FileUploadField ID="LogFileUpload" runat="server" AllowBlank="true" EmptyText="Select a log File"
-                                FieldLabel="Log File" ButtonText="" Icon="Zoom" ClientIDMode="Static" />
+<%--                            <ext:FileUploadField ID="LogFileUpload" runat="server" AllowBlank="true" EmptyText="Select a log File"
+                                FieldLabel="Log File" ButtonText="" Icon="Zoom" ClientIDMode="Static" />--%>
                         </Items>
                         <Listeners>
                             <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);" />

@@ -1,5 +1,4 @@
-﻿#define OldImportNot
-using Ext.Net;
+﻿using Ext.Net;
 using SAEON.Logs;
 using SAEON.Observations.Data;
 using SubSonic;
@@ -131,167 +130,23 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     ImportDate = DateTime.Now
                 };
                 FileInfo fi;
-                if (!string.IsNullOrEmpty(LogFileUpload.PostedFile.FileName))
-                {
-                    fi = new FileInfo(LogFileUpload.PostedFile.FileName);
-                    batch.LogFileName = fi.Name;
-                }
+                //if (!string.IsNullOrEmpty(LogFileUpload.PostedFile.FileName))
+                //{
+                //    fi = new FileInfo(LogFileUpload.PostedFile.FileName);
+                //    batch.LogFileName = fi.Name;
+                //}
 
                 fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
+
+                Logging.Information("Import Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.27, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())
                 {
                     try
                     {
-#if OldImport
-                        Logging.Information("Start");
-                        using (TransactionScope ts = Utilities.NewTransactionScope())
-                        {
-                            using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
-                            {
-                                //ImportBatch batch = new ImportBatch();
-                                //batch.Guid = Guid.NewGuid();
-
-                                if (values.FirstOrDefault(t => t.IsValid) == null)
-                                {
-                                    Logging.Verbose("Error: IsValid: {count}", values.Where(t => !t.IsValid).Count());
-                                    batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
-                                }
-                                else
-                                    batch.Status = (int)ImportBatchStatus.NoLogErrors;
-                                batch.UserId = AuthHelper.GetLoggedInUserId;
-                                batch.Save();
-
-                                for (int i = 0; i < values.Count; i++)
-                                {
-                                    SchemaValue schval = values[i];
-
-                                    SqlQuery q = new Select(Aggregate.Count(Observation.IdColumn)).From(Observation.Schema)
-                                        .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
-                                        .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
-                                        .And(Observation.Columns.RawValue).IsEqualTo(schval.RawValue)
-                                        .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
-                                        .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
-                                    //add offering
-                                    int totalDuplicate = q.ExecuteScalar<int>();
-
-                                    if (schval.IsValid && totalDuplicate == 0)
-                                    {
-
-                                        if (!isDuplicateOfNull(schval, batch.Id))
-                                        {
-                                            Observation Obrecord = new Observation()
-                                            {
-                                                SensorID = schval.SensorID.Value,
-                                                ValueDate = schval.DateValue,
-                                                RawValue = schval.RawValue,
-                                                DataValue = schval.DataValue,
-                                                PhenomenonOfferingID = schval.PhenomenonOfferingID.Value,
-                                                PhenomenonUOMID = schval.PhenomenonUOMID.Value,
-                                                ImportBatchID = batch.Id,
-                                                UserId = AuthHelper.GetLoggedInUserId,
-
-                                                AddedDate = DateTime.Now
-                                            };
-                                            if (schval.Comment.Length > 0)
-                                                Obrecord.Comment = schval.Comment;
-
-                                            Obrecord.CorrelationID = schval.CorrelationID;
-                                            if (string.IsNullOrEmpty(schval.TextValue))
-                                                Obrecord.TextValue = null;
-                                            else
-                                                Obrecord.TextValue = schval.TextValue;
-                                            Obrecord.Save();
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        //
-                                        Logging.Verbose("Error: IsValid: {isValid} TotalDuplicate: {totalDuplicate}", schval.IsValid, totalDuplicate);
-                                        batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
-                                        batch.Save();
-                                        //
-
-                                        DataLog logrecord = new DataLog()
-                                        {
-                                            SensorID = schval.SensorID
-                                        };
-                                        if (schval.DateValueInvalid)
-                                            logrecord.InvalidDateValue = schval.InvalidDateValue;
-                                        else if (schval.DateValue != DateTime.MinValue)
-                                            logrecord.ValueDate = schval.DateValue;
-
-                                        if (schval.TimeValueInvalid)
-                                            logrecord.InvalidTimeValue = schval.InvalidTimeValue;
-
-                                        if (schval.TimeValue.HasValue && schval.TimeValue != DateTime.MinValue)
-                                            logrecord.ValueTime = schval.TimeValue;
-
-                                        if (schval.RawValueInvalid)
-                                            logrecord.ValueText = schval.InvalidRawValue;
-                                        else
-                                            logrecord.RawValue = schval.RawValue;
-
-                                        if (schval.DataValueInvalid)
-                                            logrecord.TransformValueText = schval.InvalidDataValue;
-                                        else
-                                            logrecord.DataValue = schval.DataValue;
-
-                                        if (schval.InValidOffering)
-                                            logrecord.InvalidOffering = schval.PhenomenonOfferingID.Value.ToString();
-                                        else
-                                            logrecord.PhenomenonOfferingID = schval.PhenomenonOfferingID.Value;
-
-                                        if (schval.InValidUOM)
-                                            logrecord.InvalidUOM = schval.PhenomenonUOMID.Value.ToString();
-                                        else
-                                            logrecord.PhenomenonUOMID = schval.PhenomenonUOMID.Value;
-
-                                        logrecord.RawFieldValue = String.IsNullOrEmpty(schval.FieldRawValue) ? "" : schval.FieldRawValue;
-                                        logrecord.ImportDate = DateTime.Now;
-                                        logrecord.ImportBatchID = batch.Id;
-
-                                        logrecord.DataSourceTransformationID = schval.DataSourceTransformationID;
-                                        if (totalDuplicate > 0)
-                                        {
-                                            logrecord.ImportStatus = "This record is valid, but it is already in the Observations table. " + String.Join(",", schval.InvalidStatuses.ToArray());
-                                            logrecord.StatusID = new Guid("0b03dcbf-ddd1-4fe1-95d9-3c80bef2d643");  //duplicate - Record is already in live system, not uploaded
-                                        }
-                                        else
-                                        {
-                                            logrecord.ImportStatus = String.Join(",", schval.InvalidStatuses.ToArray());
-                                            logrecord.StatusID = new Guid(schval.InvalidStatuses[0]);
-                                        }
-
-                                        logrecord.UserId = AuthHelper.GetLoggedInUserId;
-
-                                        if (schval.Comment.Length > 0)
-                                            logrecord.Comment = schval.Comment;
-
-                                        logrecord.CorrelationID = schval.CorrelationID;
-                                        //Log.Verbose("BatchID: {id} Status: {status} ImportStatus: {importstatus}", batch.Id, logrecord.StatusID, logrecord.ImportStatus);
-                                        try
-                                        {
-                                            logrecord.Save();
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Logging.Exception(ex, "Unable to add DataLog");
-                                            throw;
-                                        }
-                                    }
-                                }
-                                Auditing.Log(GetType(), new ParameterList {
-                                    { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status} });
-                            }
-                            ts.Complete();
-                            Logging.Information("Finish");
-                        }
-#else
-                        Logging.Information("Start");
+                        Logging.Information("Saving {count} observations.", values.Count);
                         duplicates = 0;
                         nullDuplicates = 0;
                         using (TransactionScope ts = Utilities.NewTransactionScope())
@@ -445,9 +300,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status} });
                             }
                             ts.Complete();
-                            Logging.Information("Finish");
+                            Logging.Information("Done");
                         }
-#endif
 
                         ObservationsGridStore.DataBind();
                         ImportBatchesGrid.GetStore().DataBind();
@@ -459,7 +313,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     }
                     catch (Exception Ex)
                     {
-                        Logging.Exception(Ex, "An error occured while importing values");
+                        Logging.Exception(Ex, "An error occurred while importing values");
                         X.Msg.Show(new MessageBoxConfig
                         {
                             Buttons = MessageBox.Button.OK,
@@ -508,7 +362,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
         if (oCol.Count != 0)
         {
-            Logging.Error("nullDuplicates: {nullDuplicates}",++nullDuplicates);
+            Logging.Error("nullDuplicates: {nullDuplicates}", ++nullDuplicates);
             //delete this observation and move it do the datalog with the new value in and a status saying its a duplicate of a null that now has a value. 
             //check if this works with transformations 
             DataLog d = new DataLog()
@@ -573,51 +427,77 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     /// <returns></returns>
     List<SchemaValue> Import(Guid DataSourceId, ImportBatch batch)
     {
-        DataSource ds = new DataSource(DataSourceId);
-        List<SchemaValue> ImportValues = new List<SchemaValue>();
-
-        List<DateTime> recordgaps = new List<DateTime>();
-        List<DateTime> datagaps = new List<DateTime>();
-
-        string Data = String.Empty;
-        //if (!ds.DataSchemaID.HasValue)
-        //{
-
-        SensorCollection col = new SensorCollection()
-            .Where(Sensor.Columns.DataSourceID, DataSourceId)
-            .Where(Sensor.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null)
-            .Load();
-
-        ImportLogHelper logHelper = new ImportLogHelper();
-
-        if (LogFileUpload.PostedFile.ContentLength > 0)
-        {
-            using (StreamReader reader = new StreamReader(LogFileUpload.PostedFile.InputStream))
-            {
-                logHelper.ReadLog(reader.ReadToEnd());
-            }
-        }
-
-        using (StreamReader reader = new StreamReader(DataFileUpload.PostedFile.InputStream))
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatch", batch.Code } }))
         {
 
-            if (col.Count > 0)
+            DataSource ds = new DataSource(DataSourceId);
+            List<SchemaValue> ImportValues = new List<SchemaValue>();
+
+            List<DateTime> recordgaps = new List<DateTime>();
+            List<DateTime> datagaps = new List<DateTime>();
+
+            string Data = String.Empty;
+            //if (!ds.DataSchemaID.HasValue)
+            //{
+
+            SensorCollection col = new SensorCollection()
+                .Where(Sensor.Columns.DataSourceID, DataSourceId)
+                .Where(Sensor.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null)
+                .Load();
+
+            //ImportLogHelper logHelper = new ImportLogHelper();
+
+            //if (LogFileUpload.PostedFile.ContentLength > 0)
+            //{
+            //    using (StreamReader reader = new StreamReader(LogFileUpload.PostedFile.InputStream))
+            //    {
+            //        logHelper.ReadLog(reader.ReadToEnd());
+            //    }
+            //}
+
+            using (StreamReader reader = new StreamReader(DataFileUpload.PostedFile.InputStream))
             {
-                foreach (var sp in col)
+
+                if (col.Count > 0)
                 {
-                    DataFileUpload.PostedFile.InputStream.Seek(0, SeekOrigin.Begin);
+                    foreach (var sp in col)
+                    {
+                        DataFileUpload.PostedFile.InputStream.Seek(0, SeekOrigin.Begin);
 
-                    DataSchema schema = sp.DataSchema;
+                        DataSchema schema = sp.DataSchema;
+
+                        Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
+                        //using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, sp, logHelper))
+                        ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, sp/*, logHelper*/);
+                        {
+                            if (helper.Errors.Count > 0)
+                            {
+                                ErrorGrid.GetStore().DataSource = helper.Errors;
+                                ErrorGrid.GetStore().DataBind();
+                                break;
+                            }
+                            else
+                            {
+                                helper.ProcessSchema();
+
+                                ImportValues.AddRange(helper.SchemaValues);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    DataSchema schema = ds.DataSchema;
 
                     Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
-                    //                   using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, sp, logHelper))
-                    ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, sp, logHelper);
+
+                    //using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, null, logHelper))
+                    ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, null/*, logHelper*/);
                     {
                         if (helper.Errors.Count > 0)
                         {
                             ErrorGrid.GetStore().DataSource = helper.Errors;
                             ErrorGrid.GetStore().DataBind();
-                            break;
                         }
                         else
                         {
@@ -627,33 +507,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         }
                     }
                 }
+                //}
             }
-            else
-            {
-                DataSchema schema = ds.DataSchema;
 
-                Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
-
-                //using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, null, logHelper))
-                ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, null, logHelper);
-                {
-                    if (helper.Errors.Count > 0)
-                    {
-                        ErrorGrid.GetStore().DataSource = helper.Errors;
-                        ErrorGrid.GetStore().DataBind();
-                    }
-                    else
-                    {
-                        helper.ProcessSchema();
-
-                        ImportValues.AddRange(helper.SchemaValues);
-                    }
-                }
-            }
-            //}
+            return ImportValues;
         }
-
-        return ImportValues;
     }
 
     /// <summary>

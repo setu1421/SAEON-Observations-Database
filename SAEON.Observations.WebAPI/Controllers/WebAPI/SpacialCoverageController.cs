@@ -1,4 +1,5 @@
-﻿using SAEON.Logs;
+﻿using SAEON.AspNet.WebApi;
+using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
 using System.Data;
@@ -12,7 +13,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("SpacialCoverage")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    //[ClaimsAuthorization("client_id","SAEON.Observations.QuerySite")]
+    [ClientAuthorization("SAEON.Observations.QuerySite")]
+    [RoleAuthorization("SAEON.Observations.Admin")]
     public class SpacialCoverageController : BaseController
     {
         public SpacialCoverageController() : base()

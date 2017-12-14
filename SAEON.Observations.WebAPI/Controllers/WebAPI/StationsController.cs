@@ -10,7 +10,6 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     /// <summary>
-    /// Stations
     /// </summary>
     [RoutePrefix("Stations")]
     public class StationsController : BaseApiController<Station>

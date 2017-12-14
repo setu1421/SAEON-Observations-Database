@@ -117,12 +117,12 @@ namespace SAEON.Observations.WebAPI
                     c.OAuth2("oauth2")
                         .Description("OAuth2 Implicit Grant")
                         .Flow("implicit")
-                        .AuthorizationUrl(Properties.Settings.Default.IdentityServer + "/connect/authorize")
-                        .TokenUrl(Properties.Settings.Default.IdentityServer + "/connect/token")
+                        .AuthorizationUrl(Properties.Settings.Default.IdentityServerUrl + "/connect/authorize")
+                        .TokenUrl(Properties.Settings.Default.IdentityServerUrl + "/connect/token")
                         .Scopes(scopes =>
                         {
-                            scopes.Add("Swagger", "Swagger");
-                            scopes.Add("SAEON.Observations.WebAPI", "SAEON observations WebAPI");
+                            //scopes.Add("Swagger", "Swagger");
+                            scopes.Add("SAEON.Observations.WebAPI", "SAEON Observations WebAPI");
                         });
 
 

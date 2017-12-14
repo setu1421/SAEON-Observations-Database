@@ -14,12 +14,9 @@ namespace SAEON.Observations.WebAPI
     {
         protected void Application_Start()
         {
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.AppSettings()
-                .Enrich.FromLogContext()
-                .WriteTo.RollingFile(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebAPI {Date}.txt"))
-                .WriteTo.Seq("http://localhost:5341/")
-                .CreateLogger();
+            Logging
+                .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebAPI {Date}.txt"))
+                .Create();
             using (Logging.MethodCall(GetType()))
             {
                 try

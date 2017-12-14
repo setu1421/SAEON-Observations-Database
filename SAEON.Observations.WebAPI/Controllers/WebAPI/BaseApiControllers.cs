@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SAEON.AspNet.WebApi;
 using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
@@ -16,7 +17,6 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
 
-    [Authorize]
     public abstract class BaseApiController<TEntity> : BaseController where TEntity : BaseEntity
     {
         /// <summary>
@@ -227,7 +227,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
     }
 
-    [Authorize]
     public abstract class BaseApiWriteController<TEntity> : BaseApiController<TEntity> where TEntity : BaseEntity
     {
         public BaseApiWriteController() : base()
@@ -272,6 +271,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// </summary>
         /// <param name="item">The new TEntity </param>
         [HttpPost]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [Authorize]
+        [ClientAuthorization("SAEON.Observations.QuerySite")]
         //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
         {
@@ -341,8 +343,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the TEnity</param>
         /// <param name="delta">The new TEntity</param>
         [HttpPut]
-        //[Route("{id:guid}")] Required in derived classes
+        [ApiExplorerSettings(IgnoreApi = true)]
         [ResponseType(typeof(void))]
+        [Authorize]
+        [ClientAuthorization("SAEON.Observations.QuerySite")]
+        //[Route("{id:guid}")] Required in derived classes
         public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "id", id }, { "delta", delta } }))
@@ -407,8 +412,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the TEnity</param>
         /// <param name="delta">The new TEntity</param>
         [HttpPut]
-        //[Route] Required in derived classes
+        [ApiExplorerSettings(IgnoreApi = true)]
         [ResponseType(typeof(void))]
+        [Authorize]
+        [ClientAuthorization("SAEON.Observations.QuerySite")]
+        //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> PutByName(string name, [FromBody]TEntity delta)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "name", name }, { "delta", delta } }))
@@ -472,8 +480,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// </summary>
         /// <param name="id">The Id of the TEntity</param>
         [HttpDelete]
-        //[Route("{id:guid}")] Required in derived classes
+        [ApiExplorerSettings(IgnoreApi = true)]
         [ResponseType(typeof(void))]
+        [Authorize]
+        [ClientAuthorization("SAEON.Observations.QuerySite")]
+        //[Route("{id:guid}")] Required in derived classes
         public virtual async Task<IHttpActionResult> DeleteById(Guid id)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
@@ -519,8 +530,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// </summary>
         /// <param name="name">The Name of the TEntity</param>
         [HttpDelete]
-        //[Route] Required in derived classes
+        [ApiExplorerSettings(IgnoreApi = true)]
         [ResponseType(typeof(void))]
+        [Authorize]
+        [ClientAuthorization("SAEON.Observations.QuerySite")]
+        //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> DeleteByName(string name)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Name", name } }))

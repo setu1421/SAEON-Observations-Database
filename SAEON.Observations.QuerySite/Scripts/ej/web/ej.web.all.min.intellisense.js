@@ -651,17 +651,33 @@ redraw:function(){
 /// To redraw the bullet graph
 /// </summary>
 },
-setComparativeMeasureSymbol:function(){
+setComparativeMeasureSymbol:function(index, measure){
 /// <signature>
 /// <summary>
 /// To set the value for comparative measure in bullet graph.
 /// </summary>
+/// <param name="index"	type="number">value for the graph</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set the value for comparative measure in bullet graph.
+/// </summary>
+/// <param name="measure"	type="number">value for the graph</param>
+/// </signature>
 },
-setFeatureMeasureBarValue:function(){
+setFeatureMeasureBarValue:function(index, measure){
 /// <signature>
 /// <summary>
 /// To set the value for feature measure bar.
 /// </summary>
+/// <param name="index"	type="number">value for the graph</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set the value for feature measure bar.
+/// </summary>
+/// <param name="measure"	type="number">value for the graph</param>
+/// </signature>
 },
 });
 return instance;
@@ -1627,7 +1643,7 @@ ejChart :function (options) {
 ///Set the dataSource for all series. It can be an array of JSON objects or an instance of ej.DataManager.
 ///<br/>dataSource-any	default-null
 ///<br/><br/>
-///Specifies spline tension value for cardianal spline type. Value ranges from 0 to 1.
+///Specifies spline tension value for cardinal spline type. Value ranges from 0 to 1.
 ///<br/>cardinalSplineTension-number	default-0.5
 ///<br/><br/>
 ///Controls the size of the hole in doughnut series. Value ranges from 0 to 1
@@ -1718,7 +1734,7 @@ ejChart :function (options) {
 ///<br/>bubbleOptions-any	default-
 ///<br/><br/>
 ///Used for the calculation of the bubble radius based on the mode selected 
-///<br/>radiusMode-ej.datavisualization.Chart.RadiusMode|string	default-minmax
+///<br/>radiusMode-ej.datavisualization.Chart.RadiusMode|string	default-minMax
 ///<br/><br/>
 ///Used for the setting the minimum radius of the bubble
 ///<br/>minRadius-number	default-1
@@ -1761,6 +1777,9 @@ ejChart :function (options) {
 ///<br/><br/>
 ///Enables saturation to the data label.
 ///<br/>enableContrastColor-boolean	default-false
+///<br/><br/>
+///Displays the partially visible labels inside the chart Area
+///<br/>showEdgeLabels-boolean	default-false
 ///<br/><br/>
 ///Options for customizing the border of the data label.
 ///<br/>border-any	default-
@@ -1909,7 +1928,7 @@ ejChart :function (options) {
 ///Controls the size of the second pie in pieOfPie series. Value ranges from 0 to 1.
 ///<br/>pieOfPieCoefficient-number	default-0.6
 ///<br/><br/>
-///Split Value of pieofpie series.
+///Split Value of pieOfPie series.
 ///<br/>splitValue-string	default-null
 ///<br/><br/>
 ///Distance between the two pie's in pieOfPie series.
@@ -2126,7 +2145,7 @@ ejChart :function (options) {
 ///<br/>visibleOnLegend-string	default-visible
 ///<br/><br/>
 ///Specifies the type of the trendline for the series.
-///<br/>type-string	default-linear. See TrendlinesType
+///<br/>type-ej.datavisualization.Chart.TrendlinesType|string	default-linear. See TrendlinesType
 ///<br/><br/>
 ///Name for the trendlines that is to be displayed in the legend text.
 ///<br/>name-string	default-trendline
@@ -2621,19 +2640,19 @@ ejChart :function (options) {
 ///<br/>palette-Array&lt;any&gt;	default-null
 ///<br/><br/>
 ///Options to customize the left, right, top and bottom margins of chart area.
-///<br/>Margin-any	default-
+///<br/>margin-Margin	default-
 ///<br/><br/>
 ///Spacing for the left margin of chart area. Setting positive value decreases the width of the chart area from left side.
-///<br/>margin.left-number	default-10
+///<br/>left-number	default-10
 ///<br/><br/>
 ///Spacing for the right margin of chart area. Setting positive value decreases the width of the chart area from right side.
-///<br/>margin.right-number	default-10
+///<br/>right-number	default-10
 ///<br/><br/>
 ///Spacing for the top margin of chart area. Setting positive value decreases the height of the chart area from the top.
-///<br/>margin.top-number	default-10
+///<br/>top-number	default-10
 ///<br/><br/>
 ///Spacing for the bottom margin of the chart area. Setting positive value decreases the height of the chart area from the bottom.
-///<br/>margin.bottom-number	default-10
+///<br/>bottom-number	default-10
 ///<br/><br/>
 ///Perspective angle of the 3D view. Chart appears closer when perspective angle is decreased, and distant when perspective angle is increased.This property is applicable only when 3D view is enabled
 ///<br/>perspectiveAngle-number	default-90
@@ -3940,7 +3959,7 @@ ejChart :function (options) {
 ///Specifies the dataSource for the series. It can be an array of JSON objects or an instance of ej.DataManager.
 ///<br/>dataSource-any	default-null
 ///<br/><br/>
-///Specifies spline tension values for cardianal spline type.Value ranges from 0 to 1.
+///Specifies spline tension values for cardinal spline type.Value ranges from 0 to 1.
 ///<br/>cardinalSplineTension-number	default-0.5
 ///<br/><br/>
 ///Controls the size of the hole in doughnut series. Value ranges from 0 to 1.
@@ -4025,13 +4044,13 @@ ejChart :function (options) {
 ///<br/>splitMode-ej.datavisualization.Chart.SplitMode|string	default-value. See SplitMode
 ///<br/><br/>
 ///Quartile calculation has been performed in three different formulas to render the boxplot series .
-///<br/>boxPlotMode-ej.datavisualization.Chart.LabelPosition|string	default-exclusive
+///<br/>boxPlotMode-ej.datavisualization.Chart.LabelPosition|string	default-exclusive.See BoxPlotMode
 ///<br/><br/>
 ///Options for customizing the bubble options of the Bubble series
 ///<br/>bubbleOptions-any	default-
 ///<br/><br/>
 ///Used for the calculation of the bubble radius based on the mode selected
-///<br/>radiusMode-ej.datavisualization.Chart.RadiusMode|string	default-minmax .See RadiusMode
+///<br/>radiusMode-ej.datavisualization.Chart.RadiusMode|string	default-minMax .See RadiusMode
 ///<br/><br/>
 ///Used for the setting the minimum radius of the bubble
 ///<br/>minRadius-number	default-1
@@ -4074,6 +4093,9 @@ ejChart :function (options) {
 ///<br/><br/>
 ///Enables saturation to the data label.
 ///<br/>enableContrastColor-boolean	default-false
+///<br/><br/>
+///Displays the partially visible data labels inside the chart Area.
+///<br/>showEdgeLabels-boolean	default-false
 ///<br/><br/>
 ///Options for customizing the border of the data label.
 ///<br/>border-any	default-
@@ -4225,7 +4247,7 @@ ejChart :function (options) {
 ///Controls the size of the second pie in pieOfPie series. Value ranges from 0 to 1.
 ///<br/>pieOfPieCoefficient-number	default-0.6
 ///<br/><br/>
-///Split Value of pieofpie series.
+///Split Value of pieOfPie series.
 ///<br/>splitValue-string	default-null
 ///<br/><br/>
 ///Distance between the two pie's in pieOfPie series.
@@ -5043,503 +5065,1263 @@ destroy:function(){
 /// destroy the circular gauge widget. all events bound using this._on will be unbind automatically and bring the control to pre-init state.
 /// </summary>
 },
-exportImage:function(){
+exportImage:function(fileName, fileType){
 /// <signature>
 /// <summary>
 /// To export Image
 /// </summary>
+/// <param name="fileName"	type="string">fileName for the Image</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To export Image
+/// </summary>
+/// <param name="fileType"	type="string">fileType for the Image</param>
+/// </signature>
 },
-getBackNeedleLength:function(){
+getBackNeedleLength:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get BackNeedleLength
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get BackNeedleLength
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getCustomLabelAngle:function(){
+getCustomLabelAngle:function(scaleIndex, customLabelIndex){
 /// <signature>
 /// <summary>
 /// To get CustomLabelAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get CustomLabelAngle
+/// </summary>
+/// <param name="customLabelIndex"	type="number">customLabelIndex value for the Gauge</param>
+/// </signature>
 },
-getCustomLabelValue:function(){
+getCustomLabelValue:function(scaleIndex, customLabelIndex){
 /// <signature>
 /// <summary>
 /// To get CustomLabelValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get CustomLabelValue
+/// </summary>
+/// <param name="customLabelIndex"	type="number">customLabelIndex value for the Gauge</param>
+/// </signature>
 },
-getLabelAngle:function(){
+getLabelAngle:function(scaleIndex, labelIndex){
 /// <signature>
 /// <summary>
 /// To get LabelAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get LabelAngle
+/// </summary>
+/// <param name="labelIndex"	type="number">labelIndex value for the Gauge</param>
+/// </signature>
 },
-getLabelDistanceFromScale:function(){
+getLabelDistanceFromScale:function(scaleIndex, labelIndex){
 /// <signature>
 /// <summary>
 /// To get LabelDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get LabelDistanceFromScale
+/// </summary>
+/// <param name="labelIndex"	type="number">labelIndex value for the Gauge</param>
+/// </signature>
 },
-getLabelPlacement:function(){
+getLabelPlacement:function(scaleIndex, labelIndex){
 /// <signature>
 /// <summary>
 /// To get LabelPlacement
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get LabelPlacement
+/// </summary>
+/// <param name="labelIndex"	type="number">labelIndex value for the Gauge</param>
+/// </signature>
 },
-getLabelStyle:function(){
+getLabelStyle:function(scaleIndex, labelIndex){
 /// <signature>
 /// <summary>
 /// To get LabelStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get LabelStyle
+/// </summary>
+/// <param name="labelIndex"	type="number">labelIndex value for the Gauge</param>
+/// </signature>
 },
-getMajorIntervalValue:function(){
+getMajorIntervalValue:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get MajorIntervalValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getMarkerDistanceFromScale:function(){
+getMarkerDistanceFromScale:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get MarkerDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get MarkerDistanceFromScale
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getMarkerStyle:function(){
+getMarkerStyle:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get MarkerStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get MarkerStyle
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getMaximumValue:function(){
+getMaximumValue:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get MaximumValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getMinimumValue:function(){
+getMinimumValue:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get MinimumValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getMinorIntervalValue:function(){
+getMinorIntervalValue:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get MinorIntervalValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getNeedleStyle:function(){
+getNeedleStyle:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get NeedleStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get NeedleStyle
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerCapBorderWidth:function(){
+getPointerCapBorderWidth:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get PointerCapBorderWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerCapRadius:function(){
+getPointerCapRadius:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get PointerCapRadius
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerLength:function(){
+getPointerLength:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get PointerLength
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get PointerLength
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerNeedleType:function(){
+getPointerNeedleType:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get PointerNeedleType
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get PointerNeedleType
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerPlacement:function(){
+getPointerPlacement:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get PointerPlacement
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get PointerPlacement
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerValue:function(){
+getPointerValue:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get PointerValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get PointerValue
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerWidth:function(){
+getPointerWidth:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get PointerWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get PointerWidth
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getRangeBorderWidth:function(){
+getRangeBorderWidth:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get RangeBorderWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get RangeBorderWidth
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getRangeDistanceFromScale:function(){
+getRangeDistanceFromScale:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get RangeDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get RangeDistanceFromScale
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getRangeEndValue:function(){
+getRangeEndValue:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get RangeEndValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get RangeEndValue
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getRangePosition:function(){
+getRangePosition:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get RangePosition
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get RangePosition
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getRangeSize:function(){
+getRangeSize:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get RangeSize
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get RangeSize
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getRangeStartValue:function(){
+getRangeStartValue:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get RangeStartValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get RangeStartValue
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getScaleBarSize:function(){
+getScaleBarSize:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get ScaleBarSize
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getScaleBorderWidth:function(){
+getScaleBorderWidth:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get ScaleBorderWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getScaleDirection:function(){
+getScaleDirection:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get ScaleDirection
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getScaleRadius:function(){
+getScaleRadius:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get ScaleRadius
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getStartAngle:function(){
+getStartAngle:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get StartAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getSubGaugeLocation:function(){
+getSubGaugeLocation:function(scaleIndex, GaugeIndex){
 /// <signature>
 /// <summary>
 /// To get SubGaugeLocation
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get SubGaugeLocation
+/// </summary>
+/// <param name="GaugeIndex"	type="number">GaugeIndex value for the Gauge</param>
+/// </signature>
 },
-getSweepAngle:function(){
+getSweepAngle:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get SweepAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getTickAngle:function(){
+getTickAngle:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get TickAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get TickAngle
+/// </summary>
+/// <param name="tickIndex"	type="number">tickIndex value for the Gauge</param>
+/// </signature>
 },
-getTickDistanceFromScale:function(){
+getTickDistanceFromScale:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get TickDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get TickDistanceFromScale
+/// </summary>
+/// <param name="tickIndex"	type="number">tickIndex value for the Gauge</param>
+/// </signature>
 },
-getTickHeight:function(){
+getTickHeight:function(scaleIndex, labelIndex){
 /// <signature>
 /// <summary>
 /// To get TickHeight
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get TickHeight
+/// </summary>
+/// <param name="labelIndex"	type="number">labelIndex value for the Gauge</param>
+/// </signature>
 },
-getTickPlacement:function(){
+getTickPlacement:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get TickPlacement
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get TickPlacement
+/// </summary>
+/// <param name="tickIndex"	type="number">tickIndex value for the Gauge</param>
+/// </signature>
 },
-getTickStyle:function(){
+getTickStyle:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get TickStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get TickStyle
+/// </summary>
+/// <param name="tickIndex"	type="number">tickIndex value for the Gauge</param>
+/// </signature>
 },
-getTickWidth:function(){
+getTickWidth:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get TickWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get TickWidth
+/// </summary>
+/// <param name="tickIndex"	type="number">tickIndex value for the Gauge</param>
+/// </signature>
 },
-includeFirstValue:function(){
+includeFirstValue:function(scaleIndex, labelIndex, value){
 /// <signature>
 /// <summary>
 /// To set includeFirstValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set includeFirstValue
+/// </summary>
+/// <param name="labelIndex"	type="number">labelIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set includeFirstValue
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-redraw:function(){
+redraw:function(value){
 /// <signature>
 /// <summary>
 /// Switching the redraw option for the gauge
 /// </summary>
+/// <param name="value"	type="string">redraw value for the gauge</param>
+/// </signature>
 },
-setBackNeedleLength:function(){
+setBackNeedleLength:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set BackNeedleLength
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set BackNeedleLength
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set BackNeedleLength
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setCustomLabelAngle:function(){
+setCustomLabelAngle:function(scaleIndex, customLabelIndex, value){
 /// <signature>
 /// <summary>
 /// To set CustomLabelAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set CustomLabelAngle
+/// </summary>
+/// <param name="customLabelIndex"	type="number">customLabelIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set CustomLabelAngle
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setCustomLabelValue:function(){
+setCustomLabelValue:function(scaleIndex, customLabelIndex, value){
 /// <signature>
 /// <summary>
 /// To set CustomLabelValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set CustomLabelValue
+/// </summary>
+/// <param name="customLabelIndex"	type="number">customLabelIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set CustomLabelValue
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setLabelAngle:function(){
+setLabelAngle:function(scaleIndex, labelIndex, angle){
 /// <signature>
 /// <summary>
 /// To set LabelAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set LabelAngle
+/// </summary>
+/// <param name="labelIndex"	type="number">labelIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set LabelAngle
+/// </summary>
+/// <param name="angle"	type="number">angle value for the gauge</param>
+/// </signature>
 },
-setLabelDistanceFromScale:function(){
+setLabelDistanceFromScale:function(scaleIndex, labelIndex, value){
 /// <signature>
 /// <summary>
 /// To set LabelDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set LabelDistanceFromScale
+/// </summary>
+/// <param name="labelIndex"	type="number">labelIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set LabelDistanceFromScale
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setLabelPlacement:function(){
+setLabelPlacement:function(scaleIndex, labelIndex, value){
 /// <signature>
 /// <summary>
 /// To set LabelPlacement
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set LabelPlacement
+/// </summary>
+/// <param name="labelIndex"	type="number">labelIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set LabelPlacement
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setLabelStyle:function(){
+setLabelStyle:function(scaleIndex, labelIndex, value){
 /// <signature>
 /// <summary>
 /// To set LabelStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set LabelStyle
+/// </summary>
+/// <param name="labelIndex"	type="number">labelIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set LabelStyle
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setMajorIntervalValue:function(){
+setMajorIntervalValue:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set MajorIntervalValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set MajorIntervalValue
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setMarkerDistanceFromScale:function(){
+setMarkerDistanceFromScale:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set MarkerDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set MarkerDistanceFromScale
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set MarkerDistanceFromScale
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setMarkerStyle:function(){
+setMarkerStyle:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set MarkerStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set MarkerStyle
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set MarkerStyle
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setMaximumValue:function(){
+setMaximumValue:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set MaximumValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set MaximumValue
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setMinimumValue:function(){
+setMinimumValue:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set MinimumValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set MinimumValue
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setMinorIntervalValue:function(){
+setMinorIntervalValue:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set MinorIntervalValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set MinorIntervalValue
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setNeedleStyle:function(){
+setNeedleStyle:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set NeedleStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set NeedleStyle
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set NeedleStyle
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setPointerCapBorderWidth:function(){
+setPointerCapBorderWidth:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set PointerCapBorderWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerCapBorderWidth
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setPointerCapRadius:function(){
+setPointerCapRadius:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set PointerCapRadius
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerCapRadius
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setPointerLength:function(){
+setPointerLength:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set PointerLength
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerLength
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerLength
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setPointerNeedleType:function(){
+setPointerNeedleType:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set PointerNeedleType
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerNeedleType
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerNeedleType
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setPointerPlacement:function(){
+setPointerPlacement:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set PointerPlacement
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerPlacement
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerPlacement
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setPointerValue:function(){
+setPointerValue:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set PointerValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerValue
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerValue
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setPointerWidth:function(){
+setPointerWidth:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set PointerWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerWidth
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerWidth
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setRangeBorderWidth:function(){
+setRangeBorderWidth:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set RangeBorderWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangeBorderWidth
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangeBorderWidth
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setRangeDistanceFromScale:function(){
+setRangeDistanceFromScale:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set RangeDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangeDistanceFromScale
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangeDistanceFromScale
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setRangeEndValue:function(){
+setRangeEndValue:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set RangeEndValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangeEndValue
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangeEndValue
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setRangePosition:function(){
+setRangePosition:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set RangePosition
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangePosition
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangePosition
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setRangeSize:function(){
+setRangeSize:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set RangeSize
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangeSize
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangeSize
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setRangeStartValue:function(){
+setRangeStartValue:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set RangeStartValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangeStartValue
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set RangeStartValue
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setScaleBarSize:function(){
+setScaleBarSize:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set ScaleBarSize
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set ScaleBarSize
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setScaleBorderWidth:function(){
+setScaleBorderWidth:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set ScaleBorderWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set ScaleBorderWidth
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setScaleDirection:function(){
+setScaleDirection:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set ScaleDirection
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set ScaleDirection
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setScaleRadius:function(){
+setScaleRadius:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set ScaleRadius
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set ScaleRadius
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setStartAngle:function(){
+setStartAngle:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set StartAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set StartAngle
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setSubGaugeLocation:function(){
+setSubGaugeLocation:function(scaleIndex, GaugeIndex, value){
 /// <signature>
 /// <summary>
 /// To set SubGaugeLocation
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set SubGaugeLocation
+/// </summary>
+/// <param name="GaugeIndex"	type="number">GaugeIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set SubGaugeLocation
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setSweepAngle:function(){
+setSweepAngle:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set SweepAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set SweepAngle
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setTickAngle:function(){
+setTickAngle:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set TickAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickAngle
+/// </summary>
+/// <param name="tickIndex"	type="number">tickIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickAngle
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setTickDistanceFromScale:function(){
+setTickDistanceFromScale:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set TickDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickDistanceFromScale
+/// </summary>
+/// <param name="tickIndex"	type="number">tickIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickDistanceFromScale
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setTickHeight:function(){
+setTickHeight:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set TickHeight
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickHeight
+/// </summary>
+/// <param name="tickIndex"	type="number">tickIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickHeight
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setTickPlacement:function(){
+setTickPlacement:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set TickPlacement
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickPlacement
+/// </summary>
+/// <param name="tickIndex"	type="number">tickIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickPlacement
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setTickStyle:function(){
+setTickStyle:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set TickStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickStyle
+/// </summary>
+/// <param name="tickIndex"	type="number">tickIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickStyle
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
-setTickWidth:function(){
+setTickWidth:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set TickWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickWidth
+/// </summary>
+/// <param name="tickIndex"	type="number">tickIndex value for the gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set TickWidth
+/// </summary>
+/// <param name="value"	type="number">value for the gauge</param>
+/// </signature>
 },
 });
 return instance;
@@ -7218,6 +8000,20 @@ exportDiagram:function(options){
 /// <param name="options"	type="Diagram.Options">options to export the desired region of diagram to the desired formats.</param>
 /// </signature>
 },
+exportImage:function(image, options){
+/// <signature>
+/// <summary>
+/// The exportImage method is used to export the image passed through argument with different image format and exporting options as like exportDiagram method.
+/// </summary>
+/// <param name="image"	type="string">pass the base64String image to be exported.</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// The exportImage method is used to export the image passed through argument with different image format and exporting options as like exportDiagram method.
+/// </summary>
+/// <param name="options"	type="Diagram.Options">options to export the desired region of diagram to the desired formats.</param>
+/// </signature>
+},
 findNode:function(name){
 /// <signature>
 /// <summary>
@@ -7245,6 +8041,20 @@ fitToPage:function(mode, region, margin){
 /// </summary>
 /// <param name="margin"	type="any">to set the required margin</param>
 /// </signature>
+},
+getDiagramContent:function(styleSheets){
+/// <signature>
+/// <summary>
+/// Get the diagram DOM element as a string along with dependent stylesheets.
+/// </summary>
+/// <param name="styleSheets"	type="any[]">If its specified, will get the diagram DOM element along with specified stylesheet references. Please note that you have to define absolute path for local CSS file. If not specified, will get the diagram content along with all stylesheets loaded in the document.</param>
+/// </signature>
+},
+getDiagramBounds:function(){
+/// <signature>
+/// <summary>
+/// Get the bounds of the diagram.
+/// </summary>
 },
 group:function(){
 /// <signature>
@@ -7320,11 +8130,27 @@ paste:function(object, rename){
 /// <param name="rename"	type="boolean">to define whether the specified object is to be renamed or not</param>
 /// </signature>
 },
-print:function(){
+print:function(options){
 /// <signature>
 /// <summary>
 /// Print the diagram as image
 /// </summary>
+/// <param name="options"	type="Diagram.Options">options to print the desired region of diagram and print the diagram in multiple pages.</param>
+/// </signature>
+},
+printImage:function(image, options){
+/// <signature>
+/// <summary>
+/// The printImage method is used to print the image passed through argument with desired region and multiple pages as like print method.
+/// </summary>
+/// <param name="image"	type="string">pass the base64String image to be printed.</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// The printImage method is used to print the image passed through argument with desired region and multiple pages as like print method.
+/// </summary>
+/// <param name="options"	type="Diagram.Options">options to export the desired region of diagram to the desired formats.</param>
+/// </signature>
 },
 redo:function(){
 /// <signature>
@@ -7682,6 +8508,9 @@ ejDiagram :function (options) {
 ///Defines whether the label should be aligned within the connector boundaries
 ///<br/>boundaryConstraints-boolean	default-true
 ///<br/><br/>
+///Enables or disables the default behaviors of the label.
+///<br/>constraints-ej.datavisualization.Diagram.LabelConstraints|string	default-ej.datavisualization.Diagram.LabelConstraints.None
+///<br/><br/>
 ///Sets the fill color of the text area
 ///<br/>fillColor-string	default-transparent
 ///<br/><br/>
@@ -7693,6 +8522,9 @@ ejDiagram :function (options) {
 ///<br/><br/>
 ///Defines the font size of the text
 ///<br/>fontSize-number	default-12
+///<br/><br/>
+///Sets the height of the label(the maximum value of label height and the connector height will be considered as label height)
+///<br/>height-number	default-0
 ///<br/><br/>
 ///Sets the horizontal alignment of the label.
 ///<br/>horizontalAlignment-ej.datavisualization.Diagram.HorizontalAlignment|string	default-ej.datavisualization.Diagram.HorizontalAlignment.Center
@@ -8039,7 +8871,7 @@ ejDiagram :function (options) {
 ///Specifies the read method to get the created nodes from client side to the server side
 ///<br/>read-string	default-null
 ///<br/><br/>
-///Specifies the customfields to get the updated data from client side to the server side
+///Specifies the custom fields to get the updated data from client side to the server side
 ///<br/>customFields-Array&lt;any&gt;	default-[]
 ///<br/><br/>
 ///Defines the data source either as a collection of objects or as an instance of ej.DataManager
@@ -8051,16 +8883,16 @@ ejDiagram :function (options) {
 ///Sets the unique id of the connection data source item
 ///<br/>id-string	default-null
 ///<br/><br/>
-///Sets the sourcenode of the connection data source item
+///Sets the source node of the connection data source item
 ///<br/>sourceNode-string	default-null
 ///<br/><br/>
-///Sets the targetnode of the connection data source item
+///Sets the target node of the connection data source item
 ///<br/>targetNode-string	default-null
 ///<br/><br/>
-///Sets the sourcepoint-x value of the connection data source item
+///Sets the sourcePointX value of the connection data source item
 ///<br/>sourcePointX-string	default-null
 ///<br/><br/>
-///Sets the sourcePoint-y value of the connection data source item
+///Sets the sourcePointY value of the connection data source item
 ///<br/>sourcePointY-string	default-null
 ///<br/><br/>
 ///Sets the targetPoint-x value of the connection data source item
@@ -8084,7 +8916,7 @@ ejDiagram :function (options) {
 ///Specifies the read method which is used to get the data from client side to the server side
 ///<br/>read-string	default-null
 ///<br/><br/>
-///Specifies the customfields to get the updated data from client side to the server side
+///Specifies the custom fields to get the updated data from client side to the server side
 ///<br/>customFields-Array&lt;any&gt;	default-[]
 ///<br/><br/>
 ///Initializes the default values for nodes and connectors
@@ -8185,6 +9017,15 @@ ejDiagram :function (options) {
 ///<br/><br/>
 ///Sets the value is used to define the root node of the layout.
 ///<br/>root-string	default-30
+///<br/><br/>
+///Defines how long edges should be, ideally. This will be the resting length for the springs.
+///<br/>springLength-number	default-100
+///<br/><br/>
+///Defines how long edges should be, ideally. This will be the resting length for the springs.
+///<br/>springFactor-number	default-0.442
+///<br/><br/>
+///Defines how long edges should be, ideally. This will be the resting length for the springs.
+///<br/>maxIteration-number	default-1000
 ///<br/><br/>
 ///Defines the current culture of diagram
 ///<br/>locale-string	default-en-US
@@ -8483,6 +9324,9 @@ ejDiagram :function (options) {
 ///Sets the border width of the label
 ///<br/>borderWidth-number	default-0
 ///<br/><br/>
+///Enables or disables the default behaviors of the label.
+///<br/>constraints-ej.datavisualization.Diagram.LabelConstraints|string	default-ej.datavisualization.Diagram.LabelConstraints.None
+///<br/><br/>
 ///Sets the fill color of the text area
 ///<br/>fillColor-string	default-transparent
 ///<br/><br/>
@@ -8494,6 +9338,9 @@ ejDiagram :function (options) {
 ///<br/><br/>
 ///Defines the font size of the text
 ///<br/>fontSize-number	default-12
+///<br/><br/>
+///Sets the height of the label(the maximum value of label height and the node height will be considered as label height)
+///<br/>height-number	default-0
 ///<br/><br/>
 ///Sets the horizontal alignment of the label.
 ///<br/>horizontalAlignment-ej.datavisualization.Diagram.HorizontalAlignment|string	default-ej.datavisualization.Diagram.HorizontalAlignment.Center
@@ -8738,6 +9585,9 @@ ejDiagram :function (options) {
 ///Defines when the port should be visible.
 ///<br/>visibility-ej.datavisualization.Diagram.PortVisibility|string	default-ej.datavisualization.Diagram.PortVisibility.Default
 ///<br/><br/>
+///Sets the name of the node which contains this port.
+///<br/>parent-string	default-
+///<br/><br/>
 ///Sets the angle to which the node should be rotated
 ///<br/>rotateAngle-number	default-0
 ///<br/><br/>
@@ -8780,6 +9630,24 @@ ejDiagram :function (options) {
 ///Defines the collection of events that need to be appended with BPMN Sub-Process
 ///<br/>events-Array&lt;any&gt;	default-
 ///<br/><br/>
+///Sets the type of the event by which the sub-process will be triggered
+///<br/>event-ej.datavisualization.Diagram.BPMNEvents|string	default-ej.datavisualization.Diagram.BPMNEvents.Start
+///<br/><br/>
+///Sets the fraction/ratio(relative to parent) that defines the position of the event shape
+///<br/>offset-any	default-ej.datavisualization.Diagram.Point(0.5, 0.5)
+///<br/><br/>
+///Sets the name of the BPMN event shape.
+///<br/>name-string	default-
+///<br/><br/>
+///Defines the type of the event trigger
+///<br/>trigger-ej.datavisualization.Diagram.BPMNTriggers|string	default-ej.datavisualization.Diagram.BPMNTriggers.Message
+///<br/><br/>
+///An array of objects where each object represents a port
+///<br/>ports-Array&lt;any&gt;	default-[]
+///<br/><br/>
+///A collection of objects where each object represents a label
+///<br/>labels-Array&lt;any&gt;	default-[]
+///<br/><br/>
 ///Defines the loop type of a sub process.
 ///<br/>loop-ej.datavisualization.Diagram.BPMNLoops|string	default-ej.datavisualization.Diagram.BPMNLoops.None
 ///<br/><br/>
@@ -8806,6 +9674,9 @@ ejDiagram :function (options) {
 ///<br/><br/>
 ///Sets the type of the BPMN task.
 ///<br/>type-ej.datavisualization.Diagram.BPMNTasks|string	default-ej.datavisualization.Diagram.BPMNTasks.None
+///<br/><br/>
+///Defines the collection of events that need to be appended with BPMN tasks
+///<br/>events-Array&lt;any&gt;	default-
 ///<br/><br/>
 ///Sets the id of svg/html templates. Applicable, if the node is HTML or native.
 ///<br/>templateId-string	default-
@@ -8930,6 +9801,12 @@ ejDiagram :function (options) {
 ///A collection of frequently used commands that will be added around the selector
 ///<br/>userHandles-Array&lt;any&gt;	default-[]
 ///<br/><br/>
+///Sets the horizontal alignment of the user handle
+///<br/>horizontalAlignment-ej.datavisualization.Diagram.HorizontalAlignment|string	default-ej.datavisualization.Diagram.HorizontalAlignment.Center
+///<br/><br/>
+///To set the margin of the user handle
+///<br/>margin-any	default-ej.datavisualization.Diagram.Margin()
+///<br/><br/>
 ///Defines the name of the user handle
 ///<br/>name-string	default-
 ///<br/><br/>
@@ -8941,6 +9818,9 @@ ejDiagram :function (options) {
 ///<br/><br/>
 ///Defines whether the user handle should be added, when more than one element is selected
 ///<br/>enableMultiSelection-boolean	default-false
+///<br/><br/>
+///Sets the fraction/ratio(relative to node) that defines the position of the user handle
+///<br/>offset-any	default-ej.datavisualization.Diagram.point(0.5, 1)
 ///<br/><br/>
 ///Sets the stroke color of the user handle
 ///<br/>pathColor-string	default-transparent
@@ -8957,6 +9837,9 @@ ejDiagram :function (options) {
 ///Defines the interactive behaviors of the user handle
 ///<br/>tool-any	default-
 ///<br/><br/>
+///Sets the vertical alignment of the user handle
+///<br/>verticalAlignment-ej.datavisualization.Diagram.VerticalAlignment|string	default-ej.datavisualization.Diagram.VerticalAlignment.Center
+///<br/><br/>
 ///Defines the visibility of the user handle
 ///<br/>visible-boolean	default-true
 ///<br/><br/>
@@ -8965,6 +9848,12 @@ ejDiagram :function (options) {
 ///<br/><br/>
 ///Enables or disables tooltip of diagram
 ///<br/>showTooltip-boolean	default-true
+///<br/><br/>
+///Defines diagram serialization properties that would defines how the serialization content would be.
+///<br/>serializationSettings-SerializationSettings	default-
+///<br/><br/>
+///defines whether the default diagram properties can be serialized or not.
+///<br/>preventDefaultValues-boolean	default-false
 ///<br/><br/>
 ///Defines the properties of the both the horizontal and vertical gauge to measure the diagram area.
 ///<br/>rulerSettings-RulerSettings	default-
@@ -9938,6 +10827,9 @@ ejDropDownList :function (options) {
 ///This property selects the item in the DropDownList when the item is entered in the Search textbox.
 ///<br/>enableFilterSearch-boolean	default-false
 ///<br/><br/>
+///The serverfiltering is to perform filter action when text is typed in the search box and filtering will be done based on the collection which contains the matched item from entire datasource. Serverfiltering will be done based on the entire items in DataSource.
+///<br/>enableServerFiltering-boolean	default-false
+///<br/><br/>
 ///Saves the current model value to the browser cookies for state maintenance. While refreshing the DropDownList control page, it retains the model value and it is applied from the browser cookies.
 ///<br/>enablePersistence-boolean	default-false
 ///<br/><br/>
@@ -10592,6 +11484,9 @@ ejGantt :function (options) {
 ///Enable or disable predecessor validation. When it is true, all the task's start and end dates are aligned based on its predecessors start and end dates.
 ///<br/>enablePredecessorValidation-boolean	default-true
 ///<br/><br/>
+///Enables or disables serial number column for Gantt. When enabled, the records will be number sequenced.
+///<br/>enableSerialNumber-boolean	default-false
+///<br/><br/>
 ///Specifies the baseline background color in Gantt
 ///<br/>baselineColor-string	default-#fba41c
 ///<br/><br/>
@@ -10660,6 +11555,24 @@ ejGantt :function (options) {
 ///<br/><br/>
 ///Specifies editType of fields to be included in the edit dialog in Gantt
 ///<br/>editType-string	default-
+///<br/><br/>
+///Options for filtering and customizing filter actions.
+///<br/>filterSettings-FilterSettings	default-
+///<br/><br/>
+///Specifies the column collection for filtering the Gantt content on initial load
+///<br/>filteredColumns-Array&lt;any&gt;	default-[]
+///<br/><br/>
+///Specifies the value to be filtered in Gantt.
+///<br/>value-string	default-
+///<br/><br/>
+///Specifies the field where filtering has to be performed.
+///<br/>field-string	default-
+///<br/><br/>
+///Specifies the predicate(and/or) value to perform filtering.
+///<br/>predicate-string	default-
+///<br/><br/>
+///Specifies the filter condition to filtered column. See operator
+///<br/>operator-string	default-
 ///<br/><br/>
 ///Enables or disables the responsiveness of Gantt
 ///<br/>isResponsive-boolean	default-false
@@ -11038,6 +11951,24 @@ ejGantt :function (options) {
 ///<br/><br/>
 ///Gets or sets the working days of a week in a project.
 ///<br/>workWeek-Array&lt;any&gt;	default-[Monday,Tuesday,Wednesday,Thursday,Friday]
+///<br/><br/>
+///Specifies the view type for a project in the Gantt.
+///<br/>viewType-ej.Gantt.ViewType|string	default-ej.Gantt.ViewType.ProjectView
+///<br/><br/>
+///Specifies the data collection for grouping the resources in resource allocation view in Gantt.
+///<br/>groupCollection-Array&lt;any&gt;	default-[]
+///<br/><br/>
+///Default Value
+///<br/>resourceCollectionMapping-string	default-
+///<br/><br/>
+///Default Value
+///<br/>taskCollectionMapping-string	default-
+///<br/><br/>
+///Default Value
+///<br/>groupIdMapping-string	default-
+///<br/><br/>
+///Default Value
+///<br/>groupNameMapping-string	default-
 ///</summary>
 ///<param name="options" type="Object">
 ///The widget configuration options
@@ -11111,6 +12042,22 @@ cancelEditCell:function(){
 /// <summary>
 /// Send a cancel request to the edited cell in grid.
 /// </summary>
+},
+calculatePageSizeByParentHeight:function(containerHeight){
+/// <signature>
+/// <summary>
+/// Returns the total page size need to be displayed in grid based on the given container height. This method will also work when the property allowTextWrap as true only when wrap mode is header.
+/// </summary>
+/// <param name="containerHeight"	type="number">When passing the container height as integer or percentage, it will returns the page size that need to be displayed for grid. </param>
+/// </signature>
+},
+changePageSize:function(pageSize){
+/// <signature>
+/// <summary>
+/// It is used to change the number of records displayed per page in grid based on the given page size.
+/// </summary>
+/// <param name="pageSize"	type="number">When passing the page size, it will change the number of records displayed per page in grid. </param>
+/// </signature>
 },
 clearCellSelection:function(){
 /// <signature>
@@ -11313,7 +12260,7 @@ filterColumn:function(fieldName, filterOperator, filterValue, predicate, matchca
 /// <summary>
 /// Send a filtering request to filter one column in grid.
 /// </summary>
-/// <param name="fieldName"	type="any[]">Pass the field name of the column</param>
+/// <param name="fieldName"	type="any[]|string">Pass the field name of the column</param>
 /// </signature>
 /// <signature>
 /// <summary>
@@ -12081,7 +13028,7 @@ ejGrid :function (options) {
 ///<br/>disableHtmlEncode-boolean	default-false
 ///<br/><br/>
 ///Gets or sets a value that indicates to display a column value as checkbox or string
-///<br/>displayAsCheckBox-boolean	default-true
+///<br/>displayAsCheckbox-boolean	default-true
 ///<br/><br/>
 ///Gets or sets a value that indicates to customize ejNumericTextbox of an editable column. See editingType
 ///<br/>editParams-any	default-
@@ -12181,6 +13128,9 @@ ejGrid :function (options) {
 ///<br/><br/>
 ///Used to get or set the sub menu items to the custom context menu item.
 ///<br/>subMenu-Array&lt;any&gt;	default-[]
+///<br/><br/>
+///Used to get or set the sub menu items to the custom context menu item using JsRender template.
+///<br/>template-string	default-null
 ///<br/><br/>
 ///Gets or sets a value that indicates whether to disable the default context menu items in the grid.
 ///<br/>disableDefaultItems-boolean	default-false
@@ -13587,251 +14537,531 @@ destroy:function(){
 /// destroy the linear gauge all events bound using this._on will be unbind automatically and bring the control to pre-init state.
 /// </summary>
 },
-exportImage:function(){
+exportImage:function(fileName, fileType){
 /// <signature>
 /// <summary>
 /// To export Image
 /// </summary>
+/// <param name="fileName"	type="number">for the Image</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To export Image
+/// </summary>
+/// <param name="fileType"	type="number">for the Image</param>
+/// </signature>
 },
-getBarDistanceFromScale:function(){
+getBarDistanceFromScale:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get Bar Distance From Scale in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Bar Distance From Scale in number
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getBarPointerValue:function(){
+getBarPointerValue:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get Bar Pointer Value in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Bar Pointer Value in number
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getBarWidth:function(){
+getBarWidth:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get Bar Width in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Bar Width in number
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getCustomLabelAngle:function(){
+getCustomLabelAngle:function(scaleIndex, customLabelIndex){
 /// <signature>
 /// <summary>
 /// To get CustomLabel Angle in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get CustomLabel Angle in number
+/// </summary>
+/// <param name="customLabelIndex"	type="number">customLabelIndex value for the Gauge</param>
+/// </signature>
 },
-getCustomLabelValue:function(){
+getCustomLabelValue:function(scaleIndex, customLabelIndex){
 /// <signature>
 /// <summary>
 /// To get CustomLabel Value in string
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get CustomLabel Value in string
+/// </summary>
+/// <param name="customLabelIndex"	type="number">customLabelIndex value for the Gauge</param>
+/// </signature>
 },
-getLabelAngle:function(){
+getLabelAngle:function(scaleIndex, labelIndex){
 /// <signature>
 /// <summary>
 /// To get Label Angle in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Label Angle in number
+/// </summary>
+/// <param name="labelIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getLabelPlacement:function(){
+getLabelPlacement:function(scaleIndex, labelIndex){
 /// <signature>
 /// <summary>
 /// To get LabelPlacement in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get LabelPlacement in number
+/// </summary>
+/// <param name="labelIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getLabelStyle:function(){
+getLabelStyle:function(scaleIndex, labelIndex){
 /// <signature>
 /// <summary>
 /// To get LabelStyle in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get LabelStyle in number
+/// </summary>
+/// <param name="labelIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getLabelXDistanceFromScale:function(){
+getLabelXDistanceFromScale:function(scaleIndex, labelIndex){
 /// <signature>
 /// <summary>
 /// To get Label XDistance From Scale in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Label XDistance From Scale in number
+/// </summary>
+/// <param name="labelIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getLabelYDistanceFromScale:function(){
+getLabelYDistanceFromScale:function(scaleIndex, labelIndex){
 /// <signature>
 /// <summary>
 /// To get PointerValue in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get PointerValue in number
+/// </summary>
+/// <param name="labelIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getMajorIntervalValue:function(){
+getMajorIntervalValue:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get Major Interval Value in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getMarkerStyle:function(){
+getMarkerStyle:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get MarkerStyle in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get MarkerStyle in number
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getMaximumValue:function(){
+getMaximumValue:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get Maximum Value in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getMinimumValue:function(){
+getMinimumValue:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get PointerValue in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get PointerValue in number
+/// </summary>
+/// <param name="pointerIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getMinorIntervalValue:function(){
+getMinorIntervalValue:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get Minor Interval Value in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerDistanceFromScale:function(){
+getPointerDistanceFromScale:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get Pointer Distance From Scale in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Pointer Distance From Scale in number
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerHeight:function(){
+getPointerHeight:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get PointerHeight in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get PointerHeight in number
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerPlacement:function(){
+getPointerPlacement:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get Pointer Placement in String
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Pointer Placement in String
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerValue:function(){
+getPointerValue:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get PointerValue in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get PointerValue in number
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getPointerWidth:function(){
+getPointerWidth:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get PointerWidth in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get PointerWidth in number
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
 },
-getRangeBorderWidth:function(){
+getRangeBorderWidth:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get Range Border Width in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Range Border Width in number
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getRangeDistanceFromScale:function(){
+getRangeDistanceFromScale:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get Range Distance From Scale in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Range Distance From Scale in number
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getRangeEndValue:function(){
+getRangeEndValue:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get Range End Value in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Range End Value in number
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getRangeEndWidth:function(){
+getRangeEndWidth:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get Range End Width in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Range End Width in number
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getRangePosition:function(){
+getRangePosition:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get Range Position in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Range Position in number
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getRangeStartValue:function(){
+getRangeStartValue:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get Range Start Value in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Range Start Value in number
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getRangeStartWidth:function(){
+getRangeStartWidth:function(scaleIndex, rangeIndex){
 /// <signature>
 /// <summary>
 /// To get Range Start Width in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Range Start Width in number
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
 },
-getScaleBarLength:function(){
+getScaleBarLength:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get ScaleBarLength in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getScaleBarSize:function(){
+getScaleBarSize:function(scaleIndex, pointerIndex){
 /// <signature>
 /// <summary>
 /// To get Scale Bar Size in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Scale Bar Size in number
+/// </summary>
+/// <param name="pointerIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getScaleBorderWidth:function(){
+getScaleBorderWidth:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get Scale Border Width in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getScaleDirection:function(){
+getScaleDirection:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get Scale Direction in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getScaleLocation:function(){
+getScaleLocation:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get Scale Location in object
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getScaleStyle:function(){
+getScaleStyle:function(scaleIndex){
 /// <signature>
 /// <summary>
 /// To get Scale Style in string
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
 },
-getTickAngle:function(){
+getTickAngle:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get Tick Angle in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Tick Angle in number
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getTickHeight:function(){
+getTickHeight:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get Tick Height in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Tick Height in number
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getTickPlacement:function(){
+getTickPlacement:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get getTickPlacement in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get getTickPlacement in number
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getTickStyle:function(){
+getTickStyle:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get Tick Style in string
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Tick Style in string
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getTickWidth:function(){
+getTickWidth:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get Tick Width in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Tick Width in number
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getTickXDistanceFromScale:function(){
+getTickXDistanceFromScale:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get get Tick XDistance From Scale in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get get Tick XDistance From Scale in number
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
-getTickYDistanceFromScale:function(){
+getTickYDistanceFromScale:function(scaleIndex, tickIndex){
 /// <signature>
 /// <summary>
 /// To get Tick YDistance From Scale in number
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To get Tick YDistance From Scale in number
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
 },
 scales:function(){
 /// <signature>
@@ -13839,245 +15069,745 @@ scales:function(){
 /// Specifies the scales.
 /// </summary>
 },
-setBarDistanceFromScale:function(){
+setBarDistanceFromScale:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set setBarDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex,value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setBarDistanceFromScale
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setBarDistanceFromScale
+/// </summary>
+/// <param name="value"	type="number">Bar DistanceFromScale value for Gauge</param>
+/// </signature>
 },
-setBarPointerValue:function(){
+setBarPointerValue:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set setBarPointerValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setBarPointerValue
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setBarPointerValue
+/// </summary>
+/// <param name="value"	type="number">Bar Pointer Value for Gauge</param>
+/// </signature>
 },
-setBarWidth:function(){
+setBarWidth:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set setBarWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setBarWidth
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setBarWidth
+/// </summary>
+/// <param name="value"	type="number">Bar Width for Gauge</param>
+/// </signature>
 },
-setCustomLabelAngle:function(){
+setCustomLabelAngle:function(scaleIndex, customLabelIndex, value){
 /// <signature>
 /// <summary>
 /// To set setCustomLabelAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setCustomLabelAngle
+/// </summary>
+/// <param name="customLabelIndex"	type="number">customLabelIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setCustomLabelAngle
+/// </summary>
+/// <param name="value"	type="number">Custom Label Angle for Gauge</param>
+/// </signature>
 },
-setCustomLabelValue:function(){
+setCustomLabelValue:function(scaleIndex, customLabelIndex, value){
 /// <signature>
 /// <summary>
 /// To set setCustomLabelValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setCustomLabelValue
+/// </summary>
+/// <param name="customLabelIndex"	type="number">customLabelIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setCustomLabelValue
+/// </summary>
+/// <param name="value"	type="number">CustomLabel value for Gauge</param>
+/// </signature>
 },
-setLabelAngle:function(){
+setLabelAngle:function(scaleIndex, labelIndex, angle){
 /// <signature>
 /// <summary>
 /// To set setLabelAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setLabelAngle
+/// </summary>
+/// <param name="labelIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setLabelAngle
+/// </summary>
+/// <param name="angle"	type="number">Label Angle for Gauge</param>
+/// </signature>
 },
-setLabelPlacement:function(){
+setLabelPlacement:function(scaleIndex, labelIndex, value){
 /// <signature>
 /// <summary>
 /// To set setLabelPlacement
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setLabelPlacement
+/// </summary>
+/// <param name="labelIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setLabelPlacement
+/// </summary>
+/// <param name="value"	type="number">Label Placement for Gauge</param>
+/// </signature>
 },
-setLabelStyle:function(){
+setLabelStyle:function(scaleIndex, labelIndex, value){
 /// <signature>
 /// <summary>
 /// To set setLabelStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setLabelStyle
+/// </summary>
+/// <param name="labelIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setLabelStyle
+/// </summary>
+/// <param name="value"	type="string">Label Style for Gauge</param>
+/// </signature>
 },
-setLabelXDistanceFromScale:function(){
+setLabelXDistanceFromScale:function(scaleIndex, labelIndex, value){
 /// <signature>
 /// <summary>
 /// To set setLabelXDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setLabelXDistanceFromScale
+/// </summary>
+/// <param name="labelIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setLabelXDistanceFromScale
+/// </summary>
+/// <param name="value"	type="number">Label XDistance From Scale for Gauge</param>
+/// </signature>
 },
-setLabelYDistanceFromScale:function(){
+setLabelYDistanceFromScale:function(scaleIndex, labelIndex, value){
 /// <signature>
 /// <summary>
 /// To set setLabelYDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setLabelYDistanceFromScale
+/// </summary>
+/// <param name="labelIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setLabelYDistanceFromScale
+/// </summary>
+/// <param name="value"	type="number">Label YDistance From Scale for Gauge</param>
+/// </signature>
 },
-setMajorIntervalValue:function(){
+setMajorIntervalValue:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set setMajorIntervalValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setMajorIntervalValue
+/// </summary>
+/// <param name="value"	type="number">Major Interval Value for Gauge</param>
+/// </signature>
 },
-setMarkerStyle:function(){
+setMarkerStyle:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set setMarkerStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setMarkerStyle
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setMarkerStyle
+/// </summary>
+/// <param name="value"	type="string">marker Style for Gauge</param>
+/// </signature>
 },
-setMaximumValue:function(){
+setMaximumValue:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set setMaximumValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setMaximumValue
+/// </summary>
+/// <param name="value"	type="number">MaximumValue for Gauge</param>
+/// </signature>
 },
-setMinimumValue:function(){
+setMinimumValue:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set setMinimumValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setMinimumValue
+/// </summary>
+/// <param name="value"	type="number">MinimumValue for Gauge</param>
+/// </signature>
 },
-setMinorIntervalValue:function(){
+setMinorIntervalValue:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set setMinorIntervalValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setMinorIntervalValue
+/// </summary>
+/// <param name="value"	type="number">Minor Interval Value for Gauge</param>
+/// </signature>
 },
-setPointerDistanceFromScale:function(){
+setPointerDistanceFromScale:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set setPointerDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setPointerDistanceFromScale
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setPointerDistanceFromScale
+/// </summary>
+/// <param name="value"	type="number">for Gauge</param>
+/// </signature>
 },
-setPointerHeight:function(){
+setPointerHeight:function(scaleIndex, pointerIndex, height){
 /// <signature>
 /// <summary>
 /// To set PointerHeight
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerHeight
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerHeight
+/// </summary>
+/// <param name="height"	type="number">for Gauge</param>
+/// </signature>
 },
-setPointerPlacement:function(){
+setPointerPlacement:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set setPointerPlacement
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setPointerPlacement
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setPointerPlacement
+/// </summary>
+/// <param name="value"	type="number">pointer placement for Gauge</param>
+/// </signature>
 },
-setPointerValue:function(){
+setPointerValue:function(scaleIndex, pointerIndex, value){
 /// <signature>
 /// <summary>
 /// To set PointerValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerValue
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerValue
+/// </summary>
+/// <param name="value"	type="number">Pointer value for Gauge</param>
+/// </signature>
 },
-setPointerWidth:function(){
+setPointerWidth:function(scaleIndex, pointerIndex, width){
 /// <signature>
 /// <summary>
 /// To set PointerWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerWidth
+/// </summary>
+/// <param name="pointerIndex"	type="number">pointerIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set PointerWidth
+/// </summary>
+/// <param name="width"	type="number">Pointer width for Gauge</param>
+/// </signature>
 },
-setRangeBorderWidth:function(){
+setRangeBorderWidth:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set setRangeBorderWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeBorderWidth
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeBorderWidth
+/// </summary>
+/// <param name="value"	type="number">Range Border Width for Gauge</param>
+/// </signature>
 },
-setRangeDistanceFromScale:function(){
+setRangeDistanceFromScale:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set setRangeDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeDistanceFromScale
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeDistanceFromScale
+/// </summary>
+/// <param name="value"	type="number">Range Distance FromScale for Gauge</param>
+/// </signature>
 },
-setRangeEndValue:function(){
+setRangeEndValue:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set setRangeEndValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeEndValue
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeEndValue
+/// </summary>
+/// <param name="value"	type="number">Range end value for Gauge</param>
+/// </signature>
 },
-setRangeEndWidth:function(){
+setRangeEndWidth:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set setRangeEndWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeEndWidth
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeEndWidth
+/// </summary>
+/// <param name="value"	type="number">Range End Width for Gauge</param>
+/// </signature>
 },
-setRangePosition:function(){
+setRangePosition:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set setRangePosition
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangePosition
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangePosition
+/// </summary>
+/// <param name="value"	type="number">Range Position for Gauge</param>
+/// </signature>
 },
-setRangeStartValue:function(){
+setRangeStartValue:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set setRangeStartValue
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeStartValue
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeStartValue
+/// </summary>
+/// <param name="value"	type="number">range start value for Gauge</param>
+/// </signature>
 },
-setRangeStartWidth:function(){
+setRangeStartWidth:function(scaleIndex, rangeIndex, value){
 /// <signature>
 /// <summary>
 /// To set setRangeStartWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeStartWidth
+/// </summary>
+/// <param name="rangeIndex"	type="number">rangeIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setRangeStartWidth
+/// </summary>
+/// <param name="value"	type="number">Range Start Width for Gauge</param>
+/// </signature>
 },
-setScaleBarLength:function(){
+setScaleBarLength:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set setScaleBarLength
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setScaleBarLength
+/// </summary>
+/// <param name="value"	type="number">Scale Bar Length for Gauge</param>
+/// </signature>
 },
-setScaleBarSize:function(){
+setScaleBarSize:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set setScaleBarSize
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setScaleBarSize
+/// </summary>
+/// <param name="value"	type="number">ScaleBarSize for Gauge</param>
+/// </signature>
 },
-setScaleBorderWidth:function(){
+setScaleBorderWidth:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set setScaleBorderWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setScaleBorderWidth
+/// </summary>
+/// <param name="value"	type="number">Scale Border Width for Gauge</param>
+/// </signature>
 },
-setScaleDirection:function(){
+setScaleDirection:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set setScaleDirection
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setScaleDirection
+/// </summary>
+/// <param name="value"	type="number">Scale Direction for Gauge</param>
+/// </signature>
 },
-setScaleLocation:function(){
+setScaleLocation:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set setScaleLocation
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setScaleLocation
+/// </summary>
+/// <param name="value"	type="any">Scale position for Gauge</param>
+/// </signature>
 },
-setScaleStyle:function(){
+setScaleStyle:function(scaleIndex, value){
 /// <signature>
 /// <summary>
 /// To set setScaleStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setScaleStyle
+/// </summary>
+/// <param name="value"	type="number">for Gauge</param>
+/// </signature>
 },
-setTickAngle:function(){
+setTickAngle:function(scaleIndex, tickIndex, angle){
 /// <signature>
 /// <summary>
 /// To set setTickAngle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickAngle
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickAngle
+/// </summary>
+/// <param name="angle"	type="number">Tick Angle for Gauge</param>
+/// </signature>
 },
-setTickHeight:function(){
+setTickHeight:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set setTickHeight
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickHeight
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickHeight
+/// </summary>
+/// <param name="value"	type="number">Tick Height for Gauge</param>
+/// </signature>
 },
-setTickPlacement:function(){
+setTickPlacement:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set setTickPlacement
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickPlacement
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickPlacement
+/// </summary>
+/// <param name="value"	type="number">Tick Placement for Gauge</param>
+/// </signature>
 },
-setTickStyle:function(){
+setTickStyle:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set setTickStyle
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickStyle
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickStyle
+/// </summary>
+/// <param name="value"	type="string">Tick Style for Gauge</param>
+/// </signature>
 },
-setTickWidth:function(){
+setTickWidth:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set setTickWidth
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickWidth
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickWidth
+/// </summary>
+/// <param name="value"	type="number">Tick Width for Gauge</param>
+/// </signature>
 },
-setTickXDistanceFromScale:function(){
+setTickXDistanceFromScale:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set setTickXDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickXDistanceFromScale
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickXDistanceFromScale
+/// </summary>
+/// <param name="value"	type="number">Tick XDistance From Scale for Gauge</param>
+/// </signature>
 },
-setTickYDistanceFromScale:function(){
+setTickYDistanceFromScale:function(scaleIndex, tickIndex, value){
 /// <signature>
 /// <summary>
 /// To set setTickYDistanceFromScale
 /// </summary>
+/// <param name="scaleIndex"	type="number">scaleIndex value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickYDistanceFromScale
+/// </summary>
+/// <param name="tickIndex"	type="number">value for the Gauge</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// To set setTickYDistanceFromScale
+/// </summary>
+/// <param name="value"	type="number">Tick YDistance From Scale for Gauge</param>
+/// </signature>
 },
 });
 return instance;
@@ -15401,7 +17131,46 @@ ejListView :function (options) {
 ///<br/>enablePersistence-boolean	default-false
 ///<br/><br/>
 ///Specifies the field settings to map the datasource.
-///<br/>fieldSettings-any	default-
+///<br/>fieldSettings-FieldSettings	default-
+///<br/><br/>
+///Defines the specific field name which contains Boolean values to specify whether the list items to be checked by default or not.
+///<br/>checked-boolean	default-
+///<br/><br/>
+///Defines the URL to be navigated while clicking the list item.
+///<br/>navigateUrl-string	default-
+///<br/><br/>
+///Defines the HTML attributes such as id, class, styles for the specific list item.
+///<br/>attributes-any	default-
+///<br/><br/>
+///Defines the specific field name which contains id values for the list items.
+///<br/>id-string	default-
+///<br/><br/>
+///Defines the URL for the image to be displayed in the list item.
+///<br/>imageUrl-string	default-
+///<br/><br/>
+///Defines the class name for image in that specific list items.
+///<br/>imageClass-string	default-
+///<br/><br/>
+///Specifies whether to prevent the selection of the list item.
+///<br/>preventSelection-boolean	default-
+///<br/><br/>
+///Specifies whether to retain the selection of the list item.
+///<br/>persistSelection-boolean	default-
+///<br/><br/>
+///To define the first level of list items.
+///<br/>primaryKey-string	default-
+///<br/><br/>
+///To define the child level of list items inside the parent items.
+///<br/>parentPrimaryKey-string	default-
+///<br/><br/>
+///Defines the specific field name in the data source to load the list with data.
+///<br/>text-string	default-
+///<br/><br/>
+///To trigger the mouseup event for specific list items.
+///<br/>mouseUP-string	default-
+///<br/><br/>
+///To trigger the mousedown event for specific list items.
+///<br/>mouseDown-string	default-
 ///<br/><br/>
 ///Contains the array of items to be added in ListView.
 ///<br/>items-Array&lt;any&gt;	default-[]
@@ -15875,7 +17644,7 @@ ejMap :function (options) {
 ///<br/>urlTemplate-string	default-&#39;http://a.tile.openstreetmap.org/level/tileX/tileY.png&#39;
 ///<br/><br/>
 ///Sublayer is the collection of shape Layer
-///<br/>sublayers-Array&lt;any&gt;	default-
+///<br/>subLayers-Array&lt;any&gt;	default-
 ///<br/><br/>
 ///to get the type of bing map.
 ///<br/>bingMapType-ej.datavisualization.Map.BingMapType|string	default-aerial
@@ -16213,6 +17982,9 @@ ejMaskEdit :function (options) {
 ///<br/><br/>
 ///Specify the inputMode for mask edit textbox control. See InputMode
 ///<br/>inputMode-ej.InputMode|string	default-ej.InputMode.Text
+///<br/><br/>
+///Defines the localization culture for MaskEdit.
+///<br/>locale-string	default-en-US
 ///<br/><br/>
 ///Specifies the input mask.
 ///<br/>maskFormat-string	default-null
@@ -16645,46 +18417,6 @@ ejNavigationDrawer :function (options) {
 ///Navigation pane opened initially when isPaneOpen property is true.
 ///<br/>isPaneOpen-boolean	default-false
 ///</summary>
-///<param name="options" type="Object">
-///The widget configuration options
-///</param>
-///</signature>
-}
-});
-intellisense.annotate(ej,{
-OlapBase:function(){
- /// <signature>
- /// <summary>Constructor of ej.OlapBase</summary>
- /// </signature>
-}
-});
-ej.OlapBase=(function(){
-var original=ej.OlapBase
-var wrapper=function(){
-var instance = new original();
-intellisense.annotate(instance, {
-
-getJSONData:function(){
-/// <signature>
-/// <summary>
-/// This function gets the datasource, action and grid layout for rendering the PivotGrid.
-/// </summary>
-},
-});
-return instance;
-};
-intellisense.redirectDefinition(wrapper, original);
-return wrapper;
-})();
-jQuery.fn.ejOlapBase=function(){
-this.data("ejOlapBase",new	ej.OlapBase());
-return this;
-};
-intellisense.annotate(jQuery.fn,{
-ejOlapBase :function (options) {
-/// <signature>
-/// <summary><br/>
-///Requires</summary>
 ///<param name="options" type="Object">
 ///The widget configuration options
 ///</param>
@@ -17195,64 +18927,6 @@ ejPdfViewer :function (options) {
 }
 });
 intellisense.annotate(ej,{
-PivotAnalysisBase:function(){
- /// <signature>
- /// <summary>Constructor of ej.PivotAnalysisBase</summary>
- /// </signature>
-}
-});
-ej.PivotAnalysisBase=(function(){
-var original=ej.PivotAnalysisBase
-var wrapper=function(){
-var instance = new original();
-intellisense.annotate(instance, {
-
-setFieldCaptions:function(){
-/// <signature>
-/// <summary>
-/// This function sets the caption for all fields in datasource is it is not set.
-/// </summary>
-},
-getTreeViewData:function(){
-/// <signature>
-/// <summary>
-/// This function returns the data required to render the field list formed from the raw data source.
-/// </summary>
-},
-pivotEnginePopulate:function(){
-/// <signature>
-/// <summary>
-/// This function forms the pivot engine and JSON data required to render the Pivot Controls from the datasource.
-/// </summary>
-},
-getMembers:function(){
-/// <signature>
-/// <summary>
-/// This function returns the list of members available in the given field.
-/// </summary>
-},
-});
-return instance;
-};
-intellisense.redirectDefinition(wrapper, original);
-return wrapper;
-})();
-jQuery.fn.ejPivotAnalysisBase=function(){
-this.data("ejPivotAnalysisBase",new	ej.PivotAnalysisBase());
-return this;
-};
-intellisense.annotate(jQuery.fn,{
-ejPivotAnalysisBase :function (options) {
-/// <signature>
-/// <summary><br/>
-///This section contains the properties and methods available for all the Pivot Controls operated in client mode with Relational data.</summary>
-///<param name="options" type="Object">
-///The widget configuration options
-///</param>
-///</signature>
-}
-});
-intellisense.annotate(ej,{
 PivotChart:function(){
  /// <signature>
  /// <summary>Constructor of ej.PivotChart</summary>
@@ -17526,7 +19200,7 @@ ejPivotChart :function (options) {
 ///Allows the user to rotate the angle of PivotChart in 3D view.
 ///<br/>rotation-number	default-0
 ///<br/><br/>
-///Allows the user to enable/disable the control options of PivotChart.
+///Allows the user to enable/disable the context menu options in the PivotChart.
 ///<br/>enableContextMenu-boolean	default-false
 ///<br/><br/>
 ///Allows the user to set custom name for the methods at service-end, communicated on AJAX post.
@@ -18095,76 +19769,6 @@ ejPivotClient :function (options) {
 }
 });
 intellisense.annotate(ej,{
-PivotCommon:function(){
- /// <signature>
- /// <summary>Constructor of ej.PivotCommon</summary>
- /// </signature>
-}
-});
-ej.PivotCommon=(function(){
-var original=ej.PivotCommon
-var wrapper=function(){
-var instance = new original();
-intellisense.annotate(instance, {
-
-addReportItem:function(){
-/// <signature>
-/// <summary>
-/// This function adds an item to the specified axis in specified position when the control is operated in ClientMode.
-/// </summary>
-},
-removeReportItem:function(){
-/// <signature>
-/// <summary>
-/// This function removes the specified item from the report.
-/// </summary>
-},
-getReportItemByFieldName:function(){
-/// <signature>
-/// <summary>
-/// This function returns the field object with the given field name.
-/// </summary>
-},
-getReportItemByFieldCaption:function(){
-/// <signature>
-/// <summary>
-/// This function returns the field object with the given field caption.
-/// </summary>
-},
-onPreventPanelClose:function(){
-/// <signature>
-/// <summary>
-/// This function removes the overlay added to the control.
-/// </summary>
-},
-getNodesState:function(){
-/// <signature>
-/// <summary>
-/// This function returns the list of checked and unchecked nodes from member editor tree.
-/// </summary>
-},
-});
-return instance;
-};
-intellisense.redirectDefinition(wrapper, original);
-return wrapper;
-})();
-jQuery.fn.ejPivotCommon=function(){
-this.data("ejPivotCommon",new	ej.PivotCommon());
-return this;
-};
-intellisense.annotate(jQuery.fn,{
-ejPivotCommon :function (options) {
-/// <signature>
-/// <summary><br/>
-///Requires</summary>
-///<param name="options" type="Object">
-///The widget configuration options
-///</param>
-///</signature>
-}
-});
-intellisense.annotate(ej,{
 PivotGauge:function(){
  /// <signature>
  /// <summary>Constructor of ej.PivotGauge</summary>
@@ -18619,12 +20223,6 @@ ejPivotGrid :function (options) {
 ///Contains the collection of items to be included/excluded among the field members.
 ///<br/>values-Array&lt;any&gt;	default-[]
 ///<br/><br/>
-///Allows the user to group the field by date. This is applicable only when the format is set as "date".
-///<br/>groupByDate-any	default-{}
-///<br/><br/>
-///Contains the collection of formatString to group item from the field.
-///<br/>interval-Array&lt;any&gt;	default-[]
-///<br/><br/>
 ///Lists out the items to be arranged in rows section of PivotGrid.
 ///<br/>rows-Array&lt;any&gt;	default-[]
 ///<br/><br/>
@@ -18687,12 +20285,6 @@ ejPivotGrid :function (options) {
 ///<br/><br/>
 ///Contains the collection of items to be included/excluded among the field members.
 ///<br/>values-Array&lt;any&gt;	default-[]
-///<br/><br/>
-///Allows the user to group the field by date. This is applicable only when the format is set as "date".
-///<br/>groupByDate-any	default-{}
-///<br/><br/>
-///Contains the collection of formatString to group item from the field.
-///<br/>interval-Array&lt;any&gt;	default-[]
 ///<br/><br/>
 ///Lists out the items which supports calculation in PivotGrid.
 ///<br/>values-Array&lt;any&gt;	default-[]
@@ -19418,7 +21010,7 @@ ejPrint :function (options) {
 ///Specifies whether the URL of an external stylesheet can be included to customize and print that page.
 ///<br/>externalStyles-string	default-null
 ///<br/><br/>
-///Prepend a doctype to the document frame.
+///Prepend a docType to the document frame.
 ///<br/>docType-string	default-&amp;lt;!doctype html&amp;gt;
 ///<br/><br/>
 ///Specifies whether the global styles can be applied to the element to be printed.
@@ -22086,7 +23678,7 @@ executeCommand:function(cmdName, args, textnodeType){
 /// <summary>
 /// Performs the action value based on the given command.
 /// </summary>
-/// <param name="textnodeType"	type="boolean">Boolean value to specify whether the argument is textnode or not, this is optional.</param>
+/// <param name="textnodeType"	type="boolean">Boolean value to specify whether the argument is textNode or not, this is optional.</param>
 /// </signature>
 },
 focus:function(){
@@ -22270,7 +23862,7 @@ ejRTE :function (options) {
 ///Based on the content size, its height is adjusted instead of adding the scrollbar.
 ///<br/>autoHeight-boolean	default-false
 ///<br/><br/>
-///This API holds configuration setting for paste clenaup behavior.
+///This API holds configuration setting for paste cleanup behavior.
 ///<br/>pasteCleanupSettings-PasteCleanupSettings	default-{ listConversion: false, cleanCSS: false,	removeStyles: false, cleanElements: false }
 ///<br/><br/>
 ///This API is used to convert the list elements pasted from word document to editor.
@@ -23563,6 +25155,9 @@ ejSlider :function (options) {
 ///Specifies the readOnly of the slider.
 ///<br/>readOnly-boolean	default-false
 ///<br/><br/>
+///Shows/Hides the increment and decrement buttons of the slider.
+///<br/>showButtons-boolean	default-false
+///<br/><br/>
 ///Specifies the rounded corner behavior for slider.
 ///<br/>showRoundedCorner-boolean	default-false
 ///<br/><br/>
@@ -23943,6 +25538,14 @@ addToDictionary:function(customWord){
 /// <param name="customWord"	type="string">Word to add into the dictionary file</param>
 /// </signature>
 },
+getSuggestionWords:function(errorWord){
+/// <signature>
+/// <summary>
+/// Retrieves the possible suggestion words for the error word passed as an argument.
+/// </summary>
+/// <param name="errorWord"	type="string">Error word to get the suggestions</param>
+/// </signature>
+},
 });
 return instance;
 };
@@ -24017,6 +25620,12 @@ ejSpellCheck :function (options) {
 ///<br/><br/>
 ///It allows to spell check the multiple target HTML element's texts and correct its error words.
 ///<br/>controlsToValidate-string	default-null
+///<br/><br/>
+///When set to true, allows sending Asynchronous ajax request for checking the spelling errors.
+///<br/>enableAsync-boolean	default-true
+///<br/><br/>
+///Sets the data type for the ajax call used within the SpellCheck control, denoting the type of data that are expected to be retrieved from the server. The applicable values are json and jsonp.
+///<br/>ajaxDataType-string	default-jsonp
 ///</summary>
 ///<param name="options" type="Object">
 ///The widget configuration options
@@ -25836,7 +27445,7 @@ ejSunburstChart :function (options) {
 ///Setting the format for the data displayed in the tooltip
 ///<br/>format-string	default-#point.x# : #point.y#
 ///<br/><br/>
-///Sets the opacity of the dispalyed tooltip
+///Sets the opacity of the displayed tooltip
 ///<br/>opacity-number	default-0.95
 ///<br/><br/>
 ///Options for customizing sunburst points.
@@ -27771,6 +29380,208 @@ reorderColumn:function(fieldName, targetIndex){
 /// <param name="targetIndex"	type="string">you can pass a target column index to be inserted.</param>
 /// </signature>
 },
+getUpdatedRecords:function(){
+/// <signature>
+/// <summary>
+/// To get the updated data source of TreeGrid.
+/// </summary>
+},
+gotoPage:function(PageIndex){
+/// <signature>
+/// <summary>
+/// Sends request to navigate to a specific page in TreeGrid.
+/// </summary>
+/// <param name="PageIndex"	type="number">Pass the page index to perform paging at specified page index.</param>
+/// </signature>
+},
+updateCheckboxColumn:function(fieldName){
+/// <signature>
+/// <summary>
+/// To change the checkbox selection to any column.
+/// </summary>
+/// <param name="fieldName"	type="string">Pass the column field name to check box selection to that column.</param>
+/// </signature>
+},
+getSelectedCells:function(){
+/// <signature>
+/// <summary>
+/// Gets the selected cell(s) element details in TreeGrid.
+/// </summary>
+},
+updateResponsiveMinWidth:function(width){
+/// <signature>
+/// <summary>
+/// Sets the minimum responsive width for TreeGrid.
+/// </summary>
+/// <param name="width"	type="string">Pass the minimum responsive width, above which the TreeGrid needs to work in responsive mode.</param>
+/// </signature>
+},
+showAddDialog:function(){
+/// <signature>
+/// <summary>
+/// To open the dialog to add new record/row in TreeGrid.
+/// </summary>
+},
+showEditDialog:function(Index){
+/// <signature>
+/// <summary>
+/// To open the dialog to edit a row/record in TreeGrid.
+/// </summary>
+/// <param name="Index"	type="number">Pass the index of row to be edit.</param>
+/// </signature>
+},
+scrollOffset:function(Left, Top){
+/// <signature>
+/// <summary>
+/// Sets the scroll left and scroll top offsets of TreeGrid.
+/// </summary>
+/// <param name="Left"	type="string">Pass a value to set left position of horizontal scroll bar.</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// Sets the scroll left and scroll top offsets of TreeGrid.
+/// </summary>
+/// <param name="Top"	type="string">Pass a value to set top position of vertical scroll bar.</param>
+/// </signature>
+},
+getScrollTopOffset:function(){
+/// <signature>
+/// <summary>
+/// Gets the scroll top offset of TreeGrid.
+/// </summary>
+},
+getScrollLeftOffset:function(){
+/// <signature>
+/// <summary>
+/// Gets the scroll left offset of TreeGrid.
+/// </summary>
+},
+scrollToTop:function(){
+/// <signature>
+/// <summary>
+/// Sets the scroll top offset of TreeGrid to 0.
+/// </summary>
+},
+scrollToBottom:function(){
+/// <signature>
+/// <summary>
+/// Sets the scroll top offset of TreeGrid to maximum value.
+/// </summary>
+},
+expandCollapseRow:function(Index){
+/// <signature>
+/// <summary>
+/// To expand and collapse an item in TreeGrid using itemâ€™s index.
+/// </summary>
+/// <param name="Index"	type="number">Pass the row index of row to expand/collapse.</param>
+/// </signature>
+},
+expandAll:function(){
+/// <signature>
+/// <summary>
+/// To expand all the root level nodes in TreeGrid.
+/// </summary>
+},
+showHideDetailsRow:function(rowIndex){
+/// <signature>
+/// <summary>
+/// Show/Hide the detail row of a specific record.
+/// </summary>
+/// <param name="rowIndex"	type="number">Pass the row index of record to show/hide the detail row.</param>
+/// </signature>
+},
+filterColumn:function(fieldName, filterOperator, filterValue, predicate, matchcase, actualFilterValue){
+/// <signature>
+/// <summary>
+/// Sends filtering request to filter a column in TreeGrid.
+/// </summary>
+/// <param name="fieldName"	type="string">Pass the field name of the column.</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// Sends filtering request to filter a column in TreeGrid.
+/// </summary>
+/// <param name="filterOperator"	type="string">string/integer/dateTime operator.</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// Sends filtering request to filter a column in TreeGrid.
+/// </summary>
+/// <param name="filterValue"	type="string">Pass the value to be filtered in a column.</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// Sends filtering request to filter a column in TreeGrid.
+/// </summary>
+/// <param name="predicate"	type="string">Pass the predicate as and/or.</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// Sends filtering request to filter a column in TreeGrid.
+/// </summary>
+/// <param name="matchcase"	type="boolean">Optional pass the match case value as true/false.</param>
+/// </signature>
+/// <signature>
+/// <summary>
+/// Sends filtering request to filter a column in TreeGrid.
+/// </summary>
+/// <param name="actualFilterValue"	type="any">Optional actualFilterValue denote the filter object of current filtered columns. </param>
+/// </signature>
+},
+columnIndex:function(Index){
+/// <signature>
+/// <summary>
+/// To change the index of the tree column in TreeGrid.
+/// </summary>
+/// <param name="Index"	type="number">Pass the column index to make the column as treeColumnIndex.</param>
+/// </signature>
+},
+clearSorting:function(){
+/// <signature>
+/// <summary>
+/// To clear the sorting from sorted columns in TreeGrid.
+/// </summary>
+},
+getColumnIndexByField:function(fieldName){
+/// <signature>
+/// <summary>
+/// Gets the column index of specific column with data source field.
+/// </summary>
+/// <param name="fieldName"	type="string">Pass the column field name to get its index.</param>
+/// </signature>
+},
+getFieldNameByHeaderText:function(headerText){
+/// <signature>
+/// <summary>
+/// Gets the column field name using column header text.
+/// </summary>
+/// <param name="headerText"	type="string">Pass the column header text to get its field name.</param>
+/// </signature>
+},
+getColumnByHeaderText:function(headerText){
+/// <signature>
+/// <summary>
+/// Gets the column object of specific column.
+/// </summary>
+/// <param name="headerText"	type="string">Pass the column header text to get details of that column.</param>
+/// </signature>
+},
+clearFilter:function(fieldName){
+/// <signature>
+/// <summary>
+/// Clears the filter applied to a specific column.
+/// </summary>
+/// <param name="fieldName"	type="string">Pass the column field name to clear filtering done in that column.</param>
+/// </signature>
+},
+getColumnByField:function(fieldName){
+/// <signature>
+/// <summary>
+/// Gets the column object of specific column.
+/// </summary>
+/// <param name="fieldName"	type="string">Pass the column field name to get details of that column.</param>
+/// </signature>
+},
 });
 return instance;
 };
@@ -28133,6 +29944,30 @@ ejTreeGrid :function (options) {
 ///<br/><br/>
 ///Specifies the row height of the details view
 ///<br/>detailsRowHeight-number	default-100
+///<br/><br/>
+///Gets or sets a value that indicates stacked header should be shown on TreeGrid layout when the property â€œstackedHeaderRowsâ€ is set.
+///<br/>showStackedHeader-boolean	default-false
+///<br/><br/>
+///Gets or sets an object that indicates to managing the collection of stacked header rows for the treegrid.
+///<br/>stackedHeaderRows-Array&lt;StackedHeaderRows&gt;	default-[]
+///<br/><br/>
+///Gets or sets a value that indicates whether to add stacked header columns into the stacked header rows
+///<br/>stackedHeaderColumns-Array&lt;any&gt;	default-[]
+///<br/><br/>
+///Gets or sets a value that indicates the header text for the particular stacked header column.
+///<br/>column-any	default-null
+///<br/><br/>
+///Gets or sets a value that indicates class to the corresponding stackedHeaderColumn.
+///<br/>cssClass-string	default-null
+///<br/><br/>
+///Gets or sets a value that indicates the header text for the particular stacked header column.
+///<br/>headerText-string	default-null
+///<br/><br/>
+///Gets or sets a value that indicates the text alignment of the corresponding headerText.
+///<br/>textAlign-string	default-ej.TextAlign.Left
+///<br/><br/>
+///Sets the template for tooltip for the Grid stackedHeaderColumns.
+///<br/>tooltip-string	default-null
 ///<br/><br/>
 ///Specifies the visibility of summary row
 ///<br/>showSummaryRow-boolean	default-false

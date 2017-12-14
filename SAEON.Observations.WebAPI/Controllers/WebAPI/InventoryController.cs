@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SAEON.AspNet.WebApi;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
@@ -13,7 +14,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     [RoutePrefix("Inventory")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    //[ResourceAuthorize("Observations.Admin", "Inventory")]
+    [ClientAuthorization("SAEON.Observations.QuerySite")]
+    [RoleAuthorization("SAEON.Observations.Admin")]
     public class InventoryController : ApiController
     {
         protected ObservationsDbContext db = null;

@@ -19,6 +19,10 @@ body {
     color: black;
 }
 
+#Footer {
+    font-size: x-small;
+}
+
 .Logo {
     margin-bottom: 10px;
 }
@@ -27,4 +31,9 @@ body {
   background-color: #567baf;
   border-color: #567baf;
 }
+
+.body-content {
+    padding-right: 50px;
+}
+
 

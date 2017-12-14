@@ -56,6 +56,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.WebAPI", "SAEON.Observations.WebAPI\SAEON.Observations.WebAPI.csproj", "{48BC1051-A1C8-4597-A79F-3844F6808244}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.QuerySite", "SAEON.Observations.QuerySite\SAEON.Observations.QuerySite.csproj", "{4AC12AB6-163F-4BD3-825A-9F1FB091D08D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{48BC1051-A1C8-4597-A79F-3844F6808244} = {48BC1051-A1C8-4597-A79F-3844F6808244}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

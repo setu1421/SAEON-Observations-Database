@@ -34,14 +34,15 @@ namespace SAEON.Observations.QuerySite
                     app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
-                        AuthenticationType = "Cookies"
+                        AuthenticationType = "Cookies",
+                        ReturnUrlParameter = "requestedUrl"
                     });
                     app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                     {
                         Authority = Properties.Settings.Default.IdentityServerUrl,
                         ClientId = "SAEON.Observations.QuerySite",
                         //Scope = "openid profile email roles offline_access SAEON.Observations.WebAPI",
-                        Scope = "openid profile roles SAEON.Observations.WebAPI",
+                        Scope = "openid profile email offline_access SAEON.Observations.WebAPI",
                         //ResponseType = "code id_token token",
                         ResponseType = "id_token token code",
                         RedirectUri = Properties.Settings.Default.QuerySiteUrl,
@@ -56,14 +57,12 @@ namespace SAEON.Observations.QuerySite
                         {
                             AuthorizationCodeReceived = async n =>
                             {
-                                var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType, Constants.GivenName, Constants.Roles);
+                                var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType);
 
                                 var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo"), n.ProtocolMessage.AccessToken);
                                 var userInfo = await userInfoClient.GetAsync();
 
                                 identity.AddClaims(userInfo.GetClaimsIdentity().Claims);
-
-                                //identity.AddClaim(new Claim("client_id", n.ProtocolMessage.ClientId));
 
                                 // keep the id_token for logout
                                 identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
@@ -73,8 +72,6 @@ namespace SAEON.Observations.QuerySite
 
                                 // keep track of access token expiration
                                 identity.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
-
-                                identity.AddClaim(new Claim("role", "Observations.QuerySite"));
 
                                 n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
                             },
@@ -97,11 +94,6 @@ namespace SAEON.Observations.QuerySite
                                 // keep track of access token expiration
                                 identity.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
 
-                                // add some other app specific claim
-                                identity.AddClaim(new Claim("app_specific", "some data"));
-
-                                identity.AddClaim(new Claim("role", "Observations.QuerySite"));
-
                                 n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
                             },
                             RedirectToIdentityProvider = n =>
@@ -119,6 +111,7 @@ namespace SAEON.Observations.QuerySite
                             }
                         },
                     });
+                    // Make sure WebAPI is available
                 }
                 catch (Exception ex)
                 {

@@ -1,10 +1,10 @@
 ﻿using SAEON.Logs;
+using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [Authorize]
     public class BaseController : ApiController
     {
         protected ObservationsDbContext db = null;

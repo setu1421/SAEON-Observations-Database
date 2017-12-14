@@ -75,6 +75,8 @@ Delete RoleModule from RoleModule inner join Module on (RoleModule.ModuleID = Mo
 Delete Module where Name like 'Sensors '
 Delete RoleModule from RoleModule inner join Module on (RoleModule.ModuleID = Module.ID) where Module.Name like 'Version 2'
 Delete Module where Name like 'Version 2'
+Delete RoleModule from RoleModule inner join Module on (RoleModule.ModuleID = Module.ID) where Module.Name like 'Observations'
+Delete Module where Name like 'Observations'
 -- Changed
 Update Module set Url = Replace(Url,'/PLATFORM_TEST/SWDB/Admin/',@UrlPrefix+'/Admin/') where Url like '/PLATFORM_TEST/SWDB/Admin/%'
 Update Module set Url = Replace(Url,'/Observations/Admin/',@UrlPrefix+'/Admin/') where Url like '/Observations/Admin/%'

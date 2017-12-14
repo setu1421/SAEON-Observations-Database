@@ -24,16 +24,17 @@ namespace SAEON.Observations.WebAPI
             {
                 try
                 {
-                    Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServer);
+                    Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
                     JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
                     app.UseCors(CorsOptions.AllowAll);
                     app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
                     {
-                        Authority = Properties.Settings.Default.IdentityServer,
+                        Authority = Properties.Settings.Default.IdentityServerUrl,
                         RequiredScopes = new[] { "SAEON.Observations.WebAPI" },
                     });
 
+                    /*
                     // add app local claims per request
                     app.UseClaimsTransformation(incoming =>
                     {
@@ -43,8 +44,7 @@ namespace SAEON.Observations.WebAPI
 
                         return Task.FromResult(appPrincipal);
                     });
-
-                    app.UseResourceAuthorization(new AuthorizationManager());
+                    */
 
                     // web api configuration
                     var config = new HttpConfiguration();
