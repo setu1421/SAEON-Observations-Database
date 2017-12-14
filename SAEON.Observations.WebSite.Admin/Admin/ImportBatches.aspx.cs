@@ -139,7 +139,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
 
-                Logging.Information("Import Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.26, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.27, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())
@@ -427,51 +427,77 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     /// <returns></returns>
     List<SchemaValue> Import(Guid DataSourceId, ImportBatch batch)
     {
-        DataSource ds = new DataSource(DataSourceId);
-        List<SchemaValue> ImportValues = new List<SchemaValue>();
-
-        List<DateTime> recordgaps = new List<DateTime>();
-        List<DateTime> datagaps = new List<DateTime>();
-
-        string Data = String.Empty;
-        //if (!ds.DataSchemaID.HasValue)
-        //{
-
-        SensorCollection col = new SensorCollection()
-            .Where(Sensor.Columns.DataSourceID, DataSourceId)
-            .Where(Sensor.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null)
-            .Load();
-
-        //ImportLogHelper logHelper = new ImportLogHelper();
-
-        //if (LogFileUpload.PostedFile.ContentLength > 0)
-        //{
-        //    using (StreamReader reader = new StreamReader(LogFileUpload.PostedFile.InputStream))
-        //    {
-        //        logHelper.ReadLog(reader.ReadToEnd());
-        //    }
-        //}
-
-        using (StreamReader reader = new StreamReader(DataFileUpload.PostedFile.InputStream))
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatch", batch.Code } }))
         {
 
-            if (col.Count > 0)
-            {
-                foreach (var sp in col)
-                {
-                    DataFileUpload.PostedFile.InputStream.Seek(0, SeekOrigin.Begin);
+            DataSource ds = new DataSource(DataSourceId);
+            List<SchemaValue> ImportValues = new List<SchemaValue>();
 
-                    DataSchema schema = sp.DataSchema;
+            List<DateTime> recordgaps = new List<DateTime>();
+            List<DateTime> datagaps = new List<DateTime>();
+
+            string Data = String.Empty;
+            //if (!ds.DataSchemaID.HasValue)
+            //{
+
+            SensorCollection col = new SensorCollection()
+                .Where(Sensor.Columns.DataSourceID, DataSourceId)
+                .Where(Sensor.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null)
+                .Load();
+
+            //ImportLogHelper logHelper = new ImportLogHelper();
+
+            //if (LogFileUpload.PostedFile.ContentLength > 0)
+            //{
+            //    using (StreamReader reader = new StreamReader(LogFileUpload.PostedFile.InputStream))
+            //    {
+            //        logHelper.ReadLog(reader.ReadToEnd());
+            //    }
+            //}
+
+            using (StreamReader reader = new StreamReader(DataFileUpload.PostedFile.InputStream))
+            {
+
+                if (col.Count > 0)
+                {
+                    foreach (var sp in col)
+                    {
+                        DataFileUpload.PostedFile.InputStream.Seek(0, SeekOrigin.Begin);
+
+                        DataSchema schema = sp.DataSchema;
+
+                        Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
+                        //using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, sp, logHelper))
+                        ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, sp/*, logHelper*/);
+                        {
+                            if (helper.Errors.Count > 0)
+                            {
+                                ErrorGrid.GetStore().DataSource = helper.Errors;
+                                ErrorGrid.GetStore().DataBind();
+                                break;
+                            }
+                            else
+                            {
+                                helper.ProcessSchema();
+
+                                ImportValues.AddRange(helper.SchemaValues);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    DataSchema schema = ds.DataSchema;
 
                     Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
-                    //                   using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, sp, logHelper))
-                    ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, sp/*, logHelper*/);
+
+                    //using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, null, logHelper))
+                    ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, null/*, logHelper*/);
                     {
                         if (helper.Errors.Count > 0)
                         {
                             ErrorGrid.GetStore().DataSource = helper.Errors;
                             ErrorGrid.GetStore().DataBind();
-                            break;
                         }
                         else
                         {
@@ -481,33 +507,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         }
                     }
                 }
+                //}
             }
-            else
-            {
-                DataSchema schema = ds.DataSchema;
 
-                Data = ImportSchemaHelper.GetWorkingStream(schema, reader);
-
-                //using (ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, null, logHelper))
-                ImportSchemaHelper helper = new ImportSchemaHelper(ds, schema, Data, batch, null/*, logHelper*/);
-                {
-                    if (helper.Errors.Count > 0)
-                    {
-                        ErrorGrid.GetStore().DataSource = helper.Errors;
-                        ErrorGrid.GetStore().DataBind();
-                    }
-                    else
-                    {
-                        helper.ProcessSchema();
-
-                        ImportValues.AddRange(helper.SchemaValues);
-                    }
-                }
-            }
-            //}
+            return ImportValues;
         }
-
-        return ImportValues;
     }
 
     /// <summary>
