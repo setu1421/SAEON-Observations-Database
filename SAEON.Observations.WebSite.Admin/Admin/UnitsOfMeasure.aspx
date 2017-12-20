@@ -24,97 +24,144 @@
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="Viewport1" runat="server" Layout="Fit">
         <Items>
-            <ext:Panel ID="Panel1" runat="server" Title="Units" Layout="FitLayout" Hidden="false">
-                <TopBar>
-                    <ext:Toolbar ID="Toolbar1" runat="server">
-                        <Items>
-                            <ext:Button ID="Button1" runat="server" Icon="Add" Text="Add Unit">
-                                <ToolTips>
-                                    <ext:ToolTip ID="ToolTip1" runat="server" Html="Add" />
-                                </ToolTips>
-                                <Listeners>
-                                    <Click Fn="New" />
-                                </Listeners>
-                            </ext:Button>
-                            <ext:ToolbarFill ID="ToolbarFill1" runat="server" />
-                            <ext:Button ID="Button2" runat="server" Text="To Excel"
-                                Icon="PageExcel">
-                                <Listeners>
-                                    <Click Handler="submitValue('exc');" />
-                                </Listeners>
+            <ext:BorderLayout runat="server">
+                <North Collapsible="true" Split="true">
+                    <ext:Panel ID="pnlNorth" runat="server" Title="Units of Measure" Height="350" Layout="FitLayout">
+                        <TopBar>
+                            <ext:Toolbar ID="Toolbar1" runat="server">
+                                <Items>
+                                    <ext:Button ID="Button1" runat="server" Icon="Add" Text="Add Unit">
+                                        <ToolTips>
+                                            <ext:ToolTip ID="ToolTip1" runat="server" Html="Add" />
+                                        </ToolTips>
+                                        <Listeners>
+                                            <Click Fn="New" />
+                                        </Listeners>
+                                    </ext:Button>
+                                    <ext:ToolbarFill ID="ToolbarFill1" runat="server" />
+                                    <ext:Button ID="Button2" runat="server" Text="To Excel"
+                                        Icon="PageExcel">
+                                        <Listeners>
+                                            <Click Handler="submitValue('exc');" />
+                                        </Listeners>
 
-                            </ext:Button>
-                            <ext:Button ID="Button3" runat="server" Text="To CSV"
-                                Icon="PageAttach">
+                                    </ext:Button>
+                                    <ext:Button ID="Button3" runat="server" Text="To CSV"
+                                        Icon="PageAttach">
+                                        <Listeners>
+                                            <Click Handler="submitValue('csv');" />
+                                        </Listeners>
+                                    </ext:Button>
+                                </Items>
+                            </ext:Toolbar>
+                        </TopBar>
+                        <Items>
+                            <ext:GridPanel ID="UnitOfMeasureGrid" runat="server" Border="false" ClientIDMode="Static">
+                                <Store>
+                                    <ext:Store ID="Store2" runat="server" RemoteSort="true" OnRefreshData="UnitOfMeasureStore_RefreshData" OnSubmitData="UnitOfMeasureStore_Submit">
+                                        <Proxy>
+                                            <ext:PageProxy />
+                                        </Proxy>
+                                        <Reader>
+                                            <ext:JsonReader IDProperty="Id">
+                                                <Fields>
+                                                    <ext:RecordField Name="Id" Type="Auto" />
+                                                    <ext:RecordField Name="Code" Type="String" />
+                                                    <ext:RecordField Name="Unit" Type="String" />
+                                                    <ext:RecordField Name="UnitSymbol" Type="String" />
+                                                </Fields>
+                                            </ext:JsonReader>
+                                        </Reader>
+                                        <BaseParams>
+                                            <ext:Parameter Name="start" Value="0" Mode="Raw" />
+                                            <ext:Parameter Name="limit" Value="25" Mode="Raw" />
+                                            <ext:Parameter Name="sort" Value="" />
+                                            <ext:Parameter Name="dir" Value="" />
+                                        </BaseParams>
+                                        <SortInfo Field="Unit" Direction="ASC" />
+                                    </ext:Store>
+                                </Store>
+                                <ColumnModel ID="ColumnModel1" runat="server">
+                                    <Columns>
+                                        <ext:Column Header="Code" DataIndex="Code" Width="200" />
+                                        <ext:Column Header="Unit" DataIndex="Unit" Width="300" />
+                                        <ext:Column Header="Symbol" DataIndex="UnitSymbol" Width="200" />
+                                        <ext:CommandColumn Width="50">
+                                            <Commands>
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                            </Commands>
+                                        </ext:CommandColumn>
+                                    </Columns>
+                                </ColumnModel>
+                                <SelectionModel>
+                                    <ext:RowSelectionModel ID="RowSelectionModel1" runat="server">
+                                        <Listeners>
+                                            <RowSelect Fn="MasterRowSelect" Buffer="250" />
+                                        </Listeners>
+                                    </ext:RowSelectionModel>
+                                </SelectionModel>
+                                <LoadMask ShowMask="true" />
+                                <Plugins>
+                                    <ext:GridFilters runat="server" ID="GridFilters1">
+                                        <Filters>
+                                            <ext:StringFilter DataIndex="Id" />
+                                            <ext:StringFilter DataIndex="Code" />
+                                            <ext:StringFilter DataIndex="Unit" />
+                                            <ext:StringFilter DataIndex="UnitSymbol" />
+                                        </Filters>
+                                    </ext:GridFilters>
+                                </Plugins>
+                                <BottomBar>
+                                    <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="25" EmptyMsg="No data found" />
+                                </BottomBar>
                                 <Listeners>
-                                    <Click Handler="submitValue('csv');" />
+                                    <Command Fn="onCommand" />
                                 </Listeners>
-                            </ext:Button>
+                            </ext:GridPanel>
                         </Items>
-                    </ext:Toolbar>
-                </TopBar>
-                <Items>
-                    <ext:GridPanel ID="UnitOfMeasureGrid" runat="server" Border="false" ClientIDMode="Static">
-                        <Store>
-                            <ext:Store ID="Store2" runat="server" RemoteSort="true" OnRefreshData="UnitOfMeasureStore_RefreshData" OnSubmitData="UnitOfMeasureStore_Submit">
-                                <Proxy>
-                                    <ext:PageProxy />
-                                </Proxy>
-                                <Reader>
-                                    <ext:JsonReader IDProperty="Id">
-                                        <Fields>
-                                            <ext:RecordField Name="Id" Type="Auto" />
-                                            <ext:RecordField Name="Code" Type="String" />
-                                            <ext:RecordField Name="Unit" Type="String" />
-                                            <ext:RecordField Name="UnitSymbol" Type="String" />
-                                        </Fields>
-                                    </ext:JsonReader>
-                                </Reader>
-                                <BaseParams>
-                                    <ext:Parameter Name="start" Value="0" Mode="Raw" />
-                                    <ext:Parameter Name="limit" Value="25" Mode="Raw" />
-                                    <ext:Parameter Name="sort" Value="" />
-                                    <ext:Parameter Name="dir" Value="" />
-                                </BaseParams>
-                                <SortInfo Field="Unit" Direction="ASC" />
-                                <DirectEventConfig IsUpload="true" />
-                            </ext:Store>
-                        </Store>
-                        <ColumnModel ID="ColumnModel1" runat="server">
-                            <Columns>
-                                <ext:Column Header="Code" DataIndex="Code" Width="200" />
-                                <ext:Column Header="Unit" DataIndex="Unit" Width="200" />
-                                <ext:Column Header="Symbol" DataIndex="UnitSymbol" Width="200" />
-                                <ext:CommandColumn Width="50">
-                                    <Commands>
-                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
-                                    </Commands>
-                                </ext:CommandColumn>
-                            </Columns>
-                        </ColumnModel>
-                        <SelectionModel>
-                            <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" />
-                        </SelectionModel>
-                        <LoadMask ShowMask="true" />
-                        <Plugins>
-                            <ext:GridFilters runat="server" ID="GridFilters1">
-                                <Filters>
-                                    <ext:StringFilter DataIndex="Id" />
-                                    <ext:StringFilter DataIndex="Code" />
-                                    <ext:StringFilter DataIndex="Unit" />
-                                    <ext:StringFilter DataIndex="UnitSymbol" />
-                                </Filters>
-                            </ext:GridFilters>
-                        </Plugins>
-                        <BottomBar>
-                            <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="25" EmptyMsg="No data found" />
-                        </BottomBar>
-                        <Listeners>
-                            <Command Fn="onCommand" />
-                        </Listeners>
-                    </ext:GridPanel>
-                </Items>
-            </ext:Panel>
+                    </ext:Panel>
+                </North>
+                <Center>
+                    <ext:TabPanel ID="tpCenter" runat="server" TabPosition="Top" Border="false" ClientIDMode="Static">
+                        <Items>
+                            <ext:GridPanel ID="UnitOfMeasurePhenomenaGrid" runat="server" Title="Phenomena" ClientIDMode="Static" Layout="FitLayout">
+                                <Store>
+                                    <ext:Store ID="UnitOfMeasurePhenomenaGridStore" runat="server" OnRefreshData="UnitOfMeasurePhenomenaGridStore_RefreshData">
+                                        <Proxy>
+                                            <ext:PageProxy />
+                                        </Proxy>
+                                        <Reader>
+                                            <ext:JsonReader IDProperty="Id">
+                                                <Fields>
+                                                    <ext:RecordField Name="Id" Type="Auto" />
+                                                    <ext:RecordField Name="Code" Type="Auto" />
+                                                    <ext:RecordField Name="Name" Type="Auto" />
+                                                    <ext:RecordField Name="Description" Type="Auto" />
+                                                </Fields>
+                                            </ext:JsonReader>
+                                        </Reader>
+                                        <BaseParams>
+                                            <ext:Parameter Name="UnitOfMeasureID" Value="Ext.getCmp('#{UnitOfMeasureGrid}') && #{UnitOfMeasureGrid}.getSelectionModel().hasSelection() ? #{UnitOfMeasureGrid}.getSelectionModel().getSelected().id : -1" Mode="Raw" />
+                                        </BaseParams>
+                                    </ext:Store>
+                                </Store>
+                                <ColumnModel ID="ColumnModel2" runat="server">
+                                    <Columns>
+                                        <ext:Column Header="Code" DataIndex="Code" Width="200" />
+                                        <ext:Column Header="Name" DataIndex="Name" Width="300" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="500" />
+                                    </Columns>
+                                </ColumnModel>
+                                <SelectionModel>
+                                    <ext:RowSelectionModel ID="RowSelectionModel2" runat="server" SingleSelect="true">
+                                    </ext:RowSelectionModel>
+                                </SelectionModel>
+                                <LoadMask ShowMask="true" />
+                            </ext:GridPanel>
+                        </Items>
+                    </ext:TabPanel>
+                </Center>
+            </ext:BorderLayout>
         </Items>
     </ext:Viewport>
     <ext:Window ID="DetailWindow" runat="server" Width="450" Height="260" Closable="true" ClientIDMode="Static"

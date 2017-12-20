@@ -413,6 +413,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VObservationsList = @"vObservationsList";
         
+		public static readonly string VOfferingPhenomena = @"vOfferingPhenomena";
+        
 		public static readonly string VOrganisationInstrument = @"vOrganisationInstrument";
         
 		public static readonly string VOrganisationSite = @"vOrganisationSite";
@@ -436,6 +438,8 @@ namespace SAEON.Observations.Data
 		public static readonly string VStationInstrument = @"vStationInstrument";
         
 		public static readonly string VStationOrganisation = @"vStationOrganisation";
+        
+		public static readonly string VUnitOfMeasurePhenomena = @"vUnitOfMeasurePhenomena";
         
 		public static readonly string VUserInfo = @"vUserInfo";
         

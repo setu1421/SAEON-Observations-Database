@@ -190,10 +190,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Tables\ProjectSite.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Tables\aspnet_Profile.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
@@ -298,14 +294,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Views\vProjectSite.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Views\progress_Progress_Resolved.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Views\vInventory.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
@@ -370,10 +358,6 @@
     </Build>
     <Build Include="dbo\Stored Procedures\aspnet_WebEvent_LogEvent.sql">
       <AnsiNulls>On</AnsiNulls>
-    </Build>
-    <Build Include="dbo\Stored Procedures\progress_Status_Raw.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Stored Procedures\aspnet_Setup_RestorePermissions.sql">
       <AnsiNulls>On</AnsiNulls>
@@ -532,7 +516,6 @@
     <Build Include="dbo\Views\vSiteOrganisation.sql" />
     <Build Include="dbo\Views\vStationOrganisation.sql" />
     <Build Include="dbo\Views\vInstrumentOrganisation.sql" />
-    <Build Include="dbo\Tables\Progress.sql" />
     <Build Include="dbo\Tables\Instrument_DataSource.sql" />
     <Build Include="dbo\Views\vInstrumentDataSource.sql" />
     <Build Include="dbo\Tables\StatusReason.sql" />
@@ -561,6 +544,8 @@
     <Build Include="dbo\Views\vApiInventory.sql" />
     <Build Include="dbo\Views\vApiSpacialCoverage.sql" />
     <Build Include="dbo\Views\vSensorThingsDatastreams.sql" />
+    <Build Include="dbo\Views\vOfferingPhenomena.sql" />
+    <Build Include="dbo\Views\vUnitOfMeasurePhenomena.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

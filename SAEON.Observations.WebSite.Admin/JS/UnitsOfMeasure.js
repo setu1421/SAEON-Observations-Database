@@ -11,7 +11,7 @@
 
     tfCode.markAsValid();
     tfUnit.markAsValid();
-    DetailWindow.show()
+    DetailWindow.show();
 }
 
 function New() {
@@ -24,4 +24,10 @@ function New() {
     tfUnit.rvConfig.remoteValid = false;
     DetailWindow.show();
 
+}
+
+function MasterRowSelect(e, record) {
+    if (tpCenter.isVisible()) {
+        UnitOfMeasurePhenomenaGrid.getStore().reload();
+    }
 }
