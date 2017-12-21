@@ -53,9 +53,9 @@
     </ext:Store>
     <ext:Viewport ID="Viewport1" runat="server" Layout="FitLayout">
         <Items>
-            <ext:BorderLayout ID="BorderLayout1" runat="server">
-                <Center MarginsSummary="5 0 0 5">
-                    <ext:Panel ID="Panel1" runat="server" Title="Sites" Layout="FitLayout" Hidden="false">
+            <ext:BorderLayout runat="server">
+                <North Collapsible="true" Split="true">
+                    <ext:Panel ID="pnlNorth" runat="server" Title="Sites" Height="350" Layout="FitLayout">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
@@ -114,8 +114,8 @@
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
-                                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
+                                        <ext:Column Header="Name" DataIndex="Name" Width="300" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="500" />
                                         <ext:CommandColumn Width="75">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
@@ -151,13 +151,11 @@
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
-                </Center>
-                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
-                </East>
-                <South Collapsible="true" Split="true" MinHeight="250">
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
+                </North>
+                <Center>
+                    <ext:TabPanel ID="tpCenter" runat="server" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:Panel ID="pnlStations" runat="server" Title="Stations" Layout="FitLayout" ClientIDMode="Static">
+                            <ext:Panel ID="pnlStations" runat="server" Title="Stations" ClientIDMode="Static" Layout="FitLayout">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
@@ -210,15 +208,15 @@
                                         <ColumnModel ID="ColumnModel2" runat="server">
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="Code" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="Name" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="Name" Width="300" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:CommandColumn Width="75">
+<%--                                                <ext:CommandColumn Width="75">
                                                     <Commands>
-                                                        <%--<ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />--%>
-                                                        <%--<ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />--%>
+                                                        <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                                        <ext:GridCommand Icon="LinkDelete" CommandName="Delete" Text="Unlink" />
                                                     </Commands>
-                                                </ext:CommandColumn>
+                                                </ext:CommandColumn>--%>
                                             </Columns>
                                         </ColumnModel>
                                         <SelectionModel>
@@ -294,8 +292,8 @@
                                             <Columns>
                                                 <ext:Column Header="Level" DataIndex="Level" Width="100" />
                                                 <ext:Column Header="Code" DataIndex="LevelCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="LevelName" Width="200" />
-                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="LevelName" Width="300" />
+                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="300" />
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="200" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
@@ -321,7 +319,7 @@
                             </ext:Panel>
                         </Items>
                     </ext:TabPanel>
-                </South>
+                </Center>
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>

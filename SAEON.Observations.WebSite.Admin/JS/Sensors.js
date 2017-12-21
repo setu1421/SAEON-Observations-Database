@@ -60,7 +60,7 @@ function SelectDataSource(e, record) {
 }
 
 function MasterRowSelect(e, record) {
-    if (pnlSouth.isVisible()) {
+    if (tpCenter.isVisible()) {
         InstrumentLinksGrid.getStore().reload();
     }
 }

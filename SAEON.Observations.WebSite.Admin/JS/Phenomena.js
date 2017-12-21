@@ -17,11 +17,10 @@
 }
 
 function PhenomenaRowSelect(e, record) {
-    if (pnlSouth.isVisible())
-        PhenomenonUOMGrid.getStore().reload();
-
-    if (pnlEast.isVisible())
+    if (tpCenter.isVisible()) {
         PhenomenonOfferingGrid.getStore().reload();
+        PhenomenonUOMGrid.getStore().reload();
+    }
 }
 
 function New() {

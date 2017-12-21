@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 14.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{025EFA75-D87C-4675-A929-5BB3F730D7EF}"
+	ProjectSection(SolutionItems) = preProject
+		1) Preprocess.sql = 1) Preprocess.sql
+		2) Observations.2.0.36.publish.sql = 2) Observations.2.0.36.publish.sql
+		2) Observations.2.0.36.publish.txt = 2) Observations.2.0.36.publish.txt
+		2) ObservationsTest.2.0.36.publish.sql = 2) ObservationsTest.2.0.36.publish.sql
+		2) ObservationsTest.2.0.36.publish.txt = 2) ObservationsTest.2.0.36.publish.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27ACA336-E77A-4398-802C-54980B3D204F}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

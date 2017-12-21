@@ -73,9 +73,9 @@
     </ext:Store>
     <ext:Viewport ID="Viewport1" runat="server" Layout="FitLayout">
         <Items>
-            <ext:BorderLayout ID="BorderLayout1" runat="server">
-                <Center MarginsSummary="5 0 0 5">
-                    <ext:Panel ID="Panel1" runat="server" Title="Stations" Layout="FitLayout" Hidden="false">
+            <ext:BorderLayout runat="server">
+                <North Collapsible="true" Split="true">
+                    <ext:Panel ID="pnlNorth" runat="server" Title="Stations" Height="350" Layout="FitLayout">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
@@ -145,10 +145,10 @@
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" Groupable="false" />
-                                        <ext:Column Header="Name" DataIndex="Name" Width="200" Groupable="false" />
-                                        <ext:Column Header="Site" DataIndex="SiteName" Width="200" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="200" Groupable="false" />
-                                        <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
+                                        <ext:Column Header="Name" DataIndex="Name" Width="300" Groupable="false" />
+                                        <ext:Column Header="Site" DataIndex="SiteName" Width="300" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="500" Groupable="false" />
+                                        <%--<ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />--%>
                                         <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
                                         <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" />
                                         <ext:Column Header="Elevation" DataIndex="Elevation" Width="70" Groupable="false" />
@@ -177,7 +177,7 @@
                                             <ext:StringFilter DataIndex="Code" />
                                             <ext:StringFilter DataIndex="Name" />
                                             <ext:StringFilter DataIndex="Description" />
-                                            <ext:StringFilter DataIndex="Url" />
+                                            <%--<ext:StringFilter DataIndex="Url" />--%>
                                             <ext:NumericFilter DataIndex="Latitude" />
                                             <ext:NumericFilter DataIndex="Longitude" />
                                             <ext:NumericFilter DataIndex="Elevation" />
@@ -197,12 +197,11 @@
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
-                </Center>
-                <South Collapsible="true" Split="true" MinHeight="250">
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
+                </North>
+                <Center>
+                    <ext:TabPanel ID="tpCenter" runat="server" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:Panel ID="pnlInstruments" runat="server" Title="Instruments" Layout="FitLayout"
-                                Height="200" ClientIDMode="Static">
+                            <ext:Panel ID="pnlInstruments" runat="server" Title="Instruments" ClientIDMode="Static" Layout="FitLayout">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
@@ -258,7 +257,7 @@
                                         <ColumnModel ID="ColumnModel2" runat="server">
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="InstrumentCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="InstrumentName" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="InstrumentName" Width="300" />
                                                 <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" />
                                                 <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" />
                                                 <ext:Column Header="Elevation" DataIndex="Elevation" Width="70" />
@@ -336,7 +335,7 @@
                                         <ColumnModel ID="ColumnModel3" runat="server">
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="ProjectCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="ProjectName" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="ProjectName" Width="300" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="150">
@@ -358,7 +357,7 @@
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
-                            <ext:Panel ID="pnlOrganisations" runat="server" Title="Organisations" Layout="FitLayout" Width="425" ClientIDMode="Static">
+                            <ext:Panel ID="pnlOrganisations" runat="server" Title="Organisations" Layout="FitLayout" ClientIDMode="Static">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar3" runat="server">
                                         <Items>
@@ -417,9 +416,9 @@
                                         <ColumnModel ID="ColumnModel5" runat="server">
                                             <Columns>
                                                 <ext:Column Header="Level" DataIndex="Level" Width="100" />
-                                                <ext:Column Header="Code" DataIndex="LevelCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="LevelName" Width="200" />
-                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="200" />
+                                                <ext:Column Header="Code" DataIndex="LevelCode" Width="150" />
+                                                <ext:Column Header="Name" DataIndex="LevelName" Width="300" />
+                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="300" />
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="200" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="yyyy/MM/dd" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="yyyy/MM/dd" />
@@ -446,7 +445,7 @@
                             </ext:Panel>
                         </Items>
                     </ext:TabPanel>
-                </South>
+                </Center>
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>

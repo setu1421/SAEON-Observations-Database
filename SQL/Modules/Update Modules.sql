@@ -60,6 +60,7 @@ Update Module set Url = @UrlPrefix+'/Admin/ImportBatches' where Name like 'Impor
 Update Module set Url = @UrlPrefix+'/Admin/Phenomena', Name = 'Phenomena' where Name like 'Phenomenon'
 Update Module set Url = @UrlPrefix+'/Admin/Offerings', Name = 'Offerings' where Name like 'Offering%'
 Update Module set Url = @UrlPrefix+'/Admin/UnitsOfMeasure', Name = 'Units Of Measure' where Name like 'Unit of measure'
+Update Module set Url = @UrlPrefix+'/Admin/Users' where Name like 'Users'
 -- Deletes
 Delete RoleModule from RoleModule inner join Module on (RoleModule.ModuleID = Module.ID) where Module.Name like 'Projects/Sites'
 Delete Module where Name like 'Projects/Sites'

@@ -62,9 +62,9 @@
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="ViewPort1" runat="server">
         <Items>
-            <ext:BorderLayout ID="BorderLayout1" runat="server">
-                <Center MarginsSummary="5 0 0 5">
-                    <ext:Panel ID="Panel1" runat="server" Title="Data Sources" Layout="FitLayout" Hidden="false">
+            <ext:BorderLayout runat="server">
+                <North Collapsible="true" Split="true">
+                    <ext:Panel ID="pnlNorth" runat="server" Title="Data Sources" Height="350" Layout="FitLayout">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
@@ -130,9 +130,9 @@
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="300" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="500" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="150" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="300" />
-                                        <ext:Column Header="Data Schema" DataIndex="DataSchemaName" Width="200" />
+                                        <ext:Column Header="Data Schema" DataIndex="DataSchemaName" Width="300" />
                                         <ext:CommandColumn Width="75">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" ToolTip-Text="Edit" />
@@ -172,12 +172,11 @@
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
-                </Center>
-                <South Collapsible="true" Split="true" MinHeight="250">
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
+                </North>
+                <Center>
+                    <ext:TabPanel ID="tpCenter" runat="server" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:Panel ID="pnlTransformations" runat="server" Title="Transformations" Layout="FitLayout"
-                                Height="200" ClientIDMode="Static">
+                            <ext:Panel ID="pnlTransformations" runat="server" Title="Transformations" ClientIDMode="Static" Layout="FitLayout">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
@@ -232,12 +231,12 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel2" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
+                                                <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="200" />
                                                 <ext:Column Header="Transformation" DataIndex="TransformationName" Width="150" />
-                                                <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
-                                                <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
-                                                <ext:Column Header="New Offering" DataIndex="NewOfferingName" Width="150" />
-                                                <ext:Column Header="New Unit of Measure" DataIndex="NewUnitOfMeasureUnit" Width="150" />
+                                                <ext:Column Header="Offering" DataIndex="OfferingName" Width="200" />
+                                                <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="200" />
+                                                <ext:Column Header="New Offering" DataIndex="NewOfferingName" Width="200" />
+                                                <ext:Column Header="New Unit of Measure" DataIndex="NewUnitOfMeasureUnit" Width="200" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="150" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="150">
@@ -261,11 +260,7 @@
                             </ext:Panel>
                         </Items>
                     </ext:TabPanel>
-                </South>
-                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
-                </East>
-                <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
-                </South>
+                </Center>
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>

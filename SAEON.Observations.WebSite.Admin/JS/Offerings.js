@@ -12,7 +12,7 @@
     tfCode.markAsValid();
     tfName.markAsValid();
 
-    DetailWindow.show()
+    DetailWindow.show();
 }
 
 function New() {
@@ -25,4 +25,10 @@ function New() {
     tfName.rvConfig.remoteValid = false;
 
     DetailWindow.show();
+}
+
+function MasterRowSelect(e, record) {
+    if (tpCenter.isVisible()) {
+        OfferingPhenomenaGrid.getStore().reload();
+    }
 }

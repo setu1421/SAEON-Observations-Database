@@ -54,9 +54,9 @@
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="ViewPort1" runat="server">
         <Items>
-            <ext:BorderLayout ID="BorderLayout1" runat="server">
-                <Center MarginsSummary="5 5 0 5">
-                    <ext:Panel ID="Panel1" runat="server" Title="Import Batches" Layout="FitLayout" Hidden="false">
+            <ext:BorderLayout runat="server">
+                <North Collapsible="true" Split="true">
+                    <ext:Panel ID="pnlNorth" runat="server" Title="Import Batches" Height="350" Layout="FitLayout">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
@@ -97,6 +97,7 @@
                                                     <ext:RecordField Name="Code" Type="Int" />
                                                     <ext:RecordField Name="ImportDate" Type="Date" />
                                                     <ext:RecordField Name="Status" Type="Int" />
+                                                    <ext:RecordField Name="DataSourceID" Type="String" />
                                                     <ext:RecordField Name="DataSourceName" Type="String" />
                                                     <ext:RecordField Name="StatusDescription" Type="String" />
                                                     <ext:RecordField Name="FileName" Type="String" />
@@ -119,12 +120,11 @@
                                     <Columns>
                                         <ext:Column Header="Number" DataIndex="Code" Width="80" />
                                         <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
-                                        <ext:Column Header="DataSourceID" DataIndex="DataSourceID" Width="150" Hidden="true" />
-                                        <ext:Column Header="DataSourceName" DataIndex="DataSourceName" Width="250" />
-                                        <ext:Column Header="FileName" DataIndex="FileName" Width="200" />
-                                        <ext:Column Header="LogFileName" DataIndex="LogFileName" Width="200" />
+                                        <%--<ext:Column Header="Data Source ID" DataIndex="DataSourceID" Width="150"/>--%>
+                                        <ext:Column Header="Data Source Name" DataIndex="DataSourceName" Width="350" />
+                                        <ext:Column Header="File Name" DataIndex="FileName" Width="350" />
                                         <ext:Column Header="Status" DataIndex="StatusDescription" Width="150" />
-                                        <ext:Column Header="Issues" DataIndex="Issues" Width="150" />
+                                        <ext:Column Header="Issues" DataIndex="Issues" Width="350" />
                                         <ext:CommandColumn Width="75">
                                             <Commands>
                                                 <ext:GridCommand Icon="Pencil" CommandName="Move" Text="" ToolTip-Text="Move Batch">
@@ -164,11 +164,11 @@
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
-                </Center>
-                <South Collapsible="true" Split="true" MarginsSummary="0 5 5 5">
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="400" TabPosition="Top" Border="false" ClientIDMode="Static">
+                </North>
+                <Center>
+                    <ext:TabPanel ID="tpCenter" runat="server" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:Panel ID="Panel4" runat="server" Title="Observations" Layout="FitLayout" Height="200" ClientIDMode="Static">
+                            <ext:Panel ID="pnlObservations" runat="server" Title="Observations" ClientIDMode="Static" Layout="FitLayout">
                                 <TopBar>
                                     <ext:Toolbar ID="tbObservations" runat="server" ClientIDMode="Static">
                                         <Items>
@@ -243,7 +243,7 @@
                                                     </Click>
                                                 </DirectEvents>
                                             </ext:Button>
-<%--                                            <ext:ToolbarSeparator Width="10" />
+                                            <%--                                            <ext:ToolbarSeparator Width="10" />
                                             <ext:Button ID="Button4" runat="server" Icon="ShieldAdd" Text="Test" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip6" runat="server" Html="Test" />
@@ -281,7 +281,7 @@
                                                             <ext:RecordField Name="OfferingName" Type="Auto" />
                                                             <ext:RecordField Name="UnitOfMeasureUnit" Type="Auto" />
                                                             <ext:RecordField Name="ValueDate" Type="Date" />
-                                                            <ext:RecordField Name="TextValue" Type="Auto"/>
+                                                            <ext:RecordField Name="TextValue" Type="Auto" />
                                                             <ext:RecordField Name="RawValue" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="DataValue" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="Elevation" Type="Float" UseNull="true" />
@@ -305,7 +305,7 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel4" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Sensor" DataIndex="SensorName" Width="250" />
+                                                <ext:Column Header="Sensor" DataIndex="SensorName" Width="350" />
                                                 <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
@@ -329,7 +329,7 @@
                                         <SelectionModel>
                                             <ext:CheckboxSelectionModel runat="server">
                                                 <DirectEvents>
-                                                    <SelectionChange OnEvent="EnableButtons" Buffer="100"/>
+                                                    <SelectionChange OnEvent="EnableButtons" Buffer="100" />
                                                 </DirectEvents>
                                             </ext:CheckboxSelectionModel>
                                         </SelectionModel>
@@ -355,7 +355,7 @@
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
-                            <ext:Panel ID="Panel12" runat="server" Title="Data Log" Layout="FitLayout" Height="350" ClientIDMode="Static">
+                            <ext:Panel ID="Panel12" runat="server" Title="Data Log" ClientIDMode="Static" Layout="FitLayout">
                                 <Items>
                                     <ext:GridPanel ID="DataLogGrid" runat="server" Border="false" ClientIDMode="Static">
                                         <Store>
@@ -432,7 +432,7 @@
                                                 </ext:Column>
                                                 <ext:CheckColumn Locked="true" Header="Sensor Invalid" DataIndex="SensorInvalid"
                                                     Width="30" Hidden="true" />
-                                                <ext:Column Header="Sensor" DataIndex="SensorName" Width="150" />
+                                                <ext:Column Header="Sensor" DataIndex="SensorName" Width="350" />
                                                 <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm:ss">
                                                     <Commands>
                                                         <ext:ImageCommand Icon="Delete" CommandName="InvalidDate" Hidden="true" HideMode="Display">
@@ -544,7 +544,7 @@
                             </ext:Panel>
                         </Items>
                     </ext:TabPanel>
-                </South>
+                </Center>
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
@@ -590,7 +590,7 @@
                             <ext:FileUploadField ID="DataFileUpload" runat="server" EmptyText="Select a File"
                                 AllowBlank="false" FieldLabel="Data File" ButtonText="" Icon="Zoom" BlankText="input file is required"
                                 ClientIDMode="Static" />
-<%--                            <ext:FileUploadField ID="LogFileUpload" runat="server" AllowBlank="true" EmptyText="Select a log File"
+                            <%--                            <ext:FileUploadField ID="LogFileUpload" runat="server" AllowBlank="true" EmptyText="Select a log File"
                                 FieldLabel="Log File" ButtonText="" Icon="Zoom" ClientIDMode="Static" />--%>
                         </Items>
                         <Listeners>

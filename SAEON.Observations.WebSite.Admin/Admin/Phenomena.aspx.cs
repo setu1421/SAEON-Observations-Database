@@ -113,12 +113,12 @@ public partial class _Phenomena : System.Web.UI.Page
             UnitOfMeasureCollection uomavailCol = new Select()
                     .From(UnitOfMeasure.Schema)
                     .Where(UnitOfMeasure.IdColumn).NotIn(new Select(new String[] { PhenomenonUOM.Columns.UnitOfMeasureID })
-                                                                    .From(PhenomenonUOM.Schema)
-                                                                    .Where(PhenomenonUOM.PhenomenonIDColumn).IsEqualTo(Id))
+                    .From(PhenomenonUOM.Schema)
+                    .Where(PhenomenonUOM.PhenomenonIDColumn).IsEqualTo(Id))
                     .ExecuteAsCollection<UnitOfMeasureCollection>();
 
-            Store3.DataSource = uomavailCol.ToList();
-            Store3.DataBind();
+            UnitOfMeasureGridStore.DataSource = uomavailCol.ToList();
+            UnitOfMeasureGridStore.DataBind();
 
         }
     }
@@ -184,7 +184,7 @@ public partial class _Phenomena : System.Web.UI.Page
                 unit.Save();
             }
 
-            Store4.DataBind();
+            PhenomenonUOMGridStore.DataBind();
             AvailableUnitsWindow.Hide();
         }
         else
@@ -219,7 +219,7 @@ public partial class _Phenomena : System.Web.UI.Page
                 offer.Save();
             }
 
-            PhenomenonOfferingGrid.GetStore().DataBind();
+            PhenomenonOfferingGridStore.DataBind();
             AvailableOfferingsWindow.Hide();
         }
         else
@@ -253,7 +253,7 @@ public partial class _Phenomena : System.Web.UI.Page
         string recordID = e.ExtraParams["id"];	//offering id if ActionType = RemoveOffering || 
         string phenomenonID = e.ExtraParams["PhenomenonID"];
 
-        if (ActionType == "RemoveOffering")	
+        if (ActionType == "RemoveOffering")
         {
             PhenomenonOfferingCollection phenOffCol = new PhenomenonOfferingCollection().Where(PhenomenonOffering.Columns.OfferingID, recordID)
                 .Where(PhenomenonOffering.Columns.PhenomenonID, phenomenonID).Load();
@@ -277,10 +277,10 @@ public partial class _Phenomena : System.Web.UI.Page
                         Icon = MessageBox.Icon.ERROR
                     });
                 }
-                
+
             }
         }
-        else if (ActionType == "RemoveUOM")	
+        else if (ActionType == "RemoveUOM")
         {
             PhenomenonUOMCollection phenUOMCol = new PhenomenonUOMCollection().Where(PhenomenonUOM.Columns.UnitOfMeasureID, recordID)
                 .Where(PhenomenonUOM.Columns.PhenomenonID, phenomenonID).Load();
@@ -317,14 +317,14 @@ public partial class _Phenomena : System.Web.UI.Page
             if (phenOffCol.Count != 0 || phenUOMCol.Count != 0 || SensorCol.Count != 0)
             {
                 X.Msg.Show(new MessageBoxConfig
-                    {
-                        Title = "Error",
-                        Message = "Phenomenon's cant be deleted when they have unit of measurements, offerings or sensors connected to them.",
-                        Buttons = MessageBox.Button.OK,
-                        Icon = MessageBox.Icon.ERROR
-                    });
+                {
+                    Title = "Error",
+                    Message = "Phenomenon's cant be deleted when they have unit of measurements, offerings or sensors connected to them.",
+                    Buttons = MessageBox.Button.OK,
+                    Icon = MessageBox.Icon.ERROR
+                });
             }
-            else 
+            else
             {
                 Phenomenon.Delete(phen.Id);
                 PhenomenaGrid.DataBind();

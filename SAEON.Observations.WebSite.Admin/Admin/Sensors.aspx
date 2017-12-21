@@ -33,10 +33,9 @@
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="Viewport1" runat="server" Layout="Fit">
         <Items>
-            <ext:BorderLayout ID="BorderLayout1" runat="server">
-                <Center MarginsSummary="5 0 0 5">
-                    <ext:Panel ID="Panel1" runat="server" Title="Sensors" Layout="FitLayout"
-                        Hidden="false">
+            <ext:BorderLayout runat="server">
+                <North Collapsible="true" Split="true">
+                    <ext:Panel ID="pnlNorth" runat="server" Title="Sensors" Height="350" Layout="FitLayout">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
@@ -104,9 +103,9 @@
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
-                                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
-                                        <ext:Column Header="Source Name" DataIndex="DataSourceName" Width="200" />
+                                        <ext:Column Header="Name" DataIndex="Name" Width="300" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="500" />
+                                        <ext:Column Header="Source Name" DataIndex="DataSourceName" Width="300" />
                                         <ext:Column Header="Schema Name" DataIndex="DataSchemaName" Width="200" />
                                         <ext:Column Header="Phenomenon Name" DataIndex="PhenomenonName" Width="200" />
                                         <ext:CommandColumn Width="75">
@@ -148,13 +147,11 @@
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
-                </Center>
-                <South Collapsible="true" Split="true" MinHeight="250">
-                    <%--                    <ext:TabPanel ID="TabPanel1" runat="server" Height="250" ActiveTabIndex="0" TabPosition="Top" Border="false" ClientIDMode="Static">--%>
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
+                </North>
+                <Center>
+                    <ext:TabPanel ID="tpCenter" runat="server" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:Panel ID="pnlInstruments" runat="server" Title="Instruments" Layout="FitLayout"
-                                Height="200" ClientIDMode="Static">
+                            <ext:Panel ID="pnlInstruments" runat="server" Title="Instruments" ClientIDMode="Static" Layout="FitLayout">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
@@ -207,7 +204,7 @@
                                         <ColumnModel ID="ColumnModel4" runat="server">
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="InstrumentCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="InstrumentName" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="InstrumentName" Width="300" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="150">
@@ -231,7 +228,7 @@
                             </ext:Panel>
                         </Items>
                     </ext:TabPanel>
-                </South>
+                </Center>
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>

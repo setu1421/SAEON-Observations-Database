@@ -1,5 +1,5 @@
 ﻿function ImportBatchRowSelect(e, record) {
-    if (pnlSouth.isVisible()) {
+    if (tpCenter.isVisible()) {
         DataLogGrid.getStore().reload();
         ObservationsGrid.getSelectionModel().clearSelections();
         ObservationsGrid.getStore().reload();

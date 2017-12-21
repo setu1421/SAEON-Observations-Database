@@ -161,6 +161,7 @@
     <Compile Include="Generated\VModuleRoleModule.cs" />
     <Compile Include="Generated\VObservation.cs" />
     <Compile Include="Generated\VObservationsList.cs" />
+    <Compile Include="Generated\VOfferingPhenomena.cs" />
     <Compile Include="Generated\VOrganisationInstrument.cs" />
     <Compile Include="Generated\VOrganisationSite.cs" />
     <Compile Include="Generated\VOrganisationStation.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Generated\VStation.cs" />
     <Compile Include="Generated\VStationInstrument.cs" />
     <Compile Include="Generated\VStationOrganisation.cs" />
+    <Compile Include="Generated\VUnitOfMeasurePhenomena.cs" />
     <Compile Include="Generated\VUserInfo.cs" />
     <Compile Include="Partials\DataSourceTransformation.cs" />
     <Compile Include="Partials\DataSourceType.cs" />
