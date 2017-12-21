@@ -379,247 +379,247 @@ GO
 PRINT N'Starting rebuilding table [dbo].[Observation]...';
 
 
-GO
-BEGIN TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-
-SET XACT_ABORT ON;
-
-CREATE TABLE [dbo].[tmp_ms_xx_Observation] (
-    [ID]                   INT                  IDENTITY (1, 1) NOT NULL,
-    [SensorID]             UNIQUEIDENTIFIER     NOT NULL,
-    [ValueDate]            DATETIME             NOT NULL,
-    [ValueDay]             AS                   CAST (ValueDate AS DATE),
-    [ValueYear]            AS                   Year(ValueDate),
-    [ValueDecade]          AS                   Year(ValueDate) / 10,
-    [TextValue]            VARCHAR (10)         NULL,
-    [RawValue]             FLOAT (53)           NULL,
-    [DataValue]            FLOAT (53)           NULL,
-    [Comment]              VARCHAR (250) SPARSE NULL,
-    [PhenomenonOfferingID] UNIQUEIDENTIFIER     NOT NULL,
-    [PhenomenonUOMID]      UNIQUEIDENTIFIER     NOT NULL,
-    [ImportBatchID]        UNIQUEIDENTIFIER     NOT NULL,
-    [StatusID]             UNIQUEIDENTIFIER     NULL,
-    [StatusReasonID]       UNIQUEIDENTIFIER     NULL,
-    [CorrelationID]        UNIQUEIDENTIFIER     NULL,
-    [Elevation]            FLOAT (53)           NULL,
-    [UserId]               UNIQUEIDENTIFIER     NOT NULL,
-    [AddedDate]            DATETIME             CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
-    [AddedAt]              DATETIME             CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate() NULL,
-    [UpdatedAt]            DATETIME             CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate() NULL,
-    [RowVersion]           ROWVERSION           NOT NULL,
-    CONSTRAINT [tmp_ms_xx_constraint_PK_Observation1] PRIMARY KEY CLUSTERED ([ID] ASC) ON [Observations],
-    CONSTRAINT [tmp_ms_xx_constraint_UX_Observation1] UNIQUE NONCLUSTERED ([SensorID] ASC, [ValueDate] ASC, [RawValue] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC) ON [Observations]
-);
+--GO
+--BEGIN TRANSACTION;
+
+--SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+--SET XACT_ABORT ON;
+
+--CREATE TABLE [dbo].[tmp_ms_xx_Observation] (
+--    [ID]                   INT                  IDENTITY (1, 1) NOT NULL,
+--    [SensorID]             UNIQUEIDENTIFIER     NOT NULL,
+--    [ValueDate]            DATETIME             NOT NULL,
+--    [ValueDay]             AS                   CAST (ValueDate AS DATE),
+--    [ValueYear]            AS                   Year(ValueDate),
+--    [ValueDecade]          AS                   Year(ValueDate) / 10,
+--    [TextValue]            VARCHAR (10)         NULL,
+--    [RawValue]             FLOAT (53)           NULL,
+--    [DataValue]            FLOAT (53)           NULL,
+--    [Comment]              VARCHAR (250) SPARSE NULL,
+--    [PhenomenonOfferingID] UNIQUEIDENTIFIER     NOT NULL,
+--    [PhenomenonUOMID]      UNIQUEIDENTIFIER     NOT NULL,
+--    [ImportBatchID]        UNIQUEIDENTIFIER     NOT NULL,
+--    [StatusID]             UNIQUEIDENTIFIER     NULL,
+--    [StatusReasonID]       UNIQUEIDENTIFIER     NULL,
+--    [CorrelationID]        UNIQUEIDENTIFIER     NULL,
+--    [Elevation]            FLOAT (53)           NULL,
+--    [UserId]               UNIQUEIDENTIFIER     NOT NULL,
+--    [AddedDate]            DATETIME             CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
+--    [AddedAt]              DATETIME             CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate() NULL,
+--    [UpdatedAt]            DATETIME             CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate() NULL,
+--    [RowVersion]           ROWVERSION           NOT NULL,
+--    CONSTRAINT [tmp_ms_xx_constraint_PK_Observation1] PRIMARY KEY CLUSTERED ([ID] ASC) ON [Observations],
+--    CONSTRAINT [tmp_ms_xx_constraint_UX_Observation1] UNIQUE NONCLUSTERED ([SensorID] ASC, [ValueDate] ASC, [RawValue] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC) ON [Observations]
+--);
 
-IF EXISTS (SELECT TOP 1 1 
-           FROM   [dbo].[Observation])
-    BEGIN
-        SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Observation] ON;
-        INSERT INTO [dbo].[tmp_ms_xx_Observation] ([ID], [SensorID], [ValueDate], [RawValue], [DataValue], [Comment], [PhenomenonOfferingID], [PhenomenonUOMID], [ImportBatchID], [StatusID], [StatusReasonID], [CorrelationID], [UserId], [AddedDate], [AddedAt], [UpdatedAt], [TextValue], [Elevation])
-        SELECT   [ID],
-                 [SensorID],
-                 [ValueDate],
-                 [RawValue],
-                 [DataValue],
-                 [Comment],
-                 [PhenomenonOfferingID],
-                 [PhenomenonUOMID],
-                 [ImportBatchID],
-                 [StatusID],
-                 [StatusReasonID],
-                 [CorrelationID],
-                 [UserId],
-                 [AddedDate],
-                 [AddedAt],
-                 [UpdatedAt],
-                 [TextValue],
-                 [Elevation]
-        FROM     [dbo].[Observation]
-        ORDER BY [ID] ASC;
-        SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Observation] OFF;
-    END
+--IF EXISTS (SELECT TOP 1 1 
+--           FROM   [dbo].[Observation])
+--    BEGIN
+--        SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Observation] ON;
+--        INSERT INTO [dbo].[tmp_ms_xx_Observation] ([ID], [SensorID], [ValueDate], [RawValue], [DataValue], [Comment], [PhenomenonOfferingID], [PhenomenonUOMID], [ImportBatchID], [StatusID], [StatusReasonID], [CorrelationID], [UserId], [AddedDate], [AddedAt], [UpdatedAt], [TextValue], [Elevation])
+--        SELECT   [ID],
+--                 [SensorID],
+--                 [ValueDate],
+--                 [RawValue],
+--                 [DataValue],
+--                 [Comment],
+--                 [PhenomenonOfferingID],
+--                 [PhenomenonUOMID],
+--                 [ImportBatchID],
+--                 [StatusID],
+--                 [StatusReasonID],
+--                 [CorrelationID],
+--                 [UserId],
+--                 [AddedDate],
+--                 [AddedAt],
+--                 [UpdatedAt],
+--                 [TextValue],
+--                 [Elevation]
+--        FROM     [dbo].[Observation]
+--        ORDER BY [ID] ASC;
+--        SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Observation] OFF;
+--    END
 
-DROP TABLE [dbo].[Observation];
+--DROP TABLE [dbo].[Observation];
 
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_Observation]', N'Observation';
+--EXECUTE sp_rename N'[dbo].[tmp_ms_xx_Observation]', N'Observation';
 
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_Observation1]', N'PK_Observation', N'OBJECT';
+--EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_Observation1]', N'PK_Observation', N'OBJECT';
 
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Observation1]', N'UX_Observation', N'OBJECT';
+--EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Observation1]', N'UX_Observation', N'OBJECT';
 
-COMMIT TRANSACTION;
+--COMMIT TRANSACTION;
 
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_ImportBatchID]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_ImportBatchID]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_ImportBatchID]
-    ON [dbo].[Observation]([ImportBatchID] ASC)
-    INCLUDE([ValueDate], [RawValue], [DataValue], [Comment], [CorrelationID])
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_ImportBatchID]
+--    ON [dbo].[Observation]([ImportBatchID] ASC)
+--    INCLUDE([ValueDate], [RawValue], [DataValue], [Comment], [CorrelationID])
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_SensorID]
-    ON [dbo].[Observation]([SensorID] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_SensorID]
+--    ON [dbo].[Observation]([SensorID] ASC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_PhenomenonOfferingID]
-    ON [dbo].[Observation]([SensorID] ASC, [PhenomenonOfferingID] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_PhenomenonOfferingID]
+--    ON [dbo].[Observation]([SensorID] ASC, [PhenomenonOfferingID] ASC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_PhenomenonUOMID]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_PhenomenonUOMID]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_PhenomenonUOMID]
-    ON [dbo].[Observation]([SensorID] ASC, [PhenomenonUOMID] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_PhenomenonUOMID]
+--    ON [dbo].[Observation]([SensorID] ASC, [PhenomenonUOMID] ASC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_PhenomenonOfferingID]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_PhenomenonOfferingID]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_PhenomenonOfferingID]
-    ON [dbo].[Observation]([PhenomenonOfferingID] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_PhenomenonOfferingID]
+--    ON [dbo].[Observation]([PhenomenonOfferingID] ASC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_PhenomenonUOMID]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_PhenomenonUOMID]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_PhenomenonUOMID]
-    ON [dbo].[Observation]([PhenomenonUOMID] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_PhenomenonUOMID]
+--    ON [dbo].[Observation]([PhenomenonUOMID] ASC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_UserId]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_UserId]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_UserId]
-    ON [dbo].[Observation]([UserId] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_UserId]
+--    ON [dbo].[Observation]([UserId] ASC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_AddedDate]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_AddedDate]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_AddedDate]
-    ON [dbo].[Observation]([AddedDate] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_AddedDate]
+--    ON [dbo].[Observation]([AddedDate] ASC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDate]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDate]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_ValueDate]
-    ON [dbo].[Observation]([ValueDate] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_ValueDate]
+--    ON [dbo].[Observation]([ValueDate] ASC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDateDesc]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDateDesc]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_ValueDateDesc]
-    ON [dbo].[Observation]([ValueDate] DESC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_ValueDateDesc]
+--    ON [dbo].[Observation]([ValueDate] DESC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDay]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDay]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_ValueDay]
-    ON [dbo].[Observation]([ValueDay] ASC);
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_ValueDay]
+--    ON [dbo].[Observation]([ValueDay] ASC);
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueYear]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueYear]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_ValueYear]
-    ON [dbo].[Observation]([ValueYear] ASC);
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_ValueYear]
+--    ON [dbo].[Observation]([ValueYear] ASC);
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDecade]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDecade]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_ValueDecade]
-    ON [dbo].[Observation]([ValueDecade] ASC);
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_ValueDecade]
+--    ON [dbo].[Observation]([ValueDecade] ASC);
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusID]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusID]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_StatusID]
-    ON [dbo].[Observation]([StatusID] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_StatusID]
+--    ON [dbo].[Observation]([StatusID] ASC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusReasonID]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusReasonID]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_StatusReasonID]
-    ON [dbo].[Observation]([StatusReasonID] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_StatusReasonID]
+--    ON [dbo].[Observation]([StatusReasonID] ASC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_CorrelationID]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_CorrelationID]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_CorrelationID]
-    ON [dbo].[Observation]([CorrelationID] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_CorrelationID]
+--    ON [dbo].[Observation]([CorrelationID] ASC)
+--    ON [Observations];
 
 
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_Elevation]...';
+--GO
+--PRINT N'Creating [dbo].[Observation].[IX_Observation_Elevation]...';
 
 
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_Elevation]
-    ON [dbo].[Observation]([Elevation] ASC)
-    ON [Observations];
+--GO
+--CREATE NONCLUSTERED INDEX [IX_Observation_Elevation]
+--    ON [dbo].[Observation]([Elevation] ASC)
+--    ON [Observations];
 
 
 GO
@@ -805,77 +805,77 @@ END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160708 TimPN
 GO
-PRINT N'Creating [dbo].[TR_Observation_Insert]...';
+--PRINT N'Creating [dbo].[TR_Observation_Insert]...';
 
 
-GO
-CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]
-FOR INSERT
-AS
-BEGIN
-    SET NoCount ON
-    Update
-        src
-    set
-        AddedAt = GETDATE(),
-        UpdatedAt = NULL
-    from
-        Observation src
-        inner join inserted ins
-            on (ins.ID = src.ID)
-END
-GO
-PRINT N'Creating [dbo].[TR_Observation_Update]...';
+--GO
+--CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]
+--FOR INSERT
+--AS
+--BEGIN
+--    SET NoCount ON
+--    Update
+--        src
+--    set
+--        AddedAt = GETDATE(),
+--        UpdatedAt = NULL
+--    from
+--        Observation src
+--        inner join inserted ins
+--            on (ins.ID = src.ID)
+--END
+--GO
+--PRINT N'Creating [dbo].[TR_Observation_Update]...';
 
 
-GO
-CREATE TRIGGER [dbo].[TR_Observation_Update] ON [dbo].[Observation]
-FOR UPDATE
-AS
-BEGIN
-    SET NoCount ON
-    Update
-        src
-    set
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
-        UpdatedAt = GETDATE()
-    from
-        Observation src
-        inner join inserted ins
-            on (ins.ID = src.ID)
-        inner join deleted del
-            on (del.ID = src.ID)
-END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.8 20160718 TimPN
-/*
---> Added 2.0.35 20170824 TimPN
-GO
-CREATE TRIGGER [dbo].[TR_Observation_DuplicateOfNull] ON [dbo].[Observation]
-FOR INSERT
-AS
-BEGIN
-  SET NoCount ON
-  if Exists(
-    Select
-      *
-    from
-      Inserted
-      inner join Observation
-        on (Inserted.SensorID = Observation.SensorID) and
-           (Inserted.ValueDate = Observation.ValueDate) and
-           (Inserted.PhenomenonOfferingID = Observation.PhenomenonOfferingID) and
-           (Inserted.PhenomenonUOMID = Observation.PhenomenonUOMID)
-      where
-        (Observation.RawValue is null) --and (Inserted.RawValue is not null)
-      )
-    Throw 55555, 'Duplicate of null', 1
-END
---< Added 2.0.35 20170824 TimPN
-*/
+--GO
+--CREATE TRIGGER [dbo].[TR_Observation_Update] ON [dbo].[Observation]
+--FOR UPDATE
+--AS
+--BEGIN
+--    SET NoCount ON
+--    Update
+--        src
+--    set
+----> Changed 2.0.19 20161205 TimPN
+----		AddedAt = del.AddedAt,
+--        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
+----< Changed 2.0.19 20161205 TimPN
+--        UpdatedAt = GETDATE()
+--    from
+--        Observation src
+--        inner join inserted ins
+--            on (ins.ID = src.ID)
+--        inner join deleted del
+--            on (del.ID = src.ID)
+--END
+----< Changed 2.0.15 20161102 TimPN
+----< Added 2.0.8 20160718 TimPN
+--/*
+----> Added 2.0.35 20170824 TimPN
+--GO
+--CREATE TRIGGER [dbo].[TR_Observation_DuplicateOfNull] ON [dbo].[Observation]
+--FOR INSERT
+--AS
+--BEGIN
+--  SET NoCount ON
+--  if Exists(
+--    Select
+--      *
+--    from
+--      Inserted
+--      inner join Observation
+--        on (Inserted.SensorID = Observation.SensorID) and
+--           (Inserted.ValueDate = Observation.ValueDate) and
+--           (Inserted.PhenomenonOfferingID = Observation.PhenomenonOfferingID) and
+--           (Inserted.PhenomenonUOMID = Observation.PhenomenonUOMID)
+--      where
+--        (Observation.RawValue is null) --and (Inserted.RawValue is not null)
+--      )
+--    Throw 55555, 'Duplicate of null', 1
+--END
+----< Added 2.0.35 20170824 TimPN
+--*/
 GO
 PRINT N'Refreshing [dbo].[vDataLog]...';
 
@@ -1156,14 +1156,6 @@ from
 --< Added 2.0.36 20171220 TimPN
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[progress_Status_Raw]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[progress_Status_Raw]';
 
 
 GO
