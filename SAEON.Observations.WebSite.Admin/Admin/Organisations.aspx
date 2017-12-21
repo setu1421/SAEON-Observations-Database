@@ -22,15 +22,9 @@
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="Viewport1" runat="server" Layout="Fit">
         <Items>
-            <ext:BorderLayout ID="BorderLayout1" runat="server">
-
-                <%--                
-                <West>
-                </West>
-                --%>
-                <Center MarginsSummary="5 0 0 5" MaxWidth="500">
-                    <ext:Panel ID="pnlOrganisations" runat="server" Title="Organisations" Layout="FitLayout" Hidden="false"
-                        Icon="ChartOrganisation" Width="300">
+            <ext:BorderLayout runat="server">
+                <Center>
+                    <ext:Panel ID="pnlOrganisations" runat="server" Title="Organisations" Layout="FitLayout" Icon="ChartOrganisation">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
@@ -89,8 +83,8 @@
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
-                                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
+                                        <ext:Column Header="Name" DataIndex="Name" Width="300" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="500" />
                                         <ext:CommandColumn Width="75">
                                             <Commands>
                                                 <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
@@ -126,7 +120,7 @@
                         </Items>
                     </ext:Panel>
                 </Center>
-                <East Collapsible="true" Split="true" MinWidth="500">
+                <East Collapsible="true" Split="true">
                     <ext:Panel ID="pnlEast" runat="server" Width="600" ClientIDMode="Static" Layout="AnchorLayout">
                         <Items>
                             <ext:Panel ID="pnlSites" runat="server" ClientIDMode="Static" Title="Sites" AnchorHorizontal="100%" AnchorVertical="33%">
@@ -173,7 +167,7 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel2" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Site" DataIndex="SiteName" Width="150" />
+                                                <ext:Column Header="Site" DataIndex="SiteName" Width="250" />
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
@@ -240,7 +234,7 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel4" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Station" DataIndex="StationName" Width="150" />
+                                                <ext:Column Header="Station" DataIndex="StationName" Width="250" />
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
@@ -307,7 +301,7 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel3" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Instrument" DataIndex="InstrumentName" Width="150" />
+                                                <ext:Column Header="Instrument" DataIndex="InstrumentName" Width="250" />
                                                 <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="150" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
@@ -345,7 +339,7 @@
         </Items>
     </ext:Viewport>
     <ext:Window ID="DetailWindow" runat="server" Width="800" Height="305" Closable="true"
-        Icon="ChartOrganisation" Hidden="true" Collapsible="false" Title="Organisation Detail"        Maximizable="false" Layout="Fit" ClientIDMode="Static">
+        Icon="ChartOrganisation" Hidden="true" Collapsible="false" Title="Organisation Detail" Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true" LabelAlign="Top"
                 MonitorResize="true" Padding="10" ButtonAlign="Right" Layout="RowLayout" ClientIDMode="Static">
@@ -353,7 +347,7 @@
                 <Items>
                     <ext:Hidden ID="tfID" DataIndex="Id" runat="server" ClientIDMode="Static">
                     </ext:Hidden>
-                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form" >
+                    <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:TextField ID="tfCode" DataIndex="Code" IsRemoteValidation="true" MaxLength="50"
                                 runat="server" FieldLabel="Code" AnchorHorizontal="96%" ClientIDMode="Static"
@@ -366,7 +360,7 @@
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="Form" >
+                    <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
                                 runat="server" FieldLabel="Name" AnchorHorizontal="96%" ClientIDMode="Static"
@@ -375,7 +369,7 @@
                             </ext:TextField>
                         </Items>
                     </ext:Panel>
-                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form" >
+                    <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
                                 FieldLabel="Description" AnchorHorizontal="96%" ClientIDMode="Static"

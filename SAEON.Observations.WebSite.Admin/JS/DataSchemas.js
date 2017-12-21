@@ -40,7 +40,7 @@ function New() {
 }
 
 function MasterRowSelect(e, record) {
-    if (pnlSouth.isVisible()) {
+    if (tpCenter.isVisible()) {
         SchemaColumnsGrid.getStore().reload();
         DataSourcesGrid.getStore().reload();
     }

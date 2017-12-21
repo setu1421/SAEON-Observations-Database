@@ -88,9 +88,9 @@
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="Viewport1" runat="server" Layout="Fit">
         <Items>
-            <ext:BorderLayout ID="BorderLayout1" runat="server">
-                <Center MarginsSummary="5 0 0 5">
-                    <ext:Panel ID="Panel1" runat="server" Title="Data Schemas" Layout="Fit">
+            <ext:BorderLayout runat="server">
+                <North Collapsible="true" Split="true">
+                    <ext:Panel ID="pnlNorth" runat="server" Title="Data Schemas" Height="350" Layout="FitLayout">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
@@ -157,8 +157,8 @@
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
-                                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
+                                        <ext:Column Header="Name" DataIndex="Name" Width="300" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="500" />
                                         <ext:Column Header="Source Type Code" Width="100" DataIndex="DataSourceTypeCode" />
                                         <ext:Column Header="Source Type Description" Width="150" DataIndex="DataSourceTypeDesc" />
                                         <ext:Column Header="Ignore First" DataIndex="IgnoreFirst" Width="100" />
@@ -217,12 +217,11 @@
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
-                </Center>
-                <South Collapsible="true" Split="true" MinHeight="400">
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="400" TabPosition="Top" Border="false" ClientIDMode="Static">
+                </North>
+                <Center>
+                    <ext:TabPanel ID="tpCenter" runat="server" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:Panel ID="pnlSchemaColumns" runat="server" Title="Columns" Layout="FitLayout"
-                                Height="200" ClientIDMode="Static">
+                            <ext:Panel ID="pnlColumns" runat="server" Title="Columns" ClientIDMode="Static" Layout="FitLayout">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
@@ -326,7 +325,7 @@
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
-                            <ext:Panel ID="Panel2" runat="server" Title="Data Sources" Layout="FitLayout" Height="200" ClientIDMode="Static">
+                            <ext:Panel ID="Panel2" runat="server" Title="Data Sources" Layout="FitLayout" ClientIDMode="Static">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
@@ -407,7 +406,7 @@
                             </ext:Panel>
                         </Items>
                     </ext:TabPanel>
-                </South>
+                </Center>
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>

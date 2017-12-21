@@ -166,9 +166,9 @@
                     </ext:Panel>
                 </North>
                 <Center>
-                    <ext:TabPanel ID="pnlSouth" runat="server" TabPosition="Top" Border="false" ClientIDMode="Static">
+                    <ext:TabPanel ID="tpCenter" runat="server" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:Panel ID="Panel4" runat="server" Title="Observations" ClientIDMode="Static" Layout="FitLayout">
+                            <ext:Panel ID="pnlObservations" runat="server" Title="Observations" ClientIDMode="Static" Layout="FitLayout">
                                 <TopBar>
                                     <ext:Toolbar ID="tbObservations" runat="server" ClientIDMode="Static">
                                         <Items>

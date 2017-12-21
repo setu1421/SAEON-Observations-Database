@@ -22,7 +22,7 @@ function New() {
 }
 
 function DataSourceRowSelect(e, record) {
-    if (pnlSouth.isVisible()) {
+    if (tpCenter.isVisible()) {
         //InstrumentLinksGrid.getStore().reload();
         //RolesGrid.getStore().reload();
         TransformationsGrid.getStore().reload();

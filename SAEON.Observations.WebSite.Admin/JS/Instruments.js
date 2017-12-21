@@ -40,7 +40,7 @@ function New() {
 }
 
 function MasterRowSelect(e, record) {
-    if (pnlSouth.isVisible()) {
+    if (tpCenter.isVisible()) {
         OrganisationLinksGrid.getStore().reload();
         StationLinksGrid.getStore().reload();
         SensorLinksGrid.getStore().reload();

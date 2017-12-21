@@ -72,9 +72,9 @@
     <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Viewport ID="ViewPort1" runat="server">
         <Items>
-            <ext:BorderLayout ID="BorderLayout1" runat="server">
-                <Center MarginsSummary="5 0 0 5">
-                    <ext:Panel ID="Panel1" runat="server" Title="Instruments" Layout="FitLayout" Hidden="false">
+            <ext:BorderLayout runat="server">
+                <North Collapsible="true" Split="true">
+                    <ext:Panel ID="pnlNorth" runat="server" Title="Instruments" Height="350" Layout="FitLayout">
                         <TopBar>
                             <ext:Toolbar ID="Toolbar1" runat="server">
                                 <Items>
@@ -132,14 +132,13 @@
                                             <ext:Parameter Name="dir" Value="" />
                                         </BaseParams>
                                         <SortInfo Field="Name" Direction="ASC" />
-                                        <DirectEventConfig IsUpload="true" />
                                     </ext:Store>
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
-                                        <ext:Column Header="Name" DataIndex="Name" Width="200" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="200" />
+                                        <ext:Column Header="Name" DataIndex="Name" Width="300" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="500" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
                                         <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
                                         <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" />
@@ -186,14 +185,11 @@
                             </ext:GridPanel>
                         </Items>
                     </ext:Panel>
-                </Center>
-                <East Collapsible="true" Split="true" MarginsSummary="5 5 0 0">
-                </East>
-                <South Collapsible="true" Split="true" MinHeight="250">
-                    <ext:TabPanel ID="pnlSouth" runat="server" Height="250" TabPosition="Top" Border="false" ClientIDMode="Static">
+                </North>
+                <Center>
+                    <ext:TabPanel ID="tpCenter" runat="server" TabPosition="Top" Border="false" ClientIDMode="Static">
                         <Items>
-                            <ext:Panel ID="pnlSensors" runat="server" Title="Sensors" Layout="FitLayout"
-                                Height="200" ClientIDMode="Static">
+                            <ext:Panel ID="pnlSensors" runat="server" Title="Sensors" ClientIDMode="Static" Layout="FitLayout">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
@@ -246,7 +242,7 @@
                                         <ColumnModel ID="ColumnModel2" runat="server">
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="SensorCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="SensorName" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="SensorName" Width="500" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="150">
@@ -268,8 +264,7 @@
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
-                            <ext:Panel ID="pnlStations" runat="server" Title="Stations" Layout="FitLayout"
-                                Height="200" ClientIDMode="Static">
+                            <ext:Panel ID="pnlStations" runat="server" Title="Stations" Layout="FitLayout" ClientIDMode="Static">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar4" runat="server">
                                         <Items>
@@ -325,7 +320,7 @@
                                         <ColumnModel ID="ColumnModel4" runat="server" ClientIDMode="Static">
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="StationCode" Width="200" />
-                                                <ext:Column Header="Name" DataIndex="StationName" Width="200" />
+                                                <ext:Column Header="Name" DataIndex="StationName" Width="500" />
                                                 <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" />
                                                 <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" />
                                                 <ext:Column Header="Elevation" DataIndex="Elevation" Width="70" />
@@ -350,7 +345,7 @@
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
-                            <ext:Panel ID="pnlOrganisations" runat="server" Title="Organisations" Layout="FitLayout" Width="425" ClientIDMode="Static">
+                            <ext:Panel ID="pnlOrganisations" runat="server" Title="Organisations" Layout="FitLayout" ClientIDMode="Static">
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar3" runat="server">
                                         <Items>
@@ -411,8 +406,8 @@
                                                 <ext:Column Header="Level" DataIndex="Level" Width="100" />
                                                 <ext:Column Header="Code" DataIndex="LevelCode" Width="200" />
                                                 <ext:Column Header="Name" DataIndex="LevelName" Width="200" />
-                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="150" />
-                                                <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="75" />
+                                                <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="300" />
+                                                <ext:Column Header="Role" DataIndex="OrganisationRoleName" Width="100" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="75" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="150">
@@ -437,7 +432,7 @@
                             </ext:Panel>
                         </Items>
                     </ext:TabPanel>
-                </South>
+                </Center>
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>

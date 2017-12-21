@@ -16,7 +16,7 @@
     tfName.markAsValid();
     tfDescription.markAsValid();
 
-    DetailWindow.show()
+    DetailWindow.show();
 }
 
 function New() {
@@ -40,7 +40,7 @@ function New() {
 }
 
 function MasterRowSelect(e, record) {
-    if (pnlSouth.isVisible())
+    if (tpCenter.isVisible())
         StationLinksGrid.getStore().reload();
 }
 
