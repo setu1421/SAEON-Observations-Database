@@ -242,9 +242,9 @@ public partial class _Phenomena : System.Web.UI.Page
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
         string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-        string js = BaseRepository.BuildExportQ("Phenomenon", gridData, visCols, sortCol, sortDir);
-
-        BaseRepository.doExport(type, js);
+        //string js = BaseRepository.BuildExportQ("Phenomenon", gridData, visCols, sortCol, sortDir);
+        //BaseRepository.doExport(type, js);
+        BaseRepository.Export("Phenomenon", gridData, visCols, sortCol, sortDir, type, "Phenomena");
     }
 
     protected void DoDelete(object sender, DirectEventArgs e)

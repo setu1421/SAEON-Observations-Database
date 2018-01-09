@@ -141,9 +141,9 @@ public partial class Admin_Stations : System.Web.UI.Page
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
         string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-        string js = BaseRepository.BuildExportQ("VStation", gridData, visCols, sortCol, sortDir);
-
-        BaseRepository.doExport(type, js);
+        //string js = BaseRepository.BuildExportQ("VStation", gridData, visCols, sortCol, sortDir);
+        //BaseRepository.doExport(type, js);
+        BaseRepository.Export("vStation", gridData, visCols, sortCol, sortDir, type, "Stations");
     }
 
     public void AddStationClick(object sender, DirectEventArgs e)

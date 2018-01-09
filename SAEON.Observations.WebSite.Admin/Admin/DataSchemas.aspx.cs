@@ -31,7 +31,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     #region Data Schemas
     protected void DataSchemasGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        DataSchemasGrid.GetStore().DataSource = DataSchemRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
+        DataSchemasGridStore.DataSource = DataSchemRepository.GetPagedList(e, e.Parameters[DataSchemasGridFilters.ParamPrefix]);
         SchemaPickerStore.DataSource = new DataSchemaCollection().OrderByAsc(DataSchema.Columns.Name).Load();
         SchemaPickerStore.DataBind();
     }
@@ -77,9 +77,10 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
         string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-        string js = BaseRepository.BuildExportQ("VDataSchema", gridData, visCols, sortCol, sortDir);
+        //string js = BaseRepository.BuildExportQ("VDataSchema", gridData, visCols, sortCol, sortDir);
+        //BaseRepository.doExport(type, js);
 
-        BaseRepository.doExport(type, js);
+        BaseRepository.Export("VDataSchema", gridData, visCols, sortCol, sortDir, type, "DataSchemas");
     }
 
     protected void Save(object sender, DirectEventArgs e)

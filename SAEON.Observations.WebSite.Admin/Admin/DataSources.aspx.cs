@@ -43,7 +43,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     #region Data Sources
     protected void DataSourcesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        DataSourcesGrid.GetStore().DataSource = DataSourceRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
+        DataSourcesGridStore.DataSource = DataSourceRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -259,9 +259,9 @@ public partial class Admin_DataSources : System.Web.UI.Page
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
         string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-        string js = BaseRepository.BuildExportQ("VDataSource", gridData, visCols, sortCol, sortDir);
-
-        BaseRepository.doExport(type, js);
+        //string js = BaseRepository.BuildExportQ("VDataSource", gridData, visCols, sortCol, sortDir);
+        //BaseRepository.doExport(type, js);
+        BaseRepository.Export("vDataSource", gridData, visCols, sortCol, sortDir, type, "Data Sources");
     }
 
     #endregion

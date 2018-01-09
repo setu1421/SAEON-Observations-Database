@@ -262,8 +262,9 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
         string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
         string visCols = VisCols.Value.ToString();
-        string js = BuildQ(json, visCols, FromFilter.SelectedDate, ToFilter.SelectedDate, sortCol, sortDir);
-        BaseRepository.doExport(type, js);
+        SqlQuery query = BuildQ(json, visCols, FromFilter.SelectedDate, ToFilter.SelectedDate, sortCol, sortDir);
+        //BaseRepository.doExport(type, js);
+        BaseRepository.Export(query, visCols, type, "Data Query");
     }
 
     private string GetItem(List<Tuple<string, string>> items, string itemType)
@@ -401,7 +402,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
 
 
-    public string BuildQ(string json, string visCols, DateTime dateFrom, DateTime dateTo, string sortCol, string sortDir)
+    public SqlQuery BuildQ(string json, string visCols, DateTime dateFrom, DateTime dateTo, string sortCol, string sortDir)
     {
         Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(visCols);
 
@@ -621,43 +622,15 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             }
         }
 
-        JavaScriptSerializer ser = new JavaScriptSerializer()
-        {
-            MaxJsonLength = 2147483647
-        };
-        string js = JsonConvert.SerializeObject(dt);
+        //JavaScriptSerializer ser = new JavaScriptSerializer()
+        //{
+        //    MaxJsonLength = 2147483647
+        //};
+        //string js = JsonConvert.SerializeObject(dt);
 
-        return js;
+        //return js;
+        return q;
     }
 
-
-    protected void ToExcel(object sender, DirectEventArgs e)
-    {
-        //Ext.Net.Hidden hiddenfield = FindControl("GridData") as Ext.Net.Hidden;
-        //string json = hiddenfield.Value.ToString();
-        ///////
-        //Ext.Net.Hidden VisCols = FindControl("VisCols") as Ext.Net.Hidden;
-        //string visCols = VisCols.Value.ToString();
-
-
-
-        //string js = BuildQ(json, visCols, e.ExtraParams["dateFrom"], e.ExtraParams["dateTo"]);
-
-
-        //System.Web.Script.Serialization.JavaScriptSerializer oSerializer =
-        //new System.Web.Script.Serialization.JavaScriptSerializer();
-        ////json = oSerializer.Serialize(LOutDynamic);
-
-        //StoreSubmitDataEventArgs eSubmit = new StoreSubmitDataEventArgs(js, null);
-        //XmlNode xml = eSubmit.Xml;
-
-        //this.Response.Clear();
-        //this.Response.ContentType = "application/vnd.ms-excel";
-        //this.Response.AddHeader("Content-Disposition", "attachment; filename=submittedData.xls");
-        //XslCompiledTransform xtExcel = new XslCompiledTransform();
-        //xtExcel.Load(Server.MapPath("../Templates/Excel.xsl"));
-        //xtExcel.Transform(xml, null, this.Response.OutputStream);
-        //this.Response.End();
-    }
 
 }

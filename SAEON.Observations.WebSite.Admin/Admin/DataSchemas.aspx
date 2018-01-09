@@ -10,12 +10,12 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <script type="text/javascript">
         var submitValue = function (format) {
-            GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
-            //VisCols.setValue(Ext.encode(ContentPlaceHolder1_DataSchemaGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
+            GridData.setValue(Ext.encode(DataSchemasGridFilters.buildQuery(DataSchemasGridFilters.getFilterData())));
+            //VisCols.setValue(Ext.encode(DataSchemaGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
             var viscolsNew = makenewJsonForExport(DataSchemasGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
-            SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
+            SortInfo.setValue(DataSchemasGridFilters.store.sortInfo.field + "|" + DataSchemasGridFilters.store.sortInfo.direction);
             DataSchemasGrid.submitData(false);
         };
 
@@ -188,7 +188,7 @@
                                 </SelectionModel>
                                 <LoadMask ShowMask="true" />
                                 <Plugins>
-                                    <ext:GridFilters runat="server" ID="GridFilters1">
+                                    <ext:GridFilters runat="server" ID="DataSchemasGridFilters" ClientIDMode="Static">
                                         <Filters>
                                             <ext:StringFilter DataIndex="ID" />
                                             <ext:StringFilter DataIndex="Code" />
