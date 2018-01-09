@@ -154,9 +154,9 @@ public partial class Admin_Instruments : System.Web.UI.Page
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
         string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
 
-        string js = BaseRepository.BuildExportQ("Instrument", gridData, visCols, sortCol, sortDir);
-
-        BaseRepository.doExport(type, js);
+        //string js = BaseRepository.BuildExportQ("Instrument", gridData, visCols, sortCol, sortDir);
+        //BaseRepository.doExport(type, js);
+        BaseRepository.Export("Instrument", gridData, visCols, sortCol, sortDir, type, "Instruments");
     }
 
     #endregion
