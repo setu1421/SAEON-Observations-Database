@@ -39,148 +39,148 @@ function prepareCommand(grid, cmd, record, row) {
 
 function onDataLogCommand(e, record)
 {
-	//////////////////////
-	if (e === 'Delete')
-	{
-		DirectCall.ConfirmDeleteEntry(record.get('Id'), { eventMask: { showMask: true} });
-	}
-	else if (e === 'MoveToObservation')
-	{
-		if (record.get("StatusID") !== "edb0a37c-f68d-4693-8ba6-d14d1b4fabe8")
-		{
-			Ext.Msg.alert('Error', 'You can only move items with the status "Duplicate of a previous empty value".');
+    //////////////////////
+    if (e === 'Delete')
+    {
+        DirectCall.ConfirmDeleteEntry(record.get('Id'), { eventMask: { showMask: true} });
+    }
+    else if (e === 'MoveToObservation')
+    {
+        if (record.get("StatusID") !== "edb0a37c-f68d-4693-8ba6-d14d1b4fabe8")
+        {
+            Ext.Msg.alert('Error', 'You can only move items with the status "Duplicate of a previous empty value".');
 
-		}
-		else
-		{
-			DirectCall.ConfirmMoveToObservation(record.get('Id'), { eventMask: { showMask: true} });
-		}
+        }
+        else
+        {
+            DirectCall.ConfirmMoveToObservation(record.get('Id'), { eventMask: { showMask: true} });
+        }
 
-	}
-	//////////////////////
-	else
-	{
-		DetailsFormPanel.getForm().reset();
-		DetailsFormPanel.getForm().loadRecord(record);
-		DetailsFormPanel.getForm()._record = record;
-		DetailsFormPanel.getForm().clearInvalid();
+    }
+    //////////////////////
+    else
+    {
+        DetailsFormPanel.getForm().reset();
+        DetailsFormPanel.getForm().loadRecord(record);
+        DetailsFormPanel.getForm()._record = record;
+        DetailsFormPanel.getForm().clearInvalid();
 
-		if (!record.get('SensorInvalid'))
-		{
-			cbSensorProcedure.setReadOnly(true);
-		}
-		else
-		{
-			cbSensorProcedure.markInvalid();
-			cbSensorProcedure.setReadOnly(false);
-		}
+        if (!record.get('SensorInvalid'))
+        {
+            cbSensorProcedure.setReadOnly(true);
+        }
+        else
+        {
+            cbSensorProcedure.markInvalid();
+            cbSensorProcedure.setReadOnly(false);
+        }
 
-		if (!record.get('DateValueInvalid'))
-		{
-			ValueDate.setReadOnly(true);
-		}
-		else
-		{
-			ValueDate.markInvalid();
-			ValueDate.setReadOnly(false);
-		}
+        if (!record.get('DateValueInvalid'))
+        {
+            ValueDate.setReadOnly(true);
+        }
+        else
+        {
+            ValueDate.markInvalid();
+            ValueDate.setReadOnly(false);
+        }
 
-		if (!record.get('TimeValueInvalid'))
-		{
-			TimeValueContainer.hide();
-			TimeValue.allowBlank = true;
-		}
-		else
-		{
-			TimeValueContainer.hide();
-			TimeValue.allowBlank = false;
-			TimeValue.markInvalid();
-			TimeValueContainer.show();
-		}
+        if (!record.get('TimeValueInvalid'))
+        {
+            TimeValueContainer.hide();
+            TimeValue.allowBlank = true;
+        }
+        else
+        {
+            TimeValueContainer.hide();
+            TimeValue.allowBlank = false;
+            TimeValue.markInvalid();
+            TimeValueContainer.show();
+        }
 
-		if (!record.get('RawValueInvalid'))
-		{
-			RawValue.setReadOnly(true);
-		}
-		else
-		{
-			RawValue.markInvalid();
-			RawValue.setReadOnly(false);
-		}
+        if (!record.get('RawValueInvalid'))
+        {
+            RawValue.setReadOnly(true);
+        }
+        else
+        {
+            RawValue.markInvalid();
+            RawValue.setReadOnly(false);
+        }
 
-		if (!record.get('DataValueInvalid'))
-		{
-			DataValue.setReadOnly(true);
-		}
-		else
-		{
-			DataValue.markInvalid();
-			DataValue.setReadOnly(false);
-		}
+        if (!record.get('DataValueInvalid'))
+        {
+            DataValue.setReadOnly(true);
+        }
+        else
+        {
+            DataValue.markInvalid();
+            DataValue.setReadOnly(false);
+        }
 
-		var loadcallback = function () {
-		    DSLogGrid.el.mask('Please wait', 'x-mask-loading');
-		    cbOffering.getStore().removeListener('load', loadcallback);
+        var loadcallback = function () {
+            DSLogGrid.el.mask('Please wait', 'x-mask-loading');
+            cbOffering.getStore().removeListener('load', loadcallback);
 
-		    var val = record.get('PhenomenonOfferingID');
-		    var rd = cbOffering.findRecord(cbOffering.valueField, val);
-		    if (rd !== null) {
-		        cbOffering.setValue(val);
-		        cbOffering.setReadOnly(true);
-		    }
-		    else {
-		        cbOffering.setReadOnly(false);
-		    }
-		};
+            var val = record.get('PhenomenonOfferingID');
+            var rd = cbOffering.findRecord(cbOffering.valueField, val);
+            if (rd !== null) {
+                cbOffering.setValue(val);
+                cbOffering.setReadOnly(true);
+            }
+            else {
+                cbOffering.setReadOnly(false);
+            }
+        };
 
-		if (!record.get('OfferingInvalid'))
-		{
-			cbOffering.setReadOnly(true);
-		}
-		else
-		{
+        if (!record.get('OfferingInvalid'))
+        {
+            cbOffering.setReadOnly(true);
+        }
+        else
+        {
 
-			if (!record.get('SensorInvalid'))
-			{
-				cbOffering.getStore().on("load", loadcallback);
-			}
+            if (!record.get('SensorInvalid'))
+            {
+                cbOffering.getStore().on("load", loadcallback);
+            }
 
-			cbOffering.setReadOnly(false);
-			cbOffering.markInvalid();
-		}
+            cbOffering.setReadOnly(false);
+            cbOffering.markInvalid();
+        }
 
-		var uomloadcallback = function () {
-		    cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
+        var uomloadcallback = function () {
+            cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
 
-		    var val = DetailsFormPanel.getForm()._record.get('PhenomenonUOMID')
-		    var rd = cbUnitofMeasure.findRecord(cbUnitofMeasure.valueField, val);
-		    if (rd !== null) {
-		        cbUnitofMeasure.setValue(val);
-		        cbUnitofMeasure.setReadOnly(true);
-		    }
-		    else {
-		        cbUnitofMeasure.setReadOnly(false);
-		    }
-		    DetailWindow.el.unmask();
-		};
+            var val = DetailsFormPanel.getForm()._record.get('PhenomenonUOMID')
+            var rd = cbUnitofMeasure.findRecord(cbUnitofMeasure.valueField, val);
+            if (rd !== null) {
+                cbUnitofMeasure.setValue(val);
+                cbUnitofMeasure.setReadOnly(true);
+            }
+            else {
+                cbUnitofMeasure.setReadOnly(false);
+            }
+            DetailWindow.el.unmask();
+        };
 
-		if (!record.get('UOMInvalid'))
-		{
-			cbUnitofMeasure.setReadOnly(true);
-		}
-		else
-		{
-			if (!record.get('SensorInvalid'))
-			{
-				cbUnitofMeasure.getStore().on("load", uomloadcallback);
-			}
+        if (!record.get('UOMInvalid'))
+        {
+            cbUnitofMeasure.setReadOnly(true);
+        }
+        else
+        {
+            if (!record.get('SensorInvalid'))
+            {
+                cbUnitofMeasure.getStore().on("load", uomloadcallback);
+            }
 
-			cbUnitofMeasure.setReadOnly(false);
-			cbUnitofMeasure.markInvalid();
-		}
+            cbUnitofMeasure.setReadOnly(false);
+            cbUnitofMeasure.markInvalid();
+        }
 
-		DetailWindow.show()
-	}
+        DetailWindow.show()
+    }
 }
 
 function SelectSensor() { 
@@ -255,11 +255,11 @@ function prepareToolbarCommand (grid, toolbar, rowIndex, record)
 
 function prepareToolbarTransformation(grid, toolbar, rowIndex, record)
 {
-	if (record.get("StatusID") !== "edb0a37c-f68d-4693-8ba6-d14d1b4fabe8")
-	{
-		toolbar.items.itemAt(2).hide();
-	}
-	
+    if (record.get("StatusID") !== "edb0a37c-f68d-4693-8ba6-d14d1b4fabe8")
+    {
+        toolbar.items.itemAt(2).hide();
+    }
+    
 }
 
 //var rendererData = function (value, metadata, record, rowIndex, colIndex, store)
