@@ -130,7 +130,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     ImportDate = DateTime.Now
                 };
                 FileInfo fi;
-                //if (!string.IsNullOrEmpty(LogFileUpload.PostedFile.FileName))
+                //if (!string.IsNullOrWhiteSpace(LogFileUpload.PostedFile.FileName))
                 //{
                 //    fi = new FileInfo(LogFileUpload.PostedFile.FileName);
                 //    batch.LogFileName = fi.Name;
@@ -201,7 +201,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                                     Obrecord.Comment = schval.Comment;
 
                                                 Obrecord.CorrelationID = schval.CorrelationID;
-                                                if (string.IsNullOrEmpty(schval.TextValue))
+                                                if (string.IsNullOrWhiteSpace(schval.TextValue))
                                                     Obrecord.TextValue = null;
                                                 else
                                                     Obrecord.TextValue = schval.TextValue;
@@ -267,7 +267,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         else
                                             logrecord.PhenomenonUOMID = schval.PhenomenonUOMID.Value;
 
-                                        logrecord.RawFieldValue = String.IsNullOrEmpty(schval.FieldRawValue) ? "" : schval.FieldRawValue;
+                                        logrecord.RawFieldValue = String.IsNullOrWhiteSpace(schval.FieldRawValue) ? "" : schval.FieldRawValue;
                                         logrecord.ImportDate = DateTime.Now;
                                         logrecord.ImportBatchID = batch.Id;
 
@@ -549,7 +549,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 obs.ImportBatchID = batch.Id;
                 obs.UserId = AuthHelper.GetLoggedInUserId;
 
-                obs.Comment = String.IsNullOrEmpty(tfComment.Text) ? null : tfComment.Text;
+                obs.Comment = String.IsNullOrWhiteSpace(tfComment.Text) ? null : tfComment.Text;
 
                 SqlQuery q = new Select(Aggregate.Count("ID")).From(DataLog.Schema).Where(DataLog.ImportBatchIDColumn).IsEqualTo(batchRow.SelectedRecordID);
 
