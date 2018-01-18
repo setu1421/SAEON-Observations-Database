@@ -62,6 +62,18 @@ Select
     (DataSource.Name like 'SACTN %')
   ) Observations,
   (Select count(*) from Sensor where (Name like 'SACTN %') and (Name like '% Annual %')) AnnualSensors,
+  (
+  Select 
+    count(*)
+  from
+    Instrument_Sensor
+    inner join Instrument
+      on (Instrument_Sensor.InstrumentID = Instrument.ID)
+    inner join Sensor
+      on (Instrument_Sensor.SensorID = Sensor.ID)
+    where 
+      (Instrument.Name like 'SACTN %') and (Sensor.Name like 'SACTN %') and (Sensor.Name like '% Annual %')
+  ) AnnualInstrumentsSensors,
   (Select count(*) from DataSource where Name like 'SACTN %' and (Name like '% Annual %')) AnnualDataSources,
   (
   Select
@@ -98,6 +110,18 @@ Select
     (DataSource.Name like '% Annual %')
   ) AnnualObservations,
   (Select count(*) from Sensor where (Name like 'SACTN %') and (Name like '% Monthly %')) MonthlySensors,
+  (
+  Select 
+    count(*)
+  from
+    Instrument_Sensor
+    inner join Instrument
+      on (Instrument_Sensor.InstrumentID = Instrument.ID)
+    inner join Sensor
+      on (Instrument_Sensor.SensorID = Sensor.ID)
+    where 
+      (Instrument.Name like 'SACTN %') and (Sensor.Name like 'SACTN %') and (Sensor.Name like '% Monthly %')
+  ) MonthlyInstrumentsSensors,
   (Select count(*) from DataSource where Name like 'SACTN %' and (Name like '% Monthly %')) MonthlyDataSources,
   (
   Select
@@ -133,6 +157,18 @@ Select
     (DataSource.Name like 'SACTN %') and (DataSource.Name like '% Monthly %')
   ) MonthlyObservations,
   (Select count(*) from Sensor where (Name like 'SACTN %') and (Name like '% Daily %')) DailySensors,
+  (
+  Select 
+    count(*)
+  from
+    Instrument_Sensor
+    inner join Instrument
+      on (Instrument_Sensor.InstrumentID = Instrument.ID)
+    inner join Sensor
+      on (Instrument_Sensor.SensorID = Sensor.ID)
+    where 
+      (Instrument.Name like 'SACTN %') and (Sensor.Name like 'SACTN %') and (Sensor.Name like '% Daily %')
+  ) DailyInstrumentsSensors,
   (Select count(*) from DataSource where Name like 'SACTN %' and (Name like '% Daily %')) DailyDataSources,
   (
   Select
@@ -168,6 +204,18 @@ Select
     (DataSource.Name like 'SACTN %') and (DataSource.Name like '% Daily %')
   ) DailyObservations,
   (Select count(*) from Sensor where (Name like 'SACTN %') and (Name like '% Hourly %')) HourlySensors,
+  (
+  Select 
+    count(*)
+  from
+    Instrument_Sensor
+    inner join Instrument
+      on (Instrument_Sensor.InstrumentID = Instrument.ID)
+    inner join Sensor
+      on (Instrument_Sensor.SensorID = Sensor.ID)
+    where 
+      (Instrument.Name like 'SACTN %') and (Sensor.Name like 'SACTN %') and (Sensor.Name like '% Hourly %')
+  ) HourlyInstrumentsSensors,
   (Select count(*) from DataSource where Name like 'SACTN %' and (Name like '% Hourly %')) HourlyDataSources,
   (
   Select

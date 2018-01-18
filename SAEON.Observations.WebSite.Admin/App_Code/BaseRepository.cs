@@ -45,6 +45,14 @@ public static class DataTableExtensions
                     {
                         values.Add(v.ToString().DoubleQuoted());
                     }
+                    //else if (v is DateTime date)
+                    else if (v is DateTime)
+                    {
+                        //values.Add(date.ToString("o"));
+                        //values.Add(((DateTime)v).ToLocalTime().ToString("yyyy-MM-ddTHH:mm:ssK"));
+                        //values.Add(((DateTime)v).ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"));
+                        values.Add(((DateTime)v).ToLocalTime().ToString("yyyy-MM-dd HH:mm:ssK"));
+                    }
                     else
                     {
                         values.Add(v.ToString());
