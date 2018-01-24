@@ -48,10 +48,9 @@ public static class DataTableExtensions
                     //else if (v is DateTime date)
                     else if (v is DateTime)
                     {
+                        DateTime date = ((DateTime)v).ToUniversalTime().ToLocalTime();
                         //values.Add(date.ToString("o"));
-                        //values.Add(((DateTime)v).ToLocalTime().ToString("yyyy-MM-ddTHH:mm:ssK"));
-                        //values.Add(((DateTime)v).ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"));
-                        values.Add(((DateTime)v).ToLocalTime().ToString("yyyy-MM-dd HH:mm:ssK"));
+                        values.Add(date.ToString("yyyy-MM-ddTHH:mm:ss.fffK"));
                     }
                     else
                     {
