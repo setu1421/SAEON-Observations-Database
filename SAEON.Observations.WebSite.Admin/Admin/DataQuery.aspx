@@ -188,7 +188,7 @@
                                         <ext:Column Header="Sensor" DataIndex="SensorName" Width="100" />
                                         <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="100" />
                                         <ext:Column Header="Offering" DataIndex="OfferingName" Width="100" />
-                                        <ext:Column Header="DataValue" DataIndex="DataValue" Width="100" />
+                                        <ext:Column Header="Value" DataIndex="DataValue" Width="100" />
                                         <ext:Column Header="RawValue" DataIndex="RawValue" Width="100" Hideable="true" Hidden="true" />
                                         <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="100" Hideable="true" Hidden="true" />
                                         <ext:Column Header="Symbol" DataIndex="UnitOfMeasureSymbol" Width="50" />
