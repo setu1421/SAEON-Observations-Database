@@ -2,3 +2,4 @@ drop view vProjectSiteOld
 drop table ProjectSiteOld
 drop table Progress
 drop procedure progress_Status_Raw
+drop view progress_Progress_Resolved

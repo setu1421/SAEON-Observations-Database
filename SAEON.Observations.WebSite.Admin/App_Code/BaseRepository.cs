@@ -27,7 +27,7 @@ public static class DataTableExtensions
         IEnumerable<String> headerValues = dataTable
             .Columns
             .OfType<DataColumn>()
-            .Select(column => column.ColumnName);
+            .Select(column => column.Caption);
         sb.AppendLine(String.Join(",", headerValues));
         foreach (DataRow row in dataTable.Rows)
         {
@@ -44,6 +44,14 @@ public static class DataTableExtensions
                     if ((v is string) || (v is Guid))
                     {
                         values.Add(v.ToString().DoubleQuoted());
+                    }
+                    //else if (v is DateTime date)
+                    else if (v is DateTime)
+                    {
+                        //DateTime date = ((DateTime)v).ToUniversalTime().ToLocalTime();
+                        DateTime date = DateTime.SpecifyKind(((DateTime)v),DateTimeKind.Local);
+                        //values.Add(date.ToString("o"));
+                        values.Add(date.ToString("yyyy-MM-ddTHH:mm:ss.fffK"));
                     }
                     else
                     {
@@ -67,7 +75,7 @@ public static class DataTableExtensions
                 int c = 1;
                 foreach (DataColumn col in dataTable.Columns)
                 {
-                    ExcelHelper.SetCellValue(doc, wsp, c++, r, col.ColumnName);
+                    ExcelHelper.SetCellValue(doc, wsp, c++, r, col.Caption);
                 }
                 foreach (DataRow row in dataTable.Rows)
                 {
@@ -220,7 +228,7 @@ public class BaseRepository
                 {
                     for (int j = 0; j < colNames.Count; j++)
                     {
-                        if (colNames[j].ToLower() == dt.Columns[k].ColumnName.ToLower())
+                        if (colNames[j].Equals(dt.Columns[k].ColumnName,StringComparison.CurrentCultureIgnoreCase))
                         {
                             dt.Columns[k].Caption = colCaptions[j];
                         }
