@@ -214,10 +214,12 @@ public partial class Admin_Stations : System.Web.UI.Page
                 }
                 RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
                 var masterID = new Guid(masterRow.SelectedRecordID);
-                OrganisationStation stationOrganisation = new OrganisationStation(Utilities.MakeGuid(OrganisationLinkID.Value));
-                stationOrganisation.StationID = masterID;
-                stationOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
-                stationOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+                OrganisationStation stationOrganisation = new OrganisationStation(Utilities.MakeGuid(OrganisationLinkID.Value))
+                {
+                    StationID = masterID,
+                    OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim()),
+                    OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim())
+                };
                 if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
                     stationOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
                 if (!String.IsNullOrEmpty(dfOrganisationEndDate.Text) && (dfOrganisationEndDate.SelectedDate.Year >= 1900))
@@ -327,9 +329,11 @@ public partial class Admin_Stations : System.Web.UI.Page
                 }
                 RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
                 var masterID = new Guid(masterRow.SelectedRecordID);
-                ProjectStation projectStation = new ProjectStation(Utilities.MakeGuid(ProjectLinkID.Value));
-                projectStation.StationID = masterID;
-                projectStation.ProjectID = new Guid(cbProject.SelectedItem.Value.Trim());
+                ProjectStation projectStation = new ProjectStation(Utilities.MakeGuid(ProjectLinkID.Value))
+                {
+                    StationID = masterID,
+                    ProjectID = new Guid(cbProject.SelectedItem.Value.Trim())
+                };
                 if (!String.IsNullOrEmpty(dfProjectStartDate.Text) && (dfProjectStartDate.SelectedDate.Year >= 1900))
                     projectStation.StartDate = dfProjectStartDate.SelectedDate;
                 else
@@ -441,9 +445,11 @@ public partial class Admin_Stations : System.Web.UI.Page
                 }
                 RowSelectionModel masterRow = StationsGrid.SelectionModel.Primary as RowSelectionModel;
                 var masterID = new Guid(masterRow.SelectedRecordID);
-                StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(InstrumentLinkID.Value));
-                stationInstrument.StationID = masterID;
-                stationInstrument.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
+                StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(InstrumentLinkID.Value))
+                {
+                    StationID = masterID,
+                    InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim())
+                };
                 if (nfInstrumentLatitude.IsEmpty)
                     stationInstrument.Latitude = null;
                 else
