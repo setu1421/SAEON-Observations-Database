@@ -1033,16 +1033,6 @@ namespace SAEON.Observations.Data{
             return sp;
         }
         
-        /// <summary>
-        /// Creates an object wrapper for the progress_Status_Raw Procedure
-        /// </summary>
-        public static StoredProcedure ProgressStatusRaw()
-        {
-            SubSonic.StoredProcedure sp = new SubSonic.StoredProcedure("progress_Status_Raw", DataService.GetInstance("ObservationsDB"), "dbo");
-        	
-            return sp;
-        }
-        
     }
     
 }

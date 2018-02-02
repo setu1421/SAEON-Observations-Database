@@ -84,8 +84,6 @@ namespace SAEON.Observations.Data
         
 		public static readonly string Programme = @"Programme";
         
-		public static readonly string Progress = @"Progress";
-        
 		public static readonly string Project = @"Project";
         
 		public static readonly string ProjectStation = @"Project_Station";
@@ -286,11 +284,6 @@ namespace SAEON.Observations.Data
             get { return DataService.GetSchema("Programme", "ObservationsDB"); }
 		}
         
-		public static TableSchema.Table Progress
-		{
-            get { return DataService.GetSchema("Progress", "ObservationsDB"); }
-		}
-        
 		public static TableSchema.Table Project
 		{
             get { return DataService.GetSchema("Project", "ObservationsDB"); }
@@ -373,8 +366,6 @@ namespace SAEON.Observations.Data
     public partial struct Views 
     {
 		
-		public static readonly string ProgressProgressResolved = @"progress_Progress_Resolved";
-        
 		public static readonly string VAuditLog = @"vAuditLog";
         
 		public static readonly string VDataLog = @"vDataLog";
@@ -412,6 +403,8 @@ namespace SAEON.Observations.Data
 		public static readonly string VObservation = @"vObservation";
         
 		public static readonly string VObservationsList = @"vObservationsList";
+        
+		public static readonly string VOfferingPhemomena = @"vOfferingPhemomena";
         
 		public static readonly string VOfferingPhenomena = @"vOfferingPhenomena";
         
