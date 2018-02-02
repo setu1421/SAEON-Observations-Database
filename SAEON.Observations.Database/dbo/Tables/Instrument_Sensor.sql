@@ -12,6 +12,11 @@ CREATE TABLE [dbo].[Instrument_Sensor]
 --    [EndDate]        DATETIME         NULL,
     [EndDate]        DATE         NULL,
 --< Changed 2.0.22 20170111 TimPN
+--> Added 2.0.37 20180201 TimPN
+    [Latitude] Float Null,
+    [Longitude] Float Null,
+    [Elevation] Float Null,
+--< Added 2.0.37 20180201 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Instrument_Sensor_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Instrument_Sensor_UpdatedAt] DEFAULT GetDate(), 
@@ -32,6 +37,14 @@ GO
 CREATE INDEX [IX_Instrument_Sensor_StartDate] ON [dbo].[Instrument_Sensor] ([StartDate])
 GO
 CREATE INDEX [IX_Instrument_Sensor_EndDate] ON [dbo].[Instrument_Sensor] ([EndDate])
+--> Added 2.0.37 20180201 TimPN
+GO
+CREATE INDEX [IX_Instrument_Sensor_Latitude] ON [dbo].[Instrument_Sensor] ([Latitude])
+GO
+CREATE INDEX [IX_Instrument_Sensor_Longitude] ON [dbo].[Instrument_Sensor] ([Longitude])
+GO
+CREATE INDEX [IX_Instrument_Sensor_Elevation] ON [dbo].[Instrument_Sensor] ([Elevation])
+--< Added 2.0.37 20180201 TimPN
 GO
 CREATE INDEX [IX_Instrument_Sensor_UserId] ON [dbo].[Instrument_Sensor] ([UserId])
 --> Changed 2.0.15 20161102 TimPN

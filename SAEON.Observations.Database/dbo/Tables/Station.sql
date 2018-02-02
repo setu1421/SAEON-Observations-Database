@@ -73,6 +73,18 @@ CREATE INDEX [IX_Station_UserId] ON [dbo].[Station] ([UserId])
 GO
 CREATE INDEX [IX_Station_SiteID] ON [dbo].[Station] ([SiteID])
 --< Added 2.0.2 20160407 TimPN
+--> Added 2.0.37 20180201 TimPN
+GO
+CREATE INDEX [IX_Station_Latitude] ON [dbo].[Station] ([Latitude])
+GO
+CREATE INDEX [IX_Station_Longitude] ON [dbo].[Station] ([Longitude])
+GO
+CREATE INDEX [IX_Station_Elevation] ON [dbo].[Station] ([Elevation])
+GO
+CREATE INDEX [IX_Station_StartDate] ON [dbo].[Station] ([StartDate])
+GO
+CREATE INDEX [IX_Station_EndDate] ON [dbo].[Station] ([EndDate])
+--< Added 2.0.37 20180201 TimPN
 --> Added 2.0.3 20160421 TimPN
 --> Changed 2.0.15 20161102 TimPN
 GO
