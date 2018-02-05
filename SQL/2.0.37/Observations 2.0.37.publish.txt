@@ -39,6 +39,8 @@
        [dbo].[Station_Instrument].[IX_Station_Instrument_Longitude] (Index)
        [dbo].[TR_Observation_Update] (Trigger)
        [dbo].[vOfferingPhemomena] (View)
+     Alter
+       [dbo].[vSensorDates] (View)
 
 ** Supporting actions
      Drop
@@ -156,7 +158,6 @@
        [dbo].[vInventoryStations] (View)
        [dbo].[vObservation] (View)
        [dbo].[vSensor] (View)
-       [dbo].[vSensorDates] (View)
        [dbo].[vInventoryPhenomenaOfferings] (View)
        [dbo].[vInventoryTotals] (View)
        [dbo].[vInventoryYears] (View)

@@ -237,6 +237,30 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarSiteEndDate);
                 
+                TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
+                colvarStartDate.ColumnName = "StartDate";
+                colvarStartDate.DataType = DbType.Date;
+                colvarStartDate.MaxLength = 0;
+                colvarStartDate.AutoIncrement = false;
+                colvarStartDate.IsNullable = true;
+                colvarStartDate.IsPrimaryKey = false;
+                colvarStartDate.IsForeignKey = false;
+                colvarStartDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarStartDate);
+                
+                TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
+                colvarEndDate.ColumnName = "EndDate";
+                colvarEndDate.DataType = DbType.Date;
+                colvarEndDate.MaxLength = 0;
+                colvarEndDate.AutoIncrement = false;
+                colvarEndDate.IsNullable = true;
+                colvarEndDate.IsPrimaryKey = false;
+                colvarEndDate.IsForeignKey = false;
+                colvarEndDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarEndDate);
+                
                 
                 BaseSchema = schema;
                 //add this schema to the provider
@@ -496,6 +520,34 @@ namespace SAEON.Observations.Data{
 			    SetColumnValue("SiteEndDate", value);
             }
         }
+	      
+        [XmlAttribute("StartDate")]
+        [Bindable(true)]
+        public DateTime? StartDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("StartDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("StartDate", value);
+            }
+        }
+	      
+        [XmlAttribute("EndDate")]
+        [Bindable(true)]
+        public DateTime? EndDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("EndDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("EndDate", value);
+            }
+        }
 	    
 	    #endregion
     
@@ -533,6 +585,10 @@ namespace SAEON.Observations.Data{
             public static string SiteStartDate = @"SiteStartDate";
             
             public static string SiteEndDate = @"SiteEndDate";
+            
+            public static string StartDate = @"StartDate";
+            
+            public static string EndDate = @"EndDate";
             
 	    }
 	    #endregion

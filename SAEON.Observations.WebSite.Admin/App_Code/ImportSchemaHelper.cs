@@ -699,7 +699,7 @@ public class ImportSchemaHelper : IDisposable
 
                         if (!ErrorInDate)
                         {
-                            // Find sensor based on Datevalue
+                            // Find sensor based on DateValue
                             bool found = false;
                             bool foundTooEarly = false;
                             bool foundTooLate = false;
@@ -711,31 +711,15 @@ public class ImportSchemaHelper : IDisposable
                             {
                                 // Sensor x Instrument_Sensor x Instrument x Station_Instrument x Station x Site
                                 var dates = new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault();
-                                var startDates = new List<DateTime?> { dates.InstrumenSensorStartDate, dates.InstrumentStartDate, dates.StationInstrumentStartDate, dates.StationStartDate };
-                                var endDates = new List<DateTime?> { dates.InstrumenSensorEndDate, dates.InstrumentEndDate, dates.StationInstrumentEndDate, dates.StationEndDate };
-                                var startDate = startDates.Max();
-                                var endDate = endDates.Min();
-                                if (startDate.HasValue && (rec.DateValue.Date < startDate.Value))
+                                if (dates.StartDate.HasValue && (rec.DateValue.Date < dates.StartDate.Value))
                                 {
-                                    Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
-                                    //if ((batch.Issues == null) || !batch.Issues.Contains("Date too early, ignoring!"))
-                                    //{
-                                    //    batch.Issues += $"Date too early, ignoring!" + Environment.NewLine;
-                                    //}
-                                    //batch.Issues += $"Date too early, ignoring! Sensor: {sensor.Name} StartDate: {startDate} Date: {rec.DateValue}" + Environment.NewLine;
-                                    //Logging.Verbose("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
+                                    Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, dates.StartDate, rec.DateValue, rec);
                                     foundTooEarly = true;
                                     continue;
                                 }
-                                if (endDate.HasValue && (rec.DateValue.Date > endDate.Value))
+                                if (dates.EndDate.HasValue && (rec.DateValue.Date > dates.EndDate.Value))
                                 {
-                                    Logging.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
-                                    //if ((batch.Issues == null) || !batch.Issues.Contains("Date too late, ignoring!"))
-                                    //{
-                                    //    batch.Issues += $"Date too late, ignoring!" + Environment.NewLine;
-                                    //}
-                                    //batch.Issues += $"Date too late, ignoring! Sensor: {sensor.Name} EndDate: {endDate} Date: {rec.DateValue}" + Environment.NewLine;
-                                    //Logging.Verbose("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
+                                    Logging.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, dates.EndDate, rec.DateValue, rec);
                                     foundTooLate = true;
                                     continue;
                                 }
@@ -817,7 +801,14 @@ public class ImportSchemaHelper : IDisposable
                         if (RowComment.Trim().Length > 0)
                             rec.Comment = RowComment.TrimEnd();
                         rec.CorrelationID = correlationID;
-                        //if (rec.DataValue.HasValue)
+
+                        var loc = new VSensorLocation(rec.SensorID);
+                        if (loc != null)
+                        {
+                            if (loc.Latitude.HasValue) rec.Latitude = loc.Latitude;
+                            if (loc.Longitude.HasValue) rec.Longitude = loc.Longitude;
+                            if (loc.Elevation.HasValue) rec.Elevation = loc.Elevation;
+                        }
                         SchemaValues.Add(rec);
                     }
                 }
@@ -961,7 +952,7 @@ public class ImportSchemaHelper : IDisposable
 
             foreach (ErrorInfo errinfo in engine.ErrorManager.Errors)
             {
-                _errors.Add(new { ErrorMessage = errinfo.ExceptionInfo.Message, LineNo = errinfo.LineNumber, RecordString = errinfo.RecordString });
+                _errors.Add(new { ErrorMessage = errinfo.ExceptionInfo.Message, LineNo = errinfo.LineNumber, errinfo.RecordString });
             }
 
             return _errors;
@@ -1111,6 +1102,10 @@ public class SchemaValue
 
     public Guid CorrelationID { get; set; }
     public string TextValue { get; set; }
+
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
+    public double? Elevation { get; set; }
 
     /// <summary>
     /// 

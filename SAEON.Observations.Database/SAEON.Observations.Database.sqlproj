@@ -546,6 +546,7 @@
     <Build Include="dbo\Views\vSensorThingsDatastreams.sql" />
     <Build Include="dbo\Views\vOfferingPhenomena.sql" />
     <Build Include="dbo\Views\vUnitOfMeasurePhenomena.sql" />
+    <Build Include="dbo\Views\vSensorLocation.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />
