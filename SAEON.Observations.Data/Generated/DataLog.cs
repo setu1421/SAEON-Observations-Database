@@ -272,6 +272,45 @@ namespace SAEON.Observations.Data
 				colvarComment.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarComment);
 				
+				TableSchema.TableColumn colvarLatitude = new TableSchema.TableColumn(schema);
+				colvarLatitude.ColumnName = "Latitude";
+				colvarLatitude.DataType = DbType.Double;
+				colvarLatitude.MaxLength = 0;
+				colvarLatitude.AutoIncrement = false;
+				colvarLatitude.IsNullable = true;
+				colvarLatitude.IsPrimaryKey = false;
+				colvarLatitude.IsForeignKey = false;
+				colvarLatitude.IsReadOnly = false;
+				colvarLatitude.DefaultSetting = @"";
+				colvarLatitude.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarLatitude);
+				
+				TableSchema.TableColumn colvarLongitude = new TableSchema.TableColumn(schema);
+				colvarLongitude.ColumnName = "Longitude";
+				colvarLongitude.DataType = DbType.Double;
+				colvarLongitude.MaxLength = 0;
+				colvarLongitude.AutoIncrement = false;
+				colvarLongitude.IsNullable = true;
+				colvarLongitude.IsPrimaryKey = false;
+				colvarLongitude.IsForeignKey = false;
+				colvarLongitude.IsReadOnly = false;
+				colvarLongitude.DefaultSetting = @"";
+				colvarLongitude.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarLongitude);
+				
+				TableSchema.TableColumn colvarElevation = new TableSchema.TableColumn(schema);
+				colvarElevation.ColumnName = "Elevation";
+				colvarElevation.DataType = DbType.Double;
+				colvarElevation.MaxLength = 0;
+				colvarElevation.AutoIncrement = false;
+				colvarElevation.IsNullable = true;
+				colvarElevation.IsPrimaryKey = false;
+				colvarElevation.IsForeignKey = false;
+				colvarElevation.IsReadOnly = false;
+				colvarElevation.DefaultSetting = @"";
+				colvarElevation.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarElevation);
+				
 				TableSchema.TableColumn colvarInvalidDateValue = new TableSchema.TableColumn(schema);
 				colvarInvalidDateValue.ColumnName = "InvalidDateValue";
 				colvarInvalidDateValue.DataType = DbType.AnsiString;
@@ -613,6 +652,30 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.Comment, value); }
 		}
 		  
+		[XmlAttribute("Latitude")]
+		[Bindable(true)]
+		public double? Latitude 
+		{
+			get { return GetColumnValue<double?>(Columns.Latitude); }
+			set { SetColumnValue(Columns.Latitude, value); }
+		}
+		  
+		[XmlAttribute("Longitude")]
+		[Bindable(true)]
+		public double? Longitude 
+		{
+			get { return GetColumnValue<double?>(Columns.Longitude); }
+			set { SetColumnValue(Columns.Longitude, value); }
+		}
+		  
+		[XmlAttribute("Elevation")]
+		[Bindable(true)]
+		public double? Elevation 
+		{
+			get { return GetColumnValue<double?>(Columns.Elevation); }
+			set { SetColumnValue(Columns.Elevation, value); }
+		}
+		  
 		[XmlAttribute("InvalidDateValue")]
 		[Bindable(true)]
 		public string InvalidDateValue 
@@ -866,7 +929,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,DateTime? varValueDay,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,Guid? varCorrelationID,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
+		public static void Insert(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,DateTime? varValueDay,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,double? varLatitude,double? varLongitude,double? varElevation,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,Guid? varCorrelationID,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			DataLog item = new DataLog();
 			
@@ -891,6 +954,12 @@ namespace SAEON.Observations.Data
 			item.DataValue = varDataValue;
 			
 			item.Comment = varComment;
+			
+			item.Latitude = varLatitude;
+			
+			item.Longitude = varLongitude;
+			
+			item.Elevation = varElevation;
 			
 			item.InvalidDateValue = varInvalidDateValue;
 			
@@ -938,7 +1007,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,DateTime? varValueDay,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,Guid? varCorrelationID,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
+		public static void Update(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,DateTime? varValueDay,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,double? varLatitude,double? varLongitude,double? varElevation,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,Guid? varCorrelationID,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			DataLog item = new DataLog();
 			
@@ -963,6 +1032,12 @@ namespace SAEON.Observations.Data
 				item.DataValue = varDataValue;
 			
 				item.Comment = varComment;
+			
+				item.Latitude = varLatitude;
+			
+				item.Longitude = varLongitude;
+			
+				item.Elevation = varElevation;
 			
 				item.InvalidDateValue = varInvalidDateValue;
 			
@@ -1090,128 +1165,149 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn InvalidDateValueColumn
+        public static TableSchema.TableColumn LatitudeColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn InvalidTimeValueColumn
+        public static TableSchema.TableColumn LongitudeColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn InvalidOfferingColumn
+        public static TableSchema.TableColumn ElevationColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn InvalidUOMColumn
+        public static TableSchema.TableColumn InvalidDateValueColumn
         {
             get { return Schema.Columns[14]; }
         }
         
         
         
-        public static TableSchema.TableColumn DataSourceTransformationIDColumn
+        public static TableSchema.TableColumn InvalidTimeValueColumn
         {
             get { return Schema.Columns[15]; }
         }
         
         
         
-        public static TableSchema.TableColumn StatusIDColumn
+        public static TableSchema.TableColumn InvalidOfferingColumn
         {
             get { return Schema.Columns[16]; }
         }
         
         
         
-        public static TableSchema.TableColumn StatusReasonIDColumn
+        public static TableSchema.TableColumn InvalidUOMColumn
         {
             get { return Schema.Columns[17]; }
         }
         
         
         
-        public static TableSchema.TableColumn ImportStatusColumn
+        public static TableSchema.TableColumn DataSourceTransformationIDColumn
         {
             get { return Schema.Columns[18]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn StatusIDColumn
         {
             get { return Schema.Columns[19]; }
         }
         
         
         
-        public static TableSchema.TableColumn PhenomenonOfferingIDColumn
+        public static TableSchema.TableColumn StatusReasonIDColumn
         {
             get { return Schema.Columns[20]; }
         }
         
         
         
-        public static TableSchema.TableColumn PhenomenonUOMIDColumn
+        public static TableSchema.TableColumn ImportStatusColumn
         {
             get { return Schema.Columns[21]; }
         }
         
         
         
-        public static TableSchema.TableColumn ImportBatchIDColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[22]; }
         }
         
         
         
-        public static TableSchema.TableColumn RawRecordDataColumn
+        public static TableSchema.TableColumn PhenomenonOfferingIDColumn
         {
             get { return Schema.Columns[23]; }
         }
         
         
         
-        public static TableSchema.TableColumn RawFieldValueColumn
+        public static TableSchema.TableColumn PhenomenonUOMIDColumn
         {
             get { return Schema.Columns[24]; }
         }
         
         
         
-        public static TableSchema.TableColumn CorrelationIDColumn
+        public static TableSchema.TableColumn ImportBatchIDColumn
         {
             get { return Schema.Columns[25]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn RawRecordDataColumn
         {
             get { return Schema.Columns[26]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn RawFieldValueColumn
         {
             get { return Schema.Columns[27]; }
         }
         
         
         
-        public static TableSchema.TableColumn RowVersionColumn
+        public static TableSchema.TableColumn CorrelationIDColumn
         {
             get { return Schema.Columns[28]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn AddedAtColumn
+        {
+            get { return Schema.Columns[29]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[30]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn RowVersionColumn
+        {
+            get { return Schema.Columns[31]; }
         }
         
         
@@ -1231,6 +1327,9 @@ namespace SAEON.Observations.Data
 			 public static string RawValue = @"RawValue";
 			 public static string DataValue = @"DataValue";
 			 public static string Comment = @"Comment";
+			 public static string Latitude = @"Latitude";
+			 public static string Longitude = @"Longitude";
+			 public static string Elevation = @"Elevation";
 			 public static string InvalidDateValue = @"InvalidDateValue";
 			 public static string InvalidTimeValue = @"InvalidTimeValue";
 			 public static string InvalidOffering = @"InvalidOffering";

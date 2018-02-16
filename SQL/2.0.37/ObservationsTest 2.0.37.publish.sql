@@ -360,6 +360,9 @@ CREATE TABLE [dbo].[tmp_ms_xx_DataLog] (
     [RawValue]                   FLOAT (53)       NULL,
     [DataValue]                  FLOAT (53)       NULL,
     [Comment]                    VARCHAR (250)    NULL,
+    [Latitude]                   FLOAT (53)       NULL,
+    [Longitude]                  FLOAT (53)       NULL,
+    [Elevation]                  FLOAT (53)       NULL,
     [InvalidDateValue]           VARCHAR (50)     NULL,
     [InvalidTimeValue]           VARCHAR (50)     NULL,
     [InvalidOffering]            VARCHAR (50)     NULL,
@@ -922,6 +925,36 @@ PRINT N'Creating [dbo].[Observation].[IX_Observation_Elevation]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Observation_Elevation]
     ON [dbo].[Observation]([Elevation] ASC)
+    ON [Observations];
+
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Latitude]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate_Latitude]
+    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC, [Latitude] ASC)
+    ON [Observations];
+
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Longitude]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate_Longitude]
+    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC, [Longitude] ASC)
+    ON [Observations];
+
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Elevation]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate_Elevation]
+    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC, [Elevation] ASC)
     ON [Observations];
 
 

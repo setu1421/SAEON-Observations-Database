@@ -23,6 +23,9 @@
        [dbo].[Instrument_Sensor].[IX_Instrument_Sensor_Elevation] (Index)
        [dbo].[Observation].[IX_Observation_Latitude] (Index)
        [dbo].[Observation].[IX_Observation_Longitude] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Latitude] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Longitude] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Elevation] (Index)
        [dbo].[Sensor].[IX_Sensor_Latitude] (Index)
        [dbo].[Sensor].[IX_Sensor_Longitude] (Index)
        [dbo].[Sensor].[IX_Sensor_Elevation] (Index)
@@ -39,6 +42,7 @@
        [dbo].[Station_Instrument].[IX_Station_Instrument_Longitude] (Index)
        [dbo].[TR_Observation_Update] (Trigger)
        [dbo].[vOfferingPhemomena] (View)
+       [dbo].[vSensorLocation] (View)
      Alter
        [dbo].[vSensorDates] (View)
 
