@@ -12,6 +12,11 @@ SELECT
   Observation.Comment,
   Observation.CorrelationID,
 --< Changed 2.0.31 20170502 TimPN
+--> Added 2.0.37 20180216 TimPN
+  Observation.Latitude,
+  Observation.Longitude,
+  Observation.Elevation,
+--< Added 2.0.37 20180216 TimPN
   Sensor.Code SensorCode,
   Sensor.Name SensorName,
   Phenomenon.Code PhenomenonCode,

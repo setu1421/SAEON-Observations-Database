@@ -44,6 +44,7 @@
        [dbo].[vSensorLocation] (View)
      Alter
        [dbo].[vSensorDates] (View)
+       [dbo].[vObservationsList] (View)
 
 ** Supporting actions
      Drop
@@ -168,7 +169,6 @@
        [dbo].[vInventoryPhenomenaOfferings] (View)
        [dbo].[vInventoryTotals] (View)
        [dbo].[vInventoryYears] (View)
-       [dbo].[vObservationsList] (View)
        [dbo].[vSensorThingsDatastreams] (View)
 
 If this deployment is executed, changes to [dbo].[vObservation] might introduce run-time errors in [dbo].[vObservationRolesOld].

@@ -1,8 +1,15 @@
-use ObservationsTest
+use Observations
+insert into SchemaColumnType
+  (Name, Description, UserId)
+values
+  ('Latitude','A latitude column',(Select UserID from aspnet_Users where (UserName = 'TimPN'))),
+  ('Longitude','A longitude column',(Select UserID from aspnet_Users where (UserName = 'TimPN'))),
+  ('Elevation','An elevation column, negative for below sea level',(Select UserID from aspnet_Users where (UserName = 'TimPN')))
 Declare @Msg VarChar(100)
 Declare @BatchSize int = 10000
 Declare @BatchNum int
 Declare @Done bit
+Declare @Updated int = 0
 -- Latitude, Longitude
 Set @BatchNum = 1
 Set @Done = 0
@@ -28,7 +35,10 @@ WHILE (@Done = 0)
 	  (Observation.Longitude is null) and (vSensorLocation.Longitude is not null) and
 	  ((vSensorDates.StartDate is null) or (Observation.ValueDate >= vSensorDates.StartDate)) and
 	  ((vSensorDates.EndDate is null) or (Observation.ValueDate <= vSensorDates.EndDate))
-    IF @@ROWCOUNT = 0 Set @Done = 1
+    Set @Updated = @@RowCount 
+	Set @Msg = Convert(VarChar(20), GetDate()) + ' Latitude, Longitude Updated ' + Convert(VarChar(20), @Updated) + ' ' + Convert(VarChar(20), @BatchNum) + ' ' + Convert(VarChar(20), @BatchNum * @BatchSize)
+	RAISERROR(@msg, 0, 1) WITH NOWAIT
+    IF @Updated = 0 Set @Done = 1
 	alter table Observation enable trigger TR_Observation_Update    
     COMMIT TRANSACTION 
 	CheckPoint
@@ -123,10 +133,4 @@ WHILE (@Done = 0)
 	CheckPoint
 	set @BatchNum = @BatchNum + 1
   END 
-insert into SchemaColumnType
-  (Name, Description, UserId)
-values
-  ('Latitude','A latitude column',(Select UserID from aspnet_Users where (UserName = 'TimPN'))),
-  ('Longitude','A longitude column',(Select UserID from aspnet_Users where (UserName = 'TimPN'))),
-  ('Elevation','An elevation column, negative for below sea level',(Select UserID from aspnet_Users where (UserName = 'TimPN')))
 Print 'Done'

@@ -18,11 +18,11 @@
     [RawValue]                   FLOAT (53)       NULL,
     [DataValue]                  FLOAT (53)       NULL,
     [Comment]                    VARCHAR (250)    NULL,
---> Added 2.0.37 20180201 TimPN
+--> Added 2.0.37 20180215 TimPN
     [Latitude] Float Null,
     [Longitude] Float Null,
     [Elevation] Float Null,
---< Added 2.0.37 20180201 TimPN
+--< Added 2.0.37 20180215 TimPN
     [InvalidDateValue]           VARCHAR (50)     NULL,
     [InvalidTimeValue]           VARCHAR (50)     NULL,
     [InvalidOffering]            VARCHAR (50)     NULL,
