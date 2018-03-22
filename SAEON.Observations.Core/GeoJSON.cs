@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -13,9 +14,11 @@ namespace SAEON.Observations.Core.GeoJSON
 
         public List<double> AsList()
         {
-            var result = new List<double>();
-            result.Add(Longitude);
-            result.Add(Latitude);
+            var result = new List<double>
+            {
+                Longitude,
+                Latitude
+            };
             if (Elevation.HasValue)
             {
                 result.Add(Elevation.Value);
@@ -35,7 +38,8 @@ namespace SAEON.Observations.Core.GeoJSON
 
     public class GeoJSONGeometryPoint
     {
-        public string type { get; set; } = "Point";
+        [JsonProperty("type")]
+        public string Type { get; set; } = "Point";
         private GeoJSONCoordinate coordinate;
         [NotMapped]
         public GeoJSONCoordinate Coordinate
@@ -44,36 +48,41 @@ namespace SAEON.Observations.Core.GeoJSON
             set
             {
                 coordinate = value;
-                coordinates = coordinate.AsList();
+                Coordinates = coordinate.AsList();
             }
         }
-        public List<Double> coordinates { get; set; }
+        [JsonProperty("coordinates")]
+        public List<Double> Coordinates { get; set; }
     }
 
     public class GeoJSONFeatureGeometryPoint
     {
-        public string type { get; set; } = "Feature";
-        public GeoJSONGeometryPoint geometry { get; set; } = new GeoJSONGeometryPoint();
+        [JsonProperty("type")]
+        public string Type { get; set; } = "Feature";
+        [JsonProperty("geometry")]
+        public GeoJSONGeometryPoint Geometry { get; set; } = new GeoJSONGeometryPoint();
 
         public GeoJSONFeatureGeometryPoint() { }
         public GeoJSONFeatureGeometryPoint(GeoJSONCoordinate coordinate)
         {
-            geometry.Coordinate = coordinate;
+            Geometry.Coordinate = coordinate;
         }
     }
 
     public class GeoJSONPolygon
     {
-        public string type { get; set; } = "Polygon";
+        [JsonProperty("type")]
+        public string Type { get; set; } = "Polygon";
         [NotMapped]
-        private List<GeoJSONCoordinate> coordinatesList { get; set; } = new List<GeoJSONCoordinate>();
-        public List<string> coordinates { get; set; }
+        private List<GeoJSONCoordinate> CoordinatesList { get; set; } = new List<GeoJSONCoordinate>();
+        [JsonProperty("coordinates")]
+        public List<string> Coordinates { get; set; }
 
         public void AddCoordinate(GeoJSONCoordinate coordinate)
         {
-            coordinatesList.Add(coordinate);
-            coordinates.Clear();
-            coordinates.AddRange(coordinatesList.Select(i => i.ToString()));
+            CoordinatesList.Add(coordinate);
+            Coordinates.Clear();
+            Coordinates.AddRange(CoordinatesList.Select(i => i.ToString()));
         }
     }
 }
