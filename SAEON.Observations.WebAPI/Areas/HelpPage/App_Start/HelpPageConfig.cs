@@ -35,7 +35,6 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
         {
             //// Uncomment the following to use the documentation from XML documentation file.
             //config.SetDocumentationProvider(new XmlDocumentationProvider(HttpContext.Current.Server.MapPath("~/App_Data/XmlDocument.xml")));
-            config.SetDocumentationProvider(new XmlDocumentationProvider(HttpContext.Current.Server.MapPath("~/bin/SAEON.Observations.WebAPI.xml")));
 
             //// Uncomment the following to use "sample string" as the sample for all actions that have string as the body parameter or return type.
             //// Also, the string arrays will be used for IEnumerable<string>. The sample objects will be serialized into different media type 
@@ -73,11 +72,11 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
             //config.SetSampleResponse(new ImageSample("../images/aspNetHome.png"), new MediaTypeHeaderValue("image/png"), "Values", "Get", "id");
 
             //// Uncomment the following to correct the sample request when the action expects an HttpRequestMessage with ObjectContent<string>.
-            //// sample will be generated as if the controller named "Values" and action named "Get" were having string as the body parameter.
+            //// The sample will be generated as if the controller named "Values" and action named "Get" were having string as the body parameter.
             //config.SetActualRequestType(typeof(string), "Values", "Get");
 
             //// Uncomment the following to correct the sample response when the action returns an HttpResponseMessage with ObjectContent<string>.
-            //// sample will be generated as if the controller named "Values" and action named "Post" were returning a string.
+            //// The sample will be generated as if the controller named "Values" and action named "Post" were returning a string.
             //config.SetActualResponseType(typeof(string), "Values", "Post");
         }
 

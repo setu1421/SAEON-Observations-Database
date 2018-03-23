@@ -13,6 +13,11 @@ CREATE TABLE [dbo].[Sensor] (
     [PhenomenonID] UNIQUEIDENTIFIER NOT NULL,
     [DataSourceID] UNIQUEIDENTIFIER NOT NULL,
     [DataSchemaID] UNIQUEIDENTIFIER NULL,
+--> Added 2.0.37 20180201 TimPN
+    [Latitude] Float Null,
+    [Longitude] Float Null,
+    [Elevation] Float Null,
+--< Added 2.0.37 20180201 TimPN
     [UserId]       UNIQUEIDENTIFIER NOT NULL,
 --> Added 2.0.8 20160718 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Sensor_AddedAt] DEFAULT GetDate(), 
@@ -57,6 +62,14 @@ CREATE INDEX [IX_Sensor_DataSchemaID] ON [dbo].[Sensor] ([DataSchemaID])
 GO
 CREATE INDEX [IX_Sensor_UserId] ON [dbo].[Sensor] ([UserId])
 --< Added 2.0.1 20160406 TimPN
+--> Added 2.0.37 20180201 TimPN
+GO
+CREATE INDEX [IX_Sensor_Latitude] ON [dbo].[Sensor] ([Latitude])
+GO
+CREATE INDEX [IX_Sensor_Longitude] ON [dbo].[Sensor] ([Longitude])
+GO
+CREATE INDEX [IX_Sensor_Elevation] ON [dbo].[Sensor] ([Elevation])
+--< Added 2.0.37 20180201 TimPN
 --> Added 2.0.8 20160718 TimPN
 --> Changed 2.0.15 20161102 TimPN
 GO

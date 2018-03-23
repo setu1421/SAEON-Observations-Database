@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
-using System.Web.Mvc;
 
 namespace SAEON.Observations.Core.Entities
 {
@@ -31,6 +32,7 @@ namespace SAEON.Observations.Core.Entities
     /// <summary>
     /// Instrument entity
     /// </summary>
+    [Table("Instrument")]
     public class Instrument : BaseEntity
     {
         /// <summary>
@@ -72,18 +74,33 @@ namespace SAEON.Observations.Core.Entities
 
         // Navigation
         /// <summary>
-        /// Stations linked to this Instrument
+        /// The Organisations linked to this Instrument
         /// </summary>
-        public List<Station> Stations { get; set; }
+        //public List<Organisation> Organisations { get; set; }
+        public List<OrganisationInstrument> OrganisationInstruments { get; set; }
+
         /// <summary>
         /// Sensors linked to this Instrument
         /// </summary>
-        public List<Sensor> Sensors { get; set; }
+        //public List<Sensor> Sensors { get; set; }
+        public List<InstrumentSensor> InstrumentSensors { get; set; }
+
+        /// <summary>
+        /// Stations linked to this Instrument
+        /// </summary>
+        //public List<Station> Stations { get; set; }
+        public List<StationInstrument> StationInstruments { get; set; }
+        /// <summary>
+        /// Sensors linked to this Instrument
+        /// </summary>
+        //public List<Sensor> Sensors { get; set; }
+
     }
 
     /// <summary>
     /// Offering entity
     /// </summary>
+    [Table("Offering")]
     public class Offering : BaseEntity
     {
         /// <summary>
@@ -100,18 +117,20 @@ namespace SAEON.Observations.Core.Entities
 
         // Navigation
         /// <summary>
-        /// Phenomena of this Offering
-        /// </summary>
-        public List<Phenomenon> Phenomena { get; set; }
-        /// <summary>
         /// PhenomenaOfferings of this Offering
         /// </summary>
         public List<PhenomenonOffering> PhenomenaOfferings { get; set; }
+        /// <summary>
+        /// Phenomena of this Offering
+        /// </summary>
+        [NotMapped]
+        public List<Phenomenon> Phenomena { get { return PhenomenaOfferings.Select(i => i.Phenomenon).ToList(); } }
     }
 
     /// <summary>
     /// Organisation entity
     /// </summary>
+    [Table("Organisation")]
     public class Organisation : BaseEntity
     {
         /// <summary>
@@ -135,14 +154,26 @@ namespace SAEON.Observations.Core.Entities
         // Navigation
 
         /// <summary>
+        /// The Instruments linked to this Organisation
+        /// </summary>
+        //public List<Instrument> Instruments { get; set; }
+        public List<OrganisationInstrument> OrganisationInstruments { get; set; }
+        /// <summary>
         /// The Sites linked to this Organisation
         /// </summary>
-        public List<Site> Sites { get; set; }
+        //public List<Site> Sites { get; set; }
+        public List<OrganisationSite> OrganisationSites { get; set; }
+        /// <summary>
+        /// The Stations linked to this Organisation
+        /// </summary>
+        //public List<Station> Stations { get; set; }
+        public List<OrganisationStation> OrganisationStations { get; set; }
     }
 
     /// <summary>
     /// Phenomenon entity
     /// </summary>
+    [Table("Phenomenon")]
     public class Phenomenon : BaseEntity
     {
         /// <summary>
@@ -164,7 +195,7 @@ namespace SAEON.Observations.Core.Entities
         public string Url { get; set; }
 
         //public bool HasOfferings { get { return Offerings?.Any() ?? false; } }
-        //public bool HasUnitsOfMeasure { get { return UnitsOfMeasure?.Any() ?? false; } }
+        //public bool HasUnits { get { return Units.Any() ?? false; } }
 
         // Navigation
 
@@ -173,41 +204,164 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
         /// <summary>
+        /// PhenomenonUnits linked to this Phenomenon
+        /// </summary>
+        public List<PhenomenonUnit> PhenomenonUnits { get; set; }
+        /// <summary>
         /// Sensors linked to this Phenomenon
         /// </summary>
         public List<Sensor> Sensors { get; set; }
-        /// <summary>
-        /// Offerings of this Phenomenon
-        /// </summary>
-        //public List<Offering> Offerings { get; set; }
-        public List<Offering> Offerings { get { return PhenomenonOfferings?.Where(i => i.PhenomenonId == Id).Select(i => i.Offering).ToList(); } }
-        /// <summary>
-        /// UnitsOfMeasure of the Phenomenon
-        /// </summary>
-        public List<UnitOfMeasure> UnitsOfMeasure { get; set; }
     }
 
+    /// <summary>
+    /// PhenomenonOffering entity
+    /// </summary>
+    [Table("PhenomenonOffering")]
     public class PhenomenonOffering
     {
-        //[Required]
+        [Required]
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [ScaffoldColumn(false), HiddenInput]
         public Guid Id { get; set; }
+        [Required]
         public Guid PhenomenonId { get; set; }
-        public Phenomenon Phenomenon { get; set; }
+        [Required]
         public Guid OfferingId { get; set; }
-        public Offering Offering { get; set; }
+
         // Navigation
-        ///// <summary>
-        ///// Offerings of this Phenomenon
-        ///// </summary>
-        //public List<Offering> Offerings { get; set; }
+        /// <summary>
+        /// Phenomenon of this PhenomenonOffering
+        /// </summary>
+        public Phenomenon Phenomenon { get; set; }
+        /// <summary>
+        /// Offering of this PhenomenonOffering
+        /// </summary>
+        public Offering Offering { get; set; }
+    }
+
+    /// <summary>
+    /// PhenomenonUnit entity
+    /// </summary>
+    [Table("PhenomenonUOM")]
+    public class PhenomenonUnit
+    {
+        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ScaffoldColumn(false), HiddenInput]
+        public Guid Id { get; set; }
+        [Required]
+        public Guid PhenomenonId { get; set; }
+        [Required, Column("UnitOfMeasureID")]
+        public Guid UnitId { get; set; }
+        // Navigation
+        /// <summary>
+        /// Phenomenon of this PhenomenonUnit
+        /// </summary>
+        public Phenomenon Phenomenon { get; set; }
+        /// <summary>
+        /// Unit of this PhenomenonUnit
+        /// </summary>
+        public Unit Unit { get; set; }
+    }
+
+    /// <summary>
+    /// Programme entity
+    /// </summary>
+    [Table("Programme")]
+    public class Programme : BaseEntity
+    {
+        /// <summary>
+        /// Code of the Programme
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// <summary>
+        /// Description of the Programme
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Programme
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+        /// <summary>
+        /// StartDate of the Programme, null means always
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+        /// <summary>
+        /// EndDate of the Programme, null means always
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+
+        //public bool HasStations { get { return Stations?.Any() ?? false; } }
+        // Navigation
+
+        /// <summary>
+        /// The Projects linked to this Programme
+        /// </summary>
+        public List<Project> Projects { get; set; }
+    }
+
+    /// <summary>
+    /// Project entity
+    /// </summary>
+    [Table("Project")]
+    public class Project : BaseEntity
+    {
+        /// <summary>
+        /// The Programme of the Project
+        /// </summary>
+        [Required]
+        public Guid ProgrammeId { get; set; }
+
+        /// <summary>
+        /// Code of the Project
+        /// </summary>
+        [Required, StringLength(50)]
+        public string Code { get; set; }
+        /// <summary>
+        /// <summary>
+        /// Description of the Project
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Project
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+        /// <summary>
+        /// StartDate of the Project, null means always
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+        /// <summary>
+        /// EndDate of the Project, null means always
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+
+        //public bool HasStations { get { return Stations?.Any() ?? false; } }
+        // Navigation
+
+        /// <summary>
+        /// The Programme of the Project
+        /// </summary>
+        public Programme Programme { get; set; }
+
+        /// <summary>
+        /// The Stations linked to this Project
+        /// </summary>
+        //public List<Station> Stations { get; set; }
+        public List<ProjectStation> ProjectStations { get; set; }
     }
 
     /// <summary>
     /// Sensor entity
     /// </summary>
+    [Table("Sensor")]
     public class Sensor : BaseEntity
     {
         /// <summary>
@@ -235,7 +389,8 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Instruments linked to this Sensor
         /// </summary>
-        public List<Instrument> Instruments { get; set; }
+        //public List<Instrument> Instruments { get; set; }
+        public List<InstrumentSensor> InstrumentSensors { get; set; }
         /// <summary>
         /// Phenomenon of the Sensor
         /// </summary>
@@ -245,6 +400,7 @@ namespace SAEON.Observations.Core.Entities
     /// <summary>
     /// Site entity
     /// </summary>
+    [Table("Site")]
     public class Site : BaseEntity
     {
         /// <summary>
@@ -275,10 +431,14 @@ namespace SAEON.Observations.Core.Entities
         //public bool HasStations { get { return Stations?.Any() ?? false; } }
         // Navigation
 
+
         /// <summary>
         /// The Organisations linked to this Site
         /// </summary>
-        public List<Organisation> Organisations { get; set; }
+        //public List<Organisation> Organisations { get; set; }
+        public List<Organisation> Organisations { get { return OrganisationSites?.Select(i => i.Organisation).ToList(); } }
+        [NotMapped]
+        public List<OrganisationSite> OrganisationSites { get; set; }
         /// <summary>
         /// The Stations linked to this Site
         /// </summary>
@@ -288,6 +448,7 @@ namespace SAEON.Observations.Core.Entities
     /// <summary>
     /// Station entity
     /// </summary>
+    [Table("Station")]
     public class Station : BaseEntity
     {
         /// <summary>
@@ -341,27 +502,48 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Instruments linked to this Station
         /// </summary>
-        public List<Instrument> Instruments { get; set; }
+        //public List<Instrument> Instruments { get; set; }
+        public List<Instrument> Instruments { get { return StationInstruments?.Select(i => i.Instrument).ToList(); } }
+        public List<StationInstrument> StationInstruments { get; set; }
+        /// <summary>
+        /// The Projects linked to this Station
+        /// </summary>
+        //public List<Project> Projects { get; set; }
+        public List<Project> Projects { get { return ProjectStations?.Select(i => i.Project).ToList(); } }
+        public List<ProjectStation> ProjectStations { get; set; }
+        /// <summary>
+        /// The Organisations linked to this Station
+        /// </summary>
+        //public List<Organisation> Organisations { get; set; }
+        public List<Organisation> Organisations { get { return OrganisationStations?.Select(i => i.Organisation).ToList(); } }
+        public List<OrganisationStation> OrganisationStations { get; set; }
     }
 
     /// <summary>
-    /// UnitOfMeasure Entity
+    /// Unit Entity
     /// </summary>
-    public class UnitOfMeasure : BaseEntity
+    [Table("UnitOfMeasure")]
+    public class Unit : BaseEntity
     {
         /// <summary>
         /// Symbol of the Entity
         /// </summary>
-        [Required, StringLength(20)]
+        [Required, StringLength(20), Column("UnitSymbol")]
         public string Symbol { get; set; }
 
         // Navigation
         /// <summary>
-        /// Phenomena of this UnitOfMeasure
+        /// PhenomenaUnits of this Unit
         /// </summary>
-        public List<Phenomenon> Phenomena { get; set; }
+        public List<PhenomenonUnit> PhenomenonUnits { get; set; }
+        /// <summary>
+        /// Phenomena of this Unit
+        /// </summary>
+        [NotMapped]
+        public List<Phenomenon> Phenomena { get { return PhenomenonUnits?.Where(i => i.PhenomenonId == Id).Select(i => i.Phenomenon).ToList(); } }
     }
 
+    /*
     /// <summary>
     /// UserDownload entity
     /// </summary>
@@ -432,7 +614,65 @@ namespace SAEON.Observations.Core.Entities
         [StringLength(128), ScaffoldColumn(false)]
         public string UpdatedBy { get; set; }
     }
+    */
 
+    //> Remove later once we have proper many to many in Entity Framework Core
+    [Table("Instrument_Sensor")]
+    public class InstrumentSensor
+    {
+        public Guid InstrumentId { get; set; }
+        public Instrument Instrument { get; set; }
+        public Guid SensorId { get; set; }
+        public Sensor Sensor { get; set; }
+    }
+
+    [Table("Organisation_Instrument")]
+    public class OrganisationInstrument
+    {
+        public Guid OrganisationId { get; set; }
+        public Organisation Organisation { get; set; }
+        public Guid InstrumentId { get; set; }
+        public Instrument Instrument { get; set; }
+    }
+
+    [Table("Organisation_Site")]
+    public class OrganisationSite
+    {
+        public Guid OrganisationId { get; set; }
+        public Organisation Organisation { get; set; }
+        public Guid SiteId { get; set; }
+        public Site Site { get; set; }
+    }
+
+    [Table("Organisation_Station")]
+    public class OrganisationStation
+    {
+        public Guid OrganisationId { get; set; }
+        public Organisation Organisation { get; set; }
+        public Guid StationId { get; set; }
+        public Station Station { get; set; }
+    }
+
+    [Table("Project_Station")]
+    public class ProjectStation
+    {
+        public Guid ProjectId { get; set; }
+        public Project Project { get; set; }
+        public Guid StationId { get; set; }
+        public Station Station { get; set; }
+    }
+
+    [Table("Station_Instrument")]
+    public class StationInstrument
+    {
+        public Guid StationId { get; set; }
+        public Station Station { get; set; }
+        public Guid InstrumentId { get; set; }
+        public Instrument Instrument { get; set; }
+    }
+    //< Remove later once we have proper many to many in Entity Framework Core
+
+    /*
     public class vApiDataBase
     {
         [Key]
@@ -627,96 +867,237 @@ namespace SAEON.Observations.Core.Entities
         public string Symbol { get; set; }
         public string Url { get; set; }
     }
+    */
 
     public class ObservationsDbContext : DbContext
     {
-        public ObservationsDbContext() : base("Observations")
+        //public ObservationsDbContext() : base("Observations")
+        //{
+        //    Configuration.ProxyCreationEnabled = false;
+        //    Configuration.LazyLoadingEnabled = false;
+        //    //Database.Log = Console.Write;
+        //}
+        public ObservationsDbContext(DbContextOptions<ObservationsDbContext> options)
+            : base(options)
         {
-            Configuration.ProxyCreationEnabled = false;
-            Configuration.LazyLoadingEnabled = false;
-            //Database.Log = Console.Write;
         }
 
         public DbSet<Instrument> Instruments { get; set; }
-        public DbSet<InventoryTotal> InventoryTotals { get; set; }
-        public DbSet<InventoryStation> InventoryStations { get; set; }
-        public DbSet<InventoryInstrument> InventoryInstruments { get; set; }
-        public DbSet<InventoryPhenomenonOffering> InventoryPhenomenaOfferings { get; set; }
-        public DbSet<InventoryYear> InventoryYears { get; set; }
-        public DbSet<InventoryOrganisation> InventoryOrganisations { get; set; }
+        //public DbSet<InventoryTotal> InventoryTotals { get; set; }
+        //public DbSet<InventoryStation> InventoryStations { get; set; }
+        //public DbSet<InventoryInstrument> InventoryInstruments { get; set; }
+        //public DbSet<InventoryPhenomenonOffering> InventoryPhenomenaOfferings { get; set; }
+        //public DbSet<InventoryYear> InventoryYears { get; set; }
+        //public DbSet<InventoryOrganisation> InventoryOrganisations { get; set; }
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }
         public DbSet<PhenomenonOffering> PhenomenonOfferings { get; set; }
+        public DbSet<PhenomenonUnit> PhenomenonUnits { get; set; }
+        public DbSet<Programme> Programmes { get; set; }
+        public DbSet<Project> Projects { get; set; }
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Station> Stations { get; set; }
-        public DbSet<UnitOfMeasure> UnitOfMeasures { get; set; }
-        public DbSet<UserDownload> UserDownloads { get; set; }
-        public DbSet<UserQuery> UserQueries { get; set; }
-        public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
-        public DbSet<vApiDataQuery> vApiDataQueries { get; set; }
-        public DbSet<vApiInventory> vApiInventory { get; set; }
-        public DbSet<vApiSpacialCoverage> vApiSpacialCoverages { get; set; }
-        public DbSet<vApiTemporalCoverage> vApiTemporalCoverages { get; set; }
-        public DbSet<vSensorThingsDatastream> vSensorThingsDatastreams { get; set; }
+        public DbSet<Unit> Units { get; set; }
+        //public DbSet<UserDownload> UserDownloads { get; set; }
+        //public DbSet<UserQuery> UserQueries { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        //public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
+        //public DbSet<vApiDataQuery> vApiDataQueries { get; set; }
+        //public DbSet<vApiInventory> vApiInventory { get; set; }
+        //public DbSet<vApiSpacialCoverage> vApiSpacialCoverages { get; set; }
+        //public DbSet<vApiTemporalCoverage> vApiTemporalCoverages { get; set; }
+        //public DbSet<vSensorThingsDatastream> vSensorThingsDatastreams { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            modelBuilder.Entity<Organisation>()
-                .HasMany<Site>(l => l.Sites)
-                .WithMany(r => r.Organisations)
-                .Map(cs =>
-                {
-                    cs.MapLeftKey("OrganisationID");
-                    cs.MapRightKey("SiteID");
-                    cs.ToTable("Organisation_Site");
-                });
-            modelBuilder.Entity<Station>()
-                .HasMany<Instrument>(l => l.Instruments)
-                .WithMany(r => r.Stations)
-                .Map(cs =>
-                {
-                    cs.MapLeftKey("StationID");
-                    cs.MapRightKey("InstrumentID");
-                    cs.ToTable("Station_Instrument");
-                });
-            modelBuilder.Entity<Instrument>()
-                .HasMany<Sensor>(l => l.Sensors)
-                .WithMany(r => r.Instruments)
-                .Map(cs =>
-                {
-                    cs.MapLeftKey("InstrumentID");
-                    cs.MapRightKey("SensorID");
-                    cs.ToTable("Instrument_Sensor");
-                });
-            modelBuilder.Entity<Phenomenon>().ToTable("Phenomenon");
-            //modelBuilder.Entity<Phenomenon>()
-            //    .HasMany<Offering>(l => l.Offerings)
-            //    .WithMany(r => r.Phenomena)
-            //    .Map(cs =>
-            //    {
-            //        cs.MapLeftKey("PhenomenonID");
-            //        cs.MapRightKey("OfferingID");
-            //        cs.ToTable("PhenomenonOffering");
-            //    });
-            modelBuilder.Entity<UnitOfMeasure>().ToTable("UnitOfMeasure");
-            modelBuilder.Entity<UnitOfMeasure>().Property(p => p.Name).HasColumnName("Unit");
-            modelBuilder.Entity<UnitOfMeasure>().Property(p => p.Symbol).HasColumnName("UnitSymbol");
-            modelBuilder.Entity<Phenomenon>()
-                .HasMany<UnitOfMeasure>(l => l.UnitsOfMeasure)
-                .WithMany(r => r.Phenomena)
-                .Map(cs =>
-                {
-                    cs.MapLeftKey("PhenomenonID");
-                    cs.MapRightKey("UnitOfMeasureID");
-                    cs.ToTable("PhenomenonUOM");
-                });
-            modelBuilder.Entity<UserDownload>().ToTable("UserDownloads");
-            modelBuilder.Entity<UserQuery>().ToTable("UserQueries");
+
+            modelBuilder.Entity<Unit>().Property(p => p.Name).HasColumnName("Unit");
+
+            //> Remove later once we have proper many to many in Entity Framework Core
+            modelBuilder.Entity<InstrumentSensor>().HasKey(i => new { i.InstrumentId, i.SensorId });
+            modelBuilder.Entity<InstrumentSensor>()
+                .HasOne(i => i.Instrument)
+                .WithMany(i => i.InstrumentSensors)
+                .HasForeignKey(i => i.InstrumentId);
+            modelBuilder.Entity<InstrumentSensor>()
+                .HasOne(i => i.Sensor)
+                .WithMany(i => i.InstrumentSensors)
+                .HasForeignKey(i => i.SensorId);
+
+            modelBuilder.Entity<OrganisationInstrument>().HasKey(i => new { i.OrganisationId, i.InstrumentId });
+            modelBuilder.Entity<OrganisationInstrument>()
+                .HasOne(i => i.Organisation)
+                .WithMany(i => i.OrganisationInstruments)
+                .HasForeignKey(i => i.OrganisationId);
+            modelBuilder.Entity<OrganisationInstrument>()
+                .HasOne(i => i.Instrument)
+                .WithMany(i => i.OrganisationInstruments)
+                .HasForeignKey(i => i.InstrumentId);
+
+            modelBuilder.Entity<OrganisationSite>().HasKey(i => new { i.OrganisationId, i.SiteId });
+            modelBuilder.Entity<OrganisationSite>()
+                .HasOne(i => i.Organisation)
+                .WithMany(i => i.OrganisationSites)
+                .HasForeignKey(i => i.OrganisationId);
+            modelBuilder.Entity<OrganisationSite>()
+                .HasOne(i => i.Site)
+                .WithMany(i => i.OrganisationSites)
+                .HasForeignKey(i => i.SiteId); 
+
+            modelBuilder.Entity<OrganisationStation>().HasKey(i => new { i.OrganisationId, i.StationId });
+            modelBuilder.Entity<OrganisationStation>()
+                .HasOne(i => i.Organisation)
+                .WithMany(i => i.OrganisationStations)
+                .HasForeignKey(i => i.OrganisationId);
+            modelBuilder.Entity<OrganisationStation>()
+                .HasOne(i => i.Station)
+                .WithMany(i => i.OrganisationStations)
+                .HasForeignKey(i => i.StationId);
+
+            modelBuilder.Entity<ProjectStation>().HasKey(i => new { i.ProjectId, i.StationId });
+            modelBuilder.Entity<ProjectStation>()
+                .HasOne(i => i.Project)
+                .WithMany(i => i.ProjectStations)
+                .HasForeignKey(i => i.ProjectId);
+            modelBuilder.Entity<ProjectStation>()
+                .HasOne(i => i.Station)
+                .WithMany(i => i.ProjectStations)
+                .HasForeignKey(i => i.StationId);
+
+            modelBuilder.Entity<StationInstrument>().HasKey(i => new { i.StationId, i.InstrumentId });
+            modelBuilder.Entity<StationInstrument>()
+                .HasOne(i => i.Station)
+                .WithMany(s => s.StationInstruments)
+                .HasForeignKey(i => i.StationId);
+            modelBuilder.Entity<StationInstrument>()
+                .HasOne(i => i.Instrument)
+                .WithMany(i => i.StationInstruments)
+                .HasForeignKey(i => i.InstrumentId);
+            //< Remove later once we have proper many to many in Entity Framework Core
+
+
+
+            //    modelBuilder.Entity<Organisation>()
+            //        .HasMany<Site>(l => l.Sites)
+            //        .WithMany(r => r.Organisations)
+            //        .Map(cs =>
+            //        {
+            //            cs.MapLeftKey("OrganisationID");
+            //            cs.MapRightKey("SiteID");
+            //            cs.ToTable("Organisation_Site");
+            //        });
+            //    modelBuilder.Entity<Station>()
+            //        .HasMany<Instrument>(l => l.Instruments)
+            //        .WithMany(r => r.Stations)
+            //        .Map(cs =>
+            //        {
+            //            cs.MapLeftKey("StationID");
+            //            cs.MapRightKey("InstrumentID");
+            //            cs.ToTable("Station_Instrument");
+            //        });
+            //    modelBuilder.Entity<Instrument>()
+            //        .HasMany<Sensor>(l => l.Sensors)
+            //        .WithMany(r => r.Instruments)
+            //        .Map(cs =>
+            //        {
+            //            cs.MapLeftKey("InstrumentID");
+            //            cs.MapRightKey("SensorID");
+            //            cs.ToTable("Instrument_Sensor");
+            //        });
+            //    modelBuilder.Entity<Phenomenon>().ToTable("Phenomenon");
+            //    //modelBuilder.Entity<Phenomenon>()
+            //    //    .HasMany<Offering>(l => l.Offerings)
+            //    //    .WithMany(r => r.Phenomena)
+            //    //    .Map(cs =>
+            //    //    {
+            //    //        cs.MapLeftKey("PhenomenonID");
+            //    //        cs.MapRightKey("OfferingID");
+            //    //        cs.ToTable("PhenomenonOffering");
+            //    //    });
+            //    modelBuilder.Entity<UnitOfMeasure>().ToTable("UnitOfMeasure");
+            //    modelBuilder.Entity<UnitOfMeasure>().Property(p => p.Name).HasColumnName("Unit");
+            //    modelBuilder.Entity<UnitOfMeasure>().Property(p => p.Symbol).HasColumnName("UnitSymbol");
+            //    modelBuilder.Entity<Phenomenon>()
+            //        .HasMany<UnitOfMeasure>(l => l.UnitsOfMeasure)
+            //        .WithMany(r => r.Phenomena)
+            //        .Map(cs =>
+            //        {
+            //            cs.MapLeftKey("PhenomenonID");
+            //            cs.MapRightKey("UnitOfMeasureID");
+            //            cs.ToTable("PhenomenonUOM");
+            //        });
+            //    modelBuilder.Entity<UserDownload>().ToTable("UserDownloads");
+            //    modelBuilder.Entity<UserQuery>().ToTable("UserQueries");
+
+            //    modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.RemovePluralizingTableNameConvention();
         }
     }
 
+    public static class ModelBuilderExtensions
+    {
+        public static void RemovePluralizingTableNameConvention(this ModelBuilder modelBuilder)
+        {
+            foreach (IMutableEntityType entity in modelBuilder.Model.GetEntityTypes())
+            {
+                entity.Relational().TableName = entity.DisplayName();
+            }
+        }
+    }
+
+    public class BlogDbContext : DbContext
+    {
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<PostTag> PostTags { get; set; }
+
+        public BlogDbContext(DbContextOptions<BlogDbContext> options)
+            : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PostTag>()
+                .HasKey(t => new { t.PostId, t.TagId });
+
+            modelBuilder.Entity<PostTag>()
+                .HasOne(pt => pt.Post)
+                .WithMany(p => p.PostTags)
+                .HasForeignKey(pt => pt.PostId);
+
+            modelBuilder.Entity<PostTag>()
+                .HasOne(pt => pt.Tag)
+                .WithMany(t => t.PostTags)
+                .HasForeignKey(pt => pt.TagId);
+        }
+    }
+
+    public class Post
+    {
+        public int PostId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+
+        public List<PostTag> PostTags { get; set; }
+    }
+
+    public class Tag
+    {
+        public string TagId { get; set; }
+
+        public List<PostTag> PostTags { get; set; }
+    }
+
+    public class PostTag
+    {
+        public int PostId { get; set; }
+        public Post Post { get; set; }
+
+        public string TagId { get; set; }
+        public Tag Tag { get; set; }
+    }
 }

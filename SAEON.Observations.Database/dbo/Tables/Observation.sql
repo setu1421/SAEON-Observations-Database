@@ -49,6 +49,10 @@
 --> Added 2.0.15 20161024 TimPN
     [CorrelationID] UNIQUEIDENTIFIER NULL,
 --< Added 2.0.15 20161024 TimPN
+--> Added 2.0.37 20180201 TimPN
+    [Latitude] Float Null,
+    [Longitude] Float Null,
+--< Added 2.0.37 20180201 TimPN
 --> Added 2.0.33 20170628 TimPN
     [Elevation] Float Null,
 --< Added 2.0.33 20170628 TimPN
@@ -192,10 +196,24 @@ CREATE INDEX [IX_Observation_CorrelationID] ON [dbo].[Observation] ([Correlation
 --GO
 --CREATE INDEX [IX_Observation_SensorIDPhenomenonOfferingID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID]) ON [Observations];
 --< Added 2.0.30 20170329 TimPN
+--> Added 2.0.37 20180201 TimPN
+GO
+CREATE INDEX [IX_Observation_Latitude] ON [dbo].[Observation] ([Latitude]) ON [Observations];
+GO
+CREATE INDEX [IX_Observation_Longitude] ON [dbo].[Observation] ([Longitude]) ON [Observations];
+--< Added 2.0.37 20180201 TimPN
 --> Added 2.0.33 20170628 TimPN
 GO
 CREATE INDEX [IX_Observation_Elevation] ON [dbo].[Observation] ([Elevation]) ON [Observations];
 --< Added 2.0.33 20170628 TimPN
+--> Added 2.0.37 20180208 TimPN
+GO
+CREATE INDEX [IX_Observation_SensorID_ValueDate_Latitude] on [dbo].[Observation] ([SensorID],[ValueDate],[Latitude]) ON [Observations];
+GO
+CREATE INDEX [IX_Observation_SensorID_ValueDate_Longitude] on [dbo].[Observation] ([SensorID],[ValueDate],[Longitude]) ON [Observations];
+GO
+CREATE INDEX [IX_Observation_SensorID_ValueDate_Elevation] on [dbo].[Observation] ([SensorID],[ValueDate],[Elevation]) ON [Observations];
+--< Added 2.0.37 20180208 TimPN
 --> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]

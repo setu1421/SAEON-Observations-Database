@@ -140,9 +140,9 @@
                                         <ext:Column Header="Name" DataIndex="Name" Width="300" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="500" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
-                                        <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" />
-                                        <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" />
-                                        <ext:Column Header="Elevation" DataIndex="Elevation" Width="70" Groupable="false" />
+                                        <ext:NumberColumn Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" Format="0.000000" />
+                                        <ext:NumberColumn Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" Format="0.000000" />
+                                        <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="70" Groupable="false" Format="0.000" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="200" />
@@ -321,9 +321,9 @@
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="StationCode" Width="200" />
                                                 <ext:Column Header="Name" DataIndex="StationName" Width="500" />
-                                                <ext:Column Header="Latitude" DataIndex="Latitude" Width="70" />
-                                                <ext:Column Header="Longitude" DataIndex="Longitude" Width="70" />
-                                                <ext:Column Header="Elevation" DataIndex="Elevation" Width="70" />
+                                                <ext:NumberColumn Header="Latitude" DataIndex="Latitude" Width="70" Format="0.000000" />
+                                                <ext:NumberColumn Header="Longitude" DataIndex="Longitude" Width="70" Format="0.000000" />
+                                                <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="70" Format="0.000" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="150">
@@ -488,21 +488,21 @@
                         <Items>
                             <ext:Container ID="Container8" runat="server" Layout="Form" ColumnWidth=".32">
                                 <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLatitude" DataIndex="Latitude"
-                                        MaxLength="150" runat="server" FieldLabel="Latitude" AnchorHorizontal="98%">
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLatitude" DataIndex="Latitude" TrimTrailedZeros="false"
+                                        MaxLength="15" runat="server" FieldLabel="Latitude" AnchorHorizontal="98%">
                                     </ext:NumberField>
                                 </Items>
                             </ext:Container>
                             <ext:Container ID="Container9" runat="server" Layout="Form" ColumnWidth=".32">
                                 <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLongitude" DataIndex="Longitude"
-                                        MaxLength="150" runat="server" FieldLabel="Longitude" AnchorHorizontal="98%">
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfLongitude" DataIndex="Longitude" TrimTrailedZeros="false"
+                                        MaxLength="15" runat="server" FieldLabel="Longitude" AnchorHorizontal="98%">
                                     </ext:NumberField>
                                 </Items>
                             </ext:Container>
                             <ext:Container ID="Container10" runat="server" Layout="Form" ColumnWidth=".32">
                                 <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="2" ID="nfElevation" DataIndex="Elevation" MaxLength="7"
+                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="3" ID="nfElevation" DataIndex="Elevation" MaxLength="15" TrimTrailedZeros="false"
                                         runat="server" FieldLabel="Elevation" AnchorHorizontal="100%">
                                     </ext:NumberField>
                                 </Items>
@@ -518,14 +518,14 @@
                             <ext:Container ID="Container3" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
                                     <ext:DateField ID="dfStartDate" DataIndex="StartDate" runat="server" FieldLabel="Start Date" AnchorHorizontal="98%"
-                                        BlankText="Start Date is required." Format="dd MMM yyyy" ClientIDMode="Static">
+                                        Format="dd MMM yyyy" ClientIDMode="Static">
                                     </ext:DateField>
                                 </Items>
                             </ext:Container>
                             <ext:Container ID="Container2" runat="server" Layout="Form" ColumnWidth=".48">
                                 <Items>
                                     <ext:DateField ID="dfEndDate" DataIndex="EndDate" runat="server" FieldLabel="End Date" ColumnWidth=".5" AnchorHorizontal="100%"
-                                        BlankText="End Date is required." Format="dd MMM yyyy" ClientIDMode="Static">
+                                        Format="dd MMM yyyy" ClientIDMode="Static">
                                     </ext:DateField>
                                 </Items>
                             </ext:Container>
@@ -629,14 +629,14 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="StationLinkWindow" runat="server" Width="450" Height="310" Closable="true"
+    <ext:Window ID="StationLinkWindow" runat="server" Width="450" Height="400" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Station" Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
             <Hide Fn="ClearStationLinkForm" />
         </Listeners>
         <Content>
             <ext:FormPanel ID="StationLinkFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right" LabelAlign="Top" Layout="RowLayout" ClientIDMode="Static">
+                MonitorResize="true" Padding="10" ButtonAlign="Right" LabelAlign="Top" Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
                     <ext:Hidden ID="StationLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
@@ -656,45 +656,41 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
-                    <ext:Container ID="Container5" runat="server" Layout="Column" Height="50">
+                    <ext:Panel ID="Panel1" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
-                            <ext:Container ID="Container6" runat="server" Layout="Form" ColumnWidth=".32">
-                                <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfStationLatitude" DataIndex="Latitude"
-                                        MaxLength="150" runat="server" FieldLabel="Latitude" AnchorHorizontal="98%">
-                                    </ext:NumberField>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container7" runat="server" Layout="Form" ColumnWidth=".32">
-                                <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfStationLongitude" DataIndex="Longitude"
-                                        MaxLength="150" runat="server" FieldLabel="Longitude" AnchorHorizontal="98%">
-                                    </ext:NumberField>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container11" runat="server" Layout="Form" ColumnWidth=".32">
-                                <Items>
-                                    <ext:NumberField AllowDecimals="true" DecimalPrecision="2" ID="nfStationElevation" DataIndex="Elevation" MaxLength="7"
-                                        runat="server" FieldLabel="Elevation" AnchorHorizontal="100%">
-                                    </ext:NumberField>
-                                </Items>
-                            </ext:Container>
-                            <ext:Container ID="Container14" runat="server" Layout="Form" ColumnWidth=".04">
-                                <Items>
-                                </Items>
-                            </ext:Container>
+                            <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfStationLatitude" DataIndex="Latitude" TrimTrailedZeros="false"
+                                MaxLength="15" runat="server" FieldLabel="Latitude" AnchorHorizontal="96%">
+                            </ext:NumberField>
                         </Items>
-                    </ext:Container>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel6" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfStationLongitude" DataIndex="Longitude" TrimTrailedZeros="false"
+                                MaxLength="15" runat="server" FieldLabel="Longitude" AnchorHorizontal="96%">
+                            </ext:NumberField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel7" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:NumberField AllowDecimals="true" DecimalPrecision="3" ID="nfStationElevation" DataIndex="Elevation" MaxLength="15" TrimTrailedZeros="false"
+                                runat="server" FieldLabel="Elevation" AnchorHorizontal="96%">
+                            </ext:NumberField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel18" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                        </Items>
+                    </ext:Panel>
                     <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
-                            <ext:DateField ID="dfStationStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
+                            <ext:DateField ID="dfStationStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static" 
                                 FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                     <ext:Panel ID="Panel9" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
-                            <ext:DateField ID="dfStationEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
+                            <ext:DateField ID="dfStationEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static" 
                                 FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>

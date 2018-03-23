@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("South African Environmental Observation Network (SAEON)")]
 [assembly: AssemblyProduct("SAEON Observations Database")]
-[assembly: AssemblyCopyright("Copyright © 2017 South African Environmental Observation Network (SAEON)")]
+[assembly: AssemblyCopyright("Copyright © 2017-2018 South African Environmental Observation Network (SAEON)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

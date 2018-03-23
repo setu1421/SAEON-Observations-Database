@@ -68,18 +68,20 @@ namespace SAEON.Observations.Core.SensorThings
 
     public class UnitOfMeasurement
     {
-        [Required]
-        public string name { get; set; }
-        [Required]
-        public string symbol { get; set; }
-        [Url, Required]
-        public string definition { get; set; }
+        [Required, JsonProperty("name")]
+        public string Name { get; set; }
+        [Required, JsonProperty("symbol")]
+        public string Symbol { get; set; }
+        [Url, Required, JsonProperty("definition")]
+        public string Definition { get; set; }
     }
 
     public class Property
     {
-        public string key { get; set; }
-        public string value { get; set; }
+        [JsonProperty("key")]
+        public string Key { get; set; }
+        [JsonProperty("value")]
+        public string Value { get; set; }
     }
 
     public class PropertyList : List<Property> { }
@@ -88,8 +90,8 @@ namespace SAEON.Observations.Core.SensorThings
 
     public class BaseSensorThingEntity
     {
-        [Key]
-        public Guid id { get; set; }
+        [Key, JsonProperty("id")]
+        public Guid Id { get; set; }
         //[Url, NotMapped]
         //public string SelfLink { get; set; }
         [Url, NotMapped]
@@ -99,26 +101,27 @@ namespace SAEON.Observations.Core.SensorThings
         public virtual void GenerateSensorThingsProperties()
         {
             SensorThingsProperties.Clear();
-            SensorThingsProperties.Add("iot_id", id);
-            SensorThingsProperties.Add("iot_selfLink", $"{SensorThings.BaseUrl}/{GetType().Name}s({id})");
+            SensorThingsProperties.Add("iot_id", Id);
+            SensorThingsProperties.Add("iot_selfLink", $"{SensorThings.BaseUrl}/{GetType().Name}s({Id})");
             foreach (var link in NavigationLinks)
             {
-                SensorThingsProperties.Add($"{link}_iot_navigationLink", $"{GetType().Name}s({id})/{link}");
+                SensorThingsProperties.Add($"{link}_iot_navigationLink", $"{GetType().Name}s({Id})/{link}");
             }
         }
     }
 
     public class BaseNamedSensorThingEntity : BaseSensorThingEntity
     {
-        [Required]
-        public string name { get; set; }
-        [Required]
-        public string description { get; set; }
+        [Required, JsonProperty("name")]
+        public string Name { get; set; }
+        [Required, JsonProperty("description")]
+        public string Description { get; set; }
     }
 
     public class Thing : BaseNamedSensorThingEntity
     {
-        public PropertyList properties { get; set; } = new PropertyList();
+        [JsonProperty("properties")]
+        public PropertyList Properties { get; set; } = new PropertyList();
         //public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
 
         public Thing() : base()
@@ -131,7 +134,7 @@ namespace SAEON.Observations.Core.SensorThings
         public void AddProperty(string key, object value)
         {
             if (value == null) return;
-            properties.Add(new Property { key = key, value = value.ToString() });
+            Properties.Add(new Property { Key = key, Value = value.ToString() });
             //properties.Add(key, value.ToString());
         }
 
@@ -143,15 +146,16 @@ namespace SAEON.Observations.Core.SensorThings
 
     public class Location : BaseNamedSensorThingEntity
     {
-        [Required]
-        public string encodingType { get; private set; } = ValueCodes.GeoJson;
+        [Required, JsonProperty("encodingType")]
+        public string EncodingType { get; private set; } = ValueCodes.GeoJson;
         [NotMapped]
         public double? Elevation { get; set; } = null;
         [NotMapped]
         public GeoJSONCoordinate Coordinate { get; set; } = null;
         [NotMapped]
         public BoundingBox BoundingBox { get; set; }
-        public GeoJSONFeatureGeometryPoint location { get; set; }
+        [JsonProperty("location")]
+        public GeoJSONFeatureGeometryPoint Location_ { get; set; }
 
         public Location() : base()
         {
@@ -164,7 +168,7 @@ namespace SAEON.Observations.Core.SensorThings
             base.GenerateSensorThingsProperties();
             if (Coordinate != null)
             {
-                location = new GeoJSONFeatureGeometryPoint(Coordinate);
+                Location_ = new GeoJSONFeatureGeometryPoint(Coordinate);
             }
         }
 
@@ -180,10 +184,10 @@ namespace SAEON.Observations.Core.SensorThings
         public DateTime Time { get { return _time;
             } set {
                 _time = value;
-                time = value.ToString("o");
+                TimeStr = value.ToString("o");
             } }
-        [Required]
-        public string time { get; set; } = null;
+        [Required, JsonProperty("time")]
+        public string TimeStr { get; set; } = null;
 
         public HistoricalLocation() : base()
         {
@@ -198,16 +202,16 @@ namespace SAEON.Observations.Core.SensorThings
 
     public class Datastream : BaseNamedSensorThingEntity
     {
-        [Required]
-        public UnitOfMeasurement unitOfMeasurement { get; set; }
-        [Required]
-        public string observationType { get; set; }
+        [Required, JsonProperty("unitOfMeasurement")]
+        public UnitOfMeasurement UnitOfMeasurement { get; set; }
+        [Required, JsonProperty("observationType")]
+        public string ObservationType { get; set; }
         [NotMapped]
-        public GeoJSONPolygon observedArea { get; set; }
+        public GeoJSONPolygon ObservedArea { get; set; }
         [NotMapped]
-        public TimeInterval phenomenonTime { get; set; }
+        public TimeInterval PhenomenonTime { get; set; }
         [NotMapped]
-        public TimeInterval resultTime { get; set; }
+        public TimeInterval ResultTime { get; set; }
 
         public Datastream() : base()
         {
@@ -220,13 +224,13 @@ namespace SAEON.Observations.Core.SensorThings
         public override void GenerateSensorThingsProperties()
         {
             base.GenerateSensorThingsProperties();
-            if (phenomenonTime != null)
+            if (PhenomenonTime != null)
             {
-                SensorThingsProperties.Add("phenomenonTime", phenomenonTime.ToString());
+                SensorThingsProperties.Add("phenomenonTime", PhenomenonTime.ToString());
             }
-            if (resultTime != null)
+            if (ResultTime != null)
             {
-                SensorThingsProperties.Add("resultTime", resultTime.ToString());
+                SensorThingsProperties.Add("resultTime", ResultTime.ToString());
             }
         }
 
@@ -239,10 +243,10 @@ namespace SAEON.Observations.Core.SensorThings
 
     public class Sensor : BaseNamedSensorThingEntity
     {
-        [Required]
-        public string encodingType { get; set; }
-        [Required]
-        public string metadata { get; set; }
+        [Required, JsonProperty("encodingType")]
+        public string EncodingType { get; set; }
+        [Required, JsonProperty("metadata")]
+        public string Metadata { get; set; }
 
         public Sensor() : base()
         {
@@ -255,8 +259,8 @@ namespace SAEON.Observations.Core.SensorThings
 
     public class ObservedProperty : BaseNamedSensorThingEntity
     {
-        [Required, Url]
-        public string definition { get; set; }
+        [Required, Url, JsonProperty("definition")]
+        public string Definition { get; set; }
 
         public ObservedProperty() : base()
         {
@@ -282,7 +286,7 @@ namespace SAEON.Observations.Core.SensorThings
         public Observation() : base()
         {
             NavigationLinks.Add("Datastream");
-            NavigationLinks.Add("FeatureOfInterest");
+            NavigationLinks.Add("FeatureOfInterest"); 
         }
         // Navigation
         public Datastream Datastream { get; set; }
@@ -291,11 +295,12 @@ namespace SAEON.Observations.Core.SensorThings
 
     public class FeatureOfInterest : BaseNamedSensorThingEntity
     {
-        [Required]
-        public string encodingType { get; private set; } = ValueCodes.GeoJson;
+        [Required, JsonProperty("encodingType")]
+        public string EncodingType { get; private set; } = ValueCodes.GeoJson;
         [NotMapped]
         public GeoJSONCoordinate Coordinate { get; set; } = null;
-        public GeoJSONFeatureGeometryPoint feature { get; set; }
+        [JsonProperty("feature")]
+        public GeoJSONFeatureGeometryPoint Feature { get; set; }
 
         public FeatureOfInterest() : base()
         {
@@ -307,7 +312,7 @@ namespace SAEON.Observations.Core.SensorThings
             base.GenerateSensorThingsProperties();
             if (Coordinate != null)
             {
-                feature = new GeoJSONFeatureGeometryPoint(Coordinate);
+                Feature = new GeoJSONFeatureGeometryPoint(Coordinate);
             }
         }
         // Navigation

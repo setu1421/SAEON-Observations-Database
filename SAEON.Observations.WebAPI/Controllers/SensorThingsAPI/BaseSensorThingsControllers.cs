@@ -78,7 +78,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             {
                 try
                 {
-                    return SingleResult.Create(GetQuery(i => (i.id == id)));
+                    return SingleResult.Create(GetQuery(i => (i.Id == id)));
                 }
                 catch (Exception ex)
                 {
@@ -104,7 +104,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             {
                 try
                 {
-                    return SingleResult.Create(GetQuery(i => (i.id == id)).Select(select).Include(include));
+                    return SingleResult.Create(GetQuery(i => (i.Id == id)).Select(select).Include(include));
                 }
                 catch (Exception ex)
                 {
@@ -130,7 +130,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             {
                 try
                 {
-                    return SingleResult.Create(GetQuery(i => (i.id == id)).Select(select).Include(include));
+                    return SingleResult.Create(GetQuery(i => (i.Id == id)).Select(select).Include(include));
                 }
                 catch (Exception ex)
                 {
@@ -156,7 +156,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             {
                 try
                 {
-                    return GetQuery(i => i.id == id).SelectMany(select).Include(include);
+                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include);
                 }
                 catch (Exception ex)
                 {
@@ -182,7 +182,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             {
                 try
                 {
-                    return GetQuery(i => i.id == id).SelectMany(select).Include(include);
+                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include);
                 }
                 catch (Exception ex)
                 {

@@ -132,7 +132,15 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
                 instrument.Save();
                 Auditing.Log(GetType(), new ParameterList {
-                { "ID", instrument.Id }, { "Code", instrument.Code }, { "Name", instrument.Name } });
+                    { "ID", instrument.Id },
+                    { "Code", instrument.Code },
+                    { "Name", instrument.Name },
+                    { "Latitude", instrument?.Latitude},
+                    { "Longitude", instrument?.Longitude },
+                    { "Elevation", instrument?.Elevation },
+                    { "StartDate", instrument?.StartDate },
+                    { "EndDate", instrument?.EndDate}
+                });
 
                 InstrumentsGrid.DataBind();
 

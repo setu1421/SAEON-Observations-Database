@@ -1,15 +1,8 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace SAEON.Observations.Core
 {
@@ -102,8 +95,8 @@ namespace SAEON.Observations.Core
                 const int HashingBase = (int)2166136261;
                 const int HashingMultiplier = 16777619;
                 int hash = HashingBase;
-                hash = (hash * HashingMultiplier) ^ (!Object.ReferenceEquals(null, Name) ? Name.GetHashCode() : 0);
-                hash = (hash * HashingMultiplier) ^ (!Object.ReferenceEquals(null, Status) ? Status.GetHashCode() : 0);
+                hash = (hash * HashingMultiplier) ^ (!(Name is null) ? Name.GetHashCode() : 0);
+                hash = (hash * HashingMultiplier) ^ (!(Status is null) ? Status.GetHashCode() : 0);
                 return hash;
             }
         }
@@ -194,7 +187,7 @@ namespace SAEON.Observations.Core
                 const int HashingBase = (int)2166136261;
                 const int HashingMultiplier = 16777619;
                 int hash = HashingBase;
-                hash = (hash * HashingMultiplier) ^ (!Object.ReferenceEquals(null, Name) ? Name.GetHashCode() : 0);
+                hash = (hash * HashingMultiplier) ^ (!(Name is null) ? Name.GetHashCode() : 0);
                 return hash;
             }
         }
