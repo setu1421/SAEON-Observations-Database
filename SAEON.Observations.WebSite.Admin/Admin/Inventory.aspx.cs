@@ -109,7 +109,7 @@ public partial class Admin_Inventory : System.Web.UI.Page
             return RecordFieldType.Date;
         else if (type == typeof(Int64))
             return RecordFieldType.Float;
-        else if (type == typeof(Double))
+        else if (type == typeof(double))
             return RecordFieldType.Float;
 
         else

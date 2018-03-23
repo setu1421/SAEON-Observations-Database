@@ -159,7 +159,9 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     }
 
     [DirectMethod]
+#pragma warning disable IDE1006 // Naming Styles
     public void cbDataSourceTypeSelect(object sender, DirectEventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
     {
         DataSourceType dsType = new DataSourceType(cbDataSourceType.Value);
         if (dsType.Code == "CSV")
@@ -179,11 +181,11 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         List<string> dataSources = new DataSourceCollection().Where(DataSource.Columns.DataSchemaID, aID).OrderByAsc(DataSource.Columns.Name).Load().Select(ds => ds.Name).ToList();
         List<string> sensors = new SensorCollection().Where(Sensor.Columns.DataSchemaID, aID).OrderByAsc(Sensor.Columns.Name).Load().Select(s => s.Name).ToList();
         if (dataSources.Any() && sensors.Any())
-            MessageBoxes.Error("Error", $"Cannot delete data schema as it is unsed in data source(s) {string.Join(", ", dataSources)} and sensor(s) {string.Join(", ", sensors)}");
+            MessageBoxes.Error("Error", $"Cannot delete data schema as it is used in data source(s) {string.Join(", ", dataSources)} and sensor(s) {string.Join(", ", sensors)}");
         else if (dataSources.Any())
-            MessageBoxes.Error("Error", $"Cannot delete data schema as it is unsed in data source(s) {string.Join(", ", dataSources)}");
+            MessageBoxes.Error("Error", $"Cannot delete data schema as it is used in data source(s) {string.Join(", ", dataSources)}");
         else if (sensors.Any())
-            MessageBoxes.Error("Error", $"Cannot delete data schema as it is unsed in sensor(s) {string.Join(", ", sensors)}");
+            MessageBoxes.Error("Error", $"Cannot delete data schema as it is used in sensor(s) {string.Join(", ", sensors)}");
         else
             MessageBoxes.Confirm(
                 "Confirm Delete",
@@ -291,8 +293,10 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             {
                 RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
                 var masterID = new Guid(masterRow.SelectedRecordID);
-                SchemaColumn schemaColumn = new SchemaColumn(Utilities.MakeGuid(SchemaColumnID.Value));
-                schemaColumn.DataSchemaID = masterID;
+                SchemaColumn schemaColumn = new SchemaColumn(Utilities.MakeGuid(SchemaColumnID.Value))
+                {
+                    DataSchemaID = masterID
+                };
                 SqlQuery qry = new Select(Aggregate.Max(SchemaColumn.Columns.Number))
                     .From(SchemaColumn.Schema)
                     .Where(SchemaColumn.Columns.DataSchemaID).IsEqualTo(masterID);
@@ -316,8 +320,6 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 switch (cbSchemaColumnType.SelectedItem.Text)
                 {
                     case "Date":
-                        schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
-                        break;
                     case "Time":
                         schemaColumn.Format = cbFormat.SelectedItem.Value.Trim();
                         break;
@@ -360,7 +362,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             catch (Exception ex)
             {
                 Logging.Exception(ex);
-                MessageBoxes.Error(ex, "Error", "Unable to  SchemaColumn");
+                MessageBoxes.Error(ex, "Error", "Unable to save SchemaColumn");
             }
         }
     }
@@ -400,7 +402,9 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     }
 
     [DirectMethod]
+#pragma warning disable IDE1006 // Naming Styles
     public void cbPhenomenonSelect(object sender, DirectEventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
     {
         OfferingStore.DataSource = new Select(PhenomenonOffering.IdColumn.QualifiedName + " Id", Phenomenon.NameColumn.QualifiedName + " PhenomenonName", Offering.NameColumn.QualifiedName + " OfferingName")
             .From(PhenomenonOffering.Schema)
@@ -474,14 +478,14 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         switch (cbSchemaColumnType.SelectedItem.Text)
         {
             case "Date":
-                cbFormat.AllowBlank = false;
-                cbFormat.Hidden = false;
-                break;
             case "Time":
                 cbFormat.AllowBlank = false;
                 cbFormat.Hidden = false;
                 break;
             case "Ignore":
+            case "Elevation":
+            case "Latitude":
+            case "Longitude":
                 break;
             case "Offering":
                 cbPhenomenon.Hidden = false;
@@ -509,8 +513,22 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     }
 
     [DirectMethod]
+#pragma warning disable IDE1006 // Naming Styles
     public void cbSchemaColumnTypeSelect(object sender, DirectEventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
     {
+        RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+        var masterID = new Guid(masterRow.SelectedRecordID);
+        SchemaColumnCollection col = new SchemaColumnCollection()
+            .Where(SchemaColumn.Columns.DataSchemaID, masterID)
+            .Where(SchemaColumn.Columns.SchemaColumnTypeID, cbSchemaColumnType.SelectedItem.Value)
+            .Load();
+        if (col.Any())
+        {
+            var colType = new SchemaColumnType(cbSchemaColumnType.SelectedItem.Value);
+            MessageBoxes.Error("Error", $"Schema already has a {colType.Name} column");
+            return;
+        }
         SetFields();
         cbSchemaColumnType.MarkAsValid();
     }
@@ -646,8 +664,10 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         {
             try
             {
-                DataSource dataSource = new DataSource(aID);
-                dataSource.DataSchemaID = null;
+                DataSource dataSource = new DataSource(aID)
+                {
+                    DataSchemaID = null
+                };
                 dataSource.Save();
                 Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
                 DataSourcesGrid.DataBind();
@@ -753,19 +773,21 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                         var oldSchemaCols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, aId).Load();
                         foreach (var oldSchemaCol in oldSchemaCols)
                         {
-                            var newSchemaCol = new SchemaColumn();
-                            newSchemaCol.DataSchemaID = masterID;
-                            newSchemaCol.Number = oldSchemaCol.Number;
-                            newSchemaCol.Name = oldSchemaCol.Name;
-                            newSchemaCol.SchemaColumnTypeID = oldSchemaCol.SchemaColumnTypeID;
-                            newSchemaCol.Width = oldSchemaCol.Width;
-                            newSchemaCol.Format = oldSchemaCol.Format;
-                            newSchemaCol.PhenomenonID = oldSchemaCol.PhenomenonID;
-                            newSchemaCol.PhenomenonOfferingID = oldSchemaCol.PhenomenonOfferingID;
-                            newSchemaCol.PhenomenonUOMID = oldSchemaCol.PhenomenonUOMID;
-                            newSchemaCol.EmptyValue = oldSchemaCol.EmptyValue;
-                            newSchemaCol.FixedTime = oldSchemaCol.FixedTime;
-                            newSchemaCol.UserId = AuthHelper.GetLoggedInUserId;
+                            var newSchemaCol = new SchemaColumn
+                            {
+                                DataSchemaID = masterID,
+                                Number = oldSchemaCol.Number,
+                                Name = oldSchemaCol.Name,
+                                SchemaColumnTypeID = oldSchemaCol.SchemaColumnTypeID,
+                                Width = oldSchemaCol.Width,
+                                Format = oldSchemaCol.Format,
+                                PhenomenonID = oldSchemaCol.PhenomenonID,
+                                PhenomenonOfferingID = oldSchemaCol.PhenomenonOfferingID,
+                                PhenomenonUOMID = oldSchemaCol.PhenomenonUOMID,
+                                EmptyValue = oldSchemaCol.EmptyValue,
+                                FixedTime = oldSchemaCol.FixedTime,
+                                UserId = AuthHelper.GetLoggedInUserId
+                            };
                             newSchemaCol.Save();
                             Auditing.Log(GetType(), new ParameterList {
                                 { "DataSchemaID", newSchemaCol.DataSchemaID },
@@ -850,37 +872,41 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     {
                         var masterID = new Guid(tfSchemaCopyID.Text);
                         var oldSchema = new DataSchema(masterID);
-                        var newSchema = new DataSchema();
-                        newSchema.Code = tfSchemaCopyCode.Text.Trim();
-                        newSchema.Name = tfSchemaCopyName.Text.Trim();
-                        newSchema.Description = tfSchemaCopyDescription.Text.Trim();
-                        newSchema.DataSourceTypeID = oldSchema.DataSourceTypeID;
-                        newSchema.Delimiter = oldSchema.Delimiter;
-                        newSchema.IgnoreFirst = oldSchema.IgnoreFirst;
-                        newSchema.IgnoreLast = oldSchema.IgnoreLast;
-                        newSchema.Condition = oldSchema.Condition;
-                        newSchema.SplitIndex = oldSchema.SplitIndex;
-                        newSchema.SplitSelector = oldSchema.SplitSelector;
-                        newSchema.HasColumnNames = oldSchema.HasColumnNames;
-                        newSchema.UserId = AuthHelper.GetLoggedInUserId;
+                        var newSchema = new DataSchema
+                        {
+                            Code = tfSchemaCopyCode.Text.Trim(),
+                            Name = tfSchemaCopyName.Text.Trim(),
+                            Description = tfSchemaCopyDescription.Text.Trim(),
+                            DataSourceTypeID = oldSchema.DataSourceTypeID,
+                            Delimiter = oldSchema.Delimiter,
+                            IgnoreFirst = oldSchema.IgnoreFirst,
+                            IgnoreLast = oldSchema.IgnoreLast,
+                            Condition = oldSchema.Condition,
+                            SplitIndex = oldSchema.SplitIndex,
+                            SplitSelector = oldSchema.SplitSelector,
+                            HasColumnNames = oldSchema.HasColumnNames,
+                            UserId = AuthHelper.GetLoggedInUserId
+                        };
                         newSchema.Save();
                         Auditing.Log(GetType(), new ParameterList { { "ID", newSchema.Id }, { "Code", newSchema.Code }, { "Name", newSchema.Name } });
                         var oldSchemaCols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, masterID).Load();
                         foreach (var oldSchemaCol in oldSchemaCols)
                         {
-                            var newSchemaCol = new SchemaColumn();
-                            newSchemaCol.DataSchemaID = newSchema.Id;
-                            newSchemaCol.Number = oldSchemaCol.Number;
-                            newSchemaCol.Name = oldSchemaCol.Name;
-                            newSchemaCol.SchemaColumnTypeID = oldSchemaCol.SchemaColumnTypeID;
-                            newSchemaCol.Width = oldSchemaCol.Width;
-                            newSchemaCol.Format = oldSchemaCol.Format;
-                            newSchemaCol.PhenomenonID = oldSchemaCol.PhenomenonID;
-                            newSchemaCol.PhenomenonOfferingID = oldSchemaCol.PhenomenonOfferingID;
-                            newSchemaCol.PhenomenonUOMID = oldSchemaCol.PhenomenonUOMID;
-                            newSchemaCol.EmptyValue = oldSchemaCol.EmptyValue;
-                            newSchemaCol.FixedTime = oldSchemaCol.FixedTime;
-                            newSchemaCol.UserId = AuthHelper.GetLoggedInUserId;
+                            var newSchemaCol = new SchemaColumn
+                            {
+                                DataSchemaID = newSchema.Id,
+                                Number = oldSchemaCol.Number,
+                                Name = oldSchemaCol.Name,
+                                SchemaColumnTypeID = oldSchemaCol.SchemaColumnTypeID,
+                                Width = oldSchemaCol.Width,
+                                Format = oldSchemaCol.Format,
+                                PhenomenonID = oldSchemaCol.PhenomenonID,
+                                PhenomenonOfferingID = oldSchemaCol.PhenomenonOfferingID,
+                                PhenomenonUOMID = oldSchemaCol.PhenomenonUOMID,
+                                EmptyValue = oldSchemaCol.EmptyValue,
+                                FixedTime = oldSchemaCol.FixedTime,
+                                UserId = AuthHelper.GetLoggedInUserId
+                            };
                             newSchemaCol.Save();
                             Auditing.Log(GetType(), new ParameterList {
                                 { "DataSchemaID", newSchemaCol.DataSchemaID },

@@ -83,10 +83,10 @@ public partial class Admin_Stations : System.Web.UI.Page
                 station.Description = tfDescription.Text.Trim();
 
                 //if (!string.IsNullOrEmpty(nfLatitude.Text))
-                //    station.Latitude = Double.Parse(nfLatitude.Text);
+                //    station.Latitude = double.Parse(nfLatitude.Text);
 
                 //if (!string.IsNullOrEmpty(nfLongitude.Text))
-                //    station.Longitude = Double.Parse(nfLongitude.Text);
+                //    station.Longitude = double.Parse(nfLongitude.Text);
 
                 //if (!string.IsNullOrEmpty(nfElevation.Text))
                 //    station.Elevation = Int32.Parse(nfElevation.Text);

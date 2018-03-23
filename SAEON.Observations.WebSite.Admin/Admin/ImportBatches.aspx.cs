@@ -173,7 +173,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                                     if (schval.IsValid)
                                     {
-                                        if (schval.RawValue.HasValue && isDuplicateOfNull(schval, batch.Id))
+                                        if (schval.RawValue.HasValue && IsDuplicateOfNull(schval, batch.Id))
                                         {
                                             if (batch.Status != (int)ImportBatchStatus.DatalogWithErrors)
                                             {
@@ -193,14 +193,19 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                                     DataValue = schval.DataValue,
                                                     PhenomenonOfferingID = schval.PhenomenonOfferingID.Value,
                                                     PhenomenonUOMID = schval.PhenomenonUOMID.Value,
+                                                    Latitude = schval.Latitude,
+                                                    Longitude = schval.Longitude,
+                                                    Elevation = schval.Elevation,
                                                     ImportBatchID = batch.Id,
+                                                    CorrelationID = schval.CorrelationID,
                                                     UserId = AuthHelper.GetLoggedInUserId,
                                                     AddedDate = DateTime.Now
                                                 };
-                                                if (schval.Comment.Length > 0)
+                                                if (string.IsNullOrWhiteSpace(schval.Comment))
+                                                    Obrecord.Comment = null;
+                                                else
                                                     Obrecord.Comment = schval.Comment;
 
-                                                Obrecord.CorrelationID = schval.CorrelationID;
                                                 if (string.IsNullOrWhiteSpace(schval.TextValue))
                                                     Obrecord.TextValue = null;
                                                 else
@@ -257,12 +262,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         else
                                             logrecord.DataValue = schval.DataValue;
 
-                                        if (schval.InValidOffering)
+                                        if (schval.InvalidOffering)
                                             logrecord.InvalidOffering = schval.PhenomenonOfferingID.Value.ToString();
                                         else
                                             logrecord.PhenomenonOfferingID = schval.PhenomenonOfferingID.Value;
 
-                                        if (schval.InValidUOM)
+                                        if (schval.InvalidUOM)
                                             logrecord.InvalidUOM = schval.PhenomenonUOMID.Value.ToString();
                                         else
                                             logrecord.PhenomenonUOMID = schval.PhenomenonUOMID.Value;
@@ -283,6 +288,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         if (schval.Comment.Length > 0)
                                             logrecord.Comment = schval.Comment;
 
+                                        logrecord.Latitude = schval.Latitude;
+                                        logrecord.Longitude = schval.Longitude;
+                                        logrecord.Elevation = schval.Elevation;
                                         logrecord.CorrelationID = schval.CorrelationID;
                                         Logging.Verbose("BatchID: {id} Status: {status} ImportStatus: {importstatus}", batch.Id, logrecord.StatusID, logrecord.ImportStatus);
                                         try
@@ -349,7 +357,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
-    protected bool isDuplicateOfNull(SchemaValue schval, Guid batchid)
+    protected bool IsDuplicateOfNull(SchemaValue schval, Guid batchid)
     {
         SqlQuery q = new Select().From(Observation.Schema)
             .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
@@ -395,7 +403,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         return false;
     }
 
+#pragma warning disable IDE1006 // Naming Styles
     protected void cbOffering_RefreshData(object sender, StoreRefreshDataEventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
     {
         var Id = cbSensor.SelectedItem.Value;
 
@@ -408,7 +418,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         cbOffering.GetStore().DataBind();
     }
 
+#pragma warning disable IDE1006 // Naming Styles
     protected void cbUnitofMeasure_RefreshData(object sender, StoreRefreshDataEventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
     {
         var Id = cbSensor.SelectedItem.Value;
 
@@ -540,8 +552,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     datevalue = datevalue.AddMilliseconds(((TimeSpan)TimeValue.Value).TotalMilliseconds);
 
                 obs.ValueDate = datevalue;
-                obs.RawValue = Double.Parse(RawValue.Value.ToString());
-                obs.DataValue = Double.Parse(DataValue.Value.ToString());
+                obs.RawValue = double.Parse(RawValue.Value.ToString());
+                obs.DataValue = double.Parse(DataValue.Value.ToString());
 
                 obs.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
                 obs.PhenomenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);
@@ -903,6 +915,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     btnClearAll.Disabled = true;
                     try
                     {
+                        Logging.Information("List: {@list}", ObservationRepository.GetPagedListByBatch(e, e.Parameters[GridFiltersObservations.ParamPrefix], Id));
                         ObservationsGridStore.DataSource = ObservationRepository.GetPagedListByBatch(e, e.Parameters[GridFiltersObservations.ParamPrefix], Id);
                         ObservationsGridStore.DataBind();
                         EnableButtons();
