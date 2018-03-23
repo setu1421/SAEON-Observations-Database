@@ -18,13 +18,13 @@ using sos = SAEON.Observations.Core.SensorThings;
 
 namespace SAEON.Observations.WebAPI
 {
-    public class InheritedDirectRouteProvider : DefaultDirectRouteProvider
-    {
-        protected override IReadOnlyList<IDirectRouteFactory> GetActionRouteFactories(HttpActionDescriptor actionDescriptor)
-        {
-            return actionDescriptor.GetCustomAttributes<IDirectRouteFactory>(inherit: true);
-        }
-    }
+    //public class InheritedDirectRouteProvider : DefaultDirectRouteProvider
+    //{
+    //    protected override IReadOnlyList<IDirectRouteFactory> GetActionRouteFactories(HttpActionDescriptor actionDescriptor)
+    //    {
+    //        return actionDescriptor.GetCustomAttributes<IDirectRouteFactory>(inherit: true);
+    //    }
+    //}
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public sealed class ODataRouteNameAttribute : Attribute
@@ -37,53 +37,53 @@ namespace SAEON.Observations.WebAPI
         }
     }
 
-    public class ControllerBoundAttributeRoutingConvention : AttributeRoutingConvention
-    {
-        private readonly List<Type> controllers = new List<Type> { typeof(MetadataController) };
+    //public class ControllerBoundAttributeRoutingConvention : AttributeRoutingConvention
+    //{
+    //    private readonly List<Type> controllers = new List<Type> { typeof(MetadataController) };
 
-        public ControllerBoundAttributeRoutingConvention(string routeName, HttpConfiguration config, IEnumerable<Type> controllers) : base(routeName, config)
-        {
-            //using (Logging.MethodCall(GetType(), new ParameterList { { "routeName", routeName } }))
-            {
-                this.controllers.AddRange(controllers);
-                //Logging.Verbose("RouteName: {routeName} Controllers: {controllers}", routeName, controllers.OrderBy(i => i.FullName).Select(i => i.FullName));
-            }
-        }
+    //    public ControllerBoundAttributeRoutingConvention(string routeName, HttpConfiguration config, IEnumerable<Type> controllers) : base(routeName, config)
+    //    {
+    //        //using (Logging.MethodCall(GetType(), new ParameterList { { "routeName", routeName } }))
+    //        {
+    //            this.controllers.AddRange(controllers);
+    //            //Logging.Verbose("RouteName: {routeName} Controllers: {controllers}", routeName, controllers.OrderBy(i => i.FullName).Select(i => i.FullName));
+    //        }
+    //    }
 
-        public override bool ShouldMapController(HttpControllerDescriptor controller)
-        {
-            //using (Logging.MethodCall(GetType()))
-            {
-                var result = controllers.Contains(controller.ControllerType);
-                //Logging.Verbose("Name: {controllerName} Mapped: {mapped}", controller.ControllerType.FullName, result);
-                return result;
-            }
-        }
-    }
+    //    public override bool ShouldMapController(HttpControllerDescriptor controller)
+    //    {
+    //        //using (Logging.MethodCall(GetType()))
+    //        {
+    //            var result = controllers.Contains(controller.ControllerType);
+    //            //Logging.Verbose("Name: {controllerName} Mapped: {mapped}", controller.ControllerType.FullName, result);
+    //            return result;
+    //        }
+    //    }
+    //}
 
-    public static class HttpConfigurationExtensions
-    {
-        private static IEnumerable<Type> GetTypesWith<TAttribute>(bool inherit) where TAttribute : System.Attribute
-        {
-            return from a in AppDomain.CurrentDomain.GetAssemblies()
-                   from t in a.GetTypes()
-                   where t.IsDefined(typeof(TAttribute), inherit)
-                   select t;
-        }
+    //public static class HttpConfigurationExtensions
+    //{
+    //    private static IEnumerable<Type> GetTypesWith<TAttribute>(bool inherit) where TAttribute : System.Attribute
+    //    {
+    //        return from a in AppDomain.CurrentDomain.GetAssemblies()
+    //               from t in a.GetTypes()
+    //               where t.IsDefined(typeof(TAttribute), inherit)
+    //               select t;
+    //    }
 
-        public static ODataRoute MapControllerBoundODataServiceRoute(this HttpConfiguration configuration, string routeName, string routePrefix,
-            IEdmModel model)
-        {
-            var controllers = GetTypesWith<ODataRouteNameAttribute>(true).Where(c =>
-            {
-                var attr = (ODataRouteNameAttribute)c.GetCustomAttributes(typeof(ODataRouteNameAttribute), true).FirstOrDefault();
-                return attr?.Name.Equals(routeName, StringComparison.CurrentCultureIgnoreCase) ?? false;
-            });
-            var conventions = ODataRoutingConventions.CreateDefault();
-            conventions.Insert(0, new ControllerBoundAttributeRoutingConvention(routeName, configuration, controllers));
-            return configuration.MapODataServiceRoute(routeName, routePrefix, model, new DefaultODataPathHandler(), conventions);
-        }
-    }
+    //    public static ODataRoute MapControllerBoundODataServiceRoute(this HttpConfiguration configuration, string routeName, string routePrefix,
+    //        IEdmModel model)
+    //    {
+    //        var controllers = GetTypesWith<ODataRouteNameAttribute>(true).Where(c =>
+    //        {
+    //            var attr = (ODataRouteNameAttribute)c.GetCustomAttributes(typeof(ODataRouteNameAttribute), true).FirstOrDefault();
+    //            return attr?.Name.Equals(routeName, StringComparison.CurrentCultureIgnoreCase) ?? false;
+    //        });
+    //        var conventions = ODataRoutingConventions.CreateDefault();
+    //        conventions.Insert(0, new ControllerBoundAttributeRoutingConvention(routeName, configuration, controllers));
+    //        return configuration.MapODataServiceRoute(routeName, routePrefix, model, new DefaultODataPathHandler(), conventions);
+    //    }
+    //}
 
     public static class WebApiConfig
     {
@@ -93,8 +93,8 @@ namespace SAEON.Observations.WebAPI
             config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
 
             // Web API routes
-            //config.MapHttpAttributeRoutes();
-            config.MapHttpAttributeRoutes(new InheritedDirectRouteProvider());
+            config.MapHttpAttributeRoutes();
+            //config.MapHttpAttributeRoutes(new InheritedDirectRouteProvider());
 
             // OData
             config.Filter().Expand().Select().OrderBy().MaxTop(null).Count();
@@ -113,7 +113,7 @@ namespace SAEON.Observations.WebAPI
             odataModelBuilder.EntitySet<ef.UnitOfMeasure>("UnitsOfMeasure");
             odataModelBuilder.EntitySet<ef.UserDownload>("UserDownloads");
             odataModelBuilder.EntitySet<ef.UserQuery>("UserQueries");
-            config.MapControllerBoundODataServiceRoute("OData", "OData", odataModelBuilder.GetEdmModel());
+            //config.MapControllerBoundODataServiceRoute("OData", "OData", odataModelBuilder.GetEdmModel());
 
             // SensorThings
             ODataConventionModelBuilder sensorThingsModelBuilder = new ODataConventionModelBuilder { ContainerName = "SensorThings" };
@@ -125,7 +125,7 @@ namespace SAEON.Observations.WebAPI
             sensorThingsModelBuilder.EntitySet<sos.ObservedProperty>("ObservedProperties");
             sensorThingsModelBuilder.EntitySet<sos.Observation>("Observations");
             sensorThingsModelBuilder.EntitySet<sos.FeatureOfInterest>("FeaturesOfInterest");
-            config.MapControllerBoundODataServiceRoute("SensorThings", "SensorThings", sensorThingsModelBuilder.GetEdmModel());
+            //config.MapControllerBoundODataServiceRoute("SensorThings", "SensorThings", sensorThingsModelBuilder.GetEdmModel());
 
             SensorThingsHelper.Load();
 
