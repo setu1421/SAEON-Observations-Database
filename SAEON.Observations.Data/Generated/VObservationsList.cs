@@ -141,6 +141,42 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarCorrelationID);
                 
+                TableSchema.TableColumn colvarLatitude = new TableSchema.TableColumn(schema);
+                colvarLatitude.ColumnName = "Latitude";
+                colvarLatitude.DataType = DbType.Double;
+                colvarLatitude.MaxLength = 0;
+                colvarLatitude.AutoIncrement = false;
+                colvarLatitude.IsNullable = true;
+                colvarLatitude.IsPrimaryKey = false;
+                colvarLatitude.IsForeignKey = false;
+                colvarLatitude.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarLatitude);
+                
+                TableSchema.TableColumn colvarLongitude = new TableSchema.TableColumn(schema);
+                colvarLongitude.ColumnName = "Longitude";
+                colvarLongitude.DataType = DbType.Double;
+                colvarLongitude.MaxLength = 0;
+                colvarLongitude.AutoIncrement = false;
+                colvarLongitude.IsNullable = true;
+                colvarLongitude.IsPrimaryKey = false;
+                colvarLongitude.IsForeignKey = false;
+                colvarLongitude.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarLongitude);
+                
+                TableSchema.TableColumn colvarElevation = new TableSchema.TableColumn(schema);
+                colvarElevation.ColumnName = "Elevation";
+                colvarElevation.DataType = DbType.Double;
+                colvarElevation.MaxLength = 0;
+                colvarElevation.AutoIncrement = false;
+                colvarElevation.IsNullable = true;
+                colvarElevation.IsPrimaryKey = false;
+                colvarElevation.IsForeignKey = false;
+                colvarElevation.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarElevation);
+                
                 TableSchema.TableColumn colvarSensorCode = new TableSchema.TableColumn(schema);
                 colvarSensorCode.ColumnName = "SensorCode";
                 colvarSensorCode.DataType = DbType.AnsiString;
@@ -433,6 +469,48 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("Latitude")]
+        [Bindable(true)]
+        public double? Latitude 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("Latitude");
+		    }
+            set 
+		    {
+			    SetColumnValue("Latitude", value);
+            }
+        }
+	      
+        [XmlAttribute("Longitude")]
+        [Bindable(true)]
+        public double? Longitude 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("Longitude");
+		    }
+            set 
+		    {
+			    SetColumnValue("Longitude", value);
+            }
+        }
+	      
+        [XmlAttribute("Elevation")]
+        [Bindable(true)]
+        public double? Elevation 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("Elevation");
+		    }
+            set 
+		    {
+			    SetColumnValue("Elevation", value);
+            }
+        }
+	      
         [XmlAttribute("SensorCode")]
         [Bindable(true)]
         public string SensorCode 
@@ -621,6 +699,12 @@ namespace SAEON.Observations.Data{
             public static string Comment = @"Comment";
             
             public static string CorrelationID = @"CorrelationID";
+            
+            public static string Latitude = @"Latitude";
+            
+            public static string Longitude = @"Longitude";
+            
+            public static string Elevation = @"Elevation";
             
             public static string SensorCode = @"SensorCode";
             

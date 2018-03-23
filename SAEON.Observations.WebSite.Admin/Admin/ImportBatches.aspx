@@ -284,6 +284,8 @@
                                                             <ext:RecordField Name="TextValue" Type="Auto" />
                                                             <ext:RecordField Name="RawValue" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="DataValue" Type="Float" UseNull="true" />
+                                                            <ext:RecordField Name="Latitude" Type="Float" UseNull="true" />
+                                                            <ext:RecordField Name="Longitude" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="Elevation" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="StatusName" Type="Auto" />
                                                             <ext:RecordField Name="StatusReasonName" Type="Auto" />
@@ -313,6 +315,8 @@
                                                 <ext:Column Header="Text value" DataIndex="TextValue" Width="75" />
                                                 <ext:Column Header="Raw value" DataIndex="RawValue" Width="100" />
                                                 <ext:Column Header="Data value" DataIndex="DataValue" Width="100" />
+                                                <ext:Column Header="Latitude" DataIndex="Latitude" Width="100" />
+                                                <ext:NumberColumn Header="Longitude" DataIndex="Longitude" Width="100" />
                                                 <ext:Column Header="Elevation" DataIndex="Elevation" Width="100" />
                                                 <ext:Column Header="Status" DataIndex="StatusName" Width="150" />
                                                 <ext:Column Header="Reason" DataIndex="StatusReasonName" Width="150" />

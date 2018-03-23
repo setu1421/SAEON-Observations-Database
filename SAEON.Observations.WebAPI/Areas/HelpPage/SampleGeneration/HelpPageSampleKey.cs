@@ -98,7 +98,7 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
         /// Gets the name of the controller.
         /// </summary>
         /// <value>
-        /// name of the controller.
+        /// The name of the controller.
         /// </value>
         public string ControllerName { get; private set; }
 
@@ -106,7 +106,7 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
         /// Gets the name of the action.
         /// </summary>
         /// <value>
-        /// name of the action.
+        /// The name of the action.
         /// </value>
         public string ActionName { get; private set; }
 
@@ -114,7 +114,7 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
         /// Gets the media type.
         /// </summary>
         /// <value>
-        /// media type.
+        /// The media type.
         /// </value>
         public MediaTypeHeaderValue MediaType { get; private set; }
 

@@ -22,14 +22,14 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
 
         private static sos.Location AddLocation(Guid id, string name, string description, double latitude, double longitude, double? elevation)
         {
-            var location = Locations.FirstOrDefault(i => (i.name == name) && (i.description == description) && (i?.Coordinate.Latitude == latitude) && (i?.Coordinate.Longitude == longitude) && (!(elevation.HasValue && (i?.Coordinate?.Elevation.HasValue ?? false) || (i?.Coordinate.Elevation == elevation))));
+            var location = Locations.FirstOrDefault(i => (i.Name == name) && (i.Description == description) && (i?.Coordinate.Latitude == latitude) && (i?.Coordinate.Longitude == longitude) && (!(elevation.HasValue && (i?.Coordinate?.Elevation.HasValue ?? false) || (i?.Coordinate.Elevation == elevation))));
             if (location == null)
             {
                 location = new sos.Location
                 {
-                    id = id,
-                    name = name,
-                    description = description,
+                    Id = id,
+                    Name = name,
+                    Description = description,
                     Coordinate = new GeoJSONCoordinate { Latitude = latitude, Longitude = longitude, Elevation = elevation }
                 };
                 location.GenerateSensorThingsProperties();
@@ -40,12 +40,12 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
 
         private static sos.ObservedProperty AddObservedProperty(ef.vSensorThingsDatastream datastream)
         {
-            var observedProperty = ObservedProperties.FirstOrDefault(i => i.id == datastream.Id);
+            var observedProperty = ObservedProperties.FirstOrDefault(i => i.Id == datastream.Id);
             if (observedProperty == null)
             {
-                observedProperty = new sos.ObservedProperty { id = datastream.Id, name = $"{datastream.Phenomenon} {datastream.Offering}",
-                    description = $"{datastream.Phenomenon} {datastream.Offering} {datastream.Unit} {datastream.Symbol}",
-                    definition = string.IsNullOrEmpty(datastream.Url) ? "http://www.saeon.ac.za" : datastream.Url };
+                observedProperty = new sos.ObservedProperty { Id = datastream.Id, Name = $"{datastream.Phenomenon} {datastream.Offering}",
+                    Description = $"{datastream.Phenomenon} {datastream.Offering} {datastream.Unit} {datastream.Symbol}",
+                    Definition = string.IsNullOrEmpty(datastream.Url) ? "http://www.saeon.ac.za" : datastream.Url };
                 observedProperty.GenerateSensorThingsProperties();
                 ObservedProperties.Add(observedProperty);
             }
@@ -64,9 +64,9 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                     {
                         var thing = new sos.Thing
                         {
-                            id = organisation.Id,
-                            name = organisation.Name,
-                            description = organisation.Description
+                            Id = organisation.Id,
+                            Name = organisation.Name,
+                            Description = organisation.Description
                         };
                         thing.AddProperty("Kind", "Organisation");
                         thing.AddProperty("Url", organisation.Url);
@@ -77,9 +77,9 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                     {
                         var thing = new sos.Thing
                         {
-                            id = site.Id,
-                            name = site.Name,
-                            description = site.Description
+                            Id = site.Id,
+                            Name = site.Name,
+                            Description = site.Description
                         };
                         thing.AddProperty("Kind", "Site");
                         thing.AddProperty("Url", site.Url);
@@ -92,9 +92,9 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                     {
                         var thing = new sos.Thing
                         {
-                            id = station.Id,
-                            name = station.Name,
-                            description = station.Description
+                            Id = station.Id,
+                            Name = station.Name,
+                            Description = station.Description
                         };
                         thing.AddProperty("Kind", "Station");
                         thing.AddProperty("Url", station.Url);
@@ -105,12 +105,12 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                             var location = AddLocation(station.Id, station.Name, station.Description, station.Latitude.Value, station.Longitude.Value, station.Elevation);
                             thing.Locations.Add(location);
                             location.Things.Add(thing);
-                            var historicalLocation = new sos.HistoricalLocation { id = station.Id, Time = station?.StartDate ?? DateTime.Now };
+                            var historicalLocation = new sos.HistoricalLocation { Id = station.Id, Time = station?.StartDate ?? DateTime.Now };
                             historicalLocation.GenerateSensorThingsProperties();
                             historicalLocation.Locations.Add(location);
                             historicalLocation.Thing = thing;
                             thing.HistoricalLocations.Add(historicalLocation);
-                            var featureOfInterest = new sos.FeatureOfInterest { id = station.Id, name = station.Name, description = station.Description ,
+                            var featureOfInterest = new sos.FeatureOfInterest { Id = station.Id, Name = station.Name, Description = station.Description ,
                                 Coordinate = new GeoJSONCoordinate { Latitude = station.Latitude.Value, Longitude = station.Longitude.Value, Elevation = station.Elevation }
                             };
                             featureOfInterest.GenerateSensorThingsProperties();
@@ -123,9 +123,9 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                     {
                         var thing = new sos.Thing
                         {
-                            id = instrument.Id,
-                            name = instrument.Name,
-                            description = instrument.Description
+                            Id = instrument.Id,
+                            Name = instrument.Name,
+                            Description = instrument.Description
                         };
                         thing.AddProperty("Kind", "Instrument");
                         thing.AddProperty("Url", instrument.Url);
@@ -136,16 +136,16 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                             var location = AddLocation(instrument.Id, instrument.Name, instrument.Description, instrument.Latitude.Value, instrument.Longitude.Value, instrument.Elevation);
                             thing.Locations.Add(location);
                             location.Things.Add(thing);
-                            var historicalLocation = new sos.HistoricalLocation { id = instrument.Id, Time = instrument?.StartDate ?? DateTime.Now };
+                            var historicalLocation = new sos.HistoricalLocation { Id = instrument.Id, Time = instrument?.StartDate ?? DateTime.Now };
                             historicalLocation.GenerateSensorThingsProperties();
                             historicalLocation.Locations.Add(location);
                             historicalLocation.Thing = thing;
                             thing.HistoricalLocations.Add(historicalLocation);
                             var featureOfInterest = new sos.FeatureOfInterest
                             {
-                                id = instrument.Id,
-                                name = instrument.Name,
-                                description = instrument.Description,
+                                Id = instrument.Id,
+                                Name = instrument.Name,
+                                Description = instrument.Description,
                                 Coordinate = new GeoJSONCoordinate { Latitude = instrument.Latitude.Value, Longitude = instrument.Longitude.Value, Elevation = instrument.Elevation }
                             };
                             featureOfInterest.GenerateSensorThingsProperties();
@@ -155,11 +155,11 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                         Things.Add(thing);
                         foreach (var sensor in instrument.Sensors.OrderBy(i => i.Name))
                         {
-                            var sosSensor = new sos.Sensor { id = sensor.Id, name = sensor.Name, description = sensor.Description };
+                            var sosSensor = new sos.Sensor { Id = sensor.Id, Name = sensor.Name, Description = sensor.Description };
                             if (sensor.Url.EndsWith(".pdf", StringComparison.CurrentCultureIgnoreCase))
                             {
-                                sosSensor.encodingType = sos.ValueCodes.Pdf;
-                                sosSensor.metadata = sensor.Url;
+                                sosSensor.EncodingType = sos.ValueCodes.Pdf;
+                                sosSensor.Metadata = sensor.Url;
                             }
                             sosSensor.GenerateSensorThingsProperties();
                             Sensors.Add(sosSensor);

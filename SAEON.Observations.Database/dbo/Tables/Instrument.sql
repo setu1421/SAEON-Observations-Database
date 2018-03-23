@@ -48,6 +48,14 @@ GO
 CREATE INDEX [IX_Instrument_EndDate] ON [dbo].[Instrument] ([EndDate])
 GO
 CREATE INDEX [IX_Instrument_UserId] ON [dbo].[Instrument] ([UserId])
+--> Added 2.0.37 20180201 TimPN
+GO
+CREATE INDEX [IX_Instrument_Latitude] ON [dbo].[Instrument] ([Latitude])
+GO
+CREATE INDEX [IX_Instrument_Longitude] ON [dbo].[Instrument] ([Longitude])
+GO
+CREATE INDEX [IX_Instrument_Elevation] ON [dbo].[Instrument] ([Elevation])
+--< Added 2.0.37 20180201 TimPN
 --> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Instrument_Insert] ON [dbo].[Instrument]

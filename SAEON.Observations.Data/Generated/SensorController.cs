@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Insert(Guid Id,string Code,string Name,string Description,string Url,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,double? Latitude,double? Longitude,double? Elevation,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    Sensor item = new Sensor();
 		    
@@ -100,6 +100,12 @@ namespace SAEON.Observations.Data
             
             item.DataSchemaID = DataSchemaID;
             
+            item.Latitude = Latitude;
+            
+            item.Longitude = Longitude;
+            
+            item.Elevation = Elevation;
+            
             item.UserId = UserId;
             
             item.AddedAt = AddedAt;
@@ -116,7 +122,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string Code,string Name,string Description,string Url,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Update(Guid Id,string Code,string Name,string Description,string Url,Guid PhenomenonID,Guid DataSourceID,Guid? DataSchemaID,double? Latitude,double? Longitude,double? Elevation,Guid UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    Sensor item = new Sensor();
 	        item.MarkOld();
@@ -137,6 +143,12 @@ namespace SAEON.Observations.Data
 			item.DataSourceID = DataSourceID;
 				
 			item.DataSchemaID = DataSchemaID;
+				
+			item.Latitude = Latitude;
+				
+			item.Longitude = Longitude;
+				
+			item.Elevation = Elevation;
 				
 			item.UserId = UserId;
 				

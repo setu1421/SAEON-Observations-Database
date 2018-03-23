@@ -10,7 +10,7 @@ using SAEON.Observations.WebAPI.Areas.HelpPage.ModelDescriptions;
 namespace SAEON.Observations.WebAPI.Areas.HelpPage
 {
     /// <summary>
-    /// custom <see cref="IDocumentationProvider"/> that reads the API documentation from an XML documentation file.
+    /// A custom <see cref="IDocumentationProvider"/> that reads the API documentation from an XML documentation file.
     /// </summary>
     public class XmlDocumentationProvider : IDocumentationProvider, IModelDocumentationProvider
     {

@@ -238,11 +238,25 @@ public partial class Admin_Sensors : System.Web.UI.Page
                 InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(InstrumentLinkID.Value));
                 instrumentSensor.SensorID = masterID;
                 instrumentSensor.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
-                if (!String.IsNullOrEmpty(dfInstrumentStartDate.Text) && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
+                if (nfInstrumentLatitude.IsEmpty)
+                    instrumentSensor.Latitude = null;
+                else
+                    instrumentSensor.Latitude = nfInstrumentLatitude.Number;
+                if (nfInstrumentLongitude.IsEmpty)
+                    instrumentSensor.Longitude = null;
+                else
+                    instrumentSensor.Longitude = nfInstrumentLongitude.Number;
+                if (nfInstrumentElevation.IsEmpty)
+                    instrumentSensor.Elevation = null;
+                else
+                    instrumentSensor.Elevation = nfInstrumentElevation.Number;
+
+
+                if (!dfInstrumentStartDate.IsEmpty && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
                     instrumentSensor.StartDate = dfInstrumentStartDate.SelectedDate;
                 else
                     instrumentSensor.StartDate = null;
-                if (!String.IsNullOrEmpty(dfInstrumentEndDate.Text) && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
+                if (!dfInstrumentEndDate.IsEmpty && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
                     instrumentSensor.EndDate = dfInstrumentEndDate.SelectedDate;
                 else
                     instrumentSensor.EndDate = null;
@@ -253,6 +267,9 @@ public partial class Admin_Sensors : System.Web.UI.Page
                 { "SensorCode", instrumentSensor.Sensor.Code },
                 { "InstrumentID", instrumentSensor.InstrumentID},
                 { "InstrumentCode", instrumentSensor.Instrument.Code},
+                { "Latitude", instrumentSensor?.Latitude},
+                { "Longitude", instrumentSensor?.Longitude },
+                { "Elevation", instrumentSensor?.Elevation },
                 { "StartDate", instrumentSensor?.StartDate },
                 { "EndDate", instrumentSensor?.EndDate}
             });

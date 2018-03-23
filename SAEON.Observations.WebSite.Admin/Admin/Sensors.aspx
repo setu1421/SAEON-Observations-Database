@@ -190,6 +190,9 @@
                                                             <ext:RecordField Name="InstrumentID" Type="Auto" />
                                                             <ext:RecordField Name="InstrumentCode" Type="Auto" />
                                                             <ext:RecordField Name="InstrumentName" Type="Auto" />
+                                                            <ext:RecordField Name="Latitude" Type="Auto" />
+                                                            <ext:RecordField Name="Longitude" Type="Auto" />
+                                                            <ext:RecordField Name="Elevation" Type="Auto" />
                                                             <ext:RecordField Name="StartDate" Type="Date" />
                                                             <ext:RecordField Name="EndDate" Type="Date" />
                                                         </Fields>
@@ -205,6 +208,9 @@
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="InstrumentCode" Width="200" />
                                                 <ext:Column Header="Name" DataIndex="InstrumentName" Width="300" />
+                                                <ext:NumberColumn Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" Format="0.000000" />
+                                                <ext:NumberColumn Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" Format="0.000000" />
+                                                <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="70" Groupable="false" Format="0.000" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
                                                 <ext:CommandColumn Width="150">
@@ -408,7 +414,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="InstrumentLinkWindow" runat="server" Width="450" Height="260" Closable="true"
+    <ext:Window ID="InstrumentLinkWindow" runat="server" Width="450" Height="275" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Instrument"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
@@ -416,7 +422,7 @@
         </Listeners>
         <Content>
             <ext:FormPanel ID="InstrumentLinkFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right"
+                MonitorResize="true" Padding="10" ButtonAlign="Right"
                 Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
@@ -436,26 +442,37 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Panel>
+                    <ext:Panel ID="Panel1" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfInstrumentLatitude" DataIndex="Latitude" TrimTrailedZeros="false"
+                                MaxLength="15" runat="server" FieldLabel="Latitude" AnchorHorizontal="96%">
+                            </ext:NumberField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:NumberField AllowDecimals="true" DecimalPrecision="6" ID="nfInstrumentLongitude" DataIndex="Longitude" TrimTrailedZeros="false"
+                                MaxLength="15" runat="server" FieldLabel="Longitude" AnchorHorizontal="96%">
+                            </ext:NumberField>
+                        </Items>
+                    </ext:Panel>
+                    <ext:Panel ID="Panel8" runat="server" Border="false" Header="false" Layout="FormLayout">
+                        <Items>
+                            <ext:NumberField AllowDecimals="true" DecimalPrecision="3" ID="nfInstrumentElevation" DataIndex="Elevation" MaxLength="15" TrimTrailedZeros="false"
+                                runat="server" FieldLabel="Elevation" AnchorHorizontal="96%">
+                            </ext:NumberField>
+                        </Items>
+                    </ext:Panel>
                     <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="FormLayout">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="Start Date is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
                         <Items>
                             <ext:DateField ID="dfInstrumentStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy" >
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                     <ext:Panel ID="Panel10" runat="server" Border="false" Header="false" Layout="FormLayout">
-                        <Defaults>
-                            <ext:Parameter Name="AllowBlank" Value="true" Mode="Raw" />
-                            <ext:Parameter Name="blankText" Value="End Date is required" Mode="Value" />
-                            <ext:Parameter Name="MsgTarget" Value="side" />
-                        </Defaults>
                         <Items>
-                            <ext:DateField ID="dfInstrumentEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
+                            <ext:DateField ID="dfInstrumentEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static" 
                                 FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
                             </ext:DateField>
                         </Items>

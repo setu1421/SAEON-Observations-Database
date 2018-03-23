@@ -262,10 +262,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Views\vObservationRoles.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Views\vDataSourceTransformation.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
@@ -546,6 +542,7 @@
     <Build Include="dbo\Views\vSensorThingsDatastreams.sql" />
     <Build Include="dbo\Views\vOfferingPhenomena.sql" />
     <Build Include="dbo\Views\vUnitOfMeasurePhenomena.sql" />
+    <Build Include="dbo\Views\vSensorLocation.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

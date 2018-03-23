@@ -6,6 +6,7 @@ using SAEON.Observations.Data;
 using SubSonic;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -45,7 +46,6 @@ public class ImportSchemaHelper : IDisposable
     DataSource dataSource;
     DataSchema dataSchema;
     List<DataSourceTransformation> transformations;
-    Type recordType;
     List<SchemaDefinition> schemaDefs;
     public List<SchemaValue> SchemaValues;
 
@@ -59,7 +59,7 @@ public class ImportSchemaHelper : IDisposable
 
     //public SchemaValues
 
-    Boolean concatedatetime = false;
+    bool concatedatetime = false;
 
     string docNamePrefix;
 
@@ -128,14 +128,32 @@ public class ImportSchemaHelper : IDisposable
     /// <param name="InputStream"></param>
     public ImportSchemaHelper(DataSource ds, DataSchema schema, string data, ImportBatch batch, Sensor sensor = null)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "DataSource", ds.Name }, { "Schema", schema.Name }, { "ImportBatch", batch.Code }, { "Sensor", sensor?.Name} }))
+        using (Logging.MethodCall(GetType(), new ParameterList { { "DataSource", ds.Name }, { "Schema", schema.Name }, { "ImportBatch", batch.Code }, { "Sensor", sensor?.Name } }))
         {
 
             dataSource = ds;
             dataSchema = schema;
             this.batch = batch;
             Sensor = sensor;
+            Logging.Information("Checking Schema");
+            if (schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Time") && !schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Date"))
+            {
+                throw new Exception("Schema has a Time but no Date column");
+            }
+            if (!schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Offering"))
+            {
+                throw new Exception("Schema has no Offering column(s)");
+            }
+            if (schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Latitude") && !schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Longitude"))
+            {
+                throw new Exception("Schema has a Latitude but no Longitude column");
+            }
+            if (schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Longitude") && !schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Latitude"))
+            {
+                throw new Exception("Schema has a Longitude but no Latitude column");
+            }
             Logging.Information("Create ClassBuilder");
+            Type recordType;
             if (schema.DataSourceTypeID == new Guid(DataSourceType.CSV))
             {
                 DelimitedClassBuilder cb = new DelimitedClassBuilder("ImportBatches", schema.Delimiter)
@@ -150,55 +168,11 @@ public class ImportSchemaHelper : IDisposable
                 cb.IgnoreLastLines = schema.IgnoreLast;
                 if (!String.IsNullOrEmpty(schema.Condition))
                     schema.Condition = schema.Condition;
-                if (!String.IsNullOrEmpty(schema.SplitSelector))
-                {
-                    cb.SplitSelector = schema.SplitSelector;
-                    cb.SplitIndex = schema.SplitIndex.Value;
-                }
                 if (!(schema.HasColumnNames.HasValue && schema.HasColumnNames.Value))
                 {
                     foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
                     {
-                        cb.AddField(col.Name, typeof(string));
-                        switch (col.SchemaColumnType.Name)
-                        {
-                            case "Date":
-                                cb.LastField.ValueDate = true;
-                                cb.LastField.ValueDateformat = col.Format;
-                                break;
-                            case "Time":
-                                cb.LastField.ValueTime = true;
-                                cb.LastField.ValueTimeformat = col.Format;
-                                break;
-                            case "Ignore":
-                                cb.LastField.FieldValueDiscarded = true;
-                                break;
-                            case "Comment":
-                                cb.LastField.ValueComment = true;
-                                break;
-                            case "Offering":
-                                if (!string.IsNullOrEmpty(col.EmptyValue))
-                                {
-                                    cb.LastField.ValueEmpty = true;
-                                    cb.LastField.EmptyValue = col.EmptyValue;
-                                }
-                                cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                                cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                                break;
-                            case "FixedTime":
-                                if (!string.IsNullOrEmpty(col.EmptyValue))
-                                {
-                                    cb.LastField.ValueEmpty = true;
-                                    cb.LastField.EmptyValue = col.EmptyValue;
-                                }
-                                cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                                cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                                if (!string.IsNullOrEmpty(col.FixedTime))
-                                {
-                                    cb.LastField.FixedTime = col.FixedTime;
-                                }
-                                break;
-                        }
+                        cb.AddField(col.Name);
                     }
                 }
                 else
@@ -210,53 +184,11 @@ public class ImportSchemaHelper : IDisposable
                     foreach (var columnName in columnNames)
                     {
                         var col = schema.SchemaColumnRecords().Where(c => c.Name.Equals(columnName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-                        cb.AddField(columnName, typeof(string));
+                        cb.AddField(columnName);
                         if (col == null)
                         {
                             columnsNotInSchema.Add(columnName);
                             cb.LastField.FieldValueDiscarded = true;
-                        }
-                        else
-                        {
-                            switch (col.SchemaColumnType.Name)
-                            {
-                                case "Date":
-                                    cb.LastField.ValueDate = true;
-                                    cb.LastField.ValueDateformat = col.Format;
-                                    break;
-                                case "Time":
-                                    cb.LastField.ValueTime = true;
-                                    cb.LastField.ValueTimeformat = col.Format;
-                                    break;
-                                case "Ignore":
-                                    cb.LastField.FieldValueDiscarded = true;
-                                    break;
-                                case "Comment":
-                                    cb.LastField.ValueComment = true;
-                                    break;
-                                case "Offering":
-                                    if (!string.IsNullOrEmpty(col.EmptyValue))
-                                    {
-                                        cb.LastField.ValueEmpty = true;
-                                        cb.LastField.EmptyValue = col.EmptyValue;
-                                    }
-                                    cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                                    cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                                    break;
-                                case "FixedTime":
-                                    if (!string.IsNullOrEmpty(col.EmptyValue))
-                                    {
-                                        cb.LastField.ValueEmpty = true;
-                                        cb.LastField.EmptyValue = col.EmptyValue;
-                                    }
-                                    cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                                    cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                                    if (!string.IsNullOrEmpty(col.FixedTime))
-                                    {
-                                        cb.LastField.FixedTime = col.FixedTime;
-                                    }
-                                    break;
-                            }
                         }
                     }
                     if (columnsNotInSchema.Any())
@@ -269,7 +201,9 @@ public class ImportSchemaHelper : IDisposable
                         batch.Issues += "Columns in schema but not in data file - " + string.Join(", ", columnsNotInDataFile) + Environment.NewLine;
                     }
                 }
+                //Logging.Information("Class: {class}", cb.GetClassSourceCode(NetLanguage.CSharp));
                 recordType = cb.CreateRecordClass();
+                engine = new DelimitedFileEngine(recordType);
             }
             else
             {
@@ -285,69 +219,17 @@ public class ImportSchemaHelper : IDisposable
                 };
                 if (!String.IsNullOrEmpty(schema.Condition))
                     schema.Condition = schema.Condition;
-                if (!String.IsNullOrEmpty(schema.SplitSelector))
+                foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
                 {
-                    cb.SplitSelector = schema.SplitSelector;
-                    cb.SplitIndex = schema.SplitIndex.Value;
+                    cb.AddField(col.Name, col.Width.Value, typeof(string));
                 }
-                if (true) // !(schema.HasColumnNames.HasValue && schema.HasColumnNames.Value))
-                {
-                    foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
-                    {
-                        cb.AddField(col.Name, col.Width.Value, typeof(string));
-                        switch (col.SchemaColumnType.Name)
-                        {
-                            case "Date":
-                                cb.LastField.ValueDate = true;
-                                cb.LastField.ValueDateformat = col.Format;
-                                break;
-                            case "Time":
-                                cb.LastField.ValueTime = true;
-                                cb.LastField.ValueTimeformat = col.Format;
-                                break;
-                            case "Ignore":
-                                cb.LastField.FieldValueDiscarded = true;
-                                break;
-                            case "Comment":
-                                cb.LastField.ValueComment = true;
-                                break;
-                            case "Offering":
-                                if (!string.IsNullOrEmpty(col.EmptyValue))
-                                {
-                                    cb.LastField.ValueEmpty = true;
-                                    cb.LastField.EmptyValue = col.EmptyValue;
-                                }
-                                cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                                cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                                break;
-                            case "FixedTime":
-                                if (!string.IsNullOrEmpty(col.EmptyValue))
-                                {
-                                    cb.LastField.ValueEmpty = true;
-                                    cb.LastField.EmptyValue = col.EmptyValue;
-                                }
-                                cb.LastField.PhenomenonOfferingID = col.PhenomenonOfferingID;
-                                cb.LastField.PhenomenonUOMID = col.PhenomenonUOMID;
-                                if (!string.IsNullOrEmpty(col.FixedTime))
-                                {
-                                    cb.LastField.FixedTime = col.FixedTime;
-                                }
-                                break;
-                        }
-                    }
-                }
-                else
-                {
-                    // Still to come
-                }
+                //Logging.Information("Class: {class}", cb.GetClassSourceCode(NetLanguage.CSharp));
                 recordType = cb.CreateRecordClass();
+                engine = new FixedFileEngine(recordType);
             }
             Logging.Information("Create Engine");
-            //recordType = ClassBuilder.LoadFromXmlString(schema.DataSchemaX).CreateRecordClass();
-            engine = new FileHelperEngine(recordType)
-            {
-                ErrorMode = ErrorMode.SaveAndContinue
-            };
+            if (engine == null) throw new NullReferenceException("Engine cannot be null");
+            engine.ErrorMode = ErrorMode.SaveAndContinue;
 
             //List<object> list = engine.ReadStringAsList(data);
 
@@ -359,7 +241,8 @@ public class ImportSchemaHelper : IDisposable
                 docNamePrefix = docNamePrefix.Replace(c, '_');
             SaveDocument("Source.txt", data);
             Logging.Information("Read DataTable");
-            dtResults = engine.ReadStringAsDT(data);
+            //dtResults = engine.ReadStringAsDT(data);
+            dtResults = CommonEngine.RecordsToDataTable(engine.ReadString(data), recordType);
             //Logging.Information(dtResults.Dump());
             dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
             Logging.Information("Save as XML");
@@ -424,6 +307,15 @@ public class ImportSchemaHelper : IDisposable
                         case "Comment":
                             def.IsComment = true;
                             break;
+                        case "Elevation":
+                            def.IsElevation = true;
+                            break;
+                        case "Latitude":
+                            def.IsLatitude = true;
+                            break;
+                        case "Longitude":
+                            def.IsLongitude = true;
+                            break;
                         case "Offering":
                         case "Fixed Time":
                             def.IsOffering = true;
@@ -477,7 +369,7 @@ public class ImportSchemaHelper : IDisposable
 
             if (schemaDefs.FirstOrDefault(t => t.IsDate) != null && (schemaDefs.FirstOrDefault(t => t.IsTime) != null) || (schemaDefs.FirstOrDefault(t => t.IsFixedTime) != null))
                 concatedatetime = true;
-            Logging.Verbose("Schema: {Count} Columns: {Schemas}", schemaDefs.Count, schemaDefs.Select(i => i.FieldName).ToList());
+            Logging.Verbose("Schema: {Count} Columns: {Columns}", schemaDefs.Count, schemaDefs.Select(i => i.FieldName).ToList());
         }
     }
 
@@ -558,8 +450,8 @@ public class ImportSchemaHelper : IDisposable
                 DateTime dttme = DateTime.MinValue,
                 dt = DateTime.MinValue,
                 tm = DateTime.MinValue;
-                Boolean ErrorInDate = false;
-                Boolean ErrorInTime = false;
+                bool ErrorInDate = false;
+                bool ErrorInTime = false;
 
                 string InvalidDateValue = String.Empty,
                        InvalidTimeValue = String.Empty,
@@ -645,7 +537,7 @@ public class ImportSchemaHelper : IDisposable
 
                     if (def.IsOffering)
                     {
-                        SchemaValue rec = new SchemaValue()
+                        var rec = new SchemaValue()
                         {
                             SensorNotFound = def.SensorNotFound,
                             //SensorID = def.SensorID
@@ -655,22 +547,22 @@ public class ImportSchemaHelper : IDisposable
                             rec.SensorID = def.Sensors.FirstOrDefault()?.Id;
                             rec.InvalidStatuses.Add(Status.SensorNotFound);
                         }
-
-                        rec.InValidOffering = def.InValidOffering;
+                        string RawValue = dr[def.Index].ToString();
+                        rec.InvalidOffering = def.InValidOffering;
                         rec.PhenomenonOfferingID = def.PhenomenonOfferingID;
 
-                        if (rec.InValidOffering)
+                        if (rec.InvalidOffering)
                             rec.InvalidStatuses.Add(Status.OfferingInvalid);
 
-                        rec.InValidUOM = def.InValidUOM;
+                        rec.InvalidUOM = def.InValidUOM;
                         rec.PhenomenonUOMID = def.PhenomenonUOMID;
-                        if (rec.InValidUOM)
+                        if (rec.InvalidUOM)
                             rec.InvalidStatuses.Add(Status.UOMInvalid);
 
                         var phenomenonOffering = new PhenomenonOffering(def.PhenomenonOfferingID);
                         var phenomenonUnitOfMeasure = new PhenomenonUOM(def.PhenomenonUOMID);
                         Logging.Verbose("Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
-                            phenomenonOffering?.Phenomenon?.Name,phenomenonOffering?.Offering?.Name,phenomenonUnitOfMeasure?.Phenomenon?.Name,phenomenonUnitOfMeasure?.UnitOfMeasure?.Unit);
+                            phenomenonOffering?.Phenomenon?.Name, phenomenonOffering?.Offering?.Name, phenomenonUnitOfMeasure?.Phenomenon?.Name, phenomenonUnitOfMeasure?.UnitOfMeasure?.Unit);
                         if (ErrorInTime)
                         {
                             rec.TimeValueInvalid = true;
@@ -699,7 +591,7 @@ public class ImportSchemaHelper : IDisposable
 
                         if (!ErrorInDate)
                         {
-                            // Find sensor based on Datevalue
+                            // Find sensor based on DateValue
                             bool found = false;
                             bool foundTooEarly = false;
                             bool foundTooLate = false;
@@ -711,31 +603,15 @@ public class ImportSchemaHelper : IDisposable
                             {
                                 // Sensor x Instrument_Sensor x Instrument x Station_Instrument x Station x Site
                                 var dates = new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault();
-                                var startDates = new List<DateTime?> { dates.InstrumenSensorStartDate, dates.InstrumentStartDate, dates.StationInstrumentStartDate, dates.StationStartDate };
-                                var endDates = new List<DateTime?> { dates.InstrumenSensorEndDate, dates.InstrumentEndDate, dates.StationInstrumentEndDate, dates.StationEndDate };
-                                var startDate = startDates.Max();
-                                var endDate = endDates.Min();
-                                if (startDate.HasValue && (rec.DateValue.Date < startDate.Value))
+                                if (dates.StartDate.HasValue && (rec.DateValue.Date < dates.StartDate.Value))
                                 {
-                                    Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
-                                    //if ((batch.Issues == null) || !batch.Issues.Contains("Date too early, ignoring!"))
-                                    //{
-                                    //    batch.Issues += $"Date too early, ignoring!" + Environment.NewLine;
-                                    //}
-                                    //batch.Issues += $"Date too early, ignoring! Sensor: {sensor.Name} StartDate: {startDate} Date: {rec.DateValue}" + Environment.NewLine;
-                                    //Logging.Verbose("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, startDate, rec.DateValue, rec);
+                                    Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, dates.StartDate, rec.DateValue, rec);
                                     foundTooEarly = true;
                                     continue;
                                 }
-                                if (endDate.HasValue && (rec.DateValue.Date > endDate.Value))
+                                if (dates.EndDate.HasValue && (rec.DateValue.Date > dates.EndDate.Value))
                                 {
-                                    Logging.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
-                                    //if ((batch.Issues == null) || !batch.Issues.Contains("Date too late, ignoring!"))
-                                    //{
-                                    //    batch.Issues += $"Date too late, ignoring!" + Environment.NewLine;
-                                    //}
-                                    //batch.Issues += $"Date too late, ignoring! Sensor: {sensor.Name} EndDate: {endDate} Date: {rec.DateValue}" + Environment.NewLine;
-                                    //Logging.Verbose("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, endDate, rec.DateValue, rec);
+                                    Logging.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, dates.EndDate, rec.DateValue, rec);
                                     foundTooLate = true;
                                     continue;
                                 }
@@ -752,8 +628,6 @@ public class ImportSchemaHelper : IDisposable
                                 rec.InvalidStatuses.Add(Status.SensorNotFound);
                             }
                         }
-
-                        string RawValue = dr[def.Index].ToString();
 
                         //if (!ErrorInDate && LogHelper != null && LogHelper.CheckRecordGap(rec.DateValue))
                         //{
@@ -776,10 +650,10 @@ public class ImportSchemaHelper : IDisposable
                         {
                             rec.FieldRawValue = RawValue;
                             rec.RawValue = null;
-                            Double dvalue = -1;
+                            double dvalue = -1;
 
                             // Possibly do lookups here
-                            if (!Double.TryParse(RawValue, out dvalue))
+                            if (!double.TryParse(RawValue, out dvalue))
                             {
                                 rec.TextValue = RawValue;
                                 foreach (var transform in transformations.Where(t => t.TransformationType.Name == "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
@@ -789,7 +663,7 @@ public class ImportSchemaHelper : IDisposable
                                         RawValue = rec.RawValue.Value.ToString();
                                 }
                             }
-                            if (!Double.TryParse(RawValue, out dvalue))
+                            if (!double.TryParse(RawValue, out dvalue))
                             {
                                 rec.RawValueInvalid = true;
                                 rec.InvalidRawValue = RawValue;
@@ -813,11 +687,69 @@ public class ImportSchemaHelper : IDisposable
                                 }
                             }
                         }
+                        // Location
+                        var defLatitude = schemaDefs.FirstOrDefault(d => d.IsLatitude);
+                        var defLongitude = schemaDefs.FirstOrDefault(d => d.IsLongitude);
+                        var defElevation = schemaDefs.FirstOrDefault(d => d.IsElevation);
+                        if ((defLatitude != null) && (defLongitude != null))
+                        {
+                            string rawLatitude = dr[defLatitude.Index].ToString();
+                            string rawLongitude = dr[defLongitude.Index].ToString();
+                            if (!string.IsNullOrWhiteSpace(rawLatitude) && !string.IsNullOrWhiteSpace(rawLongitude))
+                            {
+                                try
+                                {
+                                    rec.Latitude = double.Parse(rawLatitude);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logging.Exception(ex, "RawLatitude: {RawLatitude} DataRow: {Dump}", RawValue, dr.Dump());
+                                }
+                                try
+                                {
+                                    rec.Longitude = double.Parse(rawLongitude);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logging.Exception(ex, "RawLongitude: {RawLongitude} DataRow: {Dump}", RawValue, dr.Dump());
+                                }
+                            }
+                        }
+                        if (defElevation != null)
+                        {
+                            string rawElevation = dr[defElevation.Index].ToString();
+                            if (!string.IsNullOrWhiteSpace(rawElevation))
+                            {
+                                try
+                                {
+                                    rec.Elevation = double.Parse(rawElevation);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logging.Exception(ex, "RawElevation: {RawElevation} DataRow: {Dump}", RawValue, dr.Dump());
+                                }
+                            }
+                        }
 
+                        // If still null try get from sensor/instrument/station location
+                        if (!(rec.Latitude.HasValue && rec.Longitude.HasValue) || !rec.Elevation.HasValue)
+                        {
+                            var loc = new VSensorLocation(VSensorLocation.Columns.SensorID, rec.SensorID);
+                            if (loc != null)
+                            {
+                                if (!(rec.Latitude.HasValue && rec.Longitude.HasValue) && (loc.Latitude.HasValue && loc.Longitude.HasValue))
+                                {
+                                    rec.Latitude = loc.Latitude;
+                                    rec.Longitude = loc.Longitude;
+                                }
+                                if (!rec.Elevation.HasValue && loc.Elevation.HasValue)
+                                    rec.Elevation = loc.Elevation;
+                            }
+                        }
                         if (RowComment.Trim().Length > 0)
                             rec.Comment = RowComment.TrimEnd();
                         rec.CorrelationID = correlationID;
-                        //if (rec.DataValue.HasValue)
+
                         SchemaValues.Add(rec);
                     }
                 }
@@ -876,8 +808,8 @@ public class ImportSchemaHelper : IDisposable
                             Expression exp = new Expression(corrvals["eq"]);
                             exp.Parameters["value"] = rec.RawValue;
                             object val = exp.Evaluate();
-                            rec.DataValue = Double.Parse(val.ToString());
-                            Logging.Verbose("Correction Raw: {RawValue} Data: {DataValue}",rec.RawValue,rec.DataValue);
+                            rec.DataValue = double.Parse(val.ToString());
+                            Logging.Verbose("Correction Raw: {RawValue} Data: {DataValue}", rec.RawValue, rec.DataValue);
                         }
                     }
                     else if (trns.TransformationTypeID.ToString() == TransformationType.RatingTable)
@@ -890,7 +822,7 @@ public class ImportSchemaHelper : IDisposable
                         if (!rec.DataValue.HasValue)
                             rec.DataValue = rec.RawValue;
 
-                        Dictionary<string, Double> qv = trns.QualityValues;
+                        Dictionary<string, double> qv = trns.QualityValues;
                         if (qv.ContainsKey("min") && rec.DataValue.Value < qv["min"])
                             valid = false;
 
@@ -961,7 +893,7 @@ public class ImportSchemaHelper : IDisposable
 
             foreach (ErrorInfo errinfo in engine.ErrorManager.Errors)
             {
-                _errors.Add(new { ErrorMessage = errinfo.ExceptionInfo.Message, LineNo = errinfo.LineNumber, RecordString = errinfo.RecordString });
+                _errors.Add(new { ErrorMessage = errinfo.ExceptionInfo.Message, LineNo = errinfo.LineNumber, errinfo.RecordString });
             }
 
             return _errors;
@@ -1049,21 +981,24 @@ public class SchemaDefinition
 
     public int Index { get; set; }
     public string FieldName { get; set; }
-    public Boolean IsDate { get; set; }
+    public bool IsDate { get; set; }
     public string Dateformat { get; set; }
-    public Boolean IsTime { get; set; }
+    public bool IsTime { get; set; }
     public string Timeformat { get; set; }
     public bool IsFixedTime { get; set; }
     public TimeSpan FixedTimeValue { get; set; }
-    public Boolean IsIgnored { get; set; }
+    public bool IsIgnored { get; set; }
     public Guid? PhenomenonOfferingID { get; set; }
-    public Boolean InValidOffering { get; set; }
+    public bool InValidOffering { get; set; }
     public Guid? PhenomenonUOMID { get; set; }
-    public Boolean InValidUOM { get; set; }
+    public bool InValidUOM { get; set; }
     public List<Guid> DataSourceTransformationIDs { get; set; }
-    public Boolean IsEmptyValue { get; set; }
+    public bool IsEmptyValue { get; set; }
     public string EmptyValue { get; set; }
-    public Boolean IsOffering { get; set; }
+    public bool IsOffering { get; set; }
+    public bool IsElevation { get; set; }
+    public bool IsLatitude { get; set; }
+    public bool IsLongitude { get; set; }
 
     public bool IsComment { get; set; }
     //public Guid? SensorID { get; set; }
@@ -1087,17 +1022,17 @@ public class SchemaValue
     public DateTime? TimeValue { get; set; }
     public string InvalidDateValue { get; set; }
     public string InvalidTimeValue { get; set; }
-    public Boolean DateValueInvalid { get; set; }
-    public Boolean TimeValueInvalid { get; set; }
+    public bool DateValueInvalid { get; set; }
+    public bool TimeValueInvalid { get; set; }
     public Guid? PhenomenonOfferingID { get; set; }
-    public Boolean InValidOffering { get; set; }
+    public bool InvalidOffering { get; set; }
     public Guid? PhenomenonUOMID { get; set; }
-    public Boolean InValidUOM { get; set; }
+    public bool InvalidUOM { get; set; }
     public double? RawValue { get; set; }
     public double? DataValue { get; set; }
-    public Boolean RawValueInvalid { get; set; }
+    public bool RawValueInvalid { get; set; }
     public string InvalidRawValue { get; set; }
-    public Boolean DataValueInvalid { get; set; }
+    public bool DataValueInvalid { get; set; }
     public string InvalidDataValue { get; set; }
     public List<string> InvalidStatuses { get; set; }
     public Guid? DataSourceTransformationID { get; set; }
@@ -1112,6 +1047,10 @@ public class SchemaValue
     public Guid CorrelationID { get; set; }
     public string TextValue { get; set; }
 
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
+    public double? Elevation { get; set; }
+
     /// <summary>
     /// 
     /// </summary>
@@ -1121,8 +1060,8 @@ public class SchemaValue
         {
             return !DateValueInvalid &&
                    !TimeValueInvalid &&
-                   !InValidOffering &&
-                   !InValidUOM &&
+                   !InvalidOffering &&
+                   !InvalidUOM &&
                    !RawValueInvalid &&
                    !DataValueInvalid &&
                    !SensorNotFound;

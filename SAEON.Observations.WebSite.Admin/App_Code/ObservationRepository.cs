@@ -37,6 +37,7 @@ public class ObservationRepository : BaseRepository
             .OrderDesc(VObservationsList.Columns.ValueDate)
             .OrderAsc(VObservationsList.Columns.SensorName)
             .OrderAsc(VObservationsList.Columns.OfferingName);
+        
         GetPagedQuery(ref q, e, paramPrefix);
         VObservationsListCollection col = q.ExecuteAsCollection<VObservationsListCollection>();
         return q.ExecuteAsCollection<VObservationsListCollection>().ToList<VObservationsList>();

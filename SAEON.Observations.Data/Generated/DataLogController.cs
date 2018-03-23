@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid? SensorID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,DateTime? ValueDay,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,Guid? StatusReasonID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,Guid ImportBatchID,string RawRecordData,string RawFieldValue,Guid? CorrelationID,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Insert(Guid Id,Guid? SensorID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,DateTime? ValueDay,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,double? Latitude,double? Longitude,double? Elevation,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,Guid? StatusReasonID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,Guid ImportBatchID,string RawRecordData,string RawFieldValue,Guid? CorrelationID,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    DataLog item = new DataLog();
 		    
@@ -105,6 +105,12 @@ namespace SAEON.Observations.Data
             item.DataValue = DataValue;
             
             item.Comment = Comment;
+            
+            item.Latitude = Latitude;
+            
+            item.Longitude = Longitude;
+            
+            item.Elevation = Elevation;
             
             item.InvalidDateValue = InvalidDateValue;
             
@@ -150,7 +156,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid? SensorID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,DateTime? ValueDay,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,Guid? StatusReasonID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,Guid ImportBatchID,string RawRecordData,string RawFieldValue,Guid? CorrelationID,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Update(Guid Id,Guid? SensorID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,DateTime? ValueDay,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,double? Latitude,double? Longitude,double? Elevation,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,Guid? StatusReasonID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,Guid ImportBatchID,string RawRecordData,string RawFieldValue,Guid? CorrelationID,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    DataLog item = new DataLog();
 	        item.MarkOld();
@@ -177,6 +183,12 @@ namespace SAEON.Observations.Data
 			item.DataValue = DataValue;
 				
 			item.Comment = Comment;
+				
+			item.Latitude = Latitude;
+				
+			item.Longitude = Longitude;
+				
+			item.Elevation = Elevation;
 				
 			item.InvalidDateValue = InvalidDateValue;
 				

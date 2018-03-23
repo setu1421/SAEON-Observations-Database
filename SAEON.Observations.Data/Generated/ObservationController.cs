@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid SensorID,DateTime ValueDate,DateTime? ValueDay,int? ValueYear,int? ValueDecade,string TextValue,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,double? Elevation,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Insert(Guid SensorID,DateTime ValueDate,DateTime? ValueDay,int? ValueYear,int? ValueDecade,string TextValue,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,double? Latitude,double? Longitude,double? Elevation,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    Observation item = new Observation();
 		    
@@ -114,6 +114,10 @@ namespace SAEON.Observations.Data
             
             item.CorrelationID = CorrelationID;
             
+            item.Latitude = Latitude;
+            
+            item.Longitude = Longitude;
+            
             item.Elevation = Elevation;
             
             item.UserId = UserId;
@@ -134,7 +138,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(int Id,Guid SensorID,DateTime ValueDate,DateTime? ValueDay,int? ValueYear,int? ValueDecade,string TextValue,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,double? Elevation,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Update(int Id,Guid SensorID,DateTime ValueDate,DateTime? ValueDay,int? ValueYear,int? ValueDecade,string TextValue,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,double? Latitude,double? Longitude,double? Elevation,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    Observation item = new Observation();
 	        item.MarkOld();
@@ -171,6 +175,10 @@ namespace SAEON.Observations.Data
 			item.StatusReasonID = StatusReasonID;
 				
 			item.CorrelationID = CorrelationID;
+				
+			item.Latitude = Latitude;
+				
+			item.Longitude = Longitude;
 				
 			item.Elevation = Elevation;
 				
