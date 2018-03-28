@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SAEON.AspNet.Core;
 using SAEON.Logs;
@@ -35,7 +36,6 @@ namespace SAEON.Observations.WebAPI
             {
                 var connectionString = Configuration.GetConnectionString("Observations");
                 services.AddDbContext<ObservationsDbContext>(options => options.UseSqlServer(connectionString, b => b.EnableRetryOnFailure()));
-                services.AddDbContext<BlogDbContext>(options => options.UseInMemoryDatabase("Blogs"));
                 //services.AddMvc();
                 services.AddMvc(options =>
                     {
