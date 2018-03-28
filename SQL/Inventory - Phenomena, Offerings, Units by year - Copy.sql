@@ -1,3 +1,4 @@
+use Observations
 Select
   Phenomenon.Name Phenomenon, Offering.Name Offering, UnitOfMeasure.Unit Unit, Site.Name Site, Station.Name Station, /*Status.Name Status,*/ Observation.ValueYear Year, Count(*) Count
 from
