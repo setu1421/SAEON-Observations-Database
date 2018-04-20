@@ -56,6 +56,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string ImportBatch = @"ImportBatch";
         
+		public static readonly string ImportBatchSummary = @"ImportBatchSummary";
+        
 		public static readonly string Instrument = @"Instrument";
         
 		public static readonly string InstrumentSensor = @"Instrument_Sensor";
@@ -212,6 +214,11 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table ImportBatch
 		{
             get { return DataService.GetSchema("ImportBatch", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table ImportBatchSummary
+		{
+            get { return DataService.GetSchema("ImportBatchSummary", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table Instrument
@@ -402,6 +409,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VObservation = @"vObservation";
         
+		public static readonly string VObservationExpansion = @"vObservationExpansion";
+        
 		public static readonly string VObservationsList = @"vObservationsList";
         
 		public static readonly string VOfferingPhemomena = @"vOfferingPhemomena";
@@ -437,6 +446,24 @@ namespace SAEON.Observations.Data
 		public static readonly string VUnitOfMeasurePhenomena = @"vUnitOfMeasurePhenomena";
         
 		public static readonly string VUserInfo = @"vUserInfo";
+        
+		public static readonly string VwAspnetApplication = @"vw_aspnet_Applications";
+        
+		public static readonly string VwAspnetMembershipUser = @"vw_aspnet_MembershipUsers";
+        
+		public static readonly string VwAspnetProfile = @"vw_aspnet_Profiles";
+        
+		public static readonly string VwAspnetRole = @"vw_aspnet_Roles";
+        
+		public static readonly string VwAspnetUser = @"vw_aspnet_Users";
+        
+		public static readonly string VwAspnetUsersInRole = @"vw_aspnet_UsersInRoles";
+        
+		public static readonly string VwAspnetWebPartStatePath = @"vw_aspnet_WebPartState_Paths";
+        
+		public static readonly string VwAspnetWebPartStateShared = @"vw_aspnet_WebPartState_Shared";
+        
+		public static readonly string VwAspnetWebPartStateUser = @"vw_aspnet_WebPartState_User";
         
     }
     #endregion

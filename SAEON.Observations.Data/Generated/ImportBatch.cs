@@ -581,6 +581,10 @@ namespace SAEON.Observations.Data
 		{
 			return new SAEON.Observations.Data.DataLogCollection().Where(DataLog.Columns.ImportBatchID, Id).Load();
 		}
+		public SAEON.Observations.Data.ImportBatchSummaryCollection ImportBatchSummaryRecords()
+		{
+			return new SAEON.Observations.Data.ImportBatchSummaryCollection().Where(ImportBatchSummary.Columns.ImportBatchID, Id).Load();
+		}
 		public SAEON.Observations.Data.ObservationCollection ObservationRecords()
 		{
 			return new SAEON.Observations.Data.ObservationCollection().Where(Observation.Columns.ImportBatchID, Id).Load();

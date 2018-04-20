@@ -10,6 +10,7 @@ from
   Observation
   inner join Sensor
     on (Observation.SensorID = Sensor.ID)
+--> Added 2.0.38 20180418 TimPN
   inner join Instrument_Sensor
     on (Instrument_Sensor.SensorID = Sensor.ID) and
        ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
@@ -24,7 +25,11 @@ from
        ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
   inner join Station
     on (Station_Instrument.StationID = Station.ID) and
-       ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
+--< Added 2.0.38 20180418 TimPN
+--> Changed 2.0.38 20180418 TimPN
+--       ((Station.StartDate is null) or (Observation.ValueDay = Station.StartDate)) and
+       ((Station.StartDate is null) or (Observation.ValueDay >= Station.StartDate)) and
+--< Changed 2.0.38 20180418 TimPN
        ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
   --inner join PhenomenonOffering
   --  on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)

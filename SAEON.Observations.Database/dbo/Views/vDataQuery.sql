@@ -28,7 +28,7 @@ SELECT Top (100) Percent
   Phenomenon.ID PhenomenonID, Phenomenon.Name Phenomenon, Phenomenon.Description PhenomenonDesc, 
   Offering.ID OfferingID, Offering.Name Offering, Offering.Description OfferingDesc
 FROM
-	Sensor 
+  Sensor 
   inner join Instrument_Sensor
     on (Instrument_Sensor.SensorID = Sensor.ID) 
   inner join Instrument
@@ -39,9 +39,9 @@ FROM
     on (Station_Instrument.StationID = Station.ID)
   inner join Site
     on (Station.SiteID = Site.ID)
-	INNER JOIN Phenomenon ON Phenomenon.ID = Sensor.PhenomenonID 
-	INNER JOIN PhenomenonOffering ON PhenomenonOffering.PhenomenonID = Phenomenon.ID 
-	INNER JOIN Offering ON Offering.ID = PhenomenonOffering.OfferingID 
+  INNER JOIN Phenomenon ON Phenomenon.ID = Sensor.PhenomenonID 
+  INNER JOIN PhenomenonOffering ON PhenomenonOffering.PhenomenonID = Phenomenon.ID 
+  INNER JOIN Offering ON Offering.ID = PhenomenonOffering.OfferingID 
 ORDER BY 
   Site.Name, Station.Name, Instrument.Name, Sensor, Phenomenon, Offering
 --< Added 2.0.17 20161128 TimPN

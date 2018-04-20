@@ -1,5 +1,6 @@
+use Observations
 Select
-  Phenomenon.Name Phenomenon, Site.Name Site, Station.Name Station, /*Status.Name Status,*/ Observation.ValueYear Year, Count(*) Count
+  Phenomenon.Name Phenomenon, Offering.Name Offering, UnitOfMeasure.Unit Unit, Site.Name Site, Station.Name Station, /*Status.Name Status,*/ Observation.ValueYear Year, Count(*) Count
 from
   Observation
   inner join PhenomenonOffering
@@ -8,6 +9,10 @@ from
     on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
   inner join Offering
     on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (Observation.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
   inner join Sensor
     on (Observation.SensorID = Sensor.ID)
   inner join Instrument_Sensor
@@ -36,6 +41,6 @@ where
   (Phenomenon.Name not in ('Current Direction','Current speed','Depth')) --and
   --(Status.Name = 'Verified')
 group by
-  Phenomenon.Name, Site.Name, Station.Name, /*Status.Name,*/ Observation.ValueYear
+  Phenomenon.Name, Offering.Name, UnitOfMeasure.Unit, Site.Name, Station.Name, /*Status.Name,*/ Observation.ValueYear
 order by
-  Phenomenon.Name, Site.Name, Station.Name, /*Status.Name,*/ Observation.ValueYear
+  Phenomenon.Name, Offering.Name, UnitOfMeasure.Unit, Site.Name, Station.Name, /*Status.Name,*/ Observation.ValueYear

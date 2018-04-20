@@ -115,7 +115,7 @@ public partial class Admin_Projects : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("vProject", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("vProject", gridData, visCols, sortCol, sortDir, type, "Projects");
+        BaseRepository.Export("vProject", gridData, visCols, sortCol, sortDir, type, "Projects", Response);
     }
 
     #endregion

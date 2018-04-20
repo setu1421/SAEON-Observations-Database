@@ -82,7 +82,7 @@ public partial class Admin_Organisations : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("Organisation", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("Organisation", gridData, visCols, sortCol, sortDir, type, "Organisations");
+        BaseRepository.Export("Organisation", gridData, visCols, sortCol, sortDir, type, "Organisations", Response);
     }
     #endregion
 

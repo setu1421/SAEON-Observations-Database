@@ -108,7 +108,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("Programme", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("Programme", gridData, visCols, sortCol, sortDir, type, "Programmes");
+        BaseRepository.Export("Programme", gridData, visCols, sortCol, sortDir, type, "Programmes", Response);
     }
 
     #endregion

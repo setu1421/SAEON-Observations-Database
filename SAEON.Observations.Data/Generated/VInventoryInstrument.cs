@@ -69,17 +69,17 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarSurrogateKey);
                 
-                TableSchema.TableColumn colvarName = new TableSchema.TableColumn(schema);
-                colvarName.ColumnName = "Name";
-                colvarName.DataType = DbType.AnsiString;
-                colvarName.MaxLength = 150;
-                colvarName.AutoIncrement = false;
-                colvarName.IsNullable = false;
-                colvarName.IsPrimaryKey = false;
-                colvarName.IsForeignKey = false;
-                colvarName.IsReadOnly = false;
+                TableSchema.TableColumn colvarInstrumentName = new TableSchema.TableColumn(schema);
+                colvarInstrumentName.ColumnName = "InstrumentName";
+                colvarInstrumentName.DataType = DbType.AnsiString;
+                colvarInstrumentName.MaxLength = 150;
+                colvarInstrumentName.AutoIncrement = false;
+                colvarInstrumentName.IsNullable = false;
+                colvarInstrumentName.IsPrimaryKey = false;
+                colvarInstrumentName.IsForeignKey = false;
+                colvarInstrumentName.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarName);
+                schema.Columns.Add(colvarInstrumentName);
                 
                 TableSchema.TableColumn colvarStatus = new TableSchema.TableColumn(schema);
                 colvarStatus.ColumnName = "Status";
@@ -229,17 +229,17 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("Name")]
+        [XmlAttribute("InstrumentName")]
         [Bindable(true)]
-        public string Name 
+        public string InstrumentName 
 	    {
 		    get
 		    {
-			    return GetColumnValue<string>("Name");
+			    return GetColumnValue<string>("InstrumentName");
 		    }
             set 
 		    {
-			    SetColumnValue("Name", value);
+			    SetColumnValue("InstrumentName", value);
             }
         }
 	      
@@ -350,7 +350,7 @@ namespace SAEON.Observations.Data{
 		    
             public static string SurrogateKey = @"SurrogateKey";
             
-            public static string Name = @"Name";
+            public static string InstrumentName = @"InstrumentName";
             
             public static string Status = @"Status";
             

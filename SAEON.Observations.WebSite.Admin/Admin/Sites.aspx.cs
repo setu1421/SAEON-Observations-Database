@@ -114,7 +114,7 @@ public partial class Admin_Sites : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("Site", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("Site", gridData, visCols, sortCol, sortDir, type, "Sites");
+        BaseRepository.Export("Site", gridData, visCols, sortCol, sortDir, type, "Sites", Response);
     }
 
     #endregion

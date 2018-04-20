@@ -92,6 +92,8 @@
     <Compile Include="Generated\DataSourceTypeController.cs" />
     <Compile Include="Generated\ImportBatch.cs" />
     <Compile Include="Generated\ImportBatchController.cs" />
+    <Compile Include="Generated\ImportBatchSummary.cs" />
+    <Compile Include="Generated\ImportBatchSummaryController.cs" />
     <Compile Include="Generated\Instrument.cs" />
     <Compile Include="Generated\InstrumentController.cs" />
     <Compile Include="Generated\InstrumentSensor.cs" />

@@ -49,7 +49,7 @@ public static class DataTableExtensions
                     else if (v is DateTime)
                     {
                         //DateTime date = ((DateTime)v).ToUniversalTime().ToLocalTime();
-                        DateTime date = DateTime.SpecifyKind(((DateTime)v),DateTimeKind.Local);
+                        DateTime date = DateTime.SpecifyKind(((DateTime)v), DateTimeKind.Local);
                         //values.Add(date.ToString("o"));
                         values.Add(date.ToString("yyyy-MM-ddTHH:mm:ss.fffK"));
                     }
@@ -61,7 +61,7 @@ public static class DataTableExtensions
             }
             sb.AppendLine(string.Join(",", values));
         }
-        return Encoding.Unicode.GetBytes(sb.ToString());
+        return Encoding.Unicode.GetPreamble().Concat(Encoding.Unicode.GetBytes(sb.ToString())).ToArray();
     }
 
     public static byte[] ToExcel(this DataTable dataTable)
@@ -206,7 +206,7 @@ public class BaseRepository
 
     //public enum ExportTypes { Csv, Excel };
 
-    public static void Export(SqlQuery query, string visCols, string exportType, string fileName)
+    public static void Export(SqlQuery query, string visCols, string exportType, string fileName, HttpResponse response)
     {
         using (Logging.MethodCall(typeof(BaseRepository), new ParameterList { { "Columns", visCols }, { "ExportType", exportType }, { "FileName", fileName } }))
         {
@@ -234,28 +234,28 @@ public class BaseRepository
                         }
                     }
                 }
-                HttpContext.Current.Response.Clear();
+                response.Clear();
                 byte[] bytes;
                 switch (exportType)
                 {
                     case "csv": //ExportTypes.Csv:
-                        HttpContext.Current.Response.ContentType = "text/csv";
-                        HttpContext.Current.Response.Charset = "UNICODE";
-                        HttpContext.Current.Response.AddHeader("Content-Disposition", $"attachment; filename={fileName}.csv");
+                        response.ContentType = "text/csv";
+                        response.Charset = "UTF-16";
+                        response.AddHeader("Content-Disposition", $"attachment; filename={fileName}.csv");
                         bytes = dt.ToCsv();
-                        HttpContext.Current.Response.AddHeader("Content-Length", bytes.Length.ToString());
-                        HttpContext.Current.Response.BinaryWrite(bytes);
+                        response.AddHeader("Content-Length", bytes.Length.ToString());
+                        response.BinaryWrite(bytes);
                         break;
                     case "exc": //ExportTypes.Excel
-                        HttpContext.Current.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                        HttpContext.Current.Response.AddHeader("Content-Disposition", $"attachment; filename={fileName}.xlsx");
+                        response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        response.AddHeader("Content-Disposition", $"attachment; filename={fileName}.xlsx");
                         bytes = dt.ToExcel();
-                        HttpContext.Current.Response.AddHeader("Content-Length", bytes.Length.ToString());
-                        HttpContext.Current.Response.BinaryWrite(bytes);
+                        response.AddHeader("Content-Length", bytes.Length.ToString());
+                        response.BinaryWrite(bytes);
                         break;
                 }
-                HttpContext.Current.Response.Flush();
-                HttpContext.Current.Response.End();
+                response.Flush();
+                response.End();
             }
             catch (Exception ex)
             {
@@ -265,7 +265,7 @@ public class BaseRepository
         }
     }
 
-    public static void Export(string tableName, string filters, string visCols, string sortCol, string sortDir, string exportType, string fileName)
+    public static void Export(string tableName, string filters, string visCols, string sortCol, string sortDir, string exportType, string fileName, HttpResponse response)
     {
         using (Logging.MethodCall(typeof(BaseRepository), new ParameterList { { "TableName", tableName }, { "Filters", filters }, { "Columns", visCols }, { "SortBy", sortCol },
             { "SortDir", sortDir }, { "ExportType", exportType }, { "FileName", fileName } }))
@@ -349,7 +349,7 @@ public class BaseRepository
                         q.OrderAsc(sortCol);
                     }
                 }
-                Export(q, visCols, exportType, fileName);
+                Export(q, visCols, exportType, fileName, response);
             }
             catch (Exception ex)
             {

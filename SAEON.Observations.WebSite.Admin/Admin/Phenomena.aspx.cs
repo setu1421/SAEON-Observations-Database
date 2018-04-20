@@ -244,7 +244,7 @@ public partial class _Phenomena : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("Phenomenon", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("Phenomenon", gridData, visCols, sortCol, sortDir, type, "Phenomena");
+        BaseRepository.Export("Phenomenon", gridData, visCols, sortCol, sortDir, type, "Phenomena", Response);
     }
 
     protected void DoDelete(object sender, DirectEventArgs e)

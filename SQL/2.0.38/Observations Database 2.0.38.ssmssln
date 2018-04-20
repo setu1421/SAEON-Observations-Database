@@ -3,14 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # SQL Server Management Studio Solution File, Format Version 14.00
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EB5948F6-FCAC-4FAD-B474-32D7D92A4541}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{38793798-79FB-49CA-AF33-D4874BF6F736}"
 	ProjectSection(SolutionItems) = preProject
-		Location count.sql = Location count.sql
-		Observations 2.0.37.publish.sql = Observations 2.0.37.publish.sql
-		Observations 2.0.37.publish.txt = Observations 2.0.37.publish.txt
-		ObservationsTest 2.0.37.publish.sql = ObservationsTest 2.0.37.publish.sql
-		ObservationsTest 2.0.37.publish.txt = ObservationsTest 2.0.37.publish.txt
-		Post Process.sql = Post Process.sql
+		ObservationsTest 2.0.38.publish.sql = ObservationsTest 2.0.38.publish.sql
+		ObservationsTest 2.0.38.publish.txt = ObservationsTest 2.0.38.publish.txt
+		PostProcess.sql = PostProcess.sql
 	EndProjectSection
 EndProject
 Global
@@ -18,7 +15,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{456CF707-91D8-4158-9B92-4BB0196CB1FC}.Default|Default.ActiveCfg = Default
+		{1B0A04AB-A0C0-40C1-AE05-6E1EF9EEA0E6}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

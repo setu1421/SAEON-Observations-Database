@@ -158,6 +158,6 @@ public partial class Admin_Inventory : System.Web.UI.Page
 
         //string js = ViewRepository.Export(gridData, visCols, sortCol, sortDir, "vInventory");
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("vInventory", gridData, visCols, sortCol, sortDir, type, "Inventory");
+        BaseRepository.Export("vInventory", gridData, visCols, sortCol, sortDir, type, "Inventory", Response);
     }
 }

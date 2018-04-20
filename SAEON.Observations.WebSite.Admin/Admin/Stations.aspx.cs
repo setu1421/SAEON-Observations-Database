@@ -143,7 +143,7 @@ public partial class Admin_Stations : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("VStation", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("vStation", gridData, visCols, sortCol, sortDir, type, "Stations");
+        BaseRepository.Export("vStation", gridData, visCols, sortCol, sortDir, type, "Stations", Response);
     }
 
     public void AddStationClick(object sender, DirectEventArgs e)

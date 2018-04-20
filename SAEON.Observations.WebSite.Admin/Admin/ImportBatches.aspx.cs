@@ -828,7 +828,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("VImportBatch", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("vImportBatch", gridData, visCols, sortCol, sortDir, type, "Import Batches");
+        BaseRepository.Export("vImportBatch", gridData, visCols, sortCol, sortDir, type, "Import Batches", Response);
     }
 
     [DirectMethod]

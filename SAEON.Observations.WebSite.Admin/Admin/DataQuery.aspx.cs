@@ -264,7 +264,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         string visCols = VisCols.Value.ToString();
         SqlQuery query = BuildQ(json, visCols, FromFilter.SelectedDate, ToFilter.SelectedDate, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export(query, visCols, type, "Data Query");
+        BaseRepository.Export(query, visCols, type, "Data Query", Response);
     }
 
     private string GetItem(List<Tuple<string, string>> items, string itemType)
