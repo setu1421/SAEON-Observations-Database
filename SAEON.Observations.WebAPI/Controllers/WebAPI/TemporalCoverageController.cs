@@ -38,6 +38,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     if (!input.Stations.Any()) throw new ArgumentOutOfRangeException("input.Stations");
                     if (input.PhenomenaOfferings == null) throw new ArgumentNullException("input.PhenomenaOfferings");
                     if (!input.PhenomenaOfferings.Any()) throw new ArgumentOutOfRangeException("input.PhenomenaOfferings");
+                    var output = new TemporalCoverageOutput();
+                    /*
                     var dataList = await db.vApiTemporalCoverages
                         .Where(i => input.Stations.Contains(i.StationId))
                         .Where(i => input.PhenomenaOfferings.Contains(i.PhenomenonOfferingId))
@@ -49,10 +51,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                         .ToListAsync();
                     Logging.Verbose("DataList: {count}", dataList.Count);
                     //Logging.Verbose("DataList: {count} {@dataList}", dataList.Count, dataList);
+                    
                     string lastSite = null;
                     string lastStation = null;
                     DateTime? lastDate = null;
-                    var output = new TemporalCoverageOutput();
+                    
                     // Series
                     // Date series
                     output.Series.Add(new DataSeries { Name = "Date", Caption = "Date" });
@@ -108,6 +111,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     output.Data.AddRange(rows);
                     //Logging.Verbose("Data: {Data}", result.Data);
                     Logging.Verbose("Result: Cols: {cols} Rows: {rows}", output.Series.Count, rows.Count);
+                    */
                     return output;
                 }
                 catch (Exception ex)

@@ -10,6 +10,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
+    /*
     /// <summary>
     /// Logged in users can save frequently used queries in the QueryUserQuery for later use
     /// </summary>
@@ -159,4 +160,5 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return base.DeleteByName(name);
         }
     }
+    */
 }

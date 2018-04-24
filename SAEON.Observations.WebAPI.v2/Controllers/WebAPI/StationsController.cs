@@ -20,6 +20,10 @@ namespace SAEON.Observations.WebAPI.v2.Controllers.WebAPI
             return query
                 .Include(i => i.OrganisationStations)
                     .ThenInclude(i => i.Organisation)
+                .Include(i => i.ProjectStations)
+                    .ThenInclude(i => i.Project)
+                .Include(i => i.ProjectStations)
+                    .ThenInclude(i => i.Station)
                 .Include(i => i.StationInstruments)
                     .ThenInclude(i => i.Instrument)
                 .Include(i => i.Site);
@@ -36,6 +40,12 @@ namespace SAEON.Observations.WebAPI.v2.Controllers.WebAPI
         public IEnumerable<Organisation> GetOrganisations(Guid id)
         {
             return GetMany(id, sel => sel.OrganisationStations.Select(i => i.Organisation), inc => inc.OrganisationStations.Select(i => i.Station));
+        }
+
+        [HttpGet("{id}/Projects")]
+        public IEnumerable<Project> GetProjects(Guid id)
+        {
+            return GetMany(id, sel => sel.ProjectStations.Select(i => i.Project), inc => inc.ProjectStations.Select(i => i.Station));
         }
 
         [HttpGet("{id}/Site")]

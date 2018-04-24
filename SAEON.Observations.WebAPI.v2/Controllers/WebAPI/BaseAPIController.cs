@@ -63,7 +63,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 try
                 {
                     var q = GetQuery().OrderBy(i => i.Name);
-                    Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
                     return q.ToList();
                 }
                 catch (Exception ex)
@@ -86,7 +86,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    TEntity item = await GetQuery(i => (i.Id == id)).FirstOrDefaultAsync();
+                    var q = GetQuery(i => (i.Id == id));
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    TEntity item = await q.FirstOrDefaultAsync();
                     if (item == null)
                     {
                         Logging.Error("{id} not found", id);
@@ -114,7 +116,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    TEntity item = await GetQuery(i => (i.Name == name)).FirstOrDefaultAsync();
+                    var q = GetQuery(i => (i.Name == name));
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    TEntity item = await q.FirstOrDefaultAsync();
                     if (item == null)
                     {
                         Logging.Error("{name} not found", name);
@@ -150,7 +154,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                         Logging.Error("{id} not found", id);
                         return NotFound();
                     }
-                    return new ObjectResult(await GetQuery(i => (i.Id == id)).Select(select).Include(include).FirstOrDefaultAsync());
+                    var q = GetQuery(i => (i.Id == id)).Select(select).Include(include);
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    return new ObjectResult(await q.FirstOrDefaultAsync());
                 }
                 catch (Exception ex)
                 {
@@ -175,7 +181,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                    var q = GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    return q;
                 }
                 catch (Exception ex)
                 {
@@ -200,7 +208,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                    var q = GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    return q;
                 }
                 catch (Exception ex)
                 {

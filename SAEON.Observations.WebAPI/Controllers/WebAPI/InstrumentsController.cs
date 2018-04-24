@@ -18,7 +18,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         {
             var list = base.GetIncludes();
             list.Add(i => i.Stations);
-            list.Add(i => i.Sensors);
+            //@list.Add(i => i.Sensors);
             return list;
         }
 
@@ -65,6 +65,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return GetMany<Station>(id, s => s.Stations, i => i.Instruments);
         }
 
+        /*
         // GET: Instruments/5/Sensors
         /// <summary>
         /// Sensors linked to this Instrument
@@ -76,6 +77,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         {
             return GetMany<Sensor>(id, s => s.Sensors, i => i.Instruments);
         }
+        */
 
     }
 }

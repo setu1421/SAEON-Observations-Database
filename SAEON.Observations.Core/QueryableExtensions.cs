@@ -1,16 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore.Internal;
+﻿#if NETCOREAPP2_0
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using Remotion.Linq.Parsing.Structure;
+using System.Reflection;
+#else
+#endif
 using System;
 using System.Linq;
-using System.Reflection;
 
 namespace SAEON.Observations.Core
 {
     public static class IQueryableExtensions
     {
+#if NETCOREAPP2_0
         private static readonly TypeInfo QueryCompilerTypeInfo = typeof(QueryCompiler).GetTypeInfo();
 
         private static readonly FieldInfo QueryCompilerField = typeof(EntityQueryProvider).GetTypeInfo().DeclaredFields.First(x => x.Name == "_queryCompiler");
@@ -43,5 +47,11 @@ namespace SAEON.Observations.Core
 
             return sql;
         }
+#else
+        public static string ToSql<TEntity>(this IQueryable<TEntity> query) where TEntity : class
+        {
+            throw new NotImplementedException();
+        }
+#endif
     }
 }

@@ -34,7 +34,7 @@ namespace SAEON.Observations.Core
     public class Feature : TreeNode { }
     public class Location : TreeNode { }
 
-    #region Maps
+#region Maps
     public class MapPoint
     {
         public string Title { get; set; }
@@ -43,9 +43,9 @@ namespace SAEON.Observations.Core
         public double Longitude { get; set; }
         public double? Elevation { get; set; }
     }
-    #endregion
+#endregion
 
-    #region DataQuery
+#region DataQuery
     public class QueryMapPoint : MapPoint
     {
         public bool IsSelected { get; set; }
@@ -127,17 +127,17 @@ namespace SAEON.Observations.Core
         public DataTable DataTable { get; private set; } = new DataTable("Data");
         public List<ExpandoObject> Data { get; private set; } = new List<ExpandoObject>();
     }
-    #endregion
+#endregion
 
-    #region DataDowload
+#region DataDowload
     public class DataDownloadInput : DataQueryInput { }
 
     public class DataDownloadOutput
     {
     }
-    #endregion DataDownload
+#endregion DataDownload
 
-    #region SpacialCoverage
+#region SpacialCoverage
     public class SpacialCoverageInput : DataQueryInput { }
 
     public enum SpacialStatus
@@ -197,9 +197,9 @@ namespace SAEON.Observations.Core
     {
         public List<SpacialStation> Stations { get; private set; } = new List<SpacialStation>();
     }
-    #endregion
+#endregion
 
-    #region TemporalCoverage
+#region TemporalCoverage
     public class TemporalCoverageInput : DataQueryInput { }
 
     public class TemporalCoverageOutput
@@ -207,9 +207,9 @@ namespace SAEON.Observations.Core
         public List<DataSeries> Series { get; private set; } = new List<DataSeries>();
         public List<ExpandoObject> Data { get; private set; } = new List<ExpandoObject>();
     }
-    #endregion
+#endregion
 
-    #region Inventory
+#region Inventory
     public class InventoryInput
     {
         public List<Guid> Stations { get; set; }
@@ -307,5 +307,5 @@ namespace SAEON.Observations.Core
         public List<InventoryYearItem> Years { get; private set; } = new List<InventoryYearItem>();
         public List<InventoryOrganisationItem> Organisations { get; private set; } = new List<InventoryOrganisationItem>();
     }
-    #endregion
+#endregion
 }

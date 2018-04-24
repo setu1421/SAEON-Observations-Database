@@ -18,6 +18,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 {
                     db.Configuration.AutoDetectChangesEnabled = false;
                     var result = new List<Feature>();
+                    /*
                     foreach (var phenomenon in db.Phenomena
                         .Include(i => i.PhenomenonOfferings.Select(po => po.Offering))
                         .Where(i => i.PhenomenonOfferings.Any())
@@ -46,6 +47,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                             result.Add(offeringNode);
                         }
                     }
+                    */
                     return result.AsQueryable();
                 }
                 catch (Exception ex)

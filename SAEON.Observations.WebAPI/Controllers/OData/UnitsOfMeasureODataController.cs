@@ -7,6 +7,7 @@ using SAEON.Observations.Core.Entities;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
+    /*
     /// <summary>
     /// UnitsOfMeasure
     /// </summary>
@@ -61,4 +62,5 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return GetMany(id, s => s.Phenomena, i => i.UnitsOfMeasure);
         }
     }
+    */
 }

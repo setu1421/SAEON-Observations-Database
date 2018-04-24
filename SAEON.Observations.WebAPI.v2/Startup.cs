@@ -45,7 +45,7 @@ namespace SAEON.Observations.WebAPI
                     {
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     });
-                services.AddLogging();
+                //services.AddLogging();
                 services.AddCors();
             }
         }

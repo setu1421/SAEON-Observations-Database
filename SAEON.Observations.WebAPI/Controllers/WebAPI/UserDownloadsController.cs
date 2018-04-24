@@ -10,6 +10,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
+    /*
     /// <summary>
     /// Users have to be logged in to download data in the QuerySite. Any downloads are saved for later re-downloads.
     /// </summary>
@@ -159,4 +160,5 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return base.DeleteByName(name);
         }
     }
+    */
 }

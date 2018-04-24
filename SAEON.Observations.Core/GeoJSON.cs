@@ -15,7 +15,7 @@ namespace SAEON.Observations.Core.GeoJSON
         public List<double> AsList()
         {
             var result = new List<double>
-            {
+            { 
                 Longitude,
                 Latitude
             };
