@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 14.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3FAC0DCF-341B-4DE7-A346-5109A7057C11}"
+	ProjectSection(SolutionItems) = preProject
+		Inventory - Phenomenon, Site, Station, StartDate, EndDate, Count.sql = Inventory - Phenomenon, Site, Station, StartDate, EndDate, Count.sql
+		SACTN bounds.sql = SACTN bounds.sql
+		SACTN Daily Dump.sql = SACTN Daily Dump.sql
+		SACTN Hourly Dump.sql = SACTN Hourly Dump.sql
+		SACTN stats.sql = SACTN stats.sql
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8702B5C5-21C3-42AE-B2D3-30BBE5AA7B01}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
