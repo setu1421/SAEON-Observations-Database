@@ -92,6 +92,8 @@
     <Compile Include="Generated\DataSourceTypeController.cs" />
     <Compile Include="Generated\ImportBatch.cs" />
     <Compile Include="Generated\ImportBatchController.cs" />
+    <Compile Include="Generated\ImportBatchSummary.cs" />
+    <Compile Include="Generated\ImportBatchSummaryController.cs" />
     <Compile Include="Generated\Instrument.cs" />
     <Compile Include="Generated\InstrumentController.cs" />
     <Compile Include="Generated\InstrumentSensor.cs" />
@@ -155,6 +157,7 @@
     <Compile Include="Generated\VDataSourceTransformation.cs" />
     <Compile Include="Generated\VDownload.cs" />
     <Compile Include="Generated\VImportBatch.cs" />
+    <Compile Include="Generated\VImportBatchSummary.cs" />
     <Compile Include="Generated\VInstrumentOrganisation.cs" />
     <Compile Include="Generated\VInstrumentSensor.cs" />
     <Compile Include="Generated\VInventory.cs" />

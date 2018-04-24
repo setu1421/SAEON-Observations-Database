@@ -261,7 +261,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("VDataSource", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("vDataSource", gridData, visCols, sortCol, sortDir, type, "Data Sources");
+        BaseRepository.Export("vDataSource", gridData, visCols, sortCol, sortDir, type, "Data Sources", Response);
     }
 
     #endregion

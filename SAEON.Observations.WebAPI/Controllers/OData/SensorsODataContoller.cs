@@ -7,6 +7,7 @@ using SAEON.Observations.Core.Entities;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
+    /*
     /// <summary>
     /// Sensors
     /// </summary>
@@ -74,4 +75,5 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         }
 
     }
+    */
 }

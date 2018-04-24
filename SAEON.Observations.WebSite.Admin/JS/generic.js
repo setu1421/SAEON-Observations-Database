@@ -1,13 +1,19 @@
 ﻿function makenewJsonForExport(object1)
 {
-	var myJSON = "{";
+    var myJSON = "{";
+    var first = true;
 	for (var i = 0; i < object1.length; i++)
-	{
-		myJSON += "\"" + object1[i].header + "\":\"" + object1[i].dataIndex + "\"";
-		if (i != (object1.length - 1))
-		{
-			myJSON += ",";
-		}
+    {
+        if (object1[i].header !== "") {
+            if (first) {
+                myJSON += "\"" + object1[i].header + "\":\"" + object1[i].dataIndex + "\"";
+                first = false;
+            }
+            else {
+                myJSON += ",\"" + object1[i].header + "\":\"" + object1[i].dataIndex + "\"";
+
+            }
+        }
 	}
 	myJSON += "}";
 

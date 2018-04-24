@@ -10,6 +10,7 @@ using SAEON.Observations.Core.Entities;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
+    /*
     /// <summary>
     /// Users have to be logged in to download data in the QuerySite. Any downloads are saved for later re-downloads.
     /// </summary>
@@ -95,4 +96,5 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return base.GetByName(name);
         }
     }
+    */
 }

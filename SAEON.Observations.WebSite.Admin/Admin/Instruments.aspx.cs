@@ -2,7 +2,6 @@
 using SAEON.Logs;
 using SAEON.Observations.Data;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 public partial class Admin_Instruments : System.Web.UI.Page
@@ -30,27 +29,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
         InstrumentsGrid.GetStore().DataSource = InstrumentRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
-    //protected void MasterRowSelect(object sender, DirectEventArgs e)
-    //{
-    //    RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
-    //    var masterID = new Guid(masterRow.SelectedRecordID);
-    //    SensorCollection sensors = new Select()
-    //        .From(Sensor.Schema)
-    //        .Where(Sensor.StationIDColumn)
-    //        .In(new Select(new string[] { StationInstrument.Columns.StationID })
-    //            .From(StationInstrument.Schema)
-    //            .Where(StationInstrument.InstrumentIDColumn)
-    //            .IsEqualTo(masterID))
-    //        .Or(Sensor.StationIDColumn)
-    //        .IsNull()
-    //        .OrderAsc(Sensor.Columns.Name)
-    //        .ExecuteAsCollection<SensorCollection>();
-    //    SensorStore.DataSource = sensors;
-    //    SensorStore.DataBind();
-    //}
-
-
-    protected void ValidateField(object sender, RemoteValidationEventArgs e)
+     protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
         InstrumentCollection col = new InstrumentCollection();
         string checkColumn = String.Empty;
@@ -164,7 +143,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("Instrument", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("Instrument", gridData, visCols, sortCol, sortDir, type, "Instruments");
+        BaseRepository.Export("Instrument", gridData, visCols, sortCol, sortDir, type, "Instruments", Response);
     }
 
     #endregion
@@ -224,10 +203,12 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 }
                 RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
                 var masterID = new Guid(masterRow.SelectedRecordID);
-                OrganisationInstrument organisationInstrument = new OrganisationInstrument(Utilities.MakeGuid(OrganisationLinkID.Value));
-                organisationInstrument.InstrumentID = masterID;
-                organisationInstrument.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
-                organisationInstrument.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+                OrganisationInstrument organisationInstrument = new OrganisationInstrument(Utilities.MakeGuid(OrganisationLinkID.Value))
+                {
+                    InstrumentID = masterID,
+                    OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim()),
+                    OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim())
+                };
                 if (!String.IsNullOrEmpty(dfOrganisationStartDate.Text) && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
                     organisationInstrument.StartDate = dfOrganisationStartDate.SelectedDate;
                 else
@@ -351,9 +332,11 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 }
                 RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
                 var masterID = new Guid(masterRow.SelectedRecordID);
-                StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(StationLinkID.Value));
-                stationInstrument.InstrumentID = masterID;
-                stationInstrument.StationID = new Guid(cbStation.SelectedItem.Value.Trim());
+                StationInstrument stationInstrument = new StationInstrument(Utilities.MakeGuid(StationLinkID.Value))
+                {
+                    InstrumentID = masterID,
+                    StationID = new Guid(cbStation.SelectedItem.Value.Trim())
+                };
                 if (nfStationLatitude.IsEmpty)
                     stationInstrument.Latitude = null;
                 else
@@ -492,9 +475,11 @@ public partial class Admin_Instruments : System.Web.UI.Page
 
                 RowSelectionModel masterRow = InstrumentsGrid.SelectionModel.Primary as RowSelectionModel;
                 var masterID = new Guid(masterRow.SelectedRecordID);
-                InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(SensorLinkID.Value));
-                instrumentSensor.InstrumentID = masterID;
-                instrumentSensor.SensorID = new Guid(cbSensor.SelectedItem.Value.Trim());
+                InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(SensorLinkID.Value))
+                {
+                    InstrumentID = masterID,
+                    SensorID = new Guid(cbSensor.SelectedItem.Value.Trim())
+                };
                 if (!String.IsNullOrEmpty(dfSensorStartDate.Text) && (dfSensorStartDate.SelectedDate.Year >= 1900))
                     instrumentSensor.StartDate = dfSensorStartDate.SelectedDate;
                 else
@@ -558,5 +543,4 @@ public partial class Admin_Instruments : System.Web.UI.Page
         //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Sites"));
     }
     #endregion
-
 }

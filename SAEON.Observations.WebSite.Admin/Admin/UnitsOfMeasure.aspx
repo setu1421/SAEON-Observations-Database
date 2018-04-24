@@ -9,6 +9,7 @@
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
             //VisCols.setValue(Ext.encode(ContentPlaceHolder1_UnitOfMeasureGrid.getRowsValues({ visibleOnly: true, excludeId: true })[0]));
             var viscolsNew = makenewJsonForExport(UnitOfMeasureGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); }))
+            //var viscolsNew = JSON.stringify(JSON.decycle(UnitOfMeasureGrid.getColumnModel().getColumnsBy(function (column, colIndex) { return !this.isHidden(colIndex); })));
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
@@ -79,6 +80,7 @@
                                             <ext:Parameter Name="dir" Value="" />
                                         </BaseParams>
                                         <SortInfo Field="Unit" Direction="ASC" />
+                                        <DirectEventConfig IsUpload="true" />
                                     </ext:Store>
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">

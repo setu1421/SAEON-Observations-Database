@@ -1,0 +1,824 @@
+2018-03-27 12:10:29.380 +02:00 [Information] Environment: "Development"
+2018-03-27 12:10:29.419 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:10:29.939 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:11:32.471 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:11:32.721 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:12:13.907 +02:00 [Information] Environment: "Development"
+2018-03-27 12:12:13.931 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:12:14.269 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:12:18.667 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:12:18.927 +02:00 [Error] An exception occurred
+System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'OrganisationSite'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.Execute(IRelationalConnection connection, DbCommandMethod executeMethod, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.ExecuteReader(IRelationalConnection connection, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Site , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Site )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.v2.Controllers.WebAPI.SitesController.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\SitesController.cs:line 41
+ClientConnectionId:387630c2-a921-4aa5-b371-05eb235f02cc
+Error Number:208,State:1,Class:16
+2018-03-27 12:13:26.945 +02:00 [Information] Environment: "Development"
+2018-03-27 12:13:26.969 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:13:27.313 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:13:33.702 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:13:33.938 +02:00 [Error] An exception occurred
+System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'OrganisationSite'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.Execute(IRelationalConnection connection, DbCommandMethod executeMethod, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.ExecuteReader(IRelationalConnection connection, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Site , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Site )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.v2.Controllers.WebAPI.SitesController.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\SitesController.cs:line 41
+ClientConnectionId:3001572e-6574-47b8-a548-ac32e5653ff3
+Error Number:208,State:1,Class:16
+2018-03-27 12:33:04.966 +02:00 [Information] Environment: "Development"
+2018-03-27 12:33:04.993 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:33:05.285 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:33:11.161 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:33:11.383 +02:00 [Error] An exception occurred
+System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'OrganisationSite'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.Execute(IRelationalConnection connection, DbCommandMethod executeMethod, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.ExecuteReader(IRelationalConnection connection, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Site , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Site )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.v2.Controllers.WebAPI.SitesController.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\SitesController.cs:line 41
+ClientConnectionId:509801c0-ba43-4079-9c1b-518b9ba7cd4c
+Error Number:208,State:1,Class:16
+2018-03-27 12:33:12.389 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:33:12.504 +02:00 [Error] An exception occurred
+System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'OrganisationSite'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.Execute(IRelationalConnection connection, DbCommandMethod executeMethod, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.ExecuteReader(IRelationalConnection connection, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Site , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Site )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.v2.Controllers.WebAPI.SitesController.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\SitesController.cs:line 41
+ClientConnectionId:509801c0-ba43-4079-9c1b-518b9ba7cd4c
+Error Number:208,State:1,Class:16
+2018-03-27 12:33:50.429 +02:00 [Information] Environment: "Development"
+2018-03-27 12:33:50.455 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:33:50.755 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:33:55.385 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Sites] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:33:55.566 +02:00 [Error] An exception occurred
+System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'Sites'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.Execute(IRelationalConnection connection, DbCommandMethod executeMethod, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.ExecuteReader(IRelationalConnection connection, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.v2.Controllers.WebAPI.SitesController.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\SitesController.cs:line 41
+ClientConnectionId:dab35bfb-25b3-40e9-9b77-3f0a130ef2f9
+Error Number:208,State:1,Class:16
+2018-03-27 12:36:05.634 +02:00 [Information] Environment: "Development"
+2018-03-27 12:36:05.660 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:36:05.942 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:36:12.578 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:36:13.104 +02:00 [Error] An exception occurred
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at SAEON.Observations.Core.Entities.Site.<>c.<get_OrganisationsList>b__21_0(OrganisationSite i) in D:\Development\SAEON Observations Database\SAEON.Observations.Core\Entities.cs:line 447
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , InternalEntityEntry )
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.RelationshipsSnapshot..ctor(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.EnsureRelationshipSnapshot()
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.AddToCollectionSnapshot(IPropertyBase propertyBase, Object addedEntity)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.AddToCollection(InternalEntityEntry entry, INavigation navigation, IClrCollectionAccessor collectionAccessor, Object value)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.InitialFixup(InternalEntityEntry entry, ISet`1 handledForeignKeys, Boolean fromQuery)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntryNotifier.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.MarkUnchangedFromQuery(ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTrackingFromQuery(IEntityType baseEntityType, Object entity, ValueBuffer valueBuffer, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.StartTracking(Object entity, IEntityType entityType)
+   at lambda_method(Closure , QueryContext , OrganisationSite , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , QueryContext , TransparentIdentifier`2 )
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ProjectionShaper.TypedProjectionShaper`3.Shape(QueryContext queryContext, ValueBuffer valueBuffer)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Site , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Site )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.v2.Controllers.WebAPI.SitesController.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\SitesController.cs:line 41
+2018-03-27 12:39:02.411 +02:00 [Information] Environment: "Development"
+2018-03-27 12:39:02.436 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:39:02.763 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:39:08.917 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:39:09.022 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:39:49.208 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:39:49.219 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:40:59.717 +02:00 [Information] Environment: "Development"
+2018-03-27 12:40:59.742 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:41:00.072 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:41:07.847 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:41:07.970 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:41:26.149 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:41:26.170 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:44:05.325 +02:00 [Information] Environment: "Development"
+2018-03-27 12:44:05.350 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:44:05.701 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:44:14.405 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:44:14.523 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:45:34.612 +02:00 [Information] Environment: "Development"
+2018-03-27 12:45:34.636 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:45:34.969 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:45:48.652 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:45:48.783 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:46:40.140 +02:00 [Information] Environment: "Development"
+2018-03-27 12:46:40.167 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:46:40.502 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:46:44.881 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:46:45.063 +02:00 [Error] An exception occurred
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at SAEON.Observations.Core.Entities.Site.<>c.<get_OrganisationsList>b__21_0(OrganisationSite i) in D:\Development\SAEON Observations Database\SAEON.Observations.Core\Entities.cs:line 447
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , InternalEntityEntry )
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.RelationshipsSnapshot..ctor(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.EnsureRelationshipSnapshot()
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.AddToCollectionSnapshot(IPropertyBase propertyBase, Object addedEntity)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.AddToCollection(InternalEntityEntry entry, INavigation navigation, IClrCollectionAccessor collectionAccessor, Object value)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.InitialFixup(InternalEntityEntry entry, ISet`1 handledForeignKeys, Boolean fromQuery)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntryNotifier.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.MarkUnchangedFromQuery(ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTrackingFromQuery(IEntityType baseEntityType, Object entity, ValueBuffer valueBuffer, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.StartTracking(Object entity, IEntityType entityType)
+   at lambda_method(Closure , QueryContext , OrganisationSite , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , QueryContext , TransparentIdentifier`2 )
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ProjectionShaper.TypedProjectionShaper`3.Shape(QueryContext queryContext, ValueBuffer valueBuffer)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Site , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Site )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.v2.Controllers.WebAPI.SitesController.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\SitesController.cs:line 41
+2018-03-27 12:47:17.794 +02:00 [Information] Environment: "Development"
+2018-03-27 12:47:17.819 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:47:18.164 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 12:47:22.460 +02:00 [Information] SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]
+2018-03-27 12:47:22.618 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 13:11:47.690 +02:00 [Information] Environment: "Development"
+2018-03-27 13:11:47.715 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 13:11:48.054 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 13:11:52.219 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:27:14.138 +02:00 [Information] Environment: "Development"
+2018-03-27 14:27:14.164 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:27:37.380 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:28:40.036 +02:00 [Information] Environment: "Development"
+2018-03-27 14:28:40.060 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:28:40.418 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:28:45.231 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:29:04.536 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:29:12.358 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:29:32.989 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:30:10.257 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:30:35.667 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:30:41.086 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:30:48.102 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:35:14.709 +02:00 [Information] Environment: "Development"
+2018-03-27 14:35:14.734 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:35:15.071 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:35:21.065 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:36:15.741 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:38:08.422 +02:00 [Information] Environment: "Development"
+2018-03-27 14:38:08.447 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:38:08.797 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:38:27.059 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:39:19.657 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:49:20.728 +02:00 [Information] Environment: "Development"
+2018-03-27 14:49:20.752 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:49:21.079 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:49:29.610 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:49:43.698 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:49:53.700 +02:00 [Error] Unable to get all
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at SAEON.Observations.Core.Entities.Organisation.<>c.<get_Sites>b__13_0(OrganisationSite i) in D:\Development\SAEON Observations Database\SAEON.Observations.Core\Entities.cs:line 175
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , InternalEntityEntry )
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.RelationshipsSnapshot..ctor(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.EnsureRelationshipSnapshot()
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.AddToCollectionSnapshot(IPropertyBase propertyBase, Object addedEntity)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.AddToCollection(InternalEntityEntry entry, INavigation navigation, IClrCollectionAccessor collectionAccessor, Object value)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.InitialFixup(InternalEntityEntry entry, ISet`1 handledForeignKeys, Boolean fromQuery)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntryNotifier.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.MarkUnchangedFromQuery(ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTrackingFromQuery(IEntityType baseEntityType, Object entity, ValueBuffer valueBuffer, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.StartTracking(Object entity, IEntityType entityType)
+   at lambda_method(Closure , QueryContext , OrganisationSite , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , QueryContext , TransparentIdentifier`2 )
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ProjectionShaper.TypedProjectionShaper`3.Shape(QueryContext queryContext, ValueBuffer valueBuffer)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Site , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Site )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.Controllers.WebAPI.BaseAPIController`1.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\BaseAPIController.cs:line 65
+2018-03-27 14:50:01.013 +02:00 [Error] Unable to get all
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at SAEON.Observations.Core.Entities.Organisation.<>c.<get_Sites>b__13_0(OrganisationSite i) in D:\Development\SAEON Observations Database\SAEON.Observations.Core\Entities.cs:line 175
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , InternalEntityEntry )
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.RelationshipsSnapshot..ctor(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.EnsureRelationshipSnapshot()
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.AddToCollectionSnapshot(IPropertyBase propertyBase, Object addedEntity)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.AddToCollection(InternalEntityEntry entry, INavigation navigation, IClrCollectionAccessor collectionAccessor, Object value)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.InitialFixup(InternalEntityEntry entry, ISet`1 handledForeignKeys, Boolean fromQuery)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntryNotifier.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.MarkUnchangedFromQuery(ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTrackingFromQuery(IEntityType baseEntityType, Object entity, ValueBuffer valueBuffer, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.StartTracking(Object entity, IEntityType entityType)
+   at lambda_method(Closure , QueryContext , OrganisationSite , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , QueryContext , TransparentIdentifier`2 )
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ProjectionShaper.TypedProjectionShaper`3.Shape(QueryContext queryContext, ValueBuffer valueBuffer)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Site , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Site )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.Controllers.WebAPI.BaseAPIController`1.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\BaseAPIController.cs:line 65
+2018-03-27 14:50:01.950 +02:00 [Error] Unable to get all
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at SAEON.Observations.Core.Entities.Organisation.<>c.<get_Sites>b__13_0(OrganisationSite i) in D:\Development\SAEON Observations Database\SAEON.Observations.Core\Entities.cs:line 175
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , InternalEntityEntry )
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.RelationshipsSnapshot..ctor(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.EnsureRelationshipSnapshot()
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.AddToCollectionSnapshot(IPropertyBase propertyBase, Object addedEntity)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.AddToCollection(InternalEntityEntry entry, INavigation navigation, IClrCollectionAccessor collectionAccessor, Object value)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.InitialFixup(InternalEntityEntry entry, ISet`1 handledForeignKeys, Boolean fromQuery)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntryNotifier.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.MarkUnchangedFromQuery(ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTrackingFromQuery(IEntityType baseEntityType, Object entity, ValueBuffer valueBuffer, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.StartTracking(Object entity, IEntityType entityType)
+   at lambda_method(Closure , QueryContext , OrganisationSite , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , QueryContext , TransparentIdentifier`2 )
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ProjectionShaper.TypedProjectionShaper`3.Shape(QueryContext queryContext, ValueBuffer valueBuffer)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Site , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Site )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.Controllers.WebAPI.BaseAPIController`1.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\BaseAPIController.cs:line 65
+2018-03-27 14:51:35.309 +02:00 [Information] Environment: "Development"
+2018-03-27 14:51:35.334 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:51:35.672 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:51:43.394 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 14:51:50.116 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:34:20.607 +02:00 [Information] Environment: "Development"
+2018-03-27 15:34:20.633 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:34:20.962 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:34:44.902 +02:00 [Error] Unable to get all
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at SAEON.Observations.Core.Entities.Station.<>c.<get_Organisations>b__43_0(OrganisationStation i) in D:\Development\SAEON Observations Database\SAEON.Observations.Core\Entities.cs:line 532
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , InternalEntityEntry )
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.RelationshipsSnapshot..ctor(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.EnsureRelationshipSnapshot()
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.AddToCollectionSnapshot(IPropertyBase propertyBase, Object addedEntity)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.AddToCollection(InternalEntityEntry entry, INavigation navigation, IClrCollectionAccessor collectionAccessor, Object value)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.InitialFixup(InternalEntityEntry entry, ISet`1 handledForeignKeys, Boolean fromQuery)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntryNotifier.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.MarkUnchangedFromQuery(ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTrackingFromQuery(IEntityType baseEntityType, Object entity, ValueBuffer valueBuffer, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.StartTracking(Object entity, IEntityType entityType)
+   at lambda_method(Closure , QueryContext , OrganisationStation , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , QueryContext , TransparentIdentifier`2 )
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ProjectionShaper.TypedProjectionShaper`3.Shape(QueryContext queryContext, ValueBuffer valueBuffer)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Organisation , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Organisation )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.Controllers.WebAPI.BaseAPIController`1.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\BaseAPIController.cs:line 65
+2018-03-27 15:35:00.816 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:35:07.325 +02:00 [Error] Unable to get all
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at SAEON.Observations.Core.Entities.Station.<>c.<get_Organisations>b__43_0(OrganisationStation i) in D:\Development\SAEON Observations Database\SAEON.Observations.Core\Entities.cs:line 532
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , InternalEntityEntry )
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.RelationshipsSnapshot..ctor(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.EnsureRelationshipSnapshot()
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.AddToCollectionSnapshot(IPropertyBase propertyBase, Object addedEntity)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.AddToCollection(InternalEntityEntry entry, INavigation navigation, IClrCollectionAccessor collectionAccessor, Object value)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.InitialFixup(InternalEntityEntry entry, ISet`1 handledForeignKeys, Boolean fromQuery)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntryNotifier.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.MarkUnchangedFromQuery(ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTrackingFromQuery(IEntityType baseEntityType, Object entity, ValueBuffer valueBuffer, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.StartTracking(Object entity, IEntityType entityType)
+   at lambda_method(Closure , QueryContext , OrganisationStation , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , QueryContext , TransparentIdentifier`2 )
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ProjectionShaper.TypedProjectionShaper`3.Shape(QueryContext queryContext, ValueBuffer valueBuffer)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Organisation , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Organisation )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.Controllers.WebAPI.BaseAPIController`1.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\BaseAPIController.cs:line 65
+2018-03-27 15:35:43.548 +02:00 [Information] Environment: "Development"
+2018-03-27 15:35:43.573 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:35:43.929 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:35:47.007 +02:00 [Error] Unable to get all
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at SAEON.Observations.Core.Entities.Station.<>c.<get_Organisations>b__43_0(OrganisationStation i) in D:\Development\SAEON Observations Database\SAEON.Observations.Core\Entities.cs:line 532
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , InternalEntityEntry )
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.RelationshipsSnapshot..ctor(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.EnsureRelationshipSnapshot()
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.AddToCollectionSnapshot(IPropertyBase propertyBase, Object addedEntity)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.AddToCollection(InternalEntityEntry entry, INavigation navigation, IClrCollectionAccessor collectionAccessor, Object value)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.InitialFixup(InternalEntityEntry entry, ISet`1 handledForeignKeys, Boolean fromQuery)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntryNotifier.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.MarkUnchangedFromQuery(ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTrackingFromQuery(IEntityType baseEntityType, Object entity, ValueBuffer valueBuffer, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.StartTracking(Object entity, IEntityType entityType)
+   at lambda_method(Closure , QueryContext , OrganisationStation , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , QueryContext , TransparentIdentifier`2 )
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ProjectionShaper.TypedProjectionShaper`3.Shape(QueryContext queryContext, ValueBuffer valueBuffer)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Organisation , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Organisation )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.Controllers.WebAPI.BaseAPIController`1.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\BaseAPIController.cs:line 65
+2018-03-27 15:37:27.647 +02:00 [Information] Environment: "Development"
+2018-03-27 15:37:27.671 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:37:28.030 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:37:30.444 +02:00 [Error] Unable to get all
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at SAEON.Observations.Core.Entities.Station.<>c.<get_Organisations>b__43_0(OrganisationStation i) in D:\Development\SAEON Observations Database\SAEON.Observations.Core\Entities.cs:line 532
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , InternalEntityEntry )
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.RelationshipsSnapshot..ctor(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.EnsureRelationshipSnapshot()
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.AddToCollectionSnapshot(IPropertyBase propertyBase, Object addedEntity)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.AddToCollection(InternalEntityEntry entry, INavigation navigation, IClrCollectionAccessor collectionAccessor, Object value)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.InitialFixup(InternalEntityEntry entry, ISet`1 handledForeignKeys, Boolean fromQuery)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntryNotifier.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.MarkUnchangedFromQuery(ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTrackingFromQuery(IEntityType baseEntityType, Object entity, ValueBuffer valueBuffer, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.StartTracking(Object entity, IEntityType entityType)
+   at lambda_method(Closure , QueryContext , OrganisationStation , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , QueryContext , TransparentIdentifier`2 )
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ProjectionShaper.TypedProjectionShaper`3.Shape(QueryContext queryContext, ValueBuffer valueBuffer)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Organisation , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Organisation )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.Controllers.WebAPI.BaseAPIController`1.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\BaseAPIController.cs:line 65
+2018-03-27 15:38:24.571 +02:00 [Information] Environment: "Development"
+2018-03-27 15:38:24.596 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:38:24.928 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:38:48.765 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:38:52.888 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:44:51.098 +02:00 [Information] Environment: "Development"
+2018-03-27 15:44:51.125 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:44:51.439 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:44:59.159 +02:00 [Error] Unable to get all
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at SAEON.Observations.Core.Entities.Organisation.<>c.<get_Sites>b__13_0(OrganisationSite i) in D:\Development\SAEON Observations Database\SAEON.Observations.Core\Entities.cs:line 175
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , InternalEntityEntry )
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.RelationshipsSnapshot..ctor(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.EnsureRelationshipSnapshot()
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.AddToCollectionSnapshot(IPropertyBase propertyBase, Object addedEntity)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.AddToCollection(InternalEntityEntry entry, INavigation navigation, IClrCollectionAccessor collectionAccessor, Object value)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.InitialFixup(InternalEntityEntry entry, ISet`1 handledForeignKeys, Boolean fromQuery)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntryNotifier.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.MarkUnchangedFromQuery(ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTrackingFromQuery(IEntityType baseEntityType, Object entity, ValueBuffer valueBuffer, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.StartTracking(Object entity, IEntityType entityType)
+   at lambda_method(Closure , QueryContext , OrganisationSite , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , QueryContext , TransparentIdentifier`2 )
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ProjectionShaper.TypedProjectionShaper`3.Shape(QueryContext queryContext, ValueBuffer valueBuffer)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Organisation , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Organisation )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.Controllers.WebAPI.BaseAPIController`1.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\BaseAPIController.cs:line 65
+2018-03-27 15:47:11.406 +02:00 [Information] Environment: "Development"
+2018-03-27 15:47:11.432 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:47:11.745 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:47:17.494 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:47:22.854 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:47:47.767 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:50:20.851 +02:00 [Information] Environment: "Development"
+2018-03-27 15:50:20.876 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:50:21.192 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:50:26.856 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:50:40.244 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:51:15.658 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:52:49.567 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:53:37.015 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:53:50.066 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:54:11.149 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:54:26.854 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 15:54:38.965 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:00:37.983 +02:00 [Information] Environment: "Development"
+2018-03-27 16:00:38.007 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:00:38.349 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:00:47.642 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:02:28.267 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:07:52.510 +02:00 [Information] Environment: "Development"
+2018-03-27 16:07:52.536 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:07:52.875 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:08:04.503 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Name], [i].[Url]
+FROM [Organisation] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:08:04.735 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:09:34.777 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Name], [i].[Url]
+FROM [Organisation] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:09:35.014 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:11:54.749 +02:00 [Information] Environment: "Development"
+2018-03-27 16:11:54.774 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:11:55.108 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:12:00.799 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Name], [i].[Url]
+FROM [Organisation] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:12:01.104 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:12:33.874 +02:00 [Information] Environment: "Development"
+2018-03-27 16:12:33.898 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:12:34.235 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:12:38.984 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Name], [i].[Url]
+FROM [Organisation] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:12:39.410 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:16:48.820 +02:00 [Information] Environment: "Development"
+2018-03-27 16:16:48.846 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:16:49.143 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:16:55.243 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Name], [i].[Url]
+FROM [Organisation] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:16:55.996 +02:00 [Error] Unable to get all
+System.Data.SqlClient.SqlException (0x80131904): Invalid object name 'OrganisationSite'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, SqlDataReader ds)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean asyncWrite, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.Execute(IRelationalConnection connection, DbCommandMethod executeMethod, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Storage.Internal.RelationalCommand.ExecuteReader(IRelationalConnection connection, IReadOnlyDictionary`2 parameterValues)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Organisation , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Organisation )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.Controllers.WebAPI.BaseAPIController`1.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\BaseAPIController.cs:line 64
+ClientConnectionId:8080d70c-7158-42cd-9c15-b735ecc029f6
+Error Number:208,State:1,Class:16
+2018-03-27 16:17:37.255 +02:00 [Information] Environment: "Development"
+2018-03-27 16:17:37.280 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:17:37.631 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:17:39.793 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Name], [i].[Url]
+FROM [Organisation] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:17:40.131 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:49:38.871 +02:00 [Information] Environment: "Development"
+2018-03-27 16:49:38.896 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:49:39.230 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:50:48.922 +02:00 [Information] Environment: "Development"
+2018-03-27 16:50:48.949 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:50:49.230 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:50:53.740 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Name], [i].[Url]
+FROM [Organisation] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:50:54.709 +02:00 [Error] Unable to get all
+System.NullReferenceException: Object reference not set to an instance of an object.
+   at SAEON.Observations.Core.Entities.Site.<>c.<get_OrganisationsList>b__23_0(Organisation i) in D:\Development\SAEON Observations Database\SAEON.Observations.Core\Entities.cs:line 476
+   at System.Linq.Enumerable.SelectListIterator`2.ToList()
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at lambda_method(Closure , InternalEntityEntry )
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.RelationshipsSnapshot..ctor(InternalEntityEntry entry)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.EnsureRelationshipSnapshot()
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.AddToCollectionSnapshot(IPropertyBase propertyBase, Object addedEntity)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.AddToCollection(InternalEntityEntry entry, INavigation navigation, IClrCollectionAccessor collectionAccessor, Object value)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.InitialFixup(InternalEntityEntry entry, ISet`1 handledForeignKeys, Boolean fromQuery)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.NavigationFixer.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntryNotifier.TrackedFromQuery(InternalEntityEntry entry, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.InternalEntityEntry.MarkUnchangedFromQuery(ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.StartTrackingFromQuery(IEntityType baseEntityType, Object entity, ValueBuffer valueBuffer, ISet`1 handledForeignKeys)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.StartTracking(Object entity, IEntityType entityType)
+   at lambda_method(Closure , QueryContext , OrganisationSite , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , QueryContext , TransparentIdentifier`2 )
+   at Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal.ProjectionShaper.TypedProjectionShaper`3.Shape(QueryContext queryContext, ValueBuffer valueBuffer)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.BufferlessMoveNext(Boolean buffer)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryingEnumerable`1.Enumerator.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryBuffer.IncludeCollection(Int32 includeId, INavigation navigation, INavigation inverseNavigation, IEntityType targetEntityType, IClrCollectionAccessor clrCollectionAccessor, IClrPropertySetter inverseClrPropertySetter, Boolean tracking, Object entity, Func`1 relatedEntitiesFactory)
+   at lambda_method(Closure , QueryContext , Organisation , Object[] )
+   at Microsoft.EntityFrameworkCore.Query.Internal.IncludeCompiler._Include[TEntity](QueryContext queryContext, TEntity entity, Object[] included, Action`3 fixup)
+   at lambda_method(Closure , Organisation )
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.<_TrackEntities>d__17`2.MoveNext()
+   at Microsoft.EntityFrameworkCore.Query.Internal.LinqOperatorProvider.ExceptionInterceptor`1.EnumeratorExceptionInterceptor.MoveNext()
+   at System.Collections.Generic.List`1.AddEnumerable(IEnumerable`1 enumerable)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at SAEON.Observations.WebAPI.Controllers.WebAPI.BaseAPIController`1.GetAll() in D:\Development\SAEON Observations Database\SAEON.Observations.WebAPI.v2\Controllers\WebAPI\BaseAPIController.cs:line 64
+2018-03-27 16:51:33.102 +02:00 [Information] Environment: "Development"
+2018-03-27 16:51:33.127 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:51:33.485 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:51:37.738 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Name], [i].[Url]
+FROM [Organisation] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:51:38.153 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:53:08.382 +02:00 [Information] Environment: "Development"
+2018-03-27 16:53:08.408 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:53:08.734 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:53:11.838 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Name], [i].[Url]
+FROM [Organisation] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:53:12.023 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:53:16.264 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Elevation], [i].[EndDate], [i].[Latitude], [i].[Longitude], [i].[Name], [i].[SiteId], [i].[StartDate], [i].[Url], [i.Site].[Id], [i.Site].[Code], [i.Site].[Description], [i.Site].[EndDate], [i.Site].[Name], [i.Site].[StartDate], [i.Site].[Url]
+FROM [Station] AS [i]
+INNER JOIN [Site] AS [i.Site] ON [i].[SiteId] = [i.Site].[Id]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:53:16.379 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:53:31.237 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:53:31.273 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:56:51.396 +02:00 [Information] Environment: "Development"
+2018-03-27 16:56:51.422 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:56:51.726 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:56:55.516 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:56:55.883 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:57:00.614 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Elevation], [i].[EndDate], [i].[Latitude], [i].[Longitude], [i].[Name], [i].[SiteId], [i].[StartDate], [i].[Url], [i.Site].[Id], [i.Site].[Code], [i.Site].[Description], [i.Site].[EndDate], [i.Site].[Name], [i.Site].[StartDate], [i.Site].[Url]
+FROM [Station] AS [i]
+INNER JOIN [Site] AS [i.Site] ON [i].[SiteId] = [i.Site].[Id]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 16:57:00.766 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:57:43.491 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:57:57.199 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:58:03.745 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 16:58:12.009 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:13:16.113 +02:00 [Information] Environment: "Development"
+2018-03-27 17:13:16.140 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:13:16.450 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:13:22.580 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 17:13:23.165 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:13:43.920 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:13:51.078 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:14:01.192 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:14:27.290 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[EndDate], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Site] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 17:14:27.312 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:14:33.754 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Elevation], [i].[EndDate], [i].[Latitude], [i].[Longitude], [i].[Name], [i].[SiteId], [i].[StartDate], [i].[Url], [i.Site].[Id], [i.Site].[Code], [i.Site].[Description], [i.Site].[EndDate], [i.Site].[Name], [i.Site].[StartDate], [i.Site].[Url]
+FROM [Station] AS [i]
+INNER JOIN [Site] AS [i.Site] ON [i].[SiteId] = [i.Site].[Id]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 17:14:33.882 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:14:43.664 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:14:50.704 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:14:57.654 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:15:06.142 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:15:26.256 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Name], [i].[Url]
+FROM [Organisation] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 17:15:26.284 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:15:54.988 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:16:01.547 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:16:11.424 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:16:21.778 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"
+2018-03-27 17:18:47.053 +02:00 [Information] SQL: "SELECT [i].[Id], [i].[Code], [i].[Description], [i].[Elevation], [i].[EndDate], [i].[Latitude], [i].[Longitude], [i].[Name], [i].[StartDate], [i].[Url]
+FROM [Instrument] AS [i]
+ORDER BY [i].[Name], [i].[Id]"
+2018-03-27 17:18:47.219 +02:00 [Information] ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' https://*.msecnd.net https://maxcdn.bootstrapcdn.com https://code.jquery.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com; img-src 'self' https://*.creativecommons.org https://licensebuttons.net; font-src 'self' https://*.skype.com; connect-src 'self' https://*.visualstudio.com"

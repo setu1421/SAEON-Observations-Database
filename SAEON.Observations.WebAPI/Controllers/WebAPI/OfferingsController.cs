@@ -9,6 +9,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
+    /*
     /// <summary>
     /// </summary>
     [RoutePrefix("Offerings")]
@@ -64,4 +65,5 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return GetMany<Phenomenon>(id, s => s.Phenomena, i => i.Offerings);
         }
     }
+    */
 }

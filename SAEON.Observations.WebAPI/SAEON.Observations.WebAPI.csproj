@@ -162,11 +162,11 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.AspNet.WebApi, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.AspNet.WebApi.1.0.5\lib\net452\SAEON.AspNet.WebApi.dll</HintPath>
+    <Reference Include="SAEON.AspNet.WebApi, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.AspNet.WebApi.1.0.6\lib\net461\SAEON.AspNet.WebApi.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Logs, Version=1.0.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Logs.1.0.13\lib\net452\SAEON.Logs.dll</HintPath>
+    <Reference Include="SAEON.Logs, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Logs.1.0.14\lib\net461\SAEON.Logs.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.6.0\lib\net45\Serilog.dll</HintPath>
@@ -213,6 +213,22 @@
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Spatial, Version=5.8.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.8.3\lib\net40\System.Spatial.dll</HintPath>
@@ -315,6 +331,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HealthController.cs" />
+    <Compile Include="Controllers\OData\OfferingsODataController.cs" />
     <Compile Include="Controllers\SensorThingsAPI\BaseSensorThingsControllers.cs" />
     <Compile Include="Controllers\SensorThingsAPI\DataStreamsSOSController.cs" />
     <Compile Include="Controllers\SensorThingsAPI\FeaturesOfInterestSOSController.cs" />
@@ -342,7 +359,6 @@
     <Compile Include="Controllers\WebAPI\LocationsController.cs" />
     <Compile Include="Controllers\WebAPI\LocationsHelper.cs" />
     <Compile Include="Controllers\WebAPI\OfferingsController.cs" />
-    <Compile Include="Controllers\OData\OfferingsODataController.cs" />
     <Compile Include="Controllers\WebAPI\OrganisationsController.cs" />
     <Compile Include="Controllers\OData\OrganisationsODataController.cs" />
     <Compile Include="Controllers\WebAPI\PhenomenaController.cs" />

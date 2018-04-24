@@ -37,6 +37,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     if (input.PhenomenaOfferings == null) throw new ArgumentNullException("input.PhenomenaOfferings");
                     if (!input.PhenomenaOfferings.Any()) throw new ArgumentOutOfRangeException("input.PhenomenaOfferings");
                     var output = new SpacialCoverageOutput();
+                    /*
                     var dataList = await db.vApiSpacialCoverages
                         .Where(i => input.Stations.Contains(i.StationId))
                         .Where(i => input.PhenomenaOfferings.Contains(i.PhenomenonOfferingId))
@@ -67,6 +68,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                             station.Status = SpacialStatus.NoStatus;
                         output.Stations.Add(station);
                     }
+                    */
                     return output;
                 }
                 catch (Exception ex)

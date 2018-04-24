@@ -80,7 +80,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         //string js = BaseRepository.BuildExportQ("VDataSchema", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
 
-        BaseRepository.Export("VDataSchema", gridData, visCols, sortCol, sortDir, type, "DataSchemas");
+        BaseRepository.Export("VDataSchema", gridData, visCols, sortCol, sortDir, type, "DataSchemas", Response);
     }
 
     protected void Save(object sender, DirectEventArgs e)

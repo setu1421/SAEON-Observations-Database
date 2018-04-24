@@ -91,15 +91,13 @@
                                         </DirectEvents>
                                     </ext:Button>
                                     <ext:ToolbarFill ID="ToolbarFill1" runat="server" />
-                                    <ext:Button ID="Button2" runat="server" Text="To Excel"
-                                        Icon="PageExcel">
+                                    <ext:Button ID="Button2" runat="server" Text="To Excel" Icon="PageExcel">
                                         <Listeners>
                                             <Click Handler="submitValue('exc');" />
                                         </Listeners>
 
                                     </ext:Button>
-                                    <ext:Button ID="Button3" runat="server" Text="To CSV"
-                                        Icon="PageAttach">
+                                    <ext:Button ID="Button3" runat="server" Text="To CSV" Icon="PageAttach">
                                         <Listeners>
                                             <Click Handler="submitValue('csv');" />
                                         </Listeners>

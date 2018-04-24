@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI
         {
             //filters.Add(new HandleErrorAttribute());
             filters.Add(new AiHandleErrorAttribute());
-            filters.Add(new SecurityHeadersAttribute());
+            //filters.Add(new SecurityHeadersAttribute());
         }
     }
 }

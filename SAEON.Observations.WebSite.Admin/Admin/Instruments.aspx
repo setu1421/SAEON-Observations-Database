@@ -15,7 +15,11 @@
         };
     </script>
 </asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+<asp:Content ID="Content" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
+    <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
     <ext:Store ID="OrganisationStore" runat="server">
         <Reader>
             <ext:JsonReader IDProperty="Id">
@@ -66,11 +70,7 @@
             </ext:JsonReader>
         </Reader>
     </ext:Store>
-    <ext:Hidden ID="GridData" runat="server" ClientIDMode="Static" />
-    <ext:Hidden ID="VisCols" runat="server" ClientIDMode="Static" />
-    <ext:Hidden ID="FormatType" runat="server" ClientIDMode="Static" />
-    <ext:Hidden ID="SortInfo" runat="server" ClientIDMode="Static" />
-    <ext:Viewport ID="ViewPort1" runat="server">
+    <ext:Viewport ID="ViewPort1" runat="server" Layout="FitLayout">
         <Items>
             <ext:BorderLayout runat="server">
                 <North Collapsible="true" Split="true">
@@ -132,6 +132,7 @@
                                             <ext:Parameter Name="dir" Value="" />
                                         </BaseParams>
                                         <SortInfo Field="Name" Direction="ASC" />
+                                        <DirectEventConfig IsUpload="true" />
                                     </ext:Store>
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">

@@ -88,7 +88,7 @@ public partial class _UnitsOfMeasure : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("UnitOfMeasure", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("UnitOfMeasure", gridData, visCols, sortCol, sortDir, type, "Units of Measure");
+        BaseRepository.Export("UnitOfMeasure", gridData, visCols, sortCol, sortDir, type, "Units of Measure", Response);
     }
 
     #endregion

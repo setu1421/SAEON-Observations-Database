@@ -61,6 +61,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return GetMany(id, s => s.Stations, i => i.Instruments);
         }
 
+        /*
         // GET: odata/Instruments(5)/Sensors
         /// <summary>
         /// Get Sensors for the Instrument
@@ -72,6 +73,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         {
             return GetMany(id, s => s.Sensors, i => i.Instruments);
         }
+        */
 
     }
 }

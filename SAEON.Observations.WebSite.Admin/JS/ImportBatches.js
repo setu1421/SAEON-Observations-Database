@@ -1,6 +1,7 @@
 ﻿function ImportBatchRowSelect(e, record) {
     if (tpCenter.isVisible()) {
         DataLogGrid.getStore().reload();
+        SummaryGrid.getStore().reload();
         ObservationsGrid.getSelectionModel().clearSelections();
         ObservationsGrid.getStore().reload();
         PagingToolbarObservations.moveFirst();

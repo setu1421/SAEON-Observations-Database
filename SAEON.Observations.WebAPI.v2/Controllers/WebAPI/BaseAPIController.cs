@@ -1,13 +1,12 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SAEON.Logs;
+using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
@@ -15,25 +14,26 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [Route("[controller] /[action]")]
     public abstract class BaseAPIController<TEntity> : BaseController where TEntity : BaseEntity
     {
-        public BaseAPIController(ObservationsDbContext context) : base(context) { }
-
-        /// <summary>
-        /// Overwrite to filter entities
-        /// </summary>
-        /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, bool>>> GetWheres()
+        public BaseAPIController(ObservationsDbContext context) : base(context)
         {
-            return new List<Expression<Func<TEntity, bool>>>();
+            context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         /// <summary>
         /// Overwrite for entity includes 
         /// </summary>
-        /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, object>>> GetIncludes()
+        protected virtual IQueryable<TEntity> ApplyIncludes(IQueryable<TEntity> query)
         {
-            return new List<Expression<Func<TEntity, object>>>();
-        } 
+            return query;
+        }
+
+        /// <summary>
+        /// Overwrite for entity wheres 
+        /// </summary>
+        protected virtual IQueryable<TEntity> ApplyWheres(IQueryable<TEntity> query)
+        {
+            return query;
+        }
 
         /// <summary>
         /// query for items
@@ -42,14 +42,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
             var query = db.Set<TEntity>().AsQueryable();
-            foreach (var include in GetIncludes())
-            {
-                query = query.Include(include);
-            }
-            foreach (var where in GetWheres())
-            {
-                query = query.Where(where);
-            }
+            query = ApplyIncludes(query);
+            query = ApplyWheres(query);
             if (extraWhere != null)
             {
                 query = query.Where(extraWhere);
@@ -68,7 +62,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    return GetQuery().OrderBy(i => i.Name).ToList();
+                    var q = GetQuery().OrderBy(i => i.Name);
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    return q.ToList();
                 }
                 catch (Exception ex)
                 {
@@ -90,7 +86,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    TEntity item = await GetQuery(i => (i.Id == id)).FirstOrDefaultAsync();
+                    var q = GetQuery(i => (i.Id == id));
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    TEntity item = await q.FirstOrDefaultAsync();
                     if (item == null)
                     {
                         Logging.Error("{id} not found", id);
@@ -118,7 +116,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    TEntity item = await GetQuery(i => (i.Name == name)).FirstOrDefaultAsync();
+                    var q = GetQuery(i => (i.Name == name));
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    TEntity item = await q.FirstOrDefaultAsync();
                     if (item == null)
                     {
                         Logging.Error("{name} not found", name);
@@ -154,7 +154,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                         Logging.Error("{id} not found", id);
                         return NotFound();
                     }
-                    return new ObjectResult(await GetQuery(i => (i.Id == id)).Select(select).Include(include).FirstOrDefaultAsync());
+                    var q = GetQuery(i => (i.Id == id)).Select(select).Include(include);
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    return new ObjectResult(await q.FirstOrDefaultAsync());
                 }
                 catch (Exception ex)
                 {
@@ -179,7 +181,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                    var q = GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    return q;
                 }
                 catch (Exception ex)
                 {
@@ -204,7 +208,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                    var q = GetQuery(i => i.Id == id).SelectMany(select).Include(include).OrderBy(i => i.Name);
+                    //Logging.Verbose("SQL: {SQL}", q.ToSql());
+                    return q;
                 }
                 catch (Exception ex)
                 {
@@ -557,4 +563,5 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
     }
         */
+
 }

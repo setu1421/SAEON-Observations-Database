@@ -87,7 +87,7 @@ public partial class _Offerings : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("Offering", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("Offering", gridData, visCols, sortCol, sortDir, type, "Offerings");
+        BaseRepository.Export("Offering", gridData, visCols, sortCol, sortDir, type, "Offerings", Response);
     }
     #endregion
 

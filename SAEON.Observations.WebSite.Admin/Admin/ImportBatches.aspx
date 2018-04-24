@@ -313,11 +313,11 @@
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
                                                 <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
                                                 <ext:Column Header="Text value" DataIndex="TextValue" Width="75" />
-                                                <ext:Column Header="Raw value" DataIndex="RawValue" Width="100" />
-                                                <ext:Column Header="Data value" DataIndex="DataValue" Width="100" />
-                                                <ext:Column Header="Latitude" DataIndex="Latitude" Width="100" />
-                                                <ext:NumberColumn Header="Longitude" DataIndex="Longitude" Width="100" />
-                                                <ext:Column Header="Elevation" DataIndex="Elevation" Width="100" />
+                                                <ext:NumberColumn Header="Raw value" DataIndex="RawValue" Width="100" Format=",0.000" />
+                                                <ext:NumberColumn Header="Data value" DataIndex="DataValue" Width="100" Format=",0.000" />
+                                                <ext:NumberColumn Header="Latitude" DataIndex="Latitude" Width="100" Format="0.00000" />
+                                                <ext:NumberColumn Header="Longitude" DataIndex="Longitude" Width="100" Format="0.00000" />
+                                                <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="100" Format="0.00" />
                                                 <ext:Column Header="Status" DataIndex="StatusName" Width="150" />
                                                 <ext:Column Header="Reason" DataIndex="StatusReasonName" Width="150" />
                                                 <ext:Column Header="Correlation ID" DataIndex="CorrelationID" Width="150" />
@@ -359,11 +359,80 @@
                                     </ext:GridPanel>
                                 </Items>
                             </ext:Panel>
+                            <ext:Panel ID="Panel1" runat="server" Title="Summary" ClientIDMode="Static" Layout="FitLayout">
+                                <Items>
+                                    <ext:GridPanel ID="SummaryGrid" runat="server" Border="false" ClientIDMode="Static">
+                                        <Store>
+                                            <ext:Store ID="SummaryGridStore" runat="server" OnRefreshData="SummaryGridStore_RefreshData">
+                                                <Proxy>
+                                                    <ext:PageProxy />
+                                                </Proxy>
+                                                <Reader>
+                                                    <ext:JsonReader IDProperty="Id">
+                                                        <Fields>
+                                                            <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="PhenomenonName" Type="Auto" />
+                                                            <ext:RecordField Name="OfferingName" Type="Auto" />
+                                                            <ext:RecordField Name="UnitOfMeasureUnit" Type="Auto" />
+                                                            <ext:RecordField Name="SensorName" Type="Auto" />
+                                                            <ext:RecordField Name="Count" Type="Int" />
+                                                            <ext:RecordField Name="Minimum" Type="Float" />
+                                                            <ext:RecordField Name="Maximum" Type="Float" />
+                                                            <ext:RecordField Name="Average" Type="Float" />
+                                                            <ext:RecordField Name="StandardDeviation" Type="Float" UseNull="true" />
+                                                            <ext:RecordField Name="Variance" Type="Float" UseNull="true" />
+                                                        </Fields>
+                                                    </ext:JsonReader>
+                                                </Reader>
+                                                <BaseParams>
+                                                    <ext:Parameter Name="ImportBatchID" Value="Ext.getCmp('#{ImportBatchesGrid}') && #{ImportBatchesGrid}.getSelectionModel().hasSelection() ? #{ImportBatchesGrid}.getSelectionModel().getSelected().id : -1"
+                                                        Mode="Raw" />
+                                                    <ext:Parameter Name="start" Value="0" Mode="Raw" />
+                                                    <ext:Parameter Name="limit" Value="250" Mode="Raw" />
+                                                    <ext:Parameter Name="sort" Value="" />
+                                                    <ext:Parameter Name="dir" Value="" />
+                                                </BaseParams>
+                                                <SortInfo Field="PhenomenonName" Direction="DESC" />
+                                            </ext:Store>
+                                        </Store>
+                                        <ColumnModel ID="ColumnModel5" runat="server">
+                                            <Columns>
+                                                <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="150" />
+                                                <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
+                                                <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
+                                                <ext:Column Header="Sensor" DataIndex="SensorName" Width="350" />
+                                                <ext:NumberColumn Header="Count" DataIndex="Count" Width="100" Format=",0" />
+                                                <ext:NumberColumn Header="Minimum" DataIndex="Minimum" Width="100" Format=",0.000" />
+                                                <ext:NumberColumn Header="Maximum" DataIndex="Maximum" Width="100" Format=",0.000" />
+                                                <ext:NumberColumn Header="Average" DataIndex="Average" Width="100" Format=",0.000" />
+                                                <ext:NumberColumn Header="StandardDeviation" DataIndex="StandardDeviation" Width="100" Format=",0.000000" />
+                                                <ext:NumberColumn Header="Variance" DataIndex="Variance" Width="100" Format=",0.000000" />
+                                            </Columns>
+                                        </ColumnModel>
+                                        <SelectionModel>
+                                        </SelectionModel>
+                                        <LoadMask ShowMask="true" />
+                                        <Plugins>
+                                            <ext:GridFilters runat="server" ID="GridFilters2">
+                                                <Filters>
+                                                    <ext:StringFilter DataIndex="PhenomenonName" />
+                                                    <ext:StringFilter DataIndex="OfferingName" />
+                                                    <ext:StringFilter DataIndex="UnitOfMeasureUnit" />
+                                                    <ext:StringFilter DataIndex="SensorName" />
+                                                </Filters>
+                                            </ext:GridFilters>
+                                        </Plugins>
+                                        <BottomBar>
+                                            <ext:PagingToolbar ID="PagingToolbar3" runat="server" ClientIDMode="Static" PageSize="250" EmptyMsg="No data found" />
+                                        </BottomBar>
+                                    </ext:GridPanel>
+                                </Items>
+                            </ext:Panel>
                             <ext:Panel ID="Panel12" runat="server" Title="Data Log" ClientIDMode="Static" Layout="FitLayout">
                                 <Items>
                                     <ext:GridPanel ID="DataLogGrid" runat="server" Border="false" ClientIDMode="Static">
                                         <Store>
-                                            <ext:Store ID="Store4" runat="server" RemoteSort="true" OnRefreshData="DataLogGrid_RefreshData">
+                                            <ext:Store ID="DataLogGridStore" runat="server" RemoteSort="true" OnRefreshData="DataLogGrid_RefreshData">
                                                 <Proxy>
                                                     <ext:PageProxy />
                                                 </Proxy>

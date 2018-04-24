@@ -174,7 +174,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
 
         //string js = BaseRepository.BuildExportQ("VSensor", gridData, visCols, sortCol, sortDir);
         //BaseRepository.doExport(type, js);
-        BaseRepository.Export("vSensor", gridData, visCols, sortCol, sortDir, type, "Sensors");
+        BaseRepository.Export("vSensor", gridData, visCols, sortCol, sortDir, type, "Sensors", Response);
     }
     #endregion
 

@@ -9,6 +9,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
+    /*
     /// <summary>
     /// </summary>
     [RoutePrefix("Sensors")]
@@ -80,4 +81,5 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
     }
+    */
 }

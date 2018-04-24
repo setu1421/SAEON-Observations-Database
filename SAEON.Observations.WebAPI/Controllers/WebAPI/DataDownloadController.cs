@@ -36,6 +36,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     if (!input.Stations.Any()) throw new ArgumentOutOfRangeException("input.Stations");
                     if (input.PhenomenaOfferings == null) throw new ArgumentNullException("input.PhenomenaOfferings");
                     if (!input.PhenomenaOfferings.Any()) throw new ArgumentOutOfRangeException("input.PhenomenaOfferings");
+                    /*
                     var dataList = await db.vApiDataDownloads
                         .Where(i => input.Stations.Contains(i.StationId))
                         .Where(i => input.PhenomenaOfferings.Contains(i.PhenomenonOfferingId))
@@ -48,6 +49,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                         .ThenBy(i => i.ValueDate)
                         .ToListAsync();
                     Logging.Verbose("DataList: {count}", dataList.Count);
+                    */
                     var result = new DataDownloadOutput();
                     return result;
                 }

@@ -38,6 +38,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     if (input.PhenomenaOfferings == null) throw new ArgumentNullException("input.PhenomenaOfferings");
                     if (!input.PhenomenaOfferings.Any()) throw new ArgumentOutOfRangeException("input.PhenomenaOfferings");
                     var output = new DataQueryOutput();
+                    /*
                     foreach (var station in await db.Stations.Where(i => input.Stations
                         .Contains(i.Id))
                         .Include(i => i.Site)
@@ -141,6 +142,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     output.Data.AddRange(rows);
                     //Logging.Verbose("Data: {Data}", result.Data);
                     Logging.Verbose("Result: Cols: {cols} Rows: {rows}", output.Series.Count, rows.Count);
+                    */
                     return output;
                 }
                 catch (Exception ex)

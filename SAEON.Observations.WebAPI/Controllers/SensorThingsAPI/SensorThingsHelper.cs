@@ -38,6 +38,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             return location;
         }
 
+        /*
         private static sos.ObservedProperty AddObservedProperty(ef.vSensorThingsDatastream datastream)
         {
             var observedProperty = ObservedProperties.FirstOrDefault(i => i.Id == datastream.Id);
@@ -51,6 +52,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             }
             return observedProperty;
         }
+        */
 
         public static void Load()
         {
@@ -119,6 +121,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                         thing.GenerateSensorThingsProperties();
                         Things.Add(thing);
                     }
+                    /*
                     foreach (var instrument in db.Instruments.Include(i => i.Sensors).OrderBy(i => i.Name))
                     {
                         var thing = new sos.Thing
@@ -185,6 +188,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                             //}
                         }
                     }
+                */
                 }
             }
         }

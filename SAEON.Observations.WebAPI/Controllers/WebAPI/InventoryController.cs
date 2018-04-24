@@ -57,6 +57,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                     if (input == null) throw new ArgumentNullException("input");
                     var output = new InventoryOutput();
                     output.Success = true;
+                    /*
                     output.Totals.AddRange((await db.InventoryTotals
                         .OrderBy(i => i.Status)
                         .ToListAsync())
@@ -88,6 +89,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                         .ToListAsync())
                         .Select(i => Mapper.Map<InventoryOrganisationItem>(i)));
                     //Logging.Verbose("Output: {@output}", output);
+                    */
                     return output;
                 }
                 catch (Exception ex)

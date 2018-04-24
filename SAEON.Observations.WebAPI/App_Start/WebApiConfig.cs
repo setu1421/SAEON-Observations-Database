@@ -104,16 +104,16 @@ namespace SAEON.Observations.WebAPI
             odataModelBuilder.EntitySet<Feature>("Features");
             odataModelBuilder.EntitySet<ef.Instrument>("Instruments");
             odataModelBuilder.EntitySet<Location>("Locations");
-            odataModelBuilder.EntitySet<ef.Offering>("Offerings");
+            //@odataModelBuilder.EntitySet<ef.Offering>("Offerings");
             odataModelBuilder.EntitySet<ef.Organisation>("Organisations");
-            odataModelBuilder.EntitySet<ef.Phenomenon>("Phenomena");
-            odataModelBuilder.EntitySet<ef.Sensor>("Sensors");
+            //@odataModelBuilder.EntitySet<ef.Phenomenon>("Phenomena");
+            //@odataModelBuilder.EntitySet<ef.Sensor>("Sensors");
             odataModelBuilder.EntitySet<ef.Site>("Sites");
             odataModelBuilder.EntitySet<ef.Station>("Stations");
-            odataModelBuilder.EntitySet<ef.UnitOfMeasure>("UnitsOfMeasure");
-            odataModelBuilder.EntitySet<ef.UserDownload>("UserDownloads");
-            odataModelBuilder.EntitySet<ef.UserQuery>("UserQueries");
-            //config.MapControllerBoundODataServiceRoute("OData", "OData", odataModelBuilder.GetEdmModel());
+            //@odataModelBuilder.EntitySet<ef.UnitOfMeasure>("UnitsOfMeasure");
+            //@odataModelBuilder.EntitySet<ef.UserDownload>("UserDownloads");
+            //@odataModelBuilder.EntitySet<ef.UserQuery>("UserQueries");
+            //@config.MapControllerBoundODataServiceRoute("OData", "OData", odataModelBuilder.GetEdmModel());
 
             // SensorThings
             ODataConventionModelBuilder sensorThingsModelBuilder = new ODataConventionModelBuilder { ContainerName = "SensorThings" };
