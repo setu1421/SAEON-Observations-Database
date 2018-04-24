@@ -80,6 +80,7 @@
                                             <ext:Parameter Name="dir" Value="" />
                                         </BaseParams>
                                         <SortInfo Field="Unit" Direction="ASC" />
+                                        <DirectEventConfig IsUpload="true" />
                                     </ext:Store>
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">
