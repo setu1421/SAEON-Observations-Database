@@ -157,6 +157,7 @@
     <Compile Include="Generated\VDataSourceTransformation.cs" />
     <Compile Include="Generated\VDownload.cs" />
     <Compile Include="Generated\VImportBatch.cs" />
+    <Compile Include="Generated\VImportBatchSummary.cs" />
     <Compile Include="Generated\VInstrumentOrganisation.cs" />
     <Compile Include="Generated\VInstrumentSensor.cs" />
     <Compile Include="Generated\VInventory.cs" />

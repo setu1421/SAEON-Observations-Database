@@ -71,8 +71,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         if (e.Parameters["ImportBatchID"] != null && e.Parameters["ImportBatchID"].ToString() != "-1")
         {
             Guid BatchId = Utilities.MakeGuid(e.Parameters["ImportBatchID"].ToString());
-            DataLogGrid.GetStore().DataSource = DataLogRepository.GetPagedListByBatch(e, e.Parameters[GridFiltersDataLog.ParamPrefix], BatchId);
-            DataLogGrid.GetStore().DataBind();
+            DataLogGridStore.DataSource = DataLogRepository.GetPagedListByBatch(e, e.Parameters[GridFiltersDataLog.ParamPrefix], BatchId);
+            DataLogGridStore.DataBind();
         }
     }
 
@@ -139,7 +139,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
 
-                Logging.Information("Import Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.27, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.28, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())
@@ -304,6 +304,29 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         }
                                     }
                                 }
+                                // Summaries
+                                var cmd = connScope.CurrentConnection.CreateCommand();
+                                var sql =
+                                    "Insert Into ImportBatchSummary" + Environment.NewLine +
+                                    "  (ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance)" + Environment.NewLine +
+                                    "Select" + Environment.NewLine +
+                                    "  ImportBatch.ID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance" + Environment.NewLine +
+                                    "from" + Environment.NewLine +
+                                    "  ImportBatch" + Environment.NewLine +
+                                    "  inner join Observation" + Environment.NewLine +
+                                    "    on(Observation.ImportBatchID = ImportBatch.ID)" + Environment.NewLine +
+                                    "where" + Environment.NewLine +
+                                    "  (ImportBatch.ID = @ImportBatchID)" + Environment.NewLine +
+                                    "group by" + Environment.NewLine +
+                                    "  ImportBatch.ID, SensorID, PhenomenonOfferingID, PhenomenonUOMID";
+                                cmd.CommandText = sql;
+                                var param = cmd.CreateParameter();
+                                param.DbType = DbType.Guid;
+                                param.ParameterName = "@ImportBatchID";
+                                param.Value = batch.Id;
+                                cmd.Parameters.Add(param);
+                                var n = cmd.ExecuteNonQuery();
+                                Logging.Verbose("Added {Summaries} summaries", n);
                                 Auditing.Log(GetType(), new ParameterList {
                                     { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status} });
                             }
@@ -313,6 +336,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                         ObservationsGridStore.DataBind();
                         ImportBatchesGrid.GetStore().DataBind();
+                        SummaryGridStore.DataBind();
                         DataLogGrid.GetStore().DataBind();
 
                         ImportWindow.Hide();
@@ -670,14 +694,16 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     {
                         DataLog.Delete(DataLog.Columns.ImportBatchID, ImportBatchId);
                         Observation.Delete(Observation.Columns.ImportBatchID, ImportBatchId);
+                        ImportBatchSummary.Delete(ImportBatchSummary.Columns.ImportBatchID, ImportBatchId);
                         ImportBatch.Delete(ImportBatchId);
                     }
 
                     ts.Complete();
                 }
 
-                ImportBatchesGrid.GetStore().DataBind();
-                DataLogGrid.GetStore().DataBind();
+                ImportBatchesGridStore.DataBind();
+                DataLogGridStore.DataBind();
+                SummaryGridStore.DataBind();
                 ObservationsGridStore.DataBind();
             }
             catch (Exception ex)
@@ -744,8 +770,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     ts.Complete();
                 }
 
-                ImportBatchesGrid.GetStore().DataBind();
-                DataLogGrid.GetStore().DataBind();
+                ImportBatchesGridStore.DataBind();
+                DataLogGridStore.DataBind();
+                SummaryGridStore.DataBind();
                 ObservationsGridStore.DataBind();
             }
             catch (Exception ex)
@@ -805,8 +832,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     ts.Complete();
                 }
 
-                ImportBatchesGrid.GetStore().DataBind();
-                DataLogGrid.GetStore().DataBind();
+                ImportBatchesGridStore.DataBind();
+                DataLogGridStore.DataBind();
+                SummaryGridStore.DataBind();
                 ObservationsGridStore.DataBind();
 
             }
@@ -884,8 +912,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     ts.Complete();
                 }
 
-                ImportBatchesGrid.GetStore().DataBind();
-                DataLogGrid.GetStore().DataBind();
+                ImportBatchesGridStore.DataBind();
+                DataLogGridStore.DataBind();
+                SummaryGridStore.DataBind();
                 ObservationsGridStore.DataBind();
             }
             catch (Exception ex)
@@ -915,7 +944,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     btnClearAll.Disabled = true;
                     try
                     {
-                        Logging.Information("List: {@list}", ObservationRepository.GetPagedListByBatch(e, e.Parameters[GridFiltersObservations.ParamPrefix], Id));
+                        //Logging.Information("List: {@list}", ObservationRepository.GetPagedListByBatch(e, e.Parameters[GridFiltersObservations.ParamPrefix], Id));
                         ObservationsGridStore.DataSource = ObservationRepository.GetPagedListByBatch(e, e.Parameters[GridFiltersObservations.ParamPrefix], Id);
                         ObservationsGridStore.DataBind();
                         EnableButtons();
@@ -1232,6 +1261,36 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     {
         EnableButtons();
     }
+    #endregion
+
+    #region Summary
+    protected void SummaryGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    {
+        using (Logging.MethodCall(GetType()))
+        {
+            try
+            {
+                if (e.Parameters["ImportBatchID"] != null && e.Parameters["ImportBatchID"].ToString() != "-1")
+                {
+                    Guid Id = Guid.Parse(e.Parameters["ImportBatchID"].ToString());
+                    VImportBatchSummaryCollection col = new VImportBatchSummaryCollection()
+                        .Where(VImportBatchSummary.Columns.ImportBatchID, Id)
+                        .OrderByAsc(VImportBatchSummary.Columns.PhenomenonName)
+                        .OrderByAsc(VImportBatchSummary.Columns.OfferingName)
+                        .OrderByAsc(VImportBatchSummary.Columns.UnitOfMeasureUnit)
+                        .Load();
+                    SummaryGridStore.DataSource = col;
+                    SummaryGridStore.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                throw;
+            }
+        }
+    }
+
     #endregion
 
 }

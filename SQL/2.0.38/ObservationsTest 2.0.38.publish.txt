@@ -24,6 +24,7 @@
        [dbo].[FK_ImportBatchSummary_SensorID] (Foreign Key)
        [dbo].[FK_ImportBatchSummary_PhenomenonOffering] (Foreign Key)
        [dbo].[FK_ImportBatchSummary_PhenomenonUOM] (Foreign Key)
+       [dbo].[vImportBatchSummary] (View)
        [dbo].[vObservationExpansion] (View)
      Alter
        [dbo].[vInventoryPhenomenaOfferings] (View)

@@ -543,6 +543,7 @@
     <Build Include="dbo\Views\vSensorLocation.sql" />
     <Build Include="dbo\Tables\ImportBatchSummary.sql" />
     <Build Include="dbo\Views\vObservationExpansion.sql" />
+    <Build Include="dbo\Views\vImportBatchSummary.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

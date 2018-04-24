@@ -177,9 +177,11 @@ public partial class _Phenomena : System.Web.UI.Page
         {
             foreach (SelectedRow row in sm.SelectedRows)
             {
-                PhenomenonUOM unit = new PhenomenonUOM();
-                unit.UnitOfMeasureID = new Guid(row.RecordID);
-                unit.PhenomenonID = new Guid(PhenomenonID);
+                PhenomenonUOM unit = new PhenomenonUOM
+                {
+                    UnitOfMeasureID = new Guid(row.RecordID),
+                    PhenomenonID = new Guid(PhenomenonID)
+                };
 
                 unit.Save();
             }
@@ -212,9 +214,11 @@ public partial class _Phenomena : System.Web.UI.Page
         {
             foreach (SelectedRow row in sm.SelectedRows)
             {
-                PhenomenonOffering offer = new PhenomenonOffering();
-                offer.OfferingID = new Guid(row.RecordID);
-                offer.PhenomenonID = new Guid(PhenomenonID);
+                PhenomenonOffering offer = new PhenomenonOffering
+                {
+                    OfferingID = new Guid(row.RecordID),
+                    PhenomenonID = new Guid(PhenomenonID)
+                };
 
                 offer.Save();
             }

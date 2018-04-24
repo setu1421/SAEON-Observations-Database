@@ -387,6 +387,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VImportBatch = @"vImportBatch";
         
+		public static readonly string VImportBatchSummary = @"vImportBatchSummary";
+        
 		public static readonly string VInstrumentOrganisation = @"vInstrumentOrganisation";
         
 		public static readonly string VInstrumentSensor = @"vInstrumentSensor";
