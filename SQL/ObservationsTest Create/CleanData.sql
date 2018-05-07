@@ -89,6 +89,15 @@ from
 where
   (DataSource.Name not like 'SACTN %')
 Delete DataSourceRoleOld
+Delete
+  Instrument_Sensor
+from
+  Instrument_Sensor
+  inner join Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID)
+where
+  (Sensor.Name not like 'SACTN %')
+Delete Sensor where (Name not like 'SACTN %')
 Delete DataSource where (Name not like 'SACTN %')
 Delete
   SchemaColumn
@@ -99,15 +108,6 @@ from
 where
   (DataSchema.Name not like 'SACTN %')
 Delete DataSchema where (Name not like 'SACTN %')
-Delete
-  Instrument_Sensor
-from
-  Instrument_Sensor
-  inner join Sensor
-    on (Instrument_Sensor.SensorID = Sensor.ID)
-where
-  (Sensor.Name not like 'SACTN %')
-Delete Sensor where (Name not like 'SACTN %')
 Delete
   Organisation_Instrument
 from
@@ -224,3 +224,4 @@ from
 where
   (Station.Name = 'SACTN Seaview SAEON')
 Update Station set Code = 'SACTN Winkelspruit KZNSB', Name = Code, Description = 'Winkelspruit KZNSB' where Code = 'SACTN Winkelspriut KZNSB'
+CheckPoint

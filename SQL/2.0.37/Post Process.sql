@@ -1,4 +1,3 @@
-use Observations
 insert into SchemaColumnType
   (Name, Description, UserId)
 values

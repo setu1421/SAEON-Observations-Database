@@ -5,7 +5,7 @@ from
   vObservationExpansion
 where
   (PhenomenonName not in ('Current Direction','Current speed','Depth')) and
-  (StationName like 'SACTN%') and ((SensorName like '% Daily %') or (SensorName like '% Hourly %'))
+  (StationName like 'SACTN%') and (SensorName like '% Hourly %')
 group by
   PhenomenonName
 order by

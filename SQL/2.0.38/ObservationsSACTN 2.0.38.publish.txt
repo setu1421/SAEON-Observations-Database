@@ -1,4 +1,4 @@
-﻿** Highlights
+** Highlights
      Tables that will be rebuilt
        [dbo].[DataLog]
        [dbo].[Observation]
@@ -54,14 +54,14 @@
        [dbo].[DF_Observation_AddedDate] (Default Constraint)
        [dbo].[DF_Observation_AddedAt] (Default Constraint)
        [dbo].[DF_Observation_UpdatedAt] (Default Constraint)
+       [dbo].[FK_DataLog_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_DataLog_PhenomenonUOM] (Foreign Key)
        [dbo].[FK_DataLog_Sensor] (Foreign Key)
        [dbo].[FK_DataLog_Status] (Foreign Key)
        [dbo].[FK_DataLog_StatusReason] (Foreign Key)
        [dbo].[FK_DataLog_aspnet_Users] (Foreign Key)
        [dbo].[FK_DataLog_DataSourceTransformation] (Foreign Key)
        [dbo].[FK_DataLog_ImportBatch] (Foreign Key)
-       [dbo].[FK_DataLog_PhenomenonOffering] (Foreign Key)
-       [dbo].[FK_DataLog_PhenomenonUOM] (Foreign Key)
        [dbo].[FK_Observation_ImportBatch] (Foreign Key)
        [dbo].[FK_Observation_Status] (Foreign Key)
        [dbo].[FK_Observation_StatusReason] (Foreign Key)
@@ -114,14 +114,14 @@
        [dbo].[Sensor].[IX_Sensor_Latitude] (Index)
        [dbo].[Sensor].[IX_Sensor_Longitude] (Index)
        [dbo].[Sensor].[IX_Sensor_Elevation] (Index)
+       [dbo].[FK_DataLog_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_DataLog_PhenomenonUOM] (Foreign Key)
        [dbo].[FK_DataLog_Sensor] (Foreign Key)
        [dbo].[FK_DataLog_Status] (Foreign Key)
        [dbo].[FK_DataLog_StatusReason] (Foreign Key)
        [dbo].[FK_DataLog_aspnet_Users] (Foreign Key)
        [dbo].[FK_DataLog_DataSourceTransformation] (Foreign Key)
        [dbo].[FK_DataLog_ImportBatch] (Foreign Key)
-       [dbo].[FK_DataLog_PhenomenonOffering] (Foreign Key)
-       [dbo].[FK_DataLog_PhenomenonUOM] (Foreign Key)
        [dbo].[FK_Observation_ImportBatch] (Foreign Key)
        [dbo].[FK_Observation_Status] (Foreign Key)
        [dbo].[FK_Observation_StatusReason] (Foreign Key)
@@ -149,12 +149,6 @@
        [dbo].[vSensor] (View)
        [dbo].[vSensorLocation] (View)
 
-The source's object [Authentication] is different than the target's version of the object but the target object will not be updated.
-The source's object [Observations] is different than the target's version of the object but the target object will not be updated.
-The object [Authentication] already exists in database with a different definition and will not be altered.
-The object [Observations] already exists in database with a different definition and will not be altered.
-If this deployment is executed, changes to [dbo].[Observation] might introduce run-time errors in [dbo].[vApiDataGaps].
-If this deployment is executed, changes to [dbo].[Sensor] might introduce run-time errors in [dbo].[progress_Progress_Resolved].
-If this deployment is executed, changes to [dbo].[Sensor] might introduce run-time errors in [dbo].[vApiDataGaps].
-If this deployment is executed, changes to [dbo].[vObservation] might introduce run-time errors in [dbo].[vObservationRolesOld].
+The source's object [Documents] is different than the target's version of the object but the target object will not be updated.
+The object [Documents] already exists in database with a different definition and will not be altered.
 
