@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{38793798-79FB-49CA-AF33-D4874BF6F736}"
 	ProjectSection(SolutionItems) = preProject
+		Observations 2.0.38.publish.sql = Observations 2.0.38.publish.sql
+		Observations 2.0.38.publish.txt = Observations 2.0.38.publish.txt
+		ObservationsSACTN 2.0.38.publish.sql = ObservationsSACTN 2.0.38.publish.sql
+		ObservationsSACTN 2.0.38.publish.txt = ObservationsSACTN 2.0.38.publish.txt
 		ObservationsTest 2.0.38.publish.sql = ObservationsTest 2.0.38.publish.sql
 		ObservationsTest 2.0.38.publish.txt = ObservationsTest 2.0.38.publish.txt
 		PostProcess.sql = PostProcess.sql
@@ -15,7 +19,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1B0A04AB-A0C0-40C1-AE05-6E1EF9EEA0E6}.Default|Default.ActiveCfg = Default
+		{0B651892-EE06-4894-8BB6-726754501C0B}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

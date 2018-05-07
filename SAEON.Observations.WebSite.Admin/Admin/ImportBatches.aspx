@@ -525,6 +525,7 @@
                                                 <ext:CheckColumn Locked="true" Header="Raw Value Invalid" DataIndex="RawValueInvalid"
                                                     Width="30" Hidden="true" />
                                                 <ext:Column Header="Invalid Raw value" DataIndex="ValueText" Width="150" Hidden="true" />
+                                                <ext:Column Header="Raw Text" DataIndex="ValueText" Width="90" />
                                                 <ext:Column Header="Raw Value" DataIndex="RawValue" Width="90">
                                                     <Commands>
                                                         <ext:ImageCommand Icon="Delete" CommandName="InvalidRawValue" Hidden="true" HideMode="Display">

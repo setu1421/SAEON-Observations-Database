@@ -210,19 +210,48 @@ public class ImportSchemaHelper : IDisposable
                 FixedLengthClassBuilder cb = new FixedLengthClassBuilder(schema.Name, FixedMode.AllowVariableLength)
                 {
                     IgnoreEmptyLines = true,
-                    IgnoreFirstLines = schema.IgnoreFirst,
-                    //if (schema.HasColumnNames.HasValue && schema.HasColumnNames.Value)
-                    //{
-                    //    cb.IgnoreFirstLines++;
-                    //}
-                    IgnoreLastLines = schema.IgnoreLast
+                    IgnoreFirstLines = schema.IgnoreFirst
                 };
+                //if (schema.HasColumnNames.HasValue && schema.HasColumnNames.Value)
+                //{
+                //    cb.IgnoreFirstLines++;
+                //}
+                cb.IgnoreLastLines = schema.IgnoreLast;
                 if (!String.IsNullOrEmpty(schema.Condition))
                     schema.Condition = schema.Condition;
-                foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
+                //if (!(schema.HasColumnNames.HasValue && schema.HasColumnNames.Value))
                 {
-                    cb.AddField(col.Name, col.Width.Value, typeof(string));
+                    foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
+                    {
+                        cb.AddField(col.Name, col.Width.Value, typeof(string));
+                    }
                 }
+                //else
+                //{
+                //    // Load column names from file
+                //    List<string> columnNames = LoadColumnNamesFixedWidth(schema, data);
+                //    // Loop through and if in schema add else ignore
+                //    List<string> columnsNotInSchema = new List<string>();
+                //    foreach (var columnName in columnNames)
+                //    {
+                //        var col = schema.SchemaColumnRecords().Where(c => c.Name.Equals(columnName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+                //        cb.AddField(columnName);
+                //        if (col == null)
+                //        {
+                //            columnsNotInSchema.Add(columnName);
+                //            cb.LastField.FieldValueDiscarded = true;
+                //        }
+                //    }
+                //    if (columnsNotInSchema.Any())
+                //    {
+                //        batch.Issues += "Columns in data file but not in schema - " + string.Join(", ", columnsNotInSchema) + Environment.NewLine;
+                //    }
+                //    var columnsNotInDataFile = schema.SchemaColumnRecords().Select(c => c.Name.ToLower()).Except(cb.Fields.Select(f => f.FieldName.ToLower()));
+                //    if (columnsNotInDataFile.Any())
+                //    {
+                //        batch.Issues += "Columns in schema but not in data file - " + string.Join(", ", columnsNotInDataFile) + Environment.NewLine;
+                //    }
+                //}
                 //Logging.Information("Class: {class}", cb.GetClassSourceCode(NetLanguage.CSharp));
                 recordType = cb.CreateRecordClass();
                 engine = new FixedFileEngine(recordType);
@@ -622,7 +651,7 @@ public class ImportSchemaHelper : IDisposable
                             if (!found)
                             {
                                 if (foundTooEarly || foundTooLate) continue; // Ignore 
-                                Logging.Error("Sensor not found Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
+                                Logging.Error("Index: {Index} FieldName: {FieldName} Sensor not found Sensors: {sensors}", def.Index, def.FieldName, def.Sensors.Select(s => s.Name).ToList());
                                 rec.SensorNotFound = true;
                                 rec.SensorID = def.Sensors.FirstOrDefault()?.Id;
                                 rec.InvalidStatuses.Add(Status.SensorNotFound);

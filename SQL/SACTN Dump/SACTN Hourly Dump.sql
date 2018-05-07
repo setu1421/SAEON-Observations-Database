@@ -1,5 +1,5 @@
 Select 
-  SiteName, StationName, InstrumentName, SensorName, PhenomenonName, OfferingName, UnitOfMeasureUnit, ValueDate, DataValue 
+  SiteName, StationName, InstrumentName, SensorName, PhenomenonName, OfferingName, UnitOfMeasureUnit, ValueDate, DataValue, Latitude, Longitude, Elevation
 from
   vObservationExpansion
 where

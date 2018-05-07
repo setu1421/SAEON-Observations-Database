@@ -79,6 +79,30 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     private int duplicates = 0;
     private int nullDuplicates = 0;
 
+    private void CreateSummary(SharedDbConnectionScope connScope, Guid importBatchId)
+    {
+        var cmd = connScope.CurrentConnection.CreateCommand();
+        ImportBatchSummary.Delete("ImportBatchID", importBatchId);
+        var sql =
+            "Insert Into ImportBatchSummary" + Environment.NewLine +
+            "  (ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance)" + Environment.NewLine +
+            "Select" + Environment.NewLine +
+            "  ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(ImportBatchID) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance" + Environment.NewLine +
+            "from" + Environment.NewLine +
+            "  Observation" + Environment.NewLine +
+            "where" + Environment.NewLine +
+            "  (ImportBatchID = @ImportBatchID)" + Environment.NewLine +
+            "group by" + Environment.NewLine +
+            "  ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID";
+        cmd.CommandText = sql;
+        var param = cmd.CreateParameter();
+        param.DbType = DbType.Guid;
+        param.ParameterName = "@ImportBatchID";
+        param.Value = importBatchId;
+        cmd.Parameters.Add(param);
+        var n = cmd.ExecuteNonQuery();
+        Logging.Verbose("Added {Summaries} summaries", n);
+    }
 
     protected void UploadClick(object sender, DirectEventArgs e)
     {
@@ -305,28 +329,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     }
                                 }
                                 // Summaries
-                                var cmd = connScope.CurrentConnection.CreateCommand();
-                                var sql =
-                                    "Insert Into ImportBatchSummary" + Environment.NewLine +
-                                    "  (ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance)" + Environment.NewLine +
-                                    "Select" + Environment.NewLine +
-                                    "  ImportBatch.ID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance" + Environment.NewLine +
-                                    "from" + Environment.NewLine +
-                                    "  ImportBatch" + Environment.NewLine +
-                                    "  inner join Observation" + Environment.NewLine +
-                                    "    on(Observation.ImportBatchID = ImportBatch.ID)" + Environment.NewLine +
-                                    "where" + Environment.NewLine +
-                                    "  (ImportBatch.ID = @ImportBatchID)" + Environment.NewLine +
-                                    "group by" + Environment.NewLine +
-                                    "  ImportBatch.ID, SensorID, PhenomenonOfferingID, PhenomenonUOMID";
-                                cmd.CommandText = sql;
-                                var param = cmd.CreateParameter();
-                                param.DbType = DbType.Guid;
-                                param.ParameterName = "@ImportBatchID";
-                                param.Value = batch.Id;
-                                cmd.Parameters.Add(param);
-                                var n = cmd.ExecuteNonQuery();
-                                Logging.Verbose("Added {Summaries} summaries", n);
+                                CreateSummary(connScope, batch.Id);
                                 Auditing.Log(GetType(), new ParameterList {
                                     { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status} });
                             }
@@ -618,6 +621,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
 
                             DataLog.Delete(tfID.Text);
+                            CreateSummary(connScope, batch.Id);
                         }
 
                         ts.Complete();
@@ -765,6 +769,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             log.Save();
                             Observation.Delete(ob.Id);
                         }
+                        CreateSummary(connScope, ImportBatchId);
                     }
 
                     ts.Complete();
@@ -801,6 +806,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }).Show();
     }
 
+    /*
     [DirectMethod]
     public void DeleteEntry(Guid Id)
     {
@@ -845,6 +851,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
         }
     }
+    */
 
     protected void ImportBatchesGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {
@@ -905,8 +912,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         };
                         Obrecord.Save();
 
-                        new Delete().From(DataLog.Schema).Where(DataLog.Columns.Id).IsEqualTo(d.Id).Execute();
-
+                        //new Delete().From(DataLog.Schema).Where(DataLog.Columns.Id).IsEqualTo(d.Id).Execute();
+                        DataLog.Delete("ID", d.Id);
+                        CreateSummary(connScope, d.ImportBatchID);
                     }
 
                     ts.Complete();

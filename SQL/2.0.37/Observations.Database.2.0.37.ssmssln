@@ -8,6 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Location count.sql = Location count.sql
 		Observations 2.0.37.publish.sql = Observations 2.0.37.publish.sql
 		Observations 2.0.37.publish.txt = Observations 2.0.37.publish.txt
+		ObservationsSACTN 2.0.37.publish.sql = ObservationsSACTN 2.0.37.publish.sql
+		ObservationsSACTN 2.0.37.publish.txt = ObservationsSACTN 2.0.37.publish.txt
 		ObservationsTest 2.0.37.publish.sql = ObservationsTest 2.0.37.publish.sql
 		ObservationsTest 2.0.37.publish.txt = ObservationsTest 2.0.37.publish.txt
 		Post Process.sql = Post Process.sql
@@ -18,7 +20,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{456CF707-91D8-4158-9B92-4BB0196CB1FC}.Default|Default.ActiveCfg = Default
+		{FD2927D6-2CA4-44AA-92DB-AE1D07084A4D}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
