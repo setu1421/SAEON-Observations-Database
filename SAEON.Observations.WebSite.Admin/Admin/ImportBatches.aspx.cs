@@ -57,6 +57,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             {
                 //Log.Verbose("ImportBatchesGridStore_RefreshData");
                 ImportBatchesGridStore.DataSource = ImportBatchRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
+                ImportBatchesGridStore.DataBind();
+                //(ImportBatchesGridStore.Proxy[0] as PageProxy).Total = ImportBatchesGridStore.DataSource
             }
             catch (Exception ex)
             {
@@ -788,6 +790,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
+    /*
     [DirectMethod]
     public void ConfirmDeleteEntry(Guid Id)
     {
@@ -806,7 +809,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }).Show();
     }
 
-    /*
     [DirectMethod]
     public void DeleteEntry(Guid Id)
     {

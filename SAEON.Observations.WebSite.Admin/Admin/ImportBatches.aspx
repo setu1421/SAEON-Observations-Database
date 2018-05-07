@@ -139,7 +139,7 @@
                                 <SelectionModel>
                                     <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" SingleSelect="true">
                                         <Listeners>
-                                            <RowSelect Fn="ImportBatchRowSelect" Buffer="250" />
+                                            <RowSelect Fn="ImportBatchRowSelect" Buffer="25" />
                                         </Listeners>
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
@@ -156,7 +156,7 @@
                                     </ext:GridFilters>
                                 </Plugins>
                                 <BottomBar>
-                                    <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="25" EmptyMsg="No data found" />
+                                    <ext:PagingToolbar ID="PagingToolbar1" runat="server" PageSize="25" EmptyMsg="No data found"/>
                                 </BottomBar>
                                 <Listeners>
                                     <Command Fn="onBatchCommand" />
