@@ -7,9 +7,9 @@ CREATE TABLE [dbo].[ImportBatchSummary]
     [PhenomenonOfferingID] UNIQUEIDENTIFIER NOT NULL, 
     [PhenomenonUOMID] UNIQUEIDENTIFIER NOT NULL, 
     [Count] INT NOT NULL, 
-    [Minimum] FLOAT NOT NULL, 
-    [Maximum] FLOAT NOT NULL, 
-    [Average] FLOAT NOT NULL, 
+    [Minimum] FLOAT NULL, 
+    [Maximum] FLOAT NULL, 
+    [Average] FLOAT NULL, 
     [StandardDeviation] FLOAT NULL, 
     [Variance] FLOAT NULL,
     CONSTRAINT [PK_ImportBatchSummary] PRIMARY KEY CLUSTERED ([ID]), 
@@ -17,7 +17,7 @@ CREATE TABLE [dbo].[ImportBatchSummary]
     CONSTRAINT [FK_ImportBatchSummary_SensorID] FOREIGN KEY ([SensorID]) REFERENCES [Sensor]([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [PhenomenonOffering]([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [PhenomenonUOM]([ID]),
-    CONSTRAINT [UX_ImportBatchSummary] UNIQUE (ImportBatchID,PhenomenonOfferingID,PhenomenonUOMID),
+    CONSTRAINT [UX_ImportBatchSummary] UNIQUE (ImportBatchID,SensorID,PhenomenonOfferingID,PhenomenonUOMID),
 )
 
 GO

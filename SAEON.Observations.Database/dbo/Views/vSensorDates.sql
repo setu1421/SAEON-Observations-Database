@@ -33,7 +33,7 @@ from
     on (Station_Instrument.InstrumentID = Instrument.ID)
   left join Station
     on (Station_Instrument.StationID = Station.ID)
-  left join Site
+  inner join Site
     on (Station.SiteID = Site.ID)
 --< Added 2.0.29 20170324 TimPN
 

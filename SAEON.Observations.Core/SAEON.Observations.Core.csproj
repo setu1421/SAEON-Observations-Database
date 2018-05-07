@@ -12,15 +12,6 @@
     <Version>1.0.4</Version>
   </PropertyGroup>
 
-  <!--<ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>-->
-
-  <!--<ItemGroup>
-    <PackageReference Include="EntityFramework.SqlServerCompact" Version="6.2.0" />
-    <PackageReference Include="SAEON.Logs" Version="1.0.12" />
-  </ItemGroup>-->
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="echo rd /s /q &quot;D:\Development\NuGet\$(ProjectName)&quot;&#xD;&#xA;rd /s /q &quot;D:\Development\NuGet\$(ProjectName)&quot;&#xD;&#xA;echo nuget init &quot;$(ProjectDir)bin\Release&quot; D:\Development\NuGet&#xD;&#xA;nuget init &quot;$(ProjectDir)bin\Release&quot; D:\Development\NuGet&#xD;&#xA;" />
   </Target>
