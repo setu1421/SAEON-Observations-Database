@@ -165,7 +165,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
 
-                Logging.Information("Import Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.28, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.29, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())
