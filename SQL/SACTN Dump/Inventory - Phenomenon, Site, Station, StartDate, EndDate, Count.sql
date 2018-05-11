@@ -1,3 +1,4 @@
+use ObservationsSACTN
 Select
   PhenomenonName Phenomenon, SiteName Site, StationName Station, Min(ValueDay) StartDate, Max(ValueDay) EndDate, Count(*) Observations
 from

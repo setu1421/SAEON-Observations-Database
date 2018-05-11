@@ -1,4 +1,4 @@
-use Observations
+use ObservationsSACTN
 Select 
   (Select count(*) from Site where Name like 'SACTN %') Sites,
   (Select count(*) from Station where Name like 'SACTN %') Stations,

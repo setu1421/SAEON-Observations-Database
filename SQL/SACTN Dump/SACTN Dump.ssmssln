@@ -5,12 +5,15 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3FAC0DCF-341B-4DE7-A346-5109A7057C11}"
 	ProjectSection(SolutionItems) = preProject
+		Bounds - Daily.sql = Bounds - Daily.sql
+		Bounds - Hourly.sql = Bounds - Hourly.sql
+		Clean data.sql = Clean data.sql
+		Dump - Daily.sql = Dump - Daily.sql
+		Dump - Hourly.sql = Dump - Hourly.sql
+		Inventory - Daily.sql = Inventory - Daily.sql
+		Inventory - Hourly.sql = Inventory - Hourly.sql
+		Inventory - Phenomenon, Offering, Unit, Site, Station, StartDate, EndDate, Count.sql = Inventory - Phenomenon, Offering, Unit, Site, Station, StartDate, EndDate, Count.sql
 		Inventory - Phenomenon, Site, Station, StartDate, EndDate, Count.sql = Inventory - Phenomenon, Site, Station, StartDate, EndDate, Count.sql
-		SACTN bounds.sql = SACTN bounds.sql
-		SACTN Daily Bounds.sql = SACTN Daily Bounds.sql
-		SACTN Daily Dump.sql = SACTN Daily Dump.sql
-		SACTN Hourly Bounds.sql = SACTN Hourly Bounds.sql
-		SACTN Hourly Dump.sql = SACTN Hourly Dump.sql
 		SACTN stats.sql = SACTN stats.sql
 	EndProjectSection
 EndProject
@@ -19,7 +22,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{12FB7970-9AB9-46C4-9394-1D72F3FC47D6}.Default|Default.ActiveCfg = Default
+		{47BE9473-D4C2-44CD-8289-D10B9DF38F32}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

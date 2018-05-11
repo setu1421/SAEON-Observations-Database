@@ -1,3 +1,4 @@
+use ObservationsSACTN
 Select
   PhenomenonName Phenomenon, Min(ValueDay) StartDate, Max(ValueDay) EndDate, Count(*) Observations, 
   Min(Longitude) West, Max(Longitude) East, Max(Latitude) North, Min(Latitude) South
