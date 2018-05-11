@@ -89,7 +89,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             "Insert Into ImportBatchSummary" + Environment.NewLine +
             "  (ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance)" + Environment.NewLine +
             "Select" + Environment.NewLine +
-            "  ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(ImportBatchID) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance" + Environment.NewLine +
+            "  ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance" + Environment.NewLine +
             "from" + Environment.NewLine +
             "  Observation" + Environment.NewLine +
             "where" + Environment.NewLine +

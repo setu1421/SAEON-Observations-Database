@@ -594,8 +594,8 @@ public class ImportSchemaHelper : IDisposable
 
                         var phenomenonOffering = new PhenomenonOffering(def.PhenomenonOfferingID);
                         var phenomenonUnitOfMeasure = new PhenomenonUOM(def.PhenomenonUOMID);
-                        Logging.Verbose("Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
-                            phenomenonOffering?.Phenomenon?.Name, phenomenonOffering?.Offering?.Name, phenomenonUnitOfMeasure?.Phenomenon?.Name, phenomenonUnitOfMeasure?.UnitOfMeasure?.Unit);
+                        Logging.Verbose("Index: {Index} Column: {Column} Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
+                            def.Index, def.FieldName, phenomenonOffering?.Phenomenon?.Name, phenomenonOffering?.Offering?.Name, phenomenonUnitOfMeasure?.Phenomenon?.Name, phenomenonUnitOfMeasure?.UnitOfMeasure?.Unit);
                         if (ErrorInTime)
                         {
                             rec.TimeValueInvalid = true;
@@ -636,6 +636,7 @@ public class ImportSchemaHelper : IDisposable
                             {
                                 // Sensor x Instrument_Sensor x Instrument x Station_Instrument x Station x Site
                                 var dates = new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault();
+                                if (dates == null) continue;
                                 if (dates.StartDate.HasValue && (rec.DateValue.Date < dates.StartDate.Value))
                                 {
                                     Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, dates.StartDate, rec.DateValue, rec);
@@ -764,21 +765,21 @@ public class ImportSchemaHelper : IDisposable
                             }
                         }
 
-                        // If still null try get from sensor/instrument/station location
-                        if (!(rec.Latitude.HasValue && rec.Longitude.HasValue) || !rec.Elevation.HasValue)
-                        {
-                            var loc = new VSensorLocation(VSensorLocation.Columns.SensorID, rec.SensorID);
-                            if (loc != null)
-                            {
-                                if (!(rec.Latitude.HasValue && rec.Longitude.HasValue) && (loc.Latitude.HasValue && loc.Longitude.HasValue))
-                                {
-                                    rec.Latitude = loc.Latitude;
-                                    rec.Longitude = loc.Longitude;
-                                }
-                                if (!rec.Elevation.HasValue && loc.Elevation.HasValue)
-                                    rec.Elevation = loc.Elevation;
-                            }
-                        }
+                        //// If still null try get from sensor/instrument/station location
+                        //if (!(rec.Latitude.HasValue && rec.Longitude.HasValue) || !rec.Elevation.HasValue)
+                        //{
+                        //    var loc = new VSensorLocation(VSensorLocation.Columns.SensorID, rec.SensorID);
+                        //    if (loc != null)
+                        //    {
+                        //        if (!(rec.Latitude.HasValue && rec.Longitude.HasValue) && (loc.Latitude.HasValue && loc.Longitude.HasValue))
+                        //        {
+                        //            rec.Latitude = loc.Latitude;
+                        //            rec.Longitude = loc.Longitude;
+                        //        }
+                        //        if (!rec.Elevation.HasValue && loc.Elevation.HasValue)
+                        //            rec.Elevation = loc.Elevation;
+                        //    }
+                        //}
                         if (RowComment.Trim().Length > 0)
                             rec.Comment = RowComment.TrimEnd();
                         rec.CorrelationID = correlationID;
