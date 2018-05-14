@@ -5,7 +5,9 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6529C3C3-91F8-4290-9881-9578390E9307}"
 	ProjectSection(SolutionItems) = preProject
+		Bad Data.sql = Bad Data.sql
 		CleanData.sql = CleanData.sql
+		CreateData.sql = CreateData.sql
 	EndProjectSection
 EndProject
 Global
@@ -13,7 +15,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D7288CEF-2F1B-487A-A4C8-F56E21F495B7}.Default|Default.ActiveCfg = Default
+		{BAE62A4A-E59A-45BD-AB60-E1307EE07B0A}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
