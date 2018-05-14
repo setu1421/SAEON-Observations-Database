@@ -11,11 +11,11 @@ CREATE TABLE [dbo].[Instrument]
     [Url] VARCHAR(250) NULL, 
 --> Changed 2.0.22 20170111 TimPN
 --    [StartDate]        DATETIME         NULL,
-    [StartDate]        DATETIMEOFFSET         NULL,
+    [StartDate]        DATE         NULL,
 --< Changed 2.0.22 20170111 TimPN
 --> Changed 2.0.22 20170111 TimPN
 --    [EndDate]        DATETIME         NULL,
-    [EndDate]        DATETIMEOFFSET         NULL,
+    [EndDate]        DATE         NULL,
 --< Changed 2.0.22 20170111 TimPN
 --> Added 2.0.33 20170628 TimPN
     [Latitude] Float Null,
