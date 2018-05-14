@@ -8,11 +8,11 @@ CREATE TABLE [dbo].[Site]
     [Url] VARCHAR(250) NULL, 
 --> Changed 2.0.22 20170111 TimPN
 --    [StartDate]        DATETIME         NULL,
-    [StartDate]        DATE         NULL,
+    [StartDate]        DATETIMEOFFSET         NULL,
 --< Changed 2.0.22 20170111 TimPN
 --> Changed 2.0.22 20170111 TimPN
 --    [EndDate]        DATETIME         NULL,
-    [EndDate]        DATE         NULL,
+    [EndDate]        DATETIMEOFFSET         NULL,
 --< Changed 2.0.22 20170111 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
 --> Added 2.0.3 20160421 TimPN
