@@ -7,14 +7,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Bounds - Daily.sql = Bounds - Daily.sql
 		Bounds - Hourly.sql = Bounds - Hourly.sql
-		Clean data.sql = Clean data.sql
 		Dump - Daily.sql = Dump - Daily.sql
 		Dump - Hourly.sql = Dump - Hourly.sql
 		Inventory - Daily.sql = Inventory - Daily.sql
 		Inventory - Hourly.sql = Inventory - Hourly.sql
 		Inventory - Phenomenon, Offering, Unit, Site, Station, StartDate, EndDate, Count.sql = Inventory - Phenomenon, Offering, Unit, Site, Station, StartDate, EndDate, Count.sql
 		Inventory - Phenomenon, Site, Station, StartDate, EndDate, Count.sql = Inventory - Phenomenon, Site, Station, StartDate, EndDate, Count.sql
-		SACTN stats.sql = SACTN stats.sql
 	EndProjectSection
 EndProject
 Global
@@ -22,7 +20,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{47BE9473-D4C2-44CD-8289-D10B9DF38F32}.Default|Default.ActiveCfg = Default
+		{D50A5DB7-B245-44DB-A495-38F2D139FFDB}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

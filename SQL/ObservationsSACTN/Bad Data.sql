@@ -1,3 +1,4 @@
+use ObservationsSACTN
 Select Code SiteCode, Name SiteName from Site where Code <> Name
 Select Code StationCode, Name StationName from Station where Code <> Name
 Select

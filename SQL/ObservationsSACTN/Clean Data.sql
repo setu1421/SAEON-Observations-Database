@@ -93,7 +93,10 @@ where
 Insert Station_Instrument
   (StationID, InstrumentID, UserId)
 values
-  ((Select ID from Station where Code = 'SACTN Seaview SAEON'), (Select ID from Instrument where Code = 'SACTN Seaview SAEON UTR'), (Select UserId from aspnet_Users where LoweredUserName='timpn'))
+  ((Select ID from Station where Code = 'SACTN Seaview SAEON'), 
+   (Select ID from Instrument where Code = 'SACTN Seaview SAEON UTR'), 
+   (Select UserId from aspnet_Users where LoweredUserName='timpn'))
+
 -- Sensors
 set @Code = 'SACTN Blythedale KZNSB Thermo Annual Temperature'
 Update Sensor set Code = @Code, Name = @Code, Description = SUBSTRING(@Code,7, 500) where Code = 'SACTN Bylthedale KZNSB Thermo Annual Temperature'
@@ -106,5 +109,22 @@ Update Sensor set Code = @Code, Name = @Code, Description = SUBSTRING(@Code,7, 5
 set @Code = 'SACTN Humewood SAWS Thermo Monthly Temperature'
 Update Sensor set Code = @Code, Name = @Code, Description = SUBSTRING(@Code,7, 500) where Code = 'SACTN Humehood SAWS Thermo Monthly Temperature'
 
+-- InstrumentSensor
+Delete
+  Instrument_Sensor
+from
+  Instrument_Sensor
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID)
+  inner join Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID)
+where
+  (Instrument.Name = 'SACTN Kent Bay KZNSB Thermo') and (Sensor.Name = 'SACTN Kenton on Sea SAEON UTR Daily Temperature')
+Insert Instrument_Sensor
+  (InstrumentID, SensorID, UserId)
+values
+  ((Select ID from Instrument where Name = 'SACTN Kenton on Sea SAEON UTR'),
+   (Select ID from Sensor where Name = 'SACTN Kenton on Sea SAEON UTR Daily Temperature'),
+   (Select UserId from aspnet_Users where LoweredUserName='timpn'))
 
 
