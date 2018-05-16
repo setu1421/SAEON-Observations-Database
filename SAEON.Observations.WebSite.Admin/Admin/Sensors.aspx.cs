@@ -255,14 +255,14 @@ public partial class Admin_Sensors : System.Web.UI.Page
                     instrumentSensor.Elevation = nfInstrumentElevation.Number;
 
 
-                if (!dfInstrumentStartDate.IsEmpty && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
-                    instrumentSensor.StartDate = dfInstrumentStartDate.SelectedDate;
-                else
+                if (dfInstrumentStartDate.IsEmpty || (dfInstrumentStartDate.SelectedDate.Year < 1900))
                     instrumentSensor.StartDate = null;
-                if (!dfInstrumentEndDate.IsEmpty && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
-                    instrumentSensor.EndDate = dfInstrumentEndDate.SelectedDate;
                 else
+                    instrumentSensor.StartDate = DateTime.Parse(dfInstrumentStartDate.RawText);
+                if (dfInstrumentEndDate.IsEmpty || (dfInstrumentEndDate.SelectedDate.Year < 1900))
                     instrumentSensor.EndDate = null;
+                else
+                    instrumentSensor.EndDate = DateTime.Parse(dfInstrumentEndDate.RawText);
                 instrumentSensor.UserId = AuthHelper.GetLoggedInUserId;
                 instrumentSensor.Save();
                 Auditing.Log(GetType(), new ParameterList {

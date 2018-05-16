@@ -244,8 +244,8 @@
                                             <Columns>
                                                 <ext:Column Header="Code" DataIndex="SensorCode" Width="200" />
                                                 <ext:Column Header="Name" DataIndex="SensorName" Width="500" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="100" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="100" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="125" Format="dd MMM yyyy HH:mm" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="125" Format="dd MMM yyyy HH:mm" />
                                                 <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" />
@@ -715,7 +715,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="SensorLinkWindow" runat="server" Width="450" Height="260" Closable="true"
+    <ext:Window ID="SensorLinkWindow" runat="server" Width="450" Height="275" Closable="true"
         Hidden="true" Collapsible="false" Title="Link Sensor"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Listeners>
@@ -723,7 +723,7 @@
         </Listeners>
         <Content>
             <ext:FormPanel ID="SensorLinkFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
-                MonitorResize="true" Padding="10" Width="440" Height="370" ButtonAlign="Right" LabelAlign="Top" Layout="RowLayout" ClientIDMode="Static">
+                MonitorResize="true" Padding="10" ButtonAlign="Right" LabelAlign="Top" Layout="RowLayout" ClientIDMode="Static">
                 <LoadMask ShowMask="true" />
                 <Items>
                     <ext:Hidden ID="SensorLinkID" DataIndex="Id" runat="server" ClientIDMode="Static">
@@ -746,14 +746,14 @@
                     <ext:Panel ID="Panel10" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
                             <ext:DateField ID="dfSensorStartDate" DataIndex="StartDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
+                                FieldLabel="Start Date" AnchorHorizontal="96%" Format="dd MMM yyyy H:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
                     <ext:Panel ID="Panel11" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
                             <ext:DateField ID="dfSensorEndDate" DataIndex="EndDate" MaxLength="100" runat="server" ClientIDMode="Static"
-                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy">
+                                FieldLabel="End Date" AnchorHorizontal="96%" Format="dd MMM yyyy H:mm" >
                             </ext:DateField>
                         </Items>
                     </ext:Panel>
