@@ -134,7 +134,7 @@ namespace SAEON.Observations.Data{
                 colvarMinimum.DataType = DbType.Double;
                 colvarMinimum.MaxLength = 0;
                 colvarMinimum.AutoIncrement = false;
-                colvarMinimum.IsNullable = false;
+                colvarMinimum.IsNullable = true;
                 colvarMinimum.IsPrimaryKey = false;
                 colvarMinimum.IsForeignKey = false;
                 colvarMinimum.IsReadOnly = false;
@@ -146,7 +146,7 @@ namespace SAEON.Observations.Data{
                 colvarMaximum.DataType = DbType.Double;
                 colvarMaximum.MaxLength = 0;
                 colvarMaximum.AutoIncrement = false;
-                colvarMaximum.IsNullable = false;
+                colvarMaximum.IsNullable = true;
                 colvarMaximum.IsPrimaryKey = false;
                 colvarMaximum.IsForeignKey = false;
                 colvarMaximum.IsReadOnly = false;
@@ -158,7 +158,7 @@ namespace SAEON.Observations.Data{
                 colvarAverage.DataType = DbType.Double;
                 colvarAverage.MaxLength = 0;
                 colvarAverage.AutoIncrement = false;
-                colvarAverage.IsNullable = false;
+                colvarAverage.IsNullable = true;
                 colvarAverage.IsPrimaryKey = false;
                 colvarAverage.IsForeignKey = false;
                 colvarAverage.IsReadOnly = false;
@@ -433,11 +433,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("Minimum")]
         [Bindable(true)]
-        public double Minimum 
+        public double? Minimum 
 	    {
 		    get
 		    {
-			    return GetColumnValue<double>("Minimum");
+			    return GetColumnValue<double?>("Minimum");
 		    }
             set 
 		    {
@@ -447,11 +447,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("Maximum")]
         [Bindable(true)]
-        public double Maximum 
+        public double? Maximum 
 	    {
 		    get
 		    {
-			    return GetColumnValue<double>("Maximum");
+			    return GetColumnValue<double?>("Maximum");
 		    }
             set 
 		    {
@@ -461,11 +461,11 @@ namespace SAEON.Observations.Data{
 	      
         [XmlAttribute("Average")]
         [Bindable(true)]
-        public double Average 
+        public double? Average 
 	    {
 		    get
 		    {
-			    return GetColumnValue<double>("Average");
+			    return GetColumnValue<double?>("Average");
 		    }
             set 
 		    {
