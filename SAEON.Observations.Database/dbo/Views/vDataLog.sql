@@ -116,8 +116,8 @@ FROM DataLog d
 --> Changed 2.0.31 20170423 TimPN
        --((Instrument_Sensor.StartDate is null) or (Cast(d.ValueDate as Date) >= Instrument_Sensor.StartDate)) and
        --((Instrument_Sensor.EndDate is null) or (Cast(d.ValueDate as Date) <= Instrument_Sensor.EndDate))
-       ((Instrument_Sensor.StartDate is null) or (d.ValueDay >= Instrument_Sensor.StartDate)) and
-       ((Instrument_Sensor.EndDate is null) or (d.ValueDay <= Instrument_Sensor.EndDate))
+       ((Instrument_Sensor.StartDate is null) or (d.ValueDate >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (d.ValueDate <= Instrument_Sensor.EndDate))
 --< Changed 2.0.31 20170423 TimPN
 --< Changed 2.0.22 20170111 TimPN
 --> Changed 2.0.28 20170317 TimPN

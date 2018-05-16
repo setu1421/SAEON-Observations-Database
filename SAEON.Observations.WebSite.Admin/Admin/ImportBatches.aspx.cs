@@ -57,6 +57,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             {
                 //Log.Verbose("ImportBatchesGridStore_RefreshData");
                 ImportBatchesGridStore.DataSource = ImportBatchRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
+                ImportBatchesGridStore.DataBind();
+                //(ImportBatchesGridStore.Proxy[0] as PageProxy).Total = ImportBatchesGridStore.DataSource
             }
             catch (Exception ex)
             {
@@ -87,7 +89,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             "Insert Into ImportBatchSummary" + Environment.NewLine +
             "  (ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance)" + Environment.NewLine +
             "Select" + Environment.NewLine +
-            "  ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(ImportBatchID) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance" + Environment.NewLine +
+            "  ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance" + Environment.NewLine +
             "from" + Environment.NewLine +
             "  Observation" + Environment.NewLine +
             "where" + Environment.NewLine +
@@ -163,7 +165,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
 
-                Logging.Information("Import Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.28, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version} DataSource: {dataSource} FileName: {fileName}", 1.30, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())
@@ -788,6 +790,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
+    /*
     [DirectMethod]
     public void ConfirmDeleteEntry(Guid Id)
     {
@@ -806,7 +809,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }).Show();
     }
 
-    /*
     [DirectMethod]
     public void DeleteEntry(Guid Id)
     {

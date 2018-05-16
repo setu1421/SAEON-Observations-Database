@@ -139,7 +139,7 @@
                                 <SelectionModel>
                                     <ext:RowSelectionModel ID="RowSelectionModel1" runat="server" SingleSelect="true">
                                         <Listeners>
-                                            <RowSelect Fn="ImportBatchRowSelect" Buffer="250" />
+                                            <RowSelect Fn="ImportBatchRowSelect" Buffer="25" />
                                         </Listeners>
                                     </ext:RowSelectionModel>
                                 </SelectionModel>
@@ -401,12 +401,12 @@
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="150" />
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
                                                 <ext:Column Header="Sensor" DataIndex="SensorName" Width="350" />
-                                                <ext:NumberColumn Header="Count" DataIndex="Count" Width="100" Format=",0" />
-                                                <ext:NumberColumn Header="Minimum" DataIndex="Minimum" Width="100" Format=",0.000" />
-                                                <ext:NumberColumn Header="Maximum" DataIndex="Maximum" Width="100" Format=",0.000" />
-                                                <ext:NumberColumn Header="Average" DataIndex="Average" Width="100" Format=",0.000" />
-                                                <ext:NumberColumn Header="StandardDeviation" DataIndex="StandardDeviation" Width="100" Format=",0.000000" />
-                                                <ext:NumberColumn Header="Variance" DataIndex="Variance" Width="100" Format=",0.000000" />
+                                                <ext:NumberColumn Header="Count" DataIndex="Count" Width="100" Format=",0" Align="Right" />
+                                                <ext:NumberColumn Header="Minimum" DataIndex="Minimum" Width="100" Format=",0.000" Align="Right" />
+                                                <ext:NumberColumn Header="Maximum" DataIndex="Maximum" Width="100" Format=",0.000" Align="Right" />
+                                                <ext:NumberColumn Header="Average" DataIndex="Average" Width="100" Format=",0.000" Align="Right" />
+                                                <ext:NumberColumn Header="Standard Dev." DataIndex="StandardDeviation" Width="100" Format=",0.000000" Align="Right" />
+                                                <ext:NumberColumn Header="Variance" DataIndex="Variance" Width="100" Format=",0.000000" Align="Right" />
                                             </Columns>
                                         </ColumnModel>
                                         <SelectionModel>

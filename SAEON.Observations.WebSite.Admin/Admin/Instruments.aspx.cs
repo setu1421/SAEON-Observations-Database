@@ -29,7 +29,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
         InstrumentsGrid.GetStore().DataSource = InstrumentRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
     }
 
-     protected void ValidateField(object sender, RemoteValidationEventArgs e)
+    protected void ValidateField(object sender, RemoteValidationEventArgs e)
     {
         InstrumentCollection col = new InstrumentCollection();
         string checkColumn = String.Empty;
@@ -480,14 +480,18 @@ public partial class Admin_Instruments : System.Web.UI.Page
                     InstrumentID = masterID,
                     SensorID = new Guid(cbSensor.SelectedItem.Value.Trim())
                 };
-                if (!String.IsNullOrEmpty(dfSensorStartDate.Text) && (dfSensorStartDate.SelectedDate.Year >= 1900))
-                    instrumentSensor.StartDate = dfSensorStartDate.SelectedDate;
-                else
+                if (dfSensorStartDate.IsEmpty || (dfSensorStartDate.SelectedDate.Year < 1900))
                     instrumentSensor.StartDate = null;
-                if (!String.IsNullOrEmpty(dfSensorEndDate.Text) && (dfSensorEndDate.SelectedDate.Year >= 1900))
-                    instrumentSensor.EndDate = dfSensorEndDate.SelectedDate;
                 else
+                {
+                    instrumentSensor.StartDate = DateTime.Parse(dfSensorStartDate.RawText);
+                }
+                if (dfSensorEndDate.IsEmpty || (dfSensorEndDate.SelectedDate.Year < 1900))
                     instrumentSensor.EndDate = null;
+                else
+                {
+                    instrumentSensor.EndDate = DateTime.Parse(dfSensorEndDate.RawText);
+                }
                 instrumentSensor.UserId = AuthHelper.GetLoggedInUserId;
                 instrumentSensor.Save();
                 Auditing.Log(GetType(), new ParameterList {

@@ -83,7 +83,7 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarInstrumenSensorStartDate = new TableSchema.TableColumn(schema);
                 colvarInstrumenSensorStartDate.ColumnName = "InstrumenSensorStartDate";
-                colvarInstrumenSensorStartDate.DataType = DbType.Date;
+                colvarInstrumenSensorStartDate.DataType = DbType.DateTime;
                 colvarInstrumenSensorStartDate.MaxLength = 0;
                 colvarInstrumenSensorStartDate.AutoIncrement = false;
                 colvarInstrumenSensorStartDate.IsNullable = true;
@@ -95,7 +95,7 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarInstrumenSensorEndDate = new TableSchema.TableColumn(schema);
                 colvarInstrumenSensorEndDate.ColumnName = "InstrumenSensorEndDate";
-                colvarInstrumenSensorEndDate.DataType = DbType.Date;
+                colvarInstrumenSensorEndDate.DataType = DbType.DateTime;
                 colvarInstrumenSensorEndDate.MaxLength = 0;
                 colvarInstrumenSensorEndDate.AutoIncrement = false;
                 colvarInstrumenSensorEndDate.IsNullable = true;
@@ -206,7 +206,7 @@ namespace SAEON.Observations.Data{
                 colvarSiteName.DataType = DbType.AnsiString;
                 colvarSiteName.MaxLength = 150;
                 colvarSiteName.AutoIncrement = false;
-                colvarSiteName.IsNullable = true;
+                colvarSiteName.IsNullable = false;
                 colvarSiteName.IsPrimaryKey = false;
                 colvarSiteName.IsForeignKey = false;
                 colvarSiteName.IsReadOnly = false;
@@ -239,7 +239,7 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
                 colvarStartDate.ColumnName = "StartDate";
-                colvarStartDate.DataType = DbType.Date;
+                colvarStartDate.DataType = DbType.DateTime;
                 colvarStartDate.MaxLength = 0;
                 colvarStartDate.AutoIncrement = false;
                 colvarStartDate.IsNullable = true;
@@ -251,7 +251,7 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
                 colvarEndDate.ColumnName = "EndDate";
-                colvarEndDate.DataType = DbType.Date;
+                colvarEndDate.DataType = DbType.DateTime;
                 colvarEndDate.MaxLength = 0;
                 colvarEndDate.AutoIncrement = false;
                 colvarEndDate.IsNullable = true;

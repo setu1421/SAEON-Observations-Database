@@ -19,16 +19,16 @@ public class ObservationRepository : BaseRepository
         //
     }
 
-    public static List<object> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix)
-    {
-        SqlQuery q = new Select().From(VObservation.Schema);
+    //public static List<object> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix)
+    //{
+    //    SqlQuery q = new Select().From(VObservation.Schema);
 
-        GetPagedQuery(ref q, e, paramPrefix);
+    //    GetPagedQuery(ref q, e, paramPrefix);
 
-        VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
+    //    VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
 
-        return col.ToList<object>();
-    }
+    //    return col.ToList();
+    //}
 
     public static List<VObservationsList> GetPagedListByBatch(StoreRefreshDataEventArgs e, string paramPrefix, Guid BatchID)
     {
@@ -39,7 +39,6 @@ public class ObservationRepository : BaseRepository
             .OrderAsc(VObservationsList.Columns.OfferingName);
         
         GetPagedQuery(ref q, e, paramPrefix);
-        VObservationsListCollection col = q.ExecuteAsCollection<VObservationsListCollection>();
-        return q.ExecuteAsCollection<VObservationsListCollection>().ToList<VObservationsList>();
+        return q.ExecuteAsCollection<VObservationsListCollection>().ToList();
     }
 }

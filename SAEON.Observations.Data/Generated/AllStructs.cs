@@ -373,6 +373,10 @@ namespace SAEON.Observations.Data
     public partial struct Views 
     {
 		
+		public static readonly string ProgressProgressResolved = @"progress_Progress_Resolved";
+        
+		public static readonly string VApiDataGap = @"vApiDataGaps";
+        
 		public static readonly string VAuditLog = @"vAuditLog";
         
 		public static readonly string VDataLog = @"vDataLog";
@@ -448,24 +452,6 @@ namespace SAEON.Observations.Data
 		public static readonly string VUnitOfMeasurePhenomena = @"vUnitOfMeasurePhenomena";
         
 		public static readonly string VUserInfo = @"vUserInfo";
-        
-		public static readonly string VwAspnetApplication = @"vw_aspnet_Applications";
-        
-		public static readonly string VwAspnetMembershipUser = @"vw_aspnet_MembershipUsers";
-        
-		public static readonly string VwAspnetProfile = @"vw_aspnet_Profiles";
-        
-		public static readonly string VwAspnetRole = @"vw_aspnet_Roles";
-        
-		public static readonly string VwAspnetUser = @"vw_aspnet_Users";
-        
-		public static readonly string VwAspnetUsersInRole = @"vw_aspnet_UsersInRoles";
-        
-		public static readonly string VwAspnetWebPartStatePath = @"vw_aspnet_WebPartState_Paths";
-        
-		public static readonly string VwAspnetWebPartStateShared = @"vw_aspnet_WebPartState_Shared";
-        
-		public static readonly string VwAspnetWebPartStateUser = @"vw_aspnet_WebPartState_User";
         
     }
     #endregion

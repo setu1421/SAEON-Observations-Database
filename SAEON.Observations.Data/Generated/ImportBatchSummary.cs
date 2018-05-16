@@ -214,7 +214,7 @@ namespace SAEON.Observations.Data
 				colvarMinimum.DataType = DbType.Double;
 				colvarMinimum.MaxLength = 0;
 				colvarMinimum.AutoIncrement = false;
-				colvarMinimum.IsNullable = false;
+				colvarMinimum.IsNullable = true;
 				colvarMinimum.IsPrimaryKey = false;
 				colvarMinimum.IsForeignKey = false;
 				colvarMinimum.IsReadOnly = false;
@@ -227,7 +227,7 @@ namespace SAEON.Observations.Data
 				colvarMaximum.DataType = DbType.Double;
 				colvarMaximum.MaxLength = 0;
 				colvarMaximum.AutoIncrement = false;
-				colvarMaximum.IsNullable = false;
+				colvarMaximum.IsNullable = true;
 				colvarMaximum.IsPrimaryKey = false;
 				colvarMaximum.IsForeignKey = false;
 				colvarMaximum.IsReadOnly = false;
@@ -240,7 +240,7 @@ namespace SAEON.Observations.Data
 				colvarAverage.DataType = DbType.Double;
 				colvarAverage.MaxLength = 0;
 				colvarAverage.AutoIncrement = false;
-				colvarAverage.IsNullable = false;
+				colvarAverage.IsNullable = true;
 				colvarAverage.IsPrimaryKey = false;
 				colvarAverage.IsForeignKey = false;
 				colvarAverage.IsReadOnly = false;
@@ -334,25 +334,25 @@ namespace SAEON.Observations.Data
 		  
 		[XmlAttribute("Minimum")]
 		[Bindable(true)]
-		public double Minimum 
+		public double? Minimum 
 		{
-			get { return GetColumnValue<double>(Columns.Minimum); }
+			get { return GetColumnValue<double?>(Columns.Minimum); }
 			set { SetColumnValue(Columns.Minimum, value); }
 		}
 		  
 		[XmlAttribute("Maximum")]
 		[Bindable(true)]
-		public double Maximum 
+		public double? Maximum 
 		{
-			get { return GetColumnValue<double>(Columns.Maximum); }
+			get { return GetColumnValue<double?>(Columns.Maximum); }
 			set { SetColumnValue(Columns.Maximum, value); }
 		}
 		  
 		[XmlAttribute("Average")]
 		[Bindable(true)]
-		public double Average 
+		public double? Average 
 		{
-			get { return GetColumnValue<double>(Columns.Average); }
+			get { return GetColumnValue<double?>(Columns.Average); }
 			set { SetColumnValue(Columns.Average, value); }
 		}
 		  
@@ -437,7 +437,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double varMinimum,double varMaximum,double varAverage,double? varStandardDeviation,double? varVariance)
+		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -473,7 +473,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double varMinimum,double varMaximum,double varAverage,double? varStandardDeviation,double? varVariance)
+		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			

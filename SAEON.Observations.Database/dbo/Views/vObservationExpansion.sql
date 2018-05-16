@@ -24,8 +24,8 @@ from
     on (Observation.SensorID = Sensor.ID)
   inner join Instrument_Sensor
     on (Observation.SensorID = Instrument_Sensor.SensorID) and
-       ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
-       ((Instrument_Sensor.EndDate is null) or (Observation.ValueDay <= Instrument_Sensor.EndDate))
+       ((Instrument_Sensor.StartDate is null) or (Observation.ValueDate >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (Observation.ValueDate <= Instrument_Sensor.EndDate))
   inner join Instrument
     on (Instrument_Sensor.InstrumentID = Instrument.ID) and
        ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate)) and

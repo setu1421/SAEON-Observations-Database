@@ -1,3 +1,4 @@
+Delete ImportBatchSummary
 Insert Into ImportBatchSummary
   (ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance)
 Select
@@ -6,4 +7,3 @@ from
   Observation
 group by
   ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID
-drop view vDataSourceRoleOld

@@ -6,11 +6,11 @@ CREATE TABLE [dbo].[Instrument_Sensor]
     [SensorID] UNIQUEIDENTIFIER NOT NULL, 
 --> Changed 2.0.22 20170111 TimPN
 --    [StartDate]        DATETIME         NULL,
-    [StartDate]        DATE         NULL,
+    [StartDate]        DATETIME         NULL,
 --< Changed 2.0.22 20170111 TimPN
 --> Changed 2.0.22 20170111 TimPN
 --    [EndDate]        DATETIME         NULL,
-    [EndDate]        DATE         NULL,
+    [EndDate]        DATETIME         NULL,
 --< Changed 2.0.22 20170111 TimPN
 --> Added 2.0.37 20180201 TimPN
     [Latitude] Float Null,

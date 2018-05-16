@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid ImportBatchID,Guid SensorID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double Minimum,double Maximum,double Average,double? StandardDeviation,double? Variance)
+	    public void Insert(Guid Id,Guid ImportBatchID,Guid SensorID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double? Minimum,double? Maximum,double? Average,double? StandardDeviation,double? Variance)
 	    {
 		    ImportBatchSummary item = new ImportBatchSummary();
 		    
@@ -114,7 +114,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid ImportBatchID,Guid SensorID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double Minimum,double Maximum,double Average,double? StandardDeviation,double? Variance)
+	    public void Update(Guid Id,Guid ImportBatchID,Guid SensorID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double? Minimum,double? Maximum,double? Average,double? StandardDeviation,double? Variance)
 	    {
 		    ImportBatchSummary item = new ImportBatchSummary();
 	        item.MarkOld();

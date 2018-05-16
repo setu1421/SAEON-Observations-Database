@@ -52,7 +52,8 @@ public partial class Admin_Sensors : System.Web.UI.Page
     #region Sensors
     protected void SensorsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
-        this.SensorsGrid.GetStore().DataSource = SensorRepository.GetPagedList(e, e.Parameters[this.GridFilters1.ParamPrefix]);
+        SensorsGridStore.DataSource = SensorRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
+        SensorsGridStore.DataBind();
     }
 
     protected void ValidateField(object sender, RemoteValidationEventArgs e)
@@ -235,9 +236,11 @@ public partial class Admin_Sensors : System.Web.UI.Page
                 }
                 RowSelectionModel masterRow = SensorsGrid.SelectionModel.Primary as RowSelectionModel;
                 var masterID = new Guid(masterRow.SelectedRecordID);
-                InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(InstrumentLinkID.Value));
-                instrumentSensor.SensorID = masterID;
-                instrumentSensor.InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim());
+                InstrumentSensor instrumentSensor = new InstrumentSensor(Utilities.MakeGuid(InstrumentLinkID.Value))
+                {
+                    SensorID = masterID,
+                    InstrumentID = new Guid(cbInstrument.SelectedItem.Value.Trim())
+                };
                 if (nfInstrumentLatitude.IsEmpty)
                     instrumentSensor.Latitude = null;
                 else
@@ -252,14 +255,14 @@ public partial class Admin_Sensors : System.Web.UI.Page
                     instrumentSensor.Elevation = nfInstrumentElevation.Number;
 
 
-                if (!dfInstrumentStartDate.IsEmpty && (dfInstrumentStartDate.SelectedDate.Year >= 1900))
-                    instrumentSensor.StartDate = dfInstrumentStartDate.SelectedDate;
-                else
+                if (dfInstrumentStartDate.IsEmpty || (dfInstrumentStartDate.SelectedDate.Year < 1900))
                     instrumentSensor.StartDate = null;
-                if (!dfInstrumentEndDate.IsEmpty && (dfInstrumentEndDate.SelectedDate.Year >= 1900))
-                    instrumentSensor.EndDate = dfInstrumentEndDate.SelectedDate;
                 else
+                    instrumentSensor.StartDate = DateTime.Parse(dfInstrumentStartDate.RawText);
+                if (dfInstrumentEndDate.IsEmpty || (dfInstrumentEndDate.SelectedDate.Year < 1900))
                     instrumentSensor.EndDate = null;
+                else
+                    instrumentSensor.EndDate = DateTime.Parse(dfInstrumentEndDate.RawText);
                 instrumentSensor.UserId = AuthHelper.GetLoggedInUserId;
                 instrumentSensor.Save();
                 Auditing.Log(GetType(), new ParameterList {
