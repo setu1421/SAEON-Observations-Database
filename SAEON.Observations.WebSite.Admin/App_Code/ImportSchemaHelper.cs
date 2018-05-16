@@ -48,9 +48,8 @@ public class ImportSchemaHelper : IDisposable
     List<DataSourceTransformation> transformations;
     List<SchemaDefinition> schemaDefs;
     public List<SchemaValue> SchemaValues;
-
-    Sensor Sensor = null;
-    ImportBatch batch = null;
+    readonly Sensor Sensor = null;
+    readonly ImportBatch batch = null;
 
     /// <summary>
     /// Gap Record Helper
