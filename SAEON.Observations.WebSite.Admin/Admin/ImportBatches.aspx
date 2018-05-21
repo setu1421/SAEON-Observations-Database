@@ -663,7 +663,11 @@
                             </ext:ComboBox>
                             <ext:FileUploadField ID="DataFileUpload" runat="server" EmptyText="Select a File"
                                 AllowBlank="false" FieldLabel="Data File" ButtonText="" Icon="Zoom" BlankText="input file is required"
-                                ClientIDMode="Static" />
+                                ClientIDMode="Static">
+                                <DirectEvents>
+                                    <FileSelected OnEvent="FileSelected" />
+                                </DirectEvents>
+                            </ext:FileUploadField>
                             <%--                            <ext:FileUploadField ID="LogFileUpload" runat="server" AllowBlank="true" EmptyText="Select a log File"
                                 FieldLabel="Log File" ButtonText="" Icon="Zoom" ClientIDMode="Static" />--%>
                         </Items>
@@ -674,7 +678,9 @@
                             <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept">
                                 <DirectEvents>
                                     <Click OnEvent="UploadClick" Before="if (!#{BasicForm}.getForm().isValid()) { return false; } 
-                                                    Ext.Msg.wait('Uploading and processing...', 'Processing');"
+                                                                         Ext.Msg.wait('Uploading and processing...', 'Processing');
+                                                                         return true;"
+                                        
                                         Failure="Ext.Msg.show({ 
                                                     title   : 'Error', 
                                                     msg     : 'Error during uploading', 

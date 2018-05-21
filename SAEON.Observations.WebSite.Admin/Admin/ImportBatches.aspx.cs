@@ -106,6 +106,14 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         Logging.Verbose("Added {Summaries} summaries", n);
     }
 
+    protected void FileSelected(object sender, DirectEventArgs e)
+    {
+        using (Logging.MethodCall(GetType()))
+        {
+            Logging.Information("Import file selected");
+        }
+    }
+
     protected void UploadClick(object sender, DirectEventArgs e)
     {
         using (Logging.MethodCall(GetType()))
@@ -1302,5 +1310,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     }
 
     #endregion
+
 
 }
