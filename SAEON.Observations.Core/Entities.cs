@@ -966,7 +966,7 @@ namespace SAEON.Observations.Core.Entities
                     cs.MapRightKey("SensorID");
                     cs.ToTable("Instrument_Sensor");
                 });  
-            modelBuilder.Entity<Phenomenon>()
+            modelBuilder.Entity<Phenomenon>() 
                 .HasMany<Offering>(l => l.Offerings)
                 .WithMany(r => r.Phenomena)
                 .Map(cs =>
