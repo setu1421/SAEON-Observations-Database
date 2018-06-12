@@ -87,7 +87,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the UserQuery</param>
         /// <returns>UserQuery</returns>
         [ResponseType(typeof(UserQuery))]
-        public override async Task<IHttpActionResult> GetById(Guid id)
+        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
         {
             return await base.GetById(id);
         }
@@ -98,7 +98,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the UserQuery</param>
         /// <returns>UserQuery</returns>
         [ResponseType(typeof(UserQuery))]
-        public override async Task<IHttpActionResult> GetByName(string name)
+        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
         {
             return await base.GetByName(name);
         }

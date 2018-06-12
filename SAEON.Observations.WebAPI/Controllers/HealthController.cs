@@ -6,11 +6,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Results;
+using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [RoutePrefix("Health")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class HealthController : ApiController
     {
         protected ObservationsDbContext db = null;

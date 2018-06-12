@@ -1,14 +1,43 @@
-﻿.page-header {
+﻿.bg-SAEON {
+    background-color: #567baf;
+}
+
+#Body {
+    padding: 15px;
+}
+
+/*#Page {
+    padding: 10px;
+    margin: 10px;
+}*/
+
+/*#Header {
+    margin: 5px;
+    padding: 5px;
+}*/
+
+.Logo {
+    margin: 5px;
+}
+
+#Footer {
+    font-size: x-small;
+}
+
+/*
+.page-header {
     margin-top: 0;
     padding-top: 0;
-    /*padding-bottom: 0;
-    border-bottom: 0;*/
 }
 
 body {
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: #567baf;
+}
+
+#Body {
+    padding-right: 50px;
 }
 
 #Page {
@@ -19,7 +48,8 @@ body {
     color: black;
 }
 
-#Footer {
+#Footer
+{
     font-size: x-small;
 }
 
@@ -28,12 +58,19 @@ body {
 }
 
 .navbar-inverse {
-  background-color: #567baf;
-  border-color: #567baf;
+    background-color: #567baf;
+    border-color: #567baf;
+}
+
+.ButtonRow {
+    padding-top: 5px;
+}
+
+.ErrorRow {
+    color: red;
 }
 
 .body-content {
     padding-right: 50px;
 }
-
-
+*/

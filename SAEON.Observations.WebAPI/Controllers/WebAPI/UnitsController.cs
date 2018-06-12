@@ -9,13 +9,12 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-   
     /// <summary>
     /// </summary>
-    [RoutePrefix("Offerings")]
-    public class OfferingsController : CodedApiController<Offering>
+    [RoutePrefix("Units")]
+    public class UnitsController : CodedApiController<Unit>
     {
-        protected override List<Expression<Func<Offering, object>>> GetIncludes()
+        protected override List<Expression<Func<Unit, object>>> GetIncludes()
         {
             var list = base.GetIncludes();
             list.Add(i => i.Phenomena);
@@ -23,59 +22,57 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
         /// <summary>
-        /// All Offerings
+        /// All Units
         /// </summary>
-        /// <returns>ListOf(Offering)</returns>
-        public override IQueryable<Offering> GetAll()
+        /// <returns>ListOf(Unit)</returns>
+        public override IQueryable<Unit> GetAll()
         {
             return base.GetAll();
         }
 
         /// <summary>
-        /// Offering by Id
+        /// Unit by Id
         /// </summary>
-        /// <param name="id">The Id of the Offering</param>
-        /// <returns>Offering</returns>
-        [ResponseType(typeof(Offering))]
+        /// <param name="id">The Id of the Unit</param>
+        /// <returns>Unit</returns>
+        [ResponseType(typeof(Unit))]
         public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
         {
             return await base.GetById(id);
         }
 
         /// <summary>
-        /// Offering by Code
+        /// Unit by Code
         /// </summary>
-        /// <param name="code">The Code of the Offering</param>
-        /// <returns>Offering</returns>
-        [ResponseType(typeof(Offering))]
+        /// <param name="code">The Code of the Unit</param>
+        /// <returns>Unit</returns>
+        [ResponseType(typeof(Unit))]
         public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
         {
             return await base.GetByCode(code);
         }
 
         /// <summary>
-        /// Offering by Name
+        /// Unit by Name
         /// </summary>
-        /// <param name="name">The Name of the Offering</param>
-        /// <returns>Offering</returns>
-        [ResponseType(typeof(Offering))]
+        /// <param name="name">The Name of the Unit</param>
+        /// <returns>Unit</returns>
+        [ResponseType(typeof(Unit))]
         public override async Task<IHttpActionResult> GetByName([FromUri] string name)
         {
             return await base.GetByName(name);
         }
 
-        // GET: Offerings/5/Phenomena
+        // GET: UnitsOfMeasure/5/Phenomena
         /// <summary>
-        /// Phenomena for the Offering
+        /// Phenomena for the Unit
         /// </summary>
-        /// <param name="id">Id of the Offering</param>
-        /// <returns>ListOf(Phenomemon)</returns>
+        /// <param name="id">Id of the Unit</param>
+        /// <returns>ListOf(Phenomenon)</returns>
         [Route("{id:guid}/Phenomena")]
         public IQueryable<Phenomenon> GetPhenomena([FromUri] Guid id)
         {
-            return GetMany<Phenomenon>(id, s => s.Phenomena, i => i.Offerings);
+            return GetMany<Phenomenon>(id, s => s.Phenomena, i => i.Units);
         }
-       
     }
-    
 }

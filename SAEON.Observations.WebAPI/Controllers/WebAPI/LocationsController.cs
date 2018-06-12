@@ -14,7 +14,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [ClientAuthorization("SAEON.Observations.QuerySite")]
     public class LocationsController : ApiController
     {
-        ObservationsDbContext db = new ObservationsDbContext();
+        readonly ObservationsDbContext db = new ObservationsDbContext();
 
         [HttpGet]
         [Route]

@@ -7,15 +7,13 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     public class BaseController : ApiController
     {
-        protected ObservationsDbContext db = null;
+        protected readonly ObservationsDbContext db = null;
 
         public BaseController() : base()
         {
             using (Logging.MethodCall(GetType()))
             {
                 db = new ObservationsDbContext();
-                db.Configuration.AutoDetectChangesEnabled = false;
-                db.Database.CommandTimeout = 30 * 60;
             }
         }
 

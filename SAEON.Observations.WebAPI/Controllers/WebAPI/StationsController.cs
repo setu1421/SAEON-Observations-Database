@@ -12,7 +12,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     /// <summary>
     /// </summary>
     [RoutePrefix("Stations")]
-    public class StationsController : BaseApiController<Station>
+    public class StationsController : CodedApiController<Station>
     {
         protected override List<Expression<Func<Station, object>>> GetIncludes()
         {
@@ -37,7 +37,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Station</param>
         /// <returns>Station</returns>
         [ResponseType(typeof(Station))]
-        public override async Task<IHttpActionResult> GetById(Guid id)
+        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
         {
             return await base.GetById(id);
         }
@@ -48,9 +48,20 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Station</param>
         /// <returns>Station</returns>
         [ResponseType(typeof(Station))]
-        public override async Task<IHttpActionResult> GetByName(string name)
+        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
         {
             return await base.GetByName(name);
+        }
+
+        /// <summary>
+        /// Station by Code
+        /// </summary>
+        /// <param name="code">The Code of the Station</param>
+        /// <returns>Station</returns>
+        [ResponseType(typeof(Station))]
+        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        {
+            return await base.GetByCode(code);
         }
 
         // GET: Stations/5/Site
@@ -61,7 +72,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>Site</returns>
         [Route("{id:guid}/Site")]
         [ResponseType(typeof(Site))]
-        public async Task<IHttpActionResult> GetSite(Guid id)
+        public async Task<IHttpActionResult> GetSite([FromUri] Guid id)
         {
             return await GetSingle<Site>(id, s => s.Site, i => i.Stations);
         }

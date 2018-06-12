@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Organisations
     /// </summary>
     [ODataRoutePrefix("Organisations")]
-    public class OrganisationsODataController : BaseODataController<Organisation>
+    public class OrganisationsODataController : CodedODataController<Organisation>
     {
         /// <summary>
         /// All Organisations

@@ -39,5 +39,11 @@ namespace SAEON.Observations.WebAPI.Controllers
             return View();
         }
 
+        [Route("SwaggerFrame")]
+        public ActionResult SwaggerFrame()
+        {
+            return View();
+        }
+
     }
 }

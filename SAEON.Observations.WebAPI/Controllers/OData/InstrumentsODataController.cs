@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Instruments
     /// </summary>
     [ODataRoutePrefix("Instruments")]
-    public class InstrumentsODataController : BaseODataController<Instrument>
+    public class InstrumentsODataController : CodedODataController<Instrument>
     {
 
         // GET: odata/Instruments

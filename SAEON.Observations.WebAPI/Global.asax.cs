@@ -1,6 +1,5 @@
 ﻿using SAEON.Logs;
 using SAEON.Observations.Core;
-using Serilog;
 using System;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -15,8 +14,8 @@ namespace SAEON.Observations.WebAPI
         protected void Application_Start()
         {
             Logging
-                .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebAPI {Date}.txt"))
-                .Create();
+                 .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebAPI {Date}.txt"))
+                 .Create();
             using (Logging.MethodCall(GetType()))
             {
                 try
@@ -38,3 +37,4 @@ namespace SAEON.Observations.WebAPI
         }
     }
 }
+

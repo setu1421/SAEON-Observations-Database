@@ -9,11 +9,10 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    /*
     /// <summary>
     /// </summary>
     [RoutePrefix("Sensors")]
-    public class SensorsController : BaseApiController<Sensor>
+    public class SensorsController : CodedApiController<Sensor>
     {
         protected override List<Expression<Func<Sensor, object>>> GetIncludes()
         {
@@ -38,10 +37,22 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Sensor</param>
         /// <returns>Sensor</returns>
         [ResponseType(typeof(Sensor))]
-        public override async Task<IHttpActionResult> GetById(Guid id)
+        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
         {
             return await base.GetById(id);
         }
+
+        /// <summary>
+        /// Sensor by Code
+        /// </summary>
+        /// <param name="code">The Code of the Sensor</param>
+        /// <returns>Sensor</returns>
+        [ResponseType(typeof(Sensor))]
+        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        {
+            return await base.GetByCode(code);
+        }
+
 
         /// <summary>
         /// Sensor by Name
@@ -49,7 +60,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Sensor</param>
         /// <returns>Sensor</returns>
         [ResponseType(typeof(Sensor))]
-        public override async Task<IHttpActionResult> GetByName(string name)
+        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
         {
             return await base.GetByName(name);
         }
@@ -81,5 +92,4 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
     }
-    */
 }

@@ -12,7 +12,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     /// <summary>
     /// </summary>
     [RoutePrefix("Sites")]
-    public class SitesController : BaseApiController<Site>
+    public class SitesController : CodedApiController<Site>
     {
         protected override List<Expression<Func<Site, object>>> GetIncludes()
         {
@@ -37,7 +37,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Site</param>
         /// <returns>Site</returns>
         [ResponseType(typeof(Site))]
-        public override async Task<IHttpActionResult> GetById(Guid id)
+        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
         {
             return await base.GetById(id);
         }
@@ -48,9 +48,20 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Site</param>
         /// <returns>Site</returns>
         [ResponseType(typeof(Site))]
-        public override async Task<IHttpActionResult> GetByName(string name)
+        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
         {
             return await base.GetByName(name);
+        }
+
+        /// <summary>
+        /// Site by Code
+        /// </summary>
+        /// <param name="code">The Code of the Site</param>
+        /// <returns>Site</returns>
+        [ResponseType(typeof(Site))]
+        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        {
+            return await base.GetByCode(code);
         }
 
         //GET: Sites/5/Organisations
