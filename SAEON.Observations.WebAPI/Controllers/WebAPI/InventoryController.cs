@@ -12,7 +12,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("Inventory")]
+    [RoutePrefix("Api/Inventory")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ClientAuthorization("SAEON.Observations.QuerySite")]
     [RoleAuthorization("SAEON.Observations.Admin")]

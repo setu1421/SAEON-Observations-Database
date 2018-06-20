@@ -13,7 +13,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     /// <summary>
     /// </summary>
-    [RoutePrefix("Programmes")]
+    [RoutePrefix("Api/Programmes")]
     public class ProgrammesController :  CodedApiController<Programme>
     {
         protected override List<Expression<Func<Programme, object>>> GetIncludes()

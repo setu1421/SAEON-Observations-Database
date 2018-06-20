@@ -13,7 +13,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("TemporalCoverage")]
+    [RoutePrefix("Api/TemporalCoverage")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ClientAuthorization("SAEON.Observations.QuerySite")]
     [RoleAuthorization("SAEON.Observations.Admin")]

@@ -10,7 +10,8 @@
 
     // Group APIs by controller
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model
-        .OrderBy(d => d.ActionDescriptor.ControllerDescriptor.ControllerName)
+        .OrderBy(d => d.RelativePath)
+        .ThenBy(d => d.ActionDescriptor.ControllerDescriptor.ControllerName)
         .ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
 }
 

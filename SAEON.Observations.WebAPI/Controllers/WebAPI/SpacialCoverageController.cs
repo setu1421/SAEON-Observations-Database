@@ -11,7 +11,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("SpacialCoverage")]
+    [RoutePrefix("Api/SpacialCoverage")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ClientAuthorization("SAEON.Observations.QuerySite")]
     [RoleAuthorization("SAEON.Observations.Admin")]

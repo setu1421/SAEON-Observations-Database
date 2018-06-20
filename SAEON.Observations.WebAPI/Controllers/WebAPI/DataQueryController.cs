@@ -13,7 +13,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("DataQuery")]
+    [RoutePrefix("Api/DataQuery")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ClientAuthorization("SAEON.Observations.QuerySite")]
     public class DataQueryController : BaseController

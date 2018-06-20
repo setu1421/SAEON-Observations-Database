@@ -9,7 +9,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("Features")]
+    [RoutePrefix("Api/Features")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [ClientAuthorization("SAEON.Observations.QuerySite")]
     public class FeaturesController : ApiController

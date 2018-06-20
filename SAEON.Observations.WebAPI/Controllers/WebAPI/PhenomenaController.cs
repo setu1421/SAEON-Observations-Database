@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     /// <summary>
     /// </summary>
-    [RoutePrefix("Phenomena")]
+    [RoutePrefix("Api/Phenomena")]
     public class PhenomenaController : CodedApiController<Phenomenon>
     {
         protected override List<Expression<Func<Phenomenon, object>>> GetIncludes()

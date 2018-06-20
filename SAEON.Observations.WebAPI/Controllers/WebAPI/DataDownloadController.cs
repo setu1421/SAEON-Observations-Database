@@ -11,7 +11,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    [RoutePrefix("DataDownload")]
+    [RoutePrefix("Api/DataDownload")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     [ClientAuthorization("SAEON.Observations.QuerySite")]
