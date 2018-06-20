@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using SAEON.Logs;
+using SAEON.Logs; 
 
 namespace SAEON.Observations.Core.Entities
 {
@@ -401,6 +401,18 @@ namespace SAEON.Observations.Core.Entities
         /// PhenomenonId of the sensor
         /// </summary>
         public Guid PhenomenonId { get; set; }
+        /// <summary>
+        /// Latitude of the Sensor
+        /// </summary>  
+        public double? Latitude { get; set; }
+        /// <summary>
+        /// Longitude of the Sensor
+        /// </summary> 
+        public double? Longitude { get; set; }
+        /// <summary>
+        /// Elevation of the Sensor, positive above sea level, negative below sea level
+        /// </summary>
+        public double? Elevation { get; set; }
 
         // Navigation
         /// <summary>
