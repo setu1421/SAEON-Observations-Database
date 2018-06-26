@@ -636,13 +636,13 @@ public class ImportSchemaHelper : IDisposable
                                 // Sensor x Instrument_Sensor x Instrument x Station_Instrument x Station x Site
                                 var dates = new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault();
                                 if (dates == null) continue;
-                                if (dates.StartDate.HasValue && (rec.DateValue.Date < dates.StartDate.Value))
+                                if (dates.StartDate.HasValue && (rec.DateValue < dates.StartDate.Value))
                                 {
                                     Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, dates.StartDate, rec.DateValue, rec);
                                     foundTooEarly = true;
                                     continue;
                                 }
-                                if (dates.EndDate.HasValue && (rec.DateValue.Date > dates.EndDate.Value))
+                                if (dates.EndDate.HasValue && (rec.DateValue > dates.EndDate.Value))
                                 {
                                     Logging.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, dates.EndDate, rec.DateValue, rec);
                                     foundTooLate = true;

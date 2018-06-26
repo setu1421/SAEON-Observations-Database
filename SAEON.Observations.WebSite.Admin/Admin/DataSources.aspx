@@ -237,8 +237,8 @@
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="200" />
                                                 <ext:Column Header="New Offering" DataIndex="NewOfferingName" Width="200" />
                                                 <ext:Column Header="New Unit of Measure" DataIndex="NewUnitOfMeasureUnit" Width="200" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="150" Format="dd MMM yyyy" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy HH:mm" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="150" Format="dd MMM yyyy HH:mm" />
                                                 <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" ToolTip-Text="Edit" />
@@ -476,14 +476,14 @@
                     <ext:Container ID="Container9" runat="server" Layout="Form" ColumnWidth=".5">
                         <Items>
                             <ext:DateField ID="dfTransStart" DataIndex="StartDate" runat="server" FieldLabel="Start Date"
-                                AnchorHorizontal="96%" AllowBlank="true" BlankText="Start Date is required" Format="dd MMM yyyy">
+                                AnchorHorizontal="96%" AllowBlank="true" BlankText="Start Date is required" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container14" runat="server" Layout="Form" ColumnWidth=".5">
                         <Items>
                             <ext:DateField ID="dfTransEnd" DataIndex="EndDate" runat="server" FieldLabel="End Date"
-                                AnchorHorizontal="96%" AllowBlank="true" BlankText="End Date is required" Format="dd MMM yyyy">
+                                AnchorHorizontal="96%" AllowBlank="true" BlankText="End Date is required" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Container>

@@ -4,14 +4,8 @@
     [PhenomenonID]            UNIQUEIDENTIFIER NOT NULL,
     [PhenomenonOfferingID]    UNIQUEIDENTIFIER NULL,
     [PhenomenonUOMID]         UNIQUEIDENTIFIER NULL,
---> Changed 2.0.22 20170111 TimPN
---    [StartDate]        DATETIME         NULL,
-    [StartDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
---> Changed 2.0.22 20170111 TimPN
---    [EndDate]        DATETIME         NULL,
-    [EndDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
+    [StartDate]				  DATETIME         NULL,
+    [EndDate]				  DATETIME         NULL,
     [DataSourceID]            UNIQUEIDENTIFIER NOT NULL,
     [Definition]              TEXT             NOT NULL,
     [NewPhenomenonOfferingID] UNIQUEIDENTIFIER NULL,
