@@ -353,6 +353,7 @@
     <Compile Include="Controllers\SensorThingsAPI\BaseController.cs" />
     <Compile Include="Controllers\SensorThingsAPI\LocationsSOSController.cs" />
     <Compile Include="Controllers\SensorThingsAPI\SensorThingsController.cs" />
+    <Compile Include="Controllers\SensorThingsAPI\SensorThingsFactory.cs" />
     <Compile Include="Controllers\SensorThingsAPI\ThingsSOSController.cs" />
     <Compile Include="Controllers\WebAPI\BaseApiControllers.cs" />
     <Compile Include="Controllers\WebAPI\BaseController.cs" />

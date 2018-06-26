@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
+using e = SAEON.Observations.Core.Entities;
 using SAEON.SensorThings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -9,72 +11,86 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
     [RoutePrefix("SensorThings/Locations")]
     public class LocationsSOSController : BaseController<Location>
     {
-        protected override List<Location> GetList()
+
+        protected override Location GetEntity(int id)
         {
-            var result = base.GetList();
-            foreach (var station in db.Stations.OrderBy(i => i.Name))
-            {
-                var name = $"Station {station.Name}";
-                if ((station.Latitude.HasValue && station.Longitude.HasValue) && (!result.Any(i => (i.Name == name))))
-                {
-                    var location = new Location
-                    {
-                        Uri = Request.RequestUri,
-                        Id = station.Id.GetHashCode(),
-                        Name = name,
-                        Description = station.Description,
-                        Latitude = station.Latitude.Value,
-                        Longitude = station.Longitude.Value,
-                        Elevation = station.Elevation
-                    };
-                    result.Add(location);
-                }
-            }
-            foreach (var instrument in db.Instruments.OrderBy(i => i.Name))
-            {
-                var name = $"Instrument {instrument.Name}";
-                if ((instrument.Latitude.HasValue && instrument.Longitude.HasValue) && (!result.Any(i => (i.Name == name))))
-                {
-                    var location = new Location
-                    {
-                        Uri = Request.RequestUri,
-                        Id = instrument.Id.GetHashCode(),
-                        Name = name,
-                        Description = instrument.Description,
-                        Latitude = instrument.Latitude.Value,
-                        Longitude = instrument.Longitude.Value,
-                        Elevation = instrument.Elevation
-                    };
-                    result.Add(location);
-                }
-            }
-            foreach (var sensor in db.Sensors.OrderBy(i => i.Name))
-            {
-                var name = $"Sensor {sensor.Name}";
-                if ((sensor.Latitude.HasValue && sensor.Longitude.HasValue) && (!result.Any(i => (i.Name == name))))
-                {
-                    var location = new Location
-                    {
-                        Uri = Request.RequestUri,
-                        Id = sensor.Id.GetHashCode(),
-                        Name = name,
-                        Description = sensor.Description,
-                        Latitude = sensor.Latitude.Value,
-                        Longitude = sensor.Longitude.Value,
-                        Elevation = sensor.Elevation
-                    };
-                    result.Add(location);
-                }
-            }
-            return result;
+            var station = db.Stations.Where(i => i.Latitude.HasValue && i.Longitude.HasValue).ToList().FirstOrDefault(i => i.Id.GetHashCode() == id);
+            if (station != null) return SensorThingsFactory.LocationFromStation(station, Request.RequestUri);
+            var instrument = db.Instruments.Where(i => i.Latitude.HasValue && i.Longitude.HasValue).ToList().FirstOrDefault(i => i.Id.GetHashCode() == id);
+            if (instrument != null) return SensorThingsFactory.LocationFromInstrument(instrument, Request.RequestUri);
+            var sensor = db.Sensors.Where(i => i.Latitude.HasValue && i.Longitude.HasValue).ToList().FirstOrDefault(i => i.Id.GetHashCode() == id);
+            if (sensor != null) return SensorThingsFactory.LocationFromSensor(sensor, Request.RequestUri);
+            return null;
         }
 
-        //[HttpGet]
-        //[Route]
+        protected override List<Location> GetEntities()
+        {
+            var result = base.GetEntities();
+            foreach (var station in db.Stations.Where(i => i.Latitude.HasValue && i.Longitude.HasValue))
+            {
+                if (!result.Any(i => i.Name == $"Station {station.Name}"))
+                {
+                    result.Add(SensorThingsFactory.LocationFromStation(station, Request.RequestUri));
+                }
+            }
+            foreach (var instrument in db.Instruments.Where(i => i.Latitude.HasValue && i.Longitude.HasValue))
+            {
+                if (!result.Any(i => i.Name == $"Instrument {instrument.Name}"))
+                {
+                    result.Add(SensorThingsFactory.LocationFromInstrument(instrument, Request.RequestUri));
+                }
+            }
+            foreach (var sensor in db.Sensors.Where(i => i.Latitude.HasValue && i.Longitude.HasValue))
+            {
+                if (!result.Any(i => i.Name == $"Sensor {sensor.Name}"))
+                {
+                    result.Add(SensorThingsFactory.LocationFromSensor(sensor, Request.RequestUri));
+                }
+            }
+            return result.OrderBy(i => i.Name).ToList();
+        }
+
+        protected List<Thing> GetRelatedThings(int id)
+        {
+            var result = new List<Thing>();
+            var location = GetEntity(id);
+            if (location != null)
+            {
+                result.AddRange(location.Things);
+                //foreach (var station in db.Stations.Where(i => i.Latitude.HasValue && i.Longitude.HasValue).ToList().Where(i => i.Id.GetHashCode() == location.Id))
+                //{
+                //    result.Add(SensorThingsFactory.ThingFromStation(station, Request.RequestUri));
+                //}
+                //foreach (var instrument in db.Instruments.Where(i => i.Latitude.HasValue && i.Longitude.HasValue).ToList().Where(i => i.Id.GetHashCode() == location.Id))
+                //{
+                //    result.Add(SensorThingsFactory.ThingFromInstrument(instrument, Request.RequestUri));
+                //}
+                //foreach (var sensor in db.Sensors.Where(i => i.Latitude.HasValue && i.Longitude.HasValue).ToList().Where(i => i.Id.GetHashCode() == location.Id))
+                //{
+                //    result.Add(SensorThingsFactory.ThingFromSensor(sensor, Request.RequestUri));
+                //}
+            }
+            return result.OrderBy(i => i.Name).ToList();
+        }
+
         public override JToken GetAll()
         {
             return base.GetAll();
         }
+
+        [Route("~/SensorThings/Locations({id:int})")]
+        public override JToken GetById([FromUri] int id)
+        {
+            return base.GetById(id);
+        }
+
+        [HttpGet]
+        [Route("~/SensorThings/Locations({id:int})/Things")]
+        public JToken GetThings([FromUri] int id)
+        {
+            return GetMany<Thing>(id, GetRelatedThings);
+        }
+
 
     }
 }
