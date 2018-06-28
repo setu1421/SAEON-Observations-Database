@@ -274,6 +274,58 @@ namespace SAEON.Observations.Data
 				colvarVariance.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarVariance);
 				
+				TableSchema.TableColumn colvarTopLatitude = new TableSchema.TableColumn(schema);
+				colvarTopLatitude.ColumnName = "TopLatitude";
+				colvarTopLatitude.DataType = DbType.Double;
+				colvarTopLatitude.MaxLength = 0;
+				colvarTopLatitude.AutoIncrement = false;
+				colvarTopLatitude.IsNullable = true;
+				colvarTopLatitude.IsPrimaryKey = false;
+				colvarTopLatitude.IsForeignKey = false;
+				colvarTopLatitude.IsReadOnly = false;
+				colvarTopLatitude.DefaultSetting = @"";
+				colvarTopLatitude.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarTopLatitude);
+				
+				TableSchema.TableColumn colvarBottomLatitude = new TableSchema.TableColumn(schema);
+				colvarBottomLatitude.ColumnName = "BottomLatitude";
+				colvarBottomLatitude.DataType = DbType.Double;
+				colvarBottomLatitude.MaxLength = 0;
+				colvarBottomLatitude.AutoIncrement = false;
+				colvarBottomLatitude.IsNullable = true;
+				colvarBottomLatitude.IsPrimaryKey = false;
+				colvarBottomLatitude.IsForeignKey = false;
+				colvarBottomLatitude.IsReadOnly = false;
+				colvarBottomLatitude.DefaultSetting = @"";
+				colvarBottomLatitude.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarBottomLatitude);
+				
+				TableSchema.TableColumn colvarLeftLongitude = new TableSchema.TableColumn(schema);
+				colvarLeftLongitude.ColumnName = "LeftLongitude";
+				colvarLeftLongitude.DataType = DbType.Double;
+				colvarLeftLongitude.MaxLength = 0;
+				colvarLeftLongitude.AutoIncrement = false;
+				colvarLeftLongitude.IsNullable = true;
+				colvarLeftLongitude.IsPrimaryKey = false;
+				colvarLeftLongitude.IsForeignKey = false;
+				colvarLeftLongitude.IsReadOnly = false;
+				colvarLeftLongitude.DefaultSetting = @"";
+				colvarLeftLongitude.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarLeftLongitude);
+				
+				TableSchema.TableColumn colvarRightLongitude = new TableSchema.TableColumn(schema);
+				colvarRightLongitude.ColumnName = "RightLongitude";
+				colvarRightLongitude.DataType = DbType.Double;
+				colvarRightLongitude.MaxLength = 0;
+				colvarRightLongitude.AutoIncrement = false;
+				colvarRightLongitude.IsNullable = true;
+				colvarRightLongitude.IsPrimaryKey = false;
+				colvarRightLongitude.IsForeignKey = false;
+				colvarRightLongitude.IsReadOnly = false;
+				colvarRightLongitude.DefaultSetting = @"";
+				colvarRightLongitude.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarRightLongitude);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -371,6 +423,38 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<double?>(Columns.Variance); }
 			set { SetColumnValue(Columns.Variance, value); }
 		}
+		  
+		[XmlAttribute("TopLatitude")]
+		[Bindable(true)]
+		public double? TopLatitude 
+		{
+			get { return GetColumnValue<double?>(Columns.TopLatitude); }
+			set { SetColumnValue(Columns.TopLatitude, value); }
+		}
+		  
+		[XmlAttribute("BottomLatitude")]
+		[Bindable(true)]
+		public double? BottomLatitude 
+		{
+			get { return GetColumnValue<double?>(Columns.BottomLatitude); }
+			set { SetColumnValue(Columns.BottomLatitude, value); }
+		}
+		  
+		[XmlAttribute("LeftLongitude")]
+		[Bindable(true)]
+		public double? LeftLongitude 
+		{
+			get { return GetColumnValue<double?>(Columns.LeftLongitude); }
+			set { SetColumnValue(Columns.LeftLongitude, value); }
+		}
+		  
+		[XmlAttribute("RightLongitude")]
+		[Bindable(true)]
+		public double? RightLongitude 
+		{
+			get { return GetColumnValue<double?>(Columns.RightLongitude); }
+			set { SetColumnValue(Columns.RightLongitude, value); }
+		}
 		
 		#endregion
 		
@@ -437,7 +521,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance)
+		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varTopLatitude,double? varBottomLatitude,double? varLeftLongitude,double? varRightLongitude)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -463,6 +547,14 @@ namespace SAEON.Observations.Data
 			
 			item.Variance = varVariance;
 			
+			item.TopLatitude = varTopLatitude;
+			
+			item.BottomLatitude = varBottomLatitude;
+			
+			item.LeftLongitude = varLeftLongitude;
+			
+			item.RightLongitude = varRightLongitude;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -473,7 +565,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance)
+		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varTopLatitude,double? varBottomLatitude,double? varLeftLongitude,double? varRightLongitude)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -498,6 +590,14 @@ namespace SAEON.Observations.Data
 				item.StandardDeviation = varStandardDeviation;
 			
 				item.Variance = varVariance;
+			
+				item.TopLatitude = varTopLatitude;
+			
+				item.BottomLatitude = varBottomLatitude;
+			
+				item.LeftLongitude = varLeftLongitude;
+			
+				item.RightLongitude = varRightLongitude;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -589,6 +689,34 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn TopLatitudeColumn
+        {
+            get { return Schema.Columns[11]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn BottomLatitudeColumn
+        {
+            get { return Schema.Columns[12]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn LeftLongitudeColumn
+        {
+            get { return Schema.Columns[13]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn RightLongitudeColumn
+        {
+            get { return Schema.Columns[14]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -604,6 +732,10 @@ namespace SAEON.Observations.Data
 			 public static string Average = @"Average";
 			 public static string StandardDeviation = @"StandardDeviation";
 			 public static string Variance = @"Variance";
+			 public static string TopLatitude = @"TopLatitude";
+			 public static string BottomLatitude = @"BottomLatitude";
+			 public static string LeftLongitude = @"LeftLongitude";
+			 public static string RightLongitude = @"RightLongitude";
 						
 		}
 		#endregion

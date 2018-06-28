@@ -57,7 +57,7 @@
     [Elevation] Float Null,
 --< Added 2.0.33 20170628 TimPN
     [UserId]                UNIQUEIDENTIFIER NOT NULL,
-    [AddedDate]             DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT getdate() NOT NULL,
+    [AddedDate]             DATETIME         CONSTRAINT [DF_Observation_AddedDate] DEFAULT GetDate() NOT NULL,
 --> Added 2.0.8 20160718 TimPN
     [AddedAt] DATETIME NULL CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate(), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate(), 
@@ -254,28 +254,3 @@ BEGIN
 END
 --< Changed 2.0.15 20161102 TimPN
 --< Added 2.0.8 20160718 TimPN
-/*
---> Added 2.0.35 20170824 TimPN
-GO
-CREATE TRIGGER [dbo].[TR_Observation_DuplicateOfNull] ON [dbo].[Observation]
-FOR INSERT
-AS
-BEGIN
-  SET NoCount ON
-  if Exists(
-    Select
-      *
-    from
-      Inserted
-      inner join Observation
-        on (Inserted.SensorID = Observation.SensorID) and
-           (Inserted.ValueDate = Observation.ValueDate) and
-           (Inserted.PhenomenonOfferingID = Observation.PhenomenonOfferingID) and
-           (Inserted.PhenomenonUOMID = Observation.PhenomenonUOMID)
-      where
-        (Observation.RawValue is null) --and (Inserted.RawValue is not null)
-      )
-    Throw 55555, 'Duplicate of null', 1
-END
---< Added 2.0.35 20170824 TimPN
-*/

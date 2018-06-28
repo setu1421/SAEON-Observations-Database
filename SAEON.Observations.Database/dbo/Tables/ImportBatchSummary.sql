@@ -1,7 +1,7 @@
 ﻿--> Added 2.0.38 20180418 TimPN
 CREATE TABLE [dbo].[ImportBatchSummary]
 (
-    [Id] UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL CONSTRAINT [DF_ImportBatchSummary_ID] DEFAULT newid(), 
+    [ID] UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL CONSTRAINT [DF_ImportBatchSummary_ID] DEFAULT newid(), 
     [ImportBatchID] UNIQUEIDENTIFIER NOT NULL, 
     [SensorID] UNIQUEIDENTIFIER NOT NULL, 
     [PhenomenonOfferingID] UNIQUEIDENTIFIER NOT NULL, 
@@ -12,6 +12,10 @@ CREATE TABLE [dbo].[ImportBatchSummary]
     [Average] FLOAT NULL, 
     [StandardDeviation] FLOAT NULL, 
     [Variance] FLOAT NULL,
+    [TopLatitude] FLOAT NULL, 
+    [BottomLatitude] FLOAT NULL, 
+    [LeftLongitude] FLOAT NULL, 
+    [RightLongitude] FLOAT NULL, 
     CONSTRAINT [PK_ImportBatchSummary] PRIMARY KEY CLUSTERED ([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [ImportBatch]([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_SensorID] FOREIGN KEY ([SensorID]) REFERENCES [Sensor]([ID]), 

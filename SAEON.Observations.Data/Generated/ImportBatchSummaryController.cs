@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid ImportBatchID,Guid SensorID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double? Minimum,double? Maximum,double? Average,double? StandardDeviation,double? Variance)
+	    public void Insert(Guid Id,Guid ImportBatchID,Guid SensorID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double? Minimum,double? Maximum,double? Average,double? StandardDeviation,double? Variance,double? TopLatitude,double? BottomLatitude,double? LeftLongitude,double? RightLongitude)
 	    {
 		    ImportBatchSummary item = new ImportBatchSummary();
 		    
@@ -106,6 +106,14 @@ namespace SAEON.Observations.Data
             
             item.Variance = Variance;
             
+            item.TopLatitude = TopLatitude;
+            
+            item.BottomLatitude = BottomLatitude;
+            
+            item.LeftLongitude = LeftLongitude;
+            
+            item.RightLongitude = RightLongitude;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -114,7 +122,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid ImportBatchID,Guid SensorID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double? Minimum,double? Maximum,double? Average,double? StandardDeviation,double? Variance)
+	    public void Update(Guid Id,Guid ImportBatchID,Guid SensorID,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,int Count,double? Minimum,double? Maximum,double? Average,double? StandardDeviation,double? Variance,double? TopLatitude,double? BottomLatitude,double? LeftLongitude,double? RightLongitude)
 	    {
 		    ImportBatchSummary item = new ImportBatchSummary();
 	        item.MarkOld();
@@ -141,6 +149,14 @@ namespace SAEON.Observations.Data
 			item.StandardDeviation = StandardDeviation;
 				
 			item.Variance = Variance;
+				
+			item.TopLatitude = TopLatitude;
+				
+			item.BottomLatitude = BottomLatitude;
+				
+			item.LeftLongitude = LeftLongitude;
+				
+			item.RightLongitude = RightLongitude;
 				
 	        item.Save(UserName);
 	    }
