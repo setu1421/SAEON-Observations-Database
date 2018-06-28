@@ -1,10 +1,4 @@
 ﻿--use Observations
-Declare @UrlPrefix varchar(100)
---set @UrlPrefix = '/ObservationsDBv1Live'
---set @UrlPrefix = '/ObservationsDBv1Staging'
---set @UrlPrefix = '/Observations'
---set @UrlPrefix = '/ObservationsTest' 
-set @UrlPrefix = ''
 Declare @MasterModuleId UniqueIdentifier = (Select ID from Module where Name like 'Master Data Management')
 -- New
 if not Exists(select * from Module where Name like 'Hidden') 
@@ -21,7 +15,7 @@ begin
 	Insert into Module
 	  (Name, Description, URL, Icon, ModuleId, iOrder)
 	values
-	  ('Programmes','Programmes',@UrlPrefix+'/Admin/Programmes',1125,@MasterModuleId,300)
+	  ('Programmes','Programmes','/Admin/Programmes',1125,@MasterModuleId,300)
 end
 if Exists(select * from Module where Name like 'Projects') 
   Update Module set ModuleID = @MasterModuleId where Name like 'Projects'
@@ -30,7 +24,7 @@ begin
 	Insert into Module
 	  (Name, Description, URL, Icon, ModuleId, iOrder)
 	values
-	  ('Projects','Projects',@UrlPrefix+'/Admin/Projects',1221,@MasterModuleId,300)
+	  ('Projects','Projects','/Admin/Projects',1221,@MasterModuleId,300)
 end
 if Exists(select * from Module where Name like 'Sites') 
   Update Module set ModuleID = @MasterModuleId where Name like 'Sites'
@@ -39,7 +33,7 @@ begin
 	Insert into Module
 	  (Name, Description, URL, Icon, ModuleId, iOrder)
 	values
-	  ('Sites','Sites',@UrlPrefix+'/Admin/Sites',(Select Icon from Module where Name = 'Projects/Sites'),@MasterModuleId,300)
+	  ('Sites','Sites','/Admin/Sites',(Select Icon from Module where Name = 'Projects/Sites'),@MasterModuleId,300)
 end
 if Exists(select * from Module where Name like 'Instruments') 
   Update Module set ModuleID = @MasterModuleId where Name like 'Instruments'
@@ -48,20 +42,20 @@ begin
 	Insert into Module
 	  (Name, Description, URL, Icon, ModuleId, iOrder)
 	values
-	  ('Instruments','Instruments',@UrlPrefix+'/Admin/Instruments',1680,@MasterModuleId,300)
+	  ('Instruments','Instruments','/Admin/Instruments',1680,@MasterModuleId,300)
 end
 -- Changes
-Update Module set Url = @UrlPrefix+'/Admin/Organisations', ModuleID = @MasterModuleId where Name like 'Organisations'
-Update Module set Url = @UrlPrefix+'/Admin/Stations' where Name like 'Stations'
-Update Module set Url = @UrlPrefix+'/Admin/Sensors' where Name like 'Sensors'
-Update Module set Url = @UrlPrefix+'/Admin/DataSources' where Name like 'Data Sources'
-Update Module set Url = @UrlPrefix+'/Admin/DataSchemas' where Name like 'Data Schemas'
-Update Module set Url = @UrlPrefix+'/Admin/ImportBatches' where Name like 'Import Batches'
-Update Module set Url = @UrlPrefix+'/Admin/Phenomena', Name = 'Phenomena' where Name like 'Phenomenon'
-Update Module set Url = @UrlPrefix+'/Admin/Offerings', Name = 'Offerings' where Name like 'Offering%'
-Update Module set Url = @UrlPrefix+'/Admin/UnitsOfMeasure', Name = 'Units Of Measure' where Name like 'Unit of measure'
-Update Module set Url = @UrlPrefix+'/Admin/Users' where Name like 'Users'
-Update Module set Url = @UrlPrefix+'/Admin/Inventory' where Name like 'Inventory'
+Update Module set Url = '/Admin/Organisations', ModuleID = @MasterModuleId where Name like 'Organisations'
+Update Module set Url = '/Admin/Stations' where Name like 'Stations'
+Update Module set Url = '/Admin/Sensors' where Name like 'Sensors'
+Update Module set Url = '/Admin/DataSources' where Name like 'Data Sources'
+Update Module set Url = '/Admin/DataSchemas' where Name like 'Data Schemas'
+Update Module set Url = '/Admin/ImportBatches' where Name like 'Import Batches'
+Update Module set Url = '/Admin/Phenomena', Name = 'Phenomena' where Name like 'Phenomenon'
+Update Module set Url = '/Admin/Offerings', Name = 'Offerings' where Name like 'Offering%'
+Update Module set Url = '/Admin/UnitsOfMeasure', Name = 'Units Of Measure' where Name like 'Unit of measure'
+Update Module set Url = '/Admin/Users' where Name like 'Users'
+Update Module set Url = '/Admin/Inventory' where Name like 'Inventory'
 -- Deletes
 Delete RoleModule from RoleModule inner join Module on (RoleModule.ModuleID = Module.ID) where Module.Name like 'Projects/Sites'
 Delete Module where Name like 'Projects/Sites'
@@ -80,13 +74,12 @@ Delete Module where Name like 'Version 2'
 Delete RoleModule from RoleModule inner join Module on (RoleModule.ModuleID = Module.ID) where Module.Name like 'Observations'
 Delete Module where Name like 'Observations'
 -- Changed
-Update Module set Url = Replace(Url,'/PLATFORM_TEST/SWDB/Admin/',@UrlPrefix+'/Admin/') where Url like '/PLATFORM_TEST/SWDB/Admin/%'
-Update Module set Url = Replace(Url,'/Observations/Admin/',@UrlPrefix+'/Admin/') where Url like '/Observations/Admin/%'
-Update Module set Url = Replace(Url,'/ObservationsAdmin/Admin/',@UrlPrefix+'/Admin/') where Url like '/ObservationsAdmin/Admin/%'
-Update Module set Url = Replace(Url,'/ObservationsDBv1Live/Admin/',@UrlPrefix+'/Admin/') where Url like '/ObservationsDBv1Live/Admin/%'
-Update Module set Url = Replace(Url,'/ObservationsDBv1Staging/Admin/',@UrlPrefix+'/Admin/') where Url like '/ObservationsDBv1Staging/Admin/%'
-Update Module set Url = Replace(Url,'/Admin/',@UrlPrefix+'/Admin/') where Url like '/Admin/%'
-Update Module set Url = Replace(Url,'Admin/',@UrlPrefix+'/Admin/') where Url like 'Admin/%'
+Update Module set Url = Replace(Url,'/PLATFORM_TEST/SWDB/Admin/','/Admin/') where Url like '/PLATFORM_TEST/SWDB/Admin/%'
+Update Module set Url = Replace(Url,'/Observations/Admin/','/Admin/') where Url like '/Observations/Admin/%'
+Update Module set Url = Replace(Url,'/ObservationsAdmin/Admin/','/Admin/') where Url like '/ObservationsAdmin/Admin/%'
+Update Module set Url = Replace(Url,'/ObservationsDBv1Live/Admin/','/Admin/') where Url like '/ObservationsDBv1Live/Admin/%'
+Update Module set Url = Replace(Url,'/ObservationsDBv1Staging/Admin/','/Admin/') where Url like '/ObservationsDBv1Staging/Admin/%'
+Update Module set Url = Replace(Url,'/Admin/','Admin/') where Url like '/Admin/%'
 Update Module set Url = Replace(Replace(Url,'.aspx',''),'//','/')
 -- Hidden
 --Declare @HiddenModuleId UniqueIdentifier = (Select ID from Module where Name like 'Hidden')
