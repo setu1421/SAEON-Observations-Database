@@ -64,6 +64,18 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return await base.GetByCode(code);
         }
 
+        // GET: Instruments/5/Organisations
+        /// <summary>
+        /// Organisations linked to this Instrument
+        /// </summary>
+        /// <param name="id">Id of the Instrument</param>
+        /// <returns>ListOf(Organisation)</returns>
+        [Route("{id:guid}/Organisations")]
+        public IQueryable<Organisation> Getorganisations([FromUri] Guid id)
+        {
+            return GetMany<Organisation>(id, s => s.Organisations, i => i.Instruments);
+        }
+
         // GET: Instruments/5/Stations
         /// <summary>
         /// Stations linked to this Instrument

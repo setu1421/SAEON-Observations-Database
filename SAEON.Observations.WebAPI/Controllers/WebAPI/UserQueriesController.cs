@@ -10,13 +10,12 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    /*
     /// <summary>
     /// Logged in users can save frequently used queries in the QueryUserQuery for later use
     /// </summary>
     [RoutePrefix("Api/UserQueries")]
     [Authorize]
-    public class UserQueriesController : BaseApiWriteController<UserQuery>
+    public class UserQueriesController : NamedApiWriteController<UserQuery>
     {
         protected override List<Expression<Func<UserQuery, bool>>> GetWheres()
         {
@@ -160,5 +159,4 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return base.DeleteByName(name);
         }
     }
-    */
 }

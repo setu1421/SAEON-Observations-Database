@@ -9,7 +9,7 @@ using System.Web.Http;
 namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
 {
     [RoutePrefix("SensorThings/Things")]
-    public class ThingsSOSController : BaseController<Thing>
+    public class ThingsSTController : BaseController<Thing>
     {
         protected override Thing GetEntity(int id)
         {
@@ -40,27 +40,26 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             return result.OrderBy(i => i.Name).ToList();
         }
 
-        private List<Location> GetRelatedLocations(int id)
+        private List<Location> GetLocationsList(int id)
         {
             var result = new List<Location>();
             var thing = GetEntity(id);
             if (thing != null)
             {
                 result.Add(thing.Location);
-                //foreach (var station in db.Stations.Where(i => i.Latitude.HasValue && i.Longitude.HasValue).ToList().Where(i => i.Id.GetHashCode() == thing.Id))
-                //{
-                //    result.Add(SensorThingsFactory.LocationFromStation(station, Request.RequestUri));
-                //}
-                //foreach (var instrument in db.Instruments.Where(i => i.Latitude.HasValue && i.Longitude.HasValue).ToList().Where(i => i.Id.GetHashCode() == thing.Id))
-                //{
-                //    result.Add(SensorThingsFactory.LocationFromInstrument(instrument, Request.RequestUri));
-                //}
-                //foreach (var sensor in db.Sensors.Where(i => i.Latitude.HasValue && i.Longitude.HasValue).ToList().Where(i => i.Id.GetHashCode() == thing.Id))
-                //{
-                //    result.Add(SensorThingsFactory.LocationFromSensor(sensor, Request.RequestUri));
-                //}
             }
             return result.OrderBy(i => i.Name).ToList();
+        }
+
+        private List<HistoricalLocation> GetHistoricalLocationsList(int id)
+        {
+            var result = new List<HistoricalLocation>();
+            var thing = GetEntity(id);
+            if (thing != null)
+            {
+                result.AddRange(thing.HistoricalLocations);
+            }
+            return result.ToList();
         }
 
         public override JToken GetAll()
@@ -78,7 +77,14 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
         [Route("~/SensorThings/Things({id:int})/Locations")]
         public JToken GetLocations([FromUri] int id)
         {
-            return GetMany<Location>(id, GetRelatedLocations);
+            return GetMany<Location>(id, GetLocationsList);
+        }
+
+        [HttpGet]
+        [Route("~/SensorThings/Things({id:int})/HistoricalLocations")]
+        public JToken GetHistoricalLocations([FromUri] int id)
+        {
+            return GetMany<HistoricalLocation>(id, GetHistoricalLocationsList);
         }
 
     }

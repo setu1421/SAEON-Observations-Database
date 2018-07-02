@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Instruments
     /// </summary>
     [ODataRoutePrefix("Instruments")]
-    public class InstrumentsODataController : CodedODataController<Instrument>
+    public class InstrumentsODController : BaseODataController<Instrument>
     {
 
         // GET: odata/Instruments
@@ -37,16 +37,16 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return base.GetById(id);
         }
 
-        // GET: odata/Instruments(5)
+        // GET: odata/Instruments(5)/Organisations
         /// <summary>
-        /// Instrument by Name
+        /// Get Organisations for the Instrument
         /// </summary>
-        /// <param name="name">Name of Instrument</param>
-        /// <returns>Instrument</returns>
-        [EnableQuery, ODataRoute("({name})")]
-        public override SingleResult<Instrument> GetByName([FromODataUri] string name)
+        /// <param name="id">Id of Instrument</param>
+        /// <returns>ListOf(Organisation)</returns>
+        [EnableQuery, ODataRoute("({id})/Organisations")]
+        public IQueryable<Organisation> GetOrganisations([FromODataUri] Guid id)
         {
-            return base.GetByName(name);
+            return GetMany(id, s => s.Organisations, i => i.Instruments);
         }
 
         // GET: odata/Instruments(5)/Stations
@@ -61,7 +61,6 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return GetMany(id, s => s.Stations, i => i.Instruments);
         }
 
-        /*
         // GET: odata/Instruments(5)/Sensors
         /// <summary>
         /// Get Sensors for the Instrument
@@ -73,7 +72,6 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         {
             return GetMany(id, s => s.Sensors, i => i.Instruments);
         }
-        */
 
     }
 }

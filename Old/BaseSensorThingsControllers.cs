@@ -1,23 +1,22 @@
 ﻿using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
+using SAEON.Observations.Core.SensorThings;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Http;
-using System.Web.Http.Description;
 using System.Web.OData;
 
-namespace SAEON.Observations.WebAPI.Controllers.OData
+namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
 {
-    [ApiExplorerSettings(IgnoreApi = true)]
-    //[ODataRouteName("OData")]
-    public abstract class BaseODataController<TEntity> : ODataController where TEntity : NamedEntity
+    [ODataRouteName("SensorThings")]
+    public class BaseSensorThingsControllers<TEntity> : ODataController where TEntity : BaseSensorThingEntity
     {
-        protected readonly ObservationsDbContext db = null;
+        protected ObservationsDbContext db = null;
 
-        public BaseODataController()
+        public BaseSensorThingsControllers()
         {
             db = new ObservationsDbContext();
             db.Configuration.AutoDetectChangesEnabled = false;
@@ -33,68 +32,23 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             base.Dispose(disposing);
         }
 
-        /// <summary>
-        /// Overwrite to filter entities
-        /// </summary>
-        /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, bool>>> GetWheres()
+        protected virtual List<TEntity> GetList()
         {
-            return new List<Expression<Func<TEntity, bool>>>();
+            return new List<TEntity>();
         }
 
-        /// <summary>
-        /// Overwrite to order of entities
-        /// </summary>
-        /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, object>>> GetOrderBys()
-        {
-            var result = new List<Expression<Func<TEntity, object>>>
-            {
-                i => i.Name
-            };
-            return result;
-        }
-
-        /// <summary>
-        /// Overwrite for entity includes
-        /// </summary>
-        /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, bool>>> GetIncludes()
-        {
-            return new List<Expression<Func<TEntity, bool>>>();
-        }
-
-        /// <summary>
-        /// query for items
-        /// </summary>
-        /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
-            var query = db.Set<TEntity>().AsQueryable().AsNoTracking();
-            foreach (var include in GetIncludes())
-            {
-                query = query.Include(include);
-            }
-            foreach (var where in GetWheres())
-            {
-                query = query.Where(where);
-            }
+            var list = GetList();
+            list.ForEach(i => i.GenerateSensorThingsProperties());
+            var query = list.AsQueryable();
             if (extraWhere != null)
             {
                 query = query.Where(extraWhere);
             }
-            foreach (var orderBy in GetOrderBys())
-            {
-                query = query.OrderBy(orderBy);
-            }
             return query;
         }
 
-        /// <summary>
-        /// Get all entities
-        /// </summary>
-        /// <returns>ListOf(TEntity)</returns>
-        // GET: odata/TEntity
         //[EnableQuery, ODataRoute] Required in derived class
         public virtual IQueryable<TEntity> GetAll()
         {
@@ -117,7 +71,6 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id"></param>
         /// <returns>TEntity</returns>
-        // GET: odata/TEntity(5)
         //[EnableQuery, ODataRoute("({id})")] Required in derived class
         public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
         {
@@ -135,29 +88,6 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             }
         }
 
-        ///// <summary>
-        ///// Get TEntity by Name
-        ///// </summary>
-        ///// <param name="name"></param>
-        ///// <returns>TEntity</returns>
-        //// GET: odata/TEntity(abc)
-        ////[EnableQuery, ODataRoute("({name})")] Required in derived class 
-        //public virtual SingleResult<TEntity> GetByName([FromODataUri] string name)
-        //{
-        //    using (Logging.MethodCall<SingleResult<TEntity>>(GetType(), new ParameterList { { "Name", name } }))
-        //    {
-        //        try
-        //        {
-        //            return SingleResult.Create(GetQuery(i => (i.Name == name)));
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logging.Exception(ex, "Unable to get {name}", name);
-        //            throw;
-        //        }
-        //    }
-        //}
-
         /// <summary>
         /// Related Entity TEntity.TRelated
         /// </summary>
@@ -168,7 +98,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>SingleResultOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseEntity
+        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseSensorThingEntity
         {
             using (Logging.MethodCall<SingleResult<TRelated>>(GetType()))
             {
@@ -194,7 +124,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>SingleResultOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
+        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseSensorThingEntity
         {
             using (Logging.MethodCall<SingleResult<TRelated>>(GetType()))
             {
@@ -220,7 +150,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>IQueryableOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseEntity
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseSensorThingEntity
         {
             using (Logging.MethodCall<TRelated>(GetType()))
             {
@@ -246,7 +176,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>IQueryableOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseSensorThingEntity
         {
             using (Logging.MethodCall<TRelated>(GetType()))
             {
@@ -261,6 +191,6 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
                 }
             }
         }
+
     }
 }
-

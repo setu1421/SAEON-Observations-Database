@@ -50,14 +50,8 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=7.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.7.0.0\lib\net45\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoQueryable, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoQueryable.1.7.0\lib\netstandard1.3\AutoQueryable.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoQueryable.AspNet.Filter, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoQueryable.AspNet.Filter.1.7.0\lib\net46\AutoQueryable.AspNet.Filter.dll</HintPath>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -99,11 +93,11 @@
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.OData.Core, Version=7.4.4.20330, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.OData.Core.7.4.4\lib\portable-net45+win8+wpa81\Microsoft.OData.Core.dll</HintPath>
+    <Reference Include="Microsoft.OData.Core, Version=7.5.0.20627, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OData.Core.7.5.0\lib\portable-net45+win8+wpa81\Microsoft.OData.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.OData.Edm, Version=7.4.4.20330, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.OData.Edm.7.4.4\lib\portable-net45+win8+wpa81\Microsoft.OData.Edm.dll</HintPath>
+    <Reference Include="Microsoft.OData.Edm, Version=7.5.0.20627, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OData.Edm.7.5.0\lib\portable-net45+win8+wpa81\Microsoft.OData.Edm.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
@@ -114,8 +108,17 @@
     <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.0.0\lib\net451\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Spatial, Version=7.4.4.20330, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Spatial.7.4.4\lib\portable-net45+win8+wpa81\Microsoft.Spatial.dll</HintPath>
+    <Reference Include="Microsoft.Restier.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Restier.Core.1.0.0-beta\lib\net45\Microsoft.Restier.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Restier.Providers.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Restier.Providers.EntityFramework.1.0.0-beta\lib\net45\Microsoft.Restier.Providers.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Restier.Publishers.OData, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Restier.Publishers.OData.1.0.0-beta\lib\net45\Microsoft.Restier.Publishers.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Spatial, Version=7.5.0.20627, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Spatial.7.5.0\lib\portable-net45+win8+wpa81\Microsoft.Spatial.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
@@ -176,8 +179,8 @@
       <HintPath>..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+    <Reference Include="System.Console, Version=4.0.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Console.4.3.1\lib\net46\System.Console.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -210,8 +213,8 @@
       <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Reflection.TypeExtensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reflection.TypeExtensions.4.3.0\lib\net46\System.Reflection.TypeExtensions.dll</HintPath>
+    <Reference Include="System.Reflection.TypeExtensions, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.TypeExtensions.4.5.0\lib\net461\System.Reflection.TypeExtensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
@@ -227,6 +230,9 @@
     </Reference>
     <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.2\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Cors, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.6\lib\net45\System.Web.Cors.dll</HintPath>
@@ -284,7 +290,7 @@
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.1\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
     </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
@@ -340,32 +346,33 @@
     <Compile Include="Controllers\HealthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OData\BaseODataControllers.cs" />
-    <Compile Include="Controllers\OData\InstrumentsODataController.cs" />
-    <Compile Include="Controllers\OData\OfferingsODataController.cs" />
-    <Compile Include="Controllers\OData\OrganisationsODataController.cs" />
-    <Compile Include="Controllers\OData\PhenomenaODataController.cs" />
-    <Compile Include="Controllers\OData\SensorsODataContoller.cs" />
-    <Compile Include="Controllers\OData\SitesODataController.cs" />
-    <Compile Include="Controllers\OData\StationsODataController.cs" />
-    <Compile Include="Controllers\OData\UnitsOfMeasureODataController.cs" />
-    <Compile Include="Controllers\OData\UserDownloadsODataController.cs" />
-    <Compile Include="Controllers\OData\UserQueriesODataController.cs" />
-    <Compile Include="Controllers\SensorThingsAPI\BaseController.cs" />
-    <Compile Include="Controllers\SensorThingsAPI\LocationsSOSController.cs" />
-    <Compile Include="Controllers\SensorThingsAPI\SensorThingsController.cs" />
-    <Compile Include="Controllers\SensorThingsAPI\SensorThingsFactory.cs" />
-    <Compile Include="Controllers\SensorThingsAPI\ThingsSOSController.cs" />
+    <Compile Include="Controllers\OData\InstrumentsODController.cs" />
+    <Compile Include="Controllers\OData\OfferingsODController.cs" />
+    <Compile Include="Controllers\OData\OrganisationsODController.cs" />
+    <Compile Include="Controllers\OData\PhenomenaODController.cs" />
+    <Compile Include="Controllers\OData\ProgrammesODController.cs" />
+    <Compile Include="Controllers\OData\ProjectsController.cs" />
+    <Compile Include="Controllers\OData\SensorsODContoller.cs" />
+    <Compile Include="Controllers\OData\SitesODController.cs" />
+    <Compile Include="Controllers\OData\StationsODController.cs" />
+    <Compile Include="Controllers\OData\UnitsODController.cs" />
+    <Compile Include="Controllers\SensorThings\BaseController.cs" />
+    <Compile Include="Controllers\SensorThings\DatastreamsSTController.cs" />
+    <Compile Include="Controllers\SensorThings\LocationsSTController.cs" />
+    <Compile Include="Controllers\SensorThings\SensorThingsController.cs" />
+    <Compile Include="Controllers\SensorThings\SensorThingsFactory.cs" />
+    <Compile Include="Controllers\SensorThings\ThingsSTController.cs" />
     <Compile Include="Controllers\WebAPI\BaseApiControllers.cs" />
     <Compile Include="Controllers\WebAPI\BaseController.cs" />
-    <Compile Include="Controllers\WebAPI\ClaimsController.cs" />
-    <Compile Include="Controllers\WebAPI\DataDownloadController.cs" />
-    <Compile Include="Controllers\WebAPI\DataQueryController.cs" />
-    <Compile Include="Controllers\WebAPI\FeaturesController.cs" />
-    <Compile Include="Controllers\WebAPI\FeaturesHelper.cs" />
+    <Compile Include="Controllers\WebAPI\ToDo\ClaimsController.cs" />
+    <Compile Include="Controllers\WebAPI\ToDo\DataDownloadController.cs" />
+    <Compile Include="Controllers\WebAPI\ToDo\DataQueryController.cs" />
+    <Compile Include="Controllers\WebAPI\ToDo\FeaturesController.cs" />
+    <Compile Include="Controllers\WebAPI\ToDo\FeaturesHelper.cs" />
     <Compile Include="Controllers\WebAPI\InstrumentsController.cs" />
-    <Compile Include="Controllers\WebAPI\InventoryController.cs" />
-    <Compile Include="Controllers\WebAPI\LocationsController.cs" />
-    <Compile Include="Controllers\WebAPI\LocationsHelper.cs" />
+    <Compile Include="Controllers\WebAPI\ToDo\InventoryController.cs" />
+    <Compile Include="Controllers\WebAPI\ToDo\LocationsController.cs" />
+    <Compile Include="Controllers\WebAPI\ToDo\LocationsHelper.cs" />
     <Compile Include="Controllers\WebAPI\OfferingsController.cs" />
     <Compile Include="Controllers\WebAPI\OrganisationsController.cs" />
     <Compile Include="Controllers\WebAPI\PhenomenaController.cs" />
@@ -373,9 +380,9 @@
     <Compile Include="Controllers\WebAPI\ProjectsController.cs" />
     <Compile Include="Controllers\WebAPI\SensorsController.cs" />
     <Compile Include="Controllers\WebAPI\SitesController.cs" />
-    <Compile Include="Controllers\WebAPI\SpacialCoverageController.cs" />
+    <Compile Include="Controllers\WebAPI\ToDo\SpacialCoverageController.cs" />
     <Compile Include="Controllers\WebAPI\StationsController.cs" />
-    <Compile Include="Controllers\WebAPI\TemporalCoverageController.cs" />
+    <Compile Include="Controllers\WebAPI\ToDo\TemporalCoverageController.cs" />
     <Compile Include="Controllers\WebAPI\UnitsController.cs" />
     <Compile Include="Controllers\WebAPI\UserDownloadsController.cs" />
     <Compile Include="Controllers\WebAPI\UserQueriesController.cs" />
@@ -505,7 +512,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.8.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.8.2\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
   </Target>
+  <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

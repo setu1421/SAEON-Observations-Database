@@ -7,12 +7,11 @@ using SAEON.Observations.Core.Entities;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
-    /*
     /// <summary>
     /// Sensors
     /// </summary>
     [ODataRoutePrefix("Sensors")]
-    public class SensorsController : BaseODataController<Sensor>
+    public class SensorsODController : BaseODataController<Sensor>
     {
 
         // GET: odata/Sensors
@@ -38,16 +37,16 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return base.GetById(id);
         }
 
-        // GET: odata/Sensors(5)
+        // GET: odata/Sensors(5)/Phenomenon
         /// <summary>
-        /// Sensor by Name
+        /// Phenomena for the Sensor
         /// </summary>
-        /// <param name="name">Name of Sensor</param>
-        /// <returns>Sensor</returns>
-        [EnableQuery, ODataRoute("({name})")]
-        public override SingleResult<Sensor> GetByName([FromODataUri] string name)
+        /// <param name="id">Id of the Sensor</param>
+        /// <returns>ListOf(Phenomenon)</returns>
+        [EnableQuery, ODataRoute("({id})/Phenomenon")]
+        public SingleResult<Phenomenon> GetPhenomenon([FromODataUri] Guid id)
         {
-            return base.GetByName(name);
+            return GetSingle(id, s => s.Phenomenon, i => i.Sensors);
         }
 
         // GET: odata/Sensors(5)/Instruments
@@ -62,18 +61,5 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return GetMany<Instrument>(id, s => s.Instruments, i => i.Sensors);
         }
 
-        // GET: odata/Sensors(5)/Phenomenon
-        /// <summary>
-        /// Phenomena for the Sensor
-        /// </summary>
-        /// <param name="id">Id of the Sensor</param>
-        /// <returns>ListOf(Phenomenon)</returns>
-        [EnableQuery, ODataRoute("({id})/Phenomenon")]
-        public SingleResult<Phenomenon> GetPhenomenon([FromODataUri] Guid id)
-        {
-            return GetSingle(id, s => s.Phenomenon, i => i.Sensors);
-        }
-
     }
-    */
 }

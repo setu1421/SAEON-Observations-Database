@@ -88,5 +88,30 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         {
             return GetMany<Instrument>(id, s => s.Instruments, i => i.Stations);
         }
+
+        // GET: Stations/5/Organisations
+        /// <summary>
+        /// Organisations for the Station
+        /// </summary>
+        /// <param name="id">Id of the Station</param>
+        /// <returns>ListOf(Organisation)</returns>
+        [Route("{id:guid}/Organisations")]
+        public IQueryable<Organisation> GetOrganisations([FromUri] Guid id)
+        {
+            return GetMany<Organisation>(id, s => s.Organisations, i => i.Stations);
+        }
+
+        // GET: Stations/5/Projects
+        /// <summary>
+        /// Projects for the Station
+        /// </summary>
+        /// <param name="id">Id of the Station</param>
+        /// <returns>ListOf(Project)</returns>
+        [Route("{id:guid}/Projects")]
+        public IQueryable<Project> GetProjects([FromUri] Guid id)
+        {
+            return GetMany<Project>(id, s => s.Projects, i => i.Stations);
+        }
+
     }
 }

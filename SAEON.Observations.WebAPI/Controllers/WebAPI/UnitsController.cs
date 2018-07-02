@@ -63,7 +63,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return await base.GetByName(name);
         }
 
-        // GET: UnitsOfMeasure/5/Phenomena
+        // GET: Units/5/Phenomena
         /// <summary>
         /// Phenomena for the Unit
         /// </summary>

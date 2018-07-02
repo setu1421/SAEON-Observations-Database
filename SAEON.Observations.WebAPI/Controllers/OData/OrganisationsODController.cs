@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Organisations
     /// </summary>
     [ODataRoutePrefix("Organisations")]
-    public class OrganisationsODataController : CodedODataController<Organisation>
+    public class OrganisationsODController : BaseODataController<Organisation>
     {
         /// <summary>
         /// All Organisations
@@ -36,18 +36,6 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         }
 
 
-        // GET: odata/Organisations(5)
-        /// <summary>
-        /// Organisation by Name
-        /// </summary>
-        /// <param name="name">Name of Organisation</param>
-        /// <returns>Organisation</returns>
-        [EnableQuery, ODataRoute("({name})")]
-        public override SingleResult<Organisation> GetByName([FromODataUri] string name)
-        {
-            return base.GetByName(name);
-        }
-
         //GET: odata/Organisations(5)/Sites
         /// <summary>
         /// Sites for the Organisation
@@ -58,6 +46,30 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         public IQueryable<Site> GetSites([FromODataUri] Guid id)
         {
             return GetMany<Site>(id, s => s.Sites, i => i.Organisations);
+        }
+
+        //GET: odata/Organisations(5)/Stations
+        /// <summary>
+        /// Stations for the Organisation
+        /// </summary>
+        /// <param name="id">Id of Organisation</param>
+        /// <returns>ListOf(Station)</returns>
+        [EnableQuery, ODataRoute("({id})/Stations")]
+        public IQueryable<Station> GetStations([FromODataUri] Guid id)
+        {
+            return GetMany<Station>(id, s => s.Stations, i => i.Organisations);
+        }
+
+        //GET: odata/Organisations(5)/Instruments
+        /// <summary>
+        /// Instruments for the Organisation
+        /// </summary>
+        /// <param name="id">Id of Organisation</param>
+        /// <returns>ListOf(Instrument)</returns>
+        [EnableQuery, ODataRoute("({id})/Instruments")]
+        public IQueryable<Instrument> GetInstruments([FromODataUri] Guid id)
+        {
+            return GetMany<Instrument>(id, s => s.Instruments, i => i.Organisations);
         }
     }
 }

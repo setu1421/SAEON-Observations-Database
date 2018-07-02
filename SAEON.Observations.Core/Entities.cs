@@ -1,13 +1,13 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Web.Mvc;
-using Newtonsoft.Json; 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using SAEON.Logs; 
+using SAEON.Logs;
 
 namespace SAEON.Observations.Core.Entities
 {
@@ -45,6 +45,9 @@ namespace SAEON.Observations.Core.Entities
         [ScaffoldColumn(false), HiddenInput]
         [JsonProperty(Order = -99)]
         public Guid Id { get; set; }
+        [Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false), HiddenInput]
+        public byte[] RowVersion { get; set; }
+
         public virtual EntityListItem AsEntityListItem => new EntityListItem { Id = Id };
     }
 
@@ -98,7 +101,7 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Url of the Instrument
         /// </summary>
-        [Url, StringLength(250)] 
+        [Url, StringLength(250)]
         public string Url { get; set; }
         /// <summary>
         /// StartDate of the Instrument, null means always
@@ -125,10 +128,18 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// The Organisations linked to this Instrument
         /// </summary>
-        [JsonIgnore] 
+        [JsonIgnore]
         public List<Organisation> Organisations { get; set; }
         [JsonProperty("Organisations")]
         public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
+
+        /// <summary>
+        /// Stations linked to this Instrument
+        /// </summary>
+        [JsonIgnore]
+        public List<Station> Stations { get; set; }
+        [JsonProperty("Stations")]
+        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
         /// Sensors linked to this Instrument
@@ -138,13 +149,6 @@ namespace SAEON.Observations.Core.Entities
         [JsonProperty("Sensors")]
         public List<EntityListItem> SensorsList => Sensors?.Select(i => i.AsEntityListItem).ToList();
 
-        /// <summary>
-        /// Stations linked to this Instrument
-        /// </summary>
-        [JsonIgnore]
-        public List<Station> Stations { get; set; }
-        [JsonProperty("Stations")]
-        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
     }
 
     /// <summary>
@@ -187,14 +191,6 @@ namespace SAEON.Observations.Core.Entities
         // Navigation
 
         /// <summary>
-        /// The Instruments linked to this Organisation
-        /// </summary>
-        [JsonIgnore]
-        public List<Instrument> Instruments { get; set; }
-        [JsonProperty("Instruments")]
-        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
-
-        /// <summary>
         /// The Sites linked to this Organisation
         /// </summary>
         [JsonIgnore]
@@ -209,6 +205,14 @@ namespace SAEON.Observations.Core.Entities
         public List<Station> Stations { get; set; }
         [JsonProperty("Stations")]
         public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
+
+        /// <summary>
+        /// The Instruments linked to this Organisation
+        /// </summary>
+        [JsonIgnore]
+        public List<Instrument> Instruments { get; set; }
+        [JsonProperty("Instruments")]
+        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
     }
 
     /// <summary>
@@ -240,20 +244,20 @@ namespace SAEON.Observations.Core.Entities
         public List<EntityListItem> OfferingsList => Offerings?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
-        /// Sensors linked to this Phenomenon 
-        /// </summary>
-        [JsonIgnore]
-        public List<Sensor> Sensors { get; set; }
-        [JsonProperty("Sensors"), NotMapped]
-        public List<EntityListItem> SensorsList => Sensors?.Select(i => i.AsEntityListItem).ToList();
-
-        /// <summary>
         /// Units of this Phenomenon 
         /// </summary>
         [JsonIgnore]
         public List<Unit> Units { get; set; }
         [JsonProperty("Units"), NotMapped]
         public List<EntityListItem> UnitsList => Units?.Select(i => i.AsEntityListItem).ToList();
+
+        /// <summary>
+        /// Sensors linked to this Phenomenon 
+        /// </summary>
+        [JsonIgnore]
+        public List<Sensor> Sensors { get; set; }
+        [JsonProperty("Sensors"), NotMapped]
+        public List<EntityListItem> SensorsList => Sensors?.Select(i => i.AsEntityListItem).ToList();
 
     }
 
@@ -414,6 +418,14 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         public double? Elevation { get; set; }
 
+        /// <summary>
+        /// Phenomenon of the Sensor
+        /// </summary>
+        [JsonIgnore]
+        public Phenomenon Phenomenon { get; set; }
+        [JsonProperty("Phenomenon")]
+        public EntityListItem PhenomenonName => Phenomenon?.AsEntityListItem;
+
         // Navigation
         /// <summary>
         /// Instruments linked to this Sensor
@@ -422,14 +434,6 @@ namespace SAEON.Observations.Core.Entities
         public List<Instrument> Instruments { get; set; }
         [JsonProperty("Instruments")]
         public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
-
-        /// <summary>
-        /// Phenomenon of the Sensor
-        /// </summary>
-        [JsonIgnore]
-        public Phenomenon Phenomenon { get; set; }
-        [JsonProperty("Phenomenon")]
-        public EntityListItem PhenomenonName => Phenomenon?.AsEntityListItem;
     }
 
     /// <summary>
@@ -520,13 +524,14 @@ namespace SAEON.Observations.Core.Entities
 
         // Navigation
 
+
         /// <summary>
-        /// Instruments linked to this Station
+        /// Site of the Station
         /// </summary>
         [JsonIgnore]
-        public List<Instrument> Instruments { get; set; }
-        [JsonProperty("Instruments")]
-        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
+        public Site Site { get; set; }
+        [JsonProperty("Site")]
+        public EntityListItem SiteName => Site?.AsEntityListItem;
 
         /// <summary>
         /// The Organisations linked to this Station
@@ -546,12 +551,12 @@ namespace SAEON.Observations.Core.Entities
         public List<EntityListItem> ProjectsList => Projects?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
-        /// Site of the Station
+        /// Instruments linked to this Station
         /// </summary>
         [JsonIgnore]
-        public Site Site { get; set; }
-        [JsonProperty("Site")]
-        public EntityListItem SiteName => Site?.AsEntityListItem;
+        public List<Instrument> Instruments { get; set; }
+        [JsonProperty("Instruments")]
+        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
     }
 
     /// <summary>
@@ -645,6 +650,41 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [StringLength(128), ScaffoldColumn(false)]
         public string UpdatedBy { get; set; }
+    }
+
+    [Table("vImportBatchSummary")]
+    public class ImportBatchSummary : BaseEntity
+    {
+        public Guid ImportBatchId { get; set; }
+        public Guid SensorBatchId { get; set; }
+        public Guid InstrumentBatchId { get; set; }
+        public Guid StationBatchId { get; set; }
+        public Guid SiteBatchId { get; set; }
+        public Guid PhenomenonOfferingId { get; set; }
+        [Column("PhenomenonUOMID")]
+        public Guid PhenomenonUnitId { get; set; }
+        public int Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
+        public double? TopLatitude { get; set; }
+        public double? BottomLatitude { get; set; }
+        public double? LeftLongitude { get; set; }
+        public double? RightLongitude { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        [Column("UnitOfMeasureCode")]
+        public string UnitCode { get; set; }
+        [Column("UnitOfMeasureUnit")]
+        public string UnitName { get; set; }
+        [Column("UnitOfMeasureSymbol")]
+        public string UnitSymbol { get; set; }
+        public string SensorCode { get; set; }
+        public string SensorName { get; set; }
     }
 
 #if !NET461
@@ -906,7 +946,7 @@ namespace SAEON.Observations.Core.Entities
     {
         public ObservationsDbContext() : base("Observations")
         {
-            Configuration.ProxyCreationEnabled = false; 
+            Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
             Database.Log = s => Logging.Verbose(s);
             Database.CommandTimeout = 30 * 60;
@@ -929,6 +969,8 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<Unit> Units { get; set; }
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
+
+        public DbSet<ImportBatchSummary> ImportBatchSummaries { get; set; }
 
         //public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
         //public DbSet<vApiDataQuery> vApiDataQueries { get; set; }
@@ -965,7 +1007,7 @@ namespace SAEON.Observations.Core.Entities
                 .Map(cs =>
                 {
                     cs.MapLeftKey("StationID");
-                    cs.MapRightKey("InstrumentID"); 
+                    cs.MapRightKey("InstrumentID");
                     cs.ToTable("Station_Instrument");
                 });
 
@@ -977,8 +1019,8 @@ namespace SAEON.Observations.Core.Entities
                     cs.MapLeftKey("InstrumentID");
                     cs.MapRightKey("SensorID");
                     cs.ToTable("Instrument_Sensor");
-                });  
-            modelBuilder.Entity<Phenomenon>() 
+                });
+            modelBuilder.Entity<Phenomenon>()
                 .HasMany<Offering>(l => l.Offerings)
                 .WithMany(r => r.Phenomena)
                 .Map(cs =>

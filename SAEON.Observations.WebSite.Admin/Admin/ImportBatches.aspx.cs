@@ -87,10 +87,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         ImportBatchSummary.Delete("ImportBatchID", importBatchId);
         var sql =
             "Insert Into ImportBatchSummary" + Environment.NewLine +
-            "  (ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance,"+Environment.NewLine+
+            "  (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance," + Environment.NewLine+
             "   TopLatitude, BottomLatitude, LeftLongitude, RightLongitude)" + Environment.NewLine +
             "Select" + Environment.NewLine +
-            "  ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, "+Environment.NewLine+
+            "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, " + Environment.NewLine+
             "  STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance" + Environment.NewLine +
             "  Max(Latitude) TopLatitude, Min(Latitude) BottomLatitude, Min(Longitude) LeftLongitude, Max(Longitude) RightLongitude"+Environment.NewLine+
             "from" + Environment.NewLine +
@@ -98,7 +98,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             "where" + Environment.NewLine +
             "  (ImportBatchID = @ImportBatchID)" + Environment.NewLine +
             "group by" + Environment.NewLine +
-            "  ImportBatchID, SensorID, PhenomenonOfferingID, PhenomenonUOMID";
+            "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID";
         cmd.CommandText = sql;
         var param = cmd.CreateParameter();
         param.DbType = DbType.Guid;
@@ -176,7 +176,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
 
-                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.31, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.32, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())

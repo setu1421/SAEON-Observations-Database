@@ -7,12 +7,11 @@ using SAEON.Observations.Core.Entities;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
-    /*
     /// <summary>
     /// Phenomenona
     /// </summary>
     [ODataRoutePrefix("Phenomena")]
-    public class PhenomenaODataController : BaseODataController<Phenomenon>
+    public class PhenomenaODController : BaseODataController<Phenomenon>
     {
         // GET: odata/Phenomena
         /// <summary>
@@ -37,16 +36,28 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return base.GetById(id);
         }
 
-        // GET: odata/Phenomena(5)
+        // GET: odata/Phenomena(5)/Offerings
         /// <summary>
-        /// Phenomenon by Name
+        /// Offerings for the Phenomenon
         /// </summary>
-        /// <param name="name">Name of Phenomenon</param>
-        /// <returns>Phenomenon</returns>
-        [EnableQuery, ODataRoute("({name})")]
-        public override SingleResult<Phenomenon> GetByName([FromODataUri] string name)
+        /// <param name="id">Id of the Phenomenon</param>
+        /// <returns>ListOf(Offering)</returns>
+        [EnableQuery, ODataRoute("({id})/Offerings")]
+        public IQueryable<Offering> GetOfferings([FromODataUri] Guid id)
         {
-            return base.GetByName(name);
+            return GetMany(id, s => s.Offerings, i => i.Phenomena);
+        }
+
+        // GET: odata/Phenomena(5)/Units
+        /// <summary>
+        /// Units for the Phenomenon
+        /// </summary>
+        /// <param name="id">Id of the Phenomenon</param>
+        /// <returns>ListOf(Unit)</returns>
+        [EnableQuery, ODataRoute("({id})/Units")]
+        public IQueryable<Unit> GetUnits([FromODataUri] Guid id)
+        {
+            return GetMany(id, s => s.Units, i => i.Phenomena);
         }
 
         // GET: odata/Phenomena(5)/Sensors
@@ -60,30 +71,5 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         {
             return GetMany(id, s => s.Sensors, i => i.Phenomenon);
         }
-
-        // GET: odata/Phenomena(5)/Offerings
-        /// <summary>
-        /// Offerings for the Phenomenon
-        /// </summary>
-        /// <param name="id">Id of the Phenomenon</param>
-        /// <returns>ListOf(Offering)</returns>
-        [EnableQuery, ODataRoute("({id})/Offerings")]
-        public IQueryable<Offering> GetOfferings([FromODataUri] Guid id)
-        {
-            return GetMany(id, s => s.Offerings, i => i.Phenomena);
-        }
-
-        // GET: odata/Phenomena(5)/UnitsOfMeasure
-        /// <summary>
-        /// UnitsOfMeasure for the Phenomenon
-        /// </summary>
-        /// <param name="id">Id of the Phenomenon</param>
-        /// <returns>ListOf(UnitOfMeasure)</returns>
-        [EnableQuery, ODataRoute("({id})/UnitsOfMeasure")]
-        public IQueryable<UnitOfMeasure> GetUnitsOfMeasure([FromODataUri] Guid id)
-        {
-            return GetMany(id, s => s.UnitsOfMeasure, i => i.Phenomena);
-        }
     }
-    */
 }

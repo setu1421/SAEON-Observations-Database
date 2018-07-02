@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
     {
         #region Things
 
-        public static Thing ThingFromStation(e.Station station, Uri uri)
+        public static Thing ThingFromStation(e.Station station, Uri uri, Location location = null)
         {
             var result = new Thing
             {
@@ -33,12 +33,17 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             {
                 result.Properties.Add("endDate", station.EndDate.Value.ToString("o"));
             }
-            result.Location = LocationFromStation(station, uri);
-            //result.HistoricalLocations.Add();
+            if (location == null)
+                result.Location = LocationFromStation(station, uri, result);
+            else
+                result.Location = location;
+            var historicalLocation = new HistoricalLocation { Thing = result, Time = DateTime.Now };
+            historicalLocation.Locations.Add(result.Location);
+            result.HistoricalLocations.Add(historicalLocation);
             return result;
         }
 
-        public static Thing ThingFromInstrument(e.Instrument instrument, Uri uri)
+        public static Thing ThingFromInstrument(e.Instrument instrument, Uri uri, Location location = null)
         {
             var result = new Thing
             {
@@ -60,11 +65,17 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             {
                 result.Properties.Add("endDate", instrument.EndDate.Value.ToString("o"));
             }
-            result.Location = LocationFromInstrument(instrument, uri);
+            if (location == null)
+                result.Location = LocationFromInstrument(instrument, uri, result);
+            else
+                result.Location = location;
+            var historicalLocation = new HistoricalLocation { Thing = result, Time = DateTime.Now };
+            historicalLocation.Locations.Add(result.Location);
+            result.HistoricalLocations.Add(historicalLocation);
             return result;
         }
 
-        public static Thing ThingFromSensor(e.Sensor sensor, Uri uri)
+        public static Thing ThingFromSensor(e.Sensor sensor, Uri uri, Location location = null)
         {
             var result = new Thing
             {
@@ -78,13 +89,19 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             {
                 result.Properties.Add("url", sensor.Url);
             }
-            result.Location = LocationFromSensor(sensor, uri);
+            if (location == null)
+                result.Location = LocationFromSensor(sensor, uri, result);
+            else
+                result.Location = location;
+            var historicalLocation = new HistoricalLocation { Thing = result, Time = DateTime.Now };
+            historicalLocation.Locations.Add(result.Location);
+            result.HistoricalLocations.Add(historicalLocation);
             return result;
         }
         #endregion
 
         #region Locations
-        public static Location LocationFromStation(e.Station station, Uri uri)
+        public static Location LocationFromStation(e.Station station, Uri uri, Thing thing = null)
         {
             var result = new Location
             {
@@ -96,11 +113,18 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                 Longitude = station.Longitude.Value,
                 Elevation = station.Elevation,
             };
-            result.Things.Add(ThingFromStation(station, uri));
+            if (thing == null)
+            {
+                thing = ThingFromStation(station, uri, result);
+            }
+            result.Things.Add(thing);
+            var historicalLocation = new HistoricalLocation { Thing = thing, Time = DateTime.Now };
+            historicalLocation.Locations.Add(thing.Location);
+            result.HistoricalLocations.Add(historicalLocation);
             return result;
         }
 
-        public static Location LocationFromInstrument(e.Instrument instrument, Uri uri)
+        public static Location LocationFromInstrument(e.Instrument instrument, Uri uri, Thing thing = null)
         {
             var result = new Location
             {
@@ -112,11 +136,18 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                 Longitude = instrument.Longitude.Value,
                 Elevation = instrument.Elevation
             };
-            result.Things.Add(ThingFromInstrument(instrument, uri));
+            if (thing == null)
+            {
+                thing = ThingFromInstrument(instrument, uri, result);
+            }
+            result.Things.Add(thing);
+            var historicalLocation = new HistoricalLocation { Thing = thing, Time = DateTime.Now };
+            historicalLocation.Locations.Add(thing.Location);
+            result.HistoricalLocations.Add(historicalLocation);
             return result;
         }
 
-        public static Location LocationFromSensor(e.Sensor sensor, Uri uri)
+        public static Location LocationFromSensor(e.Sensor sensor, Uri uri, Thing thing = null)
         {
             var result = new Location
             {
@@ -128,55 +159,17 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
                 Longitude = sensor.Longitude.Value,
                 Elevation = sensor.Elevation
             };
-            result.Things.Add(ThingFromSensor(sensor, uri));
+            if (thing == null)
+            {
+                thing = ThingFromSensor(sensor, uri, result);
+            }
+            result.Things.Add(thing);
+            var historicalLocation = new HistoricalLocation { Thing = thing, Time = DateTime.Now };
+            historicalLocation.Locations.Add(thing.Location);
+            result.HistoricalLocations.Add(historicalLocation);
             return result;
         }
         #endregion
 
-        /*
-        #region HistoricalLocations
-        public static HistoricalLocation HistoricalLocationFromStation(e.Station station, Uri uri)
-        {
-            return new HistoricalLocation
-            {
-                BaseUrl = uri.GetLeftPart(UriPartial.Authority) + "/SensorThings",
-                Id = station.Id.GetHashCode(),
-                Name = $"Station {station.Name}",
-                Description = station.Description,
-                Latitude = station.Latitude.Value,
-                Longitude = station.Longitude.Value,
-                Elevation = station.Elevation
-            };
-        }
-
-        public static HistoricalLocation HistoricalLocationFromInstrument(e.Instrument instrument, Uri uri)
-        {
-            return new HistoricalLocation
-            {
-                BaseUrl = uri.GetLeftPart(UriPartial.Authority) + "/SensorThings",
-                Id = instrument.Id.GetHashCode(),
-                Name = $"Instrument {instrument.Name}",
-                Description = instrument.Description,
-                Latitude = instrument.Latitude.Value,
-                Longitude = instrument.Longitude.Value,
-                Elevation = instrument.Elevation
-            };
-        }
-
-        public static HistoricalLocation HistoricalLocationFromSensor(e.Sensor sensor, Uri uri)
-        {
-            return new HistoricalLocation
-            {
-                BaseUrl = uri.GetLeftPart(UriPartial.Authority) + "/SensorThings",
-                Id = sensor.Id.GetHashCode(),
-                Name = $"Sensor {sensor.Name}",
-                Description = sensor.Description,
-                Latitude = sensor.Latitude.Value,
-                Longitude = sensor.Longitude.Value,
-                Elevation = sensor.Elevation
-            };
-        }
-        #endregion
-    */
     }
 }

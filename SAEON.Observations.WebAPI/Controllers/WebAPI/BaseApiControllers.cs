@@ -288,7 +288,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
     }
 
-    public abstract class NamedApiWriteController<TEntity> : BaseApiController<TEntity> where TEntity : NamedEntity
+    public abstract class NamedApiWriteController<TEntity> : NamedApiController<TEntity> where TEntity : NamedEntity
     {
         public NamedApiWriteController() : base()
         {

@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Stations
     /// </summary>
     [ODataRoutePrefix("Stations")]
-    public class StationsODataController : NamedODataController<Station>
+    public class StationsODController : BaseODataController<Station>
     {
         /// <summary>
         /// All Stations
@@ -36,18 +36,6 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         }
 
 
-        // GET: odata/Stations(5)
-        /// <summary>
-        /// Station by Name
-        /// </summary>
-        /// <param name="name">Name of Station</param>
-        /// <returns>Station</returns>
-        [EnableQuery, ODataRoute("({name})")]
-        public override SingleResult<Station> GetByName([FromODataUri] string name)
-        {
-            return base.GetByName(name);
-        }
-
         // GET: odata/Stations(5)/Site
         /// <summary>
         /// Site for the Station
@@ -60,9 +48,33 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return GetSingle(id, s => s.Site, i => i.Stations);
         }
 
+        // GET: odata/Stations(5)/Organisations
+        /// <summary>
+        /// Organisations for the Station
+        /// </summary>
+        /// <param name="id">Id of the Station</param>
+        /// <returns>ListOf(Organisation(</returns>
+        [EnableQuery, ODataRoute("({id})/Organisations")]
+        public IQueryable<Organisation> GetOrganisations([FromODataUri] Guid id)
+        {
+            return GetMany(id, s => s.Organisations, i => i.Stations);
+        }
+
+        // GET: odata/Stations(5)/Projects
+        /// <summary>
+        /// Projects for the Station
+        /// </summary>
+        /// <param name="id">Id of the Station</param>
+        /// <returns>ListOf(Project(</returns>
+        [EnableQuery, ODataRoute("({id})/Projects")]
+        public IQueryable<Project> GetProjects([FromODataUri] Guid id)
+        {
+            return GetMany(id, s => s.Projects, i => i.Stations);
+        }
+
         // GET: odata/Stations(5)/Instruments
         /// <summary>
-        /// Instrumenst for the Station
+        /// Instruments for the Station
         /// </summary>
         /// <param name="id">Id of the Station</param>
         /// <returns>ListOf(Instrument(</returns>

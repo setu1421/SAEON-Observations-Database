@@ -27,6 +27,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             var List = new EntitySetList();
             List.Value.Add(new EntitySet { Name = "Things", Url = Request.Url.AbsoluteUri +"/Things" });
             List.Value.Add(new EntitySet { Name = "Locations", Url = Request.Url.AbsoluteUri + "/Locations" });
+            List.Value.Add(new EntitySet { Name = "Datastreams", Url = Request.Url.AbsoluteUri + "/Datastreams" });
             JsonNetResult jsonNetResult = new JsonNetResult
             {
                 Formatting = Formatting.Indented,

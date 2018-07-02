@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Sites
     /// </summary>
     [ODataRoutePrefix("Sites")]
-    public class SitesODataController : CodedODataController<Site>
+    public class SitesODController : BaseODataController<Site>
     {
         /// <summary>
         /// All Sites
@@ -36,16 +36,16 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         }
 
 
-        // GET: odata/Sites(5)
+        //GET: odata/Sites(5)/Organisations
         /// <summary>
-        /// Site by Name
+        /// Organisations for the Site
         /// </summary>
-        /// <param name="name">Name of Site</param>
-        /// <returns>Site</returns>
-        [EnableQuery, ODataRoute("({name})")]
-        public override SingleResult<Site> GetByName([FromODataUri] string name)
+        /// <param name="id">Id of Site</param>
+        /// <returns>ListOf(Organisation)</returns>
+        [EnableQuery, ODataRoute("({id})/Organisations")]
+        public IQueryable<Organisation> GetOrganisations([FromODataUri] Guid id)
         {
-            return base.GetByName(name);
+            return GetMany<Organisation>(id, s => s.Organisations, i => i.Sites);
         }
 
         //GET: odata/Sites(5)/Stations
