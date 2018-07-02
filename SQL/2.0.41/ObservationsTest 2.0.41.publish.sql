@@ -61,6 +61,14 @@ USE [$(DatabaseName)];
 
 
 GO
+PRINT N'Dropping [dbo].[ImportBatchSummary]...';
+
+
+GO
+DROP TABLE [dbo].[ImportBatchSummary];
+
+
+GO
 PRINT N'Dropping [dbo].[DF_DataLog_ID]...';
 
 
@@ -393,7 +401,7 @@ CREATE NONCLUSTERED INDEX [IX_DataLog_StatusReasonID]
 
 
 GO
-PRINT N'Altering [dbo].[ImportBatchSummary]...';
+PRINT N'Creating [dbo].[ImportBatchSummary]...';
 
 
 GO
@@ -401,15 +409,95 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-ALTER TABLE [dbo].[ImportBatchSummary]
-    ADD [TopLatitude]    FLOAT NULL,
-        [BottomLatitude] FLOAT NULL,
-        [LeftLongitude]  FLOAT NULL,
-        [RightLongitude] FLOAT NULL;
+CREATE TABLE [dbo].[ImportBatchSummary] (
+    [ID]                   UNIQUEIDENTIFIER CONSTRAINT [DF_ImportBatchSummary_ID] DEFAULT newid() ROWGUIDCOL NOT NULL,
+    [ImportBatchID]        UNIQUEIDENTIFIER NOT NULL,
+    [SensorID]             UNIQUEIDENTIFIER NOT NULL,
+    [InstrumentID]         UNIQUEIDENTIFIER NOT NULL,
+    [StationID]            UNIQUEIDENTIFIER NOT NULL,
+    [SiteID]               UNIQUEIDENTIFIER NOT NULL,
+    [PhenomenonOfferingID] UNIQUEIDENTIFIER NOT NULL,
+    [PhenomenonUOMID]      UNIQUEIDENTIFIER NOT NULL,
+    [Count]                INT              NOT NULL,
+    [Minimum]              FLOAT (53)       NULL,
+    [Maximum]              FLOAT (53)       NULL,
+    [Average]              FLOAT (53)       NULL,
+    [StandardDeviation]    FLOAT (53)       NULL,
+    [Variance]             FLOAT (53)       NULL,
+    [TopLatitude]          FLOAT (53)       NULL,
+    [BottomLatitude]       FLOAT (53)       NULL,
+    [LeftLongitude]        FLOAT (53)       NULL,
+    [RightLongitude]       FLOAT (53)       NULL,
+    CONSTRAINT [PK_ImportBatchSummary] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [UX_ImportBatchSummary] UNIQUE NONCLUSTERED ([ImportBatchID] ASC, [SensorID] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC)
+);
 
 
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ImportBatchID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_ImportBatchID]
+    ON [dbo].[ImportBatchSummary]([ImportBatchID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_SensorID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_SensorID]
+    ON [dbo].[ImportBatchSummary]([SensorID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_InstrumentID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_InstrumentID]
+    ON [dbo].[ImportBatchSummary]([InstrumentID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_StationID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_StationID]
+    ON [dbo].[ImportBatchSummary]([StationID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_SiteID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_SiteID]
+    ON [dbo].[ImportBatchSummary]([SiteID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_PhenomenonOfferingID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_PhenomenonOfferingID]
+    ON [dbo].[ImportBatchSummary]([PhenomenonOfferingID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_PhenomenonUOMID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_PhenomenonUOMID]
+    ON [dbo].[ImportBatchSummary]([PhenomenonUOMID] ASC);
+
 
 
 GO
@@ -784,6 +872,70 @@ GO
 ALTER TABLE [dbo].[DataLog] WITH NOCHECK
     ADD CONSTRAINT [FK_DataLog_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
 
+GO
+PRINT N'Creating [dbo].[FK_ImportBatchSummary_ImportBatchID]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatchSummary_ImportBatchID] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_ImportBatchSummary_SensorID]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatchSummary_SensorID] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_ImportBatchSummary_PhenomenonOfferingID]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatchSummary_PhenomenonOfferingID] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_ImportBatchSummary_PhenomenonUOMID]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatchSummary_PhenomenonUOMID] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_ImportBatchSummary_InstrumentID]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatchSummary_InstrumentID] FOREIGN KEY ([InstrumentID]) REFERENCES [dbo].[Instrument] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_ImportBatchSummary_StationID]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatchSummary_StationID] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[FK_ImportBatchSummary_SiteID]...';
+
+
+GO
+ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
+    ADD CONSTRAINT [FK_ImportBatchSummary_SiteID] FOREIGN KEY ([SiteID]) REFERENCES [dbo].[Site] ([ID]);
+
+
+
 
 --GO
 --PRINT N'Creating [dbo].[FK_Observation_ImportBatch]...';
@@ -951,7 +1103,7 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vDataLog]';
 
 
 GO
-PRINT N'Refreshing [dbo].[vImportBatchSummary]...';
+PRINT N'Altering [dbo].[vImportBatchSummary]...';
 
 
 GO
@@ -959,9 +1111,39 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vImportBatchSummary]';
-
-
+--> Added 2.0.28 20180423 TimPN
+ALTER VIEW [dbo].[vImportBatchSummary]
+AS 
+Select
+  ImportBatchSummary.*, 
+  Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName,
+  Offering.Code OfferingCode, Offering.Name OfferingName,
+  UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  Sensor.Code SensorCode, Sensor.Name SensorName,
+  Instrument.Code InstrumentCode, Instrument.Name InstrumentName,
+  Station.Code StationCode, Station.Name StationName,
+  Site.Code SiteCode, Site.Name SiteName
+From
+  ImportBatchSummary
+  inner join Sensor
+    on (ImportBatchSummary.SensorID = Sensor.ID)
+  inner join Instrument
+    on (ImportBatchSummary.InstrumentID = Instrument.ID)
+  inner join Station
+    on (ImportBatchSummary.StationID = Station.ID)
+  inner join Site
+    on (ImportBatchSummary.SiteID = Site.ID)
+  inner join PhenomenonOffering
+    on (ImportBatchSummary.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (ImportBatchSummary.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+--< Added 2.0.28 20180423 TimPN
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
@@ -1230,6 +1412,20 @@ ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_Status];
 ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_StatusReason];
 
 ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_aspnet_Users];
+
+ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_SensorID];
+
+ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_ImportBatchID];
+
+ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_InstrumentID];
+
+ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_StationID];
+
+ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_SiteID];
+
+ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_PhenomenonOfferingID];
+
+ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_PhenomenonUOMID];
 
 ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_ImportBatch];
 

@@ -384,6 +384,10 @@ namespace SAEON.Observations.Data
         }
         
 		
+		public SAEON.Observations.Data.ImportBatchSummaryCollection ImportBatchSummaryRecords()
+		{
+			return new SAEON.Observations.Data.ImportBatchSummaryCollection().Where(ImportBatchSummary.Columns.SiteID, Id).Load();
+		}
 		public SAEON.Observations.Data.OrganisationSiteCollection OrganisationSiteRecords()
 		{
 			return new SAEON.Observations.Data.OrganisationSiteCollection().Where(OrganisationSite.Columns.SiteID, Id).Load();
