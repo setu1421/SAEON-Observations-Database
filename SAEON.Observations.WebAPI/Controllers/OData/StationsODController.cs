@@ -31,7 +31,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>Station</returns>
         [EnableQuery, ODataRoute("({id})")]
         public override SingleResult<Station> GetById([FromODataUri] Guid id)
-        {
+        { 
             return base.GetById(id);
         }
 

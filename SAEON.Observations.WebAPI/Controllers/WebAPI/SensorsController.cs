@@ -66,6 +66,19 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
 
+        // GET: Sensors/5/Phenomenon
+        /// <summary>
+        /// Phenomenon of a Sensor
+        /// </summary>
+        /// <param name="id">The Id of the Sensor</param>
+        /// <returns>Phenomenon</returns>
+        [Route("{id:guid}/Phenomenon")]
+        [ResponseType(typeof(Phenomenon))]
+        public async Task<IHttpActionResult> GetPhenomenon(Guid id)
+        {
+            return await GetSingle<Phenomenon>(id, s => s.Phenomenon, i => i.Sensors);
+        }
+
         // GET: Sensors/5/Instruments
         /// <summary>
         /// Instruments for the Sensor
@@ -76,19 +89,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
             return GetMany<Instrument>(id, s => s.Instruments, i => i.Sensors);
-        }
-
-        // GET: Sensors/5/Phenomenon
-        /// <summary>
-        /// Phenomena of a Sensor
-        /// </summary>
-        /// <param name="id">The Id of the Sensor</param>
-        /// <returns>Phenomenon</returns>
-        [Route("{id:guid}/Phenomenon")]
-        [ResponseType(typeof(Phenomenon))]
-        public async Task<IHttpActionResult> GetPhenomenon(Guid id)
-        {
-            return await GetSingle<Phenomenon>(id, s => s.Phenomenon, i => i.Sensors);
         }
 
     }

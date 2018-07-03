@@ -81,7 +81,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// </summary>
         /// <param name="id">Id of Organisation</param>
         /// <returns>ListOf(Station)</returns>
-        [Route("{id:guid}/Station")]
+        [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
             return GetMany<Station>(id, s => s.Stations, i => i.Organisations);

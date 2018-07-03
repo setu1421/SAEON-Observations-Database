@@ -383,7 +383,7 @@ namespace SAEON.Observations.Core.Entities
         [JsonIgnore]
         public List<Station> Stations { get; set; }
         [JsonProperty("Stations")]
-        public List<EntityListItem> StationsList => Stations.Select(i => i.AsEntityListItem).ToList();
+        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
     }
 
     /// <summary>
@@ -527,7 +527,7 @@ namespace SAEON.Observations.Core.Entities
 
         /// <summary>
         /// Site of the Station
-        /// </summary>
+        /// </summary> 
         [JsonIgnore]
         public Site Site { get; set; }
         [JsonProperty("Site")]
@@ -976,13 +976,22 @@ namespace SAEON.Observations.Core.Entities
         //public DbSet<vApiDataQuery> vApiDataQueries { get; set; }
         //public DbSet<vApiInventory> vApiInventory { get; set; }
         //public DbSet<vApiSpacialCoverage> vApiSpacialCoverages { get; set; }
-        //public DbSet<vApiTemporalCoverage> vApiTemporalCoverages { get; set; }
+        //public DbSet<vApiTemporalCoverage> vApiTemporalCoverages { get; set; } 
         //public DbSet<vSensorThingsDatastream> vSensorThingsDatastreams { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Entity<Instrument>()
+                .HasMany<Sensor>(l => l.Sensors)
+                .WithMany(r => r.Instruments)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("InstrumentID");
+                    cs.MapRightKey("SensorID");
+                    cs.ToTable("Instrument_Sensor");
+                });
             modelBuilder.Entity<Organisation>()
                 .HasMany<Site>(l => l.Sites)
                 .WithMany(r => r.Organisations)
@@ -991,6 +1000,33 @@ namespace SAEON.Observations.Core.Entities
                     cs.MapLeftKey("OrganisationID");
                     cs.MapRightKey("SiteID");
                     cs.ToTable("Organisation_Site");
+                });
+            modelBuilder.Entity<Organisation>()
+                .HasMany<Station>(l => l.Stations)
+                .WithMany(r => r.Organisations)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("OrganisationID");
+                    cs.MapRightKey("StationID");
+                    cs.ToTable("Organisation_Station");
+                });
+            modelBuilder.Entity<Organisation>()
+                .HasMany<Instrument>(l => l.Instruments)
+                .WithMany(r => r.Organisations)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("OrganisationID");
+                    cs.MapRightKey("InstrumentID");
+                    cs.ToTable("Organisation_Instrument");
+                });
+            modelBuilder.Entity<Phenomenon>()
+                .HasMany<Offering>(l => l.Offerings)
+                .WithMany(r => r.Phenomena)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("PhenomenonID");
+                    cs.MapRightKey("OfferingID");
+                    cs.ToTable("PhenomenonOffering");
                 });
             modelBuilder.Entity<Project>()
                 .HasMany<Station>(l => l.Stations)
@@ -1011,24 +1047,6 @@ namespace SAEON.Observations.Core.Entities
                     cs.ToTable("Station_Instrument");
                 });
 
-            modelBuilder.Entity<Instrument>()
-                .HasMany<Sensor>(l => l.Sensors)
-                .WithMany(r => r.Instruments)
-                .Map(cs =>
-                {
-                    cs.MapLeftKey("InstrumentID");
-                    cs.MapRightKey("SensorID");
-                    cs.ToTable("Instrument_Sensor");
-                });
-            modelBuilder.Entity<Phenomenon>()
-                .HasMany<Offering>(l => l.Offerings)
-                .WithMany(r => r.Phenomena)
-                .Map(cs =>
-                {
-                    cs.MapLeftKey("PhenomenonID");
-                    cs.MapRightKey("OfferingID");
-                    cs.ToTable("PhenomenonOffering");
-                });
             modelBuilder.Entity<Unit>().Property(p => p.Name).HasColumnName("Unit");
             modelBuilder.Entity<Phenomenon>()
                 .HasMany<Unit>(l => l.Units)
