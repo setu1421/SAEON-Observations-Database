@@ -1,0 +1,14 @@
+{
+  "name": "saeon.observations.querysite",
+  "version": "1.0.0",
+  "description": "SAEON Observations Query Site",
+  "author": "Tim Parker-Nance",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/SAEON-Data/Observations-Database.git"
+  },
+  "dependencies": {
+    "mdbootstrap": "^4.5.0"
+  }
+}
