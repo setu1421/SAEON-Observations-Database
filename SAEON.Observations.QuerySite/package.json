@@ -1,0 +1,20 @@
+{
+  "name": "saeon.observations.querysite",
+  "version": "1.0.0",
+  "description": "SAEON Observations Query Site",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tim Parker-Nance",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/SAEON-Data/Observations-Database.git"
+  },
+  "dependencies": {
+    "jquery-validation-unobtrusive": "^3.2.6",
+    "mdbootstrap": "^4.5.0"
+  }
+
+}
