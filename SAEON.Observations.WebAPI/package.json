@@ -4,6 +4,10 @@
   "description": "SAEON Observations WebAPI",
   "author": "Tim Parker-Nance",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/SAEON-Data/Observations-Database.git"
+  },
   "dependencies": {
     "jquery-validation-unobtrusive": "^3.2.6",
     "mdbootstrap": "^4.5.0"
