@@ -91,7 +91,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             "   TopLatitude, BottomLatitude, LeftLongitude, RightLongitude)" + Environment.NewLine +
             "Select" + Environment.NewLine +
             "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, " + Environment.NewLine+
-            "  STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance" + Environment.NewLine +
+            "  STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance, " + Environment.NewLine +
             "  Max(Latitude) TopLatitude, Min(Latitude) BottomLatitude, Min(Longitude) LeftLongitude, Max(Longitude) RightLongitude"+Environment.NewLine+
             "from" + Environment.NewLine +
             "  vObservationExpansion" + Environment.NewLine +
