@@ -1,5 +1,4 @@
-﻿--> Added 2.0.13 20161010 TimPN
-/*
+﻿/*
 Do not change the database path or name variables.
 Any sqlcmd variables will be properly substituted during 
 build and deployment.
@@ -11,7 +10,7 @@ ALTER DATABASE [$(DatabaseName)]
 	(
 		NAME = [Documents],
 		FILENAME = '$(DefaultDataPath)$(DefaultFilePrefix)_Documents.ndf',
-		MAXSIZE = UNLIMITED
+		MAXSIZE = UNLIMITED,
+		FILEGROWTH = 1GB
 	) TO FILEGROUP [Documents];
 GO
---< Added 2.0.13 20161010 TimPN

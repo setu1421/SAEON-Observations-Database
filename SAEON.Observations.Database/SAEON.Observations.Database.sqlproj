@@ -56,7 +56,7 @@
     <ReadCommittedSnapshot>False</ReadCommittedSnapshot>
     <VardecimalStorageFormatOn>True</VardecimalStorageFormatOn>
     <SupplementalLoggingOn>False</SupplementalLoggingOn>
-    <CompatibilityMode>100</CompatibilityMode>
+    <CompatibilityMode>120</CompatibilityMode>
     <AnsiNullDefault>False</AnsiNullDefault>
     <AnsiPadding>False</AnsiPadding>
     <AnsiWarnings>False</AnsiWarnings>
@@ -207,10 +207,6 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Tables\aspnet_UsersInRoles.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\DataSourceRole.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -525,7 +521,6 @@
     <Build Include="dbo\Tables\UserDownloads.sql" />
     <Build Include="dbo\Views\vApiDataDownload.sql" />
     <Build Include="dbo\Views\vSensorDates.sql" />
-    <Build Include="Scripts\ObservationsSequence.sql" />
     <Build Include="dbo\Views\vInventoryTotals.sql" />
     <Build Include="dbo\Views\vInventoryStations.sql" />
     <Build Include="dbo\Views\vInventoryPhenomenaOfferings.sql" />
@@ -550,7 +545,6 @@
     <None Include="ObservationDB.publish.xml" />
     <None Include="Observations.publish.xml" />
     <None Include="ObservationsTest.publish.xml" />
-    <None Include="SAEON.Observations.Database.publish.xml" />
     <None Include="ObservationsSACTN.publish.xml" />
   </ItemGroup>
   <ItemGroup>

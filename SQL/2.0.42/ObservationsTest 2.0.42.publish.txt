@@ -1,0 +1,126 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[vDataLog] (View)
+       [dbo].[vInventory] (View)
+       [dbo].[vInventoryPhenomenaOfferings] (View)
+       [dbo].[vInventoryStations] (View)
+       [dbo].[vSensorThingsDatastreams] (View)
+       [dbo].[vApiDataDownload] (View)
+       [dbo].[vApiDataQuery] (View)
+       [dbo].[vApiInventory] (View)
+       [dbo].[vApiSpacialCoverage] (View)
+       [dbo].[vApiTemporalCoverage] (View)
+       [dbo].[vInventoryInstruments] (View)
+       [dbo].[vInventoryOrganisations] (View)
+       [dbo].[vInventoryTotals] (View)
+       [dbo].[vInventoryYears] (View)
+       [dbo].[vObservationExpansion] (View)
+     Alter
+       [dbo].[DataLog] (Table)
+       [dbo].[ImportBatchSummary] (Table)
+       [dbo].[Observation] (Table)
+       [dbo].[TR_AuditLog_Update] (Trigger)
+       [dbo].[TR_DataLog_Update] (Trigger)
+       [dbo].[TR_DataSchema_Update] (Trigger)
+       [dbo].[TR_DataSource_Update] (Trigger)
+       [dbo].[TR_DataSourceTransformation_Update] (Trigger)
+       [dbo].[TR_DataSourceType_Update] (Trigger)
+       [dbo].[TR_ImportBatch_Update] (Trigger)
+       [dbo].[TR_Instrument_Update] (Trigger)
+       [dbo].[TR_Instrument_Sensor_Update] (Trigger)
+       [dbo].[TR_Observation_Update] (Trigger)
+       [dbo].[TR_Offering_Update] (Trigger)
+       [dbo].[TR_Organisation_Update] (Trigger)
+       [dbo].[TR_Organisation_Instrument_Update] (Trigger)
+       [dbo].[TR_Organisation_Site_Update] (Trigger)
+       [dbo].[TR_Organisation_Station_Update] (Trigger)
+       [dbo].[TR_OrganisationRole_Update] (Trigger)
+       [dbo].[TR_Phenomenon_Update] (Trigger)
+       [dbo].[TR_PhenomenonOffering_Update] (Trigger)
+       [dbo].[TR_PhenomenonUOM_Update] (Trigger)
+       [dbo].[TR_Programme_Update] (Trigger)
+       [dbo].[TR_Project_Update] (Trigger)
+       [dbo].[TR_Project_Station_Update] (Trigger)
+       [dbo].[TR_SchemaColumn_Update] (Trigger)
+       [dbo].[TR_SchemaColumnType_Update] (Trigger)
+       [dbo].[TR_Sensor_Update] (Trigger)
+       [dbo].[TR_Site_Update] (Trigger)
+       [dbo].[TR_Station_Update] (Trigger)
+       [dbo].[TR_Station_Instrument_Update] (Trigger)
+       [dbo].[TR_Status_Update] (Trigger)
+       [dbo].[TR_StatusReason_Update] (Trigger)
+       [dbo].[TR_TransformationType_Update] (Trigger)
+       [dbo].[TR_UnitOfMeasure_Update] (Trigger)
+       [dbo].[TR_UserDownloads_Update] (Trigger)
+       [dbo].[TR_UserQueries_Update] (Trigger)
+       [dbo].[vImportBatchSummary] (View)
+       [dbo].[vDataQuery] (View)
+       [dbo].[vDataSchema] (View)
+       [dbo].[vDataSourceTransformation] (View)
+       [dbo].[vImportBatch] (View)
+       [dbo].[vInstrumentOrganisation] (View)
+       [dbo].[vInstrumentSensor] (View)
+       [dbo].[vOfferingPhenomena] (View)
+       [dbo].[vOrganisationInstrument] (View)
+       [dbo].[vOrganisationSite] (View)
+       [dbo].[vOrganisationStation] (View)
+       [dbo].[vProject] (View)
+       [dbo].[vProjectStation] (View)
+       [dbo].[vSchemaColumn] (View)
+       [dbo].[vSensor] (View)
+       [dbo].[vSensorDates] (View)
+       [dbo].[vSensorLocation] (View)
+       [dbo].[vSiteOrganisation] (View)
+       [dbo].[vStation] (View)
+       [dbo].[vStationInstrument] (View)
+       [dbo].[vStationOrganisation] (View)
+       [dbo].[vUnitOfMeasurePhenomena] (View)
+     Create
+       [dbo].[DF_Observation_AddedAt] (Default Constraint)
+       [dbo].[DF_Observation_AddedDate] (Default Constraint)
+       [dbo].[DF_Observation_UpdatedAt] (Default Constraint)
+       [dbo].[vDataLog] (View)
+       [dbo].[vInventory] (View)
+       [dbo].[vInventoryPhenomenaOfferings] (View)
+       [dbo].[vInventoryStations] (View)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsDatastreams] (View)
+       [dbo].[vApiDataDownload] (View)
+       [dbo].[vApiDataQuery] (View)
+       [dbo].[vApiInventory] (View)
+       [dbo].[vApiSpacialCoverage] (View)
+       [dbo].[vApiTemporalCoverage] (View)
+       [dbo].[vInventoryInstruments] (View)
+       [dbo].[vInventoryOrganisations] (View)
+       [dbo].[vInventoryTotals] (View)
+       [dbo].[vInventoryYears] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[DataLog].[IX_DataLog_ValueDay] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDay] (Index)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationsList] (View)
+     Create
+       [dbo].[DataLog].[IX_DataLog_ValueDay] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDay] (Index)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationsList] (View)
+
+The source's object [Authentication] is different than the target's version of the object but the target object will not be updated.
+The source's object [Documents] is different than the target's version of the object but the target object will not be updated.
+The source's object [Observations] is different than the target's version of the object but the target object will not be updated.
+The object [Authentication] already exists in database with a different definition and will not be altered.
+The object [Documents] already exists in database with a different definition and will not be altered.
+The object [Observations] already exists in database with a different definition and will not be altered.
+

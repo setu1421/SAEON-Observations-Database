@@ -1,16 +1,13 @@
-﻿--> Added 20170523 2.0.32 TimPN
-CREATE VIEW [dbo].[vInventoryPhenomenaOfferings]
+﻿CREATE VIEW [dbo].[vInventoryPhenomenaOfferings]
 AS
 Select
   Phenomenon.Name+'~'+Offering.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
-  --Station.ID StationID, PhenomenonOffering.ID PhenomenonOfferingID, 
   Phenomenon.Name Phenomenon, Offering.Name Offering, IsNull(Status.Name,'No status') Status, 
   Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
 from  
   Observation
   inner join Sensor
     on (Observation.SensorID = Sensor.ID)
---> Added 2.0.38 20180418 TimPN
   inner join Instrument_Sensor
     on (Instrument_Sensor.SensorID = Sensor.ID) and
        ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
@@ -27,7 +24,6 @@ from
     on (Station_Instrument.StationID = Station.ID) and
        ((Station.StartDate is null) or (Observation.ValueDay >= Station.StartDate)) and
        ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
---< Added 2.0.38 20180418 TimPN
   inner join PhenomenonOffering
     on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
   inner join Phenomenon
@@ -38,8 +34,3 @@ from
     on (Observation.StatusID = Status.ID)
 group by 
   Phenomenon.Name, Offering.Name, Status.Name
---< Added 20170523 2.0.32 TimPN
-
-
-
-

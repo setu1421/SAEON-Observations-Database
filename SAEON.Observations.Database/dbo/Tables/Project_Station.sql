@@ -1,23 +1,14 @@
-﻿--> Added 2.0.5 20160527 TimPN
-CREATE TABLE [dbo].[Project_Station]
+﻿CREATE TABLE [dbo].[Project_Station]
 (
-    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Project_Station_ID] DEFAULT newid(), 
+    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Project_Station_ID] DEFAULT (newid()), 
     [ProjectID] UNIQUEIDENTIFIER NOT NULL,
     [StationID] UNIQUEIDENTIFIER NOT NULL,
---> Changed 2.0.22 20170111 TimPN
---    [StartDate]        DATETIME         NULL,
     [StartDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
---> Changed 2.0.22 20170111 TimPN
---    [EndDate]        DATETIME         NULL,
     [EndDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_Project_Station_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Project_Station__UpdatedAt] DEFAULT GetDate(), 
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_Project_Station_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Project_Station__UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Project_Station] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_Project_Station] UNIQUE ([ProjectID],[StationID],[StartDate],[EndDate]),
     CONSTRAINT [FK_Project_Station_ProjectID] FOREIGN KEY ([ProjectID]) REFERENCES [dbo].[Project] ([ID]),
@@ -34,7 +25,6 @@ GO
 CREATE INDEX [IX_Project_Station_StartDate] ON [dbo].[Project_Station] ([StartDate])
 GO
 CREATE INDEX [IX_Project_Station_EndDate] ON [dbo].[Project_Station] ([EndDate])
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Project_Station_Insert] ON [dbo].[Project_Station]
 FOR INSERT
@@ -44,7 +34,7 @@ BEGIN
     Update 
         src 
     set 
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         Project_Station src
@@ -60,10 +50,7 @@ BEGIN
     Update 
         src 
     set 
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         Project_Station src
@@ -72,5 +59,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.5 20160527 TimPN

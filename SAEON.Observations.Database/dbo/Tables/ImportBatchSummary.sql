@@ -1,7 +1,6 @@
-﻿--> Added 2.0.38 20180418 TimPN
-CREATE TABLE [dbo].[ImportBatchSummary]
+﻿CREATE TABLE [dbo].[ImportBatchSummary]
 (
-    [ID] UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL CONSTRAINT [DF_ImportBatchSummary_ID] DEFAULT newid(), 
+    [ID] UNIQUEIDENTIFIER ROWGUIDCOL NOT NULL CONSTRAINT [DF_ImportBatchSummary_ID] DEFAULT (newid()), 
     [ImportBatchID] UNIQUEIDENTIFIER NOT NULL, 
     [SensorID] UNIQUEIDENTIFIER NOT NULL, 
     [InstrumentID] UNIQUEIDENTIFIER NOT NULL, 
@@ -19,6 +18,8 @@ CREATE TABLE [dbo].[ImportBatchSummary]
     [BottomLatitude] FLOAT NULL, 
     [LeftLongitude] FLOAT NULL, 
     [RightLongitude] FLOAT NULL, 
+    [StartDate] DATETIME NULL, 
+    [EndDate] DATETIME NULL, 
     CONSTRAINT [PK_ImportBatchSummary] PRIMARY KEY CLUSTERED ([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_ImportBatchID] FOREIGN KEY ([ImportBatchID]) REFERENCES [ImportBatch]([ID]), 
     CONSTRAINT [FK_ImportBatchSummary_SensorID] FOREIGN KEY ([SensorID]) REFERENCES [Sensor]([ID]), 
@@ -50,5 +51,3 @@ CREATE INDEX [IX_ImportBatchSummary_PhenomenonOfferingID] ON [dbo].[ImportBatchS
 
 GO
 CREATE INDEX [IX_ImportBatchSummary_PhenomenonUOMID] ON [dbo].[ImportBatchSummary] ([PhenomenonUOMID])
---< Added 2.0.38 20180418 TimPN
-

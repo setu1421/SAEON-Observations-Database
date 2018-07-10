@@ -20,25 +20,16 @@
     [FailedPasswordAnswerAttemptCount]       INT              NOT NULL,
     [FailedPasswordAnswerAttemptWindowStart] DATETIME         NOT NULL,
     [Comment]                                NTEXT            NULL,
---> Changed 2.0.13 20161011 TimPN
---    PRIMARY KEY NONCLUSTERED ([UserId]),
     CONSTRAINT [PK_aspnet_Membership] PRIMARY KEY NONCLUSTERED ([UserId]) ON [Authentication],
---< Changed 2.0.13 20161011 TimPN
     FOREIGN KEY ([ApplicationId]) REFERENCES [dbo].[aspnet_Applications] ([ApplicationId]),
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 )
---> Added 2.0.13 20161010 TimPN
   ON [Authentication];
---< Added 2.0.13 20161010 TimPN
 
 GO
 EXECUTE sp_tableoption @TableNamePattern = N'[dbo].[aspnet_Membership]', @OptionName = N'text in row', @OptionValue = N'3000';
 
 
 GO
-CREATE CLUSTERED INDEX [aspnet_Membership_index]
-    ON [dbo].[aspnet_Membership]([ApplicationId] ASC, [LoweredEmail])
---> Added 2.0.13 20161010 TimPN
-  WITH(DROP_EXISTING=ON,ONLINE=ON) ON [Authentication];
---< Added 2.0.13 20161010 TimPN
+CREATE CLUSTERED INDEX [aspnet_Membership_index] ON [dbo].[aspnet_Membership]([ApplicationId] ASC, [LoweredEmail]) ON [Authentication];
 

@@ -1,5 +1,4 @@
-﻿--> Added 2.0.32 20170527 TimPN
-CREATE VIEW [dbo].[vApiSpacialCoverage]
+﻿CREATE VIEW [dbo].[vApiSpacialCoverage]
 AS
 Select
   vObservationExpansion.*,
@@ -15,4 +14,3 @@ from
   vObservationExpansion
 where
   (Latitude is not null) and (Longitude is not null)
---> Added 2.0.32 20170527 TimPN

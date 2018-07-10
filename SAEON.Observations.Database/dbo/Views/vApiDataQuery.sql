@@ -1,5 +1,4 @@
-﻿--> Added 2.0.32 20170527 TimPN
-CREATE VIEW [dbo].[vApiDataQuery]
+﻿CREATE VIEW [dbo].[vApiDataQuery]
 AS
 Select
   vObservationExpansion.*,
@@ -10,4 +9,3 @@ from
   vObservationExpansion
 where
   (StatusName = 'Verified')
---> Added 2.0.32 20170527 TimPN

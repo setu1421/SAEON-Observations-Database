@@ -3,9 +3,7 @@ AS
 
 SELECT 
 b.ID,
---> Added 2.0.11 20161004 TimPN
 b.Code,
---< Added 2.0.11 20161004 TimPN
 b.DataSourceID,
 b.ImportDate, 
 b.[Status],
@@ -19,9 +17,7 @@ CASE b.[Status]
 END StatusDescription,
 b.[FileName],
 b.LogFileName,
---> Added 20170203 TimPN
 b.Issues
---< Added 20170203 TimPN
 
 FROM ImportBatch b
 INNER JOIN DataSource d

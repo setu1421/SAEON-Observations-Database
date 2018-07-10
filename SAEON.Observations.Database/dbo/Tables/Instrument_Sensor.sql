@@ -1,28 +1,17 @@
-﻿--> Added 2.0.5 20160530 TimPN
-CREATE TABLE [dbo].[Instrument_Sensor]
+﻿CREATE TABLE [dbo].[Instrument_Sensor]
 (
-    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Instrument_Sensor_ID] DEFAULT newid(), 
+    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Instrument_Sensor_ID] DEFAULT (newid()), 
     [InstrumentID] UNIQUEIDENTIFIER NOT NULL, 
     [SensorID] UNIQUEIDENTIFIER NOT NULL, 
---> Changed 2.0.22 20170111 TimPN
---    [StartDate]        DATETIME         NULL,
     [StartDate]        DATETIME         NULL,
---< Changed 2.0.22 20170111 TimPN
---> Changed 2.0.22 20170111 TimPN
---    [EndDate]        DATETIME         NULL,
     [EndDate]        DATETIME         NULL,
---< Changed 2.0.22 20170111 TimPN
---> Added 2.0.37 20180201 TimPN
     [Latitude] Float Null,
     [Longitude] Float Null,
     [Elevation] Float Null,
---< Added 2.0.37 20180201 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_Instrument_Sensor_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Instrument_Sensor_UpdatedAt] DEFAULT GetDate(), 
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_Instrument_Sensor_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Instrument_Sensor_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Instrument_Sensor] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Instrument_Sensor_Instrument] FOREIGN KEY ([InstrumentID]) REFERENCES [dbo].[Instrument] ([ID]),
     CONSTRAINT [FK_Instrument_Sensor_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
@@ -37,17 +26,14 @@ GO
 CREATE INDEX [IX_Instrument_Sensor_StartDate] ON [dbo].[Instrument_Sensor] ([StartDate])
 GO
 CREATE INDEX [IX_Instrument_Sensor_EndDate] ON [dbo].[Instrument_Sensor] ([EndDate])
---> Added 2.0.37 20180201 TimPN
 GO
 CREATE INDEX [IX_Instrument_Sensor_Latitude] ON [dbo].[Instrument_Sensor] ([Latitude])
 GO
 CREATE INDEX [IX_Instrument_Sensor_Longitude] ON [dbo].[Instrument_Sensor] ([Longitude])
 GO
 CREATE INDEX [IX_Instrument_Sensor_Elevation] ON [dbo].[Instrument_Sensor] ([Elevation])
---< Added 2.0.37 20180201 TimPN
 GO
 CREATE INDEX [IX_Instrument_Sensor_UserId] ON [dbo].[Instrument_Sensor] ([UserId])
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Instrument_Sensor_Insert] ON [dbo].[Instrument_Sensor]
 FOR INSERT
@@ -57,7 +43,7 @@ BEGIN
     Update
         src
     set
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         Instrument_Sensor src
@@ -73,10 +59,7 @@ BEGIN
     Update
         src
     set
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         Instrument_Sensor src
@@ -85,5 +68,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---> Added 2.0.5 20160530 TimPN

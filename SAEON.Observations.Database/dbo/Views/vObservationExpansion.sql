@@ -1,5 +1,4 @@
-﻿--> Added 2.0.38 20180418 TimPN
-CREATE VIEW [dbo].[vObservationExpansion]
+﻿CREATE VIEW [dbo].[vObservationExpansion]
 AS
 Select
   Observation.ID, Observation.ImportBatchID,  
@@ -56,5 +55,4 @@ from
     on (Observation.StatusID = Status.ID)
   left join StatusReason
     on (Observation.StatusReasonID = StatusReason.ID)
---< Added 2.0.38 20180418 TimPN
 

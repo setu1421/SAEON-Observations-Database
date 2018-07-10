@@ -88,11 +88,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         var sql =
             "Insert Into ImportBatchSummary" + Environment.NewLine +
             "  (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance," + Environment.NewLine+
-            "   TopLatitude, BottomLatitude, LeftLongitude, RightLongitude)" + Environment.NewLine +
+            "   TopLatitude, BottomLatitude, LeftLongitude, RightLongitude, StartDate, EndDate)" + Environment.NewLine +
             "Select" + Environment.NewLine +
             "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, " + Environment.NewLine+
             "  STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance, " + Environment.NewLine +
-            "  Max(Latitude) TopLatitude, Min(Latitude) BottomLatitude, Min(Longitude) LeftLongitude, Max(Longitude) RightLongitude"+Environment.NewLine+
+            "  Max(Latitude) TopLatitude, Min(Latitude) BottomLatitude, Min(Longitude) LeftLongitude, Max(Longitude) RightLongitude, "+Environment.NewLine+
+            "  Min(ValueDate) StartDate, Max(ValueDate) EndDate" + Environment.NewLine +
             "from" + Environment.NewLine +
             "  vObservationExpansion" + Environment.NewLine +
             "where" + Environment.NewLine +

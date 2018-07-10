@@ -1,5 +1,4 @@
-﻿--> Added 2.0.28 20180423 TimPN
-CREATE VIEW [dbo].[vImportBatchSummary]
+﻿CREATE VIEW [dbo].[vImportBatchSummary]
 AS 
 Select
   ImportBatchSummary.*, 
@@ -30,4 +29,3 @@ From
     on (ImportBatchSummary.PhenomenonUOMID = PhenomenonUOM.ID)
   inner join UnitOfMeasure
     on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
---< Added 2.0.28 20180423 TimPN

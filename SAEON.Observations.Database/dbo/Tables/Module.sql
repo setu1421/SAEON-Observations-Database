@@ -9,7 +9,5 @@
     CONSTRAINT [PK_Module] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Module_Module] FOREIGN KEY ([ModuleID]) REFERENCES [dbo].[Module] ([ID])
 );
---> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Module_ModuleID] ON [dbo].[Module] ([ModuleID])
---< Added 2.0.0 20160406 TimPN

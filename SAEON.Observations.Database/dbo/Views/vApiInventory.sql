@@ -1,5 +1,4 @@
-﻿--> Added 2.0.32 20170527 TimPN
-CREATE VIEW [dbo].[vApiInventory]
+﻿CREATE VIEW [dbo].[vApiInventory]
 AS
 Select
   vObservationExpansion.*,
@@ -7,4 +6,3 @@ Select
   IsNull(StatusName, 'No Status') Status
 from
   vObservationExpansion
---> Added 2.0.32 20170527 TimPN
