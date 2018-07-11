@@ -39,302 +39,328 @@ GO
 USE [$(DatabaseName)];
 
 
---GO
---IF (SELECT is_default
---    FROM   [$(DatabaseName)].[sys].[filegroups]
---    WHERE  [name] = N'Documents') = 0
---    BEGIN
---        ALTER DATABASE [$(DatabaseName)]
---            MODIFY FILEGROUP [Documents] DEFAULT;
---    END
-
-
---GO
---IF EXISTS (SELECT 1
---           FROM   [master].[dbo].[sysdatabases]
---           WHERE  [name] = N'$(DatabaseName)')
---    BEGIN
---        ALTER DATABASE [$(DatabaseName)]
---            SET TEMPORAL_HISTORY_RETENTION ON 
---            WITH ROLLBACK IMMEDIATE;
---    END
-
-
 GO
-PRINT N'Dropping [dbo].[ImportBatchSummary]...';
-
-
-GO
-DROP TABLE [dbo].[ImportBatchSummary];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_DataLog_ID]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_ID];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_DataLog_ImportDate]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_ImportDate];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_DataLog_AddedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_AddedAt];
-
-
-GO
-PRINT N'Dropping [dbo].[DF_DataLog_UpdatedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [DF_DataLog_UpdatedAt];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataLog_StatusReason]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_StatusReason];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataLog_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_aspnet_Users];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataLog_DataSourceTransformation]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_DataSourceTransformation];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataLog_ImportBatch]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_ImportBatch];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataLog_PhenomenonOffering]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_PhenomenonOffering];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataLog_PhenomenonUOM]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_PhenomenonUOM];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataLog_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_Sensor];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_DataLog_Status]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] DROP CONSTRAINT [FK_DataLog_Status];
-
-
-GO
-PRINT N'Dropping [dbo].[FK_Observation_Sensor]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_Sensor];
-
-
---GO
---PRINT N'Dropping [dbo].[FK_Observation_Status]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_Status];
-
-
---GO
---PRINT N'Dropping [dbo].[FK_Observation_StatusReason]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_StatusReason];
-
-
---GO
---PRINT N'Dropping [dbo].[FK_Observation_aspnet_Users]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_aspnet_Users];
-
-
---GO
---PRINT N'Dropping [dbo].[FK_Observation_ImportBatch]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_ImportBatch];
-
-
---GO
---PRINT N'Dropping [dbo].[FK_Observation_PhenomenonOffering]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_PhenomenonOffering];
-
-
---GO
---PRINT N'Dropping [dbo].[FK_Observation_PhenomenonUOM]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [FK_Observation_PhenomenonUOM];
-
-
-GO
-PRINT N'Starting rebuilding table [dbo].[DataLog]...';
-
-
-GO
-BEGIN TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-
-SET XACT_ABORT ON;
-
-CREATE TABLE [dbo].[tmp_ms_xx_DataLog] (
-    [ID]                         UNIQUEIDENTIFIER CONSTRAINT [DF_DataLog_ID] DEFAULT newid() NOT NULL,
-    [SensorID]                   UNIQUEIDENTIFIER NULL,
-    [ImportDate]                 DATETIME         CONSTRAINT [DF_DataLog_ImportDate] DEFAULT (getdate()) NOT NULL,
-    [ValueDate]                  DATETIME         NULL,
-    [ValueTime]                  DATETIME         NULL,
-    [ValueDay]                   AS               CAST (ValueDate AS DATE),
-    [ValueText]                  VARCHAR (50)     NOT NULL,
-    [TransformValueText]         VARCHAR (50)     NULL,
-    [RawValue]                   FLOAT (53)       NULL,
-    [DataValue]                  FLOAT (53)       NULL,
-    [Comment]                    VARCHAR (250)    NULL,
-    [Latitude]                   FLOAT (53)       NULL,
-    [Longitude]                  FLOAT (53)       NULL,
-    [Elevation]                  FLOAT (53)       NULL,
-    [InvalidDateValue]           VARCHAR (50)     NULL,
-    [InvalidTimeValue]           VARCHAR (50)     NULL,
-    [InvalidOffering]            VARCHAR (50)     NULL,
-    [InvalidUOM]                 VARCHAR (50)     NULL,
-    [DataSourceTransformationID] UNIQUEIDENTIFIER NULL,
-    [StatusID]                   UNIQUEIDENTIFIER NOT NULL,
-    [StatusReasonID]             UNIQUEIDENTIFIER NULL,
-    [ImportStatus]               VARCHAR (500)    NOT NULL,
-    [UserId]                     UNIQUEIDENTIFIER NULL,
-    [PhenomenonOfferingID]       UNIQUEIDENTIFIER NULL,
-    [PhenomenonUOMID]            UNIQUEIDENTIFIER NULL,
-    [ImportBatchID]              UNIQUEIDENTIFIER NOT NULL,
-    [RawRecordData]              VARCHAR (500)    NULL,
-    [RawFieldValue]              VARCHAR (50)     NOT NULL,
-    [CorrelationID]              UNIQUEIDENTIFIER NULL,
-    [AddedAt]                    DATETIME         CONSTRAINT [DF_DataLog_AddedAt] DEFAULT GetDate() NULL,
-    [UpdatedAt]                  DATETIME         CONSTRAINT [DF_DataLog_UpdatedAt] DEFAULT GetDate() NULL,
-    [RowVersion]                 ROWVERSION       NOT NULL,
-    CONSTRAINT [tmp_ms_xx_constraint_PK_DataLog1] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_DataLog1] UNIQUE NONCLUSTERED ([ImportBatchID] ASC, [SensorID] ASC, [ValueDate] ASC, [RawValue] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC)
-);
-
-IF EXISTS (SELECT TOP 1 1 
-           FROM   [dbo].[DataLog])
+IF (SELECT is_default
+    FROM   [$(DatabaseName)].[sys].[filegroups]
+    WHERE  [name] = N'Documents') = 0
     BEGIN
-        INSERT INTO [dbo].[tmp_ms_xx_DataLog] ([ID], [SensorID], [ImportDate], [ValueDate], [ValueTime], [ValueText], [TransformValueText], [RawValue], [DataValue], [Comment], [Latitude], [Longitude], [Elevation], [InvalidDateValue], [InvalidTimeValue], [InvalidOffering], [InvalidUOM], [DataSourceTransformationID], [StatusID], [StatusReasonID], [ImportStatus], [UserId], [PhenomenonOfferingID], [PhenomenonUOMID], [ImportBatchID], [RawRecordData], [RawFieldValue], [CorrelationID], [AddedAt], [UpdatedAt])
-        SELECT   [ID],
-                 [SensorID],
-                 [ImportDate],
-                 [ValueDate],
-                 [ValueTime],
-                 [ValueText],
-                 [TransformValueText],
-                 [RawValue],
-                 [DataValue],
-                 [Comment],
-                 [Latitude],
-                 [Longitude],
-                 [Elevation],
-                 [InvalidDateValue],
-                 [InvalidTimeValue],
-                 [InvalidOffering],
-                 [InvalidUOM],
-                 [DataSourceTransformationID],
-                 [StatusID],
-                 [StatusReasonID],
-                 [ImportStatus],
-                 [UserId],
-                 [PhenomenonOfferingID],
-                 [PhenomenonUOMID],
-                 [ImportBatchID],
-                 [RawRecordData],
-                 [RawFieldValue],
-                 [CorrelationID],
-                 [AddedAt],
-                 [UpdatedAt]
-        FROM     [dbo].[DataLog]
-        ORDER BY [ID] ASC;
+        ALTER DATABASE [$(DatabaseName)]
+            MODIFY FILEGROUP [Documents] DEFAULT;
     END
 
-DROP TABLE [dbo].[DataLog];
 
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_DataLog]', N'DataLog';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_DataLog1]', N'PK_DataLog', N'OBJECT';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_DataLog1]', N'UX_DataLog', N'OBJECT';
-
-COMMIT TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+GO
+IF EXISTS (SELECT 1
+           FROM   [master].[dbo].[sysdatabases]
+           WHERE  [name] = N'$(DatabaseName)')
+    BEGIN
+        ALTER DATABASE [$(DatabaseName)]
+            SET TEMPORAL_HISTORY_RETENTION ON 
+            WITH ROLLBACK IMMEDIATE;
+    END
 
 
 GO
-PRINT N'Creating [dbo].[DataLog].[IX_DataLog_ImportBatchID]...';
+PRINT N'Dropping [dbo].[DataSourceRoleOld]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_DataLog_ImportBatchID]
-    ON [dbo].[DataLog]([ImportBatchID] ASC);
+DROP TABLE [dbo].[DataSourceRoleOld];
 
 
 GO
-PRINT N'Creating [dbo].[DataLog].[IX_DataLog_SensorID]...';
+PRINT N'Dropping [dbo].[vOfferingPhemomena]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_DataLog_SensorID]
-    ON [dbo].[DataLog]([SensorID] ASC);
+DROP VIEW [dbo].[vOfferingPhemomena];
+
+
+GO
+PRINT N'Dropping [dbo].[vOfferingPhenomena]...';
+
+
+GO
+DROP VIEW [dbo].[vOfferingPhenomena];
+
+
+
+GO
+PRINT N'Dropping [dbo].[DataLog].[IX_DataLog_ValueDay]...';
+
+
+GO
+DROP INDEX [IX_DataLog_ValueDay]
+    ON [dbo].[DataLog];
+
+
+GO
+PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDay]...';
+
+
+GO
+DROP INDEX [IX_Observation_ValueDay]
+    ON [dbo].[Observation];
+
+
+GO
+PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDecade]...';
+
+
+GO
+DROP INDEX [IX_Observation_ValueDecade]
+    ON [dbo].[Observation];
+
+
+GO
+PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueYear]...';
+
+
+GO
+DROP INDEX [IX_Observation_ValueYear]
+    ON [dbo].[Observation];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Applications] TO [aspnet_Membership_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Applications] TO [aspnet_Profile_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Applications] TO [aspnet_Roles_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Applications] TO [aspnet_Personalization_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_MembershipUsers] TO [aspnet_Membership_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Profiles] TO [aspnet_Profile_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Roles] TO [aspnet_Roles_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Users] TO [aspnet_Membership_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Users] TO [aspnet_Profile_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Users] TO [aspnet_Roles_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Users] TO [aspnet_Personalization_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_UsersInRoles] TO [aspnet_Roles_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_WebPartState_Paths] TO [aspnet_Personalization_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_WebPartState_Shared] TO [aspnet_Personalization_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_WebPartState_User] TO [aspnet_Personalization_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_Applications]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_Applications];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_MembershipUsers]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_MembershipUsers];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_Profiles]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_Profiles];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_Roles]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_Roles];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_Users]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_Users];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_UsersInRoles]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_UsersInRoles];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_WebPartState_Paths]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_WebPartState_Paths];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_WebPartState_Shared]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_WebPartState_Shared];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_WebPartState_User]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_WebPartState_User];
+
+GO
+PRINT N'Dropping [dbo].[vDataLog]...';
+
+
+GO
+DROP VIEW [dbo].[vDataLog];
+
+
+GO
+PRINT N'Altering [dbo].[DataLog]...';
+
+
+GO
+ALTER TABLE [dbo].[DataLog] DROP COLUMN [ValueDay];
+
+
+GO
+ALTER TABLE [dbo].[DataLog]
+    ADD [ValueDay] AS (CONVERT (DATE, [ValueDate]));
 
 
 GO
@@ -347,61 +373,7 @@ CREATE NONCLUSTERED INDEX [IX_DataLog_ValueDay]
 
 
 GO
-PRINT N'Creating [dbo].[DataLog].[IX_DataLog_DataSourceTransformationID]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_DataLog_DataSourceTransformationID]
-    ON [dbo].[DataLog]([DataSourceTransformationID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[DataLog].[IX_DataLog_PhenomenonOfferingID]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_DataLog_PhenomenonOfferingID]
-    ON [dbo].[DataLog]([PhenomenonOfferingID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[DataLog].[IX_DataLog_PhenomenonUOMID]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_DataLog_PhenomenonUOMID]
-    ON [dbo].[DataLog]([PhenomenonUOMID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[DataLog].[IX_DataLog_StatusID]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_DataLog_StatusID]
-    ON [dbo].[DataLog]([StatusID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[DataLog].[IX_DataLog_UserId]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_DataLog_UserId]
-    ON [dbo].[DataLog]([UserId] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[DataLog].[IX_DataLog_StatusReasonID]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_DataLog_StatusReasonID]
-    ON [dbo].[DataLog]([StatusReasonID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[ImportBatchSummary]...';
+PRINT N'Altering [dbo].[ImportBatchSummary]...';
 
 
 GO
@@ -409,622 +381,136 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-CREATE TABLE [dbo].[ImportBatchSummary] (
-    [ID]                   UNIQUEIDENTIFIER CONSTRAINT [DF_ImportBatchSummary_ID] DEFAULT newid() ROWGUIDCOL NOT NULL,
-    [ImportBatchID]        UNIQUEIDENTIFIER NOT NULL,
-    [SensorID]             UNIQUEIDENTIFIER NOT NULL,
-    [InstrumentID]         UNIQUEIDENTIFIER NOT NULL,
-    [StationID]            UNIQUEIDENTIFIER NOT NULL,
-    [SiteID]               UNIQUEIDENTIFIER NOT NULL,
-    [PhenomenonOfferingID] UNIQUEIDENTIFIER NOT NULL,
-    [PhenomenonUOMID]      UNIQUEIDENTIFIER NOT NULL,
-    [Count]                INT              NOT NULL,
-    [Minimum]              FLOAT (53)       NULL,
-    [Maximum]              FLOAT (53)       NULL,
-    [Average]              FLOAT (53)       NULL,
-    [StandardDeviation]    FLOAT (53)       NULL,
-    [Variance]             FLOAT (53)       NULL,
-    [TopLatitude]          FLOAT (53)       NULL,
-    [BottomLatitude]       FLOAT (53)       NULL,
-    [LeftLongitude]        FLOAT (53)       NULL,
-    [RightLongitude]       FLOAT (53)       NULL,
-    CONSTRAINT [PK_ImportBatchSummary] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [UX_ImportBatchSummary] UNIQUE NONCLUSTERED ([ImportBatchID] ASC, [SensorID] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC)
-);
+ALTER TABLE [dbo].[ImportBatchSummary]
+    ADD [StartDate] DATETIME NULL,
+        [EndDate]   DATETIME NULL;
 
 
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
-GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_ImportBatchID]...';
-
 
 GO
-CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_ImportBatchID]
-    ON [dbo].[ImportBatchSummary]([ImportBatchID] ASC);
+PRINT N'Altering [dbo].[Observation]...';
 
 
 GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_SensorID]...';
+ALTER TABLE [dbo].[Observation] DROP COLUMN [ValueDecade], COLUMN [ValueYear], COLUMN [ValueDay];
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_SensorID]
-    ON [dbo].[ImportBatchSummary]([SensorID] ASC);
+ALTER TABLE [dbo].[Observation]
+    ADD [ValueDay]    AS (CONVERT (DATE, [ValueDate])),
+        [ValueYear]   AS (datepart(year, [ValueDate])),
+        [ValueDecade] AS (datepart(year, [ValueDate]) / (10));
 
 
 GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_InstrumentID]...';
+PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDay]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_InstrumentID]
-    ON [dbo].[ImportBatchSummary]([InstrumentID] ASC);
+CREATE NONCLUSTERED INDEX [IX_Observation_ValueDay]
+    ON [dbo].[Observation]([ValueDay] ASC)
+    ON [Observations];
 
 
 GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_StationID]...';
+PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDecade]...';
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Observation_ValueDecade]
+    ON [dbo].[Observation]([ValueDecade] ASC)
+    ON [Observations];
+
+GO
+PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueYear]...';
+
+
+CREATE NONCLUSTERED INDEX [IX_Observation_ValueYear]
+    ON [dbo].[Observation]([ValueYear] ASC)
+    ON [Observations];
+GO
+
+--GO
+--PRINT N'Creating [dbo].[DF_Observation_AddedAt]...';
+
+
+--GO
+--ALTER TABLE [dbo].[Observation]
+--    ADD CONSTRAINT [DF_Observation_AddedAt] DEFAULT (getdate()) FOR [AddedAt];
+
+
+--GO
+--PRINT N'Creating [dbo].[DF_Observation_AddedDate]...';
+
+
+--GO
+--ALTER TABLE [dbo].[Observation]
+--    ADD CONSTRAINT [DF_Observation_AddedDate] DEFAULT (getdate()) FOR [AddedDate];
+
+
+--GO
+--PRINT N'Creating [dbo].[DF_Observation_UpdatedAt]...';
+
+
+--GO
+--ALTER TABLE [dbo].[Observation]
+--    ADD CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT (getdate()) FOR [UpdatedAt];
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_StationID]
-    ON [dbo].[ImportBatchSummary]([StationID] ASC);
+PRINT N'Altering [dbo].[TR_Observation_Insert]...';
 
 
 GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_SiteID]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_SiteID]
-    ON [dbo].[ImportBatchSummary]([SiteID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_PhenomenonOfferingID]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_PhenomenonOfferingID]
-    ON [dbo].[ImportBatchSummary]([PhenomenonOfferingID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_PhenomenonUOMID]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_ImportBatchSummary_PhenomenonUOMID]
-    ON [dbo].[ImportBatchSummary]([PhenomenonUOMID] ASC);
-
-
---GO
---PRINT N'Starting rebuilding table [dbo].[Observation]...';
-
-
---GO
---BEGIN TRANSACTION;
-
---SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-
---SET XACT_ABORT ON;
-
---CREATE TABLE [dbo].[tmp_ms_xx_Observation] (
---    [ID]                   INT                  IDENTITY (1, 1) NOT NULL,
---    [SensorID]             UNIQUEIDENTIFIER     NOT NULL,
---    [ValueDate]            DATETIME             NOT NULL,
---    [ValueDay]             AS                   CAST (ValueDate AS DATE),
---    [ValueYear]            AS                   Year(ValueDate),
---    [ValueDecade]          AS                   Year(ValueDate) / 10,
---    [TextValue]            VARCHAR (10)         NULL,
---    [RawValue]             FLOAT (53)           NULL,
---    [DataValue]            FLOAT (53)           NULL,
---    [Comment]              VARCHAR (250) SPARSE NULL,
---    [PhenomenonOfferingID] UNIQUEIDENTIFIER     NOT NULL,
---    [PhenomenonUOMID]      UNIQUEIDENTIFIER     NOT NULL,
---    [ImportBatchID]        UNIQUEIDENTIFIER     NOT NULL,
---    [StatusID]             UNIQUEIDENTIFIER     NULL,
---    [StatusReasonID]       UNIQUEIDENTIFIER     NULL,
---    [CorrelationID]        UNIQUEIDENTIFIER     NULL,
---    [Latitude]             FLOAT (53)           NULL,
---    [Longitude]            FLOAT (53)           NULL,
---    [Elevation]            FLOAT (53)           NULL,
---    [UserId]               UNIQUEIDENTIFIER     NOT NULL,
---    [AddedDate]            DATETIME             CONSTRAINT [DF_Observation_AddedDate] DEFAULT GetDate() NOT NULL,
---    [AddedAt]              DATETIME             CONSTRAINT [DF_Observation_AddedAt] DEFAULT GetDate() NULL,
---    [UpdatedAt]            DATETIME             CONSTRAINT [DF_Observation_UpdatedAt] DEFAULT GetDate() NULL,
---    [RowVersion]           ROWVERSION           NOT NULL,
---    CONSTRAINT [tmp_ms_xx_constraint_PK_Observation1] PRIMARY KEY CLUSTERED ([ID] ASC) ON [Observations],
---    CONSTRAINT [tmp_ms_xx_constraint_UX_Observation1] UNIQUE NONCLUSTERED ([SensorID] ASC, [ValueDate] ASC, [RawValue] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC) ON [Observations]
---);
-
---IF EXISTS (SELECT TOP 1 1 
---           FROM   [dbo].[Observation])
---    BEGIN
---        SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Observation] ON;
---        INSERT INTO [dbo].[tmp_ms_xx_Observation] ([ID], [SensorID], [ValueDate], [RawValue], [DataValue], [Comment], [PhenomenonOfferingID], [PhenomenonUOMID], [ImportBatchID], [StatusID], [StatusReasonID], [CorrelationID], [UserId], [AddedDate], [AddedAt], [UpdatedAt], [TextValue], [Elevation], [Latitude], [Longitude])
---        SELECT   [ID],
---                 [SensorID],
---                 [ValueDate],
---                 [RawValue],
---                 [DataValue],
---                 [Comment],
---                 [PhenomenonOfferingID],
---                 [PhenomenonUOMID],
---                 [ImportBatchID],
---                 [StatusID],
---                 [StatusReasonID],
---                 [CorrelationID],
---                 [UserId],
---                 [AddedDate],
---                 [AddedAt],
---                 [UpdatedAt],
---                 [TextValue],
---                 [Elevation],
---                 [Latitude],
---                 [Longitude]
---        FROM     [dbo].[Observation]
---        ORDER BY [ID] ASC;
---        SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Observation] OFF;
---    END
-
---DROP TABLE [dbo].[Observation];
-
---EXECUTE sp_rename N'[dbo].[tmp_ms_xx_Observation]', N'Observation';
-
---EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_Observation1]', N'PK_Observation', N'OBJECT';
-
---EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_Observation1]', N'UX_Observation', N'OBJECT';
-
---COMMIT TRANSACTION;
-
---SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_ImportBatchID]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_ImportBatchID]
---    ON [dbo].[Observation]([ImportBatchID] ASC)
---    INCLUDE([ValueDate], [RawValue], [DataValue], [Comment], [CorrelationID])
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_SensorID]
---    ON [dbo].[Observation]([SensorID] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_PhenomenonOfferingID]
---    ON [dbo].[Observation]([SensorID] ASC, [PhenomenonOfferingID] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_PhenomenonUOMID]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_PhenomenonUOMID]
---    ON [dbo].[Observation]([SensorID] ASC, [PhenomenonUOMID] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_PhenomenonOfferingID]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_PhenomenonOfferingID]
---    ON [dbo].[Observation]([PhenomenonOfferingID] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_PhenomenonUOMID]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_PhenomenonUOMID]
---    ON [dbo].[Observation]([PhenomenonUOMID] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_UserId]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_UserId]
---    ON [dbo].[Observation]([UserId] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_AddedDate]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_AddedDate]
---    ON [dbo].[Observation]([AddedDate] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDate]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_ValueDate]
---    ON [dbo].[Observation]([ValueDate] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDateDesc]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_ValueDateDesc]
---    ON [dbo].[Observation]([ValueDate] DESC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDay]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_ValueDay]
---    ON [dbo].[Observation]([ValueDay] ASC);
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueYear]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_ValueYear]
---    ON [dbo].[Observation]([ValueYear] ASC);
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDecade]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_ValueDecade]
---    ON [dbo].[Observation]([ValueDecade] ASC);
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusID]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_StatusID]
---    ON [dbo].[Observation]([StatusID] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_StatusReasonID]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_StatusReasonID]
---    ON [dbo].[Observation]([StatusReasonID] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_CorrelationID]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_CorrelationID]
---    ON [dbo].[Observation]([CorrelationID] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_Latitude]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_Latitude]
---    ON [dbo].[Observation]([Latitude] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_Longitude]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_Longitude]
---    ON [dbo].[Observation]([Longitude] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_Elevation]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_Elevation]
---    ON [dbo].[Observation]([Elevation] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Latitude]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate_Latitude]
---    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC, [Latitude] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Longitude]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate_Longitude]
---    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC, [Longitude] ASC)
---    ON [Observations];
-
-
---GO
---PRINT N'Creating [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Elevation]...';
-
-
---GO
---CREATE NONCLUSTERED INDEX [IX_Observation_SensorID_ValueDate_Elevation]
---    ON [dbo].[Observation]([SensorID] ASC, [ValueDate] ASC, [Elevation] ASC)
---    ON [Observations];
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataLog_StatusReason]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataLog_aspnet_Users]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataLog_DataSourceTransformation]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_DataSourceTransformation] FOREIGN KEY ([DataSourceTransformationID]) REFERENCES [dbo].[DataSourceTransformation] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataLog_ImportBatch]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataLog_PhenomenonOffering]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataLog_PhenomenonUOM]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataLog_Sensor]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataLog_Status]...';
-
-
-GO
-ALTER TABLE [dbo].[DataLog] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataLog_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_ImportBatchSummary_ImportBatchID]...';
-
-
-GO
-ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
-    ADD CONSTRAINT [FK_ImportBatchSummary_ImportBatchID] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_ImportBatchSummary_SensorID]...';
-
-
-GO
-ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
-    ADD CONSTRAINT [FK_ImportBatchSummary_SensorID] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_ImportBatchSummary_PhenomenonOfferingID]...';
-
-
-GO
-ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
-    ADD CONSTRAINT [FK_ImportBatchSummary_PhenomenonOfferingID] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_ImportBatchSummary_PhenomenonUOMID]...';
-
-
-GO
-ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
-    ADD CONSTRAINT [FK_ImportBatchSummary_PhenomenonUOMID] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_ImportBatchSummary_InstrumentID]...';
-
-
-GO
-ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
-    ADD CONSTRAINT [FK_ImportBatchSummary_InstrumentID] FOREIGN KEY ([InstrumentID]) REFERENCES [dbo].[Instrument] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_ImportBatchSummary_StationID]...';
-
-
-GO
-ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
-    ADD CONSTRAINT [FK_ImportBatchSummary_StationID] FOREIGN KEY ([StationID]) REFERENCES [dbo].[Station] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[FK_ImportBatchSummary_SiteID]...';
-
-
-GO
-ALTER TABLE [dbo].[ImportBatchSummary] WITH NOCHECK
-    ADD CONSTRAINT [FK_ImportBatchSummary_SiteID] FOREIGN KEY ([SiteID]) REFERENCES [dbo].[Site] ([ID]);
-
-
-
---GO
---PRINT N'Creating [dbo].[FK_Observation_Sensor]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] WITH NOCHECK
---    ADD CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]);
-
-
---GO
---PRINT N'Creating [dbo].[FK_Observation_Status]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] WITH NOCHECK
---    ADD CONSTRAINT [FK_Observation_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]);
-
-
---GO
---PRINT N'Creating [dbo].[FK_Observation_StatusReason]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] WITH NOCHECK
---    ADD CONSTRAINT [FK_Observation_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]);
-
-
---GO
---PRINT N'Creating [dbo].[FK_Observation_aspnet_Users]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] WITH NOCHECK
---    ADD CONSTRAINT [FK_Observation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]);
-
-
---GO
---PRINT N'Creating [dbo].[FK_Observation_ImportBatch]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] WITH NOCHECK
---    ADD CONSTRAINT [FK_Observation_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]);
-
-
---GO
---PRINT N'Creating [dbo].[FK_Observation_PhenomenonOffering]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] WITH NOCHECK
---    ADD CONSTRAINT [FK_Observation_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]);
-
-
---GO
---PRINT N'Creating [dbo].[FK_Observation_PhenomenonUOM]...';
-
-
---GO
---ALTER TABLE [dbo].[Observation] WITH NOCHECK
---    ADD CONSTRAINT [FK_Observation_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]);
-
-
-GO
-PRINT N'Creating [dbo].[TR_DataLog_Insert]...';
-
-
-GO
-CREATE TRIGGER [dbo].[TR_DataLog_Insert] ON [dbo].[DataLog]
+ALTER TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]
 FOR INSERT
 AS
 BEGIN
     SET NoCount ON
-    Update 
-        src 
-    set 
-        AddedAt = GETDATE(),
+    Update
+        src
+    set
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
-        DataLog src
-        inner join inserted ins 
+        Observation src
+        inner join inserted ins
             on (ins.ID = src.ID)
 END
 GO
-PRINT N'Creating [dbo].[TR_DataLog_Update]...';
+PRINT N'Altering [dbo].[TR_Observation_Update]...';
 
 
 GO
-CREATE TRIGGER [dbo].[TR_DataLog_Update] ON [dbo].[DataLog]
+ALTER TRIGGER [dbo].[TR_Observation_Update] ON [dbo].[Observation]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Observation src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_AuditLog_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_AuditLog_Update] ON [dbo].[AuditLog]
 FOR UPDATE
 AS
 BEGIN
@@ -1032,10 +518,33 @@ BEGIN
     Update 
         src 
     set 
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        AuditLog src
+        inner join inserted ins 
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_DataLog_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_DataLog_Update] ON [dbo].[DataLog]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         DataLog src
@@ -1044,63 +553,933 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.8 20160708 TimPN
---GO
---PRINT N'Creating [dbo].[TR_Observation_Insert]...';
-
-
---GO
---CREATE TRIGGER [dbo].[TR_Observation_Insert] ON [dbo].[Observation]
---FOR INSERT
---AS
---BEGIN
---    SET NoCount ON
---    Update
---        src
---    set
---        AddedAt = GETDATE(),
---        UpdatedAt = NULL
---    from
---        Observation src
---        inner join inserted ins
---            on (ins.ID = src.ID)
---END
---GO
---PRINT N'Creating [dbo].[TR_Observation_Update]...';
-
-
---GO
---CREATE TRIGGER [dbo].[TR_Observation_Update] ON [dbo].[Observation]
---FOR UPDATE
---AS
---BEGIN
---    SET NoCount ON
---    Update
---        src
---    set
-----> Changed 2.0.19 20161205 TimPN
-----		AddedAt = del.AddedAt,
---        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
-----< Changed 2.0.19 20161205 TimPN
---        UpdatedAt = GETDATE()
---    from
---        Observation src
---        inner join inserted ins
---            on (ins.ID = src.ID)
---        inner join deleted del
---            on (del.ID = src.ID)
---END
-----< Changed 2.0.15 20161102 TimPN
-----< Added 2.0.8 20160718 TimPN
 GO
-PRINT N'Refreshing [dbo].[vDataLog]...';
+PRINT N'Altering [dbo].[TR_DataSchema_Update]...';
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vDataLog]';
+ALTER TRIGGER [dbo].[TR_DataSchema_Update] ON [dbo].[DataSchema]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        DataSchema src
+        inner join inserted ins 
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_DataSource_Update]...';
 
 
+GO
+ALTER TRIGGER [dbo].[TR_DataSource_Update] ON [dbo].[DataSource]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        DataSource src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_DataSourceTransformation_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_DataSourceTransformation_Update] ON [dbo].[DataSourceTransformation]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        DataSourceTransformation src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_DataSourceType_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_DataSourceType_Update] ON [dbo].[DataSourceType]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        DataSourceType src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_ImportBatch_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_ImportBatch_Update] ON [dbo].[ImportBatch]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        ImportBatch src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_Instrument_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Instrument_Update] ON [dbo].[Instrument]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Instrument src
+        inner join inserted ins 
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_Instrument_Sensor_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Instrument_Sensor_Update] ON [dbo].[Instrument_Sensor]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Instrument_Sensor src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_Offering_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Offering_Update] ON [dbo].[Offering]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Offering src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_Organisation_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Organisation_Update] ON [dbo].[Organisation]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Organisation src
+        inner join inserted ins 
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_Organisation_Instrument_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Organisation_Instrument_Update] ON [dbo].[Organisation_Instrument]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Organisation_Instrument src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_Organisation_Site_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Organisation_Site_Update] ON [dbo].[Organisation_Site]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Organisation_Site src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_Organisation_Station_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Organisation_Station_Update] ON [dbo].[Organisation_Station]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Organisation_Station src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_OrganisationRole_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_OrganisationRole_Update] ON [dbo].[OrganisationRole]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        OrganisationRole src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_Phenomenon_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Phenomenon_Update] ON [dbo].[Phenomenon]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Phenomenon src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_PhenomenonOffering_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_PhenomenonOffering_Update] ON [dbo].[PhenomenonOffering]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        PhenomenonOffering src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_PhenomenonUOM_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_PhenomenonUOM_Update] ON [dbo].[PhenomenonUOM]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        PhenomenonUOM src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_Programme_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Programme_Update] ON [dbo].[Programme]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Programme src
+        inner join inserted ins 
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_Project_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Project_Update] ON [dbo].[Project]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Project src
+        inner join inserted ins 
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_Project_Station_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Project_Station_Update] ON [dbo].[Project_Station]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Project_Station src
+        inner join inserted ins 
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_SchemaColumn_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_SchemaColumn_Update] ON [dbo].[SchemaColumn]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        SchemaColumn src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_SchemaColumnType_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_SchemaColumnType_Update] ON [dbo].[SchemaColumnType]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        SchemaColumnType src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_Sensor_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Sensor_Update] ON [dbo].[Sensor]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Sensor src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_Site_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Site_Update] ON [dbo].[Site]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update 
+        src 
+    set 
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Site src
+        inner join inserted ins 
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_Station_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Station_Update] ON [dbo].[Station]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Station src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_Station_Instrument_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Station_Instrument_Update] ON [dbo].[Station_Instrument]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Station_Instrument src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_Status_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_Status_Update] ON [dbo].[Status]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        Status src
+        inner join inserted ins 
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_StatusReason_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_StatusReason_Update] ON [dbo].[StatusReason]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        StatusReason src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_TransformationType_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_TransformationType_Update] ON [dbo].[TransformationType]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        TransformationType src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_UnitOfMeasure_Update]...';
+
+
+GO
+ALTER TRIGGER [dbo].[TR_UnitOfMeasure_Update] ON [dbo].[UnitOfMeasure]
+FOR UPDATE
+AS
+BEGIN
+    SET NoCount ON
+    Update
+        src
+    set
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+        UpdatedAt = GETDATE()
+    from
+        UnitOfMeasure src
+        inner join inserted ins
+            on (ins.ID = src.ID)
+        inner join deleted del
+            on (del.ID = src.ID)
+END
+GO
+PRINT N'Altering [dbo].[TR_UserDownloads_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_UserDownloads_Update] ON [dbo].[UserDownloads]
+FOR UPDATE
+AS
+BEGIN
+  SET NoCount ON
+  Update
+      src
+  set
+    AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+    UpdatedAt = GetDate()
+  from
+    UserDownloads src
+    inner join inserted ins
+      on (ins.ID = src.ID)
+    inner join deleted del
+      on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[TR_UserQueries_Update]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER TRIGGER [dbo].[TR_UserQueries_Update] ON [dbo].[UserQueries]
+FOR UPDATE
+AS
+BEGIN
+  SET NoCount ON
+  Update
+      src
+  set
+    AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+    UpdatedAt = GetDate()
+  from
+    UserQueries src
+    inner join inserted ins
+      on (ins.ID = src.ID)
+    inner join deleted del
+      on (del.ID = src.ID)
+END
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vDataLog]...';
+
+
+GO
+CREATE VIEW [dbo].[vDataLog]
+AS
+
+SELECT 
+d.ID, 
+d.ImportDate,
+Site.Name SiteName,
+Station.Name StationName,
+Instrument.Name InstrumentName,
+d.SensorID,
+Sensor.Name SensorName,
+CASE 
+    WHEN d.SensorID is null then 1
+    ELSE 0
+END SensorInvalid,
+
+d.ValueDate,
+d.InvalidDateValue, 
+CASE 
+    WHEN ValueDate is null then 1
+    ELSE 0
+END DateValueInvalid,
+
+d.InvalidTimeValue, 
+CASE 
+    WHEN InvalidTimeValue is not null then 1
+    ELSE 0
+END TimeValueInvalid,
+
+CASE 
+    WHEN InvalidDateValue is null AND InvalidTimeValue IS NULL Then ValueDate
+    WHEN ValueTime is not null then ValueTime 
+END ValueTime,
+
+
+d.RawValue,
+d.ValueText,
+CASE
+    WHEN d.RawValue is null then 1
+    ELSE 0
+END RawValueInvalid,	
+
+d.DataValue,
+d.TransformValueText, 
+CASE
+    WHEN d.DataValue is null then 1
+    ELSE 0
+END DataValueInvalid,
+
+d.PhenomenonOfferingID, 
+CASE
+    WHEN d.PhenomenonOfferingID is null then 1
+    ELSE 0
+END OfferingInvalid,
+
+d.PhenomenonUOMID, 
+CASE
+    WHEN d.PhenomenonUOMID is null then 1
+    ELSE 0
+END UOMInvalid,
+
+p.Name PhenomenonName,
+o.Name OfferingName,
+uom.Unit,
+
+d.DataSourceTransformationID,
+tt.Name Transformation,
+d.StatusID,
+s.Name [Status],
+d.ImportBatchID,
+d.RawFieldValue,
+d.Comment
+
+FROM DataLog d
+  left join Sensor 
+    on (d.SensorID = Sensor.ID) 
+  left join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) and
+       ((Instrument_Sensor.StartDate is null) or (d.ValueDate >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (d.ValueDate <= Instrument_Sensor.EndDate))
+  left join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+       ((Instrument.StartDate is null) or (d.ValueDay >= Instrument.StartDate )) and
+       ((Instrument.EndDate is null) or (d.ValueDay <= Instrument.EndDate))
+  left join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID) and
+       ((Station_Instrument.StartDate is null) or (d.ValueDay >= Station_Instrument.StartDate)) and
+       ((Station_Instrument.EndDate is null) or (d.ValueDay <= Station_Instrument.EndDate))
+  left join Station 
+    on (Station_Instrument.StationID = Station.ID) and
+       ((Station.StartDate is null) or (d.ValueDay >= Station.StartDate)) and
+       ((Station.EndDate is null) or (d.ValueDay <= Station.EndDate))
+  left join Site
+    on (Station.SiteID = Site.ID) and
+       ((Site.StartDate is null) or  (d.ValueDay >= Site.StartDate)) and
+       ((Site.EndDate is null) or  (d.ValueDay <= Site.EndDate))
+LEFT JOIN PhenomenonOffering po
+ ON d.PhenomenonOfferingID = po.ID
+LEFT JOIN Phenomenon p
+    on po.PhenomenonID = p.ID
+LEFT JOIN Offering o
+    on po.OfferingID = o.ID
+LEFT JOIN PhenomenonUOM pu
+    on d.PhenomenonUOMID = pu.ID
+LEFT JOIN UnitOfMeasure uom
+    on pu.UnitOfMeasureID = uom.ID
+LEFT JOIN DataSourceTransformation ds
+    on d.DataSourceTransformationID = ds.ID
+LEFT JOIN TransformationType tt
+    on ds.TransformationTypeID = tt.ID
+INNER JOIN [Status] s
+    on d.StatusID = s.ID
 GO
 PRINT N'Altering [dbo].[vImportBatchSummary]...';
 
@@ -1110,7 +1489,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
---> Added 2.0.28 20180423 TimPN
 ALTER VIEW [dbo].[vImportBatchSummary]
 AS 
 Select
@@ -1142,21 +1520,58 @@ From
     on (ImportBatchSummary.PhenomenonUOMID = PhenomenonUOM.ID)
   inner join UnitOfMeasure
     on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
---< Added 2.0.28 20180423 TimPN
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vInventory]...';
+PRINT N'Altering [dbo].[vInventory]...';
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventory]';
-
-
+ALTER VIEW [dbo].[vInventory]
+AS
+Select 
+  Site.Name Site,
+  Station.Name Station,
+  Instrument.Name Instrument,
+  Sensor.Name Sensor,
+  p.Name Phenomenon,
+  d.StartDate,
+  d.EndDate
+from
+  Sensor 
+  INNER JOIN 
+  (
+     SELECT SensorID,MIN(Cast(ValueDate as Date)) StartDate,MAX(Cast(ValueDate as Date)) EndDate
+     FROM Observation
+     Group By SensorID
+  ) d
+    ON (Sensor.ID = d.SensorID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) and
+       ((Instrument_Sensor.StartDate is null) or (d.StartDate >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (d.EndDate <= Instrument_Sensor.EndDate))
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+       ((Instrument.StartDate is null) or (d.StartDate >= Instrument.StartDate )) and
+       ((Instrument.EndDate is null) or (d.EndDate <= Instrument.EndDate))
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID) and
+       ((Station_Instrument.StartDate is null) or (d.StartDate >= Station_Instrument.StartDate)) and
+       ((Station_Instrument.EndDate is null) or (d.EndDate <= Station_Instrument.EndDate))
+  inner join Station 
+    on (Station_Instrument.StationID = Station.ID) and
+       ((Station.StartDate is null) or (d.StartDate >= Station.StartDate)) and
+       ((Station.EndDate is null) or (d.EndDate <= Station.EndDate))
+  inner join Site
+    on (Station.SiteID = Site.ID) and
+       ((Site.StartDate is null) or  (d.StartDate >= Site.StartDate)) and
+       ((Site.EndDate is null) or  (d.EndDate <= Site.EndDate))
+  inner join Phenomenon p 
+   on (Sensor.PhenomenonID = p.ID )
 GO
-PRINT N'Refreshing [dbo].[vInventoryPhenomenaOfferings]...';
+PRINT N'Altering [dbo].[vInventoryPhenomenaOfferings]...';
 
 
 GO
@@ -1164,15 +1579,48 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventoryPhenomenaOfferings]';
-
-
+ALTER VIEW [dbo].[vInventoryPhenomenaOfferings]
+AS
+Select
+  Phenomenon.Name+'~'+Offering.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Phenomenon.Name Phenomenon, Offering.Name Offering, IsNull(Status.Name,'No status') Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
+from  
+  Observation
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) and
+       ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (Observation.ValueDay <= Instrument_Sensor.EndDate))
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+       ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate )) and
+       ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID) and
+       ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+       ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+  inner join Station
+    on (Station_Instrument.StationID = Station.ID) and
+       ((Station.StartDate is null) or (Observation.ValueDay >= Station.StartDate)) and
+       ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  inner join PhenomenonOffering
+    on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  left join Status
+    on (Observation.StatusID = Status.ID)
+group by 
+  Phenomenon.Name, Offering.Name, Status.Name
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vInventoryStations]...';
+PRINT N'Altering [dbo].[vInventoryStations]...';
 
 
 GO
@@ -1180,15 +1628,42 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventoryStations]';
-
-
+ALTER VIEW [dbo].[vInventoryStations]
+AS
+Select
+  Station.Name+'~'+IsNull(Status.Name,'') SurrogateKey,
+  Station.ID, Station.Name, Station.Latitude, Station.Longitude, IsNull(Status.Name,'No status') Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
+from  
+  Observation
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) and
+       ((Instrument_Sensor.StartDate is null) or (Observation.ValueDay >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (Observation.ValueDay <= Instrument_Sensor.EndDate))
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+       ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate )) and
+       ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID) and
+       ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+       ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+  inner join Station
+    on (Station_Instrument.StationID = Station.ID) and
+       ((Station.StartDate is null) or (Observation.ValueDay >= Station.StartDate)) and
+       ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  left join Status
+    on (Observation.StatusID = Status.ID)
+group by 
+  Station.ID, Station.Name, Station.Latitude, Station.Longitude, Status.Name
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vObservationExpansion]...';
+PRINT N'Altering [dbo].[vObservationExpansion]...';
 
 
 GO
@@ -1196,15 +1671,69 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vObservationExpansion]';
-
-
+ALTER VIEW [dbo].[vObservationExpansion]
+AS
+Select
+  Observation.ID, Observation.ImportBatchID,  
+  Observation.ValueDate, Observation.ValueDay, Observation.ValueYear, Observation.ValueDecade, 
+  Observation.RawValue, Observation.DataValue, Observation.TextValue, 
+  Observation.Comment, Observation.CorrelationID,
+  Site.ID SiteID, Site.Code SiteCode, Site.Name SiteName, Site.Description SiteDescription, Site.Url SiteUrl,
+  Station.ID StationID, Station.Code StationCode, Station.Name StationName, Station.Description StationDescription, Station.Url StationUrl,
+  Instrument.ID InstrumentID, Instrument.Code InstrumentCode, Instrument.Name InstrumentName, Instrument.Description InstrumentDescription, Instrument.Url InstrumentUrl,
+  Observation.SensorID, Sensor.Code SensorCode, Sensor.Name SensorName, Sensor.Description SensorDescription, Sensor.Url SensorUrl,
+  Coalesce(Observation.Latitude, Sensor.Latitude, Instrument_Sensor.Latitude, Instrument.Latitude, Station_Instrument.Latitude, Station.Latitude) Latitude,
+  Coalesce(Observation.Longitude, Sensor.Longitude, Instrument_Sensor.Longitude, Instrument.Longitude, Station_Instrument.Longitude, Station.Longitude) Longitude,
+  Coalesce(Observation.Elevation, Sensor.Elevation, Instrument_Sensor.Elevation, Instrument.Elevation, Station_Instrument.Elevation, Station.Elevation) Elevation,
+  Observation.PhenomenonOfferingID, Phenomenon.ID PhenomenonID, Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
+  Offering.ID OfferingID, Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription,
+  Observation.PhenomenonUOMID, UnitOfMeasure.ID UnitOfMeasureID, UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  Observation.StatusID, Status.Code StatusCode, Status.Name StatusName, Status.Description StatusDescription,
+  Observation.StatusReasonID, StatusReason.Code StatusReasonCode, StatusReason.Name StatusReasonName, StatusReason.Description StatusReasonDescription
+from
+  Observation
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join Instrument_Sensor
+    on (Observation.SensorID = Instrument_Sensor.SensorID) and
+       ((Instrument_Sensor.StartDate is null) or (Observation.ValueDate >= Instrument_Sensor.StartDate)) and
+       ((Instrument_Sensor.EndDate is null) or (Observation.ValueDate <= Instrument_Sensor.EndDate))
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
+       ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate)) and
+       ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument_Sensor.InstrumentID) and
+       ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+       ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+  inner join Station
+    on (Station_Instrument.StationID = Station.ID) and
+       ((Station.StartDate is null) or (Observation.ValueDay >= Station.StartDate))  and
+       ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+  inner join Site
+    on (Station.SiteID = Site.ID) and
+       ((Site.StartDate is null) or (Observation.ValueDay >= Site.StartDate)) and
+       ((Site.EndDate is null) or (Observation.ValueDay <= Site.EndDate))
+  inner join PhenomenonOffering
+    on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (Observation.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+  left join Status
+    on (Observation.StatusID = Status.ID)
+  left join StatusReason
+    on (Observation.StatusReasonID = StatusReason.ID)
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsDatastreams]...';
+PRINT N'Altering [dbo].[vSensorThingsDatastreams]...';
 
 
 GO
@@ -1212,15 +1741,30 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsDatastreams]';
-
-
+ALTER VIEW [dbo].[vSensorThingsDatastreams]
+AS
+Select distinct
+  PhenomenonOffering.ID, Sensor.ID SensorID, Sensor.Name Sensor, Phenomenon.Name Phenomenon, Offering.Name Offering, UnitOfMeasure.Unit, UnitOfMeasure.UnitSymbol Symbol, Phenomenon.Url
+from
+  Observation
+  inner join Sensor
+    on (Observation.SensorID = Sensor.ID)
+  inner join PhenomenonOffering
+    on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (Observation.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vApiDataDownload]...';
+PRINT N'Altering [dbo].[vApiDataDownload]...';
 
 
 GO
@@ -1228,15 +1772,23 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vApiDataDownload]';
-
-
+ALTER VIEW [dbo].[vApiDataDownload]
+AS
+Select
+  vObservationExpansion.*,
+  PhenomenonName + ', ' + OfferingName + ', ' + UnitOfMeasureSymbol FeatureCaption,
+  Replace(PhenomenonName + '_' + OfferingName + '_' + UnitOfMeasureUnit,' ','') FeatureName,
+  IsNull(StatusName, 'No Status') Status
+from
+  vObservationExpansion 
+where
+  (StatusName = 'Verified')
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vApiDataQuery]...';
+PRINT N'Altering [dbo].[vApiDataQuery]...';
 
 
 GO
@@ -1244,15 +1796,23 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vApiDataQuery]';
-
-
+ALTER VIEW [dbo].[vApiDataQuery]
+AS
+Select
+  vObservationExpansion.*,
+  PhenomenonName + ', ' + OfferingName + ', ' + UnitOfMeasureSymbol FeatureCaption,
+  Replace(PhenomenonName + '_' + OfferingName + '_' + UnitOfMeasureUnit,' ','') FeatureName,
+  IsNull(StatusName, 'No Status') Status
+from
+  vObservationExpansion
+where
+  (StatusName = 'Verified')
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vApiInventory]...';
+PRINT N'Altering [dbo].[vApiInventory]...';
 
 
 GO
@@ -1260,15 +1820,20 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vApiInventory]';
-
-
+ALTER VIEW [dbo].[vApiInventory]
+AS
+Select
+  vObservationExpansion.*,
+  Replace(PhenomenonName + '_' + OfferingName + '_' + UnitOfMeasureUnit,' ','') FeatureName,
+  IsNull(StatusName, 'No Status') Status
+from
+  vObservationExpansion
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vApiSpacialCoverage]...';
+PRINT N'Altering [dbo].[vApiSpacialCoverage]...';
 
 
 GO
@@ -1276,15 +1841,28 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vApiSpacialCoverage]';
-
-
+ALTER VIEW [dbo].[vApiSpacialCoverage]
+AS
+Select
+  vObservationExpansion.*,
+  PhenomenonName + ', ' + OfferingName + ', ' + UnitOfMeasureSymbol FeatureCaption,
+  Replace(PhenomenonName + '_' + OfferingName + '_' + UnitOfMeasureUnit,' ','') FeatureName,
+  Status = case 
+    when StatusName is Null then 'No Status'
+    when StatusName = 'Verified' then StatusName
+    when StatusName = 'Unverified' then StatusName
+    else 'Being Verified'
+  end 
+from
+  vObservationExpansion
+where
+  (Latitude is not null) and (Longitude is not null)
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vApiTemporalCoverage]...';
+PRINT N'Altering [dbo].[vApiTemporalCoverage]...';
 
 
 GO
@@ -1292,15 +1870,24 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vApiTemporalCoverage]';
-
-
+ALTER VIEW [dbo].[vApiTemporalCoverage]
+AS
+Select
+  vObservationExpansion.*,
+  Status = case 
+    when StatusName is Null then 'No Status'
+    when StatusName = 'Verified' then StatusName
+    when StatusName = 'Unverified' then StatusName
+    else 'Being Verified'
+  end 
+from
+  vObservationExpansion
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vInventoryInstruments]...';
+PRINT N'Altering [dbo].[vInventoryInstruments]...';
 
 
 GO
@@ -1308,15 +1895,22 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventoryInstruments]';
-
-
+ALTER VIEW [dbo].[vInventoryInstruments]
+AS 
+Select
+  InstrumentName+'~'+IsNull(StatusName,'') SurrogateKey,
+  InstrumentName, IsNull(StatusName,'No status') Status, 
+  Count(DataValue) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
+from
+  vObservationExpansion
+group by
+  InstrumentName, StatusName
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vInventoryOrganisations]...';
+PRINT N'Altering [dbo].[vInventoryOrganisations]...';
 
 
 GO
@@ -1324,15 +1918,43 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventoryOrganisations]';
-
-
+ALTER VIEW [dbo].[vInventoryOrganisations]
+AS 
+Select
+  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name)+'~'+IsNull(StatusName,'') SurrogateKey,
+  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) Name, IsNull(StatusName,'No status') Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
+from
+  vObservationExpansion
+  left join Organisation_Site
+    on (Organisation_Site.SiteID = vObservationExpansion.SiteID) and
+       ((Organisation_Site.StartDate is null) or (ValueDay >= Organisation_Site.StartDate )) and
+       ((Organisation_Site.EndDate is null) or (ValueDay <= Organisation_Site.EndDate))
+  left join Organisation SiteOrganisation
+    on (Organisation_Site.OrganisationID = SiteOrganisation.ID)  		
+  left join Organisation_Station
+    on (Organisation_Station.StationID = vObservationExpansion.StationID) and
+       ((Organisation_Station.StartDate is null) or (ValueDay >= Organisation_Station.StartDate )) and
+       ((Organisation_Station.EndDate is null) or (ValueDay <= Organisation_Station.EndDate))
+  left join Organisation StationOrganisation
+    on (Organisation_Station.OrganisationID = vObservationExpansion.StationID)  		
+  left join Organisation_Instrument
+    on (Organisation_Instrument.InstrumentID = vObservationExpansion.InstrumentID) and
+       ((Organisation_Instrument.StartDate is null) or (ValueDay >= Organisation_Instrument.StartDate )) and
+       ((Organisation_Instrument.EndDate is null) or (ValueDay <= Organisation_Instrument.EndDate))
+  left join Organisation InstrumentOrganisation
+    on (Organisation_Instrument.OrganisationID = vObservationExpansion.InstrumentID)  		
+where 
+  (Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name) is not null)
+group by
+  Coalesce(InstrumentOrganisation.Name, StationOrganisation.Name, SiteOrganisation.Name),
+  StatusName
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vInventoryTotals]...';
+PRINT N'Altering [dbo].[vInventoryTotals]...';
 
 
 GO
@@ -1340,15 +1962,22 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventoryTotals]';
-
-
+ALTER VIEW [dbo].[vInventoryTotals]
+AS 
+Select
+  IsNull(StatusName,'') SurrogateKey,
+  IsNull(StatusName,'No status') Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
+from  
+  vObservationExpansion
+group by 
+  StatusName
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vInventoryYears]...';
+PRINT N'Altering [dbo].[vInventoryYears]...';
 
 
 GO
@@ -1356,9 +1985,16 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vInventoryYears]';
-
-
+ALTER VIEW [dbo].[vInventoryYears]
+AS 
+Select
+  Cast(ValueYear as VarChar(10))+'~'+IsNull(StatusName,'') SurrogateKey,
+  ValueYear Year, IsNull(StatusName,'No status') Status, 
+  Count(*) Count, Min(DataValue) Minimum, Max(DataValue) Maximum, Avg(DataValue) Average, StDev(DataValue) StandardDeviation, Var(DataValue) Variance
+from
+  vObservationExpansion
+group by
+  ValueYear, StatusName
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
@@ -1388,57 +2024,848 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Checking existing data against newly created constraints';
+PRINT N'Altering [dbo].[vDataQuery]...';
 
 
 GO
-USE [$(DatabaseName)];
+ALTER VIEW [dbo].[vDataQuery]
+AS
+SELECT Top (100) Percent    
+  Site.ID SiteID, Site.Name SiteName, Site.Description SiteDesc,
+  Station.ID StationID, Station.Name StationName, Station.Description StationDesc,
+  Instrument.ID InstrumentID, Instrument.Name InstrumentName, Instrument.Description InstrumentDesc,
+  Sensor.ID SensorID, Sensor.Name Sensor, Sensor.Description SensorDesc, 
+  Phenomenon.ID PhenomenonID, Phenomenon.Name Phenomenon, Phenomenon.Description PhenomenonDesc, 
+  Offering.ID OfferingID, Offering.Name Offering, Offering.Description OfferingDesc
+FROM
+  Sensor 
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID) 
+  inner join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID)
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID)
+  inner join Station 
+    on (Station_Instrument.StationID = Station.ID)
+  inner join Site
+    on (Station.SiteID = Site.ID)
+  INNER JOIN Phenomenon ON Phenomenon.ID = Sensor.PhenomenonID 
+  INNER JOIN PhenomenonOffering ON PhenomenonOffering.PhenomenonID = Phenomenon.ID 
+  INNER JOIN Offering ON Offering.ID = PhenomenonOffering.OfferingID 
+ORDER BY 
+  Site.Name, Station.Name, Instrument.Name, Sensor, Phenomenon, Offering
+GO
+PRINT N'Altering [dbo].[vDataSchema]...';
 
 
 GO
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_StatusReason];
+ALTER VIEW [dbo].[vDataSchema]
+AS 
+select
+  d.*,
+  t.Code AS DataSourceTypeCode,
+  t.[Description] as DataSourceTypeDesc
+FROM 
+  DataSchema d
+  INNER JOIN DataSourceType t
+    ON (d.DataSourceTypeID = t.ID)
+GO
+PRINT N'Altering [dbo].[vDataSourceTransformation]...';
 
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_aspnet_Users];
 
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_DataSourceTransformation];
+GO
+ALTER VIEW [dbo].[vDataSourceTransformation]
+AS
+Select dt.ID,
+       dt.TransformationTypeID,
+       dt.PhenomenonID,
+       dt.StartDate,
+       dt.EndDate,
+       dt.DataSourceID,
+       dt.[Definition],
+       p.Name as PhenomenonName,
+       tt.Name as TransformationName,
+       po.ID as PhenomenonOfferingId,
+       o.Name as OfferingName,
+       pu.ID as UnitOfMeasureId,
+       uom.Unit as UnitOfMeasureUnit,
+       dt.NewPhenomenonOfferingID,
+        NewOffering.Name NewOfferingName,
+       dt.NewPhenomenonUOMID,
+        NewUnitOfMeasure.Unit NewUnitOfMeasureUnit,
+       tt.iorder,
+       dt.Rank
+       
+From DataSourceTransformation dt
+ INNER JOIN DataSource ds
+    on dt.DataSourceID = ds.ID
+ INNER JOIN TransformationType tt
+    on dt.TransformationTypeID = tt.ID
+ INNER JOIN Phenomenon p
+    on dt.PhenomenonID = p.ID
+ LEFT JOIN PhenomenonOffering po
+    on dt.PhenomenonOfferingID = po.ID
+ LEFT JOIN Offering o
+    on po.OfferingID = o.ID
+ LEFT JOIN PhenomenonUOM pu
+    on dt.PhenomenonUOMID = pu.ID
+ LEFT JOIN UnitOfMeasure uom
+    on pu.UnitOfMeasureID = uom.ID
+  left join PhenomenonOffering NewPhenomenonOffering
+    on (dt.NewPhenomenonOfferingID = NewPhenomenonOffering.ID)
+  left join Offering NewOffering
+    on (NewPhenomenonOffering.OfferingID = NewOffering.ID)
+  left join PhenomenonUOM NewPhenomenonUOM
+    on (dt.NewPhenomenonUOMID = NewPhenomenonUOM.ID)
+  left join UnitOfMeasure NewUnitOfMeasure
+    on (NewPhenomenonUOM.UnitOfMeasureID = NewUnitOfMeasure.ID)
+GO
+PRINT N'Altering [dbo].[vImportBatch]...';
 
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_ImportBatch];
 
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_PhenomenonOffering];
+GO
+ALTER VIEW [dbo].[vImportBatch]
+AS
 
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_PhenomenonUOM];
+SELECT 
+b.ID,
+b.Code,
+b.DataSourceID,
+b.ImportDate, 
+b.[Status],
+d.Name DataSourceName,
+b.UserId,
+u.UserName,
+CASE b.[Status]
+    WHEN 0 THEN 'Errors in Datalog'
+    WHEN 1 THEN 'No Errors in Log'
+    WHEN 2 THEN 'Moved to Datalog'
+END StatusDescription,
+b.[FileName],
+b.LogFileName,
+b.Issues
 
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_Sensor];
+FROM ImportBatch b
+INNER JOIN DataSource d
+    on b.DataSourceID = d.ID
+INNER JOIN aspnet_Users u
+  on b.UserId = u.UserId
+GO
+PRINT N'Altering [dbo].[vInstrumentOrganisation]...';
 
-ALTER TABLE [dbo].[DataLog] WITH CHECK CHECK CONSTRAINT [FK_DataLog_Status];
 
-ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_SensorID];
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
-ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_ImportBatchID];
 
-ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_InstrumentID];
+GO
+ALTER VIEW [dbo].[vInstrumentOrganisation]
+AS
+Select
+  [Organisation_Site].ID,
+  OrganisationID,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  [Instrument].ID InstrumentID,
+  [Instrument].Code InstrumentCode,
+  [Instrument].Name InstrumentName,
+  OrganisationRoleID, 
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName,
+  [Organisation_Site].StartDate,
+  [Organisation_Site].EndDate,
+  'Site' [Level],
+  [Site].Code LevelCode,
+  [Site].Name LevelName,
+  0 [Weight],
+  CAST(1 as bit) [IsReadOnly]
+from
+  [Organisation_Site]
+  inner join [Site]
+    on ([Organisation_Site].SiteID = [Site].ID)
+  inner join [Organisation]
+    on ([Organisation_Site].OrganisationID = [Organisation].ID)
+  inner join [Station] 
+    on ([Organisation_Site].SiteID = [Station].SiteID)
+  inner join [Station_Instrument]
+    on ([Station_Instrument].StationID = [Station].ID)
+  inner join [Instrument]
+    on ([Station_Instrument].InstrumentID = [Instrument].ID)
+  inner join [OrganisationRole]
+    on ([Organisation_Site].OrganisationRoleID = [OrganisationRole].ID)
+union
+Select 
+  [Organisation_Station].ID,
+  OrganisationID,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  InstrumentID,
+  [Instrument].Code InstrumentCode,
+  [Instrument].Name InstrumentName,
+  OrganisationRoleID,
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName,
+  [Organisation_Station].StartDate,
+  [Organisation_Station].EndDate,
+  'Station' [Level],
+  [Station].Code LevelCode,
+  [Station].Name LevelName,
+  1 [Weight],
+  CAST(1 as bit) [IsReadOnly]
+from 
+  [Organisation_Station]
+  inner join [Station] 
+    on ([Organisation_Station].StationID = [Station].ID)
+  inner join [Station_Instrument]
+    on ([Organisation_Station].StationID = [Station_Instrument].StationID)
+  inner join Instrument
+    on ([Station_Instrument].InstrumentID = [Instrument].ID)
+  inner join [Organisation]
+    on ([Organisation_Station].OrganisationID = [Organisation].ID)
+  inner join [OrganisationRole]
+    on ([Organisation_Station].OrganisationRoleID = [OrganisationRole].ID)
+union
+Select
+  [Organisation_Instrument].ID,
+  OrganisationID,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  InstrumentID,
+  [Instrument].Code InstrumentCode,
+  [Instrument].Name InstrumentName,
+  OrganisationRoleID,
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName,
+  [Organisation_Instrument].StartDate,
+  [Organisation_Instrument].EndDate,
+  'Instrument' [Level],
+  [Instrument].Code LevelCode,
+  [Instrument].Name LevelName,
+  2 [Weight],
+  CAST(0 as bit) [IsReadOnly]
+from
+  [Organisation_Instrument]
+  inner join [Instrument]
+    on ( [Organisation_Instrument].InstrumentID = [Instrument].ID)
+  inner join [Organisation]
+    on ( [Organisation_Instrument].OrganisationID = [Organisation].ID)
+  inner join [OrganisationRole]
+    on ( [Organisation_Instrument].OrganisationRoleID = [OrganisationRole].ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
-ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_StationID];
 
-ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_SiteID];
+GO
+PRINT N'Altering [dbo].[vInstrumentSensor]...';
 
-ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_PhenomenonOfferingID];
 
-ALTER TABLE [dbo].[ImportBatchSummary] WITH CHECK CHECK CONSTRAINT [FK_ImportBatchSummary_PhenomenonUOMID];
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
-ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_Sensor];
 
-ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_Status];
+GO
+ALTER VIEW [dbo].[vInstrumentSensor] AS 
+SELECT 
+  src.*, 
+  [Instrument].Code InstrumentCode,
+  [Instrument].Name InstrumentName,
+  [Sensor].Code SensorCode,
+  [Sensor].Name SensorName
+FROM 
+  [Instrument_Sensor] src
+  inner join [Instrument] 
+    on (src.InstrumentID = [Instrument].ID)
+  inner join [Sensor]
+    on (src.SensorID = [Sensor].ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
-ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_StatusReason];
 
-ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_aspnet_Users];
+GO
+PRINT N'Creating [dbo].[vOfferingPhenomena]...';
 
-ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_ImportBatch];
 
-ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_PhenomenonOffering];
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
-ALTER TABLE [dbo].[Observation] WITH CHECK CHECK CONSTRAINT [FK_Observation_PhenomenonUOM];
+
+GO
+CREATE VIEW [dbo].[vOfferingPhenomena]
+AS 
+Select
+  PhenomenonOffering.OfferingID, Phenomenon.Code, Phenomenon.Name, Phenomenon.Description
+from
+  PhenomenonOffering
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vOrganisationInstrument]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vOrganisationInstrument]
+AS 
+SELECT 
+  src.*,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  [Instrument].Code InstrumentCode,
+  [Instrument].Name InstrumentName,
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName
+FROM 
+  [Organisation_Instrument] src
+  inner join [Organisation]
+    on (src.OrganisationID = [Organisation].ID)
+  inner join [Instrument]
+    on (src.InstrumentID = [Instrument].ID)
+  inner join [OrganisationRole]
+    on (src.OrganisationRoleID = [OrganisationRole].ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vOrganisationSite]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vOrganisationSite]
+AS 
+SELECT 
+  src.*,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  [Site].Code SiteCode,
+  [Site].Name SiteName,
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName
+FROM 
+  [Organisation_Site] src
+  inner join [Organisation]
+    on (src.OrganisationID = [Organisation].ID)
+  inner join [Site]
+    on (src.SiteID = [Site].ID)
+  inner join [OrganisationRole]
+    on (src.OrganisationRoleID = [OrganisationRole].ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vOrganisationStation]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vOrganisationStation]
+AS 
+SELECT 
+  src.*,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  [Station].Code StationCode,
+  [Station].Name StationName,
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName
+FROM 
+  [Organisation_Station] src
+  inner join [Organisation]
+    on (src.OrganisationID = [Organisation].ID)
+  inner join [Station]
+    on (src.StationID = [Station].ID)
+  inner join [OrganisationRole]
+    on (src.OrganisationRoleID = [OrganisationRole].ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vProject]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vProject]
+AS
+SELECT 
+  src.*, 
+  [Programme].Code ProgrammeCode,
+  [Programme].Name ProgrammeName
+FROM 
+  [Project] src
+  left join [Programme]
+    on (src.ProgrammeID = [Programme].ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vProjectStation]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vProjectStation]
+AS
+SELECT 
+  src.*, 
+  [Project].Code ProjectCode,
+  [Project].Name ProjectName,
+  [Station].Code StationCode,
+  [Station].Name StationName
+FROM 
+  [Project_Station] src
+  inner join [Project]
+    on (src.ProjectID = [Project].ID)
+  inner join [Station]
+    on (src.StationID = [Station].ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vSchemaColumn]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vSchemaColumn]
+AS 
+SELECT 
+  SchemaColumn.*,
+  SchemaColumnType.Name SchemaColumnTypeName, 
+  Phenomenon.Name PhenomenonName,
+  Offering.Name OfferingName,
+  UnitOfMeasure.Unit UnitOfMeasureUnit
+FROM 
+  SchemaColumn
+  inner join SchemaColumnType 
+    on (SchemaColumn.SchemaColumnTypeID = SchemaColumnType.ID)
+  left join Phenomenon
+    on (SchemaColumn.PhenomenonID = Phenomenon.ID)
+  left join PhenomenonOffering
+    on (SchemaColumn.PhenomenonOfferingID = PhenomenonOffering.ID)
+  left join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  left join PhenomenonUOM 
+    on (SchemaColumn.PhenomenonUOMID = PhenomenonUOM.ID)
+  left join  UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vSensor]...';
+
+
+GO
+ALTER VIEW [dbo].[vSensor]
+AS
+SELECT 
+  Sensor.ID,
+  Sensor.Code,
+  Sensor.Name,
+  Sensor.[Description],
+  Sensor.Url,
+  Sensor.DataSourceID,
+  Sensor.PhenomenonID,
+  [Phenomenon].Name PhenomenonName,
+  Sensor.UserId,
+  Site.Name Site,
+  Station.Name Station,
+  Instrument.Name Instrument,
+  d.Name AS DataSourceName,
+  Sensor.DataSchemaID,
+  ds.[Name] DataSchemaName
+FROM 
+  Sensor 
+  left join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID)
+  left join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID)
+  left join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID)
+  left join Station 
+    on (Station_Instrument.StationID = Station.ID)
+  left join Site
+    on (Station.SiteID = Site.ID)
+INNER JOIN DataSource d
+    on Sensor.DataSourceID = d.ID
+LEFT JOIN DataSchema ds
+    on Sensor.DataSchemaID = ds.ID
+  inner join [Phenomenon]
+    on (Sensor.PhenomenonID = [Phenomenon].ID)
+GO
+PRINT N'Altering [dbo].[vSensorDates]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vSensorDates]
+AS 
+Select
+  Sensor.ID SensorID,
+  Sensor.Name SensorName,
+  Instrument_Sensor.StartDate InstrumenSensorStartDate, Instrument_Sensor.EndDate InstrumenSensorEndDate,
+  Instrument.Name InstrumentName, Instrument.StartDate InstrumentStartDate, Instrument.EndDate InstrumentEndDate,
+  Station_Instrument.StartDate StationInstrumentStartDate, Station_Instrument.EndDate StationInstrumentEndDate,
+  Station.Name StationName, Station.StartDate StationStartDate, Station.EndDate StationEndDate,
+  Site.Name SiteName, Site.StartDate SiteStartDate, Site.EndDate SiteEndDate,
+  (
+  Select 
+    Max(v) 
+  from 
+    (Values (Instrument_Sensor.StartDate),(Instrument.StartDate),(Station_Instrument.StartDate),(Station.StartDate),(Site.StartDate)) as Value(v)
+  ) StartDate,
+  (
+  Select 
+    Min(v) 
+  from 
+    (Values (Instrument_Sensor.EndDate),(Instrument.EndDate),(Station_Instrument.EndDate),(Station.EndDate),(Site.EndDate)) as Value(v)
+  ) EndDate
+from
+  Sensor
+  left join Instrument_Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID)
+  left join Instrument
+    on (Instrument_Sensor.InstrumentID = Instrument.ID)
+  left join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID)
+  left join Station
+    on (Station_Instrument.StationID = Station.ID)
+  inner join Site
+    on (Station.SiteID = Site.ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vSensorLocation]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vSensorLocation]
+AS
+Select
+  Sensor.ID SensorID,
+  Coalesce(Sensor.Latitude, Instrument_Sensor.Latitude, Instrument.Latitude, Station_Instrument.Latitude, Station.Latitude) Latitude,
+  Coalesce(Sensor.Longitude, Instrument_Sensor.Longitude, Instrument.Longitude, Station_Instrument.Longitude, Station.Longitude) Longitude,
+  Coalesce(Sensor.Elevation, Instrument_Sensor.Elevation, Instrument.Elevation, Station_Instrument.Elevation, Station.Elevation) Elevation
+from
+  Station
+  inner join Station_Instrument
+    on (Station_Instrument.StationID = Station.ID)
+  inner join Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.InstrumentID = Instrument.ID)
+  inner join Sensor 
+    on (Instrument_Sensor.SensorID = Sensor.ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vSiteOrganisation]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vSiteOrganisation]
+AS 
+Select
+  [Organisation_Site].ID,
+  OrganisationID,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  SiteID,
+  [Site].Code SiteCode,
+  [Site].Name SiteName,
+  OrganisationRoleID, 
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName,
+  [Organisation_Site].StartDate,
+  [Organisation_Site].EndDate,
+  'Site' [Level],
+  [Site].Code LevelCode,
+  [Site].Name LevelName,
+  0 [Weight],
+  CAST(0 as bit) [IsReadOnly]
+from
+  [Organisation_Site]
+  inner join [Site]
+    on ([Organisation_Site].SiteID = [Site].ID)
+  inner join [Organisation]
+    on ([Organisation_Site].OrganisationID = [Organisation].ID)
+  inner join [OrganisationRole]
+    on ([Organisation_Site].OrganisationRoleID = [OrganisationRole].ID)
+union
+Select
+  [Organisation_Station].ID,
+  OrganisationID,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  SiteID,
+  [Site].Code SiteCode,
+  [Site].Name SiteName,
+  OrganisationRoleID,
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName,
+  [Organisation_Station].StartDate,
+  [Organisation_Station].EndDate,
+  'Station' [Level],
+  [Station].Code LevelCode,
+  [Station].Name LevelName,
+  1 [Weight],
+  CAST(1 as bit) [IsReadOnly]
+from
+  [Organisation_Station]
+  inner join [Station]
+    on ([Organisation_Station].StationID = [Station].ID)
+  inner join [Organisation]
+    on ([Organisation_Station].OrganisationID = [Organisation].ID)
+  inner join [Site]
+    on ([Station].SiteID = [Site].ID)
+  inner join [OrganisationRole]
+    on ([Organisation_Station].OrganisationRoleID = [OrganisationRole].ID)
+union
+Select
+  [Organisation_Instrument].ID,
+  OrganisationID,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  SiteID,
+  [Site].Code SiteCode,
+  [Site].Name SiteName,
+  OrganisationRoleID,
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName,
+  [Organisation_Instrument].StartDate,
+  [Organisation_Instrument].EndDate,
+  'Instrument' [Level],
+  [Instrument].Code LevelCode,
+  [Instrument].Name LevelName,
+  2 [Weight],
+  CAST(1 as bit) [IsReadOnly]
+from
+  [Organisation_Instrument]
+  inner join [Instrument]
+    on ([Organisation_Instrument].InstrumentID = [Instrument].ID)
+  inner join [Organisation]
+    on ([Organisation_Instrument].OrganisationID = [Organisation].ID)
+  inner join [Station_Instrument]
+    on ([Organisation_Instrument].InstrumentID = [Station_Instrument].InstrumentID)
+  inner join [Station]
+    on ([Station_Instrument].StationID = [Station].ID)
+  inner join [Site]
+    on ([Station].SiteID = [Site].ID)
+  inner join [OrganisationRole]
+    on ([Organisation_Instrument].OrganisationRoleID = [OrganisationRole].ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vStation]...';
+
+
+GO
+ALTER VIEW [dbo].[vStation]
+AS
+SELECT 
+  Station.*,
+  s.Code SiteCode,
+  s.Name SiteName
+FROM 
+  Station
+  INNER JOIN [Site] s 
+    on (Station.SiteID = s.ID)
+GO
+PRINT N'Altering [dbo].[vStationInstrument]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vStationInstrument] AS 
+SELECT 
+  src.*, 
+  [Station].Code StationCode,
+  [Station].Name StationName,
+  [Instrument].Code InstrumentCode,
+  [Instrument].Name InstrumentName
+FROM 
+  [Station_Instrument] src
+  inner join [Station]
+    on (src.StationID = [Station].ID)
+  inner join [Instrument] 
+    on (src.InstrumentID = [Instrument].ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vStationOrganisation]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vStationOrganisation]
+AS
+Select
+  [Organisation_Site].ID,
+  OrganisationID,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  [Station].ID StationID,
+  [Station].Code StationCode,
+  [Station].Name StationName,
+  OrganisationRoleID, 
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName,
+  [Organisation_Site].StartDate,
+  [Organisation_Site].EndDate,
+  'Site' [Level],
+  [Site].Code LevelCode,
+  [Site].Name LevelName,
+  0 [Weight],
+  CAST(1 as bit) [IsReadOnly]
+from
+  [Organisation_Site]
+  inner join [Site]
+    on ([Organisation_Site].SiteID = [Site].ID)
+  inner join [Organisation]
+    on ([Organisation_Site].OrganisationID = [Organisation].ID)
+  inner join [Station] 
+    on ([Organisation_Site].SiteID = [Station].SiteID)
+  inner join [OrganisationRole]
+    on ([Organisation_Site].OrganisationRoleID = [OrganisationRole].ID)
+union
+Select 
+  [Organisation_Station].ID,
+  OrganisationID,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  StationID,
+  [Station].Code StationCode,
+  [Station].Name StationName,
+  OrganisationRoleID,
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName,
+  [Organisation_Station].StartDate,
+  [Organisation_Station].EndDate,
+  'Station' [Level],
+  [Station].Code LevelCode,
+  [Station].Name LevelName,
+  1 [Weight],
+  CAST(0 as bit) [IsReadOnly]
+from 
+  [Organisation_Station]
+  inner join [Station] 
+    on ([Organisation_Station].StationID = [Station].ID)
+  inner join [Organisation]
+    on ([Organisation_Station].OrganisationID = [Organisation].ID)
+  inner join [OrganisationRole]
+    on ([Organisation_Station].OrganisationRoleID = [OrganisationRole].ID)
+union
+Select
+  [Organisation_Instrument].ID,
+  OrganisationID,
+  [Organisation].Code OrganisationCode,
+  [Organisation].Name OrganisationName,
+  [Station].ID StationID,
+  [Station].Code StationCode,
+  [Station].Name StationName,
+  OrganisationRoleID,
+  [OrganisationRole].Code OrganisationRoleCode,
+  [OrganisationRole].Name OrganisationRoleName,
+  [Organisation_Instrument].StartDate,
+  [Organisation_Instrument].EndDate,
+  'Instrument' [Level],
+  [Instrument].Code LevelCode,
+  [Instrument].Name LevelName,
+  2 [Weight],
+  CAST(1 as bit) [IsReadOnly]
+from
+  [Organisation_Instrument]
+  inner join [Instrument]
+    on ([Organisation_Instrument].InstrumentID = [Instrument].ID)
+  inner join [Organisation]
+    on ( [Organisation_Instrument].OrganisationID = [Organisation].ID)
+  inner join [Station_Instrument]
+    on ( [Organisation_Instrument].InstrumentID = [Station_Instrument].InstrumentID)
+  inner join [Station]
+    on ( [Station_Instrument].StationID = [Station].ID)
+  inner join [OrganisationRole]
+    on ( [Organisation_Instrument].OrganisationRoleID = [OrganisationRole].ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Altering [dbo].[vUnitOfMeasurePhenomena]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vUnitOfMeasurePhenomena]
+AS 
+Select
+  PhenomenonUOM.UnitOfMeasureID, Phenomenon.Code, Phenomenon.Name, Phenomenon.Description
+from
+  PhenomenonUOM
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+  inner join Phenomenon
+    on (PhenomenonUOM.PhenomenonID = Phenomenon.ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO

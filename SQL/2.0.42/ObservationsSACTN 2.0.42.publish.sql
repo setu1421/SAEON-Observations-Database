@@ -130,6 +130,228 @@ DROP INDEX [IX_Observation_ValueYear]
 
 
 GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Applications] TO [aspnet_Membership_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Applications] TO [aspnet_Profile_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Applications] TO [aspnet_Roles_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Applications] TO [aspnet_Personalization_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_MembershipUsers] TO [aspnet_Membership_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Profiles] TO [aspnet_Profile_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Roles] TO [aspnet_Roles_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Users] TO [aspnet_Membership_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Users] TO [aspnet_Profile_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Users] TO [aspnet_Roles_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_Users] TO [aspnet_Personalization_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_UsersInRoles] TO [aspnet_Roles_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_WebPartState_Paths] TO [aspnet_Personalization_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_WebPartState_Shared] TO [aspnet_Personalization_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping Permission...';
+
+
+GO
+REVOKE SELECT
+    ON OBJECT::[dbo].[vw_aspnet_WebPartState_User] TO [aspnet_Personalization_ReportingAccess] CASCADE
+    AS [dbo];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_Applications]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_Applications];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_MembershipUsers]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_MembershipUsers];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_Profiles]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_Profiles];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_Roles]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_Roles];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_Users]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_Users];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_UsersInRoles]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_UsersInRoles];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_WebPartState_Paths]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_WebPartState_Paths];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_WebPartState_Shared]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_WebPartState_Shared];
+
+
+GO
+PRINT N'Dropping [dbo].[vw_aspnet_WebPartState_User]...';
+
+
+GO
+DROP VIEW [dbo].[vw_aspnet_WebPartState_User];
+
+
+GO
 PRINT N'Dropping [dbo].[vDataLog]...';
 
 
