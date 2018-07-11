@@ -1,9 +1,7 @@
-﻿using System;
-using System.Data.Entity;
-using System.Diagnostics;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SAEON.Observations.Core.Entities;
+using System.Data.Entity;
+using System.Linq;
 
 namespace SAEON.Observations.Core.Tests
 {
