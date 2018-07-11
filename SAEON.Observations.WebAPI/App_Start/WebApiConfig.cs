@@ -39,7 +39,7 @@ namespace SAEON.Observations.WebAPI
     {
         public static void IgnoreEntityItemLists<TEntity>(this EntitySetConfiguration<TEntity> source) where TEntity : NamedEntity
         {
-            using (Logging.MethodCall(typeof(ODataExtensions)))
+            //using (Logging.MethodCall(typeof(ODataExtensions)))
             {
                 var type = typeof(TEntity);
                 foreach (var prop in type.GetProperties().Where(i => i.Name.EndsWith("List")))
@@ -119,8 +119,8 @@ namespace SAEON.Observations.WebAPI
                 config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
 
                 // Web API routes
-                //config.MapHttpAttributeRoutes();
-                config.MapHttpAttributeRoutes(new InheritedDirectRouteProvider());
+                config.MapHttpAttributeRoutes();
+                //config.MapHttpAttributeRoutes(new InheritedDirectRouteProvider());
 
                 // OData
                 config.Filter().Expand().Select().OrderBy().MaxTop(null).Count();

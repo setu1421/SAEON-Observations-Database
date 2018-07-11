@@ -637,7 +637,4 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
     }
 
-    //public abstract class CodedApiWriteController<TEntity> : NamedApiWriteController<TEntity> where TEntity : CodedEntity
-    //{
-    //}
 }

@@ -1,12 +1,13 @@
 ﻿using SAEON.AspNet.WebApi;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace SAEON.Observations.WebAPI.Controllers.WebAPI
+namespace SAEON.Observations.WebAPI.Controllers
 {
-    [RoutePrefix("Api/Claims")]
+    [RoutePrefix("Claims")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     [ClientAuthorization("SAEON.Observations.QuerySite")]
@@ -19,6 +20,5 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             var cp = (ClaimsPrincipal)User;
             return cp.Claims.Select(i => $"{i.Type} = {i.Value}").AsQueryable();
         }
-
     }
 }

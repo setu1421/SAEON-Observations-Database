@@ -4,10 +4,19 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@(ViewBag.Title == "Observations Database WebAPI" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database WebAPI" : "Observations Database WebAPI - " + @ViewBag.Title)</title>
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     @RenderSection("Metas", required: false)
-    @Styles.Render("~/bundles/css")
+    @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDescription))
+    {
+        <meta name="description" content="@ViewBag.MetaDescription" />
+    }
+    @if (!string.IsNullOrWhiteSpace(ViewBag.MetaKeywords))
+    {
+        <meta name="keywords" content="@ViewBag.MetaKeywords" />
+    }
+    <title>@(ViewBag.Title == "Observations Database WebAPI" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database WebAPI" : "Observations Database WebAPI - " + @ViewBag.Title)</title>
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    @Styles.Render("~/Content/css")
     <link rel="stylesheet" href="~/node_modules/mdbootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/node_modules/mdbootstrap/css/mdb.min.css" />
     @RenderSection("Styles", required: false)

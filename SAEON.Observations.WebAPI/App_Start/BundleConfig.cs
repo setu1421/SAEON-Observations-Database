@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace SAEON.Observations.WebAPI
 {
@@ -13,9 +12,10 @@ namespace SAEON.Observations.WebAPI
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new StyleBundle("~/bundles/css").Include(
+            bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/site.css",
-                      "~/Content/Observations.css"));
+                      "~/Content/SAEON.css"));
+
             BundleTable.EnableOptimizations = true;
         }
     }
