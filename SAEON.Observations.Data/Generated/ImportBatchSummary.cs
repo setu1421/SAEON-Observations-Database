@@ -368,6 +368,32 @@ namespace SAEON.Observations.Data
 				colvarRightLongitude.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRightLongitude);
 				
+				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
+				colvarStartDate.ColumnName = "StartDate";
+				colvarStartDate.DataType = DbType.DateTime;
+				colvarStartDate.MaxLength = 0;
+				colvarStartDate.AutoIncrement = false;
+				colvarStartDate.IsNullable = true;
+				colvarStartDate.IsPrimaryKey = false;
+				colvarStartDate.IsForeignKey = false;
+				colvarStartDate.IsReadOnly = false;
+				colvarStartDate.DefaultSetting = @"";
+				colvarStartDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarStartDate);
+				
+				TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
+				colvarEndDate.ColumnName = "EndDate";
+				colvarEndDate.DataType = DbType.DateTime;
+				colvarEndDate.MaxLength = 0;
+				colvarEndDate.AutoIncrement = false;
+				colvarEndDate.IsNullable = true;
+				colvarEndDate.IsPrimaryKey = false;
+				colvarEndDate.IsForeignKey = false;
+				colvarEndDate.IsReadOnly = false;
+				colvarEndDate.DefaultSetting = @"";
+				colvarEndDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarEndDate);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -521,6 +547,22 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<double?>(Columns.RightLongitude); }
 			set { SetColumnValue(Columns.RightLongitude, value); }
 		}
+		  
+		[XmlAttribute("StartDate")]
+		[Bindable(true)]
+		public DateTime? StartDate 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.StartDate); }
+			set { SetColumnValue(Columns.StartDate, value); }
+		}
+		  
+		[XmlAttribute("EndDate")]
+		[Bindable(true)]
+		public DateTime? EndDate 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
+			set { SetColumnValue(Columns.EndDate, value); }
+		}
 		
 		#endregion
 		
@@ -620,7 +662,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varTopLatitude,double? varBottomLatitude,double? varLeftLongitude,double? varRightLongitude)
+		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varTopLatitude,double? varBottomLatitude,double? varLeftLongitude,double? varRightLongitude,DateTime? varStartDate,DateTime? varEndDate)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -660,6 +702,10 @@ namespace SAEON.Observations.Data
 			
 			item.RightLongitude = varRightLongitude;
 			
+			item.StartDate = varStartDate;
+			
+			item.EndDate = varEndDate;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -670,7 +716,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varTopLatitude,double? varBottomLatitude,double? varLeftLongitude,double? varRightLongitude)
+		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varTopLatitude,double? varBottomLatitude,double? varLeftLongitude,double? varRightLongitude,DateTime? varStartDate,DateTime? varEndDate)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -709,6 +755,10 @@ namespace SAEON.Observations.Data
 				item.LeftLongitude = varLeftLongitude;
 			
 				item.RightLongitude = varRightLongitude;
+			
+				item.StartDate = varStartDate;
+			
+				item.EndDate = varEndDate;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -849,6 +899,20 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn StartDateColumn
+        {
+            get { return Schema.Columns[18]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn EndDateColumn
+        {
+            get { return Schema.Columns[19]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -871,6 +935,8 @@ namespace SAEON.Observations.Data
 			 public static string BottomLatitude = @"BottomLatitude";
 			 public static string LeftLongitude = @"LeftLongitude";
 			 public static string RightLongitude = @"RightLongitude";
+			 public static string StartDate = @"StartDate";
+			 public static string EndDate = @"EndDate";
 						
 		}
 		#endregion

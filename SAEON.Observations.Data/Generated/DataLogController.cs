@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid? SensorID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,DateTime? ValueDay,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,double? Latitude,double? Longitude,double? Elevation,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,Guid? StatusReasonID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,Guid ImportBatchID,string RawRecordData,string RawFieldValue,Guid? CorrelationID,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Insert(Guid Id,Guid? SensorID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,double? Latitude,double? Longitude,double? Elevation,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,Guid? StatusReasonID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,Guid ImportBatchID,string RawRecordData,string RawFieldValue,Guid? CorrelationID,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,DateTime? ValueDay)
 	    {
 		    DataLog item = new DataLog();
 		    
@@ -93,8 +93,6 @@ namespace SAEON.Observations.Data
             item.ValueDate = ValueDate;
             
             item.ValueTime = ValueTime;
-            
-            item.ValueDay = ValueDay;
             
             item.ValueText = ValueText;
             
@@ -148,6 +146,8 @@ namespace SAEON.Observations.Data
             
             item.RowVersion = RowVersion;
             
+            item.ValueDay = ValueDay;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -156,7 +156,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid? SensorID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,DateTime? ValueDay,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,double? Latitude,double? Longitude,double? Elevation,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,Guid? StatusReasonID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,Guid ImportBatchID,string RawRecordData,string RawFieldValue,Guid? CorrelationID,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Update(Guid Id,Guid? SensorID,DateTime ImportDate,DateTime? ValueDate,DateTime? ValueTime,string ValueText,string TransformValueText,double? RawValue,double? DataValue,string Comment,double? Latitude,double? Longitude,double? Elevation,string InvalidDateValue,string InvalidTimeValue,string InvalidOffering,string InvalidUOM,Guid? DataSourceTransformationID,Guid StatusID,Guid? StatusReasonID,string ImportStatus,Guid? UserId,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,Guid ImportBatchID,string RawRecordData,string RawFieldValue,Guid? CorrelationID,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,DateTime? ValueDay)
 	    {
 		    DataLog item = new DataLog();
 	        item.MarkOld();
@@ -171,8 +171,6 @@ namespace SAEON.Observations.Data
 			item.ValueDate = ValueDate;
 				
 			item.ValueTime = ValueTime;
-				
-			item.ValueDay = ValueDay;
 				
 			item.ValueText = ValueText;
 				
@@ -225,6 +223,8 @@ namespace SAEON.Observations.Data
 			item.UpdatedAt = UpdatedAt;
 				
 			item.RowVersion = RowVersion;
+				
+			item.ValueDay = ValueDay;
 				
 	        item.Save(UserName);
 	    }

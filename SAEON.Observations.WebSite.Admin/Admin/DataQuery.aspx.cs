@@ -30,7 +30,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     private PhenomenonOfferingCollection GetPhenomenonOfferings(Guid sensorId)
     {
-        QueryCommand cmd = new QueryCommand("Select * from PhenomenonOffering where Exists(Select top (1) * from Observation where (Observation.SensorID = @SensorID) and (Observation.PhenomenonOfferingID = PhenomenonOffering.ID))", PhenomenonOffering.Schema.Provider.Name);
+        QueryCommand cmd = new QueryCommand("Select Distinct * from PhenomenonOffering inner join ImportBatchSummary on (ImportBatchSummary.PhenomenonOfferingID = PhenomenonOffering.ID) where (SensorID = @SensorID)", PhenomenonOffering.Schema.Provider.Name);
         cmd.AddParameter("@SensorID", sensorId, DbType.Guid);
         PhenomenonOfferingCollection result = new PhenomenonOfferingCollection();
         result.LoadAndCloseReader(DataService.GetReader(cmd));
@@ -47,6 +47,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     var col = new Select()
                         .From(Organisation.Schema)
                         .InnerJoin(OrganisationSite.Schema)
+                        .InnerJoin(ImportBatchSummary.SiteIDColumn, OrganisationSite.SiteIDColumn)
                         .Distinct()
                         .OrderAsc(Organisation.Columns.Name)
                         .ExecuteAsCollection<OrganisationCollection>();
@@ -56,7 +57,12 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         Logging.Verbose("Organisation: {name}", item.Name);
                         Ext.Net.TreeNode node = new Ext.Net.TreeNode("Organisation_" + item.Id.ToString(), item.Name, Icon.ResultsetNext);
                         e.Nodes.Add(node);
-                        var q = new Query(OrganisationSite.Schema).AddWhere(OrganisationSite.Columns.OrganisationID, item.Id).GetCount(OrganisationSite.Columns.SiteID);
+                        var q = new Select()
+                            .From(ImportBatchSummary.Schema)
+                            .InnerJoin(OrganisationSite.SiteIDColumn, ImportBatchSummary.SiteIDColumn)
+                            .Where(OrganisationSite.Columns.OrganisationID)
+                            .IsEqualTo(item.Id)
+                            .GetRecordCount();
                         if (q == 0)
                             node.Leaf = true;
                         else
@@ -73,13 +79,14 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 {
                     var organisation = new Organisation(e.NodeID.Split('|')[0].Split('_')[1]);
                     var col = new Select()
-                        .From(SAEON.Observations.Data.Site.Schema)
-                        .InnerJoin(OrganisationSite.Schema)
-                        .Where(OrganisationSite.Columns.OrganisationID)
-                        .IsEqualTo(organisation.Id)
-                        .OrderAsc(SAEON.Observations.Data.Site.Columns.Name)
-                        .Distinct()
-                        .ExecuteAsCollection<SiteCollection>();
+                                .From(SAEON.Observations.Data.Site.Schema)
+                                .InnerJoin(OrganisationSite.SiteIDColumn, SAEON.Observations.Data.Site.IdColumn)
+                                .InnerJoin(ImportBatchSummary.SiteIDColumn, OrganisationSite.SiteIDColumn)
+                                .Where(OrganisationSite.Columns.OrganisationID)
+                                .IsEqualTo(organisation.Id)
+                                .Distinct()
+                                .OrderAsc(SAEON.Observations.Data.Site.Columns.Name)
+                                .ExecuteAsCollection<SiteCollection>();
                     Logging.Verbose("Sites: {count}", col.Count());
                     foreach (var item in col)
                     {
@@ -89,7 +96,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                             Checked = ThreeStateBool.False
                         };
                         e.Nodes.Add(node);
-                        var q = new Query(Station.Schema).AddWhere(Station.Columns.SiteID, item.Id).GetCount(Station.Columns.Id);
+                        var q = new Select()
+                            .From(ImportBatchSummary.Schema)
+                            .Where(ImportBatchSummary.SiteIDColumn)
+                            .IsEqualTo(item.Id)
+                            .GetRecordCount();
                         if (q == 0)
                             node.Leaf = true;
                         else
@@ -107,11 +118,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     var site = new SAEON.Observations.Data.Site(e.NodeID.Split('|')[0].Split('_')[1]);
                     var col = new Select()
                         .From(Station.Schema)
-                        .InnerJoin(SAEON.Observations.Data.Site.Schema)
-                        .Where(Station.Columns.SiteID)
+                        .InnerJoin(ImportBatchSummary.SiteIDColumn, Station.SiteIDColumn)
+                        .Where(ImportBatchSummary.SiteIDColumn)
                         .IsEqualTo(site.Id)
-                        .OrderAsc(Station.Columns.Name)
                         .Distinct()
+                        .OrderAsc(Station.Columns.Name)
                         .ExecuteAsCollection<StationCollection>();
                     Logging.Verbose("Stations: {count}", col.Count());
                     foreach (var item in col)
@@ -122,7 +133,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                             Checked = ThreeStateBool.False
                         };
                         e.Nodes.Add(node);
-                        var q = new Query(StationInstrument.Schema).AddWhere(StationInstrument.Columns.StationID, item.Id).GetCount(StationInstrument.Columns.InstrumentID);
+                        var q = new Select()
+                            .From(ImportBatchSummary.Schema)
+                            .Where(ImportBatchSummary.StationIDColumn)
+                            .IsEqualTo(item.Id)
+                            .GetRecordCount();
                         if (q == 0)
                             node.Leaf = true;
                         else
@@ -141,11 +156,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     var station = new Station(e.NodeID.Split('|')[0].Split('_')[1]);
                     var col = new Select()
                         .From(Instrument.Schema)
-                        .InnerJoin(StationInstrument.Schema)
-                        .Where(StationInstrument.Columns.StationID)
+                        .InnerJoin(ImportBatchSummary.InstrumentIDColumn, Instrument.IdColumn)
+                        .Where(ImportBatchSummary.StationIDColumn)
                         .IsEqualTo(station.Id)
-                        .OrderAsc(Instrument.Columns.Name)
                         .Distinct()
+                        .OrderAsc(Instrument.Columns.Name)
                         .ExecuteAsCollection<InstrumentCollection>();
                     Logging.Verbose("Instruments: {count}", col.Count());
                     foreach (var item in col)
@@ -156,7 +171,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                             Checked = ThreeStateBool.False
                         };
                         e.Nodes.Add(node);
-                        var q = new Query(InstrumentSensor.Schema).AddWhere(InstrumentSensor.Columns.InstrumentID, item.Id).GetCount(InstrumentSensor.Columns.SensorID);
+                        var q = new Select()
+                            .From(ImportBatchSummary.Schema)
+                            .Where(ImportBatchSummary.InstrumentIDColumn)
+                            .IsEqualTo(item.Id)
+                            .GetRecordCount();
                         if (q == 0)
                             node.Leaf = true;
                         else
@@ -175,53 +194,98 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     var instrument = new Instrument(e.NodeID.Split('|')[0].Split('_')[1]);
                     var col = new Select()
                         .From(Sensor.Schema)
-                        .InnerJoin(InstrumentSensor.Schema)
-                        .Where(InstrumentSensor.Columns.InstrumentID)
+                        .InnerJoin(ImportBatchSummary.SensorIDColumn, Sensor.IdColumn)
+                        .Where(ImportBatchSummary.InstrumentIDColumn)
                         .IsEqualTo(instrument.Id)
-                        .OrderAsc(Instrument.Columns.Name)
                         .Distinct()
+                        .OrderAsc(Sensor.Columns.Name)
                         .ExecuteAsCollection<SensorCollection>();
                     Logging.Verbose("Sensors: {count}", col.Count());
                     foreach (var item in col)
                     {
                         Logging.Verbose("Sensor: {name}", item.Name);
-                        AsyncTreeNode node = new AsyncTreeNode("Sensor_" + item.Id.ToString() + "|" + e.NodeID, item.Name)
+                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Sensor_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
                             Icon = Icon.ResultsetNext,
                             Checked = ThreeStateBool.False
                         };
                         e.Nodes.Add(node);
-                        var colOfferings = GetPhenomenonOfferings(item.Id);
-                        if (!colOfferings.Any())
+                        var q = new Select()
+                            .From(ImportBatchSummary.Schema)
+                            .Where(ImportBatchSummary.SensorIDColumn)
+                            .IsEqualTo(item.Id)
+                            .GetRecordCount();
+                        if (q == 0)
                             node.Leaf = true;
                         else
                         {
-                            //AsyncTreeNode root = new AsyncTreeNode("Phenomena_" + item.PhenomenonID.ToString(), "Phenomena");
-                            //root.Icon = Icon.ResultsetNext;
-                            //node.Nodes.Add(root);
+                            AsyncTreeNode root = new AsyncTreeNode("Phenomena_" + item.Id.ToString() + "|" + node.NodeID, "Phenomena")
+                            {
+                                Icon = Icon.ResultsetNext
+                            };
+                            node.Nodes.Add(root);
                         }
                     }
                 }
-                else if (e.NodeID.StartsWith("Sensor_"))
+                else if (e.NodeID.StartsWith("Phenomena_"))
                 {
                     var sensor = new Sensor(e.NodeID.Split('|')[0].Split('_')[1]);
-                    AsyncTreeNode root = new AsyncTreeNode("Phenomenon_" + sensor.PhenomenonID.ToString() + "|" + e.NodeID, sensor.Phenomenon.Name)
+                    var col = new Select()
+                        .From(Phenomenon.Schema)
+                        .InnerJoin(PhenomenonOffering.PhenomenonIDColumn,Phenomenon.IdColumn)
+                        .InnerJoin(ImportBatchSummary.PhenomenonOfferingIDColumn, PhenomenonOffering.IdColumn)
+                        .Where(ImportBatchSummary.SensorIDColumn)
+                        .IsEqualTo(sensor.Id)
+                        .Distinct()
+                        .OrderAsc(Phenomenon.Columns.Name)
+                        .ExecuteAsCollection<PhenomenonCollection>();
+                    Logging.Verbose("Phenomena: {count}", col.Count());
+                    foreach (var item in col)
                     {
-                        Icon = Icon.ResultsetNext
-                    };
-                    e.Nodes.Add(root);
+                        Logging.Verbose("Phenomenon: {name}", item.Name);
+                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Phenomenon_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
+                        {
+                            Icon = Icon.ResultsetNext,
+                            Checked = ThreeStateBool.False
+                        };
+                        e.Nodes.Add(node);
+                        var q = new Select()
+                            .From(ImportBatchSummary.Schema)
+                            .InnerJoin(PhenomenonOffering.PhenomenonIDColumn, ImportBatchSummary.PhenomenonOfferingIDColumn)
+                            .Where(PhenomenonOffering.PhenomenonIDColumn)
+                            .IsEqualTo(item.Id)
+                            .GetRecordCount();
+                        if (q == 0)
+                            node.Leaf = true;
+                        else
+                        {
+                            AsyncTreeNode root = new AsyncTreeNode("Offerings_" + item.Id.ToString(), "Offerings")
+                            {
+                                Icon = Icon.ResultsetNext
+                            };
+                            node.Nodes.Add(root);
+                        }
+                    }
                 }
-                else if (e.NodeID.StartsWith("Phenomenon_"))
+                else if (e.NodeID.StartsWith("Offerings_"))
                 {
                     var phenomenon = new Phenomenon(e.NodeID.Split('|')[0].Split('_')[1]);
-                    var items = e.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                    var col = GetPhenomenonOfferings(items.Where(i => i.Item1 == "Sensor").Select(i => Utilities.MakeGuid(i.Item2)).First());
+                    var col = new Select()
+                        .From(Offering.Schema)
+                        .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
+                        .InnerJoin(ImportBatchSummary.PhenomenonOfferingIDColumn, PhenomenonOffering.IdColumn)
+                        .Where(PhenomenonOffering.PhenomenonIDColumn)
+                        .IsEqualTo(phenomenon.Id)
+                        .Distinct()
+                        .OrderAsc(Offering.Columns.Name)
+                        .ExecuteAsCollection<OfferingCollection>();
                     Logging.Verbose("Offerings: {count}", col.Count());
                     foreach (var item in col)
                     {
-                        Logging.Verbose("Phenomenon: {phenomenon} Offering: {offering}", item.Phenomenon.Name, item.Offering.Name);
-                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Offering_" + item.Id.ToString() + "|" + e.NodeID, item.Offering.Name, Icon.ResultsetNext)
+                        Logging.Verbose("Offering: {name}", item.Name);
+                        Ext.Net.TreeNode node = new Ext.Net.TreeNode("Offering_" + item.Id.ToString() + "|" + e.NodeID, item.Name, Icon.ResultsetNext)
                         {
+                            Icon = Icon.ResultsetNext,
                             Checked = ThreeStateBool.False,
                             Leaf = true
                         };

@@ -254,10 +254,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Views\vObservation.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Views\vDataSourceTransformation.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
@@ -279,10 +275,6 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vStation.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Views\vDataQuery.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -515,22 +507,10 @@
     <Build Include="Scripts\AuthenticationFileGroup.sql" />
     <Build Include="Scripts\ObservationsFileGroup.sql" />
     <Build Include="Scripts\DocumentsFileGroup.sql" />
-    <Build Include="dbo\Views\vObservationsList.sql" />
     <Build Include="Scripts\PrimaryFileGroup.sql" />
     <Build Include="dbo\Tables\UserQueries.sql" />
     <Build Include="dbo\Tables\UserDownloads.sql" />
-    <Build Include="dbo\Views\vApiDataDownload.sql" />
     <Build Include="dbo\Views\vSensorDates.sql" />
-    <Build Include="dbo\Views\vInventoryTotals.sql" />
-    <Build Include="dbo\Views\vInventoryStations.sql" />
-    <Build Include="dbo\Views\vInventoryPhenomenaOfferings.sql" />
-    <Build Include="dbo\Views\vInventoryInstruments.sql" />
-    <Build Include="dbo\Views\vInventoryYears.sql" />
-    <Build Include="dbo\Views\vInventoryOrganisations.sql" />
-    <Build Include="dbo\Views\vApiDataQuery.sql" />
-    <Build Include="dbo\Views\vApiTemporalCoverage.sql" />
-    <Build Include="dbo\Views\vApiInventory.sql" />
-    <Build Include="dbo\Views\vApiSpacialCoverage.sql" />
     <Build Include="dbo\Views\vSensorThingsDatastreams.sql" />
     <Build Include="dbo\Views\vOfferingPhenomena.sql" />
     <Build Include="dbo\Views\vUnitOfMeasurePhenomena.sql" />
@@ -538,6 +518,7 @@
     <Build Include="dbo\Tables\ImportBatchSummary.sql" />
     <Build Include="dbo\Views\vObservationExpansion.sql" />
     <Build Include="dbo\Views\vImportBatchSummary.sql" />
+    <Build Include="dbo\Views\vObservation.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

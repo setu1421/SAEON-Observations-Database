@@ -388,27 +388,11 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VInventory = @"vInventory";
         
-		public static readonly string VInventoryInstrument = @"vInventoryInstruments";
-        
-		public static readonly string VInventoryOrganisation = @"vInventoryOrganisations";
-        
-		public static readonly string VInventoryPhenomenaOffering = @"vInventoryPhenomenaOfferings";
-        
-		public static readonly string VInventoryStation = @"vInventoryStations";
-        
-		public static readonly string VInventoryTotal = @"vInventoryTotals";
-        
-		public static readonly string VInventoryYear = @"vInventoryYears";
-        
 		public static readonly string VModuleRoleModule = @"vModuleRoleModule";
         
 		public static readonly string VObservation = @"vObservation";
         
 		public static readonly string VObservationExpansion = @"vObservationExpansion";
-        
-		public static readonly string VObservationsList = @"vObservationsList";
-        
-		public static readonly string VOfferingPhemomena = @"vOfferingPhemomena";
         
 		public static readonly string VOfferingPhenomena = @"vOfferingPhenomena";
         
@@ -441,24 +425,6 @@ namespace SAEON.Observations.Data
 		public static readonly string VUnitOfMeasurePhenomena = @"vUnitOfMeasurePhenomena";
         
 		public static readonly string VUserInfo = @"vUserInfo";
-        
-		public static readonly string VwAspnetApplication = @"vw_aspnet_Applications";
-        
-		public static readonly string VwAspnetMembershipUser = @"vw_aspnet_MembershipUsers";
-        
-		public static readonly string VwAspnetProfile = @"vw_aspnet_Profiles";
-        
-		public static readonly string VwAspnetRole = @"vw_aspnet_Roles";
-        
-		public static readonly string VwAspnetUser = @"vw_aspnet_Users";
-        
-		public static readonly string VwAspnetUsersInRole = @"vw_aspnet_UsersInRoles";
-        
-		public static readonly string VwAspnetWebPartStatePath = @"vw_aspnet_WebPartState_Paths";
-        
-		public static readonly string VwAspnetWebPartStateShared = @"vw_aspnet_WebPartState_Shared";
-        
-		public static readonly string VwAspnetWebPartStateUser = @"vw_aspnet_WebPartState_User";
         
     }
     #endregion

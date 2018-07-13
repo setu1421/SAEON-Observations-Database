@@ -273,6 +273,30 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarRightLongitude);
                 
+                TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
+                colvarStartDate.ColumnName = "StartDate";
+                colvarStartDate.DataType = DbType.DateTime;
+                colvarStartDate.MaxLength = 0;
+                colvarStartDate.AutoIncrement = false;
+                colvarStartDate.IsNullable = true;
+                colvarStartDate.IsPrimaryKey = false;
+                colvarStartDate.IsForeignKey = false;
+                colvarStartDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarStartDate);
+                
+                TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
+                colvarEndDate.ColumnName = "EndDate";
+                colvarEndDate.DataType = DbType.DateTime;
+                colvarEndDate.MaxLength = 0;
+                colvarEndDate.AutoIncrement = false;
+                colvarEndDate.IsNullable = true;
+                colvarEndDate.IsPrimaryKey = false;
+                colvarEndDate.IsForeignKey = false;
+                colvarEndDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarEndDate);
+                
                 TableSchema.TableColumn colvarPhenomenonCode = new TableSchema.TableColumn(schema);
                 colvarPhenomenonCode.ColumnName = "PhenomenonCode";
                 colvarPhenomenonCode.DataType = DbType.AnsiString;
@@ -755,6 +779,34 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("StartDate")]
+        [Bindable(true)]
+        public DateTime? StartDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("StartDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("StartDate", value);
+            }
+        }
+	      
+        [XmlAttribute("EndDate")]
+        [Bindable(true)]
+        public DateTime? EndDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("EndDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("EndDate", value);
+            }
+        }
+	      
         [XmlAttribute("PhenomenonCode")]
         [Bindable(true)]
         public string PhenomenonCode 
@@ -1007,6 +1059,10 @@ namespace SAEON.Observations.Data{
             public static string LeftLongitude = @"LeftLongitude";
             
             public static string RightLongitude = @"RightLongitude";
+            
+            public static string StartDate = @"StartDate";
+            
+            public static string EndDate = @"EndDate";
             
             public static string PhenomenonCode = @"PhenomenonCode";
             

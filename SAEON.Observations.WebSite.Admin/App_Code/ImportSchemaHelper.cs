@@ -513,7 +513,7 @@ public class ImportSchemaHelper : IDisposable
                         }
                         catch (Exception ex)
                         {
-                            Logging.Exception(ex);
+                            Logging.Exception(ex, "Date: {date} Format: {format}", sDateValue, dtdef.Dateformat);
                             throw;
                         }
                     }
@@ -534,7 +534,7 @@ public class ImportSchemaHelper : IDisposable
                             }
                             catch (Exception ex)
                             {
-                                Logging.Exception(ex);
+                                Logging.Exception(ex, "Time: {date} Format: {format}", sTimeValue, tmdef.Timeformat);
                                 throw;
                             }
                         }
