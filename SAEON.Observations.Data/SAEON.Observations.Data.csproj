@@ -90,6 +90,7 @@
     <Compile Include="Generated\DataSourceTransformationController.cs" />
     <Compile Include="Generated\DataSourceType.cs" />
     <Compile Include="Generated\DataSourceTypeController.cs" />
+    <Compile Include="Generated\Enums.cs" />
     <Compile Include="Generated\ImportBatch.cs" />
     <Compile Include="Generated\ImportBatchController.cs" />
     <Compile Include="Generated\ImportBatchSummary.cs" />
@@ -149,8 +150,13 @@
     <Compile Include="Generated\TransformationTypeController.cs" />
     <Compile Include="Generated\UnitOfMeasure.cs" />
     <Compile Include="Generated\UnitOfMeasureController.cs" />
+    <Compile Include="Generated\UserDownload.cs" />
+    <Compile Include="Generated\UserDownloadController.cs" />
+    <Compile Include="Generated\UserQuery.cs" />
+    <Compile Include="Generated\UserQueryController.cs" />
     <Compile Include="Generated\VAuditLog.cs" />
     <Compile Include="Generated\VDataLog.cs" />
+    <Compile Include="Generated\VDataQuery.cs" />
     <Compile Include="Generated\VDataSchema.cs" />
     <Compile Include="Generated\VDataSource.cs" />
     <Compile Include="Generated\VDataSourceTransformation.cs" />
@@ -161,7 +167,7 @@
     <Compile Include="Generated\VInventory.cs" />
     <Compile Include="Generated\VModuleRoleModule.cs" />
     <Compile Include="Generated\VObservation.cs" />
-    <Compile Include="Generated\VObservationsList.cs" />
+    <Compile Include="Generated\VObservationExpansion.cs" />
     <Compile Include="Generated\VOfferingPhenomena.cs" />
     <Compile Include="Generated\VOrganisationInstrument.cs" />
     <Compile Include="Generated\VOrganisationSite.cs" />
