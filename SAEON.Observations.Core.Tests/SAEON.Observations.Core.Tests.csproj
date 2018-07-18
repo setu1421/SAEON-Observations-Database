@@ -60,8 +60,8 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Logs, Version=1.0.23.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Logs.1.0.23\lib\net461\SAEON.Logs.dll</HintPath>
+    <Reference Include="SAEON.Logs, Version=1.0.24.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Logs.1.0.24\lib\net461\SAEON.Logs.dll</HintPath>
     </Reference>
     <Reference Include="SAEON.Observations.Core, Version=1.0.34.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Observations.Core.1.0.34\lib\net461\SAEON.Observations.Core.dll</HintPath>
