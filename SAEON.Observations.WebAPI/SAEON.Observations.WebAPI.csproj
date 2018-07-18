@@ -395,7 +395,6 @@
     <Compile Include="Controllers\SensorThings\SensorThingsController.cs" />
     <Compile Include="Controllers\SensorThings\SensorThingsFactory.cs" />
     <Compile Include="Controllers\SensorThings\ThingsSTController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\WebAPI\BaseApiControllers.cs" />
     <Compile Include="Controllers\WebAPI\BaseController.cs" />
     <Compile Include="Controllers\WebAPI\ToDo\DataDownloadController.cs" />

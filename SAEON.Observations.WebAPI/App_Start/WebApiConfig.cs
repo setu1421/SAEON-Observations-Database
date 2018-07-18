@@ -119,8 +119,8 @@ namespace SAEON.Observations.WebAPI
                 config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
 
                 // Web API routes
-                config.MapHttpAttributeRoutes();
-                //config.MapHttpAttributeRoutes(new InheritedDirectRouteProvider());
+                //config.MapHttpAttributeRoutes();
+                config.MapHttpAttributeRoutes(new InheritedDirectRouteProvider());
 
                 // OData
                 config.Filter().Expand().Select().OrderBy().MaxTop(null).Count();
