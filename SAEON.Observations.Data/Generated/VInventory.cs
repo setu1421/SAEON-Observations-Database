@@ -57,6 +57,18 @@ namespace SAEON.Observations.Data{
                 schema.SchemaName = @"dbo";
                 //columns
                 
+                TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
+                colvarId.ColumnName = "ID";
+                colvarId.DataType = DbType.Int64;
+                colvarId.MaxLength = 0;
+                colvarId.AutoIncrement = false;
+                colvarId.IsNullable = true;
+                colvarId.IsPrimaryKey = false;
+                colvarId.IsForeignKey = false;
+                colvarId.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarId);
+                
                 TableSchema.TableColumn colvarSiteCode = new TableSchema.TableColumn(schema);
                 colvarSiteCode.ColumnName = "SiteCode";
                 colvarSiteCode.DataType = DbType.AnsiString;
@@ -311,6 +323,20 @@ namespace SAEON.Observations.Data{
 	    #region Props
 	    
           
+        [XmlAttribute("Id")]
+        [Bindable(true)]
+        public long? Id 
+	    {
+		    get
+		    {
+			    return GetColumnValue<long?>("ID");
+		    }
+            set 
+		    {
+			    SetColumnValue("ID", value);
+            }
+        }
+	      
         [XmlAttribute("SiteCode")]
         [Bindable(true)]
         public string SiteCode 
@@ -556,6 +582,8 @@ namespace SAEON.Observations.Data{
 	    {
 		    
 		    
+            public static string Id = @"ID";
+            
             public static string SiteCode = @"SiteCode";
             
             public static string SiteName = @"SiteName";

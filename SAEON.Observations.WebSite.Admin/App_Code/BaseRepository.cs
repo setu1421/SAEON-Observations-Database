@@ -200,6 +200,7 @@ public class BaseRepository
                 q.Paged(currentPage, e.Total);
             else
                 q.Paged(currentPage, e.Limit);
+            //Logging.Verbose("Sql: {sql}", q.BuildSqlStatement());
         }
     }
 

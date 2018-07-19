@@ -652,27 +652,17 @@ namespace SAEON.Observations.Core.Entities
         public string UpdatedBy { get; set; }
     }
 
-    [Table("vImportBatchSummary")]
-    public class ImportBatchSummary : BaseEntity
+    [Table("vInventory")]
+    public class Inventory : BaseEntity
     {
-        public Guid ImportBatchId { get; set; }
-        public Guid SensorBatchId { get; set; }
-        public Guid InstrumentBatchId { get; set; }
-        public Guid StationBatchId { get; set; }
-        public Guid SiteBatchId { get; set; }
-        public Guid PhenomenonOfferingId { get; set; }
-        [Column("PhenomenonUOMID")]
-        public Guid PhenomenonUnitId { get; set; }
-        public int Count { get; set; }
-        public double? Minimum { get; set; }
-        public double? Maximum { get; set; }
-        public double? Average { get; set; }
-        public double? StandardDeviation { get; set; }
-        public double? Variance { get; set; }
-        public double? TopLatitude { get; set; }
-        public double? BottomLatitude { get; set; }
-        public double? LeftLongitude { get; set; }
-        public double? RightLongitude { get; set; }
+        public string SiteCode { get; set; }
+        public string SiteName { get; set; }
+        public string StationCode { get; set; }
+        public string StationName { get; set; }
+        public string InstrumentCode { get; set; }
+        public string InstrumentName { get; set; }
+        public string SensorCode { get; set; }
+        public string SensorName { get; set; }
         public string PhenomenonCode { get; set; }
         public string PhenomenonName { get; set; }
         public string OfferingCode { get; set; }
@@ -681,10 +671,9 @@ namespace SAEON.Observations.Core.Entities
         public string UnitCode { get; set; }
         [Column("UnitOfMeasureUnit")]
         public string UnitName { get; set; }
-        [Column("UnitOfMeasureSymbol")]
-        public string UnitSymbol { get; set; }
-        public string SensorCode { get; set; }
-        public string SensorName { get; set; }
+        public int Count { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 
 #if !NET461
@@ -970,7 +959,7 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
 
-        public DbSet<ImportBatchSummary> ImportBatchSummaries { get; set; }
+        public DbSet<Inventory> Inventory { get; set; }
 
         //public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
         //public DbSet<vApiDataQuery> vApiDataQueries { get; set; }
