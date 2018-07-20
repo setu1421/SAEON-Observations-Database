@@ -89,19 +89,19 @@
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Site Code" DataIndex="SiteCode" Width="125" />
+                                        <ext:Column Header="Site Code" DataIndex="SiteCode" Width="100" />
                                         <ext:Column Header="Site Name" DataIndex="SiteName" Width="200" />
-                                        <ext:Column Header="Station Code" DataIndex="StationCode" Width="125" />
+                                        <ext:Column Header="Station Code" DataIndex="StationCode" Width="100" />
                                         <ext:Column Header="Station Name" DataIndex="StationName" Width="200" />
-                                        <ext:Column Header="Instrument Code" DataIndex="InstrumentCode" Width="125" />
+                                        <ext:Column Header="Instrument Code" DataIndex="InstrumentCode" Width="100" />
                                         <ext:Column Header="Instrument Name" DataIndex="InstrumentName" Width="200" />
-                                        <ext:Column Header="Phenomenon Code" DataIndex="PhenomenonCode" Width="100" />
+                                        <ext:Column Header="Phenomenon Code" DataIndex="PhenomenonCode" Width="110" />
                                         <ext:Column Header="Phenomenon Name" DataIndex="PhenomenonName" Width="150" />
                                         <ext:Column Header="Offering Code" DataIndex="OfferingCode" Width="80" />
                                         <ext:Column Header="Offering Name" DataIndex="OfferingName" Width="100" />
-                                        <ext:Column Header="Unit Code" DataIndex="UnitOfMeasureCode" Width="80" />
+                                        <ext:Column Header="Unit Code" DataIndex="UnitOfMeasureCode" Width="70" />
                                         <ext:Column Header="Unit Name" DataIndex="UnitOfMeasureUnit" Width="100" />
-                                        <ext:NumberColumn Header="Count" DataIndex="Count" Format=",0" Align="Right" Width="50" />
+                                        <ext:NumberColumn Header="Count" DataIndex="Count" Format=",0" Align="Right" Width="60" />
                                         <ext:DateColumn Header="Start Date" DataIndex="StartDate" Format="dd MMM yyyy" Width="75" />
                                         <ext:DateColumn Header="End Date" DataIndex="EndDate" Format="dd MMM yyyy" Width="75" />
                                     </Columns>
