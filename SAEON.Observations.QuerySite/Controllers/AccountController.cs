@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using SAEON.Logs;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -62,6 +63,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
                 Logging.Verbose("Token: {token}", token);
                 var client = new HttpClient();
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 client.SetBearerToken(token);
                 var result = await client.GetStringAsync(Properties.Settings.Default.WebAPIUrl + "/claims");
                 ViewBag.Json = JArray.Parse(result.ToString());

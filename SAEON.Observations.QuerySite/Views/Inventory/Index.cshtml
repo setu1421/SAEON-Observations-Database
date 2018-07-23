@@ -1,0 +1,33 @@
+﻿@using SAEON.Observations.QuerySite.Properties
+@{
+    ViewBag.Title = "Inventory";
+}
+
+<div class="row">
+    <div class="col-md">
+        @(Html.EJ().Grid<object>("FlatGrid")
+        .Datasource(datasource => datasource.URL(ViewBag.WebAPIUrl+"/Internal/Inventory")
+        .Adaptor(AdaptorType.ODataV4Adaptor))
+        .IsResponsive()
+        .AllowPaging()
+        .PageSettings(p => p.PageSize(25))
+        .AllowSorting()
+        .AllowFiltering()
+        .FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
+        .Columns(col =>
+        {
+            col.Field("SiteName").HeaderText("Site").Add();
+            col.Field("StationName").HeaderText("Station").Add();
+            col.Field("InstrumentName").HeaderText("Instrument").Add();
+            col.Field("SensorName").HeaderText("Sensor").Add();
+            col.Field("PhenomenonName").HeaderText("Phenomenon").Add();
+            col.Field("OfferingName").HeaderText("Offering").Add();
+            col.Field("UnitName").HeaderText("Unit").Add();
+            col.Field("Count").Format("{0:n0}").HeaderText("Count").TextAlign(TextAlign.Right).Add();
+            col.Field("StartDate").Format("{0:dd MMM yyyy}").HeaderText("Start").Add();
+            col.Field("EndDate").Format("{0:dd MMM yyyy}").HeaderText("End").Add();
+        })
+        )
+    </div>
+</div>
+

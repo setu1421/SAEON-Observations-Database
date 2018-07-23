@@ -9,6 +9,7 @@ using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
 using SAEON.Logs;
 using SAEON.Observations.Core;
+using Syncfusion.Licensing;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -24,6 +25,7 @@ namespace SAEON.Observations.QuerySite
         public Startup()
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            SyncfusionLicenseProvider.RegisterLicense("NDE2OEAzMTM2MmUzMjJlMzBHMllpK2ladGdFeFBhdTBGY203bXNiVzRRVXA5OWxNbEVDQ0ROdjI4MjY4PQ==;NDE2OUAzMTM2MmUzMjJlMzBUK1U5a1E1VHFmZ09aUUlOS1crNzB1c2ZkOU5SM3l6Tis1bXNuZmNrK0VFPQ==;NDE3MEAzMTM2MmUzMjJlMzBRMGs4bXNQOEhROW9TaVVwYWNucEs1NmZGTFpHZmt6Vi9wN1FjVG5sd0prPQ==;NDE3MUAzMTM2MmUzMjJlMzBROHRGaVlIUXg3cmc3dWcrRnUxQkc3a3c1dVBXL3liRXRISnlLa3lob2RVPQ==");
         }
 
         public void Configuration(IAppBuilder app)
