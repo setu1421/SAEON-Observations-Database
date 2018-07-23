@@ -23,7 +23,6 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("About")]
-
         public ActionResult About()
         {
             return View();

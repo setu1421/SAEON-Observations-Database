@@ -652,17 +652,22 @@ namespace SAEON.Observations.Core.Entities
         public string UpdatedBy { get; set; }
     }
 
+    public abstract class BaseInternalEntity 
+    { }
+
     [Table("vInventory")]
-    public class Inventory : BaseEntity
+    public class Inventory : BaseInternalEntity
     {
+        [Key]
+        public long Id { get; set; }
         public string SiteCode { get; set; }
-        public string SiteName { get; set; }
+        public string SiteName { get; set; } 
         public string StationCode { get; set; }
-        public string StationName { get; set; }
+        public string StationName { get; set; } 
         public string InstrumentCode { get; set; }
         public string InstrumentName { get; set; }
         public string SensorCode { get; set; }
-        public string SensorName { get; set; }
+        public string SensorName { get; set; } 
         public string PhenomenonCode { get; set; }
         public string PhenomenonName { get; set; }
         public string OfferingCode { get; set; }

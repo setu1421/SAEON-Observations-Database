@@ -378,6 +378,8 @@
     <Compile Include="Controllers\ClaimsController.cs" />
     <Compile Include="Controllers\HealthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Internal\BaseInternalController.cs" />
+    <Compile Include="Controllers\Internal\InventoryController.cs" />
     <Compile Include="Controllers\OData\BaseODataControllers.cs" />
     <Compile Include="Controllers\OData\InstrumentsODController.cs" />
     <Compile Include="Controllers\OData\OfferingsODController.cs" />
@@ -397,14 +399,7 @@
     <Compile Include="Controllers\SensorThings\ThingsSTController.cs" />
     <Compile Include="Controllers\WebAPI\BaseApiControllers.cs" />
     <Compile Include="Controllers\WebAPI\BaseController.cs" />
-    <Compile Include="Controllers\WebAPI\ToDo\DataDownloadController.cs" />
-    <Compile Include="Controllers\WebAPI\ToDo\DataQueryController.cs" />
-    <Compile Include="Controllers\WebAPI\ToDo\FeaturesController.cs" />
-    <Compile Include="Controllers\WebAPI\ToDo\FeaturesHelper.cs" />
     <Compile Include="Controllers\WebAPI\InstrumentsController.cs" />
-    <Compile Include="Controllers\WebAPI\ToDo\InventoryController.cs" />
-    <Compile Include="Controllers\WebAPI\ToDo\LocationsController.cs" />
-    <Compile Include="Controllers\WebAPI\ToDo\LocationsHelper.cs" />
     <Compile Include="Controllers\WebAPI\OfferingsController.cs" />
     <Compile Include="Controllers\WebAPI\OrganisationsController.cs" />
     <Compile Include="Controllers\WebAPI\PhenomenaController.cs" />
@@ -412,9 +407,7 @@
     <Compile Include="Controllers\WebAPI\ProjectsController.cs" />
     <Compile Include="Controllers\WebAPI\SensorsController.cs" />
     <Compile Include="Controllers\WebAPI\SitesController.cs" />
-    <Compile Include="Controllers\WebAPI\ToDo\SpacialCoverageController.cs" />
     <Compile Include="Controllers\WebAPI\StationsController.cs" />
-    <Compile Include="Controllers\WebAPI\ToDo\TemporalCoverageController.cs" />
     <Compile Include="Controllers\WebAPI\UnitsController.cs" />
     <Compile Include="Controllers\WebAPI\UserDownloadsController.cs" />
     <Compile Include="Controllers\WebAPI\UserQueriesController.cs" />

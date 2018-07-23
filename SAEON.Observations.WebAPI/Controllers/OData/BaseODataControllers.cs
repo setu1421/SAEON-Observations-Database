@@ -12,7 +12,7 @@ using System.Web.OData;
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    //[ODataRouteName("OData")]
+    [ODataRouteName("ODataOld")]
     public abstract class BaseODataController<TEntity> : ODataController where TEntity : NamedEntity
     {
         protected readonly ObservationsDbContext db = null;

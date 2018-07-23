@@ -14,6 +14,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     /// Users have to be logged in to download data in the QuerySite. Any downloads are saved for later re-downloads.
     /// </summary>
     [RoutePrefix("Api/UserDownloads")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     public class UserDownloadsController : NamedApiWriteController<UserDownload>
     {

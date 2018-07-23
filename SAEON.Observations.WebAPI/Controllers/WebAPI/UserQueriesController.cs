@@ -14,6 +14,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     /// Logged in users can save frequently used queries in the QueryUserQuery for later use
     /// </summary>
     [RoutePrefix("Api/UserQueries")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
     public class UserQueriesController : NamedApiWriteController<UserQuery>
     {

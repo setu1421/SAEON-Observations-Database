@@ -35,6 +35,65 @@ namespace SAEON.Observations.WebAPI
         }
     }
 
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    public sealed class ODataRouteNameAttribute : Attribute
+    {
+        public string Name { get; private set; }
+
+        public ODataRouteNameAttribute(string name)
+        {
+            Name = name;
+        }
+    }
+
+    public class ControllerBoundAttributeRoutingConvention : AttributeRoutingConvention
+    {
+        private readonly List<Type> controllers = new List<Type> { typeof(MetadataController) };
+
+        public ControllerBoundAttributeRoutingConvention(string routeName, HttpConfiguration config, IEnumerable<Type> controllers) : base(routeName, config)
+        {
+            //using (Logging.MethodCall(GetType(), new ParameterList { { "routeName", routeName } }))
+            {
+                this.controllers.AddRange(controllers);
+                //Logging.Verbose("RouteName: {routeName} Controllers: {controllers}", routeName, controllers.OrderBy(i => i.FullName).Select(i => i.FullName));
+            }
+        }
+
+        public override bool ShouldMapController(HttpControllerDescriptor controller)
+        {
+            //using (Logging.MethodCall(GetType()))
+            {
+                var result = controllers.Contains(controller.ControllerType);
+                //Logging.Verbose("Name: {controllerName} Mapped: {mapped}", controller.ControllerType.FullName, result);
+                return result;
+            }
+        }
+    }
+
+    public static class HttpConfigurationExtensions
+    {
+        private static IEnumerable<Type> GetTypesWith<TAttribute>(bool inherit) where TAttribute : System.Attribute
+        {
+            return from a in AppDomain.CurrentDomain.GetAssemblies()
+                   from t in a.GetTypes()
+                   where t.IsDefined(typeof(TAttribute), inherit)
+                   select t;
+        }
+
+        public static ODataRoute MapControllerBoundODataServiceRoute(this HttpConfiguration configuration, string routeName, string routePrefix,
+            IEdmModel model)
+        {
+            var controllers = GetTypesWith<ODataRouteNameAttribute>(true).Where(c =>
+            {
+                var attr = (ODataRouteNameAttribute)c.GetCustomAttributes(typeof(ODataRouteNameAttribute), true).FirstOrDefault();
+                return attr?.Name.Equals(routeName, StringComparison.CurrentCultureIgnoreCase) ?? false;
+            });
+            var conventions = ODataRoutingConventions.CreateDefault();
+            conventions.Insert(0, new ControllerBoundAttributeRoutingConvention(routeName, configuration, controllers));
+            return configuration.MapODataServiceRoute(routeName, routePrefix, model, new DefaultODataPathHandler(), conventions);
+        }
+    }
+
     public static class ODataExtensions
     {
         public static void IgnoreEntityItemLists<TEntity>(this EntitySetConfiguration<TEntity> source) where TEntity : NamedEntity
@@ -83,16 +142,47 @@ namespace SAEON.Observations.WebAPI
             {
                 return await Task.Run<IEdmModel>(() =>
                 {
-                    return WebApiConfig.GetEdmModel();
+                    return WebApiConfig.GetObservationsEdmModel();
                 });
             }
         }
     }
 
+    public class InternalRESTierApi : EntityFrameworkApi<ObservationsDbContext>
+    {
+        public InternalRESTierApi(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
+
+        protected static new IServiceCollection ConfigureApi(Type apiType, IServiceCollection services)
+        {
+            // Add customized OData validation settings 
+            ODataValidationSettings validationSettingFactory(IServiceProvider sp) => new ODataValidationSettings
+            {
+                MaxAnyAllExpressionDepth = 3,
+                MaxExpansionDepth = 3
+            };
+
+            return EntityFrameworkApi<ObservationsDbContext>.ConfigureApi(apiType, services)
+                .AddSingleton<ODataValidationSettings>(validationSettingFactory)
+                .AddService<IModelBuilder, InternalModelBuilder>();
+        }
+
+        private class InternalModelBuilder : IModelBuilder
+        {
+            public async Task<IEdmModel> GetModelAsync(ModelContext context, CancellationToken cancellationToken)
+            {
+                return await Task.Run<IEdmModel>(() =>
+                {
+                    return WebApiConfig.GetInternalEdmModel();
+                });
+            }
+        }
+    }
 
     public static class WebApiConfig
     {
-        public static IEdmModel GetEdmModel()
+        public static IEdmModel GetObservationsEdmModel()
         {
             ODataConventionModelBuilder odataModelBuilder = new ODataConventionModelBuilder { ContainerName = "Observations" };
             odataModelBuilder.EntitySet<Instrument>("Instruments").IgnoreEntityItemLists();
@@ -105,6 +195,13 @@ namespace SAEON.Observations.WebAPI
             odataModelBuilder.EntitySet<Site>("Sites").IgnoreEntityItemLists();
             odataModelBuilder.EntitySet<Station>("Stations").IgnoreEntityItemLists();
             odataModelBuilder.EntitySet<Unit>("Units").IgnoreEntityItemLists();
+            return odataModelBuilder.GetEdmModel();
+        }
+
+        public static IEdmModel GetInternalEdmModel()
+        {
+            ODataConventionModelBuilder odataModelBuilder = new ODataConventionModelBuilder { ContainerName = "Internal" };
+            odataModelBuilder.EntitySet<Inventory>("Inventory");
             return odataModelBuilder.GetEdmModel();
         }
 
@@ -124,11 +221,14 @@ namespace SAEON.Observations.WebAPI
 
                 // OData
                 config.Filter().Expand().Select().OrderBy().MaxTop(null).Count();
+                //config.MapODataServiceRoute("OData", "ODataOld", GetEdmModel());
+                //config.MapControllerBoundODataServiceRoute("ODataOld", "ODataOld", GetObservationsEdmModel());
+                //config.MapControllerBoundODataServiceRoute("Internal", "Internal", GetInternalEdmModel());
 
-                // Entities
-                config.MapODataServiceRoute("OData", "ODataOld", GetEdmModel());
-
-                config.MapRestierRoute<ObservationsRESTierApi>("RESTier","OData",
+                // RESTier
+                config.MapRestierRoute<ObservationsRESTierApi>("ObservationsRESTier", "OData",
+                    new RestierBatchHandler(GlobalConfiguration.DefaultServer)).GetAwaiter().GetResult();
+                config.MapRestierRoute<InternalRESTierApi>("InternalRESTier", "Internal",
                     new RestierBatchHandler(GlobalConfiguration.DefaultServer)).GetAwaiter().GetResult();
 
                 //config.Routes.MapHttpRoute(
