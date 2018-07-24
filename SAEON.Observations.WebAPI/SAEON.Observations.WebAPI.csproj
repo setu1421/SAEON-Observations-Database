@@ -135,15 +135,6 @@
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.0.0\lib\net451\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Restier.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Restier.Core.1.0.0-beta\lib\net45\Microsoft.Restier.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Restier.Providers.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Restier.Providers.EntityFramework.1.0.0-beta\lib\net45\Microsoft.Restier.Providers.EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Restier.Publishers.OData, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Restier.Publishers.OData.1.0.0-beta\lib\net45\Microsoft.Restier.Publishers.OData.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Spatial, Version=7.5.0.20627, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Spatial.7.5.0\lib\portable-net45+win8+wpa81\Microsoft.Spatial.dll</HintPath>
     </Reference>
@@ -378,9 +369,11 @@
     <Compile Include="Controllers\ClaimsController.cs" />
     <Compile Include="Controllers\HealthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Internal\BaseInternalController.cs" />
+    <Compile Include="Controllers\Internal\BaseListController.cs" />
+    <Compile Include="Controllers\Internal\BaseODataController.cs" />
     <Compile Include="Controllers\Internal\InventoryController.cs" />
-    <Compile Include="Controllers\OData\BaseODataControllers.cs" />
+    <Compile Include="Controllers\Internal\LocationsController.cs" />
+    <Compile Include="Controllers\OData\BaseControllers.cs" />
     <Compile Include="Controllers\OData\InstrumentsODController.cs" />
     <Compile Include="Controllers\OData\OfferingsODController.cs" />
     <Compile Include="Controllers\OData\OrganisationsODController.cs" />
@@ -397,8 +390,7 @@
     <Compile Include="Controllers\SensorThings\SensorThingsController.cs" />
     <Compile Include="Controllers\SensorThings\SensorThingsFactory.cs" />
     <Compile Include="Controllers\SensorThings\ThingsSTController.cs" />
-    <Compile Include="Controllers\WebAPI\BaseApiControllers.cs" />
-    <Compile Include="Controllers\WebAPI\BaseController.cs" />
+    <Compile Include="Controllers\WebAPI\BaseControllers.cs" />
     <Compile Include="Controllers\WebAPI\InstrumentsController.cs" />
     <Compile Include="Controllers\WebAPI\OfferingsController.cs" />
     <Compile Include="Controllers\WebAPI\OrganisationsController.cs" />

@@ -51,12 +51,24 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAEON.Observations.Core", "SAEON.Observations.Core\SAEON.Observations.Core.csproj", "{E3791465-CCCE-4E02-AF9F-8F677148FEE1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.WebAPI", "SAEON.Observations.WebAPI\SAEON.Observations.WebAPI.csproj", "{491B3650-B3B3-4FC1-9C5A-18EDAD330A5F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E3791465-CCCE-4E02-AF9F-8F677148FEE1} = {E3791465-CCCE-4E02-AF9F-8F677148FEE1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Core.Tests", "SAEON.Observations.Core.Tests\SAEON.Observations.Core.Tests.csproj", "{DBE1BEAB-1839-4BD0-B4D3-1562D335E9A3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E3791465-CCCE-4E02-AF9F-8F677148FEE1} = {E3791465-CCCE-4E02-AF9F-8F677148FEE1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Core.ConsoleTests", "SAEON.Observations.Core.ConsoleTests\SAEON.Observations.Core.ConsoleTests.csproj", "{6A440D45-E170-46B8-A62F-901F15F0B7B0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E3791465-CCCE-4E02-AF9F-8F677148FEE1} = {E3791465-CCCE-4E02-AF9F-8F677148FEE1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.QuerySite", "SAEON.Observations.QuerySite\SAEON.Observations.QuerySite.csproj", "{5801A1B7-E11C-47FC-A48B-E277D17451D0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{491B3650-B3B3-4FC1-9C5A-18EDAD330A5F} = {491B3650-B3B3-4FC1-9C5A-18EDAD330A5F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

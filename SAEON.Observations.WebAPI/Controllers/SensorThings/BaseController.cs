@@ -10,7 +10,7 @@ using System.Web.Http.Description;
 namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class BaseController<TEntity> : SensorThingsApiController<TEntity> where TEntity : SensorThingEntity
+    public abstract class BaseController<TEntity> : SensorThingsApiController<TEntity> where TEntity : SensorThingEntity
     {
         protected readonly ObservationsDbContext db = null;
 

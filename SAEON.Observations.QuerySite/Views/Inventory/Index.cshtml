@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-md">
         @(Html.EJ().Grid<object>("FlatGrid")
-        .Datasource(datasource => datasource.URL(ViewBag.WebAPIUrl+"/Internal/Inventory")
+        .Datasource(datasource => datasource.URL(ViewBag.WebAPIUrl + "/Internal/Inventory")
         .Adaptor(AdaptorType.ODataV4Adaptor))
         .IsResponsive()
         .AllowPaging()

@@ -1,0 +1,48 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model DataWizardModel
+@{
+    Html.EJ()
+        .Button("btnLoadQuery")
+        .Text("Load Query")
+        .ShowRoundedCorner(true)
+        .Type(ButtonType.Button)
+        .Size(ButtonSize.Medium)
+        .ContentType(ContentType.TextAndImage)
+        .PrefixIcon("e-icon e-reload")
+        .ClientSideEvents(e => e.Click("onLoadQueryClick"))
+        .Enabled(Model.UserQueries.Count > 0)
+        .Render();
+    Html.EJ()
+        .Button("btnSaveQuery")
+        .Text("Save Query")
+        .ShowRoundedCorner(true)
+        .Type(ButtonType.Button)
+        .Size(ButtonSize.Medium)
+        .ContentType(ContentType.TextAndImage)
+        .PrefixIcon("e-icon e-save")
+        .Enabled(false)
+        .ClientSideEvents(e => e.Click("onSaveQueryClick"))
+    .Render();
+    Html.EJ()
+        .Button("btnSearch")
+        .Text("Search")
+        .ShowRoundedCorner(true)
+        .Type(ButtonType.Button)
+        .Size(ButtonSize.Medium)
+        .ContentType(ContentType.TextAndImage)
+        .PrefixIcon("e-icon e-search")
+        .Enabled(false)
+        .ClientSideEvents(e => e.Click("onSearchClick"))
+        .Render();
+    Html.EJ()
+        .Button("btnDownload")
+        .Text("Download")
+        .ShowRoundedCorner(true)
+        .Type(ButtonType.Button)
+        .Size(ButtonSize.Medium)
+        .ContentType(ContentType.TextAndImage)
+        .PrefixIcon("e-icon e-dataexport")
+        .Enabled(false)
+        .ClientSideEvents(e => e.Click("onDownloadClick"))
+        .Render();
+}

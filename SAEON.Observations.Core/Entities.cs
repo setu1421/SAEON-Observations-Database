@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using SAEON.Logs;
+using System.Configuration;
 
 namespace SAEON.Observations.Core.Entities
 {
@@ -19,7 +20,7 @@ namespace SAEON.Observations.Core.Entities
     {
         /// <summary>
         /// Id of Entity
-        /// </summary>
+        /// </summary> 
         public Guid? Id { get; set; } = null;
         /// <summary>
         /// Code of Entity
@@ -32,9 +33,14 @@ namespace SAEON.Observations.Core.Entities
     }
 
     /// <summary>
+    /// Absolute base class
+    /// </summary>
+    public abstract class BaseEntity { }
+
+    /// <summary>
     /// Base for entities
     /// </summary>
-    public abstract class BaseEntity
+    public abstract class BaseIDEntity : BaseEntity
     {
         /// <summary>
         /// Id of the Entity
@@ -51,7 +57,7 @@ namespace SAEON.Observations.Core.Entities
         public virtual EntityListItem AsEntityListItem => new EntityListItem { Id = Id };
     }
 
-    public abstract class NamedEntity : BaseEntity
+    public abstract class NamedEntity : BaseIDEntity
     {
         /// <summary>
         /// Name of the Entity
@@ -264,7 +270,7 @@ namespace SAEON.Observations.Core.Entities
     /// <summary>
     /// PhenomenonOffering entity
     /// </summary>
-    public class PhenomenonOffering : BaseEntity
+    public class PhenomenonOffering : BaseIDEntity
     {
         [Required]
         public Guid PhenomenonId { get; set; }
@@ -286,7 +292,7 @@ namespace SAEON.Observations.Core.Entities
     /// PhenomenonUnit entity
     /// </summary>
     [Table("PhenomenonUOM")]
-    public class PhenomenonUnit : BaseEntity
+    public class PhenomenonUnit : BaseIDEntity
     {
         [Required]
         public Guid PhenomenonId { get; set; }
@@ -652,22 +658,19 @@ namespace SAEON.Observations.Core.Entities
         public string UpdatedBy { get; set; }
     }
 
-    public abstract class BaseInternalEntity 
-    { }
-
     [Table("vInventory")]
-    public class Inventory : BaseInternalEntity
+    public class Inventory : BaseEntity
     {
         [Key]
         public long Id { get; set; }
         public string SiteCode { get; set; }
-        public string SiteName { get; set; } 
+        public string SiteName { get; set; }
         public string StationCode { get; set; }
-        public string StationName { get; set; } 
+        public string StationName { get; set; }
         public string InstrumentCode { get; set; }
         public string InstrumentName { get; set; }
         public string SensorCode { get; set; }
-        public string SensorName { get; set; } 
+        public string SensorName { get; set; }
         public string PhenomenonCode { get; set; }
         public string PhenomenonName { get; set; }
         public string OfferingCode { get; set; }
@@ -942,9 +945,15 @@ namespace SAEON.Observations.Core.Entities
         {
             Configuration.ProxyCreationEnabled = false;
             Configuration.LazyLoadingEnabled = false;
-            Database.Log = s => Logging.Verbose(s);
-            Database.CommandTimeout = 30 * 60;
+            Configuration.AutoDetectChangesEnabled = false;
+            var logLevel = ConfigurationManager.AppSettings["EntityFrameworkLogging"];
+            if (logLevel.Equals("Verbose", StringComparison.CurrentCultureIgnoreCase))
+                Database.Log = s => Logging.Verbose(s);
+            else
+                Database.Log = s => Logging.Information(s);
+            Database.CommandTimeout = 30 * 60; 
         }
+
         public DbSet<Instrument> Instruments { get; set; }
         //public DbSet<InventoryTotal> InventoryTotals { get; set; }
         //public DbSet<InventoryStation> InventoryStations { get; set; }

@@ -12,18 +12,20 @@ using System.Web.OData.Routing;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
+    /// <summary>
+    /// Base OData controller for Entities with surrogate IDs
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
     [ApiExplorerSettings(IgnoreApi = true)]
     [ODataRouteName("Internal")]
     //[ClientAuthorization("SAEON.Observations.QuerySite")] Uncomment when going live
-    public abstract class BaseInternalController<TEntity> : ODataController where TEntity : BaseInternalEntity
+    public abstract class BaseODataController<TEntity> : ODataController where TEntity : BaseEntity
     {
         protected readonly ObservationsDbContext db = null;
 
-        public BaseInternalController()
+        public BaseODataController()
         {
             db = new ObservationsDbContext();
-            db.Configuration.AutoDetectChangesEnabled = false;
-            db.Database.CommandTimeout = 30 * 60;
         }
 
         protected override void Dispose(bool disposing)

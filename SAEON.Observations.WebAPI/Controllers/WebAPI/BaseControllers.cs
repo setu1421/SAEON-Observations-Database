@@ -16,8 +16,33 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    public abstract class BaseApiController<TEntity> : BaseController where TEntity : BaseEntity
+    public abstract class BaseController<TEntity> : ApiController where TEntity : BaseIDEntity
     {
+        protected readonly ObservationsDbContext db = null;
+
+        public BaseController() : base()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                db = new ObservationsDbContext();
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                if (disposing)
+                {
+                    if (db != null)
+                    {
+                        db.Dispose();
+                    }
+                }
+                base.Dispose(disposing);
+            }
+        }
+
         /// <summary>
         /// Overwrite to filter entities
         /// </summary>
@@ -134,7 +159,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [HttpGet]
         //[ResponseType(typeof(TRelated))] Required in derived classes
         //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected async Task<IHttpActionResult> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseEntity
+        protected async Task<IHttpActionResult> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseIDEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
@@ -208,7 +233,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
     }
 
-    public abstract class NamedApiController<TEntity> : BaseApiController<TEntity> where TEntity : NamedEntity
+    public abstract class NamedApiController<TEntity> : BaseController<TEntity> where TEntity : NamedEntity
     {
         protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
         {

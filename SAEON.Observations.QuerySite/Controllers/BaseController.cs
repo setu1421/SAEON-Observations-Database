@@ -1,6 +1,7 @@
 ﻿using IdentityModel.Client;
 using SAEON.Logs;
 using SAEON.Observations.Core;
+using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
@@ -38,37 +40,81 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
             Logging.Verbose("Token: {token}", token);
             client.SetBearerToken(token);
+            client.Timeout = TimeSpan.FromMinutes(TimeOut);
             return client;
         }
 
-        protected async Task<IEnumerable<TEntity>> GetList<TEntity>(string resource)// where TEntity : BaseEntity
+        //protected async Task<IEnumerable<TEntity>> GetODataList<TEntity>(string resource)// where TEntity : BaseEntity
+        //{
+        //    using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Resource", resource } }))
+        //    {
+        //        try
+        //        {
+        //            using (var client = await GetWebAPIClientAsync())
+        //            {
+        //                client.Timeout = TimeSpan.FromMinutes(30);
+        //                var url = $"{apiBaseUrl}/{resource}";
+        //                Logging.Verbose("Calling: {url}", url);
+        //                var response = await client.GetAsync(url);
+        //                Logging.Verbose("Response: {response}", response);
+        //                if (!response.IsSuccessStatusCode)
+        //                {
+        //                    throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
+        //                }
+        //                var data = await response.Content.ReadAsAsync<List<TEntity>>();
+        //                //Logging.Verbose("Data: {@data}", data);
+        //                return data;
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Logging.Exception(ex);
+        //            throw;
+        //        }
+        //    }
+        //}
+
+
+    }
+
+    public class BaseController<TModel> : BaseController where TModel : BaseModel, new()
+    {
+        private readonly string sessionModelKey = typeof(TModel).Name+"Model";
+
+        private HttpSessionState CurrentSession { get { return System.Web.HttpContext.Current.Session; } }
+
+        protected TModel SessionModel { get { return GetSessionModel(); } set { SetSessionModel(value); } }
+
+        private TModel GetSessionModel() 
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Resource", resource } }))
+            if (CurrentSession[sessionModelKey] == null)
             {
-                try
-                {
-                    using (var client = await GetWebAPIClientAsync())
-                    {
-                        client.Timeout = TimeSpan.FromMinutes(30);
-                        var url = $"{apiBaseUrl}/{resource}";
-                        Logging.Verbose("Calling: {url}", url);
-                        var response = await client.GetAsync(url);
-                        Logging.Verbose("Response: {response}", response);
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
-                        }
-                        var data = await response.Content.ReadAsAsync<List<TEntity>>();
-                        //Logging.Verbose("Data: {@data}", data);
-                        return data;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex);
-                    throw;
-                }
+                CurrentSession[sessionModelKey] = CreateModel();
             }
+            return (TModel)CurrentSession[sessionModelKey];
+
+        }
+
+        private void SetSessionModel(TModel value)
+        {
+            CurrentSession[sessionModelKey] = value;
+        }
+
+        protected void RemoveSessionModel()
+        {
+            CurrentSession.Remove(sessionModelKey);
+        }
+
+        protected virtual TModel LoadModel(TModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected TModel CreateModel()
+        {
+            var model = LoadModel(new TModel());
+            SessionModel = model;
+            return model;
         }
 
     }

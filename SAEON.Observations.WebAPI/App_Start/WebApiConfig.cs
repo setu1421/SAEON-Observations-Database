@@ -1,10 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OData.Edm;
-using Microsoft.Restier.Core;
-using Microsoft.Restier.Core.Model;
-using Microsoft.Restier.Providers.EntityFramework;
-using Microsoft.Restier.Publishers.OData;
-using Microsoft.Restier.Publishers.OData.Batch;
 using Newtonsoft.Json;
 using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
@@ -116,70 +111,6 @@ namespace SAEON.Observations.WebAPI
         }
     }
 
-    public class ObservationsRESTierApi : EntityFrameworkApi<ObservationsDbContext>
-    {
-        public ObservationsRESTierApi(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
-
-        protected static new IServiceCollection ConfigureApi(Type apiType, IServiceCollection services)
-        {
-            // Add customized OData validation settings 
-            ODataValidationSettings validationSettingFactory(IServiceProvider sp) => new ODataValidationSettings
-            {
-                MaxAnyAllExpressionDepth = 3,
-                MaxExpansionDepth = 3
-            };
-
-            return EntityFrameworkApi<ObservationsDbContext>.ConfigureApi(apiType, services)
-                .AddSingleton<ODataValidationSettings>(validationSettingFactory)
-                .AddService<IModelBuilder, ObservationsModelBuilder>();
-        }
-
-        private class ObservationsModelBuilder : IModelBuilder
-        {
-            public async Task<IEdmModel> GetModelAsync(ModelContext context, CancellationToken cancellationToken)
-            {
-                return await Task.Run<IEdmModel>(() =>
-                {
-                    return WebApiConfig.GetObservationsEdmModel();
-                });
-            }
-        }
-    }
-
-    public class InternalRESTierApi : EntityFrameworkApi<ObservationsDbContext>
-    {
-        public InternalRESTierApi(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
-
-        protected static new IServiceCollection ConfigureApi(Type apiType, IServiceCollection services)
-        {
-            // Add customized OData validation settings 
-            ODataValidationSettings validationSettingFactory(IServiceProvider sp) => new ODataValidationSettings
-            {
-                MaxAnyAllExpressionDepth = 3,
-                MaxExpansionDepth = 3
-            };
-
-            return EntityFrameworkApi<ObservationsDbContext>.ConfigureApi(apiType, services)
-                .AddSingleton<ODataValidationSettings>(validationSettingFactory)
-                .AddService<IModelBuilder, InternalModelBuilder>();
-        }
-
-        private class InternalModelBuilder : IModelBuilder
-        {
-            public async Task<IEdmModel> GetModelAsync(ModelContext context, CancellationToken cancellationToken)
-            {
-                return await Task.Run<IEdmModel>(() =>
-                {
-                    return WebApiConfig.GetInternalEdmModel();
-                });
-            }
-        }
-    }
-
     public static class WebApiConfig
     {
         public static IEdmModel GetObservationsEdmModel()
@@ -201,7 +132,7 @@ namespace SAEON.Observations.WebAPI
         public static IEdmModel GetInternalEdmModel()
         {
             ODataConventionModelBuilder odataModelBuilder = new ODataConventionModelBuilder { ContainerName = "Internal" };
-            odataModelBuilder.EntitySet<Inventory>("Inventory");
+            odataModelBuilder.EntitySet<Inventory>("Inventory"); 
             return odataModelBuilder.GetEdmModel();
         }
 
@@ -222,14 +153,8 @@ namespace SAEON.Observations.WebAPI
                 // OData
                 config.Filter().Expand().Select().OrderBy().MaxTop(null).Count();
                 //config.MapODataServiceRoute("OData", "ODataOld", GetEdmModel());
-                //config.MapControllerBoundODataServiceRoute("ODataOld", "ODataOld", GetObservationsEdmModel());
-                //config.MapControllerBoundODataServiceRoute("Internal", "Internal", GetInternalEdmModel());
-
-                // RESTier
-                config.MapRestierRoute<ObservationsRESTierApi>("ObservationsRESTier", "OData",
-                    new RestierBatchHandler(GlobalConfiguration.DefaultServer)).GetAwaiter().GetResult();
-                config.MapRestierRoute<InternalRESTierApi>("InternalRESTier", "Internal",
-                    new RestierBatchHandler(GlobalConfiguration.DefaultServer)).GetAwaiter().GetResult();
+                config.MapControllerBoundODataServiceRoute("OData", "OData", GetObservationsEdmModel());
+                config.MapControllerBoundODataServiceRoute("Internal", "Internal", GetInternalEdmModel());
 
                 //config.Routes.MapHttpRoute(
                 //    name: "DefaultApi",

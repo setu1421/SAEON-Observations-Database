@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Projects
     /// </summary>
     [ODataRoutePrefix("Projects")]
-    public class ProjectsODController : BaseODataController<Project>
+    public class ProjectsODController : BaseController<Project>
     {
 
         // GET: odata/Projects

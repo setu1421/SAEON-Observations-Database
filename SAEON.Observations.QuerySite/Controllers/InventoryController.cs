@@ -17,10 +17,10 @@ namespace SAEON.Observations.QuerySite.Controllers
             return View();
         }
 
-        public async Task<IEnumerable<Inventory>> GetInventory()
-        {
-            return await GetList<Inventory>("Internal/Inventory/"+Request.QueryString);
-        }
+        //public async Task<ContentResult> GetInventory()
+        //{
+        //    return await GetODataList<Inventory>("Internal/Inventory" + Request.QueryString.ToString());
+        //}
 
     }
 }

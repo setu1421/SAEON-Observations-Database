@@ -12,7 +12,7 @@ using System.Web.OData.Routing;
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [ODataRoutePrefix("Inventory")]
-    public class InventoryController : BaseInternalController<Inventory>
+    public class InventoryController : BaseODataController<Inventory>
     {
         protected override List<Expression<Func<Inventory, object>>> GetOrderBys()
         {

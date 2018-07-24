@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAEON.Observations.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -6,7 +7,7 @@ using System.Dynamic;
 
 namespace SAEON.Observations.Core
 {
-    public abstract class TreeNode
+    public abstract class TreeNode : BaseEntity
     {
         [Key]
         public Guid Id { get; set; }
@@ -15,7 +16,7 @@ namespace SAEON.Observations.Core
         public string Key { get; set; }
         public string ParentKey { get; set; }
         public string Text { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } 
         public string SpriteImage { get; set; }
         public string ImageURL { get; set; }
         public bool HasChildren { get; set; }
@@ -27,7 +28,7 @@ namespace SAEON.Observations.Core
         public object ImageProperty { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
-        public double? Elevation { get; set; }
+        public double? Elevation { get; set; } 
         public string Url { get; set; }
     }
 
