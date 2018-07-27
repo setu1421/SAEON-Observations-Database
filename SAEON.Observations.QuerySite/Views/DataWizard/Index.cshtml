@@ -14,7 +14,7 @@
                                 <div class="col-md-6" id="PartialLocations">
                                     @Html.Partial("_Locations", Model)
                                 </div>
-                                <div class="col-md-6" id="PartialSelectedLocations">
+                                <div class="col-md-6" id="PartialLocationsSelected">
                                     @Html.Partial("_LocationsSelected", Model)
                                 </div>
                             </div>);
@@ -36,7 +36,7 @@
                             tabs.Add().ID("StationsMapTab").Text("Stations").ContentTemplate(
                                 @<div class="row">
                                     <div class="col-md" id="PartialStationsMap">
-                                        @*@Html.Partial("StationsMap", Model)*@
+                                        @Html.Partial("_StationsMap", Model)
                                     </div>
                                 </div>);
                             tabs.Add().ID("TableTab").Text("Table").ContentTemplate(
@@ -70,11 +70,7 @@
     <script type="text/javascript">
         $(function () {
             DataWizard.HideResults();
-            setTimeout(function () { DataWizard.HideWaiting(); }, 2000);
         });
-        function success() {
-            DataWizard.HideWaiting();
-        }
     </script>
 }
 <style type="text/css" class="cssStyles">

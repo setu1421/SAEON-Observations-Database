@@ -1,4 +1,10 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model DataWizardModel
-LocationsSelected
-
+@(Html.EJ()
+    .ListView("listViewLocationsSelected")
+    //.AutoAdjustHeight(true)
+    //.AutoAdjustScrollHeight(true)
+    .ShowHeader(true)
+    .HeaderTitle("Selected")
+    .DataSource(Model.LocationsSelected)
+    .FieldSettings(fs => fs.Text("Name")))

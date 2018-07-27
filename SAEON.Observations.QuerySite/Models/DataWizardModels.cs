@@ -1,4 +1,5 @@
-﻿using SAEON.Observations.Core.Entities;
+﻿using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +10,8 @@ namespace SAEON.Observations.QuerySite.Models
 {
     public class DataWizardModel : BaseModel
     {
+        public List<Location> Locations { get; private set; } = new List<Location>();
+        public List<Location> LocationsSelected { get; private set; } = new List<Location>();
         public List<UserQuery> UserQueries { get; } = new List<UserQuery>();
     }
 

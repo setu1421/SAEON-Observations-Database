@@ -59,7 +59,7 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
                 colvarId.ColumnName = "ID";
-                colvarId.DataType = DbType.Int64;
+                colvarId.DataType = DbType.Guid;
                 colvarId.MaxLength = 0;
                 colvarId.AutoIncrement = false;
                 colvarId.IsNullable = true;
@@ -325,11 +325,11 @@ namespace SAEON.Observations.Data{
           
         [XmlAttribute("Id")]
         [Bindable(true)]
-        public long? Id 
+        public Guid? Id 
 	    {
 		    get
 		    {
-			    return GetColumnValue<long?>("ID");
+			    return GetColumnValue<Guid?>("ID");
 		    }
             set 
 		    {

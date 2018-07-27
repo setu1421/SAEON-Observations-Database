@@ -44,37 +44,35 @@ namespace SAEON.Observations.QuerySite.Controllers
             return client;
         }
 
-        //protected async Task<IEnumerable<TEntity>> GetODataList<TEntity>(string resource)// where TEntity : BaseEntity
-        //{
-        //    using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Resource", resource } }))
-        //    {
-        //        try
-        //        {
-        //            using (var client = await GetWebAPIClientAsync())
-        //            {
-        //                client.Timeout = TimeSpan.FromMinutes(30);
-        //                var url = $"{apiBaseUrl}/{resource}";
-        //                Logging.Verbose("Calling: {url}", url);
-        //                var response = await client.GetAsync(url);
-        //                Logging.Verbose("Response: {response}", response);
-        //                if (!response.IsSuccessStatusCode)
-        //                {
-        //                    throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
-        //                }
-        //                var data = await response.Content.ReadAsAsync<List<TEntity>>();
-        //                //Logging.Verbose("Data: {@data}", data);
-        //                return data;
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logging.Exception(ex);
-        //            throw;
-        //        }
-        //    }
-        //}
-
-
+        protected async Task<List<TEntity>> GetList<TEntity>(string resource)// where TEntity : BaseEntity
+        {
+            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Resource", resource } }))
+            {
+                try
+                {
+                    using (var client = await GetWebAPIClientAsync())
+                    {
+                        client.Timeout = TimeSpan.FromMinutes(30);
+                        var url = $"{apiBaseUrl}/{resource}";
+                        Logging.Verbose("Calling: {url}", url);
+                        var response = await client.GetAsync(url);
+                        Logging.Verbose("Response: {response}", response);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
+                        }
+                        var data = await response.Content.ReadAsAsync<List<TEntity>>();
+                        //Logging.Verbose("Data: {@data}", data);
+                        return data;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
     }
 
     public class BaseController<TModel> : BaseController where TModel : BaseModel, new()
@@ -89,7 +87,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             if (CurrentSession[sessionModelKey] == null)
             {
-                CurrentSession[sessionModelKey] = CreateModel();
+                CurrentSession[sessionModelKey] = new TModel();
             }
             return (TModel)CurrentSession[sessionModelKey];
 
@@ -117,5 +115,16 @@ namespace SAEON.Observations.QuerySite.Controllers
             return model;
         }
 
+        protected virtual async Task<TModel> LoadModelAsync(TModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected async Task<TModel> CreateModelAsync()
+        {
+            var model = await LoadModelAsync(new TModel());
+            SessionModel = model;
+            return model;
+        }
     }
 }

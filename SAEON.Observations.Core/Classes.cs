@@ -9,23 +9,18 @@ namespace SAEON.Observations.Core
 {
     public abstract class TreeNode : BaseEntity
     {
-        [Key]
+        [Key] 
         public Guid Id { get; set; }
         public Guid? ParentId { get; set; }
-        [Key]
+        [Key] 
         public string Key { get; set; }
         public string ParentKey { get; set; }
         public string Text { get; set; }
         public string Name { get; set; } 
-        public string SpriteImage { get; set; }
-        public string ImageURL { get; set; }
         public bool HasChildren { get; set; }
         public bool IsExpanded { get; set; }
         public bool IsSelected { get; set; }
         public bool IsChecked { get; set; }
-        public object NodeProperty { get; set; }
-        public object LinkProperty { get; set; }
-        public object ImageProperty { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public double? Elevation { get; set; } 

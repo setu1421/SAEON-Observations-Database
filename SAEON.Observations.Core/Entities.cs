@@ -530,7 +530,6 @@ namespace SAEON.Observations.Core.Entities
 
         // Navigation
 
-
         /// <summary>
         /// Site of the Station
         /// </summary> 
@@ -682,6 +681,54 @@ namespace SAEON.Observations.Core.Entities
         public int Count { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+    }
+
+    [Table("vLocationsSites")] 
+    public class LocationsSites  
+    {
+        [Key, Column(Order =1)]
+        public Guid OrganisationID { get; set; }
+        [Key, Column(Order = 2)]
+        public Guid SiteID { get; set; }
+
+        // Navigation
+        public Organisation Organisation { get; set; }
+        public Site Site { get; set; }
+    }
+
+    [Table("vLocationsStations")]
+    public class LocationsStations
+    {
+        [Key, Column(Order = 1)]
+        public Guid OrganisationID { get; set; }
+        [Key, Column(Order = 2)]
+        public Guid SiteID { get; set; } 
+        [Key, Column(Order = 3)]
+        public Guid StationID { get; set; }
+
+        // Navigation
+        public Organisation Organisation { get; set; }
+        public Site Site { get; set; }
+        public Station Station { get; set; }
+    }
+
+    [Table("vLocationsInstruments")]
+    public class LocationsInstruments
+    {
+        [Key, Column(Order = 1)]
+        public Guid OrganisationID { get; set; }
+        [Key, Column(Order = 2)]
+        public Guid SiteID { get; set; }
+        [Key, Column(Order = 3)]
+        public Guid StationID { get; set; }  
+        [Key, Column(Order = 4)]
+        public Guid InstrumentID { get; set; }
+
+        // Navigation
+        public Organisation Organisation { get; set; }
+        public Site Site { get; set; }
+        public Station Station { get; set; }
+        public Instrument Instrument { get; set; }
     }
 
 #if !NET461
@@ -974,6 +1021,9 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<UserQuery> UserQueries { get; set; }
 
         public DbSet<Inventory> Inventory { get; set; }
+        public DbSet<LocationsSites> LocationsSites { get; set; }
+        public DbSet<LocationsStations> LocationsStations { get; set; }
+        public DbSet<LocationsInstruments> LocationsInstruments { get; set; }
 
         //public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
         //public DbSet<vApiDataQuery> vApiDataQueries { get; set; }
@@ -1038,7 +1088,7 @@ namespace SAEON.Observations.Core.Entities
                 {
                     cs.MapLeftKey("ProjectID");
                     cs.MapRightKey("StationID");
-                    cs.ToTable("Project_Station");
+                    cs.ToTable("Project_Station"); 
                 });
             modelBuilder.Entity<Station>()
                 .HasMany<Instrument>(l => l.Instruments)
