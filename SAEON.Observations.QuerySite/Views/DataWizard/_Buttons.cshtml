@@ -45,4 +45,14 @@
         .Enabled(false)
         .ClientSideEvents(e => e.Click("onDownloadClick"))
         .Render();
+    Html.EJ()
+        .Button("btnUpdateMap")
+        .Text("Update Map")
+        .ShowRoundedCorner(true)
+        .Type(ButtonType.Button)
+        .Size(ButtonSize.Medium)
+        .ContentType(ContentType.TextAndImage)
+        .PrefixIcon("e-icon e-dataexport")
+        .ClientSideEvents(e => e.Click("DataWizard.UpdateMap"))
+        .Render();
 }

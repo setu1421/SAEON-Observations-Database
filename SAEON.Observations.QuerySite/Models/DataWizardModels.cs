@@ -10,9 +10,13 @@ namespace SAEON.Observations.QuerySite.Models
 {
     public class DataWizardModel : BaseModel
     {
-        public List<Location> Locations { get; private set; } = new List<Location>();
-        public List<Location> LocationsSelected { get; private set; } = new List<Location>();
-        public List<UserQuery> UserQueries { get; } = new List<UserQuery>();
+        public List<LocationNode> Locations { get; private set; } = new List<LocationNode>();
+        public List<LocationNode> LocationsSelected { get; private set; } = new List<LocationNode>();
+        public List<Guid> Organisations { get; private set; } = new List<Guid>();
+        public List<Guid> Sites { get; private set; } = new List<Guid>();
+        public List<Guid> Stations { get; private set; } = new List<Guid>();
+        public List<MapPoint> MapPoints { get; private set; } = new List<MapPoint>();
+        public List<UserQuery> UserQueries { get; private set; } = new List<UserQuery>();
     }
 
     public class LoadQueryModel

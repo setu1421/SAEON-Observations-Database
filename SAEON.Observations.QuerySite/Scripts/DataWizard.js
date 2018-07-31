@@ -76,11 +76,18 @@ var DataWizard;
         btnDownload.disable();
     }
     DataWizard.DisableButtons = DisableButtons;
+    function TabActive() {
+        var tab = $("#DataWizardTabs").data("ejTab");
+        if (tab.selectedItemIndex() == 3) {
+            UpdateMap();
+        }
+    }
+    DataWizard.TabActive = TabActive;
     function LocationsReady() {
         HideWaiting();
     }
     DataWizard.LocationsReady = LocationsReady;
-    function UpdateSelectedLocations() {
+    function UpdateLocationsSelected() {
         var treeObj = $("#treeViewLocations").data('ejTreeView');
         var nodes = treeObj.getCheckedNodes();
         var selected = [];
@@ -96,54 +103,59 @@ var DataWizard;
             EnableButtons();
             HideResults();
         })
-            .fail(function () { ErrorInFunc("Error in UpdateSelectedLocations"); });
+            .fail(function () { ErrorInFunc("Error in UpdateLocationsSelected"); });
     }
-    DataWizard.UpdateSelectedLocations = UpdateSelectedLocations;
-    var Location = /** @class */ (function () {
-        function Location(latitude, longitude) {
-            this.Latitude = latitude;
-            this.Longitude = longitude;
+    DataWizard.UpdateLocationsSelected = UpdateLocationsSelected;
+    var MapPoint = /** @class */ (function () {
+        function MapPoint() {
         }
-        return Location;
+        return MapPoint;
     }());
-    DataWizard.Location = Location;
     var map;
-    var locations = new Array();
+    var markers = [];
+    var mapPoints;
+    var mapInitialized = false;
     function InitMap() {
         var mapOpts = {
             center: new google.maps.LatLng(-34, 25.5),
             zoom: 5
         };
         map = new google.maps.Map(document.getElementById('mapLocations'), mapOpts);
-        var bounds = new google.maps.LatLngBounds();
-        if (locations.length > 0) {
-            for (var i = 0; i < locations.length; i++) {
-                var markerOpts = {
-                    position: new google.maps.LatLng(locations[i].Latitude, locations[i].Longitude),
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: 'green',
-                        fillOpacity: 0.8,
-                        strokeColor: 'gold',
-                        strokeWeight: 2
-                    },
-                    map: map
-                };
-                var marker = new google.maps.Marker(markerOpts);
-                bounds.extend(marker.getPosition());
-            }
-            map.fitBounds(bounds);
-        }
+        UpdateMap();
     }
     DataWizard.InitMap = InitMap;
-    function SetLocations(Locations) {
-        for (var i = 0; i < Locations.length; i++) {
-            locations.push(Locations[i]);
-        }
-    }
-    DataWizard.SetLocations = SetLocations;
     function UpdateMap() {
+        $.getJSON("/DataWizard/GetMapPoints")
+            .done(function (json) {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            markers = [];
+            mapPoints = json;
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0; i < mapPoints.length; i++) {
+                var mapPoint = mapPoints[i];
+                var marker = new google.maps.Marker({
+                    position: { lat: mapPoint.Latitude, lng: mapPoint.Longitude },
+                    map: map,
+                    title: mapPoint.Title
+                });
+                markers.push(marker);
+                bounds.extend(marker.getPosition());
+                if (mapPoint.IsSelected) {
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+                }
+                else {
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                }
+            }
+            if (markers.length > 0) {
+                map.setCenter(bounds.getCenter());
+                map.fitBounds(bounds);
+                mapInitialized = true;
+            }
+        })
+            .fail(function () { ErrorInFunc('Error in GetMapPoints'); });
     }
     DataWizard.UpdateMap = UpdateMap;
 })(DataWizard || (DataWizard = {}));

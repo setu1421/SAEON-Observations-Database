@@ -126,5 +126,15 @@ namespace SAEON.Observations.QuerySite.Controllers
             SessionModel = model;
             return model;
         }
+
+        [HttpGet]
+        protected JsonResult GetListAsJson<TEntity>(List<TEntity> list)
+        {
+            var result = Json(list, JsonRequestBehavior.AllowGet);
+            result.MaxJsonLength = int.MaxValue;
+            return result;
+        }
+
+
     }
 }

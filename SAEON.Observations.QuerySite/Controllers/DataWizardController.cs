@@ -19,7 +19,10 @@ namespace SAEON.Observations.QuerySite.Controllers
         protected override async Task<DataWizardModel> LoadModelAsync(DataWizardModel model)
         {
             model.Locations.Clear();
-            model.Locations.AddRange(await GetList<Location>("Internal/Locations"));
+            model.Locations.AddRange(await GetList<LocationNode>("Internal/Locations"));
+            model.MapPoints.Clear();
+            model.MapPoints.AddRange(model.Locations.Where(i => i.Key.StartsWith("STA~")).Select(
+                loc => new MapPoint { Key = loc.Key, Title = loc.Name, Latitude = loc.Latitude.Value, Longitude = loc.Longitude.Value, Elevation = loc.Elevation, Url = loc.Url }));
             return model;
         }
 
@@ -38,39 +41,67 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var sessionModel = SessionModel;
-                    //Logging.Verbose("SessionModel.Locations: {@sessionModelLocations}", sessionModel.Locations);
-                    Logging.Verbose("SessionModel.LocationsSelected: {@sessionModelLocationsSelected}", sessionModel.LocationsSelected);
+                    var model = SessionModel;
                     Logging.Verbose("Locations: {locations}", locations);
-                    sessionModel.LocationsSelected.Clear();
-                    var selectedLocations = new List<Location>();
+                    // Clear all
+                    model.Locations.ForEach(i => i.IsChecked = false);
+                    model.MapPoints.ForEach(i => i.IsSelected = false);
+                    // Clear 
+                    model.LocationsSelected.Clear();
+                    model.Organisations.Clear();
+                    model.Sites.Clear();
+                    model.Stations.Clear();
                     if (locations != null)
                     {
-                        // Clear IsChecked for all
-                        sessionModel.Locations.ForEach(i => i.IsChecked = false);
+                        var mapPoints = new List<MapPoint>();
                         // Set IsCheck for selected
-                        foreach (var location in sessionModel.Locations.Where(i => locations.Contains(i.Key)))
+                        foreach (var location in model.Locations.Where(i => locations.Contains(i.Key)))
                         {
                             location.IsChecked = true;
                         }
                         // Organisations
-                        var organisations = locations.Where(l => l.StartsWith("ORG~")).ToList();
-                        Logging.Verbose("SelectedOrganisations: {organisations}", organisations);
-                        selectedLocations.AddRange(sessionModel.Locations.Where(l => organisations.Contains(l.Key)).OrderBy(l => l.Name).ToList());
+                        var orgKeys = locations.Where(l => l.StartsWith("ORG~")).ToList();
+                        var orgs = model.Locations.Where(l => orgKeys.Contains(l.Key)).OrderBy(l => l.Name);
+                        model.LocationsSelected.AddRange(orgs);
+                        model.Organisations.AddRange(orgs.Select(i => i.Id));
+                        foreach (var orgKey in orgKeys)
+                        {
+                            foreach (var loc in model.Locations.Where(i => i.Key.StartsWith("STA~") && i.Key.Contains(orgKey)))
+                            {
+                                model.MapPoints.First(i => i.Key == loc.Key).IsSelected = true;
+                            }
+                        }
                         // Sites
-                        var sites = locations.Where(l => l.StartsWith("SIT~")).ToList();
-                        Logging.Verbose("SelectedSites: {sites}", sites);
-                        selectedLocations.AddRange(sessionModel.Locations.Where(l => sites.Contains(l.Key)).OrderBy(l => l.Name).ToList());
-                        // States
-                        var stations = locations.Where(l => l.StartsWith("STA~")).ToList();
-                        Logging.Verbose("SelectedStations: {stations}", stations);
-                        selectedLocations.AddRange(sessionModel.Locations.Where(l => stations.Contains(l.Key)).OrderBy(l => l.Name).ToList());
+                        var siteKeys = locations.Where(l => l.StartsWith("SIT~")).ToList();
+                        var sites = model.Locations.Where(l => siteKeys.Contains(l.Key)).OrderBy(l => l.Name);
+                        model.LocationsSelected.AddRange(sites);
+                        model.Sites.AddRange(sites.Select(i => i.Id));
+                        foreach (var siteKey in siteKeys)
+                        {
+                            foreach (var loc in model.Locations.Where(i => i.Key.StartsWith("STA~") && i.Key.Contains(siteKey)))
+                            {
+                                model.MapPoints.First(i => i.Key == loc.Key).IsSelected = true;
+                            }
+                        }
+                        // Stations
+                        var stationKeys = locations.Where(l => l.StartsWith("STA~")).ToList();
+                        var stations = model.Locations.Where(l => stationKeys.Contains(l.Key)).OrderBy(l => l.Name);
+                        model.LocationsSelected.AddRange(stations);
+                        model.Stations.AddRange(stations.Select(i => i.Id));
+                        foreach (var stationKey in stationKeys)
+                        {
+                            foreach (var loc in model.Locations.Where(i => i.Key.StartsWith("STA~") && i.Key.Contains(stationKey)))
+                            {
+                                model.MapPoints.First(i => i.Key == loc.Key).IsSelected = true;
+                            }
+                        }
                     }
-                    Logging.Verbose("SelectedLocations: {@locations}", selectedLocations);
-                    sessionModel.LocationsSelected.AddRange(selectedLocations);
-                    LoadMapPoints(sessionModel);
-                    SessionModel = sessionModel;
-                    Logging.Verbose("SessionModel.LocationsSelected: {@sessionModelLocationsSelected}", sessionModel.LocationsSelected);
+                    SessionModel = model;
+                    Logging.Verbose("LocationsSelected: {@LocationsSelected}", model.LocationsSelected);
+                    Logging.Verbose("Organisations: {Organisations}", model.Organisations);
+                    Logging.Verbose("Sites: {Sites}", model.Sites);
+                    Logging.Verbose("Stations: {Stations}", model.Stations);
+                    Logging.Verbose("MapPoints: {@MapPoints}", model.MapPoints);
                     //Logging.Verbose("Model: {@model}", model);
                     return GetLocationsSelectedHtml();
                 }
@@ -106,6 +137,24 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
 
         }
+
+        [HttpGet]
+        public JsonResult GetMapPoints()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return GetListAsJson(SessionModel.MapPoints);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
         #endregion
     }
 }

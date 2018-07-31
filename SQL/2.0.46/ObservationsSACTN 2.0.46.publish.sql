@@ -91,7 +91,7 @@ CREATE VIEW [dbo].[vLocations]
 AS
 -- Organisation Stations from Sites
 Select
-  OrganisationID, Station.SiteID, Station.ID StationID
+  OrganisationID, Station.SiteID, Station.ID StationID, Station.Name StationName, Station.Latitude, Station.Longitude, Station.Elevation, Station.Url
 from
   Organisation_Site
   inner join Station
@@ -102,7 +102,7 @@ where
 union
 -- Organisation Stations
 Select
-  OrganisationID, SiteID, StationID
+  OrganisationID, SiteID, StationID, Station.Name StationName, Station.Latitude, Station.Longitude, Station.Elevation, Station.Url
 from
   Organisation_Station
   inner join Station
@@ -113,7 +113,7 @@ where
 union
 -- Organisation Stations from Instruments
 Select
-  OrganisationID, SiteID, StationID
+  OrganisationID, SiteID, StationID, Station.Name StationName, Station.Latitude, Station.Longitude, Station.Elevation, Station.Url
 from
   Organisation_Instrument
   inner join Station_Instrument

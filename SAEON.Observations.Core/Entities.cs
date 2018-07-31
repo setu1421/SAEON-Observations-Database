@@ -676,28 +676,15 @@ namespace SAEON.Observations.Core.Entities
         public string OfferingName { get; set; }
         [Column("UnitOfMeasureCode")]
         public string UnitCode { get; set; }
-        [Column("UnitOfMeasureUnit")]
+        [Column("UnitOfMeasureUnit")] 
         public string UnitName { get; set; }
-        public int Count { get; set; }
+        public int Count { get; set; } 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }
 
-    [Table("vLocationsSites")] 
-    public class LocationsSites  
-    {
-        [Key, Column(Order =1)]
-        public Guid OrganisationID { get; set; }
-        [Key, Column(Order = 2)]
-        public Guid SiteID { get; set; }
-
-        // Navigation
-        public Organisation Organisation { get; set; }
-        public Site Site { get; set; }
-    }
-
-    [Table("vLocationsStations")]
-    public class LocationsStations
+    [Table("vLocations")]
+    public class Location
     {
         [Key, Column(Order = 1)]
         public Guid OrganisationID { get; set; }
@@ -705,30 +692,16 @@ namespace SAEON.Observations.Core.Entities
         public Guid SiteID { get; set; } 
         [Key, Column(Order = 3)]
         public Guid StationID { get; set; }
+        public string StationName { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public string Url { get; set; }
 
         // Navigation
         public Organisation Organisation { get; set; }
         public Site Site { get; set; }
         public Station Station { get; set; }
-    }
-
-    [Table("vLocationsInstruments")]
-    public class LocationsInstruments
-    {
-        [Key, Column(Order = 1)]
-        public Guid OrganisationID { get; set; }
-        [Key, Column(Order = 2)]
-        public Guid SiteID { get; set; }
-        [Key, Column(Order = 3)]
-        public Guid StationID { get; set; }  
-        [Key, Column(Order = 4)]
-        public Guid InstrumentID { get; set; }
-
-        // Navigation
-        public Organisation Organisation { get; set; }
-        public Site Site { get; set; }
-        public Station Station { get; set; }
-        public Instrument Instrument { get; set; }
     }
 
 #if !NET461
@@ -1020,10 +993,8 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
 
-        public DbSet<Inventory> Inventory { get; set; }
-        public DbSet<LocationsSites> LocationsSites { get; set; }
-        public DbSet<LocationsStations> LocationsStations { get; set; }
-        public DbSet<LocationsInstruments> LocationsInstruments { get; set; }
+        public DbSet<Inventory> Inventory { get; set; } 
+        public DbSet<Location> Locations { get; set; }
 
         //public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
         //public DbSet<vApiDataQuery> vApiDataQueries { get; set; }

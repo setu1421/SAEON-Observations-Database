@@ -27,17 +27,19 @@ namespace SAEON.Observations.Core
         public string Url { get; set; }
     }
 
-    public class Feature : TreeNode { }
-    public class Location : TreeNode { }
+    public class FeatureNode : TreeNode { } 
+    public class LocationNode : TreeNode { }
 
 #region Maps
     public class MapPoint
     {
+        public string Key { get; set; }
         public string Title { get; set; }
         public string Url { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public double? Elevation { get; set; }
+        public double? Elevation { get; set; } 
+        public bool IsSelected { get; set; }
     }
 #endregion
 

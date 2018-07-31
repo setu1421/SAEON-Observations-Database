@@ -1,4 +1,5 @@
 ﻿using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -9,21 +10,21 @@ using System.Web.Http;
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [RoutePrefix("Internal/Locations")]
-    public class LocationsController : BaseListController<Location>
+    public class LocationsController : BaseListController<LocationNode>
     {
-        protected override List<Location> GetList()
+        protected override List<LocationNode> GetList()
         {
             var result = base.GetList();
-            Location organisation = null;
-            Location site = null;
-            Location station = null;
-            foreach (var location in db.LocationsStations
+            LocationNode organisation = null;
+            LocationNode site = null;
+            LocationNode station = null;
+            foreach (var location in db.Locations
                 .Include(i => i.Organisation).Include(i => i.Site).Include(i => i.Station)
                 .OrderBy(i => i.Organisation.Name).ThenBy(i => i.Site.Name).ThenBy(i => i.Station.Name))
             {
                 if (organisation?.Id != location.OrganisationID)
                 {
-                    organisation = new Location
+                    organisation = new LocationNode
                     {
                         Id = location.OrganisationID,
                         Key = $"ORG~{location.OrganisationID}~",
@@ -35,7 +36,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
                 if (site?.Id != location.SiteID)
                 {
-                    site = new Location
+                    site = new LocationNode
                     {
                         Id = location.SiteID,
                         ParentId = organisation.Id,
@@ -49,7 +50,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
                 if (station?.Id != location.StationID)
                 {
-                    station = new Location
+                    station = new LocationNode
                     {
                         Id = location.StationID,
                         ParentId = site.Id,

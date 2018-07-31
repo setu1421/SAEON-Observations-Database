@@ -2,19 +2,6 @@
 @model DataWizardModel
 <div class="row">
     <div class="col-md">
-        <div id="mapLocations" style="height:400px; width:100%">StationsMap...</div>
+        <div id="mapLocations" style="height:600px; width:100%">StationsMap...</div>
     </div>
 </div>
-@*@section Scripts {*@
-    <script type="text/javascript">
-        let locations = [];
-        @foreach (var location in Model.Locations)
-        {
-            @:locations.push(new DataWizard.Location(@location.Latitude,@location.Longitude));
-        }
-        DataWizard.SetLocations(locations);
-    </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TVt9f_c9hnz3TJL5HMJuX04iNXa43RI&callback=DataWizard.InitMap">
-    </script>
-@*}*@
-

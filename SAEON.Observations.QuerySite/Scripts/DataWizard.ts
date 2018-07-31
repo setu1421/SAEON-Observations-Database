@@ -73,11 +73,19 @@
         btnDownload.disable();
     }
 
+    export function TabActive() {
+        var tab = $("#DataWizardTabs").data("ejTab");
+        if (tab.selectedItemIndex() == 3) {
+            UpdateMap();
+        }
+    }
+
+
     export function LocationsReady() {
         HideWaiting();
     }
 
-    export function UpdateSelectedLocations() {
+    export function UpdateLocationsSelected() {
         var treeObj = $("#treeViewLocations").data('ejTreeView');
         var nodes = treeObj.getCheckedNodes();
         var selected = []
@@ -93,19 +101,22 @@
                 EnableButtons();
                 HideResults();
             })
-            .fail(function () { ErrorInFunc("Error in UpdateSelectedLocations"); });
+            .fail(function () { ErrorInFunc("Error in UpdateLocationsSelected"); });
     }
 
-    export class Location {
+    class MapPoint {
+        Title: string;
         Latitude: number;
         Longitude: number;
-        constructor(latitude: number, longitude: number) {
-            this.Latitude = latitude;
-            this.Longitude = longitude;
-        }
+        Elevation: number;
+        Url: string;
+        IsSelected: boolean;
     }
+
     let map: google.maps.Map;
-    let locations: Array<Location> = new Array<Location>();
+    let markers: google.maps.Marker[] = [];
+    let mapPoints: MapPoint[];
+    let mapInitialized: boolean = false;
 
     export function InitMap() {
         let mapOpts: google.maps.MapOptions = {
@@ -113,36 +124,41 @@
             zoom: 5
         };
         map = new google.maps.Map(document.getElementById('mapLocations'), mapOpts);
-        let bounds = new google.maps.LatLngBounds();
-        if (locations.length > 0) {
-            for (var i = 0; i < locations.length; i++) {
-                var markerOpts: google.maps.MarkerOptions = {
-                    position: new google.maps.LatLng(locations[i].Latitude, locations[i].Longitude),
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: 'green',
-                        fillOpacity: 0.8,
-                        strokeColor: 'gold',
-                        strokeWeight: 2
-                    },
-                    map: map
-                };
-                var marker = new google.maps.Marker(markerOpts);
-                bounds.extend(marker.getPosition());
-            }
-            map.fitBounds(bounds);
-        }
-    }
-
-    export function SetLocations(Locations: Location[]) {
-        for (var i = 0; i < Locations.length; i++) {
-            locations.push(Locations[i]);
-        }
+        UpdateMap();
     }
 
     export function UpdateMap() {
-
+        $.getJSON("/DataWizard/GetMapPoints")
+            .done(function (json) {
+                for (let i = 0; i < markers.length; i++) {
+                    markers[i].setMap(null);
+                }
+                markers = [];
+                mapPoints = json;
+                var bounds = new google.maps.LatLngBounds();
+                for (let i = 0; i < mapPoints.length; i++) {
+                    let mapPoint = mapPoints[i];
+                    let marker = new google.maps.Marker({
+                        position: { lat: mapPoint.Latitude, lng: mapPoint.Longitude },
+                        map: map,
+                        title: mapPoint.Title
+                    });
+                    markers.push(marker);
+                    bounds.extend(marker.getPosition());
+                    if (mapPoint.IsSelected) {
+                        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+                    }
+                    else {
+                        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                    }
+                }
+                if (markers.length > 0) {
+                    map.setCenter(bounds.getCenter());
+                    map.fitBounds(bounds);
+                    mapInitialized = true;
+                }
+            })
+            .fail(function () { ErrorInFunc('Error in GetMapPoints'); });
     }
 
 
