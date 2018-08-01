@@ -160,6 +160,7 @@
     <Compile Include="Generated\VDataSchema.cs" />
     <Compile Include="Generated\VDataSource.cs" />
     <Compile Include="Generated\VDataSourceTransformation.cs" />
+    <Compile Include="Generated\VFeature.cs" />
     <Compile Include="Generated\VImportBatch.cs" />
     <Compile Include="Generated\VImportBatchSummary.cs" />
     <Compile Include="Generated\VInstrumentOrganisation.cs" />

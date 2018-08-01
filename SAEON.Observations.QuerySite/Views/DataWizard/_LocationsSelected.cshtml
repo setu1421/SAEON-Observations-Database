@@ -2,9 +2,8 @@
 @model DataWizardModel
 @(Html.EJ()
     .ListView("listViewLocationsSelected")
-    //.AutoAdjustHeight(true)
-    //.AutoAdjustScrollHeight(true)
     .ShowHeader(true)
     .HeaderTitle("Selected")
     .DataSource(Model.LocationsSelected)
-    .FieldSettings(fs => fs.Text("Name")))
+    .FieldSettings(fs => fs.Text("Name"))
+    )

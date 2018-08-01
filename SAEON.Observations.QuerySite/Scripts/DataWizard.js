@@ -32,22 +32,22 @@ var DataWizard;
         var btnSearch = $("#btnSearch").data("ejButton");
         var btnDownload = $("#btnDownload").data("ejButton");
         var selectedLocations = 0;
-        //var treeObj = $("#treeViewLocations").data('ejTreeView');
-        //var checkedNodes = treeObj.getCheckedNodes();
-        //var i;
+        //let treeObj = $("#treeViewLocations").data('ejTreeView');
+        //let checkedNodes = treeObj.getCheckedNodes();
+        //let i;
         //for (i = 0; i < checkedNodes.length; i++) {
-        //    var checkedNode = checkedNodes[i];
-        //    var nodeData = treeObj.getNode(checkedNode);
+        //    let checkedNode = checkedNodes[i];
+        //    let nodeData = treeObj.getNode(checkedNode);
         //    if (nodeData.id.startsWith("STA~")) {
         //        selectedLocations = selectedLocations + 1;
         //    }
         //}
         var selectedFeatures = 0;
         //treeObj = $("#treeViewFeatures").data('ejTreeView');
-        //var checkedNodes = treeObj.getCheckedNodes();
+        //let checkedNodes = treeObj.getCheckedNodes();
         //for (i = 0; i < checkedNodes.length; i++) {
-        //    var checkedNode = checkedNodes[i];
-        //    var nodeData = treeObj.getNode(checkedNode);
+        //    let checkedNode = checkedNodes[i];
+        //    let nodeData = treeObj.getNode(checkedNode);
         //    if (nodeData.id.startsWith("OFF~")) {
         //        selectedFeatures = selectedFeatures + 1;
         //    }
@@ -79,7 +79,7 @@ var DataWizard;
     function TabActive() {
         var tab = $("#DataWizardTabs").data("ejTab");
         if (tab.selectedItemIndex() == 3) {
-            UpdateMap();
+            FitMap();
         }
     }
     DataWizard.TabActive = TabActive;
@@ -106,6 +106,24 @@ var DataWizard;
             .fail(function () { ErrorInFunc("Error in UpdateLocationsSelected"); });
     }
     DataWizard.UpdateLocationsSelected = UpdateLocationsSelected;
+    function UpdateFeaturesSelected() {
+        var treeObj = $("#treeViewFeatures").data('ejTreeView');
+        var nodes = treeObj.getCheckedNodes();
+        var selected = [];
+        var i;
+        for (i = 0; i < nodes.length; i++) {
+            var nodeData = treeObj.getNode(nodes[i]);
+            selected.push(nodeData.id);
+        }
+        $.post("/DataWizard/UpdateFeaturesSelected", { features: selected })
+            .done(function (data) {
+            $('#PartialFeaturesSelected').html(data);
+            EnableButtons();
+            HideResults();
+        })
+            .fail(function () { ErrorInFunc("Error in UpdateFeaturesSelected"); });
+    }
+    DataWizard.UpdateFeaturesSelected = UpdateFeaturesSelected;
     var MapPoint = /** @class */ (function () {
         function MapPoint() {
         }
@@ -114,7 +132,8 @@ var DataWizard;
     var map;
     var markers = [];
     var mapPoints;
-    var mapInitialized = false;
+    var mapBounds;
+    var mapFitted = false;
     function InitMap() {
         var mapOpts = {
             center: new google.maps.LatLng(-34, 25.5),
@@ -122,6 +141,7 @@ var DataWizard;
         };
         map = new google.maps.Map(document.getElementById('mapLocations'), mapOpts);
         UpdateMap();
+        FitMap();
     }
     DataWizard.InitMap = InitMap;
     function UpdateMap() {
@@ -132,7 +152,7 @@ var DataWizard;
             }
             markers = [];
             mapPoints = json;
-            var bounds = new google.maps.LatLngBounds();
+            mapBounds = new google.maps.LatLngBounds();
             for (var i = 0; i < mapPoints.length; i++) {
                 var mapPoint = mapPoints[i];
                 var marker = new google.maps.Marker({
@@ -141,7 +161,7 @@ var DataWizard;
                     title: mapPoint.Title
                 });
                 markers.push(marker);
-                bounds.extend(marker.getPosition());
+                mapBounds.extend(marker.getPosition());
                 if (mapPoint.IsSelected) {
                     marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
                 }
@@ -149,14 +169,23 @@ var DataWizard;
                     marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
                 }
             }
-            if (markers.length > 0) {
-                map.setCenter(bounds.getCenter());
-                map.fitBounds(bounds);
-                mapInitialized = true;
-            }
         })
             .fail(function () { ErrorInFunc('Error in GetMapPoints'); });
     }
     DataWizard.UpdateMap = UpdateMap;
+    function FitMap(override) {
+        if (override === void 0) { override = false; }
+        if (override || (!mapFitted && (mapBounds != null) && !mapBounds.isEmpty())) {
+            map.setCenter(mapBounds.getCenter());
+            map.fitBounds(mapBounds);
+            mapFitted = true;
+        }
+    }
+    DataWizard.FitMap = FitMap;
+    function FixMap() {
+        UpdateMap();
+        FitMap(true);
+    }
+    DataWizard.FixMap = FixMap;
 })(DataWizard || (DataWizard = {}));
 //# sourceMappingURL=DataWizard.js.map

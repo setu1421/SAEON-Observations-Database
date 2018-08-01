@@ -70,47 +70,89 @@ group by
 ) s
 
 GO
-PRINT N'Creating [dbo].[vLocations]...';
+PRINT N'Creating [dbo].[vFeatures]...';
+
 
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vFeatures]
+AS 
+Select
+  Phenomenon.ID PhenomenonID, Phenomenon.Name PhenomenonName, 
+  PhenomenonOffering.ID PhenomenonOfferingID, Offering.ID OfferingID, Offering.Name OfferingName, 
+  PhenomenonUOM.ID PhenomenonUOMID, UnitOfMeasure.ID UnitOfMeasureID, UnitOfMeasure.Unit UnitOfMeasureUnit
+from
+  Phenomenon
+  inner join PhenomenonOffering
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (PhenomenonUOM.PhenomenonID = Phenomenon.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+where
+  Exists(Select * from ImportBatchSummary where (PhenomenonOfferingID = PhenomenonOffering.ID) and (PhenomenonUOMID = PhenomenonUOM.ID))
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vLocations]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
 
 GO
 CREATE VIEW [dbo].[vLocations]
 AS
 -- Organisation Stations from Sites
 Select
-  OrganisationID, Station.SiteID, Station.ID StationID, Station.Name StationName, Station.Latitude, Station.Longitude, Station.Elevation, Station.Url
+  OrganisationID, Organisation.Name OrganisationName, Station.SiteID, Site.Name SiteName, Station.ID StationID, Station.Name StationName, Station.Latitude, Station.Longitude, Station.Elevation, Station.Url
 from
   Organisation_Site
+  inner join Organisation
+    on (Organisation_Site.OrganisationID = Organisation.ID)
+  inner join Site  
+    on (Organisation_Site.SiteID = Site.ID)
   inner join Station
     on (Organisation_Site.SiteID = Station.SiteID)
 where
-  ((Station.Latitude is not null) and (Station.Longitude is not null)) and
   Exists(Select * from ImportBatchSummary where (SiteID = Station.SiteID) and (StationID = Station.ID))
 union
 -- Organisation Stations
 Select
-  OrganisationID, SiteID, StationID, Station.Name StationName, Station.Latitude, Station.Longitude, Station.Elevation, Station.Url
+  OrganisationID, Organisation.Name OrganisationName, SiteID, Site.Name SiteName, StationID, Station.Name StationName, Station.Latitude, Station.Longitude, Station.Elevation, Station.Url
 from
   Organisation_Station
+  inner join Organisation
+    on (Organisation_Station.OrganisationID = Organisation.ID)
   inner join Station
     on (Organisation_Station.StationID = Station.ID)
+  inner join Site
+    on (Station.SiteID = Site.ID)
 where
-  ((Station.Latitude is not null) and (Station.Longitude is not null)) and
   Exists(Select * from ImportBatchSummary where (SiteID = Station.SiteID) and (StationID = Station.ID))
 union
 -- Organisation Stations from Instruments
 Select
-  OrganisationID, SiteID, StationID, Station.Name StationName, Station.Latitude, Station.Longitude, Station.Elevation, Station.Url
+  OrganisationID, Organisation.Name OrganisationName, SiteID, Site.Name SiteName, StationID, Station.Name StationName, Station.Latitude, Station.Longitude, Station.Elevation, Station.Url
 from
   Organisation_Instrument
+  inner join Organisation
+    on (Organisation_Instrument.OrganisationID = Organisation.ID)
   inner join Station_Instrument
     on (Organisation_Instrument.InstrumentID = Station_Instrument.InstrumentID)
   inner join Station
     on (Station_Instrument.StationID = Station.ID)
+  inner join Site
+    on (Station.SiteID = Site.ID)
 where
-  ((Station.Latitude is not null) and (Station.Longitude is not null)) and
   Exists(Select * from ImportBatchSummary where (SiteID = Station.SiteID) and (StationID = Station.ID))
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;

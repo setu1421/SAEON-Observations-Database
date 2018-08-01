@@ -69,6 +69,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarOrganisationID);
                 
+                TableSchema.TableColumn colvarOrganisationName = new TableSchema.TableColumn(schema);
+                colvarOrganisationName.ColumnName = "OrganisationName";
+                colvarOrganisationName.DataType = DbType.AnsiString;
+                colvarOrganisationName.MaxLength = 150;
+                colvarOrganisationName.AutoIncrement = false;
+                colvarOrganisationName.IsNullable = false;
+                colvarOrganisationName.IsPrimaryKey = false;
+                colvarOrganisationName.IsForeignKey = false;
+                colvarOrganisationName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOrganisationName);
+                
                 TableSchema.TableColumn colvarSiteID = new TableSchema.TableColumn(schema);
                 colvarSiteID.ColumnName = "SiteID";
                 colvarSiteID.DataType = DbType.Guid;
@@ -80,6 +92,18 @@ namespace SAEON.Observations.Data{
                 colvarSiteID.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarSiteID);
+                
+                TableSchema.TableColumn colvarSiteName = new TableSchema.TableColumn(schema);
+                colvarSiteName.ColumnName = "SiteName";
+                colvarSiteName.DataType = DbType.AnsiString;
+                colvarSiteName.MaxLength = 150;
+                colvarSiteName.AutoIncrement = false;
+                colvarSiteName.IsNullable = false;
+                colvarSiteName.IsPrimaryKey = false;
+                colvarSiteName.IsForeignKey = false;
+                colvarSiteName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSiteName);
                 
                 TableSchema.TableColumn colvarStationID = new TableSchema.TableColumn(schema);
                 colvarStationID.ColumnName = "StationID";
@@ -217,6 +241,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("OrganisationName")]
+        [Bindable(true)]
+        public string OrganisationName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("OrganisationName");
+		    }
+            set 
+		    {
+			    SetColumnValue("OrganisationName", value);
+            }
+        }
+	      
         [XmlAttribute("SiteID")]
         [Bindable(true)]
         public Guid SiteID 
@@ -228,6 +266,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("SiteID", value);
+            }
+        }
+	      
+        [XmlAttribute("SiteName")]
+        [Bindable(true)]
+        public string SiteName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("SiteName");
+		    }
+            set 
+		    {
+			    SetColumnValue("SiteName", value);
             }
         }
 	      
@@ -324,7 +376,11 @@ namespace SAEON.Observations.Data{
 		    
             public static string OrganisationID = @"OrganisationID";
             
+            public static string OrganisationName = @"OrganisationName";
+            
             public static string SiteID = @"SiteID";
+            
+            public static string SiteName = @"SiteName";
             
             public static string StationID = @"StationID";
             

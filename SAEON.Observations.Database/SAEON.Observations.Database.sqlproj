@@ -520,6 +520,7 @@
     <Build Include="dbo\Views\vImportBatchSummary.sql" />
     <Build Include="dbo\Views\vObservation.sql" />
     <Build Include="dbo\Views\vLocations.sql" />
+    <Build Include="dbo\Views\vFeatures.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

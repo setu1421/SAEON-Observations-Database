@@ -1,6 +1,13 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model DataWizardModel
-FeaturesSelected
+@(Html.EJ()
+    .ListView("listViewFeaturesSelected")
+    .ShowHeader(true)
+    .HeaderTitle("Selected")
+    //.DataSource(Model.FeaturesSelected)
+    //.FieldSettings(fs => fs.Text("Name"))
+    )
+
 
 
 

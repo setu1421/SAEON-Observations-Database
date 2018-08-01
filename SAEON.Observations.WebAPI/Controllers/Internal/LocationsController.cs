@@ -1,10 +1,6 @@
 ﻿using SAEON.Observations.Core;
-using SAEON.Observations.Core.Entities;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
@@ -18,33 +14,34 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             LocationNode organisation = null;
             LocationNode site = null;
             LocationNode station = null;
-            foreach (var location in db.Locations
-                .Include(i => i.Organisation).Include(i => i.Site).Include(i => i.Station)
-                .OrderBy(i => i.Organisation.Name).ThenBy(i => i.Site.Name).ThenBy(i => i.Station.Name))
+            foreach (var location in db.Locations.Where(i => (i.Latitude != null) && (i.Longitude != null)).OrderBy(i => i.OrganisationName).ThenBy(i => i.SiteName).ThenBy(i => i.StationName))
             {
                 if (organisation?.Id != location.OrganisationID)
                 {
+                    site = null;
+                    station = null;
                     organisation = new LocationNode
                     {
                         Id = location.OrganisationID,
                         Key = $"ORG~{location.OrganisationID}~",
-                        Text = location.Organisation.Name,
-                        HasChildren = true,
-                        Name = $"Organisation - {location.Organisation.Name}"
+                        Text = location.OrganisationName,
+                        Name = $"{location.OrganisationName}",
+                        HasChildren = true
                     };
                     result.Add(organisation);
                 }
                 if (site?.Id != location.SiteID)
                 {
+                    station = null;
                     site = new LocationNode
                     {
                         Id = location.SiteID,
                         ParentId = organisation.Id,
                         Key = $"SIT~{location.SiteID}~{organisation.Key}",
                         ParentKey = organisation.Key,
-                        Text = location.Site.Name,
-                        HasChildren = true,
-                        Name = $"Site - {location.Site.Name}"
+                        Text = location.SiteName,
+                        Name = $"{organisation.Name} - {location.SiteName}",
+                        HasChildren = true
                     };
                     result.Add(site);
                 }
@@ -56,13 +53,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         ParentId = site.Id,
                         Key = $"STA~{location.StationID}~{site.Key}",
                         ParentKey = site.Key,
-                        Text = location.Station.Name,
-                        Name = $"{location.Site.Name} - {location.Station.Name}",
-                        HasChildren = false,
-                        Latitude = location.Station.Latitude,
-                        Longitude = location.Station.Longitude,
-                        Elevation = location.Station.Elevation,
-                        Url = location.Station.Url,
+                        Text = location.StationName,
+                        Name = $"{organisation.Name} - {site.Name} - {location.StationName}",
+                        Latitude = location.Latitude,
+                        Longitude = location.Longitude,
+                        Elevation = location.Elevation,
+                        Url = location.Url,
+                        HasChildren = false
                     };
                     result.Add(station);
                 }

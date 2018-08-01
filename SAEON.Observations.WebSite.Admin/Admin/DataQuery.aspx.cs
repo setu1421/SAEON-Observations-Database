@@ -623,6 +623,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         //string js = JsonConvert.SerializeObject(dt);
 
         //return js;
+        //Logging.Verbose("SQL: {SQL}", q.ToString());
         return q;
     }
 

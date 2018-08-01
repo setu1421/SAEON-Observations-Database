@@ -12,9 +12,8 @@
      Alter
        [dbo].[vInventory] (View)
      Create
-       [dbo].[vLocationsInstruments] (View)
-       [dbo].[vLocationsSites] (View)
-       [dbo].[vLocationsStations] (View)
+       [dbo].[vFeatures] (View)
+       [dbo].[vLocations] (View)
 
 ** Supporting actions
 

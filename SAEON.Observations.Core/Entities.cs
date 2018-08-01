@@ -685,23 +685,43 @@ namespace SAEON.Observations.Core.Entities
 
     [Table("vLocations")]
     public class Location
-    {
+    { 
         [Key, Column(Order = 1)]
         public Guid OrganisationID { get; set; }
+        public string OrganisationName { get; set; }
         [Key, Column(Order = 2)]
-        public Guid SiteID { get; set; } 
+        public Guid SiteID { get; set; }
+        public string SiteName { get; set; } 
         [Key, Column(Order = 3)]
         public Guid StationID { get; set; }
         public string StationName { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public double? Latitude { get; set; } 
+        public double? Longitude { get; set; }
         public double? Elevation { get; set; }
         public string Url { get; set; }
 
         // Navigation
-        public Organisation Organisation { get; set; }
-        public Site Site { get; set; }
-        public Station Station { get; set; }
+        //public Organisation Organisation { get; set; }
+        //public Site Site { get; set; }
+        //public Station Station { get; set; }
+    }
+
+    [Table("vFeatures")]
+    public class Feature
+    {
+        [Key, Column(Order = 1)]
+        public Guid PhenomenonID { get; set; }
+        public string PhenomenonName { get; set; }
+        [Key, Column(Order = 2)]
+        public Guid PhenomenonOfferingID { get; set; } 
+        public Guid OfferingID { get; set; }
+        public string OfferingName { get; set; }
+        [Key, Column("PhenomenonUOMID", Order = 3)]
+        public Guid PhenomenonUnitID { get; set; }
+        [Column("UnitOfMeasureID")]
+        public Guid UnitID { get; set; }
+        [Column("UnitOfMeasureUnit")]
+        public string UnitName { get; set; }
     }
 
 #if !NET461
@@ -885,10 +905,10 @@ namespace SAEON.Observations.Core.Entities
     /// Inventory Instruments
     /// </summary>
     [Table("vInventoryInstruments")]
-    public class InventoryInstrument : InventoryBase
+    public class InventoryInstrument : InventoryBase 
     {
         public string Name { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } 
         public int? Count { get; set; }
         public double? Minimum { get; set; }
         public double? Maximum { get; set; }
@@ -995,6 +1015,7 @@ namespace SAEON.Observations.Core.Entities
 
         public DbSet<Inventory> Inventory { get; set; } 
         public DbSet<Location> Locations { get; set; }
+        public DbSet<Feature> Features { get; set; }
 
         //public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
         //public DbSet<vApiDataQuery> vApiDataQueries { get; set; }

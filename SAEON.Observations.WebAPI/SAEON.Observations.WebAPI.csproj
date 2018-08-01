@@ -371,6 +371,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Internal\BaseListController.cs" />
     <Compile Include="Controllers\Internal\BaseODataController.cs" />
+    <Compile Include="Controllers\Internal\FeaturesController.cs" />
     <Compile Include="Controllers\Internal\InventoryController.cs" />
     <Compile Include="Controllers\Internal\LocationsController.cs" />
     <Compile Include="Controllers\OData\BaseControllers.cs" />
@@ -379,7 +380,7 @@
     <Compile Include="Controllers\OData\OrganisationsODController.cs" />
     <Compile Include="Controllers\OData\PhenomenaODController.cs" />
     <Compile Include="Controllers\OData\ProgrammesODController.cs" />
-    <Compile Include="Controllers\OData\ProjectsController.cs" />
+    <Compile Include="Controllers\OData\ProjectsODController.cs" />
     <Compile Include="Controllers\OData\SensorsODContoller.cs" />
     <Compile Include="Controllers\OData\SitesODController.cs" />
     <Compile Include="Controllers\OData\StationsODController.cs" />

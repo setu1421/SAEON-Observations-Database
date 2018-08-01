@@ -134,6 +134,7 @@ namespace SAEON.Observations.WebAPI
             ODataConventionModelBuilder odataModelBuilder = new ODataConventionModelBuilder { ContainerName = "Internal" };
             odataModelBuilder.EntitySet<Inventory>("Inventory");
             odataModelBuilder.EntitySet<Location>("Locations");
+            odataModelBuilder.EntitySet<Feature>("Features");
             return odataModelBuilder.GetEdmModel();
         }
 

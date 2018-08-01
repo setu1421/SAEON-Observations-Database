@@ -20,9 +20,18 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             model.Locations.Clear();
             model.Locations.AddRange(await GetList<LocationNode>("Internal/Locations"));
+            model.Organisations.Clear();
+            model.Sites.Clear();
+            model.Stations.Clear();
+            model.Features.Clear();
+            model.Features.AddRange(await GetList<FeatureNode>("Internal/Features"));
+            model.Phenomena.Clear();
+            model.Offerings.Clear();
+            model.Units.Clear();
             model.MapPoints.Clear();
-            model.MapPoints.AddRange(model.Locations.Where(i => i.Key.StartsWith("STA~")).Select(
-                loc => new MapPoint { Key = loc.Key, Title = loc.Name, Latitude = loc.Latitude.Value, Longitude = loc.Longitude.Value, Elevation = loc.Elevation, Url = loc.Url }));
+            var mapPoints = model.Locations.Where(i => i.Key.StartsWith("STA~")).Select(
+                loc => new MapPoint { Key = loc.Key, Title = loc.Name, Latitude = loc.Latitude.Value, Longitude = loc.Longitude.Value, Elevation = loc.Elevation, Url = loc.Url });
+            model.MapPoints.AddRange(mapPoints);
             return model;
         }
 
@@ -41,8 +50,8 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
+                    Logging.Verbose("Locations: {Locations}", locations);
                     var model = SessionModel;
-                    Logging.Verbose("Locations: {locations}", locations);
                     // Clear all
                     model.Locations.ForEach(i => i.IsChecked = false);
                     model.MapPoints.ForEach(i => i.IsSelected = false);
@@ -53,7 +62,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                     model.Stations.Clear();
                     if (locations != null)
                     {
-                        var mapPoints = new List<MapPoint>();
                         // Set IsCheck for selected
                         foreach (var location in model.Locations.Where(i => locations.Contains(i.Key)))
                         {
@@ -66,10 +74,10 @@ namespace SAEON.Observations.QuerySite.Controllers
                         model.Organisations.AddRange(orgs.Select(i => i.Id));
                         foreach (var orgKey in orgKeys)
                         {
-                            foreach (var loc in model.Locations.Where(i => i.Key.StartsWith("STA~") && i.Key.Contains(orgKey)))
-                            {
-                                model.MapPoints.First(i => i.Key == loc.Key).IsSelected = true;
-                            }
+                            model.Locations.Where(i => i.Key.StartsWith("STA~") && i.Key.Contains(orgKey))
+                                .Join(model.MapPoints, l => l.Key, m => m.Key, (l, m) => m)
+                                .ToList()
+                                .ForEach(i => i.IsSelected = true);
                         }
                         // Sites
                         var siteKeys = locations.Where(l => l.StartsWith("SIT~")).ToList();
@@ -78,10 +86,10 @@ namespace SAEON.Observations.QuerySite.Controllers
                         model.Sites.AddRange(sites.Select(i => i.Id));
                         foreach (var siteKey in siteKeys)
                         {
-                            foreach (var loc in model.Locations.Where(i => i.Key.StartsWith("STA~") && i.Key.Contains(siteKey)))
-                            {
-                                model.MapPoints.First(i => i.Key == loc.Key).IsSelected = true;
-                            }
+                            model.Locations.Where(i => i.Key.StartsWith("STA~") && i.Key.Contains(siteKey))
+                                .Join(model.MapPoints, l => l.Key, m => m.Key, (l, m) => m)
+                                .ToList()
+                                .ForEach(i => i.IsSelected = true);
                         }
                         // Stations
                         var stationKeys = locations.Where(l => l.StartsWith("STA~")).ToList();
@@ -90,10 +98,10 @@ namespace SAEON.Observations.QuerySite.Controllers
                         model.Stations.AddRange(stations.Select(i => i.Id));
                         foreach (var stationKey in stationKeys)
                         {
-                            foreach (var loc in model.Locations.Where(i => i.Key.StartsWith("STA~") && i.Key.Contains(stationKey)))
-                            {
-                                model.MapPoints.First(i => i.Key == loc.Key).IsSelected = true;
-                            }
+                            model.Locations.Where(i => i.Key.StartsWith("STA~") && i.Key.Contains(stationKey))
+                                .Join(model.MapPoints, l => l.Key, m => m.Key, (l, m) => m)
+                                .ToList()
+                                .ForEach(i => i.IsSelected = true);
                         }
                     }
                     SessionModel = model;
@@ -102,8 +110,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     Logging.Verbose("Sites: {Sites}", model.Sites);
                     Logging.Verbose("Stations: {Stations}", model.Stations);
                     Logging.Verbose("MapPoints: {@MapPoints}", model.MapPoints);
-                    //Logging.Verbose("Model: {@model}", model);
-                    return GetLocationsSelectedHtml();
+                    //return GetLocationsSelectedHtml();
+                    return PartialView("_LocationsSelectedHtml", model);
                 }
                 catch (Exception ex)
                 {
@@ -113,14 +121,71 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        [HttpGet]
-        public PartialViewResult GetLocationsSelectedHtml()
+        //[HttpGet]
+        //public PartialViewResult GetLocationsSelectedHtml()
+        //{
+        //    using (Logging.MethodCall(GetType()))
+        //    {
+        //        try
+        //        {
+        //            return PartialView("_LocationsSelectedHtml", SessionModel);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Logging.Exception(ex);
+        //            throw;
+        //        }
+        //    }
+        //}
+        #endregion
+
+        #region Features
+        [HttpPost]
+        public PartialViewResult UpdateFeaturesSelected(List<string> features)
         {
             using (Logging.MethodCall(GetType()))
             {
                 try
                 {
-                    return PartialView("_LocationsSelectedHtml", SessionModel);
+                    Logging.Verbose("Features: {Features}", features);
+                    var model = SessionModel;
+                    // Clear all
+                    model.Features.ForEach(i => i.IsChecked = false);
+                    // Clear 
+                    model.FeaturesSelected.Clear();
+                    model.Phenomena.Clear();
+                    model.Offerings.Clear();
+                    model.Units.Clear();
+                    if (features != null)
+                    {
+                        // Set IsCheck for selected
+                        foreach (var feature in model.Features.Where(i => features.Contains(i.Key)))
+                        {
+                            feature.IsChecked = true;
+                        }
+                        // Phenomena
+                        var phenomenaKeys = features.Where(l => l.StartsWith("PHE~")).ToList();
+                        var phenomena = model.Features.Where(l => phenomenaKeys.Contains(l.Key)).OrderBy(l => l.Name);
+                        model.FeaturesSelected.AddRange(phenomena);
+                        model.Phenomena.AddRange(phenomena.Select(i => i.Id));
+                        // Offerings
+                        var offeringKeys = features.Where(l => l.StartsWith("OFF~")).ToList();
+                        var offerings = model.Features.Where(l => offeringKeys.Contains(l.Key)).OrderBy(l => l.Name);
+                        model.FeaturesSelected.AddRange(offerings);
+                        model.Offerings.AddRange(offerings.Select(i => i.Id));
+                        // Units
+                        var unitKeys = features.Where(l => l.StartsWith("UNI~")).ToList();
+                        var units = model.Features.Where(l => unitKeys.Contains(l.Key)).OrderBy(l => l.Name);
+                        model.FeaturesSelected.AddRange(units);
+                        model.Units.AddRange(units.Select(i => i.Id));
+                    }
+                    SessionModel = model;
+                    Logging.Verbose("FeaturesSelected: {@FeaturesSelected}", model.FeaturesSelected);
+                    Logging.Verbose("Phenomena: {Phenomena}", model.Phenomena);
+                    Logging.Verbose("Offerings: {Offerings}", model.Offerings);
+                    Logging.Verbose("Units: {Units}", model.Units);
+                    //return GetFeaturesSelectedHtml();
+                    return PartialView("_FeaturesSelectedHtml", model);
                 }
                 catch (Exception ex)
                 {
@@ -130,14 +195,25 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
+        //[HttpGet]
+        //public PartialViewResult GetFeaturesSelectedHtml()
+        //{
+        //    using (Logging.MethodCall(GetType()))
+        //    {
+        //        try
+        //        {
+        //            return PartialView("_FeaturesSelectedHtml", SessionModel);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Logging.Exception(ex);
+        //            throw;
+        //        }
+        //    }
+        //}
         #endregion
 
         #region Map
-        private void LoadMapPoints(DataWizardModel sessionModel)
-        {
-
-        }
-
         [HttpGet]
         public JsonResult GetMapPoints()
         {

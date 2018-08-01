@@ -13,7 +13,7 @@ namespace SAEON.Observations.Core
         public Guid Id { get; set; }
         public Guid? ParentId { get; set; }
         [Key] 
-        public string Key { get; set; }
+        public string Key { get; set; } 
         public string ParentKey { get; set; }
         public string Text { get; set; }
         public string Name { get; set; } 
@@ -21,16 +21,19 @@ namespace SAEON.Observations.Core
         public bool IsExpanded { get; set; }
         public bool IsSelected { get; set; }
         public bool IsChecked { get; set; }
+    }
+
+    public class LocationNode : TreeNode
+    {
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
-        public double? Elevation { get; set; } 
+        public double? Elevation { get; set; }
         public string Url { get; set; }
     }
 
-    public class FeatureNode : TreeNode { } 
-    public class LocationNode : TreeNode { }
+    public class FeatureNode : TreeNode { }
 
-#region Maps
+    #region Maps
     public class MapPoint
     {
         public string Key { get; set; }
