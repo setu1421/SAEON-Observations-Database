@@ -398,233 +398,234 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     public SqlQuery BuildQ(string json, string visCols, DateTime dateFrom, DateTime dateTo, string sortCol, string sortDir)
     {
-        Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(visCols);
-
-        List<string> colmsL = new List<string>();
-        List<string> colmsDisplayNamesL = new List<string>();
-
-        foreach (var item in values)
+        using (Logging.MethodCall(GetType()))
         {
-            if (string.IsNullOrWhiteSpace(item.Value) || string.IsNullOrWhiteSpace(item.Key))
+            try
             {
+                Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(visCols);
 
-            }
-            else
-            {
-                //colms[i] = item.Value;
-                //colmsDisplayNames[i] = item.Key;
-                //i++;
-                colmsL.Add(item.Value);
-                colmsDisplayNamesL.Add(item.Key.Replace(" ", "").Replace("/", ""));
+                List<string> colmsL = new List<string>();
+                List<string> colmsDisplayNamesL = new List<string>();
 
-            }
-        }
-
-        string[] colms = colmsL.ToArray();
-        string[] colmsDisplayNames = colmsDisplayNamesL.ToArray();
-
-
-        SqlQuery q = new Select(colms).From(VObservation.Schema);
-
-        if (FilterTree.CheckedNodes != null)
-        {
-            List<SubmittedNode> nodes = FilterTree.CheckedNodes;
-            List<QueryDataClass> QueryDataClassList = new List<QueryDataClass>();
-
-            foreach (var item in nodes)
-            {
-                var items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item2), Type = items[0].Item1 });
-            }
-            //Logging.Information("Items: {@QueryDataClassList}", QueryDataClassList);
-
-            #region buildQ
-            foreach (QueryDataClass item in QueryDataClassList)
-            {
-
-                int count = 0;
-                List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
-                //Logging.Information("Items: {@items}", items);
-                PhenomenonOffering offering = null;
-                Phenomenon phenomenon = null;
-                Sensor sensor = null;
-                Instrument instrument = null;
-                Station station = null;
-                SAEON.Observations.Data.Site site = null;
-                switch (item.Type)
+                foreach (var item in values)
                 {
-                    case "Offering":
-                        count++;
-                        offering = new PhenomenonOffering(item.ID);
-                        phenomenon = new Phenomenon(new Guid(GetItem(items, "Phenomenon")));
-                        sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
-                        instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
-                        station = new Station(new Guid(GetItem(items, "Station")));
-                        site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                        q.OrExpression(VObservation.Columns.PhenomenonOfferingID).IsEqualTo(offering.Id)
-                            .And(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
-                            .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
-                            .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
-                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
-                            .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                        break;
-                    case "Phenomenon":
-                        count++;
-                        phenomenon = new Phenomenon(item.ID);
-                        sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
-                        instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
-                        station = new Station(new Guid(GetItem(items, "Station")));
-                        site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                        q.OrExpression(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
-                            .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
-                            .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
-                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
-                            .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                        break;
-                    case "Sensor":
-                        count++;
-                        sensor = new Sensor(item.ID);
-                        instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
-                        station = new Station(new Guid(GetItem(items, "Station")));
-                        site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                        q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
-                            .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
-                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
-                            .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                        break;
-                    case "Instrument":
-                        count++;
-                        instrument = new Instrument(item.ID);
-                        station = new Station(new Guid(GetItem(items, "Station")));
-                        site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                        q.OrExpression(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
-                            .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
-                            .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                        break;
-                    case "Station":
-                        count++;
-                        station = new Station(item.ID);
-                        site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                        q.OrExpression(VObservation.Columns.StationID).IsEqualTo(station.Id)
-                            .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                        break;
-                    case "Site":
-                        count++;
-                        site = new SAEON.Observations.Data.Site(item.ID);
-                        q.OrExpression(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                        break;
-                }
-                if (count != 0)
-                {
-                    q.And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(dateFrom);
-                    q.And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(dateTo.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
-
-                    if (json != null)
+                    if (string.IsNullOrWhiteSpace(item.Value) || string.IsNullOrWhiteSpace(item.Key))
                     {
-                        if (!string.IsNullOrEmpty(json))
+
+                    }
+                    else
+                    {
+                        //colms[i] = item.Value;
+                        //colmsDisplayNames[i] = item.Key;
+                        //i++;
+                        colmsL.Add(item.Value);
+                        colmsDisplayNamesL.Add(item.Key.Replace(" ", "").Replace("/", ""));
+
+                    }
+                }
+
+                string[] colms = colmsL.ToArray();
+                string[] colmsDisplayNames = colmsDisplayNamesL.ToArray();
+
+
+                SqlQuery q = new Select(colms).From(VObservation.Schema);
+
+                if (FilterTree.CheckedNodes != null)
+                {
+                    List<SubmittedNode> nodes = FilterTree.CheckedNodes;
+                    List<QueryDataClass> QueryDataClassList = new List<QueryDataClass>();
+
+                    foreach (var item in nodes)
+                    {
+                        var items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        QueryDataClassList.Add(new QueryDataClass() { NodeID = item.NodeID, ID = new Guid(items[0].Item2), Type = items[0].Item1 });
+                    }
+
+                    Logging.Verbose("Items: {@QueryDataClassList}", QueryDataClassList);
+
+                    #region buildQ
+                    foreach (QueryDataClass item in QueryDataClassList)
+                    {
+
+                        int count = 0;
+                        List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
+                        Logging.Verbose("Items: {@items}", items);
+                        PhenomenonOffering offering = null;
+                        Phenomenon phenomenon = null;
+                        Sensor sensor = null;
+                        Instrument instrument = null;
+                        Station station = null;
+                        SAEON.Observations.Data.Site site = null;
+                        switch (item.Type)
                         {
-                            FilterConditions fc = new FilterConditions(json);
+                            case "Offering":
+                                count++;
+                                offering = new PhenomenonOffering(item.ID);
+                                phenomenon = offering.Phenomenon;
+                                sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
+                                instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
+                                station = new Station(new Guid(GetItem(items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
+                                q.OrExpression(VObservation.Columns.PhenomenonOfferingID).IsEqualTo(offering.Id)
+                                    .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                                    .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                                    .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
+                                    .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                break;
+                            case "Phenomenon":
+                                count++;
+                                phenomenon = new PhenomenonOffering(item.ID).Phenomenon;
+                                sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
+                                instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
+                                station = new Station(new Guid(GetItem(items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
+                                q.OrExpression(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
+                                    .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                                    .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                                    .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
+                                    .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                break;
+                            case "Sensor":
+                                count++;
+                                sensor = new Sensor(item.ID);
+                                instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
+                                station = new Station(new Guid(GetItem(items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
+                                q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
+                                    .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                                    .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
+                                    .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                break;
+                            case "Instrument":
+                                count++;
+                                instrument = new Instrument(item.ID);
+                                station = new Station(new Guid(GetItem(items, "Station")));
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
+                                q.OrExpression(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                                    .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
+                                    .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                break;
+                            case "Station":
+                                count++;
+                                station = new Station(item.ID);
+                                site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
+                                q.OrExpression(VObservation.Columns.StationID).IsEqualTo(station.Id)
+                                    .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                break;
+                            case "Site":
+                                count++;
+                                site = new SAEON.Observations.Data.Site(item.ID);
+                                q.OrExpression(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                break;
+                        }
+                        if (count != 0)
+                        {
+                            q.And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(dateFrom);
+                            q.And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(dateTo.Date.AddHours(23).AddMinutes(59).AddSeconds(59));
 
-                            foreach (FilterCondition condition in fc.Conditions)
+                            if (json != null)
                             {
-                                switch (condition.FilterType)
+                                if (!string.IsNullOrEmpty(json))
                                 {
-                                    case FilterType.Date:
-                                        switch (condition.Comparison.ToString())
+                                    FilterConditions fc = new FilterConditions(json);
+
+                                    foreach (FilterCondition condition in fc.Conditions)
+                                    {
+                                        switch (condition.FilterType)
                                         {
-                                            case "Eq":
-                                                q.And(condition.Name).IsEqualTo(condition.Value);
+                                            case FilterType.Date:
+                                                switch (condition.Comparison.ToString())
+                                                {
+                                                    case "Eq":
+                                                        q.And(condition.Name).IsEqualTo(condition.Value);
+
+                                                        break;
+                                                    case "Gt":
+                                                        q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+
+                                                        break;
+                                                    case "Lt":
+                                                        q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
 
                                                 break;
-                                            case "Gt":
-                                                q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+
+                                            case FilterType.Numeric:
+                                                switch (condition.Comparison.ToString())
+                                                {
+                                                    case "Eq":
+                                                        q.And(condition.Name).IsEqualTo(condition.Value);
+
+                                                        break;
+                                                    case "Gt":
+                                                        q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+
+                                                        break;
+                                                    case "Lt":
+                                                        q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
 
                                                 break;
-                                            case "Lt":
-                                                q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+
+                                            case FilterType.String:
+                                                q.And(condition.Name).Like("%" + condition.Value + "%");
+
 
                                                 break;
                                             default:
-                                                break;
+                                                throw new ArgumentOutOfRangeException();
                                         }
 
-                                        break;
+                                    }
 
-                                    case FilterType.Numeric:
-                                        switch (condition.Comparison.ToString())
-                                        {
-                                            case "Eq":
-                                                q.And(condition.Name).IsEqualTo(condition.Value);
-
-                                                break;
-                                            case "Gt":
-                                                q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
-
-                                                break;
-                                            case "Lt":
-                                                q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
-
-                                                break;
-                                            default:
-                                                break;
-                                        }
-
-                                        break;
-
-                                    case FilterType.String:
-                                        q.And(condition.Name).Like("%" + condition.Value + "%");
-
-
-                                        break;
-                                    default:
-                                        throw new ArgumentOutOfRangeException();
                                 }
-
                             }
-
+                            q.CloseExpression();
                         }
                     }
-                    q.CloseExpression();
+                    #endregion buildQ
                 }
-            }
-            #endregion buildQ
-        }
 
-        if (!(string.IsNullOrEmpty(sortCol) && string.IsNullOrEmpty(sortDir)))
-        {
-            if (sortDir.ToLower() == Ext.Net.SortDirection.DESC.ToString().ToLower())
-            {
-                q.OrderDesc(sortCol);
-            }
-            else
-            {
-                q.OrderAsc(sortCol);
-            }
-        }
-
-        //Logging.Information("SQL: {sql}", q.BuildSqlStatement());
-        DataTable dt = q.ExecuteDataSet().Tables[0];
-
-        for (int k = 0; k < dt.Columns.Count; k++)
-        {
-            for (int j = 0; j < colms.Length; j++)
-            {
-                if (colms[j].ToLower() == dt.Columns[k].ToString().ToLower())
+                if (!(string.IsNullOrEmpty(sortCol) && string.IsNullOrEmpty(sortDir)))
                 {
-                    dt.Columns[k].ColumnName = colmsDisplayNames[j];
+                    if (sortDir.ToLower() == Ext.Net.SortDirection.DESC.ToString().ToLower())
+                    {
+                        q.OrderDesc(sortCol);
+                    }
+                    else
+                    {
+                        q.OrderAsc(sortCol);
+                    }
                 }
+
+                Logging.Verbose("SQL: {sql}", q.BuildSqlStatement());
+                //DataTable dt = q.ExecuteDataSet().Tables[0];
+                //for (int k = 0; k < dt.Columns.Count; k++)
+                //{
+                //    for (int j = 0; j < colms.Length; j++)
+                //    {
+                //        if (colms[j].ToLower() == dt.Columns[k].ToString().ToLower())
+                //        {
+                //            dt.Columns[k].ColumnName = colmsDisplayNames[j];
+                //        }
+                //    }
+                //}
+                return q;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                throw;
             }
         }
-
-        //JavaScriptSerializer ser = new JavaScriptSerializer()
-        //{
-        //    MaxJsonLength = 2147483647
-        //};
-        //string js = JsonConvert.SerializeObject(dt);
-
-        //return js;
-        //Logging.Verbose("SQL: {SQL}", q.ToString());
-        return q;
     }
 
 

@@ -180,9 +180,8 @@
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="100" Hideable="true"
-                                            Hidden="true" />
-                                        <ext:Column Header="Site" DataIndex="SiteName" Width="100" Hideable="true" Hidden="true" />
+                                        <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="100" Hideable="true" Hidden="true" />
+                                        <ext:Column Header="Site" DataIndex="SiteName" Width="100" Hideable="true"/>
                                         <ext:Column Header="Station" DataIndex="StationName" Width="100" />
                                         <ext:Column Header="Instrument" DataIndex="InstrumentName" Width="100" />
                                         <ext:Column Header="Sensor" DataIndex="SensorName" Width="100" />
