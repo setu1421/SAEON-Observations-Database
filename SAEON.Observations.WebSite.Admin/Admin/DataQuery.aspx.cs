@@ -251,8 +251,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
         string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
         string visCols = VisCols.Value.ToString();
-        SqlQuery query = BuildQ(json, visCols, FromFilter.SelectedDate, ToFilter.SelectedDate, sortCol, sortDir);
-        //BaseRepository.doExport(type, js);
+        SqlQuery query = BuildQ(json, visCols, sortCol, sortDir);
         BaseRepository.Export(query, visCols, type, "Data Query", Response);
     }
 
@@ -419,7 +418,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
 
 
-    public SqlQuery BuildQ(string json, string visCols, DateTime dateFrom, DateTime dateTo, string sortCol, string sortDir)
+    public SqlQuery BuildQ(string json, string visCols, string sortCol, string sortDir)
     {
         using (Logging.MethodCall(GetType()))
         {
@@ -432,25 +431,90 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
                 foreach (var item in values)
                 {
-                    if (string.IsNullOrWhiteSpace(item.Value) || string.IsNullOrWhiteSpace(item.Key))
+                    if (!(string.IsNullOrWhiteSpace(item.Value) || string.IsNullOrWhiteSpace(item.Key)))
                     {
-
-                    }
-                    else
-                    {
-                        //colms[i] = item.Value;
-                        //colmsDisplayNames[i] = item.Key;
-                        //i++;
                         colmsL.Add(item.Value);
                         colmsDisplayNamesL.Add(item.Key.Replace(" ", "").Replace("/", ""));
-
                     }
                 }
 
                 string[] colms = colmsL.ToArray();
                 string[] colmsDisplayNames = colmsDisplayNamesL.ToArray();
+                var q = BuildQuery(colms);
+                if (!string.IsNullOrEmpty(json))
+                {
+                    FilterConditions fc = new FilterConditions(json);
 
-                return BuildQuery(colms);
+                    foreach (FilterCondition condition in fc.Conditions)
+                    {
+                        switch (condition.FilterType)
+                        {
+                            case FilterType.Date:
+                                switch (condition.Comparison.ToString())
+                                {
+                                    case "Eq":
+                                        q.And(condition.Name).IsEqualTo(condition.Value);
+
+                                        break;
+                                    case "Gt":
+                                        q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+
+                                        break;
+                                    case "Lt":
+                                        q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                break;
+
+                            case FilterType.Numeric:
+                                switch (condition.Comparison.ToString())
+                                {
+                                    case "Eq":
+                                        q.And(condition.Name).IsEqualTo(condition.Value);
+
+                                        break;
+                                    case "Gt":
+                                        q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
+
+                                        break;
+                                    case "Lt":
+                                        q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                break;
+
+                            case FilterType.String:
+                                q.And(condition.Name).Like("%" + condition.Value + "%");
+
+
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(sortCol) && !string.IsNullOrEmpty(sortDir))
+                {
+                    if (sortDir.ToLower() == Ext.Net.SortDirection.DESC.ToString().ToLower())
+                    {
+                        q.OrderDesc(sortCol);
+                    }
+                    else
+                    {
+                        q.OrderAsc(sortCol);
+                    }
+                }
+                return q;
             }
             catch (Exception ex)
             {

@@ -139,7 +139,7 @@
                             <ext:GridPanel ID="ObservationsGrid" runat="server" Border="false" Layout="FitLayout"
                                 ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="Store2" runat="server" RemoteSort="true" RemotePaging="true" OnRefreshData="DQStore_RefreshData"
+                                    <ext:Store ID="ObservationsGridStore" runat="server" RemoteSort="true" RemotePaging="true" OnRefreshData="DQStore_RefreshData"
                                         OnSubmitData="DQStore_Submit" AutoLoad="false">
                                         <Proxy>
                                             <ext:PageProxy />
@@ -216,6 +216,8 @@
                                             <ext:StringFilter DataIndex="UnitOfMeasureSymbol" />
                                             <ext:StringFilter DataIndex="DataSchemaName" />
                                             <ext:DateFilter DataIndex="ValueDate" />
+                                            <ext:StringFilter DataIndex="StatusName" />
+                                            <ext:StringFilter DataIndex="StatusReasonName" />
                                             <ext:StringFilter DataIndex="UserName" />
                                         </Filters>
                                     </ext:GridFilters>
