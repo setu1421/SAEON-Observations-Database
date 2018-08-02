@@ -945,6 +945,7 @@
     <Content Include="Views\DataWizard\_LocationsSelectedHtml.cshtml" />
     <Content Include="Views\DataWizard\_StationsMap.cshtml" />
     <Content Include="Views\DataWizard\_FeaturesSelectedHtml.cshtml" />
+    <Content Include="Views\DataWizard\_Filters.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

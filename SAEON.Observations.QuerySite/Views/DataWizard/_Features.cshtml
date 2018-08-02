@@ -1,23 +1,24 @@
 ﻿@using SAEON.Observations.QuerySite.Models
 @model DataWizardModel
 @(
-    Html.EJ().TreeView("treeViewFeatures")
-        .TreeViewFields(field => field
-            .Datasource(ds => ds.URL(ViewBag.WebAPIUrl + "/Internal/Features").Adaptor(AdaptorType.WebApiAdaptor))
-            .Id("Key")
-            .ParentId("ParentKey")
-            .Text("Text")
-            .HasChild("HasChildren")
-            .IsChecked("IsChecked")
-            .Expanded("IsExpanded")
-            .Selected("IsSelected")
+Html.EJ().TreeView("treeViewFeatures")
+    .TreeViewFields(field => field
+        .Datasource(ds => ds.URL(ViewBag.WebAPIUrl + "/Internal/Features").Adaptor(AdaptorType.WebApiAdaptor))
+        .Id("Key")
+        .ParentId("ParentKey")
+        .Text("Text")
+        .HasChild("HasChildren")
+        .IsChecked("IsChecked")
+        .Expanded("IsExpanded")
+        .Selected("IsSelected")
+    )
+    .ClientSideEvents(events => events
+        .NodeCheck("DataWizard.UpdateFeaturesSelected")
+        .NodeUncheck("DataWizard.UpdateFeaturesSelected")
+        .Ready("DataWizard.FeaturesReady")
         )
-        .ClientSideEvents(events => events
-            .NodeCheck("DataWizard.UpdateFeaturesSelected")
-            .NodeUncheck("DataWizard.UpdateFeaturesSelected")
-            )
-        .ShowCheckbox(true)
-        .AutoCheck(false)
+    .ShowCheckbox(true)
+    .AutoCheck(false)
 )
 
 

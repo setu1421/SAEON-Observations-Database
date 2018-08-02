@@ -80,9 +80,13 @@
         }
     }
 
+    let locationsReady: boolean = false;
 
     export function LocationsReady() {
-        HideWaiting();
+        locationsReady = true;
+        if (locationsReady && featuresReady) {
+            HideWaiting();
+        }
     }
 
     export function UpdateLocationsSelected() {
@@ -102,6 +106,15 @@
                 HideResults();
             })
             .fail(function () { ErrorInFunc("Error in UpdateLocationsSelected"); });
+    }
+
+    let featuresReady: boolean = false;
+
+    export function FeaturesReady() {
+        featuresReady = true;
+        //if (locationsReady && featuresReady) {
+            HideWaiting();
+        //}
     }
 
     export function UpdateFeaturesSelected() {

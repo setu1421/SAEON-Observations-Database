@@ -83,8 +83,12 @@ var DataWizard;
         }
     }
     DataWizard.TabActive = TabActive;
+    var locationsReady = false;
     function LocationsReady() {
-        HideWaiting();
+        locationsReady = true;
+        if (locationsReady && featuresReady) {
+            HideWaiting();
+        }
     }
     DataWizard.LocationsReady = LocationsReady;
     function UpdateLocationsSelected() {
@@ -106,6 +110,14 @@ var DataWizard;
             .fail(function () { ErrorInFunc("Error in UpdateLocationsSelected"); });
     }
     DataWizard.UpdateLocationsSelected = UpdateLocationsSelected;
+    var featuresReady = false;
+    function FeaturesReady() {
+        featuresReady = true;
+        //if (locationsReady && featuresReady) {
+        HideWaiting();
+        //}
+    }
+    DataWizard.FeaturesReady = FeaturesReady;
     function UpdateFeaturesSelected() {
         var treeObj = $("#treeViewFeatures").data('ejTreeView');
         var nodes = treeObj.getCheckedNodes();
