@@ -61,15 +61,24 @@ Select
 from
 (
 Select
-  SiteCode, SiteName, StationCode, StationName, InstrumentCode, InstrumentName, SensorCode, SensorName, PhenomenonCode, PhenomenonName, 
-  OfferingCode, OfferingName, UnitOfMeasureCode, UnitOfMeasureUnit, Sum(Count) Count, Min(StartDate) StartDate, Max(EndDate) EndDate
+  SiteID, SiteCode, SiteName, 
+  StationID, StationCode, StationName, 
+  InstrumentID, InstrumentCode, InstrumentName, 
+  SensorID, SensorCode, SensorName, 
+  PhenomenonCode, PhenomenonName, 
+  PhenomenonOfferingID, OfferingCode, OfferingName, 
+  PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit, 
+  Sum(Count) Count, Min(StartDate) StartDate, Max(EndDate) EndDate,
+  Max(TopLatitude) TopLatitude, Min(BottomLatitude) BottomLatitude,
+  Min(LeftLongitude) LeftLongitude, Max(RightLongitude) RightLongitude
 from
   vImportBatchSummary
 group by
-  SiteCode, SiteName, StationCode, StationName, InstrumentCode, InstrumentName, SensorCode, SensorName, PhenomenonCode, PhenomenonName, 
-  OfferingCode, OfferingName, UnitOfMeasureCode, UnitOfMeasureUnit
+  SiteID, SiteCode, SiteName, StationID, StationCode, StationName, InstrumentID, InstrumentCode, InstrumentName, 
+  SensorID, SensorCode, SensorName, PhenomenonCode, PhenomenonName, 
+  PhenomenonOfferingID, OfferingCode, OfferingName, 
+  PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit
 ) s
-
 GO
 PRINT N'Update complete.';
 

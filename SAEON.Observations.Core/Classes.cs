@@ -1,4 +1,5 @@
-﻿using SAEON.Observations.Core.Entities;
+﻿using Newtonsoft.Json;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -46,7 +47,26 @@ namespace SAEON.Observations.Core
     }
 #endregion
 
-#region DataQuery
+#region DataWizard
+    public class DataWizardInput
+    {
+        public List<Guid> Origanisations { get; set; } = null;
+        public List<Guid> Sites { get; set; } = null;
+        public List<Guid> Stations { get; set; } = null;
+        public List<Guid> Phenomena { get; set; } = null;
+        public List<Guid> Offerings { get; set; } = null;
+        public List<Guid> Units { get; set; } = null;
+        public DateTime? StartDate { get; set; } = null;  
+        public DateTime? EndDate { get; set; } = null;
+    }
+
+    public class DataWizardApproximation
+    { 
+        public long RowCount { get; set; } = 0;  
+        public List<string> Errors { get; set; } = new List<string>();
+    }
+
+    /*
     public class QueryMapPoint : MapPoint
     {
         public bool IsSelected { get; set; }
@@ -131,14 +151,17 @@ namespace SAEON.Observations.Core
 #endregion
 
 #region DataDowload
+    /*
     public class DataDownloadInput : DataQueryInput { }
 
     public class DataDownloadOutput
     {
     }
-#endregion DataDownload
+    */
+    #endregion DataDownload
 
-#region SpacialCoverage
+    #region SpacialCoverage
+    /*
     public class SpacialCoverageInput : DataQueryInput { }
 
     public enum SpacialStatus
@@ -198,9 +221,11 @@ namespace SAEON.Observations.Core
     {
         public List<SpacialStation> Stations { get; private set; } = new List<SpacialStation>();
     }
-#endregion
+    */
+    #endregion
 
-#region TemporalCoverage
+    #region TemporalCoverage
+    /*
     public class TemporalCoverageInput : DataQueryInput { }
 
     public class TemporalCoverageOutput
@@ -208,9 +233,11 @@ namespace SAEON.Observations.Core
         public List<DataSeries> Series { get; private set; } = new List<DataSeries>();
         public List<ExpandoObject> Data { get; private set; } = new List<ExpandoObject>();
     }
-#endregion
+    */
+    #endregion
 
-#region Inventory
+    #region Inventory
+    /*
     public class InventoryInput
     {
         public List<Guid> Stations { get; set; }
@@ -308,5 +335,6 @@ namespace SAEON.Observations.Core
         public List<InventoryYearItem> Years { get; private set; } = new List<InventoryYearItem>();
         public List<InventoryOrganisationItem> Organisations { get; private set; } = new List<InventoryOrganisationItem>();
     }
-#endregion
+    */
+    #endregion
 }

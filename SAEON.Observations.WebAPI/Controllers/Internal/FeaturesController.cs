@@ -6,7 +6,7 @@ using System.Web.Http;
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [RoutePrefix("Internal/Features")]
-    public class FeaturesController : BaseListController<FeatureNode>
+    public class FeaturesController : BaseController<FeatureNode>
     {
         protected override List<FeatureNode> GetList()
         {

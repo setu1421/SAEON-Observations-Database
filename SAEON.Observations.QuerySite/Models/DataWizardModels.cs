@@ -2,6 +2,7 @@
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace SAEON.Observations.QuerySite.Models
@@ -19,6 +20,11 @@ namespace SAEON.Observations.QuerySite.Models
         public List<Guid> Phenomena { get; private set; } = new List<Guid>();
         public List<Guid> Offerings { get; private set; } = new List<Guid>();
         public List<Guid> Units { get; private set; } = new List<Guid>();
+        [DisplayName("Start Date")]
+        public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
+        [DisplayName("End Date")]
+        public DateTime EndDate { get; set; } = DateTime.Now.Date;
+        public DataWizardApproximation Approximation { get; set; } = new DataWizardApproximation();
         public List<UserQuery> UserQueries { get; private set; } = new List<UserQuery>();
     }
 

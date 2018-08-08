@@ -1,15 +1,25 @@
 ﻿CREATE VIEW [dbo].[vInventory]
 AS
 Select
-  NEWID() ID, s.*
+  Row_Number() over (order by SiteName, StationName, InstrumentName, SensorName, PhenomenonName, OfferingName, UnitOfMeasureUnit) ID, s.*
 from
 (
 Select
-  SiteCode, SiteName, StationCode, StationName, InstrumentCode, InstrumentName, SensorCode, SensorName, PhenomenonCode, PhenomenonName, 
-  OfferingCode, OfferingName, UnitOfMeasureCode, UnitOfMeasureUnit, Sum(Count) Count, Min(StartDate) StartDate, Max(EndDate) EndDate
+  SiteID, SiteCode, SiteName, 
+  StationID, StationCode, StationName, 
+  InstrumentID, InstrumentCode, InstrumentName, 
+  SensorID, SensorCode, SensorName, 
+  PhenomenonCode, PhenomenonName, 
+  PhenomenonOfferingID, OfferingCode, OfferingName, 
+  PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit, 
+  Sum(Count) Count, Min(StartDate) StartDate, Max(EndDate) EndDate,
+  Max(TopLatitude) TopLatitude, Min(BottomLatitude) BottomLatitude,
+  Min(LeftLongitude) LeftLongitude, Max(RightLongitude) RightLongitude
 from
   vImportBatchSummary
 group by
-  SiteCode, SiteName, StationCode, StationName, InstrumentCode, InstrumentName, SensorCode, SensorName, PhenomenonCode, PhenomenonName, 
-  OfferingCode, OfferingName, UnitOfMeasureCode, UnitOfMeasureUnit
+  SiteID, SiteCode, SiteName, StationID, StationCode, StationName, InstrumentID, InstrumentCode, InstrumentName, 
+  SensorID, SensorCode, SensorName, PhenomenonCode, PhenomenonName, 
+  PhenomenonOfferingID, OfferingCode, OfferingName, 
+  PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit
 ) s

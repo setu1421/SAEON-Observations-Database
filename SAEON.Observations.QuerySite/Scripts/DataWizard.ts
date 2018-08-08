@@ -28,30 +28,11 @@
         let btnSaveQuery = $("#btnSaveQuery").data("ejButton");
         let btnSearch = $("#btnSearch").data("ejButton");
         let btnDownload = $("#btnDownload").data("ejButton");
-        let selectedLocations = 0;
-        //let treeObj = $("#treeViewLocations").data('ejTreeView');
-        //let checkedNodes = treeObj.getCheckedNodes();
-        //let i;
-        //for (i = 0; i < checkedNodes.length; i++) {
-        //    let checkedNode = checkedNodes[i];
-        //    let nodeData = treeObj.getNode(checkedNode);
-        //    if (nodeData.id.startsWith("STA~")) {
-        //        selectedLocations = selectedLocations + 1;
-        //    }
-        //}
-        let selectedFeatures = 0;
-        //treeObj = $("#treeViewFeatures").data('ejTreeView');
-        //let checkedNodes = treeObj.getCheckedNodes();
-        //for (i = 0; i < checkedNodes.length; i++) {
-        //    let checkedNode = checkedNodes[i];
-        //    let nodeData = treeObj.getNode(checkedNode);
-        //    if (nodeData.id.startsWith("OFF~")) {
-        //        selectedFeatures = selectedFeatures + 1;
-        //    }
-        //}
+        let locationsSelected: boolean = $("#treeViewLocations").data('ejTreeView').getCheckedNodes().length > 0;
+        let featuresSelected: boolean = $("#treeViewFeatures").data('ejTreeView').getCheckedNodes().length > 0;
+        SetApproximation();
         btnLoadQuery.enable();
-        btnLoadQuery.disable(); // remove later
-        if ((selectedLocations > 0) && (selectedFeatures > 0)) {
+        if (locationsSelected && featuresSelected) {
             btnSaveQuery.enable();
             btnSearch.enable();
         }
@@ -59,6 +40,8 @@
             btnSaveQuery.disable();
             btnSearch.disable();
         }
+        btnLoadQuery.disable(); // remove later
+        btnSaveQuery.disable(); // remove later
         btnDownload.disable();
     }
 
@@ -73,9 +56,17 @@
         btnDownload.disable();
     }
 
+    let featuresSelected: boolean = false;
+
     export function TabActive() {
         let tab = $("#DataWizardTabs").data("ejTab");
-        if (tab.selectedItemIndex() == 3) {
+        if (tab.selectedItemIndex() == 1) {
+            if (!featuresSelected) {
+                UpdateFeaturesSelected();
+                featuresSelected = true;
+            }
+        }
+        else if (tab.selectedItemIndex() == 3) {
             FitMap();
         }
     }
@@ -84,9 +75,7 @@
 
     export function LocationsReady() {
         locationsReady = true;
-        if (locationsReady && featuresReady) {
-            HideWaiting();
-        }
+        CheckReady();
     }
 
     export function UpdateLocationsSelected() {
@@ -112,9 +101,13 @@
 
     export function FeaturesReady() {
         featuresReady = true;
-        //if (locationsReady && featuresReady) {
+        CheckReady();
+    }
+
+    function CheckReady() {
+        if (locationsReady && featuresReady) {
             HideWaiting();
-        //}
+        }
     }
 
     export function UpdateFeaturesSelected() {
@@ -133,6 +126,15 @@
                 HideResults();
             })
             .fail(function () { ErrorInFunc("Error in UpdateFeaturesSelected"); });
+    }
+
+    export function UpdateFilters(startDate: Date, endDate: Date) {
+        $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate })
+            .done(function (data) {
+                EnableButtons();
+                HideResults();
+            })
+            .fail(function () { ErrorInFunc("Error in UpdateFilters"); });
     }
 
     class MapPoint {
@@ -200,5 +202,27 @@
     export function FixMap() {
         UpdateMap();
         FitMap(true);
+    }
+
+    export function GetApproximation(): string {
+        let approximation: string = "{}";
+        $.get("/DataWizard/GetApproximation")
+            .done(function (data) {
+                approximation = data;
+            })
+            .fail(function () { ErrorInFunc("Error in GetApproximation"); });
+        return approximation;
+    }
+
+    export function SetApproximation() {
+        $.get("/DataWizard/SetApproximation")
+            .done(function (data) {
+                $('#PartialApproximation').html(data);
+            })
+            .fail(function () { ErrorInFunc("Error in SetApproximation"); });
+    }
+
+    export function Test() {
+        SetApproximation();
     }
 }

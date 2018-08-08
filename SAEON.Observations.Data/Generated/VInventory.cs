@@ -59,7 +59,7 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
                 colvarId.ColumnName = "ID";
-                colvarId.DataType = DbType.Guid;
+                colvarId.DataType = DbType.Int64;
                 colvarId.MaxLength = 0;
                 colvarId.AutoIncrement = false;
                 colvarId.IsNullable = true;
@@ -68,6 +68,18 @@ namespace SAEON.Observations.Data{
                 colvarId.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarId);
+                
+                TableSchema.TableColumn colvarSiteID = new TableSchema.TableColumn(schema);
+                colvarSiteID.ColumnName = "SiteID";
+                colvarSiteID.DataType = DbType.Guid;
+                colvarSiteID.MaxLength = 0;
+                colvarSiteID.AutoIncrement = false;
+                colvarSiteID.IsNullable = false;
+                colvarSiteID.IsPrimaryKey = false;
+                colvarSiteID.IsForeignKey = false;
+                colvarSiteID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSiteID);
                 
                 TableSchema.TableColumn colvarSiteCode = new TableSchema.TableColumn(schema);
                 colvarSiteCode.ColumnName = "SiteCode";
@@ -93,6 +105,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarSiteName);
                 
+                TableSchema.TableColumn colvarStationID = new TableSchema.TableColumn(schema);
+                colvarStationID.ColumnName = "StationID";
+                colvarStationID.DataType = DbType.Guid;
+                colvarStationID.MaxLength = 0;
+                colvarStationID.AutoIncrement = false;
+                colvarStationID.IsNullable = false;
+                colvarStationID.IsPrimaryKey = false;
+                colvarStationID.IsForeignKey = false;
+                colvarStationID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarStationID);
+                
                 TableSchema.TableColumn colvarStationCode = new TableSchema.TableColumn(schema);
                 colvarStationCode.ColumnName = "StationCode";
                 colvarStationCode.DataType = DbType.AnsiString;
@@ -117,6 +141,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarStationName);
                 
+                TableSchema.TableColumn colvarInstrumentID = new TableSchema.TableColumn(schema);
+                colvarInstrumentID.ColumnName = "InstrumentID";
+                colvarInstrumentID.DataType = DbType.Guid;
+                colvarInstrumentID.MaxLength = 0;
+                colvarInstrumentID.AutoIncrement = false;
+                colvarInstrumentID.IsNullable = false;
+                colvarInstrumentID.IsPrimaryKey = false;
+                colvarInstrumentID.IsForeignKey = false;
+                colvarInstrumentID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarInstrumentID);
+                
                 TableSchema.TableColumn colvarInstrumentCode = new TableSchema.TableColumn(schema);
                 colvarInstrumentCode.ColumnName = "InstrumentCode";
                 colvarInstrumentCode.DataType = DbType.AnsiString;
@@ -140,6 +176,18 @@ namespace SAEON.Observations.Data{
                 colvarInstrumentName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarInstrumentName);
+                
+                TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
+                colvarSensorID.ColumnName = "SensorID";
+                colvarSensorID.DataType = DbType.Guid;
+                colvarSensorID.MaxLength = 0;
+                colvarSensorID.AutoIncrement = false;
+                colvarSensorID.IsNullable = false;
+                colvarSensorID.IsPrimaryKey = false;
+                colvarSensorID.IsForeignKey = false;
+                colvarSensorID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSensorID);
                 
                 TableSchema.TableColumn colvarSensorCode = new TableSchema.TableColumn(schema);
                 colvarSensorCode.ColumnName = "SensorCode";
@@ -189,6 +237,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarPhenomenonName);
                 
+                TableSchema.TableColumn colvarPhenomenonOfferingID = new TableSchema.TableColumn(schema);
+                colvarPhenomenonOfferingID.ColumnName = "PhenomenonOfferingID";
+                colvarPhenomenonOfferingID.DataType = DbType.Guid;
+                colvarPhenomenonOfferingID.MaxLength = 0;
+                colvarPhenomenonOfferingID.AutoIncrement = false;
+                colvarPhenomenonOfferingID.IsNullable = false;
+                colvarPhenomenonOfferingID.IsPrimaryKey = false;
+                colvarPhenomenonOfferingID.IsForeignKey = false;
+                colvarPhenomenonOfferingID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarPhenomenonOfferingID);
+                
                 TableSchema.TableColumn colvarOfferingCode = new TableSchema.TableColumn(schema);
                 colvarOfferingCode.ColumnName = "OfferingCode";
                 colvarOfferingCode.DataType = DbType.AnsiString;
@@ -212,6 +272,18 @@ namespace SAEON.Observations.Data{
                 colvarOfferingName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarOfferingName);
+                
+                TableSchema.TableColumn colvarPhenomenonUOMID = new TableSchema.TableColumn(schema);
+                colvarPhenomenonUOMID.ColumnName = "PhenomenonUOMID";
+                colvarPhenomenonUOMID.DataType = DbType.Guid;
+                colvarPhenomenonUOMID.MaxLength = 0;
+                colvarPhenomenonUOMID.AutoIncrement = false;
+                colvarPhenomenonUOMID.IsNullable = false;
+                colvarPhenomenonUOMID.IsPrimaryKey = false;
+                colvarPhenomenonUOMID.IsForeignKey = false;
+                colvarPhenomenonUOMID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarPhenomenonUOMID);
                 
                 TableSchema.TableColumn colvarUnitOfMeasureCode = new TableSchema.TableColumn(schema);
                 colvarUnitOfMeasureCode.ColumnName = "UnitOfMeasureCode";
@@ -325,15 +397,29 @@ namespace SAEON.Observations.Data{
           
         [XmlAttribute("Id")]
         [Bindable(true)]
-        public Guid? Id 
+        public long? Id 
 	    {
 		    get
 		    {
-			    return GetColumnValue<Guid?>("ID");
+			    return GetColumnValue<long?>("ID");
 		    }
             set 
 		    {
 			    SetColumnValue("ID", value);
+            }
+        }
+	      
+        [XmlAttribute("SiteID")]
+        [Bindable(true)]
+        public Guid SiteID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("SiteID");
+		    }
+            set 
+		    {
+			    SetColumnValue("SiteID", value);
             }
         }
 	      
@@ -365,6 +451,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("StationID")]
+        [Bindable(true)]
+        public Guid StationID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("StationID");
+		    }
+            set 
+		    {
+			    SetColumnValue("StationID", value);
+            }
+        }
+	      
         [XmlAttribute("StationCode")]
         [Bindable(true)]
         public string StationCode 
@@ -393,6 +493,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("InstrumentID")]
+        [Bindable(true)]
+        public Guid InstrumentID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("InstrumentID");
+		    }
+            set 
+		    {
+			    SetColumnValue("InstrumentID", value);
+            }
+        }
+	      
         [XmlAttribute("InstrumentCode")]
         [Bindable(true)]
         public string InstrumentCode 
@@ -418,6 +532,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("InstrumentName", value);
+            }
+        }
+	      
+        [XmlAttribute("SensorID")]
+        [Bindable(true)]
+        public Guid SensorID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("SensorID");
+		    }
+            set 
+		    {
+			    SetColumnValue("SensorID", value);
             }
         }
 	      
@@ -477,6 +605,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("PhenomenonOfferingID")]
+        [Bindable(true)]
+        public Guid PhenomenonOfferingID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("PhenomenonOfferingID");
+		    }
+            set 
+		    {
+			    SetColumnValue("PhenomenonOfferingID", value);
+            }
+        }
+	      
         [XmlAttribute("OfferingCode")]
         [Bindable(true)]
         public string OfferingCode 
@@ -502,6 +644,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("OfferingName", value);
+            }
+        }
+	      
+        [XmlAttribute("PhenomenonUOMID")]
+        [Bindable(true)]
+        public Guid PhenomenonUOMID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("PhenomenonUOMID");
+		    }
+            set 
+		    {
+			    SetColumnValue("PhenomenonUOMID", value);
             }
         }
 	      
@@ -584,17 +740,25 @@ namespace SAEON.Observations.Data{
 		    
             public static string Id = @"ID";
             
+            public static string SiteID = @"SiteID";
+            
             public static string SiteCode = @"SiteCode";
             
             public static string SiteName = @"SiteName";
+            
+            public static string StationID = @"StationID";
             
             public static string StationCode = @"StationCode";
             
             public static string StationName = @"StationName";
             
+            public static string InstrumentID = @"InstrumentID";
+            
             public static string InstrumentCode = @"InstrumentCode";
             
             public static string InstrumentName = @"InstrumentName";
+            
+            public static string SensorID = @"SensorID";
             
             public static string SensorCode = @"SensorCode";
             
@@ -604,9 +768,13 @@ namespace SAEON.Observations.Data{
             
             public static string PhenomenonName = @"PhenomenonName";
             
+            public static string PhenomenonOfferingID = @"PhenomenonOfferingID";
+            
             public static string OfferingCode = @"OfferingCode";
             
             public static string OfferingName = @"OfferingName";
+            
+            public static string PhenomenonUOMID = @"PhenomenonUOMID";
             
             public static string UnitOfMeasureCode = @"UnitOfMeasureCode";
             

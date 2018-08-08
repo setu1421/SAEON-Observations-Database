@@ -31,30 +31,11 @@ var DataWizard;
         var btnSaveQuery = $("#btnSaveQuery").data("ejButton");
         var btnSearch = $("#btnSearch").data("ejButton");
         var btnDownload = $("#btnDownload").data("ejButton");
-        var selectedLocations = 0;
-        //let treeObj = $("#treeViewLocations").data('ejTreeView');
-        //let checkedNodes = treeObj.getCheckedNodes();
-        //let i;
-        //for (i = 0; i < checkedNodes.length; i++) {
-        //    let checkedNode = checkedNodes[i];
-        //    let nodeData = treeObj.getNode(checkedNode);
-        //    if (nodeData.id.startsWith("STA~")) {
-        //        selectedLocations = selectedLocations + 1;
-        //    }
-        //}
-        var selectedFeatures = 0;
-        //treeObj = $("#treeViewFeatures").data('ejTreeView');
-        //let checkedNodes = treeObj.getCheckedNodes();
-        //for (i = 0; i < checkedNodes.length; i++) {
-        //    let checkedNode = checkedNodes[i];
-        //    let nodeData = treeObj.getNode(checkedNode);
-        //    if (nodeData.id.startsWith("OFF~")) {
-        //        selectedFeatures = selectedFeatures + 1;
-        //    }
-        //}
+        var locationsSelected = $("#treeViewLocations").data('ejTreeView').getCheckedNodes().length > 0;
+        var featuresSelected = $("#treeViewFeatures").data('ejTreeView').getCheckedNodes().length > 0;
+        SetApproximation();
         btnLoadQuery.enable();
-        btnLoadQuery.disable(); // remove later
-        if ((selectedLocations > 0) && (selectedFeatures > 0)) {
+        if (locationsSelected && featuresSelected) {
             btnSaveQuery.enable();
             btnSearch.enable();
         }
@@ -62,6 +43,8 @@ var DataWizard;
             btnSaveQuery.disable();
             btnSearch.disable();
         }
+        btnLoadQuery.disable(); // remove later
+        btnSaveQuery.disable(); // remove later
         btnDownload.disable();
     }
     DataWizard.EnableButtons = EnableButtons;
@@ -76,9 +59,16 @@ var DataWizard;
         btnDownload.disable();
     }
     DataWizard.DisableButtons = DisableButtons;
+    var featuresSelected = false;
     function TabActive() {
         var tab = $("#DataWizardTabs").data("ejTab");
-        if (tab.selectedItemIndex() == 3) {
+        if (tab.selectedItemIndex() == 1) {
+            if (!featuresSelected) {
+                UpdateFeaturesSelected();
+                featuresSelected = true;
+            }
+        }
+        else if (tab.selectedItemIndex() == 3) {
             FitMap();
         }
     }
@@ -86,9 +76,7 @@ var DataWizard;
     var locationsReady = false;
     function LocationsReady() {
         locationsReady = true;
-        if (locationsReady && featuresReady) {
-            HideWaiting();
-        }
+        CheckReady();
     }
     DataWizard.LocationsReady = LocationsReady;
     function UpdateLocationsSelected() {
@@ -113,11 +101,14 @@ var DataWizard;
     var featuresReady = false;
     function FeaturesReady() {
         featuresReady = true;
-        //if (locationsReady && featuresReady) {
-        HideWaiting();
-        //}
+        CheckReady();
     }
     DataWizard.FeaturesReady = FeaturesReady;
+    function CheckReady() {
+        if (locationsReady && featuresReady) {
+            HideWaiting();
+        }
+    }
     function UpdateFeaturesSelected() {
         var treeObj = $("#treeViewFeatures").data('ejTreeView');
         var nodes = treeObj.getCheckedNodes();
@@ -136,6 +127,15 @@ var DataWizard;
             .fail(function () { ErrorInFunc("Error in UpdateFeaturesSelected"); });
     }
     DataWizard.UpdateFeaturesSelected = UpdateFeaturesSelected;
+    function UpdateFilters(startDate, endDate) {
+        $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate })
+            .done(function (data) {
+            EnableButtons();
+            HideResults();
+        })
+            .fail(function () { ErrorInFunc("Error in UpdateFilters"); });
+    }
+    DataWizard.UpdateFilters = UpdateFilters;
     var MapPoint = /** @class */ (function () {
         function MapPoint() {
         }
@@ -199,5 +199,27 @@ var DataWizard;
         FitMap(true);
     }
     DataWizard.FixMap = FixMap;
+    function GetApproximation() {
+        var approximation = "{}";
+        $.get("/DataWizard/GetApproximation")
+            .done(function (data) {
+            approximation = data;
+        })
+            .fail(function () { ErrorInFunc("Error in GetApproximation"); });
+        return approximation;
+    }
+    DataWizard.GetApproximation = GetApproximation;
+    function SetApproximation() {
+        $.get("/DataWizard/SetApproximation")
+            .done(function (data) {
+            $('#PartialApproximation').html(data);
+        })
+            .fail(function () { ErrorInFunc("Error in SetApproximation"); });
+    }
+    DataWizard.SetApproximation = SetApproximation;
+    function Test() {
+        SetApproximation();
+    }
+    DataWizard.Test = Test;
 })(DataWizard || (DataWizard = {}));
 //# sourceMappingURL=DataWizard.js.map

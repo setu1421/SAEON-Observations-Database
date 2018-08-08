@@ -20355,11 +20355,11 @@ table.pivotGridValueTable.rowFrozenTable tr td:last-child {
   color: #686969;
 }
 .e-columnmenuselection .e-icon,
-.e-contextmenu-mouseover .e-icon {
+.e-tgcontextmenu-mouseover .e-icon {
   
 }
 .e-columnmenuselection .e-icon,
-.e-contextmenu-mouseover .e-icon {
+.e-tgcontextmenu-mouseover .e-icon {
   color: #282827;
 }
 .e-treegrid .e-tooltxt.e-hover > span {
@@ -20409,34 +20409,34 @@ table.pivotGridValueTable.rowFrozenTable tr td:last-child {
 .e-treegrid .e-summaryrow .e-summaryrowcell {
   border-bottom-color: #c8c8c8;
 }
-.e-contextmenu,
-.e-innerContextmenu {
+.e-tgcontextmenu,
+.e-tginnerContextmenu {
   
   background: white;
   font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
 }
-.e-contextmenu,
-.e-innerContextmenu {
+.e-tgcontextmenu,
+.e-tginnerContextmenu {
   border-color: #c8c8c8 !important;
   color: #333333;
 }
-.e-headerContextmenu {
+.e-tgheaderContextmenu {
   
   background: white;
   font-family: Segoe UI, Helvetica Neue, Ubuntu, Arial;
   border: 1px solid;
 }
-.e-headerContextmenu {
+.e-tgheaderContextmenu {
   border-color: #c8c8c8 !important;
   color: #333333;
 }
-.e-contextmenu-mouseover {
+.e-tgcontextmenu-mouseover {
   
 }
-.e-contextmenu-mouseover {
+.e-tgcontextmenu-mouseover {
   color: #282827;
 }
-.e-contextmenu-mouseover {
+.e-tgcontextmenu-mouseover {
   background: #86cbea;
 }
 .e-tooltipgantt {

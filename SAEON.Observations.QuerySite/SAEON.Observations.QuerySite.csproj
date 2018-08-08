@@ -60,23 +60,23 @@
     <Reference Include="IdentityModel, Version=3.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\IdentityModel.3.6.1\lib\net461\IdentityModel.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.6.4\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.7.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.7.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.6.4\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.7.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.7.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.6.4\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.7.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.7.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.Web, Version=2.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.6.4\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    <Reference Include="Microsoft.AI.Web, Version=2.7.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.7.1\lib\net45\Microsoft.AI.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.WindowsServer, Version=2.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.6.4\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.7.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.7.1\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationInsights, Version=2.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.2.6.4\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.7.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.7.1\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.3\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
@@ -154,38 +154,38 @@
     <Reference Include="Serilog.Sinks.Seq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.Seq.4.0.0\lib\net45\Serilog.Sinks.Seq.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Compression.Base, Version=16.2450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.41\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Compression.Base, Version=16.2450.0.46, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.46\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.DocIO.Base, Version=16.2450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.41\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.DocIO.Base, Version=16.2450.0.46, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.46\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ, Version=16.2450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.16.2.0.41\lib\net45\Syncfusion.EJ.dll</HintPath>
+    <Reference Include="Syncfusion.EJ, Version=16.2450.0.46, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.16.2.0.46\lib\net45\Syncfusion.EJ.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ.Export, Version=16.2450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.16.2.0.41\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.Export, Version=16.2450.0.46, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.16.2.0.46\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ.MVC, Version=16.2500.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.16.2.0.41\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.MVC, Version=16.2500.0.46, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.16.2.0.46\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Licensing, Version=16.2460.0.43, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Licensing.16.2.0.43\lib\net46\Syncfusion.Licensing.dll</HintPath>
+    <Reference Include="Syncfusion.Licensing, Version=16.2460.0.46, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Licensing.16.2.0.46\lib\net46\Syncfusion.Licensing.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Linq.Base, Version=16.2450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.16.2.0.41\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Linq.Base, Version=16.2450.0.46, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.16.2.0.46\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.OfficeChart.Base, Version=16.2450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.41\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
+    <Reference Include="Syncfusion.OfficeChart.Base, Version=16.2450.0.46, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.46\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base, Version=16.2450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.41\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Pdf.Base, Version=16.2450.0.46, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.46\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Presentation.Base, Version=16.2450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.41\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Presentation.Base, Version=16.2450.0.46, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.46\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.XlsIO.Base, Version=16.2450.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.41\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.XlsIO.Base, Version=16.2450.0.46, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.FileFormatsBase45.16.2.0.46\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -344,9 +344,6 @@
     <Content Include="Content\ej\mobile\windows-theme\ej.mobile.windows-core.min.css" />
     <Content Include="Content\ej\mobile\windows-theme\ej.mobile.windows.css" />
     <Content Include="Content\ej\mobile\windows-theme\ej.mobile.windows.min.css" />
-    <Content Include="Content\ej\web\bootstrap-theme\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\bootstrap-theme\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\bootstrap-theme\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\bootstrap-theme\ej.theme.css" />
     <Content Include="Content\ej\web\bootstrap-theme\ej.theme.min.css" />
     <Content Include="Content\ej\web\bootstrap-theme\ej.web.all.min.css" />
@@ -414,7 +411,6 @@
     <Content Include="Content\ej\web\common-images\reportdesigner\Datasource.png" />
     <Content Include="Content\ej\web\common-images\reportdesigner\DefaultImage.png" />
     <Content Include="Content\ej\web\common-images\reportdesigner\Drag Table.png" />
-    <Content Include="Content\ej\web\common-images\reportdesigner\ejreportdesigner.svg" />
     <Content Include="Content\ej\web\common-images\reportdesigner\Image.png" />
     <Content Include="Content\ej\web\common-images\reportdesigner\MoveIcon.png" />
     <Content Include="Content\ej\web\common-images\reportdesigner\Parameter.png" />
@@ -466,9 +462,6 @@
     <Content Include="Content\ej\web\common-images\spreadsheet\right_arrow_light.cur" />
     <Content Include="Content\ej\web\common-images\spreadsheet\sprites.png" />
     <Content Include="Content\ej\web\common-images\treeview\drop-sibling-rtl.png" />
-    <Content Include="Content\ej\web\default-theme\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\default-theme\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\default-theme\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\default-theme\ej.theme.css" />
     <Content Include="Content\ej\web\default-theme\ej.theme.min.css" />
     <Content Include="Content\ej\web\default-theme\ej.web.all.min.css" />
@@ -479,21 +472,10 @@
     <Content Include="Content\ej\web\default-theme\images\rotator-icon.png" />
     <Content Include="Content\ej\web\default-theme\images\slider-tick.png" />
     <Content Include="Content\ej\web\default-theme\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.bootstrap.css" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.bootstrap.min.css" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.css" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.material.css" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.material.min.css" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.min.css" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.office-365.css" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.office-365.min.css" />
     <Content Include="Content\ej\web\ej.widgets.core.bootstrap.min.css" />
     <Content Include="Content\ej\web\ej.widgets.core.material.min.css" />
     <Content Include="Content\ej\web\ej.widgets.core.min.css" />
     <Content Include="Content\ej\web\ej.widgets.core.office-365.min.css" />
-    <Content Include="Content\ej\web\flat-azure-dark\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\flat-azure-dark\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\flat-azure-dark\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\flat-azure-dark\ej.theme.css" />
     <Content Include="Content\ej\web\flat-azure-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-azure-dark\ej.web.all.min.css" />
@@ -504,9 +486,6 @@
     <Content Include="Content\ej\web\flat-azure-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-azure-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-azure-dark\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\flat-lime-dark\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\flat-lime-dark\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\flat-lime-dark\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\flat-lime-dark\ej.theme.css" />
     <Content Include="Content\ej\web\flat-lime-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-lime-dark\ej.web.all.min.css" />
@@ -517,9 +496,6 @@
     <Content Include="Content\ej\web\flat-lime-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-lime-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-lime-dark\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\flat-lime\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\flat-lime\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\flat-lime\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\flat-lime\ej.theme.css" />
     <Content Include="Content\ej\web\flat-lime\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-lime\ej.web.all.min.css" />
@@ -530,9 +506,6 @@
     <Content Include="Content\ej\web\flat-lime\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-lime\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-lime\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\flat-saffron-dark\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\flat-saffron-dark\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\flat-saffron-dark\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\flat-saffron-dark\ej.theme.css" />
     <Content Include="Content\ej\web\flat-saffron-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-saffron-dark\ej.web.all.min.css" />
@@ -543,9 +516,6 @@
     <Content Include="Content\ej\web\flat-saffron-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-saffron-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-saffron-dark\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\flat-saffron\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\flat-saffron\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\flat-saffron\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\flat-saffron\ej.theme.css" />
     <Content Include="Content\ej\web\flat-saffron\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-saffron\ej.web.all.min.css" />
@@ -556,9 +526,6 @@
     <Content Include="Content\ej\web\flat-saffron\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-saffron\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-saffron\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\gradient-azure-dark\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\gradient-azure-dark\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\gradient-azure-dark\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\gradient-azure-dark\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-azure-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-azure-dark\ej.web.all.min.css" />
@@ -569,9 +536,6 @@
     <Content Include="Content\ej\web\gradient-azure-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-azure-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-azure-dark\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\gradient-azure\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\gradient-azure\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\gradient-azure\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\gradient-azure\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-azure\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-azure\ej.web.all.min.css" />
@@ -582,9 +546,6 @@
     <Content Include="Content\ej\web\gradient-azure\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-azure\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-azure\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\gradient-lime-dark\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\gradient-lime-dark\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\gradient-lime-dark\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\gradient-lime-dark\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-lime-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-lime-dark\ej.web.all.min.css" />
@@ -595,9 +556,6 @@
     <Content Include="Content\ej\web\gradient-lime-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-lime-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-lime-dark\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\gradient-lime\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\gradient-lime\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\gradient-lime\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\gradient-lime\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-lime\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-lime\ej.web.all.min.css" />
@@ -608,9 +566,6 @@
     <Content Include="Content\ej\web\gradient-lime\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-lime\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-lime\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\gradient-saffron-dark\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\gradient-saffron-dark\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\gradient-saffron-dark\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\gradient-saffron-dark\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-saffron-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-saffron-dark\ej.web.all.min.css" />
@@ -621,9 +576,6 @@
     <Content Include="Content\ej\web\gradient-saffron-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-saffron-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-saffron-dark\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\gradient-saffron\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\gradient-saffron\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\gradient-saffron\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\gradient-saffron\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-saffron\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-saffron\ej.web.all.min.css" />
@@ -634,9 +586,6 @@
     <Content Include="Content\ej\web\gradient-saffron\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-saffron\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-saffron\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\high-contrast-01\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\high-contrast-01\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\high-contrast-01\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\high-contrast-01\ej.theme.css" />
     <Content Include="Content\ej\web\high-contrast-01\ej.theme.min.css" />
     <Content Include="Content\ej\web\high-contrast-01\ej.web.all.min.css" />
@@ -647,9 +596,6 @@
     <Content Include="Content\ej\web\high-contrast-01\images\rotator-icon.png" />
     <Content Include="Content\ej\web\high-contrast-01\images\slider-tick.png" />
     <Content Include="Content\ej\web\high-contrast-01\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\high-contrast-02\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\high-contrast-02\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\high-contrast-02\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\high-contrast-02\ej.theme.css" />
     <Content Include="Content\ej\web\high-contrast-02\ej.theme.min.css" />
     <Content Include="Content\ej\web\high-contrast-02\ej.web.all.min.css" />
@@ -660,9 +606,6 @@
     <Content Include="Content\ej\web\high-contrast-02\images\rotator-icon.png" />
     <Content Include="Content\ej\web\high-contrast-02\images\slider-tick.png" />
     <Content Include="Content\ej\web\high-contrast-02\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\material\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\material\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\material\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\material\ej.theme.css" />
     <Content Include="Content\ej\web\material\ej.theme.min.css" />
     <Content Include="Content\ej\web\material\ej.web.all.min.css" />
@@ -674,9 +617,6 @@
     <Content Include="Content\ej\web\material\images\rotator-icon.png" />
     <Content Include="Content\ej\web\material\images\slider-tick.png" />
     <Content Include="Content\ej\web\material\images\waitingpopup.gif" />
-    <Content Include="Content\ej\web\office-365\ej.reportdesigner.min.css" />
-    <Content Include="Content\ej\web\office-365\ej.reportdesigner.theme.css" />
-    <Content Include="Content\ej\web\office-365\ej.reportdesigner.theme.min.css" />
     <Content Include="Content\ej\web\office-365\ej.theme.css" />
     <Content Include="Content\ej\web\office-365\ej.theme.min.css" />
     <Content Include="Content\ej\web\office-365\ej.web.all.min.css" />
@@ -729,10 +669,6 @@
     <Content Include="Content\ej\web\ej.widgets.core.material.less" />
     <Content Include="Content\ej\web\ej.widgets.core.less" />
     <Content Include="Content\ej\web\ej.widgets.core.bootstrap.less" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.office-365.less" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.material.less" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.less" />
-    <Content Include="Content\ej\web\ej.reportdesigner.core.bootstrap.less" />
     <Content Include="Content\ej\web\default-theme\ej.theme.less" />
     <Content Include="Content\ej\web\common-images\spreadsheet\ejxlicons.woff" />
     <Content Include="Content\ej\web\common-images\spreadsheet\ejxlicons.ttf" />
@@ -743,9 +679,6 @@
     <Content Include="Content\ej\web\common-images\reportviewer\ej-reportviewericons.woff" />
     <Content Include="Content\ej\web\common-images\reportviewer\ej-reportviewericons.ttf" />
     <Content Include="Content\ej\web\common-images\reportviewer\ej-reportviewericons.eot" />
-    <Content Include="Content\ej\web\common-images\reportdesigner\ejreportdesigner.woff" />
-    <Content Include="Content\ej\web\common-images\reportdesigner\ejreportdesigner.ttf" />
-    <Content Include="Content\ej\web\common-images\reportdesigner\ejreportdesigner.eot" />
     <Content Include="Content\ej\web\common-images\navigationdrawer\icons.woff" />
     <Content Include="Content\ej\web\common-images\navigationdrawer\icons.ttf" />
     <Content Include="Content\ej\web\common-images\navigationdrawer\icons.eot" />
@@ -761,6 +694,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <None Include="Scripts\ej\web\ej.web.all.min.intellisense.js" />
     <None Include="Scripts\ej\web\ej.web.all-vsdoc.js" />
     <Content Include="Scripts\ej\common\ej.core.min.js" />
@@ -877,7 +811,6 @@
     <Content Include="Scripts\ej\web\ej.radiobutton.min.js" />
     <Content Include="Scripts\ej\web\ej.rating.min.js" />
     <Content Include="Scripts\ej\web\ej.recurrenceeditor.min.js" />
-    <Content Include="Scripts\ej\web\ej.reportdesigner.min.js" />
     <Content Include="Scripts\ej\web\ej.reportviewer.min.js" />
     <Content Include="Scripts\ej\web\ej.ribbon.min.js" />
     <Content Include="Scripts\ej\web\ej.rotator.min.js" />
@@ -901,7 +834,6 @@
     <Content Include="Scripts\ej\web\ej.uploadbox.min.js" />
     <Content Include="Scripts\ej\web\ej.waitingpopup.min.js" />
     <Content Include="Scripts\ej\web\ej.web.all.min.js" />
-    <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -946,6 +878,8 @@
     <Content Include="Views\DataWizard\_StationsMap.cshtml" />
     <Content Include="Views\DataWizard\_FeaturesSelectedHtml.cshtml" />
     <Content Include="Views\DataWizard\_Filters.cshtml" />
+    <Content Include="Views\DataWizard\_Approximation.cshtml" />
+    <Content Include="Views\DataWizard\_ApproximationHtml.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -954,7 +888,9 @@
   <ItemGroup>
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

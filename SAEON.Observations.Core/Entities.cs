@@ -662,25 +662,45 @@ namespace SAEON.Observations.Core.Entities
     {
         [Key]
         public long Id { get; set; }
+        public Guid SiteId { get; set; }
         public string SiteCode { get; set; }
         public string SiteName { get; set; }
+        public Guid StationId { get; set; }
         public string StationCode { get; set; }
         public string StationName { get; set; }
-        public string InstrumentCode { get; set; }
+        public Guid InstrumentId { get; set; }
+        public string InstrumentCode { get; set; } 
         public string InstrumentName { get; set; }
+        public Guid SensorId { get; set; }
         public string SensorCode { get; set; }
         public string SensorName { get; set; }
         public string PhenomenonCode { get; set; }
         public string PhenomenonName { get; set; }
+        public Guid PhenomenonOfferingId { get; set; }
         public string OfferingCode { get; set; }
         public string OfferingName { get; set; }
+        [Column("PhenomenonUOMID")]
+        public Guid PhenomenonUnitId { get; set; }
         [Column("UnitOfMeasureCode")]
-        public string UnitCode { get; set; }
+        public string UnitCode { get; set; }  
         [Column("UnitOfMeasureUnit")] 
         public string UnitName { get; set; }
         public int Count { get; set; } 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public double? TopLatitude { get; set; }
+        public double? BottomLatitude { get; set; }
+        public double? LeftLongitude { get; set; }
+        public double? RightLongitude { get; set; }
+
+        // Navigation
+        //public Site Site { get; set; }
+        //public Station Station { get; set; }
+        //public Instrument Instrument { get; set; }
+        //public Sensor Sensor { get; set; }
+        //public PhenomenonOffering PhenomenonOffering { get; set; }
+        //[ForeignKey("PhenomenonUnitId")]
+        //public PhenomenonUnit PhenomenonUnit { get; set; }
     }
 
     [Table("vLocations")]
@@ -721,7 +741,7 @@ namespace SAEON.Observations.Core.Entities
         [Column("UnitOfMeasureID")]
         public Guid UnitID { get; set; }
         [Column("UnitOfMeasureUnit")]
-        public string UnitName { get; set; }
+        public string UnitName { get; set; }  
     }
 
 #if !NET461

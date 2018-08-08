@@ -1,5 +1,6 @@
 ﻿using SAEON.Logs;
 using SAEON.Observations.Core;
+using SAEON.Observations.WebAPI.Controllers.SensorThingsAPI;
 using System;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -27,6 +28,7 @@ namespace SAEON.Observations.WebAPI
                     FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
                     RouteConfig.RegisterRoutes(RouteTable.Routes);
                     BundleConfig.RegisterBundles(BundleTable.Bundles);
+                    SensorThingsFactory.Load();
                 }
                 catch (Exception ex)
                 {

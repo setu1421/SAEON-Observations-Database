@@ -1,4 +1,5 @@
 ﻿using IdentityModel.Client;
+using Newtonsoft.Json;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
@@ -62,6 +63,74 @@ namespace SAEON.Observations.QuerySite.Controllers
                             throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
                         }
                         var data = await response.Content.ReadAsAsync<List<TEntity>>();
+                        //Logging.Verbose("Data: {@data}", data);
+                        return data;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        protected async Task<TOutput> GetEntity<TOutput>(string resource)
+        {
+            using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
+            {
+                try
+                {
+                    using (var client = await GetWebAPIClientAsync())
+                    {
+                        client.Timeout = TimeSpan.FromMinutes(30);
+                        var url = $"{apiBaseUrl}/{resource}";
+                        Logging.Verbose("Calling: {url}", url);
+                        var response = await client.GetAsync(url);
+                        Logging.Verbose("Response: {response}", response);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
+                        }
+                        var data = await response.Content.ReadAsAsync<TOutput>();
+                        //Logging.Verbose("Data: {@data}", data);
+                        return data;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        protected async Task<TOutput> GetEntity<TInput, TOutput>(string resource, TInput input)
+        {
+            string GenerateQueryString()
+            {
+                if (input == null)
+                    return "";
+                else
+                    return $"?input={JsonConvert.SerializeObject(input)}";
+            }
+
+            using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
+            {
+                try
+                {
+                    using (var client = await GetWebAPIClientAsync())
+                    {
+                        client.Timeout = TimeSpan.FromMinutes(30);
+                        var url = $"{apiBaseUrl}/{resource}" + GenerateQueryString();
+                        Logging.Verbose("Calling: {url}", url);
+                        var response = await client.GetAsync(url);
+                        Logging.Verbose("Response: {response}", response);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
+                        }
+                        var data = await response.Content.ReadAsAsync<TOutput>();
                         //Logging.Verbose("Data: {@data}", data);
                         return data;
                     }

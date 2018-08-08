@@ -154,7 +154,6 @@ namespace SAEON.Observations.WebAPI
 
                 // OData
                 config.Filter().Expand().Select().OrderBy().MaxTop(null).Count();
-                //config.MapODataServiceRoute("OData", "ODataOld", GetEdmModel());
                 config.MapControllerBoundODataServiceRoute("OData", "OData", GetObservationsEdmModel());
                 config.MapControllerBoundODataServiceRoute("Internal", "Internal", GetInternalEdmModel());
 

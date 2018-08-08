@@ -120,23 +120,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-
-        //[HttpGet]
-        //public PartialViewResult GetLocationsSelectedHtml()
-        //{
-        //    using (Logging.MethodCall(GetType()))
-        //    {
-        //        try
-        //        {
-        //            return PartialView("_LocationsSelectedHtml", SessionModel);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logging.Exception(ex);
-        //            throw;
-        //        }
-        //    }
-        //}
         #endregion
 
         #region Features
@@ -184,7 +167,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                     Logging.Verbose("Phenomena: {Phenomena}", model.Phenomena);
                     Logging.Verbose("Offerings: {Offerings}", model.Offerings);
                     Logging.Verbose("Units: {Units}", model.Units);
-                    //return GetFeaturesSelectedHtml();
                     return PartialView("_FeaturesSelectedHtml", model);
                 }
                 catch (Exception ex)
@@ -194,23 +176,30 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+        #endregion
 
-        //[HttpGet]
-        //public PartialViewResult GetFeaturesSelectedHtml()
-        //{
-        //    using (Logging.MethodCall(GetType()))
-        //    {
-        //        try
-        //        {
-        //            return PartialView("_FeaturesSelectedHtml", SessionModel);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logging.Exception(ex);
-        //            throw;
-        //        }
-        //    }
-        //}
+        #region Filters
+        [HttpPost]
+        public EmptyResult UpdateFilters(DateTime startDate, DateTime endDate)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    Logging.Verbose("StartDate: {startDate} EndDate: {endDate}", startDate, endDate);
+                    var model = SessionModel;
+                    model.StartDate = startDate;
+                    model.EndDate = endDate;
+                    SessionModel = model;
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
         #endregion
 
         #region Map
@@ -230,7 +219,60 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+        #endregion
 
+        #region Approximation
+        private static readonly Random random = new Random(DateTime.Now.Second);
+
+        [HttpGet]
+        public async Task<PartialViewResult> SetApproximation()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    await GetApproximation();
+                    return PartialView("_ApproximationHtml", SessionModel);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetApproximation()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    var input = new DataWizardInput();
+                    input.Origanisations.AddRange(model.Organisations);
+                    input.Sites.AddRange(model.Sites);
+                    input.Stations.AddRange(model.Stations);
+                    input.Phenomena.AddRange(model.Phenomena);
+                    input.Offerings.AddRange(model.Offerings);
+                    input.Units.AddRange(model.Units);
+                    input.StartDate = model.StartDate;
+                    input.EndDate = model.EndDate;
+
+                    model.Approximation = await GetEntity<DataWizardInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
+                    Logging.Verbose("RowCount: {RowCount}", model.Approximation.RowCount);
+                    Logging.Verbose("Errors: {Errors}", model.Approximation.Errors);
+                    SessionModel = model;
+                    return Json(SessionModel.Approximation, JsonRequestBehavior.AllowGet); 
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
         #endregion
     }
 }
