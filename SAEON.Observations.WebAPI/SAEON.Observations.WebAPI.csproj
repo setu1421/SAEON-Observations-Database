@@ -388,7 +388,11 @@
     <Compile Include="Controllers\OData\UnitsODController.cs" />
     <Compile Include="Controllers\SensorThings\BaseController.cs" />
     <Compile Include="Controllers\SensorThings\DatastreamsSTController.cs" />
+    <Compile Include="Controllers\SensorThings\FeatureOfInterestSTController.cs" />
     <Compile Include="Controllers\SensorThings\LocationsSTController.cs" />
+    <Compile Include="Controllers\SensorThings\ObservationSTController.cs" />
+    <Compile Include="Controllers\SensorThings\ObservedPropertySTController.cs" />
+    <Compile Include="Controllers\SensorThings\SensorSTController.cs" />
     <Compile Include="Controllers\SensorThings\SensorThingsController.cs" />
     <Compile Include="Controllers\SensorThings\SensorThingsFactory.cs" />
     <Compile Include="Controllers\SensorThings\ThingsSTController.cs" />

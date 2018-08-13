@@ -3,7 +3,7 @@ using SAEON.SensorThings;
 using System.Linq;
 using System.Web.Http;
 
-namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
+namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
     [RoutePrefix("SensorThings/Things")]
     public class ThingsSTController : BaseController<Thing>

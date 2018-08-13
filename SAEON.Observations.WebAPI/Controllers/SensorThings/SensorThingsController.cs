@@ -5,7 +5,7 @@ using SAEON.Core;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
-namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
+namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
     [RoutePrefix("SensorThings")]
     public class SensorThingsController : Controller
@@ -28,6 +28,10 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
             List.Value.Add(new EntitySet { Name = "Things", Url = Request.Url.AbsoluteUri +"/Things" });
             List.Value.Add(new EntitySet { Name = "Locations", Url = Request.Url.AbsoluteUri + "/Locations" });
             List.Value.Add(new EntitySet { Name = "Datastreams", Url = Request.Url.AbsoluteUri + "/Datastreams" });
+            List.Value.Add(new EntitySet { Name = "Sensors", Url = Request.Url.AbsoluteUri + "/Sensors" });
+            List.Value.Add(new EntitySet { Name = "Observations", Url = Request.Url.AbsoluteUri + "/Observations" });
+            List.Value.Add(new EntitySet { Name = "ObservedProperties", Url = Request.Url.AbsoluteUri + "/ObservedProperties" });
+            List.Value.Add(new EntitySet { Name = "FeaturesOfInterest", Url = Request.Url.AbsoluteUri + "/FeaturesOfInterest" });
             JsonNetResult jsonNetResult = new JsonNetResult
             {
                 Formatting = Formatting.Indented,

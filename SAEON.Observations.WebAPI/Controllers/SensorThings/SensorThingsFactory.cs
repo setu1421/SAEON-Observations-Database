@@ -6,17 +6,18 @@ using System.Linq;
 using System.Web;
 using SAEON.Logs;
 
-namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
+namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
     public static class SensorThingsFactory
     {
-        public static List<Thing> Things { get; private set; } = new List<Thing>();
-        public static List<Location> Locations { get; private set; } = new List<Location>();
-        public static List<HistoricalLocation> HistoricalLocations { get; private set; } = new List<HistoricalLocation>();
-        public static List<Datastream> Datastreams { get; private set; } = new List<Datastream>();
-        public static List<Sensor> Sensors { get; private set; } = new List<Sensor>();
-        public static List<ObservedProperty> ObservedProperties { get; private set; } = new List<ObservedProperty>();
-        public static List<FeatureOfInterest> FeaturesOfInterest { get; private set; } = new List<FeatureOfInterest>();
+        public static List<Thing> Things { get; } = new List<Thing>();
+        public static List<Location> Locations { get; } = new List<Location>();
+        public static List<HistoricalLocation> HistoricalLocations { get; } = new List<HistoricalLocation>();
+        public static List<Datastream> Datastreams { get; } = new List<Datastream>();
+        public static List<Sensor> Sensors { get; } = new List<Sensor>();
+        public static List<ObservedProperty> ObservedProperties { get; } = new List<ObservedProperty>();
+        public static List<Observation> Observations { get; } = new List<Observation>();
+        public static List<FeatureOfInterest> FeaturesOfInterest { get; } = new List<FeatureOfInterest>();
 
         public static void Load()
         {

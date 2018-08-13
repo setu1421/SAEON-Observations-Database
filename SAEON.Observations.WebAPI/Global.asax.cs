@@ -1,6 +1,6 @@
 ﻿using SAEON.Logs;
 using SAEON.Observations.Core;
-using SAEON.Observations.WebAPI.Controllers.SensorThingsAPI;
+using SAEON.Observations.WebAPI.Controllers.SensorThings;
 using System;
 using System.Web.Hosting;
 using System.Web.Http;

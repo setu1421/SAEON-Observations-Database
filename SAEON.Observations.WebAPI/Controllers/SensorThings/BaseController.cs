@@ -1,13 +1,9 @@
 ﻿using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using SAEON.SensorThings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace SAEON.Observations.WebAPI.Controllers.SensorThingsAPI
+namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class BaseController<TEntity> : SensorThingsApiController<TEntity> where TEntity : SensorThingEntity
