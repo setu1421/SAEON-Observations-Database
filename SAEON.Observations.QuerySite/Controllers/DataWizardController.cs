@@ -11,11 +11,6 @@ namespace SAEON.Observations.QuerySite.Controllers
 {
     public class DataWizardController : BaseController<DataWizardModel>
     {
-        //protected override async Task<DataModel> LoadModelAsync(DataModel model)
-        //{
-        //    return model;
-        //}
-
         protected override async Task<DataWizardModel> LoadModelAsync(DataWizardModel model)
         {
             model.Locations.Clear();
@@ -103,7 +98,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                                 .ToList()
                                 .ForEach(i => i.IsSelected = true);
                         }
-                    }
+                    } 
                     SessionModel = model;
                     Logging.Verbose("LocationsSelected: {@LocationsSelected}", model.LocationsSelected);
                     Logging.Verbose("Organisations: {Organisations}", model.Organisations);
@@ -251,16 +246,16 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var model = SessionModel;
                     var input = new DataWizardInput();
-                    input.Origanisations.AddRange(model.Organisations);
+                    input.Organisations.AddRange(model.Organisations);
                     input.Sites.AddRange(model.Sites);
                     input.Stations.AddRange(model.Stations);
                     input.Phenomena.AddRange(model.Phenomena);
                     input.Offerings.AddRange(model.Offerings);
                     input.Units.AddRange(model.Units);
-                    input.StartDate = model.StartDate;
-                    input.EndDate = model.EndDate;
-
-                    model.Approximation = await GetEntity<DataWizardInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
+                    input.StartDate = model.StartDate.ToUniversalTime();
+                    input.EndDate = model.EndDate.ToUniversalTime();
+                    //model.Approximation = await GetEntity<DataWizardInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
+                    model.Approximation = await PostEntity<DataWizardInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
                     Logging.Verbose("RowCount: {RowCount}", model.Approximation.RowCount);
                     Logging.Verbose("Errors: {Errors}", model.Approximation.Errors);
                     SessionModel = model;
@@ -273,6 +268,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+
         #endregion
     }
 }

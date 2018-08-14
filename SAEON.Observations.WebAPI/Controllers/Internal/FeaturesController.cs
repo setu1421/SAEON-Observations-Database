@@ -26,6 +26,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         Key = $"PHE~{feature.PhenomenonID}~",
                         Text = feature.PhenomenonName,
                         Name = $"{feature.PhenomenonName}",
+                        ToolTip = new LinkAttribute("Phenomenon"),
                         HasChildren = true
                     };
                     result.Add(phenomenon);
@@ -41,6 +42,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         ParentKey = phenomenon.Key,
                         Text = feature.OfferingName,
                         Name = $"{phenomenon.Name} - {feature.OfferingName}",
+                        ToolTip = new LinkAttribute("Offering"),
                         HasChildren = true
                     };
                     result.Add(offering);
@@ -55,6 +57,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         ParentKey = offering.Key,
                         Text = feature.UnitName,
                         Name = $"{phenomenon.Name} - {offering.Name} - {feature.UnitName}",
+                        ToolTip = new LinkAttribute("Unit"),
                         HasChildren = false
                     };
                     result.Add(unit);

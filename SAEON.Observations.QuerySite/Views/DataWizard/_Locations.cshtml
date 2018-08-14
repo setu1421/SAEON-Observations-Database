@@ -11,6 +11,7 @@ Html.EJ().TreeView("treeViewLocations")
         .IsChecked("IsChecked")
         .Expanded("IsExpanded")
         .Selected("IsSelected")
+        .LinkAttribute("ToolTip")
     )
     .ClientSideEvents(events => events
         .NodeCheck("DataWizard.UpdateLocationsSelected")

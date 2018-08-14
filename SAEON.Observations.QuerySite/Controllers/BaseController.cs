@@ -112,7 +112,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 if (input == null)
                     return "";
                 else
-                    return $"?input={JsonConvert.SerializeObject(input)}";
+                    return $"?json={JsonConvert.SerializeObject(input)}";
             }
 
             using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
@@ -142,17 +142,48 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+
+        protected async Task<TOutput> PostEntity<TInput, TOutput>(string resource, TInput input)
+        {
+            using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
+            {
+                try
+                {
+                    using (var client = await GetWebAPIClientAsync())
+                    {
+                        client.Timeout = TimeSpan.FromMinutes(30);
+                        var url = $"{apiBaseUrl}/{resource}";
+                        Logging.Verbose("Calling: {url}", url);
+                        Logging.Verbose("Input: {@Input}", input);
+                        var response = await client.PostAsJsonAsync<TInput>(url, input);
+                        Logging.Verbose("Response: {response}", response);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
+                        }
+                        var data = await response.Content.ReadAsAsync<TOutput>();
+                        //Logging.Verbose("Data: {@data}", data);
+                        return data;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
     }
 
     public class BaseController<TModel> : BaseController where TModel : BaseModel, new()
     {
-        private readonly string sessionModelKey = typeof(TModel).Name+"Model";
+        private readonly string sessionModelKey = typeof(TModel).Name + "Model";
 
         private HttpSessionState CurrentSession { get { return System.Web.HttpContext.Current.Session; } }
 
         protected TModel SessionModel { get { return GetSessionModel(); } set { SetSessionModel(value); } }
 
-        private TModel GetSessionModel() 
+        private TModel GetSessionModel()
         {
             if (CurrentSession[sessionModelKey] == null)
             {

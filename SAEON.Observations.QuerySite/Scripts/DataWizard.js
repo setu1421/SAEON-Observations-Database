@@ -107,6 +107,7 @@ var DataWizard;
     function CheckReady() {
         if (locationsReady && featuresReady) {
             HideWaiting();
+            EnableButtons();
         }
     }
     function UpdateFeaturesSelected() {

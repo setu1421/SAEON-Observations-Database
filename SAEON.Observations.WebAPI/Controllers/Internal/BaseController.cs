@@ -7,8 +7,8 @@ using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
-    //[ClientAuthorization("SAEON.Observations.QuerySite")] Uncomment when going live
-    public class BaseController<TEntity> : ApiController where TEntity : BaseEntity
+
+    public class BaseController : ApiController
     {
         protected readonly ObservationsDbContext db = null;
 
@@ -34,7 +34,12 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 base.Dispose(disposing);
             }
         }
+    }
 
+
+    //[ClientAuthorization("SAEON.Observations.QuerySite")] Uncomment when going live
+    public class BaseController<TEntity> : BaseController where TEntity : BaseEntity
+    {
         /// <summary>
         /// query for items
         /// </summary>

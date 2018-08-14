@@ -657,6 +657,33 @@ namespace SAEON.Observations.Core.Entities
         public string UpdatedBy { get; set; }
     }
 
+    [Table("vImportBatchSummary")]
+    public class ImportBatchSummary
+    {
+        [Key]
+        public Guid Id { get; set; }
+        public Guid ImportBatchId { get; set; }
+        public Guid SensorId { get; set; }
+        public Guid InstrumentId { get; set; }
+        public Guid StationId { get; set; }
+        public Guid SiteId { get; set; }
+        public Guid PhenomenonOfferingId { get; set; }
+        [Column("PhenomenonUOMID")]
+        public Guid PhenomenonUnitId { get; set; }
+        public double Count { get; set; }
+        public double? Minimum { get; set; }
+        public double? Maximum { get; set; }
+        public double? Average { get; set; }
+        public double? StandardDeviation { get; set; }
+        public double? Variance { get; set; }
+        public double? TopLatitude { get; set; }
+        public double? BottomLatitude { get; set; }
+        public double? LeftLongitude { get; set; }
+        public double? RightLongitude { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+    }
+
     [Table("vInventory")]
     public class Inventory : BaseEntity
     {
@@ -1033,6 +1060,7 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
 
+        public DbSet<ImportBatchSummary> ImportBatchSummary { get; set; }
         public DbSet<Inventory> Inventory { get; set; } 
         public DbSet<Location> Locations { get; set; }
         public DbSet<Feature> Features { get; set; }
@@ -1101,7 +1129,7 @@ namespace SAEON.Observations.Core.Entities
                     cs.MapLeftKey("ProjectID");
                     cs.MapRightKey("StationID");
                     cs.ToTable("Project_Station"); 
-                });
+                }); 
             modelBuilder.Entity<Station>()
                 .HasMany<Instrument>(l => l.Instruments)
                 .WithMany(r => r.Stations)

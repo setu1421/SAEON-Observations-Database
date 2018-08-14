@@ -107,6 +107,7 @@
     function CheckReady() {
         if (locationsReady && featuresReady) {
             HideWaiting();
+            EnableButtons();
         }
     }
 

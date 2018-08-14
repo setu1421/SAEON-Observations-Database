@@ -2,26 +2,41 @@
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Dynamic;
+using System.Globalization;
+using System.Linq;
 
 namespace SAEON.Observations.Core
 {
+    public class LinkAttribute
+    {
+        public string Title { get; set; }
+
+        public LinkAttribute() { }
+        public LinkAttribute(string title)
+        {
+            Title = title; 
+        }
+    }
+
     public abstract class TreeNode : BaseEntity
     {
-        [Key] 
+        [Key]
         public Guid Id { get; set; }
         public Guid? ParentId { get; set; }
-        [Key] 
-        public string Key { get; set; } 
+        [Key]
+        public string Key { get; set; }
         public string ParentKey { get; set; }
         public string Text { get; set; }
-        public string Name { get; set; } 
+        public string Name { get; set; }
         public bool HasChildren { get; set; }
         public bool IsExpanded { get; set; }
         public bool IsSelected { get; set; }
         public bool IsChecked { get; set; }
+        public LinkAttribute ToolTip { get; set; } = null;
     }
 
     public class LocationNode : TreeNode
@@ -42,28 +57,30 @@ namespace SAEON.Observations.Core
         public string Url { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public double? Elevation { get; set; } 
+        public double? Elevation { get; set; }
         public bool IsSelected { get; set; }
     }
-#endregion
+    #endregion
 
-#region DataWizard
+    #region DataWizard
+
     public class DataWizardInput
     {
-        public List<Guid> Origanisations { get; set; } = null;
-        public List<Guid> Sites { get; set; } = null;
-        public List<Guid> Stations { get; set; } = null;
-        public List<Guid> Phenomena { get; set; } = null;
-        public List<Guid> Offerings { get; set; } = null;
-        public List<Guid> Units { get; set; } = null;
-        public DateTime? StartDate { get; set; } = null;  
+        public List<Guid> Organisations { get; } = new List<Guid>();
+        public List<Guid> Sites { get; } = new List<Guid>();
+        public List<Guid> Stations { get; } = new List<Guid>();
+        public List<Guid> Instruments { get; } = new List<Guid>();
+        public List<Guid> Phenomena { get; } = new List<Guid>();
+        public List<Guid> Offerings { get; } = new List<Guid>();
+        public List<Guid> Units { get; } = new List<Guid>();
+        public DateTime? StartDate { get; set; } = null;
         public DateTime? EndDate { get; set; } = null;
     }
 
     public class DataWizardApproximation
-    { 
-        public long RowCount { get; set; } = 0;  
-        public List<string> Errors { get; set; } = new List<string>();
+    {
+        public long RowCount { get; set; } = 0;
+        public List<string> Errors { get; set; } = new List<string>(); 
     }
 
     /*
