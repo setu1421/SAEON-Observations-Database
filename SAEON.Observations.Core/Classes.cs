@@ -71,10 +71,10 @@ namespace SAEON.Observations.Core
         public List<Guid> Stations { get; } = new List<Guid>();
         public List<Guid> Instruments { get; } = new List<Guid>();
         public List<Guid> Phenomena { get; } = new List<Guid>();
-        public List<Guid> Offerings { get; } = new List<Guid>();
+        public List<Guid> Offerings { get; } = new List<Guid>();  
         public List<Guid> Units { get; } = new List<Guid>();
-        public DateTime? StartDate { get; set; } = null;
-        public DateTime? EndDate { get; set; } = null;
+        public DateTime StartDate { get; set; } = DateTime.Now;
+        public DateTime EndDate { get; set; } = DateTime.Now.AddYears(-100);
     }
 
     public class DataWizardApproximation

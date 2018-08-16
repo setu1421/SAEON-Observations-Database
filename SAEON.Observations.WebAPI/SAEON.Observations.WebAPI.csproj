@@ -431,7 +431,10 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ConnectionStrings.config" />
+    <Content Include="ConnectionStrings.config">
+      <SubType>Designer</SubType>
+      <TransformOnBuild>true</TransformOnBuild>
+    </Content>
     <Content Include="Images\Banner.jpg" />
     <Content Include="Images\Logo.png" />
     <Content Include="MachineKey.config" />
@@ -482,6 +485,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Connected Services\Application Insights\ConnectedService.json" />
+    <None Include="ConnectionStrings.Debug.config">
+      <DependentUpon>ConnectionStrings.config</DependentUpon>
+      <IsTransformFile>true</IsTransformFile>
+    </None>
+    <None Include="ConnectionStrings.Release.config">
+      <DependentUpon>ConnectionStrings.config</DependentUpon>
+      <IsTransformFile>true</IsTransformFile>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -535,8 +546,10 @@
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.8.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.8.2\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.SlowCheetah.3.1.66\build\Microsoft.VisualStudio.SlowCheetah.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.SlowCheetah.3.1.66\build\Microsoft.VisualStudio.SlowCheetah.targets'))" />
   </Target>
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
+  <Import Project="..\packages\Microsoft.VisualStudio.SlowCheetah.3.1.66\build\Microsoft.VisualStudio.SlowCheetah.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.SlowCheetah.3.1.66\build\Microsoft.VisualStudio.SlowCheetah.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

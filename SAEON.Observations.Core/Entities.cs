@@ -268,7 +268,7 @@ namespace SAEON.Observations.Core.Entities
     }
 
     /// <summary>
-    /// PhenomenonOffering entity
+    /// PhenomenonOffering entity 
     /// </summary>
     public class PhenomenonOffering : BaseIDEntity
     {
@@ -670,10 +670,10 @@ namespace SAEON.Observations.Core.Entities
         public Guid PhenomenonOfferingId { get; set; }
         [Column("PhenomenonUOMID")]
         public Guid PhenomenonUnitId { get; set; }
-        public double Count { get; set; }
+        public int Count { get; set; }
         public double? Minimum { get; set; }
         public double? Maximum { get; set; }
-        public double? Average { get; set; }
+        public double? Average { get; set; } 
         public double? StandardDeviation { get; set; }
         public double? Variance { get; set; }
         public double? TopLatitude { get; set; }
@@ -1051,6 +1051,8 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }
+        public DbSet<PhenomenonOffering> PhenomenonOfferings { get; set; }
+        public DbSet<PhenomenonUnit> PhenomenonUnits { get; set; }
         public DbSet<Programme> Programmes { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Sensor> Sensors { get; set; }
@@ -1112,15 +1114,15 @@ namespace SAEON.Observations.Core.Entities
                     cs.MapRightKey("InstrumentID");
                     cs.ToTable("Organisation_Instrument");
                 });
-            modelBuilder.Entity<Phenomenon>()
-                .HasMany<Offering>(l => l.Offerings)
-                .WithMany(r => r.Phenomena)
-                .Map(cs =>
-                {
-                    cs.MapLeftKey("PhenomenonID");
-                    cs.MapRightKey("OfferingID");
-                    cs.ToTable("PhenomenonOffering");
-                });
+            //modelBuilder.Entity<Phenomenon>()
+            //    .HasMany<Offering>(l => l.Offerings)
+            //    .WithMany(r => r.Phenomena)
+            //    .Map(cs =>
+            //    {
+            //        cs.MapLeftKey("PhenomenonID");
+            //        cs.MapRightKey("OfferingID");
+            //        cs.ToTable("PhenomenonOffering");
+            //    });
             modelBuilder.Entity<Project>()
                 .HasMany<Station>(l => l.Stations)
                 .WithMany(r => r.Projects)
@@ -1134,22 +1136,21 @@ namespace SAEON.Observations.Core.Entities
                 .HasMany<Instrument>(l => l.Instruments)
                 .WithMany(r => r.Stations)
                 .Map(cs =>
-                {
+                { 
                     cs.MapLeftKey("StationID");
                     cs.MapRightKey("InstrumentID");
                     cs.ToTable("Station_Instrument");
                 });
-
             modelBuilder.Entity<Unit>().Property(p => p.Name).HasColumnName("Unit");
-            modelBuilder.Entity<Phenomenon>()
-                .HasMany<Unit>(l => l.Units)
-                .WithMany(r => r.Phenomena)
-                .Map(cs =>
-                {
-                    cs.MapLeftKey("PhenomenonID");
-                    cs.MapRightKey("UnitOfMeasureID");
-                    cs.ToTable("PhenomenonUOM");
-                });
+            //modelBuilder.Entity<Phenomenon>()
+            //    .HasMany<Unit>(l => l.Units)
+            //    .WithMany(r => r.Phenomena)
+            //    .Map(cs =>
+            //    {
+            //        cs.MapLeftKey("PhenomenonID");
+            //        cs.MapRightKey("UnitOfMeasureID");
+            //        cs.ToTable("PhenomenonUOM");
+            //    });
         }
     }
 

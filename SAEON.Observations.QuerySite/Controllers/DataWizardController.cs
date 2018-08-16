@@ -248,7 +248,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var input = new DataWizardInput();
                     input.Organisations.AddRange(model.Organisations);
                     input.Sites.AddRange(model.Sites);
-                    input.Stations.AddRange(model.Stations);
+                    input.Stations.AddRange(model.Stations); 
                     input.Phenomena.AddRange(model.Phenomena);
                     input.Offerings.AddRange(model.Offerings);
                     input.Units.AddRange(model.Units);

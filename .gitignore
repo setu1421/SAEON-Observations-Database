@@ -308,9 +308,9 @@ $RECYCLE.BIN/
 App_Data/
 Logs/
 [cC]onnections.config
-[cC]onnection[sS]trings.config
+[cC]onnection[sS]trings*.config
 [mM]achine[kK]ey.config
 [sS]mtp.config
-[cC]onnection[sS]trings.json
+[cC]onnection[sS]trings*.json
 Observations*.zip
 

@@ -19,25 +19,44 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 try
                 {
                     Logging.Verbose("Input: {@Input}", input);
-                    if (input.Organisations.Any())
+                    foreach (var orgId in input.Organisations)
                     {
-                        foreach (var orgId in input.Organisations)
-                        {
-                            input.Sites.AddRange(db.Organisations.Where(i => i.Id == orgId).SelectMany(i => i.Sites).Select(i => i.Id));
-                            input.Stations.AddRange(db.Organisations.Where(i => i.Id == orgId).SelectMany(i => i.Stations).Select(i => i.Id));
-                        }
+                        input.Sites.AddRange(db.Organisations.Where(i => i.Id == orgId).SelectMany(i => i.Sites).Select(i => i.Id));
+                        input.Stations.AddRange(db.Organisations.Where(i => i.Id == orgId).SelectMany(i => i.Stations).Select(i => i.Id));
                     }
-                    Logging.Verbose("Input: {@Input}", input);
-                    //IQueryable<Inventory> sites = db.Inventory.Where(i => input.Sites.Contains(i.SiteId));
-                    //IQueryable<Inventory> stations = db.Inventory.Where(i => input.Stations.Contains(i.StationId));
-                    //IQueryable<Inventory> q = sites.Union(stations);
+                    foreach (var phenomenonId in input.Phenomena)
+                    {
+                        
+                        input.Offerings.AddRange(db.PhenomenonOfferings.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
+                        input.Units.AddRange(db.PhenomenonUnits.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
+                    }
+                    input.StartDate = input.StartDate.Date;
+                    input.EndDate = input.EndDate.Date.AddDays(1);
+                    Logging.Verbose("Processed Input: {@Input}", input);
                     IQueryable<ImportBatchSummary> sites = db.ImportBatchSummary.Where(i => input.Sites.Contains(i.SiteId));
                     IQueryable<ImportBatchSummary> stations = db.ImportBatchSummary.Where(i => input.Stations.Contains(i.StationId));
-                    IQueryable<ImportBatchSummary> q = sites.Union(stations);
-                    Logging.Verbose("Sql: {Sql}",q.ToString());
+                    IQueryable<ImportBatchSummary> qLocations = sites.Union(stations).Distinct();
+                    //Logging.Verbose("Locations Sql: {Sql}", qLocations.ToString());
+                    var locationRows = qLocations.ToList().Sum(i => i.Count);
+                    Logging.Verbose("Location Rows: {Rows}", locationRows);
+                    IQueryable<ImportBatchSummary> offerings = db.ImportBatchSummary.Where(i => input.Offerings.Contains(i.PhenomenonOfferingId));
+                    IQueryable<ImportBatchSummary> units = db.ImportBatchSummary.Where(i => input.Units.Contains(i.PhenomenonUnitId));
+                    IQueryable<ImportBatchSummary> qFeatures = offerings.Union(units).Distinct();
+                    //Logging.Verbose("Features Sql: {Sql}", qFeatures.ToString());
+                    var featureRows = qFeatures.ToList().Sum(i => i.Count);
+                    Logging.Verbose("Feature Rows: {Rows}", featureRows);
+                    var qCombined = qLocations.Intersect(qFeatures);
+                    //Logging.Verbose("Combined Sql: {Sql}", qCombined.ToString());
+                    var combinedRows = qCombined.ToList().Sum(i => i.Count);
+                    Logging.Verbose("Combined Rows: {Rows}", combinedRows);
+                    var startDate = input.StartDate;
+                    var endDate = input.EndDate;
+                    var qDates = qCombined.Where(i => i.StartDate >= startDate && i.EndDate < endDate);
+                    var dateRows = qDates.ToList().Sum(i => i.Count);
+                    Logging.Verbose("Date Rows: {Rows}", combinedRows);
                     var result = new DataWizardApproximation
                     {
-                        RowCount = q?.LongCount() ?? 0
+                        RowCount = dateRows
                     };
                     if (!(input.Organisations.Any() || input.Sites.Any() || input.Stations.Any()))
                     {
@@ -54,7 +73,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 {
                     Logging.Exception(ex);
                     throw;
-                }
+                } 
             }
         }
 
