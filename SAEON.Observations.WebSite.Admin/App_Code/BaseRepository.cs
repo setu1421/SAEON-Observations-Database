@@ -13,6 +13,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Xml;
@@ -210,6 +211,7 @@ public class BaseRepository
     {
         using (Logging.MethodCall(typeof(BaseRepository), new ParameterList { { "Columns", visCols }, { "ExportType", exportType }, { "FileName", fileName } }))
         {
+            var result = -1;
             try
             {
                 var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(visCols);
@@ -223,7 +225,9 @@ public class BaseRepository
                         colCaptions.Add(item.Key.Replace(" ", "").Replace("/", ""));
                     }
                 }
+                Logging.Verbose("Sql: {sql}", query.BuildSqlStatement());
                 DataTable dt = query.ExecuteDataSet().Tables[0];
+                result = dt.Rows.Count;
                 for (int k = 0; k < dt.Columns.Count; k++)
                 {
                     for (int j = 0; j < colNames.Count; j++)
@@ -256,6 +260,9 @@ public class BaseRepository
                 }
                 response.Flush();
                 response.End();
+            }
+            catch (ThreadAbortException ex)
+            {
             }
             catch (Exception ex)
             {

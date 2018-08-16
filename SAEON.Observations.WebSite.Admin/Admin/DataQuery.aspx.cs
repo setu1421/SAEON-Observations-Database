@@ -244,14 +244,16 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         public string Type { get; set; }
     }
 
-    protected void DQStore_Submit(object sender, StoreSubmitDataEventArgs e)
+    protected void ObservationsGridStore_Submit(object sender, StoreSubmitDataEventArgs e)
     {
         string type = FormatType.Text;
         string json = GridData.Text;
         string sortCol = SortInfo.Text.Substring(0, SortInfo.Text.IndexOf("|"));
         string sortDir = SortInfo.Text.Substring(SortInfo.Text.IndexOf("|") + 1);
         string visCols = VisCols.Value.ToString();
-        SqlQuery query = BuildQ(json, visCols, sortCol, sortDir);
+        string log;
+        SqlQuery query = BuildQ(json, visCols, sortCol, sortDir, out log);
+        Auditing.Log(GetType(), new ParameterList { { "Log", log } });
         BaseRepository.Export(query, visCols, type, "Data Query", Response);
     }
 
@@ -260,15 +262,15 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         return items.Where(i => i.Item1 == itemType).Select(i => i.Item2).FirstOrDefault();
     }
 
-    private SqlQuery BuildQuery(string[] columns = null)
+    private SqlQuery BuildQuery(out string log, string[] columns = null)
     {
         using (Logging.MethodCall(GetType(), new ParameterList { { "Columns", columns } })) ;
         {
             try
             {
-
+                log = string.Empty;
                 DateTime fromDate = FromFilter.SelectedDate;
-                DateTime ToDate = ToFilter.SelectedDate;
+                DateTime toDate = ToFilter.SelectedDate;
 
                 SqlQuery q = null;
                 if ((columns == null) || (columns.Length == 0))
@@ -296,7 +298,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         int count = 0;
                         List<Tuple<string, string>> items = item.NodeID.Split('|').Select(i => new Tuple<string, string>(i.Split('_')[0], i.Split('_')[1])).ToList();
                         Logging.Verbose("Items: {@items}", items);
-                        PhenomenonOffering offering = null;
+                        PhenomenonOffering phenomenonOffering = null;
                         Phenomenon phenomenon = null;
                         Sensor sensor = null;
                         Instrument instrument = null;
@@ -306,17 +308,17 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         {
                             case "Offering":
                                 count++;
-                                offering = new PhenomenonOffering(item.ID);
-                                phenomenon = offering.Phenomenon;
+                                phenomenonOffering = new PhenomenonOffering(item.ID);
                                 sensor = new Sensor(new Guid(GetItem(items, "Sensor")));
                                 instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
                                 station = new Station(new Guid(GetItem(items, "Station")));
                                 site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                                q.OrExpression(VObservation.Columns.PhenomenonOfferingID).IsEqualTo(offering.Id)
+                                q.OrExpression(VObservation.Columns.PhenomenonOfferingID).IsEqualTo(phenomenonOffering.Id)
                                     .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
                                     .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
                                     .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                log = $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name} Phenomenon: {phenomenonOffering.Phenomenon.Name} Offering: {phenomenonOffering.Offering.Name}";
                                 break;
                             case "Phenomenon":
                                 count++;
@@ -330,6 +332,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                     .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
                                     .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                log = $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name} Phenomenon: {phenomenonOffering.Phenomenon.Name}";
                                 break;
                             case "Sensor":
                                 count++;
@@ -341,6 +344,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                     .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
                                     .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                log = $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name}";
                                 break;
                             case "Instrument":
                                 count++;
@@ -350,6 +354,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 q.OrExpression(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
                                     .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                log = $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name}";
                                 break;
                             case "Station":
                                 count++;
@@ -357,11 +362,13 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
                                 q.OrExpression(VObservation.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                log = $"Site: {site.Name} Station: {station.Name}";
                                 break;
                             case "Site":
                                 count++;
                                 site = new SAEON.Observations.Data.Site(item.ID);
                                 q.OrExpression(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                log = $"Site: {site.Name}";
                                 break;
                         }
 
@@ -370,10 +377,13 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                             if (fromDate.ToString() != "0001/01/01 00:00:00")
                             {
                                 q.And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(fromDate.ToString());
+                                log += $" Start: {fromDate.ToString("dd MMM yyyy")}";
+
                             }
-                            if (ToDate.ToString() != "0001/01/01 00:00:00")
+                            if (toDate.ToString() != "0001/01/01 00:00:00")
                             {
-                                q.And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(ToDate.AddHours(23).AddMinutes(59).AddSeconds(59).ToString());
+                                q.And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(toDate.AddHours(23).AddMinutes(59).AddSeconds(59).ToString());
+                                log += $" End: {toDate.ToString("dd MMM yyyy")}";
                             }
                             //DataQueryRepository.qFilterNSort(ref q, ref e);
                             q.CloseExpression();
@@ -392,7 +402,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         }
     }
 
-    protected void DQStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void ObservationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         using (Logging.MethodCall(GetType()))
         {
@@ -404,7 +414,8 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                 }
                 else
                 {
-                    var q = BuildQuery();
+                    var log = string.Empty;
+                    var q = BuildQuery(out log);
                     ObservationsGrid.GetStore().DataSource = DataQueryRepository.GetPagedFilteredList(e, e.Parameters[GridFilters1.ParamPrefix], ref q);
                 }
             }
@@ -418,7 +429,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
 
 
-    public SqlQuery BuildQ(string json, string visCols, string sortCol, string sortDir)
+    public SqlQuery BuildQ(string json, string visCols, string sortCol, string sortDir, out string log)
     {
         using (Logging.MethodCall(GetType()))
         {
@@ -440,11 +451,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
                 string[] colms = colmsL.ToArray();
                 string[] colmsDisplayNames = colmsDisplayNamesL.ToArray();
-                var q = BuildQuery(colms);
+                var q = BuildQuery(out log, colms);
                 if (!string.IsNullOrEmpty(json))
                 {
                     FilterConditions fc = new FilterConditions(json);
-
+                    var filters = string.Empty;
                     foreach (FilterCondition condition in fc.Conditions)
                     {
                         switch (condition.FilterType)
@@ -454,14 +465,15 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 {
                                     case "Eq":
                                         q.And(condition.Name).IsEqualTo(condition.Value);
-
+                                        filters += $"{condition.Name} = {condition.Value}";
                                         break;
                                     case "Gt":
                                         q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
-
+                                        filters += $"{condition.Name} >= {condition.Value}";
                                         break;
                                     case "Lt":
                                         q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
+                                        filters += $"{condition.Name} <= {condition.Value}";
 
                                         break;
                                     default:
@@ -475,15 +487,15 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 {
                                     case "Eq":
                                         q.And(condition.Name).IsEqualTo(condition.Value);
-
+                                        filters += $"{condition.Name} = {condition.Value}";
                                         break;
                                     case "Gt":
                                         q.And(condition.Name).IsGreaterThanOrEqualTo(condition.Value);
-
+                                        filters += $"{condition.Name} >= {condition.Value}";
                                         break;
                                     case "Lt":
                                         q.And(condition.Name).IsLessThanOrEqualTo(condition.Value);
-
+                                        filters += $"{condition.Name} <= {condition.Value}";
                                         break;
                                     default:
                                         break;
@@ -493,6 +505,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
                             case FilterType.String:
                                 q.And(condition.Name).Like("%" + condition.Value + "%");
+                                filters += $"{condition.Name} like {condition.Value}";
 
 
                                 break;
@@ -500,6 +513,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 throw new ArgumentOutOfRangeException();
                         }
 
+                    }
+                    if (!string.IsNullOrEmpty(filters))
+                    {
+                        log += $" Filters: {filters}";
                     }
                 }
 
@@ -514,6 +531,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         q.OrderAsc(sortCol);
                     }
                 }
+                log += $" Rows: {q.GetRecordCount()}";
                 return q;
             }
             catch (Exception ex)

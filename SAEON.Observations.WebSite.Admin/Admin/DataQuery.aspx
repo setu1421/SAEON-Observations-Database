@@ -139,8 +139,8 @@
                             <ext:GridPanel ID="ObservationsGrid" runat="server" Border="false" Layout="FitLayout"
                                 ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="ObservationsGridStore" runat="server" RemoteSort="true" RemotePaging="true" OnRefreshData="DQStore_RefreshData"
-                                        OnSubmitData="DQStore_Submit" AutoLoad="false">
+                                    <ext:Store ID="ObservationsGridStore" runat="server" RemoteSort="true" RemotePaging="true" OnRefreshData="ObservationsGridStore_RefreshData"
+                                        OnSubmitData="ObservationsGridStore_Submit" AutoLoad="false">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -187,9 +187,9 @@
                                         <ext:Column Header="Sensor" DataIndex="SensorName" Width="100" />
                                         <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="100" />
                                         <ext:Column Header="Offering" DataIndex="OfferingName" Width="100" />
+                                        <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="100" Hideable="true" Hidden="false" />
                                         <ext:Column Header="Value" DataIndex="DataValue" Width="100" />
                                         <ext:Column Header="RawValue" DataIndex="RawValue" Width="100" Hideable="true" Hidden="true" />
-                                        <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="100" Hideable="true" Hidden="true" />
                                         <ext:Column Header="Symbol" DataIndex="UnitOfMeasureSymbol" Width="50" />
                                         <ext:Column Header="Schema Name" DataIndex="DataSchemaName" Width="100" Hideable="true" Hidden="true" />
                                         <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm" />
