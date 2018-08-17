@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.Dynamic;
-using System.Globalization;
-using System.Linq;
 
 namespace SAEON.Observations.Core
 {
@@ -18,7 +15,7 @@ namespace SAEON.Observations.Core
         public LinkAttribute() { }
         public LinkAttribute(string title)
         {
-            Title = title; 
+            Title = title;
         }
     }
 
@@ -71,7 +68,7 @@ namespace SAEON.Observations.Core
         public List<Guid> Stations { get; } = new List<Guid>();
         public List<Guid> Instruments { get; } = new List<Guid>();
         public List<Guid> Phenomena { get; } = new List<Guid>();
-        public List<Guid> Offerings { get; } = new List<Guid>();  
+        public List<Guid> Offerings { get; } = new List<Guid>();
         public List<Guid> Units { get; } = new List<Guid>();
         public DateTime StartDate { get; set; } = DateTime.Now;
         public DateTime EndDate { get; set; } = DateTime.Now.AddYears(-100);
@@ -80,7 +77,119 @@ namespace SAEON.Observations.Core
     public class DataWizardApproximation
     {
         public long RowCount { get; set; } = 0;
-        public List<string> Errors { get; set; } = new List<string>(); 
+        public List<string> Errors { get; set; } = new List<string>();
+    }
+
+    public enum MaxtixDataType { String, Int, Double, Date, Boolean };
+
+    public class DataMatrixColumn
+    { 
+        public string Name { get; set; }
+        public string Caption { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MaxtixDataType DataType { get; set; }
+
+        public Type AsType()
+        {
+            switch (DataType)
+            {
+                case MaxtixDataType.Boolean:
+                    return typeof(bool);
+                case MaxtixDataType.Date:
+                    return typeof(DateTime);
+                case MaxtixDataType.Double:
+                    return typeof(double);
+                case MaxtixDataType.Int:
+                    return typeof(int);
+                case MaxtixDataType.String:
+                    return typeof(string);
+                default:
+                    return typeof(object);
+            }
+        }
+    }
+
+    public class DataMatixRow
+    {
+        public List<Object> Columns { get; } = new List<object>();
+        private DataMatrix matrix = null;
+
+        public DataMatixRow(DataMatrix dataMatrix)
+        {
+            matrix = dataMatrix;
+        }
+
+        //public object this[int index]
+        //{
+        //    get { return Columns[index]; } 
+        //    set { Columns[index] = value; }
+        //} 
+
+        public object this[string name]
+        {
+            get
+            {
+                var index = matrix.Columns.FindIndex(i => i.Name == name);
+                return Columns[index];
+            }
+            set
+            {
+                var index = matrix.Columns.FindIndex(i => i.Name == name);
+                Columns[index] = value;
+            }
+        }
+    } 
+
+    public class DataMatrix 
+    {
+        public List<DataMatrixColumn> Columns { get; } = new List<DataMatrixColumn>();
+        public List<DataMatixRow> Rows { get; } = new List<DataMatixRow>();
+
+        public DataMatrixColumn AddColumn(string name, string caption, MaxtixDataType dataType)
+        {
+            var result = new DataMatrixColumn { Name = name, Caption = caption, DataType = dataType };
+            Columns.Add(result);
+            foreach (var row in Rows)
+            {
+                row.Columns.Add(null); 
+            }
+            return result;
+        } 
+
+        public DataMatixRow AddRow(params object[] values)
+
+        {
+            var result = new DataMatixRow(this);
+            Rows.Add(result);
+            for (int c = 0; c < Columns.Count; c++)
+            {
+                var col = Columns[c];
+                if (c < values.Length)
+                {
+                    result.Columns.Add(values[c]);
+                }
+                else
+                {
+                    result.Columns.Add(null);
+                }
+            }
+            return result;
+        }
+
+        public DataTable AsDataTable()
+        {
+            var result = new DataTable();
+            foreach (var col in Columns)
+            {
+                result.Columns.Add(col.Name, col.AsType()).Caption = col.Caption;
+            }
+            return result;
+        }
+    } 
+
+    public class DataWizardOutput
+    {
+        public DataMatrix DataMatrix { get; } = new DataMatrix();
     }
 
     /*

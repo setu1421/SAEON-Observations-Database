@@ -492,6 +492,7 @@
     <None Include="ConnectionStrings.Release.config">
       <DependentUpon>ConnectionStrings.config</DependentUpon>
       <IsTransformFile>true</IsTransformFile>
+      <SubType>Designer</SubType>
     </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>

@@ -25,6 +25,7 @@ namespace SAEON.Observations.QuerySite.Models
         [DisplayName("End Date")]
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
         public DataWizardApproximation Approximation { get; set; } = new DataWizardApproximation();
+        public DataWizardOutput Output { get; set; } = new DataWizardOutput();
         public List<UserQuery> UserQueries { get; } = new List<UserQuery>();
     }
 

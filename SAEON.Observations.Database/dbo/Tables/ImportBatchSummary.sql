@@ -51,3 +51,12 @@ CREATE INDEX [IX_ImportBatchSummary_PhenomenonOfferingID] ON [dbo].[ImportBatchS
 
 GO
 CREATE INDEX [IX_ImportBatchSummary_PhenomenonUOMID] ON [dbo].[ImportBatchSummary] ([PhenomenonUOMID])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_Count] ON [dbo].[ImportBatchSummary] ([Count])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_StartDate] ON [dbo].[ImportBatchSummary] ([StartDate])
+
+GO
+CREATE INDEX [IX_ImportBatchSummary_EndDate] ON [dbo].[ImportBatchSummary] ([EndDate])

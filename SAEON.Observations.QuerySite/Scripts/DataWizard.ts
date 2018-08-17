@@ -8,19 +8,23 @@
         wp.hide();
     }
     export function ShowResults() {
-        $("#TableTab").removeClass("hidden");
-        $("#ChartTab").removeClass("hidden");
+        $("#TableTab").removeClass("d-none");
+        $("#PartialTable").removeClass("d-none");
+        $("#ChartTab").removeClass("d-none");
+        $("#PartialChart").removeClass("d-none");
         //$("#CardsTab").removeClass("hidden");
     }
     export function HideResults() {
-        $("#TableTab").addClass("hidden");
-        $("#ChartTab").addClass("hidden");
+        $("#TableTab").addClass("d-none");
+        $("#PartialTable").addClass("d-none");
+        $("#ChartTab").addClass("d-none");
+        $("#PartialChart").addClass("d-none");
         //$("#CardsTab").addClass("hidden");
     }
 
-    function ErrorInFunc(msg) {
+    function ErrorInFunc(method: string, status: string, error: string) {
         HideWaiting();
-        alert(msg);
+        alert("Error in "+method+" Status: " + status + " Error: " + error);
     }
 
     export function EnableButtons() {
@@ -94,7 +98,9 @@
                 EnableButtons();
                 HideResults();
             })
-            .fail(function () { ErrorInFunc("Error in UpdateLocationsSelected"); });
+            .fail(function (jqXHR, status, error) {
+                ErrorInFunc("UpdateLocationsSelected", status, error)
+            });
     }
 
     let featuresReady: boolean = false;
@@ -126,7 +132,9 @@
                 EnableButtons();
                 HideResults();
             })
-            .fail(function () { ErrorInFunc("Error in UpdateFeaturesSelected"); });
+            .fail(function (jqXHR, status, error) {
+                ErrorInFunc("UpdateFeaturesSelected", status, error)
+            });
     }
 
     export function UpdateFilters(startDate: Date, endDate: Date) {
@@ -135,7 +143,9 @@
                 EnableButtons();
                 HideResults();
             })
-            .fail(function () { ErrorInFunc("Error in UpdateFilters"); });
+            .fail(function (jqXHR, status, error) {
+                ErrorInFunc("UpdateFilters", status, error)
+            });
     }
 
     class MapPoint {
@@ -189,7 +199,9 @@
                     }
                 }
             })
-            .fail(function () { ErrorInFunc('Error in GetMapPoints'); });
+            .fail(function (jqXHR, status, error) {
+                ErrorInFunc("UpdateMap", status, error)
+            });
     }
 
     export function FitMap(override: boolean = false) {
@@ -211,7 +223,9 @@
             .done(function (data) {
                 approximation = data;
             })
-            .fail(function () { ErrorInFunc("Error in GetApproximation"); });
+            .fail(function (jqXHR, status, error) {
+                ErrorInFunc("GetApproximation", status, error)
+            });
         return approximation;
     }
 
@@ -220,10 +234,27 @@
             .done(function (data) {
                 $('#PartialApproximation').html(data);
             })
-            .fail(function () { ErrorInFunc("Error in SetApproximation"); });
+            .fail(function (jqXHR, status, error) {
+                ErrorInFunc("SetApproximation", status, error)
+            });
     }
 
-    export function Test() {
-        SetApproximation();
+    export function Search() {
+        ShowWaiting();
+        $.get("/DataWizard/GetData")
+            .done(function () {
+                $("#PartialTable").load("/DataWizard/GetTableHtml", function () {
+                    //$("#PartialCards").load("/Query/GetCardsHtml", function () {
+                    //    $("#PartialChart").load("/Query/GetChartHtml", function () {
+                            ShowResults();
+                            EnableButtons();
+                            HideWaiting();
+                        });
+                //    });
+                //});
+            })
+            .fail(function (jqXHR, status, error) {
+                ErrorInFunc("GetData",status,error)
+            });
     }
 }

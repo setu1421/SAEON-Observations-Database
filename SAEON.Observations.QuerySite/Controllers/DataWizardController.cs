@@ -3,6 +3,7 @@ using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -217,8 +218,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region Approximation
-        private static readonly Random random = new Random(DateTime.Now.Second);
-
         [HttpGet]
         public async Task<PartialViewResult> SetApproximation()
         {
@@ -254,12 +253,64 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
-                    //model.Approximation = await GetEntity<DataWizardInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
                     model.Approximation = await PostEntity<DataWizardInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
                     Logging.Verbose("RowCount: {RowCount}", model.Approximation.RowCount);
                     Logging.Verbose("Errors: {Errors}", model.Approximation.Errors);
                     SessionModel = model;
                     return Json(SessionModel.Approximation, JsonRequestBehavior.AllowGet); 
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Data
+        [HttpGet]
+        public async Task<EmptyResult> GetData()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    var input = new DataWizardInput();
+                    input.Organisations.AddRange(model.Organisations);
+                    input.Sites.AddRange(model.Sites);
+                    input.Stations.AddRange(model.Stations);
+                    input.Phenomena.AddRange(model.Phenomena);
+                    input.Offerings.AddRange(model.Offerings);
+                    input.Units.AddRange(model.Units);
+                    input.StartDate = model.StartDate.ToUniversalTime();
+                    input.EndDate = model.EndDate.ToUniversalTime();
+                    model.Output = await PostEntity<DataWizardInput, DataWizardOutput>("Internal/DataWizard/Execute", input);
+                    SessionModel = model;
+                    return new EmptyResult();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
+
+        #region Table
+        [HttpGet]
+        public PartialViewResult GetTableHtml()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var sessionModel = SessionModel;
+                    //Logging.Verbose("Model: {@model}", model);
+                    return PartialView("_TableHtml", sessionModel);
                 }
                 catch (Exception ex)
                 {

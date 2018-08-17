@@ -11,20 +11,24 @@ var DataWizard;
     }
     DataWizard.HideWaiting = HideWaiting;
     function ShowResults() {
-        $("#TableTab").removeClass("hidden");
-        $("#ChartTab").removeClass("hidden");
+        $("#TableTab").removeClass("d-none");
+        $("#PartialTable").removeClass("d-none");
+        $("#ChartTab").removeClass("d-none");
+        $("#PartialChart").removeClass("d-none");
         //$("#CardsTab").removeClass("hidden");
     }
     DataWizard.ShowResults = ShowResults;
     function HideResults() {
-        $("#TableTab").addClass("hidden");
-        $("#ChartTab").addClass("hidden");
+        $("#TableTab").addClass("d-none");
+        $("#PartialTable").addClass("d-none");
+        $("#ChartTab").addClass("d-none");
+        $("#PartialChart").addClass("d-none");
         //$("#CardsTab").addClass("hidden");
     }
     DataWizard.HideResults = HideResults;
-    function ErrorInFunc(msg) {
+    function ErrorInFunc(method, status, error) {
         HideWaiting();
-        alert(msg);
+        alert("Error in " + method + " Status: " + status + " Error: " + error);
     }
     function EnableButtons() {
         var btnLoadQuery = $("#btnLoadQuery").data("ejButton");
@@ -95,7 +99,9 @@ var DataWizard;
             EnableButtons();
             HideResults();
         })
-            .fail(function () { ErrorInFunc("Error in UpdateLocationsSelected"); });
+            .fail(function (jqXHR, status, error) {
+            ErrorInFunc("UpdateLocationsSelected", status, error);
+        });
     }
     DataWizard.UpdateLocationsSelected = UpdateLocationsSelected;
     var featuresReady = false;
@@ -125,7 +131,9 @@ var DataWizard;
             EnableButtons();
             HideResults();
         })
-            .fail(function () { ErrorInFunc("Error in UpdateFeaturesSelected"); });
+            .fail(function (jqXHR, status, error) {
+            ErrorInFunc("UpdateFeaturesSelected", status, error);
+        });
     }
     DataWizard.UpdateFeaturesSelected = UpdateFeaturesSelected;
     function UpdateFilters(startDate, endDate) {
@@ -134,7 +142,9 @@ var DataWizard;
             EnableButtons();
             HideResults();
         })
-            .fail(function () { ErrorInFunc("Error in UpdateFilters"); });
+            .fail(function (jqXHR, status, error) {
+            ErrorInFunc("UpdateFilters", status, error);
+        });
     }
     DataWizard.UpdateFilters = UpdateFilters;
     var MapPoint = /** @class */ (function () {
@@ -183,7 +193,9 @@ var DataWizard;
                 }
             }
         })
-            .fail(function () { ErrorInFunc('Error in GetMapPoints'); });
+            .fail(function (jqXHR, status, error) {
+            ErrorInFunc("UpdateMap", status, error);
+        });
     }
     DataWizard.UpdateMap = UpdateMap;
     function FitMap(override) {
@@ -206,7 +218,9 @@ var DataWizard;
             .done(function (data) {
             approximation = data;
         })
-            .fail(function () { ErrorInFunc("Error in GetApproximation"); });
+            .fail(function (jqXHR, status, error) {
+            ErrorInFunc("GetApproximation", status, error);
+        });
         return approximation;
     }
     DataWizard.GetApproximation = GetApproximation;
@@ -215,12 +229,29 @@ var DataWizard;
             .done(function (data) {
             $('#PartialApproximation').html(data);
         })
-            .fail(function () { ErrorInFunc("Error in SetApproximation"); });
+            .fail(function (jqXHR, status, error) {
+            ErrorInFunc("SetApproximation", status, error);
+        });
     }
     DataWizard.SetApproximation = SetApproximation;
-    function Test() {
-        SetApproximation();
+    function Search() {
+        ShowWaiting();
+        $.get("/DataWizard/GetData")
+            .done(function () {
+            $("#PartialTable").load("/DataWizard/GetTableHtml", function () {
+                //$("#PartialCards").load("/Query/GetCardsHtml", function () {
+                //    $("#PartialChart").load("/Query/GetChartHtml", function () {
+                ShowResults();
+                EnableButtons();
+                HideWaiting();
+            });
+            //    });
+            //});
+        })
+            .fail(function (jqXHR, status, error) {
+            ErrorInFunc("GetData", status, error);
+        });
     }
-    DataWizard.Test = Test;
+    DataWizard.Search = Search;
 })(DataWizard || (DataWizard = {}));
 //# sourceMappingURL=DataWizard.js.map

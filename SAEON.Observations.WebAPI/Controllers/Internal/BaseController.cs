@@ -4,10 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
 
+    [ApiExplorerSettings(IgnoreApi = true)]
+    //[ClientAuthorization("SAEON.Observations.QuerySite")] Uncomment when going live
     public class BaseController : ApiController
     {
         protected readonly ObservationsDbContext db = null;

@@ -1,0 +1,20 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@using System.Data
+@model DataWizardModel
+@(Html.EJ().Grid<object>
+    ("TableGrid")
+    .Datasource(@Model.Output.DataMatrix.AsDataTable())
+    .IsResponsive()
+    .AllowPaging()
+    .PageSettings(p => p.PageSize(25))
+    .AllowSorting()
+    .AllowFiltering()
+    .FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
+    .Columns(col =>
+    {
+        foreach(var column in Model.Output.DataMatrix.Columns)
+        {
+            col.Field(column.Name).HeaderText(column.Caption).Add();
+        }
+    })
+)

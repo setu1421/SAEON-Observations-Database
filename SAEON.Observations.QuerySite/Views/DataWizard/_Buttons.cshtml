@@ -32,7 +32,7 @@
         .ContentType(ContentType.TextAndImage)
         .PrefixIcon("e-icon e-search")
         .Enabled(false)
-        .ClientSideEvents(e => e.Click("onSearchClick"))
+        .ClientSideEvents(e => e.Click("DataWizard.Search"))
         .Render();
     Html.EJ()
         .Button("btnDownload")
@@ -53,6 +53,6 @@
         .Size(ButtonSize.Medium)
         .ContentType(ContentType.TextAndImage)
         .PrefixIcon("e-icon e-dataexport")
-        .ClientSideEvents(e => e.Click("DataWizard.Test"))
+        .ClientSideEvents(e => e.Click("DataWizard.HideResults"))
         .Render();
 }
