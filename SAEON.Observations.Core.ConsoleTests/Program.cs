@@ -1,32 +1,30 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
 using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SAEON.Observations.Core.ConsoleTests
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            using (var log = new LoggerConfiguration()
-            .WriteTo.Console()
-            .WriteTo.Seq("http://localhost:5341")
-            .CreateLogger())
+            Logging
+                 .CreateConfiguration("~/SAEON.Observations.Core.ConsoleTests {Date}.txt")
+                 .WriteTo.Console()
+                 .Create();
+            using (Logging.MethodCall(typeof(Program)))
             {
                 try
                 {
+                    /*
                     var db = new ObservationsDbContext();
                     var col = db.Offerings.Take(5).Include(i => i.Phenomena.Select(j => j.Units)).OrderBy(i => i.Name);
                     //var col = db.Units.Include(i => i.Phenomena).OrderBy(i => i.Name);
-                    log.Information("Count: {count} Phenomena: {phenomena}", col.Count(), col.SelectMany(i => i.Phenomena).Count());
+                    Logging.Information("Count: {count} Phenomena: {phenomena}", col.Count(), col.SelectMany(i => i.Phenomena).Count());
                     var json = JsonConvert.SerializeObject(col, Formatting.Indented, new JsonSerializerSettings
                     {
                         MaxDepth = 1,
@@ -34,15 +32,30 @@ namespace SAEON.Observations.Core.ConsoleTests
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         PreserveReferencesHandling = PreserveReferencesHandling.None
                     });
-                    log.Information("Length: {length}", json.Length);
-                    log.Information("Length: {length} json: {json}", json.Length, json);
+                    Logging.Information("Length: {length}", json.Length);
+                    Logging.Information("Length: {length} json: {json}", json.Length, json);
+                    */
+
+                    var dm = new DataMatrix();
+                    dm.AddColumn("Name", "Name", MaxtixDataType.String);
+                    dm.AddColumn("Value", "Value", MaxtixDataType.Double);
+                    dm.AddRow("Test", 1);
+                    dm.AddRow("Wow", 2);
+                    var json = JsonConvert.SerializeObject(dm, Formatting.Indented, new JsonSerializerSettings {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
+                    Logging.Information("json: {json}", json);
+                    var dm1 = JsonConvert.DeserializeObject<DataMatrix>(json);
+                    Logging.Information("Cols: {cols} Rows: {rows}", dm1.Columns.Count, dm1.Rows.Count);
+                    Logging.Information("Data: {data}", dm1.Rows[0]["Name"]);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex,"Exception");
+                    Log.Error(ex, "Exception");
                     throw;
                 }
             }
+
         }
     }
 }

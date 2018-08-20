@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Runtime.Serialization;
 
 namespace SAEON.Observations.Core
 {
@@ -83,7 +84,7 @@ namespace SAEON.Observations.Core
     public enum MaxtixDataType { String, Int, Double, Date, Boolean };
 
     public class DataMatrixColumn
-    { 
+    {
         public string Name { get; set; }
         public string Caption { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
@@ -95,7 +96,7 @@ namespace SAEON.Observations.Core
             {
                 case MaxtixDataType.Boolean:
                     return typeof(bool);
-                case MaxtixDataType.Date:
+                case MaxtixDataType.Date: 
                     return typeof(DateTime);
                 case MaxtixDataType.Double:
                     return typeof(double);
@@ -111,39 +112,50 @@ namespace SAEON.Observations.Core
 
     public class DataMatixRow
     {
-        public List<Object> Columns { get; } = new List<object>();
-        private DataMatrix matrix = null;
+        public List<Object> Columns { get; set; } = new List<object>();
+        public DataMatrix Matrix { get; set; } = null;
+
+        public DataMatixRow() { }
 
         public DataMatixRow(DataMatrix dataMatrix)
         {
-            matrix = dataMatrix;
+            Matrix = dataMatrix;
         }
-
-        //public object this[int index]
-        //{
-        //    get { return Columns[index]; } 
-        //    set { Columns[index] = value; }
-        //} 
 
         public object this[string name]
         {
             get
             {
-                var index = matrix.Columns.FindIndex(i => i.Name == name);
+                var index = Matrix.Columns.FindIndex(i => i.Name == name);
                 return Columns[index];
             }
             set
             {
-                var index = matrix.Columns.FindIndex(i => i.Name == name);
+                var index = Matrix.Columns.FindIndex(i => i.Name == name);
                 Columns[index] = value;
             }
         }
-    } 
+         
+        public object this[int index]
+        {
+            get { return Columns[index]; }
+            set { Columns[index] = value; }
+        }
+    }
 
-    public class DataMatrix 
+    public class DataMatrix
     {
         public List<DataMatrixColumn> Columns { get; } = new List<DataMatrixColumn>();
         public List<DataMatixRow> Rows { get; } = new List<DataMatixRow>();
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            foreach (var row in Rows)
+            {
+                row.Matrix = this;
+            }
+        }
 
         public DataMatrixColumn AddColumn(string name, string caption, MaxtixDataType dataType)
         {
@@ -151,10 +163,10 @@ namespace SAEON.Observations.Core
             Columns.Add(result);
             foreach (var row in Rows)
             {
-                row.Columns.Add(null); 
+                row.Columns.Add(null);
             }
             return result;
-        } 
+        }
 
         public DataMatixRow AddRow(params object[] values)
 
@@ -170,7 +182,7 @@ namespace SAEON.Observations.Core
                 }
                 else
                 {
-                    result.Columns.Add(null);
+                    result.Columns.Add(null); 
                 }
             }
             return result;
@@ -183,9 +195,18 @@ namespace SAEON.Observations.Core
             {
                 result.Columns.Add(col.Name, col.AsType()).Caption = col.Caption;
             }
+            foreach (var row in Rows) 
+            {
+                var dataRow = result.NewRow();
+                foreach (var col in Columns)
+                {
+                    dataRow[col.Name] = row[col.Name];
+                }
+                result.Rows.Add(dataRow);
+            }
             return result;
         }
-    } 
+    }
 
     public class DataWizardOutput
     {

@@ -181,33 +181,33 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 result.DataMatrix.AddColumn(feature.Name, feature.Caption, MaxtixDataType.Double);
             }
             var observations = q.Join(db.Observations, l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
-            //        .OrderBy(i => i.SiteName)
-            //        .ThenBy(i => i.StationName)
-            //        .ThenBy(i => i.InstrumentName)
-            //        .ThenBy(i => i.SensorName)
-            //        .ThenBy(i => i.PhenomenonName)
-            //        .ThenBy(i => i.OfferingName)
-            //        .ThenBy(i => i.UnitName)
-                    .Take(10)
+                    .OrderBy(i => i.SiteName)
+                    .ThenBy(i => i.StationName)
+                    .ThenBy(i => i.InstrumentName)
+                    .ThenBy(i => i.SensorName)
+                    .ThenBy(i => i.ValueDate)
+                    //.Take(1000)
                     .ToList();
-            //Guid siteId = new Guid();
-            //Guid stationId = new Guid();
-            //Guid instrumentId = new Guid(); 
-            //var date = DateTime.MinValue;
-            //DataMatixRow row = null;
-            //foreach(var obs in observations)
-            //{
-            //    if ((row == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.ValueDate != date))
-            //    {
-            //        row = result.DataMatrix.AddRow();
-            //        row["SiteName"] = obs.SiteName;
-            //        row["StationName"] = obs.StationName;
-            //        row["InstrumentName"] = obs.InstrumentName;
-            //        row["Date"] = obs.ValueDate;
-            //    }
-            //    var name = $"{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}";
-            //    row[name] = obs.DataValue;
-            //}
+            Guid siteId = new Guid();
+            Guid stationId = new Guid();
+            Guid instrumentId = new Guid();
+            Guid sensorId = new Guid();
+            var date = DateTime.MinValue;
+            DataMatixRow row = null;
+            foreach (var obs in observations)
+            {
+                if ((row == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId) || (obs.ValueDate != date))
+                {
+                    row = result.DataMatrix.AddRow();
+                    row["SiteName"] = obs.SiteName;
+                    row["StationName"] = obs.StationName;
+                    row["InstrumentName"] = obs.InstrumentName;
+                    row["SensorName"] = obs.SensorName;
+                    row["Date"] = obs.ValueDate;
+                }
+                var name = $"{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}";
+                row[name] = obs.DataValue;
+            }
             return result;
         }
 

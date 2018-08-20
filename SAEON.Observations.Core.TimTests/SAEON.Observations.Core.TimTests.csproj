@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EFE8435A-8A56-4589-B07B-1AB6EDAAFF48}</ProjectGuid>
+    <ProjectGuid>{9152C8CC-0792-480C-A6A0-9A7F2D670DE7}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>SAEON.Observations.Core.ConsoleTests</RootNamespace>
-    <AssemblyName>SAEON.Observations.Core.ConsoleTests</AssemblyName>
+    <RootNamespace>SAEON.Observations.Core.TimTests</RootNamespace>
+    <AssemblyName>SAEON.Observations.Core.TimTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -116,9 +116,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
