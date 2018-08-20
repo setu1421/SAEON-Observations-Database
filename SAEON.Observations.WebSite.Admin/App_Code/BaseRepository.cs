@@ -207,7 +207,7 @@ public class BaseRepository
 
     //public enum ExportTypes { Csv, Excel };
 
-    public static void Export(SqlQuery query, string visCols, string exportType, string fileName, HttpResponse response)
+    public static void Export(SqlQuery query, string visCols, string exportType, string fileName, HttpResponse response, Action<DataTable> doLogging = null)
     {
         using (Logging.MethodCall(typeof(BaseRepository), new ParameterList { { "Columns", visCols }, { "ExportType", exportType }, { "FileName", fileName } }))
         {
@@ -238,6 +238,7 @@ public class BaseRepository
                         }
                     }
                 }
+                doLogging?.Invoke(dt);
                 response.Clear();
                 byte[] bytes;
                 switch (exportType)

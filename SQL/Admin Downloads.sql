@@ -1,3 +1,4 @@
+use Observations
 Select 
   AddedAt, UserName, Left(Download,Len(Download)-2) Download
 from

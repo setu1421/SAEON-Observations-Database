@@ -253,8 +253,15 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         string visCols = VisCols.Value.ToString();
         string log;
         SqlQuery query = BuildQ(json, visCols, sortCol, sortDir, out log);
-        Auditing.Log(GetType(), new ParameterList { { "Log", log } });
-        BaseRepository.Export(query, visCols, type, "Data Query", Response);
+        BaseRepository.Export(query, visCols, type, "Data Query", Response, i =>
+        {
+            var count = Convert.ToInt64(i.Compute("Count(ValueDate)",""));
+            var start = Convert.ToDateTime(i.Compute("Min(ValueDate)", ""));
+            var end = Convert.ToDateTime(i.Compute("Max(ValueDate)", ""));
+            Logging.Verbose("Count: {count} Start: {start} End: {end}", count, start, end);
+            log += $" Result -> Rows: {count:N0} Start: {start.ToString("dd MMM yyyy")} End: {end.ToString("dd MMM yyyy")}";
+            Auditing.Log(GetType(), new ParameterList { { "Log", log } });
+        });
     }
 
     private string GetItem(List<Tuple<string, string>> items, string itemType)
@@ -264,11 +271,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     private SqlQuery BuildQuery(out string log, string[] columns = null)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "Columns", columns } })) ;
+        using (Logging.MethodCall(GetType(), new ParameterList { { "Columns", columns } })) 
         {
             try
             {
-                log = string.Empty;
+                log = "Query -> ";
                 DateTime fromDate = FromFilter.SelectedDate;
                 DateTime toDate = ToFilter.SelectedDate;
 
@@ -318,7 +325,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                     .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
                                     .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                                log = $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name} Phenomenon: {phenomenonOffering.Phenomenon.Name} Offering: {phenomenonOffering.Offering.Name}";
+                                log += $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name} Phenomenon: {phenomenonOffering.Phenomenon.Name} Offering: {phenomenonOffering.Offering.Name}";
                                 break;
                             case "Phenomenon":
                                 count++;
@@ -332,7 +339,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                     .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
                                     .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                                log = $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name} Phenomenon: {phenomenonOffering.Phenomenon.Name}";
+                                log += $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name} Phenomenon: {phenomenonOffering.Phenomenon.Name}";
                                 break;
                             case "Sensor":
                                 count++;
@@ -344,7 +351,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                     .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
                                     .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                                log = $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name}";
+                                log += $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name}";
                                 break;
                             case "Instrument":
                                 count++;
@@ -354,7 +361,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 q.OrExpression(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
                                     .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                                log = $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name}";
+                                log += $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name}";
                                 break;
                             case "Station":
                                 count++;
@@ -362,13 +369,13 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
                                 q.OrExpression(VObservation.Columns.StationID).IsEqualTo(station.Id)
                                     .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                                log = $"Site: {site.Name} Station: {station.Name}";
+                                log += $"Site: {site.Name} Station: {station.Name}";
                                 break;
                             case "Site":
                                 count++;
                                 site = new SAEON.Observations.Data.Site(item.ID);
                                 q.OrExpression(VObservation.Columns.SiteID).IsEqualTo(site.Id);
-                                log = $"Site: {site.Name}";
+                                log += $"Site: {site.Name}";
                                 break;
                         }
 
@@ -516,7 +523,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                     }
                     if (!string.IsNullOrEmpty(filters))
                     {
-                        log += $" Filters: {filters}";
+                        log += $" Filters -> {filters}";
                     }
                 }
 
@@ -531,7 +538,6 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         q.OrderAsc(sortCol);
                     }
                 }
-                log += $" Rows: {q.GetRecordCount()}";
                 return q;
             }
             catch (Exception ex)
