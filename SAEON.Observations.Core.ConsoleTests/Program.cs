@@ -13,7 +13,7 @@ namespace SAEON.Observations.Core.ConsoleTests
         private static void Main(string[] args)
         {
             Logging
-                 .CreateConfiguration("~/SAEON.Observations.Core.ConsoleTests {Date}.txt")
+                 .CreateConfiguration(@"Logs\SAEON.Observations.Core.ConsoleTests {Date}.txt")
                  .WriteTo.Console()
                  .Create();
             using (Logging.MethodCall(typeof(Program)))
@@ -45,9 +45,12 @@ namespace SAEON.Observations.Core.ConsoleTests
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                     });
                     Logging.Information("json: {json}", json);
-                    var dm1 = JsonConvert.DeserializeObject<DataMatrix>(json);
-                    Logging.Information("Cols: {cols} Rows: {rows}", dm1.Columns.Count, dm1.Rows.Count);
-                    Logging.Information("Data: {data}", dm1.Rows[0]["Name"]);
+                    Logging.Information("Cols: {cols} Rows: {rows}", dm.Columns.Count, dm.Rows.Count);
+                    Logging.Information("Data: {data}", dm.Rows[0]["Name"]);
+
+                    Logging.Information("Json: {json}", dm.AsJArray());
+                    Logging.Information("Enumerable: {enumerable}", dm.AsEnumerable());
+                    Logging.Information("ExpandoList: {list}", dm.AsList());
                 }
                 catch (Exception ex)
                 {

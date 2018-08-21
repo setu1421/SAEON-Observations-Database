@@ -239,14 +239,14 @@ var DataWizard;
         $.get("/DataWizard/GetData")
             .done(function () {
             $("#PartialTable").load("/DataWizard/GetTableHtml", function () {
-                //$("#PartialCards").load("/Query/GetCardsHtml", function () {
-                //    $("#PartialChart").load("/Query/GetChartHtml", function () {
-                ShowResults();
-                EnableButtons();
-                HideWaiting();
+                $("#PartialChart").load("/DataWizard/GetChartHtml", function () {
+                    //$("#PartialCards").load("/DataWizard/GetCardsHtml", function () {
+                    ShowResults();
+                    EnableButtons();
+                    HideWaiting();
+                });
+                //    });
             });
-            //    });
-            //});
         })
             .fail(function (jqXHR, status, error) {
             ErrorInFunc("GetData", status, error);

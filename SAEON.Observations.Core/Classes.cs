@@ -1,10 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using SAEON.Observations.Core.Entities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Dynamic;
 using System.Runtime.Serialization;
 
 namespace SAEON.Observations.Core
@@ -113,7 +116,7 @@ namespace SAEON.Observations.Core
     public class DataMatixRow
     {
         public List<Object> Columns { get; set; } = new List<object>();
-        public DataMatrix Matrix { get; set; } = null;
+        internal DataMatrix Matrix { get; set; } = null;
 
         public DataMatixRow() { }
 
@@ -153,7 +156,7 @@ namespace SAEON.Observations.Core
         {
             foreach (var row in Rows)
             {
-                row.Matrix = this;
+                row.Matrix = this; 
             }
         }
 
@@ -191,26 +194,77 @@ namespace SAEON.Observations.Core
         public DataTable AsDataTable()
         {
             var result = new DataTable();
-            foreach (var col in Columns)
+            foreach (var dmCol in Columns)
             {
-                result.Columns.Add(col.Name, col.AsType()).Caption = col.Caption;
+                result.Columns.Add(dmCol.Name, dmCol.AsType()).Caption = dmCol.Caption;
             }
-            foreach (var row in Rows) 
+            foreach (var dmRow in Rows) 
             {
                 var dataRow = result.NewRow();
-                foreach (var col in Columns)
+                foreach (var dmCol in Columns)
                 {
-                    dataRow[col.Name] = row[col.Name];
+                    dataRow[dmCol.Name] = dmRow[dmCol.Name];
                 }
                 result.Rows.Add(dataRow);
             }
             return result;
+        }
+
+        public List<ExpandoObject> AsList()
+        { 
+            var result = new List<ExpandoObject>(); 
+            foreach (var dmRow in Rows)
+            {
+                dynamic row = new ExpandoObject();
+                var rowColumns = row as IDictionary<string, Object>;
+                foreach (var dmCol in Columns)
+                {
+                    rowColumns.Add(dmCol.Name, dmRow[dmCol.Name]);
+                }
+                result.Add(row);
+            }
+            return result;
+        }
+         
+        public IEnumerable AsEnumerable() 
+        {
+            var result = new List<ExpandoObject>();
+            foreach (var dmRow in Rows)
+            {
+                dynamic row = new ExpandoObject();
+                var rowColumns = row as IDictionary<string,Object>;
+                foreach (var dmCol in Columns)
+                {
+                    rowColumns.Add(dmCol.Name, dmRow[dmCol.Name]);
+                }
+                result.Add(row); 
+            }
+            return result;
+        }
+    }
+
+    public class ChartData
+    {
+        public DateTime Date { get; set; }
+        public double? Value { get; set; }
+    }
+
+    public class ChartSeries 
+    {
+        public string Name { get; set; }
+        public string Caption { get; set; }
+        public List<ChartData> Data { get; } = new List<ChartData>();  
+
+        public void Add(DateTime date, double? value)
+        {
+            Data.Add(new ChartData { Date = date, Value = value });
         }
     }
 
     public class DataWizardOutput
     {
         public DataMatrix DataMatrix { get; } = new DataMatrix();
+        public List<ChartSeries> ChartSeries { get; } = new List<ChartSeries>();
     }
 
     /*

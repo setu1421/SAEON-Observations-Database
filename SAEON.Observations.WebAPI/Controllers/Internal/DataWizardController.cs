@@ -194,8 +194,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             Guid sensorId = new Guid();
             var date = DateTime.MinValue;
             DataMatixRow row = null;
+            ChartSeries series = null;
+            // Data Matrix
             foreach (var obs in observations)
             {
+                // DataMatrix
                 if ((row == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId) || (obs.ValueDate != date))
                 {
                     row = result.DataMatrix.AddRow();
@@ -204,10 +207,39 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     row["InstrumentName"] = obs.InstrumentName;
                     row["SensorName"] = obs.SensorName;
                     row["Date"] = obs.ValueDate;
+                    siteId = obs.SiteId;
+                    stationId = obs.StationId;
+                    instrumentId = obs.InstrumentId;
+                    sensorId = obs.SensorId;
+                    date = obs.ValueDate;
                 }
                 var name = $"{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}";
                 row[name] = obs.DataValue;
             }
+            Logging.Verbose("DataMatrix: Rows: {Rows} Cols: {Cols}", result.DataMatrix.Rows.Count, result.DataMatrix.Columns.Count);
+            //Chart series
+            siteId = new Guid();
+            stationId = new Guid();
+            instrumentId = new Guid();
+            sensorId = new Guid();
+            foreach (var obs in observations)
+            {
+                if ((series == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId))
+                {
+                    series = new ChartSeries
+                    {
+                        Name = $"{obs.SensorCode.Replace(" ", "")}_{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}",
+                        Caption = $"{obs.SensorName}, {obs.PhenomenonName}, {obs.OfferingName}, {obs.UnitSymbol}"
+                    };
+                    result.ChartSeries.Add(series);
+                    siteId = obs.SiteId;
+                    stationId = obs.StationId;
+                    instrumentId = obs.InstrumentId;
+                    sensorId = obs.SensorId;
+                }
+                series.Add(obs.ValueDate, obs.DataValue);
+            }
+            Logging.Verbose("ChartSeries: Count: {count}", result.ChartSeries.Count);
             return result;
         }
 

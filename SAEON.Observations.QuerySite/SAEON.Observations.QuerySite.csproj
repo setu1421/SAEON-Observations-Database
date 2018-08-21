@@ -882,6 +882,8 @@
     <Content Include="Views\DataWizard\_ApproximationHtml.cshtml" />
     <Content Include="Views\DataWizard\_Table.cshtml" />
     <Content Include="Views\DataWizard\_TableHtml.cshtml" />
+    <Content Include="Views\DataWizard\_Chart.cshtml" />
+    <Content Include="Views\DataWizard\_ChartHtml.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

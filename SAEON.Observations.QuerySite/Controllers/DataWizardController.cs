@@ -1,4 +1,5 @@
-﻿using SAEON.Logs;
+﻿using Newtonsoft.Json;
+using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using System;
@@ -319,7 +320,48 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+        #endregion
 
+        #region Chart
+        //[HttpGet]
+        //public ContentResult GetChartData(string name)
+        //{
+        //    using (Logging.MethodCall(GetType()))
+        //    {
+        //        try
+        //        {
+        //            var series = SessionModel.Output.ChartSeries.FirstOrDefault(i => i.Name == name);
+        //            if (series == null)
+        //                return null;
+        //            else
+        //                return Content(JsonConvert.SerializeObject(series.Data, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), "application/json");
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Logging.Exception(ex);
+        //            throw;
+        //        }
+        //    }
+        //}
+
+        [HttpGet]
+        public PartialViewResult GetChartHtml()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var sessionModel = SessionModel;
+                    //Logging.Verbose("Model: {@model}", model);
+                    return PartialView("_ChartHtml", sessionModel);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
         #endregion
     }
 }
