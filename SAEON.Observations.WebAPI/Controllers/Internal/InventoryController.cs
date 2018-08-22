@@ -1,13 +1,7 @@
-﻿using SAEON.Observations.Core.Entities;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Routing;
+using SAEON.Observations.Core.Entities;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.OData;
-using System.Web.OData.Routing;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {

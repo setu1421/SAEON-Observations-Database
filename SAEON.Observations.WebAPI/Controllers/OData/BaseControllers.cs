@@ -1,4 +1,5 @@
-﻿using SAEON.Logs;
+﻿using Microsoft.AspNet.OData;
+using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.OData;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
 {

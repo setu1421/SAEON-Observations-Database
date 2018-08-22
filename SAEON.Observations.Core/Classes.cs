@@ -210,42 +210,11 @@ namespace SAEON.Observations.Core
             return result;
         }
 
-        public List<ExpandoObject> AsList()
-        { 
-            var result = new List<ExpandoObject>(); 
-            foreach (var dmRow in Rows)
-            {
-                dynamic row = new ExpandoObject();
-                var rowColumns = row as IDictionary<string, Object>;
-                foreach (var dmCol in Columns)
-                {
-                    rowColumns.Add(dmCol.Name, dmRow[dmCol.Name]);
-                }
-                result.Add(row);
-            }
-            return result;
-        }
-         
-        public IEnumerable AsEnumerable() 
-        {
-            var result = new List<ExpandoObject>();
-            foreach (var dmRow in Rows)
-            {
-                dynamic row = new ExpandoObject();
-                var rowColumns = row as IDictionary<string,Object>;
-                foreach (var dmCol in Columns)
-                {
-                    rowColumns.Add(dmCol.Name, dmRow[dmCol.Name]);
-                }
-                result.Add(row); 
-            }
-            return result;
-        }
     }
 
     public class ChartData
     {
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } 
         public double? Value { get; set; }
     }
 

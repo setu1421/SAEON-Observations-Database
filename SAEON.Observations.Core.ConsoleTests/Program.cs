@@ -48,9 +48,6 @@ namespace SAEON.Observations.Core.ConsoleTests
                     Logging.Information("Cols: {cols} Rows: {rows}", dm.Columns.Count, dm.Rows.Count);
                     Logging.Information("Data: {data}", dm.Rows[0]["Name"]);
 
-                    Logging.Information("Json: {json}", dm.AsJArray());
-                    Logging.Information("Enumerable: {enumerable}", dm.AsEnumerable());
-                    Logging.Information("ExpandoList: {list}", dm.AsList());
                 }
                 catch (Exception ex)
                 {
