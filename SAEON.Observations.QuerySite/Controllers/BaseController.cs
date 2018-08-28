@@ -5,7 +5,6 @@ using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -13,9 +12,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.SessionState;
+using Thinktecture.IdentityModel.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
+    [HandleError, HandleForbidden]
     public class BaseController : Controller
     {
         protected int TimeOut { get; set; } = 30; // In minutes
@@ -53,7 +54,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     using (var client = await GetWebAPIClientAsync())
                     {
-                        client.Timeout = TimeSpan.FromMinutes(30);
                         var url = $"{apiBaseUrl}/{resource}";
                         Logging.Verbose("Calling: {url}", url);
                         var response = await client.GetAsync(url);
@@ -83,7 +83,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     using (var client = await GetWebAPIClientAsync())
                     {
-                        client.Timeout = TimeSpan.FromMinutes(30);
                         var url = $"{apiBaseUrl}/{resource}";
                         Logging.Verbose("Calling: {url}", url);
                         var response = await client.GetAsync(url);
@@ -121,7 +120,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     using (var client = await GetWebAPIClientAsync())
                     {
-                        client.Timeout = TimeSpan.FromMinutes(30);
                         var url = $"{apiBaseUrl}/{resource}" + GenerateQueryString();
                         Logging.Verbose("Calling: {url}", url);
                         var response = await client.GetAsync(url);
@@ -151,7 +149,6 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     using (var client = await GetWebAPIClientAsync())
                     {
-                        client.Timeout = TimeSpan.FromMinutes(30);
                         var url = $"{apiBaseUrl}/{resource}";
                         Logging.Verbose("Calling: {url}", url);
                         Logging.Verbose("Input: {@Input}", input);
@@ -234,7 +231,6 @@ namespace SAEON.Observations.QuerySite.Controllers
             result.MaxJsonLength = int.MaxValue;
             return result;
         }
-
 
     }
 }

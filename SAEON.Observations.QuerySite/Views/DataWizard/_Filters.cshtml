@@ -5,7 +5,7 @@
         @Html.LabelFor(i => i.StartDate)
     </div>
     <div class="col-md-11">
-        @Html.EJ().DatePickerFor(i => i.StartDate).DateFormat("dd MMM yyyy").ClientSideEvents(ev => ev.Change("onUpdateFilters"))
+        @Html.EJ().DatePickerFor(i => i.StartDate).DateFormat("dd MMM yyyy").ClientSideEvents(ev => ev.Change("DataWizard.UpdateFilters"))
     </div>
 </div>
 <div class="row">
@@ -13,7 +13,7 @@
         @Html.LabelFor(i => i.EndDate)
     </div>
     <div class="col-md-11">
-        @Html.EJ().DatePickerFor(i => i.EndDate).DateFormat("dd MMM yyyy").ClientSideEvents(ev => ev.Change("onUpdateFilters"))
+        @Html.EJ().DatePickerFor(i => i.EndDate).DateFormat("dd MMM yyyy").ClientSideEvents(ev => ev.Change("DataWizard.UpdateFilters"))
     </div>
 </div>
 <script>

@@ -3,7 +3,7 @@
 @(
 Html.EJ().TreeView("treeViewLocations")
     .TreeViewFields(field => field
-        .Datasource(ds => ds.URL(ViewBag.WebAPIUrl + "/Internal/Locations").Adaptor(AdaptorType.WebApiAdaptor))
+        .Datasource(ds => ds.URL("/DataWizard/GetLocations").Adaptor(AdaptorType.WebApiAdaptor))
         .Id("Key")
         .ParentId("ParentKey")
         .Text("Text")

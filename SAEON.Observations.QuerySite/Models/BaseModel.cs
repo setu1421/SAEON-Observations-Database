@@ -2,5 +2,6 @@
 {
     public abstract class BaseModel
     {
+        public virtual void Clear() { }
     }
 }

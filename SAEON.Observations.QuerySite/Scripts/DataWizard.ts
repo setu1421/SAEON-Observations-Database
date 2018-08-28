@@ -1,12 +1,18 @@
 ﻿namespace DataWizard {
+    // Waiting
+
     export function ShowWaiting() {
         let wp = $("#waiting").data("ejWaitingPopup");
         wp.show();
     }
+
     export function HideWaiting() {
         let wp = $("#waiting").data("ejWaitingPopup");
         wp.hide();
     }
+
+    // Results
+
     export function ShowResults() {
         $("#TableTab").removeClass("d-none");
         $("#PartialTable").removeClass("d-none");
@@ -14,6 +20,7 @@
         $("#PartialChart").removeClass("d-none");
         //$("#CardsTab").removeClass("hidden");
     }
+
     export function HideResults() {
         $("#TableTab").addClass("d-none");
         $("#PartialTable").addClass("d-none");
@@ -22,9 +29,54 @@
         //$("#CardsTab").addClass("hidden");
     }
 
+    // Errors
+
     function ErrorInFunc(method: string, status: string, error: string) {
         HideWaiting();
-        alert("Error in "+method+" Status: " + status + " Error: " + error);
+        alert("Error in " + method + " Status: " + status + " Error: " + error);
+    }
+
+    // Tabs
+
+    function SelectTab(index: number) {
+        let tab = $("#DataWizardTabs").data("ejTab");
+        tab.option("selectedItemIndex", 0);
+    }
+
+    function SelectedTab(): number {
+        let tab = $("#DataWizardTabs").data("ejTab");
+        return tab.model.selectedItemIndex;
+    }
+
+    // Features fix on 1st load
+
+    let locationsSelected: boolean = false;
+    let featuresSelected: boolean = false;
+
+    export function TabActive() {
+        let selectedTab = SelectedTab();
+        if (selectedTab == 0) {
+            if (!locationsSelected) {
+                UpdateLocationsSelected(false);
+                locationsSelected = true;
+            }
+        }
+        else if (selectedTab == 1) {
+            if (!featuresSelected) {
+                UpdateFeaturesSelected(false);
+                featuresSelected = true;
+            }
+        }
+        else if (selectedTab == 3) {
+            FitMap();
+        }
+    }
+
+    // Buttons
+
+    let IsAuthenticated: boolean = false;
+    export function SetIsAuthenticated(aValue: boolean) {
+        IsAuthenticated = aValue;
     }
 
     export function EnableButtons() {
@@ -32,21 +84,22 @@
         let btnSaveQuery = $("#btnSaveQuery").data("ejButton");
         let btnSearch = $("#btnSearch").data("ejButton");
         let btnDownload = $("#btnDownload").data("ejButton");
+        btnLoadQuery.disable();
+        btnSaveQuery.disable();
+        btnSearch.disable();
+        btnDownload.disable();
         let locationsSelected: boolean = $("#treeViewLocations").data('ejTreeView').getCheckedNodes().length > 0;
         let featuresSelected: boolean = $("#treeViewFeatures").data('ejTreeView').getCheckedNodes().length > 0;
         SetApproximation();
-        btnLoadQuery.enable();
+        if (IsAuthenticated && UserQueriesCount > 0) {
+            btnLoadQuery.enable();
+        }
         if (locationsSelected && featuresSelected) {
-            btnSaveQuery.enable();
+            if (IsAuthenticated) {
+                btnSaveQuery.enable();
+            }
             btnSearch.enable();
         }
-        else {
-            btnSaveQuery.disable();
-            btnSearch.disable();
-        }
-        btnLoadQuery.disable(); // remove later
-        btnSaveQuery.disable(); // remove later
-        btnDownload.disable();
     }
 
     export function DisableButtons() {
@@ -60,20 +113,7 @@
         btnDownload.disable();
     }
 
-    let featuresSelected: boolean = false;
-
-    export function TabActive() {
-        let tab = $("#DataWizardTabs").data("ejTab");
-        if (tab.selectedItemIndex() == 1) {
-            if (!featuresSelected) {
-                UpdateFeaturesSelected();
-                featuresSelected = true;
-            }
-        }
-        else if (tab.selectedItemIndex() == 3) {
-            FitMap();
-        }
-    }
+    // Locations
 
     let locationsReady: boolean = false;
 
@@ -82,7 +122,7 @@
         CheckReady();
     }
 
-    export function UpdateLocationsSelected() {
+    export function UpdateLocationsSelected(enableButtons: boolean) {
         let treeObj = $("#treeViewLocations").data('ejTreeView');
         let nodes = treeObj.getCheckedNodes();
         let selected = []
@@ -95,13 +135,17 @@
             .done(function (data) {
                 $('#PartialLocationsSelected').html(data);
                 UpdateMap();
-                EnableButtons();
+                if (enableButtons) {
+                    EnableButtons();
+                }
                 HideResults();
             })
             .fail(function (jqXHR, status, error) {
                 ErrorInFunc("UpdateLocationsSelected", status, error)
             });
     }
+
+    // Features
 
     let featuresReady: boolean = false;
 
@@ -112,12 +156,14 @@
 
     function CheckReady() {
         if (locationsReady && featuresReady) {
+            UpdateLocationsSelected(false);
+            UpdateFeaturesSelected(false);
             HideWaiting();
             EnableButtons();
         }
     }
 
-    export function UpdateFeaturesSelected() {
+    export function UpdateFeaturesSelected(enableButtons: boolean) {
         let treeObj = $("#treeViewFeatures").data('ejTreeView');
         let nodes = treeObj.getCheckedNodes();
         let selected = []
@@ -129,7 +175,9 @@
         $.post("/DataWizard/UpdateFeaturesSelected", { features: selected })
             .done(function (data) {
                 $('#PartialFeaturesSelected').html(data);
-                EnableButtons();
+                if (enableButtons) {
+                    EnableButtons();
+                }
                 HideResults();
             })
             .fail(function (jqXHR, status, error) {
@@ -137,16 +185,24 @@
             });
     }
 
-    export function UpdateFilters(startDate: Date, endDate: Date) {
+    // Filters 
+
+    export function UpdateFilters(enableButtons: boolean) {
+        let startDate = $("#StartDate").ejDatePicker("instance").getValue();
+        let endDate = $("#EndDate").ejDatePicker("instance").getValue();
         $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate })
             .done(function (data) {
-                EnableButtons();
+                if (enableButtons) {
+                    EnableButtons();
+                }
                 HideResults();
             })
             .fail(function (jqXHR, status, error) {
                 ErrorInFunc("UpdateFilters", status, error)
             });
     }
+
+    // Map 
 
     class MapPoint {
         Title: string;
@@ -217,6 +273,8 @@
         FitMap(true);
     }
 
+    // Aproximation
+
     export function GetApproximation(): string {
         let approximation: string = "{}";
         $.get("/DataWizard/GetApproximation")
@@ -239,22 +297,177 @@
             });
     }
 
+    // Search
+
     export function Search() {
         ShowWaiting();
         $.get("/DataWizard/GetData")
             .done(function () {
                 $("#PartialTable").load("/DataWizard/GetTableHtml", function () {
                     $("#PartialChart").load("/DataWizard/GetChartHtml", function () {
-                    //$("#PartialCards").load("/DataWizard/GetCardsHtml", function () {
-                            ShowResults();
-                            EnableButtons();
-                            HideWaiting();
-                        });
-                //    });
+                        //$("#PartialCards").load("/DataWizard/GetCardsHtml", function () {
+                        ShowResults();
+                        EnableButtons();
+                        HideWaiting();
+                    });
+                    //    });
                 });
             })
             .fail(function (jqXHR, status, error) {
-                ErrorInFunc("GetData",status,error)
+                ErrorInFunc("GetData", status, error)
             });
+    }
+
+    // User Queries
+
+    let UserQueriesCount: number = 0;
+    export function SetUserQueriesCount(aValue: number) {
+        UserQueriesCount = aValue;
+    }
+
+    // LoadQuery
+    export function LoadQueryOpen() {
+        DisableButtons();
+        $("#dialogLoadQuery").ejDialog("open");
+        $("#editLoadQueryName").ejAutocomplete("open");
+    }
+
+    export function LoadQueryClose() {
+        $("#editLoadQueryName").ejAutocomplete("hide");
+        $("#dialogLoadQuery").ejDialog("close");
+        HideWaiting();
+        EnableButtons();
+    }
+
+    export function LoadQueryNameChange() {
+        let loadName = $("#editLoadQueryName").val();
+        let btnLoad = $("#btnLoadQueryLoad").data("ejButton");
+        if (loadName == "") {
+            btnLoad.disable()
+        }
+        else {
+            btnLoad.enable()
+        }
+    }
+
+    export function LoadQuery() {
+        ShowWaiting();
+        $.ajax({
+            url: "/DataWizard/LoadQuery",
+            data: JSON.stringify({ Name: $("#editLoadQueryName").val() }),
+            async: true,
+            type: "POST",
+            contentType: "application/json",
+            success: function () {
+                let selectedTab = SelectedTab();
+                setTimeout(SelectTab(0), 1000);
+                $("#PartialLocations").load("/DataWizard/GetLocationsHtml", function () {
+                    $("#PartialLocationsSelected").load("/DataWizard/GetLocationsSelectedHtml", function () {
+                        setTimeout(SelectTab(1), 1000);
+                        $("#PartialFeatures").load("/DataWizard/GetFeaturesHtml", function () {
+                            $("#PartialFeaturesSelected").load("/DataWizard/GetFeaturesSelectedHtml", function () {
+                                $("#PartialFilters").load("/DataWizard/GetFiltersHtml", function () {
+                                    locationsSelected = false;
+                                    featuresSelected = false;
+                                    setTimeout(SelectTab(0), 1000);
+                                    //UpdateMap();
+                                    $("PartialTable").text("");
+                                    $("PartialCards").text("");
+                                    $("PartialChart").text("");
+                                    HideResults();
+                                    LoadQueryClose();
+                                });
+                            });
+                        });
+                    });
+                });
+            },
+            error: function (jqXHR, status, error) {
+                ErrorInFunc("LoadQueryLoad", status, error)
+            }
+        });
+        //$.post("/DataWizard/LoadQuery", JSON.stringify({ Name: $("#editLoadQueryName").val() }))
+        //    .done(function () {
+        //        $("#PartialLocations").load("/DataWizard/GetLocationsHtml", function () {
+        //            $("#PartialLocationsSelected").load("/DataWizard/GetLocationsSelectedHtml", function () {
+        //                $("#PartialFeatures").load("/DataWizard/GetFeaturesHtml", function () {
+        //                    $("#PartialFeaturesSelected").load("/DataWizard/GetFeaturesSelectedHtml", function () {
+        //                        $("#PartialFilters").load("/DataWizard/GetFiltersHtml", function () {
+        //                            UpdateMap();
+        //                            $("PartialTable").text("");
+        //                            $("PartialCards").text("");
+        //                            $("PartialChart").text("");
+        //                            HideResults();
+        //                            LoadQueryClose();
+        //                        });
+        //                    });
+        //                });
+        //            });
+        //        });
+        //    })
+        //    .fail(function (jqXHR, status, error) {
+        //        ErrorInFunc("LoadQuery", status, error)
+        //    });
+    }
+
+    // Save Query
+    export function SaveQueryOpen() {
+        DisableButtons();
+        $("#dialogSaveQuery").ejDialog("open");
+    }
+
+    export function SaveQueryClose() {
+        $("#dialogSaveQuery").ejDialog("close");
+        HideWaiting();
+        EnableButtons();
+    }
+
+    export function SaveQueryNameChange() {
+        var saveName = $("#editSaveQueryName").val();
+        var btnSave = $("#btnSaveQuerySave").data("ejButton");
+        if (saveName == "") {
+            btnSave.disable()
+        }
+        else {
+            btnSave.enable()
+        }
+    }
+
+    export function SaveQuery() {
+        ShowWaiting();
+        //$.post("/DataWizard/SaveQuery", JSON.stringify({ Name: $("#editSaveQueryName").val(), Description: $("#editSaveQueryDescription").val() }))
+        //    .done(function () {
+        //        HideWaiting();
+        //        EnableButtons();
+        //        SaveQueryClose();
+        //    })
+        //    .fail(function (jqXHR, status, error) {
+        //        ErrorInFunc("SaveQuery", status, error)
+        //    });
+        $.ajax({
+            url: "/DataWizard/SaveQuery",
+            data: JSON.stringify({
+                Name: $("#editSaveQueryName").val(),
+                Description: $("#editSaveQueryDescription").val()
+            }),
+            async: true,
+            type: "POST",
+            contentType: "application/json"
+        })
+            .done(function () {
+                SaveQueryClose();
+            })
+            .fail(function (jqXHR, status, error) {
+                ErrorInFunc("SaveQuery", status, error)
+            });
+    }
+
+    export function Test() {
+        if (SelectedTab() == 0) {
+            SelectTab(1);
+        }
+        else {
+            SelectTab(0);
+        }
     }
 }

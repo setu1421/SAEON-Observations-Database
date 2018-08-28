@@ -342,7 +342,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    //Logging.Verbose("Adding {Name} {@item}", item.Name, item);
+                    Logging.Verbose("Adding {Name} {@item}", item.Name, item);
                     if (item == null)
                     {
                         Logging.Error("item cannot be null");

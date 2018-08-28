@@ -9,8 +9,50 @@
         .Size(ButtonSize.Medium)
         .ContentType(ContentType.TextAndImage)
         .PrefixIcon("e-icon e-reload")
-        .ClientSideEvents(e => e.Click("onLoadQueryClick"))
+        .ClientSideEvents(e => e.Click("DataWizard.LoadQueryOpen"))
         .Enabled(Model.UserQueries.Count > 0)
+        .Render();
+    Html.EJ()
+        .Dialog("dialogLoadQuery")
+        .Title("Load query")
+        .ShowOnInit(false)
+        .Width("auto")
+        .ClientSideEvents(ev => ev.Close("DataWizard.LoadQueryClose"))
+        .ContentTemplate(
+            @<text>
+                <div class="row">
+                    <div class="col-md">
+                        @(Html.EJ()
+                            .Autocomplete("editLoadQueryName")
+                            .Datasource(ds => ds.URL("/DataWizard/GetUserQueries").Adaptor(AdaptorType.WebApiAdaptor))
+                            .AutocompleteFields(f => f.Text("Name").Key("Id"))
+                            .WatermarkText("Name")
+                            .Width("300px")
+                            .ShowPopupButton(true)
+                            .ClientSideEvents(ev => ev.Change("DataWizard.LoadQueryNameChange"))
+                        )
+                    </div>
+                </div>
+                <div class="row ErrorRow">
+                    <div class="col-md" id="LoadError">
+                    </div>
+                </div>
+                <div class="row ButtonRow">
+                    <div class="col-md">
+                        @(Html.EJ()
+                            .Button("btnLoadQueryLoad")
+                            .Text("Load")
+                            .ShowRoundedCorner(true)
+                            .Type(ButtonType.Button)
+                            .Size(ButtonSize.Medium)
+                            .ContentType(ContentType.TextAndImage)
+                            .PrefixIcon("e-icon e-save")
+                            .Enabled(false)
+                            .ClientSideEvents(e => e.Click("DataWizard.LoadQuery"))
+                        )
+                    </div>
+                </div>
+            </text>)
         .Render();
     Html.EJ()
         .Button("btnSaveQuery")
@@ -21,8 +63,52 @@
         .ContentType(ContentType.TextAndImage)
         .PrefixIcon("e-icon e-save")
         .Enabled(false)
-        .ClientSideEvents(e => e.Click("onSaveQueryClick"))
-    .Render();
+        .ClientSideEvents(e => e.Click("DataWizard.SaveQueryOpen"))
+        .Render();
+    Html.EJ()
+        .Dialog("dialogSaveQuery")
+        .Title("Save query")
+        .ShowOnInit(false)
+        .Width("auto")
+        .ClientSideEvents(ev => ev.Close("DataWizard.SaveQueryClose"))
+        .ContentTemplate(
+            @<text>
+                <div class="row">
+                    <div class="col-md">
+                        @(Html.EJ()
+                            .MaskEdit("editSaveQueryName")
+                            .WatermarkText("Name")
+                            .Width("300px")
+                            .ClientSideEvents(ev => ev.Change("DataWizard.SaveQueryNameChange"))
+                        )
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md">
+                        @Html.EJ().MaskEdit("editSaveQueryDescription").WatermarkText("Description").Width("500px")
+                    </div>
+                </div>
+                <div class="row ErrorRow">
+                    <div class="col-md" id="SaveError">
+                    </div>
+                </div>
+                <div class="row ButtonRow">
+                    <div class="col-md">
+                        @(Html.EJ()
+                            .Button("btnSaveQuerySave")
+                            .Text("Save")
+                            .ShowRoundedCorner(true)
+                            .Type(ButtonType.Button)
+                            .Size(ButtonSize.Medium)
+                            .ContentType(ContentType.TextAndImage)
+                            .PrefixIcon("e-icon e-save")
+                            .Enabled(false)
+                            .ClientSideEvents(e => e.Click("DataWizard.SaveQuery"))
+                        )
+                    </div>
+                </div>
+            </text>)
+        .Render();
     Html.EJ()
         .Button("btnSearch")
         .Text("Search")
@@ -43,7 +129,7 @@
         .ContentType(ContentType.TextAndImage)
         .PrefixIcon("e-icon e-dataexport")
         .Enabled(false)
-        .ClientSideEvents(e => e.Click("onDownloadClick"))
+        .ClientSideEvents(e => e.Click("DataWizard.Download"))
         .Render();
     Html.EJ()
         .Button("btnTest")
@@ -51,8 +137,8 @@
         .ShowRoundedCorner(true)
         .Type(ButtonType.Button)
         .Size(ButtonSize.Medium)
-        .ContentType(ContentType.TextAndImage)
-        .PrefixIcon("e-icon e-dataexport")
-        .ClientSideEvents(e => e.Click("DataWizard.HideResults"))
+        .ContentType(ContentType.TextOnly)
+        .Enabled(true)
+        .ClientSideEvents(e => e.Click("DataWizard.Test"))
         .Render();
 }

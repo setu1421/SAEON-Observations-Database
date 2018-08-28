@@ -9,6 +9,7 @@
     "url": "git://github.com/SAEON-Data/Observations-Database.git"
   },
   "dependencies": {
+    "@types/ej.web.all": "^16.2.0",
     "@types/google-maps": "^3.2.0",
     "@types/googlemaps": "^3.30.11",
     "@types/jquery": "^3.3.5",

@@ -26,20 +26,44 @@ namespace SAEON.Observations.QuerySite.Models
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
         public DataWizardApproximation Approximation { get; set; } = new DataWizardApproximation();
         public DataWizardOutput Output { get; set; } = new DataWizardOutput();
+        public bool IsAuthenticated { get; set; } = false;
+        public List<UserDownload> UserDownloads { get; } = new List<UserDownload>();
         public List<UserQuery> UserQueries { get; } = new List<UserQuery>();
+
+        public override void Clear()
+        {
+            Locations.Clear();
+            LocationsSelected.Clear();
+            Organisations.Clear();
+            Sites.Clear();
+            Stations.Clear();
+            MapPoints.Clear();
+            Features.Clear();
+            FeaturesSelected.Clear();
+            Phenomena.Clear();
+            Offerings.Clear();
+            Units.Clear();
+            StartDate = DateTime.Now.AddYears(-100).Date;
+            EndDate = DateTime.Now.Date;
+            Approximation = new DataWizardApproximation();
+            Output = new DataWizardOutput();
+            IsAuthenticated = false;
+            UserDownloads.Clear();
+            UserQueries.Clear();
+        }
     }
 
-    //public class LoadQueryModel
-    //{
-    //    [Required, StringLength(150)]
-    //    public string Name { get; set; }
-    //}
+    public class LoadQueryModel
+    {
+        [Required, StringLength(150)]
+        public string Name { get; set; }
+    }
 
-    //public class SaveQueryModel
-    //{
-    //    [Required, StringLength(150)]
-    //    public string Name { get; set; }
-    //    [StringLength(500)]
-    //    public string Description { get; set; }
-    //}
+    public class SaveQueryModel
+    {
+        [Required, StringLength(150)]
+        public string Name { get; set; }
+        [StringLength(500)]
+        public string Description { get; set; }
+    }
 }

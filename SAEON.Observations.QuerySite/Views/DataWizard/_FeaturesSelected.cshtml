@@ -2,9 +2,10 @@
 @model DataWizardModel
 @(Html.EJ()
     .ListView("listViewFeaturesSelected")
+    //.DataSource(ds => ds.URL("/DataWizard/GetFeaturesSelected").Adaptor(AdaptorType.WebApiAdaptor))
+    .DataSource(Model.FeaturesSelected)
     .ShowHeader(true)
     .HeaderTitle("Selected")
-    .DataSource(Model.FeaturesSelected)
     .FieldSettings(fs => fs.Text("Name"))
 )
 

@@ -15,7 +15,7 @@
                                 @Html.Partial("_Locations", Model)
                             </div>
                             <div class="col-md-6" id="PartialLocationsSelected">
-                                @Html.Partial("_LocationsSelected", Model)
+                                @*@Html.Partial("_LocationsSelected", Model)*@
                             </div>
                         </div>);
                     tabs.Add().ID("FeaturesTab").Text("Features").ContentTemplate(
@@ -24,7 +24,7 @@
                                 @Html.Partial("_Features", Model)
                             </div>
                             <div class="col-md-6" id="PartialFeaturesSelected">
-                                @Html.Partial("_FeaturesSelected", Model)
+                                @*@Html.Partial("_FeaturesSelected", Model)*@
                             </div>
                         </div>);
                     tabs.Add().ID("FiltersTab").Text("Filters").ContentTemplate(
@@ -68,6 +68,8 @@
     <script type="text/javascript">
         $(function () {
             DataWizard.HideResults();
+            DataWizard.SetIsAuthenticated(@Model.IsAuthenticated.ToString().ToLower());
+            DataWizard.SetUserQueriesCount(@Model.UserQueries.Count);
         });
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TVt9f_c9hnz3TJL5HMJuX04iNXa43RI&callback=DataWizard.InitMap">
