@@ -47,6 +47,7 @@ namespace SAEON.Observations.WebAPI
                     var config = new HttpConfiguration();
                     WebApiConfig.Register(config);
                     app.UseWebApi(config);
+                    config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
                 }
                 catch (Exception ex)
                 {

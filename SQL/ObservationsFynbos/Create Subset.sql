@@ -32,8 +32,9 @@ WHILE (@Done = 0)
 		IF @Updated = 0 Set @Done = 1
 	END TRY
 	BEGIN  CATCH
-		SELECT   
-			ERROR_NUMBER() AS ErrorNumber  
+		SELECT 
+			GetDate()  
+			,ERROR_NUMBER() AS ErrorNumber  
 			,ERROR_SEVERITY() AS ErrorSeverity  
 			,ERROR_STATE() AS ErrorState  
 			,ERROR_PROCEDURE() AS ErrorProcedure  
@@ -49,7 +50,7 @@ WHILE (@Done = 0)
 	set @BatchNum = @BatchNum + 1
 	WAITFOR DELAY '00:00:30'
   END 
-
+/*
 Delete
   DataLog
 from
@@ -234,4 +235,4 @@ from
 where
   (Offering.Code like 'Interval%')
 Delete Offering where (Code like 'Interval%')
-
+*/

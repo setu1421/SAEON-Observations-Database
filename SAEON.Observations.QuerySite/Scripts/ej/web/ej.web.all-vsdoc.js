@@ -8086,6 +8086,9 @@ jQuery.fn.ejDiagram = function (options) {
 ///Describes the transparency level of the region
 ///<br/>opacity-number	default-1
 ///<br/><br/>
+///defines the node border with a smooth transition from one color to another color.
+///<br/>borderGradient-any	default-null
+///<br/><br/>
 ///Defines the header of a swimlane/lane
 ///<br/>header-any	default-{ text: Title, fontSize: 11 }
 ///<br/><br/>
@@ -9958,7 +9961,7 @@ jQuery.fn.ejFileExplorer = function (options) {
 ///<br/>enableThumbnailCompress-boolean	default-false
 ///<br/><br/>
 ///Allows specified type of files only to display in FileExplorer control.
-///<br/>fileTypes-string	default-.
+///<br/>fileTypes-string	default-* . *
 ///<br/><br/>
 ///By using filterSettings property, you can customize the search functionality of the search bar in FileExplorer control.
 ///<br/>filterSettings-FilterSettings	default-
@@ -12627,6 +12630,18 @@ jQuery.fn.ejKanban = function (options) {
 ///To enable or disable DragAndDrop across swim lane.
 ///<br/>allowDragAndDrop-boolean	default-false
 ///<br/><br/>
+///To enable or disable empty swimlane on Kanban board.  It is used to shown empty swimlane when no data's present on headers key mapping value.
+///<br/>showEmptySwimlane-boolean	default-false
+///<br/><br/>
+///Gets or sets an object that indicates to render the swimlane rows with specified swimlane headers.
+///<br/>headers-Array&lt;any&gt;	default-[]
+///<br/><br/>
+///Gets or sets a value that indicates to render the Kanban with specified swimlane header text.
+///<br/>text-string	default-null
+///<br/><br/>
+///Gets or sets a value that indicates to render the Kanban with specified swimlane header key.
+///<br/>key-string	default-null
+///<br/><br/>
 ///Customize the settings for unassigned category of swim lane.
 ///<br/>unassignedGroup-any	default-Object
 ///<br/><br/>
@@ -15012,6 +15027,27 @@ jQuery.fn.ejMap = function (options) {
 ///<br/><br/>
 ///set the smartLabelSize property
 ///<br/>smartLabelSize-ej.datavisualization.Map.LabelSize|string	default-fixed
+///<br/><br/>
+///Options for customizing the data label font.
+///<br/>font-any	default-
+///<br/><br/>
+///Font family of the data label.
+///<br/>fontFamily-string	default-Segoe UI
+///<br/><br/>
+///Font style of the data label.
+///<br/>fontStyle-ej.datavisualization.Map.FontStyle|string	default-normal.
+///<br/><br/>
+///NameType DescriptionRegularstring Specifies the font weight as regular.BoldstringSpecifies the font weight as bold.LighterstringSpecifies the font weight as lighter.  
+///<br/>fontWeight-ej.datavisualization.Map.FontWeight|string	default-regular. See
+///<br/><br/>
+///Opacity of the text.
+///<br/>opacity-number	default-1
+///<br/><br/>
+///Font color of the data label text.
+///<br/>color-string	default-null
+///<br/><br/>
+///Font size of the data label.
+///<br/>size-string	default-12px
 ///<br/><br/>
 ///Specifies the map view type.
 ///<br/>geometryType-ej.datavisualization.Map.GeometryType|string	default-&#39;geographic&#39;
@@ -18836,6 +18872,9 @@ jQuery.fn.ejRangeNavigator = function (options) {
 ///Toggles the placement of slider exactly on the place it left or on the nearest interval.
 ///<br/>allowSnapping-boolean	default-false
 ///<br/><br/>
+///It allows to show the value between the particular periods (i.e) from 1st January to 31st February and so on. The default value is true. If we set the property as false, it allows to show the value between the particular periods.(i.e) from 1st January to 31st January and so on.
+///<br/>allowNextValue-boolean	default-true
+///<br/><br/>
 ///Options for customizing the color, opacity and width of the chart border.
 ///<br/>border-Border	default-
 ///<br/><br/>
@@ -18944,6 +18983,9 @@ jQuery.fn.ejRangeNavigator = function (options) {
 ///Specifies the position of the labels to render either inside or outside of plot area
 ///<br/>labelPlacement-ej.datavisualization.RangeNavigator.LabelPlacement|string	default-outside
 ///<br/><br/>
+///Specifies to hide the labels when it intersects with each other.
+///<br/>labelIntersectAction-ej.datavisualization.RangeNavigator.LabelIntersectAction|string	default-none
+///<br/><br/>
 ///Specifies the position of the labels in higher level
 ///<br/>position-ej.datavisualization.RangeNavigator.Position|string	default-top
 ///<br/><br/>
@@ -19009,6 +19051,9 @@ jQuery.fn.ejRangeNavigator = function (options) {
 ///<br/><br/>
 ///Specifies the position of the labels to render either inside or outside of plot area. See LabelPlacement
 ///<br/>labelPlacement-ej.datavisualization.RangeNavigator.LabelPlacement|string	default-outside
+///<br/><br/>
+///Specifies to hide the labels when it intersects with each other.
+///<br/>labelIntersectAction-ej.datavisualization.RangeNavigator.LabelIntersectAction|string	default-none
 ///<br/><br/>
 ///Specifies the position of the labels in lower level.See Position
 ///<br/>position-ej.datavisualization.RangeNavigator.Position|string	default-bottom

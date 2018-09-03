@@ -1120,9 +1120,9 @@ namespace SAEON.Observations.Core.Entities
             Configuration.AutoDetectChangesEnabled = false;
             var logLevel = ConfigurationManager.AppSettings["EntityFrameworkLogging"];
             if (logLevel.Equals("Verbose", StringComparison.CurrentCultureIgnoreCase))
-                Database.Log = s => Logging.Verbose(s);
-            else
-                Database.Log = s => Logging.Information(s);
+                Database.Log = s => Logging.Verbose(s);  
+            //else
+            //    Database.Log = s => Logging.Information(s); 
             Database.CommandTimeout = 30 * 60; 
         }
 

@@ -65,6 +65,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
+                    Logging.Information("GetAll");
                     return GetList().AsQueryable();
                 }
                 catch (Exception ex)
