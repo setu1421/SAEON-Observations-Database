@@ -1,0 +1,80 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[Observation]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[ImportBatch].[Pass1File] is being dropped, data loss could occur.
+       The column [dbo].[ImportBatch].[Pass2File] is being dropped, data loss could occur.
+       The column [dbo].[ImportBatch].[Pass3File] is being dropped, data loss could occur.
+       The column [dbo].[ImportBatch].[Pass4File] is being dropped, data loss could occur.
+       The column [dbo].[ImportBatch].[SourceFile] is being dropped, data loss could occur.
+
+** User actions
+     Alter
+       [dbo].[ImportBatch] (Table)
+     Table rebuild
+       [dbo].[Observation] (Table)
+     Create
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_Count] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_EndDate] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_StartDate] (Index)
+
+** Supporting actions
+     Drop
+       [dbo].[DF_Observation_AddedDate] (Default Constraint)
+       [dbo].[DF_Observation_AddedAt] (Default Constraint)
+       [dbo].[DF_Observation_UpdatedAt] (Default Constraint)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonUOM] (Foreign Key)
+       [dbo].[FK_Observation_Sensor] (Foreign Key)
+       [dbo].[FK_Observation_Status] (Foreign Key)
+       [dbo].[FK_Observation_StatusReason] (Foreign Key)
+       [dbo].[FK_Observation_aspnet_Users] (Foreign Key)
+     Create
+       [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_PhenomenonUOMID] (Index)
+       [dbo].[Observation].[IX_Observation_PhenomenonOfferingID] (Index)
+       [dbo].[Observation].[IX_Observation_PhenomenonUOMID] (Index)
+       [dbo].[Observation].[IX_Observation_UserId] (Index)
+       [dbo].[Observation].[IX_Observation_AddedDate] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDate] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDateDesc] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDay] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_StatusID] (Index)
+       [dbo].[Observation].[IX_Observation_StatusReasonID] (Index)
+       [dbo].[Observation].[IX_Observation_CorrelationID] (Index)
+       [dbo].[Observation].[IX_Observation_Latitude] (Index)
+       [dbo].[Observation].[IX_Observation_Longitude] (Index)
+       [dbo].[Observation].[IX_Observation_Elevation] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Latitude] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Longitude] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Elevation] (Index)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonUOM] (Foreign Key)
+       [dbo].[FK_Observation_Sensor] (Foreign Key)
+       [dbo].[FK_Observation_Status] (Foreign Key)
+       [dbo].[FK_Observation_StatusReason] (Foreign Key)
+       [dbo].[FK_Observation_aspnet_Users] (Foreign Key)
+       [dbo].[TR_Observation_Insert] (Trigger)
+       [dbo].[TR_Observation_Update] (Trigger)
+     Refresh
+       [dbo].[vImportBatch] (View)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsDatastreams] (View)
+       [dbo].[vObservation] (View)
+
+The column [dbo].[ImportBatch].[Pass1File] is being dropped, data loss could occur.
+The column [dbo].[ImportBatch].[Pass2File] is being dropped, data loss could occur.
+The column [dbo].[ImportBatch].[Pass3File] is being dropped, data loss could occur.
+The column [dbo].[ImportBatch].[Pass4File] is being dropped, data loss could occur.
+The column [dbo].[ImportBatch].[SourceFile] is being dropped, data loss could occur.
+

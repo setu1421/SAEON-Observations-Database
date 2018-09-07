@@ -79,7 +79,8 @@
     <DefaultFilegroup>PRIMARY</DefaultFilegroup>
     <GenerateCreateScript>True</GenerateCreateScript>
     <TargetFrameworkProfile />
-    <DefaultFileStreamFilegroup>Documents</DefaultFileStreamFilegroup>
+    <DefaultFileStreamFilegroup>
+    </DefaultFileStreamFilegroup>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -506,7 +507,6 @@
     <Build Include="dbo\Views\vSchemaColumn.sql" />
     <Build Include="Scripts\AuthenticationFileGroup.sql" />
     <Build Include="Scripts\ObservationsFileGroup.sql" />
-    <Build Include="Scripts\DocumentsFileGroup.sql" />
     <Build Include="Scripts\PrimaryFileGroup.sql" />
     <Build Include="dbo\Tables\UserQueries.sql" />
     <Build Include="dbo\Tables\UserDownloads.sql" />
@@ -529,6 +529,7 @@
     <None Include="Observations.publish.xml" />
     <None Include="ObservationsTest.publish.xml" />
     <None Include="ObservationsSACTN.publish.xml" />
+    <None Include="ObservationsFynbos.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\master.dacpac">
