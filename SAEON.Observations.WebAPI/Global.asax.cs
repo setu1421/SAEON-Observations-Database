@@ -2,6 +2,7 @@
 using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Controllers.SensorThings;
 using System;
+using System.IO;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -29,6 +30,7 @@ namespace SAEON.Observations.WebAPI
                     RouteConfig.RegisterRoutes(RouteTable.Routes);
                     BundleConfig.RegisterBundles(BundleTable.Bundles);
                     SensorThingsFactory.Load();
+                    Directory.CreateDirectory(HostingEnvironment.MapPath($"~/App_Data/Downloads/{DateTime.Now.ToString("yyyyMM")}"));
                 }
                 catch (Exception ex)
                 {

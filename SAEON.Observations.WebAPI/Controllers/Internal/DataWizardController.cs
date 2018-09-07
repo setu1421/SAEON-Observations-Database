@@ -4,7 +4,9 @@ using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Web.Hosting;
 using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
@@ -12,6 +14,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [RoutePrefix("Internal/DataWizard")]
     public class DataWizardController : BaseController
     {
+        public DataWizardController() : base()
+        {
+            db.Configuration.AutoDetectChangesEnabled = true;
+        }
+
         private IQueryable<ImportBatchSummary> GetQuery(DataWizardInput input)
         {
             Logging.Verbose("Input: {@Input}", input);
@@ -31,7 +38,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             Logging.Verbose("Processed Input: {@Input}", input);
             var startDate = input.StartDate;
             var endDate = input.EndDate;
-            return db.ImportBatchSummary.Where(i => 
+            return db.ImportBatchSummary.Where(i =>
                 (input.Sites.Contains(i.SiteId) || input.Stations.Contains(i.StationId)) &&
                 (input.Offerings.Contains(i.PhenomenonOfferingId) || input.Units.Contains(i.PhenomenonUnitId)) &&
                 (i.StartDate >= startDate && i.EndDate < endDate)
@@ -129,14 +136,26 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
             public override bool Equals(object obj)
             {
-                if (obj == null) return false;
-                if (!(obj is DataFeature feature)) return false;
+                if (obj == null)
+                {
+                    return false;
+                }
+
+                if (!(obj is DataFeature feature))
+                {
+                    return false;
+                }
+
                 return Equals(feature);
             }
 
             public bool Equals(DataFeature feature)
             {
-                if (feature == null) return false;
+                if (feature == null)
+                {
+                    return false;
+                }
+
                 return
                     (Name == feature.Name);
             }
@@ -154,7 +173,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        private DataWizardOutput Execute(DataWizardInput input)
+        private DataWizardOutput GetData(DataWizardInput input, bool includeChart)
         {
             var result = new DataWizardOutput();
             result.DataMatrix.AddColumn("SiteName", "Site", MaxtixDataType.String);
@@ -164,18 +183,18 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.DataMatrix.AddColumn("Date", "Date", MaxtixDataType.Date);
 
             var q = GetQuery(input);
-            var qFeatures = q.Select(i => new {i.PhenomenonOfferingId, i.PhenomenonUnitId, i.PhenomenonCode, i.PhenomenonName, i.OfferingCode, i.OfferingName, i.UnitCode, i.UnitName, i.UnitSymbol }).Distinct();
+            var qFeatures = q.Select(i => new { i.PhenomenonOfferingId, i.PhenomenonUnitId, i.PhenomenonCode, i.PhenomenonName, i.OfferingCode, i.OfferingName, i.UnitCode, i.UnitName, i.UnitSymbol }).Distinct();
             var features = qFeatures.ToList().Select(i => new DataFeature
-                {
-                    PhenomenonOfferingId = i.PhenomenonOfferingId,
-                    PhenomenonUnitId = i.PhenomenonUnitId,
-                    Phenomenon = i.PhenomenonName,
-                    Offering = i.OfferingName,
-                    Unit = i.UnitName,
-                    Symbol = i.UnitSymbol,
-                    Name = $"{i.PhenomenonCode.Replace(" ", "")}_{i.OfferingCode.Replace(" ", "")}_{i.UnitCode.Replace(" ","")}",
-                    Caption = $"{i.PhenomenonName}, {i.OfferingName}, {i.UnitSymbol}"
-                });
+            {
+                PhenomenonOfferingId = i.PhenomenonOfferingId,
+                PhenomenonUnitId = i.PhenomenonUnitId,
+                Phenomenon = i.PhenomenonName,
+                Offering = i.OfferingName,
+                Unit = i.UnitName,
+                Symbol = i.UnitSymbol,
+                Name = $"{i.PhenomenonCode.Replace(" ", "")}_{i.OfferingCode.Replace(" ", "")}_{i.UnitCode.Replace(" ", "")}",
+                Caption = $"{i.PhenomenonName}, {i.OfferingName}, {i.UnitSymbol}"
+            });
             foreach (var feature in features)
             {
                 result.DataMatrix.AddColumn(feature.Name, feature.Caption, MaxtixDataType.Double);
@@ -194,7 +213,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             Guid sensorId = new Guid();
             var date = DateTime.MinValue;
             DataMatixRow row = null;
-            ChartSeries series = null;
             // Data Matrix
             foreach (var obs in observations)
             {
@@ -218,34 +236,39 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
             Logging.Verbose("DataMatrix: Rows: {Rows} Cols: {Cols}", result.DataMatrix.Rows.Count, result.DataMatrix.Columns.Count);
             //Chart series
-            siteId = new Guid();
-            stationId = new Guid();
-            instrumentId = new Guid();
-            sensorId = new Guid();
-            foreach (var obs in observations)
+            if (includeChart)
             {
-                if ((series == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId))
+                ChartSeries series = null;
+                siteId = new Guid();
+                stationId = new Guid();
+                instrumentId = new Guid();
+                sensorId = new Guid();
+                foreach (var obs in observations)
                 {
-                    series = new ChartSeries
+                    if ((series == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId))
                     {
-                        Name = $"{obs.SensorCode.Replace(" ", "")}_{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}",
-                        Caption = $"{obs.SensorName}, {obs.PhenomenonName}, {obs.OfferingName}, {obs.UnitSymbol}"
-                    };
-                    result.ChartSeries.Add(series);
-                    siteId = obs.SiteId;
-                    stationId = obs.StationId;
-                    instrumentId = obs.InstrumentId;
-                    sensorId = obs.SensorId;
+                        series = new ChartSeries
+                        {
+                            Name = $"{obs.SensorCode.Replace(" ", "")}_{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}",
+                            Caption = $"{obs.SensorName}, {obs.PhenomenonName}, {obs.OfferingName}, {obs.UnitSymbol}"
+                        };
+                        result.ChartSeries.Add(series);
+                        siteId = obs.SiteId;
+                        stationId = obs.StationId;
+                        instrumentId = obs.InstrumentId;
+                        sensorId = obs.SensorId;
+                    }
+                    series.Add(obs.ValueDate, obs.DataValue);
                 }
-                series.Add(obs.ValueDate, obs.DataValue);
+                Logging.Verbose("ChartSeries: Count: {count}", result.ChartSeries.Count);
             }
-            Logging.Verbose("ChartSeries: Count: {count}", result.ChartSeries.Count);
             return result;
         }
 
         [HttpGet]
-        [Route("Execute")]
-        public DataWizardOutput ExecuteGet([FromUri] string json)
+        [Route("GetData")]
+        [Authorize]
+        public DataWizardOutput DataGet([FromUri] string json)
         {
             using (Logging.MethodCall<DataWizardOutput>(GetType()))
             {
@@ -257,7 +280,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         throw new ArgumentNullException(nameof(json));
                     }
-                    return Execute(JsonConvert.DeserializeObject<DataWizardInput>(json));
+                    return GetData(JsonConvert.DeserializeObject<DataWizardInput>(json), true);
                 }
                 catch (Exception ex)
                 {
@@ -268,8 +291,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost]
-        [Route("Execute")]
-        public DataWizardOutput ExecutePost([FromBody] DataWizardInput input)
+        [Route("GetData")]
+        [Authorize]
+        public DataWizardOutput DataPost([FromBody] DataWizardInput input)
         {
             using (Logging.MethodCall<DataWizardOutput>(GetType()))
             {
@@ -280,7 +304,87 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         throw new ArgumentNullException(nameof(input));
                     }
-                    return Execute(input);
+                    return GetData(input, true);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        private void GetDownload(DataWizardInput input)
+        {
+            // Get Data
+            var output = GetData(input, false);
+            // Create Download
+            var date = DateTime.Now;
+            var name = date.ToString("yyyyMMdd hh:mm:ss.fff");
+            var userDownload = new UserDownload
+            {
+                Name = name,
+                Description = $"Data download on {name}",
+                QueryInput = JsonConvert.SerializeObject(input),
+                AddedBy = User.GetUserId(),
+                UpdatedBy = User.GetUserId()
+            };
+            db.UserDownloads.Add(userDownload);
+            db.SaveChanges();
+            userDownload = db.UserDownloads.FirstOrDefault(i => i.Name == name);
+            if (userDownload == null) throw new InvalidOperationException($"Unable to find UserDownload {name}");
+            var dirInfo = Directory.CreateDirectory(HostingEnvironment.MapPath($"~/App_Data/Downloads/{date.ToString("yyyyMM")}/{userDownload.Id}"));
+            userDownload.DownloadURI = dirInfo.FullName;
+            db.SaveChanges();
+            // Create files
+            // Data file as zip in download format
+            // Metadata as json file
+            // Input as json file
+            // Set DownloadURI
+        }
+
+        [HttpGet]
+        [Route("Download")]
+        [Authorize]
+        public DataWizardOutput DownloadGet([FromUri] string json)
+        {
+            using (Logging.MethodCall<DataWizardOutput>(GetType()))
+            {
+                try
+                {
+                    Logging.Verbose("Uri: {Uri}", Request.RequestUri);
+                    Logging.Verbose("Json: {Json}", json);
+                    if (string.IsNullOrWhiteSpace(json))
+                    {
+                        throw new ArgumentNullException(nameof(json));
+                    }
+                    // Get Data
+                    // Create Zip
+                    return GetData(JsonConvert.DeserializeObject<DataWizardInput>(json), false);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpPost]
+        [Route("Download")]
+        [Authorize]
+        public DataWizardOutput DownloadPost([FromBody] DataWizardInput input)
+        {
+            using (Logging.MethodCall<DataWizardOutput>(GetType()))
+            {
+                try
+                {
+                    Logging.Verbose("Uri: {Uri}", Request.RequestUri);
+                    if (input == null)
+                    {
+                        throw new ArgumentNullException(nameof(input));
+                    }
+                    return GetData(input, true);
                 }
                 catch (Exception ex)
                 {

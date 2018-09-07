@@ -113,6 +113,7 @@ namespace SAEON.Observations.WebAPI
         {
             ODataConventionModelBuilder odataModelBuilder = new ODataConventionModelBuilder { ContainerName = "Observations" };
             odataModelBuilder.EntitySet<Instrument>("Instruments").IgnoreEntityItemLists();
+            odataModelBuilder.EntitySet<Inventory>("Inventory");
             odataModelBuilder.EntitySet<Offering>("Offerings").IgnoreEntityItemLists();
             odataModelBuilder.EntitySet<Organisation>("Organisations").IgnoreEntityItemLists();
             odataModelBuilder.EntitySet<Phenomenon>("Phenomena").IgnoreEntityItemLists();
@@ -128,7 +129,6 @@ namespace SAEON.Observations.WebAPI
         public static IEdmModel GetInternalEdmModel()
         {
             ODataConventionModelBuilder odataModelBuilder = new ODataConventionModelBuilder { ContainerName = "Internal" };
-            odataModelBuilder.EntitySet<Inventory>("Inventory");
             odataModelBuilder.EntitySet<Location>("Locations");
             odataModelBuilder.EntitySet<Feature>("Features");
             return odataModelBuilder.GetEdmModel();

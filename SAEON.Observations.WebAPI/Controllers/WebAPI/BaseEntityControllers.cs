@@ -16,7 +16,7 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    public abstract class BaseEntityController<TEntity> : BaseController where TEntity : BaseIDEntity
+    public abstract class BaseEntityController<TEntity> : BaseController where TEntity : BaseEntity
     {
         /// <summary>
         /// Overwrite to filter entities
@@ -92,7 +92,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 }
             }
         }
+    }
 
+    public abstract class IDEntityController<TEntity> : BaseEntityController<TEntity> where TEntity : BaseIDEntity
+    {
         /// <summary>
         /// Get a TEntity by Id
         /// </summary>
@@ -208,7 +211,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
     }
 
-    public abstract class NamedApiController<TEntity> : BaseEntityController<TEntity> where TEntity : NamedEntity
+    public abstract class NamedApiController<TEntity> : IDEntityController<TEntity> where TEntity : NamedEntity
     {
         protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
         {

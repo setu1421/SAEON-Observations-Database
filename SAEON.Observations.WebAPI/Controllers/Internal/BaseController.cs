@@ -39,7 +39,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
     }
 
-
     //[ClientAuthorization("SAEON.Observations.QuerySite")] Uncomment when going live
     public class BaseController<TEntity> : BaseController where TEntity : BaseEntity
     {

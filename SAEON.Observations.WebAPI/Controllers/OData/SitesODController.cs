@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Sites
     /// </summary>
     [ODataRoutePrefix("Sites")]
-    public class SitesODController : BaseController<Site>
+    public class SitesODController : NamedController<Site>
     {
         /// <summary>
         /// All Sites

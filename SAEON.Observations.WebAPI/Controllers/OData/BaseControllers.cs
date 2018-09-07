@@ -13,7 +13,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [ODataRouteName("OData")]
-    public abstract class BaseController<TEntity> : ODataController where TEntity : NamedEntity
+    public abstract class BaseController<TEntity> : ODataController where TEntity : BaseEntity
     {
         protected readonly ObservationsDbContext db = null;
 
@@ -46,11 +46,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>ListOf(PredicateOf(TEntity))</returns>
         protected virtual List<Expression<Func<TEntity, object>>> GetOrderBys()
         {
-            var result = new List<Expression<Func<TEntity, object>>>
-            {
-                i => i.Name
-            };
-            return result;
+            return new List<Expression<Func<TEntity, object>>>();
         }
 
         /// <summary>
@@ -108,6 +104,17 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
                     throw;
                 }
             }
+        }
+
+    }
+
+    public abstract class NamedController<TEntity> : BaseController<TEntity> where TEntity : NamedEntity
+    {
+        protected override List<Expression<Func<TEntity, object>>> GetOrderBys()
+        {
+            var result = base.GetOrderBys();
+            result.Add(i => i.Name);
+            return result;
         }
 
         /// <summary>

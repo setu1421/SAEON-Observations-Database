@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     /// Units
     /// </summary>
     [ODataRoutePrefix("Units")]
-    public class UnitsODController : BaseController<Unit>
+    public class UnitsODController : NamedController<Unit>
     {
 
         // GET: odata/Units
