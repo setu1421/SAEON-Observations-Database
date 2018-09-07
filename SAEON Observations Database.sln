@@ -16,8 +16,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SAEON.Observations.WebSite.
 		SccAuxPath = "SAK"
 		SccLocalPath = "SAK"
 		SccProvider = "SAK"
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
-		ProjectReferences = "{5e1c5955-ee32-4fc2-9b18-a3e505dd278d}|SAEON.Observations.Data.dll;{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}|SubSonic.dll;"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6.1"
+		ProjectReferences = "{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}|SubSonic.dll;{5e1c5955-ee32-4fc2-9b18-a3e505dd278d}|SAEON.Observations.Data.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_54350"
 		Debug.AspNetCompiler.PhysicalPath = "SAEON.Observations.WebSite.Admin\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54350\"
@@ -69,6 +69,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Core.Con
 	ProjectSection(ProjectDependencies) = postProject
 		{E3791465-CCCE-4E02-AF9F-8F677148FEE1} = {E3791465-CCCE-4E02-AF9F-8F677148FEE1}
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAEON.Observations.Azure", "SAEON.Observations.Azure\SAEON.Observations.Azure.csproj", "{BF48C97A-39A1-46A2-B6D8-4888A609274D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -154,6 +156,14 @@ Global
 		{EFE8435A-8A56-4589-B07B-1AB6EDAAFF48}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
 		{EFE8435A-8A56-4589-B07B-1AB6EDAAFF48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFE8435A-8A56-4589-B07B-1AB6EDAAFF48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF48C97A-39A1-46A2-B6D8-4888A609274D}.Debug (SQL Server Only)|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF48C97A-39A1-46A2-B6D8-4888A609274D}.Debug (SQL Server Only)|Any CPU.Build.0 = Debug|Any CPU
+		{BF48C97A-39A1-46A2-B6D8-4888A609274D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF48C97A-39A1-46A2-B6D8-4888A609274D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF48C97A-39A1-46A2-B6D8-4888A609274D}.Release (SQL Server Only)|Any CPU.ActiveCfg = Release|Any CPU
+		{BF48C97A-39A1-46A2-B6D8-4888A609274D}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
+		{BF48C97A-39A1-46A2-B6D8-4888A609274D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF48C97A-39A1-46A2-B6D8-4888A609274D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
