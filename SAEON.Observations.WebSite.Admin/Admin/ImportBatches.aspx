@@ -152,6 +152,7 @@
                                             <ext:StringFilter DataIndex="DataSourceID" />
                                             <ext:StringFilter DataIndex="DataSourceName" />
                                             <ext:StringFilter DataIndex="Description" />
+                                            <ext:StringFilter DataIndex="FileName" />
                                         </Filters>
                                     </ext:GridFilters>
                                 </Plugins>

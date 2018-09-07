@@ -107,50 +107,6 @@ PRINT N'Refreshing [dbo].[vImportBatch]...';
 GO
 EXECUTE sp_refreshsqlmodule N'[dbo].[vImportBatch]';
 
-
-GO
-PRINT N'Refreshing [dbo].[vObservationExpansion]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vObservationExpansion]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vSensorThingsDatastreams]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsDatastreams]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vObservation]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vObservation]';
-
 GO
 PRINT N'Removing Filestream...';
 

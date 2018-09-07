@@ -261,7 +261,6 @@ public class ImportSchemaHelper : IDisposable
 
             //List<object> list = engine.ReadStringAsList(data);
 
-            batch.SourceFile = Encoding.Unicode.GetBytes(data);
             var fileName = $"{ds.Name}-{DateTime.Now.ToString("yyyyMMdd HHmmss")}-{Path.GetFileName(batch.FileName)}";
             foreach (var c in Path.GetInvalidFileNameChars())
                 fileName = fileName.Replace(c, '_');
@@ -441,14 +440,15 @@ public class ImportSchemaHelper : IDisposable
         {
             try
             {
+                Logging.Information("Building schema definition");
                 BuildSchemaDefinition();
-
+                Logging.Information("Processing {rows} rows",dtResults.Rows.Count);
                 for (int i = 0; i < dtResults.Rows.Count; i++)
                 {
                     DataRow dr = dtResults.Rows[i];
                     ProcessRow(dr);
                 }
-
+                Logging.Information("Processed {rows} rows", dtResults.Rows.Count);
             }
             catch (Exception ex)
             {

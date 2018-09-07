@@ -345,6 +345,54 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarEndDate);
                 
+                TableSchema.TableColumn colvarTopLatitude = new TableSchema.TableColumn(schema);
+                colvarTopLatitude.ColumnName = "TopLatitude";
+                colvarTopLatitude.DataType = DbType.Double;
+                colvarTopLatitude.MaxLength = 0;
+                colvarTopLatitude.AutoIncrement = false;
+                colvarTopLatitude.IsNullable = true;
+                colvarTopLatitude.IsPrimaryKey = false;
+                colvarTopLatitude.IsForeignKey = false;
+                colvarTopLatitude.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarTopLatitude);
+                
+                TableSchema.TableColumn colvarBottomLatitude = new TableSchema.TableColumn(schema);
+                colvarBottomLatitude.ColumnName = "BottomLatitude";
+                colvarBottomLatitude.DataType = DbType.Double;
+                colvarBottomLatitude.MaxLength = 0;
+                colvarBottomLatitude.AutoIncrement = false;
+                colvarBottomLatitude.IsNullable = true;
+                colvarBottomLatitude.IsPrimaryKey = false;
+                colvarBottomLatitude.IsForeignKey = false;
+                colvarBottomLatitude.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarBottomLatitude);
+                
+                TableSchema.TableColumn colvarLeftLongitude = new TableSchema.TableColumn(schema);
+                colvarLeftLongitude.ColumnName = "LeftLongitude";
+                colvarLeftLongitude.DataType = DbType.Double;
+                colvarLeftLongitude.MaxLength = 0;
+                colvarLeftLongitude.AutoIncrement = false;
+                colvarLeftLongitude.IsNullable = true;
+                colvarLeftLongitude.IsPrimaryKey = false;
+                colvarLeftLongitude.IsForeignKey = false;
+                colvarLeftLongitude.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarLeftLongitude);
+                
+                TableSchema.TableColumn colvarRightLongitude = new TableSchema.TableColumn(schema);
+                colvarRightLongitude.ColumnName = "RightLongitude";
+                colvarRightLongitude.DataType = DbType.Double;
+                colvarRightLongitude.MaxLength = 0;
+                colvarRightLongitude.AutoIncrement = false;
+                colvarRightLongitude.IsNullable = true;
+                colvarRightLongitude.IsPrimaryKey = false;
+                colvarRightLongitude.IsForeignKey = false;
+                colvarRightLongitude.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarRightLongitude);
+                
                 
                 BaseSchema = schema;
                 //add this schema to the provider
@@ -730,6 +778,62 @@ namespace SAEON.Observations.Data{
 			    SetColumnValue("EndDate", value);
             }
         }
+	      
+        [XmlAttribute("TopLatitude")]
+        [Bindable(true)]
+        public double? TopLatitude 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("TopLatitude");
+		    }
+            set 
+		    {
+			    SetColumnValue("TopLatitude", value);
+            }
+        }
+	      
+        [XmlAttribute("BottomLatitude")]
+        [Bindable(true)]
+        public double? BottomLatitude 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("BottomLatitude");
+		    }
+            set 
+		    {
+			    SetColumnValue("BottomLatitude", value);
+            }
+        }
+	      
+        [XmlAttribute("LeftLongitude")]
+        [Bindable(true)]
+        public double? LeftLongitude 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("LeftLongitude");
+		    }
+            set 
+		    {
+			    SetColumnValue("LeftLongitude", value);
+            }
+        }
+	      
+        [XmlAttribute("RightLongitude")]
+        [Bindable(true)]
+        public double? RightLongitude 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("RightLongitude");
+		    }
+            set 
+		    {
+			    SetColumnValue("RightLongitude", value);
+            }
+        }
 	    
 	    #endregion
     
@@ -785,6 +889,14 @@ namespace SAEON.Observations.Data{
             public static string StartDate = @"StartDate";
             
             public static string EndDate = @"EndDate";
+            
+            public static string TopLatitude = @"TopLatitude";
+            
+            public static string BottomLatitude = @"BottomLatitude";
+            
+            public static string LeftLongitude = @"LeftLongitude";
+            
+            public static string RightLongitude = @"RightLongitude";
             
 	    }
 	    #endregion
