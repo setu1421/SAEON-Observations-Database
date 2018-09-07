@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.Dynamic;
 using System.Runtime.Serialization;
 
 namespace SAEON.Observations.Core
@@ -65,6 +62,8 @@ namespace SAEON.Observations.Core
 
     #region DataWizard
 
+    public enum DownloadFormats { CSV, Excel, NetCDF }
+
     public class DataWizardInput
     {
         public List<Guid> Organisations { get; } = new List<Guid>();
@@ -76,6 +75,8 @@ namespace SAEON.Observations.Core
         public List<Guid> Units { get; } = new List<Guid>();
         public DateTime StartDate { get; set; } = DateTime.Now;
         public DateTime EndDate { get; set; } = DateTime.Now.AddYears(-100);
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DownloadFormats DownloadFormat { get; set; } = DownloadFormats.CSV;
     }
 
     public class DataWizardApproximation
@@ -99,7 +100,7 @@ namespace SAEON.Observations.Core
             {
                 case MaxtixDataType.Boolean:
                     return typeof(bool);
-                case MaxtixDataType.Date: 
+                case MaxtixDataType.Date:
                     return typeof(DateTime);
                 case MaxtixDataType.Double:
                     return typeof(double);
@@ -138,7 +139,7 @@ namespace SAEON.Observations.Core
                 Columns[index] = value;
             }
         }
-         
+
         public object this[int index]
         {
             get { return Columns[index]; }
@@ -156,7 +157,7 @@ namespace SAEON.Observations.Core
         {
             foreach (var row in Rows)
             {
-                row.Matrix = this; 
+                row.Matrix = this;
             }
         }
 
@@ -185,7 +186,7 @@ namespace SAEON.Observations.Core
                 }
                 else
                 {
-                    result.Columns.Add(null); 
+                    result.Columns.Add(null);
                 }
             }
             return result;
@@ -198,7 +199,7 @@ namespace SAEON.Observations.Core
             {
                 result.Columns.Add(dmCol.Name, dmCol.AsType()).Caption = dmCol.Caption;
             }
-            foreach (var dmRow in Rows) 
+            foreach (var dmRow in Rows)
             {
                 var dataRow = result.NewRow();
                 foreach (var dmCol in Columns)
@@ -214,15 +215,15 @@ namespace SAEON.Observations.Core
 
     public class ChartData
     {
-        public DateTime Date { get; set; } 
+        public DateTime Date { get; set; }
         public double? Value { get; set; }
     }
 
-    public class ChartSeries 
+    public class ChartSeries
     {
         public string Name { get; set; }
         public string Caption { get; set; }
-        public List<ChartData> Data { get; } = new List<ChartData>();  
+        public List<ChartData> Data { get; } = new List<ChartData>();
 
         public void Add(DateTime date, double? value)
         {
