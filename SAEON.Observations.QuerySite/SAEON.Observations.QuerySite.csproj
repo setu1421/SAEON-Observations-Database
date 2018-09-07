@@ -867,6 +867,7 @@
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -911,6 +912,9 @@
     <Content Include="Views\DataWizard\_FeaturesHtml.cshtml" />
     <Content Include="Views\DataWizard\_LocationsHtml.cshtml" />
     <Content Include="Views\DataWizard\_FiltersHtml.cshtml" />
+    <Content Include="Views\DataWizard\_DownloadDialog.cshtml" />
+    <Content Include="Views\DataWizard\_LoadQueryDialog.cshtml" />
+    <Content Include="Views\DataWizard\_SaveQueryDialog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -106,6 +106,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+
         [HttpPost]
         public PartialViewResult UpdateLocationsSelected(List<string> locations)
         {
@@ -566,6 +567,23 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        public PartialViewResult GetLoadQueryDialog()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return PartialView("_LoadQueryDialog", SessionModel);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
         #endregion
 
         #region SaveQueryDialog
@@ -608,7 +626,42 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        public PartialViewResult GetSaveQueryDialog()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return PartialView("_SaveQueryDialog", SessionModel);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
         #endregion
 
+        #region Download
+        [HttpGet]
+        public PartialViewResult GetDownloadDialog()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    return PartialView("_DownloadDialog", SessionModel);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
     }
 }
