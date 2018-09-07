@@ -2,11 +2,13 @@
 using FileHelpers.Dynamic;
 using NCalc;
 using SAEON.Logs;
+using SAEON.Observations.Azure;
 using SAEON.Observations.Data;
 using SubSonic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -60,13 +62,7 @@ public class ImportSchemaHelper : IDisposable
 
     bool concatedatetime = false;
 
-    string docNamePrefix;
-
-    // string SourceFile;
-    // string Pass1File; // As loaded from source file
-    // string Pass2File; // After 1st R Call
-    // string Pass3File; // After processing
-    // string Pass4File; // After 2nd R Call
+    private readonly Azure Azure = new Azure();
 
     private List<string> LoadColumnNamesDelimited(DataSchema schema, string data)
     {
@@ -266,36 +262,30 @@ public class ImportSchemaHelper : IDisposable
             //List<object> list = engine.ReadStringAsList(data);
 
             batch.SourceFile = Encoding.Unicode.GetBytes(data);
-            docNamePrefix = $"{ds.Name}-{DateTime.Now.ToString("yyyyMMdd HHmmss")}-{Path.GetFileNameWithoutExtension(batch.FileName)}-";
+            var fileName = $"{ds.Name}-{DateTime.Now.ToString("yyyyMMdd HHmmss")}-{Path.GetFileName(batch.FileName)}";
             foreach (var c in Path.GetInvalidFileNameChars())
-                docNamePrefix = docNamePrefix.Replace(c, '_');
+                fileName = fileName.Replace(c, '_');
             foreach (var c in Path.GetInvalidPathChars())
-                docNamePrefix = docNamePrefix.Replace(c, '_');
-            SaveDocument("Source.txt", data);
+                fileName = fileName.Replace(c, '_');
+            Logging.Information("Saving import file");
+            SaveDocument(fileName, data);
             Logging.Information("Read DataTable");
             //dtResults = engine.ReadStringAsDT(data);
             dtResults = CommonEngine.RecordsToDataTable(engine.ReadString(data), recordType);
             //Logging.Information(dtResults.Dump());
             dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-            Logging.Information("Save as XML");
-            using (StringWriter sw = new StringWriter())
-            {
-                dtResults.WriteXml(sw);
-                batch.Pass1File = Encoding.Unicode.GetBytes(sw.ToString());
-                SaveDocument("Pass1.xml", sw.ToString());
-            }
             transformations = new List<DataSourceTransformation>();
             schemaDefs = new List<SchemaDefinition>();
-
             SchemaValues = new List<SchemaValue>();
 
         }
     }
 
-    public void SaveDocument(string fileName, string text)
+    public void SaveDocument(string fileName, string fileContents)
     {
-        string docPath = HostingEnvironment.MapPath(Path.Combine(WebConfigurationManager.AppSettings["DocumentsPath"], "Uploads"));
-        File.WriteAllText(Path.Combine(docPath, docNamePrefix + fileName), text);
+        string docPath = HostingEnvironment.MapPath(Path.Combine(ConfigurationManager.AppSettings["DocumentsPath"], "Uploads"));
+        File.WriteAllText(Path.Combine(docPath, fileName), fileContents);
+        Azure.Upload($"Uploads/{DateTime.Now.ToString("yyyyMM")}", fileName, fileContents);
     }
 
     /// <summary>

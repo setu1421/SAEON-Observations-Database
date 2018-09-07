@@ -1,31 +1,12 @@
 ﻿<%@ Application Language="C#" %>
-<%@ Import Namespace="SAEON.Logs" %>
-<%@ Import Namespace="Serilog" %>
-<%@ Import Namespace="Serilog.Settings.AppSettings" %>
-<%@ Import Namespace="Serilog.Sinks.Seq" %>
-<%@ Import Namespace="System.Web.Hosting" %>
 <%@ Import Namespace="System.Web.Routing" %>
-<%@ Import Namespace="SAEON.Logs" %>
-
 <script RunAt="server">
 
     void Application_Start(object sender, EventArgs e)
     {
         // Code that runs on application startup
-        Logging
-            .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.WebSite.Admin {Date}.txt"))
-            .Create();
         RouteConfig.RegisterRoutes(RouteTable.Routes);
-        string docPath = System.Web.Configuration.WebConfigurationManager.AppSettings["DocumentsPath"];
-        if (!string.IsNullOrEmpty(docPath))
-        {
-            string path = Server.MapPath(docPath);
-            if (!string.IsNullOrEmpty(path))
-            {
-                System.IO.Directory.CreateDirectory(System.IO.Path.Combine(path,"Uploads"));
-                System.IO.Directory.CreateDirectory(System.IO.Path.Combine(path,"Downloads"));
-            }
-        }
+        Startup.Run();
     }
 
     void Application_End(object sender, EventArgs e)

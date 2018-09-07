@@ -167,17 +167,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     DataSourceID = DataSourceId,
                     ImportDate = DateTime.Now
                 };
-                FileInfo fi;
-                //if (!string.IsNullOrWhiteSpace(LogFileUpload.PostedFile.FileName))
-                //{
-                //    fi = new FileInfo(LogFileUpload.PostedFile.FileName);
-                //    batch.LogFileName = fi.Name;
-                //}
-
-                fi = new FileInfo(DataFileUpload.PostedFile.FileName);
+                var fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
 
-                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.35, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.36, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())
