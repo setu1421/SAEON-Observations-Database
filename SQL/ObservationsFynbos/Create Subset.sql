@@ -7,6 +7,7 @@ Values
   ('CONSTB_CWS_W'),('ENG CED AWS'),('HSB_BAB_SM'),('HSB_BAT_SM'),('HSB_BDB_SM'),('HSB_BDT_SM'),('JNHK_DWS_W'),
   ('JNHK_LANGFOG_500'),('JNHK_LANGFOG_600'),('JNHK_LANGFOG_700'),('JNHK_LANGFOG_800')
 
+/*
 Declare @Msg VarChar(100)
 Declare @BatchSize int = 1000000
 Declare @BatchNum int
@@ -50,45 +51,46 @@ WHILE (@Done = 0)
 	set @BatchNum = @BatchNum + 1
 	WAITFOR DELAY '00:00:30'
   END 
-/*
+*/
+RAISERROR('DataLog', 0, 1) WITH NOWAIT
 Delete
   DataLog
 from
   DataLog
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (DataLog.ImportBatchID = vImportBatchSummary.ImportBatchID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('ImportBatchSummary', 0, 1) WITH NOWAIT
 Delete
   ImportBatchSummary
 from
   ImportBatchSummary
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (ImportBatchSummary.ID = vImportBatchSummary.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('ImportBatch', 0, 1) WITH NOWAIT
 Delete
   ImportBatch
 from
   ImportBatch
-  inner join DataSource
-    on (ImportBatch.DataSourceID = DataSource.ID)
-  inner join Sensor
-    on (Sensor.DataSourceID = DataSource.ID)
-  inner join vImportBatchSummary
-    on (vImportBatchSummary.SensorID = Sensor.ID)
+  left join vImportBatchSummary
+    on (vImportBatchSummary.ImportBatchID = ImportBatch.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('DataSourceTransformation', 0, 1) WITH NOWAIT
 Delete
   DataSourceTransformation
 from
   DataSourceTransformation
   inner join Sensor
     on (DataSourceTransformation.SensorID = Sensor.ID)
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.SensorID = Sensor.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('DataSourceTransformation', 0, 1) WITH NOWAIT
 Delete
   DataSourceTransformation
 from
@@ -97,28 +99,88 @@ from
     on (DataSourceTransformation.DataSourceID = DataSource.ID)
   inner join Sensor
     on (Sensor.DataSourceID = DataSource.ID)
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.SensorID = Sensor.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('SchemaColumn', 0, 1) WITH NOWAIT
+Delete
+  SchemaColumn
+from
+  SchemaColumn
+  inner join DataSchema
+    on (SchemaColumn.DataSchemaID = DataSchema.ID)
+  inner join DataSource
+    on (DataSource.DataSchemaID = DataSchema.ID)
+  inner join Sensor
+    on (Sensor.DataSourceID = DataSource.ID)
+  left join vImportBatchSummary
+    on (vImportBatchSummary.SensorID = Sensor.ID)
+where
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('SchemaColumn', 0, 1) WITH NOWAIT
+Delete
+  SchemaColumn
+from
+  SchemaColumn
+  inner join DataSchema
+    on (SchemaColumn.DataSchemaID = DataSchema.ID)
+  inner join Sensor
+    on (Sensor.DataSchemaID = DataSchema.ID)
+  left join vImportBatchSummary
+    on (vImportBatchSummary.SensorID = Sensor.ID)
+where
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('DataSchema', 0, 1) WITH NOWAIT
+Delete
+  DataSchema
+from
+  DataSchema
+  inner join DataSource
+    on (DataSource.DataSchemaID = DataSchema.ID)
+  inner join Sensor
+    on (Sensor.DataSourceID = DataSource.ID)
+  left join vImportBatchSummary
+    on (vImportBatchSummary.SensorID = Sensor.ID)
+where
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('DataSchema', 0, 1) WITH NOWAIT
+Delete
+  DataSchema
+from
+  DataSchema
+  inner join Sensor
+    on (Sensor.DataSchemaID = DataSchema.ID)
+  left join vImportBatchSummary
+    on (vImportBatchSummary.SensorID = Sensor.ID)
+where
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('DataSchema', 0, 1) WITH NOWAIT
+Delete
+  DataSchema
+where
+  not Exists(Select * from SchemaColumn where SchemaColumn.DataSchemaID = DataSchema.ID)
+RAISERROR('Instrument_Sensor', 0, 1) WITH NOWAIT
 Delete
   Instrument_Sensor
 from
   Instrument_Sensor
   inner join Sensor
     on (Instrument_Sensor.SensorID = Sensor.ID)
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.SensorID = Sensor.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('Sensor', 0, 1) WITH NOWAIT
 Delete 
   Sensor
 from
   Sensor 
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.SensorID = Sensor.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('DataSource', 0, 1) WITH NOWAIT
 -- DataSources not used in ImportBatch nor Sensor
 Delete
   DataSource
@@ -126,11 +188,15 @@ from
   DataSource
   left join ImportBatch
     on (ImportBatch.DataSourceID = DataSource.ID)
+  left join vImportBatchSummary
+    on (vImportBatchSummary.ImportBatchID = ImportBatch.ID)
   left join Sensor
     on (Sensor.DataSourceID = DataSource.ID)
 where
+  ((vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))) and
   (ImportBatch.ID is null) and
   (Sensor.ID is null)
+RAISERROR('DataSource', 0, 1) WITH NOWAIT
 -- DataSchemas not uses in DataSource nor Sensor
 Delete
   DataSchema
@@ -138,85 +204,99 @@ from
   DataSchema
   left join DataSource
     on (DataSource.DataSchemaID = DataSchema.ID)
+  inner join ImportBatch
+    on (ImportBatch.DataSourceID = DataSource.ID)
+  left join vImportBatchSummary
+    on (vImportBatchSummary.ImportBatchID = ImportBatch.ID)
   left join Sensor
     on (Sensor.DataSchemaID = DataSchema.ID)
 where
+  ((vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))) and
   (DataSource.ID is null) and
   (Sensor.ID is null)
+RAISERROR('Organisation_Instrument', 0, 1) WITH NOWAIT
 Delete
   Organisation_Instrument
 from
   Organisation_Instrument
   inner join Instrument
     on (Organisation_Instrument.InstrumentID = Instrument.ID)
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.InstrumentID = Instrument.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('Station_Instrument', 0, 1) WITH NOWAIT
 Delete
   Station_Instrument
 from
   Station_Instrument
   inner join Instrument
     on (Station_Instrument.InstrumentID = Instrument.ID)
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.InstrumentID = Instrument.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('Instrument', 0, 1) WITH NOWAIT
 Delete 
   Instrument
 from
   Instrument 
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.InstrumentID = Instrument.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('Project_Station', 0, 1) WITH NOWAIT
 Delete
   Project_Station
 from
   Project_Station
   inner join Station
     on (Project_Station.StationID = Station.ID)
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.StationID = Station.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('Organisation_Station', 0, 1) WITH NOWAIT
 Delete
   Organisation_Station
 from
   Organisation_Station
   inner join Station
     on (Organisation_Station.StationID = Station.ID)
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.StationID = Station.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('Station', 0, 1) WITH NOWAIT
 Delete 
   Station 
 from
   Station
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.StationID = Station.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('Organisation_Site', 0, 1) WITH NOWAIT
 Delete
   Organisation_Site
 from
   Organisation_Site
   inner join Site
     on (Organisation_Site.SiteID = Site.ID)
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.SiteID = Site.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('Site', 0, 1) WITH NOWAIT
 Delete 
   Site 
 from
   Site
-  inner join vImportBatchSummary
+  left join vImportBatchSummary
     on (vImportBatchSummary.SiteID = Site.ID)
 where
-  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+  (vImportBatchSummary.ID is null) or (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+RAISERROR('PhenomenonOffering', 0, 1) WITH NOWAIT
 Delete
   PhenomenonOffering
 from
@@ -225,7 +305,9 @@ from
     on (PhenomenonOffering.OfferingID = Offering.ID)
 where
   (Offering.Code like 'Depth_%')
+RAISERROR('Offering', 0, 1) WITH NOWAIT
 Delete Offering where (Code like 'Depth_%')
+RAISERROR('PhenomenonOffering', 0, 1) WITH NOWAIT
 Delete
   PhenomenonOffering
 from
@@ -234,5 +316,6 @@ from
     on (PhenomenonOffering.OfferingID = Offering.ID)
 where
   (Offering.Code like 'Interval%')
+RAISERROR('Offering', 0, 1) WITH NOWAIT
 Delete Offering where (Code like 'Interval%')
-*/
+Print 'Done'
