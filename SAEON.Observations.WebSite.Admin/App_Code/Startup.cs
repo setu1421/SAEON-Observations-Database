@@ -24,6 +24,6 @@ public static class Startup
                 //Directory.CreateDirectory(Path.Combine(path, "Downloads"));
             }
         }
-        Azure.Initialize();
+        new Azure().Initialize();
     }
 }

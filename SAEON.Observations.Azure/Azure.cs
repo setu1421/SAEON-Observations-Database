@@ -9,12 +9,12 @@ namespace SAEON.Observations.Azure
 {
     public class Azure
     {
-        const string BlobStorageContainer = "saeon-observations";
-        const string ObservationsStorageTable = "Observations";   
+        private const string BlobStorageContainer = "saeon-observations";
+        private const string ObservationsStorageTable = "Observations";   
 
         public static bool Enabled { get; private set; } = false;
 
-        static AzureStorage Storage { get; } = null;
+        private AzureStorage Storage = null;
 
         static Azure() 
         {
@@ -22,6 +22,13 @@ namespace SAEON.Observations.Azure
             {
                 Enabled = Convert.ToBoolean(ConfigurationManager.AppSettings["AzureEnabled"]);
                 Logging.Information("Azure.Enabled: {enabled}", Enabled);
+            }
+        }
+
+        public Azure()
+        {
+            using (Logging.MethodCall(typeof(Azure)))
+            {
                 if (Enabled)
                 {
                     Storage = new AzureStorage();
@@ -29,7 +36,12 @@ namespace SAEON.Observations.Azure
             }
         }
 
-        public static async Task InitializeAsync()
+        ~Azure()
+        {
+            Storage = null;   
+        }
+
+        public async Task InitializeAsync()
         {
             if (!Azure.Enabled) return;
             using (Logging.MethodCall(typeof(Azure)))
@@ -49,7 +61,7 @@ namespace SAEON.Observations.Azure
         } 
 
 
-        public static void Initialize()
+        public void Initialize() 
         {
             if (!Azure.Enabled) return;
             using (Logging.MethodCall(typeof(Azure)))

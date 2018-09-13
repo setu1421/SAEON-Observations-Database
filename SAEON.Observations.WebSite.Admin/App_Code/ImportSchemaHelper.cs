@@ -261,7 +261,7 @@ public class ImportSchemaHelper : IDisposable
 
             //List<object> list = engine.ReadStringAsList(data);
 
-            var fileName = $"{ds.Name}-{DateTime.Now.ToString("yyyyMMdd HHmmss")}-{Path.GetFileName(batch.FileName)}";
+            var fileName = $"{ds.Name}~~{DateTime.Now.ToString("yyyyMMdd HHmmss")}~~{Path.GetFileName(batch.FileName)}";
             foreach (var c in Path.GetInvalidFileNameChars())
                 fileName = fileName.Replace(c, '_');
             foreach (var c in Path.GetInvalidPathChars())

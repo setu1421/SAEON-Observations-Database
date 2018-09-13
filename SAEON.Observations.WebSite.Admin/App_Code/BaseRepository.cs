@@ -257,7 +257,7 @@ public class BaseRepository
                 response.Flush();
                 response.End();
             }
-            catch (ThreadAbortException ex)
+            catch (ThreadAbortException)
             {
             }
             catch (Exception ex)
