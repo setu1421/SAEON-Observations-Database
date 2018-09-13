@@ -9,6 +9,6 @@
     <RegisterDataTierApplication>False</RegisterDataTierApplication>
     <ProfileVersionNumber>1</ProfileVersionNumber>
     <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
-    <IgnoreColumnOrder>False</IgnoreColumnOrder>
+    <IgnoreColumnOrder>True</IgnoreColumnOrder>
   </PropertyGroup>
 </Project>

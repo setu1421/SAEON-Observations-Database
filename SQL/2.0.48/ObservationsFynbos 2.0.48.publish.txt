@@ -1,0 +1,101 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[Observation]
+       [dbo].[UserDownloads]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[UserDownloads].[DownloadURI] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[Citation] on table [dbo].[UserDownloads] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[DOI] on table [dbo].[UserDownloads] must be added, but the column has no default value
+         and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must
+         either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults
+         as a deployment option.
+       The column [dbo].[UserDownloads].[DownloadURL] on table [dbo].[UserDownloads] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[MetadataURL] on table [dbo].[UserDownloads] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[QueryURL] on table [dbo].[UserDownloads] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+
+** User actions
+     Table rebuild
+       [dbo].[Observation] (Table)
+       [dbo].[UserDownloads] (Table)
+     Create
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_Count] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_EndDate] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_StartDate] (Index)
+
+** Supporting actions
+     Drop
+       [dbo].[DF_Observation_AddedDate] (Default Constraint)
+       [dbo].[DF_Observation_AddedAt] (Default Constraint)
+       [dbo].[DF_Observation_UpdatedAt] (Default Constraint)
+       [dbo].[DF_UserDownloads_ID] (Default Constraint)
+       [dbo].[DF_UserDownloads_AddedAt] (Default Constraint)
+       [dbo].[DF_UserDownloads_UpdatedAt] (Default Constraint)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonUOM] (Foreign Key)
+       [dbo].[FK_Observation_Sensor] (Foreign Key)
+       [dbo].[FK_Observation_Status] (Foreign Key)
+       [dbo].[FK_Observation_StatusReason] (Foreign Key)
+       [dbo].[FK_Observation_aspnet_Users] (Foreign Key)
+     Create
+       [dbo].[Observation].[IX_Observation_ImportBatchID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_PhenomenonOfferingID] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_PhenomenonUOMID] (Index)
+       [dbo].[Observation].[IX_Observation_PhenomenonOfferingID] (Index)
+       [dbo].[Observation].[IX_Observation_PhenomenonUOMID] (Index)
+       [dbo].[Observation].[IX_Observation_UserId] (Index)
+       [dbo].[Observation].[IX_Observation_AddedDate] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDate] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDateDesc] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDay] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_StatusID] (Index)
+       [dbo].[Observation].[IX_Observation_StatusReasonID] (Index)
+       [dbo].[Observation].[IX_Observation_CorrelationID] (Index)
+       [dbo].[Observation].[IX_Observation_Latitude] (Index)
+       [dbo].[Observation].[IX_Observation_Longitude] (Index)
+       [dbo].[Observation].[IX_Observation_Elevation] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Latitude] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Longitude] (Index)
+       [dbo].[Observation].[IX_Observation_SensorID_ValueDate_Elevation] (Index)
+       [dbo].[FK_Observation_ImportBatch] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonOffering] (Foreign Key)
+       [dbo].[FK_Observation_PhenomenonUOM] (Foreign Key)
+       [dbo].[FK_Observation_Sensor] (Foreign Key)
+       [dbo].[FK_Observation_Status] (Foreign Key)
+       [dbo].[FK_Observation_StatusReason] (Foreign Key)
+       [dbo].[FK_Observation_aspnet_Users] (Foreign Key)
+       [dbo].[TR_Observation_Insert] (Trigger)
+       [dbo].[TR_Observation_Update] (Trigger)
+       [dbo].[TR_UserDownloads_Insert] (Trigger)
+       [dbo].[TR_UserDownloads_Update] (Trigger)
+     Refresh
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsDatastreams] (View)
+       [dbo].[vObservation] (View)
+
+The column [dbo].[UserDownloads].[DownloadURI] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[Citation] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[DOI] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[DownloadURL] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[MetadataURL] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[QueryURL] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

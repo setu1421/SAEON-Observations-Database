@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using SAEON.Logs;
-using System.Configuration;
+using System.Configuration; 
 
 namespace SAEON.Observations.Core.Entities
 {
@@ -40,7 +40,7 @@ namespace SAEON.Observations.Core.Entities
     /// <summary>
     /// Base for entities
     /// </summary>
-    public abstract class BaseIDEntity : BaseEntity
+    public abstract class IDEntity : BaseEntity
     {
         /// <summary>
         /// Id of the Entity
@@ -57,7 +57,7 @@ namespace SAEON.Observations.Core.Entities
         public virtual EntityListItem AsEntityListItem => new EntityListItem { Id = Id };
     }
 
-    public abstract class NamedEntity : BaseIDEntity
+    public abstract class NamedEntity : IDEntity
     {
         /// <summary>
         /// Name of the Entity
@@ -270,7 +270,7 @@ namespace SAEON.Observations.Core.Entities
     /// <summary>
     /// PhenomenonOffering entity 
     /// </summary>
-    public class PhenomenonOffering : BaseIDEntity
+    public class PhenomenonOffering : IDEntity
     {
         [Required]
         public Guid PhenomenonId { get; set; }
@@ -292,7 +292,7 @@ namespace SAEON.Observations.Core.Entities
     /// PhenomenonUnit entity
     /// </summary>
     [Table("PhenomenonUOM")]
-    public class PhenomenonUnit : BaseIDEntity
+    public class PhenomenonUnit : IDEntity
     {
         [Required]
         public Guid PhenomenonId { get; set; }
@@ -598,18 +598,35 @@ namespace SAEON.Observations.Core.Entities
         [StringLength(5000)]
         public string Description { get; set; }
         /// <summary>
-        /// The URI of the original query that generated the download
+        /// The input of the query that generated the download
         /// </summary>
-        [StringLength(5000)]
+        [Required, StringLength(5000), Display(Name = "Input")]
         public string QueryInput { get; set; }
         /// <summary>
-        /// URI of the user download
+        /// URL of query that generated the download
         /// </summary>
-        [Required, StringLength(500)]
-        public string DownloadURI { get; set; }
+        [Required, StringLength(5000), Display(Name = "Query URL")]
+        public string QueryURL { get; set; }
         /// <summary>
-        /// UserId of UserDownload
+        /// DOI of the download
+        /// </summary> 
+        [Required, StringLength(2000), Display(Name = "Digital Object Identifier (DOI)")]
+        public string DOI { get; set; }
+        /// <summary>
+        /// Metadata URL for download
         /// </summary>
+        [Required, StringLength(2000), Display(Name = "Metadata URL")]
+        public string MetadataURL { get; set; }
+        /// <summary>
+        /// URL to download the data
+        /// </summary> 
+        [Required, StringLength(2000), Display(Name = "Download URL")]
+        public string DownloadURL { get; set; }
+        /// <summary>
+        /// How this data should be cited
+        /// </summary>
+        [Required, StringLength(1000)]
+        public string Citation { get; set; }
         [StringLength(128), ScaffoldColumn(false), HiddenInput]
         public string UserId { get; set; }
         /// <summary>
@@ -638,7 +655,7 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// URI of the user query
         /// </summary>
-        [Required, StringLength(5000)]
+        [Required, StringLength(5000), Display(Name = "Input")]
         public string QueryInput { get; set; }
         /// <summary>
         /// UserId of UserQuery
@@ -1115,9 +1132,9 @@ namespace SAEON.Observations.Core.Entities
     {
         public ObservationsDbContext() : base("Observations")
         {
-            Configuration.ProxyCreationEnabled = false;
-            Configuration.LazyLoadingEnabled = false;
-            Configuration.AutoDetectChangesEnabled = false;
+            //Configuration.ProxyCreationEnabled = false;
+            //Configuration.LazyLoadingEnabled = false;
+            //Configuration.AutoDetectChangesEnabled = false;
             var logLevel = ConfigurationManager.AppSettings["EntityFrameworkLogging"];
             if (logLevel.Equals("Verbose", StringComparison.CurrentCultureIgnoreCase))
                 Database.Log = s => Logging.Verbose(s);  

@@ -1,11 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SAEON.Core;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace SAEON.Observations.Core
 {
@@ -62,29 +65,6 @@ namespace SAEON.Observations.Core
 
     #region DataWizard
 
-    public enum DownloadFormats { CSV, Excel, NetCDF }
-
-    public class DataWizardInput
-    {
-        public List<Guid> Organisations { get; } = new List<Guid>();
-        public List<Guid> Sites { get; } = new List<Guid>();
-        public List<Guid> Stations { get; } = new List<Guid>();
-        public List<Guid> Instruments { get; } = new List<Guid>();
-        public List<Guid> Phenomena { get; } = new List<Guid>();
-        public List<Guid> Offerings { get; } = new List<Guid>();
-        public List<Guid> Units { get; } = new List<Guid>();
-        public DateTime StartDate { get; set; } = DateTime.Now;
-        public DateTime EndDate { get; set; } = DateTime.Now.AddYears(-100);
-        [JsonConverter(typeof(StringEnumConverter))]
-        public DownloadFormats DownloadFormat { get; set; } = DownloadFormats.CSV;
-    }
-
-    public class DataWizardApproximation
-    {
-        public long RowCount { get; set; } = 0;
-        public List<string> Errors { get; set; } = new List<string>();
-    }
-
     public enum MaxtixDataType { String, Int, Double, Date, Boolean };
 
     public class DataMatrixColumn
@@ -112,6 +92,25 @@ namespace SAEON.Observations.Core
                     return typeof(object);
             }
         }
+
+        public string AsString(object value)
+        {
+            switch (DataType)
+            {
+                case MaxtixDataType.Boolean:
+                    return ((bool)value).ToString();
+                case MaxtixDataType.Date:
+                    return ((DateTime)value).ToString("o");
+                case MaxtixDataType.Double:
+                    return ((double)value).ToString();
+                case MaxtixDataType.Int:
+                    return ((int)value).ToString();
+                case MaxtixDataType.String:
+                    return ((string)value).DoubleQuoted();
+                default:
+                    return value.ToString();
+            }
+        }
     }
 
     public class DataMatixRow
@@ -126,7 +125,7 @@ namespace SAEON.Observations.Core
             Matrix = dataMatrix;
         }
 
-        public object this[string name]
+        public object this[string name] 
         {
             get
             {
@@ -145,6 +144,7 @@ namespace SAEON.Observations.Core
             get { return Columns[index]; }
             set { Columns[index] = value; }
         }
+
     }
 
     public class DataMatrix
@@ -211,6 +211,37 @@ namespace SAEON.Observations.Core
             return result;
         }
 
+        public String AsCSV()
+        {
+            var sb = new StringBuilder();
+            var isFirst = true;
+            foreach (var dmCol in Columns)
+            {
+                if (!isFirst)
+                {
+                    sb.Append(",");
+                    isFirst = false;
+                }
+                sb.Append(dmCol.Name);
+            }
+            sb.AppendLine();
+            foreach (var dmRow in Rows)
+            {
+                isFirst = true;
+                foreach (var dmCol in Columns)
+                {
+                    if (!isFirst)
+                    {
+                        sb.Append(",");
+                        isFirst = false;
+                    }
+                    sb.Append(dmCol.AsString(dmRow[dmCol.Name]));
+                }
+                sb.AppendLine();
+            }
+            return sb.ToString();
+        }
+
     }
 
     public class ChartData
@@ -231,10 +262,37 @@ namespace SAEON.Observations.Core
         }
     }
 
-    public class DataWizardOutput
+    public class DataWizardDataInput
+    {
+        public List<Guid> Organisations { get; } = new List<Guid>();
+        public List<Guid> Sites { get; } = new List<Guid>();
+        public List<Guid> Stations { get; } = new List<Guid>();
+        public List<Guid> Instruments { get; } = new List<Guid>();
+        public List<Guid> Phenomena { get; } = new List<Guid>();
+        public List<Guid> Offerings { get; } = new List<Guid>();
+        public List<Guid> Units { get; } = new List<Guid>();
+        public DateTime StartDate { get; set; } = DateTime.Now;
+        public DateTime EndDate { get; set; } = DateTime.Now.AddYears(-100);
+    }
+
+    public class DataWizardDataOutput
     {
         public DataMatrix DataMatrix { get; } = new DataMatrix();
         public List<ChartSeries> ChartSeries { get; } = new List<ChartSeries>();
+    }
+
+    public class DataWizardApproximation
+    {
+        public long RowCount { get; set; } = 0;
+        public List<string> Errors { get; set; } = new List<string>();
+    }
+
+    public enum DownloadFormats { CSV, Excel, NetCDF }
+
+    public class DataWizardDownloadInput : DataWizardDataInput 
+    {
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DownloadFormats DownloadFormat { get; set; } = DownloadFormats.CSV;
     }
 
     #endregion
