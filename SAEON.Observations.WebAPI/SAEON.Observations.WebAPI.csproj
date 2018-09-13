@@ -207,6 +207,11 @@
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.4.0.4.403061554\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll</HintPath>
       <Private>True</Private>
@@ -349,11 +354,12 @@
     <Compile Include="Controllers\ClaimsController.cs" />
     <Compile Include="Controllers\HealthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Internal\BaseController.cs" />
-    <Compile Include="Controllers\Internal\BaseODataController.cs" />
+    <Compile Include="Controllers\Internal\BaseControllers.cs" />
     <Compile Include="Controllers\Internal\DataWizardController.cs" />
     <Compile Include="Controllers\Internal\FeaturesController.cs" />
     <Compile Include="Controllers\Internal\LocationsController.cs" />
+    <Compile Include="Controllers\Internal\UserDownloadsController.cs" />
+    <Compile Include="Controllers\Internal\UserQueriesController.cs" />
     <Compile Include="Controllers\OData\BaseControllers.cs" />
     <Compile Include="Controllers\OData\InventoryODController.cs" />
     <Compile Include="Controllers\OData\InstrumentsODController.cs" />
@@ -376,8 +382,7 @@
     <Compile Include="Controllers\SensorThings\SensorThingsController.cs" />
     <Compile Include="Controllers\SensorThings\SensorThingsFactory.cs" />
     <Compile Include="Controllers\SensorThings\ThingsSTController.cs" />
-    <Compile Include="Controllers\WebAPI\BaseController.cs" />
-    <Compile Include="Controllers\WebAPI\BaseEntityControllers.cs" />
+    <Compile Include="Controllers\WebAPI\BaseControllers.cs" />
     <Compile Include="Controllers\WebAPI\InventoryController.cs" />
     <Compile Include="Controllers\WebAPI\InstrumentsController.cs" />
     <Compile Include="Controllers\WebAPI\OfferingsController.cs" />
@@ -389,8 +394,6 @@
     <Compile Include="Controllers\WebAPI\SitesController.cs" />
     <Compile Include="Controllers\WebAPI\StationsController.cs" />
     <Compile Include="Controllers\WebAPI\UnitsController.cs" />
-    <Compile Include="Controllers\WebAPI\UserDownloadsController.cs" />
-    <Compile Include="Controllers\WebAPI\UserQueriesController.cs" />
     <Compile Include="ErrorHandler\AiHandleErrorAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -486,6 +489,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Content Include="Views\Home\SwaggerFrame.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

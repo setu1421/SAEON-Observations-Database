@@ -15,20 +15,16 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     [ODataRouteName("OData")]
     public abstract class BaseController<TEntity> : ODataController where TEntity : BaseEntity
     {
-        protected readonly ObservationsDbContext db = null;
+        protected ObservationsDbContext db = null;
 
         public BaseController()
         {
             db = new ObservationsDbContext();
         }
 
-        protected override void Dispose(bool disposing)
+        ~BaseController()
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            db = null;
         }
 
         /// <summary>
@@ -140,29 +136,6 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             }
         }
 
-        ///// <summary>
-        ///// Get TEntity by Name
-        ///// </summary>
-        ///// <param name="name"></param>
-        ///// <returns>TEntity</returns>
-        //// GET: odata/TEntity(abc)
-        ////[EnableQuery, ODataRoute("({name})")] Required in derived class 
-        //public virtual SingleResult<TEntity> GetByName([FromODataUri] string name)
-        //{
-        //    using (Logging.MethodCall<SingleResult<TEntity>>(GetType(), new ParameterList { { "Name", name } }))
-        //    {
-        //        try
-        //        {
-        //            return SingleResult.Create(GetQuery(i => (i.Name == name)));
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logging.Exception(ex, "Unable to get {name}", name);
-        //            throw;
-        //        }
-        //    }
-        //}
-
         /// <summary>
         /// Related Entity TEntity.TRelated
         /// </summary>
@@ -173,7 +146,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>SingleResultOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseIDEntity
+        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : IDEntity
         {
             using (Logging.MethodCall<SingleResult<TRelated>>(GetType()))
             {
@@ -199,7 +172,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>SingleResultOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseIDEntity
+        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : IDEntity
         {
             using (Logging.MethodCall<SingleResult<TRelated>>(GetType()))
             {
@@ -225,7 +198,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>IQueryableOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : BaseIDEntity
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : IDEntity
         {
             using (Logging.MethodCall<TRelated>(GetType()))
             {
@@ -251,7 +224,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>IQueryableOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : BaseIDEntity
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : IDEntity
         {
             using (Logging.MethodCall<TRelated>(GetType()))
             {

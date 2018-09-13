@@ -78,8 +78,8 @@
     <Reference Include="Microsoft.ApplicationInsights, Version=2.7.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.2.7.2\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.3\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.4\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -899,12 +899,10 @@
     <Content Include="Views\DataWizard\_TableHtml.cshtml" />
     <Content Include="Views\DataWizard\_Chart.cshtml" />
     <Content Include="Views\DataWizard\_ChartHtml.cshtml" />
-    <Content Include="Views\UserQueries\Create.cshtml" />
     <Content Include="Views\UserQueries\Delete.cshtml" />
     <Content Include="Views\UserQueries\Details.cshtml" />
     <Content Include="Views\UserQueries\Edit.cshtml" />
     <Content Include="Views\UserQueries\Index.cshtml" />
-    <Content Include="Views\UserDownloads\Create.cshtml" />
     <Content Include="Views\UserDownloads\Delete.cshtml" />
     <Content Include="Views\UserDownloads\Details.cshtml" />
     <Content Include="Views\UserDownloads\Edit.cshtml" />
@@ -915,6 +913,7 @@
     <Content Include="Views\DataWizard\_DownloadDialog.cshtml" />
     <Content Include="Views\DataWizard\_LoadQueryDialog.cshtml" />
     <Content Include="Views\DataWizard\_SaveQueryDialog.cshtml" />
+    <Content Include="Views\DataWizard\ViewDownload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

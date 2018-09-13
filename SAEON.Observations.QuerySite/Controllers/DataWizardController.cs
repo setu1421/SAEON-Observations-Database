@@ -399,7 +399,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var model = SessionModel;
-                    var input = new DataWizardInput();
+                    var input = new DataWizardDataInput();
                     input.Organisations.AddRange(model.Organisations);
                     input.Sites.AddRange(model.Sites);
                     input.Stations.AddRange(model.Stations);
@@ -408,7 +408,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
-                    model.Approximation = await PostEntity<DataWizardInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
+                    model.Approximation = await PostEntity<DataWizardDataInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
                     Logging.Verbose("RowCount: {RowCount}", model.Approximation.RowCount);
                     Logging.Verbose("Errors: {Errors}", model.Approximation.Errors);
                     SessionModel = model;
@@ -433,7 +433,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 try
                 {
                     var model = SessionModel;
-                    var input = new DataWizardInput();
+                    var input = new DataWizardDataInput();
                     input.Organisations.AddRange(model.Organisations);
                     input.Sites.AddRange(model.Sites);
                     input.Stations.AddRange(model.Stations);
@@ -442,7 +442,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
-                    model.Output = await PostEntity<DataWizardInput, DataWizardOutput>("Internal/DataWizard/Execute", input);
+                    model.DataOutput = await PostEntity<DataWizardDataInput, DataWizardDataOutput>("Internal/DataWizard/GetData", input);
                     SessionModel = model;
                     return new EmptyResult();
                 }
@@ -498,6 +498,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         #endregion
 
         #region UserQueries
+        //[Authorize]
         private async Task<List<UserQuery>> GetUserQueriesList()
         {
             if (User.Identity.IsAuthenticated)
@@ -511,6 +512,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public JsonResult GetUserQueries()
         {
             using (Logging.MethodCall(GetType()))
@@ -528,6 +530,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<EmptyResult> LoadQuery(LoadQueryModel input)
         {
             using (Logging.MethodCall(GetType()))
@@ -539,8 +542,12 @@ namespace SAEON.Observations.QuerySite.Controllers
                     //Logging.Verbose("Model: {@model}", model);
                     await LoadModelAsync(model);
                     var userQuery = model.UserQueries.FirstOrDefault(i => i.Name == input.Name);
-                    if (userQuery == null) throw new HttpException((int)HttpStatusCode.NotFound, $"UserQuery not found {input?.Name}");
-                    var wizardInput = JsonConvert.DeserializeObject<DataWizardInput>(userQuery.QueryInput);
+                    if (userQuery == null)
+                    {
+                        throw new HttpException((int)HttpStatusCode.NotFound, $"UserQuery not found {input?.Name}");
+                    }
+
+                    var wizardInput = JsonConvert.DeserializeObject<DataWizardDataInput>(userQuery.QueryInput);
                     // Locations
                     List<string> locations = new List<string>();
                     locations.AddRange(model.Locations.Where(i => wizardInput.Organisations.Contains(i.Id)).Select(i => i.Key));
@@ -569,6 +576,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public PartialViewResult GetLoadQueryDialog()
         {
             using (Logging.MethodCall(GetType()))
@@ -588,6 +596,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         #region SaveQueryDialog
         [HttpPost]
+        [Authorize]
         public async Task<EmptyResult> SaveQuery(SaveQueryModel input)
         {
             using (Logging.MethodCall(GetType()))
@@ -597,7 +606,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     Logging.Verbose("Input: {@Input}", input);
                     var model = SessionModel;
                     //Logging.Verbose("Model: {@model}", model);
-                    var queryInput = new DataWizardInput();
+                    var queryInput = new DataWizardDataInput();
                     queryInput.Organisations.AddRange(model.Organisations);
                     queryInput.Sites.AddRange(model.Sites);
                     queryInput.Stations.AddRange(model.Stations);
@@ -628,6 +637,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public PartialViewResult GetSaveQueryDialog()
         {
             using (Logging.MethodCall(GetType()))
@@ -647,6 +657,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         #region Download
         [HttpGet]
+        [Authorize]
         public PartialViewResult GetDownloadDialog()
         {
             using (Logging.MethodCall(GetType()))
@@ -662,6 +673,38 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> GetDownload()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    //Logging.Verbose("Model: {@model}", model);
+                    var input = new DataWizardDataInput();
+                    input.Organisations.AddRange(model.Organisations);
+                    input.Sites.AddRange(model.Sites);
+                    input.Stations.AddRange(model.Stations);
+                    input.Phenomena.AddRange(model.Phenomena);
+                    input.Offerings.AddRange(model.Offerings);
+                    input.Units.AddRange(model.Units);
+                    input.StartDate = model.StartDate.ToUniversalTime();
+                    input.EndDate = model.EndDate.ToUniversalTime();
+                    var userDownload = await PostEntity<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
+                    Logging.Verbose("UserDownload: {@userDownload}", userDownload);
+                    return RedirectToAction("Details", "UserDownloads", new { Id = userDownload.Id.ToString() });
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
         #endregion
     }
 }

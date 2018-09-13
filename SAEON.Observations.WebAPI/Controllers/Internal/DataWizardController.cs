@@ -5,6 +5,7 @@ using SAEON.Observations.Core.Entities;
 using System;
 using System.Data;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -19,7 +20,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             db.Configuration.AutoDetectChangesEnabled = true;
         }
 
-        private IQueryable<ImportBatchSummary> GetQuery(DataWizardInput input)
+        private IQueryable<ImportBatchSummary> GetQuery(DataWizardDataInput input)
         {
             Logging.Verbose("Input: {@Input}", input);
             foreach (var orgId in input.Organisations)
@@ -45,7 +46,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 );
         }
 
-        private DataWizardApproximation CalculateApproximation(DataWizardInput input)
+        private DataWizardApproximation CalculateApproximation(DataWizardDataInput input)
         {
             using (Logging.MethodCall<DataWizardApproximation>(GetType()))
             {
@@ -78,19 +79,19 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         [HttpGet]
         [Route("Approximation")]
-        public DataWizardApproximation ApproximationGet([FromUri] string json)
+        public DataWizardApproximation ApproximationGet([FromUri] string input)
         {
             using (Logging.MethodCall<DataWizardApproximation>(GetType()))
             {
                 try
                 {
                     Logging.Verbose("Uri: {Uri}", Request.RequestUri);
-                    Logging.Verbose("Json: {Json}", json);
-                    if (string.IsNullOrWhiteSpace(json))
+                    Logging.Verbose("Input: {input}", input);
+                    if (string.IsNullOrWhiteSpace(input))
                     {
-                        throw new ArgumentNullException(nameof(json));
+                        throw new ArgumentNullException(nameof(input));
                     }
-                    return CalculateApproximation(JsonConvert.DeserializeObject<DataWizardInput>(json));
+                    return CalculateApproximation(JsonConvert.DeserializeObject<DataWizardDataInput>(input));
                 }
                 catch (Exception ex)
                 {
@@ -102,13 +103,14 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         [HttpPost]
         [Route("Approximation")]
-        public DataWizardApproximation ApproximationPost([FromBody] DataWizardInput input)
+        public DataWizardApproximation ApproximationPost([FromBody] DataWizardDataInput input)
         {
             using (Logging.MethodCall<DataWizardApproximation>(GetType()))
             {
                 try
                 {
                     Logging.Verbose("Uri: {Uri}", Request.RequestUri);
+                    Logging.Verbose("Input: {@input}", input);
                     if (input == null)
                     {
                         throw new ArgumentNullException(nameof(input));
@@ -173,9 +175,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        private DataWizardOutput GetData(DataWizardInput input, bool includeChart)
+        private DataWizardDataOutput GetData(DataWizardDataInput input, bool includeChart)
         {
-            var result = new DataWizardOutput();
+            var result = new DataWizardDataOutput();
             result.DataMatrix.AddColumn("SiteName", "Site", MaxtixDataType.String);
             result.DataMatrix.AddColumn("StationName", "Station", MaxtixDataType.String);
             result.DataMatrix.AddColumn("InstrumentName", "Instrument", MaxtixDataType.String);
@@ -268,19 +270,19 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpGet]
         [Route("GetData")]
         [Authorize]
-        public DataWizardOutput DataGet([FromUri] string json)
+        public DataWizardDataOutput DataGet([FromUri] string input)
         {
-            using (Logging.MethodCall<DataWizardOutput>(GetType()))
+            using (Logging.MethodCall<DataWizardDataOutput>(GetType()))
             {
                 try
                 {
                     Logging.Verbose("Uri: {Uri}", Request.RequestUri);
-                    Logging.Verbose("Json: {Json}", json);
-                    if (string.IsNullOrWhiteSpace(json))
+                    Logging.Verbose("Input: {input}", input);
+                    if (string.IsNullOrWhiteSpace(input))
                     {
-                        throw new ArgumentNullException(nameof(json));
+                        throw new ArgumentNullException(nameof(input));
                     }
-                    return GetData(JsonConvert.DeserializeObject<DataWizardInput>(json), true);
+                    return GetData(JsonConvert.DeserializeObject<DataWizardDataInput>(input), true);
                 }
                 catch (Exception ex)
                 {
@@ -293,13 +295,14 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpPost]
         [Route("GetData")]
         [Authorize]
-        public DataWizardOutput DataPost([FromBody] DataWizardInput input)
+        public DataWizardDataOutput DataPost([FromBody] DataWizardDataInput input)
         {
-            using (Logging.MethodCall<DataWizardOutput>(GetType()))
+            using (Logging.MethodCall<DataWizardDataOutput>(GetType()))
             {
                 try
                 {
                     Logging.Verbose("Uri: {Uri}", Request.RequestUri);
+                    Logging.Verbose("Input: {@input}", input);
                     if (input == null)
                     {
                         throw new ArgumentNullException(nameof(input));
@@ -314,53 +317,68 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        private void GetDownload(DataWizardInput input)
+        private UserDownload GetDownload(DataWizardDownloadInput input)
         {
+            Logging.Verbose("UserId: {userId}", User.GetUserId());
+            Logging.Verbose("Claims: {claims}", User.GetClaims());
             // Get Data
-            var output = GetData(input, false);
+            var dataOutput = GetData(input, false);
             // Create Download
             var date = DateTime.Now;
             var name = date.ToString("yyyyMMdd hh:mm:ss.fff");
-            var userDownload = new UserDownload
+            var result = new UserDownload
             {
+                UserId = User.GetUserId(),
                 Name = name,
                 Description = $"Data download on {name}",
                 QueryInput = JsonConvert.SerializeObject(input),
+                QueryURL = Properties.Settings.Default.QuerySiteURL + $"/DataWizard/GetData?json={JsonConvert.SerializeObject(input)}",
+                DOI = "http://data.saeon.ac.za/10.11.12.13",
+                MetadataURL = "http://data.saeon.ac.za",
+                DownloadURL = Properties.Settings.Default.QuerySiteURL + $"/DataWizard/ViewDownload",
+                Citation = "SAEON....",
                 AddedBy = User.GetUserId(),
                 UpdatedBy = User.GetUserId()
             };
-            db.UserDownloads.Add(userDownload);
+            Logging.Verbose("UserDownload: {@UserDownload}", result);
+            db.UserDownloads.Add(result);
             db.SaveChanges();
-            userDownload = db.UserDownloads.FirstOrDefault(i => i.Name == name);
-            if (userDownload == null) throw new InvalidOperationException($"Unable to find UserDownload {name}");
-            var dirInfo = Directory.CreateDirectory(HostingEnvironment.MapPath($"~/App_Data/Downloads/{date.ToString("yyyyMM")}/{userDownload.Id}"));
-            userDownload.DownloadURI = dirInfo.FullName;
+            result = db.UserDownloads.FirstOrDefault(i => i.Name == name);
+            if (result == null)
+            {
+                throw new InvalidOperationException($"Unable to find UserDownload {name}");
+            }
+            var folder = HostingEnvironment.MapPath($"~/App_Data/Downloads/{date.ToString("yyyyMM")}");
+            var dirInfo = Directory.CreateDirectory(Path.Combine(folder,result.Id.ToString()));
+            result.DownloadURL = Properties.Settings.Default.QuerySiteURL + $"/DataWizard/Download/{result.Id}";
             db.SaveChanges();
             // Create files
-            // Data file as zip in download format
-            // Metadata as json file
-            // Input as json file
-            // Set DownloadURI
+            File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input));
+            File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), JsonConvert.SerializeObject(new { }));
+            File.WriteAllText(Path.Combine(dirInfo.FullName, "Data.csv"), dataOutput.DataMatrix.AsCSV());
+            // Excel
+            // NetCDF
+            ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
+            dirInfo.Delete(true);
+            return result;
         }
 
         [HttpGet]
-        [Route("Download")]
+        [Route("GetDownload")]
         [Authorize]
-        public DataWizardOutput DownloadGet([FromUri] string json)
+        public UserDownload DownloadGet([FromUri] string input)
         {
-            using (Logging.MethodCall<DataWizardOutput>(GetType()))
+            using (Logging.MethodCall<UserDownload>(GetType()))
             {
                 try
                 {
                     Logging.Verbose("Uri: {Uri}", Request.RequestUri);
-                    Logging.Verbose("Json: {Json}", json);
-                    if (string.IsNullOrWhiteSpace(json))
+                    Logging.Verbose("Input: {input}", input);
+                    if (string.IsNullOrWhiteSpace(input))
                     {
-                        throw new ArgumentNullException(nameof(json));
+                        throw new ArgumentNullException(nameof(input));
                     }
-                    // Get Data
-                    // Create Zip
-                    return GetData(JsonConvert.DeserializeObject<DataWizardInput>(json), false);
+                    return GetDownload(JsonConvert.DeserializeObject<DataWizardDownloadInput>(input));
                 }
                 catch (Exception ex)
                 {
@@ -371,20 +389,21 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         [HttpPost]
-        [Route("Download")]
+        [Route("GetDownload")]
         [Authorize]
-        public DataWizardOutput DownloadPost([FromBody] DataWizardInput input)
+        public UserDownload DownloadPost([FromBody] DataWizardDownloadInput input)
         {
-            using (Logging.MethodCall<DataWizardOutput>(GetType()))
+            using (Logging.MethodCall<UserDownload>(GetType()))
             {
                 try
                 {
                     Logging.Verbose("Uri: {Uri}", Request.RequestUri);
+                    Logging.Verbose("Input: {@input}", input);
                     if (input == null)
                     {
                         throw new ArgumentNullException(nameof(input));
                     }
-                    return GetData(input, true);
+                    return GetDownload(input);
                 }
                 catch (Exception ex)
                 {

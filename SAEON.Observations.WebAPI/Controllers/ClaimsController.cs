@@ -1,4 +1,5 @@
 ﻿using SAEON.AspNet.WebApi;
+using SAEON.Observations.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -17,8 +18,14 @@ namespace SAEON.Observations.WebAPI.Controllers
         [Route]
         public IQueryable<string> GetAll()
         {
+            var result = new List<string>
+            {
+                $"UserId: {User.GetUserId()}",
+                $"UserName: {User.GetUserName()}"
+            };
             var cp = (ClaimsPrincipal)User;
-            return cp.Claims.Select(i => $"{i.Type} = {i.Value}").AsQueryable();
+            result.AddRange(cp.Claims.Select(i => $"{i.Type} = {i.Value}").AsQueryable());
+            return result.AsQueryable();
         }
     }
 }

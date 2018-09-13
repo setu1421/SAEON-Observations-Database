@@ -8,7 +8,7 @@ namespace SAEON.Observations.QuerySite.Controllers
     {
         public UserQueriesController() : base()
         {
-            Resource = "Api/UserQueries";
+            Resource = "Internal/UserQueries";
         }
 
         //public override async Task<ActionResult> Create([Bind(Include = "UserId,Name,Description,QueryInput")]UserQuery item)

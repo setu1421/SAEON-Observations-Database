@@ -3,7 +3,7 @@
 @model DataWizardModel
 @(Html.EJ().Grid<object>
     ("TableGrid")
-    .Datasource(@Model.Output.DataMatrix.AsDataTable())
+    .Datasource(@Model.DataOutput.DataMatrix.AsDataTable())
     .IsResponsive()
     .AllowPaging()
     .PageSettings(p => p.PageSize(25))
@@ -14,7 +14,7 @@
     .FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
     .Columns(col =>
     {
-        foreach(var column in Model.Output.DataMatrix.Columns)
+        foreach(var column in Model.DataOutput.DataMatrix.Columns)
         {
             if (column.Name.Contains("_"))
                 col.Field(column.Name).TextAlign(TextAlign.Right).Format("{0:N6}").HeaderText(column.Caption).Add();

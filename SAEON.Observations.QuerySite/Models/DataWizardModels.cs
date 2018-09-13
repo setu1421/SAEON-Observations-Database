@@ -25,7 +25,7 @@ namespace SAEON.Observations.QuerySite.Models
         [DisplayName("End Date")]
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
         public DataWizardApproximation Approximation { get; set; } = new DataWizardApproximation();
-        public DataWizardOutput Output { get; set; } = new DataWizardOutput();
+        public DataWizardDataOutput DataOutput { get; set; } = new DataWizardDataOutput();
         public bool IsAuthenticated { get; set; } = false;
         public List<UserDownload> UserDownloads { get; } = new List<UserDownload>();
         public List<UserQuery> UserQueries { get; } = new List<UserQuery>();
@@ -46,7 +46,7 @@ namespace SAEON.Observations.QuerySite.Models
             StartDate = DateTime.Now.AddYears(-100).Date;
             EndDate = DateTime.Now.Date;
             Approximation = new DataWizardApproximation();
-            Output = new DataWizardOutput();
+            DataOutput = new DataWizardDataOutput();
             IsAuthenticated = false;
             UserDownloads.Clear();
             UserQueries.Clear();

@@ -97,13 +97,15 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
+                    if (!id.HasValue) return RedirectToAction("Index");
                     using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
-                        //Logging.Verbose("Data: {data}", data);
+                        Logging.Verbose("Data: {data}", data);
+                        if (data == null) return RedirectToAction("Index");
                         return View(data);
                     }
                 }
@@ -115,6 +117,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
+        /*
         // GET: TEntity/Create
         /// <summary>
         /// Create a TEntity
@@ -175,6 +178,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+        */
 
         // GET: TEntity/Edit/Id
         /// <summary>
@@ -191,6 +195,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
+                    if (!id.HasValue) return RedirectToAction("Index");
                     using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
@@ -198,6 +203,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
                         Logging.Verbose("Data: {data}", data);
+                        if (data == null) RedirectToAction("Index");
                         return View(data);
                     }
                 }
@@ -264,6 +270,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
+                    if (!id.HasValue) return RedirectToAction("Index");
                     using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
@@ -271,6 +278,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
                         Logging.Verbose("Data: {data}", data);
+                        if (data == null) return RedirectToAction("Index");
                         return View(data);
                     }
                 }

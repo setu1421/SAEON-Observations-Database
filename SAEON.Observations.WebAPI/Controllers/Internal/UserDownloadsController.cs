@@ -8,15 +8,13 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace SAEON.Observations.WebAPI.Controllers.WebAPI
+namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     /// <summary>
     /// Users have to be logged in to download data in the QuerySite. Any downloads are saved for later re-downloads.
     /// </summary>
-    [RoutePrefix("Api/UserDownloads")]
-    [ApiExplorerSettings(IgnoreApi = true)]
-    [Authorize]
-    public class UserDownloadsController : NamedApiWriteController<UserDownload>
+    [RoutePrefix("Internal/UserDownloads")]
+    public class UserDownloadsController : BaseWriteController<UserDownload>
     {
         protected override List<Expression<Func<UserDownload, bool>>> GetWheres()
         {
@@ -93,17 +91,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
         /// <summary>
-        /// UserDownload by Name for logged in user
-        /// </summary>
-        /// <param name="name">The Name of the UserDownload</param>
-        /// <returns>UserDownload</returns>
-        [ResponseType(typeof(UserDownload))]
-        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
-        {
-            return await base.GetByName(name);
-        }
-
-        /// <summary>
         /// Create a UserDownload for logged in user
         /// </summary>
         /// <param name="item">The UserDownload to be created</param>
@@ -127,18 +114,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
         /// <summary>
-        /// Update a UserDownload by Name for logged in user
-        /// </summary>
-        /// <param name="name">Name of UserDownload</param>
-        /// <param name="delta">The new UserDownload</param>
-        /// <returns></returns>
-        [Route]
-        public override Task<IHttpActionResult> PutByName(string name, [FromBody] UserDownload delta)
-        {
-            return base.PutByName(name, delta);
-        }
-
-        /// <summary>
         /// Delete a UserDownload by Id for logged in user
         /// </summary>
         /// <param name="id">Id of UserDownload</param>
@@ -149,15 +124,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return base.DeleteById(id);
         }
 
-        /// <summary>
-        /// Delete a UserDownload by Name for logged in user
-        /// </summary>
-        /// <param name="name">Name of UserDownload</param>
-        /// <returns></returns>
-        [Route]
-        public override Task<IHttpActionResult> DeleteByName(string name)
-        {
-            return base.DeleteByName(name);
-        }
     }
 }
+

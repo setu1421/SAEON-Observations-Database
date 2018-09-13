@@ -435,9 +435,14 @@ var DataWizard;
     function Download() {
         $("#dialogDownload").ejDialog("close");
         ShowWaiting();
-        setTimeout(null, 10000);
-        HideWaiting();
-        EnableButtons();
+        $.get("/DataWizard/GetDownload")
+            .done(function () {
+            EnableButtons();
+            HideWaiting();
+        })
+            .fail(function (jqXHR, status, error) {
+            ErrorInFunc("GetDownload", status, error);
+        });
     }
     DataWizard.Download = Download;
 })(DataWizard || (DataWizard = {}));

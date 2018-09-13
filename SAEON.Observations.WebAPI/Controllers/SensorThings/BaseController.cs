@@ -8,7 +8,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class BaseController<TEntity> : SensorThingsApiController<TEntity> where TEntity : SensorThingEntity
     {
-        protected readonly ObservationsDbContext db = null;
+        protected ObservationsDbContext db = null;
 
         public BaseController()
         {
@@ -18,19 +18,9 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
             }
         }
 
-        protected override void Dispose(bool disposing)
+        ~BaseController()
         {
-            using (Logging.MethodCall(GetType()))
-            {
-                if (disposing)
-                {
-                    if (db != null)
-                    {
-                        db.Dispose();
-                    }
-                }
-                base.Dispose(disposing);
-            }
+            db = null;
         }
 
     }

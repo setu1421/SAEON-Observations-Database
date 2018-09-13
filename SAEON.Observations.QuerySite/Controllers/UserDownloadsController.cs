@@ -8,7 +8,7 @@ namespace SAEON.Observations.QuerySite.Controllers
     {
         public UserDownloadsController() : base()
         {
-            Resource = "Api/UserDownloads";
+            Resource = "Internal/UserDownloads";
         }
 
         //public override async Task<ActionResult> Create([Bind(Include = "UserId,Name,Description,QueryInput,DownloadURI")]UserDownload item)

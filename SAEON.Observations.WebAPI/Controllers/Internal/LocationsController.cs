@@ -6,7 +6,7 @@ using System.Web.Http;
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [RoutePrefix("Internal/Locations")]
-    public class LocationsController : BaseController<LocationNode>
+    public class LocationsController : BaseListController<LocationNode>
     {
         protected override List<LocationNode> GetList()
         {

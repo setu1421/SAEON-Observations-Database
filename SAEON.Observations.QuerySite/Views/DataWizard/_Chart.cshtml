@@ -7,7 +7,7 @@
     .PrimaryYAxis(py => py.ValueType(AxisValueType.Double))
     .Series( sr =>
     {
-        foreach (var series in Model.Output.ChartSeries)
+        foreach (var series in Model.DataOutput.ChartSeries)
         {
             sr.Name(series.Caption)
                 .Type(SeriesType.Line)
