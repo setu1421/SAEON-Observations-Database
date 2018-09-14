@@ -75,41 +75,42 @@ FROM DataLog d
   left join Sensor 
     on (d.SensorID = Sensor.ID) 
   left join Instrument_Sensor
-    on (Instrument_Sensor.SensorID = Sensor.ID) and
-       ((Instrument_Sensor.StartDate is null) or (d.ValueDate >= Instrument_Sensor.StartDate)) and
-       ((Instrument_Sensor.EndDate is null) or (d.ValueDate <= Instrument_Sensor.EndDate))
+    on (Instrument_Sensor.SensorID = Sensor.ID) 
   left join Instrument
-    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
-       ((Instrument.StartDate is null) or (d.ValueDay >= Instrument.StartDate )) and
-       ((Instrument.EndDate is null) or (d.ValueDay <= Instrument.EndDate))
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) 
   left join Station_Instrument
-    on (Station_Instrument.InstrumentID = Instrument.ID) and
-       ((Station_Instrument.StartDate is null) or (d.ValueDay >= Station_Instrument.StartDate)) and
-       ((Station_Instrument.EndDate is null) or (d.ValueDay <= Station_Instrument.EndDate))
+    on (Station_Instrument.InstrumentID = Instrument.ID) 
   left join Station 
-    on (Station_Instrument.StationID = Station.ID) and
-       ((Station.StartDate is null) or (d.ValueDay >= Station.StartDate)) and
-       ((Station.EndDate is null) or (d.ValueDay <= Station.EndDate))
+    on (Station_Instrument.StationID = Station.ID) 
   left join Site
-    on (Station.SiteID = Site.ID) and
-       ((Site.StartDate is null) or  (d.ValueDay >= Site.StartDate)) and
-       ((Site.EndDate is null) or  (d.ValueDay <= Site.EndDate))
-LEFT JOIN PhenomenonOffering po
- ON d.PhenomenonOfferingID = po.ID
-LEFT JOIN Phenomenon p
+    on (Station.SiteID = Site.ID) 
+  LEFT JOIN PhenomenonOffering po
+    ON d.PhenomenonOfferingID = po.ID
+  LEFT JOIN Phenomenon p
     on po.PhenomenonID = p.ID
-LEFT JOIN Offering o
+  LEFT JOIN Offering o
     on po.OfferingID = o.ID
-LEFT JOIN PhenomenonUOM pu
+  LEFT JOIN PhenomenonUOM pu
     on d.PhenomenonUOMID = pu.ID
-LEFT JOIN UnitOfMeasure uom
+  LEFT JOIN UnitOfMeasure uom
     on pu.UnitOfMeasureID = uom.ID
-LEFT JOIN DataSourceTransformation ds
+  LEFT JOIN DataSourceTransformation ds
     on d.DataSourceTransformationID = ds.ID
-LEFT JOIN TransformationType tt
+  LEFT JOIN TransformationType tt
     on ds.TransformationTypeID = tt.ID
-INNER JOIN [Status] s
+  INNER JOIN [Status] s
     on d.StatusID = s.ID
+WHERE
+  ((Instrument_Sensor.StartDate is null) or (d.ValueDate >= Instrument_Sensor.StartDate)) and
+  ((Instrument_Sensor.EndDate is null) or (d.ValueDate <= Instrument_Sensor.EndDate)) and
+  ((Instrument.StartDate is null) or (d.ValueDay >= Instrument.StartDate )) and
+  ((Instrument.EndDate is null) or (d.ValueDay <= Instrument.EndDate)) and
+  ((Station_Instrument.StartDate is null) or (d.ValueDay >= Station_Instrument.StartDate)) and
+  ((Station_Instrument.EndDate is null) or (d.ValueDay <= Station_Instrument.EndDate)) and
+  ((Station.StartDate is null) or (d.ValueDay >= Station.StartDate)) and
+  ((Station.EndDate is null) or (d.ValueDay <= Station.EndDate)) and
+  ((Site.StartDate is null) or  (d.ValueDay >= Site.StartDate)) and
+  ((Site.EndDate is null) or  (d.ValueDay <= Site.EndDate))
 
     
 

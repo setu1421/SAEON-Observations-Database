@@ -22,25 +22,15 @@ from
   inner join Sensor
     on (Observation.SensorID = Sensor.ID)
   inner join Instrument_Sensor
-    on (Observation.SensorID = Instrument_Sensor.SensorID) and
-       ((Instrument_Sensor.StartDate is null) or (Observation.ValueDate >= Instrument_Sensor.StartDate)) and
-       ((Instrument_Sensor.EndDate is null) or (Observation.ValueDate <= Instrument_Sensor.EndDate))
+    on (Observation.SensorID = Instrument_Sensor.SensorID) 
   inner join Instrument
-    on (Instrument_Sensor.InstrumentID = Instrument.ID) and
-       ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate)) and
-       ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate))
+    on (Instrument_Sensor.InstrumentID = Instrument.ID) 
   inner join Station_Instrument
-    on (Station_Instrument.InstrumentID = Instrument_Sensor.InstrumentID) and
-       ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
-       ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate))
+    on (Station_Instrument.InstrumentID = Instrument_Sensor.InstrumentID) 
   inner join Station
-    on (Station_Instrument.StationID = Station.ID) and
-       ((Station.StartDate is null) or (Observation.ValueDay >= Station.StartDate))  and
-       ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate))
+    on (Station_Instrument.StationID = Station.ID) 
   inner join Site
-    on (Station.SiteID = Site.ID) and
-       ((Site.StartDate is null) or (Observation.ValueDay >= Site.StartDate)) and
-       ((Site.EndDate is null) or (Observation.ValueDay <= Site.EndDate))
+    on (Station.SiteID = Site.ID) 
   inner join PhenomenonOffering
     on (Observation.PhenomenonOfferingID = PhenomenonOffering.ID)
   inner join Phenomenon
@@ -55,4 +45,15 @@ from
     on (Observation.StatusID = Status.ID)
   left join StatusReason
     on (Observation.StatusReasonID = StatusReason.ID)
+Where
+  ((Instrument_Sensor.StartDate is null) or (Observation.ValueDate >= Instrument_Sensor.StartDate)) and
+  ((Instrument_Sensor.EndDate is null) or (Observation.ValueDate <= Instrument_Sensor.EndDate)) and
+  ((Instrument.StartDate is null) or (Observation.ValueDay >= Instrument.StartDate)) and
+  ((Instrument.EndDate is null) or (Observation.ValueDay <= Instrument.EndDate)) and
+  ((Station_Instrument.StartDate is null) or (Observation.ValueDay >= Station_Instrument.StartDate)) and
+  ((Station_Instrument.EndDate is null) or (Observation.ValueDay <= Station_Instrument.EndDate)) and
+  ((Station.StartDate is null) or (Observation.ValueDay >= Station.StartDate))  and
+  ((Station.EndDate is null) or (Observation.ValueDay <= Station.EndDate)) and
+  ((Site.StartDate is null) or (Observation.ValueDay >= Site.StartDate)) and
+  ((Site.EndDate is null) or (Observation.ValueDay <= Site.EndDate))
 
