@@ -15,11 +15,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [RoutePrefix("Internal/DataWizard")]
     public class DataWizardController : BaseController
     {
-        public DataWizardController() : base()
-        {
-            db.Configuration.AutoDetectChangesEnabled = true;
-        }
-
         private IQueryable<ImportBatchSummary> GetQuery(DataWizardDataInput input)
         {
             Logging.Verbose("Input: {@Input}", input);
@@ -325,7 +320,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var dataOutput = GetData(input, false);
             // Create Download
             var date = DateTime.Now;
-            var name = date.ToString("yyyyMMdd hh:mm:ss.fff");
+            var name = date.ToString("yyyyMMdd HH:mm:ss.fff");
             var result = new UserDownload
             {
                 UserId = User.GetUserId(),

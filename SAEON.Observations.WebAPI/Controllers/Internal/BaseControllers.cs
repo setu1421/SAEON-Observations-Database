@@ -72,7 +72,24 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
     }
 
-    public abstract class BaseContoller<TEntity> : BaseController where TEntity: IDEntity
+    public class OrderBy<TEntity>
+    {
+        public Expression<Func<TEntity, object>> Expression { get; set; }
+        public bool Ascending { get; set; } = true;
+
+        public OrderBy() { }
+        public OrderBy(Expression<Func<TEntity, object>> expression)
+        {
+            Expression = expression;
+        }
+        public OrderBy(Expression<Func<TEntity, object>> expression, bool ascending)
+        {
+            Expression = expression;
+            Ascending = ascending;
+        }
+    }
+
+    public abstract class BaseContoller<TEntity> : BaseController where TEntity : IDEntity
     {
         /// <summary>
         /// Overwrite to filter entities
@@ -87,7 +104,16 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// Overwrite to order of entities
         /// </summary>
         /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, object>>> GetOrderBys()
+        protected virtual List<OrderBy<TEntity>> GetOrderBys()
+        {
+            return new List<OrderBy<TEntity>>();
+        }
+
+        /// <summary>
+        /// Overwrite to order of entities
+        /// </summary>
+        /// <returns>ListOf(PredicateOf(TEntity))</returns>
+        protected virtual List<Expression<Func<TEntity, object>>> GetOrderBysDesc()
         {
             return new List<Expression<Func<TEntity, object>>>();
         }
@@ -111,9 +137,29 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 query = query.Where(extraWhere);
             }
-            foreach (var orderBy in GetOrderBys())
+            var orderBys = GetOrderBys();
+            var orderBy = orderBys.First();
+            if (orderBy != null)
             {
-                query = query.OrderBy(orderBy);
+                if (orderBy.Ascending)
+                {
+                    query = query.OrderBy(orderBy.Expression);
+                }
+                else
+                {
+                    query = query.OrderByDescending(orderBy.Expression);
+                }
+                foreach (var thenBy in orderBys.Skip(1))
+                {
+                    if (thenBy.Ascending)
+                    {
+                        query = ((IOrderedQueryable<TEntity>)query).ThenBy(thenBy.Expression);
+                    }
+                    else
+                    {
+                        query = ((IOrderedQueryable<TEntity>)query).ThenByDescending(thenBy.Expression);
+                    }
+                }
             }
             return query;
         }
@@ -172,7 +218,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     }
 
     [Authorize]
-    public abstract class BaseWriteController<TEntity>: BaseContoller<TEntity> where TEntity: NamedEntity
+    public abstract class BaseWriteController<TEntity> : BaseContoller<TEntity> where TEntity : NamedEntity
     {
         /// <summary>
         /// Overwrite to do additional checks before Post or Put

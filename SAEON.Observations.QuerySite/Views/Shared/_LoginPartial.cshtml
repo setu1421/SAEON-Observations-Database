@@ -3,14 +3,14 @@
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
     @if (!Request.IsAuthenticated)
     {
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
             @Html.ActionLink("Login", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
             @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item" })
         </div>
     }
     else
     {
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
             @*<a class="dropdown-item disabled" href="#">@User.GetUserId()</a>*@
             <a class="dropdown-item disabled" href="#">@User.GetUserName()</a>
             <div class="dropdown-divider"></div>

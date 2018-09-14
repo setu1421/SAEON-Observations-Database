@@ -503,7 +503,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return (await GetList<UserQuery>("Api/UserQueries"));
+                return (await GetList<UserQuery>("Internal/UserQueries"));
             }
             else
             {

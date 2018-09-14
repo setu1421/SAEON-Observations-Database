@@ -624,8 +624,8 @@ namespace SAEON.Observations.Core.Entities
         public string DownloadURL { get; set; }
         /// <summary>
         /// How this data should be cited
-        /// </summary>
-        [Required, StringLength(1000)]
+        /// </summary> 
+        [Required, StringLength(1000)] 
         public string Citation { get; set; }
         [StringLength(128), ScaffoldColumn(false), HiddenInput]
         public string UserId { get; set; }
@@ -635,10 +635,20 @@ namespace SAEON.Observations.Core.Entities
         [StringLength(128), ScaffoldColumn(false)]
         public string AddedBy { get; set; }
         /// <summary>
+        /// Time the UserDownload was added
+        /// </summary>
+        [ScaffoldColumn(false)]
+        public DateTime? AddedAt { get; set; }
+        /// <summary>
         /// UserId of user who last updated the UserDownload
         /// </summary>
         [StringLength(128), ScaffoldColumn(false)]
         public string UpdatedBy { get; set; }
+        /// <summary>
+        /// Time the UserDownload was updated
+        /// </summary>
+        [ScaffoldColumn(false)]
+        public DateTime? UpdatedAt { get; set; }
     }
 
     /// <summary>
@@ -659,7 +669,7 @@ namespace SAEON.Observations.Core.Entities
         public string QueryInput { get; set; }
         /// <summary>
         /// UserId of UserQuery
-        /// </summary>
+        /// </summary> 
         [StringLength(128), ScaffoldColumn(false), HiddenInput]
         public string UserId { get; set; }
         /// <summary>
@@ -668,10 +678,20 @@ namespace SAEON.Observations.Core.Entities
         [StringLength(128), ScaffoldColumn(false)]
         public string AddedBy { get; set; }
         /// <summary>
+        /// Time the UserDownload was added
+        /// </summary> 
+        [ScaffoldColumn(false)]
+        public DateTime? AddedAt { get; set; }
+        /// <summary>
         /// UserId of user who last updated the UserQuery
         /// </summary>
         [StringLength(128), ScaffoldColumn(false)]
         public string UpdatedBy { get; set; }
+        /// <summary>
+        /// Time the UserDownload was updated
+        /// </summary>
+        [ScaffoldColumn(false)]
+        public DateTime? UpdatedAt { get; set; }
     }
 
     [Table("vImportBatchSummary")]
