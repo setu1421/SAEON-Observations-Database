@@ -460,7 +460,7 @@
         $("#dialogDownload").ejDialog("close");
         ShowWaiting();
         $.get("/DataWizard/GetDownload")
-            .done(function () {
+            .done(function (data) {
                 EnableButtons();
                 HideWaiting();
             })
