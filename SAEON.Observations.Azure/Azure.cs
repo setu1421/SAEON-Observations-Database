@@ -1,4 +1,5 @@
-﻿using SAEON.Azure.Storage;
+﻿using SAEON.Azure.CosmosDB;
+using SAEON.Azure.Storage;
 using SAEON.Logs;
 using System;
 using System.Configuration;
@@ -10,84 +11,164 @@ namespace SAEON.Observations.Azure
     public class Azure
     {
         private const string BlobStorageContainer = "saeon-observations";
-        private const string ObservationsStorageTable = "Observations";   
+        private const string ObservationsStorageTable = "Observations";
+        private const string CosmosDBDatabase = "saeon-observations";
+        private const string CosmosDBCollection = "Observations";
+        private const string CosmosDBPartitionKey = "/SensorCode";
 
         public static bool Enabled { get; private set; } = false;
+        public static bool StorageEnabled { get; private set; } = false;
+        public static bool CosmosDBEnabled { get; private set; } = false;
 
         private AzureStorage Storage = null;
+        private AzureCosmosDB CosmosDB = null;
 
-        static Azure() 
+        static Azure()
         {
             using (Logging.MethodCall(typeof(Azure)))
             {
-                Enabled = Convert.ToBoolean(ConfigurationManager.AppSettings["AzureEnabled"]);
-                Logging.Information("Azure.Enabled: {enabled}", Enabled);
+                try
+                {
+                    Enabled = Convert.ToBoolean(ConfigurationManager.AppSettings["AzureEnabled"] ?? "false");
+                    if (Enabled)
+                    {
+                        StorageEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["AzureStorgaeEnabled"] ?? "false");
+                        CosmosDBEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["AzureCosmosDBEnabled"] ?? "false");
+                    }
+                    Logging.Information("Enabled: {Enabled} Storage: {StorageEnabled} CosmosDB: {CosmosDBEnabled}", Enabled, StorageEnabled, CosmosDBEnabled);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
             }
         }
 
         public Azure()
         {
-            using (Logging.MethodCall(typeof(Azure)))
+            using (Logging.MethodCall(GetType()))
             {
-                if (Enabled)
+                try
                 {
-                    Storage = new AzureStorage();
+                    if (Enabled)
+                    {
+                        if (StorageEnabled)
+                        {
+                            Storage = new AzureStorage();
+                        }
+                        if (CosmosDBEnabled)
+                        {
+                            CosmosDB = new AzureCosmosDB(CosmosDBDatabase, CosmosDBCollection, CosmosDBPartitionKey);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
                 }
             }
         }
 
         ~Azure()
         {
-            Storage = null;   
+            Storage = null;
+            CosmosDB = null;
         }
 
         public async Task InitializeAsync()
         {
-            if (!Azure.Enabled) return;
-            using (Logging.MethodCall(typeof(Azure)))
+            if (!Azure.Enabled)
             {
-                var storage = new AzureStorage();
-                await storage.EnsureContainerAsync(Azure.BlobStorageContainer);
-                //await storage.EnsureQueueAsync(WeatherAPIBase.LocationsJSONQueue);
-                //await storage.EnsureQueueAsync(WeatherAPIBase.LocationsQueue); 
-                //await storage.EnsureTableAsync(WeatherAPIBase.LocationsTable);
-                //await storage.EnsureQueueAsync(WeatherAPIBase.ConditionsJSONQueue);
-                //await storage.EnsureQueueAsync(WeatherAPIBase.ConditionsQueue);
-                //await storage.EnsureTableAsync(WeatherAPIBase.ConditionsTable);
-                //await storage.EnsureQueueAsync(WeatherAPIBase.ForecastsJSONQueue);
-                //await storage.EnsureQueueAsync(WeatherAPIBase.ForecastsQueue);
-                //await storage.EnsureTableAsync(WeatherAPIBase.ForecastsTable);
+                return;
             }
-        } 
+
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    if (StorageEnabled)
+                    {
+                        await Storage.EnsureContainerAsync(Azure.BlobStorageContainer);
+                    }
+                    if (CosmosDBEnabled)
+                    {
+                        await CosmosDB.EnsureCollectionAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
 
 
-        public void Initialize() 
+        public void Initialize()
         {
-            if (!Azure.Enabled) return;
-            using (Logging.MethodCall(typeof(Azure)))
-            { 
-                InitializeAsync().GetAwaiter().GetResult();
+            if (!Azure.Enabled)
+            {
+                return;
+            }
+
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    InitializeAsync().GetAwaiter().GetResult();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
             }
         }
 
         public async Task UploadAsync(string folder, string fileName, string fileContents)
         {
-            if (!Enabled) return;
-            using (Logging.MethodCall(GetType()))
+            if (!Enabled || !StorageEnabled)
             {
-                var date = DateTime.Now;
-                var container = Storage.GetContainer(BlobStorageContainer);
-                var bytes = Encoding.UTF8.GetBytes(fileContents);
-                await container.UploadBlobAsync($"{folder}/{fileName}", bytes);
+                return;
+            }
+
+            using (Logging.MethodCall(GetType(), new ParameterList { { "Folder", folder }, { "FileName", fileName } }))
+            {
+                try
+                {
+                    var date = DateTime.Now;
+                    var container = Storage.GetContainer(BlobStorageContainer);
+                    var bytes = Encoding.UTF8.GetBytes(fileContents);
+                    await container.UploadBlobAsync($"{folder}/{fileName}", bytes);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
             }
         }
 
         public void Upload(string folder, string fileName, string fileContents)
         {
-            if (!Enabled) return;  
-            using (Logging.MethodCall(GetType())) 
+            if (!Enabled || !StorageEnabled)
             {
-                UploadAsync(folder, fileName, fileContents).GetAwaiter().GetResult();
+                return;
+            }
+
+            using (Logging.MethodCall(GetType(), new ParameterList { { "Folder", folder }, { "FileName", fileName } }))
+            {
+                try
+                {
+                    UploadAsync(folder, fileName, fileContents).GetAwaiter().GetResult();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
             }
         }
     }
