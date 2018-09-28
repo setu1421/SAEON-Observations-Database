@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SAEON.Logs;
-using SAEON.Observations.Core.Entities;
 using Serilog;
 using System;
-using System.Data.Entity;
-using System.Linq;
 
 namespace SAEON.Observations.Core.ConsoleTests
 {

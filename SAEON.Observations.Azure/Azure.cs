@@ -21,7 +21,7 @@ namespace SAEON.Observations.Azure
         public static bool CosmosDBEnabled { get; private set; } = false;
 
         private AzureStorage Storage = null;
-        private AzureCosmosDB CosmosDB = null;
+        private AzureCosmosDB<ObservationDocument> CosmosDB = null;
 
         static Azure()
         {
@@ -32,10 +32,10 @@ namespace SAEON.Observations.Azure
                     Enabled = Convert.ToBoolean(ConfigurationManager.AppSettings["AzureEnabled"] ?? "false");
                     if (Enabled)
                     {
-                        StorageEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["AzureStorgaeEnabled"] ?? "false");
+                        StorageEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["AzureStorageEnabled"] ?? "false");
                         CosmosDBEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["AzureCosmosDBEnabled"] ?? "false");
                     }
-                    Logging.Information("Enabled: {Enabled} Storage: {StorageEnabled} CosmosDB: {CosmosDBEnabled}", Enabled, StorageEnabled, CosmosDBEnabled);
+                    Logging.Information("Azure: {Enabled} Storage: {StorageEnabled} CosmosDB: {CosmosDBEnabled}", Enabled, StorageEnabled, CosmosDBEnabled);
                 }
                 catch (Exception ex)
                 {
@@ -59,7 +59,7 @@ namespace SAEON.Observations.Azure
                         }
                         if (CosmosDBEnabled)
                         {
-                            CosmosDB = new AzureCosmosDB(CosmosDBDatabase, CosmosDBCollection, CosmosDBPartitionKey);
+                            CosmosDB = new AzureCosmosDB<ObservationDocument>(CosmosDBDatabase, CosmosDBCollection, CosmosDBPartitionKey);
                         }
                     }
                 }
@@ -90,10 +90,12 @@ namespace SAEON.Observations.Azure
                 {
                     if (StorageEnabled)
                     {
+                        Logging.Verbose("Ensuring Storage Container exist");
                         await Storage.EnsureContainerAsync(Azure.BlobStorageContainer);
                     }
                     if (CosmosDBEnabled)
                     {
+                        Logging.Verbose("Ensuring CosmosDB Collection exist");
                         await CosmosDB.EnsureCollectionAsync();
                     }
                 }
@@ -127,6 +129,7 @@ namespace SAEON.Observations.Azure
             }
         }
 
+        #region Storage
         public async Task UploadAsync(string folder, string fileName, string fileContents)
         {
             if (!Enabled || !StorageEnabled)
@@ -171,5 +174,50 @@ namespace SAEON.Observations.Azure
                 }
             }
         }
+        #endregion
+
+        #region CosmosDB
+        public async Task AddObservationAsync(ObservationDocument document)
+        {
+            if (!Enabled || !CosmosDBEnabled)
+            {
+                return;
+            }
+
+            using (Logging.MethodCall(GetType())) 
+            {
+                try
+                {
+                    await CosmosDB.CreateItemAsync(document);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                } 
+            } 
+        }
+
+        public void AddObservation(ObservationDocument document)
+        {
+            if (!Enabled || !CosmosDBEnabled)
+            {
+                return;
+            }
+
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    AddObservationAsync(document).GetAwaiter().GetResult();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        #endregion
     }
 }
