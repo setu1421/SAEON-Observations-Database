@@ -12,7 +12,7 @@ namespace SAEON.Observations.Azure
     {
         private const string BlobStorageContainer = "saeon-observations";
         private const string ObservationsStorageTable = "Observations";
-        private const string CosmosDBDatabase = "saeon-observations";
+        private const string CosmosDBDatabase = "saeon-observations"; 
         private const string CosmosDBCollection = "Observations";
         private const string CosmosDBPartitionKey = "/SensorCode";
 
@@ -55,7 +55,13 @@ namespace SAEON.Observations.Azure
                     {
                         if (StorageEnabled)
                         {
-                            Storage = new AzureStorage();
+                            var connectionStringName = "AzureStorage";
+                            var connectionString = ConfigurationManager.ConnectionStrings[connectionStringName]?.ConnectionString;
+                            if (string.IsNullOrEmpty(connectionString))
+                            {
+                                connectionString = ConfigurationManager.AppSettings[connectionStringName];
+                            }
+                            Storage = new AzureStorage(connectionString);
                         }
                         if (CosmosDBEnabled)
                         {
