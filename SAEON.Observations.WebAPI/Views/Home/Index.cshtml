@@ -1,6 +1,11 @@
 ﻿@{
     ViewBag.Title = "Observations Database WebAPI";
 }
+@section MetaTags {
+    <meta name="google-site-verification" content="X5PEowbP3hWPiigk5XU_VSVb79bjwBjAumMd0SnanjM" />
+    <meta name="msvalidate.01" content="C8A2A99147917721302B2895028A760C" />
+}
+
 <div class="row">
     <div class="col-md-12">
         <p>
@@ -22,28 +27,28 @@
             You can then use the returned token in your calls.
         </p>
         @*<p>
-            You can manually do a post to the token endpoint https://identity.saeon.ac.za/connect/token
-            to get an OAuth2 bearer token that you need to use for authorization in your API calls. The post needs the following:
-            <ul>
-                <li>Content-Type: application/x-www-form-urlencoded</li>
-                <li>grant_type: client_credentials</li>
-                <li>client_id: SAEON.Observations.WebAPI</li>
-                <li>client_secret: 81g5wyGSC89a</li>
-                <li>scope: SAEON.Observations.WebAPI</li>
-            </ul>
-        </p>
-        <p>
-            You will get something back like this:<br />
-            {<br />
-            "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImVhbWFaY2ZCTVRiOW9V",<br />
-            "expires_in": 25200,<br />
-            "token_type": "Bearer"<br />
-            }
-        </p>
-        <p>
-            When you call the API you need to add an Authorization header like this:<br />
-            Authorization:bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImVhbWFaY2ZCTVRiOW9V<br />
-            Content-Type:application/json
-        </p>*@
+                You can manually do a post to the token endpoint https://identity.saeon.ac.za/connect/token
+                to get an OAuth2 bearer token that you need to use for authorization in your API calls. The post needs the following:
+                <ul>
+                    <li>Content-Type: application/x-www-form-urlencoded</li>
+                    <li>grant_type: client_credentials</li>
+                    <li>client_id: SAEON.Observations.WebAPI</li>
+                    <li>client_secret: 81g5wyGSC89a</li>
+                    <li>scope: SAEON.Observations.WebAPI</li>
+                </ul>
+            </p>
+            <p>
+                You will get something back like this:<br />
+                {<br />
+                "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImVhbWFaY2ZCTVRiOW9V",<br />
+                "expires_in": 25200,<br />
+                "token_type": "Bearer"<br />
+                }
+            </p>
+            <p>
+                When you call the API you need to add an Authorization header like this:<br />
+                Authorization:bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImVhbWFaY2ZCTVRiOW9V<br />
+                Content-Type:application/json
+            </p>*@
     </div>
 </div>

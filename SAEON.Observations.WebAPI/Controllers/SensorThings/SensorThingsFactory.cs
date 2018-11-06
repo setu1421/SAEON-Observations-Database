@@ -3,7 +3,6 @@ using SAEON.SensorThings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using SAEON.Logs;
 
 namespace SAEON.Observations.WebAPI.Controllers.SensorThings

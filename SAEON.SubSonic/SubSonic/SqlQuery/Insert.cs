@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using SubSonic.Sugar;
-using SubSonic.Utilities;
 
 namespace SubSonic
 {

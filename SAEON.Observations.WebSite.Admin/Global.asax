@@ -1,5 +1,6 @@
 ﻿<%@ Application Language="C#" %>
 <%@ Import Namespace="System.Web.Routing" %>
+<%@ Import Namespace="SAEON.Logs" %>
 <script RunAt="server">
 
     void Application_Start(object sender, EventArgs e)
@@ -14,7 +15,7 @@
 
     {
         //  Code that runs on application shutdown
-
+        Logging.ShutDown();
     }
 
     void Application_Error(object sender, EventArgs e)

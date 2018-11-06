@@ -1,18 +1,12 @@
-﻿using AutoMapper;
-using SAEON.AspNet.WebApi;
-using SAEON.Logs;
+﻿using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Data.Entity.Validation;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {

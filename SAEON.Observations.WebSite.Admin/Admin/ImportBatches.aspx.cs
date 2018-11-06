@@ -12,7 +12,6 @@ using System.Transactions;
 
 public partial class Admin_ImportBatches : System.Web.UI.Page
 {
-
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!X.IsAjaxRequest)
@@ -49,6 +48,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     }
 
     #region Import Batches
+
     protected void ImportBatchesGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         using (Logging.MethodCall(GetType()))
@@ -87,12 +87,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         ImportBatchSummary.Delete("ImportBatchID", importBatchId);
         var sql =
             "Insert Into ImportBatchSummary" + Environment.NewLine +
-            "  (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance," + Environment.NewLine+
+            "  (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance," + Environment.NewLine +
             "   TopLatitude, BottomLatitude, LeftLongitude, RightLongitude, StartDate, EndDate)" + Environment.NewLine +
             "Select" + Environment.NewLine +
-            "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, " + Environment.NewLine+
+            "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, " + Environment.NewLine +
             "  STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance, " + Environment.NewLine +
-            "  Max(Latitude) TopLatitude, Min(Latitude) BottomLatitude, Min(Longitude) LeftLongitude, Max(Longitude) RightLongitude, "+Environment.NewLine+
+            "  Max(Latitude) TopLatitude, Min(Latitude) BottomLatitude, Min(Longitude) LeftLongitude, Max(Longitude) RightLongitude, " + Environment.NewLine +
             "  Min(ValueDate) StartDate, Max(ValueDate) EndDate" + Environment.NewLine +
             "from" + Environment.NewLine +
             "  vObservationExpansion" + Environment.NewLine +
@@ -170,7 +170,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 var fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
 
-                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.36, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.37, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
 
                 if (values.Any())
@@ -193,7 +193,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
                                 }
                                 else
+                                {
                                     batch.Status = (int)ImportBatchStatus.NoLogErrors;
+                                }
+
                                 batch.UserId = AuthHelper.GetLoggedInUserId;
                                 batch.Save();
 
@@ -233,14 +236,23 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                                     AddedDate = DateTime.Now
                                                 };
                                                 if (string.IsNullOrWhiteSpace(schval.Comment))
+                                                {
                                                     Obrecord.Comment = null;
+                                                }
                                                 else
+                                                {
                                                     Obrecord.Comment = schval.Comment;
+                                                }
 
                                                 if (string.IsNullOrWhiteSpace(schval.TextValue))
+                                                {
                                                     Obrecord.TextValue = null;
+                                                }
                                                 else
+                                                {
                                                     Obrecord.TextValue = schval.TextValue;
+                                                }
+
                                                 Obrecord.Save();
                                             }
                                             catch (SqlException ex) when (ex.Number == 2627)
@@ -273,35 +285,59 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                             SensorID = schval.SensorID
                                         };
                                         if (schval.DateValueInvalid)
+                                        {
                                             logrecord.InvalidDateValue = schval.InvalidDateValue;
+                                        }
                                         else if (schval.DateValue != DateTime.MinValue)
+                                        {
                                             logrecord.ValueDate = schval.DateValue;
+                                        }
 
                                         if (schval.TimeValueInvalid)
+                                        {
                                             logrecord.InvalidTimeValue = schval.InvalidTimeValue;
+                                        }
 
                                         if (schval.TimeValue.HasValue && schval.TimeValue != DateTime.MinValue)
+                                        {
                                             logrecord.ValueTime = schval.TimeValue;
+                                        }
 
                                         if (schval.RawValueInvalid)
+                                        {
                                             logrecord.ValueText = schval.InvalidRawValue;
+                                        }
                                         else
+                                        {
                                             logrecord.RawValue = schval.RawValue;
+                                        }
 
                                         if (schval.DataValueInvalid)
+                                        {
                                             logrecord.TransformValueText = schval.InvalidDataValue;
+                                        }
                                         else
+                                        {
                                             logrecord.DataValue = schval.DataValue;
+                                        }
 
                                         if (schval.InvalidOffering)
+                                        {
                                             logrecord.InvalidOffering = schval.PhenomenonOfferingID.Value.ToString();
+                                        }
                                         else
+                                        {
                                             logrecord.PhenomenonOfferingID = schval.PhenomenonOfferingID.Value;
+                                        }
 
                                         if (schval.InvalidUOM)
+                                        {
                                             logrecord.InvalidUOM = schval.PhenomenonUOMID.Value.ToString();
+                                        }
                                         else
+                                        {
                                             logrecord.PhenomenonUOMID = schval.PhenomenonUOMID.Value;
+                                        }
 
                                         logrecord.RawFieldValue = String.IsNullOrWhiteSpace(schval.FieldRawValue) ? "" : schval.FieldRawValue;
                                         logrecord.ImportDate = DateTime.Now;
@@ -317,7 +353,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         logrecord.UserId = AuthHelper.GetLoggedInUserId;
 
                                         if (schval.Comment.Length > 0)
+                                        {
                                             logrecord.Comment = schval.Comment;
+                                        }
 
                                         logrecord.Latitude = schval.Latitude;
                                         logrecord.Longitude = schval.Longitude;
@@ -405,8 +443,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         if (oCol.Count != 0)
         {
             Logging.Error("nullDuplicates: {nullDuplicates}", ++nullDuplicates);
-            //delete this observation and move it do the datalog with the new value in and a status saying its a duplicate of a null that now has a value. 
-            //check if this works with transformations 
+            //delete this observation and move it do the datalog with the new value in and a status saying its a duplicate of a null that now has a value.
+            //check if this works with transformations
             DataLog d = new DataLog()
             {
                 SensorID = oCol[0].SensorID,
@@ -415,7 +453,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 RawValue = schval.RawValue
             };
             if (d.DataValue != null)
+            {
                 d.RawFieldValue = schval.DataValue.Value.ToString();
+            }
 
             d.DataValue = schval.DataValue;
             d.Comment = oCol[0].Comment;
@@ -431,13 +471,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
             new Delete().From(Observation.Schema).Where(Observation.Columns.Id).IsEqualTo(oCol[0].Id).Execute();
             return true;
-
-
         }
         return false;
     }
 
 #pragma warning disable IDE1006 // Naming Styles
+
     protected void cbOffering_RefreshData(object sender, StoreRefreshDataEventArgs e)
 #pragma warning restore IDE1006 // Naming Styles
     {
@@ -453,6 +492,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     }
 
 #pragma warning disable IDE1006 // Naming Styles
+
     protected void cbUnitofMeasure_RefreshData(object sender, StoreRefreshDataEventArgs e)
 #pragma warning restore IDE1006 // Naming Styles
     {
@@ -468,14 +508,13 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
-    List<SchemaValue> Import(Guid DataSourceId, ImportBatch batch)
+    private List<SchemaValue> Import(Guid DataSourceId, ImportBatch batch)
     {
         using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatch", batch.Code } }))
         {
-
             DataSource ds = new DataSource(DataSourceId);
             List<SchemaValue> ImportValues = new List<SchemaValue>();
 
@@ -485,7 +524,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             string Data = String.Empty;
             //if (!ds.DataSchemaID.HasValue)
             //{
-
             SensorCollection col = new SensorCollection()
                 .Where(Sensor.Columns.DataSourceID, DataSourceId)
                 .Where(Sensor.Columns.DataSchemaID, SubSonic.Comparison.IsNot, null)
@@ -503,7 +541,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
             using (StreamReader reader = new StreamReader(DataFileUpload.PostedFile.InputStream))
             {
-
                 if (col.Count > 0)
                 {
                     foreach (var sp in col)
@@ -561,7 +598,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -583,7 +620,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 DateTime datevalue = (DateTime)ValueDate.Value;
 
                 if (TimeValue.Value.ToString() != "-10675199.02:48:05.4775808")
+                {
                     datevalue = datevalue.AddMilliseconds(((TimeSpan)TimeValue.Value).TotalMilliseconds);
+                }
 
                 obs.ValueDate = datevalue;
                 obs.RawValue = double.Parse(RawValue.Value.ToString());
@@ -605,7 +644,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
                 //try
                 //{
-
                 q = new Select("ID").From(Observation.Schema)
                     .Where(Observation.Columns.SensorID).IsEqualTo(obs.SensorID)
                     .And(Observation.Columns.ValueDate).IsEqualTo(obs.ValueDate)
@@ -625,7 +663,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 batch.Status = (int)ImportBatchStatus.NoLogErrors;
                                 batch.Save();
                             }
-
 
                             DataLog.Delete(tfID.Text);
                             CreateSummary(connScope, batch.Id);
@@ -670,16 +707,14 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         //}
 
         //if (log.DataValueInvalid == 1)
-        //    obs.       
+        //    obs.
     }
-
 
     [DirectMethod]
     public void ConfirmDeleteBatch(Guid ImportBatchId)
     {
         X.Msg.Confirm("Confirm Delete", "Are you sure you want to Delete this Batch?", new MessageBoxButtonsConfig
         {
-
             Yes = new MessageBoxButtonConfig
             {
                 Handler = String.Concat("DirectCall.DeleteBatch('", ImportBatchId, "',{ eventMask: { showMask: true}});"),
@@ -725,13 +760,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
-
     [DirectMethod]
     public void ConfirmMoveBatch(Guid ImportBatchId)
     {
         X.Msg.Confirm("Confirm Move", "Are you sure you want to Move this Batch to the DataLog?", new MessageBoxButtonsConfig
         {
-
             Yes = new MessageBoxButtonConfig
             {
                 Handler = String.Concat("DirectCall.MoveBatch('", ImportBatchId, "',{ eventMask: { showMask: true}});"),
@@ -801,7 +834,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     {
         X.Msg.Confirm("Confirm Delete", "Are you sure you want to Delete this entry?", new MessageBoxButtonsConfig
         {
-
             Yes = new MessageBoxButtonConfig
             {
                 Handler = String.Concat("DirectCall.DeleteEntry('", Id, "',{ eventMask: { showMask: true}});"),
@@ -839,7 +871,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             };
                             iB.Save();
                         }
-
                     }
 
                     ts.Complete();
@@ -849,7 +880,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 DataLogGridStore.DataBind();
                 SummaryGridStore.DataBind();
                 ObservationsGridStore.DataBind();
-
             }
             catch (Exception ex)
             {
@@ -878,7 +908,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     {
         X.Msg.Confirm("Confirm Move", "Are you sure you want to move this entry to the observations?", new MessageBoxButtonsConfig
         {
-
             Yes = new MessageBoxButtonConfig
             {
                 Handler = String.Concat("DirectCall.MoveToObservation('", Id, "',{ eventMask: { showMask: true}});"),
@@ -939,9 +968,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
         }
     }
-    #endregion
+
+    #endregion Import Batches
 
     #region Observations
+
     protected void ObservationsGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         using (Logging.MethodCall(GetType()))
@@ -970,7 +1001,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         MessageBoxes.Error(ex, "Error", "Unable to refresh Observations grid");
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -988,14 +1018,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             MessageBoxes.Confirm("Confirm",
             "DirectCall.SetSelected({eventMask: { showMask: true}});",
             $"Set status '{cbStatus.SelectedItem.Text}' to the {sm.SelectedRows.Count:N0} selected observations?");
-
         }
         else
         {
             MessageBoxes.Confirm("Confirm",
             "DirectCall.SetSelected({eventMask: { showMask: true}});",
             $"Set status '{cbStatus.SelectedItem.Text}' and reason '{cbStatusReason.SelectedItem.Text}' to the {sm.SelectedRows.Count:N0} selected observations?");
-
         }
     }
 
@@ -1014,9 +1042,14 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         StatusID = Utilities.MakeGuid(cbStatus.SelectedItem.Value)
                     };
                     if (cbStatus.SelectedItem.Text == "Verified")
+                    {
                         obs.StatusReasonID = null;
+                    }
                     else
+                    {
                         obs.StatusReasonID = Utilities.MakeGuid(cbStatusReason.SelectedItem.Value);
+                    }
+
                     obs.Save();
                 }
                 sm.ClearSelections();
@@ -1029,7 +1062,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 MessageBoxes.Error(ex, "Error", "Unable to set status and reason to the selected observations");
             }
         }
-
     }
 
     protected void SetWithoutClick(object sender, DirectEventArgs e)
@@ -1039,14 +1071,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             MessageBoxes.Confirm("Confirm",
             "DirectCall.SetWithout({eventMask: { showMask: true}});",
             $"Set status '{cbStatus.SelectedItem.Text}' to the observations without a status?");
-
         }
         else
         {
             MessageBoxes.Confirm("Confirm",
             "DirectCall.SetWithout({eventMask: { showMask: true}});",
             $"Set status '{cbStatus.SelectedItem.Text}' and reason '{cbStatusReason.SelectedItem.Text}' to the observations without status?");
-
         }
     }
 
@@ -1112,14 +1142,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             MessageBoxes.Confirm("Confirm",
             "DirectCall.SetAll({eventMask: { showMask: true}});",
             $"Set status '{cbStatus.SelectedItem.Text}' to all the observations?");
-
         }
         else
         {
             MessageBoxes.Confirm("Confirm",
             "DirectCall.SetAll({eventMask: { showMask: true}});",
             $"Set status '{cbStatus.SelectedItem.Text}' and reason '{cbStatusReason.SelectedItem.Text}' to all the observations?");
-
         }
     }
 
@@ -1276,9 +1304,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     {
         EnableButtons();
     }
-    #endregion
+
+    #endregion Observations
 
     #region Summary
+
     protected void SummaryGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         using (Logging.MethodCall(GetType()))
@@ -1306,7 +1336,5 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
-    #endregion
-
-
+    #endregion Summary
 }

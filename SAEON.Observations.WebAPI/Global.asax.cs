@@ -39,6 +39,11 @@ namespace SAEON.Observations.WebAPI
                 }
             }
         }
+
+        protected void Application_End()
+        {
+            Logging.ShutDown();
+        }
     }
 }
 
