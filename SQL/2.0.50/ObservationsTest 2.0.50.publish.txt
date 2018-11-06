@@ -1,0 +1,27 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[UX_Observation] (Unique Constraint)
+     Create
+       [dbo].[UX_Observation] (Unique Constraint)
+     Alter
+       [dbo].[vObservationExpansion] (View)
+
+** Supporting actions
+     Refresh
+       [dbo].[vObservation] (View)
+
+The source's object [Authentication] is different than the target's version of the object but the target object will not be updated.
+The source's object [Observations] is different than the target's version of the object but the target object will not be updated.
+The object [Authentication] already exists in database with a different definition and will not be altered.
+The object [Observations] already exists in database with a different definition and will not be altered.
+

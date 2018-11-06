@@ -18,7 +18,45 @@ Set @BatchNum = 1
 Set @Done = 0
 WHILE (@Done = 0)
   BEGIN 
-	Set @Msg = Convert(VarChar(20), GetDate()) + ' Observations ' + Convert(VarChar(20), @BatchNum) + ' ' + Convert(VarChar(20), @BatchNum * @BatchSize)
+	Set @Msg = Convert(VarChar(20), GetDate()) + ' Observations (ImportBatch) ' + Convert(VarChar(20), @BatchNum) + ' ' + Convert(VarChar(20), @BatchNum * @BatchSize)
+	RAISERROR(@msg, 0, 1) WITH NOWAIT
+    BEGIN TRANSACTION 
+	BEGIN TRY
+	    Delete Top (1000000)
+		  Observation
+		from
+		  Observation
+		  inner join vImportBatchSummary
+			on (Observation.ImportBatchID = vImportBatchSummary.ImportBatchID)
+		where
+		  (vImportBatchSummary.StationCode not in ((Select Code from @List)))
+		Set @Updated = @@RowCount 
+		IF @Updated = 0 Set @Done = 1
+	END TRY
+	BEGIN  CATCH
+		SELECT 
+			GetDate()  
+			,ERROR_NUMBER() AS ErrorNumber  
+			,ERROR_SEVERITY() AS ErrorSeverity  
+			,ERROR_STATE() AS ErrorState  
+			,ERROR_PROCEDURE() AS ErrorProcedure  
+			,ERROR_LINE() AS ErrorLine  
+			,ERROR_MESSAGE() AS ErrorMessage;  
+
+		IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+	END CATCH
+    IF @@TRANCOUNT > 0 COMMIT TRANSACTION 
+	--CheckPoint
+	Set @Msg = Convert(VarChar(20), GetDate()) + ' Observations (ImportBatch) Deleted ' + Convert(VarChar(20), @Updated) + ' ' + Convert(VarChar(20), @BatchNum) + ' ' + Convert(VarChar(20), @BatchNum * @BatchSize)
+	RAISERROR(@msg, 0, 1) WITH NOWAIT
+	set @BatchNum = @BatchNum + 1
+	WAITFOR DELAY '00:00:30'
+  END 
+Set @BatchNum = 1
+Set @Done = 0
+WHILE (@Done = 0)
+  BEGIN 
+	Set @Msg = Convert(VarChar(20), GetDate()) + ' Observations (Expansion) ' + Convert(VarChar(20), @BatchNum) + ' ' + Convert(VarChar(20), @BatchNum * @BatchSize)
 	RAISERROR(@msg, 0, 1) WITH NOWAIT
     BEGIN TRANSACTION 
 	BEGIN TRY
@@ -47,7 +85,7 @@ WHILE (@Done = 0)
 	END CATCH
     IF @@TRANCOUNT > 0 COMMIT TRANSACTION 
 	--CheckPoint
-	Set @Msg = Convert(VarChar(20), GetDate()) + ' Observations Deleted ' + Convert(VarChar(20), @Updated) + ' ' + Convert(VarChar(20), @BatchNum) + ' ' + Convert(VarChar(20), @BatchNum * @BatchSize)
+	Set @Msg = Convert(VarChar(20), GetDate()) + ' Observations (Expansion) Deleted ' + Convert(VarChar(20), @Updated) + ' ' + Convert(VarChar(20), @BatchNum) + ' ' + Convert(VarChar(20), @BatchNum * @BatchSize)
 	RAISERROR(@msg, 0, 1) WITH NOWAIT
 	set @BatchNum = @BatchNum + 1
 	WAITFOR DELAY '00:00:30'
