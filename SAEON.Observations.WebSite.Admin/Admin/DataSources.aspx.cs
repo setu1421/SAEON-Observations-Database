@@ -376,16 +376,16 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 }
                 //
 
-                if (dfTransStart.SelectedDate.Year < 1900)
+                if (dfTransStart.IsEmpty || (dfTransStart.SelectedDate.Year < 1900))
                 {
                     dstransform.StartDate = null;
                 }
                 else
-                    dstransform.StartDate = dfTransStart.SelectedDate;
-                if (dfTransEnd.SelectedDate.Year < 1900)
+                    dstransform.StartDate = DateTime.Parse(dfTransStart.RawText);
+                if (dfTransEnd.IsEmpty || (dfTransEnd.SelectedDate.Year < 1900))
                     dstransform.EndDate = null;
                 else
-                    dstransform.EndDate = dfTransEnd.SelectedDate;
+                    dstransform.EndDate = DateTime.Parse(dfTransEnd.RawText);
                 dstransform.Definition = tfDefinition.Text.Trim().ToLower();
                 dstransform.Rank = (int)tfRank.Number;
                 dstransform.Save();

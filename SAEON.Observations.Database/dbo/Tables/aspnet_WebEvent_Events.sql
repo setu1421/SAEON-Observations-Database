@@ -14,12 +14,7 @@
     [RequestUrl]             NVARCHAR (1024) NULL,
     [ExceptionType]          NVARCHAR (256)  NULL,
     [Details]                NTEXT           NULL,
---> Changed 2.0.13 20161011 TimPN
---    PRIMARY KEY CLUSTERED ([EventId])
     CONSTRAINT [PK_aspnet_WebEvent_Events] PRIMARY KEY CLUSTERED ([EventId]) ON [Authentication]
---< Changed 2.0.13 20161011 TimPN
 )
---> Added 2.0.13 20161010 TimPN
   ON [Authentication];
---< Added 2.0.13 20161010 TimPN
 

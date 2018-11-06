@@ -1,18 +1,13 @@
-﻿--> Added 2.0.1 20160406 TimPN
-CREATE TABLE [dbo].[OrganisationRole]
+﻿CREATE TABLE [dbo].[OrganisationRole]
 (
-    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_OrganisationRole_ID] DEFAULT newid(), 
+    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_OrganisationRole_ID] DEFAULT (newid()), 
     [Code] VARCHAR(50) NOT NULL, 
     [Name] VARCHAR(150) NOT NULL, 
     [Description] VARCHAR(5000) NULL,
     [UserId] UNIQUEIDENTIFIER NOT NULL,
---> Added 2.0.8 20160718 TimPN
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_OrganisationRole_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_OrganisationRole_UpdatedAt] DEFAULT GetDate(), 
---< Added 2.0.8 20160718 TimPN
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_OrganisationRole_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_OrganisationRole_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_OrganisationRole] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_OrganisationRole_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_OrganisationRole_Name] UNIQUE ([Name]),
@@ -20,9 +15,6 @@ CREATE TABLE [dbo].[OrganisationRole]
 )
 GO
 CREATE INDEX [IX_OrganisationRole_UserId] ON [dbo].[OrganisationRole] ([UserId])
---< Added 2.0.1 20160406 TimPN
---> Added 2.0.8 20160718 TimPN
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_OrganisationRole] ON [dbo].[OrganisationRole]
 FOR INSERT
@@ -32,7 +24,7 @@ BEGIN
     Update
         src
     set
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         OrganisationRole src
@@ -48,10 +40,7 @@ BEGIN
     Update
         src
     set
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         OrganisationRole src
@@ -60,6 +49,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.8 20160718 TimPN
-

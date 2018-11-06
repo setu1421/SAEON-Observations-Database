@@ -4,45 +4,27 @@
     [Name]             VARCHAR (150)    NOT NULL,
     [Description]      VARCHAR (5000)   NULL,
     [Url]              VARCHAR (250)    NOT NULL,
-    [DefaultNullValue] FLOAT (53)       NULL,
-    [ErrorEstimate]    FLOAT (53)       NULL,
+    [DefaultNullValue] FLOAT            NULL,
+    [ErrorEstimate]    FLOAT            NULL,
     [UpdateFreq]       INT              NOT NULL,
---> Changed 2.0.22 20170111 TimPN
---    [StartDate]        DATETIME         NULL,
     [StartDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
---> Added 2.0.2 20160419 TimPN
---> Changed 2.0.22 20170111 TimPN
---    [EndDate]        DATETIME         NULL,
     [EndDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
---< Added 2.0.2 20160419 TimPN
     [LastUpdate]       DATETIME         NOT NULL,
     [DataSchemaID]     UNIQUEIDENTIFIER NULL,
     [UserId]           UNIQUEIDENTIFIER NOT NULL,
---> Added 2.0.3 20160421 TimPN
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_DataSource_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSource_UpdatedAt] DEFAULT GetDate(), 
---< Added 2.0.3 20160421 TimPN
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_DataSource_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataSource_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_DataSource] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataSource_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_DataSource_DataSchema] FOREIGN KEY ([DataSchemaID]) REFERENCES [dbo].[DataSchema] ([ID]),
---> Added 2.0.0 20160406 TimPN
     CONSTRAINT [UX_DataSource_Code] Unique ([Code]),
     CONSTRAINT [UX_DataSource_Name] Unique ([Name])
---< Added 2.0.0 20160406 TimPN
 );
---> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_DataSource_DataSchemaID] ON [dbo].[DataSource] ([DataSchemaID])
 GO
 CREATE INDEX [IX_DataSource_UserId] ON [dbo].[DataSource] ([UserId])
---< Added 2.0.0 20160406 TimPN
---> Added 2.0.3 20160421 TimPN
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE INDEX [IX_DataSource_StartDate] ON [dbo].DataSource ([StartDate])
 GO
@@ -56,7 +38,7 @@ BEGIN
     Update
         src
     set
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         DataSource src
@@ -72,10 +54,7 @@ BEGIN
     Update
         src
     set
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         DataSource src
@@ -84,5 +63,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.3 20160421 TimPN

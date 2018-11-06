@@ -2,17 +2,17 @@
 using FileHelpers.Dynamic;
 using NCalc;
 using SAEON.Logs;
+using SAEON.Observations.Azure;
 using SAEON.Observations.Data;
 using SubSonic;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Web.Configuration;
 using System.Web.Hosting;
 
 public static class StringExtensions
@@ -25,7 +25,9 @@ public static class StringExtensions
     public static string RemoveQuotes(this string value)
     {
         if (!value.IsQuoted())
+        {
             return value;
+        }
         else
         {
             value = value.Remove(0, 1);
@@ -40,16 +42,16 @@ public static class StringExtensions
 /// </summary>
 public class ImportSchemaHelper : IDisposable
 {
-    bool disposed = false;
-    FileHelperEngine engine;
-    DataTable dtResults;
-    DataSource dataSource;
-    DataSchema dataSchema;
-    List<DataSourceTransformation> transformations;
-    List<SchemaDefinition> schemaDefs;
+    private bool disposed = false;
+    private FileHelperEngine engine;
+    private DataTable dtResults;
+    private DataSource dataSource;
+    private DataSchema dataSchema;
+    private List<DataSourceTransformation> transformations;
+    private List<SchemaDefinition> schemaDefs;
     public List<SchemaValue> SchemaValues;
-    readonly Sensor Sensor = null;
-    readonly ImportBatch batch = null;
+    private readonly Sensor Sensor = null;
+    private readonly ImportBatch batch = null;
 
     /// <summary>
     /// Gap Record Helper
@@ -58,15 +60,9 @@ public class ImportSchemaHelper : IDisposable
 
     //public SchemaValues
 
-    bool concatedatetime = false;
+    private bool concatedatetime = false;
 
-    string docNamePrefix;
-
-    // string SourceFile;
-    // string Pass1File; // As loaded from source file
-    // string Pass2File; // After 1st R Call
-    // string Pass3File; // After processing
-    // string Pass4File; // After 2nd R Call
+    private readonly Azure Azure = new Azure();
 
     private List<string> LoadColumnNamesDelimited(DataSchema schema, string data)
     {
@@ -121,7 +117,7 @@ public class ImportSchemaHelper : IDisposable
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="schema"></param>
     /// <param name="InputStream"></param>
@@ -129,7 +125,6 @@ public class ImportSchemaHelper : IDisposable
     {
         using (Logging.MethodCall(GetType(), new ParameterList { { "DataSource", ds.Name }, { "Schema", schema.Name }, { "ImportBatch", batch.Code }, { "Sensor", sensor?.Name } }))
         {
-
             dataSource = ds;
             dataSchema = schema;
             this.batch = batch;
@@ -166,7 +161,10 @@ public class ImportSchemaHelper : IDisposable
                 }
                 cb.IgnoreLastLines = schema.IgnoreLast;
                 if (!String.IsNullOrEmpty(schema.Condition))
+                {
                     schema.Condition = schema.Condition;
+                }
+
                 if (!(schema.HasColumnNames.HasValue && schema.HasColumnNames.Value))
                 {
                     foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
@@ -219,7 +217,9 @@ public class ImportSchemaHelper : IDisposable
                 //}
                 cb.IgnoreLastLines = schema.IgnoreLast;
                 if (!String.IsNullOrEmpty(schema.Condition))
+                {
                     schema.Condition = schema.Condition;
+                }
                 //if (!(schema.HasColumnNames.HasValue && schema.HasColumnNames.Value))
                 {
                     foreach (var col in schema.SchemaColumnRecords().OrderBy(sc => sc.Number))
@@ -260,48 +260,50 @@ public class ImportSchemaHelper : IDisposable
                 engine = new FixedFileEngine(recordType);
             }
             Logging.Information("Create Engine");
-            if (engine == null) throw new NullReferenceException("Engine cannot be null");
+            if (engine == null)
+            {
+                throw new NullReferenceException("Engine cannot be null");
+            }
+
             engine.ErrorMode = ErrorMode.SaveAndContinue;
 
             //List<object> list = engine.ReadStringAsList(data);
 
-            batch.SourceFile = Encoding.Unicode.GetBytes(data);
-            docNamePrefix = $"{ds.Name}-{DateTime.Now.ToString("yyyyMMdd HHmmss")}-{Path.GetFileNameWithoutExtension(batch.FileName)}-";
+            var fileName = $"{ds.Name}~~{DateTime.Now.ToString("yyyyMMdd HHmmss")}~~{Path.GetFileName(batch.FileName)}";
             foreach (var c in Path.GetInvalidFileNameChars())
-                docNamePrefix = docNamePrefix.Replace(c, '_');
+            {
+                fileName = fileName.Replace(c, '_');
+            }
+
             foreach (var c in Path.GetInvalidPathChars())
-                docNamePrefix = docNamePrefix.Replace(c, '_');
-            SaveDocument("Source.txt", data);
+            {
+                fileName = fileName.Replace(c, '_');
+            }
+
+            Logging.Information("Saving import file");
+            SaveDocument(fileName, data);
             Logging.Information("Read DataTable");
             //dtResults = engine.ReadStringAsDT(data);
             dtResults = CommonEngine.RecordsToDataTable(engine.ReadString(data), recordType);
             //Logging.Information(dtResults.Dump());
             dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-            Logging.Information("Save as XML");
-            using (StringWriter sw = new StringWriter())
-            {
-                dtResults.WriteXml(sw);
-                batch.Pass1File = Encoding.Unicode.GetBytes(sw.ToString());
-                SaveDocument("Pass1.xml", sw.ToString());
-            }
             transformations = new List<DataSourceTransformation>();
             schemaDefs = new List<SchemaDefinition>();
-
             SchemaValues = new List<SchemaValue>();
-
         }
     }
 
-    public void SaveDocument(string fileName, string text)
+    public void SaveDocument(string fileName, string fileContents)
     {
-        string docPath = HostingEnvironment.MapPath(Path.Combine(WebConfigurationManager.AppSettings["DocumentsPath"], "Uploads"));
-        File.WriteAllText(Path.Combine(docPath, docNamePrefix + fileName), text);
+        string docPath = HostingEnvironment.MapPath(Path.Combine(ConfigurationManager.AppSettings["DocumentsPath"], "Uploads"));
+        File.WriteAllText(Path.Combine(docPath, fileName), fileContents);
+        Azure.Upload($"Uploads/{DateTime.Now.ToString("yyyyMM")}", fileName, fileContents);
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    void BuildSchemaDefinition()
+    private void BuildSchemaDefinition()
     {
         using (Logging.MethodCall(GetType()))
         {
@@ -316,51 +318,71 @@ public class ImportSchemaHelper : IDisposable
                 };
                 var schemaCol = dataSchema.SchemaColumnRecords().FirstOrDefault(sc => sc.Name.Equals(def.FieldName, StringComparison.CurrentCultureIgnoreCase));
                 if (schemaCol == null)
+                {
                     if ((dataSchema.DataSourceTypeID == new Guid(DataSourceType.CSV)) && dataSchema.HasColumnNames.HasValue && dataSchema.HasColumnNames.Value)
+                    {
                         def.IsIgnored = true;
+                    }
                     else
                     {
                         throw new ArgumentNullException($"Unable to find schema column with name {def.FieldName}");
                     }
+                }
                 else
+                {
                     switch (schemaCol.SchemaColumnType.Name)
                     {
                         case "Date":
                             def.IsDate = true;
                             def.Dateformat = schemaCol.Format;
                             break;
+
                         case "Time":
                             def.IsTime = true;
                             def.Timeformat = schemaCol.Format;
                             break;
+
                         case "Ignore":
                             def.IsIgnored = true;
                             break;
+
                         case "Comment":
                             def.IsComment = true;
                             break;
+
                         case "Elevation":
                             def.IsElevation = true;
                             break;
+
                         case "Latitude":
                             def.IsLatitude = true;
                             break;
+
                         case "Longitude":
                             def.IsLongitude = true;
                             break;
+
                         case "Offering":
                         case "Fixed Time":
                             def.IsOffering = true;
                             def.PhenomenonOfferingID = schemaCol.PhenomenonOfferingID;
                             PhenomenonOffering off = new PhenomenonOffering(def.PhenomenonOfferingID);
                             if (off == null)
+                            {
                                 def.InValidOffering = true;
+                            }
                             else
+                            {
                                 def.DataSourceTransformationIDs = LoadTransformations(def.PhenomenonOfferingID.Value);
+                            }
+
                             def.PhenomenonUOMID = schemaCol.PhenomenonUOMID;
                             PhenomenonUOM uom = new PhenomenonUOM(def.PhenomenonUOMID);
                             if (uom == null)
+                            {
                                 def.InValidUOM = true;
+                            }
+
                             if (Sensor != null)
                             {
                                 //def.SensorID = Sensor.Id;
@@ -375,7 +397,9 @@ public class ImportSchemaHelper : IDisposable
                                                                       .And(Sensor.DataSourceIDColumn).IsEqualTo(dataSource.Id)
                                                                       .ExecuteAsCollection<SensorCollection>();
                                 if (colsens.Count() == 0)
+                                {
                                     def.SensorNotFound = true;
+                                }
                                 else
                                 {
                                     //def.SensorID = colsens[0].Id;
@@ -395,21 +419,25 @@ public class ImportSchemaHelper : IDisposable
                             }
                             break;
                     }
+                }
 
                 schemaDefs.Add(def);
             }
 
             if (schemaDefs.FirstOrDefault(t => t.IsDate) != null && (schemaDefs.FirstOrDefault(t => t.IsTime) != null) || (schemaDefs.FirstOrDefault(t => t.IsFixedTime) != null))
+            {
                 concatedatetime = true;
+            }
+
             Logging.Verbose("Schema: {Count} Columns: {Columns}", schemaDefs.Count, schemaDefs.Select(i => i.FieldName).ToList());
         }
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
-    List<Guid> LoadTransformations(Guid offId)
+    private List<Guid> LoadTransformations(Guid offId)
     {
         List<Guid> transforms = new List<Guid>();
 
@@ -420,12 +448,12 @@ public class ImportSchemaHelper : IDisposable
                                                 .InnerJoin(TransformationType.IdColumn, DataSourceTransformation.TransformationTypeIDColumn)
                                                 .Where(PhenomenonOffering.IdColumn).IsEqualTo(offId)
                                                 .And(DataSourceTransformation.DataSourceIDColumn).IsEqualTo(this.dataSource.Id)
-                                                .AndExpression(DataSourceTransformation.Columns.StartDate).IsNull()
-                                                    .Or(DataSourceTransformation.StartDateColumn).IsLessThanOrEqualTo(DateTime.Now.Date)
-                                                .CloseExpression()
-                                                .AndExpression(DataSourceTransformation.Columns.EndDate).IsNull()
-                                                    .Or(DataSourceTransformation.EndDateColumn).IsGreaterThanOrEqualTo(DateTime.Now)
-                                                .CloseExpression()
+                                                //.AndExpression(DataSourceTransformation.Columns.StartDate).IsNull()
+                                                //    .Or(DataSourceTransformation.StartDateColumn).IsLessThanOrEqualTo(DateTime.Now.Date)
+                                                //.CloseExpression()
+                                                //.AndExpression(DataSourceTransformation.Columns.EndDate).IsNull()
+                                                //    .Or(DataSourceTransformation.EndDateColumn).IsGreaterThanOrEqualTo(DateTime.Now)
+                                                //.CloseExpression()
                                                 .OrderAsc(TransformationType.IorderColumn.QualifiedName)
                                                 .ExecuteAsCollection<DataSourceTransformationCollection>();
 
@@ -443,7 +471,7 @@ public class ImportSchemaHelper : IDisposable
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public void ProcessSchema()
     {
@@ -451,14 +479,15 @@ public class ImportSchemaHelper : IDisposable
         {
             try
             {
+                Logging.Information("Building schema definition");
                 BuildSchemaDefinition();
-
+                Logging.Information("Processing {rows} rows", dtResults.Rows.Count);
                 for (int i = 0; i < dtResults.Rows.Count; i++)
                 {
                     DataRow dr = dtResults.Rows[i];
                     ProcessRow(dr);
                 }
-
+                Logging.Information("Processed {rows} rows", dtResults.Rows.Count);
             }
             catch (Exception ex)
             {
@@ -469,10 +498,10 @@ public class ImportSchemaHelper : IDisposable
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="dr"></param>
-    void ProcessRow(DataRow dr)
+    private void ProcessRow(DataRow dr)
     {
         using (Logging.MethodCall(GetType()))
         {
@@ -489,14 +518,15 @@ public class ImportSchemaHelper : IDisposable
                        InvalidTimeValue = String.Empty,
                        RowComment = String.Empty;
 
-
                 SchemaDefinition dtdef = schemaDefs.FirstOrDefault(t => t.IsDate);
                 SchemaDefinition tmdef = schemaDefs.FirstOrDefault(t => t.IsTime);
 
                 Guid correlationID = Guid.NewGuid();
 
                 if (tmdef == null)
+                {
                     tmdef = schemaDefs.FirstOrDefault(t => t.IsFixedTime);
+                }
 
                 if (dtdef != null)
                 {
@@ -513,7 +543,7 @@ public class ImportSchemaHelper : IDisposable
                         }
                         catch (Exception ex)
                         {
-                            Logging.Exception(ex);
+                            Logging.Exception(ex, "Date: {date} Format: {format}", sDateValue, dtdef.Dateformat);
                             throw;
                         }
                     }
@@ -534,13 +564,15 @@ public class ImportSchemaHelper : IDisposable
                             }
                             catch (Exception ex)
                             {
-                                Logging.Exception(ex);
+                                Logging.Exception(ex, "Time: {date} Format: {format}", sTimeValue, tmdef.Timeformat);
                                 throw;
                             }
                         }
                     }
                     else if (tmdef.IsFixedTime)
+                    {
                         tm = DateTime.Now.Date.AddMilliseconds(tmdef.FixedTimeValue.TotalMilliseconds);
+                    }
                 }
 
                 if (concatedatetime &&
@@ -557,9 +589,13 @@ public class ImportSchemaHelper : IDisposable
                     if (!string.IsNullOrWhiteSpace(comment))
                     {
                         if (string.IsNullOrWhiteSpace(RowComment))
+                        {
                             RowComment = comment;
+                        }
                         else
+                        {
                             RowComment += "; " + comment;
+                        }
                     }
                 }
 
@@ -584,12 +620,16 @@ public class ImportSchemaHelper : IDisposable
                         rec.PhenomenonOfferingID = def.PhenomenonOfferingID;
 
                         if (rec.InvalidOffering)
+                        {
                             rec.InvalidStatuses.Add(Status.OfferingInvalid);
+                        }
 
                         rec.InvalidUOM = def.InValidUOM;
                         rec.PhenomenonUOMID = def.PhenomenonUOMID;
                         if (rec.InvalidUOM)
+                        {
                             rec.InvalidStatuses.Add(Status.UOMInvalid);
+                        }
 
                         var phenomenonOffering = new PhenomenonOffering(def.PhenomenonOfferingID);
                         var phenomenonUnitOfMeasure = new PhenomenonUOM(def.PhenomenonUOMID);
@@ -614,12 +654,18 @@ public class ImportSchemaHelper : IDisposable
                         }
 
                         if (concatedatetime && !ErrorInDate && !ErrorInTime)
+                        {
                             rec.DateValue = dttme;
+                        }
                         else if (!ErrorInDate)
+                        {
                             rec.DateValue = dt;
+                        }
 
                         if (!ErrorInTime)
+                        {
                             rec.TimeValue = tm;
+                        }
 
                         if (!ErrorInDate)
                         {
@@ -635,14 +681,18 @@ public class ImportSchemaHelper : IDisposable
                             {
                                 // Sensor x Instrument_Sensor x Instrument x Station_Instrument x Station x Site
                                 var dates = new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault();
-                                if (dates == null) continue;
-                                if (dates.StartDate.HasValue && (rec.DateValue.Date < dates.StartDate.Value))
+                                if (dates == null)
+                                {
+                                    continue;
+                                }
+
+                                if (dates.StartDate.HasValue && (rec.DateValue < dates.StartDate.Value))
                                 {
                                     Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, dates.StartDate, rec.DateValue, rec);
                                     foundTooEarly = true;
                                     continue;
                                 }
-                                if (dates.EndDate.HasValue && (rec.DateValue.Date > dates.EndDate.Value))
+                                if (dates.EndDate.HasValue && (rec.DateValue > dates.EndDate.Value))
                                 {
                                     Logging.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, dates.EndDate, rec.DateValue, rec);
                                     foundTooLate = true;
@@ -654,7 +704,11 @@ public class ImportSchemaHelper : IDisposable
                             }
                             if (!found)
                             {
-                                if (foundTooEarly || foundTooLate) continue; // Ignore 
+                                if (foundTooEarly || foundTooLate)
+                                {
+                                    continue; // Ignore
+                                }
+
                                 Logging.Error("Index: {Index} FieldName: {FieldName} Sensor not found Sensors: {sensors}", def.Index, def.FieldName, def.Sensors.Select(s => s.Name).ToList());
                                 rec.SensorNotFound = true;
                                 rec.SensorID = def.Sensors.FirstOrDefault()?.Id;
@@ -693,7 +747,9 @@ public class ImportSchemaHelper : IDisposable
                                 {
                                     TransformValue(transform.Id, ref rec);
                                     if (rec.RawValue.HasValue)
+                                    {
                                         RawValue = rec.RawValue.Value.ToString();
+                                    }
                                 }
                             }
                             if (!double.TryParse(RawValue, out dvalue))
@@ -780,7 +836,10 @@ public class ImportSchemaHelper : IDisposable
                         //    }
                         //}
                         if (RowComment.Trim().Length > 0)
+                        {
                             rec.Comment = RowComment.TrimEnd();
+                        }
+
                         rec.CorrelationID = correlationID;
 
                         SchemaValues.Add(rec);
@@ -796,9 +855,9 @@ public class ImportSchemaHelper : IDisposable
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
-    void TransformValue(Guid dtid, ref SchemaValue rec, bool isEmpty = false)
+    private void TransformValue(Guid dtid, ref SchemaValue rec, bool isEmpty = false)
     {
         using (Logging.MethodCall(GetType()))
         {
@@ -815,9 +874,14 @@ public class ImportSchemaHelper : IDisposable
                 if (process)
                 {
                     if (trns.StartDate.HasValue && (rec.DateValue < trns.StartDate.Value))
+                    {
                         process = false;
+                    }
+
                     if (trns.EndDate.HasValue && (rec.DateValue > trns.EndDate.Value))
+                    {
                         process = false;
+                    }
                 }
 
                 //if ((trns.TransformationTypeID.ToString() != TransformationType.Lookup) && !rec.RawValue.HasValue) process = false;
@@ -853,14 +917,20 @@ public class ImportSchemaHelper : IDisposable
                     else if (trns.TransformationTypeID.ToString() == TransformationType.QualityControlValues)
                     {
                         if (!rec.DataValue.HasValue)
+                        {
                             rec.DataValue = rec.RawValue;
+                        }
 
                         Dictionary<string, double> qv = trns.QualityValues;
                         if (qv.ContainsKey("min") && rec.DataValue.Value < qv["min"])
+                        {
                             valid = false;
+                        }
 
                         if (qv.ContainsKey("max") && rec.DataValue.Value > qv["max"])
+                        {
                             valid = false;
+                        }
 
                         Logging.Verbose("QualityControl Valid: {Valid}", valid);
                         if (!valid)
@@ -874,10 +944,11 @@ public class ImportSchemaHelper : IDisposable
                     }
                     else if (trns.TransformationTypeID.ToString() == TransformationType.Lookup)
                     {
-
                         var qv = trns.LookupValues;
                         if (!qv.ContainsKey(rec.FieldRawValue))
+                        {
                             valid = false;
+                        }
                         else
                         {
                             rec.RawValue = trns.LookupValues[rec.FieldRawValue];
@@ -894,17 +965,17 @@ public class ImportSchemaHelper : IDisposable
                             rec.InvalidDataValue = rec.DataValue.ToString();
                         }
                     }
-                }
-                //Set new offering/UOM
-                if (trns.NewPhenomenonOfferingID.HasValue && (rec.PhenomenonOfferingID.Value != trns.NewPhenomenonOfferingID.Value))
-                {
-                    rec.RawPhenomenonOfferingID = trns.PhenomenonOfferingID;
-                    rec.PhenomenonOfferingID = trns.NewPhenomenonOfferingID;
-                }
-                if (trns.NewPhenomenonUOMID.HasValue && (rec.PhenomenonUOMID.Value != trns.NewPhenomenonUOMID.Value))
-                {
-                    rec.RawPhenomenonUOMID = trns.PhenomenonUOMID;
-                    rec.PhenomenonUOMID = trns.NewPhenomenonUOMID;
+                    //Set new offering/UOM
+                    if (trns.NewPhenomenonOfferingID.HasValue && (rec.PhenomenonOfferingID.Value != trns.NewPhenomenonOfferingID.Value))
+                    {
+                        rec.RawPhenomenonOfferingID = trns.PhenomenonOfferingID;
+                        rec.PhenomenonOfferingID = trns.NewPhenomenonOfferingID;
+                    }
+                    if (trns.NewPhenomenonUOMID.HasValue && (rec.PhenomenonUOMID.Value != trns.NewPhenomenonUOMID.Value))
+                    {
+                        rec.RawPhenomenonUOMID = trns.PhenomenonUOMID;
+                        rec.PhenomenonUOMID = trns.NewPhenomenonUOMID;
+                    }
                 }
             }
             catch (Exception ex)
@@ -916,7 +987,7 @@ public class ImportSchemaHelper : IDisposable
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public List<object> Errors
     {
@@ -934,7 +1005,7 @@ public class ImportSchemaHelper : IDisposable
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public void Dispose()
     {
@@ -944,23 +1015,25 @@ public class ImportSchemaHelper : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (disposed) return;
+        if (disposed)
+        {
+            return;
+        }
+
         if (disposing)
         {
-
         }
         disposed = true;
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="ds"></param>
     /// <param name="reader"></param>
     /// <returns></returns>
     public static string GetWorkingStream(DataSchema ds, StreamReader reader)
     {
-
         String Result = String.Empty;
 
         if (!String.IsNullOrEmpty(ds.SplitSelector))
@@ -974,7 +1047,9 @@ public class ImportSchemaHelper : IDisposable
             while ((line = reader.ReadLine()) != null && index <= ds.SplitIndex)
             {
                 if (line.StartsWith(ds.SplitSelector))
+                {
                     index++;
+                }
 
                 if (index == ds.SplitIndex)
                 {
@@ -986,7 +1061,9 @@ public class ImportSchemaHelper : IDisposable
             while ((line = reader.ReadLine()) != null && index <= ds.SplitIndex)
             {
                 if (line.StartsWith(ds.SplitSelector))
+                {
                     index++;
+                }
 
                 if (index <= ds.SplitIndex)
                 {
@@ -997,16 +1074,16 @@ public class ImportSchemaHelper : IDisposable
             Result = sb.ToString();
         }
         else
+        {
             Result = reader.ReadToEnd();
+        }
 
         return Result;
     }
-
 }
 
 public class SchemaDefinition
 {
-
     public SchemaDefinition()
     {
         this.DataSourceTransformationIDs = new List<Guid>();
@@ -1034,17 +1111,18 @@ public class SchemaDefinition
     public bool IsLongitude { get; set; }
 
     public bool IsComment { get; set; }
+
     //public Guid? SensorID { get; set; }
     public List<Sensor> Sensors { get; set; } = new List<Sensor>();
+
     public bool SensorNotFound { get; set; }
 }
 
 /// <summary>
-/// 
+///
 /// </summary>
 public class SchemaValue
 {
-
     public SchemaValue()
     {
         this.InvalidStatuses = new List<string>();
@@ -1085,7 +1163,7 @@ public class SchemaValue
     public double? Elevation { get; set; }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public bool IsValid
     {
@@ -1101,4 +1179,3 @@ public class SchemaValue
         }
     }
 }
-

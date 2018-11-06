@@ -1,5 +1,4 @@
-﻿--> Added 2.0.11 20160927 TimPN
-CREATE VIEW [dbo].[vSchemaColumn]
+﻿CREATE VIEW [dbo].[vSchemaColumn]
 AS 
 SELECT 
   SchemaColumn.*,
@@ -21,5 +20,3 @@ FROM
     on (SchemaColumn.PhenomenonUOMID = PhenomenonUOM.ID)
   left join  UnitOfMeasure
     on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
---< Added 2.0.11 20160927 TimPN
-    

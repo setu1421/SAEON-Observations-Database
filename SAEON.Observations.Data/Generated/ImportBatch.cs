@@ -288,71 +288,6 @@ namespace SAEON.Observations.Data
 				colvarIssues.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarIssues);
 				
-				TableSchema.TableColumn colvarSourceFile = new TableSchema.TableColumn(schema);
-				colvarSourceFile.ColumnName = "SourceFile";
-				colvarSourceFile.DataType = DbType.Binary;
-				colvarSourceFile.MaxLength = -1;
-				colvarSourceFile.AutoIncrement = false;
-				colvarSourceFile.IsNullable = true;
-				colvarSourceFile.IsPrimaryKey = false;
-				colvarSourceFile.IsForeignKey = false;
-				colvarSourceFile.IsReadOnly = false;
-				colvarSourceFile.DefaultSetting = @"";
-				colvarSourceFile.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarSourceFile);
-				
-				TableSchema.TableColumn colvarPass1File = new TableSchema.TableColumn(schema);
-				colvarPass1File.ColumnName = "Pass1File";
-				colvarPass1File.DataType = DbType.Binary;
-				colvarPass1File.MaxLength = -1;
-				colvarPass1File.AutoIncrement = false;
-				colvarPass1File.IsNullable = true;
-				colvarPass1File.IsPrimaryKey = false;
-				colvarPass1File.IsForeignKey = false;
-				colvarPass1File.IsReadOnly = false;
-				colvarPass1File.DefaultSetting = @"";
-				colvarPass1File.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarPass1File);
-				
-				TableSchema.TableColumn colvarPass2File = new TableSchema.TableColumn(schema);
-				colvarPass2File.ColumnName = "Pass2File";
-				colvarPass2File.DataType = DbType.Binary;
-				colvarPass2File.MaxLength = -1;
-				colvarPass2File.AutoIncrement = false;
-				colvarPass2File.IsNullable = true;
-				colvarPass2File.IsPrimaryKey = false;
-				colvarPass2File.IsForeignKey = false;
-				colvarPass2File.IsReadOnly = false;
-				colvarPass2File.DefaultSetting = @"";
-				colvarPass2File.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarPass2File);
-				
-				TableSchema.TableColumn colvarPass3File = new TableSchema.TableColumn(schema);
-				colvarPass3File.ColumnName = "Pass3File";
-				colvarPass3File.DataType = DbType.Binary;
-				colvarPass3File.MaxLength = -1;
-				colvarPass3File.AutoIncrement = false;
-				colvarPass3File.IsNullable = true;
-				colvarPass3File.IsPrimaryKey = false;
-				colvarPass3File.IsForeignKey = false;
-				colvarPass3File.IsReadOnly = false;
-				colvarPass3File.DefaultSetting = @"";
-				colvarPass3File.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarPass3File);
-				
-				TableSchema.TableColumn colvarPass4File = new TableSchema.TableColumn(schema);
-				colvarPass4File.ColumnName = "Pass4File";
-				colvarPass4File.DataType = DbType.Binary;
-				colvarPass4File.MaxLength = -1;
-				colvarPass4File.AutoIncrement = false;
-				colvarPass4File.IsNullable = true;
-				colvarPass4File.IsPrimaryKey = false;
-				colvarPass4File.IsForeignKey = false;
-				colvarPass4File.IsReadOnly = false;
-				colvarPass4File.DefaultSetting = @"";
-				colvarPass4File.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarPass4File);
-				
 				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
 				colvarAddedAt.ColumnName = "AddedAt";
 				colvarAddedAt.DataType = DbType.DateTime;
@@ -500,46 +435,6 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.Issues, value); }
 		}
 		  
-		[XmlAttribute("SourceFile")]
-		[Bindable(true)]
-		public byte[] SourceFile 
-		{
-			get { return GetColumnValue<byte[]>(Columns.SourceFile); }
-			set { SetColumnValue(Columns.SourceFile, value); }
-		}
-		  
-		[XmlAttribute("Pass1File")]
-		[Bindable(true)]
-		public byte[] Pass1File 
-		{
-			get { return GetColumnValue<byte[]>(Columns.Pass1File); }
-			set { SetColumnValue(Columns.Pass1File, value); }
-		}
-		  
-		[XmlAttribute("Pass2File")]
-		[Bindable(true)]
-		public byte[] Pass2File 
-		{
-			get { return GetColumnValue<byte[]>(Columns.Pass2File); }
-			set { SetColumnValue(Columns.Pass2File, value); }
-		}
-		  
-		[XmlAttribute("Pass3File")]
-		[Bindable(true)]
-		public byte[] Pass3File 
-		{
-			get { return GetColumnValue<byte[]>(Columns.Pass3File); }
-			set { SetColumnValue(Columns.Pass3File, value); }
-		}
-		  
-		[XmlAttribute("Pass4File")]
-		[Bindable(true)]
-		public byte[] Pass4File 
-		{
-			get { return GetColumnValue<byte[]>(Columns.Pass4File); }
-			set { SetColumnValue(Columns.Pass4File, value); }
-		}
-		  
 		[XmlAttribute("AddedAt")]
 		[Bindable(true)]
 		public DateTime? AddedAt 
@@ -653,7 +548,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varIssues,byte[] varSourceFile,byte[] varPass1File,byte[] varPass2File,byte[] varPass3File,byte[] varPass4File,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
+		public static void Insert(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varIssues,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -679,16 +574,6 @@ namespace SAEON.Observations.Data
 			
 			item.Issues = varIssues;
 			
-			item.SourceFile = varSourceFile;
-			
-			item.Pass1File = varPass1File;
-			
-			item.Pass2File = varPass2File;
-			
-			item.Pass3File = varPass3File;
-			
-			item.Pass4File = varPass4File;
-			
 			item.AddedAt = varAddedAt;
 			
 			item.UpdatedAt = varUpdatedAt;
@@ -705,7 +590,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,int varCode,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varIssues,byte[] varSourceFile,byte[] varPass1File,byte[] varPass2File,byte[] varPass3File,byte[] varPass4File,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
+		public static void Update(Guid varId,int varCode,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varIssues,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -732,16 +617,6 @@ namespace SAEON.Observations.Data
 				item.StatusReasonID = varStatusReasonID;
 			
 				item.Issues = varIssues;
-			
-				item.SourceFile = varSourceFile;
-			
-				item.Pass1File = varPass1File;
-			
-				item.Pass2File = varPass2File;
-			
-				item.Pass3File = varPass3File;
-			
-				item.Pass4File = varPass4File;
 			
 				item.AddedAt = varAddedAt;
 			
@@ -846,58 +721,23 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn SourceFileColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn Pass1FileColumn
+        public static TableSchema.TableColumn UpdatedAtColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn Pass2FileColumn
-        {
-            get { return Schema.Columns[14]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn Pass3FileColumn
-        {
-            get { return Schema.Columns[15]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn Pass4FileColumn
-        {
-            get { return Schema.Columns[16]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn AddedAtColumn
-        {
-            get { return Schema.Columns[17]; }
-        }
-        
-        
-        
-        public static TableSchema.TableColumn UpdatedAtColumn
-        {
-            get { return Schema.Columns[18]; }
-        }
-        
-        
-        
         public static TableSchema.TableColumn RowVersionColumn
         {
-            get { return Schema.Columns[19]; }
+            get { return Schema.Columns[14]; }
         }
         
         
@@ -918,11 +758,6 @@ namespace SAEON.Observations.Data
 			 public static string StatusID = @"StatusID";
 			 public static string StatusReasonID = @"StatusReasonID";
 			 public static string Issues = @"Issues";
-			 public static string SourceFile = @"SourceFile";
-			 public static string Pass1File = @"Pass1File";
-			 public static string Pass2File = @"Pass2File";
-			 public static string Pass3File = @"Pass3File";
-			 public static string Pass4File = @"Pass4File";
 			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
 			 public static string RowVersion = @"RowVersion";

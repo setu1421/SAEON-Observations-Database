@@ -1,12 +1,11 @@
-Select
-  PhenomenonName Phenomenon, SiteName Site, StationName Station, Min(ValueDay) StartDate, Max(ValueDay) EndDate, Count(*) Observations, 
-  Min(Latitude) West, Max(Latitude) East, Min(Longitude) North, Max(Longitude) South
+Select 
+  SiteName Site, StationName Station, InstrumentName Instrument, PhenomenonName Phenomenon, OfferingName Offering, UnitOfMeasureUnit Unit, Latitude, Longitude
 from
   vObservationExpansion
-where
-  (PhenomenonName not in ('Current Direction','Current speed','Depth')) and
-  (SiteName like 'SACTN%')
+--where
+--  (PhenomenonName not in ('Current Direction','Current speed','Depth'))
 group by
-  PhenomenonName, SiteName, StationName
+  SiteName, StationName, InstrumentName, PhenomenonName, OfferingName, UnitOfMeasureUnit, Latitude, Longitude
 order by
-  PhenomenonName, SiteName, StationName
+  SiteName, StationName, InstrumentName, PhenomenonName, OfferingName, UnitOfMeasureUnit, Latitude, Longitude
+

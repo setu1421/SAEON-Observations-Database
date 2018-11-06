@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
@@ -23,7 +19,6 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("About")]
-
         public ActionResult About()
         {
             return View();
@@ -35,6 +30,12 @@ namespace SAEON.Observations.WebAPI.Controllers
         /// <returns></returns>
         [Route("Contact")]
         public ActionResult Contact()
+        {
+            return View();
+        }
+
+        [Route("SwaggerFrame")]
+        public ActionResult SwaggerFrame()
         {
             return View();
         }

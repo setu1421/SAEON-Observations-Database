@@ -1,5 +1,5 @@
 ﻿using IdentityModel.Client;
-using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security;
@@ -8,9 +8,9 @@ using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
 using SAEON.Logs;
 using SAEON.Observations.Core;
+using Syncfusion.Licensing;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Helpers;
@@ -21,6 +21,12 @@ namespace SAEON.Observations.QuerySite
 {
     public class Startup
     {
+        public Startup()
+        {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            SyncfusionLicenseProvider.RegisterLicense("Mjg3ODFAMzEzNjJlMzMyZTMwY3lCNyszenVCMzloemxPdlEzRHh6UnNIeWVHZW1RL2YwTzRobWhoMHhJZz0=;Mjg3ODJAMzEzNjJlMzMyZTMwbEZLSENBQVA5cHRUbllxUWhjSmN3MG1ZbmFUTEthTWc3OW4rS3Y3QVFaND0=;Mjg3ODNAMzEzNjJlMzMyZTMwV0dsNHkwMFM3WjRkV1pTbTM4Vzd6TjRwNkFpQXZCMnBETXI2UVFGUkRxND0=");
+        }
+
         public void Configuration(IAppBuilder app)
         {
             using (Logging.MethodCall(GetType()))
@@ -29,40 +35,39 @@ namespace SAEON.Observations.QuerySite
                 {
                     Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
-                    JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
                     app.UseCors(CorsOptions.AllowAll);
-                    app.UseResourceAuthorization(new AuthorizationManager());
+                    //app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
-                        AuthenticationType = "Cookies",
-                        ReturnUrlParameter = "requestedUrl"
+                        AuthenticationType = "Cookies"
                     });
                     app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                     {
                         Authority = Properties.Settings.Default.IdentityServerUrl,
                         ClientId = "SAEON.Observations.QuerySite",
-                        //Scope = "openid profile email roles offline_access SAEON.Observations.WebAPI",
-                        Scope = "openid profile email offline_access SAEON.Observations.WebAPI",
-                        //ResponseType = "code id_token token",
+                        Scope = "openid profile email offline_access roles SAEON.Observations.WebAPI",
                         ResponseType = "id_token token code",
-                        RedirectUri = Properties.Settings.Default.QuerySiteUrl,
-                        //TokenValidationParameters = new TokenValidationParameters
-                        //{
-                        //    NameClaimType = "name",
-                        //    RoleClaimType = "role"
-                        //},
+                        RedirectUri = Properties.Settings.Default.QuerySiteUrl + "/signin-oidc",
+                        PostLogoutRedirectUri = Properties.Settings.Default.QuerySiteUrl,
+                        TokenValidationParameters = new TokenValidationParameters
+                        {
+                            NameClaimType = "name",
+                            RoleClaimType = "role"
+                        },
                         SignInAsAuthenticationType = "Cookies",
                         UseTokenLifetime = false,
+                        RequireHttpsMetadata = false,
+
                         Notifications = new OpenIdConnectAuthenticationNotifications
                         {
                             AuthorizationCodeReceived = async n =>
                             {
                                 var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType);
 
-                                var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo"), n.ProtocolMessage.AccessToken);
-                                var userInfo = await userInfoClient.GetAsync();
+                                var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
+                                var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
 
-                                identity.AddClaims(userInfo.GetClaimsIdentity().Claims);
+                                identity.AddClaims(userInfo.Claims);
 
                                 // keep the id_token for logout
                                 identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
@@ -80,10 +85,10 @@ namespace SAEON.Observations.QuerySite
                                 var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType, "given_name", "role");
 
                                 // get userinfo data
-                                var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo"), n.ProtocolMessage.AccessToken);
+                                var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
 
-                                var userInfo = await userInfoClient.GetAsync();
-                                identity.AddClaims(userInfo.GetClaimsIdentity().Claims);
+                                var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
+                                identity.AddClaims(userInfo.Claims);
 
                                 // keep the id_token for logout
                                 identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
@@ -98,10 +103,9 @@ namespace SAEON.Observations.QuerySite
                             },
                             RedirectToIdentityProvider = n =>
                             {
-                                if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.LogoutRequest)
+                                if (n.ProtocolMessage.RequestType == Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectRequestType.Logout)
                                 {
                                     var idTokenHint = n.OwinContext.Authentication.User.FindFirst("id_token");
-
                                     if (idTokenHint != null)
                                     {
                                         n.ProtocolMessage.IdTokenHint = idTokenHint.Value;

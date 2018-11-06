@@ -104,7 +104,7 @@
                                     <Columns>
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="300" />
-                                        <ext:Column Header="Description" DataIndex="Description" Width="500" />
+                                        <ext:Column Header="Description" DataIndex="Description" Width="480" />
                                         <ext:Column Header="Source Name" DataIndex="DataSourceName" Width="300" />
                                         <ext:Column Header="Schema Name" DataIndex="DataSchemaName" Width="200" />
                                         <ext:Column Header="Phenomenon Name" DataIndex="PhenomenonName" Width="200" />

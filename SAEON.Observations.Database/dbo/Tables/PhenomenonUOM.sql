@@ -4,34 +4,21 @@
     [UnitOfMeasureID] UNIQUEIDENTIFIER NOT NULL,
     [IsDefault]       BIT              CONSTRAINT [DF_PhenomenonUOM_IsDefault] DEFAULT ((0)) NOT NULL,
     [UserId] UNIQUEIDENTIFIER NULL, 
---> Added 2.0.8 20160718 TimPN
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonUOM_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonUOM_UpdatedAt] DEFAULT GetDate(), 
---< Added 2.0.8 20160718 TimPN
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonUOM_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonUOM_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_PhenomenonUOM] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_PhenomenonUOM_PhenomenonUOM] FOREIGN KEY ([PhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]),
     CONSTRAINT [FK_PhenomenonUOM_UnitOfMeasure] FOREIGN KEY ([UnitOfMeasureID]) REFERENCES [dbo].[UnitOfMeasure] ([ID]),
---> Changed 20160329 TimPN
---    CONSTRAINT [IX_PhenomenonUOM] UNIQUE ([PhenomenonID] ASC, [UnitOfMeasureID])
     CONSTRAINT [UX_PhenomenonUOM] UNIQUE ([PhenomenonID], [UnitOfMeasureID]),
---< Changed 20160329 TimPN
---> Added 2.0.0 20160406 TimPN
     CONSTRAINT [FK_PhenomenonUOM_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
---< Added 2.0.0 20160406 TimPN
 );
---> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_PhenomenonUOM_PhenomenonID] ON [dbo].[PhenomenonUOM] ([PhenomenonID])
 GO
 CREATE INDEX [IX_PhenomenonUOM_UnitOfMeasureID] ON [dbo].[PhenomenonUOM] ([UnitOfMeasureID])
 GO
 CREATE INDEX [IX_PhenomenonUOM_UserId] ON [dbo].[PhenomenonUOM] ([UserId])
---> Added 2.0.0 20160406 TimPN
---> Added 2.0.8 20160718 TimPN
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_PhenomenonUOM_Insert] ON [dbo].[PhenomenonUOM]
 FOR INSERT
@@ -41,7 +28,7 @@ BEGIN
     Update
         src
     set
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         PhenomenonUOM src
@@ -57,10 +44,7 @@ BEGIN
     Update
         src
     set
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         PhenomenonUOM src
@@ -69,6 +53,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.8 20160718 TimPN
-

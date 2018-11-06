@@ -1,27 +1,16 @@
-﻿--> Added 2.0.2 20160419 TimPN
-CREATE TABLE [dbo].[AuditLog]
+﻿CREATE TABLE [dbo].[AuditLog]
 (
-    [ID] UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_AuditLog_ID] DEFAULT NewID(), 
---> Changed 20170316 TimPN
---    [Description] VARCHAR(500) NOT NULL, 
+    [ID] UNIQUEIDENTIFIER NOT NULL CONSTRAINT [DF_AuditLog_ID] DEFAULT (newid()), 
     [Description] VARCHAR(5000) NOT NULL, 
---< Changed 20170316 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_AuditLog_AddedAt] DEFAULT GetDate(), 
---> Added 2.0.3 20160421 TimPN
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_AuditLog_UpdatedAt] DEFAULT GetDate(), 
---< Added 2.0.3 20160421 TimPN
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_AuditLog_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_AuditLog_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_AuditLog] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_AuditLog_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
 CREATE INDEX [IX_AuditLog_UserId] ON [dbo].AuditLog ([UserId])
---< Added 2.0.2 20160419 TimPN
---> Added 2.0.3 20160421 TimPN
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_AuditLog_Insert] ON [dbo].[AuditLog]
 FOR INSERT
@@ -31,7 +20,7 @@ BEGIN
     Update 
         src 
     set 
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         AuditLog src
@@ -47,10 +36,7 @@ BEGIN
     Update 
         src 
     set 
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         AuditLog src
@@ -59,5 +45,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---> Changed 2.0.15 20161102 TimPN
---< Added 2.0.3 20160421 TimPN

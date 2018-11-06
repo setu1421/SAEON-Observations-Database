@@ -1,28 +1,21 @@
-﻿--> Added 2.0.26 20170127 TimPN
-Create Table [dbo].[UserDownloads]
+﻿Create Table [dbo].[UserDownloads]
 (
-    [ID] UniqueIdentifier Constraint [DF_UserDownloads_ID] Default NewId(), 
+    [ID] UniqueIdentifier Constraint [DF_UserDownloads_ID] DEFAULT (newid()), 
     [UserId] NVarChar(128) not Null,
     [Name] VarChar(150) not Null, 
     [Description] VarChar(5000) Null,
---> Changed 2.0.31 20170423 TimPN
---    [QueryURI] VarChar(500) not Null,
     [QueryInput] VarChar(5000) not Null,
---< Changed 2.0.31 20170423 TimPN
-    [DownloadURI] VarChar(500) not Null,
-    [AddedAt] DateTime null Constraint [DF_UserDownloads_AddedAt] Default GetDate(),
+    [QueryURL] VarChar(5000) not Null,
+    [DOI] VarChar(2000) not Null,
+    [MetadataURL] VarChar(2000) not Null,
+    [DownloadURL] VarChar(2000) not Null,
+    [Citation] VarChar(1000) not null,
+    [AddedAt] DateTime null Constraint [DF_UserDownloads_AddedAt] DEFAULT (getdate()),
     [AddedBy] NVarChar(128) not Null,
-    [UpdatedAt] DateTime null Constraint [DF_UserDownloads_UpdatedAt] Default GetDate(), 
+    [UpdatedAt] DateTime null Constraint [DF_UserDownloads_UpdatedAt] DEFAULT (getdate()), 
     [UpdatedBy] NVarChar(128) not Null,
---> Added 2.0.33 20170628 TimPN
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     Constraint [PK_UserDownloads] Primary Key Clustered ([ID]),
---> Removed 20170301
---    Constraint [FK_UserDownloads_AspNetUsers_UserId] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
---    Constraint [FK_UserDownloads_AspNetUsers_AddedBy] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
---    Constraint [FK_UserDownloads_AspNetUsers_UpdatedBy] Foreign Key ([UserId]) References [dbo].[AspNetUsers] ([Id]),
---< Removed 20170301
     Constraint [UX_UserDownloads_UserId_Name] Unique ([UserId],[Name])
 )
 GO
@@ -50,8 +43,8 @@ BEGIN
   Update
       src
   set
-    AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
-    UpdatedAt = GetDate ()
+    AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
+    UpdatedAt = GetDate()
   from
     UserDownloads src
     inner join inserted ins
@@ -59,4 +52,3 @@ BEGIN
     inner join deleted del
       on (del.ID = src.ID)
 END
---< Added 2.0.26 20170127 TimPN

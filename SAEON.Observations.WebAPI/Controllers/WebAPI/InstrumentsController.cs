@@ -11,14 +11,14 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     /// <summary>
     /// </summary>
-    [RoutePrefix("Instruments")]
-    public class InstrumentsController : BaseApiController<Instrument>
+    [RoutePrefix("Api/Instruments")]
+    public class InstrumentsController : CodedApiController<Instrument>
     {
         protected override List<Expression<Func<Instrument, object>>> GetIncludes()
         {
             var list = base.GetIncludes();
             list.Add(i => i.Stations);
-            //@list.Add(i => i.Sensors);
+            list.Add(i => i.Sensors);
             return list;
         }
 
@@ -37,7 +37,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Instrument</param>
         /// <returns>Instrument</returns>
         [ResponseType(typeof(Instrument))]
-        public override async Task<IHttpActionResult> GetById(Guid id)
+        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
         {
             return await base.GetById(id);
         }
@@ -48,9 +48,32 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Instrument</param>
         /// <returns>Instrument</returns>
         [ResponseType(typeof(Instrument))]
-        public override async Task<IHttpActionResult> GetByName(string name)
+        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
         {
             return await base.GetByName(name);
+        }
+
+        /// <summary>
+        /// Instrument by Code
+        /// </summary>
+        /// <param name="code">The Code of the Instrument</param>
+        /// <returns>Instrument</returns>
+        [ResponseType(typeof(Instrument))]
+        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        {
+            return await base.GetByCode(code);
+        }
+
+        // GET: Instruments/5/Organisations
+        /// <summary>
+        /// Organisations linked to this Instrument
+        /// </summary>
+        /// <param name="id">Id of the Instrument</param>
+        /// <returns>ListOf(Organisation)</returns>
+        [Route("{id:guid}/Organisations")]
+        public IQueryable<Organisation> Getorganisations([FromUri] Guid id)
+        {
+            return GetMany<Organisation>(id, s => s.Organisations, i => i.Instruments);
         }
 
         // GET: Instruments/5/Stations
@@ -65,7 +88,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return GetMany<Station>(id, s => s.Stations, i => i.Instruments);
         }
 
-        /*
         // GET: Instruments/5/Sensors
         /// <summary>
         /// Sensors linked to this Instrument
@@ -77,7 +99,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         {
             return GetMany<Sensor>(id, s => s.Sensors, i => i.Instruments);
         }
-        */
 
     }
 }

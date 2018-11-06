@@ -33,6 +33,9 @@ where (Code = 'SACTN Bordjies DAFF')
 Update Station
 Set Latitude = -33.984972
 where (Code = 'SACTN Oudekraal DAFF')
+Update Station
+Set Longitude = 32.733333
+where (Code = 'SACTN Sodwana DEA')
 Update
   Station
 Set

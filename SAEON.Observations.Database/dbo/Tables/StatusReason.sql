@@ -1,16 +1,13 @@
-﻿--> Added 2.0.9 20160823 TimPN
-CREATE TABLE [dbo].[StatusReason]
+﻿CREATE TABLE [dbo].[StatusReason]
 (
     [ID]          UNIQUEIDENTIFIER CONSTRAINT [DF_StatusReason_ID] DEFAULT (newid()) NOT NULL,
     [Code]        VARCHAR (50)     NOT NULL,
     [Name]        VARCHAR (150)    NOT NULL,
     [Description] VARCHAR (500)    NOT NULL,
     [UserId] UNIQUEIDENTIFIER NOT NULL, 
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_StatusReason_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_StatusReason_UpdatedAt] DEFAULT GetDate(), 
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_StatusReason_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_StatusReason_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_StatusReason] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_StatusReason_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_StatusReason_Name] UNIQUE ([Name]),
@@ -18,7 +15,6 @@ CREATE TABLE [dbo].[StatusReason]
 )
 GO
 CREATE INDEX [IX_StatusReason_UserId] ON [dbo].[StatusReason] ([UserId])
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_StatusReason_Insert] ON [dbo].[StatusReason]
 FOR INSERT
@@ -28,7 +24,7 @@ BEGIN
     Update
         src
     set
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         StatusReason src
@@ -44,10 +40,7 @@ BEGIN
     Update
         src
     set
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         StatusReason src
@@ -56,5 +49,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---> Added 2.0.9 20160823 TimPN

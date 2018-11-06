@@ -295,7 +295,7 @@ namespace SAEON.Observations.WebAPI
                     //    appName: "Swagger UI"
                     ////additionalQueryStringParams: new Dictionary<string, string>() { { "foo", "bar" } }
                     //);
-                    c.EnableOAuth2Support("Swagger", "Swagger", "Swagger", "Swagger UI");
+                    c.EnableOAuth2Support("SAEON.Observations.WebAPI.Swagger", "4O5ddx9v6KAu", "Swagger", "Swagger UI");
 
                     // If your API supports ApiKey, you can override the default values.
                     // "apiKeyIn" can either be "query" or "header"                                                

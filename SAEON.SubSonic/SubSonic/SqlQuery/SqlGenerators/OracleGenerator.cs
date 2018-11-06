@@ -12,8 +12,6 @@
  * rights and limitations under the License.
 */
 using System;
-using System.Data;
-using SubSonic.Utilities;
 
 namespace SubSonic
 {

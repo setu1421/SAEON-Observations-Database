@@ -2,10 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using SubSonic;
-using ext =Ext.Net;
-using System.Collections.ObjectModel;
+using ext = Ext.Net;
 using System.Data;
 using Newtonsoft.Json;
 using System.Web.Script.Serialization;
@@ -74,7 +72,7 @@ public class ViewRepository
             FilterString = String.Concat("AND ", String.Join(" AND ",Filters));
 
 
-		StoredProcedure sp = SPs.ExecuteView(View,false,false,e.Sort, e.Dir.ToString(), e.Start + 1, e.Limit, FilterString);
+        StoredProcedure sp = SPs.ExecuteView(View,false,false,e.Sort, e.Dir.ToString(), e.Start + 1, e.Limit, FilterString);
         DataTable ResultTable = sp.GetDataSet().Tables[0];
 
        

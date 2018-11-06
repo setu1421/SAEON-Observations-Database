@@ -9,11 +9,11 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    /*
+   
     /// <summary>
     /// </summary>
-    [RoutePrefix("Offerings")]
-    public class OfferingsController : BaseApiController<Offering>
+    [RoutePrefix("Api/Offerings")]
+    public class OfferingsController : CodedApiController<Offering>
     {
         protected override List<Expression<Func<Offering, object>>> GetIncludes()
         {
@@ -37,9 +37,20 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Offering</param>
         /// <returns>Offering</returns>
         [ResponseType(typeof(Offering))]
-        public override async Task<IHttpActionResult> GetById(Guid id)
+        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
         {
             return await base.GetById(id);
+        }
+
+        /// <summary>
+        /// Offering by Code
+        /// </summary>
+        /// <param name="code">The Code of the Offering</param>
+        /// <returns>Offering</returns>
+        [ResponseType(typeof(Offering))]
+        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        {
+            return await base.GetByCode(code);
         }
 
         /// <summary>
@@ -48,7 +59,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Offering</param>
         /// <returns>Offering</returns>
         [ResponseType(typeof(Offering))]
-        public override async Task<IHttpActionResult> GetByName(string name)
+        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
         {
             return await base.GetByName(name);
         }
@@ -64,6 +75,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         {
             return GetMany<Phenomenon>(id, s => s.Phenomena, i => i.Offerings);
         }
+       
     }
-    */
+    
 }

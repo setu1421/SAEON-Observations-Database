@@ -1,5 +1,4 @@
-﻿--> Added 2.0.37 20180202 TimPN
-CREATE VIEW [dbo].[vSensorLocation]
+﻿CREATE VIEW [dbo].[vSensorLocation]
 AS
 Select
   Sensor.ID SensorID,
@@ -16,4 +15,3 @@ from
     on (Instrument_Sensor.InstrumentID = Instrument.ID)
   inner join Sensor 
     on (Instrument_Sensor.SensorID = Sensor.ID)
---< Added 2.0.37 20180202 TimPN

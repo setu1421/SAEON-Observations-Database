@@ -192,18 +192,70 @@ namespace SAEON.Observations.Data
 				colvarQueryInput.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarQueryInput);
 				
-				TableSchema.TableColumn colvarDownloadURI = new TableSchema.TableColumn(schema);
-				colvarDownloadURI.ColumnName = "DownloadURI";
-				colvarDownloadURI.DataType = DbType.AnsiString;
-				colvarDownloadURI.MaxLength = 500;
-				colvarDownloadURI.AutoIncrement = false;
-				colvarDownloadURI.IsNullable = false;
-				colvarDownloadURI.IsPrimaryKey = false;
-				colvarDownloadURI.IsForeignKey = false;
-				colvarDownloadURI.IsReadOnly = false;
-				colvarDownloadURI.DefaultSetting = @"";
-				colvarDownloadURI.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarDownloadURI);
+				TableSchema.TableColumn colvarQueryURL = new TableSchema.TableColumn(schema);
+				colvarQueryURL.ColumnName = "QueryURL";
+				colvarQueryURL.DataType = DbType.AnsiString;
+				colvarQueryURL.MaxLength = 5000;
+				colvarQueryURL.AutoIncrement = false;
+				colvarQueryURL.IsNullable = false;
+				colvarQueryURL.IsPrimaryKey = false;
+				colvarQueryURL.IsForeignKey = false;
+				colvarQueryURL.IsReadOnly = false;
+				colvarQueryURL.DefaultSetting = @"";
+				colvarQueryURL.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarQueryURL);
+				
+				TableSchema.TableColumn colvarDoi = new TableSchema.TableColumn(schema);
+				colvarDoi.ColumnName = "DOI";
+				colvarDoi.DataType = DbType.AnsiString;
+				colvarDoi.MaxLength = 2000;
+				colvarDoi.AutoIncrement = false;
+				colvarDoi.IsNullable = false;
+				colvarDoi.IsPrimaryKey = false;
+				colvarDoi.IsForeignKey = false;
+				colvarDoi.IsReadOnly = false;
+				colvarDoi.DefaultSetting = @"";
+				colvarDoi.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarDoi);
+				
+				TableSchema.TableColumn colvarMetadataURL = new TableSchema.TableColumn(schema);
+				colvarMetadataURL.ColumnName = "MetadataURL";
+				colvarMetadataURL.DataType = DbType.AnsiString;
+				colvarMetadataURL.MaxLength = 2000;
+				colvarMetadataURL.AutoIncrement = false;
+				colvarMetadataURL.IsNullable = false;
+				colvarMetadataURL.IsPrimaryKey = false;
+				colvarMetadataURL.IsForeignKey = false;
+				colvarMetadataURL.IsReadOnly = false;
+				colvarMetadataURL.DefaultSetting = @"";
+				colvarMetadataURL.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarMetadataURL);
+				
+				TableSchema.TableColumn colvarDownloadURL = new TableSchema.TableColumn(schema);
+				colvarDownloadURL.ColumnName = "DownloadURL";
+				colvarDownloadURL.DataType = DbType.AnsiString;
+				colvarDownloadURL.MaxLength = 2000;
+				colvarDownloadURL.AutoIncrement = false;
+				colvarDownloadURL.IsNullable = false;
+				colvarDownloadURL.IsPrimaryKey = false;
+				colvarDownloadURL.IsForeignKey = false;
+				colvarDownloadURL.IsReadOnly = false;
+				colvarDownloadURL.DefaultSetting = @"";
+				colvarDownloadURL.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarDownloadURL);
+				
+				TableSchema.TableColumn colvarCitation = new TableSchema.TableColumn(schema);
+				colvarCitation.ColumnName = "Citation";
+				colvarCitation.DataType = DbType.AnsiString;
+				colvarCitation.MaxLength = 1000;
+				colvarCitation.AutoIncrement = false;
+				colvarCitation.IsNullable = false;
+				colvarCitation.IsPrimaryKey = false;
+				colvarCitation.IsForeignKey = false;
+				colvarCitation.IsReadOnly = false;
+				colvarCitation.DefaultSetting = @"";
+				colvarCitation.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarCitation);
 				
 				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
 				colvarAddedAt.ColumnName = "AddedAt";
@@ -322,12 +374,44 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.QueryInput, value); }
 		}
 		  
-		[XmlAttribute("DownloadURI")]
+		[XmlAttribute("QueryURL")]
 		[Bindable(true)]
-		public string DownloadURI 
+		public string QueryURL 
 		{
-			get { return GetColumnValue<string>(Columns.DownloadURI); }
-			set { SetColumnValue(Columns.DownloadURI, value); }
+			get { return GetColumnValue<string>(Columns.QueryURL); }
+			set { SetColumnValue(Columns.QueryURL, value); }
+		}
+		  
+		[XmlAttribute("Doi")]
+		[Bindable(true)]
+		public string Doi 
+		{
+			get { return GetColumnValue<string>(Columns.Doi); }
+			set { SetColumnValue(Columns.Doi, value); }
+		}
+		  
+		[XmlAttribute("MetadataURL")]
+		[Bindable(true)]
+		public string MetadataURL 
+		{
+			get { return GetColumnValue<string>(Columns.MetadataURL); }
+			set { SetColumnValue(Columns.MetadataURL, value); }
+		}
+		  
+		[XmlAttribute("DownloadURL")]
+		[Bindable(true)]
+		public string DownloadURL 
+		{
+			get { return GetColumnValue<string>(Columns.DownloadURL); }
+			set { SetColumnValue(Columns.DownloadURL, value); }
+		}
+		  
+		[XmlAttribute("Citation")]
+		[Bindable(true)]
+		public string Citation 
+		{
+			get { return GetColumnValue<string>(Columns.Citation); }
+			set { SetColumnValue(Columns.Citation, value); }
 		}
 		  
 		[XmlAttribute("AddedAt")]
@@ -389,7 +473,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,string varDownloadURI,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion)
+		public static void Insert(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,string varQueryURL,string varDoi,string varMetadataURL,string varDownloadURL,string varCitation,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion)
 		{
 			UserDownload item = new UserDownload();
 			
@@ -403,7 +487,15 @@ namespace SAEON.Observations.Data
 			
 			item.QueryInput = varQueryInput;
 			
-			item.DownloadURI = varDownloadURI;
+			item.QueryURL = varQueryURL;
+			
+			item.Doi = varDoi;
+			
+			item.MetadataURL = varMetadataURL;
+			
+			item.DownloadURL = varDownloadURL;
+			
+			item.Citation = varCitation;
 			
 			item.AddedAt = varAddedAt;
 			
@@ -425,7 +517,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,string varDownloadURI,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion)
+		public static void Update(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,string varQueryURL,string varDoi,string varMetadataURL,string varDownloadURL,string varCitation,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion)
 		{
 			UserDownload item = new UserDownload();
 			
@@ -439,7 +531,15 @@ namespace SAEON.Observations.Data
 			
 				item.QueryInput = varQueryInput;
 			
-				item.DownloadURI = varDownloadURI;
+				item.QueryURL = varQueryURL;
+			
+				item.Doi = varDoi;
+			
+				item.MetadataURL = varMetadataURL;
+			
+				item.DownloadURL = varDownloadURL;
+			
+				item.Citation = varCitation;
 			
 				item.AddedAt = varAddedAt;
 			
@@ -499,44 +599,72 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn DownloadURIColumn
+        public static TableSchema.TableColumn QueryURLColumn
         {
             get { return Schema.Columns[5]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn DoiColumn
         {
             get { return Schema.Columns[6]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedByColumn
+        public static TableSchema.TableColumn MetadataURLColumn
         {
             get { return Schema.Columns[7]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn DownloadURLColumn
         {
             get { return Schema.Columns[8]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedByColumn
+        public static TableSchema.TableColumn CitationColumn
         {
             get { return Schema.Columns[9]; }
         }
         
         
         
-        public static TableSchema.TableColumn RowVersionColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[10]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn AddedByColumn
+        {
+            get { return Schema.Columns[11]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedAtColumn
+        {
+            get { return Schema.Columns[12]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn UpdatedByColumn
+        {
+            get { return Schema.Columns[13]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn RowVersionColumn
+        {
+            get { return Schema.Columns[14]; }
         }
         
         
@@ -550,7 +678,11 @@ namespace SAEON.Observations.Data
 			 public static string Name = @"Name";
 			 public static string Description = @"Description";
 			 public static string QueryInput = @"QueryInput";
-			 public static string DownloadURI = @"DownloadURI";
+			 public static string QueryURL = @"QueryURL";
+			 public static string Doi = @"DOI";
+			 public static string MetadataURL = @"MetadataURL";
+			 public static string DownloadURL = @"DownloadURL";
+			 public static string Citation = @"Citation";
 			 public static string AddedAt = @"AddedAt";
 			 public static string AddedBy = @"AddedBy";
 			 public static string UpdatedAt = @"UpdatedAt";

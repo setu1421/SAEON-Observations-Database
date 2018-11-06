@@ -1,0 +1,23 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model DataWizardModel
+@(
+Html.EJ().TreeView("treeViewLocations")
+    .TreeViewFields(field => field
+        .Datasource(ds => ds.URL("/DataWizard/GetLocations").Adaptor(AdaptorType.WebApiAdaptor))
+        .Id("Key")
+        .ParentId("ParentKey")
+        .Text("Text")
+        .HasChild("HasChildren")
+        .IsChecked("IsChecked")
+        .Expanded("IsExpanded")
+        .Selected("IsSelected")
+        .LinkAttribute("ToolTip")
+    )
+    .ClientSideEvents(events => events
+        .NodeCheck("DataWizard.UpdateLocationsSelected")
+        .NodeUncheck("DataWizard.UpdateLocationsSelected")
+        .Ready("DataWizard.LocationsReady")
+        )
+    .ShowCheckbox(true)
+    .AutoCheck(false)
+)

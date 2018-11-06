@@ -3,31 +3,21 @@
     [PhenomenonID] UNIQUEIDENTIFIER NOT NULL,
     [OfferingID]   UNIQUEIDENTIFIER NOT NULL,
     [UserId] UNIQUEIDENTIFIER NULL, 
---> Added 2.0.8 20160718 TimPN
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonOffering_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonOffering_UpdatedAt] DEFAULT GetDate(), 
---< Added 2.0.8 20160718 TimPN
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonOffering_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_PhenomenonOffering_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_PhenomenonOffering] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_PhenomenonOffering_Offering] FOREIGN KEY ([OfferingID]) REFERENCES [dbo].[Offering] ([ID]),
     CONSTRAINT [FK_PhenomenonOffering_Phenomenon] FOREIGN KEY ([PhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]),
---> Added 2.0.0 20160406 TimPN
     CONSTRAINT [UX_PhenomenonOffering] UNIQUE ([PhenomenonID],[OfferingID]),
     CONSTRAINT [FK_PhenomenonOffering_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
---< Added 2.0.0 20160406 TimPN
 );
---> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_PhenomenonOffering_PhenomenonID] ON [dbo].[PhenomenonOffering] ([PhenomenonID])
 GO
 CREATE INDEX [IX_PhenomenonOffering_OfferingID] ON [dbo].[PhenomenonOffering] ([OfferingID])
 GO
 CREATE INDEX [IX_PhenomenonOffering_UserId] ON [dbo].[PhenomenonOffering] ([UserId])
---< Added 2.0.0 20160406 TimPN
---> Added 2.0.8 20160718 TimPN
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_PhenomenonOffering_Insert] ON [dbo].[PhenomenonOffering]
 FOR INSERT
@@ -37,7 +27,7 @@ BEGIN
     Update
         src
     set
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         PhenomenonOffering src
@@ -53,10 +43,7 @@ BEGIN
     Update
         src
     set
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         PhenomenonOffering src
@@ -65,6 +52,4 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.8 20160718 TimPN
 

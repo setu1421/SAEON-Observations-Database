@@ -1,7 +1,6 @@
-﻿--> Added 2.0.11 20160908 TimPN
-CREATE TABLE [dbo].[SchemaColumn]
+﻿CREATE TABLE [dbo].[SchemaColumn]
 (
-    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_SchemaColumn_ID] DEFAULT newid(), 
+    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_SchemaColumn_ID] DEFAULT (newid()), 
     [DataSchemaID] UNIQUEIDENTIFIER NOT NULL, 
     [Number] INT NOT NULL,
     [Name] VARCHAR(100) NOT NULL,
@@ -14,11 +13,9 @@ CREATE TABLE [dbo].[SchemaColumn]
     [EmptyValue] VARCHAR(50) NULL,
     [FixedTime] VARCHAR(10) NULL,
     [UserId] UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumn_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumn_UpdatedAt] DEFAULT GetDate(), 
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumn_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_SchemaColumn_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_SchemaColumn] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_SchemaColumn_DataSchema] FOREIGN KEY ([DataSchemaID]) REFERENCES [dbo].[DataSchema] ([ID]),
     CONSTRAINT [FK_SchemaColumn_SchemaColumnType] FOREIGN KEY ([SchemaColumnTypeID]) REFERENCES [dbo].[SchemaColumnType] ([ID]),
@@ -41,7 +38,6 @@ GO
 CREATE INDEX [IX_SchemaColumn_PhenomenonUOMID] ON [dbo].[SchemaColumn] ([PhenomenonUOMID])
 GO
 CREATE INDEX [IX_SchemaColumn_UserId] ON [dbo].[SchemaColumn] ([UserId])
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_SchemaColumn_Insert] ON [dbo].[SchemaColumn]
 FOR INSERT
@@ -51,7 +47,7 @@ BEGIN
     Update
         src
     set
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         SchemaColumn src
@@ -67,10 +63,7 @@ BEGIN
     Update
         src
     set
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         SchemaColumn src
@@ -79,5 +72,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.11 20160908 TimPN

@@ -1,14 +1,14 @@
-﻿using System.Web.Mvc;
+﻿using SAEON.Observations.Core.Entities;
 using System.Threading.Tasks;
-using SAEON.Observations.Core.Entities;
+using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
     public class UserDownloadsController : BaseRestController<UserDownload>
     {
-        public UserDownloadsController() :base()
+        public UserDownloadsController() : base()
         {
-            Resource = "UserDownloads";
+            Resource = "Internal/UserDownloads";
         }
 
         //public override async Task<ActionResult> Create([Bind(Include = "UserId,Name,Description,QueryInput,DownloadURI")]UserDownload item)

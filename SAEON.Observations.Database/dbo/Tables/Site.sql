@@ -1,27 +1,16 @@
-﻿--> Added 2.0.1 20160406 TimPN
-CREATE TABLE [dbo].[Site]
+﻿CREATE TABLE [dbo].[Site]
 (
-    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Site_ID] DEFAULT newid(), 
+    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Site_ID] DEFAULT (newid()), 
     [Code] VARCHAR(50) NOT NULL, 
     [Name] VARCHAR(150) NOT NULL, 
     [Description] VARCHAR(5000) NULL,
     [Url] VARCHAR(250) NULL, 
---> Changed 2.0.22 20170111 TimPN
---    [StartDate]        DATETIME         NULL,
     [StartDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
---> Changed 2.0.22 20170111 TimPN
---    [EndDate]        DATETIME         NULL,
     [EndDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
---> Added 2.0.3 20160421 TimPN
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_Site_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Site_UpdatedAt] DEFAULT GetDate(), 
---< Added 2.0.3 20160421 TimPN
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_Site_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Site_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Site] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_Site_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_Site_Name] UNIQUE ([Name]),
@@ -29,14 +18,10 @@ CREATE TABLE [dbo].[Site]
 )
 GO
 CREATE INDEX [IX_Site_UserId] ON [dbo].[Site] ([UserId])
---< Added 2.0.1 20160406 TimPN
-
---> Added 2.0.3 20160421 TimPN
 GO
 CREATE INDEX [IX_Site_StartDate] ON [dbo].[Site] ([StartDate])
 GO
 CREATE INDEX [IX_Site_EndDate] ON [dbo].[Site] ([EndDate])
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Site_Insert] ON [dbo].[Site]
 FOR INSERT
@@ -46,7 +31,7 @@ BEGIN
     Update 
         src 
     set 
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         Site src
@@ -62,10 +47,7 @@ BEGIN
     Update 
         src 
     set 
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         Site src
@@ -74,5 +56,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.3 20160421 TimPN

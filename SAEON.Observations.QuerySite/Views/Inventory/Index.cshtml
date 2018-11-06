@@ -1,57 +1,33 @@
-﻿@using SAEON.Observations.QuerySite.Models
-@model InventoryModel
+﻿@using SAEON.Observations.QuerySite.Properties
 @{
     ViewBag.Title = "Inventory";
 }
-<div id="waiting">
-    @Html.EJ().WaitingPopup("waiting").Text("Please wait...").ShowOnInit(true)
-    <div class="row">
-        <div class="col-md-12">
-            @{Html.EJ().Accordion("accordianInventory").Width("100%").EnableMultipleOpen(false).Items(data =>
-                {
-                    data.Add().Text("Totals").ContentTemplate(@<div>@Html.Partial("Totals", Model)</div>);
-                    data.Add().Text("Stations").ContentTemplate(@<div>@Html.Partial("Stations", Model)</div>);
-                    data.Add().Text("Phenomena").ContentTemplate(@<div>@Html.Partial("Phenomena", Model)</div>);
-                    data.Add().Text("Instruments").ContentTemplate(@<div>@Html.Partial("Instruments", Model)</div>);
-                    data.Add().Text("Years").ContentTemplate(@<div>@Html.Partial("Years", Model)</div>);
-                    data.Add().Text("Organisations").ContentTemplate(@<div>@Html.Partial("Organisations", Model)</div>);
-                })
-                .Render();
-}
-        </div>
+
+<div class="row">
+    <div class="col-md">
+        @(Html.EJ().Grid<object>("InventoryGrid")
+        .Datasource(datasource => datasource.URL(ViewBag.WebAPIUrl + "/OData/Inventory")
+        .Adaptor(AdaptorType.ODataV4Adaptor))
+        .IsResponsive()
+        .AllowPaging()
+        .PageSettings(p => p.PageSize(25))
+        .AllowSorting()
+        .AllowFiltering()
+        .FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
+        .Columns(col =>
+        {
+            col.Field("SiteName").HeaderText("Site").Add();
+            col.Field("StationName").HeaderText("Station").Add();
+            col.Field("InstrumentName").HeaderText("Instrument").Add();
+            col.Field("SensorName").HeaderText("Sensor").Add();
+            col.Field("PhenomenonName").HeaderText("Phenomenon").Add();
+            col.Field("OfferingName").HeaderText("Offering").Add();
+            col.Field("UnitName").HeaderText("Unit").Add();
+            col.Field("Count").Format("{0:n0}").HeaderText("Count").TextAlign(TextAlign.Right).Add();
+            col.Field("StartDate").Format("{0:dd MMM yyyy}").HeaderText("Start").Add();
+            col.Field("EndDate").Format("{0:dd MMM yyyy}").HeaderText("End").Add();
+        })
+        )
     </div>
-    @*<div class="row ButtonRow">
-            <div class="col-md-12" id="PartialButtons">
-                @Html.Partial("Buttons", Model)
-            </div>
-        </div>*@
 </div>
-<script type="text/javascript">
-    $(function () {
-        //$("#ResultsTab").addClass("hidden");
-    });
-    function ShowWaiting() {
-        var wp = $("#waiting").data("ejWaitingPopup");
-        wp.show();
-    }
-    function HideWaiting() {
-        var wp = $("#waiting").data("ejWaitingPopup");
-        wp.hide();
-    }
-</script>
-<style type="text/css" class="cssStyles">
-    #target {
-        margin: 0 auto;
-    }
 
-    #target_WaitingPopup .e-image {
-        display: block;
-        height: 100px;
-    }
-
-    #popup {
-        height: auto;
-        width: auto;
-        margin-top: 100px;
-    }
-</style>

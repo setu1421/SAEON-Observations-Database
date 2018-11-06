@@ -1,0 +1,10 @@
+﻿@using SAEON.Observations.QuerySite.Models
+@model DataWizardModel
+@(Html.EJ()
+    .ListView("listViewLocationsSelected")
+    //.DataSource(ds => ds.URL("/DataWizard/GetLocationsSelected").Adaptor(AdaptorType.WebApiAdaptor))
+    .DataSource(Model.LocationsSelected)
+    .ShowHeader(true)
+    .HeaderTitle("Selected")
+    .FieldSettings(fs => fs.Text("Name"))
+)

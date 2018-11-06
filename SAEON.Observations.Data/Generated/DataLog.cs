@@ -194,19 +194,6 @@ namespace SAEON.Observations.Data
 				colvarValueTime.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarValueTime);
 				
-				TableSchema.TableColumn colvarValueDay = new TableSchema.TableColumn(schema);
-				colvarValueDay.ColumnName = "ValueDay";
-				colvarValueDay.DataType = DbType.Date;
-				colvarValueDay.MaxLength = 0;
-				colvarValueDay.AutoIncrement = false;
-				colvarValueDay.IsNullable = true;
-				colvarValueDay.IsPrimaryKey = false;
-				colvarValueDay.IsForeignKey = false;
-				colvarValueDay.IsReadOnly = true;
-				colvarValueDay.DefaultSetting = @"";
-				colvarValueDay.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarValueDay);
-				
 				TableSchema.TableColumn colvarValueText = new TableSchema.TableColumn(schema);
 				colvarValueText.ColumnName = "ValueText";
 				colvarValueText.DataType = DbType.AnsiString;
@@ -554,6 +541,19 @@ namespace SAEON.Observations.Data
 				colvarRowVersion.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRowVersion);
 				
+				TableSchema.TableColumn colvarValueDay = new TableSchema.TableColumn(schema);
+				colvarValueDay.ColumnName = "ValueDay";
+				colvarValueDay.DataType = DbType.Date;
+				colvarValueDay.MaxLength = 0;
+				colvarValueDay.AutoIncrement = false;
+				colvarValueDay.IsNullable = true;
+				colvarValueDay.IsPrimaryKey = false;
+				colvarValueDay.IsForeignKey = false;
+				colvarValueDay.IsReadOnly = true;
+				colvarValueDay.DefaultSetting = @"";
+				colvarValueDay.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarValueDay);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -602,14 +602,6 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<DateTime?>(Columns.ValueTime); }
 			set { SetColumnValue(Columns.ValueTime, value); }
-		}
-		  
-		[XmlAttribute("ValueDay")]
-		[Bindable(true)]
-		public DateTime? ValueDay 
-		{
-			get { return GetColumnValue<DateTime?>(Columns.ValueDay); }
-			set { SetColumnValue(Columns.ValueDay, value); }
 		}
 		  
 		[XmlAttribute("ValueText")]
@@ -819,6 +811,14 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
 			set { SetColumnValue(Columns.RowVersion, value); }
 		}
+		  
+		[XmlAttribute("ValueDay")]
+		[Bindable(true)]
+		public DateTime? ValueDay 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.ValueDay); }
+			set { SetColumnValue(Columns.ValueDay, value); }
+		}
 		
 		#endregion
 		
@@ -929,7 +929,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,DateTime? varValueDay,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,double? varLatitude,double? varLongitude,double? varElevation,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,Guid? varCorrelationID,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
+		public static void Insert(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,double? varLatitude,double? varLongitude,double? varElevation,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,Guid? varCorrelationID,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,DateTime? varValueDay)
 		{
 			DataLog item = new DataLog();
 			
@@ -942,8 +942,6 @@ namespace SAEON.Observations.Data
 			item.ValueDate = varValueDate;
 			
 			item.ValueTime = varValueTime;
-			
-			item.ValueDay = varValueDay;
 			
 			item.ValueText = varValueText;
 			
@@ -997,6 +995,8 @@ namespace SAEON.Observations.Data
 			
 			item.RowVersion = varRowVersion;
 			
+			item.ValueDay = varValueDay;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -1007,7 +1007,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,DateTime? varValueDay,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,double? varLatitude,double? varLongitude,double? varElevation,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,Guid? varCorrelationID,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
+		public static void Update(Guid varId,Guid? varSensorID,DateTime varImportDate,DateTime? varValueDate,DateTime? varValueTime,string varValueText,string varTransformValueText,double? varRawValue,double? varDataValue,string varComment,double? varLatitude,double? varLongitude,double? varElevation,string varInvalidDateValue,string varInvalidTimeValue,string varInvalidOffering,string varInvalidUOM,Guid? varDataSourceTransformationID,Guid varStatusID,Guid? varStatusReasonID,string varImportStatus,Guid? varUserId,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,Guid varImportBatchID,string varRawRecordData,string varRawFieldValue,Guid? varCorrelationID,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,DateTime? varValueDay)
 		{
 			DataLog item = new DataLog();
 			
@@ -1020,8 +1020,6 @@ namespace SAEON.Observations.Data
 				item.ValueDate = varValueDate;
 			
 				item.ValueTime = varValueTime;
-			
-				item.ValueDay = varValueDay;
 			
 				item.ValueText = varValueText;
 			
@@ -1075,6 +1073,8 @@ namespace SAEON.Observations.Data
 			
 				item.RowVersion = varRowVersion;
 			
+				item.ValueDay = varValueDay;
+			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -1123,189 +1123,189 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn ValueDayColumn
+        public static TableSchema.TableColumn ValueTextColumn
         {
             get { return Schema.Columns[5]; }
         }
         
         
         
-        public static TableSchema.TableColumn ValueTextColumn
+        public static TableSchema.TableColumn TransformValueTextColumn
         {
             get { return Schema.Columns[6]; }
         }
         
         
         
-        public static TableSchema.TableColumn TransformValueTextColumn
+        public static TableSchema.TableColumn RawValueColumn
         {
             get { return Schema.Columns[7]; }
         }
         
         
         
-        public static TableSchema.TableColumn RawValueColumn
+        public static TableSchema.TableColumn DataValueColumn
         {
             get { return Schema.Columns[8]; }
         }
         
         
         
-        public static TableSchema.TableColumn DataValueColumn
+        public static TableSchema.TableColumn CommentColumn
         {
             get { return Schema.Columns[9]; }
         }
         
         
         
-        public static TableSchema.TableColumn CommentColumn
+        public static TableSchema.TableColumn LatitudeColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn LatitudeColumn
+        public static TableSchema.TableColumn LongitudeColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn LongitudeColumn
+        public static TableSchema.TableColumn ElevationColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn ElevationColumn
+        public static TableSchema.TableColumn InvalidDateValueColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn InvalidDateValueColumn
+        public static TableSchema.TableColumn InvalidTimeValueColumn
         {
             get { return Schema.Columns[14]; }
         }
         
         
         
-        public static TableSchema.TableColumn InvalidTimeValueColumn
+        public static TableSchema.TableColumn InvalidOfferingColumn
         {
             get { return Schema.Columns[15]; }
         }
         
         
         
-        public static TableSchema.TableColumn InvalidOfferingColumn
+        public static TableSchema.TableColumn InvalidUOMColumn
         {
             get { return Schema.Columns[16]; }
         }
         
         
         
-        public static TableSchema.TableColumn InvalidUOMColumn
+        public static TableSchema.TableColumn DataSourceTransformationIDColumn
         {
             get { return Schema.Columns[17]; }
         }
         
         
         
-        public static TableSchema.TableColumn DataSourceTransformationIDColumn
+        public static TableSchema.TableColumn StatusIDColumn
         {
             get { return Schema.Columns[18]; }
         }
         
         
         
-        public static TableSchema.TableColumn StatusIDColumn
+        public static TableSchema.TableColumn StatusReasonIDColumn
         {
             get { return Schema.Columns[19]; }
         }
         
         
         
-        public static TableSchema.TableColumn StatusReasonIDColumn
+        public static TableSchema.TableColumn ImportStatusColumn
         {
             get { return Schema.Columns[20]; }
         }
         
         
         
-        public static TableSchema.TableColumn ImportStatusColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[21]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn PhenomenonOfferingIDColumn
         {
             get { return Schema.Columns[22]; }
         }
         
         
         
-        public static TableSchema.TableColumn PhenomenonOfferingIDColumn
+        public static TableSchema.TableColumn PhenomenonUOMIDColumn
         {
             get { return Schema.Columns[23]; }
         }
         
         
         
-        public static TableSchema.TableColumn PhenomenonUOMIDColumn
+        public static TableSchema.TableColumn ImportBatchIDColumn
         {
             get { return Schema.Columns[24]; }
         }
         
         
         
-        public static TableSchema.TableColumn ImportBatchIDColumn
+        public static TableSchema.TableColumn RawRecordDataColumn
         {
             get { return Schema.Columns[25]; }
         }
         
         
         
-        public static TableSchema.TableColumn RawRecordDataColumn
+        public static TableSchema.TableColumn RawFieldValueColumn
         {
             get { return Schema.Columns[26]; }
         }
         
         
         
-        public static TableSchema.TableColumn RawFieldValueColumn
+        public static TableSchema.TableColumn CorrelationIDColumn
         {
             get { return Schema.Columns[27]; }
         }
         
         
         
-        public static TableSchema.TableColumn CorrelationIDColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[28]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn UpdatedAtColumn
         {
             get { return Schema.Columns[29]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn RowVersionColumn
         {
             get { return Schema.Columns[30]; }
         }
         
         
         
-        public static TableSchema.TableColumn RowVersionColumn
+        public static TableSchema.TableColumn ValueDayColumn
         {
             get { return Schema.Columns[31]; }
         }
@@ -1321,7 +1321,6 @@ namespace SAEON.Observations.Data
 			 public static string ImportDate = @"ImportDate";
 			 public static string ValueDate = @"ValueDate";
 			 public static string ValueTime = @"ValueTime";
-			 public static string ValueDay = @"ValueDay";
 			 public static string ValueText = @"ValueText";
 			 public static string TransformValueText = @"TransformValueText";
 			 public static string RawValue = @"RawValue";
@@ -1348,6 +1347,7 @@ namespace SAEON.Observations.Data
 			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
 			 public static string RowVersion = @"RowVersion";
+			 public static string ValueDay = @"ValueDay";
 						
 		}
 		#endregion

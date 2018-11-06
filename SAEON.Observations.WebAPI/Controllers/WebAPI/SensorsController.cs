@@ -9,11 +9,10 @@ using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    /*
     /// <summary>
     /// </summary>
-    [RoutePrefix("Sensors")]
-    public class SensorsController : BaseApiController<Sensor>
+    [RoutePrefix("Api/Sensors")]
+    public class SensorsController : CodedApiController<Sensor>
     {
         protected override List<Expression<Func<Sensor, object>>> GetIncludes()
         {
@@ -38,10 +37,22 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Sensor</param>
         /// <returns>Sensor</returns>
         [ResponseType(typeof(Sensor))]
-        public override async Task<IHttpActionResult> GetById(Guid id)
+        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
         {
             return await base.GetById(id);
         }
+
+        /// <summary>
+        /// Sensor by Code
+        /// </summary>
+        /// <param name="code">The Code of the Sensor</param>
+        /// <returns>Sensor</returns>
+        [ResponseType(typeof(Sensor))]
+        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        {
+            return await base.GetByCode(code);
+        }
+
 
         /// <summary>
         /// Sensor by Name
@@ -49,11 +60,24 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Sensor</param>
         /// <returns>Sensor</returns>
         [ResponseType(typeof(Sensor))]
-        public override async Task<IHttpActionResult> GetByName(string name)
+        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
         {
             return await base.GetByName(name);
         }
 
+
+        // GET: Sensors/5/Phenomenon
+        /// <summary>
+        /// Phenomenon of a Sensor
+        /// </summary>
+        /// <param name="id">The Id of the Sensor</param>
+        /// <returns>Phenomenon</returns>
+        [Route("{id:guid}/Phenomenon")]
+        [ResponseType(typeof(Phenomenon))]
+        public async Task<IHttpActionResult> GetPhenomenon(Guid id)
+        {
+            return await GetSingle<Phenomenon>(id, s => s.Phenomenon, i => i.Sensors);
+        }
 
         // GET: Sensors/5/Instruments
         /// <summary>
@@ -67,19 +91,5 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             return GetMany<Instrument>(id, s => s.Instruments, i => i.Sensors);
         }
 
-        // GET: Sensors/5/Phenomenon
-        /// <summary>
-        /// Phenomena of a Sensor
-        /// </summary>
-        /// <param name="id">The Id of the Sensor</param>
-        /// <returns>Phenomenon</returns>
-        [Route("{id:guid}/Phenomenon")]
-        [ResponseType(typeof(Phenomenon))]
-        public async Task<IHttpActionResult> GetPhenomenon(Guid id)
-        {
-            return await GetSingle<Phenomenon>(id, s => s.Phenomenon, i => i.Sensors);
-        }
-
     }
-    */
 }

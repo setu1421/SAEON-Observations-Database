@@ -1,11 +1,11 @@
-﻿using Microsoft.Owin;
+﻿using IdentityServer3.AccessTokenValidation;
+using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Owin;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens;
 using System.Web.Helpers;
 using System.Web.Http;
 
@@ -23,13 +23,13 @@ namespace SAEON.Observations.WebAPI
                 {
                     Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
-                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap = new Dictionary<string, string>();
+                    JwtSecurityTokenHandler.InboundClaimTypeMap.Clear();
                     app.UseCors(CorsOptions.AllowAll);
-                    //app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
-                    //{
-                    //    Authority = Properties.Settings.Default.IdentityServerUrl,
-                    //    RequiredScopes = new[] { "SAEON.Observations.WebAPI" },
-                    //});
+                    app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
+                    {
+                        Authority = Properties.Settings.Default.IdentityServerUrl,
+                        RequiredScopes = new[] { "SAEON.Observations.WebAPI" },
+                    });
 
                     /*
                     // add app local claims per request
@@ -47,6 +47,7 @@ namespace SAEON.Observations.WebAPI
                     var config = new HttpConfiguration();
                     WebApiConfig.Register(config);
                     app.UseWebApi(config);
+                    config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
                 }
                 catch (Exception ex)
                 {

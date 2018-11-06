@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
-using System.Runtime.Remoting.Contexts;
 using SAEON.Observations.Data;
-using System.Web.Security;
 
 /// <summary>
 /// Summary description for AuthHelper
@@ -77,14 +74,14 @@ public class listHelper
             int ival = (int)val;
 
             switch (ival)
-	        {
+            {
                 case 0:
                     list.Add(ival, "Ad-Hoc");
                     break;
-		        default:
+                default:
                     list.Add(ival, Enum.GetName(typeof(UpdateFrequency), ival)); 
                     break;
-	        }
+            }
         } 
 
          return list;

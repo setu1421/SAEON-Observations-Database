@@ -1,24 +1,15 @@
-﻿--> Added 2.0.5 20160530 TimPN
-CREATE TABLE [dbo].[Organisation_Instrument]
+﻿CREATE TABLE [dbo].[Organisation_Instrument]
 (
-    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Organisation_Instrument_ID] DEFAULT newid(), 
+    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Organisation_Instrument_ID] DEFAULT (newid()), 
     [OrganisationID] UNIQUEIDENTIFIER NOT NULL, 
     [InstrumentID] UNIQUEIDENTIFIER NOT NULL, 
     [OrganisationRoleID] UNIQUEIDENTIFIER NOT NULL,
---> Changed 2.0.22 20170111 TimPN
---    [StartDate]        DATETIME         NULL,
     [StartDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
---> Changed 2.0.22 20170111 TimPN
---    [EndDate]        DATETIME         NULL,
     [EndDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Instrument_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Instrument_UpdatedAt] DEFAULT GetDate(), 
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Instrument_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Organisation_Instrument_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Organisation_Instrument] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_Organisation_Instrument_Organisation] FOREIGN KEY ([OrganisationID]) REFERENCES [dbo].[Organisation] ([ID]),
     CONSTRAINT [FK_Organisation_Instrument_Instrument] FOREIGN KEY ([InstrumentID]) REFERENCES [dbo].[Instrument] ([ID]),
@@ -38,7 +29,6 @@ GO
 CREATE INDEX [IX_Organisation_Instrument_EndDate] ON [dbo].[Organisation_Instrument] ([EndDate])
 GO
 CREATE INDEX [IX_Organisation_Instrument_UserId] ON [dbo].[Organisation_Instrument] ([UserId])
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Organisation_Instrument_Insert] ON [dbo].[Organisation_Instrument]
 FOR INSERT
@@ -48,7 +38,7 @@ BEGIN
     Update
         src
     set
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         Organisation_Instrument src
@@ -64,10 +54,7 @@ BEGIN
     Update
         src
     set
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         Organisation_Instrument src
@@ -76,5 +63,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.5 20160530 TimPN

@@ -1,5 +1,4 @@
-﻿--> Added 2.0.6 20160607 TimPN
-CREATE VIEW [dbo].[vSiteOrganisation]
+﻿CREATE VIEW [dbo].[vSiteOrganisation]
 AS 
 Select
   [Organisation_Site].ID,
@@ -89,5 +88,3 @@ from
     on ([Station].SiteID = [Site].ID)
   inner join [OrganisationRole]
     on ([Organisation_Instrument].OrganisationRoleID = [OrganisationRole].ID)
---< Added 2.0.6 20160607 TimPN
-

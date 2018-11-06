@@ -56,7 +56,7 @@
     <ReadCommittedSnapshot>False</ReadCommittedSnapshot>
     <VardecimalStorageFormatOn>True</VardecimalStorageFormatOn>
     <SupplementalLoggingOn>False</SupplementalLoggingOn>
-    <CompatibilityMode>100</CompatibilityMode>
+    <CompatibilityMode>120</CompatibilityMode>
     <AnsiNullDefault>False</AnsiNullDefault>
     <AnsiPadding>False</AnsiPadding>
     <AnsiWarnings>False</AnsiWarnings>
@@ -79,7 +79,8 @@
     <DefaultFilegroup>PRIMARY</DefaultFilegroup>
     <GenerateCreateScript>True</GenerateCreateScript>
     <TargetFrameworkProfile />
-    <DefaultFileStreamFilegroup>Documents</DefaultFileStreamFilegroup>
+    <DefaultFileStreamFilegroup>
+    </DefaultFileStreamFilegroup>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -210,10 +211,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Tables\DataSourceRole.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Tables\DataLog.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
@@ -258,10 +255,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Views\vObservation.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Views\vDataSourceTransformation.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
@@ -283,10 +276,6 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Views\vStation.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Views\vDataQuery.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -518,24 +507,10 @@
     <Build Include="dbo\Views\vSchemaColumn.sql" />
     <Build Include="Scripts\AuthenticationFileGroup.sql" />
     <Build Include="Scripts\ObservationsFileGroup.sql" />
-    <Build Include="Scripts\DocumentsFileGroup.sql" />
-    <Build Include="dbo\Views\vObservationsList.sql" />
     <Build Include="Scripts\PrimaryFileGroup.sql" />
     <Build Include="dbo\Tables\UserQueries.sql" />
     <Build Include="dbo\Tables\UserDownloads.sql" />
-    <Build Include="dbo\Views\vApiDataDownload.sql" />
     <Build Include="dbo\Views\vSensorDates.sql" />
-    <Build Include="Scripts\ObservationsSequence.sql" />
-    <Build Include="dbo\Views\vInventoryTotals.sql" />
-    <Build Include="dbo\Views\vInventoryStations.sql" />
-    <Build Include="dbo\Views\vInventoryPhenomenaOfferings.sql" />
-    <Build Include="dbo\Views\vInventoryInstruments.sql" />
-    <Build Include="dbo\Views\vInventoryYears.sql" />
-    <Build Include="dbo\Views\vInventoryOrganisations.sql" />
-    <Build Include="dbo\Views\vApiDataQuery.sql" />
-    <Build Include="dbo\Views\vApiTemporalCoverage.sql" />
-    <Build Include="dbo\Views\vApiInventory.sql" />
-    <Build Include="dbo\Views\vApiSpacialCoverage.sql" />
     <Build Include="dbo\Views\vSensorThingsDatastreams.sql" />
     <Build Include="dbo\Views\vOfferingPhenomena.sql" />
     <Build Include="dbo\Views\vUnitOfMeasurePhenomena.sql" />
@@ -543,6 +518,9 @@
     <Build Include="dbo\Tables\ImportBatchSummary.sql" />
     <Build Include="dbo\Views\vObservationExpansion.sql" />
     <Build Include="dbo\Views\vImportBatchSummary.sql" />
+    <Build Include="dbo\Views\vObservation.sql" />
+    <Build Include="dbo\Views\vLocations.sql" />
+    <Build Include="dbo\Views\vFeatures.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />
@@ -550,8 +528,8 @@
     <None Include="ObservationDB.publish.xml" />
     <None Include="Observations.publish.xml" />
     <None Include="ObservationsTest.publish.xml" />
-    <None Include="SAEON.Observations.Database.publish.xml" />
     <None Include="ObservationsSACTN.publish.xml" />
+    <None Include="ObservationsFynbos.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\master.dacpac">

@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string UserId,string Name,string Description,string QueryInput,string DownloadURI,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
+	    public void Insert(Guid Id,string UserId,string Name,string Description,string QueryInput,string QueryURL,string Doi,string MetadataURL,string DownloadURL,string Citation,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
 	    {
 		    UserDownload item = new UserDownload();
 		    
@@ -94,7 +94,15 @@ namespace SAEON.Observations.Data
             
             item.QueryInput = QueryInput;
             
-            item.DownloadURI = DownloadURI;
+            item.QueryURL = QueryURL;
+            
+            item.Doi = Doi;
+            
+            item.MetadataURL = MetadataURL;
+            
+            item.DownloadURL = DownloadURL;
+            
+            item.Citation = Citation;
             
             item.AddedAt = AddedAt;
             
@@ -114,7 +122,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string UserId,string Name,string Description,string QueryInput,string DownloadURI,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
+	    public void Update(Guid Id,string UserId,string Name,string Description,string QueryInput,string QueryURL,string Doi,string MetadataURL,string DownloadURL,string Citation,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
 	    {
 		    UserDownload item = new UserDownload();
 	        item.MarkOld();
@@ -130,7 +138,15 @@ namespace SAEON.Observations.Data
 				
 			item.QueryInput = QueryInput;
 				
-			item.DownloadURI = DownloadURI;
+			item.QueryURL = QueryURL;
+				
+			item.Doi = Doi;
+				
+			item.MetadataURL = MetadataURL;
+				
+			item.DownloadURL = DownloadURL;
+				
+			item.Citation = Citation;
 				
 			item.AddedAt = AddedAt;
 				

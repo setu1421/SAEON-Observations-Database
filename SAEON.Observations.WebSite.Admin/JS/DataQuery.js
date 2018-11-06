@@ -2,7 +2,7 @@
     var from = FromFilter;
     var to = ToFilter;
 
-    if (FromFilter.getValue() == '' || ToFilter.getValue() == '') {
+    if (FromFilter.getValue() === '' || ToFilter.getValue() === '') {
         //Ext.Msg.alert('Invalid Date Range', 'Select a valid Date Range');
         Ext.Msg.show(
         {
@@ -12,7 +12,7 @@
             title: 'Invalid Date Range'
         });
     }
-    else if (FilterTree.getCheckedNodes().length == 0) {
+    else if (FilterTree.getCheckedNodes().length === 0) {
         Ext.Msg.show(
         {
             icon: Ext.MessageBox.WARNING,

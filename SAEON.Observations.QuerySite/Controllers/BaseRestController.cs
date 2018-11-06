@@ -16,12 +16,14 @@ using Thinktecture.IdentityModel.Mvc;
 namespace SAEON.Observations.QuerySite.Controllers
 {
     [HandleError, HandleForbidden]
-    public class BaseRestController<TEntity> : Controller where TEntity : BaseEntity, new()
+    public class BaseRestController<TEntity> : Controller where TEntity : NamedEntity, new()
     {
-        private static string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;
-        //private static string identityUrl = Properties.Settings.Default.IdentityServerUrl;
+        protected int TimeOut { get; set; } = 1; // In minutes
+        private readonly string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;
+
         private string resource = null;
         protected string Resource { get { return resource; } set { resource = value; } }
+
 
         protected List<string> ModelStateErrors
         {
@@ -31,7 +33,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        private async Task<HttpClient> GetClientAsync()
+        private async Task<HttpClient> GetWebAPIClientAsync()
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
@@ -51,6 +53,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
             Logging.Verbose("Token: {token}", token);
             client.SetBearerToken(token);
+            client.Timeout = TimeSpan.FromMinutes(TimeOut);
             return client;
         }
 
@@ -62,9 +65,8 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = await GetClientAsync())
+                    using (var client = await GetWebAPIClientAsync())
                     {
-                        client.Timeout = TimeSpan.FromMinutes(30);
                         var response = await client.GetAsync($"{apiBaseUrl}/{Resource}");
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
@@ -95,13 +97,15 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = await GetClientAsync())
+                    if (!id.HasValue) return RedirectToAction("Index");
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
-                        //Logging.Verbose("Data: {data}", data);
+                        Logging.Verbose("Data: {data}", data);
+                        if (data == null) return RedirectToAction("Index");
                         return View(data);
                     }
                 }
@@ -113,6 +117,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
+        /*
         // GET: TEntity/Create
         /// <summary>
         /// Create a TEntity
@@ -158,7 +163,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         return View(item);
                     }
                     else
-                        using (var client = await GetClientAsync())
+                        using (var client = await GetWebAPIClientAsync())
                         {
                             var response = await client.PostAsJsonAsync<TEntity>($"{apiBaseUrl}/{Resource}", item);
                             Logging.Verbose("Response: {response}", response);
@@ -173,6 +178,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
+        */
 
         // GET: TEntity/Edit/Id
         /// <summary>
@@ -189,13 +195,15 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = await GetClientAsync())
+                    if (!id.HasValue) return RedirectToAction("Index");
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
                         Logging.Verbose("Data: {data}", data);
+                        if (data == null) RedirectToAction("Index");
                         return View(data);
                     }
                 }
@@ -229,7 +237,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     }
                     else
                     {
-                        using (var client = await GetClientAsync())
+                        using (var client = await GetWebAPIClientAsync())
                         {
                             var response = await client.PutAsJsonAsync<TEntity>($"{apiBaseUrl}/{Resource}/{delta?.Id}", delta);
                             Logging.Verbose("Response: {response}", response);
@@ -262,13 +270,15 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = await GetClientAsync())
+                    if (!id.HasValue) return RedirectToAction("Index");
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.GetAsync($"{apiBaseUrl}/{Resource}/{id?.ToString()}");
                         Logging.Verbose("Response: {response}", response);
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
                         Logging.Verbose("Data: {data}", data);
+                        if (data == null) return RedirectToAction("Index");
                         return View(data);
                     }
                 }
@@ -295,7 +305,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    using (var client = await GetClientAsync())
+                    using (var client = await GetWebAPIClientAsync())
                     {
                         var response = await client.DeleteAsync($"{apiBaseUrl}/{Resource}/{id}");
                         Logging.Verbose("Response: {response}", response);

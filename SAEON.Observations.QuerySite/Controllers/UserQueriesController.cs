@@ -8,7 +8,7 @@ namespace SAEON.Observations.QuerySite.Controllers
     {
         public UserQueriesController() : base()
         {
-            Resource = "UserQueries";
+            Resource = "Internal/UserQueries";
         }
 
         //public override async Task<ActionResult> Create([Bind(Include = "UserId,Name,Description,QueryInput")]UserQuery item)
@@ -20,6 +20,5 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             return await base.Edit(delta);
         }
-
     }
 }

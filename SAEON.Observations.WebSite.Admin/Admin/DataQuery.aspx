@@ -139,8 +139,8 @@
                             <ext:GridPanel ID="ObservationsGrid" runat="server" Border="false" Layout="FitLayout"
                                 ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="Store2" runat="server" RemoteSort="true" RemotePaging="true" OnRefreshData="DQStore_RefreshData"
-                                        OnSubmitData="DQStore_Submit" AutoLoad="false">
+                                    <ext:Store ID="ObservationsGridStore" runat="server" RemoteSort="true" RemotePaging="true" OnRefreshData="ObservationsGridStore_RefreshData"
+                                        OnSubmitData="ObservationsGridStore_Submit" AutoLoad="false">
                                         <Proxy>
                                             <ext:PageProxy />
                                         </Proxy>
@@ -180,17 +180,16 @@
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">
                                     <Columns>
-                                        <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="100" Hideable="true"
-                                            Hidden="true" />
-                                        <ext:Column Header="Site" DataIndex="SiteName" Width="100" Hideable="true" Hidden="true" />
+                                        <ext:Column Header="Organisation" DataIndex="OrganisationName" Width="100" Hideable="true" Hidden="true" />
+                                        <ext:Column Header="Site" DataIndex="SiteName" Width="100" Hideable="true"/>
                                         <ext:Column Header="Station" DataIndex="StationName" Width="100" />
                                         <ext:Column Header="Instrument" DataIndex="InstrumentName" Width="100" />
                                         <ext:Column Header="Sensor" DataIndex="SensorName" Width="100" />
                                         <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="100" />
                                         <ext:Column Header="Offering" DataIndex="OfferingName" Width="100" />
+                                        <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="100" Hideable="true" Hidden="false" />
                                         <ext:Column Header="Value" DataIndex="DataValue" Width="100" />
                                         <ext:Column Header="RawValue" DataIndex="RawValue" Width="100" Hideable="true" Hidden="true" />
-                                        <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="100" Hideable="true" Hidden="true" />
                                         <ext:Column Header="Symbol" DataIndex="UnitOfMeasureSymbol" Width="50" />
                                         <ext:Column Header="Schema Name" DataIndex="DataSchemaName" Width="100" Hideable="true" Hidden="true" />
                                         <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm" />
@@ -217,6 +216,8 @@
                                             <ext:StringFilter DataIndex="UnitOfMeasureSymbol" />
                                             <ext:StringFilter DataIndex="DataSchemaName" />
                                             <ext:DateFilter DataIndex="ValueDate" />
+                                            <ext:StringFilter DataIndex="StatusName" />
+                                            <ext:StringFilter DataIndex="StatusReasonName" />
                                             <ext:StringFilter DataIndex="UserName" />
                                         </Filters>
                                     </ext:GridFilters>

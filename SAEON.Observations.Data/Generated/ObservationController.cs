@@ -80,19 +80,13 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid SensorID,DateTime ValueDate,DateTime? ValueDay,int? ValueYear,int? ValueDecade,string TextValue,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,double? Latitude,double? Longitude,double? Elevation,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Insert(Guid SensorID,DateTime ValueDate,string TextValue,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,double? Latitude,double? Longitude,double? Elevation,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,DateTime? ValueDay,int? ValueYear,int? ValueDecade)
 	    {
 		    Observation item = new Observation();
 		    
             item.SensorID = SensorID;
             
             item.ValueDate = ValueDate;
-            
-            item.ValueDay = ValueDay;
-            
-            item.ValueYear = ValueYear;
-            
-            item.ValueDecade = ValueDecade;
             
             item.TextValue = TextValue;
             
@@ -130,6 +124,12 @@ namespace SAEON.Observations.Data
             
             item.RowVersion = RowVersion;
             
+            item.ValueDay = ValueDay;
+            
+            item.ValueYear = ValueYear;
+            
+            item.ValueDecade = ValueDecade;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -138,7 +138,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(int Id,Guid SensorID,DateTime ValueDate,DateTime? ValueDay,int? ValueYear,int? ValueDecade,string TextValue,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,double? Latitude,double? Longitude,double? Elevation,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Update(int Id,Guid SensorID,DateTime ValueDate,string TextValue,double? RawValue,double? DataValue,string Comment,Guid PhenomenonOfferingID,Guid PhenomenonUOMID,Guid ImportBatchID,Guid? StatusID,Guid? StatusReasonID,Guid? CorrelationID,double? Latitude,double? Longitude,double? Elevation,Guid UserId,DateTime AddedDate,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,DateTime? ValueDay,int? ValueYear,int? ValueDecade)
 	    {
 		    Observation item = new Observation();
 	        item.MarkOld();
@@ -149,12 +149,6 @@ namespace SAEON.Observations.Data
 			item.SensorID = SensorID;
 				
 			item.ValueDate = ValueDate;
-				
-			item.ValueDay = ValueDay;
-				
-			item.ValueYear = ValueYear;
-				
-			item.ValueDecade = ValueDecade;
 				
 			item.TextValue = TextValue;
 				
@@ -191,6 +185,12 @@ namespace SAEON.Observations.Data
 			item.UpdatedAt = UpdatedAt;
 				
 			item.RowVersion = RowVersion;
+				
+			item.ValueDay = ValueDay;
+				
+			item.ValueYear = ValueYear;
+				
+			item.ValueDecade = ValueDecade;
 				
 	        item.Save(UserName);
 	    }

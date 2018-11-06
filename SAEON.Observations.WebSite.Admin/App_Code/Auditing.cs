@@ -1,10 +1,7 @@
 ﻿using SAEON.Logs;
 using SAEON.Observations.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Web;
 
 /// <summary>
 /// Summary description for Auditing
@@ -17,11 +14,13 @@ public static class Auditing
         {
             try
             {
-                AuditLog auditLog = new AuditLog();
-                auditLog.AddedAt = null;
-                auditLog.UpdatedAt = null;
-                auditLog.Description = Logging.MethodSignature(type, methodName, parameters);
-                auditLog.UserId = AuthHelper.GetLoggedInUserId;
+                AuditLog auditLog = new AuditLog
+                {
+                    AddedAt = null,
+                    UpdatedAt = null,
+                    Description = Logging.MethodSignature(type, methodName, parameters),
+                    UserId = AuthHelper.GetLoggedInUserId
+                };
                 auditLog.Save();
             }
             catch (Exception ex)

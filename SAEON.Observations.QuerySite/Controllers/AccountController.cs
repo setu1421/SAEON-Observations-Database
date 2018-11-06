@@ -21,6 +21,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         public ActionResult LogOut()
         {
+            //Request.GetOwinContext().Authentication.SignOut("Cookies");
             Request.GetOwinContext().Authentication.SignOut();
             return Redirect("/");
         }
@@ -61,6 +62,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
                 Logging.Verbose("Token: {token}", token);
                 var client = new HttpClient();
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 client.SetBearerToken(token);
                 var result = await client.GetStringAsync(Properties.Settings.Default.WebAPIUrl + "/claims");
                 ViewBag.Json = JArray.Parse(result.ToString());

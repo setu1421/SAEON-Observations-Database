@@ -1,38 +1,27 @@
-﻿--> Added 2.0.5 20160511 TimPN
-CREATE TABLE [dbo].[Programme]
+﻿CREATE TABLE [dbo].[Programme]
 (
-    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Programme_ID] DEFAULT newid(), 
+    [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Programme_ID] DEFAULT (newid()), 
     [Code] VARCHAR(50) NOT NULL, 
     [Name] VARCHAR(150) NOT NULL, 
     [Description] VARCHAR(5000) NULL,
     [Url] VARCHAR(250) NULL, 
---> Changed 2.0.22 20170111 TimPN
---    [StartDate]        DATETIME         NULL,
     [StartDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
---> Changed 2.0.22 20170111 TimPN
---    [EndDate]        DATETIME         NULL,
     [EndDate]        DATE         NULL,
---< Changed 2.0.22 20170111 TimPN
     [UserId] UNIQUEIDENTIFIER NOT NULL,
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_Programme_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Programme_UpdatedAt] DEFAULT GetDate(), 
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_Programme_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Programme_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Programme] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [UX_Programme_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_Programme_Name] UNIQUE ([Name]),
     CONSTRAINT [FK_Programme_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
-GO
 CREATE INDEX [IX_Programme_UserId] ON [dbo].[Programme] ([UserId])
 GO
 CREATE INDEX [IX_Programme_StartDate] ON [dbo].[Programme] ([StartDate])
 GO
 CREATE INDEX [IX_Programme_EndDate] ON [dbo].[Programme] ([EndDate])
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Programme_Insert] ON [dbo].[Programme]
 FOR INSERT
@@ -42,7 +31,7 @@ BEGIN
     Update 
         src 
     set 
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         Programme src
@@ -58,10 +47,7 @@ BEGIN
     Update 
         src 
     set 
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         Programme src
@@ -70,5 +56,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.5 20160511 TimPN

@@ -18,8 +18,6 @@ namespace SAEON.Observations.Data
 	public partial struct Tables
 	{
 		
-		public static readonly string RefactorLog = @"__RefactorLog";
-        
 		public static readonly string AspnetApplication = @"aspnet_Applications";
         
 		public static readonly string AspnetMembership = @"aspnet_Membership";
@@ -121,11 +119,6 @@ namespace SAEON.Observations.Data
     #region Schemas
     public partial class Schemas {
 		
-		public static TableSchema.Table RefactorLog
-		{
-            get { return DataService.GetSchema("__RefactorLog", "ObservationsDB"); }
-		}
-        
 		public static TableSchema.Table AspnetApplication
 		{
             get { return DataService.GetSchema("aspnet_Applications", "ObservationsDB"); }
@@ -373,10 +366,6 @@ namespace SAEON.Observations.Data
     public partial struct Views 
     {
 		
-		public static readonly string ProgressProgressResolved = @"progress_Progress_Resolved";
-        
-		public static readonly string VApiDataGap = @"vApiDataGaps";
-        
 		public static readonly string VAuditLog = @"vAuditLog";
         
 		public static readonly string VDataLog = @"vDataLog";
@@ -389,6 +378,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VDataSourceTransformation = @"vDataSourceTransformation";
         
+		public static readonly string VFeature = @"vFeatures";
+        
 		public static readonly string VImportBatch = @"vImportBatch";
         
 		public static readonly string VImportBatchSummary = @"vImportBatchSummary";
@@ -399,27 +390,13 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VInventory = @"vInventory";
         
-		public static readonly string VInventoryInstrument = @"vInventoryInstruments";
-        
-		public static readonly string VInventoryOrganisation = @"vInventoryOrganisations";
-        
-		public static readonly string VInventoryPhenomenaOffering = @"vInventoryPhenomenaOfferings";
-        
-		public static readonly string VInventoryStation = @"vInventoryStations";
-        
-		public static readonly string VInventoryTotal = @"vInventoryTotals";
-        
-		public static readonly string VInventoryYear = @"vInventoryYears";
+		public static readonly string VLocation = @"vLocations";
         
 		public static readonly string VModuleRoleModule = @"vModuleRoleModule";
         
 		public static readonly string VObservation = @"vObservation";
         
 		public static readonly string VObservationExpansion = @"vObservationExpansion";
-        
-		public static readonly string VObservationsList = @"vObservationsList";
-        
-		public static readonly string VOfferingPhemomena = @"vOfferingPhemomena";
         
 		public static readonly string VOfferingPhenomena = @"vOfferingPhenomena";
         

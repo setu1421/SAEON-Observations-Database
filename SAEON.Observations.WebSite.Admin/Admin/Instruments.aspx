@@ -140,7 +140,6 @@
                                         <ext:Column Header="Code" DataIndex="Code" Width="200" />
                                         <ext:Column Header="Name" DataIndex="Name" Width="300" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="500" />
-                                        <ext:Column Header="Url" DataIndex="Url" Width="150" Groupable="false" />
                                         <ext:NumberColumn Header="Latitude" DataIndex="Latitude" Width="70" Groupable="false" Format="0.000000" />
                                         <ext:NumberColumn Header="Longitude" DataIndex="Longitude" Width="70" Groupable="false" Format="0.000000" />
                                         <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="70" Groupable="false" Format="0.000" />

@@ -5,13 +5,9 @@
     CONSTRAINT [PK_RoleModule] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_RoleModule_aspnet_Roles] FOREIGN KEY ([RoleId]) REFERENCES [dbo].[aspnet_Roles] ([RoleId]),
     CONSTRAINT [FK_RoleModule_Module] FOREIGN KEY ([ModuleID]) REFERENCES [dbo].[Module] ([ID]),
---> Added 2.0.8 20160726 TimPN
     CONSTRAINT [UX_RoleModule] UNIQUE ([RoleId], [ModuleID])
---< Added 2.0.8 20160726 TimPN
 );
---> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_RoleModule_RoleId] ON [dbo].[RoleModule] ([RoleId])
 GO
 CREATE INDEX [IX_RoleModule_ModuleID] ON [dbo].[RoleModule] ([ModuleID])
---< Added 2.0.0 20160406 TimPN

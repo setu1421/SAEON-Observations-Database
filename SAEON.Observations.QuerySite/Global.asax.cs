@@ -1,6 +1,5 @@
 ﻿using SAEON.Logs;
 using SAEON.Observations.Core;
-using Serilog;
 using System;
 using System.Web.Hosting;
 using System.Web.Mvc;
@@ -14,8 +13,8 @@ namespace SAEON.Observations.QuerySite
         protected void Application_Start()
         {
             Logging
-                .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite {Date}.txt"))
-                .Create();
+                 .CreateConfiguration(HostingEnvironment.MapPath(@"~/App_Data/Logs/SAEON.Observations.QuerySite {Date}.txt"))
+                 .Create();
             using (Logging.MethodCall(GetType()))
             {
                 try

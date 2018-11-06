@@ -1,5 +1,4 @@
-﻿--> Added 2.0.5 20160531 TimPN
-CREATE VIEW [dbo].[vInstrumentSensor] AS 
+﻿CREATE VIEW [dbo].[vInstrumentSensor] AS 
 SELECT 
   src.*, 
   [Instrument].Code InstrumentCode,
@@ -12,4 +11,3 @@ FROM
     on (src.InstrumentID = [Instrument].ID)
   inner join [Sensor]
     on (src.SensorID = [Sensor].ID)
---< Added 2.0.5 20160531 TimPN

@@ -81,6 +81,30 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarImportBatchID);
                 
+                TableSchema.TableColumn colvarImportBatchCode = new TableSchema.TableColumn(schema);
+                colvarImportBatchCode.ColumnName = "ImportBatchCode";
+                colvarImportBatchCode.DataType = DbType.Int32;
+                colvarImportBatchCode.MaxLength = 0;
+                colvarImportBatchCode.AutoIncrement = false;
+                colvarImportBatchCode.IsNullable = false;
+                colvarImportBatchCode.IsPrimaryKey = false;
+                colvarImportBatchCode.IsForeignKey = false;
+                colvarImportBatchCode.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarImportBatchCode);
+                
+                TableSchema.TableColumn colvarImportBatchDate = new TableSchema.TableColumn(schema);
+                colvarImportBatchDate.ColumnName = "ImportBatchDate";
+                colvarImportBatchDate.DataType = DbType.DateTime;
+                colvarImportBatchDate.MaxLength = 0;
+                colvarImportBatchDate.AutoIncrement = false;
+                colvarImportBatchDate.IsNullable = false;
+                colvarImportBatchDate.IsPrimaryKey = false;
+                colvarImportBatchDate.IsForeignKey = false;
+                colvarImportBatchDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarImportBatchDate);
+                
                 TableSchema.TableColumn colvarValueDate = new TableSchema.TableColumn(schema);
                 colvarValueDate.ColumnName = "ValueDate";
                 colvarValueDate.DataType = DbType.DateTime;
@@ -828,6 +852,34 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("ImportBatchID", value);
+            }
+        }
+	      
+        [XmlAttribute("ImportBatchCode")]
+        [Bindable(true)]
+        public int ImportBatchCode 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int>("ImportBatchCode");
+		    }
+            set 
+		    {
+			    SetColumnValue("ImportBatchCode", value);
+            }
+        }
+	      
+        [XmlAttribute("ImportBatchDate")]
+        [Bindable(true)]
+        public DateTime ImportBatchDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime>("ImportBatchDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("ImportBatchDate", value);
             }
         }
 	      
@@ -1625,6 +1677,10 @@ namespace SAEON.Observations.Data{
             public static string Id = @"ID";
             
             public static string ImportBatchID = @"ImportBatchID";
+            
+            public static string ImportBatchCode = @"ImportBatchCode";
+            
+            public static string ImportBatchDate = @"ImportBatchDate";
             
             public static string ValueDate = @"ValueDate";
             

@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,string Issues,byte[] SourceFile,byte[] Pass1File,byte[] Pass2File,byte[] Pass3File,byte[] Pass4File,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Insert(Guid Id,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,string Issues,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    ImportBatch item = new ImportBatch();
 		    
@@ -106,16 +106,6 @@ namespace SAEON.Observations.Data
             
             item.Issues = Issues;
             
-            item.SourceFile = SourceFile;
-            
-            item.Pass1File = Pass1File;
-            
-            item.Pass2File = Pass2File;
-            
-            item.Pass3File = Pass3File;
-            
-            item.Pass4File = Pass4File;
-            
             item.AddedAt = AddedAt;
             
             item.UpdatedAt = UpdatedAt;
@@ -130,7 +120,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,int Code,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,string Issues,byte[] SourceFile,byte[] Pass1File,byte[] Pass2File,byte[] Pass3File,byte[] Pass4File,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Update(Guid Id,int Code,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,string Issues,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    ImportBatch item = new ImportBatch();
 	        item.MarkOld();
@@ -159,16 +149,6 @@ namespace SAEON.Observations.Data
 			item.StatusReasonID = StatusReasonID;
 				
 			item.Issues = Issues;
-				
-			item.SourceFile = SourceFile;
-				
-			item.Pass1File = Pass1File;
-				
-			item.Pass2File = Pass2File;
-				
-			item.Pass3File = Pass3File;
-				
-			item.Pass4File = Pass4File;
 				
 			item.AddedAt = AddedAt;
 				

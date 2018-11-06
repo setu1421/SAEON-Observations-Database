@@ -1,0 +1,32 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[ImportBatch].[Pass1File] is being dropped, data loss could occur.
+       The column [dbo].[ImportBatch].[Pass2File] is being dropped, data loss could occur.
+       The column [dbo].[ImportBatch].[Pass3File] is being dropped, data loss could occur.
+       The column [dbo].[ImportBatch].[Pass4File] is being dropped, data loss could occur.
+       The column [dbo].[ImportBatch].[SourceFile] is being dropped, data loss could occur.
+
+** User actions
+     Alter
+       [dbo].[ImportBatch] (Table)
+     Create
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_Count] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_EndDate] (Index)
+       [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_StartDate] (Index)
+
+** Supporting actions
+     Refresh
+       [dbo].[vImportBatch] (View)
+
+The column [dbo].[ImportBatch].[Pass1File] is being dropped, data loss could occur.
+The column [dbo].[ImportBatch].[Pass2File] is being dropped, data loss could occur.
+The column [dbo].[ImportBatch].[Pass3File] is being dropped, data loss could occur.
+The column [dbo].[ImportBatch].[Pass4File] is being dropped, data loss could occur.
+The column [dbo].[ImportBatch].[SourceFile] is being dropped, data loss could occur.
+

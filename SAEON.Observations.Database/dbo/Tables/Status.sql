@@ -3,35 +3,17 @@
     [Code]        VARCHAR (50)     NOT NULL,
     [Name]        VARCHAR (150)    NOT NULL,
     [Description] VARCHAR (500)    NOT NULL,
---> Added 2.0.0 20160406 TimPN
     [UserId] UNIQUEIDENTIFIER NULL, 
---< Added 2.0.0 20160406 TimPN
---> Added 2.0.8 20160718 TimPN
-    [AddedAt] DATETIME NULL CONSTRAINT [DF_Status_AddedAt] DEFAULT GetDate(), 
-    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Status_UpdatedAt] DEFAULT GetDate(), 
---< Added 2.0.8 20160718 TimPN
---> Added 2.0.33 20170628 TimPN
+    [AddedAt] DATETIME NULL CONSTRAINT [DF_Status_AddedAt] DEFAULT (getdate()), 
+    [UpdatedAt] DATETIME NULL CONSTRAINT [DF_Status_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
---< Added 2.0.33 20170628 TimPN
     CONSTRAINT [PK_Status] PRIMARY KEY CLUSTERED ([ID]),
---> Changed 20160329 TimPN
---	CONSTRAINT [IX_Status_Code] UNIQUE ([Code]),
     CONSTRAINT [UX_Status_Code] UNIQUE ([Code]),
---< Changed 20160329 TimPN
---> Changed 20160329 TimPN
---    CONSTRAINT [IX_Status_Name] UNIQUE ([Name])
     CONSTRAINT [UX_Status_Name] UNIQUE ([Name]),
---< Changed 20160329 TimPN
---> Added 2.0.0 20160406 TimPN
     CONSTRAINT [FK_Status_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
---< Added 2.0.0 20160406 TimPN
 );
---> Added 2.0.0 20160406 TimPN
 GO
 CREATE INDEX [IX_Status_UserId] ON [dbo].[Status] ([UserId])
---< Added 2.0.0 20160406 TimPN
---> Added 2.0.8 20160718 TimPN
---> Changed 2.0.15 20161102 TimPN
 GO
 CREATE TRIGGER [dbo].[TR_Status_Insert] ON [dbo].[Status]
 FOR INSERT
@@ -41,7 +23,7 @@ BEGIN
     Update
         src
     set
-        AddedAt = GETDATE(),
+        AddedAt = GetDate(),
         UpdatedAt = NULL
     from
         Status src
@@ -57,10 +39,7 @@ BEGIN
     Update
         src
     set
---> Changed 2.0.19 20161205 TimPN
---		AddedAt = del.AddedAt,
-        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate ()),
---< Changed 2.0.19 20161205 TimPN
+        AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
         UpdatedAt = GETDATE()
     from
         Status src
@@ -69,7 +48,3 @@ BEGIN
         inner join deleted del
             on (del.ID = src.ID)
 END
---< Changed 2.0.15 20161102 TimPN
---< Added 2.0.8 20160718 TimPN
-
-

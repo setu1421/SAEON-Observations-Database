@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Ext.Net;
 using SubSonic;
 using SAEON.Observations.Data;
-using System.Web.Security;
 
 /// <summary>
 /// Summary description for ObservationRepository
@@ -30,15 +28,15 @@ public class ObservationRepository : BaseRepository
     //    return col.ToList();
     //}
 
-    public static List<VObservationsList> GetPagedListByBatch(StoreRefreshDataEventArgs e, string paramPrefix, Guid BatchID)
+    public static List<VObservationExpansion> GetPagedListByBatch(StoreRefreshDataEventArgs e, string paramPrefix, Guid BatchID)
     {
-        SqlQuery q = new Select().From(VObservationsList.Schema)
-            .Where(VObservationsList.Columns.ImportBatchID).IsEqualTo(BatchID)
-            .OrderDesc(VObservationsList.Columns.ValueDate)
-            .OrderAsc(VObservationsList.Columns.SensorName)
-            .OrderAsc(VObservationsList.Columns.OfferingName);
+        SqlQuery q = new Select().From(VObservationExpansion.Schema)
+            .Where(VObservationExpansion.Columns.ImportBatchID).IsEqualTo(BatchID)
+            .OrderDesc(VObservationExpansion.Columns.ValueDate)
+            .OrderAsc(VObservationExpansion.Columns.SensorName)
+            .OrderAsc(VObservationExpansion.Columns.OfferingName);
         
         GetPagedQuery(ref q, e, paramPrefix);
-        return q.ExecuteAsCollection<VObservationsListCollection>().ToList();
+        return q.ExecuteAsCollection<VObservationExpansionCollection>().ToList();
     }
 }
