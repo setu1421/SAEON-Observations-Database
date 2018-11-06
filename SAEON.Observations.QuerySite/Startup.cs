@@ -1,5 +1,4 @@
 ﻿using IdentityModel.Client;
-using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
@@ -25,7 +24,7 @@ namespace SAEON.Observations.QuerySite
         public Startup()
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            SyncfusionLicenseProvider.RegisterLicense("NDE2OEAzMTM2MmUzMjJlMzBHMllpK2ladGdFeFBhdTBGY203bXNiVzRRVXA5OWxNbEVDQ0ROdjI4MjY4PQ==;NDE2OUAzMTM2MmUzMjJlMzBUK1U5a1E1VHFmZ09aUUlOS1crNzB1c2ZkOU5SM3l6Tis1bXNuZmNrK0VFPQ==;NDE3MEAzMTM2MmUzMjJlMzBRMGs4bXNQOEhROW9TaVVwYWNucEs1NmZGTFpHZmt6Vi9wN1FjVG5sd0prPQ==;NDE3MUAzMTM2MmUzMjJlMzBROHRGaVlIUXg3cmc3dWcrRnUxQkc3a3c1dVBXL3liRXRISnlLa3lob2RVPQ==");
+            SyncfusionLicenseProvider.RegisterLicense("Mjg3ODFAMzEzNjJlMzMyZTMwY3lCNyszenVCMzloemxPdlEzRHh6UnNIeWVHZW1RL2YwTzRobWhoMHhJZz0=;Mjg3ODJAMzEzNjJlMzMyZTMwbEZLSENBQVA5cHRUbllxUWhjSmN3MG1ZbmFUTEthTWc3OW4rS3Y3QVFaND0=;Mjg3ODNAMzEzNjJlMzMyZTMwV0dsNHkwMFM3WjRkV1pTbTM4Vzd6TjRwNkFpQXZCMnBETXI2UVFGUkRxND0=");
         }
 
         public void Configuration(IAppBuilder app)
@@ -41,7 +40,6 @@ namespace SAEON.Observations.QuerySite
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
                         AuthenticationType = "Cookies"
-
                     });
                     app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                     {
@@ -59,7 +57,7 @@ namespace SAEON.Observations.QuerySite
                         SignInAsAuthenticationType = "Cookies",
                         UseTokenLifetime = false,
                         RequireHttpsMetadata = false,
-                        
+
                         Notifications = new OpenIdConnectAuthenticationNotifications
                         {
                             AuthorizationCodeReceived = async n =>

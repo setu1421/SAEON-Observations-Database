@@ -37,6 +37,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         #region Locations
+
         [HttpGet]
         public JsonResult GetLocations()
         {
@@ -119,7 +120,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     // Clear all
                     model.Locations.ForEach(i => i.IsChecked = false);
                     model.MapPoints.ForEach(i => i.IsSelected = false);
-                    // Clear 
+                    // Clear
                     model.LocationsSelected.Clear();
                     model.Organisations.Clear();
                     model.Sites.Clear();
@@ -184,9 +185,11 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion Locations
 
         #region Features
+
         [HttpGet]
         public JsonResult GetFeatures()
         {
@@ -268,7 +271,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var model = SessionModel;
                     // Clear all
                     model.Features.ForEach(i => i.IsChecked = false);
-                    // Clear 
+                    // Clear
                     model.FeaturesSelected.Clear();
                     model.Phenomena.Clear();
                     model.Offerings.Clear();
@@ -310,9 +313,11 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion Features
 
         #region Filters
+
         [HttpGet]
         public PartialViewResult GetFiltersHtml()
         {
@@ -351,9 +356,11 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion Filters
 
         #region Map
+
         [HttpGet]
         public JsonResult GetMapPoints()
         {
@@ -370,9 +377,11 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion Map
 
         #region Approximation
+
         [HttpGet]
         public async Task<PartialViewResult> SetApproximation()
         {
@@ -422,9 +431,10 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        #endregion
+        #endregion Approximation
 
         #region Data
+
         [HttpGet]
         public async Task<EmptyResult> GetData()
         {
@@ -453,9 +463,11 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion Data
 
         #region Table
+
         [HttpGet]
         public PartialViewResult GetTableHtml()
         {
@@ -474,9 +486,11 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion Table
 
         #region Chart
+
         [HttpGet]
         public PartialViewResult GetChartHtml()
         {
@@ -495,9 +509,11 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion Chart
 
         #region UserQueries
+
         //[Authorize]
         private async Task<List<UserQuery>> GetUserQueriesList()
         {
@@ -576,7 +592,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public PartialViewResult GetLoadQueryDialog()
         {
             using (Logging.MethodCall(GetType()))
@@ -592,9 +607,11 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion UserQueries
 
         #region SaveQueryDialog
+
         [HttpPost]
         [Authorize]
         public async Task<EmptyResult> SaveQuery(SaveQueryModel input)
@@ -637,7 +654,6 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public PartialViewResult GetSaveQueryDialog()
         {
             using (Logging.MethodCall(GetType()))
@@ -653,11 +669,12 @@ namespace SAEON.Observations.QuerySite.Controllers
                 }
             }
         }
-        #endregion
+
+        #endregion SaveQueryDialog
 
         #region Download
+
         [HttpGet]
-        [Authorize]
         public PartialViewResult GetDownloadDialog()
         {
             using (Logging.MethodCall(GetType()))
@@ -705,6 +722,6 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        #endregion
+        #endregion Download
     }
 }

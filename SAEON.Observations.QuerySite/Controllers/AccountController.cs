@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Linq;
 using SAEON.Logs;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;

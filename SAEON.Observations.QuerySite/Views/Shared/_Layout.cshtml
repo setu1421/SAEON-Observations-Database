@@ -1,10 +1,20 @@
 ﻿<!DOCTYPE html>
 <html lang="en-za">
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128063984-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-128063984-4'); /*Test site*/
+        //gtag('config', 'UA-128063984-5'); /*Live site*/
+    </script>
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    @RenderSection("Metas", required: false)
+    @RenderSection("MetaTags", required: false)
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDescription))
     {
         <meta name="description" content="@ViewBag.MetaDescription" />
@@ -16,12 +26,12 @@
     <title>@(ViewBag.Title == "Observations Database" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database" : "Observations Database - " + @ViewBag.Title)</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
-    @Styles.Render("~/Content/css")
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="stylesheet" href="~/Content/SAEON.css" />
+    @Styles.Render("~/node_modules/mdbootstrap/css/bootstrap.min.css")
+    @Styles.Render("~/node_modules/mdbootstrap/css/mdb.min.css")
     @Styles.Render("~/Content/ej/web/bootstrap-theme/ej.web.all.min.css")
-    <link rel="stylesheet" href="~/node_modules/mdbootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/node_modules/mdbootstrap/css/mdb.min.css" />
     @RenderSection("Styles", required: false)
-    @Scripts.Render("~/bundles/modernizr")
     <script type='text/javascript'>
         var appInsights = window.appInsights || function (config) {
             function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } }
@@ -52,10 +62,10 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Query</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @Html.ActionLink("Inventory", "Index", "Inventory", null, new { @class = "nav-link" })
-                                @Html.ActionLink("Data", "Index", "DataWizard", null, new { @class = "nav-link" })
+                                @Html.ActionLink("Inventory", "Index", "Inventory", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Data", "Index", "DataWizard", null, new { @class = "dropdown-item" })
                                 @*<a class="dropdown-item" href="#">Spacial Coverage</a>
-                                <a class="dropdown-item" href="#">Temporal Coverage</a>*@
+                                    <a class="dropdown-item" href="#">Temporal Coverage</a>*@
                             </div>
                         </li>
                         @Html.Partial("_AdminPartial")
@@ -100,12 +110,14 @@
             </div>
         </footer>
     </div>
-    <script src="~/node_modules/mdbootstrap/js/jquery-3.3.1.min.js"></script>
-    <script src="~/node_modules/mdbootstrap/js/popper.min.js"></script>
-    <script src="~/node_modules/mdbootstrap/js/bootstrap.min.js"></script>
-    <script src="~/node_modules/mdbootstrap/js/mdb.min.js"></script>
+    @Scripts.Render("~/node_modules/mdbootstrap/js/jquery-3.3.1.min.js")
+    @Scripts.Render("~/node_modules/mdbootstrap/js/popper.min.js")
+    @Scripts.Render("~/node_modules/mdbootstrap/js/bootstrap.min.js")
+    @Scripts.Render("~/node_modules/mdbootstrap/js/mdb.min.js")
     @Scripts.Render("~/Scripts/jsrender.min.js")
     @Scripts.Render("~/Scripts/ej/web/ej.web.all.min.js")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jqueryval")
     @RenderSection("Scripts", required: false)
     @Html.EJ().ScriptManager()
 </body>

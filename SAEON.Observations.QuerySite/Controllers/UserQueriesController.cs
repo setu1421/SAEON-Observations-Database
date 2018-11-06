@@ -20,6 +20,5 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             return await base.Edit(delta);
         }
-
     }
 }
