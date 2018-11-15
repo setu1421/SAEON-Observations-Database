@@ -965,17 +965,17 @@ public class ImportSchemaHelper : IDisposable
                             rec.InvalidDataValue = rec.DataValue.ToString();
                         }
                     }
-                    //Set new offering/UOM
-                    if (trns.NewPhenomenonOfferingID.HasValue && (rec.PhenomenonOfferingID.Value != trns.NewPhenomenonOfferingID.Value))
-                    {
-                        rec.RawPhenomenonOfferingID = trns.PhenomenonOfferingID;
-                        rec.PhenomenonOfferingID = trns.NewPhenomenonOfferingID;
-                    }
-                    if (trns.NewPhenomenonUOMID.HasValue && (rec.PhenomenonUOMID.Value != trns.NewPhenomenonUOMID.Value))
-                    {
-                        rec.RawPhenomenonUOMID = trns.PhenomenonUOMID;
-                        rec.PhenomenonUOMID = trns.NewPhenomenonUOMID;
-                    }
+                }
+                //Set new offering/UOM
+                if (trns.NewPhenomenonOfferingID.HasValue && (rec.PhenomenonOfferingID.Value != trns.NewPhenomenonOfferingID.Value))
+                {
+                    rec.RawPhenomenonOfferingID = trns.PhenomenonOfferingID;
+                    rec.PhenomenonOfferingID = trns.NewPhenomenonOfferingID;
+                }
+                if (trns.NewPhenomenonUOMID.HasValue && (rec.PhenomenonUOMID.Value != trns.NewPhenomenonUOMID.Value))
+                {
+                    rec.RawPhenomenonUOMID = trns.PhenomenonUOMID;
+                    rec.PhenomenonUOMID = trns.NewPhenomenonUOMID;
                 }
             }
             catch (Exception ex)
