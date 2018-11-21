@@ -13,6 +13,11 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
             Entities.AddRange(SensorThingsFactory.FeaturesOfInterest.OrderBy(i => i.Name));
         }
 
+        public override IQueryable<FeatureOfInterest> GetEntities()
+        {
+            return base.GetEntities();
+        }
+
         public override JToken GetAll()
         {
             return base.GetAll();
