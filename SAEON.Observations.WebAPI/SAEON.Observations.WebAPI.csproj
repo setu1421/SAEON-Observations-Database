@@ -476,7 +476,9 @@
       <TransformOnBuild>true</TransformOnBuild>
     </Content>
     <Content Include="Images\Banner.jpg" />
+    <Content Include="Images\DST logo.png" />
     <Content Include="Images\Logo.png" />
+    <Content Include="Images\SAEON logo.png" />
     <Content Include="MachineKey.config" />
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
