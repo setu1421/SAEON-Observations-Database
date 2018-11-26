@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime? StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int? Rank,Guid? SensorID,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Insert(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime? StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int? Rank,Guid? SensorID,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,double? ParamA,double? ParamB,double? ParamC,double? ParamD,double? ParamE,double? ParamF,double? ParamG,double? ParamH,double? ParamI,double? ParamJ,double? ParamK,double? ParamL,double? ParamM,double? ParamN,double? ParamO,double? ParamP,double? ParamQ,double? ParamR,double? ParamSX,double? ParamT,double? ParamU,double? ParamV,double? ParamW,double? ParamX,double? ParamY)
 	    {
 		    DataSourceTransformation item = new DataSourceTransformation();
 		    
@@ -118,6 +118,56 @@ namespace SAEON.Observations.Data
             
             item.RowVersion = RowVersion;
             
+            item.ParamA = ParamA;
+            
+            item.ParamB = ParamB;
+            
+            item.ParamC = ParamC;
+            
+            item.ParamD = ParamD;
+            
+            item.ParamE = ParamE;
+            
+            item.ParamF = ParamF;
+            
+            item.ParamG = ParamG;
+            
+            item.ParamH = ParamH;
+            
+            item.ParamI = ParamI;
+            
+            item.ParamJ = ParamJ;
+            
+            item.ParamK = ParamK;
+            
+            item.ParamL = ParamL;
+            
+            item.ParamM = ParamM;
+            
+            item.ParamN = ParamN;
+            
+            item.ParamO = ParamO;
+            
+            item.ParamP = ParamP;
+            
+            item.ParamQ = ParamQ;
+            
+            item.ParamR = ParamR;
+            
+            item.ParamSX = ParamSX;
+            
+            item.ParamT = ParamT;
+            
+            item.ParamU = ParamU;
+            
+            item.ParamV = ParamV;
+            
+            item.ParamW = ParamW;
+            
+            item.ParamX = ParamX;
+            
+            item.ParamY = ParamY;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -126,7 +176,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime? StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int? Rank,Guid? SensorID,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
+	    public void Update(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime? StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int? Rank,Guid? SensorID,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,double? ParamA,double? ParamB,double? ParamC,double? ParamD,double? ParamE,double? ParamF,double? ParamG,double? ParamH,double? ParamI,double? ParamJ,double? ParamK,double? ParamL,double? ParamM,double? ParamN,double? ParamO,double? ParamP,double? ParamQ,double? ParamR,double? ParamSX,double? ParamT,double? ParamU,double? ParamV,double? ParamW,double? ParamX,double? ParamY)
 	    {
 		    DataSourceTransformation item = new DataSourceTransformation();
 	        item.MarkOld();
@@ -165,6 +215,56 @@ namespace SAEON.Observations.Data
 			item.UpdatedAt = UpdatedAt;
 				
 			item.RowVersion = RowVersion;
+				
+			item.ParamA = ParamA;
+				
+			item.ParamB = ParamB;
+				
+			item.ParamC = ParamC;
+				
+			item.ParamD = ParamD;
+				
+			item.ParamE = ParamE;
+				
+			item.ParamF = ParamF;
+				
+			item.ParamG = ParamG;
+				
+			item.ParamH = ParamH;
+				
+			item.ParamI = ParamI;
+				
+			item.ParamJ = ParamJ;
+				
+			item.ParamK = ParamK;
+				
+			item.ParamL = ParamL;
+				
+			item.ParamM = ParamM;
+				
+			item.ParamN = ParamN;
+				
+			item.ParamO = ParamO;
+				
+			item.ParamP = ParamP;
+				
+			item.ParamQ = ParamQ;
+				
+			item.ParamR = ParamR;
+				
+			item.ParamSX = ParamSX;
+				
+			item.ParamT = ParamT;
+				
+			item.ParamU = ParamU;
+				
+			item.ParamV = ParamV;
+				
+			item.ParamW = ParamW;
+				
+			item.ParamX = ParamX;
+				
+			item.ParamY = ParamY;
 				
 	        item.Save(UserName);
 	    }

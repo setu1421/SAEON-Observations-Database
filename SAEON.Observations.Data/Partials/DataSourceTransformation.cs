@@ -60,16 +60,16 @@ namespace SAEON.Observations.Data
             get
             {
 
-                if (!String.IsNullOrEmpty(this.Definition) && this.TransformationTypeID.ToString() == da.TransformationType.RatingTable)
+                if (!String.IsNullOrEmpty(Definition) && TransformationType.Code == TransformationType.RatingTable)
                 {
-                    string json = String.Concat("{", this.Definition, "}");
+                    string json = String.Concat("{", Definition, "}");
 
-                    this.ratingTableValues = new List<double>();
+                    ratingTableValues = new List<double>();
 
 
                     Dictionary<double, double> dic = JsonConvert.DeserializeObject<Dictionary<double, double>>(json);
 
-                    this.ratingTableValues = from v in dic.Keys
+                    ratingTableValues = from v in dic.Keys
                                              orderby dic[v] ascending
                                              select dic[v];
 
@@ -86,9 +86,9 @@ namespace SAEON.Observations.Data
 
             double result = RawValue;
 
-            if (!String.IsNullOrEmpty(this.Definition) && this.TransformationTypeID.ToString() == da.TransformationType.RatingTable)
+            if (!String.IsNullOrEmpty(Definition) && TransformationType.Code == TransformationType.RatingTable)
             {
-                string json = String.Concat("{", this.Definition, "}");
+                string json = String.Concat("{", Definition, "}");
 
                 Dictionary<double, double> dic = JsonConvert.DeserializeObject<Dictionary<double, double>>(json);
 
@@ -145,11 +145,11 @@ namespace SAEON.Observations.Data
         {
             get
             {
-                if (!String.IsNullOrEmpty(this.Definition) && this.TransformationTypeID.ToString() == da.TransformationType.QualityControlValues)
+                if (!String.IsNullOrEmpty(Definition) && TransformationType.Code == TransformationType.QualityControlValues)
                 {
-                    string json = String.Concat("{", this.Definition, "}");
+                    string json = String.Concat("{", Definition, "}");
 
-                    this.qualityValues = new Dictionary<string, double>();
+                    qualityValues = new Dictionary<string, double>();
 
                     JavaScriptSerializer js = new JavaScriptSerializer();
                     qualityValues = js.Deserialize<Dictionary<string, double>>(json);
@@ -172,11 +172,11 @@ namespace SAEON.Observations.Data
             get
             {
 
-                if (!String.IsNullOrEmpty(this.Definition) && this.TransformationTypeID.ToString() == da.TransformationType.CorrectionValues)
+                if (!String.IsNullOrEmpty(Definition) && TransformationType.Code == TransformationType.CorrectionValues)
                 {
-                    string json = String.Concat("{", this.Definition, "}");
+                    string json = String.Concat("{", Definition, "}");
 
-                    this.correctionValues = new Dictionary<string, string>();
+                    correctionValues = new Dictionary<string, string>();
 
                     JavaScriptSerializer js = new JavaScriptSerializer();
                     correctionValues = js.Deserialize<Dictionary<string, string>>(json);
@@ -192,11 +192,11 @@ namespace SAEON.Observations.Data
         {
             get
             {
-                if (!String.IsNullOrEmpty(this.Definition) && this.TransformationTypeID.ToString() == da.TransformationType.Lookup)
+                if (!String.IsNullOrEmpty(Definition) && TransformationType.Code == TransformationType.Lookup)
                 {
-                    string json = String.Concat("{", this.Definition, "}");
+                    string json = String.Concat("{", Definition, "}");
 
-                    this.lookupValues = new Dictionary<string, double>(StringComparer.InvariantCultureIgnoreCase);
+                    lookupValues = new Dictionary<string, double>(StringComparer.InvariantCultureIgnoreCase);
 
                     JavaScriptSerializer js = new JavaScriptSerializer();
                     lookupValues = new Dictionary<string, double>(js.Deserialize<Dictionary<string, double>>(json), StringComparer.InvariantCultureIgnoreCase);

@@ -895,7 +895,7 @@ public class ImportSchemaHelper : IDisposable
 
                 if (!isEmpty)
                 {
-                    if (trns.TransformationTypeID.ToString() == TransformationType.CorrectionValues)
+                    if (trns.TransformationType.Code == TransformationType.CorrectionValues)
                     {
                         Dictionary<string, string> corrvals = trns.CorrectionValues;
 
@@ -909,12 +909,12 @@ public class ImportSchemaHelper : IDisposable
                             Logging.Verbose("Correction Raw: {RawValue} Data: {DataValue}", rec.RawValue, rec.DataValue);
                         }
                     }
-                    else if (trns.TransformationTypeID.ToString() == TransformationType.RatingTable)
+                    else if (trns.TransformationType.Code == TransformationType.RatingTable)
                     {
                         Logging.Verbose("Rating");
                         rec.DataValue = trns.GetRatingValue(rec.RawValue.Value);
                     }
-                    else if (trns.TransformationTypeID.ToString() == TransformationType.QualityControlValues)
+                    else if (trns.TransformationType.Code == TransformationType.QualityControlValues)
                     {
                         if (!rec.DataValue.HasValue)
                         {
@@ -942,7 +942,7 @@ public class ImportSchemaHelper : IDisposable
                             rec.InvalidDataValue = rec.DataValue.ToString();
                         }
                     }
-                    else if (trns.TransformationTypeID.ToString() == TransformationType.Lookup)
+                    else if (trns.TransformationType.Code == TransformationType.Lookup)
                     {
                         var qv = trns.LookupValues;
                         if (!qv.ContainsKey(rec.FieldRawValue))
@@ -963,6 +963,133 @@ public class ImportSchemaHelper : IDisposable
 
                             rec.DataValueInvalid = true;
                             rec.InvalidDataValue = rec.DataValue.ToString();
+                        }
+                    }
+                    else if (trns.TransformationType.Code == TransformationType.Expression)
+                    {
+                        Expression expr = new Expression(trns.Definition, EvaluateOptions.IgnoreCase);
+                        expr.Parameters["value"] = rec.RawValue;
+                        if (!trns.ParamA.HasValue)
+                        {
+                            expr.Parameters["a"] = trns.ParamA.Value;
+                        }
+                        if (!trns.ParamB.HasValue)
+                        {
+                            expr.Parameters["b"] = trns.ParamB.Value;
+                        }
+                        if (!trns.ParamC.HasValue)
+                        {
+                            expr.Parameters["c"] = trns.ParamC.Value;
+                        }
+                        if (!trns.ParamD.HasValue)
+                        {
+                            expr.Parameters["d"] = trns.ParamD.Value;
+                        }
+                        if (!trns.ParamE.HasValue)
+                        {
+                            expr.Parameters["e"] = trns.ParamE.Value;
+                        }
+                        if (!trns.ParamF.HasValue)
+                        {
+                            expr.Parameters["f"] = trns.ParamF.Value;
+                        }
+                        if (!trns.ParamG.HasValue)
+                        {
+                            expr.Parameters["g"] = trns.ParamG.Value;
+                        }
+                        if (!trns.ParamH.HasValue)
+                        {
+                            expr.Parameters["h"] = trns.ParamH.Value;
+                        }
+                        if (!trns.ParamI.HasValue)
+                        {
+                            expr.Parameters["i"] = trns.ParamI.Value;
+                        }
+                        if (!trns.ParamJ.HasValue)
+                        {
+                            expr.Parameters["j"] = trns.ParamJ.Value;
+                        }
+                        if (!trns.ParamK.HasValue)
+                        {
+                            expr.Parameters["k"] = trns.ParamK.Value;
+                        }
+                        if (!trns.ParamL.HasValue)
+                        {
+                            expr.Parameters["l"] = trns.ParamL.Value;
+                        }
+                        if (!trns.ParamM.HasValue)
+                        {
+                            expr.Parameters["m"] = trns.ParamM.Value;
+                        }
+                        if (!trns.ParamN.HasValue)
+                        {
+                            expr.Parameters["n"] = trns.ParamN.Value;
+                        }
+                        if (!trns.ParamO.HasValue)
+                        {
+                            expr.Parameters["o"] = trns.ParamO.Value;
+                        }
+                        if (!trns.ParamP.HasValue)
+                        {
+                            expr.Parameters["p"] = trns.ParamP.Value;
+                        }
+                        if (!trns.ParamQ.HasValue)
+                        {
+                            expr.Parameters["q"] = trns.ParamQ.Value;
+                        }
+                        if (!trns.ParamR.HasValue)
+                        {
+                            expr.Parameters["r"] = trns.ParamR.Value;
+                        }
+                        if (!trns.ParamSX.HasValue)
+                        {
+                            expr.Parameters["s"] = trns.ParamSX.Value;
+                        }
+                        if (!trns.ParamT.HasValue)
+                        {
+                            expr.Parameters["t"] = trns.ParamT.Value;
+                        }
+                        if (!trns.ParamU.HasValue)
+                        {
+                            expr.Parameters["u"] = trns.ParamU.Value;
+                        }
+                        if (!trns.ParamV.HasValue)
+                        {
+                            expr.Parameters["v"] = trns.ParamV.Value;
+                        }
+                        if (!trns.ParamW.HasValue)
+                        {
+                            expr.Parameters["w"] = trns.ParamW.Value;
+                        }
+                        if (!trns.ParamX.HasValue)
+                        {
+                            expr.Parameters["x"] = trns.ParamX.Value;
+                        }
+                        if (!trns.ParamY.HasValue)
+                        {
+                            expr.Parameters["y"] = trns.ParamY.Value;
+                        }
+                        try
+                        {
+                            if (expr.HasErrors())
+                            {
+                                throw new EvaluateException($"Error in expression - {expr.Error}");
+                            }
+                            var valueStr = expr.Evaluate();
+                            Logging.Verbose("ValueStr: {value}", valueStr);
+                            var value = double.Parse(valueStr.ToString());
+                            Logging.Verbose("Value: {value}", value);
+                            rec.DataValue = value;
+                            Logging.Verbose("Expression: {Valid} Raw: {RawValue} Data: {DataValue}", true, rec.RawValue, rec.DataValue);
+                        }
+                        catch (Exception ex)
+                        {
+                            rec.InvalidStatuses.Add(Status.TransformValueInvalid);
+                            rec.DataSourceTransformationID = trns.Id;
+                            rec.DataValueInvalid = true;
+                            rec.InvalidDataValue = rec.RawValue?.ToString();
+                            Logging.Verbose("Expression: {Valid} Raw: {RawValue} Ex: {Exception}", false, rec.RawValue, ex.Message);
+                            throw;
                         }
                     }
                 }

@@ -360,6 +360,331 @@ namespace SAEON.Observations.Data
 				colvarRowVersion.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRowVersion);
 				
+				TableSchema.TableColumn colvarParamA = new TableSchema.TableColumn(schema);
+				colvarParamA.ColumnName = "ParamA";
+				colvarParamA.DataType = DbType.Double;
+				colvarParamA.MaxLength = 0;
+				colvarParamA.AutoIncrement = false;
+				colvarParamA.IsNullable = true;
+				colvarParamA.IsPrimaryKey = false;
+				colvarParamA.IsForeignKey = false;
+				colvarParamA.IsReadOnly = false;
+				colvarParamA.DefaultSetting = @"";
+				colvarParamA.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamA);
+				
+				TableSchema.TableColumn colvarParamB = new TableSchema.TableColumn(schema);
+				colvarParamB.ColumnName = "ParamB";
+				colvarParamB.DataType = DbType.Double;
+				colvarParamB.MaxLength = 0;
+				colvarParamB.AutoIncrement = false;
+				colvarParamB.IsNullable = true;
+				colvarParamB.IsPrimaryKey = false;
+				colvarParamB.IsForeignKey = false;
+				colvarParamB.IsReadOnly = false;
+				colvarParamB.DefaultSetting = @"";
+				colvarParamB.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamB);
+				
+				TableSchema.TableColumn colvarParamC = new TableSchema.TableColumn(schema);
+				colvarParamC.ColumnName = "ParamC";
+				colvarParamC.DataType = DbType.Double;
+				colvarParamC.MaxLength = 0;
+				colvarParamC.AutoIncrement = false;
+				colvarParamC.IsNullable = true;
+				colvarParamC.IsPrimaryKey = false;
+				colvarParamC.IsForeignKey = false;
+				colvarParamC.IsReadOnly = false;
+				colvarParamC.DefaultSetting = @"";
+				colvarParamC.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamC);
+				
+				TableSchema.TableColumn colvarParamD = new TableSchema.TableColumn(schema);
+				colvarParamD.ColumnName = "ParamD";
+				colvarParamD.DataType = DbType.Double;
+				colvarParamD.MaxLength = 0;
+				colvarParamD.AutoIncrement = false;
+				colvarParamD.IsNullable = true;
+				colvarParamD.IsPrimaryKey = false;
+				colvarParamD.IsForeignKey = false;
+				colvarParamD.IsReadOnly = false;
+				colvarParamD.DefaultSetting = @"";
+				colvarParamD.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamD);
+				
+				TableSchema.TableColumn colvarParamE = new TableSchema.TableColumn(schema);
+				colvarParamE.ColumnName = "ParamE";
+				colvarParamE.DataType = DbType.Double;
+				colvarParamE.MaxLength = 0;
+				colvarParamE.AutoIncrement = false;
+				colvarParamE.IsNullable = true;
+				colvarParamE.IsPrimaryKey = false;
+				colvarParamE.IsForeignKey = false;
+				colvarParamE.IsReadOnly = false;
+				colvarParamE.DefaultSetting = @"";
+				colvarParamE.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamE);
+				
+				TableSchema.TableColumn colvarParamF = new TableSchema.TableColumn(schema);
+				colvarParamF.ColumnName = "ParamF";
+				colvarParamF.DataType = DbType.Double;
+				colvarParamF.MaxLength = 0;
+				colvarParamF.AutoIncrement = false;
+				colvarParamF.IsNullable = true;
+				colvarParamF.IsPrimaryKey = false;
+				colvarParamF.IsForeignKey = false;
+				colvarParamF.IsReadOnly = false;
+				colvarParamF.DefaultSetting = @"";
+				colvarParamF.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamF);
+				
+				TableSchema.TableColumn colvarParamG = new TableSchema.TableColumn(schema);
+				colvarParamG.ColumnName = "ParamG";
+				colvarParamG.DataType = DbType.Double;
+				colvarParamG.MaxLength = 0;
+				colvarParamG.AutoIncrement = false;
+				colvarParamG.IsNullable = true;
+				colvarParamG.IsPrimaryKey = false;
+				colvarParamG.IsForeignKey = false;
+				colvarParamG.IsReadOnly = false;
+				colvarParamG.DefaultSetting = @"";
+				colvarParamG.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamG);
+				
+				TableSchema.TableColumn colvarParamH = new TableSchema.TableColumn(schema);
+				colvarParamH.ColumnName = "ParamH";
+				colvarParamH.DataType = DbType.Double;
+				colvarParamH.MaxLength = 0;
+				colvarParamH.AutoIncrement = false;
+				colvarParamH.IsNullable = true;
+				colvarParamH.IsPrimaryKey = false;
+				colvarParamH.IsForeignKey = false;
+				colvarParamH.IsReadOnly = false;
+				colvarParamH.DefaultSetting = @"";
+				colvarParamH.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamH);
+				
+				TableSchema.TableColumn colvarParamI = new TableSchema.TableColumn(schema);
+				colvarParamI.ColumnName = "ParamI";
+				colvarParamI.DataType = DbType.Double;
+				colvarParamI.MaxLength = 0;
+				colvarParamI.AutoIncrement = false;
+				colvarParamI.IsNullable = true;
+				colvarParamI.IsPrimaryKey = false;
+				colvarParamI.IsForeignKey = false;
+				colvarParamI.IsReadOnly = false;
+				colvarParamI.DefaultSetting = @"";
+				colvarParamI.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamI);
+				
+				TableSchema.TableColumn colvarParamJ = new TableSchema.TableColumn(schema);
+				colvarParamJ.ColumnName = "ParamJ";
+				colvarParamJ.DataType = DbType.Double;
+				colvarParamJ.MaxLength = 0;
+				colvarParamJ.AutoIncrement = false;
+				colvarParamJ.IsNullable = true;
+				colvarParamJ.IsPrimaryKey = false;
+				colvarParamJ.IsForeignKey = false;
+				colvarParamJ.IsReadOnly = false;
+				colvarParamJ.DefaultSetting = @"";
+				colvarParamJ.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamJ);
+				
+				TableSchema.TableColumn colvarParamK = new TableSchema.TableColumn(schema);
+				colvarParamK.ColumnName = "ParamK";
+				colvarParamK.DataType = DbType.Double;
+				colvarParamK.MaxLength = 0;
+				colvarParamK.AutoIncrement = false;
+				colvarParamK.IsNullable = true;
+				colvarParamK.IsPrimaryKey = false;
+				colvarParamK.IsForeignKey = false;
+				colvarParamK.IsReadOnly = false;
+				colvarParamK.DefaultSetting = @"";
+				colvarParamK.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamK);
+				
+				TableSchema.TableColumn colvarParamL = new TableSchema.TableColumn(schema);
+				colvarParamL.ColumnName = "ParamL";
+				colvarParamL.DataType = DbType.Double;
+				colvarParamL.MaxLength = 0;
+				colvarParamL.AutoIncrement = false;
+				colvarParamL.IsNullable = true;
+				colvarParamL.IsPrimaryKey = false;
+				colvarParamL.IsForeignKey = false;
+				colvarParamL.IsReadOnly = false;
+				colvarParamL.DefaultSetting = @"";
+				colvarParamL.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamL);
+				
+				TableSchema.TableColumn colvarParamM = new TableSchema.TableColumn(schema);
+				colvarParamM.ColumnName = "ParamM";
+				colvarParamM.DataType = DbType.Double;
+				colvarParamM.MaxLength = 0;
+				colvarParamM.AutoIncrement = false;
+				colvarParamM.IsNullable = true;
+				colvarParamM.IsPrimaryKey = false;
+				colvarParamM.IsForeignKey = false;
+				colvarParamM.IsReadOnly = false;
+				colvarParamM.DefaultSetting = @"";
+				colvarParamM.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamM);
+				
+				TableSchema.TableColumn colvarParamN = new TableSchema.TableColumn(schema);
+				colvarParamN.ColumnName = "ParamN";
+				colvarParamN.DataType = DbType.Double;
+				colvarParamN.MaxLength = 0;
+				colvarParamN.AutoIncrement = false;
+				colvarParamN.IsNullable = true;
+				colvarParamN.IsPrimaryKey = false;
+				colvarParamN.IsForeignKey = false;
+				colvarParamN.IsReadOnly = false;
+				colvarParamN.DefaultSetting = @"";
+				colvarParamN.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamN);
+				
+				TableSchema.TableColumn colvarParamO = new TableSchema.TableColumn(schema);
+				colvarParamO.ColumnName = "ParamO";
+				colvarParamO.DataType = DbType.Double;
+				colvarParamO.MaxLength = 0;
+				colvarParamO.AutoIncrement = false;
+				colvarParamO.IsNullable = true;
+				colvarParamO.IsPrimaryKey = false;
+				colvarParamO.IsForeignKey = false;
+				colvarParamO.IsReadOnly = false;
+				colvarParamO.DefaultSetting = @"";
+				colvarParamO.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamO);
+				
+				TableSchema.TableColumn colvarParamP = new TableSchema.TableColumn(schema);
+				colvarParamP.ColumnName = "ParamP";
+				colvarParamP.DataType = DbType.Double;
+				colvarParamP.MaxLength = 0;
+				colvarParamP.AutoIncrement = false;
+				colvarParamP.IsNullable = true;
+				colvarParamP.IsPrimaryKey = false;
+				colvarParamP.IsForeignKey = false;
+				colvarParamP.IsReadOnly = false;
+				colvarParamP.DefaultSetting = @"";
+				colvarParamP.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamP);
+				
+				TableSchema.TableColumn colvarParamQ = new TableSchema.TableColumn(schema);
+				colvarParamQ.ColumnName = "ParamQ";
+				colvarParamQ.DataType = DbType.Double;
+				colvarParamQ.MaxLength = 0;
+				colvarParamQ.AutoIncrement = false;
+				colvarParamQ.IsNullable = true;
+				colvarParamQ.IsPrimaryKey = false;
+				colvarParamQ.IsForeignKey = false;
+				colvarParamQ.IsReadOnly = false;
+				colvarParamQ.DefaultSetting = @"";
+				colvarParamQ.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamQ);
+				
+				TableSchema.TableColumn colvarParamR = new TableSchema.TableColumn(schema);
+				colvarParamR.ColumnName = "ParamR";
+				colvarParamR.DataType = DbType.Double;
+				colvarParamR.MaxLength = 0;
+				colvarParamR.AutoIncrement = false;
+				colvarParamR.IsNullable = true;
+				colvarParamR.IsPrimaryKey = false;
+				colvarParamR.IsForeignKey = false;
+				colvarParamR.IsReadOnly = false;
+				colvarParamR.DefaultSetting = @"";
+				colvarParamR.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamR);
+				
+				TableSchema.TableColumn colvarParamSX = new TableSchema.TableColumn(schema);
+				colvarParamSX.ColumnName = "ParamS";
+				colvarParamSX.DataType = DbType.Double;
+				colvarParamSX.MaxLength = 0;
+				colvarParamSX.AutoIncrement = false;
+				colvarParamSX.IsNullable = true;
+				colvarParamSX.IsPrimaryKey = false;
+				colvarParamSX.IsForeignKey = false;
+				colvarParamSX.IsReadOnly = false;
+				colvarParamSX.DefaultSetting = @"";
+				colvarParamSX.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamSX);
+				
+				TableSchema.TableColumn colvarParamT = new TableSchema.TableColumn(schema);
+				colvarParamT.ColumnName = "ParamT";
+				colvarParamT.DataType = DbType.Double;
+				colvarParamT.MaxLength = 0;
+				colvarParamT.AutoIncrement = false;
+				colvarParamT.IsNullable = true;
+				colvarParamT.IsPrimaryKey = false;
+				colvarParamT.IsForeignKey = false;
+				colvarParamT.IsReadOnly = false;
+				colvarParamT.DefaultSetting = @"";
+				colvarParamT.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamT);
+				
+				TableSchema.TableColumn colvarParamU = new TableSchema.TableColumn(schema);
+				colvarParamU.ColumnName = "ParamU";
+				colvarParamU.DataType = DbType.Double;
+				colvarParamU.MaxLength = 0;
+				colvarParamU.AutoIncrement = false;
+				colvarParamU.IsNullable = true;
+				colvarParamU.IsPrimaryKey = false;
+				colvarParamU.IsForeignKey = false;
+				colvarParamU.IsReadOnly = false;
+				colvarParamU.DefaultSetting = @"";
+				colvarParamU.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamU);
+				
+				TableSchema.TableColumn colvarParamV = new TableSchema.TableColumn(schema);
+				colvarParamV.ColumnName = "ParamV";
+				colvarParamV.DataType = DbType.Double;
+				colvarParamV.MaxLength = 0;
+				colvarParamV.AutoIncrement = false;
+				colvarParamV.IsNullable = true;
+				colvarParamV.IsPrimaryKey = false;
+				colvarParamV.IsForeignKey = false;
+				colvarParamV.IsReadOnly = false;
+				colvarParamV.DefaultSetting = @"";
+				colvarParamV.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamV);
+				
+				TableSchema.TableColumn colvarParamW = new TableSchema.TableColumn(schema);
+				colvarParamW.ColumnName = "ParamW";
+				colvarParamW.DataType = DbType.Double;
+				colvarParamW.MaxLength = 0;
+				colvarParamW.AutoIncrement = false;
+				colvarParamW.IsNullable = true;
+				colvarParamW.IsPrimaryKey = false;
+				colvarParamW.IsForeignKey = false;
+				colvarParamW.IsReadOnly = false;
+				colvarParamW.DefaultSetting = @"";
+				colvarParamW.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamW);
+				
+				TableSchema.TableColumn colvarParamX = new TableSchema.TableColumn(schema);
+				colvarParamX.ColumnName = "ParamX";
+				colvarParamX.DataType = DbType.Double;
+				colvarParamX.MaxLength = 0;
+				colvarParamX.AutoIncrement = false;
+				colvarParamX.IsNullable = true;
+				colvarParamX.IsPrimaryKey = false;
+				colvarParamX.IsForeignKey = false;
+				colvarParamX.IsReadOnly = false;
+				colvarParamX.DefaultSetting = @"";
+				colvarParamX.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamX);
+				
+				TableSchema.TableColumn colvarParamY = new TableSchema.TableColumn(schema);
+				colvarParamY.ColumnName = "ParamY";
+				colvarParamY.DataType = DbType.Double;
+				colvarParamY.MaxLength = 0;
+				colvarParamY.AutoIncrement = false;
+				colvarParamY.IsNullable = true;
+				colvarParamY.IsPrimaryKey = false;
+				colvarParamY.IsForeignKey = false;
+				colvarParamY.IsReadOnly = false;
+				colvarParamY.DefaultSetting = @"";
+				colvarParamY.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarParamY);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -505,6 +830,206 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
 			set { SetColumnValue(Columns.RowVersion, value); }
 		}
+		  
+		[XmlAttribute("ParamA")]
+		[Bindable(true)]
+		public double? ParamA 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamA); }
+			set { SetColumnValue(Columns.ParamA, value); }
+		}
+		  
+		[XmlAttribute("ParamB")]
+		[Bindable(true)]
+		public double? ParamB 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamB); }
+			set { SetColumnValue(Columns.ParamB, value); }
+		}
+		  
+		[XmlAttribute("ParamC")]
+		[Bindable(true)]
+		public double? ParamC 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamC); }
+			set { SetColumnValue(Columns.ParamC, value); }
+		}
+		  
+		[XmlAttribute("ParamD")]
+		[Bindable(true)]
+		public double? ParamD 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamD); }
+			set { SetColumnValue(Columns.ParamD, value); }
+		}
+		  
+		[XmlAttribute("ParamE")]
+		[Bindable(true)]
+		public double? ParamE 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamE); }
+			set { SetColumnValue(Columns.ParamE, value); }
+		}
+		  
+		[XmlAttribute("ParamF")]
+		[Bindable(true)]
+		public double? ParamF 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamF); }
+			set { SetColumnValue(Columns.ParamF, value); }
+		}
+		  
+		[XmlAttribute("ParamG")]
+		[Bindable(true)]
+		public double? ParamG 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamG); }
+			set { SetColumnValue(Columns.ParamG, value); }
+		}
+		  
+		[XmlAttribute("ParamH")]
+		[Bindable(true)]
+		public double? ParamH 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamH); }
+			set { SetColumnValue(Columns.ParamH, value); }
+		}
+		  
+		[XmlAttribute("ParamI")]
+		[Bindable(true)]
+		public double? ParamI 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamI); }
+			set { SetColumnValue(Columns.ParamI, value); }
+		}
+		  
+		[XmlAttribute("ParamJ")]
+		[Bindable(true)]
+		public double? ParamJ 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamJ); }
+			set { SetColumnValue(Columns.ParamJ, value); }
+		}
+		  
+		[XmlAttribute("ParamK")]
+		[Bindable(true)]
+		public double? ParamK 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamK); }
+			set { SetColumnValue(Columns.ParamK, value); }
+		}
+		  
+		[XmlAttribute("ParamL")]
+		[Bindable(true)]
+		public double? ParamL 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamL); }
+			set { SetColumnValue(Columns.ParamL, value); }
+		}
+		  
+		[XmlAttribute("ParamM")]
+		[Bindable(true)]
+		public double? ParamM 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamM); }
+			set { SetColumnValue(Columns.ParamM, value); }
+		}
+		  
+		[XmlAttribute("ParamN")]
+		[Bindable(true)]
+		public double? ParamN 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamN); }
+			set { SetColumnValue(Columns.ParamN, value); }
+		}
+		  
+		[XmlAttribute("ParamO")]
+		[Bindable(true)]
+		public double? ParamO 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamO); }
+			set { SetColumnValue(Columns.ParamO, value); }
+		}
+		  
+		[XmlAttribute("ParamP")]
+		[Bindable(true)]
+		public double? ParamP 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamP); }
+			set { SetColumnValue(Columns.ParamP, value); }
+		}
+		  
+		[XmlAttribute("ParamQ")]
+		[Bindable(true)]
+		public double? ParamQ 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamQ); }
+			set { SetColumnValue(Columns.ParamQ, value); }
+		}
+		  
+		[XmlAttribute("ParamR")]
+		[Bindable(true)]
+		public double? ParamR 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamR); }
+			set { SetColumnValue(Columns.ParamR, value); }
+		}
+		  
+		[XmlAttribute("ParamSX")]
+		[Bindable(true)]
+		public double? ParamSX 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamSX); }
+			set { SetColumnValue(Columns.ParamSX, value); }
+		}
+		  
+		[XmlAttribute("ParamT")]
+		[Bindable(true)]
+		public double? ParamT 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamT); }
+			set { SetColumnValue(Columns.ParamT, value); }
+		}
+		  
+		[XmlAttribute("ParamU")]
+		[Bindable(true)]
+		public double? ParamU 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamU); }
+			set { SetColumnValue(Columns.ParamU, value); }
+		}
+		  
+		[XmlAttribute("ParamV")]
+		[Bindable(true)]
+		public double? ParamV 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamV); }
+			set { SetColumnValue(Columns.ParamV, value); }
+		}
+		  
+		[XmlAttribute("ParamW")]
+		[Bindable(true)]
+		public double? ParamW 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamW); }
+			set { SetColumnValue(Columns.ParamW, value); }
+		}
+		  
+		[XmlAttribute("ParamX")]
+		[Bindable(true)]
+		public double? ParamX 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamX); }
+			set { SetColumnValue(Columns.ParamX, value); }
+		}
+		  
+		[XmlAttribute("ParamY")]
+		[Bindable(true)]
+		public double? ParamY 
+		{
+			get { return GetColumnValue<double?>(Columns.ParamY); }
+			set { SetColumnValue(Columns.ParamY, value); }
+		}
 		
 		#endregion
 		
@@ -642,7 +1167,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
+		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,double? varParamA,double? varParamB,double? varParamC,double? varParamD,double? varParamE,double? varParamF,double? varParamG,double? varParamH,double? varParamI,double? varParamJ,double? varParamK,double? varParamL,double? varParamM,double? varParamN,double? varParamO,double? varParamP,double? varParamQ,double? varParamR,double? varParamSX,double? varParamT,double? varParamU,double? varParamV,double? varParamW,double? varParamX,double? varParamY)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -680,6 +1205,56 @@ namespace SAEON.Observations.Data
 			
 			item.RowVersion = varRowVersion;
 			
+			item.ParamA = varParamA;
+			
+			item.ParamB = varParamB;
+			
+			item.ParamC = varParamC;
+			
+			item.ParamD = varParamD;
+			
+			item.ParamE = varParamE;
+			
+			item.ParamF = varParamF;
+			
+			item.ParamG = varParamG;
+			
+			item.ParamH = varParamH;
+			
+			item.ParamI = varParamI;
+			
+			item.ParamJ = varParamJ;
+			
+			item.ParamK = varParamK;
+			
+			item.ParamL = varParamL;
+			
+			item.ParamM = varParamM;
+			
+			item.ParamN = varParamN;
+			
+			item.ParamO = varParamO;
+			
+			item.ParamP = varParamP;
+			
+			item.ParamQ = varParamQ;
+			
+			item.ParamR = varParamR;
+			
+			item.ParamSX = varParamSX;
+			
+			item.ParamT = varParamT;
+			
+			item.ParamU = varParamU;
+			
+			item.ParamV = varParamV;
+			
+			item.ParamW = varParamW;
+			
+			item.ParamX = varParamX;
+			
+			item.ParamY = varParamY;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -690,7 +1265,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
+		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,double? varParamA,double? varParamB,double? varParamC,double? varParamD,double? varParamE,double? varParamF,double? varParamG,double? varParamH,double? varParamI,double? varParamJ,double? varParamK,double? varParamL,double? varParamM,double? varParamN,double? varParamO,double? varParamP,double? varParamQ,double? varParamR,double? varParamSX,double? varParamT,double? varParamU,double? varParamV,double? varParamW,double? varParamX,double? varParamY)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -727,6 +1302,56 @@ namespace SAEON.Observations.Data
 				item.UpdatedAt = varUpdatedAt;
 			
 				item.RowVersion = varRowVersion;
+			
+				item.ParamA = varParamA;
+			
+				item.ParamB = varParamB;
+			
+				item.ParamC = varParamC;
+			
+				item.ParamD = varParamD;
+			
+				item.ParamE = varParamE;
+			
+				item.ParamF = varParamF;
+			
+				item.ParamG = varParamG;
+			
+				item.ParamH = varParamH;
+			
+				item.ParamI = varParamI;
+			
+				item.ParamJ = varParamJ;
+			
+				item.ParamK = varParamK;
+			
+				item.ParamL = varParamL;
+			
+				item.ParamM = varParamM;
+			
+				item.ParamN = varParamN;
+			
+				item.ParamO = varParamO;
+			
+				item.ParamP = varParamP;
+			
+				item.ParamQ = varParamQ;
+			
+				item.ParamR = varParamR;
+			
+				item.ParamSX = varParamSX;
+			
+				item.ParamT = varParamT;
+			
+				item.ParamU = varParamU;
+			
+				item.ParamV = varParamV;
+			
+				item.ParamW = varParamW;
+			
+				item.ParamX = varParamX;
+			
+				item.ParamY = varParamY;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -860,6 +1485,181 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn ParamAColumn
+        {
+            get { return Schema.Columns[17]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamBColumn
+        {
+            get { return Schema.Columns[18]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamCColumn
+        {
+            get { return Schema.Columns[19]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamDColumn
+        {
+            get { return Schema.Columns[20]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamEColumn
+        {
+            get { return Schema.Columns[21]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamFColumn
+        {
+            get { return Schema.Columns[22]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamGColumn
+        {
+            get { return Schema.Columns[23]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamHColumn
+        {
+            get { return Schema.Columns[24]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamIColumn
+        {
+            get { return Schema.Columns[25]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamJColumn
+        {
+            get { return Schema.Columns[26]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamKColumn
+        {
+            get { return Schema.Columns[27]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamLColumn
+        {
+            get { return Schema.Columns[28]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamMColumn
+        {
+            get { return Schema.Columns[29]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamNColumn
+        {
+            get { return Schema.Columns[30]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamOColumn
+        {
+            get { return Schema.Columns[31]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamPColumn
+        {
+            get { return Schema.Columns[32]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamQColumn
+        {
+            get { return Schema.Columns[33]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamRColumn
+        {
+            get { return Schema.Columns[34]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamSXColumn
+        {
+            get { return Schema.Columns[35]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamTColumn
+        {
+            get { return Schema.Columns[36]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamUColumn
+        {
+            get { return Schema.Columns[37]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamVColumn
+        {
+            get { return Schema.Columns[38]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamWColumn
+        {
+            get { return Schema.Columns[39]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamXColumn
+        {
+            get { return Schema.Columns[40]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ParamYColumn
+        {
+            get { return Schema.Columns[41]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -881,6 +1681,31 @@ namespace SAEON.Observations.Data
 			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
 			 public static string RowVersion = @"RowVersion";
+			 public static string ParamA = @"ParamA";
+			 public static string ParamB = @"ParamB";
+			 public static string ParamC = @"ParamC";
+			 public static string ParamD = @"ParamD";
+			 public static string ParamE = @"ParamE";
+			 public static string ParamF = @"ParamF";
+			 public static string ParamG = @"ParamG";
+			 public static string ParamH = @"ParamH";
+			 public static string ParamI = @"ParamI";
+			 public static string ParamJ = @"ParamJ";
+			 public static string ParamK = @"ParamK";
+			 public static string ParamL = @"ParamL";
+			 public static string ParamM = @"ParamM";
+			 public static string ParamN = @"ParamN";
+			 public static string ParamO = @"ParamO";
+			 public static string ParamP = @"ParamP";
+			 public static string ParamQ = @"ParamQ";
+			 public static string ParamR = @"ParamR";
+			 public static string ParamSX = @"ParamS";
+			 public static string ParamT = @"ParamT";
+			 public static string ParamU = @"ParamU";
+			 public static string ParamV = @"ParamV";
+			 public static string ParamW = @"ParamW";
+			 public static string ParamX = @"ParamX";
+			 public static string ParamY = @"ParamY";
 						
 		}
 		#endregion

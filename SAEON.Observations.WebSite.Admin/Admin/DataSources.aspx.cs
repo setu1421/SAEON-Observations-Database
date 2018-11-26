@@ -1,17 +1,11 @@
 ﻿using Ext.Net;
 using NCalc;
-using Newtonsoft.Json;
 using SAEON.Logs;
 using SAEON.Observations.Data;
 using SubSonic;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class Admin_DataSources : System.Web.UI.Page
 {
@@ -67,9 +61,13 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
             }
             if (tfID.IsEmpty)
+            {
                 col = new DataSourceCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            }
             else
+            {
                 col = new DataSourceCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(DataSource.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+            }
 
             if (col.Count > 0)
             {
@@ -163,9 +161,13 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 DataSource ds = new DataSource();
 
                 if (String.IsNullOrEmpty(tfID.Text))
+                {
                     ds.Id = Guid.NewGuid();
+                }
                 else
+                {
                     ds = new DataSource(tfID.Text.Trim());
+                }
 
                 ds.Code = tfCode.Text.Trim();
                 ds.Name = tfName.Text.Trim();
@@ -177,7 +179,9 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 ds.UpdateFreq = int.Parse(cbUpdateFrequency.SelectedItem.Value);
 
                 if (cbDataSchema.IsEmpty)
+                {
                     ds.DataSchemaID = null;
+                }
                 else
                 {
                     SensorCollection col = new Select().From(Sensor.Schema)
@@ -201,13 +205,22 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
 
                 if (dfStartDate.SelectedDate.Date.Year < 1900)
+                {
                     ds.StartDate = null;
+                }
                 else
+                {
                     ds.StartDate = dfStartDate.SelectedDate;
+                }
+
                 if (dfEndDate.SelectedDate.Date.Year < 1900)
+                {
                     ds.EndDate = null;
+                }
                 else
+                {
                     ds.EndDate = dfEndDate.SelectedDate;
+                }
 
                 ds.UserId = AuthHelper.GetLoggedInUserId;
 
@@ -346,28 +359,44 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 dstransform.PhenomenonID = new Guid(cbPhenomenon.SelectedItem.Value);
 
                 if (cbOffering.SelectedItem.Value != null)
+                {
                     dstransform.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
+                }
                 else
+                {
                     dstransform.PhenomenonOfferingID = null;
+                }
 
                 if (cbUnitofMeasure.SelectedItem.Value != null)
+                {
                     dstransform.PhenomenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);
+                }
                 else
+                {
                     dstransform.PhenomenonUOMID = null;
+                }
 
                 //9ca36c10-cbad-4862-9f28-591acab31237 = Quality Control on Values
                 if (new Guid(cbTransformType.SelectedItem.Value) != new Guid("9ca36c10-cbad-4862-9f28-591acab31237"))
                 {
 
                     if (sbNewOffering.SelectedItem.Value != null)
+                    {
                         dstransform.NewPhenomenonOfferingID = new Guid(sbNewOffering.SelectedItem.Value);
+                    }
                     else
+                    {
                         dstransform.NewPhenomenonOfferingID = null;
+                    }
 
                     if (sbNewUoM.SelectedItem.Value != null)
+                    {
                         dstransform.NewPhenomenonUOMID = new Guid(sbNewUoM.SelectedItem.Value);
+                    }
                     else
+                    {
                         dstransform.NewPhenomenonUOMID = null;
+                    }
                 }
                 else
                 {
@@ -381,13 +410,46 @@ public partial class Admin_DataSources : System.Web.UI.Page
                     dstransform.StartDate = null;
                 }
                 else
+                {
                     dstransform.StartDate = DateTime.Parse(dfTransStart.RawText);
+                }
+
                 if (dfTransEnd.IsEmpty || (dfTransEnd.SelectedDate.Year < 1900))
+                {
                     dstransform.EndDate = null;
+                }
                 else
+                {
                     dstransform.EndDate = DateTime.Parse(dfTransEnd.RawText);
+                }
+
                 dstransform.Definition = tfDefinition.Text.Trim().ToLower();
                 dstransform.Rank = (int)tfRank.Number;
+                dstransform.ParamA = tfParamA.IsEmpty ? null : (double?)tfParamA.Number;
+                dstransform.ParamB = tfParamB.IsEmpty ? null : (double?)tfParamB.Number;
+                dstransform.ParamC = tfParamC.IsEmpty ? null : (double?)tfParamC.Number;
+                dstransform.ParamD = tfParamD.IsEmpty ? null : (double?)tfParamD.Number;
+                dstransform.ParamE = tfParamE.IsEmpty ? null : (double?)tfParamE.Number;
+                dstransform.ParamF = tfParamF.IsEmpty ? null : (double?)tfParamF.Number;
+                dstransform.ParamG = tfParamG.IsEmpty ? null : (double?)tfParamG.Number;
+                dstransform.ParamH = tfParamH.IsEmpty ? null : (double?)tfParamH.Number;
+                dstransform.ParamI = tfParamI.IsEmpty ? null : (double?)tfParamI.Number;
+                dstransform.ParamJ = tfParamJ.IsEmpty ? null : (double?)tfParamJ.Number;
+                dstransform.ParamK = tfParamK.IsEmpty ? null : (double?)tfParamK.Number;
+                dstransform.ParamL = tfParamL.IsEmpty ? null : (double?)tfParamL.Number;
+                dstransform.ParamM = tfParamM.IsEmpty ? null : (double?)tfParamM.Number;
+                dstransform.ParamN = tfParamN.IsEmpty ? null : (double?)tfParamN.Number;
+                dstransform.ParamO = tfParamO.IsEmpty ? null : (double?)tfParamO.Number;
+                dstransform.ParamP = tfParamP.IsEmpty ? null : (double?)tfParamP.Number;
+                dstransform.ParamQ = tfParamQ.IsEmpty ? null : (double?)tfParamQ.Number;
+                dstransform.ParamR = tfParamR.IsEmpty ? null : (double?)tfParamR.Number;
+                dstransform.ParamSX = tfParamS.IsEmpty ? null : (double?)tfParamS.Number;
+                dstransform.ParamT = tfParamT.IsEmpty ? null : (double?)tfParamT.Number;
+                dstransform.ParamU = tfParamU.IsEmpty ? null : (double?)tfParamU.Number;
+                dstransform.ParamV = tfParamV.IsEmpty ? null : (double?)tfParamV.Number;
+                dstransform.ParamW = tfParamW.IsEmpty ? null : (double?)tfParamW.Number;
+                dstransform.ParamX = tfParamX.IsEmpty ? null : (double?)tfParamX.Number;
+                dstransform.ParamY = tfParamY.IsEmpty ? null : (double?)tfParamY.Number;
                 dstransform.Save();
                 Auditing.Log(GetType(), new ParameterList {
                 { "DataSourceID", dstransform.DataSourceID},
@@ -404,7 +466,32 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 {"NewPhenomenonUnitOfMeasureID", dstransform.NewPhenomenonUOMID },
                 {"StartDate", dstransform?.StartDate },
                 {"EndDate", dstransform?.EndDate },
-                {"Rank", dstransform.Rank }
+                {"Rank", dstransform.Rank },
+                {"ParamA", dstransform.ParamA},
+                {"ParamB", dstransform.ParamB},
+                {"ParamC", dstransform.ParamC},
+                {"ParamD", dstransform.ParamD},
+                {"ParamE", dstransform.ParamE},
+                {"ParamF", dstransform.ParamF},
+                {"ParamG", dstransform.ParamG},
+                {"ParamH", dstransform.ParamH},
+                {"ParamI", dstransform.ParamI},
+                {"ParamJ", dstransform.ParamJ},
+                {"ParamK", dstransform.ParamK},
+                {"ParamL", dstransform.ParamL},
+                {"ParamM", dstransform.ParamM},
+                {"ParamN", dstransform.ParamN},
+                {"ParamO", dstransform.ParamO},
+                {"ParamP", dstransform.ParamP},
+                {"ParamQ", dstransform.ParamQ},
+                {"ParamR", dstransform.ParamR},
+                {"ParamS", dstransform.ParamSX},
+                {"ParamT", dstransform.ParamT},
+                {"ParamU", dstransform.ParamU},
+                {"ParamV", dstransform.ParamV},
+                {"ParamW", dstransform.ParamW},
+                {"ParamX", dstransform.ParamX},
+                {"ParamY", dstransform.ParamY},
                 });
 
                 TransformationsGrid.GetStore().DataBind();
@@ -499,74 +586,226 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void OnDefinitionValidation(object sender, RemoteValidationEventArgs e)
     {
-
-
-        try
+        using (Logging.MethodCall(GetType()))
         {
-            string json = String.Concat("{", e.Value.ToString(), "}");
+            try
+            {
+                string json = String.Concat("{", e.Value.ToString(), "}");
 
-            if (cbTransformType.SelectedItem.Value == null)
-            {
-                e.ErrorMessage = "Select a transformation type.";
-                e.Success = false;
-            }
-            else
-            {
-                switch (cbTransformType.SelectedItem.Value)
+                if (cbTransformType.SelectedItem.Value == null)
                 {
-                    case TransformationType.RatingTable:
-                        JSON.Deserialize<Dictionary<double, double>>(json);
-                        e.Success = true;
-                        break;
-                    case TransformationType.QualityControlValues:
-                        JSON.Deserialize<Dictionary<string, double>>(json);
-                        e.Success = true;
-                        break;
-                    case TransformationType.Lookup:
-                        JSON.Deserialize<Dictionary<string, double>>(json);
-                        e.Success = true;
-                        break;
-                    case TransformationType.CorrectionValues:
-                        Dictionary<string, string> corrvals = JSON.Deserialize<Dictionary<string, string>>(json);
+                    e.ErrorMessage = "Select a transformation type.";
+                    e.Success = false;
+                }
+                else
+                {
+                    var transformationType = new TransformationType(cbTransformType.SelectedItem.Value);
+                    switch (transformationType.Code)
+                    {
+                        case TransformationType.RatingTable:
+                            JSON.Deserialize<Dictionary<double, double>>(json);
+                            e.Success = true;
+                            break;
+                        case TransformationType.QualityControlValues:
+                            JSON.Deserialize<Dictionary<string, double>>(json);
+                            e.Success = true;
+                            break;
+                        case TransformationType.Lookup:
+                            JSON.Deserialize<Dictionary<string, double>>(json);
+                            e.Success = true;
+                            break;
+                        case TransformationType.CorrectionValues:
+                            Dictionary<string, string> corrvals = JSON.Deserialize<Dictionary<string, string>>(json);
 
-                        if (corrvals.Count > 1)
-                        {
-                            e.Success = false;
-                            e.ErrorMessage = "Only one expression is currently supported";
-                        }
-                        else if (!corrvals.ContainsKey("eq"))
-                        {
-                            e.Success = false;
-                            e.ErrorMessage = "The Key value of this value should be \" eq \"";
-                        }
-                        else
-                        {
-                            Expression exp = new Expression(corrvals["eq"]);
-
-                            if (!corrvals["eq"].Contains("[value]"))
+                            if (corrvals.Count > 1)
                             {
                                 e.Success = false;
-                                e.ErrorMessage = "The expression accepts only one one variable - [value]";
+                                e.ErrorMessage = "Only one expression is currently supported";
                             }
-                            else if (exp.HasErrors())
+                            else if (!corrvals.ContainsKey("eq"))
                             {
                                 e.Success = false;
-                                e.ErrorMessage = String.Concat("Error in expression - ", exp.Error);
+                                e.ErrorMessage = "The Key value of this value should be \" eq \"";
                             }
                             else
+                            {
+                                Expression exp = new Expression(corrvals["eq"]);
+
+                                if (!corrvals["eq"].Contains("[value]"))
+                                {
+                                    e.Success = false;
+                                    e.ErrorMessage = "The expression accepts only one one variable - [value]";
+                                }
+                                else if (exp.HasErrors())
+                                {
+                                    e.Success = false;
+                                    e.ErrorMessage = String.Concat("Error in expression - ", exp.Error);
+                                }
+                                else
+                                {
+                                    e.Success = true;
+                                }
+                            }
+                            break;
+                        case TransformationType.Expression:
+                            e.Success = false;
+                            Expression expr = new Expression(e.Value.ToString(), EvaluateOptions.IgnoreCase);
+                            expr.Parameters["value"] = 1.0;
+                            if (!tfParamA.IsEmpty)
+                            {
+                                expr.Parameters["a"] = tfParamA.Number;
+                            }
+                            if (!tfParamB.IsEmpty)
+                            {
+                                expr.Parameters["b"] = tfParamB.Number;
+                            }
+                            if (!tfParamC.IsEmpty)
+                            {
+                                expr.Parameters["c"] = tfParamC.Number;
+                            }
+                            if (!tfParamD.IsEmpty)
+                            {
+                                expr.Parameters["d"] = tfParamD.Number;
+                            }
+                            if (!tfParamE.IsEmpty)
+                            {
+                                expr.Parameters["e"] = tfParamE.Number;
+                            }
+                            if (!tfParamF.IsEmpty)
+                            {
+                                expr.Parameters["f"] = tfParamF.Number;
+                            }
+                            if (!tfParamG.IsEmpty)
+                            {
+                                expr.Parameters["g"] = tfParamG.Number;
+                            }
+                            if (!tfParamH.IsEmpty)
+                            {
+                                expr.Parameters["h"] = tfParamH.Number;
+                            }
+                            if (!tfParamI.IsEmpty)
+                            {
+                                expr.Parameters["i"] = tfParamI.Number;
+                            }
+                            if (!tfParamJ.IsEmpty)
+                            {
+                                expr.Parameters["j"] = tfParamJ.Number;
+                            }
+                            if (!tfParamK.IsEmpty)
+                            {
+                                expr.Parameters["k"] = tfParamK.Number;
+                            }
+                            if (!tfParamL.IsEmpty)
+                            {
+                                expr.Parameters["l"] = tfParamL.Number;
+                            }
+                            if (!tfParamM.IsEmpty)
+                            {
+                                expr.Parameters["m"] = tfParamM.Number;
+                            }
+                            if (!tfParamN.IsEmpty)
+                            {
+                                expr.Parameters["n"] = tfParamN.Number;
+                            }
+                            if (!tfParamO.IsEmpty)
+                            {
+                                expr.Parameters["o"] = tfParamO.Number;
+                            }
+                            if (!tfParamP.IsEmpty)
+                            {
+                                expr.Parameters["p"] = tfParamP.Number;
+                            }
+                            if (!tfParamQ.IsEmpty)
+                            {
+                                expr.Parameters["q"] = tfParamQ.Number;
+                            }
+                            if (!tfParamR.IsEmpty)
+                            {
+                                expr.Parameters["r"] = tfParamR.Number;
+                            }
+                            if (!tfParamS.IsEmpty)
+                            {
+                                expr.Parameters["s"] = tfParamS.Number;
+                            }
+                            if (!tfParamT.IsEmpty)
+                            {
+                                expr.Parameters["t"] = tfParamT.Number;
+                            }
+                            if (!tfParamU.IsEmpty)
+                            {
+                                expr.Parameters["u"] = tfParamU.Number;
+                            }
+                            if (!tfParamV.IsEmpty)
+                            {
+                                expr.Parameters["v"] = tfParamV.Number;
+                            }
+                            if (!tfParamW.IsEmpty)
+                            {
+                                expr.Parameters["w"] = tfParamW.Number;
+                            }
+                            if (!tfParamX.IsEmpty)
+                            {
+                                expr.Parameters["x"] = tfParamX.Number;
+                            }
+                            if (!tfParamY.IsEmpty)
+                            {
+                                expr.Parameters["y"] = tfParamY.Number;
+                            }
+                            if (expr.HasErrors())
+                            {
+                                e.ErrorMessage = $"Error in expression - {expr.Error}";
+                                Logging.Error("Error in expression {Error}", expr.Error);
+                                break;
+                            }
+                            try
+                            {
+                                var valueStr = expr.Evaluate();
+                                Logging.Verbose("ValueStr: {value}", valueStr);
+                                var value = double.Parse(valueStr.ToString());
+                                Logging.Verbose("Value: {value}", value);
                                 e.Success = true;
+                            }
+                            catch (EvaluationException ex)
+                            {
+                                e.ErrorMessage = $"Error evaluating expression - {ex.Message}";
+                                Logging.Exception(ex, "Error evaluating expression {exception}", ex.Message);
+                            }
+                            catch (Exception ex)
+                            {
+                                e.ErrorMessage = $"Exception evaluating expression - {ex.Message}";
+                                Logging.Exception(ex, "Exception evaluating expression {exception}", ex.Message);
 
-                        }
-
-                        break;
+                            }
+                            break;
+                    }
                 }
             }
+            catch
+            {
+                e.ErrorMessage = "Invalid Definition.";
+                e.Success = false;
+            }
         }
-        catch
-        {
-            e.ErrorMessage = "Invalid Definition.";
-            e.Success = false;
-        }
+    }
+
+    protected void OnParamValidation(object sender, RemoteValidationEventArgs e)
+    {
+        e.Success = true;
+        tfDefinition.Clear();
+        tfDefinition.ClearInvalid();
+        tfDefinition.MarkInvalid();
+    }
+
+    [DirectMethod]
+#pragma warning disable IDE1006 // Naming Styles
+    public void cbTransformTypeSelect(object sender, DirectEventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
+    {
+        TransformationType transformType = new TransformationType(cbTransformType.Value);
+        PanelParameters.Hidden = (transformType.Code != TransformationType.Expression);
+        tfDefinition.Clear();
+        tfDefinition.ClearInvalid();
+        tfDefinition.MarkInvalid();
     }
 
     #endregion
