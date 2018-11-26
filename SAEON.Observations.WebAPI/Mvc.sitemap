@@ -9,7 +9,7 @@
     <mvcSiteMapNode title="OData" controller="OData" action="$metadata"/>
     <mvcSiteMapNode title="SensorThings" controller="SensorThings" action="Index"/>
     <mvcSiteMapNode title="About" controller="Home" action="About"/>
-    <mvcSiteMapNode title="Contact" controller="Contact" action="Contact"/>
+    <mvcSiteMapNode title="Contact" controller="Home" action="Contact"/>
   </mvcSiteMapNode>
 
 </mvcSiteMap>
