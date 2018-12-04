@@ -455,6 +455,7 @@ public class ImportSchemaHelper : IDisposable
                                                 //    .Or(DataSourceTransformation.EndDateColumn).IsGreaterThanOrEqualTo(DateTime.Now)
                                                 //.CloseExpression()
                                                 .OrderAsc(TransformationType.IorderColumn.QualifiedName)
+                                                .OrderAsc(DataSourceTransformation.RankColumn.QualifiedName)
                                                 .ExecuteAsCollection<DataSourceTransformationCollection>();
 
         foreach (var item in col)
@@ -969,103 +970,103 @@ public class ImportSchemaHelper : IDisposable
                     {
                         Expression expr = new Expression(trns.Definition, EvaluateOptions.IgnoreCase);
                         expr.Parameters["value"] = rec.RawValue;
-                        if (!trns.ParamA.HasValue)
+                        if (trns.ParamA.HasValue)
                         {
                             expr.Parameters["a"] = trns.ParamA.Value;
                         }
-                        if (!trns.ParamB.HasValue)
+                        if (trns.ParamB.HasValue)
                         {
                             expr.Parameters["b"] = trns.ParamB.Value;
                         }
-                        if (!trns.ParamC.HasValue)
+                        if (trns.ParamC.HasValue)
                         {
                             expr.Parameters["c"] = trns.ParamC.Value;
                         }
-                        if (!trns.ParamD.HasValue)
+                        if (trns.ParamD.HasValue)
                         {
                             expr.Parameters["d"] = trns.ParamD.Value;
                         }
-                        if (!trns.ParamE.HasValue)
+                        if (trns.ParamE.HasValue)
                         {
                             expr.Parameters["e"] = trns.ParamE.Value;
                         }
-                        if (!trns.ParamF.HasValue)
+                        if (trns.ParamF.HasValue)
                         {
                             expr.Parameters["f"] = trns.ParamF.Value;
                         }
-                        if (!trns.ParamG.HasValue)
+                        if (trns.ParamG.HasValue)
                         {
                             expr.Parameters["g"] = trns.ParamG.Value;
                         }
-                        if (!trns.ParamH.HasValue)
+                        if (trns.ParamH.HasValue)
                         {
                             expr.Parameters["h"] = trns.ParamH.Value;
                         }
-                        if (!trns.ParamI.HasValue)
+                        if (trns.ParamI.HasValue)
                         {
                             expr.Parameters["i"] = trns.ParamI.Value;
                         }
-                        if (!trns.ParamJ.HasValue)
+                        if (trns.ParamJ.HasValue)
                         {
                             expr.Parameters["j"] = trns.ParamJ.Value;
                         }
-                        if (!trns.ParamK.HasValue)
+                        if (trns.ParamK.HasValue)
                         {
                             expr.Parameters["k"] = trns.ParamK.Value;
                         }
-                        if (!trns.ParamL.HasValue)
+                        if (trns.ParamL.HasValue)
                         {
                             expr.Parameters["l"] = trns.ParamL.Value;
                         }
-                        if (!trns.ParamM.HasValue)
+                        if (trns.ParamM.HasValue)
                         {
                             expr.Parameters["m"] = trns.ParamM.Value;
                         }
-                        if (!trns.ParamN.HasValue)
+                        if (trns.ParamN.HasValue)
                         {
                             expr.Parameters["n"] = trns.ParamN.Value;
                         }
-                        if (!trns.ParamO.HasValue)
+                        if (trns.ParamO.HasValue)
                         {
                             expr.Parameters["o"] = trns.ParamO.Value;
                         }
-                        if (!trns.ParamP.HasValue)
+                        if (trns.ParamP.HasValue)
                         {
                             expr.Parameters["p"] = trns.ParamP.Value;
                         }
-                        if (!trns.ParamQ.HasValue)
+                        if (trns.ParamQ.HasValue)
                         {
                             expr.Parameters["q"] = trns.ParamQ.Value;
                         }
-                        if (!trns.ParamR.HasValue)
+                        if (trns.ParamR.HasValue)
                         {
                             expr.Parameters["r"] = trns.ParamR.Value;
                         }
-                        if (!trns.ParamSX.HasValue)
+                        if (trns.ParamSX.HasValue)
                         {
                             expr.Parameters["s"] = trns.ParamSX.Value;
                         }
-                        if (!trns.ParamT.HasValue)
+                        if (trns.ParamT.HasValue)
                         {
                             expr.Parameters["t"] = trns.ParamT.Value;
                         }
-                        if (!trns.ParamU.HasValue)
+                        if (trns.ParamU.HasValue)
                         {
                             expr.Parameters["u"] = trns.ParamU.Value;
                         }
-                        if (!trns.ParamV.HasValue)
+                        if (trns.ParamV.HasValue)
                         {
                             expr.Parameters["v"] = trns.ParamV.Value;
                         }
-                        if (!trns.ParamW.HasValue)
+                        if (trns.ParamW.HasValue)
                         {
                             expr.Parameters["w"] = trns.ParamW.Value;
                         }
-                        if (!trns.ParamX.HasValue)
+                        if (trns.ParamX.HasValue)
                         {
                             expr.Parameters["x"] = trns.ParamX.Value;
                         }
-                        if (!trns.ParamY.HasValue)
+                        if (trns.ParamY.HasValue)
                         {
                             expr.Parameters["y"] = trns.ParamY.Value;
                         }

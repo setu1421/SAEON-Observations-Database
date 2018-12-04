@@ -314,11 +314,11 @@
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
                                                 <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
                                                 <ext:Column Header="Text value" DataIndex="TextValue" Width="75" />
-                                                <ext:NumberColumn Header="Raw value" DataIndex="RawValue" Width="100" Format=",0.000" />
-                                                <ext:NumberColumn Header="Data value" DataIndex="DataValue" Width="100" Format=",0.000" />
-                                                <ext:NumberColumn Header="Latitude" DataIndex="Latitude" Width="100" Format="0.00000" />
-                                                <ext:NumberColumn Header="Longitude" DataIndex="Longitude" Width="100" Format="0.00000" />
-                                                <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="100" Format="0.00" />
+                                                <ext:NumberColumn Header="Raw value" DataIndex="RawValue" Width="100" Format=",0.000000" Align="Right" />
+                                                <ext:NumberColumn Header="Data value" DataIndex="DataValue" Width="100" Format=",0.000000" Align="Right" />
+                                                <ext:NumberColumn Header="Latitude" DataIndex="Latitude" Width="100" Format="0.00000" Align="Right" />
+                                                <ext:NumberColumn Header="Longitude" DataIndex="Longitude" Width="100" Format="0.00000" Align="Right" />
+                                                <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="100" Format="0.00" Align="Right" />
                                                 <ext:Column Header="Status" DataIndex="StatusName" Width="150" />
                                                 <ext:Column Header="Reason" DataIndex="StatusReasonName" Width="150" />
                                                 <ext:Column Header="Correlation ID" DataIndex="CorrelationID" Width="150" />

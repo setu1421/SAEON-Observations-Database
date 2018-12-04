@@ -239,6 +239,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
         }
     }
 
+
     [DirectMethod]
     public void DeleteSensorSchemas(Guid aID)
     {
@@ -788,12 +789,55 @@ public partial class Admin_DataSources : System.Web.UI.Page
         }
     }
 
+    [DirectMethod]
+    public void SetFields()
+    {
+        tfParamA.MarkAsValid();
+        tfParamB.MarkAsValid();
+        tfParamC.MarkAsValid();
+        tfParamD.MarkAsValid();
+        tfParamE.MarkAsValid();
+        tfParamF.MarkAsValid();
+        tfParamG.MarkAsValid();
+        tfParamH.MarkAsValid();
+        tfParamI.MarkAsValid();
+        tfParamJ.MarkAsValid();
+        tfParamK.MarkAsValid();
+        tfParamL.MarkAsValid();
+        tfParamM.MarkAsValid();
+        tfParamN.MarkAsValid();
+        tfParamO.MarkAsValid();
+        tfParamP.MarkAsValid();
+        tfParamQ.MarkAsValid();
+        tfParamR.MarkAsValid();
+        tfParamS.MarkAsValid();
+        tfParamT.MarkAsValid();
+        tfParamU.MarkAsValid();
+        tfParamV.MarkAsValid();
+        tfParamW.MarkAsValid();
+        tfParamX.MarkAsValid();
+        tfParamY.MarkAsValid();
+    }
+
     protected void OnParamValidation(object sender, RemoteValidationEventArgs e)
     {
-        e.Success = true;
-        tfDefinition.Clear();
         tfDefinition.ClearInvalid();
-        tfDefinition.MarkInvalid();
+        try
+        {
+            OnDefinitionValidation(sender, e);
+            if (e.Success)
+            {
+                tfDefinition.MarkAsValid();
+            }
+            else
+            {
+                tfDefinition.MarkInvalid();
+            }
+        }
+        catch (Exception)
+        {
+        }
+        e.Success = true;
     }
 
     [DirectMethod]
@@ -802,8 +846,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
 #pragma warning restore IDE1006 // Naming Styles
     {
         TransformationType transformType = new TransformationType(cbTransformType.Value);
-        PanelParameters.Hidden = (transformType.Code != TransformationType.Expression);
-        tfDefinition.Clear();
+        ContainerParameters.Hidden = (transformType.Code != TransformationType.Expression);
         tfDefinition.ClearInvalid();
         tfDefinition.MarkInvalid();
     }

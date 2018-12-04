@@ -90,7 +90,7 @@ function onTransformCommand(e, record) {
         tfDefinition.rvConfig.remoteValidated = false;
         tfDefinition.rvConfig.remoteValid = false;
         tfDefinition.markAsValid();
-        delete tfDefinition.rvConfig.lastValue; 
+        delete tfDefinition.rvConfig.lastValue;
 
         cbOffering.getStore().on("load", loadcallback);
         cbUnitofMeasure.getStore().on("load", uomloadcallback);
@@ -98,12 +98,16 @@ function onTransformCommand(e, record) {
         //
         sbNewOffering.getStore().on("load", newOloadcallback);
         sbNewUoM.getStore().on("load", newUOMloadcallback);
-        
 
+
+        cbTransformType.setValueAndFireSelect(record.data.TransformationTypeID);
         cbPhenomenon.setValueAndFireSelect(record.data.PhenomenonID);
         //cbOffering.setValueAndFireSelect(record.data.PhenomenonOfferingID)
         //cbUnitofMeasure.setValueAndFireSelect(record.data.PhenomenonUOMID)
+        DirectCall.SetFields();
         TransformationDetailWindow.show();
+        TransformationDetailPanel.getForm().clearInvalid();
+        TransformationDetailPanel.validate();
     }
 }
 
@@ -161,3 +165,20 @@ function CloseAvailableRoles() {
     AvailableStationsGrid.selModel.clearSelections();
 }
 
+function GetInvalidFields(formPanel) {
+    var s = 'Invalid: ';
+    var form = formPanel.getForm();
+    var fields = form.items;
+    var i = 0;
+    for (i = 0; i < fields.length; i += 1) {
+        var field = fields.items[i];
+        var input = form.findField(field.id);
+        if (input) {
+            input.validate();
+            if (!input.isValid()) {
+                s = s + " " + input.id;
+            }
+        }
+    }
+    alert(s);
+}

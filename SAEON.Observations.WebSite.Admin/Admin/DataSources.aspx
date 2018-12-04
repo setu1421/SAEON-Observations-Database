@@ -208,18 +208,6 @@
                                                             <ext:RecordField Name="StartDate" Type="Date" />
                                                             <ext:RecordField Name="EndDate" Type="Date" />
                                                             <ext:RecordField Name="DataSourceID" Type="Auto" />
-                                                            <ext:RecordField Name="Definition" Type="String" />
-                                                            <ext:RecordField Name="PhenomenonName" Type="String" />
-                                                            <ext:RecordField Name="TransformationName" Type="String" />
-                                                            <ext:RecordField Name="PhenomenonOfferingId" Type="Auto" />
-                                                            <ext:RecordField Name="OfferingName" Type="String" />
-                                                            <ext:RecordField Name="UnitOfMeasureId" Type="Auto" />
-                                                            <ext:RecordField Name="UnitOfMeasureUnit" Type="String" />
-                                                            <ext:RecordField Name="NewPhenomenonOfferingID" Type="Auto" />
-                                                            <ext:RecordField Name="NewOfferingName" Type="Auto" />
-                                                            <ext:RecordField Name="NewPhenomenonUOMID" Type="Auto" />
-                                                            <ext:RecordField Name="NewUnitOfMeasureUnit" Type="Auto" />
-                                                            <ext:RecordField Name="Rank" Type="Int" UseNull="true" />
                                                             <ext:RecordField Name="ParamA" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamB" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamC" Type="Float" UseNull="true" />
@@ -238,13 +226,25 @@
                                                             <ext:RecordField Name="ParamP" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamQ" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamR" Type="Float" UseNull="true" />
-                                                            <ext:RecordField Name="ParamS" Type="Float" UseNull="true" />
+                                                            <ext:RecordField Name="ParamSX" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamT" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamU" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamV" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamW" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamX" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamY" Type="Float" UseNull="true" />
+                                                            <ext:RecordField Name="Definition" Type="String" />
+                                                            <ext:RecordField Name="PhenomenonName" Type="String" />
+                                                            <ext:RecordField Name="TransformationName" Type="String" />
+                                                            <ext:RecordField Name="PhenomenonOfferingId" Type="Auto" />
+                                                            <ext:RecordField Name="OfferingName" Type="String" />
+                                                            <ext:RecordField Name="UnitOfMeasureId" Type="Auto" />
+                                                            <ext:RecordField Name="UnitOfMeasureUnit" Type="String" />
+                                                            <ext:RecordField Name="NewPhenomenonOfferingID" Type="Auto" />
+                                                            <ext:RecordField Name="NewOfferingName" Type="Auto" />
+                                                            <ext:RecordField Name="NewPhenomenonUOMID" Type="Auto" />
+                                                            <ext:RecordField Name="NewUnitOfMeasureUnit" Type="Auto" />
+                                                            <ext:RecordField Name="Rank" Type="Int" UseNull="true" />
                                                         </Fields>
                                                     </ext:JsonReader>
                                                 </Reader>
@@ -419,7 +419,7 @@
                     </ext:Hidden>
                     <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbTransformType" runat="server" StoreID="TransformationTypeStore"
+                            <ext:ComboBox ID="cbTransformType" runat="server" StoreID="TransformationTypeStore" ClientIDMode="Static"
                                 Editable="true" BlankText="Transform Type is required" MsgTarget="Side" DisplayField="Name"
                                 ValueField="Id" TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All"
                                 AllowBlank="false" DataIndex="TransformationTypeID" EmptyText="Select Transform Type"
@@ -501,128 +501,129 @@
                             </ext:SelectBox>
                         </Items>
                     </ext:Panel>
-                    <ext:Container ID="Container9" runat="server" Layout="Form" ColumnWidth=".5">
+                    <ext:Container ID="Container9" runat="server" Layout="FormLayout">
                         <Items>
                             <ext:DateField ID="dfTransStart" DataIndex="StartDate" runat="server" FieldLabel="Start Date"
                                 AnchorHorizontal="96%" AllowBlank="true" BlankText="Start Date is required" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="Container14" runat="server" Layout="Form" ColumnWidth=".5">
+                    <ext:Container ID="Container14" runat="server" Layout="FormLayout">
                         <Items>
                             <ext:DateField ID="dfTransEnd" DataIndex="EndDate" runat="server" FieldLabel="End Date"
                                 AnchorHorizontal="96%" AllowBlank="true" BlankText="End Date is required" Format="dd MMM yyyy HH:mm">
                             </ext:DateField>
                         </Items>
                     </ext:Container>
-                    <ext:Panel ID="PanelParameters" runat="server" Title="Parameters" AutoHeight="true" FormGroup="true" Hidden="true">
-                        <Content>
-                            <ext:Container runat="server" Layout="ColumnLayout" AutoHeight="true">
+                    <ext:Container ID="ContainerParameters" runat="server" Layout="ColumnLayout" Height="155px">
+                        <Items>
+                            <ext:Container runat="server" Layout="Form" ColumnWidth=".2" LabelWidth="25" Style="padding-right: 10px">
                                 <Items>
-                                    <ext:Container runat="server" Layout="Form" ColumnWidth=".2" LabelWidth="25" Style="padding-right:10px">
-                                        <Items>
-                                            <ext:NumberField ID="tfParamA" DataIndex="ParamA" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="a">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamB" DataIndex="ParamB" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="b">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamC" DataIndex="ParamC" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="c">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamD" DataIndex="ParamD" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="d">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamE" DataIndex="ParamE" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="e">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                        </Items>
-                                    </ext:Container>
-                                    <ext:Container runat="server" Layout="Form" ColumnWidth=".2" LabelWidth="25" Style="padding-right:10px">
-                                        <Items>
-                                            <ext:NumberField ID="tfParamF" DataIndex="ParamF" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="f">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamG" DataIndex="ParamG" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="g">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamH" DataIndex="ParamH" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="h">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamI" DataIndex="ParamI" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="i">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamJ" DataIndex="ParamJ" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="j">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                        </Items>
-                                    </ext:Container>
-                                    <ext:Container runat="server" Layout="Form" ColumnWidth=".2" LabelWidth="25" Style="padding-right:10px">
-                                        <Items>
-                                            <ext:NumberField ID="tfParamK" DataIndex="ParamK" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="k">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamL" DataIndex="ParamL" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="l">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamM" DataIndex="ParamM" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="m">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamN" DataIndex="ParamN" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="n">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamO" DataIndex="ParamO" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="o">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                        </Items>
-                                    </ext:Container>
-                                    <ext:Container runat="server" Layout="Form" ColumnWidth=".2" LabelWidth="25" Style="padding-right:10px">
-                                        <Items>
-                                            <ext:NumberField ID="tfParamP" DataIndex="ParamP" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="p">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamQ" DataIndex="ParamQ" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="q">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamR" DataIndex="ParamR" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="r">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamS" DataIndex="ParamS" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="s">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamT" DataIndex="ParamT" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="t">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                        </Items>
-                                    </ext:Container>
-                                    <ext:Container runat="server" Layout="Form" ColumnWidth=".2" LabelWidth="25">
-                                        <Items>
-                                            <ext:NumberField ID="tfParamU" DataIndex="ParamU" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="u">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamV" DataIndex="ParamV" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="v">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamW" DataIndex="ParamW" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="w">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamX" DataIndex="ParamX" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="x">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                            <ext:NumberField ID="tfParamY" DataIndex="ParamY" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="y">
-                                                <RemoteValidation OnValidation="OnParamValidation" />
-                                            </ext:NumberField>
-                                        </Items>
-                                    </ext:Container>
+                                    <ext:Label runat="server" Text="Parameters" />
+                                    <ext:NumberField ID="tfParamA" DataIndex="ParamA" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="a" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamB" DataIndex="ParamB" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="b" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamC" DataIndex="ParamC" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="c" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamD" DataIndex="ParamD" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="d" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamE" DataIndex="ParamE" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="e" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
                                 </Items>
                             </ext:Container>
-                        </Content>
-                    </ext:Panel>
+                            <ext:Container runat="server" Layout="Form" ColumnWidth=".2" LabelWidth="25" Style="padding-right: 10px">
+                                <Items>
+                                    <ext:Label runat="server" Text="Parameters" />
+                                    <ext:NumberField ID="tfParamF" DataIndex="ParamF" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="f" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamG" DataIndex="ParamG" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="g" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamH" DataIndex="ParamH" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="h" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamI" DataIndex="ParamI" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="i" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamJ" DataIndex="ParamJ" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="j" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container runat="server" Layout="Form" ColumnWidth=".2" LabelWidth="25" Style="padding-right: 10px">
+                                <Items>
+                                    <ext:Label runat="server" Text="Parameters" />
+                                    <ext:NumberField ID="tfParamK" DataIndex="ParamK" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="k" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamL" DataIndex="ParamL" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="l" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamM" DataIndex="ParamM" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="m" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamN" DataIndex="ParamN" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="n" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamO" DataIndex="ParamO" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="o" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container runat="server" Layout="Form" ColumnWidth=".2" LabelWidth="25" Style="padding-right: 10px">
+                                <Items>
+                                    <ext:Label runat="server" Text="Parameters" />
+                                    <ext:NumberField ID="tfParamP" DataIndex="ParamP" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="p" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamQ" DataIndex="ParamQ" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="q" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamR" DataIndex="ParamR" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="r" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamS" DataIndex="ParamSX" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="s" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamT" DataIndex="ParamT" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="t" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                </Items>
+                            </ext:Container>
+                            <ext:Container runat="server" Layout="Form" ColumnWidth=".2" LabelWidth="25">
+                                <Items>
+                                    <ext:Label runat="server" Text="Parameters" />
+                                    <ext:NumberField ID="tfParamU" DataIndex="ParamU" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="u" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamV" DataIndex="ParamV" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="v" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamW" DataIndex="ParamW" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="w" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamX" DataIndex="ParamX" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="x" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                    <ext:NumberField ID="tfParamY" DataIndex="ParamY" MaxLength="8" Width="75px" IsRemoteValidation="true" runat="server" FieldLabel="y" ClientIDMode="Static" AllowBlank="true">
+                                        <RemoteValidation OnValidation="OnParamValidation" />
+                                    </ext:NumberField>
+                                </Items>
+                            </ext:Container>
+                        </Items>
+                    </ext:Container>
 
                     <%--Format="dd/MM/yyyy"--%>
                     <ext:Container ID="Container10" runat="server" Layout="Form">
                         <Items>
-                            <ext:TextArea ID="tfDefinition" DataIndex="Definition" runat="server" AllowBlank="false"
+                            <ext:TextArea ID="tfDefinition" DataIndex="Definition" runat="server" AllowBlank="false" Height="100px"
                                 BlankText="Transformation Definition is required" MsgTarget="Side" IsRemoteValidation="true"
                                 FieldLabel="Transformation Definition" AnchorHorizontal="96%" ClientIDMode="Static">
                                 <RemoteValidation OnValidation="OnDefinitionValidation" />
@@ -695,11 +696,11 @@
                     <%--=============--%>
                 </Items>
                 <Buttons>
-                    <%--                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
                         <Listeners>
-                            <Click Handler="alert(#{TransformationDetailPanel}.validate())" />
+                            <Click Handler="GetInvalidFields(#{TransformationDetailPanel})" />
                         </Listeners>
-                    </ext:Button>--%>
+                    </ext:Button>
                     <ext:Button ID="SaveTransform" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="SaveTransformation" Method="POST">
