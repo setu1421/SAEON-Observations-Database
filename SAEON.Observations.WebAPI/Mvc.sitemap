@@ -4,8 +4,12 @@
             xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
 
   <mvcSiteMapNode title="Home" controller="Home" action="Index">
+    <mvcSiteMapNode title="API" controller="Help" action="Index"/>
+    <mvcSiteMapNode title="Swagger" controller="Swagger" action="Index"/>
+    <mvcSiteMapNode title="OData" controller="OData" action="$metadata"/>
+    <mvcSiteMapNode title="SensorThings" controller="SensorThings" action="Index"/>
     <mvcSiteMapNode title="About" controller="Home" action="About"/>
-    <mvcSiteMapNode title="Contact" controller="Contact" action="Contact"/>
+    <mvcSiteMapNode title="Contact" controller="Home" action="Contact"/>
   </mvcSiteMapNode>
 
 </mvcSiteMap>

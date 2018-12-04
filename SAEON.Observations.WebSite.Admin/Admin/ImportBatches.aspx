@@ -120,7 +120,7 @@
                                     <Columns>
                                         <ext:Column Header="Number" DataIndex="Code" Width="80" />
                                         <ext:DateColumn Header="Import Date" DataIndex="ImportDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
-                                        <%--<ext:Column Header="Data Source ID" DataIndex="DataSourceID" Width="150"/>--%>
+                                        <%--<ext:Column Header="Data Source ID" DataIndex="DataSourceID" Width="150" />--%>
                                         <ext:Column Header="Data Source Name" DataIndex="DataSourceName" Width="350" />
                                         <ext:Column Header="File Name" DataIndex="FileName" Width="350" />
                                         <ext:Column Header="Status" DataIndex="StatusDescription" Width="150" />
@@ -253,7 +253,7 @@
                                                     <Click OnEvent="SetTestClick" />
                                                 </DirectEvents>
                                             </ext:Button>--%>
-                                            <%-- 
+                                            <%--
                                             <ext:Button ID="btnAddObservation" runat="server" Icon="Add" Text="Add Observation">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip5" runat="server" Html="Add" />
@@ -314,11 +314,11 @@
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="150" />
                                                 <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
                                                 <ext:Column Header="Text value" DataIndex="TextValue" Width="75" />
-                                                <ext:NumberColumn Header="Raw value" DataIndex="RawValue" Width="100" Format=",0.000" />
-                                                <ext:NumberColumn Header="Data value" DataIndex="DataValue" Width="100" Format=",0.000" />
-                                                <ext:NumberColumn Header="Latitude" DataIndex="Latitude" Width="100" Format="0.00000" />
-                                                <ext:NumberColumn Header="Longitude" DataIndex="Longitude" Width="100" Format="0.00000" />
-                                                <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="100" Format="0.00" />
+                                                <ext:NumberColumn Header="Raw value" DataIndex="RawValue" Width="100" Format=",0.000000" Align="Right" />
+                                                <ext:NumberColumn Header="Data value" DataIndex="DataValue" Width="100" Format=",0.000000" Align="Right" />
+                                                <ext:NumberColumn Header="Latitude" DataIndex="Latitude" Width="100" Format="0.00000" Align="Right" />
+                                                <ext:NumberColumn Header="Longitude" DataIndex="Longitude" Width="100" Format="0.00000" Align="Right" />
+                                                <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="100" Format="0.00" Align="Right" />
                                                 <ext:Column Header="Status" DataIndex="StatusName" Width="150" />
                                                 <ext:Column Header="Reason" DataIndex="StatusReasonName" Width="150" />
                                                 <ext:Column Header="Correlation ID" DataIndex="CorrelationID" Width="150" />
@@ -382,6 +382,8 @@
                                                             <ext:RecordField Name="Average" Type="Float" />
                                                             <ext:RecordField Name="StandardDeviation" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="Variance" Type="Float" UseNull="true" />
+                                                            <ext:RecordField Name="StartDate" Type="Date" />
+                                                            <ext:RecordField Name="EndDate" Type="Date" />
                                                         </Fields>
                                                     </ext:JsonReader>
                                                 </Reader>
@@ -408,6 +410,8 @@
                                                 <ext:NumberColumn Header="Average" DataIndex="Average" Width="100" Format=",0.000" Align="Right" />
                                                 <ext:NumberColumn Header="Standard Dev." DataIndex="StandardDeviation" Width="100" Format=",0.000000" Align="Right" />
                                                 <ext:NumberColumn Header="Variance" DataIndex="Variance" Width="100" Format=",0.000000" Align="Right" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
                                             </Columns>
                                         </ColumnModel>
                                         <SelectionModel>
@@ -678,17 +682,16 @@
                         <Buttons>
                             <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept">
                                 <DirectEvents>
-                                    <Click OnEvent="UploadClick" Before="if (!#{BasicForm}.getForm().isValid()) { return false; } 
+                                    <Click OnEvent="UploadClick" Before="if (!#{BasicForm}.getForm().isValid()) { return false; }
                                                                          Ext.Msg.wait('Uploading and processing...', 'Processing');
                                                                          return true;"
-                                        
-                                        Failure="Ext.Msg.show({ 
-                                                    title   : 'Error', 
-                                                    msg     : 'Error during uploading', 
-                                                    minWidth: 200, 
-                                                    modal   : true, 
-                                                    icon    : Ext.Msg.ERROR, 
-                                                    buttons : Ext.Msg.OK 
+                                        Failure="Ext.Msg.show({
+                                                    title   : 'Error',
+                                                    msg     : 'Error during uploading',
+                                                    minWidth: 200,
+                                                    modal   : true,
+                                                    icon    : Ext.Msg.ERROR,
+                                                    buttons : Ext.Msg.OK
                                                 });">
                                     </Click>
                                 </DirectEvents>
@@ -881,4 +884,3 @@
         </Content>
     </ext:Window>
 </asp:Content>
-

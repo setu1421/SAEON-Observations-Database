@@ -36,7 +36,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var endDate = input.EndDate;
             return db.ImportBatchSummary.Where(i =>
                 (input.Sites.Contains(i.SiteId) || input.Stations.Contains(i.StationId)) &&
-                (input.Offerings.Contains(i.PhenomenonOfferingId) || input.Units.Contains(i.PhenomenonUnitId)) &&
+                (input.Offerings.Contains(i.PhenomenonOfferingId) && input.Units.Contains(i.PhenomenonUnitId)) &&
                 (i.StartDate >= startDate && i.EndDate < endDate)
                 );
         }
@@ -195,8 +195,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             foreach (var feature in features)
             {
                 result.DataMatrix.AddColumn(feature.Name, feature.Caption, MaxtixDataType.Double);
+                Logging.Verbose("Feature: {@Feature}", feature);
             }
-            var observations = q.Join(db.Observations, l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
+            var phenomenonOfferingIds = features.Select(f => f.PhenomenonOfferingId);
+            var phenomenonUnitIds = features.Select(f => f.PhenomenonUnitId);
+            var observations = q.Join(db.Observations.Where(i => (i.StatusId == null) || (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
+                    .Where(i => phenomenonOfferingIds.Contains(i.PhenomenonOfferingId))
+                    .Where(i => phenomenonUnitIds.Contains(i.PhenomenonUnitId))
                     .OrderBy(i => i.SiteName)
                     .ThenBy(i => i.StationName)
                     .ThenBy(i => i.InstrumentName)
@@ -204,6 +209,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     .ThenBy(i => i.ValueDate)
                     //.Take(1000)
                     .ToList();
+            Logging.Verbose("Observations: {Observations}", observations.Count);
             Guid siteId = new Guid();
             Guid stationId = new Guid();
             Guid instrumentId = new Guid();
@@ -229,6 +235,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     date = obs.ValueDate;
                 }
                 var name = $"{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}";
+                //Logging.Verbose("Name: {Name}",name);
                 row[name] = obs.DataValue;
             }
             Logging.Verbose("DataMatrix: Rows: {Rows} Cols: {Cols}", result.DataMatrix.Rows.Count, result.DataMatrix.Columns.Count);

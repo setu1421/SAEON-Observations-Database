@@ -124,7 +124,7 @@ namespace SAEON.Observations.Core
             Matrix = dataMatrix;
         }
 
-        public object this[string name] 
+        public object this[string name]
         {
             get
             {
@@ -142,6 +142,12 @@ namespace SAEON.Observations.Core
         {
             get { return Columns[index]; }
             set { Columns[index] = value; }
+        }
+
+        public bool IsNull(string name)
+        {
+            var val = this[name];
+            return (val == null);
         }
 
     }
@@ -203,7 +209,11 @@ namespace SAEON.Observations.Core
                 var dataRow = result.NewRow();
                 foreach (var dmCol in Columns)
                 {
-                    dataRow[dmCol.Name] = dmRow[dmCol.Name];
+                    var value = dmRow[dmCol.Name];
+                    if (value != null)
+                    { 
+                        dataRow[dmCol.Name] = value;
+                    }
                 }
                 result.Rows.Add(dataRow);
             }
@@ -288,7 +298,7 @@ namespace SAEON.Observations.Core
 
     public enum DownloadFormats { CSV, Excel, NetCDF }
 
-    public class DataWizardDownloadInput : DataWizardDataInput 
+    public class DataWizardDownloadInput : DataWizardDataInput
     {
         [JsonConverter(typeof(StringEnumConverter))]
         public DownloadFormats DownloadFormat { get; set; } = DownloadFormats.CSV;
