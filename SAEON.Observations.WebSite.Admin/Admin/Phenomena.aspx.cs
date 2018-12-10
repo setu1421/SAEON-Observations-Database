@@ -7,6 +7,7 @@ using SAEON.Observations.Data;
 using SubSonic;
 using System.Xml;
 using System.Xml.Xsl;
+using SAEON.Logs;
 
 /// <summary>
 /// Summary description for _Phenomenon
@@ -84,7 +85,7 @@ public partial class _Phenomena : System.Web.UI.Page
         DetailWindow.Hide();
     }
 
-    protected void PhenomenonUOMGrid_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void PhenomenonUOMGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
 
         if (e.Parameters["PhenomenonID"] != null && e.Parameters["PhenomenonID"].ToString() != "-1")
@@ -104,18 +105,26 @@ public partial class _Phenomena : System.Web.UI.Page
     }
 
 
-    protected void UnitOfMeasureStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    protected void UnitOfMeasureGridStore_RefreshData(object sender, StoreRefreshDataEventArgs e)
     {
         if (e.Parameters["PhenomenonID"] != null && e.Parameters["PhenomenonID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["PhenomenonID"].ToString());
 
-            UnitOfMeasureCollection uomavailCol = new Select()
+            var q = new Select()
                     .From(UnitOfMeasure.Schema)
                     .Where(UnitOfMeasure.IdColumn).NotIn(new Select(new String[] { PhenomenonUOM.Columns.UnitOfMeasureID })
                     .From(PhenomenonUOM.Schema)
                     .Where(PhenomenonUOM.PhenomenonIDColumn).IsEqualTo(Id))
-                    .ExecuteAsCollection<UnitOfMeasureCollection>();
+                    .OrderAsc(UnitOfMeasure.Columns.Unit);
+            Logging.Verbose("ID: {id} SQL: {sql}", Id, q.BuildSqlStatement());
+            UnitOfMeasureCollection uomavailCol = new Select()
+                .From(UnitOfMeasure.Schema)
+                .Where(UnitOfMeasure.IdColumn).NotIn(new Select(new String[] { PhenomenonUOM.Columns.UnitOfMeasureID })
+                .From(PhenomenonUOM.Schema)
+                .Where(PhenomenonUOM.PhenomenonIDColumn).IsEqualTo(Id))
+                .OrderAsc(UnitOfMeasure.Columns.Unit)
+                .ExecuteAsCollection<UnitOfMeasureCollection>();
 
             UnitOfMeasureGridStore.DataSource = uomavailCol.ToList();
             UnitOfMeasureGridStore.DataBind();
@@ -131,12 +140,11 @@ public partial class _Phenomena : System.Web.UI.Page
         {
 
             Guid Id = Guid.Parse(e.Parameters["PhenomenonID"].ToString());
-
             OfferingCollection offeringCol = new Select()
-                     .From(Offering.Schema)
-                     .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
-                     .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
-                     .ExecuteAsCollection<OfferingCollection>();
+                .From(Offering.Schema)
+                .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
+                .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
+                .ExecuteAsCollection<OfferingCollection>();
 
             PhenomenonOfferingGrid.GetStore().DataSource = offeringCol;
             PhenomenonOfferingGrid.GetStore().DataBind();
@@ -148,13 +156,21 @@ public partial class _Phenomena : System.Web.UI.Page
         if (e.Parameters["PhenomenonID"] != null && e.Parameters["PhenomenonID"].ToString() != "-1")
         {
             Guid Id = Guid.Parse(e.Parameters["PhenomenonID"].ToString());
-
-            OfferingCollection offavailCol = new Select()
+            var q = new Select()
                     .From(Offering.Schema)
                     .Where(Offering.IdColumn).NotIn(new Select(new String[] { PhenomenonOffering.Columns.OfferingID })
-                                                                    .From(PhenomenonOffering.Schema)
-                                                                    .Where(PhenomenonOffering.PhenomenonIDColumn).IsEqualTo(Id))
-                    .ExecuteAsCollection<OfferingCollection>();
+                    .From(PhenomenonOffering.Schema)
+                    .Where(PhenomenonOffering.PhenomenonIDColumn).IsEqualTo(Id))
+                    .OrderAsc(Offering.Columns.Name);
+            Logging.Verbose("ID: {id} SQL: {sql}", Id, q.BuildSqlStatement());
+
+            OfferingCollection offavailCol = new Select()
+                .From(Offering.Schema)
+                .Where(Offering.IdColumn).NotIn(new Select(new String[] { PhenomenonOffering.Columns.OfferingID })
+                .From(PhenomenonOffering.Schema)
+                .Where(PhenomenonOffering.PhenomenonIDColumn).IsEqualTo(Id))
+                .OrderAsc(Offering.Columns.Name)
+                .ExecuteAsCollection<OfferingCollection>();
 
             OfferingGridStore.DataSource = offavailCol.ToList();
             OfferingGridStore.DataBind();

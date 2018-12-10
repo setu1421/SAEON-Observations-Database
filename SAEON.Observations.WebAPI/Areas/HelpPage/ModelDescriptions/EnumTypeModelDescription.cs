@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace SAEON.Observations.WebAPI.Areas.HelpPage.ModelDescriptions

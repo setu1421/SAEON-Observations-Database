@@ -215,7 +215,7 @@
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Add" />
                                                 </ToolTips>
                                                 <Listeners>
-                                                    <Click Handler="if(Ext.getCmp('#{PhenomenaGrid}') && #{PhenomenaGrid}.getSelectionModel().hasSelection()){#{Store3}.reload();#{AvailableUnitsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a phenomenon.')}" />
+                                                    <Click Handler="if(Ext.getCmp('#{PhenomenaGrid}') && #{PhenomenaGrid}.getSelectionModel().hasSelection()){#{UnitOfMeasureGridStore}.reload();#{AvailableUnitsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a phenomenon.')}" />
                                                 </Listeners>
                                             </ext:Button>
                                         </Items>
@@ -224,7 +224,7 @@
                                 <Items>
                                     <ext:GridPanel ID="PhenomenonUOMGrid" runat="server" Border="false" ClientIDMode="Static">
                                         <Store>
-                                            <ext:Store ID="PhenomenonUOMGridStore" runat="server" OnRefreshData="PhenomenonUOMGrid_RefreshData">
+                                            <ext:Store ID="PhenomenonUOMGridStore" runat="server" OnRefreshData="PhenomenonUOMGridStore_RefreshData">
                                                 <Proxy>
                                                     <ext:PageProxy />
                                                 </Proxy>
@@ -352,7 +352,7 @@
         <Items>
             <ext:GridPanel ID="OfferingGrid" runat="server" Header="false" Border="false" ClientIDMode="Static">
                 <Store>
-                    <ext:Store ID="OfferingGridStore" runat="server" OnRefreshData="OfferingGridStore_RefreshData" RemoteSort="true" >
+                    <ext:Store ID="OfferingGridStore" runat="server" OnRefreshData="OfferingGridStore_RefreshData">
                         <Proxy>
                             <ext:PageProxy />
                         </Proxy>
@@ -382,7 +382,7 @@
                 </ColumnModel>
                 <LoadMask ShowMask="true" />
                 <Plugins>
-                    <ext:GridFilters runat="server" ID="GridFilters5">
+                    <ext:GridFilters runat="server" ID="GridFilters5" Local="true">
                         <Filters>
                             <ext:StringFilter DataIndex="Code" />
                             <ext:StringFilter DataIndex="Name" />
@@ -412,7 +412,7 @@
         <Items>
             <ext:GridPanel ID="UnitOfMeasureGrid" runat="server" Header="false" Border="false" ClientIDMode="Static">
                 <Store>
-                    <ext:Store ID="UnitOfMeasureGridStore" runat="server" OnRefreshData="UnitOfMeasureStore_RefreshData">
+                    <ext:Store ID="UnitOfMeasureGridStore" runat="server" OnRefreshData="UnitOfMeasureGridStore_RefreshData">
                         <Proxy>
                             <ext:PageProxy />
                         </Proxy>
@@ -442,7 +442,7 @@
                 </ColumnModel>
                 <LoadMask ShowMask="true" />
                 <Plugins>
-                    <ext:GridFilters runat="server" ID="GridFilters4">
+                    <ext:GridFilters runat="server" ID="GridFilters4" Local="true">
                         <Filters>
                             <ext:StringFilter DataIndex="Code" />
                             <ext:StringFilter DataIndex="Unit" />
