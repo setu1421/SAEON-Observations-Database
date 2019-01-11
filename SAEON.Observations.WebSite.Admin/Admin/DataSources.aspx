@@ -40,7 +40,7 @@
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -50,7 +50,7 @@
         <Reader>
             <ext:JsonReader IDProperty="Id">
                 <Fields>
-                    <ext:RecordField Name="Id" Type="String" />
+                    <ext:RecordField Name="Id" Type="Auto" />
                     <ext:RecordField Name="Name" Type="String" />
                 </Fields>
             </ext:JsonReader>
@@ -202,12 +202,17 @@
                                                     <ext:JsonReader IDProperty="Id">
                                                         <Fields>
                                                             <ext:RecordField Name="Id" Type="Auto" />
+                                                            <ext:RecordField Name="DataSourceID" Type="Auto" />
                                                             <ext:RecordField Name="TransformationTypeID" Type="Auto" />
+                                                            <ext:RecordField Name="TransformationName" Type="String" />
                                                             <ext:RecordField Name="PhenomenonID" Type="Auto" />
+                                                            <ext:RecordField Name="PhenomenonName" Type="String" />
                                                             <ext:RecordField Name="PhenomenonOfferingID" Type="Auto" />
+                                                            <ext:RecordField Name="OfferingName" Type="String" />
+                                                            <ext:RecordField Name="PhenomenonUOMID" Type="Auto" />
+                                                            <ext:RecordField Name="UnitOfMeasureUnit" Type="String" />
                                                             <ext:RecordField Name="StartDate" Type="Date" />
                                                             <ext:RecordField Name="EndDate" Type="Date" />
-                                                            <ext:RecordField Name="DataSourceID" Type="Auto" />
                                                             <ext:RecordField Name="ParamA" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamB" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamC" Type="Float" UseNull="true" />
@@ -234,12 +239,8 @@
                                                             <ext:RecordField Name="ParamX" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="ParamY" Type="Float" UseNull="true" />
                                                             <ext:RecordField Name="Definition" Type="String" />
-                                                            <ext:RecordField Name="PhenomenonName" Type="String" />
-                                                            <ext:RecordField Name="TransformationName" Type="String" />
-                                                            <ext:RecordField Name="PhenomenonOfferingId" Type="Auto" />
-                                                            <ext:RecordField Name="OfferingName" Type="String" />
-                                                            <ext:RecordField Name="UnitOfMeasureId" Type="Auto" />
-                                                            <ext:RecordField Name="UnitOfMeasureUnit" Type="String" />
+                                                            <ext:RecordField Name="NewPhenomenonID" Type="Auto" />
+                                                            <ext:RecordField Name="NewPhenomenonName" Type="Auto" />
                                                             <ext:RecordField Name="NewPhenomenonOfferingID" Type="Auto" />
                                                             <ext:RecordField Name="NewOfferingName" Type="Auto" />
                                                             <ext:RecordField Name="NewPhenomenonUOMID" Type="Auto" />
@@ -256,10 +257,11 @@
                                         </Store>
                                         <ColumnModel ID="ColumnModel2" runat="server">
                                             <Columns>
-                                                <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="200" />
                                                 <ext:Column Header="Transformation" DataIndex="TransformationName" Width="150" />
+                                                <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="200" />
                                                 <ext:Column Header="Offering" DataIndex="OfferingName" Width="200" />
                                                 <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="200" />
+                                                <ext:Column Header="New Phenomenon" DataIndex="NewPhenomenonName" Width="200" />
                                                 <ext:Column Header="New Offering" DataIndex="NewOfferingName" Width="200" />
                                                 <ext:Column Header="New Unit of Measure" DataIndex="NewUnitOfMeasureUnit" Width="200" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy HH:mm" />
@@ -412,7 +414,7 @@
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="TransformationDetailPanel" runat="server" Title="" MonitorPoll="500"
-                MonitorValid="true" MonitorResize="true" Padding="10" Width="440" Height="520"
+                MonitorValid="true" MonitorResize="true" Padding="10" 
                 ButtonAlign="Right" Layout="RowLayout" ClientIDMode="Static">
                 <Items>
                     <ext:Hidden ID="tfTransID" DataIndex="Id" runat="server">
@@ -440,10 +442,9 @@
                                 TypeAhead="true" Mode="Local" ForceSelection="true" TriggerAction="All" AllowBlank="false"
                                 DataIndex="PhenomenonID" EmptyText="Select Phenomenon" SelectOnFocus="true" FieldLabel="Phenomenon"
                                 AnchorHorizontal="96%" ClientIDMode="Static">
-                                <Listeners>
-                                    <Select Handler="#{cbOffering}.clearValue();#{cbOffering}.getStore().reload();#{cbUnitofMeasure}.clearValue();#{cbUnitofMeasure}.getStore().reload()
-                                                    ;#{sbNewOffering}.clearValue();#{sbNewOffering}.getStore().reload();#{sbNewUoM}.clearValue();#{sbNewUoM}.getStore().reload()" />
-                                </Listeners>
+                                <DirectEvents>
+                                    <Select OnEvent="cbPhenomenonSelect" />
+                                </DirectEvents>
                             </ext:SelectBox>
                         </Items>
                     </ext:Panel>
@@ -454,7 +455,7 @@
                                 ValueField="ID" FieldLabel="Offering" EmptyText="Please select" ValueNotFoundText="Please select"
                                 AnchorHorizontal="96%" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="store3" runat="server" AutoLoad="false" OnRefreshData="cbOffering_RefreshData">
+                                    <ext:Store ID="store3" runat="server" AutoLoad="false">
                                         <Reader>
                                             <ext:JsonReader IDProperty="ID">
                                                 <Fields>
@@ -481,7 +482,7 @@
                                 ValueField="ID" FieldLabel="Unit of Measure" EmptyText="Please select" ValueNotFoundText="Please select"
                                 AnchorHorizontal="96%" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="store5" runat="server" AutoLoad="false" OnRefreshData="cbUnitofMeasure_RefreshData">
+                                    <ext:Store ID="store5" runat="server" AutoLoad="false">
                                         <Reader>
                                             <ext:JsonReader IDProperty="ID">
                                                 <Fields>
@@ -631,14 +632,31 @@
                         </Items>
                     </ext:Container>
                     <%--=============--%>
+                    <ext:Panel ID="Panel1" runat="server" Border="false" Header="false" Layout="Form">
+                        <Items>
+                            <ext:SelectBox ID="sbNewPhenomenon" runat="server" DisplayField="Name" StoreID="PhenomenonStore" DataIndex="NewPhenomenonID"
+                                AllowBlank="true" BlankText="New Phenomenon is required" MsgTarget="Side" ForceSelection="false"
+                                ValueField="Id" FieldLabel="New Phenomenon" EmptyText="Please select" ValueNotFoundText="Please select"
+                                AnchorHorizontal="96%" ClientIDMode="Static">
+                                <Triggers>
+                                    <ext:FieldTrigger Icon="Clear" />
+                                </Triggers>
+                                <DirectEvents>
+                                    <Select OnEvent="sbNewPhenomenonSelect" />
+                                    <TriggerClick OnEvent="sbNewPhenomenonClear" />
+                                </DirectEvents>
+                            </ext:SelectBox>
+                        </Items>
+                    </ext:Panel>
+
                     <ext:Panel ID="Panel2" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:SelectBox ID="sbNewOffering" runat="server" DataIndex="NewPhenomenonOfferingID" DisplayField="Name"
-                                AllowBlank="true" BlankText="Offering is required" MsgTarget="Side" ForceSelection="false"
+                                AllowBlank="true" BlankText="New Offering is required" MsgTarget="Side" ForceSelection="false"
                                 ValueField="ID" FieldLabel="New Offering" EmptyText="Please select" ValueNotFoundText="Please select"
                                 AnchorHorizontal="96%" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="store6" runat="server" AutoLoad="false" OnRefreshData="cbNewOffering_RefreshData">
+                                    <ext:Store ID="store6" runat="server" AutoLoad="false">
                                         <Reader>
                                             <ext:JsonReader IDProperty="ID">
                                                 <Fields>
@@ -652,20 +670,20 @@
                                 <Triggers>
                                     <ext:FieldTrigger Icon="Clear" />
                                 </Triggers>
-                                <Listeners>
-                                    <TriggerClick Handler="this.clearValue();" />
-                                </Listeners>
+                                <DirectEvents>
+                                    <TriggerClick OnEvent="sbNewOfferingClear" />
+                                </DirectEvents>
                             </ext:SelectBox>
                         </Items>
                     </ext:Panel>
                     <ext:Panel ID="Panel5" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:SelectBox ID="sbNewUoM" runat="server" DataIndex="NewPhenomenonUOMID" DisplayField="Unit"
-                                AllowBlank="true" BlankText="Offering is required" MsgTarget="Side" ForceSelection="false"
+                                AllowBlank="true" BlankText="New Unit is required" MsgTarget="Side" ForceSelection="false"
                                 ValueField="ID" FieldLabel="New Unit of Measure" EmptyText="Please select" ValueNotFoundText="Please select"
                                 AnchorHorizontal="96%" ClientIDMode="Static">
                                 <Store>
-                                    <ext:Store ID="store7" runat="server" AutoLoad="false" OnRefreshData="cbNewUnitofMeasure_RefreshData">
+                                    <ext:Store ID="store7" runat="server" AutoLoad="false">
                                         <Reader>
                                             <ext:JsonReader IDProperty="ID">
                                                 <Fields>
@@ -679,9 +697,9 @@
                                 <Triggers>
                                     <ext:FieldTrigger Icon="Clear" />
                                 </Triggers>
-                                <Listeners>
-                                    <TriggerClick Handler="this.clearValue();" />
-                                </Listeners>
+                                <DirectEvents>
+                                    <TriggerClick OnEvent="sbNewUoMClear" />
+                                </DirectEvents>
                             </ext:SelectBox>
                         </Items>
                     </ext:Panel>

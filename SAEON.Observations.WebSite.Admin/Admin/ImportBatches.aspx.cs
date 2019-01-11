@@ -83,31 +83,59 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
     private void CreateSummary(SharedDbConnectionScope connScope, Guid importBatchId)
     {
-        var cmd = connScope.CurrentConnection.CreateCommand();
-        ImportBatchSummary.Delete("ImportBatchID", importBatchId);
-        var sql =
-            "Insert Into ImportBatchSummary" + Environment.NewLine +
-            "  (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance," + Environment.NewLine +
-            "   TopLatitude, BottomLatitude, LeftLongitude, RightLongitude, StartDate, EndDate)" + Environment.NewLine +
-            "Select" + Environment.NewLine +
-            "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, " + Environment.NewLine +
-            "  STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance, " + Environment.NewLine +
-            "  Max(Latitude) TopLatitude, Min(Latitude) BottomLatitude, Min(Longitude) LeftLongitude, Max(Longitude) RightLongitude, " + Environment.NewLine +
-            "  Min(ValueDate) StartDate, Max(ValueDate) EndDate" + Environment.NewLine +
-            "from" + Environment.NewLine +
-            "  vObservationExpansion" + Environment.NewLine +
-            "where" + Environment.NewLine +
-            "  (ImportBatchID = @ImportBatchID)" + Environment.NewLine +
-            "group by" + Environment.NewLine +
-            "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID";
-        cmd.CommandText = sql;
-        var param = cmd.CreateParameter();
-        param.DbType = DbType.Guid;
-        param.ParameterName = "@ImportBatchID";
-        param.Value = importBatchId;
-        cmd.Parameters.Add(param);
-        var n = cmd.ExecuteNonQuery();
-        Logging.Verbose("Added {Summaries} summaries", n);
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
+        {
+            var cmd = connScope.CurrentConnection.CreateCommand();
+            ImportBatchSummary.Delete("ImportBatchID", importBatchId);
+            var sql =
+                "Insert Into ImportBatchSummary" + Environment.NewLine +
+                "  (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance," + Environment.NewLine +
+                "   TopLatitude, BottomLatitude, LeftLongitude, RightLongitude, StartDate, EndDate)" + Environment.NewLine +
+                "Select" + Environment.NewLine +
+                "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, " + Environment.NewLine +
+                "  STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance, " + Environment.NewLine +
+                "  Max(Latitude) TopLatitude, Min(Latitude) BottomLatitude, Min(Longitude) LeftLongitude, Max(Longitude) RightLongitude, " + Environment.NewLine +
+                "  Min(ValueDate) StartDate, Max(ValueDate) EndDate" + Environment.NewLine +
+                "from" + Environment.NewLine +
+                "  vObservationExpansion" + Environment.NewLine +
+                "where" + Environment.NewLine +
+                "  (ImportBatchID = @ImportBatchID)" + Environment.NewLine +
+                "group by" + Environment.NewLine +
+                "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID";
+            cmd.CommandText = sql;
+            var param = cmd.CreateParameter();
+            param.DbType = DbType.Guid;
+            param.ParameterName = "@ImportBatchID";
+            param.Value = importBatchId;
+            cmd.Parameters.Add(param);
+            var n = cmd.ExecuteNonQuery();
+            Logging.Verbose("Added {Summaries} summaries", n);
+        }
+    }
+
+    private void CreateDocuments(SharedDbConnectionScope connScope, Guid importBatchId)
+    {
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
+        {
+            var cmd = connScope.CurrentConnection.CreateCommand();
+            var sql =
+                "Select" + Environment.NewLine +
+                "  *" + Environment.NewLine +
+                "from" + Environment.NewLine +
+                "  vObservationJSON" + Environment.NewLine +
+                "where" + Environment.NewLine +
+                "  (ImportBatchID = @ImportBatchID)";
+            cmd.CommandText = sql;
+            var param = cmd.CreateParameter();
+            param.DbType = DbType.Guid;
+            param.ParameterName = "@ImportBatchID";
+            param.Value = importBatchId;
+            cmd.Parameters.Add(param);
+            //var reader = cmd.ExecuteReader();
+            //while reader.
+            //var n = cmd.ExecuteNonQuery();
+            //Logging.Verbose("Added {Summaries} summaries", n);
+        }
     }
 
     protected void FileSelected(object sender, DirectEventArgs e)
@@ -381,6 +409,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             ts.Complete();
                             Logging.Information("Done");
                         }
+                        // Upload to CosmosDB
 
                         ObservationsGridStore.DataBind();
                         ImportBatchesGrid.GetStore().DataBind();
