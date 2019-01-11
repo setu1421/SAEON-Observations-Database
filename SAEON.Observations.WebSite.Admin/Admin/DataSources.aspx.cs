@@ -834,10 +834,20 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 if (transformType.Code == TransformationType.QualityControlValues)
                 {
                     cbOffering.ReadOnly = true;
+                    cbOffering.Clear();
+                    cbOffering.ClearInvalid();
                     cbUnitofMeasure.ReadOnly = true;
+                    cbUnitofMeasure.Clear();
+                    cbUnitofMeasure.ClearInvalid();
                     sbNewPhenomenon.ReadOnly = true;
+                    sbNewPhenomenon.Clear();
+                    sbNewPhenomenon.ClearInvalid();
                     sbNewOffering.ReadOnly = true;
+                    sbNewOffering.Clear();
+                    sbNewOffering.ClearInvalid();
                     sbNewUoM.ReadOnly = true;
+                    sbNewUoM.Clear();
+                    sbNewUoM.ClearInvalid();
                 }
                 else
                 {
@@ -855,48 +865,6 @@ public partial class Admin_DataSources : System.Web.UI.Page
             }
         }
     }
-
-    /*
-    private void SetNewAllowBlank()
-    {
-        var allowBlank = sbNewPhenomenon.IsEmpty && sbNewOffering.IsEmpty && sbNewUoM.IsEmpty;
-        sbNewPhenomenon.AllowBlank = allowBlank;
-        sbNewOffering.AllowBlank = allowBlank;
-        sbNewUoM.AllowBlank = allowBlank;
-    }
-
-    private void SetNewValid(object sender)
-    {
-        var allSelected = (!sbNewPhenomenon.IsEmpty && !sbNewOffering.IsEmpty && !sbNewUoM.IsEmpty);
-        var noneSelected = (sbNewPhenomenon.IsEmpty && sbNewOffering.IsEmpty && sbNewUoM.IsEmpty);
-        if (allSelected || noneSelected)
-        {
-            sbNewPhenomenon.ClearInvalid();
-            sbNewPhenomenon.MarkAsValid();
-            sbNewOffering.ClearInvalid();
-            sbNewOffering.MarkAsValid();
-            sbNewUoM.ClearInvalid();
-            sbNewUoM.MarkAsValid();
-        }
-        else
-        {
-            if ((sender != sbNewPhenomenon) && sbNewPhenomenon.IsEmpty)
-            {
-                sbNewPhenomenon.MarkInvalid();
-            }
-
-            if ((sender != sbNewOffering) && sbNewOffering.IsEmpty)
-            {
-                sbNewOffering.MarkInvalid();
-            }
-
-            if ((sender != sbNewUoM) && sbNewUoM.IsEmpty)
-            {
-                sbNewUoM.MarkInvalid();
-            }
-        }
-    }
-    */
 
     private void LoadNewComboBoxes()
     {

@@ -264,8 +264,8 @@
                                                 <ext:Column Header="New Phenomenon" DataIndex="NewPhenomenonName" Width="200" />
                                                 <ext:Column Header="New Offering" DataIndex="NewOfferingName" Width="200" />
                                                 <ext:Column Header="New Unit of Measure" DataIndex="NewUnitOfMeasureUnit" Width="200" />
-                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="150" Format="dd MMM yyyy HH:mm" />
-                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="150" Format="dd MMM yyyy HH:mm" />
+                                                <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="125" Format="dd MMM yyyy HH:mm" />
+                                                <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="125" Format="dd MMM yyyy HH:mm" />
                                                 <ext:CommandColumn Width="150">
                                                     <Commands>
                                                         <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" ToolTip-Text="Edit" />
