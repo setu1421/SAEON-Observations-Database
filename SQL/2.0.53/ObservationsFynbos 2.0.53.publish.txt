@@ -1,0 +1,21 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[DataSourceTransformation] (Table)
+       [dbo].[vDataSourceTransformation] (View)
+     Create
+       [dbo].[DataSourceTransformation].[IX_DataSourceTransformation_NewPhenomenonID] (Index)
+       [dbo].[FK_DataSourceTransformation_NewPhenomenon] (Foreign Key)
+
+** Supporting actions
+     Refresh
+       [dbo].[vDataLog] (View)

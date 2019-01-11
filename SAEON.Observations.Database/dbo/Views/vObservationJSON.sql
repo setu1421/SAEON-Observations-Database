@@ -1,4 +1,6 @@
-Select Top(10)
+﻿CREATE VIEW [dbo].[vObservationJSON]
+AS
+Select
   ID,
   ValueDate,
   ValueDay,
@@ -45,6 +47,4 @@ Select Top(10)
   StatusReasonName 'StatusReason.Name'
 from
   vObservationExpansion
-order by
-  ValueDate desc
-for json path
+

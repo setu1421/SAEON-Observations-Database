@@ -33,6 +33,7 @@
     [ParamW] FLOAT NULL, 
     [ParamX] FLOAT NULL, 
     [ParamY] FLOAT NULL, 
+    [NewPhenomenonID] UNIQUEIDENTIFIER NULL,
     [NewPhenomenonOfferingID] UNIQUEIDENTIFIER NULL,
     [NewPhenomenonUOMID]      UNIQUEIDENTIFIER NULL,
     [Rank]                    INT              CONSTRAINT [DF_DataSourceTransformation_Rank] DEFAULT ((0)) NULL,
@@ -47,6 +48,7 @@
     CONSTRAINT [FK_DataSourceTransformation_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
     CONSTRAINT [FK_DataSourceTransformation_PhenomenonUOM] FOREIGN KEY ([PhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
     CONSTRAINT [FK_DataSourceTransformation_TransformationType] FOREIGN KEY ([TransformationTypeID]) REFERENCES [dbo].[TransformationType] ([ID]),
+    CONSTRAINT [FK_DataSourceTransformation_NewPhenomenon] FOREIGN KEY ([NewPhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]),
     CONSTRAINT [FK_DataSourceTransformation_NewPhenomenonOffering] FOREIGN KEY ([NewPhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),
     CONSTRAINT [FK_DataSourceTransformation_NewPhenomenonUOM] FOREIGN KEY ([NewPhenomenonUOMID]) REFERENCES [dbo].[PhenomenonUOM] ([ID]),
     CONSTRAINT [FK_DataSourceTransformation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
@@ -63,6 +65,8 @@ GO
 CREATE INDEX [IX_DataSourceTransformation_PhenomenonOfferingID] ON [dbo].[DataSourceTransformation] ([PhenomenonOfferingID])
 GO
 CREATE INDEX [IX_DataSourceTransformation_PhenomenonUOMID] ON [dbo].[DataSourceTransformation] ([PhenomenonUOMID])
+GO
+CREATE INDEX [IX_DataSourceTransformation_NewPhenomenonID] ON [dbo].[DataSourceTransformation] ([NewPhenomenonID])
 GO
 CREATE INDEX [IX_DataSourceTransformation_NewPhenomenonOfferingID] ON [dbo].[DataSourceTransformation] ([NewPhenomenonOfferingID])
 GO

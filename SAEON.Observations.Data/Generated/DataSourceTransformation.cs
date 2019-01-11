@@ -685,6 +685,20 @@ namespace SAEON.Observations.Data
 				colvarParamY.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarParamY);
 				
+				TableSchema.TableColumn colvarNewPhenomenonID = new TableSchema.TableColumn(schema);
+				colvarNewPhenomenonID.ColumnName = "NewPhenomenonID";
+				colvarNewPhenomenonID.DataType = DbType.Guid;
+				colvarNewPhenomenonID.MaxLength = 0;
+				colvarNewPhenomenonID.AutoIncrement = false;
+				colvarNewPhenomenonID.IsNullable = true;
+				colvarNewPhenomenonID.IsPrimaryKey = false;
+				colvarNewPhenomenonID.IsForeignKey = true;
+				colvarNewPhenomenonID.IsReadOnly = false;
+				colvarNewPhenomenonID.DefaultSetting = @"";
+				
+					colvarNewPhenomenonID.ForeignKeyTableName = "Phenomenon";
+				schema.Columns.Add(colvarNewPhenomenonID);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -1030,6 +1044,14 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<double?>(Columns.ParamY); }
 			set { SetColumnValue(Columns.ParamY, value); }
 		}
+		  
+		[XmlAttribute("NewPhenomenonID")]
+		[Bindable(true)]
+		public Guid? NewPhenomenonID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.NewPhenomenonID); }
+			set { SetColumnValue(Columns.NewPhenomenonID, value); }
+		}
 		
 		#endregion
 		
@@ -1081,6 +1103,17 @@ namespace SAEON.Observations.Data
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Phenomenon Phenomenon
+		{
+			get { return SAEON.Observations.Data.Phenomenon.FetchByID(this.NewPhenomenonID); }
+			set { SetColumnValue("NewPhenomenonID", value.Id); }
+		}
+		
+		
+		/// <summary>
+		/// Returns a Phenomenon ActiveRecord object related to this DataSourceTransformation
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.Phenomenon PhenomenonToPhenomenonID
 		{
 			get { return SAEON.Observations.Data.Phenomenon.FetchByID(this.PhenomenonID); }
 			set { SetColumnValue("PhenomenonID", value.Id); }
@@ -1167,7 +1200,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,double? varParamA,double? varParamB,double? varParamC,double? varParamD,double? varParamE,double? varParamF,double? varParamG,double? varParamH,double? varParamI,double? varParamJ,double? varParamK,double? varParamL,double? varParamM,double? varParamN,double? varParamO,double? varParamP,double? varParamQ,double? varParamR,double? varParamSX,double? varParamT,double? varParamU,double? varParamV,double? varParamW,double? varParamX,double? varParamY)
+		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,double? varParamA,double? varParamB,double? varParamC,double? varParamD,double? varParamE,double? varParamF,double? varParamG,double? varParamH,double? varParamI,double? varParamJ,double? varParamK,double? varParamL,double? varParamM,double? varParamN,double? varParamO,double? varParamP,double? varParamQ,double? varParamR,double? varParamSX,double? varParamT,double? varParamU,double? varParamV,double? varParamW,double? varParamX,double? varParamY,Guid? varNewPhenomenonID)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -1255,6 +1288,8 @@ namespace SAEON.Observations.Data
 			
 			item.ParamY = varParamY;
 			
+			item.NewPhenomenonID = varNewPhenomenonID;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -1265,7 +1300,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,double? varParamA,double? varParamB,double? varParamC,double? varParamD,double? varParamE,double? varParamF,double? varParamG,double? varParamH,double? varParamI,double? varParamJ,double? varParamK,double? varParamL,double? varParamM,double? varParamN,double? varParamO,double? varParamP,double? varParamQ,double? varParamR,double? varParamSX,double? varParamT,double? varParamU,double? varParamV,double? varParamW,double? varParamX,double? varParamY)
+		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,double? varParamA,double? varParamB,double? varParamC,double? varParamD,double? varParamE,double? varParamF,double? varParamG,double? varParamH,double? varParamI,double? varParamJ,double? varParamK,double? varParamL,double? varParamM,double? varParamN,double? varParamO,double? varParamP,double? varParamQ,double? varParamR,double? varParamSX,double? varParamT,double? varParamU,double? varParamV,double? varParamW,double? varParamX,double? varParamY,Guid? varNewPhenomenonID)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -1352,6 +1387,8 @@ namespace SAEON.Observations.Data
 				item.ParamX = varParamX;
 			
 				item.ParamY = varParamY;
+			
+				item.NewPhenomenonID = varNewPhenomenonID;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -1660,6 +1697,13 @@ namespace SAEON.Observations.Data
         
         
         
+        public static TableSchema.TableColumn NewPhenomenonIDColumn
+        {
+            get { return Schema.Columns[42]; }
+        }
+        
+        
+        
         #endregion
 		#region Columns Struct
 		public struct Columns
@@ -1706,6 +1750,7 @@ namespace SAEON.Observations.Data
 			 public static string ParamW = @"ParamW";
 			 public static string ParamX = @"ParamX";
 			 public static string ParamY = @"ParamY";
+			 public static string NewPhenomenonID = @"NewPhenomenonID";
 						
 		}
 		#endregion

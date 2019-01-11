@@ -344,6 +344,10 @@ namespace SAEON.Observations.Data
 		
 		public SAEON.Observations.Data.DataSourceTransformationCollection DataSourceTransformationRecords()
 		{
+			return new SAEON.Observations.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.NewPhenomenonID, Id).Load();
+		}
+		public SAEON.Observations.Data.DataSourceTransformationCollection DataSourceTransformationRecordsFromPhenomenon()
+		{
 			return new SAEON.Observations.Data.DataSourceTransformationCollection().Where(DataSourceTransformation.Columns.PhenomenonID, Id).Load();
 		}
 		public SAEON.Observations.Data.PhenomenonOfferingCollection PhenomenonOfferingRecords()
