@@ -96,12 +96,12 @@ namespace SAEON.Observations.Azure
                 {
                     if (StorageEnabled)
                     {
-                        Logging.Verbose("Ensuring Storage Container exist");
+                        Logging.Verbose("Ensuring Storage Container exists");
                         await Storage.EnsureContainerAsync(Azure.BlobStorageContainer);
                     }
                     if (CosmosDBEnabled)
                     {
-                        Logging.Verbose("Ensuring CosmosDB Collection exist");
+                        Logging.Verbose("Ensuring CosmosDB Collection exists");
                         await CosmosDB.EnsureCollectionAsync();
                     }
                 }

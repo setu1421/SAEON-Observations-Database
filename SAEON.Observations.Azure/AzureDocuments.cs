@@ -11,6 +11,27 @@ namespace SAEON.Observations.Azure
         public EpochDate Date { get; set; }
     }
 
+    public class ObservationSite : AzureSubDocument
+    {
+        public Guid ID { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class ObservationStation : AzureSubDocument
+    {
+        public Guid ID { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class ObservationInstrument : AzureSubDocument
+    {
+        public Guid ID { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
+    }
+
     public class ObservationSensor : AzureSubDocument
     {
         public Guid ID { get; set; }
@@ -57,6 +78,9 @@ namespace SAEON.Observations.Azure
     public class ObservationDocument : AzureDocument
     {
         public ObservationImportBatch ImportBatch { get; set; }
+        public ObservationSite Site { get; set; }
+        public ObservationStation Station { get; set; }
+        public ObservationInstrument Instrument { get; set; }
         public ObservationSensor Sensor { get; set; }
         public ObservationPhenomenon Phenomenon { get; set; }
         public ObservationOffering Offering { get; set; }

@@ -5,17 +5,17 @@
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
     <Authors>Tim Parker-Nance</Authors>
     <Company>South African Environmental Observation Network (SAEON)</Company>
-    <Product>SAEON.Observations.Azure</Product>
+    <Product>SAEON Observations Database</Product>
     <Description>SAEON Observations Azure</Description>
-    <Copyright>Copyright © 2018 South African Environmental Observation Network (SAEON)</Copyright>
+    <Copyright>© 2018-2019 South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.12</Version>
+    <Version>1.0.15</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.23" />
-    <PackageReference Include="SAEON.Azure.Storage" Version="1.0.42" />
-    <PackageReference Include="SAEON.Logs" Version="1.0.34" />
+    <PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.25" />
+    <PackageReference Include="SAEON.Azure.Storage" Version="1.0.45" />
+    <PackageReference Include="SAEON.Logs" Version="1.0.35" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
