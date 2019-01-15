@@ -31,8 +31,14 @@ namespace SAEON.Observations.QuerySite.Controllers
             var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
             if (token == null)
             {
-                var tokenClient = new TokenClient(Properties.Settings.Default.IdentityServerUrl + "/connect/token", "SAEON.Observations.QuerySite", "It6fWPU5J708");
-                var tokenResponse = await tokenClient.RequestClientCredentialsAsync("SAEON.Observations.WebAPI");
+                var tokenClient = new HttpClient();
+                var tokenResponse = await tokenClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+                {
+                    Address = Properties.Settings.Default.IdentityServerUrl + "/connect/token",
+                    ClientId = "It6fWPU5J708",
+                    ClientSecret = "secret",
+                    Scope = "SAEON.Observations.WebAPI"
+                });
                 if (tokenResponse.IsError)
                 {
                     Logging.Error("Error: {error}", tokenResponse.Error);

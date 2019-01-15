@@ -2,7 +2,7 @@
 using SAEON.Azure.CosmosDB;
 using System;
 
-namespace SAEON.Observations.Azure
+namespace SAEON.Observations.Azure 
 {
     public class ObservationImportBatch : AzureSubDocument
     {

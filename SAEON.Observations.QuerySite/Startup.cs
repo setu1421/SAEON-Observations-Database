@@ -39,7 +39,9 @@ namespace SAEON.Observations.QuerySite
                     //app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
-                        AuthenticationType = "Cookies"
+                        AuthenticationType = "Cookies",
+                        ExpireTimeSpan = new TimeSpan(7, 0, 0, 0),
+                        SlidingExpiration = true
                     });
                     app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                     {
