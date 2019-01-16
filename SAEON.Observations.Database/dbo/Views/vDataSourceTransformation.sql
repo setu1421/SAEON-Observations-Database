@@ -2,11 +2,11 @@
 AS
 Select 
   dt.*,
-  p.Name as PhenomenonName,
   tt.Name as TransformationName,
+  p.Name as PhenomenonName,
   o.Name as OfferingName,
-  pu.ID as UnitOfMeasureId,
-  uom.Unit as UnitOfMeasureUnit,
+  u.Unit as UnitOfMeasureUnit,
+  np.Name NewPhenomenonName,
   NewOffering.Name NewOfferingName,
   NewUnitOfMeasure.Unit NewUnitOfMeasureUnit,
   tt.iorder
@@ -24,8 +24,10 @@ From
     on po.OfferingID = o.ID
   LEFT JOIN PhenomenonUOM pu
     on dt.PhenomenonUOMID = pu.ID
-  LEFT JOIN UnitOfMeasure uom
-    on pu.UnitOfMeasureID = uom.ID
+  LEFT JOIN UnitOfMeasure u
+    on pu.UnitOfMeasureID = u.ID
+  left join Phenomenon np
+    on (dt.NewPhenomenonID = np.ID)
   left join PhenomenonOffering NewPhenomenonOffering
     on (dt.NewPhenomenonOfferingID = NewPhenomenonOffering.ID)
   left join Offering NewOffering

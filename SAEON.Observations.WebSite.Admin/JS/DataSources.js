@@ -61,49 +61,13 @@ function onTransformCommand(e, record) {
     else if (e === "Edit") {
         TransformationDetailPanel.getForm().reset();
         TransformationDetailPanel.getForm().loadRecord(record);
-        TransformationDetailPanel.getForm().clearInvalid();
-
-        //TransformationsGrid.el.mask('Please wait', 'x-mask-loading');
-
-        var loadcallback = function () {
-            cbOffering.getStore().removeListener('load', loadcallback);
-            cbOffering.setValue(record.data.PhenomenonOfferingId);
-        };
-
-        var uomloadcallback = function () {
-            cbUnitofMeasure.getStore().removeListener('load', uomloadcallback);
-            cbUnitofMeasure.setValue(record.data.UnitOfMeasureId);
-        };
-
-        //
-        var newOloadcallback = function () {
-            sbNewOffering.getStore().removeListener('load', newOloadcallback);
-            sbNewOffering.setValue(record.data.NewPhenomenonOfferingID);
-        };
-
-        var newUOMloadcallback = function () {
-            sbNewUoM.getStore().removeListener('load', newUOMloadcallback);
-            sbNewUoM.setValue(record.data.NewPhenomenonUOMID);
-        };
-        //
+        DirectCall.LoadCombos(record.get("TransformationTypeID"), record.get("PhenomenonID"), record.get("PhenomenonOfferingID"), record.get("PhenomenonUOMID"), record.get("NewPhenomenonID"), record.get("NewPhenomenonOfferingID"), record.get("NewPhenomenonUOMID"));
 
         tfDefinition.rvConfig.remoteValidated = false;
         tfDefinition.rvConfig.remoteValid = false;
         tfDefinition.markAsValid();
         delete tfDefinition.rvConfig.lastValue;
 
-        cbOffering.getStore().on("load", loadcallback);
-        cbUnitofMeasure.getStore().on("load", uomloadcallback);
-
-        //
-        sbNewOffering.getStore().on("load", newOloadcallback);
-        sbNewUoM.getStore().on("load", newUOMloadcallback);
-
-
-        cbTransformType.setValueAndFireSelect(record.data.TransformationTypeID);
-        cbPhenomenon.setValueAndFireSelect(record.data.PhenomenonID);
-        //cbOffering.setValueAndFireSelect(record.data.PhenomenonOfferingID)
-        //cbUnitofMeasure.setValueAndFireSelect(record.data.PhenomenonUOMID)
         DirectCall.SetFields();
         TransformationDetailWindow.show();
         TransformationDetailPanel.getForm().clearInvalid();
@@ -179,6 +143,9 @@ function GetInvalidFields(formPanel) {
                 s = s + " " + input.id;
             }
         }
+    }
+    if (s === 'Invalid: ') {
+        s = 'Valid';
     }
     alert(s);
 }

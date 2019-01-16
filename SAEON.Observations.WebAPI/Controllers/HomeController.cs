@@ -34,6 +34,16 @@ namespace SAEON.Observations.WebAPI.Controllers
             return View();
         }
 
+        /// <summary>
+        /// GraphQL
+        /// </summary>
+        /// <returns></returns>
+        [Route("GraphQL")]
+        public ActionResult GraphQL()
+        {
+            return View();
+        }
+
         [Route("SwaggerFrame")]
         public ActionResult SwaggerFrame()
         {

@@ -2,11 +2,11 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("SAEON.Observations.Core.Tests")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("SAEON Observations Core Tests")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SAEON.Observations.Core.Tests")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCompany("South African Environmental Observation Network (SAEON)")]
+[assembly: AssemblyProduct("SAEON Observations Database")]
+[assembly: AssemblyCopyright("© 2018-2019 South African Environmental Observation Network (SAEON)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

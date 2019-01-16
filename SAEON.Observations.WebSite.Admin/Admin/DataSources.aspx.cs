@@ -358,51 +358,21 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 dstransform.DataSourceID = masterID;
                 dstransform.TransformationTypeID = new Guid(cbTransformType.SelectedItem.Value);
                 dstransform.PhenomenonID = new Guid(cbPhenomenon.SelectedItem.Value);
+                dstransform.PhenomenonOfferingID = cbOffering.IsEmpty ? null : new Guid?(new Guid(cbOffering.SelectedItem.Value));
+                dstransform.PhenomenonUOMID = cbUnitofMeasure.IsEmpty ? null : new Guid?(new Guid(cbUnitofMeasure.SelectedItem.Value));
 
-                if (cbOffering.SelectedItem.Value != null)
+                var transformType = new TransformationType(new Guid(cbTransformType.SelectedItem.Value));
+                if (transformType.Code == TransformationType.QualityControlValues)
                 {
-                    dstransform.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
-                }
-                else
-                {
-                    dstransform.PhenomenonOfferingID = null;
-                }
-
-                if (cbUnitofMeasure.SelectedItem.Value != null)
-                {
-                    dstransform.PhenomenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);
-                }
-                else
-                {
-                    dstransform.PhenomenonUOMID = null;
-                }
-
-                //9ca36c10-cbad-4862-9f28-591acab31237 = Quality Control on Values
-                if (new Guid(cbTransformType.SelectedItem.Value) != new Guid("9ca36c10-cbad-4862-9f28-591acab31237"))
-                {
-
-                    if (sbNewOffering.SelectedItem.Value != null)
-                    {
-                        dstransform.NewPhenomenonOfferingID = new Guid(sbNewOffering.SelectedItem.Value);
-                    }
-                    else
-                    {
-                        dstransform.NewPhenomenonOfferingID = null;
-                    }
-
-                    if (sbNewUoM.SelectedItem.Value != null)
-                    {
-                        dstransform.NewPhenomenonUOMID = new Guid(sbNewUoM.SelectedItem.Value);
-                    }
-                    else
-                    {
-                        dstransform.NewPhenomenonUOMID = null;
-                    }
-                }
-                else
-                {
+                    dstransform.NewPhenomenonID = null;
                     dstransform.NewPhenomenonOfferingID = null;
                     dstransform.NewPhenomenonUOMID = null;
+                }
+                else
+                {
+                    dstransform.NewPhenomenonID = sbNewPhenomenon.IsEmpty ? null : new Guid?(new Guid(sbNewPhenomenon.SelectedItem.Value));
+                    dstransform.NewPhenomenonOfferingID = sbNewOffering.IsEmpty ? null : new Guid?(new Guid(sbNewOffering.SelectedItem.Value));
+                    dstransform.NewPhenomenonUOMID = sbNewUoM.IsEmpty ? null : new Guid?(new Guid(sbNewUoM.SelectedItem.Value));
                 }
                 //
 
@@ -457,12 +427,10 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 { "DataSourceCode", dstransform.DataSource.Code},
                 { "TransformationTypeID", dstransform.TransformationTypeID},
                 { "TransformationTypeName", dstransform.TransformationType.Name },
-                { "PhenmenonID", dstransform.PhenomenonID},
-                {"PhenomenonName", dstransform.Phenomenon.Name },
+                { "PhenomenonID", dstransform.PhenomenonID},
                 {"PhenomenonOfferingID", dstransform.PhenomenonOfferingID },
-                {"OfferingName", dstransform.PhenomenonOffering?.Offering.Name },
                 {"PhenomenonUnitOfMeasureID", dstransform.PhenomenonUOMID },
-                {"UnitOfMeasureUnit", dstransform.PhenomenonUOM?.UnitOfMeasure.Unit },
+                {"NewPhenomenonID" , dstransform.NewPhenomenonID},
                 {"NewPhenomenonOfferingID", dstransform.NewPhenomenonOfferingID },
                 {"NewPhenomenonUnitOfMeasureID", dstransform.NewPhenomenonUOMID },
                 {"StartDate", dstransform?.StartDate },
@@ -536,53 +504,27 @@ public partial class Admin_DataSources : System.Web.UI.Page
         }
     }
 
-    protected void cbOffering_RefreshData(object sender, StoreRefreshDataEventArgs e)
+    [DirectMethod]
+#pragma warning disable IDE1006 // Naming Styles
+    public void cbPhenomenonSelect(object sender, DirectEventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
     {
-        var Id = cbPhenomenon.SelectedItem.Value;
-
         cbOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.NameColumn)
                  .From(Offering.Schema)
                  .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
-                 .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
+                 .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(cbPhenomenon.Value)
                  .ExecuteDataSet().Tables[0];
         cbOffering.GetStore().DataBind();
-    }
-
-    protected void cbUnitofMeasure_RefreshData(object sender, StoreRefreshDataEventArgs e)
-    {
-        var Id = cbPhenomenon.SelectedItem.Value;
-
         cbUnitofMeasure.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
                .From(UnitOfMeasure.Schema)
                .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
-               .Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(Id)
+               .Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(cbPhenomenon.Value)
                .ExecuteDataSet().Tables[0];
         cbUnitofMeasure.GetStore().DataBind();
-    }
-
-    //////////////
-    protected void cbNewOffering_RefreshData(object sender, StoreRefreshDataEventArgs e)
-    {
-        var Id = cbPhenomenon.SelectedItem.Value;
-
-        sbNewOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.NameColumn)
-                 .From(Offering.Schema)
-                 .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
-                 .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
-                 .ExecuteDataSet().Tables[0];
-        sbNewOffering.GetStore().DataBind();
-    }
-
-    protected void cbNewUnitofMeasure_RefreshData(object sender, StoreRefreshDataEventArgs e)
-    {
-        var Id = cbPhenomenon.SelectedItem.Value;
-
-        sbNewUoM.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
-               .From(UnitOfMeasure.Schema)
-               .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
-               .Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(Id)
-               .ExecuteDataSet().Tables[0];
-        sbNewUoM.GetStore().DataBind();
+        cbOffering.Clear();
+        cbOffering.ClearInvalid();
+        cbUnitofMeasure.Clear();
+        cbUnitofMeasure.ClearInvalid();
     }
 
     protected void OnDefinitionValidation(object sender, RemoteValidationEventArgs e)
@@ -790,33 +732,71 @@ public partial class Admin_DataSources : System.Web.UI.Page
     }
 
     [DirectMethod]
+    public void LoadCombos(string transformationTypeID, string phenomenonID, string offeringID, string unitOfMeasureID, string newPhenomenonID, string newOfferingID, string newUnitOfMeasureID)
+    {
+        using (Logging.MethodCall(GetType(), new ParameterList { { "TransformationTypeID", transformationTypeID },
+            { "PhenomenonID", phenomenonID }, { "OfferingID", offeringID }, {"UnitOfMeasureID", unitOfMeasureID },
+            { "NewPhenomenonID", newPhenomenonID }, { "NewOfferingID", newOfferingID }, { "NewUnitOfMeasureID", newUnitOfMeasureID } }))
+        {
+            try
+            {
+                cbTransformType.Value = transformationTypeID;
+                cbTransformTypeSelect(cbTransformType, new DirectEventArgs(null));
+                cbPhenomenon.Value = phenomenonID;
+                cbPhenomenonSelect(cbPhenomenon, new DirectEventArgs(null));
+                cbOffering.Value = string.IsNullOrWhiteSpace(offeringID) ? null : offeringID;
+                cbUnitofMeasure.Value = string.IsNullOrWhiteSpace(unitOfMeasureID) ? null : unitOfMeasureID;
+                sbNewPhenomenon.Value = string.IsNullOrWhiteSpace(newPhenomenonID) ? null : newPhenomenonID;
+                sbNewPhenomenonSelect(sbNewPhenomenon, new DirectEventArgs(null));
+                sbNewOffering.Value = string.IsNullOrWhiteSpace(newOfferingID) ? null : newOfferingID;
+                sbNewUoM.Value = string.IsNullOrWhiteSpace(newUnitOfMeasureID) ? null : newUnitOfMeasureID;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                throw;
+            }
+        }
+
+    }
+
+    [DirectMethod]
     public void SetFields()
     {
-        tfParamA.MarkAsValid();
-        tfParamB.MarkAsValid();
-        tfParamC.MarkAsValid();
-        tfParamD.MarkAsValid();
-        tfParamE.MarkAsValid();
-        tfParamF.MarkAsValid();
-        tfParamG.MarkAsValid();
-        tfParamH.MarkAsValid();
-        tfParamI.MarkAsValid();
-        tfParamJ.MarkAsValid();
-        tfParamK.MarkAsValid();
-        tfParamL.MarkAsValid();
-        tfParamM.MarkAsValid();
-        tfParamN.MarkAsValid();
-        tfParamO.MarkAsValid();
-        tfParamP.MarkAsValid();
-        tfParamQ.MarkAsValid();
-        tfParamR.MarkAsValid();
-        tfParamS.MarkAsValid();
-        tfParamT.MarkAsValid();
-        tfParamU.MarkAsValid();
-        tfParamV.MarkAsValid();
-        tfParamW.MarkAsValid();
-        tfParamX.MarkAsValid();
-        tfParamY.MarkAsValid();
+        void SetField(NumberField field)
+        {
+            field.ClearInvalid();
+            field.MarkAsValid();
+        }
+
+        using (Logging.MethodCall(GetType()))
+        {
+            SetField(tfParamA);
+            SetField(tfParamB);
+            SetField(tfParamC);
+            SetField(tfParamD);
+            SetField(tfParamE);
+            SetField(tfParamF);
+            SetField(tfParamG);
+            SetField(tfParamH);
+            SetField(tfParamI);
+            SetField(tfParamJ);
+            SetField(tfParamK);
+            SetField(tfParamL);
+            SetField(tfParamM);
+            SetField(tfParamN);
+            SetField(tfParamO);
+            SetField(tfParamP);
+            SetField(tfParamQ);
+            SetField(tfParamR);
+            SetField(tfParamS);
+            SetField(tfParamT);
+            SetField(tfParamU);
+            SetField(tfParamV);
+            SetField(tfParamW);
+            SetField(tfParamX);
+            SetField(tfParamY);
+        }
     }
 
     protected void OnParamValidation(object sender, RemoteValidationEventArgs e)
@@ -845,10 +825,106 @@ public partial class Admin_DataSources : System.Web.UI.Page
     public void cbTransformTypeSelect(object sender, DirectEventArgs e)
 #pragma warning restore IDE1006 // Naming Styles
     {
-        TransformationType transformType = new TransformationType(cbTransformType.Value);
-        ContainerParameters.Hidden = (transformType.Code != TransformationType.Expression);
-        tfDefinition.ClearInvalid();
-        tfDefinition.MarkInvalid();
+        using (Logging.MethodCall(GetType()))
+        {
+            try
+            {
+                TransformationType transformType = new TransformationType(cbTransformType.Value);
+                ContainerParameters.Hidden = (transformType.Code != TransformationType.Expression);
+                if (transformType.Code == TransformationType.QualityControlValues)
+                {
+                    cbOffering.ReadOnly = true;
+                    cbOffering.Clear();
+                    cbOffering.ClearInvalid();
+                    cbUnitofMeasure.ReadOnly = true;
+                    cbUnitofMeasure.Clear();
+                    cbUnitofMeasure.ClearInvalid();
+                    sbNewPhenomenon.ReadOnly = true;
+                    sbNewPhenomenon.Clear();
+                    sbNewPhenomenon.ClearInvalid();
+                    sbNewOffering.ReadOnly = true;
+                    sbNewOffering.Clear();
+                    sbNewOffering.ClearInvalid();
+                    sbNewUoM.ReadOnly = true;
+                    sbNewUoM.Clear();
+                    sbNewUoM.ClearInvalid();
+                }
+                else
+                {
+                    cbOffering.ReadOnly = false;
+                    cbUnitofMeasure.ReadOnly = false;
+                    sbNewPhenomenon.ReadOnly = false;
+                    sbNewOffering.ReadOnly = false;
+                    sbNewUoM.ReadOnly = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                throw;
+            }
+        }
+    }
+
+    private void LoadNewComboBoxes()
+    {
+        var Id = sbNewPhenomenon.SelectedItem.Value;
+        sbNewOffering.GetStore().DataSource = new Select(PhenomenonOffering.IdColumn, Offering.NameColumn)
+                 .From(Offering.Schema)
+                 .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
+                 .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
+                 .ExecuteDataSet().Tables[0];
+        sbNewOffering.GetStore().DataBind();
+        sbNewUoM.GetStore().DataSource = new Select(PhenomenonUOM.IdColumn, UnitOfMeasure.UnitColumn)
+               .From(UnitOfMeasure.Schema)
+               .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
+               .Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(Id)
+               .ExecuteDataSet().Tables[0];
+        sbNewUoM.GetStore().DataBind();
+    }
+
+    [DirectMethod]
+#pragma warning disable IDE1006 // Naming Styles
+    public void sbNewPhenomenonSelect(object sender, DirectEventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
+    {
+        LoadNewComboBoxes();
+        sbNewOffering.Clear();
+        sbNewOffering.ClearInvalid();
+        sbNewUoM.Clear();
+        sbNewUoM.ClearInvalid();
+    }
+
+    [DirectMethod]
+#pragma warning disable IDE1006 // Naming Styles
+    public void sbNewPhenomenonClear(object sender, DirectEventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
+    {
+        sbNewPhenomenon.Clear();
+        sbNewPhenomenon.ClearInvalid();
+        sbNewOffering.Clear();
+        sbNewOffering.ClearInvalid();
+        sbNewUoM.Clear();
+        sbNewUoM.ClearInvalid();
+        LoadNewComboBoxes();
+    }
+
+    [DirectMethod]
+#pragma warning disable IDE1006 // Naming Styles
+    public void sbNewOfferingClear(object sender, DirectEventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
+    {
+        sbNewOffering.Clear();
+        sbNewOffering.ClearInvalid();
+    }
+
+    [DirectMethod]
+#pragma warning disable IDE1006 // Naming Styles
+    public void sbNewUoMClear(object sender, DirectEventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
+    {
+        sbNewUoM.Clear();
+        sbNewUoM.ClearInvalid();
     }
 
     #endregion

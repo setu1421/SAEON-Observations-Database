@@ -790,6 +790,15 @@
                         </DirectEvents>
                     </ext:Button>
                 </Buttons>
+                <Plugins>
+                    <ext:GridFilters runat="server" ID="DataSourcesFilters" ClientIDMode="Static" Local="true">
+                        <Filters>
+                            <ext:StringFilter DataIndex="Code" />
+                            <ext:StringFilter DataIndex="Name" />
+                        </Filters>
+                    </ext:GridFilters>
+                </Plugins>
+
             </ext:GridPanel>
         </Items>
     </ext:Window>

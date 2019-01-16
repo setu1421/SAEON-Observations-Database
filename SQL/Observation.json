@@ -1,52 +1,60 @@
-    {
-        "ID": 80212708,
-        "ImportBatchID": "19DDFDB1-843F-443B-BFB8-ABE51E24248A",
-        "ValueDate": "2024-01-26T00:00:00",
-        "ValueDay": "2024-01-26",
-        "ValueYear": 2024,
-        "ValueDecade": 202,
-        "RawValue": 1.170000000000000e+001,
-        "DataValue": 1.170000000000000e+001,
-        "SiteID": "B0F41CA5-8159-4568-847E-29EC393D61D3",
-        "SiteCode": "CPEAK",
-        "SiteName": "Cathedral Peak",
-        "SiteDescription": "Cathedral Peak, Kwazulu-Natal",
-        "StationID": "D6757E1D-34D1-459E-A0B6-B65B1D7CE5B7",
-        "StationCode": "CPEAK_Catch6_6\/7C",
-        "StationName": "CPEAK Catch. 6 6\/7C",
-        "StationDescription": "Cathedral Peak - Catch. 6 6\/7C",
-        "StationUrl": "http:\/\/data.saeon.ac.za",
-        "InstrumentID": "9185F940-31AE-424B-A04D-1E1A00B1FB0B",
-        "InstrumentCode": "CPEAK_Catch6_6\/7C",
-        "InstrumentName": "CPEAK Catch. 6 6\/7C",
-        "InstrumentDescription": "Cathedral Peak - Catch. 6 6\/7C",
-        "InstrumentUrl": "http:\/\/data.saeon.ac.za",
-        "SensorID": "F0F9F275-BA0C-443E-823B-C1DC9884DAC4",
-        "SensorCode": "CPEAK_Catch6_6\/7C_RAIN",
-        "SensorName": "MANUAL Catch. 6 6\/7C Weekly Rainfall",
-        "SensorDescription": "MANUAL Cathedral Peak Catch. 6 6\/7C Weekly Rainfall",
-        "SensorUrl": "http:\/\/data.saeon.ac.za",
-        "PhenomenonOfferingID": "84A31CAD-FB56-4F75-9810-46670E1C3F70",
-        "PhenomenonID": "4674F771-E190-4EAB-85A4-93736B5CD13E",
-        "PhenomenonCode": "RAIN",
-        "PhenomenonName": "Rainfall",
-        "PhenomenonDescription": "Rainfall",
-        "PhenomenonUrl": "urn:ogc:def:phenomenon:OGC:rainfall",
-        "OfferingID": "77369A1F-34BD-4678-8AAD-41EDA51F31CE",
-        "OfferingCode": "TOT_W_RAIN",
-        "OfferingName": "Total Weekly rainfall",
-        "OfferingDescription": "Total Rainfall during time period of one week",
-        "PhenomenonUOMID": "C9D8BA10-844A-403C-A43F-1F3CD87DC5D5",
-        "UnitOfMeasureID": "9614BED0-B65A-4F80-A86F-334B752E029D",
-        "UnitOfMeasureCode": "MM",
-        "UnitOfMeasureUnit": "Millimeter",
-        "UnitOfMeasureSymbol": "mm",
-        "StatusID": "41772118-F326-4E46-94B5-9B895BBEC01B",
-        "StatusCode": "QA-98",
-        "StatusName": "Unverified - Staging",
-        "StatusDescription": "Staging data merged as unverfied, not in data log",
-        "StatusReasonID": "8D22E84C-348F-40EE-B08F-4F44FE1CB82C",
-        "StatusReasonCode": "QAR-38",
-        "StatusReasonName": "Historical data not yet verfied",
-        "StatusReasonDescription": "Historical data not yet verfied"
-    }
+{
+  "ID": 80212708,
+  "ValueDate": "2024-01-26T00:00:00",
+  "ValueDay": "2024-01-26",
+  "ValueYear": 2024,
+  "ValueDecade": 202,
+  "RawValue": 1.170000000000000e+001,
+  "DataValue": 1.170000000000000e+001,
+  "ImportBatch": {
+    "ID": "19DDFDB1-843F-443B-BFB8-ABE51E24248A",
+    "Code": 3199,
+    "Date": "2014-09-30T12:19:43.017"
+  },
+  "Site": {
+    "ID": "B0F41CA5-8159-4568-847E-29EC393D61D3",
+    "Code": "CPEAK",
+    "Name": "Cathedral Peak"
+  },
+  "Station": {
+    "ID": "D6757E1D-34D1-459E-A0B6-B65B1D7CE5B7",
+    "Code": "CPEAK_Catch6_6\/7C",
+    "Name": "CPEAK Catch. 6 6\/7C"
+  },
+  "Instrument": {
+    "ID": "9185F940-31AE-424B-A04D-1E1A00B1FB0B",
+    "Code": "CPEAK_Catch6_6\/7C",
+    "Name": "CPEAK Catch. 6 6\/7C"
+  },
+  "Sensor": {
+    "ID": "F0F9F275-BA0C-443E-823B-C1DC9884DAC4",
+    "Code": "CPEAK_Catch6_6\/7C_RAIN",
+    "Name": "MANUAL Catch. 6 6\/7C Weekly Rainfall"
+  },
+  "Phenomenon": {
+    "ID": "4674F771-E190-4EAB-85A4-93736B5CD13E",
+    "Code": "RAIN",
+    "Name": "Rainfall"
+  },
+  "Offering": {
+    "ID": "77369A1F-34BD-4678-8AAD-41EDA51F31CE",
+    "Code": "TOT_W_RAIN",
+    "Name": "Total Weekly rainfall"
+  },
+  "Unit": {
+    "ID": "9614BED0-B65A-4F80-A86F-334B752E029D",
+    "Code": "MM",
+    "Name": "Millimeter",
+    "Symbol": "mm"
+  },
+  "Status": {
+    "ID": "41772118-F326-4E46-94B5-9B895BBEC01B",
+    "Code": "QA-98",
+    "Name": "Unverified - Staging"
+  },
+  "StatusReason": {
+    "ID": "8D22E84C-348F-40EE-B08F-4F44FE1CB82C",
+    "Code": "QAR-38",
+    "Name": "Historical data not yet verfied"
+  }
+}

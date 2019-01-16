@@ -10,7 +10,7 @@ namespace SAEON.Observations.Azure
 {
     public class Azure
     {
-        private const string BlobStorageContainer = "saeon-observations";
+        private const string BlobStorageContainer = "saeon-observations"; 
         private const string ObservationsStorageTable = "Observations";
         private const string CosmosDBDatabase = "saeon-observations"; 
         private const string CosmosDBCollection = "Observations";
@@ -96,12 +96,12 @@ namespace SAEON.Observations.Azure
                 {
                     if (StorageEnabled)
                     {
-                        Logging.Verbose("Ensuring Storage Container exist");
+                        Logging.Verbose("Ensuring Storage Container exists");
                         await Storage.EnsureContainerAsync(Azure.BlobStorageContainer);
                     }
                     if (CosmosDBEnabled)
                     {
-                        Logging.Verbose("Ensuring CosmosDB Collection exist");
+                        Logging.Verbose("Ensuring CosmosDB Collection exists");
                         await CosmosDB.EnsureCollectionAsync();
                     }
                 }

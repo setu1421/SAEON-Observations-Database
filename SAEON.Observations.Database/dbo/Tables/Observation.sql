@@ -22,7 +22,7 @@
     [RowVersion] RowVersion not null,
     [ValueDay]             as (CONVERT([date],[ValueDate])),
     [ValueYear]             as (datepart(year,[ValueDate])),
-    [ValueDecade]           as (datepart(year,[ValueDate])/(10)),
+    [ValueDecade]           as (datepart(year,[ValueDate])/10*10),
     CONSTRAINT [FK_Observation_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_Observation_ImportBatch] FOREIGN KEY ([ImportBatchID]) REFERENCES [dbo].[ImportBatch] ([ID]),
     CONSTRAINT [FK_Observation_PhenomenonOffering] FOREIGN KEY ([PhenomenonOfferingID]) REFERENCES [dbo].[PhenomenonOffering] ([ID]),

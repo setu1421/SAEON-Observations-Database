@@ -10,7 +10,7 @@ namespace SAEON.Observations.Core
     {
         public static void Initialize()
         {
-            using (Logging.MethodCall(typeof(BootStrapper))) 
+            using (Logging.MethodCall(typeof(BootStrapper)))
             {
                 try
                 {
