@@ -35,8 +35,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                 var tokenResponse = await tokenClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
                 {
                     Address = Properties.Settings.Default.IdentityServerUrl + "/connect/token",
-                    ClientId = "It6fWPU5J708",
-                    ClientSecret = "secret",
+                    ClientId = "SAEON.Observations.QuerySite",
+                    ClientSecret = "It6fWPU5J708",
                     Scope = "SAEON.Observations.WebAPI"
                 });
                 if (tokenResponse.IsError)

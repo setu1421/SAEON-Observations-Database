@@ -1,6 +1,7 @@
 ﻿using IdentityServer3.AccessTokenValidation;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
+using Microsoft.Owin.Security.Cookies;
 using Owin;
 using SAEON.Logs;
 using SAEON.Observations.Core;
@@ -25,6 +26,12 @@ namespace SAEON.Observations.WebAPI
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
                     JwtSecurityTokenHandler.InboundClaimTypeMap.Clear();
                     app.UseCors(CorsOptions.AllowAll);
+                    app.UseCookieAuthentication(new CookieAuthenticationOptions
+                    {
+                        AuthenticationType = "Cookies",
+                        ExpireTimeSpan = new TimeSpan(7, 0, 0, 0),
+                        SlidingExpiration = true
+                    });
                     app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
                     {
                         Authority = Properties.Settings.Default.IdentityServerUrl,
