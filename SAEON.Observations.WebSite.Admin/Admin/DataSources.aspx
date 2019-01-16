@@ -714,11 +714,11 @@
                     <%--=============--%>
                 </Items>
                 <Buttons>
-                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+<%--                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
                         <Listeners>
                             <Click Handler="GetInvalidFields(#{TransformationDetailPanel})" />
                         </Listeners>
-                    </ext:Button>
+                    </ext:Button>--%>
                     <ext:Button ID="SaveTransform" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="SaveTransformation" Method="POST">

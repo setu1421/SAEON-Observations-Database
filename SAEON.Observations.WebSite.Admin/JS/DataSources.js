@@ -144,5 +144,8 @@ function GetInvalidFields(formPanel) {
             }
         }
     }
+    if (s === 'Invalid: ') {
+        s = 'Valid';
+    }
     alert(s);
 }
