@@ -442,10 +442,9 @@
                     </ext:Panel>
                     <ext:Panel ID="Panel16" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server"
                                 FieldLabel="Description" AnchorHorizontal="96%" ClientIDMode="Static"
                                 AllowBlank="false" BlankText="Description is a required" MsgTarget="Side">
-                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>
@@ -563,6 +562,11 @@
                     </ext:Container>
                 </Items>
                 <Buttons>
+<%--                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                        <Listeners>
+                            <Click Handler="GetInvalidFields(#{DetailsFormPanel})" />
+                        </Listeners>
+                    </ext:Button>--%>
                     <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">
@@ -575,7 +579,8 @@
                     <ext:StatusBar ID="StatusBar1" runat="server" Height="25" />
                 </BottomBar>
                 <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                    <%--<ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />--%>
+                    <ClientValidation Handler="#{btnSave}.setDisabled(!valid);" />
                 </Listeners>
             </ext:FormPanel>
         </Content>

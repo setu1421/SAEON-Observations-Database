@@ -409,7 +409,7 @@
             </ext:FormPanel>
         </Content>
     </ext:Window>
-    <ext:Window ID="TransformationDetailWindow" runat="server" Width="800" Height="650"
+    <ext:Window ID="TransformationDetailWindow" runat="server" Width="800" Height="680"
         Closable="true" Hidden="true" Collapsible="false" Title="Transformation Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
@@ -719,7 +719,7 @@
                             <Click Handler="GetInvalidFields(#{TransformationDetailPanel})" />
                         </Listeners>
                     </ext:Button>--%>
-                    <ext:Button ID="SaveTransform" runat="server" Text="Save" FormBind="true">
+                    <ext:Button ID="btnSaveTransform" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="SaveTransformation" Method="POST">
                                 <EventMask ShowMask="true" />
@@ -740,7 +740,7 @@
                 </BottomBar>
                 <Listeners>
                     <%--<ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />--%>
-                    <ClientValidation Handler="#{SaveTransform}.setDisabled(!valid);" />
+                    <ClientValidation Handler="#{btnSaveTransform}.setDisabled(!valid);" />
                 </Listeners>
             </ext:FormPanel>
         </Content>
