@@ -562,11 +562,11 @@
                     </ext:Container>
                 </Items>
                 <Buttons>
-<%--                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
                         <Listeners>
-                            <Click Handler="GetInvalidFields(#{DetailsFormPanel})" />
+                            <Click Handler="GetInvalidFields(#{DetailsFormPanel});" />
                         </Listeners>
-                    </ext:Button>--%>
+                    </ext:Button>
                     <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">
@@ -620,10 +620,10 @@
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="ctWidth" runat="server" Layout="Form" ClientIDMode="Static">
+                    <ext:Container ID="ctWidth" runat="server" Layout="Form">
                         <Items>
                             <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server" AllowBlank="false" EmptyText="Enter a width" MsgTarget="Side"
-                                FieldLabel="Width" AnchorHorizontal="96%" AllowDecimals="false" MinValue="1">
+                                FieldLabel="Width" AnchorHorizontal="96%" AllowDecimals="false" MinValue="1" ClientIDMode="Static">
                             </ext:NumberField>
                         </Items>
                     </ext:Container>
@@ -694,14 +694,14 @@
                     </ext:Container>
                     <ext:Container ID="Container25" runat="server" Layout="Form">
                         <Items>
-                            <ext:TextField ID="tfEmptyValue" DataIndex="EmptyValue" MaxLength="50" runat="server" FieldLabel="Empty Value" AnchorHorizontal="96%">
+                            <ext:TextField ID="tfEmptyValue" DataIndex="EmptyValue" MaxLength="50" runat="server" FieldLabel="Empty Value" AnchorHorizontal="96%" ClientIDMode="Static">
                             </ext:TextField>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container26" runat="server" Layout="Form">
                         <Items>
                             <ext:TimeField ID="ttFixedTime" runat="server" DataIndex="FixedTime" FieldLabel="Fixed Time" MsgTarget="Side"
-                                EmptyText="Please select" AnchorHorizontal="96%" AllowBlank="false"
+                                EmptyText="Please select" AnchorHorizontal="96%" AllowBlank="false" 
                                 BlankText="Fixed Time is required" ClientIDMode="Static" Format="H:mm" Increment="60">
                                 <Triggers>
                                     <ext:FieldTrigger Icon="Clear" />
@@ -714,11 +714,11 @@
                     </ext:Container>
                 </Items>
                 <Buttons>
-                    <%--                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                    <ext:Button ID="btnValidateSchemaColumn" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
                         <Listeners>
-                            <Click Handler="alert(#{SchemaColumnFormPanel}.validate())" />
+                            <Click Handler="GetInvalidFields(#{SchemaColumnFormPanel});" />
                         </Listeners>
-                    </ext:Button>--%>
+                    </ext:Button>
                     <ext:Button ID="btnSchemaColumnSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="SchemaColumnSave">
@@ -739,7 +739,8 @@
                     </ext:StatusBar>
                 </BottomBar>
                 <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                    <%--                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />--%>
+                    <ClientValidation Handler="#{btnSchemaColumnSave}.setDisabled(!valid);" />
                 </Listeners>
             </ext:FormPanel>
         </Content>

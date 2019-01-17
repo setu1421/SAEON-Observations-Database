@@ -4,17 +4,19 @@ using SAEON.Observations.Data;
 using SubSonic;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Transactions;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class Admin_DataSchemas : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true";
+        btnValidate.Hidden = !Request.IsLocal && !showValidate;
+        btnValidateSchemaColumn.Hidden = !Request.IsLocal && !showValidate;
         if (!X.IsAjaxRequest)
         {
             DataSourceTypeStore.DataSource = new DataSourceTypeCollection().OrderByAsc(DataSourceType.Columns.Code).Load();
@@ -254,7 +256,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void ValidateColumnField(object sender, RemoteValidationEventArgs e)
     {
-        e.Success = true;
+        //e.Success = true;
         if (e.ID == "tfColumnName")
         {
             RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
@@ -268,7 +270,29 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 e.Success = false;
                 e.ErrorMessage = "The specified Schema Column Name already exists";
             }
+            else
+            {
+                e.Success = true;
+            }
         }
+        //else if (e.ID == "cbSchemaColumnType")
+        //{
+        //    var columnType = new SchemaColumnType(cbSchemaColumnType.SelectedItem.Text);
+        //    if ((columnType.Name != "Ignore") && (columnType.Name != "Comment"))
+        //    {
+        //        RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+        //        var masterID = new Guid(masterRow.SelectedRecordID);
+        //        SchemaColumnCollection col = new SchemaColumnCollection()
+        //            .Where(SchemaColumn.Columns.DataSchemaID, masterID)
+        //            .Where(SchemaColumn.Columns.SchemaColumnTypeID, cbSchemaColumnType.SelectedItem.Value)
+        //            .Load();
+        //        if (col.Any())
+        //        {
+        //            e.Success = false;
+        //            e.ErrorMessage = $"Schema already has a {columnType.Name} column";
+        //        }
+        //    }
+        //}
         else if (e.ID == "tfFormat")
         {
             try
@@ -276,6 +300,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 DateTime dt = DateTime.Now;
                 string format = e.Value.ToString().Trim();
                 DateTime.ParseExact(dt.ToString(format), format, null);
+                e.Success = true;
             }
             catch
             {
@@ -517,19 +542,26 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     public void cbSchemaColumnTypeSelect(object sender, DirectEventArgs e)
 #pragma warning restore IDE1006 // Naming Styles
     {
-        RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
-        var masterID = new Guid(masterRow.SelectedRecordID);
-        SchemaColumnCollection col = new SchemaColumnCollection()
-            .Where(SchemaColumn.Columns.DataSchemaID, masterID)
-            .Where(SchemaColumn.Columns.SchemaColumnTypeID, cbSchemaColumnType.SelectedItem.Value)
-            .Load();
-        if (col.Any())
+        var columnType = new SchemaColumnType(cbSchemaColumnType.SelectedItem.Value);
+        if ((columnType.Name != "Ignore") && (columnType.Name != "Comment"))
         {
-            var colType = new SchemaColumnType(cbSchemaColumnType.SelectedItem.Value);
-            MessageBoxes.Error("Error", $"Schema already has a {colType.Name} column");
-            return;
+            RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+            var masterID = new Guid(masterRow.SelectedRecordID);
+            SchemaColumnCollection col = new SchemaColumnCollection()
+                .Where(SchemaColumn.Columns.DataSchemaID, masterID)
+                .Where(SchemaColumn.Columns.SchemaColumnTypeID, cbSchemaColumnType.SelectedItem.Value)
+                .Load();
+            if (col.Any())
+            {
+                var colType = new SchemaColumnType(cbSchemaColumnType.SelectedItem.Value);
+                MessageBoxes.Error("Error", $"Schema already has a {colType.Name} column");
+                cbSchemaColumnType.ClearInvalid();
+                cbSchemaColumnType.MarkInvalid();
+                return;
+            }
         }
         SetFields();
+        cbSchemaColumnType.ClearInvalid();
         cbSchemaColumnType.MarkAsValid();
     }
 

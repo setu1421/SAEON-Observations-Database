@@ -5,12 +5,16 @@ using SAEON.Observations.Data;
 using SubSonic;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 public partial class Admin_DataSources : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true";
+        btnValidate.Hidden = !Request.IsLocal && !showValidate;
+        btnValidateTransformation.Hidden = !Request.IsLocal && !showValidate;
         if (!X.IsAjaxRequest)
         {
             DataSchemaStore.DataSource = new DataSchemaCollection().OrderByAsc(DataSchema.Columns.Name).Load();

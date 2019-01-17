@@ -392,6 +392,11 @@
                     </ext:Container>
                 </Items>
                 <Buttons>
+                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                        <Listeners>
+                            <Click Handler="GetInvalidFields(#{DetailsFormPanel});" />
+                        </Listeners>
+                    </ext:Button>
                     <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">
@@ -404,7 +409,8 @@
                     <ext:StatusBar ID="StatusBar1" runat="server" Height="25" />
                 </BottomBar>
                 <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                    <%--<ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />--%>
+                    <ClientValidation Handler="#{btnSave}.setDisabled(!valid);" />
                 </Listeners>
             </ext:FormPanel>
         </Content>
@@ -714,11 +720,11 @@
                     <%--=============--%>
                 </Items>
                 <Buttons>
-<%--                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                    <ext:Button ID="btnValidateTransformation" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
                         <Listeners>
-                            <Click Handler="GetInvalidFields(#{TransformationDetailPanel})" />
+                            <Click Handler="GetInvalidFields(#{TransformationDetailPanel});" />
                         </Listeners>
-                    </ext:Button>--%>
+                    </ext:Button>
                     <ext:Button ID="btnSaveTransform" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="SaveTransformation" Method="POST">
