@@ -1,0 +1,50 @@
+﻿@model SAEON.Observations.QuerySite.Models.DownloadModel
+
+@{
+    ViewBag.Title = "View";
+}
+
+<h2>View</h2>
+
+<div>
+    <h4>DownloadModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MetadataURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MetadataURL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DataURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataURL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DOI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DOI)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Citation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Citation)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

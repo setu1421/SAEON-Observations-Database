@@ -1,0 +1,31 @@
+﻿.bg-SAEON {
+    background-color: #567baf;
+}
+
+#Body {
+    padding: 15px;
+}
+
+.Logo {
+    margin: 5px;
+}
+
+#Footer {
+    font-size: x-small;
+}
+
+.footer-image {
+    border: none;
+}
+
+.PaddedRow {
+    padding-top: 5px;
+}
+
+.PaddedButton {
+    padding-right: 5px;
+}
+
+.ErrorRow {
+    color: red;
+}
