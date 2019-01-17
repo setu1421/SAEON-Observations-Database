@@ -10,7 +10,7 @@ namespace SAEON.Observations.Azure
 {
     public class Azure
     {
-        private const string BlobStorageContainer = "saeon-observations"; 
+        private const string BlobStorageContainer = "saeon-observations";
         private const string ObservationsStorageTable = "Observations";
         private const string CosmosDBDatabase = "saeon-observations"; 
         private const string CosmosDBCollection = "Observations";
