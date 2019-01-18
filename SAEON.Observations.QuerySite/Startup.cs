@@ -11,8 +11,10 @@ using SAEON.Observations.Core;
 using Syncfusion.Licensing;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Helpers;
 
 [assembly: OwinStartupAttribute(typeof(SAEON.Observations.QuerySite.Startup))]
@@ -66,10 +68,31 @@ namespace SAEON.Observations.QuerySite
                             {
                                 var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType);
 
-                                var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
-                                var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
+                                //var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
+                                //var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
+                                //identity.AddClaims(userInfo.Claims);
+                                
+                                var discoClient = new HttpClient();
+                                var disco = await discoClient.GetDiscoveryDocumentAsync(Properties.Settings.Default.IdentityServerUrl);
+                                if (disco.IsError)
+                                {
+                                    Logging.Error("Error: {error}", disco.Error);
+                                    throw new HttpException(disco.Error);
+                                }
 
-                                identity.AddClaims(userInfo.Claims);
+                                var userInfoClient = new HttpClient();
+                                var userInfoResponse = await userInfoClient.GetUserInfoAsync(new UserInfoRequest
+                                {
+                                    Address = disco.UserInfoEndpoint, 
+                                    Token = n.ProtocolMessage.AccessToken
+                                });
+                                if (userInfoResponse.IsError)
+                                {
+                                    Logging.Error("Error: {error}", userInfoResponse.Error);
+                                    throw new HttpException(userInfoResponse.Error);
+
+                                }
+                                identity.AddClaims(userInfoResponse.Claims);
 
                                 // keep the id_token for logout
                                 identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
@@ -86,11 +109,31 @@ namespace SAEON.Observations.QuerySite
                             {
                                 var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType, "given_name", "role");
 
-                                // get userinfo data
-                                var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
+                                //var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
+                                //var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
+                                //identity.AddClaims(userInfo.Claims);
+                                
+                                var discoClient = new HttpClient();
+                                var disco = await discoClient.GetDiscoveryDocumentAsync(Properties.Settings.Default.IdentityServerUrl);
+                                if (disco.IsError)
+                                {
+                                    Logging.Error("Error: {error}", disco.Error);
+                                    throw new HttpException(disco.Error);
+                                }
 
-                                var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
-                                identity.AddClaims(userInfo.Claims);
+                                var userInfoClient = new HttpClient();
+                                var userInfoResponse = await userInfoClient.GetUserInfoAsync(new UserInfoRequest
+                                {
+                                    Address = disco.UserInfoEndpoint,
+                                    Token = n.ProtocolMessage.AccessToken
+                                });
+                                if (userInfoResponse.IsError)
+                                {
+                                    Logging.Error("Error: {error}", userInfoResponse.Error);
+                                    throw new HttpException(userInfoResponse.Error);
+
+                                }
+                                identity.AddClaims(userInfoResponse.Claims);
 
                                 // keep the id_token for logout
                                 identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));

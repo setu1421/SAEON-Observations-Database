@@ -31,10 +31,17 @@ namespace SAEON.Observations.QuerySite.Controllers
             var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
             if (token == null)
             {
+                var discoClient = new HttpClient();
+                var disco = await discoClient.GetDiscoveryDocumentAsync(Properties.Settings.Default.IdentityServerUrl);
+                if (disco.IsError)
+                {
+                    Logging.Error("Error: {error}", disco.Error);
+                    throw new HttpException(disco.Error);
+                }
                 var tokenClient = new HttpClient();
                 var tokenResponse = await tokenClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
                 {
-                    Address = Properties.Settings.Default.IdentityServerUrl + "/connect/token",
+                    Address = disco.TokenEndpoint,
                     ClientId = "SAEON.Observations.QuerySite",
                     ClientSecret = "It6fWPU5J708",
                     Scope = "SAEON.Observations.WebAPI"
