@@ -610,10 +610,10 @@
                     <ext:Container ID="Container18" runat="server" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbSchemaColumnType" runat="server" StoreID="SchemaColumnTypeStore" IsRemoteValidation="true" MsgTarget="Side"
-                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
+                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" 
                                 ValueField="Id" DisplayField="Name" DataIndex="SchemaColumnTypeID" FieldLabel="Column type" EmptyText="Select a column type"
                                 AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true">
-                                <RemoteValidation OnValidation="ValidateColumnField" />
+                                <RemoteValidation OnValidation="ValidateColumnField" ValidationEvent="select" EventOwner="Field" />
                                 <DirectEvents>
                                     <Select OnEvent="cbSchemaColumnTypeSelect" />
                                 </DirectEvents>
@@ -636,7 +636,7 @@
                             <ext:ComboBox ID="cbFormat" runat="server" IsRemoteValidation="true" ClientIDMode="Static" MsgTarget="Side"
                                 TriggerAction="All" Editable="true" TypeAhead="true" ForceSelection="false" AllowBlank="false" FieldLabel="Format"
                                 DataIndex="Format" EmptyText="Enter a format" AnchorHorizontal="96%">
-                                <RemoteValidation OnValidation="ValidateColumnField" />
+                                <RemoteValidation OnValidation="ValidateColumnField"  ValidationEvent="select" EventOwner="Field"/>
                                 <Items>
                                     <ext:ListItem Text="d/M/yyyy (21 Sep 2017 13:14:15 -> 21/9/2017)" Value="d/M/yyyy" />
                                     <ext:ListItem Text="dd/MM/yy HH:mm:ss (21 Sep 2017 13:14:15 -> 21/09/17 13:14:15)" Value="dd/MM/yy HH:mm:ss" />
@@ -676,19 +676,21 @@
                     </ext:Container>
                     <ext:Container ID="Container23" runat="server" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore" MsgTarget="Side" DisplayField="OfferingName"
-                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
+                            <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore" MsgTarget="Side" DisplayField="OfferingName" 
+                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" 
                                 ValueField="Id" FieldLabel="Offering" DataIndex="PhenomenonOfferingID" EmptyText="Select an offering" ValueNotFoundText="Select an offering"
-                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true">
+                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true" IsRemoteValidation="true" >
+                                <RemoteValidation OnValidation="ValidateColumnField" ValidationEvent="select" EventOwner="Field" />
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container24" runat="server" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="UnitOfMeasureStore" MsgTarget="Side" DisplayField="UnitOfMeasureUnit"
-                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
+                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" 
                                 ValueField="Id" FieldLabel="Unit of measure" DataIndex="PhenomenonUOMID" EmptyText="Select a unit of measure" ValueNotFoundText="Select a unit of measure"
-                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true">
+                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true" IsRemoteValidation="true" >
+                                <RemoteValidation OnValidation="ValidateColumnField"  ValidationEvent="select" EventOwner="Field"/>
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
