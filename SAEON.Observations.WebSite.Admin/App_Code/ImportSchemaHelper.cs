@@ -486,7 +486,7 @@ public class ImportSchemaHelper : IDisposable
                 for (int i = 0; i < dtResults.Rows.Count; i++)
                 {
                     DataRow dr = dtResults.Rows[i];
-                    ProcessRow(dr);
+                    ProcessRow(dr, i + 1);
                 }
                 Logging.Information("Processed {rows} rows", dtResults.Rows.Count);
             }
@@ -502,7 +502,7 @@ public class ImportSchemaHelper : IDisposable
     ///
     /// </summary>
     /// <param name="dr"></param>
-    private void ProcessRow(DataRow dr)
+    private void ProcessRow(DataRow dr, int rowNum)
     {
         using (Logging.MethodCall(GetType()))
         {
@@ -544,7 +544,7 @@ public class ImportSchemaHelper : IDisposable
                         }
                         catch (Exception ex)
                         {
-                            Logging.Exception(ex, "Date: {date} Format: {format}", sDateValue, dtdef.Dateformat);
+                            Logging.Exception(ex, "Row#: {row} Date: {date} Format: {format}", rowNum, sDateValue, dtdef.Dateformat);
                             throw;
                         }
                     }
@@ -565,7 +565,7 @@ public class ImportSchemaHelper : IDisposable
                             }
                             catch (Exception ex)
                             {
-                                Logging.Exception(ex, "Time: {date} Format: {format}", sTimeValue, tmdef.Timeformat);
+                                Logging.Exception(ex, "Row#: {row} Time: {date} Format: {format}", rowNum, sTimeValue, tmdef.Timeformat);
                                 throw;
                             }
                         }
@@ -634,8 +634,8 @@ public class ImportSchemaHelper : IDisposable
 
                         var phenomenonOffering = new PhenomenonOffering(def.PhenomenonOfferingID);
                         var phenomenonUnitOfMeasure = new PhenomenonUOM(def.PhenomenonUOMID);
-                        Logging.Verbose("Index: {Index} Column: {Column} Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
-                            def.Index, def.FieldName, phenomenonOffering?.Phenomenon?.Name, phenomenonOffering?.Offering?.Name, phenomenonUnitOfMeasure?.Phenomenon?.Name, phenomenonUnitOfMeasure?.UnitOfMeasure?.Unit);
+                        Logging.Verbose("Row#: {row} Index: {Index} Column: {Column} Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
+                            rowNum, def.Index, def.FieldName, phenomenonOffering?.Phenomenon?.Name, phenomenonOffering?.Offering?.Name, phenomenonUnitOfMeasure?.Phenomenon?.Name, phenomenonUnitOfMeasure?.UnitOfMeasure?.Unit);
                         if (ErrorInTime)
                         {
                             rec.TimeValueInvalid = true;
@@ -676,7 +676,7 @@ public class ImportSchemaHelper : IDisposable
                             bool foundTooLate = false;
                             if (def.Sensors.Count > 0)
                             {
-                                Logging.Verbose("Sensors: {sensors}", def.Sensors.Select(s => s.Name).ToList());
+                                Logging.Verbose("Row#: {row} Sensors: {sensors}", rowNum, def.Sensors.Select(s => s.Name).ToList());
                             }
                             foreach (var sensor in def.Sensors)
                             {
@@ -689,13 +689,13 @@ public class ImportSchemaHelper : IDisposable
 
                                 if (dates.StartDate.HasValue && (rec.DateValue < dates.StartDate.Value))
                                 {
-                                    Logging.Error("Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", sensor.Name, dates.StartDate, rec.DateValue, rec);
+                                    Logging.Error("Row#: {row} Date too early, ignoring! Sensor: {sensor} StartDate: {startDate} Date: {recDate} Rec: {@rec}", rowNum, sensor.Name, dates.StartDate, rec.DateValue, rec);
                                     foundTooEarly = true;
                                     continue;
                                 }
                                 if (dates.EndDate.HasValue && (rec.DateValue > dates.EndDate.Value))
                                 {
-                                    Logging.Error("Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", sensor.Name, dates.EndDate, rec.DateValue, rec);
+                                    Logging.Error("Row#: {row} Date too late, ignoring! Sensor: {sensor} EndDate: {endDate} Date: {recDate} Rec: {@rec}", rowNum, sensor.Name, dates.EndDate, rec.DateValue, rec);
                                     foundTooLate = true;
                                     continue;
                                 }
@@ -710,7 +710,7 @@ public class ImportSchemaHelper : IDisposable
                                     continue; // Ignore
                                 }
 
-                                Logging.Error("Index: {Index} FieldName: {FieldName} Sensor not found Sensors: {sensors}", def.Index, def.FieldName, def.Sensors.Select(s => s.Name).ToList());
+                                Logging.Error("Row#: {row} Index: {Index} FieldName: {FieldName} Sensor not found Sensors: {sensors}", rowNum, def.Index, def.FieldName, def.Sensors.Select(s => s.Name).ToList());
                                 rec.SensorNotFound = true;
                                 rec.SensorID = def.Sensors.FirstOrDefault()?.Id;
                                 rec.InvalidStatuses.Add(Status.SensorNotFound);
@@ -731,7 +731,7 @@ public class ImportSchemaHelper : IDisposable
                             rec.DataValue = null; // dataSource.DefaultNullValue;
                             foreach (var transform in transformations.Where(t => def.DataSourceTransformationIDs.Contains(t.Id)))
                             {
-                                TransformValue(transform.Id, ref rec, true);
+                                TransformValue(transform.Id, ref rec, rowNum, true);
                             }
                         }
                         else
@@ -746,7 +746,7 @@ public class ImportSchemaHelper : IDisposable
                                 rec.TextValue = RawValue;
                                 foreach (var transform in transformations.Where(t => t.TransformationType.Name == "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
                                 {
-                                    TransformValue(transform.Id, ref rec);
+                                    TransformValue(transform.Id, ref rec, rowNum);
                                     if (rec.RawValue.HasValue)
                                     {
                                         RawValue = rec.RawValue.Value.ToString();
@@ -764,7 +764,7 @@ public class ImportSchemaHelper : IDisposable
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Exception(ex, "RawValue: {RawValue} DataRow: {Dump}", RawValue, dr.Dump());
+                                    Logging.Exception(ex, "Row#: {row} RawValue: {RawValue} DataRow: {Dump}", rowNum, RawValue, dr.Dump());
                                 }
                             }
                             else
@@ -773,7 +773,7 @@ public class ImportSchemaHelper : IDisposable
                                 rec.DataValue = rec.RawValue;
                                 foreach (var transform in transformations.Where(t => t.TransformationType.Name != "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
                                 {
-                                    TransformValue(transform.Id, ref rec);
+                                    TransformValue(transform.Id, ref rec, rowNum);
                                 }
                             }
                         }
@@ -793,7 +793,7 @@ public class ImportSchemaHelper : IDisposable
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Exception(ex, "RawLatitude: {RawLatitude} DataRow: {Dump}", RawValue, dr.Dump());
+                                    Logging.Exception(ex, "Row#: {row} RawLatitude: {RawLatitude} DataRow: {Dump}", rowNum, RawValue, dr.Dump());
                                 }
                                 try
                                 {
@@ -801,7 +801,7 @@ public class ImportSchemaHelper : IDisposable
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Exception(ex, "RawLongitude: {RawLongitude} DataRow: {Dump}", RawValue, dr.Dump());
+                                    Logging.Exception(ex, "Row#: {row} RawLongitude: {RawLongitude} DataRow: {Dump}", rowNum, RawValue, dr.Dump());
                                 }
                             }
                         }
@@ -816,7 +816,7 @@ public class ImportSchemaHelper : IDisposable
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Exception(ex, "RawElevation: {RawElevation} DataRow: {Dump}", RawValue, dr.Dump());
+                                    Logging.Exception(ex, "Row#: {row} RawElevation: {RawElevation} DataRow: {Dump}", rowNum, RawValue, dr.Dump());
                                 }
                             }
                         }
@@ -849,7 +849,7 @@ public class ImportSchemaHelper : IDisposable
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex, "DataRow: {Dump}", dr.Dump());
+                Logging.Exception(ex, "Row#: {row} DataRow: {Dump}", rowNum, dr.Dump());
                 throw;
             }
         }
@@ -858,7 +858,7 @@ public class ImportSchemaHelper : IDisposable
     /// <summary>
     ///
     /// </summary>
-    private void TransformValue(Guid dtid, ref SchemaValue rec, bool isEmpty = false)
+    private void TransformValue(Guid dtid, ref SchemaValue rec, int rowNum, bool isEmpty = false)
     {
         using (Logging.MethodCall(GetType()))
         {
@@ -866,8 +866,8 @@ public class ImportSchemaHelper : IDisposable
             {
                 bool valid = true;
                 var trns = transformations.FirstOrDefault(t => t.Id == dtid);
-                Logging.Verbose("Phenomenon: {Phenomenon} Offering: {Offering} {TransOfferingID} {RecOfferingID} UnitOfMeasure: {UnitOfMeasure} {TransUnitOfMeasureID} {RecUnitOfMeasureID} StartDate: {StartDate} EndDate: {EndDate} Date: {Date}",
-                    trns?.Phenomenon?.Name, trns?.PhenomenonOffering?.Offering?.Name, trns?.PhenomenonOfferingID, rec?.PhenomenonOfferingID,
+                Logging.Verbose("Row#: {row} Phenomenon: {Phenomenon} Offering: {Offering} {TransOfferingID} {RecOfferingID} UnitOfMeasure: {UnitOfMeasure} {TransUnitOfMeasureID} {RecUnitOfMeasureID} StartDate: {StartDate} EndDate: {EndDate} Date: {Date}",
+                    rowNum, trns?.Phenomenon?.Name, trns?.PhenomenonOffering?.Offering?.Name, trns?.PhenomenonOfferingID, rec?.PhenomenonOfferingID,
                     trns?.PhenomenonUOM?.UnitOfMeasure?.Unit, trns?.PhenomenonUOMID, rec?.PhenomenonUOMID, trns?.StartDate, trns?.EndDate, rec.DateValue);
 
                 bool process = trns.PhenomenonOfferingID.HasValue ? trns.PhenomenonOfferingID.Value == rec.PhenomenonOfferingID.Value : true &&
@@ -889,7 +889,7 @@ public class ImportSchemaHelper : IDisposable
 
                 if (!process)
                 {
-                    Logging.Verbose("Ignoring transformation");
+                    Logging.Verbose("Row#: {row} Ignoring transformation", rowNum);
                     //rec.DataValue = rec.RawValue;
                     return;
                 }
@@ -907,13 +907,13 @@ public class ImportSchemaHelper : IDisposable
                             exp.Parameters["value"] = rec.RawValue;
                             object val = exp.Evaluate();
                             rec.DataValue = double.Parse(val.ToString());
-                            Logging.Verbose("Correction Raw: {RawValue} Data: {DataValue}", rec.RawValue, rec.DataValue);
+                            Logging.Verbose("Row#: {row} Correction Raw: {RawValue} Data: {DataValue}", rowNum, rec.RawValue, rec.DataValue);
                         }
                     }
                     else if (trns.TransformationType.Code == TransformationType.RatingTable)
                     {
-                        Logging.Verbose("Rating");
                         rec.DataValue = trns.GetRatingValue(rec.RawValue.Value);
+                        Logging.Verbose("Row#: {row} Rating Raw: {RawValue} Data: {DataValue}", rowNum, rec.RawValue, rec.DataValue);
                     }
                     else if (trns.TransformationType.Code == TransformationType.QualityControlValues)
                     {
@@ -933,7 +933,7 @@ public class ImportSchemaHelper : IDisposable
                             valid = false;
                         }
 
-                        Logging.Verbose("QualityControl Valid: {Valid}", valid);
+                        Logging.Verbose("Row#: {row} QualityControl Valid: {Valid}", rowNum, valid);
                         if (!valid)
                         {
                             rec.InvalidStatuses.Add(Status.TransformValueInvalid);
@@ -956,7 +956,7 @@ public class ImportSchemaHelper : IDisposable
                             rec.DataValue = rec.RawValue;
                         }
 
-                        Logging.Verbose("Lookup Valid: {Valid} Raw: {RawValue} Data: {DataValue}", valid, rec.RawValue, rec.DataValue);
+                        Logging.Verbose("Row#: {row} Lookup Valid: {Valid} Raw: {RawValue} Data: {DataValue}", rowNum, valid, rec.RawValue, rec.DataValue);
                         if (!valid)
                         {
                             rec.InvalidStatuses.Add(Status.TransformValueInvalid);
@@ -1077,11 +1077,11 @@ public class ImportSchemaHelper : IDisposable
                                 throw new EvaluateException($"Error in expression - {expr.Error}");
                             }
                             var valueStr = expr.Evaluate();
-                            Logging.Verbose("ValueStr: {value}", valueStr);
+                            //Logging.Verbose("ValueStr: {value}", valueStr);
                             var value = double.Parse(valueStr.ToString());
-                            Logging.Verbose("Value: {value}", value);
+                            //Logging.Verbose("Value: {value}", value);
                             rec.DataValue = value;
-                            Logging.Verbose("Expression: {Valid} Raw: {RawValue} Data: {DataValue}", true, rec.RawValue, rec.DataValue);
+                            Logging.Verbose("Row#: {row} Valid: {Valid} ValueStr: {ValueStr} Value: {Value} Raw: {RawValue} Data: {DataValue}", rowNum, true, valueStr, value, rec.RawValue, rec.DataValue);
                         }
                         catch (Exception ex)
                         {
@@ -1089,7 +1089,7 @@ public class ImportSchemaHelper : IDisposable
                             rec.DataSourceTransformationID = trns.Id;
                             rec.DataValueInvalid = true;
                             rec.InvalidDataValue = rec.RawValue?.ToString();
-                            Logging.Verbose("Expression: {Valid} Raw: {RawValue} Ex: {Exception}", false, rec.RawValue, ex.Message);
+                            Logging.Verbose("Row#: {row} Value: {Valid} Raw: {RawValue} Expr: {expr} Ex: {Exception}", rowNum, false, rec.RawValue, trns.Definition, ex.Message);
                             throw;
                         }
                     }
@@ -1108,7 +1108,7 @@ public class ImportSchemaHelper : IDisposable
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex, "dtid: {dtid} rec: {@rec})", dtid, rec);
+                Logging.Exception(ex, "Row#: {row} dtid: {dtid} rec: {@rec})", rowNum, dtid, rec);
                 throw;
             }
         }
