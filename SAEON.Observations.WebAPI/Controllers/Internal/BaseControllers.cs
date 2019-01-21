@@ -60,7 +60,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    //Logging.Information("GetAll");
                     return GetList().AsQueryable();
                 }
                 catch (Exception ex)
@@ -110,15 +109,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         /// <summary>
-        /// Overwrite to order of entities
-        /// </summary>
-        /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, object>>> GetOrderBysDesc()
-        {
-            return new List<Expression<Func<TEntity, object>>>();
-        }
-
-        /// <summary>
         /// query for items
         /// </summary>
         /// <returns></returns>
@@ -138,7 +128,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 query = query.Where(extraWhere);
             }
             var orderBys = GetOrderBys();
-            var orderBy = orderBys.First();
+            //Logging.Information("OrderBys: {orderBys}", orderBys?.Count);
+            var orderBy = orderBys.FirstOrDefault();
             if (orderBy != null)
             {
                 if (orderBy.Ascending)

@@ -68,12 +68,16 @@ namespace SAEON.Observations.QuerySite
                             {
                                 var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType);
 
+                                // UserInfoClient Obsolete
                                 //var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
                                 //var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
                                 //identity.AddClaims(userInfo.Claims);
-                                
+
                                 var discoClient = new HttpClient();
-                                var disco = await discoClient.GetDiscoveryDocumentAsync(Properties.Settings.Default.IdentityServerUrl);
+                                var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest {
+                                    Address = Properties.Settings.Default.IdentityServerUrl,
+                                    Policy = {RequireHttps = false}
+                                });
                                 if (disco.IsError)
                                 {
                                     Logging.Error("Error: {error}", disco.Error);
@@ -83,7 +87,7 @@ namespace SAEON.Observations.QuerySite
                                 var userInfoClient = new HttpClient();
                                 var userInfoResponse = await userInfoClient.GetUserInfoAsync(new UserInfoRequest
                                 {
-                                    Address = disco.UserInfoEndpoint, 
+                                    Address = disco.UserInfoEndpoint,
                                     Token = n.ProtocolMessage.AccessToken
                                 });
                                 if (userInfoResponse.IsError)
@@ -109,12 +113,17 @@ namespace SAEON.Observations.QuerySite
                             {
                                 var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType, "given_name", "role");
 
+                                // UserInfoClient Obsolete
                                 //var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
                                 //var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
                                 //identity.AddClaims(userInfo.Claims);
-                                
+
                                 var discoClient = new HttpClient();
-                                var disco = await discoClient.GetDiscoveryDocumentAsync(Properties.Settings.Default.IdentityServerUrl);
+                                var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+                                {
+                                    Address = Properties.Settings.Default.IdentityServerUrl,
+                                    Policy = { RequireHttps = false }
+                                });
                                 if (disco.IsError)
                                 {
                                     Logging.Error("Error: {error}", disco.Error);
@@ -131,7 +140,6 @@ namespace SAEON.Observations.QuerySite
                                 {
                                     Logging.Error("Error: {error}", userInfoResponse.Error);
                                     throw new HttpException(userInfoResponse.Error);
-
                                 }
                                 identity.AddClaims(userInfoResponse.Claims);
 
