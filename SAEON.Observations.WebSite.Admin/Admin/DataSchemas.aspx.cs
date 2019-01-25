@@ -289,7 +289,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         using (Logging.MethodCall(GetType()))
         {
             e.Success = true;
-            Logging.Information("Column: {ID}", e.ID);
+            Logging.Verbose("Column: {ID}", e.ID);
             if (e.ID == "tfColumnName")
             {
                 RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;

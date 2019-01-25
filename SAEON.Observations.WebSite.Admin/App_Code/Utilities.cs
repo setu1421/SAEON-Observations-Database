@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Transactions;
 
@@ -62,6 +63,7 @@ public static class Utilities
 
     public static TransactionScope NewTransactionScope()
     {
-        return new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted, Timeout = TimeSpan.FromMinutes(30) });
+        var timeout = TimeSpan.Parse(ConfigurationManager.AppSettings["TransactionTimeout"]);
+        return new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted, Timeout = timeout });
     }
 }

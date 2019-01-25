@@ -45,5 +45,16 @@ public static class MessageBoxes
         });
     }
 
+    public static void Warning(string title, string message, params object[] values)
+    {
+        X.Msg.Show(new MessageBoxConfig
+        {
+            Title = title,
+            Message = string.Format(message, values),
+            Buttons = MessageBox.Button.OK,
+            Icon = MessageBox.Icon.WARNING
+        });
+    }
+
 
 }

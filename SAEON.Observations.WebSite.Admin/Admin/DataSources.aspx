@@ -522,7 +522,7 @@
                             </ext:DateField>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="ContainerParameters" runat="server" Layout="ColumnLayout" Height="155px">
+                    <ext:Container ID="ContainerParameters" runat="server" Layout="ColumnLayout" Height="155px" Hidden="true">
                         <Items>
                             <ext:Container runat="server" Layout="Form" ColumnWidth=".2" LabelWidth="25" Style="padding-right: 10px">
                                 <Items>

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -33,6 +34,107 @@ public static class StringExtensions
             value = value.Remove(0, 1);
             value = value.Remove(value.Length - 1, 1);
             return value;
+        }
+    }
+}
+
+public class SchemaDefinition
+{
+    public SchemaDefinition()
+    {
+        this.DataSourceTransformationIDs = new List<Guid>();
+    }
+
+    public int Index { get; set; }
+    public string FieldName { get; set; }
+    public bool IsDate { get; set; }
+    public string Dateformat { get; set; }
+    public bool IsTime { get; set; }
+    public string Timeformat { get; set; }
+    public bool IsFixedTime { get; set; }
+    public TimeSpan FixedTimeValue { get; set; }
+    public bool IsIgnored { get; set; }
+    public Guid? PhenomenonOfferingID { get; set; }
+    public PhenomenonOffering PhenomenonOffering { get; set; } = null;
+    public bool InValidOffering { get; set; }
+    public Guid? PhenomenonUOMID { get; set; }
+    public PhenomenonUOM PhenomenonOUM { get; set; } = null;
+    public bool InValidUOM { get; set; }
+    public List<Guid> DataSourceTransformationIDs { get; set; }
+    public bool IsEmptyValue { get; set; }
+    public string EmptyValue { get; set; }
+    public bool IsOffering { get; set; }
+    public bool IsElevation { get; set; }
+    public bool IsLatitude { get; set; }
+    public bool IsLongitude { get; set; }
+
+    public bool IsComment { get; set; }
+
+    //public Guid? SensorID { get; set; }
+    public List<Sensor> Sensors { get; set; } = new List<Sensor>();
+
+    public bool SensorNotFound { get; set; }
+}
+
+/// <summary>
+///
+/// </summary>
+public class SchemaValue
+{
+    public SchemaValue()
+    {
+        this.InvalidStatuses = new List<string>();
+        this.Comment = String.Empty;
+    }
+
+    public DateTime DateValue { get; set; }
+    public DateTime? TimeValue { get; set; }
+    public string InvalidDateValue { get; set; }
+    public string InvalidTimeValue { get; set; }
+    public bool DateValueInvalid { get; set; }
+    public bool TimeValueInvalid { get; set; }
+    public Guid? PhenomenonOfferingID { get; set; }
+    public bool InvalidOffering { get; set; }
+    public Guid? PhenomenonUOMID { get; set; }
+    public bool InvalidUOM { get; set; }
+    public double? RawValue { get; set; }
+    public double? DataValue { get; set; }
+    public bool RawValueInvalid { get; set; }
+    public string InvalidRawValue { get; set; }
+    public bool DataValueInvalid { get; set; }
+    public string InvalidDataValue { get; set; }
+    public List<string> InvalidStatuses { get; set; }
+    public Guid? DataSourceTransformationID { get; set; }
+    public Guid? SensorID { get; set; }
+    public bool SensorNotFound { get; set; }
+    public string FieldRawValue { get; set; }
+    public string Comment { get; set; }
+
+    public Guid? RawPhenomenonOfferingID { get; set; }
+    public Guid? RawPhenomenonUOMID { get; set; }
+
+    public Guid CorrelationID { get; set; }
+    public string TextValue { get; set; }
+
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
+    public double? Elevation { get; set; }
+    public int RowNum { get; set; }
+
+    /// <summary>
+    ///
+    /// </summary>
+    public bool IsValid
+    {
+        get
+        {
+            return !DateValueInvalid &&
+                   !TimeValueInvalid &&
+                   !InvalidOffering &&
+                   !InvalidUOM &&
+                   !RawValueInvalid &&
+                   !DataValueInvalid &&
+                   !SensorNotFound;
         }
     }
 }
@@ -280,12 +382,19 @@ public class ImportSchemaHelper : IDisposable
                 fileName = fileName.Replace(c, '_');
             }
 
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             Logging.Information("Saving import file");
             SaveDocument(fileName, data);
-            Logging.Information("Read DataTable");
+            stopwatch.Stop();
+            Logging.Information("Saved import file in {time}",stopwatch.Elapsed);
+            stopwatch.Start();
+            Logging.Information("Reading DataTable");
             //dtResults = engine.ReadStringAsDT(data);
             dtResults = CommonEngine.RecordsToDataTable(engine.ReadString(data), recordType);
             //Logging.Information(dtResults.Dump());
+            stopwatch.Stop();
+            Logging.Information("Read DataTable in {time}", stopwatch.Elapsed);
             dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
             transformations = new List<DataSourceTransformation>();
             schemaDefs = new List<SchemaDefinition>();
@@ -366,8 +475,8 @@ public class ImportSchemaHelper : IDisposable
                         case "Fixed Time":
                             def.IsOffering = true;
                             def.PhenomenonOfferingID = schemaCol.PhenomenonOfferingID;
-                            PhenomenonOffering off = new PhenomenonOffering(def.PhenomenonOfferingID);
-                            if (off == null)
+                            def.PhenomenonOffering = new PhenomenonOffering(def.PhenomenonOfferingID);
+                            if (def.PhenomenonOffering == null)
                             {
                                 def.InValidOffering = true;
                             }
@@ -377,8 +486,8 @@ public class ImportSchemaHelper : IDisposable
                             }
 
                             def.PhenomenonUOMID = schemaCol.PhenomenonUOMID;
-                            PhenomenonUOM uom = new PhenomenonUOM(def.PhenomenonUOMID);
-                            if (uom == null)
+                            def.PhenomenonOUM = new PhenomenonUOM(def.PhenomenonUOMID);
+                            if (def.PhenomenonOUM == null)
                             {
                                 def.InValidUOM = true;
                             }
@@ -393,7 +502,7 @@ public class ImportSchemaHelper : IDisposable
                             {
                                 SensorCollection colsens = new Select()
                                                                       .From(Sensor.Schema)
-                                                                      .Where(Sensor.PhenomenonIDColumn).IsEqualTo(off.PhenomenonID)
+                                                                      .Where(Sensor.PhenomenonIDColumn).IsEqualTo(def.PhenomenonOffering.PhenomenonID)
                                                                       .And(Sensor.DataSourceIDColumn).IsEqualTo(dataSource.Id)
                                                                       .ExecuteAsCollection<SensorCollection>();
                                 if (colsens.Count() == 0)
@@ -480,15 +589,21 @@ public class ImportSchemaHelper : IDisposable
         {
             try
             {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
                 Logging.Information("Building schema definition");
                 BuildSchemaDefinition();
+                stopwatch.Stop();
+                Logging.Information("Built schema definition in {time}", stopwatch.Elapsed);
+                stopwatch.Start();
                 Logging.Information("Processing {rows} rows", dtResults.Rows.Count);
                 for (int i = 0; i < dtResults.Rows.Count; i++)
                 {
                     DataRow dr = dtResults.Rows[i];
                     ProcessRow(dr, i + 1);
                 }
-                Logging.Information("Processed {rows} rows", dtResults.Rows.Count);
+                stopwatch.Stop();
+                Logging.Information("Processed {rows} rows in {time}", dtResults.Rows.Count, stopwatch.Elapsed);
             }
             catch (Exception ex)
             {
@@ -544,8 +659,9 @@ public class ImportSchemaHelper : IDisposable
                         }
                         catch (Exception ex)
                         {
-                            Logging.Exception(ex, "Row#: {row} Date: {date} Format: {format}", rowNum, sDateValue, dtdef.Dateformat);
-                            throw;
+                            var exc = new FormatException($"{ex.Message} Row#: {rowNum} Date: {sDateValue} Format: {dtdef.Dateformat}", ex);
+                            Logging.Exception(exc);
+                            throw exc;
                         }
                     }
                 }
@@ -565,8 +681,9 @@ public class ImportSchemaHelper : IDisposable
                             }
                             catch (Exception ex)
                             {
-                                Logging.Exception(ex, "Row#: {row} Time: {date} Format: {format}", rowNum, sTimeValue, tmdef.Timeformat);
-                                throw;
+                                var exc = new FormatException($"{ex.Message} Row#: {rowNum} Time: {sTimeValue} Format: {tmdef.Timeformat}", ex);
+                                Logging.Exception(exc);
+                                throw exc;
                             }
                         }
                     }
@@ -609,6 +726,7 @@ public class ImportSchemaHelper : IDisposable
                         var rec = new SchemaValue()
                         {
                             SensorNotFound = def.SensorNotFound,
+                            RowNum = rowNum
                             //SensorID = def.SensorID
                         };
                         if (rec.SensorNotFound)
@@ -632,10 +750,8 @@ public class ImportSchemaHelper : IDisposable
                             rec.InvalidStatuses.Add(Status.UOMInvalid);
                         }
 
-                        var phenomenonOffering = new PhenomenonOffering(def.PhenomenonOfferingID);
-                        var phenomenonUnitOfMeasure = new PhenomenonUOM(def.PhenomenonUOMID);
                         Logging.Verbose("Row#: {row} Index: {Index} Column: {Column} Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
-                            rowNum, def.Index, def.FieldName, phenomenonOffering?.Phenomenon?.Name, phenomenonOffering?.Offering?.Name, phenomenonUnitOfMeasure?.Phenomenon?.Name, phenomenonUnitOfMeasure?.UnitOfMeasure?.Unit);
+                            rowNum, def.Index, def.FieldName, def.PhenomenonOffering?.Phenomenon?.Name, def.PhenomenonOffering?.Offering?.Name, def.PhenomenonOUM?.Phenomenon?.Name, def.PhenomenonOUM?.UnitOfMeasure?.Unit);
                         if (ErrorInTime)
                         {
                             rec.TimeValueInvalid = true;
@@ -1210,100 +1326,3 @@ public class ImportSchemaHelper : IDisposable
     }
 }
 
-public class SchemaDefinition
-{
-    public SchemaDefinition()
-    {
-        this.DataSourceTransformationIDs = new List<Guid>();
-    }
-
-    public int Index { get; set; }
-    public string FieldName { get; set; }
-    public bool IsDate { get; set; }
-    public string Dateformat { get; set; }
-    public bool IsTime { get; set; }
-    public string Timeformat { get; set; }
-    public bool IsFixedTime { get; set; }
-    public TimeSpan FixedTimeValue { get; set; }
-    public bool IsIgnored { get; set; }
-    public Guid? PhenomenonOfferingID { get; set; }
-    public bool InValidOffering { get; set; }
-    public Guid? PhenomenonUOMID { get; set; }
-    public bool InValidUOM { get; set; }
-    public List<Guid> DataSourceTransformationIDs { get; set; }
-    public bool IsEmptyValue { get; set; }
-    public string EmptyValue { get; set; }
-    public bool IsOffering { get; set; }
-    public bool IsElevation { get; set; }
-    public bool IsLatitude { get; set; }
-    public bool IsLongitude { get; set; }
-
-    public bool IsComment { get; set; }
-
-    //public Guid? SensorID { get; set; }
-    public List<Sensor> Sensors { get; set; } = new List<Sensor>();
-
-    public bool SensorNotFound { get; set; }
-}
-
-/// <summary>
-///
-/// </summary>
-public class SchemaValue
-{
-    public SchemaValue()
-    {
-        this.InvalidStatuses = new List<string>();
-        this.Comment = String.Empty;
-    }
-
-    public DateTime DateValue { get; set; }
-    public DateTime? TimeValue { get; set; }
-    public string InvalidDateValue { get; set; }
-    public string InvalidTimeValue { get; set; }
-    public bool DateValueInvalid { get; set; }
-    public bool TimeValueInvalid { get; set; }
-    public Guid? PhenomenonOfferingID { get; set; }
-    public bool InvalidOffering { get; set; }
-    public Guid? PhenomenonUOMID { get; set; }
-    public bool InvalidUOM { get; set; }
-    public double? RawValue { get; set; }
-    public double? DataValue { get; set; }
-    public bool RawValueInvalid { get; set; }
-    public string InvalidRawValue { get; set; }
-    public bool DataValueInvalid { get; set; }
-    public string InvalidDataValue { get; set; }
-    public List<string> InvalidStatuses { get; set; }
-    public Guid? DataSourceTransformationID { get; set; }
-    public Guid? SensorID { get; set; }
-    public bool SensorNotFound { get; set; }
-    public string FieldRawValue { get; set; }
-    public string Comment { get; set; }
-
-    public Guid? RawPhenomenonOfferingID { get; set; }
-    public Guid? RawPhenomenonUOMID { get; set; }
-
-    public Guid CorrelationID { get; set; }
-    public string TextValue { get; set; }
-
-    public double? Latitude { get; set; }
-    public double? Longitude { get; set; }
-    public double? Elevation { get; set; }
-
-    /// <summary>
-    ///
-    /// </summary>
-    public bool IsValid
-    {
-        get
-        {
-            return !DateValueInvalid &&
-                   !TimeValueInvalid &&
-                   !InvalidOffering &&
-                   !InvalidUOM &&
-                   !RawValueInvalid &&
-                   !DataValueInvalid &&
-                   !SensorNotFound;
-        }
-    }
-}
