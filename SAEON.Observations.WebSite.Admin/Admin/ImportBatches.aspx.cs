@@ -116,7 +116,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             cmd.Parameters.Add(param);
             var n = cmd.ExecuteNonQuery();
             stopwatch.Stop();
-            Logging.Information("Created Summary [n] in {time}", n, stopwatch.Elapsed);
+            Logging.Information("Created Summary {count} in {time}", n, stopwatch.Elapsed);
         }
     }
 
@@ -415,7 +415,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     }
                                 }
                             }
-                            Logging.Information("Saved {count} observations in {time}", stopwatch.Elapsed);
+                            Logging.Information("Saved {count} observations in {time}", values.Count, stopwatch.Elapsed);
                             // Summaries
                             CreateSummary(connScope, batch.Id);
                             Auditing.Log(GetType(), new ParameterList {
@@ -427,7 +427,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         catch (Exception ex)
                         {
                             stopwatch.Stop();
-                            Logging.Exception(ex, "Time: {time}", stopwatch.Elapsed);
+                            Logging.Exception(ex, "Unable to save {count} observations in {time}", values.Count, stopwatch.Elapsed);
                             throw;
                         }
                     }
@@ -439,6 +439,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     SummaryGridStore.DataBind();
                     DataLogGrid.GetStore().DataBind();
                     ImportWindow.Hide();
+                    X.Msg.Hide();
                 }
             }
             catch (Exception ex)
@@ -451,6 +452,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 ErrorGridStore.DataSource = errors;
                 ErrorGrid.DataBind();
                 MessageBoxes.Error("Error", $"An error occurred while importing - {ex.Message}");
+                X.Msg.Hide();
             }
         }
     }
@@ -720,7 +722,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 catch (Exception ex)
                 {
                     stopwatch.Stop();
-                    Logging.Exception(ex, "Time: {time}", stopwatch.Elapsed);
+                    Logging.Exception(ex, "Unable to move from DataLog to Observation in {time}", stopwatch.Elapsed);
                     throw;
                 }
             }
@@ -774,6 +776,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 stopwatch.Start();
                 try
                 {
+                    Logging.Information("Deleting batch {Id}", ImportBatchId);
                     using (TransactionScope ts = Utilities.NewTransactionScope())
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
@@ -790,7 +793,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 catch (Exception ex)
                 {
                     stopwatch.Stop();
-                    Logging.Exception(ex, "Time: {time}", stopwatch.Elapsed);
+                    Logging.Exception(ex, "Unable to delete batch {Id} in {time}", ImportBatchId, stopwatch.Elapsed);
                 }
 
                 ImportBatchesGridStore.DataBind();
@@ -836,6 +839,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 stopwatch.Start();
                 try
                 {
+                    Logging.Information("Moving import batch to DataLog {Id}", ImportBatchId);
                     using (TransactionScope tranScope = Utilities.NewTransactionScope())
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
@@ -868,7 +872,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 catch (Exception ex)
                 {
                     stopwatch.Stop();
-                    Logging.Exception(ex, "Time {time}", stopwatch.Elapsed);
+                    Logging.Exception(ex, "Unable to moved import batch to DataLog {Id} in {time}", ImportBatchId, stopwatch.Elapsed);
                 }
 
                 ImportBatchesGridStore.DataBind();
@@ -987,6 +991,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 stopwatch.Start();
                 try
                 {
+                    Logging.Information("Moving from DataLog {Id}", Id);
                     using (TransactionScope tranScope = Utilities.NewTransactionScope())
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
@@ -1019,7 +1024,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 catch (Exception ex)
                 {
                     stopwatch.Stop();
-                    Logging.Exception(ex, "Time: {time}", stopwatch.Elapsed);
+                    Logging.Exception(ex, "Unable to moved from DataLog {Id} in {time}", Id, stopwatch.Elapsed);
                 }
 
                 ImportBatchesGridStore.DataBind();
@@ -1182,14 +1187,14 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         }
                         ts.Complete();
                         stopwatch.Stop();
-                        Logging.Information("Done: {time}", stopwatch.Elapsed);
+                        Logging.Information("SetWithOut in {time}", stopwatch.Elapsed);
                     }
 
                 }
                 catch (Exception ex)
                 {
                     stopwatch.Stop();
-                    Logging.Exception(ex, "Time: {time}", stopwatch.Elapsed);
+                    Logging.Exception(ex, "Unable to SetWithOut in {time}", stopwatch.Elapsed);
                     throw;
                 }
                 var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
@@ -1263,13 +1268,13 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         }
                         ts.Complete();
                         stopwatch.Stop();
-                        Logging.Information("Done: {time}", stopwatch.Elapsed);
+                        Logging.Information("SetAll in {time}", stopwatch.Elapsed);
                     }
                 }
                 catch (Exception ex)
                 {
                     stopwatch.Stop();
-                    Logging.Exception(ex, "Time: {time}", stopwatch.Elapsed);
+                    Logging.Exception(ex, "Unable to SetAll in {time}", stopwatch.Elapsed);
                     throw;
                 }
                 var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
@@ -1353,13 +1358,13 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             .Execute();
                         ts.Complete();
                         stopwatch.Stop();
-                        Logging.Information("Done: {time}", stopwatch.Elapsed);
+                        Logging.Information("ClearAll in {time}", stopwatch.Elapsed);
                     }
                 }
                 catch (Exception ex)
                 {
                     stopwatch.Stop();
-                    Logging.Exception(ex, "Time: {time}", stopwatch.Elapsed);
+                    Logging.Exception(ex, "Unable to ClearAll in {time}", stopwatch.Elapsed);
                     throw;
                 }
                 var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
