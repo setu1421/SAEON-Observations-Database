@@ -1,0 +1,8 @@
+1) Create Offerings
+2) Create PhenomenonOfferings
+3) Fix 1 Hours
+
+
+To redo
+1) Delete PhenomenonOfferings
+2) Delete Offerings
