@@ -1,7 +1,6 @@
 ﻿using IdentityModel.Client;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Owin;
-using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
@@ -37,7 +36,25 @@ namespace SAEON.Observations.QuerySite
                 {
                     Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
-                    app.UseCors(CorsOptions.AllowAll);
+
+                    //var corsPolicy = new CorsPolicy
+                    //{
+                    //    AllowAnyMethod = true,
+                    //    AllowAnyHeader = true,
+                    //    SupportsCredentials = true
+                    //};
+                    //Logging.Verbose("CORS Origin: {cors}", Properties.Settings.Default.QuerySiteUrl);
+                    //corsPolicy.Origins.Add(Properties.Settings.Default.QuerySiteUrl);
+                    //var corsOptions = new CorsOptions
+                    //{
+                    //    PolicyProvider = new CorsPolicyProvider
+                    //    {
+                    //        PolicyResolver = context => Task.FromResult(corsPolicy)
+                    //    }
+                    //};
+                    //app.UseCors(corsOptions);
+                    //app.UseCors(CorsOptions.AllowAll);
+
                     //app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
@@ -60,7 +77,7 @@ namespace SAEON.Observations.QuerySite
                         },
                         SignInAsAuthenticationType = "Cookies",
                         UseTokenLifetime = false,
-                        RequireHttpsMetadata = false,
+                        RequireHttpsMetadata = !HttpContext.Current.Request.IsLocal,
 
                         Notifications = new OpenIdConnectAuthenticationNotifications
                         {
@@ -76,7 +93,7 @@ namespace SAEON.Observations.QuerySite
                                 var discoClient = new HttpClient();
                                 var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest {
                                     Address = Properties.Settings.Default.IdentityServerUrl,
-                                    Policy = {RequireHttps = false}
+                                    Policy = {RequireHttps = !HttpContext.Current.Request.IsLocal }
                                 });
                                 if (disco.IsError)
                                 {
@@ -122,7 +139,7 @@ namespace SAEON.Observations.QuerySite
                                 var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
                                 {
                                     Address = Properties.Settings.Default.IdentityServerUrl,
-                                    Policy = { RequireHttps = false }
+                                    Policy = { RequireHttps = !HttpContext.Current.Request.IsLocal }
                                 });
                                 if (disco.IsError)
                                 {

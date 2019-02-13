@@ -35,9 +35,9 @@ namespace SAEON.Observations.WebAPI.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:54340")]
-        public string QuerySiteURL {
+        public string QuerySiteUrl {
             get {
-                return ((string)(this["QuerySiteURL"]));
+                return ((string)(this["QuerySiteUrl"]));
             }
         }
     }

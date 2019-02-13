@@ -1,6 +1,5 @@
 ﻿using IdentityServer3.AccessTokenValidation;
 using Microsoft.Owin;
-using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using SAEON.Logs;
@@ -25,7 +24,25 @@ namespace SAEON.Observations.WebAPI
                     Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
                     JwtSecurityTokenHandler.InboundClaimTypeMap.Clear();
-                    app.UseCors(CorsOptions.AllowAll);
+
+                    //var corsPolicy = new CorsPolicy
+                    //{
+                    //    AllowAnyMethod = true,
+                    //    AllowAnyHeader = true,
+                    //    SupportsCredentials = true
+                    //};
+                    //Logging.Verbose("CORS Origin: {cors}", Properties.Settings.Default.QuerySiteUrl);
+                    //corsPolicy.Origins.Add(Properties.Settings.Default.QuerySiteUrl);
+                    //var corsOptions = new CorsOptions
+                    //{
+                    //    PolicyProvider = new CorsPolicyProvider
+                    //    {
+                    //        PolicyResolver = context => Task.FromResult(corsPolicy)
+                    //    }
+                    //};
+                    //app.UseCors(corsOptions);
+                    //app.UseCors(CorsOptions.AllowAll);
+
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
                         AuthenticationType = "Cookies",
@@ -55,6 +72,7 @@ namespace SAEON.Observations.WebAPI
                     WebApiConfig.Register(config);
                     app.UseWebApi(config);
                     config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
+
                 }
                 catch (Exception ex)
                 {

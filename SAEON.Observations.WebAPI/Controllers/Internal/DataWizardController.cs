@@ -334,10 +334,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 Name = name,
                 Description = $"Data download on {name}",
                 QueryInput = JsonConvert.SerializeObject(input),
-                QueryURL = Properties.Settings.Default.QuerySiteURL + $"/DataWizard/GetData?json={JsonConvert.SerializeObject(input)}",
+                QueryURL = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/GetData?json={JsonConvert.SerializeObject(input)}",
                 DOI = "http://data.saeon.ac.za/10.11.12.13",
                 MetadataURL = "http://data.saeon.ac.za",
-                DownloadURL = Properties.Settings.Default.QuerySiteURL + $"/DataWizard/ViewDownload",
+                DownloadURL = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/ViewDownload",
                 Citation = "SAEON....",
                 AddedBy = User.GetUserId(),
                 UpdatedBy = User.GetUserId()
@@ -352,7 +352,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
             var folder = HostingEnvironment.MapPath($"~/App_Data/Downloads/{date.ToString("yyyyMM")}");
             var dirInfo = Directory.CreateDirectory(Path.Combine(folder,result.Id.ToString()));
-            result.DownloadURL = Properties.Settings.Default.QuerySiteURL + $"/DataWizard/Download/{result.Id}";
+            result.DownloadURL = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Download/{result.Id}";
             db.SaveChanges();
             // Create files
             File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input));
