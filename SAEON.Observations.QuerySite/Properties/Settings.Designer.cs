@@ -49,5 +49,14 @@ namespace SAEON.Observations.QuerySite.Properties {
                 return ((string)(this["QuerySiteUrl"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HTTPSEnabled {
+            get {
+                return ((bool)(this["HTTPSEnabled"]));
+            }
+        }
     }
 }

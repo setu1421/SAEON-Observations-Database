@@ -34,7 +34,7 @@ namespace SAEON.Observations.QuerySite
             {
                 try
                 {
-                    Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
+                    Logging.Verbose("IdentityServer: {name} HTTPS: {HTTPSEnabled}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.HTTPSEnabled);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
 
                     //var corsPolicy = new CorsPolicy
@@ -77,7 +77,7 @@ namespace SAEON.Observations.QuerySite
                         },
                         SignInAsAuthenticationType = "Cookies",
                         UseTokenLifetime = false,
-                        RequireHttpsMetadata = !HttpContext.Current.Request.IsLocal,
+                        RequireHttpsMetadata = Properties.Settings.Default.HTTPSEnabled && !HttpContext.Current.Request.IsLocal,
 
                         Notifications = new OpenIdConnectAuthenticationNotifications
                         {
@@ -93,7 +93,7 @@ namespace SAEON.Observations.QuerySite
                                 var discoClient = new HttpClient();
                                 var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest {
                                     Address = Properties.Settings.Default.IdentityServerUrl,
-                                    Policy = {RequireHttps = !HttpContext.Current.Request.IsLocal }
+                                    Policy = {RequireHttps = Properties.Settings.Default.HTTPSEnabled && !HttpContext.Current.Request.IsLocal }
                                 });
                                 if (disco.IsError)
                                 {
@@ -139,7 +139,7 @@ namespace SAEON.Observations.QuerySite
                                 var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
                                 {
                                     Address = Properties.Settings.Default.IdentityServerUrl,
-                                    Policy = { RequireHttps = !HttpContext.Current.Request.IsLocal }
+                                    Policy = { RequireHttps = Properties.Settings.Default.HTTPSEnabled && !HttpContext.Current.Request.IsLocal }
                                 });
                                 if (disco.IsError)
                                 {

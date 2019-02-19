@@ -54,7 +54,12 @@ namespace SAEON.Observations.QuerySite.Controllers
                     //var tokenClient = new TokenClient(Properties.Settings.Default.IdentityServerUrl + "/connect/token", "SAEON.Observations.QuerySite", "It6fWPU5J708");
                     //var tokenResponse = await tokenClient.RequestClientCredentialsAsync("SAEON.Observations.WebAPI");
                     var discoClient = new HttpClient();
-                    var disco = await discoClient.GetDiscoveryDocumentAsync(Properties.Settings.Default.IdentityServerUrl);
+                    var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+                    {
+                        Address = Properties.Settings.Default.IdentityServerUrl,
+                        Policy = { RequireHttps = Properties.Settings.Default.HTTPSEnabled && !Request.IsLocal }
+                    });
+
                     if (disco.IsError)
                     {
                         Logging.Error("Error: {error}", disco.Error);

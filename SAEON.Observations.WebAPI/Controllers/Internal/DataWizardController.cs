@@ -25,7 +25,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
             foreach (var phenomenonId in input.Phenomena)
             {
-
                 input.Offerings.AddRange(db.PhenomenonOfferings.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
                 input.Units.AddRange(db.PhenomenonUnits.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
             }
@@ -36,9 +35,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var endDate = input.EndDate;
             return db.ImportBatchSummary.Where(i =>
                 (input.Sites.Contains(i.SiteId) || input.Stations.Contains(i.StationId)) &&
-                (input.Offerings.Contains(i.PhenomenonOfferingId) && input.Units.Contains(i.PhenomenonUnitId)) &&
-                (i.StartDate >= startDate && i.EndDate < endDate)
-                );
+                ((!input.Offerings.Any() || input.Offerings.Contains(i.PhenomenonOfferingId)) && (!input.Units.Any() || input.Units.Contains(i.PhenomenonUnitId))) &&
+                (i.StartDate >= startDate && i.EndDate < endDate));
         }
 
         private DataWizardApproximation CalculateApproximation(DataWizardDataInput input)
@@ -351,7 +349,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 throw new InvalidOperationException($"Unable to find UserDownload {name}");
             }
             var folder = HostingEnvironment.MapPath($"~/App_Data/Downloads/{date.ToString("yyyyMM")}");
-            var dirInfo = Directory.CreateDirectory(Path.Combine(folder,result.Id.ToString()));
+            var dirInfo = Directory.CreateDirectory(Path.Combine(folder, result.Id.ToString()));
             result.DownloadURL = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Download/{result.Id}";
             db.SaveChanges();
             // Create files

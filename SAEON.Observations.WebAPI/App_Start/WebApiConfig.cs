@@ -146,13 +146,15 @@ namespace SAEON.Observations.WebAPI
                 config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
 
-                // If using WebAPI.Cors
-                var corsAttr = new EnableCorsAttribute(Properties.Settings.Default.QuerySiteUrl.TrimEnd("//"), "*", "*")
-                {
-                    SupportsCredentials = true
-                };
+                var querySiteUrl = Properties.Settings.Default.QuerySiteUrl.TrimEnd("//").Replace("https:","http:");
+                var corsUrls = querySiteUrl + "," + querySiteUrl.Replace("http:", "https:");
+                Logging.Information("CORS: {corsURLS}", corsUrls);
+                var corsAttr = new EnableCorsAttribute(corsUrls, "*", "*");
+                //{
+                //    SupportsCredentials = true
+                //};
                 config.EnableCors(corsAttr);
-                
+
                 // Web API routes
                 //config.MapHttpAttributeRoutes();
                 config.MapHttpAttributeRoutes(new InheritedDirectRouteProvider());
