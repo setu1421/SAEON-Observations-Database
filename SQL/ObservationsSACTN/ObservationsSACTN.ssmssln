@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Bad Data.sql = Bad Data.sql
 		Clean Data.sql = Clean Data.sql
 		Create Data.sql = Create Data.sql
+		Fix Offerrings.sql = Fix Offerrings.sql
 	EndProjectSection
 EndProject
 Global
@@ -15,7 +16,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FC6263A4-187C-45BE-AA41-85C467920C31}.Default|Default.ActiveCfg = Default
+		{6FA97346-68C0-48C2-BFA4-5EC367E7A339}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
