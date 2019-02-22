@@ -51,51 +51,11 @@ IF EXISTS (SELECT 1
 
 
 GO
-PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDecade]...';
-
-
-GO
-DROP INDEX [IX_Observation_ValueDecade]
-    ON [dbo].[Observation];
-
-
-GO
 PRINT N'Dropping [dbo].[UX_Observation]...';
 
 
 GO
 ALTER TABLE [dbo].[Observation] DROP CONSTRAINT [UX_Observation];
-
-
-GO
-PRINT N'Altering [dbo].[DataSourceTransformation]...';
-
-
-GO
-ALTER TABLE [dbo].[DataSourceTransformation]
-    ADD [NewPhenomenonID] UNIQUEIDENTIFIER NULL;
-
-
-GO
-PRINT N'Creating [dbo].[DataSourceTransformation].[IX_DataSourceTransformation_NewPhenomenonID]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_DataSourceTransformation_NewPhenomenonID]
-    ON [dbo].[DataSourceTransformation]([NewPhenomenonID] ASC);
-
-
-GO
-PRINT N'Altering [dbo].[Observation]...';
-
-
-GO
-ALTER TABLE [dbo].[Observation] DROP COLUMN [ValueDecade];
-
-
-GO
-ALTER TABLE [dbo].[Observation]
-    ADD [ValueDecade] AS (datepart(year, [ValueDate]) / 10 * 10);
 
 
 GO
@@ -105,33 +65,6 @@ PRINT N'Creating [dbo].[UX_Observation]...';
 GO
 ALTER TABLE [dbo].[Observation]
     ADD CONSTRAINT [UX_Observation] UNIQUE NONCLUSTERED ([SensorID] ASC, [ValueDate] ASC, [DataValue] ASC, [PhenomenonOfferingID] ASC, [PhenomenonUOMID] ASC, [Elevation] ASC) ON [Observations];
-
-
-GO
-PRINT N'Creating [dbo].[Observation].[IX_Observation_ValueDecade]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Observation_ValueDecade]
-    ON [dbo].[Observation]([ValueDecade] ASC)
-    ON [Observations];
-
-
-GO
-PRINT N'Creating [dbo].[FK_DataSourceTransformation_NewPhenomenon]...';
-
-
-GO
-ALTER TABLE [dbo].[DataSourceTransformation] WITH NOCHECK
-    ADD CONSTRAINT [FK_DataSourceTransformation_NewPhenomenon] FOREIGN KEY ([NewPhenomenonID]) REFERENCES [dbo].[Phenomenon] ([ID]);
-
-
-GO
-PRINT N'Refreshing [dbo].[vDataLog]...';
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vDataLog]';
 
 
 GO
@@ -177,128 +110,6 @@ From
     on (dt.NewPhenomenonUOMID = NewPhenomenonUOM.ID)
   left join UnitOfMeasure NewUnitOfMeasure
     on (NewPhenomenonUOM.UnitOfMeasureID = NewUnitOfMeasure.ID)
-GO
-PRINT N'Refreshing [dbo].[vObservationExpansion]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vObservationExpansion]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vSensorThingsDatastreams]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsDatastreams]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Refreshing [dbo].[vObservation]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vObservation]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Creating [dbo].[vObservationJSON]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-CREATE VIEW [dbo].[vObservationJSON]
-AS
-Select
-  ID,
-  ValueDate,
-  ValueDay,
-  ValueYear,
-  ValueDecade,
-  TextValue,
-  RawValue,
-  DataValue,
-  Comment,
-  CorrelationID,
-  Latitude,
-  Longitude,
-  Elevation,
-  ImportBatchID 'ImportBatch.ID',
-  ImportBatchCode 'ImportBatch.Code',
-  ImportBatchDate 'ImportBatch.Date',
-  SiteID 'Site.ID',
-  SiteCode 'Site.Code',
-  SiteName 'Site.Name',
-  StationID 'Station.ID',
-  StationCode 'Station.Code',
-  StationName 'Station.Name',
-  InstrumentID 'Instrument.ID',
-  InstrumentCode 'Instrument.Code',
-  InstrumentName 'Instrument.Name',
-  SensorID 'Sensor.ID',
-  SensorCode 'Sensor.Code',
-  SensorName 'Sensor.Name',
-  PhenomenonID 'Phenomenon.ID',
-  PhenomenonCode 'Phenomenon.Code',
-  PhenomenonName 'Phenomenon.Name',
-  OfferingID 'Offering.ID',
-  OfferingCode 'Offering.Code',
-  OfferingName 'Offering.Name',
-  UnitOfMeasureID 'Unit.ID',
-  UnitOfMeasureCode 'Unit.Code',
-  UnitOfMeasureUnit 'Unit.Name',
-  UnitOfMeasureSymbol 'Unit.Symbol',
-  StatusID 'Status.ID',
-  StatusCode 'Status.Code',
-  StatusName 'Status.Name',
-  StatusReasonID 'StatusReason.ID',
-  StatusReasonCode 'StatusReason.Code',
-  StatusReasonName 'StatusReason.Name'
-from
-  vObservationExpansion
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Checking existing data against newly created constraints';
-
-
-GO
-USE [$(DatabaseName)];
-
-
-GO
-ALTER TABLE [dbo].[DataSourceTransformation] WITH CHECK CHECK CONSTRAINT [FK_DataSourceTransformation_NewPhenomenon];
-
-
 GO
 PRINT N'Update complete.';
 

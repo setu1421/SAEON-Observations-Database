@@ -11,23 +11,9 @@
 ** User actions
      Drop
        [dbo].[UX_Observation] (Unique Constraint)
-     Alter
-       [dbo].[DataSourceTransformation] (Table)
-       [dbo].[Observation] (Table)
-       [dbo].[vDataSourceTransformation] (View)
      Create
-       [dbo].[DataSourceTransformation].[IX_DataSourceTransformation_NewPhenomenonID] (Index)
        [dbo].[UX_Observation] (Unique Constraint)
-       [dbo].[FK_DataSourceTransformation_NewPhenomenon] (Foreign Key)
-       [dbo].[vObservationJSON] (View)
+     Alter
+       [dbo].[vDataSourceTransformation] (View)
 
 ** Supporting actions
-     Drop
-       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
-     Create
-       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
-     Refresh
-       [dbo].[vDataLog] (View)
-       [dbo].[vObservationExpansion] (View)
-       [dbo].[vSensorThingsDatastreams] (View)
-       [dbo].[vObservation] (View)
