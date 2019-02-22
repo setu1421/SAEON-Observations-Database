@@ -1,7 +1,12 @@
 1) Create Offerings
 2) Create PhenomenonOfferings
-3) Fix 1 Hours
-
+3) Drop Observation Indexes
+4) Set Observation Depths
+5) Set Observations PhenomenonOffering
+6) Create Observation Indexes
+7) Set DataSourceTransformations
+8) Set ImportBatchSummary
+9) Set SchemaColumn
 
 To redo
 1) Delete PhenomenonOfferings

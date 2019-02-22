@@ -1,12 +1,10 @@
+use Observations;
 with DepthOfferings
 as
 (
 Select distinct
   Phenomenon.Code PhenomenonCode, 
   Phenomenon.Name PhenomenonName, 
-  --Offering.Code OldOfferingCode,
-  --Offering.Name OldOfferingName,
-  --Abs(Convert(float, Replace(Replace(Left(Offering.Name,CharIndex(' at ',Offering.Name)),'Depth ',''),'M','')))*-1.0 Depth,
   Replace(Replace(Replace(
     'ACT_'+Replace(Replace(SubString(Offering.Name,CharIndex(' at ',Offering.Name)+4,10000),' Interval','s'),' ','_'),
 	'_Hours','_Hr'),'_Minutes','_Min'),'_Seconds','_Sec') NewOfferingCode,
@@ -23,9 +21,4 @@ where
   (CharIndex(' at ',Offering.Name) > 0)
 )
 
-Delete
-  Offering
-from
-  Offering
-  inner join DepthOfferings
-    on (DepthOfferings.NewOfferingCode = Offering.Code)	
+Select * from DepthOfferings

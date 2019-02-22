@@ -6,14 +6,28 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C6BE1ED3-FB08-488A-93FD-EE4FFFBA41E1}"
 	ProjectSection(SolutionItems) = preProject
 		Cleanup.sql = Cleanup.sql
+		Create Observation Indexes.sql = Create Observation Indexes.sql
 		Create Offerings.sql = Create Offerings.sql
 		Create PhenomenonOfferings.sql = Create PhenomenonOfferings.sql
+		Delete Observation Indexes.sql = Delete Observation Indexes.sql
 		Delete Offerings.sql = Delete Offerings.sql
 		Delete PhenomenonOfferings.sql = Delete PhenomenonOfferings.sql
-		Fix 1 Hours.sql = Fix 1 Hours.sql
-		Offering Intervals.sql = Offering Intervals.sql
-		Offerings with at.sql = Offerings with at.sql
+		Depth Offerings With Depths.sql = Depth Offerings With Depths.sql
+		Depth Offerings.sql = Depth Offerings.sql
+		Observations 2.0.54.publish.sql = Observations 2.0.54.publish.sql
+		Observations 2.0.54.publish.txt = Observations 2.0.54.publish.txt
+		ObservationsFynbos 2.0.54.publish.sql = ObservationsFynbos 2.0.54.publish.sql
+		ObservationsFynbos 2.0.54.publish.txt = ObservationsFynbos 2.0.54.publish.txt
+		ObservationsSACTN 2.0.54.publish.sql = ObservationsSACTN 2.0.54.publish.sql
+		ObservationsSACTN 2.0.54.publish.txt = ObservationsSACTN 2.0.54.publish.txt
+		ObservationsTest 2.0.54.publish.sql = ObservationsTest 2.0.54.publish.sql
+		ObservationsTest 2.0.54.publish.txt = ObservationsTest 2.0.54.publish.txt
 		Process.txt = Process.txt
+		Set DataSourceTransformation.sql = Set DataSourceTransformation.sql
+		Set ImportBatchSummary.sql = Set ImportBatchSummary.sql
+		Set Observations Depth.sql = Set Observations Depth.sql
+		Set Observations PhenomenonOffering.sql = Set Observations PhenomenonOffering.sql
+		Set SchemaColumn.sql = Set SchemaColumn.sql
 	EndProjectSection
 EndProject
 Global
@@ -21,7 +35,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F92B284B-08C6-45A6-97C1-A5B3B779BF0B}.Default|Default.ActiveCfg = Default
+		{DFD4D4B8-5B65-4212-B3AB-D98C1AB5DECF}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
