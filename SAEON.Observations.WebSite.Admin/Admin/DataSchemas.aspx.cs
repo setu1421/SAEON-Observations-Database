@@ -14,9 +14,9 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true";
-        btnValidate.Hidden = !Request.IsLocal && !showValidate;
-        btnValidateSchemaColumn.Hidden = !Request.IsLocal && !showValidate;
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
+        btnValidateSchemaColumn.Hidden = !showValidate;
         if (!X.IsAjaxRequest)
         {
             DataSourceTypeStore.DataSource = new DataSourceTypeCollection().OrderByAsc(DataSourceType.Columns.Code).Load();

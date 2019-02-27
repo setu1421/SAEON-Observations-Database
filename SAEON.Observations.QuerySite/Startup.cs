@@ -34,26 +34,8 @@ namespace SAEON.Observations.QuerySite
             {
                 try
                 {
-                    Logging.Verbose("IdentityServer: {name} HTTPS: {HTTPSEnabled}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.HTTPSEnabled);
+                    Logging.Verbose("IdentityServer: {name} RequireHttps: {RequireHTTPS}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.RequireHTTPS);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
-
-                    //var corsPolicy = new CorsPolicy
-                    //{
-                    //    AllowAnyMethod = true,
-                    //    AllowAnyHeader = true,
-                    //    SupportsCredentials = true
-                    //};
-                    //Logging.Verbose("CORS Origin: {cors}", Properties.Settings.Default.QuerySiteUrl);
-                    //corsPolicy.Origins.Add(Properties.Settings.Default.QuerySiteUrl);
-                    //var corsOptions = new CorsOptions
-                    //{
-                    //    PolicyProvider = new CorsPolicyProvider
-                    //    {
-                    //        PolicyResolver = context => Task.FromResult(corsPolicy)
-                    //    }
-                    //};
-                    //app.UseCors(corsOptions);
-                    //app.UseCors(CorsOptions.AllowAll);
 
                     //app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -77,7 +59,7 @@ namespace SAEON.Observations.QuerySite
                         },
                         SignInAsAuthenticationType = "Cookies",
                         UseTokenLifetime = false,
-                        RequireHttpsMetadata = Properties.Settings.Default.HTTPSEnabled && !HttpContext.Current.Request.IsLocal,
+                        RequireHttpsMetadata = Properties.Settings.Default.RequireHTTPS && !HttpContext.Current.Request.IsLocal,
 
                         Notifications = new OpenIdConnectAuthenticationNotifications
                         {
@@ -93,7 +75,7 @@ namespace SAEON.Observations.QuerySite
                                 var discoClient = new HttpClient();
                                 var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest {
                                     Address = Properties.Settings.Default.IdentityServerUrl,
-                                    Policy = {RequireHttps = Properties.Settings.Default.HTTPSEnabled && !HttpContext.Current.Request.IsLocal }
+                                    Policy = {RequireHttps = Properties.Settings.Default.RequireHTTPS && !HttpContext.Current.Request.IsLocal }
                                 });
                                 if (disco.IsError)
                                 {
@@ -139,7 +121,7 @@ namespace SAEON.Observations.QuerySite
                                 var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
                                 {
                                     Address = Properties.Settings.Default.IdentityServerUrl,
-                                    Policy = { RequireHttps = Properties.Settings.Default.HTTPSEnabled && !HttpContext.Current.Request.IsLocal }
+                                    Policy = { RequireHttps = Properties.Settings.Default.RequireHTTPS && !HttpContext.Current.Request.IsLocal }
                                 });
                                 if (disco.IsError)
                                 {

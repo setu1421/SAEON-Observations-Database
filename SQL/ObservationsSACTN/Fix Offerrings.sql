@@ -1,4 +1,4 @@
-use ObservationsSACTN
+use Observations--SACTN
 declare @PhenomenonID UniqueIdentifier = (Select ID
 from Phenomenon
 where Name = 'Water Temperature')
@@ -243,7 +243,7 @@ where
 Update
   SchemaColumn
 set
-  PhenomenonOfferingID = @HourlyPhenomenonOfferingID
+  PhenomenonOfferingID = @YearlyPhenomenonOfferingID
 from
   SchemaColumn
   inner join DataSchema

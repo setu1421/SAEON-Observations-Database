@@ -5,11 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C6BE1ED3-FB08-488A-93FD-EE4FFFBA41E1}"
 	ProjectSection(SolutionItems) = preProject
-		Cleanup.sql = Cleanup.sql
-		Create Observation Indexes.sql = Create Observation Indexes.sql
 		Create Offerings.sql = Create Offerings.sql
 		Create PhenomenonOfferings.sql = Create PhenomenonOfferings.sql
-		Delete Observation Indexes.sql = Delete Observation Indexes.sql
 		Delete Offerings.sql = Delete Offerings.sql
 		Delete PhenomenonOfferings.sql = Delete PhenomenonOfferings.sql
 		Depth Offerings With Depths.sql = Depth Offerings With Depths.sql
@@ -35,7 +32,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DFD4D4B8-5B65-4212-B3AB-D98C1AB5DECF}.Default|Default.ActiveCfg = Default
+		{B697D20B-83A3-4F46-97FC-D2C45BDDA778}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

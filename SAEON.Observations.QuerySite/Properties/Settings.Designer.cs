@@ -53,9 +53,9 @@ namespace SAEON.Observations.QuerySite.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool HTTPSEnabled {
+        public bool RequireHTTPS {
             get {
-                return ((bool)(this["HTTPSEnabled"]));
+                return ((bool)(this["RequireHTTPS"]));
             }
         }
     }

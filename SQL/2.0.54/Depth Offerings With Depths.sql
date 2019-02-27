@@ -34,4 +34,4 @@ where
 	'_Hours','_Hr'),'_Minutes','_Min'),'_Seconds','_Sec'))
 )
 
-Select * from DepthOfferings
+Select * from DepthOfferings order by OldPhenomenonCode, OldOfferingCode

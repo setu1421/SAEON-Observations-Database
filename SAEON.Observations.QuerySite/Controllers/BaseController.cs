@@ -38,7 +38,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
                         {
                             Address = Properties.Settings.Default.IdentityServerUrl,
-                            Policy = { RequireHttps = Properties.Settings.Default.HTTPSEnabled && !Request.IsLocal }
+                            Policy = { RequireHttps = Properties.Settings.Default.RequireHTTPS && !Request.IsLocal }
                         });
                         if (disco.IsError)
                         {

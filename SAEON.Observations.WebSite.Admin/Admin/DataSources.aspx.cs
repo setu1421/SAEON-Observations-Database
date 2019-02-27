@@ -12,9 +12,9 @@ public partial class Admin_DataSources : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true";
-        btnValidate.Hidden = !Request.IsLocal && !showValidate;
-        btnValidateTransformation.Hidden = !Request.IsLocal && !showValidate;
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
+        btnValidateTransformation.Hidden = !showValidate;
         if (!X.IsAjaxRequest)
         {
             DataSchemaStore.DataSource = new DataSchemaCollection().OrderByAsc(DataSchema.Columns.Name).Load();

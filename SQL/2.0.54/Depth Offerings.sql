@@ -21,4 +21,4 @@ where
   (CharIndex(' at ',Offering.Name) > 0)
 )
 
-Select * from DepthOfferings
+Select * from DepthOfferings --order by OldPhenomenonCode, OldOfferingCode
