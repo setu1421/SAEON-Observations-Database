@@ -155,6 +155,7 @@
                                                     <ext:RecordField Name="SensorName" Type="String" />
                                                     <ext:RecordField Name="PhenomenonName" Type="String" />
                                                     <ext:RecordField Name="OfferingName" Type="String" />
+                                                    <ext:RecordField Name="Elevation" Type="Float" UseNull="true" />
                                                     <ext:RecordField Name="DataValue" Type="Float" UseNull="true" />
                                                     <ext:RecordField Name="RawValue" Type="Float" UseNull="true" />
                                                     <ext:RecordField Name="UnitOfMeasureUnit" Type="String" />
@@ -188,8 +189,9 @@
                                         <ext:Column Header="Phenomenon" DataIndex="PhenomenonName" Width="100" />
                                         <ext:Column Header="Offering" DataIndex="OfferingName" Width="100" />
                                         <ext:Column Header="Unit of Measure" DataIndex="UnitOfMeasureUnit" Width="100" Hideable="true" Hidden="false" />
-                                        <ext:Column Header="Value" DataIndex="DataValue" Width="100" />
-                                        <ext:Column Header="RawValue" DataIndex="RawValue" Width="100" Hideable="true" Hidden="true" />
+                                        <ext:NumberColumn Header="Elevation" DataIndex="Elevation" Width="75" Format="0.00" Align="Right"/>
+                                        <ext:NumberColumn Header="Value" DataIndex="DataValue" Width="100" Format=",0.000000" Align="Right" />
+                                        <ext:NumberColumn Header="RawValue" DataIndex="RawValue" Width="100" Hideable="true" Hidden="true" Format=",0.000000" Align="Right" />
                                         <ext:Column Header="Symbol" DataIndex="UnitOfMeasureSymbol" Width="50" />
                                         <ext:Column Header="Schema Name" DataIndex="DataSchemaName" Width="100" Hideable="true" Hidden="true" />
                                         <ext:DateColumn Header="Date" DataIndex="ValueDate" Width="125" Format="dd MMM yyyy HH:mm" />
@@ -210,6 +212,7 @@
                                             <ext:StringFilter DataIndex="SensorName" />
                                             <ext:StringFilter DataIndex="PhenomenonName" />
                                             <ext:StringFilter DataIndex="OfferingName" />
+                                            <ext:NumericFilter DataIndex="Elevation" />
                                             <ext:NumericFilter DataIndex="DataValue" />
                                             <ext:NumericFilter DataIndex="RawValue" />
                                             <ext:StringFilter DataIndex="UnitOfMeasureUnit" />
