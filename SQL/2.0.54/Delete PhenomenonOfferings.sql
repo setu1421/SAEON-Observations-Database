@@ -2,6 +2,7 @@ with DepthOfferings
 as
 (
 Select distinct
+  PhenomenonOffering.ID, 
   Phenomenon.Code PhenomenonCode, 
   Phenomenon.Name PhenomenonName, 
   --Offering.Code OldOfferingCode,
@@ -27,10 +28,5 @@ Delete
   PhenomenonOffering
 from
   PhenomenonOffering
-  inner join Phenomenon
-    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
-  inner join Offering
-    on (PhenomenonOffering.OfferingID = Offering.ID)
   inner join DepthOfferings
-    on (DepthOfferings.PhenomenonName = Phenomenon.Name) and
-	   (DepthOfferings.NewOfferingCode = Offering.Code)	
+    on (DepthOfferings.ID = PhenomenonOffering.ID)
