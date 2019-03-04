@@ -5,10 +5,20 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C6BE1ED3-FB08-488A-93FD-EE4FFFBA41E1}"
 	ProjectSection(SolutionItems) = preProject
-		Create Offerings.sql = Create Offerings.sql
-		Create PhenomenonOfferings.sql = Create PhenomenonOfferings.sql
-		Delete Offerings.sql = Delete Offerings.sql
-		Delete PhenomenonOfferings.sql = Delete PhenomenonOfferings.sql
+		01 Process.txt = 01 Process.txt
+		02 Create View OldDepthOfferings.sql = 02 Create View OldDepthOfferings.sql
+		03 Create View NewDepthOfferings.sql = 03 Create View NewDepthOfferings.sql
+		04 Create View NewDepthPhenomenonOfferings.sql = 04 Create View NewDepthPhenomenonOfferings.sql
+		05 Create Offerings.sql = 05 Create Offerings.sql
+		06 Create PhenomenonOfferings.sql = 06 Create PhenomenonOfferings.sql
+		07 Set DataSourceTransformation.sql = 07 Set DataSourceTransformation.sql
+		08 Set ImportBatchSummary.sql = 08 Set ImportBatchSummary.sql
+		09 Set SchemaColumn.sql = 09 Set SchemaColumn.sql
+		10 Set Observations Depth.sql = 10 Set Observations Depth.sql
+		11 Set Observations PhenomenonOffering.sql = 11 Set Observations PhenomenonOffering.sql
+		12 Delete Old PhenomenonOfferings.sql = 12 Delete Old PhenomenonOfferings.sql
+		13 Delete Old Offerings.sql = 13 Delete Old Offerings.sql
+		14 Delete Views.sql = 14 Delete Views.sql
 		Depth Offerings With Depths.sql = Depth Offerings With Depths.sql
 		Depth Offerings.sql = Depth Offerings.sql
 		Observations 2.0.54.publish.sql = Observations 2.0.54.publish.sql
@@ -19,12 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ObservationsSACTN 2.0.54.publish.txt = ObservationsSACTN 2.0.54.publish.txt
 		ObservationsTest 2.0.54.publish.sql = ObservationsTest 2.0.54.publish.sql
 		ObservationsTest 2.0.54.publish.txt = ObservationsTest 2.0.54.publish.txt
-		Process.txt = Process.txt
-		Set DataSourceTransformation.sql = Set DataSourceTransformation.sql
-		Set ImportBatchSummary.sql = Set ImportBatchSummary.sql
-		Set Observations Depth.sql = Set Observations Depth.sql
-		Set Observations PhenomenonOffering.sql = Set Observations PhenomenonOffering.sql
-		Set SchemaColumn.sql = Set SchemaColumn.sql
 	EndProjectSection
 EndProject
 Global
@@ -32,7 +36,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B697D20B-83A3-4F46-97FC-D2C45BDDA778}.Default|Default.ActiveCfg = Default
+		{900A09FD-7AD4-4D69-B0C5-207619DE8EC6}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

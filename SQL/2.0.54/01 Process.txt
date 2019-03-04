@@ -1,0 +1,17 @@
+1) Create View OldDepthOfferings
+2) Create View NewDepthOfferings
+3) Create View NewDepthPhenomenonOfferings
+4) Create Offerings
+5) Create PhenomenonOfferings
+6) Set DataSourceTransformations
+7) Set ImportBatchSummary
+8) Set SchemaColumn
+9) Set Observation Depths
+10) Set Observations PhenomenonOffering
+11) Delete Old PhenomenonOfferings
+12) Delete Old Offerings
+13) Delete Views
+14) Delete View NewDepthOfferings
+
+
+

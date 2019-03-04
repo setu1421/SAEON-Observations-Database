@@ -225,10 +225,10 @@ var DataWizard;
                 markers.push(marker);
                 mapBounds.extend(marker.getPosition());
                 if (mapPoint.IsSelected) {
-                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+                    marker.setIcon('https://maps.google.com/mapfiles/ms/icons/green-dot.png');
                 }
                 else {
-                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                    marker.setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
                 }
             }
         })
