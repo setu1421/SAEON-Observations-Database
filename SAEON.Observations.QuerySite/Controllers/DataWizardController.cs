@@ -36,6 +36,35 @@ namespace SAEON.Observations.QuerySite.Controllers
             return View(await CreateModelAsync());
         }
 
+        #region State
+        [HttpGet]
+        public JsonResult GetState()
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    var model = SessionModel;
+                    var result = new StateModel
+                    {
+                        IsAuthenticated = model.IsAuthenticated,
+                        LoadEnabled = model.IsAuthenticated && model.UserQueries.Any(),
+                        SaveEnabled = model.IsAuthenticated && model.LocationsSelected.Any() && model.FeaturesSelected.Any(),
+                        SearchEnabled = model.LocationsSelected.Any() && model.FeaturesSelected.Any()
+                    };
+                    Logging.Verbose("State: {@State}", result);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        #endregion
+
         #region Locations
 
         [HttpGet]
@@ -639,7 +668,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         QueryInput = JsonConvert.SerializeObject(queryInput)
                     };
                     Logging.Verbose("UserQuery: {@UserQuery}", userQuery);
-                    await PostEntity<UserQuery, UserQuery>("Api/UserQueries", userQuery);
+                    await PostEntity<UserQuery, UserQuery>("Internal/UserQueries", userQuery);
                     model.UserQueries.Clear();
                     model.UserQueries.AddRange(await GetUserQueriesList());
                     SessionModel = model;

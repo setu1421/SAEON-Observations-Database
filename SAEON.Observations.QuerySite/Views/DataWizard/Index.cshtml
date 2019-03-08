@@ -66,8 +66,6 @@
     <script type="text/javascript">
         $(function () {
             DataWizard.HideResults();
-            DataWizard.SetIsAuthenticated(@Model.IsAuthenticated.ToString().ToLower());
-            DataWizard.SetUserQueriesCount(@Model.UserQueries.Count);
         });
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TVt9f_c9hnz3TJL5HMJuX04iNXa43RI&callback=DataWizard.InitMap">

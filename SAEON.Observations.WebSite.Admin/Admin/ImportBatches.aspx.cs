@@ -120,12 +120,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
-    private void CreateDocuments(SharedDbConnectionScope connScope, SqlTransaction trans, Guid importBatchId)
+    private void CreateDocuments(SharedDbConnectionScope connScope, Guid importBatchId)
     {
         using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
         {
-            var sqlCon = (SqlConnection)connScope.CurrentConnection;
-            var cmd = sqlCon.CreateCommand();
             var sql =
                 "Select" + Environment.NewLine +
                 "  *" + Environment.NewLine +
@@ -133,17 +131,24 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 "  vObservationJSON" + Environment.NewLine +
                 "where" + Environment.NewLine +
                 "  (ImportBatchID = @ImportBatchID)";
+            var cmd = connScope.CurrentConnection.CreateCommand();
             cmd.CommandText = sql;
-            cmd.Transaction = trans;
+            cmd.CommandTimeout = Convert.ToInt32(TimeSpan.Parse(ConfigurationManager.AppSettings["TransactionTimeout"]).TotalSeconds);
             var param = cmd.CreateParameter();
             param.DbType = DbType.Guid;
             param.ParameterName = "@ImportBatchID";
             param.Value = importBatchId;
             cmd.Parameters.Add(param);
-            //var reader = cmd.ExecuteReader();
-            //while reader.
-            //var n = cmd.ExecuteNonQuery();
-            //Logging.Verbose("Added {Summaries} summaries", n);
+            var reader = cmd.ExecuteReader();
+            var n = 0;
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    n++;
+                }
+            }
+            Logging.Verbose("Added {Summaries} summaries", n);
         }
     }
 
@@ -418,8 +423,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             Logging.Information("Saved {count} observations in {time}", values.Count, stopwatch.Elapsed);
                             // Summaries
                             CreateSummary(connScope, batch.Id);
-                            Auditing.Log(GetType(), new ParameterList {
-                                    { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status} });
+                            // Documents
+                            CreateDocuments(connScope, batch.Id);
+                            Auditing.Log(GetType(), new ParameterList { { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status } });
                             tranScope.Complete();
                             stopwatch.Stop();
                             Logging.Information("Saved {count} observations and summary in {time}", values.Count, stopwatch.Elapsed);

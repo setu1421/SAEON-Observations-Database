@@ -65,36 +65,48 @@ var DataWizard;
         }
     }
     DataWizard.TabActive = TabActive;
+    // State
+    var State = /** @class */ (function () {
+        function State() {
+        }
+        return State;
+    }());
     // Buttons
-    var IsAuthenticated = false;
-    function SetIsAuthenticated(aValue) {
-        IsAuthenticated = aValue;
-    }
-    DataWizard.SetIsAuthenticated = SetIsAuthenticated;
     function EnableButtons() {
         var btnLoadQuery = $("#btnLoadQuery").data("ejButton");
         var btnSaveQuery = $("#btnSaveQuery").data("ejButton");
         var btnSearch = $("#btnSearch").data("ejButton");
         var btnDownload = $("#btnDownload").data("ejButton");
-        btnLoadQuery.disable();
-        btnSaveQuery.disable();
-        btnSearch.disable();
-        btnDownload.disable();
-        var locationsSelected = $("#treeViewLocations").data('ejTreeView').getCheckedNodes().length > 0;
-        var featuresSelected = $("#treeViewFeatures").data('ejTreeView').getCheckedNodes().length > 0;
-        SetApproximation();
-        if (IsAuthenticated && UserQueriesCount > 0) {
-            btnLoadQuery.enable();
-        }
-        if (locationsSelected && featuresSelected) {
-            if (IsAuthenticated) {
+        $.get("/DataWizard/GetState")
+            .done(function (state) {
+            if (state.LoadEnabled) {
+                btnLoadQuery.enable();
+            }
+            else {
+                btnLoadQuery.disable();
+            }
+            if (state.SaveEnabled) {
                 btnSaveQuery.enable();
             }
-            btnSearch.enable();
-            if (searched) {
+            else {
+                btnSaveQuery.disable();
+            }
+            if (state.SearchEnabled) {
+                btnSearch.enable();
+            }
+            else {
+                btnSearch.disable();
+            }
+            if (state.DownloadEnabled) {
                 btnDownload.enable();
             }
-        }
+            else {
+                btnDownload.disable();
+            }
+        })
+            .fail(function (jqXHR, status, error) {
+            ErrorInFunc("GetState", status, error);
+        });
     }
     DataWizard.EnableButtons = EnableButtons;
     function DisableButtons() {
@@ -115,7 +127,12 @@ var DataWizard;
         CheckReady();
     }
     DataWizard.LocationsReady = LocationsReady;
-    function UpdateLocationsSelected() {
+    function LocationsChanged() {
+        UpdateLocationsSelected(true);
+    }
+    DataWizard.LocationsChanged = LocationsChanged;
+    function UpdateLocationsSelected(isClick) {
+        if (isClick === void 0) { isClick = false; }
         var treeObj = $("#treeViewLocations").data('ejTreeView');
         var nodes = treeObj.getCheckedNodes();
         var selected = [];
@@ -127,15 +144,17 @@ var DataWizard;
         $.post("/DataWizard/UpdateLocationsSelected", { locations: selected })
             .done(function (data) {
             $('#PartialLocationsSelected').html(data);
+            SetApproximation();
             UpdateMap();
-            HideResults();
+            if (isClick) {
+                HideResults();
+            }
             EnableButtons();
         })
             .fail(function (jqXHR, status, error) {
             ErrorInFunc("UpdateLocationsSelected", status, error);
         });
     }
-    DataWizard.UpdateLocationsSelected = UpdateLocationsSelected;
     // Features
     var featuresReady = false;
     function FeaturesReady() {
@@ -151,7 +170,12 @@ var DataWizard;
             EnableButtons();
         }
     }
-    function UpdateFeaturesSelected() {
+    function FeaturesChanged() {
+        UpdateFeaturesSelected(true);
+    }
+    DataWizard.FeaturesChanged = FeaturesChanged;
+    function UpdateFeaturesSelected(isClick) {
+        if (isClick === void 0) { isClick = false; }
         var treeObj = $("#treeViewFeatures").data('ejTreeView');
         var nodes = treeObj.getCheckedNodes();
         var selected = [];
@@ -163,28 +187,36 @@ var DataWizard;
         $.post("/DataWizard/UpdateFeaturesSelected", { features: selected })
             .done(function (data) {
             $('#PartialFeaturesSelected').html(data);
-            HideResults();
+            SetApproximation();
+            if (isClick) {
+                HideResults();
+            }
             EnableButtons();
         })
             .fail(function (jqXHR, status, error) {
             ErrorInFunc("UpdateFeaturesSelected", status, error);
         });
     }
-    DataWizard.UpdateFeaturesSelected = UpdateFeaturesSelected;
     // Filters 
-    function UpdateFilters() {
+    function FiltersChanged() {
+        UpdateFilters(true);
+    }
+    DataWizard.FiltersChanged = FiltersChanged;
+    function UpdateFilters(isClick) {
+        if (isClick === void 0) { isClick = false; }
         var startDate = $("#StartDate").ejDatePicker("instance").getValue();
         var endDate = $("#EndDate").ejDatePicker("instance").getValue();
         $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate })
             .done(function (data) {
-            HideResults();
+            if (isClick) {
+                HideResults();
+            }
             EnableButtons();
         })
             .fail(function (jqXHR, status, error) {
             ErrorInFunc("UpdateFilters", status, error);
         });
     }
-    DataWizard.UpdateFilters = UpdateFilters;
     // Map 
     var MapPoint = /** @class */ (function () {
         function MapPoint() {
@@ -252,18 +284,17 @@ var DataWizard;
     }
     DataWizard.FixMap = FixMap;
     // Aproximation
-    function GetApproximation() {
-        var approximation = "{}";
-        $.get("/DataWizard/GetApproximation")
-            .done(function (data) {
-            approximation = data;
-        })
-            .fail(function (jqXHR, status, error) {
-            ErrorInFunc("GetApproximation", status, error);
-        });
-        return approximation;
-    }
-    DataWizard.GetApproximation = GetApproximation;
+    //export function GetApproximation(): string {
+    //    let approximation: string = "{}";
+    //    $.get("/DataWizard/GetApproximation")
+    //        .done(function (data) {
+    //            approximation = data;
+    //        })
+    //        .fail(function (jqXHR, status, error) {
+    //            ErrorInFunc("GetApproximation", status, error)
+    //        });
+    //    return approximation;
+    //}
     function SetApproximation() {
         $.get("/DataWizard/SetApproximation")
             .done(function (data) {
@@ -297,11 +328,6 @@ var DataWizard;
     }
     DataWizard.Search = Search;
     // User Queries
-    var UserQueriesCount = 0;
-    function SetUserQueriesCount(aValue) {
-        UserQueriesCount = aValue;
-    }
-    DataWizard.SetUserQueriesCount = SetUserQueriesCount;
     // LoadQuery
     function LoadQueryOpen() {
         DisableButtons();
@@ -339,11 +365,9 @@ var DataWizard;
                 var selectedTab = SelectedTab();
                 setTimeout(SelectTab(0), 1000);
                 $("#PartialLocations").load("/DataWizard/GetLocationsHtml", function () {
-                    setTimeout(SelectTab(0), 1000);
                     $("#PartialLocationsSelected").load("/DataWizard/GetLocationsSelectedHtml", function () {
                         setTimeout(SelectTab(1), 1000);
                         $("#PartialFeatures").load("/DataWizard/GetFeaturesHtml", function () {
-                            setTimeout(SelectTab(1), 1000);
                             $("#PartialFeaturesSelected").load("/DataWizard/GetFeaturesSelectedHtml", function () {
                                 setTimeout(SelectTab(2), 1000);
                                 $("#PartialFilters").load("/DataWizard/GetFiltersHtml", function () {
@@ -412,12 +436,7 @@ var DataWizard;
     }
     DataWizard.SaveQuery = SaveQuery;
     function Test() {
-        if (SelectedTab() == 0) {
-            SelectTab(1);
-        }
-        else {
-            SelectTab(0);
-        }
+        EnableButtons();
     }
     DataWizard.Test = Test;
     // Download

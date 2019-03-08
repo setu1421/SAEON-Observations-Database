@@ -73,37 +73,52 @@
         }
     }
 
-    // Buttons
-
-    let IsAuthenticated: boolean = false;
-    export function SetIsAuthenticated(aValue: boolean) {
-        IsAuthenticated = aValue;
+    // State
+    class State {
+        IsAuthenticated: boolean;
+        LoadEnabled: boolean;
+        SaveEnabled: boolean;
+        SearchEnabled: boolean;
+        DownloadEnabled: boolean;
     }
+
+    // Buttons
 
     export function EnableButtons() {
         let btnLoadQuery = $("#btnLoadQuery").data("ejButton");
         let btnSaveQuery = $("#btnSaveQuery").data("ejButton");
         let btnSearch = $("#btnSearch").data("ejButton");
         let btnDownload = $("#btnDownload").data("ejButton");
-        btnLoadQuery.disable();
-        btnSaveQuery.disable();
-        btnSearch.disable();
-        btnDownload.disable();
-        let locationsSelected: boolean = $("#treeViewLocations").data('ejTreeView').getCheckedNodes().length > 0;
-        let featuresSelected: boolean = $("#treeViewFeatures").data('ejTreeView').getCheckedNodes().length > 0;
-        SetApproximation();
-        if (IsAuthenticated && UserQueriesCount > 0) {
-            btnLoadQuery.enable();
-        }
-        if (locationsSelected && featuresSelected) {
-            if (IsAuthenticated) {
-                btnSaveQuery.enable();
-            }
-            btnSearch.enable();
-            if (searched) {
-                btnDownload.enable();
-            }
-        }
+        $.get("/DataWizard/GetState")
+            .done(function (state: State) {
+                if (state.LoadEnabled) {
+                    btnLoadQuery.enable();
+                }
+                else {
+                    btnLoadQuery.disable();
+                }
+
+                if (state.SaveEnabled) {
+                    btnSaveQuery.enable();
+                } else {
+                    btnSaveQuery.disable();
+                }
+                if (state.SearchEnabled) {
+                    btnSearch.enable();
+                }
+                else {
+                    btnSearch.disable();
+                }
+                if (state.DownloadEnabled) {
+                    btnDownload.enable();
+                }
+                else {
+                    btnDownload.disable();
+                }
+            })
+            .fail(function (jqXHR, status, error) {
+                ErrorInFunc("GetState", status, error)
+            });
     }
 
     export function DisableButtons() {
@@ -126,7 +141,11 @@
         CheckReady();
     }
 
-    export function UpdateLocationsSelected() {
+    export function LocationsChanged() {
+        UpdateLocationsSelected(true);
+    }
+
+    function UpdateLocationsSelected(isClick: boolean = false) {
         let treeObj = $("#treeViewLocations").data('ejTreeView');
         let nodes = treeObj.getCheckedNodes();
         let selected = []
@@ -138,8 +157,11 @@
         $.post("/DataWizard/UpdateLocationsSelected", { locations: selected })
             .done(function (data) {
                 $('#PartialLocationsSelected').html(data);
+                SetApproximation();
                 UpdateMap();
-                HideResults();
+                if (isClick) {
+                    HideResults();
+                }
                 EnableButtons();
             })
             .fail(function (jqXHR, status, error) {
@@ -165,7 +187,11 @@
         }
     }
 
-    export function UpdateFeaturesSelected() {
+    export function FeaturesChanged() {
+        UpdateFeaturesSelected(true);
+    }
+
+    function UpdateFeaturesSelected(isClick: boolean = false) {
         let treeObj = $("#treeViewFeatures").data('ejTreeView');
         let nodes = treeObj.getCheckedNodes();
         let selected = []
@@ -177,7 +203,10 @@
         $.post("/DataWizard/UpdateFeaturesSelected", { features: selected })
             .done(function (data) {
                 $('#PartialFeaturesSelected').html(data);
-                HideResults();
+                SetApproximation();
+                if (isClick) {
+                    HideResults();
+                }
                 EnableButtons();
             })
             .fail(function (jqXHR, status, error) {
@@ -187,12 +216,18 @@
 
     // Filters 
 
-    export function UpdateFilters() {
+    export function FiltersChanged() {
+        UpdateFilters(true);
+    }
+
+    function UpdateFilters(isClick: boolean = false) {
         let startDate = $("#StartDate").ejDatePicker("instance").getValue();
         let endDate = $("#EndDate").ejDatePicker("instance").getValue();
         $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate })
             .done(function (data) {
-                HideResults();
+                if (isClick) {
+                    HideResults();
+                }
                 EnableButtons();
             })
             .fail(function (jqXHR, status, error) {
@@ -273,17 +308,17 @@
 
     // Aproximation
 
-    export function GetApproximation(): string {
-        let approximation: string = "{}";
-        $.get("/DataWizard/GetApproximation")
-            .done(function (data) {
-                approximation = data;
-            })
-            .fail(function (jqXHR, status, error) {
-                ErrorInFunc("GetApproximation", status, error)
-            });
-        return approximation;
-    }
+    //export function GetApproximation(): string {
+    //    let approximation: string = "{}";
+    //    $.get("/DataWizard/GetApproximation")
+    //        .done(function (data) {
+    //            approximation = data;
+    //        })
+    //        .fail(function (jqXHR, status, error) {
+    //            ErrorInFunc("GetApproximation", status, error)
+    //        });
+    //    return approximation;
+    //}
 
     export function SetApproximation() {
         $.get("/DataWizard/SetApproximation")
@@ -320,11 +355,6 @@
     }
 
     // User Queries
-
-    let UserQueriesCount: number = 0;
-    export function SetUserQueriesCount(aValue: number) {
-        UserQueriesCount = aValue;
-    }
 
     // LoadQuery
     export function LoadQueryOpen() {
@@ -363,11 +393,9 @@
                 let selectedTab = SelectedTab();
                 setTimeout(SelectTab(0), 1000);
                 $("#PartialLocations").load("/DataWizard/GetLocationsHtml", function () {
-                    setTimeout(SelectTab(0), 1000);
                     $("#PartialLocationsSelected").load("/DataWizard/GetLocationsSelectedHtml", function () {
                         setTimeout(SelectTab(1), 1000);
                         $("#PartialFeatures").load("/DataWizard/GetFeaturesHtml", function () {
-                            setTimeout(SelectTab(1), 1000);
                             $("#PartialFeaturesSelected").load("/DataWizard/GetFeaturesSelectedHtml", function () {
                                 setTimeout(SelectTab(2), 1000);
                                 $("#PartialFilters").load("/DataWizard/GetFiltersHtml", function () {
@@ -436,12 +464,7 @@
     }
 
     export function Test() {
-        if (SelectedTab() == 0) {
-            SelectTab(1);
-        }
-        else {
-            SelectTab(0);
-        }
+        EnableButtons();
     }
 
     // Download
