@@ -2,17 +2,17 @@ use Observations;
 Update
   DataSourceTransformation
 set
-  PhenomenonOfferingID = NewDepthPhenomenonOfferings.NewPhenomenonOfferingID
+  PhenomenonOfferingID = vNewDepthPhenomenonOfferings.NewPhenomenonOfferingID
 from
   DataSourceTransformation
-  inner join NewDepthPhenomenonOfferings 
-    on (DataSourceTransformation.PhenomenonOfferingID = NewDepthPhenomenonOfferings.OldPhenomenonOfferingID)
+  inner join vNewDepthPhenomenonOfferings 
+    on (DataSourceTransformation.PhenomenonOfferingID = vNewDepthPhenomenonOfferings.OldPhenomenonOfferingID)
 
 Update
   DataSourceTransformation
 set
-  NewPhenomenonOfferingID = NewDepthPhenomenonOfferings.NewPhenomenonOfferingID
+  NewPhenomenonOfferingID = vNewDepthPhenomenonOfferings.NewPhenomenonOfferingID
 from
   DataSourceTransformation
-  inner join NewDepthPhenomenonOfferings 
-    on (DataSourceTransformation.NewPhenomenonOfferingID = NewDepthPhenomenonOfferings.OldPhenomenonOfferingID)
+  inner join vNewDepthPhenomenonOfferings 
+    on (DataSourceTransformation.NewPhenomenonOfferingID = vNewDepthPhenomenonOfferings.OldPhenomenonOfferingID)

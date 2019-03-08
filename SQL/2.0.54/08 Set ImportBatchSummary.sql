@@ -5,6 +5,6 @@ set
   PhenomenonOfferingID = NewPhenomenonOfferingID
 from
   ImportBatchSummary
-  inner join NewDepthPhenomenonOfferings
+  inner join vNewDepthPhenomenonOfferings
     on (ImportBatchSummary.PhenomenonOfferingID = OldPhenomenonOfferingID)
 

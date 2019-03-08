@@ -7,6 +7,6 @@ Select distinct
   NewOfferingDescription,
   (Select UserId from aspnet_Users where UserName='TimPN')
 from
-  NewDepthOfferings
+  vNewDepthOfferings
 where
   not Exists(Select * from Offering where Code = NewOfferingCode)

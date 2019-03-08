@@ -1,10 +1,10 @@
 use Observations;
 Update
-  SchemaColumn
+  DataLog
 set
   PhenomenonOfferingID = NewPhenomenonOfferingID
 from
-  SchemaColumn
+  DataLog
   inner join vNewDepthPhenomenonOfferings
-    on (SchemaColumn.PhenomenonOfferingID = OldPhenomenonOfferingID)
+    on (Datalog.PhenomenonOfferingID = OldPhenomenonOfferingID)
 

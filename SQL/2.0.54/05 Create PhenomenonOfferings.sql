@@ -2,11 +2,13 @@ use Observations;
 Insert into PhenomenonOffering
   (PhenomenonID, OfferingID, UserId)
 Select distinct
-  NewDepthOfferings.PhenomenonID,
+  PhenomenonOffering.PhenomenonID,
   (Select Id from Offering where Code = NewOfferingCode) OfferingID,
   (Select UserId from aspnet_Users where UserName='TimPN')
 from 
-  NewDepthOfferings
+  vNewDepthOfferings
+  inner join PhenomenonOffering
+    on (PhenomenonOffering.OfferingID = OldOfferingID)
 where
   not exists(
 	Select 
@@ -14,5 +16,5 @@ where
 	from 
 	  PhenomenonOffering 
 	where
-	  (PhenomenonID = NewDepthOfferings.PhenomenonID) and
+	  (PhenomenonID = PhenomenonOffering.PhenomenonID) and
 	  (OfferingID = (Select ID from Offering where Code = NewOfferingCode)))
