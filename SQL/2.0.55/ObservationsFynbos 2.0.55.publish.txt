@@ -1,0 +1,20 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[ImportBatch] (Table)
+
+** Supporting actions
+     Refresh
+       [dbo].[vImportBatch] (View)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)

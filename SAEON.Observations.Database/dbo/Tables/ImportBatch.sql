@@ -11,6 +11,7 @@
     [StatusID] UNIQUEIDENTIFIER NULL,
     [StatusReasonID] UNIQUEIDENTIFIER NULL,
     [Issues] VARCHAR(1000) NULL,
+    [DurationInSecs] INT Null,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_ImportBatch_AddedAt] DEFAULT (getdate()), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_ImportBatch_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
