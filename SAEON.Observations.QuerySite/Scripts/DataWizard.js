@@ -37,7 +37,7 @@ var DataWizard;
     // Tabs
     function SelectTab(index) {
         var tab = $("#DataWizardTabs").data("ejTab");
-        tab.option("selectedItemIndex", 0);
+        tab.option("selectedItemIndex", index);
     }
     function SelectedTab() {
         var tab = $("#DataWizardTabs").data("ejTab");
@@ -45,7 +45,9 @@ var DataWizard;
     }
     // Features fix on 1st load
     var locationsSelected = false;
+    var locationsExpand = false;
     var featuresSelected = false;
+    var featuresExpand = true;
     function TabActive() {
         var selectedTab = SelectedTab();
         if (selectedTab == 0) {
@@ -133,6 +135,8 @@ var DataWizard;
     DataWizard.LocationsChanged = LocationsChanged;
     function UpdateLocationsSelected(isClick) {
         if (isClick === void 0) { isClick = false; }
+        if (loading)
+            return;
         var treeObj = $("#treeViewLocations").data('ejTreeView');
         var nodes = treeObj.getCheckedNodes();
         var selected = [];
@@ -140,6 +144,13 @@ var DataWizard;
         for (i = 0; i < nodes.length; i++) {
             var nodeData = treeObj.getNode(nodes[i]);
             selected.push(nodeData.id);
+            if (locationsExpand) {
+                var parent_1 = treeObj.getParent(nodes[i]);
+                while (parent_1 != null) {
+                    treeObj.expandNode(parent_1);
+                    parent_1 = treeObj.getParent(parent_1);
+                }
+            }
         }
         $.post("/DataWizard/UpdateLocationsSelected", { locations: selected })
             .done(function (data) {
@@ -154,6 +165,18 @@ var DataWizard;
             .fail(function (jqXHR, status, error) {
             ErrorInFunc("UpdateLocationsSelected", status, error);
         });
+    }
+    function ExpandLocationsSelected() {
+        var treeObj = $("#treeViewLocations").data('ejTreeView');
+        var nodes = treeObj.getCheckedNodes();
+        var i;
+        for (i = 0; i < nodes.length; i++) {
+            var parent_2 = treeObj.getParent(nodes[i]);
+            while (parent_2 != null) {
+                treeObj.expandNode(parent_2);
+                parent_2 = treeObj.getParent(parent_2);
+            }
+        }
     }
     // Features
     var featuresReady = false;
@@ -176,6 +199,8 @@ var DataWizard;
     DataWizard.FeaturesChanged = FeaturesChanged;
     function UpdateFeaturesSelected(isClick) {
         if (isClick === void 0) { isClick = false; }
+        if (loading)
+            return;
         var treeObj = $("#treeViewFeatures").data('ejTreeView');
         var nodes = treeObj.getCheckedNodes();
         var selected = [];
@@ -183,6 +208,13 @@ var DataWizard;
         for (i = 0; i < nodes.length; i++) {
             var nodeData = treeObj.getNode(nodes[i]);
             selected.push(nodeData.id);
+            if (featuresExpand) {
+                var parent_3 = treeObj.getParent(nodes[i]);
+                while (parent_3 != null) {
+                    treeObj.expandNode(parent_3);
+                    parent_3 = treeObj.getParent(parent_3);
+                }
+            }
         }
         $.post("/DataWizard/UpdateFeaturesSelected", { features: selected })
             .done(function (data) {
@@ -196,6 +228,18 @@ var DataWizard;
             .fail(function (jqXHR, status, error) {
             ErrorInFunc("UpdateFeaturesSelected", status, error);
         });
+    }
+    function ExpandFeaturesSelected() {
+        var treeObj = $("#treeViewFeatures").data('ejTreeView');
+        var nodes = treeObj.getCheckedNodes();
+        var i;
+        for (i = 0; i < nodes.length; i++) {
+            var parent_4 = treeObj.getParent(nodes[i]);
+            while (parent_4 != null) {
+                treeObj.expandNode(parent_4);
+                parent_4 = treeObj.getParent(parent_4);
+            }
+        }
     }
     // Filters 
     function FiltersChanged() {
@@ -353,6 +397,7 @@ var DataWizard;
         }
     }
     DataWizard.LoadQueryNameChange = LoadQueryNameChange;
+    var loading = false;
     function LoadQuery() {
         ShowWaiting();
         $.ajax({
@@ -363,23 +408,22 @@ var DataWizard;
             contentType: "application/json",
             success: function () {
                 var selectedTab = SelectedTab();
-                setTimeout(SelectTab(0), 1000);
                 $("#PartialLocations").load("/DataWizard/GetLocationsHtml", function () {
                     $("#PartialLocationsSelected").load("/DataWizard/GetLocationsSelectedHtml", function () {
-                        setTimeout(SelectTab(1), 1000);
                         $("#PartialFeatures").load("/DataWizard/GetFeaturesHtml", function () {
                             $("#PartialFeaturesSelected").load("/DataWizard/GetFeaturesSelectedHtml", function () {
-                                setTimeout(SelectTab(2), 1000);
                                 $("#PartialFilters").load("/DataWizard/GetFiltersHtml", function () {
-                                    locationsSelected = false;
-                                    featuresSelected = false;
-                                    setTimeout(SelectTab(selectedTab), 1000);
                                     //UpdateMap();
                                     $("PartialTable").text("");
                                     $("PartialCards").text("");
                                     $("PartialChart").text("");
                                     HideResults();
                                     LoadQueryClose();
+                                    locationsSelected = false;
+                                    featuresSelected = false;
+                                    loading = false;
+                                    ExpandLocationsSelected();
+                                    ExpandFeaturesSelected();
                                 });
                             });
                         });
@@ -436,7 +480,15 @@ var DataWizard;
     }
     DataWizard.SaveQuery = SaveQuery;
     function Test() {
-        EnableButtons();
+        //locationsSelected = false;
+        //featuresSelected = false;
+        //if (SelectedTab() == 0) {
+        //    SelectTab(1)
+        //} else {
+        //    SelectTab(0);
+        //}
+        ExpandLocationsSelected();
+        ExpandFeaturesSelected();
     }
     DataWizard.Test = Test;
     // Download

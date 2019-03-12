@@ -41,7 +41,7 @@
 
     function SelectTab(index: number) {
         let tab = $("#DataWizardTabs").data("ejTab");
-        tab.option("selectedItemIndex", 0);
+        tab.option("selectedItemIndex", index);
     }
 
     function SelectedTab(): number {
@@ -52,7 +52,9 @@
     // Features fix on 1st load
 
     let locationsSelected: boolean = false;
+    let locationsExpand: boolean = false;
     let featuresSelected: boolean = false;
+    let featuresExpand: boolean = true;
 
     export function TabActive() {
         let selectedTab = SelectedTab();
@@ -146,6 +148,7 @@
     }
 
     function UpdateLocationsSelected(isClick: boolean = false) {
+        if (loading) return;
         let treeObj = $("#treeViewLocations").data('ejTreeView');
         let nodes = treeObj.getCheckedNodes();
         let selected = []
@@ -153,6 +156,13 @@
         for (i = 0; i < nodes.length; i++) {
             let nodeData = treeObj.getNode(nodes[i]);
             selected.push(nodeData.id);
+            if (locationsExpand) {
+                let parent = treeObj.getParent(nodes[i]);
+                while (parent != null) {
+                    treeObj.expandNode(parent);
+                    parent = treeObj.getParent(parent);
+                }
+            }
         }
         $.post("/DataWizard/UpdateLocationsSelected", { locations: selected })
             .done(function (data) {
@@ -167,6 +177,21 @@
             .fail(function (jqXHR, status, error) {
                 ErrorInFunc("UpdateLocationsSelected", status, error)
             });
+    }
+
+
+    function ExpandLocationsSelected() {
+        let treeObj = $("#treeViewLocations").data('ejTreeView');
+        let nodes = treeObj.getCheckedNodes();
+        let i: number;
+        for (i = 0; i < nodes.length; i++) {
+            let parent = treeObj.getParent(nodes[i]);
+            while (parent != null)
+            {
+                treeObj.expandNode(parent);
+                parent = treeObj.getParent(parent);
+            }
+        }
     }
 
     // Features
@@ -192,6 +217,7 @@
     }
 
     function UpdateFeaturesSelected(isClick: boolean = false) {
+        if (loading) return;
         let treeObj = $("#treeViewFeatures").data('ejTreeView');
         let nodes = treeObj.getCheckedNodes();
         let selected = []
@@ -199,6 +225,13 @@
         for (i = 0; i < nodes.length; i++) {
             let nodeData = treeObj.getNode(nodes[i]);
             selected.push(nodeData.id);
+            if (featuresExpand) {
+                let parent = treeObj.getParent(nodes[i]);
+                while (parent != null) {
+                    treeObj.expandNode(parent);
+                    parent = treeObj.getParent(parent);
+                }
+            }
         }
         $.post("/DataWizard/UpdateFeaturesSelected", { features: selected })
             .done(function (data) {
@@ -212,6 +245,19 @@
             .fail(function (jqXHR, status, error) {
                 ErrorInFunc("UpdateFeaturesSelected", status, error)
             });
+    }
+
+    function ExpandFeaturesSelected() {
+        let treeObj = $("#treeViewFeatures").data('ejTreeView');
+        let nodes = treeObj.getCheckedNodes();
+        let i: number;
+        for (i = 0; i < nodes.length; i++) {
+            let parent = treeObj.getParent(nodes[i]);
+            while (parent != null) {
+                treeObj.expandNode(parent);
+                parent = treeObj.getParent(parent);
+            }
+        }
     }
 
     // Filters 
@@ -381,6 +427,7 @@
         }
     }
 
+    let loading: boolean = false;
     export function LoadQuery() {
         ShowWaiting();
         $.ajax({
@@ -391,23 +438,22 @@
             contentType: "application/json",
             success: function () {
                 let selectedTab = SelectedTab();
-                setTimeout(SelectTab(0), 1000);
                 $("#PartialLocations").load("/DataWizard/GetLocationsHtml", function () {
                     $("#PartialLocationsSelected").load("/DataWizard/GetLocationsSelectedHtml", function () {
-                        setTimeout(SelectTab(1), 1000);
                         $("#PartialFeatures").load("/DataWizard/GetFeaturesHtml", function () {
                             $("#PartialFeaturesSelected").load("/DataWizard/GetFeaturesSelectedHtml", function () {
-                                setTimeout(SelectTab(2), 1000);
                                 $("#PartialFilters").load("/DataWizard/GetFiltersHtml", function () {
-                                    locationsSelected = false;
-                                    featuresSelected = false;
-                                    setTimeout(SelectTab(selectedTab), 1000);
                                     //UpdateMap();
                                     $("PartialTable").text("");
                                     $("PartialCards").text("");
                                     $("PartialChart").text("");
                                     HideResults();
                                     LoadQueryClose();
+                                    locationsSelected = false;
+                                    featuresSelected = false;
+                                    loading = false;
+                                    ExpandLocationsSelected();
+                                    ExpandFeaturesSelected();
                                 });
                             });
                         });
@@ -464,7 +510,15 @@
     }
 
     export function Test() {
-        EnableButtons();
+        //locationsSelected = false;
+        //featuresSelected = false;
+        //if (SelectedTab() == 0) {
+        //    SelectTab(1)
+        //} else {
+        //    SelectTab(0);
+        //}
+        ExpandLocationsSelected();
+        ExpandFeaturesSelected();
     }
 
     // Download
