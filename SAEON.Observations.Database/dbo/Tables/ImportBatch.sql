@@ -36,6 +36,8 @@ CREATE INDEX [IX_ImportBatch_StatusID] ON [dbo].[ImportBatch] ([StatusID])
 GO
 CREATE INDEX [IX_ImportBatch_StatusReasonID] ON [dbo].[ImportBatch] ([StatusReasonID])
 GO
+CREATE INDEX [IX_ImportBatch_DurationInSecs] ON [dbo].[ImportBatch] ([DurationInSecs])
+GO
 CREATE TRIGGER [dbo].[TR_ImportBatch_Insert] ON [dbo].[ImportBatch]
 FOR INSERT
 AS

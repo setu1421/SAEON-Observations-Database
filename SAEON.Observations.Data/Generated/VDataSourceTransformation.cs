@@ -573,18 +573,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarNewPhenomenonID);
                 
-                TableSchema.TableColumn colvarPhenomenonName = new TableSchema.TableColumn(schema);
-                colvarPhenomenonName.ColumnName = "PhenomenonName";
-                colvarPhenomenonName.DataType = DbType.AnsiString;
-                colvarPhenomenonName.MaxLength = 150;
-                colvarPhenomenonName.AutoIncrement = false;
-                colvarPhenomenonName.IsNullable = false;
-                colvarPhenomenonName.IsPrimaryKey = false;
-                colvarPhenomenonName.IsForeignKey = false;
-                colvarPhenomenonName.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarPhenomenonName);
-                
                 TableSchema.TableColumn colvarTransformationName = new TableSchema.TableColumn(schema);
                 colvarTransformationName.ColumnName = "TransformationName";
                 colvarTransformationName.DataType = DbType.AnsiString;
@@ -596,6 +584,18 @@ namespace SAEON.Observations.Data{
                 colvarTransformationName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarTransformationName);
+                
+                TableSchema.TableColumn colvarPhenomenonName = new TableSchema.TableColumn(schema);
+                colvarPhenomenonName.ColumnName = "PhenomenonName";
+                colvarPhenomenonName.DataType = DbType.AnsiString;
+                colvarPhenomenonName.MaxLength = 150;
+                colvarPhenomenonName.AutoIncrement = false;
+                colvarPhenomenonName.IsNullable = false;
+                colvarPhenomenonName.IsPrimaryKey = false;
+                colvarPhenomenonName.IsForeignKey = false;
+                colvarPhenomenonName.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarPhenomenonName);
                 
                 TableSchema.TableColumn colvarOfferingName = new TableSchema.TableColumn(schema);
                 colvarOfferingName.ColumnName = "OfferingName";
@@ -1321,20 +1321,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("PhenomenonName")]
-        [Bindable(true)]
-        public string PhenomenonName 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("PhenomenonName");
-		    }
-            set 
-		    {
-			    SetColumnValue("PhenomenonName", value);
-            }
-        }
-	      
         [XmlAttribute("TransformationName")]
         [Bindable(true)]
         public string TransformationName 
@@ -1346,6 +1332,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("TransformationName", value);
+            }
+        }
+	      
+        [XmlAttribute("PhenomenonName")]
+        [Bindable(true)]
+        public string PhenomenonName 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("PhenomenonName");
+		    }
+            set 
+		    {
+			    SetColumnValue("PhenomenonName", value);
             }
         }
 	      
@@ -1526,9 +1526,9 @@ namespace SAEON.Observations.Data{
             
             public static string NewPhenomenonID = @"NewPhenomenonID";
             
-            public static string PhenomenonName = @"PhenomenonName";
-            
             public static string TransformationName = @"TransformationName";
+            
+            public static string PhenomenonName = @"PhenomenonName";
             
             public static string OfferingName = @"OfferingName";
             

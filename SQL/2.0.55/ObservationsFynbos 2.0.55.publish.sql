@@ -60,6 +60,15 @@ ALTER TABLE [dbo].[ImportBatch]
 
 
 GO
+PRINT N'Creating [dbo].[ImportBatch].[IX_ImportBatch_DurationInSecs]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatch_DurationInSecs]
+    ON [dbo].[ImportBatch]([DurationInSecs] ASC);
+
+
+GO
 PRINT N'Refreshing [dbo].[vImportBatch]...';
 
 

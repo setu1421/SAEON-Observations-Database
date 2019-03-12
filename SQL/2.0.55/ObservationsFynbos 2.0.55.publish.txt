@@ -11,6 +11,8 @@
 ** User actions
      Alter
        [dbo].[ImportBatch] (Table)
+     Create
+       [dbo].[ImportBatch].[IX_ImportBatch_DurationInSecs] (Index)
 
 ** Supporting actions
      Refresh

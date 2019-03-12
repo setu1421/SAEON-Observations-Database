@@ -12,6 +12,7 @@
      Alter
        [dbo].[ImportBatch] (Table)
      Create
+       [dbo].[ImportBatch].[IX_ImportBatch_DurationInSecs] (Index)
        [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_Count] (Index)
        [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_EndDate] (Index)
        [dbo].[ImportBatchSummary].[IX_ImportBatchSummary_StartDate] (Index)

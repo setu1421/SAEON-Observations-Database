@@ -212,8 +212,14 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 var fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
 
+                var durationStopWatch = new Stopwatch();
+                durationStopWatch.Start();
+                var importStopWatch = new Stopwatch();
+                importStopWatch.Start();
                 Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.41, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
+                importStopWatch.Stop();
+                Logging.Information("Imported {count} values in {elapsed}", values.Count, importStopWatch);
 
                 if (!values.Any())
                 {
@@ -221,8 +227,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 }
                 else
                 {
-                    var stopwatch = new Stopwatch();
-                    stopwatch.Start();
+                    
+                    var saveStopwatch = new Stopwatch();
+                    saveStopwatch.Start();
                     Logging.Information("Saving {count} observations.", values.Count);
                     duplicates = 0;
                     nullDuplicates = 0;
@@ -420,20 +427,21 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     }
                                 }
                             }
-                            Logging.Information("Saved {count} observations in {time}", values.Count, stopwatch.Elapsed);
+                            Logging.Information("Saved {count} observations in {time}", values.Count, saveStopwatch.Elapsed);
                             // Summaries
                             CreateSummary(connScope, batch.Id);
                             // Documents
                             CreateDocuments(connScope, batch.Id);
                             Auditing.Log(GetType(), new ParameterList { { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status } });
+                            batch.DurationInSecs = (int)durationStopWatch.Elapsed.TotalSeconds;
+                            batch.Save();
                             tranScope.Complete();
-                            stopwatch.Stop();
-                            Logging.Information("Saved {count} observations and summary in {time}", values.Count, stopwatch.Elapsed);
+                            Logging.Information("Saved {count} observations and summary in {time}", values.Count, saveStopwatch.Elapsed);
+                            Logging.Information("Import duration {duration}", durationStopWatch.Elapsed);
                         }
                         catch (Exception ex)
                         {
-                            stopwatch.Stop();
-                            Logging.Exception(ex, "Unable to save {count} observations in {time}", values.Count, stopwatch.Elapsed);
+                            Logging.Exception(ex, "Unable to save {count} observations in {time} total {duration}", values.Count, saveStopwatch.Elapsed, durationStopWatch.Elapsed);
                             throw;
                         }
                     }

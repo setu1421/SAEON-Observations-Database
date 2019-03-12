@@ -40,7 +40,14 @@ USE [$(DatabaseName)];
 
 
 GO
-PRINT N'Rename refactoring operation with key 185d32e7-e9e8-4752-8d36-09c3b3ff06ef, 69836961-23b5-4dfa-a8ed-dd0dd191d0c0 is skipped, element [dbo].[ImportBatch].[TimeToImport] (SqlSimpleColumn) will not be renamed to DurationInSecs';
+IF EXISTS (SELECT 1
+           FROM   [master].[dbo].[sysdatabases]
+           WHERE  [name] = N'$(DatabaseName)')
+    BEGIN
+        ALTER DATABASE [$(DatabaseName)]
+            SET TEMPORAL_HISTORY_RETENTION ON 
+            WITH ROLLBACK IMMEDIATE;
+    END
 
 
 GO
@@ -50,6 +57,15 @@ PRINT N'Altering [dbo].[ImportBatch]...';
 GO
 ALTER TABLE [dbo].[ImportBatch]
     ADD [DurationInSecs] INT NULL;
+
+
+GO
+PRINT N'Creating [dbo].[ImportBatch].[IX_ImportBatch_DurationInSecs]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ImportBatch_DurationInSecs]
+    ON [dbo].[ImportBatch]([DurationInSecs] ASC);
 
 
 GO
@@ -107,22 +123,6 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vObservationJSON]';
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
-
-GO
--- Refactoring step to update target server with deployed transaction logs
-
-IF OBJECT_ID(N'dbo.__RefactorLog') IS NULL
-BEGIN
-    CREATE TABLE [dbo].[__RefactorLog] (OperationKey UNIQUEIDENTIFIER NOT NULL PRIMARY KEY)
-    EXEC sp_addextendedproperty N'microsoft_database_tools_support', N'refactoring log', N'schema', N'dbo', N'table', N'__RefactorLog'
-END
-GO
-IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '185d32e7-e9e8-4752-8d36-09c3b3ff06ef')
-INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('185d32e7-e9e8-4752-8d36-09c3b3ff06ef')
-IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '69836961-23b5-4dfa-a8ed-dd0dd191d0c0')
-INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('69836961-23b5-4dfa-a8ed-dd0dd191d0c0')
-
-GO
 
 GO
 PRINT N'Update complete.';
