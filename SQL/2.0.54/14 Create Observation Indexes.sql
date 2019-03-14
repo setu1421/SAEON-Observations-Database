@@ -5,4 +5,5 @@ ON [Observations];
 CREATE INDEX [IX_Observation_Elevation] ON [dbo].[Observation] ([Elevation]) ON [Observations];
 CREATE INDEX [IX_Observation_PhenomenonOfferingID] ON [dbo].[Observation] ([PhenomenonOfferingID]) ON [Observations];
 CREATE INDEX [IX_Observation_SensorID_PhenomenonOfferingID] ON [dbo].[Observation] ([SensorID],[PhenomenonOfferingID]) ON [Observations];
+Alter database Observations set Multi_User
 CheckPoint;
