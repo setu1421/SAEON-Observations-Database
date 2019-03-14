@@ -106,17 +106,19 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 "  (ImportBatchID = @ImportBatchID)" + Environment.NewLine +
                 "group by" + Environment.NewLine +
                 "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID";
-            var cmd = connScope.CurrentConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.CommandTimeout = Convert.ToInt32(TimeSpan.Parse(ConfigurationManager.AppSettings["TransactionTimeout"]).TotalSeconds);
-            var param = cmd.CreateParameter();
-            param.DbType = DbType.Guid;
-            param.ParameterName = "@ImportBatchID";
-            param.Value = importBatchId;
-            cmd.Parameters.Add(param);
-            var n = cmd.ExecuteNonQuery();
-            stopwatch.Stop();
-            Logging.Information("Created Summary {count} in {time}", n, stopwatch.Elapsed);
+            using (var cmd = connScope.CurrentConnection.CreateCommand())
+            {
+                cmd.CommandText = sql;
+                cmd.CommandTimeout = Convert.ToInt32(TimeSpan.Parse(ConfigurationManager.AppSettings["TransactionTimeout"]).TotalSeconds);
+                var param = cmd.CreateParameter();
+                param.DbType = DbType.Guid;
+                param.ParameterName = "@ImportBatchID";
+                param.Value = importBatchId;
+                cmd.Parameters.Add(param);
+                var n = cmd.ExecuteNonQuery();
+                stopwatch.Stop();
+                Logging.Information("Created Summary {count} in {time}", n, stopwatch.Elapsed);
+            }
         }
     }
 
@@ -124,31 +126,36 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     {
         using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            Logging.Verbose("Adding documents");
             var sql =
                 "Select" + Environment.NewLine +
                 "  *" + Environment.NewLine +
                 "from" + Environment.NewLine +
                 "  vObservationJSON" + Environment.NewLine +
                 "where" + Environment.NewLine +
-                "  (ImportBatchID = @ImportBatchID)";
-            var cmd = connScope.CurrentConnection.CreateCommand();
-            cmd.CommandText = sql;
-            cmd.CommandTimeout = Convert.ToInt32(TimeSpan.Parse(ConfigurationManager.AppSettings["TransactionTimeout"]).TotalSeconds);
-            var param = cmd.CreateParameter();
-            param.DbType = DbType.Guid;
-            param.ParameterName = "@ImportBatchID";
-            param.Value = importBatchId;
-            cmd.Parameters.Add(param);
-            var reader = cmd.ExecuteReader();
-            var n = 0;
-            if (reader.HasRows)
+                "  ([ImportBatch.ID] = @ImportBatchID)";
+            using (var cmd = connScope.CurrentConnection.CreateCommand())
             {
-                while (reader.Read())
+                cmd.CommandText = sql;
+                cmd.CommandTimeout = Convert.ToInt32(TimeSpan.Parse(ConfigurationManager.AppSettings["TransactionTimeout"]).TotalSeconds);
+                var param = cmd.CreateParameter();
+                param.DbType = DbType.Guid;
+                param.ParameterName = "@ImportBatchID";
+                param.Value = importBatchId;
+                cmd.Parameters.Add(param);
+                var reader = cmd.ExecuteReader();
+                var n = 0;
+                if (reader.HasRows)
                 {
-                    n++;
+                    while (reader.Read())
+                    {
+                        n++;
+                    }
                 }
+                Logging.Verbose("Added {Documents} documents in {elapsed}", n, stopwatch.Elapsed);
             }
-            Logging.Verbose("Added {Summaries} summaries", n);
         }
     }
 
@@ -216,10 +223,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopWatch.Start();
                 var importStopWatch = new Stopwatch();
                 importStopWatch.Start();
-                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.41, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.42, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 importStopWatch.Stop();
-                Logging.Information("Imported {count} values in {elapsed}", values.Count, importStopWatch);
+                Logging.Information("Imported {count} values in {elapsed}", values.Count, importStopWatch.Elapsed);
 
                 if (!values.Any())
                 {
@@ -436,7 +443,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             batch.DurationInSecs = (int)durationStopWatch.Elapsed.TotalSeconds;
                             batch.Save();
                             tranScope.Complete();
-                            Logging.Information("Saved {count} observations and summary in {time}", values.Count, saveStopwatch.Elapsed);
+                            Logging.Information("Saved {count} observations, summary and documents in {time}", values.Count, saveStopwatch.Elapsed);
                             Logging.Information("Import duration {duration}", durationStopWatch.Elapsed);
                         }
                         catch (Exception ex)
