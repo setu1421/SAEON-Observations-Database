@@ -275,7 +275,8 @@ var DataWizard;
     function InitMap() {
         var mapOpts = {
             center: new google.maps.LatLng(-34, 25.5),
-            zoom: 5
+            zoom: 5,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
         };
         map = new google.maps.Map(document.getElementById('mapLocations'), mapOpts);
         UpdateMap();
