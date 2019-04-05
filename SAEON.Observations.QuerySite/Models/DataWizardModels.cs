@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Models
 {
@@ -51,6 +52,15 @@ namespace SAEON.Observations.QuerySite.Models
             UserDownloads.Clear();
             UserQueries.Clear();
         }
+    }
+
+    public class StateModel
+    {
+        public bool IsAuthenticated { get; set; }
+        public bool LoadEnabled { get; set; }
+        public bool SaveEnabled { get; set; }
+        public bool SearchEnabled { get; set; }
+        public bool DownloadEnabled { get; set; }
     }
 
     public class LoadQueryModel

@@ -1,4 +1,5 @@
 ﻿using Ext.Net;
+using SAEON.Logs;
 using SAEON.Observations.Data;
 using SubSonic;
 using System;
@@ -49,10 +50,12 @@ public class DataQueryRepository : BaseRepository
         //    q.Or(VObservation.Columns.PhenomenonOfferingID).In(offerings);
 
         GetPagedQuery(ref q, e, paramPrefix);
-        //Log.Verbose("GetPagedFilteredList SQL: {sql}", q.BuildSqlStatement());
+        //Logging.Verbose("GetPagedFilteredList SQL: {sql}", q.BuildSqlStatement());
         VObservationCollection col = q.ExecuteAsCollection<VObservationCollection>();
         return col.ToList<object>();
     }
+
+    /*
 
     //public static void qFilterNSort(ref SqlQuery q, ref StoreRefreshDataEventArgs storeRefreshDataEventArgs, string json)
     public static void qFilterNSort(ref SqlQuery q, ref StoreRefreshDataEventArgs storeRefreshDataEventArgs)
@@ -163,4 +166,5 @@ public class DataQueryRepository : BaseRepository
         else
             q.Paged(currenPage, storeRefreshDataEventArgs.Limit);
     }
+    */
 }

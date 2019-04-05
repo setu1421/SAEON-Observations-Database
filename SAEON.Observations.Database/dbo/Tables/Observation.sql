@@ -30,7 +30,7 @@
     CONSTRAINT [FK_Observation_Sensor] FOREIGN KEY ([SensorID]) REFERENCES [dbo].[Sensor] ([ID]),
     CONSTRAINT [FK_Observation_Status] FOREIGN KEY ([StatusID]) REFERENCES [dbo].[Status] ([ID]),
     CONSTRAINT [FK_Observation_StatusReason] FOREIGN KEY ([StatusReasonID]) REFERENCES [dbo].[StatusReason] ([ID]),
-    CONSTRAINT [UX_Observation] UNIQUE ([SensorID], [ValueDate], [DataValue], [PhenomenonOfferingID], [PhenomenonUOMID]) on [Observations]
+    CONSTRAINT [UX_Observation] UNIQUE ([SensorID], [ValueDate], [DataValue], [PhenomenonOfferingID], [PhenomenonUOMID], [Elevation]) on [Observations]
 );
 GO
 CREATE INDEX [IX_Observation_ImportBatchID] ON [dbo].[Observation]([ImportBatchID])

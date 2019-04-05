@@ -1,7 +1,6 @@
 ﻿using IdentityModel.Client;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Owin;
-using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
@@ -11,8 +10,10 @@ using SAEON.Observations.Core;
 using Syncfusion.Licensing;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Helpers;
 
 [assembly: OwinStartupAttribute(typeof(SAEON.Observations.QuerySite.Startup))]
@@ -33,9 +34,9 @@ namespace SAEON.Observations.QuerySite
             {
                 try
                 {
-                    Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
+                    Logging.Verbose("IdentityServer: {name} RequireHttps: {RequireHTTPS}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.RequireHTTPS);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
-                    app.UseCors(CorsOptions.AllowAll);
+
                     //app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
@@ -58,7 +59,7 @@ namespace SAEON.Observations.QuerySite
                         },
                         SignInAsAuthenticationType = "Cookies",
                         UseTokenLifetime = false,
-                        RequireHttpsMetadata = false,
+                        RequireHttpsMetadata = Properties.Settings.Default.RequireHTTPS && !HttpContext.Current.Request.IsLocal,
 
                         Notifications = new OpenIdConnectAuthenticationNotifications
                         {
@@ -66,10 +67,35 @@ namespace SAEON.Observations.QuerySite
                             {
                                 var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType);
 
-                                var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
-                                var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
+                                // UserInfoClient Obsolete
+                                //var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
+                                //var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
+                                //identity.AddClaims(userInfo.Claims);
 
-                                identity.AddClaims(userInfo.Claims);
+                                var discoClient = new HttpClient();
+                                var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest {
+                                    Address = Properties.Settings.Default.IdentityServerUrl,
+                                    Policy = {RequireHttps = Properties.Settings.Default.RequireHTTPS && !HttpContext.Current.Request.IsLocal }
+                                });
+                                if (disco.IsError)
+                                {
+                                    Logging.Error("Error: {error}", disco.Error);
+                                    throw new HttpException(disco.Error);
+                                }
+
+                                var userInfoClient = new HttpClient();
+                                var userInfoResponse = await userInfoClient.GetUserInfoAsync(new UserInfoRequest
+                                {
+                                    Address = disco.UserInfoEndpoint,
+                                    Token = n.ProtocolMessage.AccessToken
+                                });
+                                if (userInfoResponse.IsError)
+                                {
+                                    Logging.Error("Error: {error}", userInfoResponse.Error);
+                                    throw new HttpException(userInfoResponse.Error);
+
+                                }
+                                identity.AddClaims(userInfoResponse.Claims);
 
                                 // keep the id_token for logout
                                 identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
@@ -86,11 +112,35 @@ namespace SAEON.Observations.QuerySite
                             {
                                 var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType, "given_name", "role");
 
-                                // get userinfo data
-                                var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
+                                // UserInfoClient Obsolete
+                                //var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
+                                //var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
+                                //identity.AddClaims(userInfo.Claims);
 
-                                var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
-                                identity.AddClaims(userInfo.Claims);
+                                var discoClient = new HttpClient();
+                                var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+                                {
+                                    Address = Properties.Settings.Default.IdentityServerUrl,
+                                    Policy = { RequireHttps = Properties.Settings.Default.RequireHTTPS && !HttpContext.Current.Request.IsLocal }
+                                });
+                                if (disco.IsError)
+                                {
+                                    Logging.Error("Error: {error}", disco.Error);
+                                    throw new HttpException(disco.Error);
+                                }
+
+                                var userInfoClient = new HttpClient();
+                                var userInfoResponse = await userInfoClient.GetUserInfoAsync(new UserInfoRequest
+                                {
+                                    Address = disco.UserInfoEndpoint,
+                                    Token = n.ProtocolMessage.AccessToken
+                                });
+                                if (userInfoResponse.IsError)
+                                {
+                                    Logging.Error("Error: {error}", userInfoResponse.Error);
+                                    throw new HttpException(userInfoResponse.Error);
+                                }
+                                identity.AddClaims(userInfoResponse.Claims);
 
                                 // keep the id_token for logout
                                 identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));

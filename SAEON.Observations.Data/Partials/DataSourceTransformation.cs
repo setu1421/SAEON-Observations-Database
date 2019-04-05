@@ -50,7 +50,7 @@ namespace SAEON.Observations.Data
         /// <summary>
         /// 
         /// </summary>
-        private IEnumerable<double> ratingTableValues;
+        //private IEnumerable<double> ratingTableValues;
 
         /// <summary>
         /// 
@@ -59,20 +59,15 @@ namespace SAEON.Observations.Data
         {
             get
             {
+                var ratingTableValues = new List<double>();
 
                 if (!String.IsNullOrEmpty(Definition) && TransformationType.Code == TransformationType.RatingTable)
                 {
                     string json = String.Concat("{", Definition, "}");
 
-                    ratingTableValues = new List<double>();
-
-
                     Dictionary<double, double> dic = JsonConvert.DeserializeObject<Dictionary<double, double>>(json);
 
-                    ratingTableValues = from v in dic.Keys
-                                             orderby dic[v] ascending
-                                             select dic[v];
-
+                    ratingTableValues = dic.OrderBy(i => i.Value).Select(i => i.Value).ToList();
                 }
 
                 return ratingTableValues;
@@ -136,7 +131,7 @@ namespace SAEON.Observations.Data
         /// <summary>
         /// 
         /// </summary>
-        private Dictionary<string, double> qualityValues;
+        //private Dictionary<string, double> qualityValues;
 
         /// <summary>
         /// 
@@ -145,11 +140,11 @@ namespace SAEON.Observations.Data
         {
             get
             {
+                var qualityValues = new Dictionary<string, double>();
                 if (!String.IsNullOrEmpty(Definition) && TransformationType.Code == TransformationType.QualityControlValues)
                 {
                     string json = String.Concat("{", Definition, "}");
 
-                    qualityValues = new Dictionary<string, double>();
 
                     JavaScriptSerializer js = new JavaScriptSerializer();
                     qualityValues = js.Deserialize<Dictionary<string, double>>(json);
@@ -162,7 +157,7 @@ namespace SAEON.Observations.Data
         /// <summary>
         /// 
         /// </summary>
-        private Dictionary<string, string> correctionValues;
+        //private Dictionary<string, string> correctionValues;
 
         /// <summary>
         /// 
@@ -171,12 +166,12 @@ namespace SAEON.Observations.Data
         {
             get
             {
+                var correctionValues = new Dictionary<string, string>();
 
                 if (!String.IsNullOrEmpty(Definition) && TransformationType.Code == TransformationType.CorrectionValues)
                 {
                     string json = String.Concat("{", Definition, "}");
 
-                    correctionValues = new Dictionary<string, string>();
 
                     JavaScriptSerializer js = new JavaScriptSerializer();
                     correctionValues = js.Deserialize<Dictionary<string, string>>(json);
@@ -186,17 +181,17 @@ namespace SAEON.Observations.Data
             }
         }
 
-        private Dictionary<string, double> lookupValues;
+        //private Dictionary<string, double> lookupValues;
 
         public Dictionary<string, double> LookupValues
         {
             get
             {
+                var lookupValues = new Dictionary<string, double>(StringComparer.InvariantCultureIgnoreCase);
                 if (!String.IsNullOrEmpty(Definition) && TransformationType.Code == TransformationType.Lookup)
                 {
                     string json = String.Concat("{", Definition, "}");
 
-                    lookupValues = new Dictionary<string, double>(StringComparer.InvariantCultureIgnoreCase);
 
                     JavaScriptSerializer js = new JavaScriptSerializer();
                     lookupValues = new Dictionary<string, double>(js.Deserialize<Dictionary<string, double>>(json), StringComparer.InvariantCultureIgnoreCase);

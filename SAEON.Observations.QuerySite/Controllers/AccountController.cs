@@ -32,7 +32,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             return Redirect(Properties.Settings.Default.IdentityServerUrl + $"/Account/Register?returnUrl={Properties.Settings.Default.QuerySiteUrl}");
         }
 
-        //[Authorize]
+        [Authorize]
         public ActionResult Claims()
         {
             ViewBag.Message = "Claims";
@@ -43,7 +43,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             return View();
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult> CallApi()
         {
             using (Logging.MethodCall(GetType()))
@@ -51,8 +51,28 @@ namespace SAEON.Observations.QuerySite.Controllers
                 var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
                 if (token == null)
                 {
-                    var tokenClient = new TokenClient(Properties.Settings.Default.IdentityServerUrl + "/connect/token", "SAEON.Observations.QuerySite", "It6fWPU5J708");
-                    var tokenResponse = await tokenClient.RequestClientCredentialsAsync("SAEON.Observations.WebAPI");
+                    //var tokenClient = new TokenClient(Properties.Settings.Default.IdentityServerUrl + "/connect/token", "SAEON.Observations.QuerySite", "It6fWPU5J708");
+                    //var tokenResponse = await tokenClient.RequestClientCredentialsAsync("SAEON.Observations.WebAPI");
+                    var discoClient = new HttpClient();
+                    var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+                    {
+                        Address = Properties.Settings.Default.IdentityServerUrl,
+                        Policy = { RequireHttps = Properties.Settings.Default.RequireHTTPS && !Request.IsLocal }
+                    });
+
+                    if (disco.IsError)
+                    {
+                        Logging.Error("Error: {error}", disco.Error);
+                        throw new HttpException(disco.Error);
+                    }
+                    var tokenClient = new HttpClient();
+                    var tokenResponse = await tokenClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+                    {
+                        Address = disco.TokenEndpoint,
+                        ClientId = "SAEON.Observations.QuerySite",
+                        ClientSecret = "It6fWPU5J708",
+                        Scope = "SAEON.Observations.WebAPI"
+                    });
                     if (tokenResponse.IsError)
                     {
                         Logging.Error("Error: {error}", tokenResponse.Error);

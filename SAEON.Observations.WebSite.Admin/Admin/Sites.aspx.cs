@@ -175,10 +175,12 @@ public partial class Admin_Sites : System.Web.UI.Page
                 }
                 RowSelectionModel masterRow = SitesGrid.SelectionModel.Primary as RowSelectionModel;
                 var masterID = new Guid(masterRow.SelectedRecordID);
-                da.OrganisationSite siteOrganisation = new da.OrganisationSite(Utilities.MakeGuid(OrganisationLinkID.Value));
-                siteOrganisation.SiteID = masterID;
-                siteOrganisation.OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim());
-                siteOrganisation.OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim());
+                da.OrganisationSite siteOrganisation = new da.OrganisationSite(Utilities.MakeGuid(OrganisationLinkID.Value))
+                {
+                    SiteID = masterID,
+                    OrganisationID = new Guid(cbOrganisation.SelectedItem.Value.Trim()),
+                    OrganisationRoleID = new Guid(cbOrganisationRole.SelectedItem.Value.Trim())
+                };
                 if (!dfOrganisationStartDate.IsEmpty && (dfOrganisationStartDate.SelectedDate.Year >= 1900))
                     siteOrganisation.StartDate = dfOrganisationStartDate.SelectedDate;
                 else

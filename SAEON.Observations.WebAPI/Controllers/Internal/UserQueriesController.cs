@@ -28,6 +28,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             return list;
         }
 
+        protected override List<OrderBy<UserQuery>> GetOrderBys()
+        {
+            var result = base.GetOrderBys();
+            result.Add(new OrderBy<UserQuery>(i => i.Name));
+            return result;
+        }
+
         /// <summary>
         /// Check UserId is logged in UserId
         /// </summary>

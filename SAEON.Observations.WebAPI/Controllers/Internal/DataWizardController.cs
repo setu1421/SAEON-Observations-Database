@@ -25,7 +25,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
             foreach (var phenomenonId in input.Phenomena)
             {
-
                 input.Offerings.AddRange(db.PhenomenonOfferings.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
                 input.Units.AddRange(db.PhenomenonUnits.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
             }
@@ -36,9 +35,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var endDate = input.EndDate;
             return db.ImportBatchSummary.Where(i =>
                 (input.Sites.Contains(i.SiteId) || input.Stations.Contains(i.StationId)) &&
-                (input.Offerings.Contains(i.PhenomenonOfferingId) && input.Units.Contains(i.PhenomenonUnitId)) &&
-                (i.StartDate >= startDate && i.EndDate < endDate)
-                );
+                ((!input.Offerings.Any() || input.Offerings.Contains(i.PhenomenonOfferingId)) && (!input.Units.Any() || input.Units.Contains(i.PhenomenonUnitId))) &&
+                (i.StartDate >= startDate && i.EndDate < endDate));
         }
 
         private DataWizardApproximation CalculateApproximation(DataWizardDataInput input)
@@ -80,8 +78,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    Logging.Verbose("Uri: {Uri}", Request.RequestUri);
-                    Logging.Verbose("Input: {input}", input);
                     if (string.IsNullOrWhiteSpace(input))
                     {
                         throw new ArgumentNullException(nameof(input));
@@ -104,8 +100,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    Logging.Verbose("Uri: {Uri}", Request.RequestUri);
-                    Logging.Verbose("Input: {@input}", input);
                     if (input == null)
                     {
                         throw new ArgumentNullException(nameof(input));
@@ -178,6 +172,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.DataMatrix.AddColumn("InstrumentName", "Instrument", MaxtixDataType.String);
             result.DataMatrix.AddColumn("SensorName", "Sensor", MaxtixDataType.String);
             result.DataMatrix.AddColumn("Date", "Date", MaxtixDataType.Date);
+            result.DataMatrix.AddColumn("Elevation", "Elevation", MaxtixDataType.Double);
 
             var q = GetQuery(input);
             var qFeatures = q.Select(i => new { i.PhenomenonOfferingId, i.PhenomenonUnitId, i.PhenomenonCode, i.PhenomenonName, i.OfferingCode, i.OfferingName, i.UnitCode, i.UnitName, i.UnitSymbol }).Distinct();
@@ -199,6 +194,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
             var phenomenonOfferingIds = features.Select(f => f.PhenomenonOfferingId);
             var phenomenonUnitIds = features.Select(f => f.PhenomenonUnitId);
+            //var observations = q.Join(db.Observations.Where(i => (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
             var observations = q.Join(db.Observations.Where(i => (i.StatusId == null) || (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
                     .Where(i => phenomenonOfferingIds.Contains(i.PhenomenonOfferingId))
                     .Where(i => phenomenonUnitIds.Contains(i.PhenomenonUnitId))
@@ -207,20 +203,22 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     .ThenBy(i => i.InstrumentName)
                     .ThenBy(i => i.SensorName)
                     .ThenBy(i => i.ValueDate)
+                    .ThenBy(i => i.Elevation)
                     //.Take(1000)
                     .ToList();
             Logging.Verbose("Observations: {Observations}", observations.Count);
-            Guid siteId = new Guid();
-            Guid stationId = new Guid();
-            Guid instrumentId = new Guid();
-            Guid sensorId = new Guid();
+            var siteId = new Guid();
+            var stationId = new Guid();
+            var instrumentId = new Guid();
+            var sensorId = new Guid();
             var date = DateTime.MinValue;
+            double? elevation = null;
             DataMatixRow row = null;
             // Data Matrix
             foreach (var obs in observations)
             {
                 // DataMatrix
-                if ((row == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId) || (obs.ValueDate != date))
+                if ((row == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId) || (obs.ValueDate != date) || (obs.Elevation != elevation))
                 {
                     row = result.DataMatrix.AddRow();
                     row["SiteName"] = obs.SiteName;
@@ -228,11 +226,13 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     row["InstrumentName"] = obs.InstrumentName;
                     row["SensorName"] = obs.SensorName;
                     row["Date"] = obs.ValueDate;
+                    row["Elevation"] = obs.Elevation;
                     siteId = obs.SiteId;
                     stationId = obs.StationId;
                     instrumentId = obs.InstrumentId;
                     sensorId = obs.SensorId;
                     date = obs.ValueDate;
+                    elevation = obs.Elevation;
                 }
                 var name = $"{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}";
                 //Logging.Verbose("Name: {Name}",name);
@@ -278,8 +278,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    Logging.Verbose("Uri: {Uri}", Request.RequestUri);
-                    Logging.Verbose("Input: {input}", input);
                     if (string.IsNullOrWhiteSpace(input))
                     {
                         throw new ArgumentNullException(nameof(input));
@@ -303,8 +301,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    Logging.Verbose("Uri: {Uri}", Request.RequestUri);
-                    Logging.Verbose("Input: {@input}", input);
                     if (input == null)
                     {
                         throw new ArgumentNullException(nameof(input));
@@ -334,10 +330,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 Name = name,
                 Description = $"Data download on {name}",
                 QueryInput = JsonConvert.SerializeObject(input),
-                QueryURL = Properties.Settings.Default.QuerySiteURL + $"/DataWizard/GetData?json={JsonConvert.SerializeObject(input)}",
+                QueryURL = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/GetData?json={JsonConvert.SerializeObject(input)}",
                 DOI = "http://data.saeon.ac.za/10.11.12.13",
                 MetadataURL = "http://data.saeon.ac.za",
-                DownloadURL = Properties.Settings.Default.QuerySiteURL + $"/DataWizard/ViewDownload",
+                DownloadURL = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/ViewDownload",
                 Citation = "SAEON....",
                 AddedBy = User.GetUserId(),
                 UpdatedBy = User.GetUserId()
@@ -351,8 +347,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 throw new InvalidOperationException($"Unable to find UserDownload {name}");
             }
             var folder = HostingEnvironment.MapPath($"~/App_Data/Downloads/{date.ToString("yyyyMM")}");
-            var dirInfo = Directory.CreateDirectory(Path.Combine(folder,result.Id.ToString()));
-            result.DownloadURL = Properties.Settings.Default.QuerySiteURL + $"/DataWizard/Download/{result.Id}";
+            var dirInfo = Directory.CreateDirectory(Path.Combine(folder, result.Id.ToString()));
+            result.DownloadURL = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Download/{result.Id}";
             db.SaveChanges();
             // Create files
             File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input));
@@ -361,7 +357,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             // Excel
             // NetCDF
             ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
-            dirInfo.Delete(true);
+            //dirInfo.Delete(true);
             return result;
         }
 

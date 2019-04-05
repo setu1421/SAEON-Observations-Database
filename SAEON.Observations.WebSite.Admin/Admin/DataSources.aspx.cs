@@ -5,12 +5,16 @@ using SAEON.Observations.Data;
 using SubSonic;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 public partial class Admin_DataSources : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
+        btnValidateTransformation.Hidden = !showValidate;
         if (!X.IsAjaxRequest)
         {
             DataSchemaStore.DataSource = new DataSchemaCollection().OrderByAsc(DataSchema.Columns.Name).Load();
@@ -529,6 +533,35 @@ public partial class Admin_DataSources : System.Web.UI.Page
 
     protected void OnDefinitionValidation(object sender, RemoteValidationEventArgs e)
     {
+        bool TryEvaluate(Expression expr, double aValue, out string message)
+        {
+            var result = false;
+            message = string.Empty;
+            expr.Parameters["value"] = aValue;
+            if (expr.HasErrors())
+            {
+                Logging.Error("Error in expression with value {Value} -> {Error}", aValue, expr.Error);
+                message = $"Error in expression with value {aValue} -> {expr.Error}";
+            }
+            else
+            {
+                try
+                {
+                    var valueStr = expr.Evaluate();
+                    Logging.Verbose("ValueStr: {value}", valueStr);
+                    var value = double.Parse(valueStr.ToString());
+                    Logging.Verbose("Value: {value}", value);
+                    result = true;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Error evaluating expression with value {Value} -> {Exception}", aValue, ex.Message);
+                    message = $"Error evaluating expression with value {aValue} - {ex.Message}";
+                }
+            }
+            return result;
+        }
+
         using (Logging.MethodCall(GetType()))
         {
             try
@@ -593,7 +626,6 @@ public partial class Admin_DataSources : System.Web.UI.Page
                         case TransformationType.Expression:
                             e.Success = false;
                             Expression expr = new Expression(e.Value.ToString(), EvaluateOptions.IgnoreCase);
-                            expr.Parameters["value"] = 1.0;
                             if (!tfParamA.IsEmpty)
                             {
                                 expr.Parameters["a"] = tfParamA.Number;
@@ -694,30 +726,12 @@ public partial class Admin_DataSources : System.Web.UI.Page
                             {
                                 expr.Parameters["y"] = tfParamY.Number;
                             }
-                            if (expr.HasErrors())
-                            {
-                                e.ErrorMessage = $"Error in expression - {expr.Error}";
-                                Logging.Error("Error in expression {Error}", expr.Error);
-                                break;
-                            }
-                            try
-                            {
-                                var valueStr = expr.Evaluate();
-                                Logging.Verbose("ValueStr: {value}", valueStr);
-                                var value = double.Parse(valueStr.ToString());
-                                Logging.Verbose("Value: {value}", value);
+                            var message = string.Empty; 
+                            if (TryEvaluate(expr, double.MaxValue, out message) && TryEvaluate(expr, double.MinValue, out message) && TryEvaluate(expr, 0.0, out message))
                                 e.Success = true;
-                            }
-                            catch (EvaluationException ex)
+                            else
                             {
-                                e.ErrorMessage = $"Error evaluating expression - {ex.Message}";
-                                Logging.Exception(ex, "Error evaluating expression {exception}", ex.Message);
-                            }
-                            catch (Exception ex)
-                            {
-                                e.ErrorMessage = $"Exception evaluating expression - {ex.Message}";
-                                Logging.Exception(ex, "Exception evaluating expression {exception}", ex.Message);
-
+                                e.ErrorMessage = message;
                             }
                             break;
                     }

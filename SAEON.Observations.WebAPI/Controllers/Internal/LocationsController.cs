@@ -41,7 +41,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         Key = $"SIT~{location.SiteID}~{organisation.Key}",
                         ParentKey = organisation.Key,
                         Text = location.SiteName,
-                        Name = $"{organisation.Name} - {location.SiteName}",
+                        Name = $"{organisation.Text} | {location.SiteName}",
                         ToolTip = new LinkAttribute("Site"),
                         HasChildren = true
                     };
@@ -56,7 +56,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         Key = $"STA~{location.StationID}~{site.Key}",
                         ParentKey = site.Key,
                         Text = location.StationName,
-                        Name = $"{organisation.Name} - {site.Name} - {location.StationName}",
+                        Name = $"{organisation.Text} | {site.Text} | {location.StationName}",
                         ToolTip = new LinkAttribute("Station"),
                         Latitude = location.Latitude,
                         Longitude = location.Longitude,

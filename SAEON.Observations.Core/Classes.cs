@@ -211,7 +211,7 @@ namespace SAEON.Observations.Core
                 {
                     var value = dmRow[dmCol.Name];
                     if (value != null)
-                    { 
+                    {
                         dataRow[dmCol.Name] = value;
                     }
                 }
@@ -276,12 +276,12 @@ namespace SAEON.Observations.Core
         public List<Guid> Organisations { get; } = new List<Guid>();
         public List<Guid> Sites { get; } = new List<Guid>();
         public List<Guid> Stations { get; } = new List<Guid>();
-        public List<Guid> Instruments { get; } = new List<Guid>();
+        //public List<Guid> Instruments { get; } = new List<Guid>();
         public List<Guid> Phenomena { get; } = new List<Guid>();
         public List<Guid> Offerings { get; } = new List<Guid>();
         public List<Guid> Units { get; } = new List<Guid>();
-        public DateTime StartDate { get; set; } = DateTime.Now;
-        public DateTime EndDate { get; set; } = DateTime.Now.AddYears(-100);
+        public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
+        public DateTime EndDate { get; set; } = DateTime.Now.Date;
     }
 
     public class DataWizardDataOutput

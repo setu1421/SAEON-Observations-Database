@@ -1,0 +1,29 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[ImportBatch] (Table)
+       [dbo].[Observation] (Table)
+       [dbo].[vDataLog] (View)
+     Create
+       [dbo].[ImportBatch].[IX_ImportBatch_DurationInSecs] (Index)
+       [dbo].[vObservationJSON] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+     Create
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+     Refresh
+       [dbo].[vImportBatch] (View)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vSensorThingsDatastreams] (View)

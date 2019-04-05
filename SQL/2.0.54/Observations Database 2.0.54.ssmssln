@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 14.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C6BE1ED3-FB08-488A-93FD-EE4FFFBA41E1}"
+	ProjectSection(SolutionItems) = preProject
+		01 Create vOldDepthOfferrings.sql = 01 Create vOldDepthOfferrings.sql
+		02 Create vNewDepthOfferings.sql = 02 Create vNewDepthOfferings.sql
+		03 Create Offerings.sql = 03 Create Offerings.sql
+		04 Create vOldDepthPhenomenonOfferings.sql = 04 Create vOldDepthPhenomenonOfferings.sql
+		05 Create PhenomenonOfferings.sql = 05 Create PhenomenonOfferings.sql
+		06 Create vNewDepthPhenomenonOfferings.sql = 06 Create vNewDepthPhenomenonOfferings.sql
+		07 Set DataSourceTransformation.sql = 07 Set DataSourceTransformation.sql
+		08 Set ImportBatchSummary.sql = 08 Set ImportBatchSummary.sql
+		09 Set SchemaColumn.sql = 09 Set SchemaColumn.sql
+		10 Set DataLog.sql = 10 Set DataLog.sql
+		11 Delete Observation Indexes.sql = 11 Delete Observation Indexes.sql
+		12 Set Observations Depth.sql = 12 Set Observations Depth.sql
+		13 Set Observations PhenomenonOffering.sql = 13 Set Observations PhenomenonOffering.sql
+		14 Create Observation Indexes.sql = 14 Create Observation Indexes.sql
+		15 Delete Old PhenomenonOfferings.sql = 15 Delete Old PhenomenonOfferings.sql
+		16 Delete Old Offerings.sql = 16 Delete Old Offerings.sql
+		17 Delete Views.sql = 17 Delete Views.sql
+		Observations 2.0.54.publish.sql = Observations 2.0.54.publish.sql
+		Observations 2.0.54.publish.txt = Observations 2.0.54.publish.txt
+		ObservationsFynbos 2.0.54.publish.sql = ObservationsFynbos 2.0.54.publish.sql
+		ObservationsFynbos 2.0.54.publish.txt = ObservationsFynbos 2.0.54.publish.txt
+		ObservationsSACTN 2.0.54.publish.sql = ObservationsSACTN 2.0.54.publish.sql
+		ObservationsSACTN 2.0.54.publish.txt = ObservationsSACTN 2.0.54.publish.txt
+		ObservationsTest 2.0.54.publish.sql = ObservationsTest 2.0.54.publish.sql
+		ObservationsTest 2.0.54.publish.txt = ObservationsTest 2.0.54.publish.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE3B095C-B2A3-4257-B224-54CBCA8FA056}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

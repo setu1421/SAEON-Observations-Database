@@ -5,6 +5,7 @@ using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNet.OData.Routing.Conventions;
 using Microsoft.OData.Edm;
 using Newtonsoft.Json;
+using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
@@ -14,6 +15,7 @@ using System.Linq.Expressions;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using System.Web.Http.Cors;
 using System.Web.Http.Routing;
 
 namespace SAEON.Observations.WebAPI
@@ -143,6 +145,15 @@ namespace SAEON.Observations.WebAPI
                 config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
                 config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+
+                var querySiteUrl = Properties.Settings.Default.QuerySiteUrl.TrimEnd("//").Replace("https:","http:");
+                var corsUrls = querySiteUrl + "," + querySiteUrl.Replace("http:", "https:");
+                Logging.Information("CORS: {corsURLS}", corsUrls);
+                var corsAttr = new EnableCorsAttribute(corsUrls, "*", "*");
+                //{
+                //    SupportsCredentials = true
+                //};
+                config.EnableCors(corsAttr);
 
                 // Web API routes
                 //config.MapHttpAttributeRoutes();

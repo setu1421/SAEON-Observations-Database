@@ -47,6 +47,7 @@ function NewTransform() {
         delete tfDefinition.rvConfig.lastValue;
         tfDefinition.markAsValid();
 
+        DirectCall.SetFields();
         TransformationDetailWindow.show();
     }
     else {

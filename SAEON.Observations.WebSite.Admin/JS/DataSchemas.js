@@ -91,5 +91,25 @@ function OnDataSourceCommand(e, record) {
     }
 }
 
+function GetInvalidFields(formPanel) {
+    var s = 'Invalid: ';
+    var form = formPanel.getForm();
+    var fields = form.items;
+    var i = 0;
+    for (i = 0; i < fields.length; i += 1) {
+        var field = fields.items[i];
+        var input = form.findField(field.id);
+        if (input) {
+            input.validate();
+            if (!input.isValid()) {
+                s = s + " " + input.id;
+            }
+        }
+    }
+    if (s === 'Invalid: ') {
+        s = 'Valid';
+    }
+    alert(s);
+}
 
 

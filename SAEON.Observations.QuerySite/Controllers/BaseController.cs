@@ -11,7 +11,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.SessionState;
 using Thinktecture.IdentityModel.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
@@ -24,32 +23,54 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         private async Task<HttpClient> GetWebAPIClientAsync()
         {
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
-            var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
-            if (token == null)
+            using (Logging.MethodCall(GetType()))
             {
-                var tokenClient = new HttpClient();
-                var tokenResponse = await tokenClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+                try
                 {
-                    Address = Properties.Settings.Default.IdentityServerUrl + "/connect/token",
-                    ClientId = "It6fWPU5J708",
-                    ClientSecret = "secret",
-                    Scope = "SAEON.Observations.WebAPI"
-                });
-                if (tokenResponse.IsError)
-                {
-                    Logging.Error("Error: {error}", tokenResponse.Error);
-                    throw new HttpException(tokenResponse.Error);
+                    var client = new HttpClient();
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
+                    var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
+                    if (token == null)
+                    {
+                        var discoClient = new HttpClient();
+                        var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+                        {
+                            Address = Properties.Settings.Default.IdentityServerUrl,
+                            Policy = { RequireHttps = Properties.Settings.Default.RequireHTTPS && !Request.IsLocal }
+                        });
+                        if (disco.IsError)
+                        {
+                            Logging.Error("Error: {error}", disco.Error);
+                            throw new HttpException(disco.Error);
+                        }
+                        var tokenClient = new HttpClient();
+                        var tokenResponse = await tokenClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+                        {
+                            Address = disco.TokenEndpoint,
+                            ClientId = "SAEON.Observations.QuerySite",
+                            ClientSecret = "It6fWPU5J708",
+                            Scope = "SAEON.Observations.WebAPI"
+                        });
+                        if (tokenResponse.IsError)
+                        {
+                            Logging.Error("Error: {error}", tokenResponse.Error);
+                            throw new HttpException(tokenResponse.Error);
+                        }
+                        token = tokenResponse.AccessToken;
+                    }
+                    Logging.Verbose("Token: {token}", token);
+                    client.SetBearerToken(token);
+                    client.Timeout = TimeSpan.FromMinutes(TimeOut);
+                    return client;
                 }
-                token = tokenResponse.AccessToken;
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
             }
-            Logging.Verbose("Token: {token}", token);
-            client.SetBearerToken(token);
-            client.Timeout = TimeSpan.FromMinutes(TimeOut);
-            return client;
         }
 
         protected async Task<List<TEntity>> GetList<TEntity>(string resource)// where TEntity : BaseEntity
@@ -182,28 +203,26 @@ namespace SAEON.Observations.QuerySite.Controllers
     {
         private readonly string sessionModelKey = typeof(TModel).Name + "Model";
 
-        private HttpSessionState CurrentSession { get { return System.Web.HttpContext.Current.Session; } }
-
         protected TModel SessionModel { get { return GetSessionModel(); } set { SetSessionModel(value); } }
 
         private TModel GetSessionModel()
         {
-            if (CurrentSession[sessionModelKey] == null)
+            if (Session[sessionModelKey] == null)
             {
-                CurrentSession[sessionModelKey] = new TModel();
+                Session[sessionModelKey] = new TModel();
             }
-            return (TModel)CurrentSession[sessionModelKey];
+            return (TModel)Session[sessionModelKey];
 
         }
 
         private void SetSessionModel(TModel value)
         {
-            CurrentSession[sessionModelKey] = value;
+            Session[sessionModelKey] = value;
         }
 
         protected void RemoveSessionModel()
         {
-            CurrentSession.Remove(sessionModelKey);
+            Session.Remove(sessionModelKey);
         }
 
         protected virtual TModel LoadModel(TModel model)

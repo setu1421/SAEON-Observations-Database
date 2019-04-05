@@ -442,10 +442,9 @@
                     </ext:Panel>
                     <ext:Panel ID="Panel16" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
-                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
+                            <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server"
                                 FieldLabel="Description" AnchorHorizontal="96%" ClientIDMode="Static"
                                 AllowBlank="false" BlankText="Description is a required" MsgTarget="Side">
-                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>
@@ -563,6 +562,11 @@
                     </ext:Container>
                 </Items>
                 <Buttons>
+                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                        <Listeners>
+                            <Click Handler="GetInvalidFields(#{DetailsFormPanel});" />
+                        </Listeners>
+                    </ext:Button>
                     <ext:Button ID="btnSave" runat="server" Text="Save" FormBind="true">
                         <DirectEvents>
                             <Click OnEvent="Save" Method="POST">
@@ -575,7 +579,8 @@
                     <ext:StatusBar ID="StatusBar1" runat="server" Height="25" />
                 </BottomBar>
                 <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                    <%--<ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />--%>
+                    <ClientValidation Handler="#{btnSave}.setDisabled(!valid);" />
                 </Listeners>
             </ext:FormPanel>
         </Content>
@@ -605,20 +610,20 @@
                     <ext:Container ID="Container18" runat="server" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbSchemaColumnType" runat="server" StoreID="SchemaColumnTypeStore" IsRemoteValidation="true" MsgTarget="Side"
-                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
+                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" 
                                 ValueField="Id" DisplayField="Name" DataIndex="SchemaColumnTypeID" FieldLabel="Column type" EmptyText="Select a column type"
                                 AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true">
-                                <RemoteValidation OnValidation="ValidateColumnField" />
+                                <RemoteValidation OnValidation="ValidateColumnField" ValidationEvent="select" EventOwner="Field" />
                                 <DirectEvents>
                                     <Select OnEvent="cbSchemaColumnTypeSelect" />
                                 </DirectEvents>
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
-                    <ext:Container ID="ctWidth" runat="server" Layout="Form" ClientIDMode="Static">
+                    <ext:Container ID="ctWidth" runat="server" Layout="Form">
                         <Items>
                             <ext:NumberField ID="nfWidth" DataIndex="Width" MaxLength="5" runat="server" AllowBlank="false" EmptyText="Enter a width" MsgTarget="Side"
-                                FieldLabel="Width" AnchorHorizontal="96%" AllowDecimals="false" MinValue="1">
+                                FieldLabel="Width" AnchorHorizontal="96%" AllowDecimals="false" MinValue="1" ClientIDMode="Static">
                             </ext:NumberField>
                         </Items>
                     </ext:Container>
@@ -631,7 +636,7 @@
                             <ext:ComboBox ID="cbFormat" runat="server" IsRemoteValidation="true" ClientIDMode="Static" MsgTarget="Side"
                                 TriggerAction="All" Editable="true" TypeAhead="true" ForceSelection="false" AllowBlank="false" FieldLabel="Format"
                                 DataIndex="Format" EmptyText="Enter a format" AnchorHorizontal="96%">
-                                <RemoteValidation OnValidation="ValidateColumnField" />
+                                <RemoteValidation OnValidation="ValidateColumnField"  ValidationEvent="select" EventOwner="Field"/>
                                 <Items>
                                     <ext:ListItem Text="d/M/yyyy (21 Sep 2017 13:14:15 -> 21/9/2017)" Value="d/M/yyyy" />
                                     <ext:ListItem Text="dd/MM/yy HH:mm:ss (21 Sep 2017 13:14:15 -> 21/09/17 13:14:15)" Value="dd/MM/yy HH:mm:ss" />
@@ -671,32 +676,34 @@
                     </ext:Container>
                     <ext:Container ID="Container23" runat="server" Layout="Form">
                         <Items>
-                            <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore" MsgTarget="Side" DisplayField="OfferingName"
-                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
+                            <ext:ComboBox ID="cbOffering" runat="server" StoreID="OfferingStore" MsgTarget="Side" DisplayField="OfferingName" 
+                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" 
                                 ValueField="Id" FieldLabel="Offering" DataIndex="PhenomenonOfferingID" EmptyText="Select an offering" ValueNotFoundText="Select an offering"
-                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true">
+                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true" IsRemoteValidation="true" >
+                                <RemoteValidation OnValidation="ValidateColumnField" ValidationEvent="select" EventOwner="Field" />
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container24" runat="server" Layout="Form">
                         <Items>
                             <ext:ComboBox ID="cbUnitOfMeasure" runat="server" StoreID="UnitOfMeasureStore" MsgTarget="Side" DisplayField="UnitOfMeasureUnit"
-                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" Mode="Local"
+                                Editable="true" TypeAhead="true" ForceSelection="true" AllowBlank="false" SelectOnFocus="true" TriggerAction="All" 
                                 ValueField="Id" FieldLabel="Unit of measure" DataIndex="PhenomenonUOMID" EmptyText="Select a unit of measure" ValueNotFoundText="Select a unit of measure"
-                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true">
+                                AnchorHorizontal="96%" ClientIDMode="Static" FireSelectOnLoad="true" IsRemoteValidation="true" >
+                                <RemoteValidation OnValidation="ValidateColumnField"  ValidationEvent="select" EventOwner="Field"/>
                             </ext:ComboBox>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container25" runat="server" Layout="Form">
                         <Items>
-                            <ext:TextField ID="tfEmptyValue" DataIndex="EmptyValue" MaxLength="50" runat="server" FieldLabel="Empty Value" AnchorHorizontal="96%">
+                            <ext:TextField ID="tfEmptyValue" DataIndex="EmptyValue" MaxLength="50" runat="server" FieldLabel="Empty Value" AnchorHorizontal="96%" ClientIDMode="Static">
                             </ext:TextField>
                         </Items>
                     </ext:Container>
                     <ext:Container ID="Container26" runat="server" Layout="Form">
                         <Items>
                             <ext:TimeField ID="ttFixedTime" runat="server" DataIndex="FixedTime" FieldLabel="Fixed Time" MsgTarget="Side"
-                                EmptyText="Please select" AnchorHorizontal="96%" AllowBlank="false"
+                                EmptyText="Please select" AnchorHorizontal="96%" AllowBlank="false" 
                                 BlankText="Fixed Time is required" ClientIDMode="Static" Format="H:mm" Increment="60">
                                 <Triggers>
                                     <ext:FieldTrigger Icon="Clear" />
@@ -709,11 +716,11 @@
                     </ext:Container>
                 </Items>
                 <Buttons>
-                    <%--                    <ext:Button ID="btnValidate" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
+                    <ext:Button ID="btnValidateSchemaColumn" runat="server" Text="Validate" Icon="Tick" ClientIDMode="Static">
                         <Listeners>
-                            <Click Handler="alert(#{SchemaColumnFormPanel}.validate())" />
+                            <Click Handler="GetInvalidFields(#{SchemaColumnFormPanel});" />
                         </Listeners>
-                    </ext:Button>--%>
+                    </ext:Button>
                     <ext:Button ID="btnSchemaColumnSave" runat="server" Text="Save" FormBind="true" Icon="Accept" ClientIDMode="Static">
                         <DirectEvents>
                             <Click OnEvent="SchemaColumnSave">
@@ -734,7 +741,8 @@
                     </ext:StatusBar>
                 </BottomBar>
                 <Listeners>
-                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />
+                    <%--                    <ClientValidation Handler="this.getBottomToolbar().setStatus({text : valid ? 'Form is valid' : 'Form is invalid', iconCls: valid ? 'icon-accept1' : 'icon-exclamation'});" />--%>
+                    <ClientValidation Handler="#{btnSchemaColumnSave}.setDisabled(!valid);" />
                 </Listeners>
             </ext:FormPanel>
         </Content>

@@ -11,6 +11,7 @@
     [StatusID] UNIQUEIDENTIFIER NULL,
     [StatusReasonID] UNIQUEIDENTIFIER NULL,
     [Issues] VARCHAR(1000) NULL,
+    [DurationInSecs] INT Null,
     [AddedAt] DATETIME NULL CONSTRAINT [DF_ImportBatch_AddedAt] DEFAULT (getdate()), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_ImportBatch_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
@@ -34,6 +35,8 @@ GO
 CREATE INDEX [IX_ImportBatch_StatusID] ON [dbo].[ImportBatch] ([StatusID])
 GO
 CREATE INDEX [IX_ImportBatch_StatusReasonID] ON [dbo].[ImportBatch] ([StatusReasonID])
+GO
+CREATE INDEX [IX_ImportBatch_DurationInSecs] ON [dbo].[ImportBatch] ([DurationInSecs])
 GO
 CREATE TRIGGER [dbo].[TR_ImportBatch_Insert] ON [dbo].[ImportBatch]
 FOR INSERT

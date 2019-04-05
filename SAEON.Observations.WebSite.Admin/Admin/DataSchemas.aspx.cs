@@ -4,17 +4,19 @@ using SAEON.Observations.Data;
 using SubSonic;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Transactions;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class Admin_DataSchemas : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        var showValidate = ConfigurationManager.AppSettings["ShowValidateButton"] == "true" && Request.IsLocal;
+        btnValidate.Hidden = !showValidate;
+        btnValidateSchemaColumn.Hidden = !showValidate;
         if (!X.IsAjaxRequest)
         {
             DataSourceTypeStore.DataSource = new DataSourceTypeCollection().OrderByAsc(DataSourceType.Columns.Code).Load();
@@ -57,9 +59,13 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
             }
 
             if (tfID.IsEmpty)
+            {
                 col = new DataSchemaCollection().Where(checkColumn, e.Value.ToString().Trim()).Load();
+            }
             else
+            {
                 col = new DataSchemaCollection().Where(checkColumn, e.Value.ToString().Trim()).Where(DataSchema.Columns.Id, SubSonic.Comparison.NotEquals, tfID.Text.Trim()).Load();
+            }
 
             if (col.Count > 0)
             {
@@ -93,22 +99,35 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 DataSchema schema = new DataSchema();
 
                 if (String.IsNullOrEmpty(tfID.Text))
+                {
                     schema.Id = Guid.NewGuid();
+                }
                 else
+                {
                     schema = new DataSchema(tfID.Text.Trim());
+                }
+
                 schema.Code = Utilities.NullIfEmpty(tfCode.Text);
                 schema.Name = Utilities.NullIfEmpty(tfName.Text);
                 schema.Description = Utilities.NullIfEmpty(tfDescription.Text);
 
                 if (!String.IsNullOrEmpty(nfIgnoreFirst.Text))
+                {
                     schema.IgnoreFirst = Int32.Parse(nfIgnoreFirst.Text);
+                }
                 else
+                {
                     schema.IgnoreFirst = 0;
+                }
 
                 if (!String.IsNullOrEmpty(nfIgnoreLast.Text))
+                {
                     schema.IgnoreLast = Int32.Parse(nfIgnoreLast.Text);
+                }
                 else
+                {
                     schema.IgnoreLast = 0;
+                }
 
                 schema.Condition = Utilities.NullIfEmpty(tfCondition.Text);
 
@@ -165,7 +184,9 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     {
         DataSourceType dsType = new DataSourceType(cbDataSourceType.Value);
         if (dsType.Code == "CSV")
+        {
             cbDelimiter.AllowBlank = false;
+        }
         else
         {
             cbDelimiter.AllowBlank = true;
@@ -181,16 +202,24 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         List<string> dataSources = new DataSourceCollection().Where(DataSource.Columns.DataSchemaID, aID).OrderByAsc(DataSource.Columns.Name).Load().Select(ds => ds.Name).ToList();
         List<string> sensors = new SensorCollection().Where(Sensor.Columns.DataSchemaID, aID).OrderByAsc(Sensor.Columns.Name).Load().Select(s => s.Name).ToList();
         if (dataSources.Any() && sensors.Any())
+        {
             MessageBoxes.Error("Error", $"Cannot delete data schema as it is used in data source(s) {string.Join(", ", dataSources)} and sensor(s) {string.Join(", ", sensors)}");
+        }
         else if (dataSources.Any())
+        {
             MessageBoxes.Error("Error", $"Cannot delete data schema as it is used in data source(s) {string.Join(", ", dataSources)}");
+        }
         else if (sensors.Any())
+        {
             MessageBoxes.Error("Error", $"Cannot delete data schema as it is used in sensor(s) {string.Join(", ", sensors)}");
+        }
         else
+        {
             MessageBoxes.Confirm(
                 "Confirm Delete",
                 String.Format("DirectCall.DeleteSchema(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
                 "Are you sure you want to delete this schema?");
+        }
     }
 
     [DirectMethod]
@@ -206,7 +235,10 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     {
                         SchemaColumnCollection cols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, aID).Load();
                         foreach (var col in cols)
+                        {
                             SchemaColumn.Delete(col.Id);
+                        }
+
                         DataSchema.Delete(aID);
                     }
                     ts.Complete();
@@ -254,33 +286,72 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
     protected void ValidateColumnField(object sender, RemoteValidationEventArgs e)
     {
-        e.Success = true;
-        if (e.ID == "tfColumnName")
+        using (Logging.MethodCall(GetType()))
         {
-            RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
-            var masterID = new Guid(masterRow.SelectedRecordID);
-            SchemaColumnCollection col = new SchemaColumnCollection()
-                .Where(SchemaColumn.Columns.DataSchemaID, masterID)
-                .Where(SchemaColumn.Columns.Name, e.Value.ToString().Trim())
-                .Load();
-            if (col.Any())
+            e.Success = true;
+            Logging.Verbose("Column: {ID}", e.ID);
+            if (e.ID == "tfColumnName")
             {
-                e.Success = false;
-                e.ErrorMessage = "The specified Schema Column Name already exists";
+                RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                SchemaColumnCollection col = new SchemaColumnCollection()
+                    .Where(SchemaColumn.Columns.DataSchemaID, masterID)
+                    .Where(SchemaColumn.Columns.Name, e.Value.ToString().Trim())
+                    .Load();
+                if (col.Any())
+                {
+                    e.Success = false;
+                    e.ErrorMessage = "The specified Schema Column Name already exists";
+                }
             }
-        }
-        else if (e.ID == "tfFormat")
-        {
-            try
+            else if (e.ID == "cbSchemaColumnType")
             {
-                DateTime dt = DateTime.Now;
-                string format = e.Value.ToString().Trim();
-                DateTime.ParseExact(dt.ToString(format), format, null);
+                var columnType = new SchemaColumnType(cbSchemaColumnType.SelectedItem.Value);
+                if ((columnType.Name != "Ignore") && (columnType.Name != "Comment") && (columnType.Name != "Offering"))
+                {
+                    RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+                    var masterID = new Guid(masterRow.SelectedRecordID);
+                    SchemaColumnCollection col = new SchemaColumnCollection()
+                        .Where(SchemaColumn.Columns.DataSchemaID, masterID)
+                        .Where(SchemaColumn.Columns.SchemaColumnTypeID, cbSchemaColumnType.SelectedItem.Value)
+                        .Load();
+                    if (col.Any())
+                    {
+                        e.Success = false;
+                        e.ErrorMessage = $"Schema already has a {columnType.Name} column";
+                    }
+                }
             }
-            catch
+            else if (e.ID == "tfFormat")
             {
-                e.Success = false;
-                e.ErrorMessage = "The format specified is invalid.";
+                try
+                {
+                    DateTime dt = DateTime.Now;
+                    string format = e.Value.ToString().Trim();
+                    DateTime.ParseExact(dt.ToString(format), format, null);
+                }
+                catch
+                {
+                    e.Success = false;
+                    e.ErrorMessage = "The format specified is invalid.";
+                }
+            }
+            else if ((e.ID == "cbOffering") || (e.ID == "cbUnitOfMeasure"))
+            {
+                RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
+                var masterID = new Guid(masterRow.SelectedRecordID);
+                var q = new Select().From(SchemaColumn.Schema)
+                    .Where(SchemaColumn.Columns.DataSchemaID).IsEqualTo(masterID)
+                    .And(SchemaColumn.Columns.SchemaColumnTypeID).IsEqualTo(cbSchemaColumnType.SelectedItem.Value)
+                    .AndExpression(SchemaColumn.Columns.PhenomenonOfferingID).IsNull().Or(SchemaColumn.Columns.PhenomenonOfferingID).IsEqualTo(cbOffering.SelectedItem.Value).CloseExpression()
+                    .AndExpression(SchemaColumn.Columns.PhenomenonUOMID).IsNull().Or(SchemaColumn.Columns.PhenomenonUOMID).IsEqualTo(cbUnitOfMeasure.SelectedItem.Value).CloseExpression();
+                var col = q.ExecuteAsCollection<SchemaColumnCollection>();
+                //Logging.Verbose("Count: {count} Any: {any} SQL: {sql}", col.Count, col.Any(), q.BuildSqlStatement());
+                if (col.Any())
+                {
+                    e.Success = false;
+                    e.ErrorMessage = $"Schema already has such an offering";
+                }
             }
         }
     }
@@ -300,17 +371,28 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 SqlQuery qry = new Select(Aggregate.Max(SchemaColumn.Columns.Number))
                     .From(SchemaColumn.Schema)
                     .Where(SchemaColumn.Columns.DataSchemaID).IsEqualTo(masterID);
-                if (Utilities.MakeGuid(SchemaColumnID.Value) == Guid.Empty) schemaColumn.Number = qry.ExecuteScalar<int>() + 1;
+                if (Utilities.MakeGuid(SchemaColumnID.Value) == Guid.Empty)
+                {
+                    schemaColumn.Number = qry.ExecuteScalar<int>() + 1;
+                }
+
                 schemaColumn.Name = Utilities.NullIfEmpty(tfColumnName.Text);
                 schemaColumn.SchemaColumnTypeID = new Guid(cbSchemaColumnType.SelectedItem.Value.Trim());
                 DataSchema schema = new DataSchema(masterID);
                 DataSourceType dataSourceType = new DataSourceType(schema.DataSourceTypeID);
                 if (dataSourceType.Code == "CSV")
+                {
                     schemaColumn.Width = null;
+                }
                 else if (string.IsNullOrEmpty(nfWidth.Text.Trim()))
+                {
                     schemaColumn.Width = null;
+                }
                 else
+                {
                     schemaColumn.Width = int.Parse(nfWidth.Text.Trim());
+                }
+
                 schemaColumn.Format = null;
                 schemaColumn.PhenomenonID = null;
                 schemaColumn.PhenomenonOfferingID = null;
@@ -335,7 +417,10 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                         schemaColumn.PhenomenonUOMID = Utilities.MakeGuid(cbUnitOfMeasure.Value);
                         schemaColumn.EmptyValue = Utilities.NullIfEmpty(tfEmptyValue.Text);
                         if (!string.IsNullOrEmpty(ttFixedTime.Text.Trim()))
+                        {
                             schemaColumn.FixedTime = ttFixedTime.SelectedTime.ToString();
+                        }
+
                         break;
                 }
                 schemaColumn.UserId = AuthHelper.GetLoggedInUserId;
@@ -517,20 +602,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     public void cbSchemaColumnTypeSelect(object sender, DirectEventArgs e)
 #pragma warning restore IDE1006 // Naming Styles
     {
-        RowSelectionModel masterRow = DataSchemasGrid.SelectionModel.Primary as RowSelectionModel;
-        var masterID = new Guid(masterRow.SelectedRecordID);
-        SchemaColumnCollection col = new SchemaColumnCollection()
-            .Where(SchemaColumn.Columns.DataSchemaID, masterID)
-            .Where(SchemaColumn.Columns.SchemaColumnTypeID, cbSchemaColumnType.SelectedItem.Value)
-            .Load();
-        if (col.Any())
-        {
-            var colType = new SchemaColumnType(cbSchemaColumnType.SelectedItem.Value);
-            MessageBoxes.Error("Error", $"Schema already has a {colType.Name} column");
-            return;
-        }
         SetFields();
-        cbSchemaColumnType.MarkAsValid();
     }
 
     [DirectMethod]
@@ -549,6 +621,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     col1.Save();
                 }
                 else
+                {
                     using (var ts = new TransactionScope())
                     {
                         using (new SharedDbConnectionScope())
@@ -566,6 +639,8 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                         }
                         ts.Complete();
                     }
+                }
+
                 Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
                 SchemaColumnsGrid.DataBind();
             }
@@ -593,6 +668,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     col1.Save();
                 }
                 else
+                {
                     using (var ts = new TransactionScope())
                     {
                         using (new SharedDbConnectionScope())
@@ -610,6 +686,8 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                         }
                         ts.Complete();
                     }
+                }
+
                 Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
                 SchemaColumnsGrid.DataBind();
             }
@@ -713,6 +791,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 {
                     DataSource dataSource = new DataSource(row.RecordID);
                     if (dataSource != null)
+                    {
                         try
                         {
                             dataSource.DataSchemaID = new Guid(DataSchemaID);
@@ -730,6 +809,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                             Logging.Exception(ex);
                             MessageBoxes.Error(ex, "Error", "Unable to link DataSource");
                         }
+                    }
                 }
                 DataSourcesGridStore.DataBind();
                 AvailableDataSourcesWindow.Hide();

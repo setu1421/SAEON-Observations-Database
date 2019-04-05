@@ -97,6 +97,7 @@ public partial class _Phenomena : System.Web.UI.Page
                       .From(UnitOfMeasure.Schema)
                       .InnerJoin(PhenomenonUOM.UnitOfMeasureIDColumn, UnitOfMeasure.IdColumn)
                       .Where(PhenomenonUOM.Columns.PhenomenonID).IsEqualTo(Id)
+                      .OrderAsc(UnitOfMeasure.Columns.Unit)
                       .ExecuteAsCollection<UnitOfMeasureCollection>();
 
             PhenomenonUOMGrid.GetStore().DataSource = uomCol;
@@ -144,6 +145,7 @@ public partial class _Phenomena : System.Web.UI.Page
                 .From(Offering.Schema)
                 .InnerJoin(PhenomenonOffering.OfferingIDColumn, Offering.IdColumn)
                 .Where(PhenomenonOffering.Columns.PhenomenonID).IsEqualTo(Id)
+                .OrderAsc(Offering.Columns.Name)
                 .ExecuteAsCollection<OfferingCollection>();
 
             PhenomenonOfferingGrid.GetStore().DataSource = offeringCol;
