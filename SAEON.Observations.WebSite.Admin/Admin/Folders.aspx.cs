@@ -41,9 +41,9 @@ public partial class Admin_Folders : System.Web.UI.Page
             try
             {
                 Logging.Information("FileName: {FileName}",TemplateFile.PostedFile.FileName);
-                //using (SpreadsheetDocument doc = SpreadsheetDocument.Open(fi.FullName, false))
                 using (SpreadsheetDocument doc = SpreadsheetDocument.Open(TemplateFile.PostedFile.InputStream, false))
                 {
+
                     var instruments = ExcelHelper.GetRangeValues(doc, "Instruments!T3:T102");
                     foreach (string instrument in instruments)
                     {
@@ -51,9 +51,13 @@ public partial class Admin_Folders : System.Web.UI.Page
                         {
                             var splits = instrument.Split(new string[] { ", " }, StringSplitOptions.None);
                             Logging.Information("Programme: {Programmee} Project: {Project} Site: {Site} Station: {Station} Instrument: {Instrument}", splits[0], splits[1], splits[2], splits[3], splits[4]);
+                            Directory.CreateDirectory(Path.Combine(ObservationsFolder.Text, splits[0], splits[1], splits[2], splits[3], splits[4], "Operational metadata"));
+                            Directory.CreateDirectory(Path.Combine(ObservationsFolder.Text, splits[0], splits[1], splits[2], splits[3], splits[4], "Files", "Version 00"));
+                            Directory.CreateDirectory(Path.Combine(ObservationsFolder.Text, splits[0], splits[1], splits[2], splits[3], splits[4], "Files", "Version 01"));
+                            Directory.CreateDirectory(Path.Combine(ObservationsFolder.Text, splits[0], splits[1], splits[2], splits[3], splits[4], "Files", "Version 02"));
+                            Directory.CreateDirectory(Path.Combine(ObservationsFolder.Text, splits[0], splits[1], splits[2], splits[3], splits[4], "Metadata records"));
                         }
                     }
-                    return;
                     /*
                     // Programmes
                     var programmeNames = ExcelHelper.GetRangeValues(doc, "Programmes!B3:B102");
