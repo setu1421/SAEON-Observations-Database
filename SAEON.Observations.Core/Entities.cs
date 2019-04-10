@@ -95,6 +95,68 @@ namespace SAEON.Observations.Core.Entities
     }
 
     /// <summary>
+    /// Data Schema entity
+    /// </summary>
+    public class DataSchema : CodedEntity
+    {
+        /// <summary>
+        /// DataSourceTypeId of the DataSchema
+        /// </summary>
+        [Required]
+        public Guid DataSourceTypeId { get; set; }
+        /// <summary>
+        /// Description of the DataSchema
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+
+        // Navigation
+        public DataSourceType DataSourceType { get; set; }
+    }
+
+    /// <summary>
+    /// Data Source entity
+    /// </summary>
+    public class DataSource : CodedEntity
+    {
+        public Guid DataSchemaId { get; set; }
+        /// <summary>
+        /// Description of the Instrument
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+        /// <summary>
+        /// Url of the Instrument
+        /// </summary>
+        [Url, StringLength(250)]
+        public string Url { get; set; }
+        /// <summary>
+        /// StartDate of the Instrument, null means always
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+        /// <summary>
+        /// EndDate of the Instrument, null means always
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+
+        // Navigation
+        public DataSchema DataSchema { get; set; }
+        public List<Sensor> Sensors { get; set; }
+    }
+
+    public class DataSourceType: CodedEntity
+    {
+        /// <summary>
+        /// Description of the Instrument
+        /// </summary>
+        [StringLength(5000)]
+        public string Description { get; set; }
+
+        // Navigation
+        public List<DataSchema> DataSchemas { get; set; }
+    }
+
+    /// <summary>
     /// Instrument entity
     /// </summary>
     public class Instrument : CodedEntity
@@ -183,7 +245,7 @@ namespace SAEON.Observations.Core.Entities
     public class Organisation : CodedEntity
     {
         /// <summary>
-        /// Description of the Site
+        /// Description of the Organisation
         /// </summary>
         [StringLength(5000)]
         public string Description { get; set; }
@@ -407,6 +469,8 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [Url, StringLength(250)]
         public string Url { get; set; }
+        [Required]
+        public Guid DataSourceId { get; set; }
         /// <summary>
         /// PhenomenonId of the sensor
         /// </summary>
@@ -423,6 +487,9 @@ namespace SAEON.Observations.Core.Entities
         /// Elevation of the Sensor, positive above sea level, negative below sea level
         /// </summary>
         public double? Elevation { get; set; }
+
+        [JsonIgnore]
+        public DataSource DataSource { get; set; }
 
         /// <summary>
         /// Phenomenon of the Sensor
@@ -1163,6 +1230,9 @@ namespace SAEON.Observations.Core.Entities
             Database.CommandTimeout = 30 * 60; 
         }
 
+        public DbSet<DataSchema> DataSchemas { get; set; }
+        public DbSet<DataSource> DataSources { get; set; }
+        public DbSet<DataSourceType> DataSourceTypes { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
         //public DbSet<InventoryTotal> InventoryTotals { get; set; }
         //public DbSet<InventoryStation> InventoryStations { get; set; }

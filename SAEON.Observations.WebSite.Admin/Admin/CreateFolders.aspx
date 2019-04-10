@@ -1,16 +1,12 @@
-﻿<%@ Page Title="Folders" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Folders.aspx.cs" Inherits="Admin_Folders" %>
+﻿<%@ Page Title="Folders" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="CreateFolders.aspx.cs" Inherits="Admin_CreateFolders" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <ext:Viewport ID="ViewPort1" runat="server">
         <Items>
-            <ext:FormPanel ID="BasicForm" runat="server" Title="Folder structure creation" Width="700px" LabelWidth="150" ClientIDMode="Static" MonitorValid="true">
+            <ext:FormPanel ID="BasicForm" runat="server" Title="" Width="700px" LabelWidth="150" ClientIDMode="Static" MonitorValid="true">
                 <Items>
-<%--                    <ext:TextField ID="TemplateFile" runat="server" FieldLabel="Template Spreadsheet" AllowBlank="false" EmptyText="Select a Template Spreadsheet" Width="500px"
-                        IsRemoteValidation="true" MsgTarget="Side">
-                        <RemoteValidation OnValidation="ValidateTemplateFile" />
-                    </ext:TextField>--%>
                     <ext:FileUploadField ID="TemplateFile" runat="server" FieldLabel="Template Spreadsheet" AllowBlank="false" EmptyText="Select a Template Spreadsheet" Width="500px" Icon="Attach" />
                     <ext:TextField ID="ObservationsFolder" runat="server" FieldLabel="Observations Folder" AllowBlank="false" EmptyText="Observations Folder is required" Width="500px"
                         IsRemoteValidation="true" MsgTarget="Side">
