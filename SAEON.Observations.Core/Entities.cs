@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using SAEON.Logs;
-using System.Configuration; 
+using System.Configuration;
 
 namespace SAEON.Observations.Core.Entities
 {
@@ -53,6 +53,7 @@ namespace SAEON.Observations.Core.Entities
         public Guid Id { get; set; }
         [Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false), HiddenInput]
         public byte[] RowVersion { get; set; }
+        public Guid UserId { get; set; }
 
         public virtual EntityListItem AsEntityListItem => new EntityListItem { Id = Id };
     }
@@ -144,8 +145,28 @@ namespace SAEON.Observations.Core.Entities
         public List<Sensor> Sensors { get; set; }
     }
 
-    public class DataSourceType: CodedEntity
+    public class DataSourceType: BaseEntity
     {
+        /// <summary>
+        /// Id of the Entity
+        /// </summary>
+        //[Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ScaffoldColumn(false), HiddenInput]
+        [JsonProperty(Order = -99)]
+        public Guid Id { get; set; }
+        [Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false), HiddenInput]
+        public byte[] RowVersion { get; set; }
+        public Guid? UserId { get; set; }
+
+        public EntityListItem AsEntityListItem => new EntityListItem { Id = Id, Code=Code };
+
+        /// <summary>
+        /// Code of the Entity
+        /// </summary>
+        [Required, StringLength(50), JsonProperty(Order = -98)]
+        public string Code { get; set; }
         /// <summary>
         /// Description of the Instrument
         /// </summary>
@@ -284,6 +305,15 @@ namespace SAEON.Observations.Core.Entities
     }
 
     /// <summary>
+    /// OrganisationRole enitity
+    /// </summary>
+    public class OrganisationRole : CodedEntity
+    {
+        // Navigation
+        //public List<Organisation> Organisations { get; set; }
+    }
+
+    /// <summary>
     /// Phenomenon entity
     /// </summary>
     public class Phenomenon : CodedEntity
@@ -402,7 +432,7 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public List<Project> Projects { get; set; }
-        [JsonProperty("Projects")]
+        [JsonProperty("Projects"), NotMapped]
         public List<EntityListItem> ProjectList => Projects?.Select(i => i.AsEntityListItem).Where(i => i != null).ToList();
     }
 
@@ -442,15 +472,15 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public Programme Programme { get; set; }
-        [JsonProperty("Programme")]
-        public EntityListItem ProgrammeName => Programme?.AsEntityListItem;
+        [JsonProperty("Programme"), NotMapped]
+        public EntityListItem ProgrammeItem => Programme?.AsEntityListItem;
 
         /// <summary>
         /// The Stations linked to this Project
         /// </summary>
         [JsonIgnore]
         public List<Station> Stations { get; set; }
-        [JsonProperty("Stations")]
+        [JsonProperty("Stations"), NotMapped]
         public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
     }
 
@@ -542,7 +572,7 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public List<Organisation> Organisations { get; set; }
-        [JsonProperty("Organisations")]
+        [JsonProperty("Organisations"), NotMapped]
         public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
@@ -550,7 +580,7 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public List<Station> Stations { get; set; }
-        [JsonProperty("Stations")]
+        [JsonProperty("Stations"), NotMapped]
         public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
     }
 
@@ -602,7 +632,7 @@ namespace SAEON.Observations.Core.Entities
         /// </summary> 
         [JsonIgnore]
         public Site Site { get; set; }
-        [JsonProperty("Site")]
+        [JsonProperty("Site"), NotMapped]
         public EntityListItem SiteName => Site?.AsEntityListItem;
 
         /// <summary>
@@ -611,7 +641,7 @@ namespace SAEON.Observations.Core.Entities
         [JsonIgnore]
         public List<Organisation> Organisations { get; set; }
         [JsonIgnore]
-        [JsonProperty("Organisations")]
+        [JsonProperty("Organisations"), NotMapped]
         public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
@@ -619,7 +649,7 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public List<Project> Projects { get; set; }
-        [JsonProperty("Projects")]
+        [JsonProperty("Projects"), NotMapped]
         public List<EntityListItem> ProjectsList => Projects?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
@@ -627,7 +657,7 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public List<Instrument> Instruments { get; set; }
-        [JsonProperty("Instruments")]
+        [JsonProperty("Instruments"), NotMapped]
         public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
     }
 
@@ -1222,7 +1252,7 @@ namespace SAEON.Observations.Core.Entities
             //Configuration.ProxyCreationEnabled = false;
             //Configuration.LazyLoadingEnabled = false;
             //Configuration.AutoDetectChangesEnabled = false;
-            var logLevel = ConfigurationManager.AppSettings["EntityFrameworkLogging"];
+            var logLevel = ConfigurationManager.AppSettings["EntityFrameworkLogging"] ?? "Information"; 
             if (logLevel.Equals("Verbose", StringComparison.CurrentCultureIgnoreCase))
                 Database.Log = s => Logging.Verbose(s);  
             //else
@@ -1242,6 +1272,7 @@ namespace SAEON.Observations.Core.Entities
         //public DbSet<InventoryOrganisation> InventoryOrganisations { get; set; }
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
+        public DbSet<OrganisationRole> OrganisationRoles { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }
         public DbSet<PhenomenonOffering> PhenomenonOfferings { get; set; }
         public DbSet<PhenomenonUnit> PhenomenonUnits { get; set; }

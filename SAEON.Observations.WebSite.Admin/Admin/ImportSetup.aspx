@@ -18,10 +18,10 @@
                             <Click
                                 OnEvent="CreateClick"
                                 Before="if (!#{BasicForm}.getForm().isValid()) { return false; } 
-                                Ext.Msg.wait('Creating folder structure...', 'Creating');"
+                                Ext.Msg.wait('Importing setup from template spreadsheet...', 'Information');"
                                 Failure="Ext.Msg.show({ 
                                 title   : 'Error', 
-                                msg     : 'Error creating folders', 
+                                msg     : 'Error importing setup', 
                                 minWidth: 200, 
                                 modal   : true, 
                                 icon    : Ext.Msg.ERROR, 
