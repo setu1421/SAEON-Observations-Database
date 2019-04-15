@@ -229,7 +229,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                             dbContext.Sites.Add(site);
                             SaveChanges();
                             var siteId = dbContext.Sites.First(i => i.Code == siteCode).Id;
-                            var sql = 
+                            var sql =
                                 "Insert Organisation_Site " +
                                 "  (OrganisationID, SiteID, OrganisationRoleID, UserID) " +
                                 "Values " +
@@ -294,10 +294,9 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                     var instrumentManufacturers = ExcelHelper.GetRangeValues(doc, "Instruments!G3:H102");
                     var instruments = ExcelHelper.GetRangeValues(doc, "Instruments!J3:R102");
                     var instrumentsList = ExcelHelper.GetRangeValues(doc, "Instruments!T3:W102");
-                    var instrumentsListShort = ExcelHelper.GetRangeValues(doc, "Instruments!Y3:AA102");
                     for (int rInstrument = 0; rInstrument < instrumentsList.GetUpperBound(0) + 1; rInstrument++)
                     {
-                        var instrumentCode =GetString(instrumentsList,rInstrument, 0);
+                        var instrumentCode = GetString(instrumentsList, rInstrument, 0);
                         if (string.IsNullOrWhiteSpace(instrumentCode)) continue;
                         var instrument = dbContext.Instruments.FirstOrDefault(i => i.Code == instrumentCode);
                         if (instrument != null)
@@ -309,21 +308,21 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                             instrument = new Instrument
                             {
                                 Code = instrumentCode,
-                                Name = GetString(instrumentsList,rInstrument, 1),
-                                Description = GetString(instrumentsList,rInstrument, 2),
-                                Url = GetString(instruments,rInstrument, 3),
-                                Latitude = GetDouble(instruments,rInstrument, 4),
-                                Longitude = GetDouble(instruments,rInstrument, 5),
-                                Elevation = GetDouble(instruments,rInstrument, 6),
-                                StartDate = GetDate(instruments,rInstrument, 7),
-                                EndDate = GetDate(instruments,rInstrument, 8),
+                                Name = GetString(instrumentsList, rInstrument, 1),
+                                Description = GetString(instrumentsList, rInstrument, 2),
+                                Url = GetString(instruments, rInstrument, 3),
+                                Latitude = GetDouble(instruments, rInstrument, 4),
+                                Longitude = GetDouble(instruments, rInstrument, 5),
+                                Elevation = GetDouble(instruments, rInstrument, 6),
+                                StartDate = GetDate(instruments, rInstrument, 7),
+                                EndDate = GetDate(instruments, rInstrument, 8),
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
                             //Logging.Verbose("Adding Instrument {@Instrument}", instrument);
                             dbContext.Instruments.Add(instrument);
                             SaveChanges();
                             var instrumentId = dbContext.Instruments.First(i => i.Code == instrumentCode).Id;
-                            var stationCode = GetString(instrumentStations,rInstrument, 0);
+                            var stationCode = GetString(instrumentStations, rInstrument, 0);
                             var stationId = dbContext.Stations.First(i => i.Code == stationCode).Id;
                             var sql =
                                 "Insert Station_Instrument " +
@@ -337,9 +336,10 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                     }
                     // DataSchemas
                     Logging.Information("Adding DataSchemas");
+                    var dataSchemasList = ExcelHelper.GetRangeValues(doc, "Instruments!Y3:AA102");
                     for (int rInstrument = 0; rInstrument < instrumentsList.GetUpperBound(0) + 1; rInstrument++)
                     {
-                        var dataSchemaCode = GetString(instrumentsListShort,rInstrument,0);
+                        var dataSchemaCode = GetString(dataSchemasList, rInstrument, 0);
                         if (string.IsNullOrWhiteSpace(dataSchemaCode)) continue;
                         var dataSchema = dbContext.DataSchemas.FirstOrDefault(i => i.Code == dataSchemaCode);
                         if (dataSchema != null)
@@ -351,24 +351,23 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                             dataSchema = new DataSchema
                             {
                                 Code = dataSchemaCode,
-                                Name = GetString(instrumentsListShort, rInstrument, 1),
-                                Description = GetString(instrumentsListShort, rInstrument, 2),
+                                Name = GetString(dataSchemasList, rInstrument, 1),
+                                Description = GetString(dataSchemasList, rInstrument, 2),
                                 DataSourceTypeId = CSVTypeId,
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
-                            //Logging.Verbose("Adding DataShcema {@DataShcema}", dataSchema);
+                            //Logging.Verbose("Adding DataSchema {@DataSchema}", dataSchema);
                             dbContext.DataSchemas.Add(dataSchema);
                             SaveChanges();
                             Logging.Verbose("Added DataSchema {DataSchemaCode}", dataSchemaCode);
                         }
                     }
-                    /*
                     // DataSources
                     Logging.Information("Adding DataSources");
+                    var dataSourcesList = ExcelHelper.GetRangeValues(doc, "Instruments!AC3:AE102");
                     for (int rInstrument = 0; rInstrument < instrumentsList.GetUpperBound(0) + 1; rInstrument++)
                     {
-                        var dataSchemaCode = $"{instrumentInstrumentTypes[rInstrument, 0]}-{instrumentManufacturers[rInstrument, 0]}-{instruments[rInstrument, 0]}";
-                        var dataSourceCode = $"{instrumentInstrumentTypes[rInstrument, 0]}-{instrumentManufacturers[rInstrument, 0]}-{instruments[rInstrument, 0]}-{instruments[rInstrument, 1]}".TrimEnd('-');
+                        var dataSourceCode = GetString(dataSourcesList, rInstrument, 0);
                         if (string.IsNullOrWhiteSpace(dataSourceCode)) continue;
                         var dataSource = dbContext.DataSources.FirstOrDefault(i => i.Code == dataSourceCode);
                         if (dataSource != null)
@@ -377,22 +376,21 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                         }
                         else
                         {
+                            var dataSchemaCode = GetString(dataSchemasList, rInstrument, 0);
                             dataSource = new DataSource
                             {
                                 Code = dataSourceCode,
-                                Name = $"{instrumentInstrumentTypes[rInstrument, 1]}, {instrumentManufacturers[rInstrument, 1]}, {instruments[rInstrument, 1]}",
-                                Description = $"{instrumentInstrumentTypes[rInstrument, 1]}, {instrumentManufacturers[rInstrument, 1]}, {instruments[rInstrument, 1]}",
-                                DataSchemaId = dbContext.DataSchemas.First(i => i.Code == dataSchemaCode).Id
+                                Name = GetString(dataSourcesList, rInstrument, 1),
+                                Description = GetString(dataSourcesList, rInstrument, 2),
+                                DataSchemaId = dbContext.DataSchemas.First(i => i.Code == dataSchemaCode).Id,
+                                Url = "http://observations.saeon.ac.za",
+                                UpdateFreq = 0,
+                                LastUpdate = new DateTime(1900, 1, 1),
+                                UserId = AuthHelper.GetLoggedInUserId
                             };
-                            try
-                            {
-                                dbContext.SaveChanges();
-                            }
-                            catch (DbEntityValidationException ex)
-                            {
-                                Logging.Exception(ex, "Errors: {Errors}", ex.EntityValidationErrors.SelectMany(i => i.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList());
-                                throw;
-                            }
+                            //Logging.Verbose("Adding DataSources {@DataSource}", dataSource);
+                            dbContext.DataSources.Add(dataSource);
+                            SaveChanges();
                             Logging.Verbose("Added DataSource {DataSourceCode}", dataSourceCode);
                         }
                     }
@@ -401,7 +399,7 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                     var phenomena = ExcelHelper.GetRangeValues(doc, "Phenomena!A3:D102");
                     for (int rPhenomenon = 0; rPhenomenon < phenomena.GetUpperBound(0) + 1; rPhenomenon++)
                     {
-                        var phenomenonCode = (string)phenomena[rPhenomenon, 0];
+                        var phenomenonCode = GetString(phenomena, rPhenomenon, 0);
                         if (string.IsNullOrWhiteSpace(phenomenonCode)) continue;
                         var phenomenon = dbContext.Phenomena.FirstOrDefault(i => i.Code == phenomenonCode);
                         if (phenomenon != null)
@@ -413,20 +411,14 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                             phenomenon = new Phenomenon
                             {
                                 Code = phenomenonCode,
-                                Name = (string)phenomena[rPhenomenon, 1],
-                                Description = (string)phenomena[rPhenomenon, 2],
-                                Url = (string)phenomena[rPhenomenon, 3]
+                                Name = GetString(phenomena, rPhenomenon, 1),
+                                Description = GetString(phenomena, rPhenomenon, 2),
+                                Url = GetString(phenomena, rPhenomenon, 3),
+                                UserId = AuthHelper.GetLoggedInUserId
                             };
+                            //Logging.Verbose("Adding Phenomenon {@Phenomenon}", phenomenon);
                             dbContext.Phenomena.Add(phenomenon);
-                            try
-                            {
-                                dbContext.SaveChanges();
-                            }
-                            catch (DbEntityValidationException ex)
-                            {
-                                Logging.Exception(ex, "Errors: {Errors}", ex.EntityValidationErrors.SelectMany(i => i.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList());
-                                throw;
-                            }
+                            SaveChanges();
                             Logging.Verbose("Added Phenomenon {PhenomenonCode}", phenomenonCode);
                         }
                     }
@@ -435,10 +427,10 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                     var sensorInstruments = ExcelHelper.GetRangeValues(doc, "Sensors!A3:B102");
                     var sensorPhenomena = ExcelHelper.GetRangeValues(doc, "Sensors!D3:E102");
                     var sensors = ExcelHelper.GetRangeValues(doc, "Sensors!G3:N102");
-                    var sensorsList = ExcelHelper.GetRangeValues(doc, "Sensors!P3:Q102");
+                    var sensorsList = ExcelHelper.GetRangeValues(doc, "Sensors!P3:R102");
                     for (int rSensor = 0; rSensor < sensorsList.GetUpperBound(0) + 1; rSensor++)
                     {
-                        var sensorCode = (string)sensorsList[rSensor, 0];
+                        var sensorCode = GetString(sensorsList, rSensor, 0);
                         if (string.IsNullOrWhiteSpace(sensorCode)) continue;
                         var sensor = dbContext.Sensors.FirstOrDefault(i => i.Code == sensorCode);
                         if (sensor != null)
@@ -447,36 +439,38 @@ public partial class Admin_ImportSetup : System.Web.UI.Page
                         }
                         else
                         {
-                            var instrumentCode = (string)sensorInstruments[rSensor, 0];
+                            var instrumentCode = GetString(sensorInstruments, rSensor, 0);
                             var rInstrument = FindRowIndex(instrumentsList, 0, instrumentCode);
-                            var dataSourceCode = $"{instrumentInstrumentTypes[rInstrument, 0]}-{instrumentManufacturers[rInstrument, 0]}-{instruments[rInstrument, 0]}-{instruments[rInstrument, 1]}".TrimEnd('-');
-                            var phenomenaCode = (string)sensorPhenomena[rSensor, 0];
+                            var dataSourceCode = GetString(dataSourcesList, rInstrument, 0);
+                            var phenomenaCode = GetString(sensorPhenomena, rSensor, 0);
                             sensor = new Sensor
                             {
                                 Code = sensorCode,
-                                Name = (string)sensorsList[rSensor, 1],
-                                Description = (string)sensors[rSensor, 1],
-                                Url = (string)sensors[rSensor, 2],
-                                Latitude = (double?)sensors[rSensor, 3],
-                                Longitude = (double?)sensors[rSensor, 4],
-                                Elevation = (double?)sensors[rSensor, 5],
+                                Name = GetString(sensorsList, rSensor, 1),
+                                Description = GetString(sensorsList, rSensor, 2),
+                                Url = GetString(sensors, rSensor, 2),
+                                Latitude = GetDouble(sensors, rSensor, 3),
+                                Longitude = GetDouble(sensors, rSensor, 4),
+                                Elevation = GetDouble(sensors, rSensor, 5),
                                 DataSourceId = dbContext.DataSources.First(i => i.Code == dataSourceCode).Id,
-                                PhenomenonId = dbContext.Phenomena.First(i => i.Code == phenomenaCode).Id
+                                PhenomenonId = dbContext.Phenomena.First(i => i.Code == phenomenaCode).Id,
+                                UserId = AuthHelper.GetLoggedInUserId
                             };
+                            //Logging.Verbose("Adding Sensor {@Sensor}", sensor);
                             dbContext.Sensors.Add(sensor);
-                            try
-                            {
-                                dbContext.SaveChanges();
-                            }
-                            catch (DbEntityValidationException ex)
-                            {
-                                Logging.Exception(ex, "Errors: {Errors}", ex.EntityValidationErrors.SelectMany(i => i.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList());
-                                throw;
-                            }
+                            SaveChanges();
+                            var instrumentId = dbContext.Instruments.First(i => i.Code == instrumentCode).Id;
+                            var sensorId = dbContext.Sensors.First(i => i.Code == sensorCode).Id;
+                            var sql =
+                                "Insert Instrument_Sensor " +
+                                "  (InstrumentID, SensorID, UserID) " +
+                                "Values " +
+                               $"  ('{instrumentId}','{sensorId}','{AuthHelper.GetLoggedInUserId}')";
+                            //Logging.Verbose("Sql: {Sql}", sql);
+                            dbContext.Database.ExecuteSqlCommand(sql);
                             Logging.Verbose("Added Sensor {SensorCode}", sensorCode);
                         }
                     }
-                    */
                 }
                 ExtNet.Msg.Hide();
                 MessageBoxes.Info("Information", "Done");

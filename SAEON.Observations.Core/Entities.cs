@@ -122,21 +122,30 @@ namespace SAEON.Observations.Core.Entities
     {
         public Guid DataSchemaId { get; set; }
         /// <summary>
-        /// Description of the Instrument
+        /// Description of the DataSource
         /// </summary>
         [StringLength(5000)]
         public string Description { get; set; }
         /// <summary>
-        /// Url of the Instrument
+        /// Url of the DataSource
         /// </summary>
         [Url, StringLength(250)]
         public string Url { get; set; }
         /// <summary>
-        /// StartDate of the Instrument, null means always
+        /// Update Frequency of the DataSource
+        /// Enum of {AdHoc, Daily, Weekly, Monthly, Quarterly, Annually, Hourly}
+        /// </summary>
+        public int UpdateFreq { get; set; }
+        /// <summary>
+        /// Last update of the DataSource
+        /// </summary>
+        public DateTime LastUpdate { get; set; }
+        /// <summary>
+        /// StartDate of the DataSource, null means always
         /// </summary>
         public DateTime? StartDate { get; set; }
         /// <summary>
-        /// EndDate of the Instrument, null means always
+        /// EndDate of the DataSource, null means always
         /// </summary>
         public DateTime? EndDate { get; set; }
 
