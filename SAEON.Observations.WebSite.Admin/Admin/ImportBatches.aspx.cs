@@ -1,5 +1,8 @@
 ﻿using Ext.Net;
+using SAEON.Azure.CosmosDB;
+using SAEON.Core.Extensions;
 using SAEON.Logs;
+using SAEON.Observations.Azure;
 using SAEON.Observations.Data;
 using SubSonic;
 using System;
@@ -124,10 +127,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
     private void CreateDocuments(SharedDbConnectionScope connScope, Guid importBatchId)
     {
+        if (!(Azure.Enabled && Azure.CosmosDBEnabled)) return;
         using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
+            var azure = new Azure();
             Logging.Verbose("Adding documents");
             var sql =
                 "Select" + Environment.NewLine +
@@ -152,6 +157,23 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     while (reader.Read())
                     {
                         n++;
+                        var observation = new ObservationDocument
+                        {
+                            Id = reader.GetFieldValue<int>(0).ToString(),
+                            ValueDate = new EpochDate(reader.GetFieldValue<DateTime>(1)),
+                            ValueDay = new EpochDate(reader.GetFieldValue<DateTime>(2)),
+                            ValueYear = reader.GetFieldValue<int>(3),
+                            ValueDecade = reader.GetFieldValue<int>(4),
+                            TextValue = reader.GetFieldValue<string>(5),
+                            RawValue = reader.GetFieldValue<float?>(6),
+                            DataValue = reader.GetFieldValue<float?>(7),
+                            Comment = reader.GetFieldValue<string>(8),
+                            CorrelationID = reader.GetFieldValue<Guid?>(9),
+                            Latitude = reader.GetFieldValue<float?>(10),
+                            Longitude = reader.GetFieldValue<float?>(11),
+                            Elevation = reader.GetFieldValue<float?>(12)
+                        };
+                        azure.AddObservation(observation);
                     }
                 }
                 Logging.Verbose("Added {Documents} documents in {elapsed}", n, stopwatch.Elapsed);
