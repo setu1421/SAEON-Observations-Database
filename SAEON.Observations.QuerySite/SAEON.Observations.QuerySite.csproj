@@ -115,7 +115,7 @@
       <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.2.2.4\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
@@ -183,8 +183,8 @@
     <Reference Include="SAEON.Logs, Version=1.0.38.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Logs.1.0.38\lib\net472\SAEON.Logs.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.Core, Version=1.0.47.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.Core.1.0.47\lib\net472\SAEON.Observations.Core.dll</HintPath>
+    <Reference Include="SAEON.Observations.Core, Version=1.0.57.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.Core.1.0.57\lib\net472\SAEON.Observations.Core.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.8.0\lib\net46\Serilog.dll</HintPath>
