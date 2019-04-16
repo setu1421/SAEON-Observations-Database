@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -127,6 +128,41 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
     private void CreateDocuments(SharedDbConnectionScope connScope, Guid importBatchId)
     {
+        string GetString(DbDataReader reader, int index)
+        {
+            try
+            {
+                if (reader.IsDBNull(index))
+                    return null;
+                else
+                {
+                    var value = reader.GetFieldValue<string>(index);
+                    return string.IsNullOrEmpty(value) ? null : value;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex, "Unable to read index {Index}", index);
+                throw;
+            }
+        }
+
+        T GetValue<T>(DbDataReader reader, int index)
+        {
+            try
+            {
+                if (reader.IsDBNull(index))
+                    return default;
+                else
+                    return reader.GetFieldValue<T>(index);
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex, "Unable to read index {Index}", index);
+                throw;
+            }
+        }
+
         if (!(Azure.Enabled && Azure.CosmosDBEnabled)) return;
         using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
         {
@@ -159,19 +195,20 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         n++;
                         var observation = new ObservationDocument
                         {
-                            Id = reader.GetFieldValue<int>(0).ToString(),
-                            ValueDate = new EpochDate(reader.GetFieldValue<DateTime>(1)),
-                            ValueDay = new EpochDate(reader.GetFieldValue<DateTime>(2)),
-                            ValueYear = reader.GetFieldValue<int>(3),
-                            ValueDecade = reader.GetFieldValue<int>(4),
-                            TextValue = reader.GetFieldValue<string>(5),
-                            RawValue = reader.GetFieldValue<float?>(6),
-                            DataValue = reader.GetFieldValue<float?>(7),
-                            Comment = reader.GetFieldValue<string>(8),
-                            CorrelationID = reader.GetFieldValue<Guid?>(9),
-                            Latitude = reader.GetFieldValue<float?>(10),
-                            Longitude = reader.GetFieldValue<float?>(11),
-                            Elevation = reader.GetFieldValue<float?>(12)
+                            Id = GetValue<int>(reader, 0).ToString(),
+                            ValueDate = new EpochDate(GetValue<DateTime>(reader, 1)),
+                            ValueDay = new EpochDate(GetValue<DateTime>(reader, 2)),
+                            ValueYear = GetValue<int>(reader, 3),
+                            ValueDecade = GetValue<int>(reader, 4),
+                            TextValue = GetString(reader, 5),
+                            RawValue = GetValue<double?>(reader, 6),
+                            DataValue = GetValue<double?>(reader, 7),
+                            Comment = GetString(reader, 8),
+                            CorrelationID = GetValue<Guid?>(reader, 9),
+                            Latitude = GetValue<double?>(reader, 10),
+                            Longitude = GetValue<double?>(reader, 11),
+                            Elevation = GetValue<double?>(reader, 12),
+                            ImportBatch = new ObservationImportBatch { ID=GetValue<Guid>(reader,13), Code=GetValue<int>(reader,14),Date=new EpochDate(GetValue<DateTime>(reader,15))}
                         };
                         azure.AddObservation(observation);
                     }
@@ -256,7 +293,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 }
                 else
                 {
-                    
+
                     var saveStopwatch = new Stopwatch();
                     saveStopwatch.Start();
                     Logging.Information("Saving {count} observations.", values.Count);
@@ -1372,7 +1409,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
     protected void ClearAllClick(object sender, DirectEventArgs e)
     {
-        var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
+        //var sm = ObservationsGrid.SelectionModel.Primary as CheckboxSelectionModel;
         MessageBoxes.Confirm("Confirm",
         "DirectCall.ClearAll({eventMask: { showMask: true}});",
         $"Clear status and reason on all the observations?");

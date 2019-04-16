@@ -1,7 +1,9 @@
-﻿using SAEON.Azure.CosmosDB;
+﻿using Microsoft.Azure.Documents;
+using SAEON.Azure.CosmosDB;
 using SAEON.Azure.Storage;
 using SAEON.Logs;
 using System;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Text;
 using System.Threading.Tasks;
@@ -102,7 +104,15 @@ namespace SAEON.Observations.Azure
                     if (CosmosDBEnabled)
                     {
                         Logging.Verbose("Ensuring CosmosDB Collection exists");
-                        await CosmosDB.EnsureCollectionAsync();
+                        var uniqueKeyPolicy = new UniqueKeyPolicy
+                        {
+                            UniqueKeys = new Collection<UniqueKey>
+                        { // pair </name/first, name/last> is unique. 
+                            new UniqueKey { Paths = new Collection<string> { "/id" } },
+                            // /address is unique. 
+                            new UniqueKey { Paths = new Collection<string> { "/Sensor/Id", "/ValueDate/Epoch", "/DataValue", "/Phenomenon/Id", "/Offering/Id", "/Unit/Id", "/Elevation" } }, }
+                        };
+                        await CosmosDB.EnsureCollectionAsync(uniqueKeyPolicy);
                     }
                 }
                 catch (Exception ex)
