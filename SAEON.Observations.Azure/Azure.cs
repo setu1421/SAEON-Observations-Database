@@ -1,9 +1,7 @@
-﻿using Microsoft.Azure.Documents;
-using SAEON.Azure.CosmosDB;
+﻿using SAEON.Azure.CosmosDB;
 using SAEON.Azure.Storage;
 using SAEON.Logs;
 using System;
-using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,10 +11,10 @@ namespace SAEON.Observations.Azure
     public class Azure
     {
         private const string BlobStorageContainer = "saeon-observations";
-        private const string ObservationsStorageTable = "Observations";
-        private const string CosmosDBDatabase = "saeon-observations"; 
+        //private const string ObservationsStorageTable = "Observations";
+        private const string CosmosDBDatabase = "saeon-observations";
         private const string CosmosDBCollection = "Observations";
-        private const string CosmosDBPartitionKey = "/SensorCode";
+        private const string CosmosDBPartitionKey = "/ImportBatch/id";
 
         public static bool Enabled { get; private set; } = false;
         public static bool StorageEnabled { get; private set; } = false;
@@ -87,11 +85,7 @@ namespace SAEON.Observations.Azure
 
         public async Task InitializeAsync()
         {
-            if (!Azure.Enabled)
-            {
-                return;
-            }
-
+            if (!Azure.Enabled) return;
             using (Logging.MethodCall(GetType()))
             {
                 try
@@ -104,15 +98,7 @@ namespace SAEON.Observations.Azure
                     if (CosmosDBEnabled)
                     {
                         Logging.Verbose("Ensuring CosmosDB Collection exists");
-                        var uniqueKeyPolicy = new UniqueKeyPolicy
-                        {
-                            UniqueKeys = new Collection<UniqueKey>
-                        { // pair </name/first, name/last> is unique. 
-                            new UniqueKey { Paths = new Collection<string> { "/id" } },
-                            // /address is unique. 
-                            new UniqueKey { Paths = new Collection<string> { "/Sensor/Id", "/ValueDate/Epoch", "/DataValue", "/Phenomenon/Id", "/Offering/Id", "/Unit/Id", "/Elevation" } }, }
-                        };
-                        await CosmosDB.EnsureCollectionAsync(uniqueKeyPolicy);
+                        await CosmosDB.EnsureCollectionAsync();
                     }
                 }
                 catch (Exception ex)
@@ -126,11 +112,7 @@ namespace SAEON.Observations.Azure
 
         public void Initialize()
         {
-            if (!Azure.Enabled)
-            {
-                return;
-            }
-
+            if (!Azure.Enabled) return;
             using (Logging.MethodCall(GetType()))
             {
                 try
@@ -148,11 +130,7 @@ namespace SAEON.Observations.Azure
         #region Storage
         public async Task UploadAsync(string folder, string fileName, string fileContents)
         {
-            if (!Enabled || !StorageEnabled)
-            {
-                return;
-            }
-
+            if (!Enabled || !StorageEnabled) return;
             using (Logging.MethodCall(GetType(), new ParameterList { { "Folder", folder }, { "FileName", fileName } }))
             {
                 try
@@ -172,11 +150,7 @@ namespace SAEON.Observations.Azure
 
         public void Upload(string folder, string fileName, string fileContents)
         {
-            if (!Enabled || !StorageEnabled)
-            {
-                return;
-            }
-
+            if (!Enabled || !StorageEnabled) return;
             using (Logging.MethodCall(GetType(), new ParameterList { { "Folder", folder }, { "FileName", fileName } }))
             {
                 try
@@ -195,12 +169,8 @@ namespace SAEON.Observations.Azure
         #region CosmosDB
         public async Task AddObservationAsync(ObservationDocument document)
         {
-            if (!Enabled || !CosmosDBEnabled)
-            {
-                return;
-            }
-
-            using (Logging.MethodCall(GetType())) 
+            if (!Enabled || !CosmosDBEnabled) return;
+            using (Logging.MethodCall(GetType()))
             {
                 try
                 {
@@ -210,22 +180,155 @@ namespace SAEON.Observations.Azure
                 {
                     Logging.Exception(ex);
                     throw;
-                } 
-            } 
+                }
+            }
         }
 
         public void AddObservation(ObservationDocument document)
         {
-            if (!Enabled || !CosmosDBEnabled)
-            {
-                return;
-            }
-
+            if (!Enabled || !CosmosDBEnabled) return;
             using (Logging.MethodCall(GetType()))
             {
                 try
                 {
                     AddObservationAsync(document).GetAwaiter().GetResult();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public async Task UpdateObservationAsync(ObservationDocument document)
+        {
+            if (!Enabled || !CosmosDBEnabled) return;
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    await CosmosDB.UpdateItemAsync(document.Id, document);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public void UpdateObservation(ObservationDocument document)
+        {
+            if (!Enabled || !CosmosDBEnabled) return;
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    UpdateObservationAsync(document).GetAwaiter().GetResult();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public async Task UpsertObservationAsync(ObservationDocument document)
+        {
+            if (!Enabled || !CosmosDBEnabled) return;
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    //await CosmosDB.UpsertItemAsync(i => i.Id, i => i.Sensor.Code, document);
+                    await CosmosDB.UpsertItemAsync(document.Id, document);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public void UpsertObservation(ObservationDocument document)
+        {
+            if (!Enabled || !CosmosDBEnabled) return;
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    UpsertObservationAsync(document).GetAwaiter().GetResult();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public async Task DeleteObservationAsync(ObservationDocument document)
+        {
+            if (!Enabled || !CosmosDBEnabled) return;
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    await CosmosDB.DeleteItemAsync(i => i.Id, i => i.Sensor.Code, document);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public void DeleteObservation(ObservationDocument document)
+        {
+            if (!Enabled || !CosmosDBEnabled) return;
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    DeleteObservationAsync(document).GetAwaiter().GetResult();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public async Task DeleteImportBatchAsync(Guid importBatchId)
+        {
+            if (!Enabled || !CosmosDBEnabled) return;
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    await CosmosDB.DeleteItemsAsync(i => i.Id, importBatchId.ToString(), i => i.ImportBatch.Id == importBatchId);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        public void DeleteImportBatch(Guid importBatchId)
+        {
+            if (!Enabled || !CosmosDBEnabled) return;
+            using (Logging.MethodCall(GetType()))
+            {
+                try
+                {
+                    DeleteImportBatchAsync(importBatchId).GetAwaiter().GetResult();
                 }
                 catch (Exception ex)
                 {

@@ -145,15 +145,14 @@ public class SchemaValue
 public class ImportSchemaHelper : IDisposable
 {
     private bool disposed = false;
-    private FileHelperEngine engine;
-    private DataTable dtResults;
-    private DataSource dataSource;
-    private DataSchema dataSchema;
-    private List<DataSourceTransformation> transformations;
-    private List<SchemaDefinition> schemaDefs;
+    private readonly FileHelperEngine engine;
+    private readonly DataTable dtResults;
+    private readonly DataSource dataSource;
+    private readonly DataSchema dataSchema;
+    private readonly List<DataSourceTransformation> transformations;
+    private readonly List<SchemaDefinition> schemaDefs;
     public List<SchemaValue> SchemaValues;
     private readonly Sensor Sensor = null;
-    private readonly ImportBatch batch = null;
 
     /// <summary>
     /// Gap Record Helper
@@ -192,31 +191,31 @@ public class ImportSchemaHelper : IDisposable
         return result;
     }
 
-    private List<string> LoadColumnNamesFixedWidth(DataSchema schema, string data)
-    {
-        List<string> result = new List<string>();
-        string[] lines = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-        int columnNamesLine = schema.IgnoreFirst;
-        if (columnNamesLine >= lines.Length)
-        {
-            throw new IndexOutOfRangeException("Column Names line greater than lines in source file");
-        }
-        List<string> columnNames = lines[columnNamesLine]
-            .Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None)
-            .Select(i => i.RemoveQuotes())
-            .ToList();
-        List<string> badColumnNames = columnNames
-            .GroupBy(x => x)
-            .Where(g => g.Count() > 1)
-            .Select(y => y.Key)
-            .ToList();
-        if (badColumnNames.Any())
-        {
-            throw new InvalidOperationException("Duplicate column names found " + string.Join(", ", columnNames));
-        }
-        result.AddRange(columnNames);
-        return result;
-    }
+    //private List<string> LoadColumnNamesFixedWidth(DataSchema schema, string data)
+    //{
+    //    List<string> result = new List<string>();
+    //    string[] lines = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+    //    int columnNamesLine = schema.IgnoreFirst;
+    //    if (columnNamesLine >= lines.Length)
+    //    {
+    //        throw new IndexOutOfRangeException("Column Names line greater than lines in source file");
+    //    }
+    //    List<string> columnNames = lines[columnNamesLine]
+    //        .Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None)
+    //        .Select(i => i.RemoveQuotes())
+    //        .ToList();
+    //    List<string> badColumnNames = columnNames
+    //        .GroupBy(x => x)
+    //        .Where(g => g.Count() > 1)
+    //        .Select(y => y.Key)
+    //        .ToList();
+    //    if (badColumnNames.Any())
+    //    {
+    //        throw new InvalidOperationException("Duplicate column names found " + string.Join(", ", columnNames));
+    //    }
+    //    result.AddRange(columnNames);
+    //    return result;
+    //}
 
     /// <summary>
     ///
@@ -229,7 +228,6 @@ public class ImportSchemaHelper : IDisposable
         {
             dataSource = ds;
             dataSchema = schema;
-            this.batch = batch;
             Sensor = sensor;
             Logging.Information("Checking Schema");
             if (schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Time") && !schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Date"))

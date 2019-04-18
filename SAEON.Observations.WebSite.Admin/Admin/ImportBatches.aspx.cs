@@ -128,39 +128,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
     private void CreateDocuments(SharedDbConnectionScope connScope, Guid importBatchId)
     {
-        string GetString(DbDataReader reader, int index)
+        T GetValue<T>(DataRow row, string colName)
         {
-            try
-            {
-                if (reader.IsDBNull(index))
-                    return null;
-                else
-                {
-                    var value = reader.GetFieldValue<string>(index);
-                    return string.IsNullOrEmpty(value) ? null : value;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logging.Exception(ex, "Unable to read index {Index}", index);
-                throw;
-            }
-        }
-
-        T GetValue<T>(DbDataReader reader, int index)
-        {
-            try
-            {
-                if (reader.IsDBNull(index))
-                    return default;
-                else
-                    return reader.GetFieldValue<T>(index);
-            }
-            catch (Exception ex)
-            {
-                Logging.Exception(ex, "Unable to read index {Index}", index);
-                throw;
-            }
+            if (row.IsNull(colName))
+                return default;
+            else
+                return (T)row[colName];
         }
 
         if (!(Azure.Enabled && Azure.CosmosDBEnabled)) return;
@@ -187,34 +160,59 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 param.Value = importBatchId;
                 cmd.Parameters.Add(param);
                 var reader = cmd.ExecuteReader();
-                var n = 0;
-                if (reader.HasRows)
+                var table = new DataTable("Observations");
+                table.Load(reader);
+                foreach (DataRow row in table.Rows)
                 {
-                    while (reader.Read())
+                    var observation = new ObservationDocument
                     {
-                        n++;
-                        var observation = new ObservationDocument
-                        {
-                            Id = GetValue<int>(reader, 0).ToString(),
-                            ValueDate = new EpochDate(GetValue<DateTime>(reader, 1)),
-                            ValueDay = new EpochDate(GetValue<DateTime>(reader, 2)),
-                            ValueYear = GetValue<int>(reader, 3),
-                            ValueDecade = GetValue<int>(reader, 4),
-                            TextValue = GetString(reader, 5),
-                            RawValue = GetValue<double?>(reader, 6),
-                            DataValue = GetValue<double?>(reader, 7),
-                            Comment = GetString(reader, 8),
-                            CorrelationID = GetValue<Guid?>(reader, 9),
-                            Latitude = GetValue<double?>(reader, 10),
-                            Longitude = GetValue<double?>(reader, 11),
-                            Elevation = GetValue<double?>(reader, 12),
-                            ImportBatch = new ObservationImportBatch { ID=GetValue<Guid>(reader,13), Code=GetValue<int>(reader,14),Date=new EpochDate(GetValue<DateTime>(reader,15))}
-                        };
-                        azure.AddObservation(observation);
-                    }
+                        Id = GetValue<int>(row, "ID").ToString(),
+                        ValueDate = new EpochDate(GetValue<DateTime>(row, "ValueDate")),
+                        ValueDay = new EpochDate(GetValue<DateTime>(row, "ValueDay")),
+                        ValueYear = GetValue<int>(row, "ValueYear"),
+                        ValueDecade = GetValue<int>(row, "ValueDecade"),
+                        TextValue = GetValue<string>(row, "TextValue"),
+                        RawValue = GetValue<double?>(row, "RawValue"),
+                        DataValue = GetValue<double?>(row, "DataValue"),
+                        Comment = GetValue<string>(row, "Comment"),
+                        CorrelationId = GetValue<Guid?>(row, "CorrelationId"),
+                        Latitude = GetValue<double?>(row, "Latitude"),
+                        Longitude = GetValue<double?>(row, "Longitude"),
+                        Elevation = GetValue<double?>(row, "Elevation"),
+                        UserId = GetValue<Guid>(row, "UserId"),
+                        AddedDate = new EpochDate(GetValue<DateTime>(row, "AddedDate")),
+                        AddedAt = new EpochDate(GetValue<DateTime>(row, "AddedAt")),
+                        UpdatedAt = new EpochDate(GetValue<DateTime>(row, "UpdatedAt")),
+                        ImportBatch = new ObservationImportBatch { Id = GetValue<Guid>(row, "ImportBatch.ID"), Code = GetValue<int>(row, "ImportBatch.Code"), Date = new EpochDate(GetValue<DateTime>(row, "ImportBatch.Date")) },
+                        Site = new ObservationSite { Id = GetValue<Guid>(row, "Site.ID"), Code = GetValue<string>(row, "Site.Code"), Name = GetValue<string>(row, "Site.Name") },
+                        Station = new ObservationStation { Id = GetValue<Guid>(row, "Station.ID"), Code = GetValue<string>(row, "Station.Code"), Name = GetValue<string>(row, "Station.Name") },
+                        Instrument = new ObservationInstrument { Id = GetValue<Guid>(row, "Instrument.ID"), Code = GetValue<string>(row, "Instrument.Code"), Name = GetValue<string>(row, "Instrument.Name") },
+                        Sensor = new ObservationSensor { Id = GetValue<Guid>(row, "Sensor.ID"), Code = GetValue<string>(row, "Sensor.Code"), Name = GetValue<string>(row, "Sensor.Name") },
+                        Phenomenon = new ObservationPhenomenon { Id = GetValue<Guid>(row, "Phenomenon.ID"), Code = GetValue<string>(row, "Phenomenon.Code"), Name = GetValue<string>(row, "Phenomenon.Name") },
+                        Offering = new ObservationOffering { Id = GetValue<Guid>(row, "Offering.ID"), Code = GetValue<string>(row, "Offering.Code"), Name = GetValue<string>(row, "Offering.Name") },
+                        Unit = new ObservationUnit { Id = GetValue<Guid>(row, "Unit.ID"), Code = GetValue<string>(row, "Unit.Code"), Name = GetValue<string>(row, "Unit.Name") },
+                        Status = new ObservationStatus { Id = GetValue<Guid>(row, "Status.ID"), Code = GetValue<string>(row, "Status.Code"), Name = GetValue<string>(row, "Status.Name") },
+                        StatusReason = new ObservationStatusReason { Id = GetValue<Guid>(row, "StatusReason.ID"), Code = GetValue<string>(row, "StatusReason.Code"), Name = GetValue<string>(row, "StatusReason.Name") },
+                    };
+                    //Logging.Verbose("Adding {@Observation}", observation);
+                    azure.UpsertObservation(observation);
                 }
-                Logging.Verbose("Added {Documents} documents in {elapsed}", n, stopwatch.Elapsed);
+                Logging.Verbose("Added {Documents} documents in {elapsed}", table.Rows.Count, stopwatch.Elapsed);
             }
+        }
+    }
+
+    private void DeleteDocuments(Guid importBatchId)
+    {
+        if (!(Azure.Enabled && Azure.CosmosDBEnabled)) return;
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var azure = new Azure();
+            Logging.Verbose("Deleting {importBatchId} documents", importBatchId);
+            azure.DeleteImportBatch(importBatchId);
+            Logging.Verbose("Deleted {importBatchId} documents in {elapsed}", importBatchId, stopwatch.Elapsed);
         }
     }
 
@@ -846,9 +844,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     }
 
     [DirectMethod]
-    public void DeleteBatch(Guid ImportBatchId)
+    public void DeleteBatch(Guid importBatchId)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", ImportBatchId } }))
+        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
         {
             try
             {
@@ -856,24 +854,25 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 stopwatch.Start();
                 try
                 {
-                    Logging.Information("Deleting batch {Id}", ImportBatchId);
+                    Logging.Information("Deleting batch {Id}", importBatchId);
                     using (TransactionScope ts = Utilities.NewTransactionScope())
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
-                        DataLog.Delete(DataLog.Columns.ImportBatchID, ImportBatchId);
-                        Observation.Delete(Observation.Columns.ImportBatchID, ImportBatchId);
-                        ImportBatchSummary.Delete(ImportBatchSummary.Columns.ImportBatchID, ImportBatchId);
-                        ImportBatch.Delete(ImportBatchId);
+                        DataLog.Delete(DataLog.Columns.ImportBatchID, importBatchId);
+                        Observation.Delete(Observation.Columns.ImportBatchID, importBatchId);
+                        ImportBatchSummary.Delete(ImportBatchSummary.Columns.ImportBatchID, importBatchId);
+                        ImportBatch.Delete(importBatchId);
+                        DeleteDocuments(importBatchId);
                         ts.Complete();
                         stopwatch.Stop();
-                        Logging.Information("Deleted import batch {Id} in {time}", ImportBatchId, stopwatch.Elapsed);
+                        Logging.Information("Deleted import batch {Id} in {time}", importBatchId, stopwatch.Elapsed);
                     }
 
                 }
                 catch (Exception ex)
                 {
                     stopwatch.Stop();
-                    Logging.Exception(ex, "Unable to delete batch {Id} in {time}", ImportBatchId, stopwatch.Elapsed);
+                    Logging.Exception(ex, "Unable to delete batch {Id} in {time}", importBatchId, stopwatch.Elapsed);
                 }
 
                 ImportBatchesGridStore.DataBind();
