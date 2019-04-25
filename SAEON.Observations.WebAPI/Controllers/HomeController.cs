@@ -44,6 +44,12 @@ namespace SAEON.Observations.WebAPI.Controllers
             return View();
         }
 
+        [Route("HowToCite")]
+        public ActionResult HowToCite()
+        {
+            return View();
+        }
+
         [Route("SwaggerFrame")]
         public ActionResult SwaggerFrame()
         {
