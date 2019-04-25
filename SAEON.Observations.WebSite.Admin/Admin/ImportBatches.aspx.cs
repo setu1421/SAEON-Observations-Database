@@ -142,7 +142,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var azure = new Azure();
-            Logging.Verbose("Adding documents");
+            Logging.Information("Adding documents");
             var sql =
                 "Select" + Environment.NewLine +
                 "  *" + Environment.NewLine +
@@ -162,9 +162,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 var reader = cmd.ExecuteReader();
                 var table = new DataTable("Observations");
                 table.Load(reader);
+                var cost = new AzureCost();
+                var documents = new List<ObservationDocument>();
+                var batchSize = azure.BatchSize;
                 foreach (DataRow row in table.Rows)
                 {
-                    var observation = new ObservationDocument
+                    var document = new ObservationDocument
                     {
                         Id = GetValue<int>(row, "ID").ToString(),
                         ValueDate = new EpochDate(GetValue<DateTime>(row, "ValueDate")),
@@ -195,9 +198,22 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         StatusReason = new ObservationStatusReason { Id = GetValue<Guid>(row, "StatusReason.ID"), Code = GetValue<string>(row, "StatusReason.Code"), Name = GetValue<string>(row, "StatusReason.Name") },
                     };
                     //Logging.Verbose("Adding {@Observation}", observation);
-                    azure.UpsertObservation(observation);
+                    documents.Add(document);
+                    if (documents.Count >= batchSize)
+                    {
+                        var batchCost = azure.UpsertObservations(documents);
+                        cost += batchCost;
+                        Logging.Verbose("Added batch of {BatchSize} Cost: {BatchCost}", documents.Count, batchCost);
+                        documents.Clear();
+                    }
                 }
-                Logging.Verbose("Added {Documents} documents in {elapsed}", table.Rows.Count, stopwatch.Elapsed);
+                if (documents.Count > 0)
+                {
+                    var batchCost = azure.UpsertObservations(documents);
+                    cost += batchCost;
+                    Logging.Verbose("Added batch of {BatchSize} Cost: {BatchCost}", documents.Count, batchCost);
+                }
+                Logging.Information("Added {Documents} documents in {elapsed}, Cost: {Cost}", table.Rows.Count, stopwatch.Elapsed, cost);
             }
         }
     }
@@ -210,9 +226,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var azure = new Azure();
-            Logging.Verbose("Deleting {importBatchId} documents", importBatchId);
-            azure.DeleteImportBatch(importBatchId);
-            Logging.Verbose("Deleted {importBatchId} documents in {elapsed}", importBatchId, stopwatch.Elapsed);
+            Logging.Information("Deleting {importBatchId} documents", importBatchId);
+            var cost = azure.DeleteImportBatch(importBatchId);
+            Logging.Information("Deleted {importBatchId} documents in {elapsed}, Cost: {Cost}", importBatchId, stopwatch.Elapsed, cost);
         }
     }
 
@@ -859,8 +875,15 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
                         DataLog.Delete(DataLog.Columns.ImportBatchID, importBatchId);
+                        Logging.Information("Deleting observations for ImportBatch {ImportBatchID}", importBatchId);
+                        var t = stopwatch.Elapsed;
                         Observation.Delete(Observation.Columns.ImportBatchID, importBatchId);
+                        Logging.Information("Deleted observations for ImportBatch {ImportBatchID} in {Elapsed}", importBatchId, stopwatch.Elapsed - t);
+                        t = stopwatch.Elapsed;
+                        Logging.Information("Deleting summaries for ImportBatch {ImportBatchID}", importBatchId);
                         ImportBatchSummary.Delete(ImportBatchSummary.Columns.ImportBatchID, importBatchId);
+                        t = stopwatch.Elapsed;
+                        Logging.Information("Deleted summaries for ImportBatch {ImportBatchID} in {Elapsed}", importBatchId, stopwatch.Elapsed - t);
                         ImportBatch.Delete(importBatchId);
                         DeleteDocuments(importBatchId);
                         ts.Complete();

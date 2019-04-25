@@ -1,0 +1,4920 @@
+[33mcommit 95a0f05f2d206f5d2b887584eef3750aa7d7ec1b[m[33m ([m[1;36mHEAD -> [m[1;32mdevelop[m[33m)[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Apr 25 12:59:10 2019 +0200
+
+    Package updates
+
+[33mcommit 72c72eb36a6a36762e67051d588521e15ec7c93e[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Apr 25 12:56:49 2019 +0200
+
+    Package updates
+
+[33mcommit 0ade1aa42c2f9c15d67612a7c964f11dfb6ca075[m[33m ([m[1;31morigin/develop[m[33m)[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Apr 18 16:20:51 2019 +0200
+
+    CosmosDB updates
+
+[33mcommit ea2c161352e179bce900cd90f2106bc676f93432[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 16 12:34:49 2019 +0200
+
+    CosmosDB tweeks
+
+[33mcommit 5b6e92a0814edd6cbece0452ae491810180797f0[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 16 12:22:09 2019 +0200
+
+    Data version 2.0.56
+
+[33mcommit c8a20c93c6024f681431566d53a126636c39e73c[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Apr 15 16:11:33 2019 +0200
+
+    CosmosDB tweeks
+
+[33mcommit 10da2414086a9ab0d8931057057e08eab2d5d606[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Apr 15 16:11:22 2019 +0200
+
+    Package updates
+
+[33mcommit e6c3a00895a4192b627040f267cf56da585ed1a1[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Apr 15 16:10:12 2019 +0200
+
+    Inventory not downloadable? Closes #158
+
+[33mcommit 9412326db0d1c26a09937f81bd7237537f78d635[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Apr 15 11:37:58 2019 +0200
+
+    Admin - Import Setup
+
+[33mcommit 8aa399c955023856f478495825d785ebdd9ffbd3[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Apr 12 15:31:40 2019 +0200
+
+    Admin - Import Setup
+
+[33mcommit 319642fd900dda32e1773b219ca5ba701ebfac84[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Apr 10 16:20:47 2019 +0200
+
+    Admin - Import Setup added
+
+[33mcommit 05f738ea5e2150c7da643e66cdb25f1bc9ff658b[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 9 16:22:15 2019 +0200
+
+    Admin/Folders
+
+[33mcommit 8e239e7d5291da79ac40717612b72917f0f4eff0[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 9 15:39:53 2019 +0200
+
+    Reinstall pakcages after clean
+
+[33mcommit 22c444aca0dc35ba554671b3425d2f66188c5ea2[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 9 15:28:31 2019 +0200
+
+    Admin/Folders added
+    Packages cleaned out
+
+[33mcommit 57022310d4ab42c33a2492a5a3704ff6fbe5dc7f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 9 15:28:00 2019 +0200
+
+    Package updates
+
+[33mcommit e2471b0ac18de5401e4739cea9671d7aa60c4f72[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 9 15:27:17 2019 +0200
+
+    Package reinstall
+
+[33mcommit c9d1cbd9211c8f638f1e175b3620f01d735797c8[m
+Merge: a82122ee e8355975
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Apr 5 09:48:29 2019 +0200
+
+    Merge tag '2.0.16' into develop
+    
+    2.0.16 2.0.16
+
+[33mcommit e8355975f1f0de51d8cc1ff03a27408ce0bcb578[m[33m ([m[1;33mtag: 2.0.16[m[33m, [m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Merge: 905f2d70 a82122ee
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Apr 5 09:48:22 2019 +0200
+
+    Merge branch 'release/2.0.16'
+
+[33mcommit a82122ee866956c16ac87268f38c623dacdb6d42[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Apr 5 09:46:17 2019 +0200
+
+    20th Logo
+
+[33mcommit 90fe7fcc12e9b66eee5fade80e0cabaa25f9e9d3[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 2 16:24:41 2019 +0200
+
+    Package updates
+    Expression transformation parameters decimal precision now 6
+
+[33mcommit 6155547051401051095e28d8ce8ca5936a81147f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 2 16:23:40 2019 +0200
+
+    Package updates
+
+[33mcommit 32fdc20403dc53c2042bfdea2c881f8750ce0dcd[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Mar 14 15:53:31 2019 +0200
+
+    ImportBatch DurationInSecs
+
+[33mcommit 24630c69bd6083eda0a4718bcc8df6bcbe7fda5b[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Mar 14 15:53:14 2019 +0200
+
+    Data version 2.0.54
+
+[33mcommit e5e0cc9ed7acf4706ccd3a6ca865168f1c7765ae[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Mar 12 16:16:24 2019 +0200
+
+    Npm updates
+    Maps now display satellite imagery
+
+[33mcommit d02f65e2e30c941c4ca6e648a62e22485abd1654[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Mar 12 16:15:45 2019 +0200
+
+    Data Version 2.0.55
+
+[33mcommit 8b17a734480bc62706cb99ab369ffeffcf22c269[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Mar 12 09:04:43 2019 +0200
+
+    Data Wizard load query fixes
+
+[33mcommit 25ef2a2fee28f1a190d1d630a963420733d8a9bd[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Mar 12 09:03:46 2019 +0200
+
+    Data Version 2.0.55
+
+[33mcommit 176d68c0b2b8211c299cfbe8ace21f0b4720a72e[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Mar 12 09:02:13 2019 +0200
+
+    Data Version 2.0.54
+
+[33mcommit 1984c52f071c2917b084799147bc334ae25be4b7[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Mar 8 15:53:59 2019 +0200
+
+    QuerySite updates
+
+[33mcommit 9a99f3f0690f7d9a9ad8eaa44ca461a75b7b60d7[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Mar 8 15:50:59 2019 +0200
+
+    Data version 2.0.54
+
+[33mcommit 09f293694bc8a26d77af878d3a98ae0d3aa2d7a6[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Mar 4 17:31:15 2019 +0200
+
+    Https
+
+[33mcommit 5b56d211dc77af6559f59794bb73d4c6c59b81df[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Feb 28 11:39:56 2019 +0200
+
+    Data Version 2.0.54
+
+[33mcommit 5aa6cda6f3d562ea5f6de5e2f897956031cbac6c[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Feb 28 11:39:48 2019 +0200
+
+    Elevation in DataQuery
+
+[33mcommit 9ce03d99d215a7fa69db401df65c834af68268a9[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Feb 27 16:18:27 2019 +0200
+
+    Package updates
+
+[33mcommit f3a5ac60467b75c02195f046ed139b3e5248681c[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Feb 22 12:53:58 2019 +0200
+
+    Data version 2.0.54
+
+[33mcommit a2381701fc155c2f2452441f91793b81e569b4bd[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Feb 22 09:28:16 2019 +0200
+
+    gitignore change
+
+[33mcommit c661605f49bac52db410acbb28de525fc1d2470c[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Feb 22 09:24:42 2019 +0200
+
+    Data version 2.0.54
+
+[33mcommit f676bc1dcf0a4c23bd0273ce658a2920de1bd8b9[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Feb 19 09:02:01 2019 +0200
+
+    Phenomena tree generated query fixed to handle no phenomenon selected
+
+[33mcommit 8328e3c6d69acd49cb88949a519c728fadc9c7b4[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Feb 19 09:00:44 2019 +0200
+
+    Fix offerings added
+
+[33mcommit 654ab6bb3c643d9f65d11c3d36b5087c91237838[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Feb 13 16:55:30 2019 +0200
+
+    CORS and SSL
+
+[33mcommit 8efaa095dd3c373b7ece7dbe450538a9827d5b22[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Feb 11 09:23:09 2019 +0200
+
+    Package updates
+
+[33mcommit e5078aa3235bc56ebc16c37ed876ab4bd1c1e0af[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Feb 11 09:21:36 2019 +0200
+
+    Data version 2.0.54
+
+[33mcommit 29bfe68930081999d0c3513814a3a4291ef4caaf[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Feb 4 14:34:24 2019 +0200
+
+    Improved import logging
+
+[33mcommit 440a642601ab04bc999d691e5ffaa9eef1e21481[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jan 25 15:53:24 2019 +0200
+
+    Rion slow imports of enormous logfiles
+
+[33mcommit f0711ef9316c983fa4a9002cdfb675345b9f7adc[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Jan 21 13:16:40 2019 +0200
+
+    Data schemas - currently unable to have more than one offering column #154
+
+[33mcommit c07beddc5523f5c107c339288727c2e36aae2890[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Jan 21 11:14:07 2019 +0200
+
+    .Net 4.7.2 upgrade
+
+[33mcommit 78ea57a15ea013a9c14ff3ba732d07d86dda5404[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Jan 21 09:07:19 2019 +0200
+
+    Expression validation now evaluates with very small number, very large number and 0 to overcome the short circuit evaluation in NCalc
+
+[33mcommit f6c5ea31c5df7e61f68af55736bd21e5de58677d[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jan 18 15:07:57 2019 +0200
+
+    .Net 4.7.2
+
+[33mcommit e122ba22014e092eb6a766493da741c0c60a07e2[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Jan 17 11:35:51 2019 +0200
+
+    Syncfusion update
+
+[33mcommit a110fecfcee933e757fa4ba69911378e7f372a98[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Jan 17 11:35:29 2019 +0200
+
+    ShowValidateButton added
+
+[33mcommit c11c0d21074697ec4bca03c8810eb8e61249f407[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Jan 17 10:25:37 2019 +0200
+
+    Serilog 2.8
+    Upgrade to .Net 4.7.2
+
+[33mcommit b2f6728bfe1db8f028fd54f86e7a0909b8043c70[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jan 16 16:57:13 2019 +0200
+
+    Data schemas all invalid, fixes #150
+    Transformation privates removed
+
+[33mcommit 397f8126336da001e7a3eae90f77ea578e798164[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jan 16 13:00:16 2019 +0200
+
+    TokenClient fixes
+
+[33mcommit 0a29bf58d22db81a7649cd5cb6decfceda6e6a3b[m
+Merge: 0ca6d1a2 905f2d70
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jan 16 11:21:10 2019 +0200
+
+    Merge tag '2.0.15' into develop
+    
+    2.0.15 2.0.15
+
+[33mcommit 905f2d70fc2597a5d93da6a313aa0374e5130c25[m[33m ([m[1;33mtag: 2.0.15[m[33m)[m
+Merge: 184ab567 0ca6d1a2
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jan 16 11:21:09 2019 +0200
+
+    Merge branch 'release/2.0.15'
+
+[33mcommit 0ca6d1a2e3e006c4003a8f3ee41654de6aefe5b3[m
+Merge: 51fd2c62 184ab567
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jan 16 11:20:34 2019 +0200
+
+    Merge branch 'master' into develop
+
+[33mcommit 184ab567f051cb9bd4f9b2973275eb89bd03a830[m
+Merge: dabf6208 51fd2c62
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jan 16 11:20:04 2019 +0200
+
+    Merge branch 'release/2.0.14'
+
+[33mcommit 51fd2c625ce31abb798596566dce15be396b8b5e[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jan 16 11:17:46 2019 +0200
+
+    A search/filter function for Available Datasources? #148
+
+[33mcommit 6bf656928a45b4ca8ca49783530d7b15fb179de4[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jan 15 14:32:26 2019 +0200
+
+    Package updates, downgrades where necessary
+
+[33mcommit 977202824c4b62b14c03426ae96a64dbea2990b5[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jan 15 14:32:08 2019 +0200
+
+    Data version 2.0.53
+
+[33mcommit c533b62c235c8ac1915ba37fc131e3175a757030[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jan 11 14:55:17 2019 +0200
+
+    Syncfusion 16.4 upgrade
+
+[33mcommit 300f294e6e063698b386351c078f8d159fa1cd0d[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jan 11 14:20:07 2019 +0200
+
+    MVCSiteMapProvider upgrade
+
+[33mcommit dbd1d628ecfb63fa3bdf1fc5e2e327c887b9b8a1[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jan 11 14:19:53 2019 +0200
+
+    Expression transformation requires transformation of phenomena #147
+
+[33mcommit 561468b791e9482d20d19476a7f888e2ee3bcfff[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jan 11 12:42:43 2019 +0200
+
+    Expression transformation requires transformation of phenomena #147
+
+[33mcommit 04e6380d9b86c1f463f1f8ab16ec0783c42eb08a[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jan 11 12:42:05 2019 +0200
+
+    Data version 2.0.52
+
+[33mcommit 27d88ad5b5fef94f7662c53d9ee82afeaeb7e833[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jan 11 12:41:49 2019 +0200
+
+    Package updates
+
+[33mcommit 9c833101c8eac553fc79ce7548dcd448c1fcf718[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jan 11 12:41:28 2019 +0200
+
+    Data version 2.0.53
+
+[33mcommit 436d0d9ee5be171571f018e7882909df5e5b1239[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jan 11 12:40:24 2019 +0200
+
+    Package updates
+
+[33mcommit 0e0aada81ad0e8341e344b0481016fc095d5fedb[m
+Merge: b99abf38 dabf6208
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Dec 10 12:08:12 2018 +0200
+
+    Merge tag '2.0.12' into develop
+    
+    2.0.12 2.0.12
+
+[33mcommit dabf62080d5e6130f8a7996bd612248ae372604d[m[33m ([m[1;33mtag: 2.0.12[m[33m)[m
+Merge: e2da1aeb b99abf38
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Dec 10 12:07:49 2018 +0200
+
+    Merge branch 'release/2.0.12'
+
+[33mcommit b99abf38f409de1a2a903d8036b294d888de2af5[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Dec 10 11:16:04 2018 +0200
+
+    Choosing new offerings for a phenomenon #146
+
+[33mcommit 79e34727ef1e4915db2312468d687fe31757fa53[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Dec 7 14:01:44 2018 +0200
+
+    Package updates
+
+[33mcommit 58dca667061fa73cad76d8c35dee7016713b2e41[m
+Merge: d0c479e8 e2da1aeb
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Dec 4 14:56:50 2018 +0200
+
+    Merge tag '2.0.11' into develop
+    
+    2.0.11 2.0.11
+
+[33mcommit e2da1aeb58d6996e7b40f2c5e7f51f9ee4cb094d[m[33m ([m[1;33mtag: 2.0.11[m[33m)[m
+Merge: 5e8aed69 d0c479e8
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Dec 4 14:56:49 2018 +0200
+
+    Merge branch 'release/2.0.11'
+
+[33mcommit d0c479e8916a7ba13405cbcc1aa5870a5c4ad2a3[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Dec 4 14:54:45 2018 +0200
+
+    Data Version 2.0.51
+    Expression transformation type, issue #145
+
+[33mcommit f5570ce89635bbc8f6e9503bbc75d30d2b42e399[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Nov 26 16:32:09 2018 +0200
+
+    Bin removed
+
+[33mcommit 054a049d35da40e4356c028828e154bea1054709[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Nov 26 16:28:26 2018 +0200
+
+    Database version 2.0.51
+    Expression transformation type #145
+
+[33mcommit 221f6f61fac9b43db6adc6e2dd3f8e4655557504[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Nov 26 09:24:49 2018 +0200
+
+    WebAPI MVCSitemap errors fixed
+
+[33mcommit b6c54ddcb52f06a7fa2ef5511891f9c8eb016c7f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Nov 22 09:36:36 2018 +0200
+
+    DST Logo
+
+[33mcommit 7ee2b036072ac79f4c2f6d0206e4512850be6cc8[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Nov 21 16:17:38 2018 +0200
+
+    SensorThings AutoQueryable added
+
+[33mcommit 25a71e940200fd2e0578cf8f2c2cee3c7ef0f2d3[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Nov 20 16:55:45 2018 +0200
+
+    MVCSiteMapProvider
+
+[33mcommit 0aa62f785316a2e8d8b61dc9f4b2c480e06798f9[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Nov 19 16:13:11 2018 +0200
+
+    Data query problem with Fynbos subset
+
+[33mcommit c0143e4b3ac777a218b14d620bf24e9b16ebd091[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Nov 15 14:36:02 2018 +0200
+
+    Transforms now enabled even if Raw is null (Don't think that is correct)
+
+[33mcommit 8090c51f91d737e5e1e46b1f7798598c032f8889[m
+Merge: bd712794 5e8aed69
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Nov 6 14:27:51 2018 +0200
+
+    Merge tag '2.0.10' into develop
+    
+    2.0.10 2.0.10
+
+[33mcommit 5e8aed69b5eaabe5892f35ef7df7af4c78505b6e[m[33m ([m[1;33mtag: 2.0.10[m[33m)[m
+Merge: 7e44565d bd712794
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Nov 6 14:27:34 2018 +0200
+
+    Merge branch 'release/2.0.10'
+
+[33mcommit bd71279460eacfeb251e1730256724d882e262b0[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Nov 6 14:25:18 2018 +0200
+
+    CodeMaid
+    SiteMap and robots.txt added
+
+[33mcommit 74c94c0bac02bcaadcd390402da314522b393421[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Nov 6 14:23:32 2018 +0200
+
+    Syncfusion updates
+
+[33mcommit 63320e0e29693a3f85c3413824d8d8b0ede212f6[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Nov 6 14:22:59 2018 +0200
+
+    Database version 2.0.50
+
+[33mcommit 27dff6a8eea776533d2aa32a3722a08d87115592[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Oct 29 15:31:16 2018 +0200
+
+    Observations.Core changes
+
+[33mcommit a7b563627dbfc7e36ecf6a094c924063940025fd[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Oct 29 15:03:05 2018 +0200
+
+    SAEON.Azure.Storage, SAEON.Azure.CosmosDB changes
+
+[33mcommit d570da3cea418f5fc89aa04c2f4ceacd8d2f70f4[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 28 10:33:48 2018 +0200
+
+    CosmosDB added
+
+[33mcommit e85b09eec820608756f5f34164ac7277c1529b05[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Sep 18 17:23:03 2018 +0200
+
+    CosmosDB added
+
+[33mcommit d624e045983faecbc6fae2f18fd3ec12e2d03dae[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Sep 17 16:17:21 2018 +0200
+
+    Fynbos subset
+    Ext.Net Newtonsoft.json in GAC
+
+[33mcommit 9d969b979b9da24be92a99fb9f5e89070857ad50[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 14 15:35:34 2018 +0200
+
+    Data downloads
+
+[33mcommit fc815cdea1c735168b4a86ae36adc447d008955c[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 14 15:34:48 2018 +0200
+
+    Form size tweaks
+
+[33mcommit c95762abcc021a04545d54dc18d35366b0156fcc[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 14 15:26:17 2018 +0200
+
+    Data version 2.0.49
+
+[33mcommit 2f1aa8986537d9f9223275e1984fefb674185c02[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Sep 13 15:56:33 2018 +0200
+
+    Fynbos subset
+
+[33mcommit c69a4fc5cfc8a66f886065050103807c13f13202[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Sep 13 15:56:25 2018 +0200
+
+    User downloads and cleaning up of base controllers
+
+[33mcommit 57295a0cfa2656fe887fdd846ea42f8e9fba7461[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Sep 13 15:55:45 2018 +0200
+
+    Azure blob storage of uploads
+
+[33mcommit 49a65cf2db2837cc8b8610263b0d3a9db4c2f6ce[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Sep 13 15:55:15 2018 +0200
+
+    Database version 2.0.48
+
+[33mcommit 187f636e92ba04c8a625ccb543dce24bce890052[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 7 14:53:39 2018 +0200
+
+    Data Version 2.0.47
+
+[33mcommit 3eb7f4ba57ee21d4ecff86bce119a84466645562[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 7 14:03:38 2018 +0200
+
+    Package updates
+
+[33mcommit bdc67d22bb523b948afde739b5e355f6a1257646[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 7 14:03:27 2018 +0200
+
+    Data version 2.0.47
+
+[33mcommit b12cf8fb166f9e398b1d91b4e0f6e63c6977a459[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 7 14:03:14 2018 +0200
+
+    QuerySite data downloads added
+
+[33mcommit fca28ca28449ca6ce11b3f015997a0598f62b485[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 7 14:02:39 2018 +0200
+
+    Azure blobs for Import source files added
+
+[33mcommit a784dbea1a0a7f38f8cdd862d69e9c048a72bc50[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 7 14:01:05 2018 +0200
+
+    Package updates
+
+[33mcommit d847ed3dab97ca00f44e52ca772436c6d3da5d6d[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 7 14:00:32 2018 +0200
+
+    Inventory move from Internal to API and OData
+
+[33mcommit dd275116a4dbaf0dd76384ddb46c9d9294c1552b[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 7 11:20:00 2018 +0200
+
+    Data version 2.0.47
+
+[33mcommit f82b7f19e4ab32fdc7b54da9d4f84f1125afd232[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Sep 3 12:31:39 2018 +0200
+
+    Package updates
+    WebAPI production errors
+    QueirySite Load, Save user queries
+
+[33mcommit 1bfc0c58a65cfc50251e380615efee8c6c138d7b[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Aug 28 16:14:14 2018 +0200
+
+    Observations
+
+[33mcommit 6893708ae2134579f394bab704f8ed20be621b51[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Aug 28 16:14:01 2018 +0200
+
+    Observations Fynbos subset
+
+[33mcommit 57e0516ab60b943e3b0ae83f73dc03564da469c5[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Aug 28 16:13:23 2018 +0200
+
+    ESLinting fixes
+
+[33mcommit e24c6a1e399454db298375611f2d89cac2eb4489[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Aug 28 16:12:59 2018 +0200
+
+    UserDownloads, UserQueries
+
+[33mcommit 507afa000b94a52a755b9aea4a64af47cf5eee6f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Aug 22 15:56:43 2018 +0200
+
+    Update to OData 7.0.1
+
+[33mcommit 0d5ea327233408bbb9236046a5d06ad35471b25d[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Aug 21 15:46:48 2018 +0200
+
+    DataWizard Chart
+
+[33mcommit f506cbd892324fd5ddee93e38f021b35d9759256[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Aug 20 16:24:20 2018 +0200
+
+    DataWizard table data
+
+[33mcommit cca77724c151f1a248bd368f6a5f3267ddca6c32[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Aug 20 10:53:39 2018 +0200
+
+    Admin downloads audit logging
+
+[33mcommit b749b26badc20f00d34c5a8813e2de9fc779b037[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Aug 17 15:18:38 2018 +0200
+
+    Data Wizard Table
+
+[33mcommit 2cfb39c4c753eaaafa520a207bd8173725ce69c5[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Aug 16 12:58:22 2018 +0200
+
+    Data Wizard approximation
+
+[33mcommit 4b5fc342bce8137d307925fb58413b1a93ae4af5[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Aug 16 12:57:58 2018 +0200
+
+    Better logging of downloads for auditors
+
+[33mcommit 79e0a95d3ff282dd23cc44368f8b0262b92da23f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Aug 14 17:20:10 2018 +0200
+
+    WebAPI Approximation
+
+[33mcommit 389ffdf782861363c497b6aca8c7b41b87932da1[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Aug 13 13:30:21 2018 +0200
+
+    SensorThings
+
+[33mcommit edc4fda9e5503bc6c8f37739e68d264c2ce323bf[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Aug 8 17:01:09 2018 +0200
+
+    SensorThings
+
+[33mcommit 122a1844231b399464878d09b6a7af52f18c590d[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Aug 2 11:17:02 2018 +0200
+
+    Downloads only downloading column headers #138
+
+[33mcommit 8170e36bc86192816e9356229101bd0c719fdcf1[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Aug 2 09:08:21 2018 +0200
+
+    Data Version 2.0.46
+
+[33mcommit a61fec09ec81fa390f139bdc932d3f57034ba8a9[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Aug 2 09:08:12 2018 +0200
+
+    Downloads only downloading column headers, fixes #138
+
+[33mcommit 728453a8f5676c12099ddfbb6388d5fc41588ec3[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Aug 1 14:25:16 2018 +0200
+
+    Data Version 2.0.46
+
+[33mcommit fa22bfe4949820ec5a6508131566bb45597d36b5[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jul 31 09:30:54 2018 +0200
+
+    Data Version 2.0.46
+
+[33mcommit f8993befc549c59fbbe0c22544c7ce7f71355a17[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jul 31 09:30:36 2018 +0200
+
+    Downloads only downloading column headers #138
+
+[33mcommit 28c6a66708ca831d33b273a5d892241eee62d59f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jul 27 16:23:22 2018 +0200
+
+    Data version 2.0.46
+
+[33mcommit 81046fdb5452345ace9764ead46549d633f503e9[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jul 24 14:55:59 2018 +0200
+
+    WebAPI & QuerySite tweaks for Locations
+
+[33mcommit c84f2acb2d53a7643293a5d1b89f9ea9c80b4503[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Jul 23 11:13:31 2018 +0200
+
+    Updates for new QuerySite framework
+
+[33mcommit 86e0d9a0b85ec3443f9311075eff4f9a3decf275[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Jul 23 11:11:57 2018 +0200
+
+    QuerySite resurrection in new framework
+
+[33mcommit d63f0b42cdec92775ea9efd9a9feaec97dda6eae[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jul 20 09:15:34 2018 +0200
+
+    Inventory column widths tweak
+
+[33mcommit f6be7404ae316fa752ecb11aa403a216b7d37b13[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Jul 19 14:29:36 2018 +0200
+
+    Data Version 2.0.44
+
+[33mcommit 7fb2986e58450ab8b3ccb624c8e5e00721b7722e[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 18 12:54:32 2018 +0200
+
+    Swagger fixes
+
+[33mcommit c0678be9e0692af72d1c0453c31fbbac6a040c17[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 18 12:53:53 2018 +0200
+
+    Removed packages from repository
+
+[33mcommit df03605bb8e82ff2815ebb4ba275e1f3aef08a09[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 18 09:07:04 2018 +0200
+
+    Package updates
+
+[33mcommit c25a0ae2c0373930ca09fe3cdd0588fa0433ff73[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jul 17 13:47:45 2018 +0200
+
+    Data Version 2.0.43
+
+[33mcommit 136ed09c3a838f587b1d4eab750c3556e116fd13[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Jul 16 13:58:05 2018 +0200
+
+    Data Version 2.0.43
+
+[33mcommit d72d7114881bc640a2040fc056a52d6adbfe4356[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Jul 13 15:16:57 2018 +0200
+
+    Data version 2.0.43
+
+[33mcommit 61316178300fe7a3509bfc40a2dd09ad64ad086e[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 11 15:21:17 2018 +0200
+
+    Package updates
+
+[33mcommit ff7d7cb3dc8de5435ad510d0a57fa88ef42080c0[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 11 15:21:04 2018 +0200
+
+    Web API Resurrection
+
+[33mcommit e14f1b6f6f5895e03bf059bec166df8db544bbe0[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 11 15:20:45 2018 +0200
+
+    Query Site Resurrection
+
+[33mcommit 2be7cccfc22b823f77bcd6939d3f351ce44bc303[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 11 15:20:17 2018 +0200
+
+    Data version 2.0.42
+
+[33mcommit ef2f27da8b5cf97d3d8ab8fbd3ec3308528f2338[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jul 10 14:50:42 2018 +0200
+
+    Data Version 2.0.42
+
+[33mcommit 45696e45b86c9c275adc2a7074d98e3c11670dc6[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 4 16:14:07 2018 +0200
+
+    Packages
+
+[33mcommit 7d98d0ff02fac07241887cdfa42914997f206ebb[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 4 16:13:55 2018 +0200
+
+    Cleanup
+
+[33mcommit afedaeb64f220d70ab0be930e9077161fcb238a5[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 4 16:13:17 2018 +0200
+
+    QuerySite resurrection
+
+[33mcommit af9f5c2a71cab96606bd5671a0aadf9a33ab89dd[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 4 16:12:40 2018 +0200
+
+    Rename
+
+[33mcommit 8a8c17f9cbb13b3358a7001e8cb799051d4bbfa1[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 4 14:33:42 2018 +0200
+
+    QuerySite.v2
+
+[33mcommit 9af28a4f18e60c938d1e02a6df3cd5e692e53788[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jul 4 13:50:07 2018 +0200
+
+    Data Version 2.0.41
+
+[33mcommit dc9b4e712023bc13eca6d4cc940151c25dadba41[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jul 3 16:19:35 2018 +0200
+
+    Resurrect QuerySite
+
+[33mcommit 1a9c7e3b95884324dd627f2d9856519d9fadf376[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jul 3 10:07:51 2018 +0200
+
+    Data Version 2.0.41
+
+[33mcommit f1073d1cc778bfa4287fcfc3afa7959d436a5ab0[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Jul 2 16:23:02 2018 +0200
+
+    Data version 2.0.41
+
+[33mcommit 04cc53de78e7e7d6386ea54e5544a118153a621b[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Jul 2 12:29:21 2018 +0200
+
+    Data version 2.0.41
+
+[33mcommit cf0a7f503f8efd5a000909833869dbd6e97c271a[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Jun 28 12:52:14 2018 +0200
+
+    Data Version 2.0.40
+
+[33mcommit 1d1c724b3091538ebd821ec24247a565e1b4b1f5[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Jun 28 12:51:43 2018 +0200
+
+    Data Version 2.0.41
+
+[33mcommit 3fc1716dd5d012d7f4e0e56d0e5c6c3aec9e04a4[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jun 26 16:27:04 2018 +0200
+
+    GetManyRelated
+
+[33mcommit f93ece8789d7b3288d7ea121f41d5007db49f5c6[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jun 26 16:26:06 2018 +0200
+
+    Data version 2.0.40
+
+[33mcommit 39eb03aaaaa587c435ce18126319582a32c1d309[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jun 20 08:38:37 2018 +0200
+
+    Package updates
+
+[33mcommit b539f9926c8f413e45a5c14c9408da8ab0daeb60[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jun 20 08:37:56 2018 +0200
+
+    SAEON.SensorThings
+
+[33mcommit 2b2aa62f3858466bdbd3be7458934ab0b67ace4e[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jun 20 08:37:26 2018 +0200
+
+    Package updates
+
+[33mcommit 196720e11e0ac762657dbd1f5d2f769128a2ac67[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jun 20 08:37:01 2018 +0200
+
+    SensorThings moved to SAEON.SensorThings
+
+[33mcommit b3add257b4dc50fb04cb9db91eff3be3c7afafde[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jun 12 14:24:54 2018 +0200
+
+    Package updates
+
+[33mcommit 52ac820894e967a5606a96ec7496e0a8ebce9fb5[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jun 12 08:20:44 2018 +0200
+
+    Observations.WebAPI resurrection with WebAPI and OData
+
+[33mcommit a628b9ffe0c05923943f0d1732b2c96444e83295[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jun 12 08:19:24 2018 +0200
+
+    Observations.Core tests
+
+[33mcommit a55c0838f56e46e60c8bf80da2180eb7a28426c2[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jun 12 08:18:51 2018 +0200
+
+    SAEON.Observations.Core EntityItemLists
+
+[33mcommit a3e38d823d78a753c1a6357836cb1cc981438938[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jun 12 08:17:27 2018 +0200
+
+    Package updates
+
+[33mcommit cdc6b450315e8dfa5390e0aef1b234e12d7f3ba0[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon May 21 14:07:27 2018 +0200
+
+    Extra logging for Rion's slow imports
+
+[33mcommit c7f2540358718e4febbe9e687a6711082d12cd6b[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri May 18 08:51:14 2018 +0200
+
+    Import version fix
+
+[33mcommit ed06098ac778a042c42b300f125af9ece3db9e4e[m
+Merge: c1fb0670 7e44565d
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed May 16 15:44:01 2018 +0200
+
+    Merge tag '2.0.9' into develop
+    
+    2.0.9 2.0.9
+
+[33mcommit 7e44565d320e42a332e83ac0383803ced2b64c32[m[33m ([m[1;33mtag: 2.0.9[m[33m)[m
+Merge: 304c9980 c1fb0670
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed May 16 15:43:59 2018 +0200
+
+    Merge branch 'release/2.0.9'
+
+[33mcommit c1fb067057f38c0a6d5965b78aa69276e787bfd3[m
+Merge: 4223745f 304c9980
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed May 16 15:41:09 2018 +0200
+
+    Merge tag '2.0.8' into develop
+    
+    2.0.8 2.0.8
+
+[33mcommit 304c9980ab0eb042897e640a711ef69281d5fc0c[m[33m ([m[1;33mtag: 2.0.8[m[33m)[m
+Merge: 5dab13b2 4223745f
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed May 16 15:40:54 2018 +0200
+
+    Merge branch 'release/2.0.8'
+
+[33mcommit 4223745fba59bdace5cf518272c423604de3e19a[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed May 16 15:34:11 2018 +0200
+
+    Discontinued/replaced sensors don't allow sub-daily timestamps, closes #121
+
+[33mcommit 2b56afb9cf9424f7a01496ee77278a9a5c6e945f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed May 16 15:33:40 2018 +0200
+
+    Data version 2.0.39
+
+[33mcommit cd3fdf64a582b280d107703f7a219caf12822009[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed May 16 09:35:15 2018 +0200
+
+    Discontinued/replaced sensors don't allow sub-daily timestamps. Closes #121
+
+[33mcommit 71c5926b353afc8760742ff57e4252c3fd8c995d[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed May 16 09:34:43 2018 +0200
+
+    Data Version 2.0.38, 2.0.39
+
+[33mcommit aa1351604e9b1011c4fddd11c0e543e49dfbff61[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon May 14 16:46:40 2018 +0200
+
+    Data version 2.0.39
+
+[33mcommit 3eb19b329a79c041f6965b3e47d550cc38d93c04[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon May 14 16:46:22 2018 +0200
+
+    SACTN cleanup and dump
+
+[33mcommit 8f6b7ec1bba00c9a9546b17104209544e38fb4a5[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon May 14 10:14:35 2018 +0200
+
+    Data version 2.0.39
+
+[33mcommit ce96f2ee0ed1bb9136fa8b050588600c25e408fc[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon May 14 09:17:42 2018 +0200
+
+    SACTN cleanup
+
+[33mcommit 95ed75934332721662e835104859f95e5318818b[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri May 11 10:51:28 2018 +0200
+
+    Identity Server URL fix
+
+[33mcommit 339bce8c3a84c717721c37a52e4133a5a6926a77[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri May 11 10:51:01 2018 +0200
+
+    SACTN Dump
+
+[33mcommit b58c34b7521f4cb9b543f3cc018a6b5aa6eb03e0[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri May 11 10:50:42 2018 +0200
+
+    Data version 2.0.38
+
+[33mcommit fa9496b98ddb16d8284a76d587b4c24a0ea49a77[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri May 11 10:50:21 2018 +0200
+
+    Cryptic error message, closes #123
+
+[33mcommit 774c40529e1dfacb0320ec398a94cee48bbe33e6[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue May 8 12:11:40 2018 +0200
+
+    Package updates
+
+[33mcommit 2562f7909fd06b226f7e0f4008bd63fc2e82051d[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon May 7 14:38:55 2018 +0200
+
+    BaseRepository.GetPagedQuery fixed double execute
+
+[33mcommit ad13ca58a070dd97ebaabde3aaafcb6b3fd5c507[m
+Merge: dd20e195 5dab13b2
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon May 7 10:53:47 2018 +0200
+
+    Merge tag '2.0.7_Data_Version_2.0.38' into develop
+    
+    2.0.7 2.0.7_Data_Version_2.0.38
+
+[33mcommit 5dab13b2146e9eabf545e9f15d8e3952ee6dae65[m[33m ([m[1;33mtag: 2.0.7_Data_Version_2.0.38[m[33m)[m
+Merge: 0573bd9b dd20e195
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon May 7 10:53:46 2018 +0200
+
+    Merge branch 'release/2.0.7_Data_Version_2.0.38'
+
+[33mcommit dd20e1952945e2ed274b563dc71ee7a3d206d38b[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon May 7 10:38:03 2018 +0200
+
+    Import batches need summaries, closes #118
+
+[33mcommit 641099d24e8241fb65922d9734be2e96ee685872[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon May 7 10:34:04 2018 +0200
+
+    Data version 2.0.37
+
+[33mcommit efee45954cc0b1a4962174815f092a0a3be605e3[m
+Merge: 4f0bb35b 0573bd9b
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 24 10:40:25 2018 +0200
+
+    Merge tag '2.0.6' into develop
+    
+    2.0.6 2.0.6
+
+[33mcommit 0573bd9b217bc002d1c9ea833c669a69dd42536b[m[33m ([m[1;33mtag: 2.0.6[m[33m)[m
+Merge: 474ec34f 4f0bb35b
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 24 10:40:22 2018 +0200
+
+    Merge branch 'release/2.0.6'
+
+[33mcommit 4f0bb35b1b6e89364df67970820c53bc84a62bc4[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 24 10:38:35 2018 +0200
+
+    Some CSV exports not working, closes #117
+
+[33mcommit 96b645ad897fccecddac6f6c7db43e6bef3c58c8[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 24 10:37:52 2018 +0200
+
+    SACTN Dump
+
+[33mcommit d536705bf3a72d57142f62c867115bf190afcaa8[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 24 10:37:25 2018 +0200
+
+    Asp.Net Core 2
+
+[33mcommit 6ad0c88b07e776f28ed5862371e1325ffd7134ce[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Apr 24 08:39:03 2018 +0200
+
+    Data version 2.0.38
+
+[33mcommit a0ffc439920e220c367280c604658b8481e4422f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Apr 20 15:17:53 2018 +0200
+
+    Data version 2.0.38
+
+[33mcommit 3d83cab61282226689a9e96f704a71d4881733a6[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Mar 28 08:58:48 2018 +0200
+
+    WebAPI on .Net Core 2.0
+
+[33mcommit 341a76d6a6701bf29cee09ed189d0509f4f9299f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Mar 28 08:58:26 2018 +0200
+
+    Inventory by year
+
+[33mcommit 6400b0d33b1a4c7256ffca60c36ad1f094051ffe[m
+Merge: 5ee92b43 474ec34f
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Mar 23 12:29:19 2018 +0200
+
+    Merge tag '2.0.5' into develop
+    
+    2.05 2.0.5
+
+[33mcommit 474ec34fbebaddf920c0d1299db5bdd305c3bfc1[m[33m ([m[1;33mtag: 2.0.5[m[33m)[m
+Merge: 1c42ddf2 5ee92b43
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Mar 23 12:29:09 2018 +0200
+
+    Merge branch 'release/2.0.5'
+
+[33mcommit 5ee92b43d0e890b261ac559eb362b24a95653e22[m
+Merge: 05fb9e0e 1c42ddf2
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Mar 23 11:57:04 2018 +0200
+
+    Merge tag '2.0.4' into develop
+    
+    2.04 2.0.4
+
+[33mcommit 1c42ddf258c7cfd72d974e18d78ae7610f9cd63e[m[33m ([m[1;33mtag: 2.0.4[m[33m)[m
+Merge: bc350954 5e3082bf
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Mar 23 11:56:55 2018 +0200
+
+    Merge branch 'release/2.0.4'
+
+[33mcommit 05fb9e0e6ff8fcdad5ee9ffb5fa515b9044455cb[m
+Merge: 5e3082bf 761a7b25
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Mar 23 11:52:41 2018 +0200
+
+    Merge branch 'feature/Elevations_and_Locations' into develop
+
+[33mcommit 761a7b25cb8c98cbe283b345d41e45cbd1e7e8d2[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Mar 23 11:50:47 2018 +0200
+
+    New Identity Service
+
+[33mcommit 585277b3a8cc5201b4681e40242fcfd8f39535ae[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Mar 23 11:49:32 2018 +0200
+
+    Observations need Location. Closes #111
+
+[33mcommit da6a60a6fda0b1268b4d9a7ba0141c95127905ce[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Mar 22 16:17:30 2018 +0200
+
+    Asp.Net Core 2.0
+
+[33mcommit efe63ccc180aeb0251408db78ea780593a4e7fd3[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Feb 19 16:03:28 2018 +0200
+
+    Database version 2.0.37
+
+[33mcommit 32d84fe7ebe3f781cec150c23e2124c46cb1e4d8[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Feb 16 10:19:25 2018 +0200
+
+    Database version 2.0.37
+
+[33mcommit 3790c02be6db2577dc9b0836686903ab75292477[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Feb 16 09:55:39 2018 +0200
+
+    Removal of SAEON.FileHelper.
+    Upgrade to current version of FileHelpers
+    Closes #112
+
+[33mcommit 728759253b2faf65220fc8daa91faf58014b871c[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Feb 5 12:46:42 2018 +0200
+
+    Data version 2.0.37
+
+[33mcommit c14089d24e57e53f3168053c3c47e4bcbf611ca2[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Feb 2 15:27:13 2018 +0200
+
+    Observations need elevation #76
+    Observations need Location #111
+
+[33mcommit 213b6d7f79c36849e0bad16b5b5779855397cd69[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Feb 2 15:21:39 2018 +0200
+
+    Database version 2.0.37
+
+[33mcommit 117eddc7a7d0f33c9bace372b0063e15bb40aad0[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Feb 2 14:06:02 2018 +0200
+
+    Database version 2.0.37
+
+[33mcommit 5e3082bf134eeff855eff82ae06280d546848a37[m
+Merge: e6344371 bc350954
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Feb 1 10:40:53 2018 +0200
+
+    Merge tag 'v2.0.3' into develop
+    
+    v2.0.3 v2.0.3
+
+[33mcommit bc350954c1cf4ce3bb270c7efef9598fb97f1e6d[m[33m ([m[1;33mtag: v2.0.3[m[33m)[m
+Merge: c26ac02f e6344371
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Feb 1 10:40:52 2018 +0200
+
+    Merge branch 'release/v2.0.3'
+
+[33mcommit e634437105eba51673a91a4f8c719f742a818b40[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Feb 1 10:15:43 2018 +0200
+
+    DataQuery DataValue header now Value
+
+[33mcommit 29c5139297faacb7fc3baf3205fea19f79cf30ae[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Jan 24 13:27:16 2018 +0200
+
+    CSV export DateTime tweek
+
+[33mcommit 1a8977e1272538bf15b6d07c46891389c86cf620[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Jan 18 14:39:45 2018 +0200
+
+    Excel export date format, closes #109
+    CSV export date format, closes #110
+
+[33mcommit 5a34fdfb0e0afc980e217b19b3e985c890570e0f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jan 16 15:00:05 2018 +0200
+
+    SACTN Hourly duplicates, closes #100
+
+[33mcommit 864509052b787195da42de7e521f7446e1383d55[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Jan 15 13:01:26 2018 +0200
+
+    Package updates
+
+[33mcommit 6f4be62e9cbd0400503de7e2356c1f6446d5ba08[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Jan 15 13:01:18 2018 +0200
+
+    Data version 2.0.36
+
+[33mcommit c26ac02f2194a94b3c675437e8438727aedc8823[m
+Merge: dd705318 70c951e6
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jan 9 13:31:01 2018 +0200
+
+    Merge branch 'release/2.0.3'
+
+[33mcommit 906b00f1332df791d76963202480326f08a20b4a[m
+Merge: 70c951e6 c26ac02f
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jan 9 13:31:01 2018 +0200
+
+    Merge branch 'master' into develop
+
+[33mcommit dd705318c9c5daa679bb00d0ccfefba51c192c60[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jan 9 13:30:20 2018 +0200
+
+    Inventory
+
+[33mcommit 70c951e68b90389d6275b33cd06c09ce68a1de53[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jan 9 12:30:50 2018 +0200
+
+    Inventory, closes #108
+
+[33mcommit 8ac39339fd2d31e86c2cd52cd7f5095256bb0fe2[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Jan 9 12:30:23 2018 +0200
+
+    Standardize column widths, closes #107
+    Downloads, closes #106
+
+[33mcommit 8284531bb6abe5e3470960004c47f9850b9d6037[m
+Merge: a85d7a67 c0536a35
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Dec 21 10:17:07 2017 +0200
+
+    Merge branch 'master' into develop
+
+[33mcommit c0536a350cdb0303f091cdc4a1531dca8e86e892[m
+Merge: 7dd0276e a85d7a67
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Dec 21 10:17:05 2017 +0200
+
+    Merge branch 'release/2.0.2'
+
+[33mcommit a85d7a67ef0d15f96a1b4a29665ac60a9ec2a7de[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Dec 21 10:15:29 2017 +0200
+
+    Modules update
+
+[33mcommit 8eb5d48006b12067a85cf0997186996218b3ca56[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Dec 21 10:14:37 2017 +0200
+
+    Form sizes on small screens, fixes #102
+
+[33mcommit 899d1bdc73463afa7499af2dfa7c03d7eb592cea[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Dec 21 10:13:59 2017 +0200
+
+    Data version 2.0.36
+
+[33mcommit d30a6e387f3afd0d5bf9df8f059cfa8dca39248f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Dec 20 14:40:28 2017 +0200
+
+    Offerings and UnitOfMeasure now have Phenomena grid. Fixes #103, fixes #104
+
+[33mcommit abd0d0d322507d58faa6fdf6fe85d0d276a5427f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Dec 20 11:26:33 2017 +0200
+
+    Package updates
+
+[33mcommit 951513bea8c93e12881c448edb866aedad2303cf[m
+Merge: 2801c9df 7dd0276e
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Dec 14 16:10:20 2017 +0200
+
+    Merge branch 'master' into develop
+
+[33mcommit 7dd0276e0d8d15566919a0d0c67b59463e6255fb[m
+Merge: c82f6930 f8b5b419
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Dec 14 16:10:14 2017 +0200
+
+    Merge branch 'release/2.01'
+
+[33mcommit f8b5b4194d2fcb7e5f1b2ca923fde12d3463eaab[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Dec 14 16:07:55 2017 +0200
+
+    Import Batches transactions, fixes #101
+
+[33mcommit 2801c9dfb70362f961379aa60cddbac8d3c2776e[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Dec 11 11:02:12 2017 +0200
+
+    Hourly duplicates, #100
+
+[33mcommit b925b902e49c289bd329796374903ff91086ae46[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Dec 11 09:27:00 2017 +0200
+
+    Instruments not displaying Sensors, closes #99
+
+[33mcommit ea1786b0d18471ba8d02dfb323338d0c3e4d93b8[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Dec 8 09:56:44 2017 +0200
+
+    New PC, package updates
+
+[33mcommit 93c43efef80c60868c2351bdb26229894935e429[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Dec 4 15:02:58 2017 +0200
+
+    Date/Time Errors now logged
+
+[33mcommit 065d39f8c494e9382b04c2949f5055c25df45b68[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Nov 15 14:20:47 2017 +0200
+
+    Package updates
+
+[33mcommit d60476a031baae3b6d6b7de7cdcc7eb55a0904a0[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Oct 11 15:21:51 2017 +0200
+
+    Imports of long files fixed #94
+
+[33mcommit cf5e5fe4e4d08aa982646f98ad8c009d7d3e6a33[m
+Merge: 86cff052 e76307c5
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Oct 11 13:08:05 2017 +0200
+
+    Merge branch 'feature/Conversion-To-TypeScript' into develop
+
+[33mcommit e76307c57b54319e4bb2f20395193b93c9584137[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Oct 11 13:06:42 2017 +0200
+
+    Package updates
+
+[33mcommit 9a9a62a0ee76a21ba5cb6a2e0d8b342864c58441[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Oct 2 15:12:37 2017 +0200
+
+    Import batch start logging changed
+
+[33mcommit 9b858ada960d6d76b595449eed492572d44a9148[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 29 11:59:27 2017 +0200
+
+    Issue #91 Cryptic error message
+
+[33mcommit df8f602b81ec8f3008207de78116a94f9ef3e20a[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 29 11:58:48 2017 +0200
+
+    Issue #93 Transformations
+
+[33mcommit 3fe80b2dc621304cb50cf40a50fe81262d9ee5a1[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Sep 26 12:36:55 2017 +0200
+
+    Issue #91
+
+[33mcommit 1b4fd62fff35e1c840773d6fbc5d7c50ebdeed15[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Sep 19 14:39:00 2017 +0200
+
+    Health Checks added
+
+[33mcommit e503c706b4e4e1773dc9af9382c15457b1b8f2cb[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Sep 19 14:38:35 2017 +0200
+
+    Health checks added
+
+[33mcommit 604c88b278759ba8c3bfd5f1236d1e9a38cf8b2f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Sep 18 13:56:36 2017 +0200
+
+    New Identity Service. Package updates
+
+[33mcommit 224384a0faeb9e55689541cbc62d08e2319206f7[m
+Merge: a50b3e6c 86cff052
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Sep 14 16:13:26 2017 +0200
+
+    Merge branch 'develop' into feature/Conversion-To-TypeScript
+
+[33mcommit 86cff0524dbd9f175b013a6e8636d047c744d537[m
+Merge: c82f6930 634bf2c1
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Sep 14 15:36:17 2017 +0200
+
+    Merge branch 'feature/CLientId_Authorization' into develop
+
+[33mcommit a50b3e6cc2e4ec15e4f0c4549c744fe18c80e22f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Sep 14 15:33:08 2017 +0200
+
+    Conversion to TypeScript
+
+[33mcommit 634bf2c1e95087e2a77cf3a99145e053bf4d8844[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Sep 14 15:31:01 2017 +0200
+
+    Client ID authorization
+
+[33mcommit 64d6ec237570995179d4a8865c645ac11dcc4fea[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Sep 14 15:26:29 2017 +0200
+
+    ClinetID authorization added
+
+[33mcommit 2797cd67f5728d06fdb564634fc5b77a9a938e6b[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Sep 11 12:46:26 2017 +0200
+
+    Syncfusion controls added
+
+[33mcommit 5fee620335cbe47453313f487a67c5500b2046e7[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Sep 11 12:42:30 2017 +0200
+
+    Syncfusion controls removed
+
+[33mcommit c82f6930045c0f16b88bdc42f3c562858ad5ce74[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Sep 1 15:20:49 2017 +0200
+
+    Roslyn downgrade to 1.0.6
+
+[33mcommit cf9ff1324459700ef3aacd64acc5d052d38c935e[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Aug 31 12:50:54 2017 +0200
+
+    Package updates
+
+[33mcommit 7c1753a21875f4a1a5d079022a5859a9c0bc37fa[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Aug 30 14:49:55 2017 +0200
+
+    SAEON.Logs now multi targets
+
+[33mcommit 911a03ca3082989db55bd31b3d52a19e180414a3[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Aug 30 14:49:31 2017 +0200
+
+    Database version 2.0.35
+
+[33mcommit 563aa9271672f6f6012d9a9a9bc10e7c5d106421[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Aug 29 13:55:27 2017 +0200
+
+    Database version 2.0.35. Closes #89
+
+[33mcommit d74832203a4d25f0d1f5f26bd23f0665ea35a4ad[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Wed Aug 23 12:52:12 2017 +0200
+
+    Database version 2.0.34. Closes #87
+
+[33mcommit c1543787163ddd15def61236ed8d118aabb5a973[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Aug 22 11:13:21 2017 +0200
+
+    Database version 2.0.34
+
+[33mcommit eeaa6adc26ffdc12caab77f3d046638cdd3884fa[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Aug 22 10:02:55 2017 +0200
+
+    Database version 2.0.34
+
+[33mcommit 793b9995f78e5f79d63c833b2d3c1b0cd6c6084f[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Aug 22 09:47:13 2017 +0200
+
+    Database version 2.0.34
+
+[33mcommit b85da3106d765d74cf609f9ea93d367e830ae4da[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Tue Aug 22 09:09:19 2017 +0200
+
+    Database version 2.0.34
+
+[33mcommit b05172120827f71d965d562be8bfebd3481b12f1[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Aug 21 11:21:49 2017 +0200
+
+    Undo upgrade to .Net 2.0 Standard
+
+[33mcommit 3f34989f0381b5a6c8677f4a794157e1da7946a1[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Aug 21 11:20:37 2017 +0200
+
+    Undo .Net Standard 2.0 upgrade
+
+[33mcommit 71a47a70e68b1f4e8158349f26cd766156052a8c[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Aug 21 11:19:58 2017 +0200
+
+    Add ignored dates to issues
+
+[33mcommit 1175cc2197b319274f9cbdba31490f0a6562ddea[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Mon Aug 21 11:19:36 2017 +0200
+
+    Hide Instruments tab
+
+[33mcommit 93d34ccdaa657031bef5f5518ffd12a702c44146[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Thu Aug 10 16:06:47 2017 +0200
+
+    SAEON certificates
+
+[33mcommit 7a8df559cefb9e5bbb9a70c68c466d6eabc3c1da[m
+Author: Tim Parker-Nance <timpn@saeon.ac.za>
+Date:   Fri Aug 4 15:17:21 2017 +0200
+
+    Recovery of old code
+
+[33mcommit ba63d1c118f7fb704452e79b78854f4c65ad674d[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Mon Jul 24 13:53:39 2017 +0200
+
+    Package updates
+
+[33mcommit 936d967ae0d90e7afcf8364d6fa8d866a1f3a129[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Fri Jul 7 16:17:29 2017 +0200
+
+    Closes #84 Hourly update frequency
+
+[33mcommit 1e4c74763ef9bb4eba28cc7d0b2f043cadb84cf6[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Fri Jul 7 16:07:58 2017 +0200
+
+    Minor fixes
+
+[33mcommit 65bcb4584c3caf788e11640789e3531efc172978[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Fri Jul 7 13:39:03 2017 +0200
+
+    Package updates
+
+[33mcommit 993f4a609d5bb89188f078cedb7f555dd0ce8e0b[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Fri Jul 7 13:16:18 2017 +0200
+
+    TextValue and Elevation added to Observations grid
+
+[33mcommit 18d56535223b975bdcc672afba099934a7b9ea2b[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Thu Jul 6 13:09:27 2017 +0200
+
+    Closes #82 Import quoted column names
+
+[33mcommit 6aa0fac273dd7f33a1f05457f01d9f16213f6199[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Tue Jul 4 15:28:54 2017 +0200
+
+    Data Schema copy, closed #81
+
+[33mcommit d3fed3725bb1a2b0e27f407f53122901fcd9c67f[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Mon Jul 3 13:46:33 2017 +0200
+
+    Fixes issue #79 Code & Name validation not working.
+    Fixes issue #80 Detail window control positions
+
+[33mcommit a61a464e4a58d122e9995db1d0953854e51a743a[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Fri Jun 30 14:55:14 2017 +0200
+
+    Observations need TextValue, issue #77
+
+[33mcommit 573614b6686d35b3f9aa41f2f9ecaaecef7a5393[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Fri Jun 30 14:54:38 2017 +0200
+
+    Database version 2.0.33
+
+[33mcommit e21482d6e24f6c0e52352b6a229e51cfaf0f9862[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Fri Jun 30 14:52:23 2017 +0200
+
+    Detail windows Code is not required, issue #78
+
+[33mcommit d984c3b0bc0a35e447b639a83fee79e3c6618335[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Thu Jun 29 15:22:27 2017 +0200
+
+    SAEON.Logs added
+
+[33mcommit b801296179315e6fa7d0d95f38e488a96489cdd9[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Thu Jun 29 11:46:40 2017 +0200
+
+    Station, Instruments and their links now have latitude, longitude and elevation
+
+[33mcommit 9c4245a5661649feff94dd7c5f95883fbb1ed970[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Wed Jun 28 16:20:23 2017 +0200
+
+    Database version 2.0.33
+
+[33mcommit 8ca35ed6c28190f68e0e8e6aad41d17370382b03[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Tue Jun 27 13:22:18 2017 +0200
+
+    SAEON Libraries added
+
+[33mcommit 08bb976c0ba0f23f149ad85929947e8c54a5d064[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Tue Jun 27 12:24:28 2017 +0200
+
+    Database version 2.0.32
+
+[33mcommit f151116fbe0fd0989b092b84ed8d59584e0fc590[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Mon Jun 12 14:43:57 2017 +0200
+
+    Spacial coverage fixes
+
+[33mcommit eb7ccbf6ce84d78f128a69f8f58388cf2f3bff57[m
+Author: Tim Parker-Nance <tim.parker-nance@saeon.ac.za>
+Date:   Mon Jun 12 14:43:37 2017 +0200
+
+    Acceptance tests
+
+[33mcommit c15b6fa971caed2e23e6a163eed49055d69ff86b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jun 7 09:09:36 2017 +0200
+
+    SensorThings fixes
+
+[33mcommit b4712e5ee9a196567d9b12a453b1c656db639a37[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Jun 6 16:25:50 2017 +0200
+
+    Updates
+
+[33mcommit 827cb7b70548b4c4a48304c96f4e3d08ab35db78[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Jun 6 16:25:20 2017 +0200
+
+    Spacial coverage fixes
+
+[33mcommit c66168254c17ea843fbbc5fcb605fdb010ca019e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Jun 6 16:24:50 2017 +0200
+
+    Datbase version 2.0.32
+
+[33mcommit a2170959b8461148680b85eabd79510cc6695687[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Jun 6 09:57:40 2017 +0200
+
+    UA tests fixes
+
+[33mcommit 30fe58e3b47c251da13527ff5d826ba1fc652e7b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jun 5 14:59:49 2017 +0200
+
+    Link verification before save
+
+[33mcommit 3b28c5774ad177456cb66370e58bb6f5ed0812fb[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sun Jun 4 16:17:39 2017 +0200
+
+    UAC tests
+
+[33mcommit 5e55368e77dfb3a6f4a33768d0ead895ac8d1075[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sun Jun 4 16:16:56 2017 +0200
+
+    Database version 2.0.32
+
+[33mcommit 0dbf39f799a6451da033e2b6810bf6adb2d697c1[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 31 16:53:21 2017 +0200
+
+    User Acceptance Tests changes
+
+[33mcommit f081f943f0eff3eb853ef127bcc25e445be0f89e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 31 16:53:02 2017 +0200
+
+    Database version 2.0.32
+
+[33mcommit 088f309b5a6ecf2603d129da779042fea873f070[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon May 29 10:54:58 2017 +0200
+
+    Data gaps
+
+[33mcommit 1560fa42b793bd11d9a0e604c84374657196bb38[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon May 29 10:49:15 2017 +0200
+
+    Database version 2.0.32
+
+[33mcommit 6912dfc37dcb4fddb92efc87c582407e3f7128ad[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 26 16:35:54 2017 +0200
+
+    Inventory
+
+[33mcommit 38ea3704b00cc594369f687c95710f32d278660a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 26 16:35:41 2017 +0200
+
+    Database version 2.0.32
+
+[33mcommit de7827de5bbf69040a1f4453116843938516a184[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 24 17:33:58 2017 +0200
+
+    Map visibility fix
+
+[33mcommit 47da3c3b4736e0aa682edd4237bde0c172bd6490[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 24 17:12:46 2017 +0200
+
+    Syncfusion Controls added
+
+[33mcommit 9595995f9d9e15979377be75af5a3eba39b07c99[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 24 16:19:58 2017 +0200
+
+    Inventory
+
+[33mcommit 413b8d135320b2b40fe2a0cf789693c42ba89e01[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 24 16:19:29 2017 +0200
+
+    Syncfusion controls removed
+
+[33mcommit 2edf12d8feeb4d58dc0d5994d8e5dfc90e197c0c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 24 16:18:36 2017 +0200
+
+    Database Version 2.0.32
+
+[33mcommit cf5ad46d96ae9f42a076b5b1188c6fd06edcd2b2[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 24 09:52:10 2017 +0200
+
+    WebAPI Inventory added
+
+[33mcommit 8a6c0f633858786ab17af1e344322d62265f4ca5[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 24 09:51:54 2017 +0200
+
+    DataQuery splitter added
+
+[33mcommit 5a535d5c1810ca0bbfb446f1823ae9a781137f17[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 24 09:50:57 2017 +0200
+
+    Database version 2.0.32
+
+[33mcommit 7f81ed11074816d701c02cf57772861a011b05cb[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 24 09:50:20 2017 +0200
+
+    Database version 2.0.32
+
+[33mcommit 8286fe14893a5e2ba4a1311725c93a24af21e100[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 19 16:06:45 2017 +0200
+
+    Date Formats fix
+
+[33mcommit e3e971f0a10939c5aa102b1fdd30a8279ed76d16[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu May 18 13:01:37 2017 +0200
+
+    Claims Authorization
+
+[33mcommit ec90ce04b64f18d88f1cabf8fe191a6495a3ff98[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu May 18 13:00:58 2017 +0200
+
+    Schema Column Date Formats from list
+
+[33mcommit 69fda42002bff3c2a54802d4c954e5dbf2ca03f9[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 17 17:08:13 2017 +0200
+
+    ResourceAuthorization
+
+[33mcommit e33f6088aefc4570fe6695a9e8e552a065b3de6a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 17 11:52:11 2017 +0200
+
+    Package Updates, ResourceAuthorization added
+
+[33mcommit c14e4b0b5ca069c2c46a659d3d17113b367c4b2e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 17 09:43:32 2017 +0200
+
+    WebAPI SensorThings
+
+[33mcommit e3d5ad66db49514786f7d1092ca672f4fba09f32[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 16 17:01:29 2017 +0200
+
+    WebAPI SensorThings
+
+[33mcommit a7f164c51fe0b630361552274999f73f74914bfa[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon May 15 17:07:46 2017 +0200
+
+    WebAPI SensorThings
+
+[33mcommit 72783d329cf00ce22bf979c61e0c9967b60a6814[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sat May 13 15:59:28 2017 +0200
+
+    WebAPI SensorThings
+
+[33mcommit 94f131ff57c2883569c46574aed0f8f58e63e949[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 12 14:03:33 2017 +0200
+
+    WebAPI, OData and SensorThing contollers now in separate folders
+
+[33mcommit 5c897264631ad821811b34b59ef27f0b2b8c3612[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 12 14:02:41 2017 +0200
+
+    Resurected the Inventory view
+
+[33mcommit 2ae3ceb51a7f319c88e9a6bad965223878163cce[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 12 14:02:05 2017 +0200
+
+    Selenium Automated UI tests updated
+
+[33mcommit c44aed2e9b59bda7f8e5d0367ffbdd7f9174e5e0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 10 16:57:58 2017 +0200
+
+    QuerySite Cards
+
+[33mcommit c1b12b038af8b7c9946020bcfd9120f0fa71f0a8[m
+Merge: 5423c8e9 b3d14025
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 10 11:57:45 2017 +0200
+
+    Merge branch 'master' of https://github.com/NimbusServices/SAEON.ObservationsDatabase
+
+[33mcommit 5423c8e9ea1b9206baffd78b2ffbfe048a2503bb[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 10 11:45:52 2017 +0200
+
+    Package updates
+
+[33mcommit b3d140257cd77930e047f82b406edecf95a63e70[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 10 11:17:23 2017 +0200
+
+    Package updates
+
+[33mcommit cb014f2934a13c2f265f6d4733b08c658e1f3604[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon May 8 18:57:11 2017 +0200
+
+    QuerySite Load queries
+
+[33mcommit 7352ffdab12ed9099e091fb2b897ede8f6b648b2[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sat May 6 16:13:39 2017 +0200
+
+    QuerySite save user queries
+
+[33mcommit f718250e3f609af7dddcce7ab23a23ee9d1d9ae2[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 5 19:34:58 2017 +0200
+
+    QuerySite Wizard Dialogs
+
+[33mcommit 28a5b9aa7a5c17e22301ad709f3f7a2ac7d74c03[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu May 4 17:30:02 2017 +0200
+
+    Datbase version 2.0.31
+
+[33mcommit c6a3d0f425098c87debe3f386c43b3876f247399[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 3 11:49:46 2017 +0200
+
+    Package updates
+
+[33mcommit a0ca6b569cbbfffc986ecb065aa0e547a4743669[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 2 17:18:09 2017 +0200
+
+    QuerySite buttons
+
+[33mcommit f15c8b5bf7d6fed4f67860b5b46992e7ae3919b0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 2 17:17:30 2017 +0200
+
+    Database version 2.0.31
+
+[33mcommit e4657c996111fedce74ca448cd00c8adf1378ebd[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 26 17:04:40 2017 +0200
+
+    QuerySite buttons
+
+[33mcommit 7bf9c3ccc7b5cecf102bd1a339be89fcf06cfedf[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 26 17:04:26 2017 +0200
+
+    Database version 2.0.31
+
+[33mcommit d0306524ca243c059f569729545a67f280ce0c73[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 25 10:33:24 2017 +0200
+
+    Database version 2.0.31
+
+[33mcommit dabe4c7d36cfa5cf382cc56dc31818115296a74c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Apr 24 17:24:05 2017 +0200
+
+    QuerySite buttons
+
+[33mcommit 68103f011947626d37c762901c5562b15da48d6b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Apr 24 11:32:53 2017 +0200
+
+    Database version 2.0.31
+
+[33mcommit da7905f4b6080a3cdbbf167743b747c3eda0c9bf[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 21 16:38:07 2017 +0200
+
+    QuerySite Map
+
+[33mcommit 03264a7d442639b622905eeff19c366248556ba3[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 20 16:56:23 2017 +0200
+
+    QuerySite Map
+
+[33mcommit 149c85cadb879112287706c189194c9ca4877087[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 19 16:48:43 2017 +0200
+
+    QuerySite charts
+
+[33mcommit 4aa6742b44027744aa920d377b3049dba0101836[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 18 17:22:00 2017 +0200
+
+    Package updates and QuerySite Charts
+
+[33mcommit 111d0a22dabd80d79e043339202a804094377b5c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 18 10:19:10 2017 +0200
+
+    QuerySite
+
+[33mcommit c3eba7b3128a6925ae84d7f36cbd407ed620faae[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 18 10:18:40 2017 +0200
+
+    Database version 2.0.31
+
+[33mcommit 34e51e29f6c25458647cb81783e0cd78f8669fea[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 6 16:40:03 2017 +0200
+
+    QuerySite downloads
+
+[33mcommit 5536d6b76ec194e904ed3036f97eecd0a4b8d344[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 6 11:44:53 2017 +0200
+
+    Query Downloads
+
+[33mcommit 7e778de74c684496ba3ce3bfae507df130b30f51[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 6 11:44:24 2017 +0200
+
+    Issue #71 Timestamp errors
+
+[33mcommit 309d6b0fc2ca147be7344097d5517b762c31e06a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Apr 3 18:30:43 2017 +0200
+
+    QueryResults
+
+[33mcommit 52d0a79a496969303bcdbd9c87528140d941b8cd[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Apr 3 18:25:19 2017 +0200
+
+    QueryResults
+
+[33mcommit 6e500c7d0bebfda3937c34f03ad62411d91d3420[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Apr 3 11:26:45 2017 +0200
+
+    Revert "Syncfusion removed unused styles and scripts"
+    
+    This reverts commit 9815a8976be927ddf65eeb166987a6df2953e234.
+
+[33mcommit 6169cc0e1c9f8a5daa79af0a204fa149143df13d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 30 16:43:55 2017 +0200
+
+    QuerySite Filters
+
+[33mcommit 7b46be050875df3a2c7960eb83dbf01532715f05[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 29 17:24:47 2017 +0200
+
+    QuerySite Filters
+
+[33mcommit 7e08ddd25528b64eb174f589a3a652fd7cb34e32[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 29 17:24:36 2017 +0200
+
+    Database version 2.0.30
+
+[33mcommit 09d76472917d4d41cf0c68b14fa2e6798e2cc393[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 29 15:13:03 2017 +0200
+
+    Issue #70 Data Query nothing selected
+
+[33mcommit 56b4eca2e6e0d41cc51771795b2d13839cd4aa23[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 29 13:21:41 2017 +0200
+
+    Issue #69 Timeout on Data Query node expand
+
+[33mcommit 771900f94c2e435602bbdffd36b01573ca97b033[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 29 13:21:11 2017 +0200
+
+    Now targeting .Net 4.5
+
+[33mcommit 255d4400172e7ac7b6bc2f9fd37c7cda4ac0b99a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 29 13:20:46 2017 +0200
+
+    FixedWidth imports now column insesitive. Issue #8
+
+[33mcommit 9815a8976be927ddf65eeb166987a6df2953e234[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 29 10:05:55 2017 +0200
+
+    Syncfusion removed unused styles and scripts
+
+[33mcommit f7ff8d116cbd41de7c8a12ce793748c8253cf830[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 27 17:48:24 2017 +0200
+
+    Query Wizzard
+
+[33mcommit 5fcb5b64efaf656fcd77fbe10c8f35fdedaba9f9[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sun Mar 26 14:05:31 2017 +0200
+
+    Query Wizard
+
+[33mcommit 18a6c7fb913cfdf79c448467070edbffb2a38376[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Mar 24 13:59:50 2017 +0200
+
+    Database version 2.0.29. Issue #68 StartDates and EndDates on ImportBatch
+
+[33mcommit 993dc90371b5a85e5621bd1203df3f75583cff0d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 23 15:34:14 2017 +0200
+
+    Package updates
+
+[33mcommit 6dea06cf9862a859de052c873b0de197142e6260[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 23 15:10:23 2017 +0200
+
+    TypeScript
+
+[33mcommit ba7591152d3c3ba139c289eb7f3f48dcaaa824e8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 23 15:10:09 2017 +0200
+
+    Features and Locations
+
+[33mcommit 3803516b40f227049c89ddb74ad62e238e3942ef[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 23 15:09:52 2017 +0200
+
+    Features and Locations
+
+[33mcommit 103aa8280a3108900f05fb6457d19f8a6e368ea0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 23 15:09:30 2017 +0200
+
+    Features and Locations
+
+[33mcommit f63ead666a27a32de8414c8307ab9be75fd43d31[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 23 15:09:03 2017 +0200
+
+    Issue #67 and issue #68
+
+[33mcommit 9ffb71945674e1f2ce1ef453dd18864f0b4f6603[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 23 15:08:34 2017 +0200
+
+    Unused JavaScript removed
+
+[33mcommit e4631f28f15e7248355f6258eaab81f206eb9116[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Mar 17 12:27:02 2017 +0200
+
+    Issue #65 Database version 2.0.28
+
+[33mcommit 31b60767afae77de62039b0bc839a490e8f3710f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Mar 17 11:50:30 2017 +0200
+
+    Issue #65 vDataLog inner joins on Start, EndDates now left joins
+
+[33mcommit de0760077d33937af40e14a9cd25d0a37d2588ed[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Mar 17 10:35:05 2017 +0200
+
+    Drive recovery
+
+[33mcommit 6b22b80cef47c3fef98844ba803840b4838b0736[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 16 12:49:09 2017 +0200
+
+    Issue #64
+
+[33mcommit a522b3aabf3f012e90a6f4bc0367ddb79f40ab28[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 16 12:46:46 2017 +0200
+
+    Syncfusion added
+
+[33mcommit e14a3204159b7758238793c18e3ea5bc0c2f992f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 16 12:46:21 2017 +0200
+
+    AuditLog comment increased to 5000 characters
+
+[33mcommit a91ccf43e07be44add9c44d67c2199e155d639ed[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 16 12:44:57 2017 +0200
+
+    Bin not ignored
+
+[33mcommit 7eecfccc492d04ba2f40dd326d137aeaebbaf721[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 16 09:47:28 2017 +0200
+
+    Issue #64 Selections now cleared after setting Status and Reason. Selections cleared after loading Import Batch. Paging reset after loading Import Batch
+
+[33mcommit 5cf1eb0a051137d693d5e32ff3f96b7411535629[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 15 12:51:26 2017 +0200
+
+    IdentityServer setting
+
+[33mcommit 433993ad93dde3b9801f94cfe931809ca89148dd[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 15 12:51:04 2017 +0200
+
+    IdentityServer setting
+
+[33mcommit f113eca199ce3c831adc6ed0b2bf552925a5bf5f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 14 11:02:44 2017 +0200
+
+    Swagger Oauth2 added
+
+[33mcommit e7aa2b1c53ca2ae63c4315ef957d4ab7a69124a5[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 13 16:52:08 2017 +0200
+
+    SubSonic update
+
+[33mcommit 6da666f3ae0491cfccbf2a588cb965ed70344444[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 13 16:51:47 2017 +0200
+
+    WebAPI fix route returned in Post
+
+[33mcommit 76322c66de976ffd678d54b13cf0861d75b2ff79[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 13 16:50:59 2017 +0200
+
+    Database version 2.0.27
+
+[33mcommit 6399b6b38b88a038411c6ade708f11ccb8502dfc[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 13 16:50:16 2017 +0200
+
+    Asp.Net identity removed. IdentityServer added
+
+[33mcommit 8d696325d867b12f2f3c8e367a91c74dc560c867[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 13 16:49:36 2017 +0200
+
+    Bootstapper mappings fix. Logging removed this.Log...
+
+[33mcommit c7520980c7fb87dcde93460515ee4e44165faa74[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 13 16:48:50 2017 +0200
+
+    Asp.Net Identity tables removed
+
+[33mcommit c3b3e1ba269fa8d19b1f669db031a08b5dfb0ead[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sat Mar 11 17:27:43 2017 +0200
+
+    Visual Studion 2017
+
+[33mcommit 37a1ecade21c5cb407267a59ed21ab62841ab40d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sat Mar 11 17:27:29 2017 +0200
+
+    Visual Studio 2017
+
+[33mcommit 0f951d0449928b7f6463c3068e62eb896c958337[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sat Mar 11 17:27:05 2017 +0200
+
+    WebAPI.Tests removed
+
+[33mcommit 619e1409927164df99ba013debe71d2e974dbcb8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sat Mar 11 17:26:41 2017 +0200
+
+    QuerySite.Tests removed
+
+[33mcommit 71a7af1390bad48dd4ba00c7ab50454b9aa8ad2e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sat Mar 11 17:26:24 2017 +0200
+
+    WebAPI.Tests removed
+
+[33mcommit 392fe6bdb4cefa22d8e50bdb946c5f1166203dda[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sat Mar 11 17:26:00 2017 +0200
+
+    Single Signon via Identity Server added
+
+[33mcommit 1e14dfbde0f182611cc943ec42fc416aecca5649[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sat Mar 11 17:24:14 2017 +0200
+
+    Visual Studio 2017
+
+[33mcommit 4ba793ca0863d13495875688bd28aa02453140d8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sat Mar 11 17:23:51 2017 +0200
+
+    Constants, Logging added. Organisation entity added
+
+[33mcommit 45a726fec2ba2f92c7aaf17083bab16cdbd9a752[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sat Mar 11 17:23:10 2017 +0200
+
+    MVCTest removed
+
+[33mcommit df9b710c80344709bffaf023fe1dcb49b33675e7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 2 14:03:57 2017 +0200
+
+    Issue #60
+
+[33mcommit d0cdbc316fb9b2bd545746020d7f95fae704a2e3[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 2 14:02:49 2017 +0200
+
+    Asp.Net identity removed
+
+[33mcommit ae5e9377f82ecf205c18916b8fe086afc3ba9b17[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 1 09:42:37 2017 +0200
+
+    Asp.Net Identity tables removed, UX_Observations removed
+
+[33mcommit eca089d35a5bb4ea6224081a0aa6eaf860fc53bf[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Feb 27 16:57:47 2017 +0200
+
+    OpenIDConnect
+
+[33mcommit bf84bcce536dc65798095f3d92c34337d67b12e4[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Feb 22 13:20:09 2017 +0200
+
+    WebAPI now using IdentityServer
+
+[33mcommit dffe427c16cef3c1efbd095032572c3406fc4317[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Feb 22 12:24:36 2017 +0200
+
+    QuerySite now using IdentityServer
+
+[33mcommit 85f0cc3137b19a889c77c6b60cc40bc764061a6b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Feb 20 16:45:13 2017 +0200
+
+    Old Asp.Net Identity removed in prep for IdentityServer
+
+[33mcommit 1878afb2dd7ec026809fefe438d233e5697a88d6[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Feb 14 15:25:41 2017 +0200
+
+    Phenomena, Offerings, UnitsOfMeasure
+
+[33mcommit bad940129b268a7c0f947a59fac8b0a629b2907c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Feb 13 18:31:03 2017 +0200
+
+    Issue #56
+
+[33mcommit eba8e2f0e450c1fe75a9d6252b22bdde866be700[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Feb 10 09:25:31 2017 +0200
+
+    Phenomena, Offerings, UnitsOfMeasure added to WebAPI
+
+[33mcommit 9bf8b7e44e83a90893fb4e3c676e6ed843943161[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Feb 10 09:19:54 2017 +0200
+
+    Null start / end dates causing audit loging failure
+
+[33mcommit 107dac7edb7735fbc0a09d07d13f3e41bd98d684[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Feb 7 15:47:32 2017 +0200
+
+    Connections.config added
+
+[33mcommit 4b8eff6d8847fca0c8d982a99d557c95097d9c7a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Feb 7 15:22:58 2017 +0200
+
+    WebAPI updates
+
+[33mcommit 2ae0437d3997ab333c4fb2c90e1a9f391dde6dbc[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Feb 7 15:22:46 2017 +0200
+
+    QuerySite updates
+
+[33mcommit e27e7ba14fdd90698fd22c80369be48d5facf9ba[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Feb 7 15:22:30 2017 +0200
+
+    Core updates for WebAPI and QuerySite
+
+[33mcommit 6416afa31d5a54153c95f9ddf21159f4ee9a6a41[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Feb 7 13:09:27 2017 +0200
+
+    Issue #54 DataSourceRoles was not initializing IsRoleReadOnly on add
+
+[33mcommit bbfb50769f260f0641abe3ee52c7a6f5cb06c943[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Feb 3 15:47:52 2017 +0200
+
+    Column insensitive imports
+
+[33mcommit 658946a76745ceb5f25316d7cee79d057a134a0b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Feb 2 18:13:20 2017 +0200
+
+    Schema column order not important if HasColumnHeader true
+
+[33mcommit a98c88481777b2bbeceecbee4aff7e2555e28786[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Feb 2 14:51:06 2017 +0200
+
+    BaseApiController, Help area fixes
+
+[33mcommit b60f2c8fefd567f1307cd6d717ffba5dd8753f8e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Feb 2 14:50:25 2017 +0200
+
+    HasHeaderRow renamed to HasColumnNames
+
+[33mcommit 7149d18543cf9ce772f8f6d945f2bd20f033f5db[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 30 16:48:12 2017 +0200
+
+    WebAPI & QuerySite
+
+[33mcommit c64bb389aab60fb4ed87b113c5bcbc961de776f7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 30 16:47:55 2017 +0200
+
+    Database version 2.0.23
+
+[33mcommit 1e6bea30c7f66419df714bee010539822d89d500[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 30 16:47:34 2017 +0200
+
+    Database version 2.0.26
+
+[33mcommit 756ee8304714e10e1486fe9aa47e765c7d0c2b9e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 27 17:30:03 2017 +0200
+
+    Database version 2.0.26
+
+[33mcommit 58e542b9ee694c3819495be30a86d30f491c466a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 26 16:58:15 2017 +0200
+
+    Issue #51 Transformations end dates
+
+[33mcommit 1000fc43e384bfa83d97837a13ca57b38c02b605[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Jan 24 17:09:59 2017 +0200
+
+    OAuth logins and OData versioning
+
+[33mcommit 8aa4ae8628b17d250f5b07397f7201d854ee8423[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 23 16:56:12 2017 +0200
+
+    Sites and Stations added
+
+[33mcommit 7c616c3f5f9badeebef01e678f85424b1f626cf9[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 23 09:21:59 2017 +0200
+
+    Database version 2.0.25
+
+[33mcommit d71b93ca1625578b464df2bf93f762cc5dfce4ad[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sun Jan 22 14:00:57 2017 +0200
+
+    Station.SiteID now required
+
+[33mcommit a5872dd2b70fa7cf205777ba827ae011581f6eb0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sun Jan 22 13:59:51 2017 +0200
+
+    New Identity tables excluded
+
+[33mcommit 4397e75feef5be3367c23fb014f0722c8e7079cd[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 20 15:53:35 2017 +0200
+
+    Upgraded OData to v4
+
+[33mcommit 1e0a58cd3625b89f91ddcb2b50e1fd5dd0ae1ae0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 20 15:52:55 2017 +0200
+
+    Database version 2.0.25
+
+[33mcommit 12cd54e761258a7116ca5baf2a5acc6646c0cf0c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 20 15:52:14 2017 +0200
+
+    Database version 2.0.24
+
+[33mcommit 8f4a463ee0198bb2595e40256c1b701b092fd623[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 20 15:02:35 2017 +0200
+
+    Traget 2.6.2
+
+[33mcommit 15fe9c9d11ea6faeb8fca7afad80036bff62e839[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 20 10:46:09 2017 +0200
+
+    Database version 2.0.24
+
+[33mcommit 737a460729fada1a0040eba1ab71825f8d160796[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 19 17:48:54 2017 +0200
+
+    Changed Target to 4.5.2
+
+[33mcommit 1c6a051ac89b9718a445ce39594d19cc223e2911[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 19 14:08:18 2017 +0200
+
+    Test setup
+
+[33mcommit 70320d4d328999b32bdb77eaf0e10f5876578869[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 19 14:08:00 2017 +0200
+
+    Test setup
+
+[33mcommit a162efa22707d2a940ad4d08c95a94e7efca7155[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 19 14:07:44 2017 +0200
+
+    Test Setup
+
+[33mcommit a4bcb89694a5743bca0cbdf09e51238465027f20[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 19 14:06:58 2017 +0200
+
+    Removed SAEON.Observations.Identity
+
+[33mcommit 64083fc029e3d77d5564d05d975694cfd7f4d155[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 19 14:06:39 2017 +0200
+
+    Removed  SAEON.Observations.Entities
+
+[33mcommit 283a1dd1179ae63e30ee2099da6341126a810741[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 19 14:06:14 2017 +0200
+
+    Added AutoMapper to map between Entities and DTOs
+
+[33mcommit c246de11e9c3ea7b481e7254fd284d7107b436d8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 19 09:32:16 2017 +0200
+
+    Identity and Entities combined in SAEON.Observations.Core
+
+[33mcommit 4ba5039493005461cdc62e866d38c09425c8835e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jan 18 16:55:26 2017 +0200
+
+    Logging added to all API endpoints
+
+[33mcommit 20585f7ecd4e22a24c0ee2df4ab3f77f48491f81[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jan 18 11:47:48 2017 +0200
+
+    Facebooak and Google external logins
+
+[33mcommit dfb2a1d78a0e4ce0f4b86e493d84ea92a561db44[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jan 18 11:47:16 2017 +0200
+
+    ImportBatches added delay 1ms to make sure clustered index on AddedAt is unique
+
+[33mcommit 165ffcc6cb7b463438027f154c1a9bdec0e32f7e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Jan 17 17:16:06 2017 +0200
+
+    Authentication and external logins
+
+[33mcommit 27e0b0679cf05e99147512173f6db7aad60e01b6[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Jan 17 17:15:38 2017 +0200
+
+    Database version 2.0.23
+
+[33mcommit ae7cddfd2eff13c392d647a328d3d216ec605850[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 16 17:01:05 2017 +0200
+
+    ValuesController removed
+
+[33mcommit bdfd1f72c5b4d86ef23d4472f2c30594e33ed0d2[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 16 17:00:37 2017 +0200
+
+    Database version 2.0.23
+
+[33mcommit db54bd91aebbc44188e678f18f88f6dd2ace71cf[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 16 17:00:09 2017 +0200
+
+    WebAPI security, API documentation
+
+[33mcommit 3f5b11f09ea7f866d0e0556589aae61398f19437[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 16 16:59:39 2017 +0200
+
+    QuerySite security, API documentation
+
+[33mcommit da7fba878a3299a6d6ad8ecc302c8e68f1250f3c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 16 16:59:11 2017 +0200
+
+    Docs folder added
+
+[33mcommit 818060b91406a2c06f143c42db37e69ec60faa4c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 16 10:20:40 2017 +0200
+
+    App setup
+
+[33mcommit aeadf6c8aa45d3b3d8e87ba02c4b611314568372[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 16 10:13:29 2017 +0200
+
+    Identity updated to new database
+
+[33mcommit 416d2a1f99b36cbb2e290f96099bd1d187156d76[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 16 10:13:09 2017 +0200
+
+    WebAPI logging added
+
+[33mcommit 5e22dfbdde91ae8276e661fbb3a13f051a418fbc[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 16 10:12:51 2017 +0200
+
+    QuerySite added logging
+
+[33mcommit a891882ffa569ea39d514f17b53f5fe7c71b2135[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 16 10:12:08 2017 +0200
+
+    SubSonic Date type support added
+
+[33mcommit 134fecfaec95fea75be1931dc829cf0a2762e604[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 16 10:11:46 2017 +0200
+
+    Database version 2.0.23
+
+[33mcommit 5740863b307fc4449783f1c841b3f6093efe2641[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 12 16:36:22 2017 +0200
+
+    Database version 2.0.23
+
+[33mcommit 3d9a98f08bf635901b889d94d0efb0a6566862d1[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 12 16:36:02 2017 +0200
+
+    Database version 2.0.23
+
+[33mcommit 138934db22c58beebeace4e7a967b7ee059a2122[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 12 16:35:43 2017 +0200
+
+    QuerySite and WebAPI target .Net 4.6.2
+
+[33mcommit c6fa4728acb3c3340fae906015a91f86815f9f22[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 12 09:43:11 2017 +0200
+
+    Added Date support
+
+[33mcommit e0ee8cb671c068f57dd9f1bc5e7aa7cc8e69301e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 12 09:38:41 2017 +0200
+
+    Added Date support
+
+[33mcommit 271d8dee65c0ba620f59ec2ce57ed984c03cd22d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jan 12 09:18:47 2017 +0200
+
+    Support for Date added
+
+[33mcommit f2f66f1fac3de34507355b5fa2f7fed6068247c0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jan 11 14:25:35 2017 +0200
+
+    Database version 2.0.22
+
+[33mcommit 3e7f57b0992f520269c8bc28720127c702480400[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jan 11 13:09:01 2017 +0200
+
+    App_Data removed
+
+[33mcommit 329f49c647a612c1f8232bc15401145283b8fe7e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jan 11 12:52:45 2017 +0200
+
+    Database version 2.0.22
+
+[33mcommit 5d3db1fd561cec953ace57cbb2d37173c8b4a79f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jan 11 12:52:25 2017 +0200
+
+    Uploads now store in Documents\Uploads
+
+[33mcommit c7e71d751f218207902f39393d748f4c529d0ec7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jan 11 12:51:54 2017 +0200
+
+    DataSchema HaHeaderRow added
+
+[33mcommit 5fc9ad29da867f2a4194d782ebebbc16e5c95e2b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jan 11 12:51:29 2017 +0200
+
+    Entities updated
+
+[33mcommit 9de9bd7f96380de4f6a846b2af6115b1ff1fc943[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jan 11 12:51:07 2017 +0200
+
+    Start, EndDate now Dates
+
+[33mcommit 88ea5351dd29a52e22556edd99bcb16aa3e34382[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jan 11 12:48:30 2017 +0200
+
+    SAEON.Observation.Identity added
+
+[33mcommit a90f27c74fdce046b64150d0a4a8a18c6d6b35e5[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 9 13:52:30 2017 +0200
+
+    WebAPI added
+
+[33mcommit 33b83b30f296f9e0f6ec99374b31b9992f438484[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 9 13:14:00 2017 +0200
+
+    QuerySite added
+
+[33mcommit e745e7945faf547919dd0fc40cf53fad6a24b232[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 9 12:34:20 2017 +0200
+
+    Error adding QuerySite
+
+[33mcommit c9436c342668622d3a3de21eec3b0e2c211d9be1[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jan 9 12:05:19 2017 +0200
+
+    QuerySite added
+
+[33mcommit 41f355f84d8bdf5753a5d5ea64fd5ef4543b83b8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 6 16:31:10 2017 +0200
+
+    gitignore updated
+
+[33mcommit e9c392a826a267f66a602627e17029ce8f2a6592[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 6 16:14:48 2017 +0200
+
+    SAEON.SubSonic installed
+
+[33mcommit bd4f9cc7e1cce787cb04558d6bdf20d18bc6cf6f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 6 16:13:34 2017 +0200
+
+    SAEON.SubSonic added
+
+[33mcommit 8bf934a3be1a55d3ed41b28353e838c529be4c06[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 6 14:30:49 2017 +0200
+
+    SAEON.SubSonic added
+
+[33mcommit 8601beaff73cb3b5c0a71902d317dc8ddba607e8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 6 14:30:14 2017 +0200
+
+    SAEOn.FileHelpers added
+
+[33mcommit d87f1e542eefcc38113ac51e920df1e16208a19a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 6 14:24:14 2017 +0200
+
+    SAEON.FileHelpers added
+
+[33mcommit 36e6c7784bbee12aa414233ac91dce31d0e6e206[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 6 13:22:07 2017 +0200
+
+    Database version 2.0.21
+
+[33mcommit 4db676ac1e14af16a4966b971d1d88821a78b4f7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jan 6 12:33:28 2017 +0200
+
+    Remove the now ignored directory App_Data
+
+[33mcommit f9c39e78e335e8e59b5ca9cff9f99c21bfa83f1c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Dec 14 17:45:04 2016 +0200
+
+    Bassons Kloof Rainfall data #44
+
+[33mcommit e53f78d8f1a788ef495c124a2996db62ce98af4d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Dec 14 13:15:12 2016 +0200
+
+    New SAEON.FileHelpers and SAEON.SubSonic
+
+[33mcommit fcbb97ba9ac25030f5ea713458851884be1ff3ab[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Dec 14 10:19:55 2016 +0200
+
+    FileHelpers and SubSonic moved to their own repositories
+
+[33mcommit a4c5014497ee16114d79fb84a8f5b2ebb269461f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Dec 14 10:19:16 2016 +0200
+
+    FileHelpers, SubSonic move to own repositories
+
+[33mcommit e8fb56a30fbce74080f9c674527154f4c3b2a8f8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Dec 14 09:01:30 2016 +0200
+
+    SubASonic renamed SAEON.SubSonic
+
+[33mcommit bb49f68528be98bccebea155b98f81419f1e2549[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Dec 14 09:01:12 2016 +0200
+
+    FileHelpers renamed SAEON.FileHelpers
+
+[33mcommit f2bdaba17be042abd095f46a334b569ac24e7364[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Dec 13 17:22:35 2016 +0200
+
+    FileHelpers added
+
+[33mcommit d24f6b91477eb721c8c976d2a8b0dbe258c18bae[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Dec 13 17:21:53 2016 +0200
+
+    SubSonic added
+
+[33mcommit 9b2168347814a232a9afae81076a816b7680d92d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Dec 13 17:21:24 2016 +0200
+
+    FileHelpers added
+
+[33mcommit 508a34f5146fad13c47efa34ee098d80e6871a46[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Dec 13 15:21:44 2016 +0200
+
+    ImportBatches timeouts
+
+[33mcommit b8e1e358d2f9959127e5342b9483bac398178af6[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Dec 13 15:21:11 2016 +0200
+
+    Entities added
+
+[33mcommit b1b16eeb196f450d748cd8d7c950105d5946d4ab[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Dec 13 15:20:50 2016 +0200
+
+    Datbase version 2.0.20
+
+[33mcommit 3f262d5fccdc4c969e647d03cb289be14601edd7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Dec 6 16:17:41 2016 +0200
+
+    SAEON.Observations.Entities added
+
+[33mcommit 2db6e2e73660a16299d95072dfc1669704f3fb5c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Dec 6 16:17:23 2016 +0200
+
+    SubSonic recordcount now adds Option(Recompile)
+
+[33mcommit 5e6f4e0783f2951ac1c7b3da35ca666a1215440b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Dec 5 17:00:24 2016 +0200
+
+    #37 EmptyValue not being set
+
+[33mcommit 2b6d76c49c355a294c688d369428b78b7d9b9299[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Dec 5 16:54:55 2016 +0200
+
+    Database versopn 2.0.19. Closes #38
+
+[33mcommit 11e9e185f046099fad563633becd72a63a738659[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Dec 5 15:23:49 2016 +0200
+
+    Closes #34, IsRoleReadOnly being set to null not 0
+
+[33mcommit 0a03240fa2754249caa2b7495698fc07cca00862[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Dec 5 13:48:00 2016 +0200
+
+    Issue #36, filename needs to be cleaned of invalid chars before saving
+
+[33mcommit cd08d9ff3c2d929ffd6fb00ab39d308e4814f13d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Dec 1 16:59:31 2016 +0200
+
+    Merge moved to its own repository
+
+[33mcommit 5d4fe9626d5bc493135391ec9c1da472ce388c00[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Dec 1 12:01:19 2016 +0200
+
+    Import Batches now imports nulls
+
+[33mcommit fc938fac65c1307db305082a740e361da6407d0a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Dec 1 09:55:34 2016 +0200
+
+    Data Query selection at offering level not working
+
+[33mcommit 3b4643d4f41cb6d378d7677ec9ddbca3a564e544[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 30 22:52:54 2016 +0200
+
+    Import batch ignore sensor data sources
+
+[33mcommit 2c7758de2b21b85bf2c643b3e00a3f38d952dd2d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 30 21:47:35 2016 +0200
+
+    Data version 2.0.18
+
+[33mcommit 1cfeac4a275171e81dc26afd5d40ea5cdfff1ee7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 30 21:45:37 2016 +0200
+
+    Dataversion 2.0.18
+
+[33mcommit c9f643d43e31d46496ebafa1e9befcbdfc56f2ca[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 30 21:44:42 2016 +0200
+
+    Data version 2.0.17
+
+[33mcommit 87642cf7d13bd622f25f2b44c1da98a113ffd0e9[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 30 21:44:05 2016 +0200
+
+    Database version 2.0.17
+
+[33mcommit 8629c7b16aa884f47c59915e16290faf0f0a3b6b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 30 14:34:13 2016 +0200
+
+    Import ignores nulls
+
+[33mcommit ac997ce03fec7b24e5d1fee096e2a9c1b35c3049[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 30 14:33:46 2016 +0200
+
+    Sensor, Instrument, Station links DateTime sensitive. Station, Site Date sensitive
+
+[33mcommit f99d368ed2deb0496a17c5488982f08d0fc87142[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Nov 29 20:27:15 2016 +0200
+
+    Tweaks
+
+[33mcommit 41d8114b6d42a6c907c13fca023d36c9403acf67[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Nov 29 16:22:42 2016 +0200
+
+    Import Batches timeouts, Data Sources add schema confirms removal of sensor schemas, Data transformations add button not working
+
+[33mcommit 9e5340b7369d15dd02e9aac861ef2c4012a88916[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Nov 28 16:37:56 2016 +0200
+
+    Database version 2.0.17
+
+[33mcommit 53229309a8e777e4e129747da9f9497d5a6e7a33[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Nov 25 15:34:56 2016 +0200
+
+    SubSonic fixes for paging
+
+[33mcommit 32b7eab08e16416f5d30536f4c856e51b70b28b1[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Nov 24 17:13:40 2016 +0200
+
+    DataQuery expand on demand, Status and Reason added
+
+[33mcommit 34cb667df56ba450355d8dbec83c5f775231b3f4[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 23 17:08:17 2016 +0200
+
+    DataQuery expand on demand
+
+[33mcommit 1c49734f6e722adb8ed6576b3fa4d5cd09d183a3[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 23 17:08:00 2016 +0200
+
+    Old websites removed
+
+[33mcommit 8b9e276acb6fe334c19178260376aef3b0fff72c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 23 17:06:03 2016 +0200
+
+    Old websites removed
+
+[33mcommit 9e9d5bed73d7fb7f84cc57562fc1c5ba445e7e78[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Nov 22 12:30:04 2016 +0200
+
+    Old projects removed
+
+[33mcommit 5c2a569597e6e4b882cb376cb49e4d7de4c9c12e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Nov 21 18:54:37 2016 +0200
+
+    ImportBatch verification
+
+[33mcommit 68142feecf151fd65a52f62175f14a2950c9be85[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Nov 18 15:45:30 2016 +0200
+
+    Package updates, fixes for #27 and #28
+
+[33mcommit 2a3d0dcbb4a91d4de1b59573e3e27ec087f15712[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 16 17:22:40 2016 +0200
+
+    Import Batches, new import usins SchemaColumns
+
+[33mcommit 209a5e03ba7cd6a36f0fc8571d255fd4d13a60b0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Nov 10 19:06:51 2016 +0200
+
+    Data Query Test removed
+
+[33mcommit 628fea8e7020a95d9afad1f4e630bd2376d02efc[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Nov 10 19:04:12 2016 +0200
+
+    Database version 2.0.16
+
+[33mcommit 38e9dd691298993c0af3a21f0fb637bbc6d905cd[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Nov 10 16:21:24 2016 +0200
+
+    Data Schema fixes, closes #25
+
+[33mcommit a9b66c196b47dd15fe3c7531aeac788db712f88a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Nov 10 16:20:42 2016 +0200
+
+    Date Query quick fixes
+
+[33mcommit c540e1fa9268c0b841bdfe608439b062c7c7bfe3[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Nov 10 16:19:42 2016 +0200
+
+    Database version 2.0.16
+
+[33mcommit b712b6edea43837e3a7ac3d77b79b0f3dc06678c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Nov 10 14:01:36 2016 +0200
+
+    Sensor Schema not loaded on edit
+
+[33mcommit 09cba5711b351e537def8290b65ade1210e0dc69[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 9 15:11:22 2016 +0200
+
+    Data Query form for new database structure
+
+[33mcommit dedb059b392a7b0309bc065a8fedc19d1596dabe[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 9 15:11:01 2016 +0200
+
+    Database version 2.0.16
+
+[33mcommit b7a5725e505c69c5337537e16d34f24ac65fbb98[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 9 15:10:10 2016 +0200
+
+    Database version 2.0.16
+
+[33mcommit 6c7396a57c2419f74973f41d761c2b026c7cfc05[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Nov 8 15:13:18 2016 +0200
+
+    Database version 2.0.16
+
+[33mcommit 73cad42bd119fe3b362eea75f93b15c0d7f2dbde[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Nov 8 15:11:26 2016 +0200
+
+    Database version 2.0.16
+
+[33mcommit 57f0d089ff528370f4c3b2d3e3b3288ccacfacd0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Nov 7 17:53:05 2016 +0200
+
+    Import Batch won't import HOBO data. Closes #20
+
+[33mcommit a972cd836c725fd448e4d2d0d543cc42614f4cbc[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 2 17:07:05 2016 +0200
+
+    Logging added to ImportBatch
+
+[33mcommit be507ed4e7efd50034b55d4c4d2c7d08d3b1f9b2[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 2 16:06:52 2016 +0200
+
+    DataQuery, closes #15
+
+[33mcommit ed054553072f0b326376217fddeb95ddef2d471b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Nov 2 10:14:06 2016 +0200
+
+    Database version 2.0.15. Close #17
+
+[33mcommit 8f18e2024e2783144d701d3f3bd976e83d0dd1b2[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Nov 1 17:22:40 2016 +0200
+
+    ImportBatches date problem and value problem
+
+[33mcommit 5f845f19a24d5d95d18735680779de48810bd031[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Oct 31 10:28:03 2016 +0200
+
+    Query Website added
+
+[33mcommit c3509d165f2e01e4d16261a2dcf14d8787e76991[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Oct 28 16:33:15 2016 +0200
+
+    Import Batches apply Status and Reason
+
+[33mcommit 1df423b679d6dd809803d27a6d4a15d8aeed5c9c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Oct 27 13:34:13 2016 +0200
+
+    Import Batches added Apply for Status and Reason
+
+[33mcommit 7161d0c9069b1ddf96b6a041fc8badd091aac337[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Oct 25 11:08:11 2016 +0200
+
+    Database version 2.0.14, Observation row correlation, ImportBatches now show Observations
+
+[33mcommit 27a77d14497c6a00717f1d9df558c83f1adc38b1[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Oct 20 17:18:38 2016 +0200
+
+    SchemaColumns conversion
+
+[33mcommit d4a5fca7f5685563b1161285057ff05c0c96005e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Oct 19 14:16:46 2016 +0200
+
+    DataSchema columns grid. Closes #2
+
+[33mcommit e73fe1676537cffcdf639401afd506e3697369da[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Oct 17 17:07:19 2016 +0200
+
+    SchemaColumn conversion
+
+[33mcommit e3b9ab5a4b55ebd3662c98b1f5f157eda2e0c983[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Oct 14 17:11:36 2016 +0200
+
+    Newtonsoft dependancy problems
+    
+    Was the cause of the data transformation problems on new server. Still
+    have to verify on new server
+
+[33mcommit 134f1a709617d1d75f86c2bfbf4116913ef75069[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Oct 12 11:35:28 2016 +0200
+
+    JavaScript source folder now off root
+
+[33mcommit 977098e60267dea442f558021c005dc5215f25df[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Oct 11 16:53:54 2016 +0200
+
+    New DataSources form
+
+[33mcommit 6d326df17ed09cceaab69e705d1a0e2ccfc941d5[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Oct 11 11:53:51 2016 +0200
+
+    Database version 2.0.13
+    
+    File groups Authentication, Observations and Documents added. FileStream
+    enabled on Documents
+
+[33mcommit f7826e2e678aa55c2aa9c342295f32f212b65294[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Oct 7 15:51:23 2016 +0200
+
+    Admin/v1 folder
+    
+    Added Admin/v1 folder for the old forms
+
+[33mcommit c7540bad317f38c75796b1e7b2434e243dff01ab[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Oct 7 15:44:17 2016 +0200
+
+    DataSchemas
+
+[33mcommit ffe4709078d24ba23f9ec78821c371e19db75829[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Oct 7 15:44:04 2016 +0200
+
+    Database version 2.0.12
+    
+    Dropped filtered indexes on Observation.Comment
+
+[33mcommit 0fbaa36c546c764f0af9eaf65727df1b2d79af33[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Oct 5 17:02:56 2016 +0200
+
+    Schema Columns conversion
+
+[33mcommit dd30bbb14c9832a1bfb23b1e856d4ecd7bbcf0f0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Oct 4 16:35:33 2016 +0200
+
+    Module updates move to own solution
+
+[33mcommit 9db0ce5a9e4e11f3dea7a36065c6d105c3075fc0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Oct 4 16:35:18 2016 +0200
+
+    DataSchema changes
+
+[33mcommit 3a23174c5c68523ee3303696fb48146f5068ed24[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Oct 4 16:34:39 2016 +0200
+
+    Import batch cant be deleted
+    
+    Closes #5
+
+[33mcommit bba75446138f7c9b1244aaaa76fd0aab7cee5f0b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Oct 3 16:17:41 2016 +0200
+
+    DataSchema form
+
+[33mcommit c4f35359514e85c0f657272b66fa18581564097c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Sep 30 11:30:55 2016 +0200
+
+    SQL versioning changes
+
+[33mcommit 45d0208fad5165a7d00ebeff8b63daee75599caf[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Sep 30 11:28:51 2016 +0200
+
+    SQL versioning changes
+
+[33mcommit 7e37a39bf7d67f7598f0f3eba21d50d5eae404ee[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Sep 27 15:11:06 2016 +0200
+
+    License updated
+
+[33mcommit ed9fa22ea6ca08fdf4dcc19341f423252457b6bf[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Sep 27 15:10:02 2016 +0200
+
+    License added
+
+[33mcommit e5528e31b1cb56b3b1f0f9a9e359a0d631f23eb2[m
+Merge: 13e7b9b7 4eae51ca
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Sep 27 15:09:17 2016 +0200
+
+    Merge branch 'master' of https://github.com/TimPN/SAEON.ObservationsDatabase
+
+[33mcommit 13e7b9b75b73ec96df92b10563a18a6a748fe3c6[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Sep 27 15:08:47 2016 +0200
+
+    DataSchema form
+
+[33mcommit 4eae51ca4d69cab1e535bfc1d48b542124fd6e29[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Sep 27 14:49:43 2016 +0200
+
+    Create License.MD
+
+[33mcommit 1b588ea9d6a6cce4d9b0bed22432eb28c193f080[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Sep 27 10:31:35 2016 +0200
+
+    SQL Data Versioning now in SQL folder
+
+[33mcommit 5a1a84d061a35bc0e797fabbbdca3c51e9642929[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Sep 26 16:56:53 2016 +0200
+
+    DataSchemas form
+
+[33mcommit acbd71223cd6d1e69af2242c62619fbdedc7e951[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Sep 23 15:59:45 2016 +0200
+
+    DatSchemas form
+
+[33mcommit 8bc193889de33275f9bda83e0a20d5bf60810435[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Sep 22 16:48:37 2016 +0200
+
+    DataSchemas form
+
+[33mcommit b67872e476712cbb30718ae979ea70bfdf7d6a6b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Sep 21 17:07:04 2016 +0200
+
+    DataSchemas form
+
+[33mcommit 521c8870717b32b1e554132313725179f644289e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Sep 20 16:05:08 2016 +0200
+
+    Database v2.0.11 (SchemaColumns)
+
+[33mcommit 12444ff2edb704e53c29be536f612db71ae1c496[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Sep 16 15:25:34 2016 +0200
+
+    Merge, batch steps fixed
+
+[33mcommit a7ceeaead36fbd1392741dda5d5c096c9d803b65[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Sep 15 15:09:15 2016 +0200
+
+    Merge, batch inserts for big tables
+
+[33mcommit d7f23c6fcf65205ed17ef790dd9e430eefad941a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Sep 13 20:19:41 2016 +0200
+
+    Merge - Batch insert for big tables
+
+[33mcommit aecae9d8e8b4fb02cde9c821668b919bfd4ddf5d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Sep 12 15:24:21 2016 +0200
+
+    Merge - Observations, disable enable indexes for performance
+
+[33mcommit f5850ccf6e02b40ac4f925b028898c014ca32761[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Sep 8 13:22:26 2016 +0200
+
+    SchemaColumn
+    
+    Closes #4
+
+[33mcommit bc7f4e6a2f64e8c3243dbc4517926d1de435006d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Sep 8 11:55:51 2016 +0200
+
+    Database v2.0.10
+
+[33mcommit f8a3e9867923c3200992abd0e647d47cb5cdf8ea[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Sep 8 11:30:16 2016 +0200
+
+    Database v2.0.10
+    
+    Closes #3
+
+[33mcommit bb9c7de8fc0d09f79c5dd0c9b270f42d38eb212d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Sep 8 10:47:16 2016 +0200
+
+    Merge, Insert foreign key expansion
+
+[33mcommit ca301dac9e8205d60c638ed8974d66282277a6e0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Sep 7 09:28:14 2016 +0200
+
+    Merge - DataLog
+
+[33mcommit ff0386dc563bc5e222455b7640f3d7b4020805c8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Sep 5 08:58:51 2016 +0200
+
+    Merge foreign key recursive expansion
+
+[33mcommit 1af458972c057e99aec36dbcc0cbc78ec8770469[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Sep 2 15:58:53 2016 +0200
+
+    Merge ManyToMany expansions
+
+[33mcommit 2b14c162487f1587844e8f6a6a64d9b56bed0945[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Aug 30 15:50:14 2016 +0200
+
+    Merge finalization
+
+[33mcommit 79b6c80a35d8397b4d1c3ac13565f8319ea8a098[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Aug 26 16:06:44 2016 +0200
+
+    Database v2.0.9
+
+[33mcommit 9ad26e3d1220bd325daffaec0623fee222219cc8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Aug 23 13:22:54 2016 +0200
+
+    Database v2.0.8
+
+[33mcommit 4bae03c81ad3ae64c901165ef6e2c9194d80d0a4[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Aug 19 13:48:01 2016 +0200
+
+    TFS source control removed
+
+[33mcommit ccdd6eafd5f8c8b048a510f1c91cb336dc380f3d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Aug 18 11:04:07 2016 +0200
+
+    Merge Inserts (except for Observations)
+
+[33mcommit 00e144f2c18bb87d7d28c6b301ce1377319cbe3e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Aug 16 19:55:45 2016 +0200
+
+    Merge inserts except Many to Many foreign keys
+
+[33mcommit d7ce1f21f7880d7950fa81ab4b0b12eec66bcfab[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Aug 16 12:17:19 2016 +0200
+
+    Ext.Net controls
+
+[33mcommit 926601cfdc7bb212941a6e7351a1503beb97ac06[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Aug 16 12:17:06 2016 +0200
+
+    Database changes 2.0.8
+
+[33mcommit 0e11a39163169381f8e6f8ec6fc21d17d76b1022[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Aug 16 08:41:20 2016 +0200
+
+    Selenium UI Tests added
+
+[33mcommit 5402b0a322767f06e1a678555455306d27eb1b2f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Aug 15 12:00:02 2016 +0200
+
+    Gityfying
+
+[33mcommit 69153fbf78dfc30c2c1343381dd21927fbf20ebe[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Aug 12 16:37:17 2016 +0200
+
+    initial commit after conversion
+
+[33mcommit 91b8c90ca02fbf89cdd3d74ce87cc6318442b0b0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Aug 3 08:45:56 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1056
+
+[33mcommit e8c14856c90220f6ceb0c523d445a817ff7861fd[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Aug 1 09:48:29 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1053
+
+[33mcommit 5955ba5949138b1c3773900f0f9f247000d71896[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jul 27 14:10:24 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1052
+
+[33mcommit 30f279f962e2fc31a855a8590c2a7014beef778a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jul 22 13:20:28 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1048
+
+[33mcommit 19e04506e0bdfc7ed4b1c9cc1ec7a95de75c58e6[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jul 22 07:47:06 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1046
+
+[33mcommit e14098ec01975a36b6f59096753b14e87efef8a6[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Jul 19 12:56:54 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1045
+
+[33mcommit 78e2f674a34a90641dae64c3d3dcc80809eb1eca[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jul 18 15:28:55 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1044
+
+[33mcommit e2c53a508fda664e0eae4a2593b573a729dc75cf[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jul 11 17:19:16 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1043
+
+[33mcommit 8ca6f1844c9f57f9f0d6866517172bf9ef5dfacc[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jul 7 12:49:26 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1042
+
+[33mcommit 20de48450c2c16758918f27f577685078bc59000[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jul 7 12:35:29 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1041
+
+[33mcommit 889a55eae8d90dd3e5b7e83e36c10b266bb8d231[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jul 6 14:26:45 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1040
+
+[33mcommit ad54d1641c6227f78d8f76b78e2f4017dd36feec[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jul 6 14:17:11 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1039
+
+[33mcommit b1534af1327f3afe78c7dbd891b1b488ad9ce346[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jul 6 13:49:20 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1038
+
+[33mcommit 257f690b0f5890758ff07ace8ca3f8c101a686b5[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jul 6 13:41:24 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1037
+
+[33mcommit 1b752dc89ee0e7e72cd5714848a6350bf6655d35[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jul 6 13:28:25 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1036
+
+[33mcommit 60e15f5d566177926d22998d7b5b8bece105fd61[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jul 6 12:59:39 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1035
+
+[33mcommit d499c6feed76134eeaa5cb2a0450acc80222009d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jul 6 11:34:11 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1034
+
+[33mcommit df01313899724831a309c711169a56f505ba4381[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jul 6 10:13:34 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1033
+
+[33mcommit 04151b82ecf4b0f466c8f9b0955db58d67c59d6b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Jul 5 13:09:54 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1032
+
+[33mcommit 7a8423c06516fbf62014d46be39e488525c6cc4b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jul 4 14:46:42 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1031
+
+[33mcommit b2820551d1ef43e9056e262cab6ad1be61b616ee[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jul 4 11:04:06 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1030
+
+[33mcommit 8c691c0699474a674df3f978ab20ced86726083f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jul 4 09:33:08 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1029
+
+[33mcommit 8243a786640d10d5eea630c5e0b94a9ee7183235[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jun 30 15:17:25 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1026
+
+[33mcommit 84748063ea8860be609aa2fea5d4d0375423bc01[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jun 27 14:21:48 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1023
+
+[33mcommit 4369db7b5327c43c75b7c0f873cecb0c152d2cdc[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jun 24 14:28:06 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1022
+
+[33mcommit c2d7accd6773d2ab8ab38bd8512afd7e29c5ce74[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jun 24 12:30:20 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1021
+
+[33mcommit 08b2205cfd5a11634e2f75cfce6349dd510c7ede[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jun 20 15:43:14 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1015
+
+[33mcommit d9a466f3d8c96ed77c36c37ff11717fa3c95557d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jun 17 16:31:10 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1013
+
+[33mcommit 473251c0b2390393c9f3ce461938f9c3a6a21955[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jun 17 12:14:51 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1011
+
+[33mcommit d73144a6e8a5f544966fa195f6b843b3ea396ba9[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jun 17 12:13:19 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1010
+
+[33mcommit 33c56dfda0a2b0452c14dc4f971d7352f3f73e27[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Jun 13 10:49:25 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1007
+
+[33mcommit c9a662b98626d9364467fad71591d205d27dbaaa[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jun 10 09:06:59 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1006
+
+[33mcommit 9735bd998dcd7c2d53430a21f7d6da2966aace5b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Jun 10 08:28:34 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1005
+
+[33mcommit fc8102a6a8fd46be01ac6af2428479957c04a1b7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Jun 9 13:36:40 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1003
+
+[33mcommit d18f5a142c6d2449878b6a9ccaf11e8b6e5f76c6[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jun 8 14:25:47 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1001
+
+[33mcommit 8ab9cc1ac27fa16e1acb1f3e03702b9aae3536b0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jun 8 08:41:39 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C1000
+
+[33mcommit 3e493c490a57b1dd1937c1492bc580e60e88d101[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Jun 7 14:54:13 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C999
+
+[33mcommit 9cc646e126fc408edeb95421e90995c4a2e77645[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Jun 7 11:45:31 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C998
+
+[33mcommit 8882996711514867edec996b285cd4b16d648696[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jun 1 11:33:38 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C997
+
+[33mcommit 1a061f4ea1c37825d48370f239f88c085b918a4d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jun 1 08:45:23 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C996
+
+[33mcommit a8877708ed9314cc51c63a1b67fd771f2cbeaefe[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Jun 1 08:42:50 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C995
+
+[33mcommit 528569abcb002191fb2c4cdea434720f4f93f63e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 31 18:36:51 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C994
+
+[33mcommit c6a7bc7858c1f0e50dfe1acf1203b3cc81d0dbb4[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 31 16:46:01 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C993
+
+[33mcommit 7c0f23b0baba71a5d378d05fa4cf599ef660d353[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 31 10:48:15 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C992
+
+[33mcommit d39b515c9c0d1078f12899304cb4b40f16f63114[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 31 08:14:32 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C991
+
+[33mcommit e76d08909cfe8184f88f899b2d42d8c44ec6f20e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 27 10:45:18 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C990
+
+[33mcommit 22ec8d8d28e9e6d94e4a4e205a2c99a390ca7ca1[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 27 10:18:54 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C989
+
+[33mcommit c902be9ae4fb3118d3f8afffedfbaacdcd692a03[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu May 26 14:55:58 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C988
+
+[33mcommit b44cb0c81c016b0638119cba6971f2cb2e8ce924[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 20 13:23:45 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C987
+
+[33mcommit f8cc0e22f94c4cbfc840cf8c207717c831d9351c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 20 09:41:10 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C986
+
+[33mcommit 789881376f6894ce58d86f390f3feb4dbee97acc[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 20 09:27:52 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C985
+
+[33mcommit 5de6dcd8d1b25957e4f9b6a250fad3cf6c3afde1[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 20 09:26:46 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C984
+
+[33mcommit 818b87d7b45dda936c3eef9e6136adef0a4879c6[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 20 09:26:25 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C983
+
+[33mcommit 8756405ccc9a23d79be5742e96e7dea38539821c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 20 09:17:15 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C982
+
+[33mcommit 57eba08496829b8addb948e02a5d94ba1e42f435[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 17 18:26:47 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C981
+
+[33mcommit c9596e9fc3da1e6eaaecda21b3252a6dad19e80f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 17 11:30:10 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C980
+
+[33mcommit af0a6b3d483c7dcd20265e41d39b12969e223902[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 17 10:12:49 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C979
+
+[33mcommit 4651bbe6a44be863d1082662ea3cdd359edf7b24[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon May 16 11:21:52 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C978
+
+[33mcommit ac830668bb3b1d3f22a7fe75392622f32e23f216[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 13 14:45:30 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C977
+
+[33mcommit 2ce1e274ea8f307230f30ce0fec3e65f429828f8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu May 12 13:12:58 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C976
+
+[33mcommit 48251af13eafd53ce37eb502245870dceedc9e31[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu May 12 12:20:46 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C975
+
+[33mcommit c333a8646d27b239fe9c39237c67cbabbd1cd23f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed May 11 12:42:27 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C974
+
+[33mcommit fac5a0dd84aad0c4e06b228f15c697205d63573e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon May 9 14:39:40 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C970
+
+[33mcommit b6264e7394b364fc4ccb81188d340d5f5a252169[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon May 9 10:13:16 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C969
+
+[33mcommit da10c7949688f0b6c4cb2ee873a1832928eb711a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon May 9 08:48:19 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C968
+
+[33mcommit ed5c2b5a7ad83919330a77e9a59f48ee20d22f46[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sun May 8 12:48:20 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C967
+
+[33mcommit 3b3d2ab22cea9614c4c46beb68b2dfb3849dec34[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sun May 8 11:29:50 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C966
+
+[33mcommit b829585675d75d22aa06180ac423e883481e5d39[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Sun May 8 09:33:35 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C965
+
+[33mcommit a06ded44100279863f0d8a79d4d0a403be509a01[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri May 6 12:23:05 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C964
+
+[33mcommit 0d4b308929e9accca0eb85b1b6586a5786951a72[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 3 14:12:49 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C962
+
+[33mcommit a0fec0fda3dfbfb776485c0da163d495e72b61c7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 3 11:56:02 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C961
+
+[33mcommit 730d9dce7c0b84a413ffe7fa1b1589336326df41[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue May 3 10:42:37 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C960
+
+[33mcommit cfc5101e65eb64e91d9f5713cef6900342cd565b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon May 2 10:54:20 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C959
+
+[33mcommit d353626d3e64f500bc1dbb4629893cb0c37770fc[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon May 2 10:49:01 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C958
+
+[33mcommit 7bc12a5d4dc36b3a25de9b53c9837f004cc42c5a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 28 14:26:51 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C957
+
+[33mcommit 9eee5cd154dcf65f59412760b57782d6d25295c7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 28 12:12:11 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C956
+
+[33mcommit 99a1a592dbce00c86147b13585c0847731e9832d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 28 11:39:31 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C955
+
+[33mcommit d56c6869eb7800b6d98ac1720b3f8fb64c3a026f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 28 09:14:00 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C954
+
+[33mcommit 43f8fd6e30a7740511ffa60031b64073dc7ca4c8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 26 14:21:22 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C953
+
+[33mcommit 86bce811836409ceaaafbde2e637d44332f13022[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 26 14:00:14 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C952
+
+[33mcommit 46e3185702c632758e20e776269fdfc4008e7950[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 26 13:15:01 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C951
+
+[33mcommit 5c36f0e7b17b969264e7198a77cef9db6b9ae63c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Apr 25 15:19:20 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C950
+
+[33mcommit e03b96e62fb284fe1039febdece69268152b72e0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 21 14:13:08 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C949
+
+[33mcommit b0bee353f366507be816cf529139ef7ba028d4b5[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 21 12:43:05 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C948
+
+[33mcommit f0bfc770160331bdbb142d3c8e55a22720d734f3[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 21 12:39:29 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C947
+
+[33mcommit 9e13dcc6613a22ccda1cbd80c7e60a7f35409ba8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 21 12:35:29 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C946
+
+[33mcommit 8d0c7f2470c81fb4538844fe194e9f268f16811c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 21 12:33:02 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C945
+
+[33mcommit 07b7052f75439dd2b47ff538b145f69b139d8c2b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 21 12:26:42 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C944
+
+[33mcommit 7e1afc65d6d601cebadef513d40c55ebf89dfd40[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 21 11:53:55 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C943
+
+[33mcommit 64122d2712fdccc7101007764a2c889f9b0ea3a0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 21 11:42:06 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C942
+
+[33mcommit 25f6c0668fb41da69bad630bd6b23d807f169df5[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 20 14:18:56 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C941
+
+[33mcommit c3beb520db989448d46de7bdafbe599955d1a925[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 20 13:26:07 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C940
+
+[33mcommit a67b8c8959db315abd282aabb65f68619c313a80[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 20 10:08:57 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C939
+
+[33mcommit b4a2ce1cda6d2ebc22b824d5001eaf84f0427deb[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 19 14:46:35 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C938
+
+[33mcommit e0f175c6bab34f0e81b92c1d73cb940d1130893f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 19 11:12:56 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C937
+
+[33mcommit 8c20cb94e4b3a664a9e9b25bf2d09b7612aa364e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 19 08:37:00 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C936
+
+[33mcommit 71ee2699193454557148b42f81692535f89c9659[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Apr 18 14:41:18 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C935
+
+[33mcommit 9848d380a462c68ef2d27fbb09c1903380f718ce[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Apr 18 14:30:11 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C934
+
+[33mcommit b5f3f9cedab2e247d5baa33115b49c2b5f1da4b3[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Apr 18 12:43:56 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C933
+
+[33mcommit 72ea9f7051bf59c504a1513885ad67e7bccb8726[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Apr 18 12:37:05 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C932
+
+[33mcommit f57035094a4dae2ab4f761c0361dc98338b8b192[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 15 10:26:36 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C925
+
+[33mcommit 2bab3b99640e09f03e7ad5434765cdbcef04e643[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 15 10:12:01 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C924
+
+[33mcommit 039db56a4e15707f0d3ae6a506848206bea290cb[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 15 09:46:10 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C923
+
+[33mcommit 5a42bef6601ad0db86f04e7c966f1703ea8f7ff5[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 15 09:45:24 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C922
+
+[33mcommit 9495730f5395d3fc14d40b14e6e609405c0e921b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 15 09:23:31 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C921
+
+[33mcommit 72b7cb0b629fcee7b71ddaaab766a56fe1faffbd[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 15 08:56:35 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C920
+
+[33mcommit bd652f8b278417846f87ea556ac48df21d35b148[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 14 15:48:01 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C919
+
+[33mcommit 78efae36415741b9790d29f3a86b470c912cf24c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 14 15:20:57 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C918
+
+[33mcommit 0725b52991880290c2db1074677d29c9af2f9435[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 14 14:47:51 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C917
+
+[33mcommit 5b2adc23de5436ee0e404c2f38597beb32d98ea8[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 14 14:23:47 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C916
+
+[33mcommit e1a93ee4389aadde7dea3a29c149bd2b398ac370[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 14 14:10:48 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C915
+
+[33mcommit ab370034cd6fefa404340a805e6eb5edb8234e1d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 14 14:00:30 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C914
+
+[33mcommit 364efbe27136c3710dceb9a947a51ab73a00d703[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 14 12:59:10 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C913
+
+[33mcommit 31521eb3aa8634024e66e90e6da74b5bfa8f779f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 14 12:58:21 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C912
+
+[33mcommit 441c01664c7d1863e7d5888d3470b56758efda31[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 14 12:55:26 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C911
+
+[33mcommit 355f2abbf5d9abbaffc910b940a7318132465a93[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 14 12:48:52 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C910
+
+[33mcommit f0eace7593b2bc2daa8507c768c9ef0425c1dcc3[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 13 14:08:03 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C909
+
+[33mcommit d64e991772bbf1d04d28f8857468e00c551d3c6b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 12 14:57:43 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C908
+
+[33mcommit 3b272509bb0610cd4c90a8dedb592a2308fb4e87[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 12 11:35:55 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C907
+
+[33mcommit a53679f8a5c49f7d6f08ddef0fbb5e462e57f142[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Apr 12 11:07:05 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C906
+
+[33mcommit ce5da8a0fc711e98602a01039c4db461fa57df7a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 8 13:52:37 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C905
+
+[33mcommit 9c309f9ccadd4c5481647d31e0b7a90031caaf62[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 7 12:15:44 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C904
+
+[33mcommit 690a22224b56454135b0b7dd5e926b42066581e7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 7 10:23:41 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C903
+
+[33mcommit a65390f6b5c890ccedfc74e84c219453624c6186[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 7 09:06:16 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C902
+
+[33mcommit e4955928c000a38df5bf6d28537fa4cff48c2aef[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Apr 7 09:05:21 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C901
+
+[33mcommit 80339439eb0af4f586ff77166ebb6dbc4e52f431[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 6 14:53:39 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C900
+
+[33mcommit 69b9a2a78aec4f4abaa6c0e89e45e947c1a5e32c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 6 13:45:03 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C898
+
+[33mcommit f6b09406ac60f9166ecd1aafe57ac925427d4d92[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 6 13:19:48 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C897
+
+[33mcommit 9cb07fa1fdfca6748ec0fd427a544b76ddcce607[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 6 13:19:16 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C896
+
+[33mcommit 0440494d90aaac56a6d2a5e03f6187da7dbc4045[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Apr 6 09:11:37 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C895
+
+[33mcommit 5450bbb2eb06c853f9fc4e811a81cc831ce61ee3[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 1 13:19:19 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C894
+
+[33mcommit abcda7b9c46ea125bf43302b01e2f661585a3f68[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 1 12:32:53 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C893
+
+[33mcommit 59f88a744236e680ac2e0a896e9000d800076089[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 1 12:21:49 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C892
+
+[33mcommit 1b99147cca367e6d437576673a6be4efb31d67d3[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 1 12:19:32 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C891
+
+[33mcommit 1fb894b99321d2fcf39c3b9c8536479995ea8c1b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 1 11:41:50 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C890
+
+[33mcommit edcfb7570c4b10b61fe666cb3d294f0b69fd7ea2[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Fri Apr 1 11:17:09 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C889
+
+[33mcommit 69f8e7c7073587f9cfdc91a63848bdfe045f9f5d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 30 15:03:14 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C888
+
+[33mcommit ee8cb7626de445320f200447559dc21bed328edc[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 30 14:59:02 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C887
+
+[33mcommit 19f18b6df4908ea5fae033265d0489867660c4d1[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 29 14:35:01 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C886
+
+[33mcommit 9192e90479b9710d5d29ad45916872d9392c085d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 12:51:33 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C884
+
+[33mcommit bb2c04704cd367964770ca7faa300713c27b8875[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 12:44:30 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C883
+
+[33mcommit 8558d4be6563bf07010306793f4fe3252c3c29bb[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 12:39:14 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C882
+
+[33mcommit 82438c91c4924912c34bb6b7b9b890455bca4c9d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 12:33:27 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C881
+
+[33mcommit b786795120842cfa35f32029f4d96887761b1c7e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 12:10:30 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C880
+
+[33mcommit eb70bd1de57098dfbe4a0563b912954c8534a04e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 12:10:19 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C879
+
+[33mcommit 2fb0047bf9362e8c0f793ad2e98879fb8b7fa793[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 12:06:34 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C878
+
+[33mcommit 51c1555dffa4afe910422a7890c3755021deb309[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 12:00:52 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C877
+
+[33mcommit 1800f3407f4912091a96463649f04ae8e583b966[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 11:57:21 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C876
+
+[33mcommit ed9d15603fae552fa447c07241c305b1e5778255[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 11:55:09 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C875
+
+[33mcommit 24e862502e73760c8a3c30fb45a0189f749ffec2[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 11:33:51 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C874
+
+[33mcommit 600e5c8436a411ef0620a90e744e63598ae8c7c0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 10:25:44 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C873
+
+[33mcommit b123dbc61c9ff30e179c7a6012e85d8f1fff4411[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 10:07:12 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C872
+
+[33mcommit 747edfcf9e881f44d0ede236dabc1c1cd2eb8718[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 10:02:48 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C871
+
+[33mcommit 107de8e0165d84307c4c623f23f8ce13feea6fab[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 09:42:10 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C870
+
+[33mcommit d37aadf1b7b9a69174fa826a5ef6f2031aed679e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 09:41:49 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C869
+
+[33mcommit 4645fae82f515956a85521c02b0fb72062962bec[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 09:29:11 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C868
+
+[33mcommit 547935b98ccee6637ffb532fde998e16c21f78ec[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Thu Mar 24 09:07:26 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C867
+
+[33mcommit 35521e9a4a6b8d6587aaf60a284bfa8846778cd0[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 23 14:00:55 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C866
+
+[33mcommit 4ec8b4876ff262168b82ddff9969676cc327a0e9[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 15:10:41 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C865
+
+[33mcommit bbe3b49eaf5d9ec4062455b853ba3d109da8f46d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 12:48:37 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C864
+
+[33mcommit 5bf5b2c30daf1d19acfec3f6565655d982cd0685[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 12:48:13 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C863
+
+[33mcommit 53583d9aea67703d6394197ea30e0b7eda785f0e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 12:47:40 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C862
+
+[33mcommit dc5a2abad8e07730fa26325f9d192b4a5d5d6880[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 12:40:41 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C861
+
+[33mcommit f4c954857692a05f9e0a6beb380e3a7ef88260c9[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 12:26:01 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C860
+
+[33mcommit 672dd2d209f1c13e0451506a5e529bca95bd9a8c[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 12:10:56 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C859
+
+[33mcommit 046b06ac0cb2ab11298f5b42a170e8fca76bf884[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 12:05:54 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C858
+
+[33mcommit ca1c2046a40941344071ff2307a5d7106db86230[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 12:02:36 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C857
+
+[33mcommit 242575b2e3afdcc8666773de2aeb6efbe7d7199b[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 11:57:53 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C856
+
+[33mcommit 3f1f50cfe240fd75ed72da2fa82687ab84f796aa[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 11:57:22 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C855
+
+[33mcommit 030c70a3542fec2eb92629636e1c90554432fea3[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 11:04:34 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C854
+
+[33mcommit 47204fc9bccd30fce2e95b54b8c4cb9053634dee[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 10:45:00 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C853
+
+[33mcommit 98e6773bf42695094179eefe74460ad47f597271[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 10:44:48 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C852
+
+[33mcommit d87c36f9385804aecd0ac63450fabe68b8b3c3a9[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 09:36:24 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C851
+
+[33mcommit ac67ed567b052fe877e186991edd5d8ce7ce9dc6[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 09:35:21 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C850
+
+[33mcommit 80b9cd9636575b9b48ccf46e15dafd2442959427[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 09:27:53 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C849
+
+[33mcommit 4b3b9138a78acf77de9160d470018eb4015b31f6[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 09:27:27 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C848
+
+[33mcommit d887ef782c1b80309fbe6751c4940e41c9329d17[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 22 08:23:46 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C847
+
+[33mcommit 4e5a047df0e28e9ccf27440d938c5914d155fa8f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 21 14:39:34 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C846
+
+[33mcommit 4b92d1017c6352c4005c78aefad8394cf0b83408[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 21 09:52:13 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C845
+
+[33mcommit dd66ef6f153726e23eb5371559941f69dbb760ea[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 21 09:47:38 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C844
+
+[33mcommit 87bd2c9eb29cb4398fd7cfe8dcefc82510f598a5[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 16 15:01:02 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C840
+
+[33mcommit d80597c3d713b4ade06d90dbd414af5026f974e3[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 16 14:55:35 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C839
+
+[33mcommit 17150d274db009e569d2c8e8dc2c335a4b76f0e5[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 14:15:42 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C838
+
+[33mcommit 5870963e96a5ad34b5a411b3b44b616dfe59a5e9[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 14:12:49 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C837
+
+[33mcommit 3899a5065404c6e04ebbc91b79dd5e4b4a21f639[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 13:13:58 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C836
+
+[33mcommit 8d9963b51bb7d926392bb6b607868500cf80636e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 10:26:22 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C835
+
+[33mcommit ed7b83f10cbe1808dad9db2e502996c8a858ac3d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 10:18:02 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C834
+
+[33mcommit a87b1ced5bbd8eea1d467e49b70da7557d0a3cc6[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 10:15:29 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C833
+
+[33mcommit ba7efbbc7892211b0a69ad38bfc9105c7d2ea9f1[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 10:14:07 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C832
+
+[33mcommit 186175d2d1f621321649bd007fa1b08e15121194[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 10:13:09 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C831
+
+[33mcommit b8910065c3239cda19028dc2f5156d0c5212590f[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 10:03:44 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C830
+
+[33mcommit 98f8bf344252060b30a729b36e9ce9dc0e6c70b7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 09:31:14 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C829
+
+[33mcommit 169e1b0a2fb6ccef033adfab74281e85e35c2396[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 09:29:13 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C828
+
+[33mcommit 5d0e72bb0769b60ba443dd6258ee39df935793d1[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 09:27:13 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C827
+
+[33mcommit 2e30087af608ed3dece1c781f74e761ad0d8fa40[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 09:26:10 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C826
+
+[33mcommit 382c9ae9bbac0fd46fc3c222bf887d5b00c7d989[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 09:25:58 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C825
+
+[33mcommit ac69322888c7307f778bde915dc4bde2401af3fb[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 09:24:55 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C824
+
+[33mcommit 154dcad48cbcd32f4eb5f862217ec01ac4bd8afb[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 09:14:06 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C823
+
+[33mcommit 35b933af8bda68e98767294a27993f9c70596a84[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 08:24:29 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C822
+
+[33mcommit 8f56386c73c73e912cfaaf322974edd6630316e7[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Tue Mar 15 07:50:55 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C821
+
+[33mcommit 643a310f4d9088914b4656af85ba65d5fced9b36[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 14 16:02:59 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C820
+
+[33mcommit 997c883fc2956cbb020c53058039c99607258052[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 14 15:57:58 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C819
+
+[33mcommit 9a33fa1f7e08855589918c1d16cc37f9b3946a4a[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 14 15:54:55 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C818
+
+[33mcommit de48a534a4cba084d7768c62065dc40c886096dd[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 14 14:41:19 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C817
+
+[33mcommit 0f154998ebf1ef133bac2ab216c783d5e8ee158e[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Mon Mar 14 14:27:12 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C816
+
+[33mcommit e83f628cf0233868283b34c044045c47a6c02f2d[m
+Author: Tim Parker-Nance <tim@nimbusservices.co.za>
+Date:   Wed Mar 9 09:49:49 2016 +0000
+
+    git-tfs-id: [https://nimbusservices.visualstudio.com]$/SAEON/Observations Database;C801

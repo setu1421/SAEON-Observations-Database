@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;net472;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net461;net472;</TargetFrameworks>
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
     <Authors>Tim Parker-Nance</Authors>
     <Company>South African Environmental Observation Network (SAEON)</Company>
@@ -9,13 +9,14 @@
     <Description>SAEON Observations Azure</Description>
     <Copyright>© 2018-2019 South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.46</Version>
+    <Version>1.0.58</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.57" />
+    <PackageReference Include="Microsoft.Azure.DocumentDB" Version="[2.1.3]" />
+    <PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.74" />
     <PackageReference Include="SAEON.Azure.Storage" Version="1.0.52" />
-    <PackageReference Include="SAEON.Logs" Version="1.0.41" />
+    <PackageReference Include="SAEON.Logs" Version="1.0.42" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
