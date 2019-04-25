@@ -24,5 +24,11 @@ namespace SAEON.Observations.QuerySite.Controllers
 
             return View();
         }
+
+        [Route("HowToCite")]
+        public ActionResult HowToCite()
+        {
+            return View();
+        }
     }
 }
