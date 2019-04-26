@@ -142,7 +142,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var azure = new Azure();
-            Logging.Information("Adding documents");
+            Logging.Information("Adding documents for ImportBatch {ImportBatchId}", importBatchId);
             var sql =
                 "Select" + Environment.NewLine +
                 "  *" + Environment.NewLine +
@@ -203,17 +203,17 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     {
                         var batchCost = azure.UpsertObservations(documents);
                         cost += batchCost;
-                        Logging.Verbose("Added batch of {BatchSize} Cost: {BatchCost}", documents.Count, batchCost);
+                        Logging.Information("Added batch of {BatchSize} for ImportBatch {ImportBatchId} Cost: {BatchCost}", documents.Count, importBatchId, batchCost);
                         documents.Clear();
                     }
                 }
-                if (documents.Count > 0)
-                {
+                if (documents.Any())
+                { 
                     var batchCost = azure.UpsertObservations(documents);
                     cost += batchCost;
-                    Logging.Verbose("Added batch of {BatchSize} Cost: {BatchCost}", documents.Count, batchCost);
+                    Logging.Information("Added batch of {BatchSize} for ImportBatch {ImportBatchId} Cost: {BatchCost}", documents.Count, importBatchId, batchCost);
                 }
-                Logging.Information("Added {Documents} documents in {elapsed}, Cost: {Cost}", table.Rows.Count, stopwatch.Elapsed, cost);
+                Logging.Information("Added {Documents} documents for ImportBatch {ImportBatchId} in {elapsed}, Cost: {Cost}", table.Rows.Count, importBatchId, stopwatch.Elapsed, cost);
             }
         }
     }
@@ -226,9 +226,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var azure = new Azure();
-            Logging.Information("Deleting {importBatchId} documents", importBatchId);
+            Logging.Information("Deleting documents for ImportBatch {importBatchId}", importBatchId);
             var cost = azure.DeleteImportBatch(importBatchId);
-            Logging.Information("Deleted {importBatchId} documents in {elapsed}, Cost: {Cost}", importBatchId, stopwatch.Elapsed, cost);
+            Logging.Information("Deleted documents for ImportBatch {importBatchId} in {elapsed}, Cost: {Cost}", importBatchId, stopwatch.Elapsed, cost);
         }
     }
 
@@ -870,7 +870,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 stopwatch.Start();
                 try
                 {
-                    Logging.Information("Deleting batch {Id}", importBatchId);
+                    Logging.Information("Deleting ImportBatch {ImportBatchID}", importBatchId);
                     using (TransactionScope ts = Utilities.NewTransactionScope())
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                     {
@@ -888,14 +888,14 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         DeleteDocuments(importBatchId);
                         ts.Complete();
                         stopwatch.Stop();
-                        Logging.Information("Deleted import batch {Id} in {time}", importBatchId, stopwatch.Elapsed);
+                        Logging.Information("Deleted ImportBatch {ImportBatchID} in {time}", importBatchId, stopwatch.Elapsed);
                     }
 
                 }
                 catch (Exception ex)
                 {
                     stopwatch.Stop();
-                    Logging.Exception(ex, "Unable to delete batch {Id} in {time}", importBatchId, stopwatch.Elapsed);
+                    Logging.Exception(ex, "Unable to delete ImportBatch {ImportBatchID} in {time}", importBatchId, stopwatch.Elapsed);
                 }
 
                 ImportBatchesGridStore.DataBind();

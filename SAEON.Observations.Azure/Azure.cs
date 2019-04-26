@@ -350,7 +350,9 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    var resp = await CosmosDB.DeleteItemsAsync(i => i.Id, importBatchId.ToString(), i => i.ImportBatch.Id == importBatchId);
+                    //var resp = await CosmosDB.DeleteItemsAsync(i => i.Id, importBatchId.ToString(), i => i.ImportBatch.Id == importBatchId);
+                    //return resp;
+                    var resp = await CosmosDB.DeleteItemsAsync("ImportBatch.id","ImportBatch.id",importBatchId);
                     return resp;
                 }
                 catch (Exception ex)
