@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.OData;
+using SAEON.AspNet.WebApi;
 using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
@@ -13,18 +14,23 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [ODataRouteName("OData")]
+    [TenantAuthorization]
     public abstract class BaseController<TEntity> : ODataController where TEntity : BaseEntity
     {
-        protected ObservationsDbContext db = null;
-
-        public BaseController()
+        private ObservationsDbContext dbContext = null;
+        protected ObservationsDbContext DbContext
         {
-            db = new ObservationsDbContext();
+            get
+            {
+                if (dbContext == null) dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
+                return dbContext;
+            }
+            private set => dbContext = value;
         }
 
         ~BaseController()
         {
-            db = null;
+            DbContext = null;
         }
 
         /// <summary>
@@ -60,7 +66,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
-            var query = db.Set<TEntity>().AsQueryable().AsNoTracking();
+            var query = DbContext.Set<TEntity>().AsQueryable().AsNoTracking();
             foreach (var include in GetIncludes())
             {
                 query = query.Include(include);

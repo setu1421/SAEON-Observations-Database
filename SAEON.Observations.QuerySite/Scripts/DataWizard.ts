@@ -368,12 +368,12 @@
     //}
 
     export function SetApproximation() {
-        $.get("/DataWizard/SetApproximation")
+        $.get("/DataWizard/SetApproximationAsync")
             .done(function (data) {
                 $('#PartialApproximation').html(data);
             })
             .fail(function (jqXHR, status, error) {
-                ErrorInFunc("SetApproximation", status, error)
+                ErrorInFunc("SetApproximationAsync", status, error)
             });
     }
 
@@ -383,7 +383,7 @@
 
     export function Search() {
         ShowWaiting();
-        $.get("/DataWizard/GetData")
+        $.get("/DataWizard/GetDataAsync")
             .done(function () {
                 $("#PartialTable").load("/DataWizard/GetTableHtml", function () {
                     $("#PartialChart").load("/DataWizard/GetChartHtml", function () {
@@ -397,7 +397,7 @@
                 });
             })
             .fail(function (jqXHR, status, error) {
-                ErrorInFunc("GetData", status, error)
+                ErrorInFunc("GetDataAsync", status, error)
             });
     }
 

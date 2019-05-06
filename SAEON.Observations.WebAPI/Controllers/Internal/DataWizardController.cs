@@ -20,20 +20,20 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             Logging.Verbose("Input: {@Input}", input);
             foreach (var orgId in input.Organisations)
             {
-                input.Sites.AddRange(db.Organisations.Where(i => i.Id == orgId).SelectMany(i => i.Sites).Select(i => i.Id));
-                input.Stations.AddRange(db.Organisations.Where(i => i.Id == orgId).SelectMany(i => i.Stations).Select(i => i.Id));
+                input.Sites.AddRange(DbContext.Organisations.Where(i => i.Id == orgId).SelectMany(i => i.Sites).Select(i => i.Id));
+                input.Stations.AddRange(DbContext.Organisations.Where(i => i.Id == orgId).SelectMany(i => i.Stations).Select(i => i.Id));
             }
             foreach (var phenomenonId in input.Phenomena)
             {
-                input.Offerings.AddRange(db.PhenomenonOfferings.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
-                input.Units.AddRange(db.PhenomenonUnits.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
+                input.Offerings.AddRange(DbContext.PhenomenonOfferings.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
+                input.Units.AddRange(DbContext.PhenomenonUnits.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
             }
             input.StartDate = input.StartDate.Date;
             input.EndDate = input.EndDate.Date.AddDays(1);
             Logging.Verbose("Processed Input: {@Input}", input);
             var startDate = input.StartDate;
             var endDate = input.EndDate;
-            return db.ImportBatchSummary.Where(i =>
+            return DbContext.ImportBatchSummary.Where(i =>
                 (input.Sites.Contains(i.SiteId) || input.Stations.Contains(i.StationId)) &&
                 ((!input.Offerings.Any() || input.Offerings.Contains(i.PhenomenonOfferingId)) && (!input.Units.Any() || input.Units.Contains(i.PhenomenonUnitId))) &&
                 (i.StartDate >= startDate && i.EndDate < endDate));
@@ -195,7 +195,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var phenomenonOfferingIds = features.Select(f => f.PhenomenonOfferingId);
             var phenomenonUnitIds = features.Select(f => f.PhenomenonUnitId);
             //var observations = q.Join(db.Observations.Where(i => (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
-            var observations = q.Join(db.Observations.Where(i => (i.StatusId == null) || (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
+            var observations = q.Join(DbContext.Observations.Where(i => (i.StatusId == null) || (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
                     .Where(i => phenomenonOfferingIds.Contains(i.PhenomenonOfferingId))
                     .Where(i => phenomenonUnitIds.Contains(i.PhenomenonUnitId))
                     .OrderBy(i => i.SiteName)
@@ -339,9 +339,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 UpdatedBy = User.GetUserId()
             };
             Logging.Verbose("UserDownload: {@UserDownload}", result);
-            db.UserDownloads.Add(result);
-            db.SaveChanges();
-            result = db.UserDownloads.FirstOrDefault(i => i.Name == name);
+            DbContext.UserDownloads.Add(result);
+            DbContext.SaveChanges();
+            result = DbContext.UserDownloads.FirstOrDefault(i => i.Name == name);
             if (result == null)
             {
                 throw new InvalidOperationException($"Unable to find UserDownload {name}");
@@ -349,7 +349,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var folder = HostingEnvironment.MapPath($"~/App_Data/Downloads/{date.ToString("yyyyMM")}");
             var dirInfo = Directory.CreateDirectory(Path.Combine(folder, result.Id.ToString()));
             result.DownloadURL = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Download/{result.Id}";
-            db.SaveChanges();
+            DbContext.SaveChanges();
             // Create files
             File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input));
             File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), JsonConvert.SerializeObject(new { }));

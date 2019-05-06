@@ -5,6 +5,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using Syncfusion.Licensing;
@@ -35,7 +36,7 @@ namespace SAEON.Observations.QuerySite
                 try
                 {
                     Logging.Verbose("IdentityServer: {name} RequireHttps: {RequireHTTPS}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.RequireHTTPS);
-                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
+                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
 
                     //app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions

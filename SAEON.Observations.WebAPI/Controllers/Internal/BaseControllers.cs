@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SAEON.AspNet.WebApi;
 using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -17,22 +19,24 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    //[ClientAuthorization("SAEON.Observations.QuerySite")] Uncomment when going live
+    [ClientAuthorization("SAEON.Observations.QuerySite")] //Uncomment when going live
+    [TenantAuthorization]
     public abstract class BaseController : ApiController
     {
-        protected ObservationsDbContext db = null;
-
-        public BaseController() : base()
+        private ObservationsDbContext dbContext = null;
+        protected ObservationsDbContext DbContext
         {
-            using (Logging.MethodCall(GetType()))
+            get
             {
-                db = new ObservationsDbContext();
+                if (dbContext == null) dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
+                return dbContext;
             }
+            private set => dbContext = value;
         }
 
         ~BaseController()
         {
-            db = null;
+            DbContext = null;
         }
     }
 
@@ -114,7 +118,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
-            var query = db.Set<TEntity>().AsQueryable();
+            var query = DbContext.Set<TEntity>().AsQueryable();
             //foreach (var include in GetIncludes())
             //{
             //    query = query.Include(include);
@@ -185,7 +189,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpGet]
         [Route("{id:guid}")]
         //[ResponseType(typeof(TEntity))] required in derived classes
-        public virtual async Task<IHttpActionResult> GetById([FromUri] Guid id)
+        public virtual async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
@@ -249,7 +253,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <param name="item">The new TEntity </param>
         [HttpPost]
         //[Route] Required in derived classes
-        public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
+        public virtual async Task<IHttpActionResult> PostAsync([FromBody]TEntity item)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "item", item } }))
             {
@@ -275,8 +279,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         SetEntity(ref item, true);
                         Logging.Verbose("Add {@item}", item);
-                        db.Set<TEntity>().Add(item);
-                        await db.SaveChangesAsync();
+                        DbContext.Set<TEntity>().Add(item);
+                        await DbContext.SaveChangesAsync();
                     }
                     catch (DbEntityValidationException ex)
                     {
@@ -319,7 +323,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpPut]
         [ResponseType(typeof(void))]
         //[Route("{id:guid}")] Required in derived classes
-        public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
+        public virtual async Task<IHttpActionResult> PutByIdAsync(Guid id, [FromBody]TEntity delta)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "id", id }, { "delta", delta } }))
             {
@@ -354,7 +358,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         //Logging.Verbose("Mapped delta {@item}", item);
                         SetEntity(ref item, false);
                         Logging.Verbose("Set {@item}", item);
-                        await db.SaveChangesAsync();
+                        await DbContext.SaveChangesAsync();
                     }
                     catch (DbEntityValidationException ex)
                     {
@@ -452,7 +456,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpDelete]
         [ResponseType(typeof(void))]
         //[Route("{id:guid}")] Required in derived classes
-        public virtual async Task<IHttpActionResult> DeleteById(Guid id)
+        public virtual async Task<IHttpActionResult> DeleteByIdAsync(Guid id)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
@@ -467,9 +471,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     }
                     try
                     {
-                        db.Set<TEntity>().Remove(item);
+                        DbContext.Set<TEntity>().Remove(item);
                         Logging.Verbose("Delete {@item}", item);
-                        await db.SaveChangesAsync();
+                        await DbContext.SaveChangesAsync();
                     }
                     catch (DbEntityValidationException ex)
                     {

@@ -37,9 +37,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Station</param>
         /// <returns>Station</returns>
         [ResponseType(typeof(Station))]
-        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
+        public override async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
         {
-            return await base.GetById(id);
+            return await base.GetByIdAsync(id);
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Station</param>
         /// <returns>Station</returns>
         [ResponseType(typeof(Station))]
-        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
+        public override async Task<IHttpActionResult> GetByNameAsync([FromUri] string name)
         {
-            return await base.GetByName(name);
+            return await base.GetByNameAsync(name);
         }
 
         /// <summary>
@@ -59,9 +59,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="code">The Code of the Station</param>
         /// <returns>Station</returns>
         [ResponseType(typeof(Station))]
-        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        public override async Task<IHttpActionResult> GetByCodeAsync([FromUri] string code)
         {
-            return await base.GetByCode(code);
+            return await base.GetByCodeAsync(code);
         }
 
         // GET: Stations/5/Site
@@ -72,9 +72,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>Site</returns>
         [Route("{id:guid}/Site")]
         [ResponseType(typeof(Site))]
-        public async Task<IHttpActionResult> GetSite([FromUri] Guid id)
+        public async Task<IHttpActionResult> GetSiteAsync([FromUri] Guid id)
         {
-            return await GetSingle<Site>(id, s => s.Site, i => i.Stations);
+            return await GetSingleAsync<Site>(id, s => s.Site, i => i.Stations);
         }
 
         // GET: Stations/5/Instruments

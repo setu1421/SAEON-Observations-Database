@@ -11,7 +11,7 @@ using System.Linq;
 
 public partial class Admin_ImportSetup : System.Web.UI.Page
 {
-    private readonly ObservationsDbContext dbContext = new ObservationsDbContext();
+    private readonly ObservationsDbContext dbContext = new ObservationsDbContext("SAEON");
 
     protected void Page_Load(object sender, EventArgs e)
     {

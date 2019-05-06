@@ -1,6 +1,8 @@
-﻿using SAEON.Logs;
+﻿using SAEON.AspNet.Common;
+using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
+using System.Configuration;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -33,5 +35,11 @@ namespace SAEON.Observations.QuerySite
                 }
             }
         }
+
+        void Session_Start(object sender, EventArgs e)
+        {
+            Session[Constants.TenantSession] = ConfigurationManager.AppSettings[Constants.TenantDefault] ?? "Fynbos";
+        }
+
     }
 }

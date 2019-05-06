@@ -1,5 +1,6 @@
 ﻿using IdentityModel.Client;
 using Newtonsoft.Json;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
@@ -29,7 +30,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var client = new HttpClient();
                     client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+                    client.DefaultRequestHeaders.Add(Constants.TenantHeader, Session[Constants.TenantSession].ToString());
+                    Logging.Verbose("Headers: {@Headers}", client.DefaultRequestHeaders);
                     Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
                     var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
                     if (token == null)
@@ -73,7 +76,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<List<TEntity>> GetList<TEntity>(string resource)// where TEntity : BaseEntity
+        protected async Task<List<TEntity>> GetListAsync<TEntity>(string resource)// where TEntity : BaseEntity
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Resource", resource } }))
             {
@@ -102,7 +105,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<TOutput> GetEntity<TOutput>(string resource)
+        protected async Task<TOutput> GetEntityAsync<TOutput>(string resource)
         {
             using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
             {
@@ -131,7 +134,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<TOutput> GetEntity<TInput, TOutput>(string resource, TInput input)
+        protected async Task<TOutput> GetEntityAsync<TInput, TOutput>(string resource, TInput input)
         {
             string GenerateQueryString()
             {
@@ -168,7 +171,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<TOutput> PostEntity<TInput, TOutput>(string resource, TInput input)
+        protected async Task<TOutput> PostEntityAsync<TInput, TOutput>(string resource, TInput input)
         {
             using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
             {

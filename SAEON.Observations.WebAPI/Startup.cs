@@ -2,8 +2,8 @@
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
-using SAEON.Observations.Core;
 using System;
 using System.IdentityModel.Tokens;
 using System.Web.Helpers;
@@ -22,7 +22,7 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
-                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
+                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
                     JwtSecurityTokenHandler.InboundClaimTypeMap.Clear();
 
                     //var corsPolicy = new CorsPolicy

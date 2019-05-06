@@ -44,7 +44,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> CallApi()
+        public async Task<ActionResult> CallApiAsync()
         {
             using (Logging.MethodCall(GetType()))
             {

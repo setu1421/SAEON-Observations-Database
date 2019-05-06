@@ -1,4 +1,5 @@
-﻿using SAEON.Logs;
+﻿using SAEON.AspNet.WebApi;
+using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,21 +11,24 @@ using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
+    [TenantAuthorization]
     public abstract class BaseController : ApiController
     {
-        protected ObservationsDbContext db = null;
-
-        public BaseController() : base()
+        private ObservationsDbContext dbContext = null;
+        protected ObservationsDbContext DbContext
         {
-            using (Logging.MethodCall(GetType()))
+            get
             {
-                db = new ObservationsDbContext();
+                if (dbContext == null) dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
+                return dbContext;
             }
+            private set => dbContext = value;
         }
+
 
         ~BaseController()
         {
-            db = null;
+            DbContext = null;
         }
     }
 
@@ -63,7 +67,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
-            var query = db.Set<TEntity>().AsQueryable();
+            var query = DbContext.Set<TEntity>().AsQueryable();
             foreach (var include in GetIncludes())
             {
                 query = query.Include(include);
@@ -116,7 +120,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [HttpGet]
         [Route("{id:guid}")]
         //[ResponseType(typeof(TEntity))] required in derived classes
-        public virtual async Task<IHttpActionResult> GetById([FromUri] Guid id)
+        public virtual async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
@@ -149,7 +153,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [HttpGet]
         //[ResponseType(typeof(TRelated))] Required in derived classes
         //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected async Task<IHttpActionResult> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : IDEntity
+        protected async Task<IHttpActionResult> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : IDEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
@@ -240,7 +244,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [HttpGet]
         [Route]
         //[ResponseType(typeof(TEntity))] required in derived classes
-        public virtual async Task<IHttpActionResult> GetByName([FromUri] string name)
+        public virtual async Task<IHttpActionResult> GetByNameAsync([FromUri] string name)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Name", name } }))
             {
@@ -280,7 +284,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [HttpGet]
         [Route]
         //[ResponseType(typeof(TEntity))] required in derived classes
-        public virtual async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        public virtual async Task<IHttpActionResult> GetByCodeAsync([FromUri] string code)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Code", code } }))
             {

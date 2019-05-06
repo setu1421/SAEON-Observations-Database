@@ -26,8 +26,12 @@
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
     @Styles.Render("~/Content/css")
-    <link rel="stylesheet" href="~/node_modules/mdbootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/node_modules/mdbootstrap/css/mdb.min.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
     @RenderSection("Styles", required: false)
     @Scripts.Render("~/bundles/modernizr")
     <script>
@@ -67,8 +71,8 @@
                         <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     </ul>
                     @*<ul class="navbar-nav ml-auto">
-                        @Html.Partial("_LoginPartial")
-                    </ul>*@
+                            @Html.Partial("_LoginPartial")
+                        </ul>*@
                 </div>
             </nav>
             <h1>
@@ -115,10 +119,14 @@
         </footer>
     </div>
 
-    <script src="~/node_modules/mdbootstrap/js/jquery-3.3.1.min.js"></script>
-    <script src="~/node_modules/mdbootstrap/js/popper.min.js"></script>
-    <script src="~/node_modules/mdbootstrap/js/bootstrap.min.js"></script>
-    <script src="~/node_modules/mdbootstrap/js/mdb.min.js"></script>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/js/mdb.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

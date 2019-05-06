@@ -37,9 +37,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Sensor</param>
         /// <returns>Sensor</returns>
         [ResponseType(typeof(Sensor))]
-        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
+        public override async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
         {
-            return await base.GetById(id);
+            return await base.GetByIdAsync(id);
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="code">The Code of the Sensor</param>
         /// <returns>Sensor</returns>
         [ResponseType(typeof(Sensor))]
-        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        public override async Task<IHttpActionResult> GetByCodeAsync([FromUri] string code)
         {
-            return await base.GetByCode(code);
+            return await base.GetByCodeAsync(code);
         }
 
 
@@ -60,9 +60,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Sensor</param>
         /// <returns>Sensor</returns>
         [ResponseType(typeof(Sensor))]
-        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
+        public override async Task<IHttpActionResult> GetByNameAsync([FromUri] string name)
         {
-            return await base.GetByName(name);
+            return await base.GetByNameAsync(name);
         }
 
 
@@ -74,9 +74,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>Phenomenon</returns>
         [Route("{id:guid}/Phenomenon")]
         [ResponseType(typeof(Phenomenon))]
-        public async Task<IHttpActionResult> GetPhenomenon(Guid id)
+        public async Task<IHttpActionResult> GetPhenomenonAsync(Guid id)
         {
-            return await GetSingle<Phenomenon>(id, s => s.Phenomenon, i => i.Sensors);
+            return await GetSingleAsync<Phenomenon>(id, s => s.Phenomenon, i => i.Sensors);
         }
 
         // GET: Sensors/5/Instruments

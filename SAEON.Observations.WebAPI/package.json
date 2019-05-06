@@ -9,6 +9,5 @@
     "url": "git://github.com/SAEON-Data/Observations-Database.git"
   },
   "dependencies": {
-    "mdbootstrap": "^4.7.4"
   }
 }

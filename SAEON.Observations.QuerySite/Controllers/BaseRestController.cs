@@ -1,4 +1,5 @@
 ﻿using IdentityModel.Client;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
@@ -48,7 +49,9 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
             var client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+            client.DefaultRequestHeaders.Add(Constants.TenantHeader, Session[Constants.TenantSession].ToString());
+            Logging.Verbose("Headers: {@Headers}", client.DefaultRequestHeaders);
             Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
             var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
             if (token == null)
@@ -77,7 +80,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         // GET: TEntity
         [HttpGet]
-        public virtual async Task<ActionResult> Index()
+        public virtual async Task<ActionResult> IndexAsync()
         {
             using (Logging.MethodCall<TEntity>(GetType()))
             {
@@ -109,7 +112,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         /// <returns>View(TEntity)</returns>
         [HttpGet]
         [Route("{id:guid}")]
-        public virtual async Task<ActionResult> Details(Guid? id)
+        public virtual async Task<ActionResult> DetailsAsync(Guid? id)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
@@ -207,7 +210,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [Authorize]
-        public virtual async Task<ActionResult> Edit(Guid? id)
+        public virtual async Task<ActionResult> EditAsync(Guid? id)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
@@ -242,7 +245,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public virtual async Task<ActionResult> Edit(TEntity delta)
+        public virtual async Task<ActionResult> EditAsync(TEntity delta)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", delta?.Id }, { "Delta", delta } }))
             {
@@ -282,7 +285,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [Authorize]
-        public virtual async Task<ActionResult> Delete(Guid? id)
+        public virtual async Task<ActionResult> DeleteAsync(Guid? id)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
@@ -317,7 +320,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public virtual async Task<ActionResult> DeleteConfirmed(Guid id)
+        public virtual async Task<ActionResult> DeleteConfirmedAsync(Guid id)
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {

@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SAEON.Logs;
+using SAEON.AspNet.WebApi;
+using System.Configuration;
+using SAEON.AspNet.Common;
 
 namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
@@ -127,7 +130,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 
             using (Logging.MethodCall(typeof(SensorThingsFactory)))
             {
-                using (var db = new e.ObservationsDbContext())
+                using (var db = new e.ObservationsDbContext(ConfigurationManager.AppSettings[Constants.TenantDefault] ?? "Fynbos"))
                 {
                     Things.Clear();
                     Locations.Clear();

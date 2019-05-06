@@ -19,18 +19,18 @@ namespace SAEON.Observations.QuerySite.Controllers
         protected override async Task<DataWizardModel> LoadModelAsync(DataWizardModel model)
         {
             model.Clear();
-            model.Locations.AddRange(await GetList<LocationNode>("Internal/Locations"));
-            model.Features.AddRange(await GetList<FeatureNode>("Internal/Features"));
+            model.Locations.AddRange(await GetListAsync<LocationNode>("Internal/Locations"));
+            model.Features.AddRange(await GetListAsync<FeatureNode>("Internal/Features"));
             var mapPoints = model.Locations.Where(i => i.Key.StartsWith("STA~")).Select(
                 loc => new MapPoint { Key = loc.Key, Title = loc.Name, Latitude = loc.Latitude.Value, Longitude = loc.Longitude.Value, Elevation = loc.Elevation, Url = loc.Url });
             model.MapPoints.AddRange(mapPoints);
             model.IsAuthenticated = User.Identity.IsAuthenticated;
-            model.UserQueries.AddRange(await GetUserQueriesList());
+            model.UserQueries.AddRange(await GetUserQueriesListAsync());
             return model;
         }
 
         // GET: Data
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> IndexAsync()
         {
             ViewBag.WebAPIUrl = Properties.Settings.Default.WebAPIUrl;
             return View(await CreateModelAsync());
@@ -412,13 +412,13 @@ namespace SAEON.Observations.QuerySite.Controllers
         #region Approximation
 
         [HttpGet]
-        public async Task<PartialViewResult> SetApproximation()
+        public async Task<PartialViewResult> SetApproximationAsync()
         {
             using (Logging.MethodCall(GetType()))
             {
                 try
                 {
-                    await GetApproximation();
+                    await GetApproximationAsync();
                     return PartialView("_ApproximationHtml", SessionModel);
                 }
                 catch (Exception ex)
@@ -430,7 +430,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetApproximation()
+        public async Task<JsonResult> GetApproximationAsync()
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -446,7 +446,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
-                    model.Approximation = await PostEntity<DataWizardDataInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
+                    model.Approximation = await PostEntityAsync<DataWizardDataInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
                     Logging.Verbose("RowCount: {RowCount}", model.Approximation.RowCount);
                     Logging.Verbose("Errors: {Errors}", model.Approximation.Errors);
                     SessionModel = model;
@@ -465,7 +465,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         #region Data
 
         [HttpGet]
-        public async Task<EmptyResult> GetData()
+        public async Task<EmptyResult> GetDataAsync()
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -481,7 +481,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
-                    model.DataOutput = await PostEntity<DataWizardDataInput, DataWizardDataOutput>("Internal/DataWizard/GetData", input);
+                    model.DataOutput = await PostEntityAsync<DataWizardDataInput, DataWizardDataOutput>("Internal/DataWizard/GetData", input);
                     SessionModel = model;
                     return new EmptyResult();
                 }
@@ -544,11 +544,11 @@ namespace SAEON.Observations.QuerySite.Controllers
         #region UserQueries
 
         //[Authorize]
-        private async Task<List<UserQuery>> GetUserQueriesList()
+        private async Task<List<UserQuery>> GetUserQueriesListAsync()
         {
             if (User.Identity.IsAuthenticated)
             {
-                return (await GetList<UserQuery>("Internal/UserQueries"));
+                return (await GetListAsync<UserQuery>("Internal/UserQueries"));
             }
             else
             {
@@ -576,7 +576,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<EmptyResult> LoadQuery(LoadQueryModel input)
+        public async Task<EmptyResult> LoadQueryAsync(LoadQueryModel input)
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -643,7 +643,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<EmptyResult> SaveQuery(SaveQueryModel input)
+        public async Task<EmptyResult> SaveQueryAsync(SaveQueryModel input)
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -668,9 +668,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                         QueryInput = JsonConvert.SerializeObject(queryInput)
                     };
                     Logging.Verbose("UserQuery: {@UserQuery}", userQuery);
-                    await PostEntity<UserQuery, UserQuery>("Internal/UserQueries", userQuery);
+                    await PostEntityAsync<UserQuery, UserQuery>("Internal/UserQueries", userQuery);
                     model.UserQueries.Clear();
-                    model.UserQueries.AddRange(await GetUserQueriesList());
+                    model.UserQueries.AddRange(await GetUserQueriesListAsync());
                     SessionModel = model;
                     return null;
                 }
@@ -722,7 +722,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult> GetDownload()
+        public async Task<ActionResult> GetDownloadAsync()
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -739,7 +739,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
-                    var userDownload = await PostEntity<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
+                    var userDownload = await PostEntityAsync<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
                     Logging.Verbose("UserDownload: {@userDownload}", userDownload);
                     return RedirectToAction("Details", "UserDownloads", new { Id = userDownload.Id.ToString() });
                 }
