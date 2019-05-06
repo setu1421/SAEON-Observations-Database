@@ -20,7 +20,7 @@ namespace SAEON.Observations.Core.ConsoleTests
             {
                 try
                 {
-                    var db = new ObservationsDbContext();
+                    var db = new ObservationsDbContext("SAEON");
                     Logging.Information("Schemas: {Schemas}", db.DataSchemas.ToList().Count);
                     //var col = db.Offerings.Take(5).Include(i => i.Phenomena.Select(j => j.Units)).OrderBy(i => i.Name);
                     ////var col = db.Units.Include(i => i.Phenomena).OrderBy(i => i.Name);

@@ -1254,9 +1254,9 @@ namespace SAEON.Observations.Core.Entities
     }
     */
 
-    public class ObservationsDbContext : DbContext
+    public class ObservationsDbContext : DbContext 
     {
-        public ObservationsDbContext() : base("Observations")
+        public ObservationsDbContext(string tenantConnectionString) : base(tenantConnectionString)
         {
             //Configuration.ProxyCreationEnabled = false;
             //Configuration.LazyLoadingEnabled = false;

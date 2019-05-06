@@ -13,7 +13,7 @@ namespace SAEON.Observations.Core.Tests
         [ClassInitialize]
         public static void Initialize(TestContext testContext)
         {
-            db = new ObservationsDbContext();
+            db = new ObservationsDbContext("SAEON");
         }
 
         [ClassCleanup]
