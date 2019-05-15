@@ -765,6 +765,54 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarStatusReasonDescription);
                 
+                TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
+                colvarUserId.ColumnName = "UserId";
+                colvarUserId.DataType = DbType.Guid;
+                colvarUserId.MaxLength = 0;
+                colvarUserId.AutoIncrement = false;
+                colvarUserId.IsNullable = false;
+                colvarUserId.IsPrimaryKey = false;
+                colvarUserId.IsForeignKey = false;
+                colvarUserId.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUserId);
+                
+                TableSchema.TableColumn colvarAddedDate = new TableSchema.TableColumn(schema);
+                colvarAddedDate.ColumnName = "AddedDate";
+                colvarAddedDate.DataType = DbType.DateTime;
+                colvarAddedDate.MaxLength = 0;
+                colvarAddedDate.AutoIncrement = false;
+                colvarAddedDate.IsNullable = false;
+                colvarAddedDate.IsPrimaryKey = false;
+                colvarAddedDate.IsForeignKey = false;
+                colvarAddedDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarAddedDate);
+                
+                TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+                colvarAddedAt.ColumnName = "AddedAt";
+                colvarAddedAt.DataType = DbType.DateTime;
+                colvarAddedAt.MaxLength = 0;
+                colvarAddedAt.AutoIncrement = false;
+                colvarAddedAt.IsNullable = true;
+                colvarAddedAt.IsPrimaryKey = false;
+                colvarAddedAt.IsForeignKey = false;
+                colvarAddedAt.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarAddedAt);
+                
+                TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+                colvarUpdatedAt.ColumnName = "UpdatedAt";
+                colvarUpdatedAt.DataType = DbType.DateTime;
+                colvarUpdatedAt.MaxLength = 0;
+                colvarUpdatedAt.AutoIncrement = false;
+                colvarUpdatedAt.IsNullable = true;
+                colvarUpdatedAt.IsPrimaryKey = false;
+                colvarUpdatedAt.IsForeignKey = false;
+                colvarUpdatedAt.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUpdatedAt);
+                
                 TableSchema.TableColumn colvarDataSchemaName = new TableSchema.TableColumn(schema);
                 colvarDataSchemaName.ColumnName = "DataSchemaName";
                 colvarDataSchemaName.DataType = DbType.AnsiString;
@@ -1653,6 +1701,62 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("UserId")]
+        [Bindable(true)]
+        public Guid UserId 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("UserId");
+		    }
+            set 
+		    {
+			    SetColumnValue("UserId", value);
+            }
+        }
+	      
+        [XmlAttribute("AddedDate")]
+        [Bindable(true)]
+        public DateTime AddedDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime>("AddedDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("AddedDate", value);
+            }
+        }
+	      
+        [XmlAttribute("AddedAt")]
+        [Bindable(true)]
+        public DateTime? AddedAt 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("AddedAt");
+		    }
+            set 
+		    {
+			    SetColumnValue("AddedAt", value);
+            }
+        }
+	      
+        [XmlAttribute("UpdatedAt")]
+        [Bindable(true)]
+        public DateTime? UpdatedAt 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("UpdatedAt");
+		    }
+            set 
+		    {
+			    SetColumnValue("UpdatedAt", value);
+            }
+        }
+	      
         [XmlAttribute("DataSchemaName")]
         [Bindable(true)]
         public string DataSchemaName 
@@ -1791,6 +1895,14 @@ namespace SAEON.Observations.Data{
             public static string StatusReasonName = @"StatusReasonName";
             
             public static string StatusReasonDescription = @"StatusReasonDescription";
+            
+            public static string UserId = @"UserId";
+            
+            public static string AddedDate = @"AddedDate";
+            
+            public static string AddedAt = @"AddedAt";
+            
+            public static string UpdatedAt = @"UpdatedAt";
             
             public static string DataSchemaName = @"DataSchemaName";
             

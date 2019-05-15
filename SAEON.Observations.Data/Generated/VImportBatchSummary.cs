@@ -225,54 +225,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarVariance);
                 
-                TableSchema.TableColumn colvarTopLatitude = new TableSchema.TableColumn(schema);
-                colvarTopLatitude.ColumnName = "TopLatitude";
-                colvarTopLatitude.DataType = DbType.Double;
-                colvarTopLatitude.MaxLength = 0;
-                colvarTopLatitude.AutoIncrement = false;
-                colvarTopLatitude.IsNullable = true;
-                colvarTopLatitude.IsPrimaryKey = false;
-                colvarTopLatitude.IsForeignKey = false;
-                colvarTopLatitude.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarTopLatitude);
-                
-                TableSchema.TableColumn colvarBottomLatitude = new TableSchema.TableColumn(schema);
-                colvarBottomLatitude.ColumnName = "BottomLatitude";
-                colvarBottomLatitude.DataType = DbType.Double;
-                colvarBottomLatitude.MaxLength = 0;
-                colvarBottomLatitude.AutoIncrement = false;
-                colvarBottomLatitude.IsNullable = true;
-                colvarBottomLatitude.IsPrimaryKey = false;
-                colvarBottomLatitude.IsForeignKey = false;
-                colvarBottomLatitude.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarBottomLatitude);
-                
-                TableSchema.TableColumn colvarLeftLongitude = new TableSchema.TableColumn(schema);
-                colvarLeftLongitude.ColumnName = "LeftLongitude";
-                colvarLeftLongitude.DataType = DbType.Double;
-                colvarLeftLongitude.MaxLength = 0;
-                colvarLeftLongitude.AutoIncrement = false;
-                colvarLeftLongitude.IsNullable = true;
-                colvarLeftLongitude.IsPrimaryKey = false;
-                colvarLeftLongitude.IsForeignKey = false;
-                colvarLeftLongitude.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarLeftLongitude);
-                
-                TableSchema.TableColumn colvarRightLongitude = new TableSchema.TableColumn(schema);
-                colvarRightLongitude.ColumnName = "RightLongitude";
-                colvarRightLongitude.DataType = DbType.Double;
-                colvarRightLongitude.MaxLength = 0;
-                colvarRightLongitude.AutoIncrement = false;
-                colvarRightLongitude.IsNullable = true;
-                colvarRightLongitude.IsPrimaryKey = false;
-                colvarRightLongitude.IsForeignKey = false;
-                colvarRightLongitude.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarRightLongitude);
-                
                 TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
                 colvarStartDate.ColumnName = "StartDate";
                 colvarStartDate.DataType = DbType.DateTime;
@@ -296,6 +248,78 @@ namespace SAEON.Observations.Data{
                 colvarEndDate.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarEndDate);
+                
+                TableSchema.TableColumn colvarLatitudeNorth = new TableSchema.TableColumn(schema);
+                colvarLatitudeNorth.ColumnName = "LatitudeNorth";
+                colvarLatitudeNorth.DataType = DbType.Double;
+                colvarLatitudeNorth.MaxLength = 0;
+                colvarLatitudeNorth.AutoIncrement = false;
+                colvarLatitudeNorth.IsNullable = true;
+                colvarLatitudeNorth.IsPrimaryKey = false;
+                colvarLatitudeNorth.IsForeignKey = false;
+                colvarLatitudeNorth.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarLatitudeNorth);
+                
+                TableSchema.TableColumn colvarLatitudeSouth = new TableSchema.TableColumn(schema);
+                colvarLatitudeSouth.ColumnName = "LatitudeSouth";
+                colvarLatitudeSouth.DataType = DbType.Double;
+                colvarLatitudeSouth.MaxLength = 0;
+                colvarLatitudeSouth.AutoIncrement = false;
+                colvarLatitudeSouth.IsNullable = true;
+                colvarLatitudeSouth.IsPrimaryKey = false;
+                colvarLatitudeSouth.IsForeignKey = false;
+                colvarLatitudeSouth.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarLatitudeSouth);
+                
+                TableSchema.TableColumn colvarLongitudeWest = new TableSchema.TableColumn(schema);
+                colvarLongitudeWest.ColumnName = "LongitudeWest";
+                colvarLongitudeWest.DataType = DbType.Double;
+                colvarLongitudeWest.MaxLength = 0;
+                colvarLongitudeWest.AutoIncrement = false;
+                colvarLongitudeWest.IsNullable = true;
+                colvarLongitudeWest.IsPrimaryKey = false;
+                colvarLongitudeWest.IsForeignKey = false;
+                colvarLongitudeWest.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarLongitudeWest);
+                
+                TableSchema.TableColumn colvarLongitudeEast = new TableSchema.TableColumn(schema);
+                colvarLongitudeEast.ColumnName = "LongitudeEast";
+                colvarLongitudeEast.DataType = DbType.Double;
+                colvarLongitudeEast.MaxLength = 0;
+                colvarLongitudeEast.AutoIncrement = false;
+                colvarLongitudeEast.IsNullable = true;
+                colvarLongitudeEast.IsPrimaryKey = false;
+                colvarLongitudeEast.IsForeignKey = false;
+                colvarLongitudeEast.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarLongitudeEast);
+                
+                TableSchema.TableColumn colvarElevationMinimum = new TableSchema.TableColumn(schema);
+                colvarElevationMinimum.ColumnName = "ElevationMinimum";
+                colvarElevationMinimum.DataType = DbType.Double;
+                colvarElevationMinimum.MaxLength = 0;
+                colvarElevationMinimum.AutoIncrement = false;
+                colvarElevationMinimum.IsNullable = true;
+                colvarElevationMinimum.IsPrimaryKey = false;
+                colvarElevationMinimum.IsForeignKey = false;
+                colvarElevationMinimum.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarElevationMinimum);
+                
+                TableSchema.TableColumn colvarElevationMaximum = new TableSchema.TableColumn(schema);
+                colvarElevationMaximum.ColumnName = "ElevationMaximum";
+                colvarElevationMaximum.DataType = DbType.Double;
+                colvarElevationMaximum.MaxLength = 0;
+                colvarElevationMaximum.AutoIncrement = false;
+                colvarElevationMaximum.IsNullable = true;
+                colvarElevationMaximum.IsPrimaryKey = false;
+                colvarElevationMaximum.IsForeignKey = false;
+                colvarElevationMaximum.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarElevationMaximum);
                 
                 TableSchema.TableColumn colvarPhenomenonCode = new TableSchema.TableColumn(schema);
                 colvarPhenomenonCode.ColumnName = "PhenomenonCode";
@@ -723,62 +747,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("TopLatitude")]
-        [Bindable(true)]
-        public double? TopLatitude 
-	    {
-		    get
-		    {
-			    return GetColumnValue<double?>("TopLatitude");
-		    }
-            set 
-		    {
-			    SetColumnValue("TopLatitude", value);
-            }
-        }
-	      
-        [XmlAttribute("BottomLatitude")]
-        [Bindable(true)]
-        public double? BottomLatitude 
-	    {
-		    get
-		    {
-			    return GetColumnValue<double?>("BottomLatitude");
-		    }
-            set 
-		    {
-			    SetColumnValue("BottomLatitude", value);
-            }
-        }
-	      
-        [XmlAttribute("LeftLongitude")]
-        [Bindable(true)]
-        public double? LeftLongitude 
-	    {
-		    get
-		    {
-			    return GetColumnValue<double?>("LeftLongitude");
-		    }
-            set 
-		    {
-			    SetColumnValue("LeftLongitude", value);
-            }
-        }
-	      
-        [XmlAttribute("RightLongitude")]
-        [Bindable(true)]
-        public double? RightLongitude 
-	    {
-		    get
-		    {
-			    return GetColumnValue<double?>("RightLongitude");
-		    }
-            set 
-		    {
-			    SetColumnValue("RightLongitude", value);
-            }
-        }
-	      
         [XmlAttribute("StartDate")]
         [Bindable(true)]
         public DateTime? StartDate 
@@ -804,6 +772,90 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("EndDate", value);
+            }
+        }
+	      
+        [XmlAttribute("LatitudeNorth")]
+        [Bindable(true)]
+        public double? LatitudeNorth 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("LatitudeNorth");
+		    }
+            set 
+		    {
+			    SetColumnValue("LatitudeNorth", value);
+            }
+        }
+	      
+        [XmlAttribute("LatitudeSouth")]
+        [Bindable(true)]
+        public double? LatitudeSouth 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("LatitudeSouth");
+		    }
+            set 
+		    {
+			    SetColumnValue("LatitudeSouth", value);
+            }
+        }
+	      
+        [XmlAttribute("LongitudeWest")]
+        [Bindable(true)]
+        public double? LongitudeWest 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("LongitudeWest");
+		    }
+            set 
+		    {
+			    SetColumnValue("LongitudeWest", value);
+            }
+        }
+	      
+        [XmlAttribute("LongitudeEast")]
+        [Bindable(true)]
+        public double? LongitudeEast 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("LongitudeEast");
+		    }
+            set 
+		    {
+			    SetColumnValue("LongitudeEast", value);
+            }
+        }
+	      
+        [XmlAttribute("ElevationMinimum")]
+        [Bindable(true)]
+        public double? ElevationMinimum 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("ElevationMinimum");
+		    }
+            set 
+		    {
+			    SetColumnValue("ElevationMinimum", value);
+            }
+        }
+	      
+        [XmlAttribute("ElevationMaximum")]
+        [Bindable(true)]
+        public double? ElevationMaximum 
+	    {
+		    get
+		    {
+			    return GetColumnValue<double?>("ElevationMaximum");
+		    }
+            set 
+		    {
+			    SetColumnValue("ElevationMaximum", value);
             }
         }
 	      
@@ -1052,17 +1104,21 @@ namespace SAEON.Observations.Data{
             
             public static string Variance = @"Variance";
             
-            public static string TopLatitude = @"TopLatitude";
-            
-            public static string BottomLatitude = @"BottomLatitude";
-            
-            public static string LeftLongitude = @"LeftLongitude";
-            
-            public static string RightLongitude = @"RightLongitude";
-            
             public static string StartDate = @"StartDate";
             
             public static string EndDate = @"EndDate";
+            
+            public static string LatitudeNorth = @"LatitudeNorth";
+            
+            public static string LatitudeSouth = @"LatitudeSouth";
+            
+            public static string LongitudeWest = @"LongitudeWest";
+            
+            public static string LongitudeEast = @"LongitudeEast";
+            
+            public static string ElevationMinimum = @"ElevationMinimum";
+            
+            public static string ElevationMaximum = @"ElevationMaximum";
             
             public static string PhenomenonCode = @"PhenomenonCode";
             

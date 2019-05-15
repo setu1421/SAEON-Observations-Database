@@ -94,6 +94,7 @@ namespace SAEON.Observations.Core
 
         public string AsString(object value)
         {
+            if (value == null) return string.Empty;
             switch (DataType)
             {
                 case MaxtixDataType.Boolean:
@@ -184,7 +185,7 @@ namespace SAEON.Observations.Core
             Rows.Add(result);
             for (int c = 0; c < Columns.Count; c++)
             {
-                var col = Columns[c];
+                //var col = Columns[c];
                 if (c < values.Length)
                 {
                     result.Columns.Add(values[c]);
@@ -226,10 +227,13 @@ namespace SAEON.Observations.Core
             var isFirst = true;
             foreach (var dmCol in Columns)
             {
-                if (!isFirst)
+                if (isFirst)
+                {
+                    isFirst = false;
+                }
+                else
                 {
                     sb.Append(",");
-                    isFirst = false;
                 }
                 sb.Append(dmCol.Name);
             }
@@ -239,10 +243,13 @@ namespace SAEON.Observations.Core
                 isFirst = true;
                 foreach (var dmCol in Columns)
                 {
-                    if (!isFirst)
+                    if (isFirst)
+                    {
+                        isFirst = false;
+                    }
+                    else
                     {
                         sb.Append(",");
-                        isFirst = false;
                     }
                     sb.Append(dmCol.AsString(dmRow[dmCol.Name]));
                 }
@@ -288,6 +295,33 @@ namespace SAEON.Observations.Core
     {
         public DataMatrix DataMatrix { get; } = new DataMatrix();
         public List<ChartSeries> ChartSeries { get; } = new List<ChartSeries>();
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Citation { get; set; }
+        /// <summary>
+        /// Semi-colon separated Name;Scheme;Uri
+        /// </summary>
+        public List<string> Keywords { get; } = new List<string>();
+        /// <summary>
+        /// Lookup on GeoNames in format Name:Country:Lat:Lon
+        /// </summary> 
+        public List<string> Places { get; } = new List<string>();
+        public double? TopLatitude { get; set; } = null; // + N to -S
+        public double? BottomLatitude { get; set; } = null; // + N to -S
+        public double? LeftLongitude { get; set; } = null; // -W to +E
+        public double? RightLongitude { get; set; } = null; // -W to +E
+        public double? ElevationMinimum { get; set; }
+        public double? ElevationMaximum { get; set; }
+        public DateTime? StartDate { get; set; } = null;
+        public DateTime? EndDate { get; set; } = null;
+        /// <summary>
+        /// Json sent to metadata service
+        /// </summary>
+        public string MetadataJson { get; set; }
+        /// <summary>
+        /// SHA-256 checksum
+        /// </summary>
+        public string Checksum { get; set; }
     }
 
     public class DataWizardApproximation

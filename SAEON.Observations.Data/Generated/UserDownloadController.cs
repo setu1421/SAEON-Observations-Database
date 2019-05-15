@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string UserId,string Name,string Description,string QueryInput,string QueryURL,string Doi,string MetadataURL,string DownloadURL,string Citation,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
+	    public void Insert(Guid Id,string UserId,string Name,string Description,string Title,string Input,string ReQueryURL,string Doi,string DOIUrl,string MetadataURL,string DownloadURL,string ZipFullName,string ZipCheckSum,string Citation,string Places,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
 	    {
 		    UserDownload item = new UserDownload();
 		    
@@ -92,17 +92,43 @@ namespace SAEON.Observations.Data
             
             item.Description = Description;
             
-            item.QueryInput = QueryInput;
+            item.Title = Title;
             
-            item.QueryURL = QueryURL;
+            item.Input = Input;
+            
+            item.ReQueryURL = ReQueryURL;
             
             item.Doi = Doi;
+            
+            item.DOIUrl = DOIUrl;
             
             item.MetadataURL = MetadataURL;
             
             item.DownloadURL = DownloadURL;
             
+            item.ZipFullName = ZipFullName;
+            
+            item.ZipCheckSum = ZipCheckSum;
+            
             item.Citation = Citation;
+            
+            item.Places = Places;
+            
+            item.LatitudeNorth = LatitudeNorth;
+            
+            item.LatitudeSouth = LatitudeSouth;
+            
+            item.LongitudeWest = LongitudeWest;
+            
+            item.LongitudeEast = LongitudeEast;
+            
+            item.ElevationMinimum = ElevationMinimum;
+            
+            item.ElevationMaximum = ElevationMaximum;
+            
+            item.StartDate = StartDate;
+            
+            item.EndDate = EndDate;
             
             item.AddedAt = AddedAt;
             
@@ -122,7 +148,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string UserId,string Name,string Description,string QueryInput,string QueryURL,string Doi,string MetadataURL,string DownloadURL,string Citation,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
+	    public void Update(Guid Id,string UserId,string Name,string Description,string Title,string Input,string ReQueryURL,int DOIId,string Doi,string DOIUrl,string MetadataURL,string DownloadURL,string ZipFullName,string ZipCheckSum,string Citation,string Places,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
 	    {
 		    UserDownload item = new UserDownload();
 	        item.MarkOld();
@@ -136,17 +162,45 @@ namespace SAEON.Observations.Data
 				
 			item.Description = Description;
 				
-			item.QueryInput = QueryInput;
+			item.Title = Title;
 				
-			item.QueryURL = QueryURL;
+			item.Input = Input;
+				
+			item.ReQueryURL = ReQueryURL;
+				
+			item.DOIId = DOIId;
 				
 			item.Doi = Doi;
+				
+			item.DOIUrl = DOIUrl;
 				
 			item.MetadataURL = MetadataURL;
 				
 			item.DownloadURL = DownloadURL;
 				
+			item.ZipFullName = ZipFullName;
+				
+			item.ZipCheckSum = ZipCheckSum;
+				
 			item.Citation = Citation;
+				
+			item.Places = Places;
+				
+			item.LatitudeNorth = LatitudeNorth;
+				
+			item.LatitudeSouth = LatitudeSouth;
+				
+			item.LongitudeWest = LongitudeWest;
+				
+			item.LongitudeEast = LongitudeEast;
+				
+			item.ElevationMinimum = ElevationMinimum;
+				
+			item.ElevationMaximum = ElevationMaximum;
+				
+			item.StartDate = StartDate;
+				
+			item.EndDate = EndDate;
 				
 			item.AddedAt = AddedAt;
 				

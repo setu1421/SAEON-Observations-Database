@@ -345,53 +345,53 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarEndDate);
                 
-                TableSchema.TableColumn colvarTopLatitude = new TableSchema.TableColumn(schema);
-                colvarTopLatitude.ColumnName = "TopLatitude";
-                colvarTopLatitude.DataType = DbType.Double;
-                colvarTopLatitude.MaxLength = 0;
-                colvarTopLatitude.AutoIncrement = false;
-                colvarTopLatitude.IsNullable = true;
-                colvarTopLatitude.IsPrimaryKey = false;
-                colvarTopLatitude.IsForeignKey = false;
-                colvarTopLatitude.IsReadOnly = false;
+                TableSchema.TableColumn colvarLatitudeNorth = new TableSchema.TableColumn(schema);
+                colvarLatitudeNorth.ColumnName = "LatitudeNorth";
+                colvarLatitudeNorth.DataType = DbType.Double;
+                colvarLatitudeNorth.MaxLength = 0;
+                colvarLatitudeNorth.AutoIncrement = false;
+                colvarLatitudeNorth.IsNullable = true;
+                colvarLatitudeNorth.IsPrimaryKey = false;
+                colvarLatitudeNorth.IsForeignKey = false;
+                colvarLatitudeNorth.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarTopLatitude);
+                schema.Columns.Add(colvarLatitudeNorth);
                 
-                TableSchema.TableColumn colvarBottomLatitude = new TableSchema.TableColumn(schema);
-                colvarBottomLatitude.ColumnName = "BottomLatitude";
-                colvarBottomLatitude.DataType = DbType.Double;
-                colvarBottomLatitude.MaxLength = 0;
-                colvarBottomLatitude.AutoIncrement = false;
-                colvarBottomLatitude.IsNullable = true;
-                colvarBottomLatitude.IsPrimaryKey = false;
-                colvarBottomLatitude.IsForeignKey = false;
-                colvarBottomLatitude.IsReadOnly = false;
+                TableSchema.TableColumn colvarLatitudeSouth = new TableSchema.TableColumn(schema);
+                colvarLatitudeSouth.ColumnName = "LatitudeSouth";
+                colvarLatitudeSouth.DataType = DbType.Double;
+                colvarLatitudeSouth.MaxLength = 0;
+                colvarLatitudeSouth.AutoIncrement = false;
+                colvarLatitudeSouth.IsNullable = true;
+                colvarLatitudeSouth.IsPrimaryKey = false;
+                colvarLatitudeSouth.IsForeignKey = false;
+                colvarLatitudeSouth.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarBottomLatitude);
+                schema.Columns.Add(colvarLatitudeSouth);
                 
-                TableSchema.TableColumn colvarLeftLongitude = new TableSchema.TableColumn(schema);
-                colvarLeftLongitude.ColumnName = "LeftLongitude";
-                colvarLeftLongitude.DataType = DbType.Double;
-                colvarLeftLongitude.MaxLength = 0;
-                colvarLeftLongitude.AutoIncrement = false;
-                colvarLeftLongitude.IsNullable = true;
-                colvarLeftLongitude.IsPrimaryKey = false;
-                colvarLeftLongitude.IsForeignKey = false;
-                colvarLeftLongitude.IsReadOnly = false;
+                TableSchema.TableColumn colvarLongitudeWest = new TableSchema.TableColumn(schema);
+                colvarLongitudeWest.ColumnName = "LongitudeWest";
+                colvarLongitudeWest.DataType = DbType.Double;
+                colvarLongitudeWest.MaxLength = 0;
+                colvarLongitudeWest.AutoIncrement = false;
+                colvarLongitudeWest.IsNullable = true;
+                colvarLongitudeWest.IsPrimaryKey = false;
+                colvarLongitudeWest.IsForeignKey = false;
+                colvarLongitudeWest.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarLeftLongitude);
+                schema.Columns.Add(colvarLongitudeWest);
                 
-                TableSchema.TableColumn colvarRightLongitude = new TableSchema.TableColumn(schema);
-                colvarRightLongitude.ColumnName = "RightLongitude";
-                colvarRightLongitude.DataType = DbType.Double;
-                colvarRightLongitude.MaxLength = 0;
-                colvarRightLongitude.AutoIncrement = false;
-                colvarRightLongitude.IsNullable = true;
-                colvarRightLongitude.IsPrimaryKey = false;
-                colvarRightLongitude.IsForeignKey = false;
-                colvarRightLongitude.IsReadOnly = false;
+                TableSchema.TableColumn colvarLongitudeEast = new TableSchema.TableColumn(schema);
+                colvarLongitudeEast.ColumnName = "LongitudeEast";
+                colvarLongitudeEast.DataType = DbType.Double;
+                colvarLongitudeEast.MaxLength = 0;
+                colvarLongitudeEast.AutoIncrement = false;
+                colvarLongitudeEast.IsNullable = true;
+                colvarLongitudeEast.IsPrimaryKey = false;
+                colvarLongitudeEast.IsForeignKey = false;
+                colvarLongitudeEast.IsReadOnly = false;
                 
-                schema.Columns.Add(colvarRightLongitude);
+                schema.Columns.Add(colvarLongitudeEast);
                 
                 
                 BaseSchema = schema;
@@ -779,59 +779,59 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("TopLatitude")]
+        [XmlAttribute("LatitudeNorth")]
         [Bindable(true)]
-        public double? TopLatitude 
+        public double? LatitudeNorth 
 	    {
 		    get
 		    {
-			    return GetColumnValue<double?>("TopLatitude");
+			    return GetColumnValue<double?>("LatitudeNorth");
 		    }
             set 
 		    {
-			    SetColumnValue("TopLatitude", value);
+			    SetColumnValue("LatitudeNorth", value);
             }
         }
 	      
-        [XmlAttribute("BottomLatitude")]
+        [XmlAttribute("LatitudeSouth")]
         [Bindable(true)]
-        public double? BottomLatitude 
+        public double? LatitudeSouth 
 	    {
 		    get
 		    {
-			    return GetColumnValue<double?>("BottomLatitude");
+			    return GetColumnValue<double?>("LatitudeSouth");
 		    }
             set 
 		    {
-			    SetColumnValue("BottomLatitude", value);
+			    SetColumnValue("LatitudeSouth", value);
             }
         }
 	      
-        [XmlAttribute("LeftLongitude")]
+        [XmlAttribute("LongitudeWest")]
         [Bindable(true)]
-        public double? LeftLongitude 
+        public double? LongitudeWest 
 	    {
 		    get
 		    {
-			    return GetColumnValue<double?>("LeftLongitude");
+			    return GetColumnValue<double?>("LongitudeWest");
 		    }
             set 
 		    {
-			    SetColumnValue("LeftLongitude", value);
+			    SetColumnValue("LongitudeWest", value);
             }
         }
 	      
-        [XmlAttribute("RightLongitude")]
+        [XmlAttribute("LongitudeEast")]
         [Bindable(true)]
-        public double? RightLongitude 
+        public double? LongitudeEast 
 	    {
 		    get
 		    {
-			    return GetColumnValue<double?>("RightLongitude");
+			    return GetColumnValue<double?>("LongitudeEast");
 		    }
             set 
 		    {
-			    SetColumnValue("RightLongitude", value);
+			    SetColumnValue("LongitudeEast", value);
             }
         }
 	    
@@ -890,13 +890,13 @@ namespace SAEON.Observations.Data{
             
             public static string EndDate = @"EndDate";
             
-            public static string TopLatitude = @"TopLatitude";
+            public static string LatitudeNorth = @"LatitudeNorth";
             
-            public static string BottomLatitude = @"BottomLatitude";
+            public static string LatitudeSouth = @"LatitudeSouth";
             
-            public static string LeftLongitude = @"LeftLongitude";
+            public static string LongitudeWest = @"LongitudeWest";
             
-            public static string RightLongitude = @"RightLongitude";
+            public static string LongitudeEast = @"LongitudeEast";
             
 	    }
 	    #endregion

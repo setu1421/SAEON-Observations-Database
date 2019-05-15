@@ -385,7 +385,7 @@ public class ImportSchemaHelper : IDisposable
             Logging.Information("Saving import file");
             SaveDocument(fileName, data);
             stopwatch.Stop();
-            Logging.Information("Saved import file in {time}",stopwatch.Elapsed);
+            Logging.Information("Saved import file in {time}", stopwatch.Elapsed);
             stopwatch.Start();
             Logging.Information("Reading DataTable");
             //dtResults = engine.ReadStringAsDT(data);
@@ -403,8 +403,10 @@ public class ImportSchemaHelper : IDisposable
     public void SaveDocument(string fileName, string fileContents)
     {
         string docPath = HostingEnvironment.MapPath(Path.Combine(ConfigurationManager.AppSettings["DocumentsPath"], "Uploads"));
-        File.WriteAllText(Path.Combine(docPath, fileName), fileContents);
-        Azure.Upload($"Uploads/{DateTime.Now.ToString("yyyyMM")}", fileName, fileContents);
+        var yearMonth = DateTime.Now.ToString("yyyyMM");
+        Directory.CreateDirectory(Path.Combine(docPath, yearMonth));
+        File.WriteAllText(Path.Combine(docPath, yearMonth, fileName), fileContents);
+        Azure.Upload($"Uploads/{yearMonth}", fileName, fileContents);
     }
 
     /// <summary>
@@ -1276,7 +1278,7 @@ public class ImportSchemaHelper : IDisposable
     /// <returns></returns>
     public static string GetWorkingStream(DataSchema ds, StreamReader reader)
     {
-        String Result = String.Empty;
+        String Result;
 
         if (!String.IsNullOrEmpty(ds.SplitSelector))
         {

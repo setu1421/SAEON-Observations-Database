@@ -13,8 +13,8 @@ Select
   PhenomenonOfferingID, OfferingCode, OfferingName, 
   PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit, 
   Sum(Count) Count, Min(StartDate) StartDate, Max(EndDate) EndDate,
-  Max(TopLatitude) TopLatitude, Min(BottomLatitude) BottomLatitude,
-  Min(LeftLongitude) LeftLongitude, Max(RightLongitude) RightLongitude
+  Max(LatitudeNorth) LatitudeNorth, Min(LatitudeSouth) LatitudeSouth,
+  Min(LongitudeWest) LongitudeWest, Max(LongitudeEast) LongitudeEast
 from
   vImportBatchSummary
 group by

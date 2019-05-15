@@ -98,12 +98,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var sql =
                 "Insert Into ImportBatchSummary" + Environment.NewLine +
                 "  (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance," + Environment.NewLine +
-                "   TopLatitude, BottomLatitude, LeftLongitude, RightLongitude, StartDate, EndDate)" + Environment.NewLine +
+                "   TopLatitude, BottomLatitude, LeftLongitude, RightLongitude, ElevationMinimum, ElevationMaximum, StartDate, EndDate)" + Environment.NewLine +
                 "Select" + Environment.NewLine +
                 "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, " + Environment.NewLine +
                 "  STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance, " + Environment.NewLine +
                 "  Max(Latitude) TopLatitude, Min(Latitude) BottomLatitude, Min(Longitude) LeftLongitude, Max(Longitude) RightLongitude, " + Environment.NewLine +
-                "  Min(ValueDate) StartDate, Max(ValueDate) EndDate" + Environment.NewLine +
+                "  Min(Elevation) ElevationMinimum, Max(Elevation) ElevationMaximum, Min(ValueDate) StartDate, Max(ValueDate) EndDate" + Environment.NewLine +
                 "from" + Environment.NewLine +
                 "  vObservationExpansion" + Environment.NewLine +
                 "where" + Environment.NewLine +
@@ -296,7 +296,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopWatch.Start();
                 var importStopWatch = new Stopwatch();
                 importStopWatch.Start();
-                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.42, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.43, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 importStopWatch.Stop();
                 Logging.Information("Imported {count} values in {elapsed}", values.Count, importStopWatch.Elapsed);
