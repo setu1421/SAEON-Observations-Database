@@ -137,10 +137,21 @@
     // Locations
 
     let locationsReady: boolean = false;
+    let locationsLoaded: boolean = false;
 
     export function LocationsReady() {
         locationsReady = true;
         CheckReady();
+    }
+
+    export function LocationsLoadComplete() {
+        if (!locationsLoaded) {
+            locationsLoaded = true;
+            //UpdateLocationsSelected();
+            //UpdateFeaturesSelected();
+            HideWaiting();
+            EnableButtons();
+        }
     }
 
     export function LocationsChanged() {
@@ -207,8 +218,8 @@
         if (locationsReady && featuresReady) {
             UpdateLocationsSelected();
             UpdateFeaturesSelected();
-            HideWaiting();
-            EnableButtons();
+            //HideWaiting();
+            //EnableButtons();
         }
     }
 
@@ -528,19 +539,26 @@
         $("#dialogDownload").ejDialog("open");
     }
 
+    let downloading: boolean = false;
+
     export function DownloadClose() {
         $("#dialogDownload").ejDialog("close");
-        HideWaiting();
-        EnableButtons();
+        if (!downloading) {
+            HideWaiting();
+            EnableButtons();
+        }
     }
 
     export function Download() {
+        downloading = true;
         $("#dialogDownload").ejDialog("close");
         ShowWaiting();
-        $.get("/DataWizard/GetDownload")
+        $.get("/DataWizard/GetDownloadAsync")
             .done(function (data) {
-                EnableButtons();
+                downloading = false;
+                //EnableButtons();
                 HideWaiting();
+                window.location = data.url;
             })
             .fail(function (jqXHR, status, error) {
                 ErrorInFunc("GetDownload", status, error)

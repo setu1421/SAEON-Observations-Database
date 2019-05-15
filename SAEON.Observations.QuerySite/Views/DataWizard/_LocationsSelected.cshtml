@@ -6,4 +6,5 @@
     .ShowHeader(true)
     .HeaderTitle("Selected")
     .FieldSettings(fs => fs.Text("Name"))
+    .ClientSideEvents(events => events.LoadComplete("DataWizard.LocationsLoadComplete"))
 )

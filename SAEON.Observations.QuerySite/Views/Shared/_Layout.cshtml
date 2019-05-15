@@ -41,7 +41,7 @@
             function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } }
             var t = { config: config }, u = document, e = window, o = 'script', s = u.createElement(o), i, f; for (s.src = config.url || '//az416426.vo.msecnd.net/scripts/a/ai.0.js', u.getElementsByTagName(o)[0].parentNode.appendChild(s), t.cookie = u.cookie, t.queue = [], i = ['Event', 'Exception', 'Metric', 'PageView', 'Trace', 'Ajax']; i.length;) r('track' + i.pop()); return r('setAuthenticatedUserContext'), r('clearAuthenticatedUserContext'), config.disableExceptionTracking || (i = 'onerror', r('_' + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t['_' + i](config, r, u, e, o), s }), t
         }({
-            instrumentationKey: 'cf180c84-e427-4073-acbf-a78ded1b5f42'
+            instrumentationKey: '45bcc62c-61d7-408a-a268-a5703b8fc5ab'
         });
 
         window.appInsights = appInsights;
@@ -67,7 +67,7 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownQuery" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Query</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownQuery">
                                 @Html.ActionLink("Inventory", "Index", "Inventory", null, new { @class = "dropdown-item" })
-                                @Html.ActionLink("Data", "IndexAsync", "DataWizard", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Data", "Index", "DataWizard", null, new { @class = "dropdown-item" })
                                 @*@Html.ActionLink("Spacial Coverage", "Index", "SpacialCoverage", null, new { @class = "dropdown-item" })*@
                                 @*@Html.ActionLink("Temporal Coverage", "Index", "TemporalCoverage", null, new { @class = "dropdown-item" })*@
                             </div>
@@ -77,14 +77,7 @@
                         <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDataSource" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Data Source</a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownDataSource">
-                                @Html.ActionLink("Fynbos", "SetTenant", "Home", new { Name = "Fynbos" }, new { @class = (string)Session[Constants.TenantSession] == "Fynbos" ? "dropdown-item active" : "dropdown-item" })
-                                @Html.ActionLink("SA Coastal Temperature Network", "SetTenant", "Home", new { Name = "SACTN" }, new { @class = (string)Session[Constants.TenantSession] == "SACTN" ? "dropdown-item active" : "dropdown-item" })
-                                @Html.ActionLink("SAEON", "SetTenant", "Home", new { Name = "SAEON" }, new { @class = (string)Session[Constants.TenantSession] == "SAEON" ? "dropdown-item active" : "dropdown-item" })
-                            </div>
-                        </li>
+                        @Html.Partial("_DataSourcesPartial")
                         @Html.Partial("_LoginPartial")
                     </ul>
                 </div>

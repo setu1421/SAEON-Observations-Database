@@ -16,9 +16,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         //    return await base.Create(item);
         //}
 
-        public override async Task<ActionResult> EditAsync([Bind(Include = "Id,UserId,Name,Description,QueryInput,DownloadURI")] UserDownload delta)
+        public override async Task<ActionResult> Edit([Bind(Include = "Id,UserId,Name,Description,QueryInput,DownloadURI")] UserDownload delta)
         {
-            return await base.EditAsync(delta);
+            return await base.Edit(delta);
         }
     }
 }

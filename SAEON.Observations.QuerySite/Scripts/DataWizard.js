@@ -124,11 +124,22 @@ var DataWizard;
     DataWizard.DisableButtons = DisableButtons;
     // Locations
     var locationsReady = false;
+    var locationsLoaded = false;
     function LocationsReady() {
         locationsReady = true;
         CheckReady();
     }
     DataWizard.LocationsReady = LocationsReady;
+    function LocationsLoadComplete() {
+        if (!locationsLoaded) {
+            locationsLoaded = true;
+            //UpdateLocationsSelected();
+            //UpdateFeaturesSelected();
+            HideWaiting();
+            EnableButtons();
+        }
+    }
+    DataWizard.LocationsLoadComplete = LocationsLoadComplete;
     function LocationsChanged() {
         UpdateLocationsSelected(true);
     }
@@ -189,8 +200,8 @@ var DataWizard;
         if (locationsReady && featuresReady) {
             UpdateLocationsSelected();
             UpdateFeaturesSelected();
-            HideWaiting();
-            EnableButtons();
+            //HideWaiting();
+            //EnableButtons();
         }
     }
     function FeaturesChanged() {
@@ -498,19 +509,25 @@ var DataWizard;
         $("#dialogDownload").ejDialog("open");
     }
     DataWizard.DownloadOpen = DownloadOpen;
+    var downloading = false;
     function DownloadClose() {
         $("#dialogDownload").ejDialog("close");
-        HideWaiting();
-        EnableButtons();
+        if (!downloading) {
+            HideWaiting();
+            EnableButtons();
+        }
     }
     DataWizard.DownloadClose = DownloadClose;
     function Download() {
+        downloading = true;
         $("#dialogDownload").ejDialog("close");
         ShowWaiting();
-        $.get("/DataWizard/GetDownload")
+        $.get("/DataWizard/GetDownloadAsync")
             .done(function (data) {
-            EnableButtons();
+            downloading = false;
+            //EnableButtons();
             HideWaiting();
+            window.location = data.url;
         })
             .fail(function (jqXHR, status, error) {
             ErrorInFunc("GetDownload", status, error);

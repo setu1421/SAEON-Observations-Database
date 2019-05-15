@@ -213,8 +213,8 @@
     <Reference Include="SAEON.Logs, Version=1.0.42.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Logs.1.0.42\lib\net472\SAEON.Logs.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.Core, Version=1.0.66.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.Core.1.0.66\lib\net472\SAEON.Observations.Core.dll</HintPath>
+    <Reference Include="SAEON.Observations.Core, Version=1.0.79.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.Core.1.0.79\lib\net472\SAEON.Observations.Core.dll</HintPath>
     </Reference>
     <Reference Include="SAEON.SensorThings, Version=1.0.34.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.SensorThings.1.0.34\lib\net472\SAEON.SensorThings.dll</HintPath>

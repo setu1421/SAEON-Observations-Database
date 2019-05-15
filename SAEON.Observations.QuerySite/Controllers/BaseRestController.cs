@@ -80,7 +80,9 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         // GET: TEntity
         [HttpGet]
-        public virtual async Task<ActionResult> IndexAsync()
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public virtual async Task<ActionResult> Index()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall<TEntity>(GetType()))
             {
@@ -112,7 +114,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         /// <returns>View(TEntity)</returns>
         [HttpGet]
         [Route("{id:guid}")]
-        public virtual async Task<ActionResult> DetailsAsync(Guid? id)
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public virtual async Task<ActionResult> Details(Guid? id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
@@ -210,7 +214,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [Authorize]
-        public virtual async Task<ActionResult> EditAsync(Guid? id)
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public virtual async Task<ActionResult> Edit(Guid? id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
@@ -245,7 +251,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public virtual async Task<ActionResult> EditAsync(TEntity delta)
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public virtual async Task<ActionResult> Edit(TEntity delta)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", delta?.Id }, { "Delta", delta } }))
             {
@@ -285,7 +293,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [Authorize]
-        public virtual async Task<ActionResult> DeleteAsync(Guid? id)
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public virtual async Task<ActionResult> Delete(Guid? id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
@@ -320,7 +330,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public virtual async Task<ActionResult> DeleteConfirmedAsync(Guid id)
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public virtual async Task<ActionResult> DeleteConfirmed(Guid id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {

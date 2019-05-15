@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -29,8 +30,11 @@ namespace SAEON.Observations.QuerySite.Controllers
             return model;
         }
 
+
         // GET: Data
-        public async Task<ActionResult> IndexAsync()
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<ActionResult> Index()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             ViewBag.WebAPIUrl = Properties.Settings.Default.WebAPIUrl;
             return View(await CreateModelAsync());
@@ -50,7 +54,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                         IsAuthenticated = model.IsAuthenticated,
                         LoadEnabled = model.IsAuthenticated && model.UserQueries.Any(),
                         SaveEnabled = model.IsAuthenticated && model.LocationsSelected.Any() && model.FeaturesSelected.Any(),
-                        SearchEnabled = model.LocationsSelected.Any() && model.FeaturesSelected.Any()
+                        SearchEnabled = model.LocationsSelected.Any() && model.FeaturesSelected.Any(),
+                        DownloadEnabled = model.IsAuthenticated && model.LocationsSelected.Any() && model.FeaturesSelected.Any() && model.HaveSearched
                     };
                     Logging.Verbose("State: {@State}", result);
                     return Json(result, JsonRequestBehavior.AllowGet);
@@ -482,6 +487,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
                     model.DataOutput = await PostEntityAsync<DataWizardDataInput, DataWizardDataOutput>("Internal/DataWizard/GetData", input);
+                    model.HaveSearched = true;
                     SessionModel = model;
                     return new EmptyResult();
                 }
@@ -722,7 +728,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult> GetDownloadAsync()
+        public async Task<JsonResult> GetDownloadAsync()
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -741,7 +747,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.EndDate = model.EndDate.ToUniversalTime();
                     var userDownload = await PostEntityAsync<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
                     Logging.Verbose("UserDownload: {@userDownload}", userDownload);
-                    return RedirectToAction("Details", "UserDownloads", new { Id = userDownload.Id.ToString() });
+                    return Json(new { url = Url.Action("Details", "UserDownloads", new { userDownload.Id })}, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {
@@ -751,6 +757,24 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
+        [HttpGet, Authorize]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<ActionResult> ViewDownload(Guid id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
+        {
+            var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
+            if (userDownload == null) throw new ArgumentNullException(nameof(id));
+            return View(userDownload);
+        }
+
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<FilePathResult> DownloadZip(Guid id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
+        {
+            var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
+            if (userDownload == null) throw new ArgumentNullException(nameof(id));
+            return new FilePathResult(userDownload.ZipFullName, MediaTypeNames.Application.Zip);
+        }
         #endregion Download
     }
 }

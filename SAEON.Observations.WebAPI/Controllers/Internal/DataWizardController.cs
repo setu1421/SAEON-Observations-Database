@@ -7,6 +7,7 @@ using System.Data;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web.Hosting;
 using System.Web.Http;
 
@@ -237,6 +238,12 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 var name = $"{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}";
                 //Logging.Verbose("Name: {Name}",name);
                 row[name] = obs.DataValue;
+                if (obs.ValueDate < (result.StartDate ?? DateTime.MaxValue)) result.StartDate = obs.ValueDate;
+                if (obs.ValueDate > (result.EndDate ?? DateTime.MinValue)) result.EndDate = obs.ValueDate;
+                if (obs.Latitude.HasValue && (obs.Latitude.Value > (result.TopLatitude ?? double.MinValue))) result.TopLatitude = obs.Latitude;
+                if (obs.Latitude.HasValue && (obs.Latitude.Value < (result.BottomLatitude ?? double.MaxValue))) result.BottomLatitude = obs.Latitude;
+                if (obs.Longitude.HasValue && (obs.Longitude.Value < (result.LeftLongitude ?? double.MaxValue))) result.LeftLongitude = obs.Longitude;
+                if (obs.Longitude.HasValue && (obs.Longitude.Value > (result.RightLongitude ?? double.MinValue))) result.RightLongitude = obs.Longitude;
             }
             Logging.Verbose("DataMatrix: Rows: {Rows} Cols: {Cols}", result.DataMatrix.Rows.Count, result.DataMatrix.Columns.Count);
             //Chart series
@@ -317,6 +324,16 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         private UserDownload GetDownload(DataWizardDownloadInput input)
         {
+            string GetChecksum(string file)
+            {
+                using (FileStream stream = File.OpenRead(file))
+                {
+                    var sha = new SHA256Managed();
+                    byte[] checksum = sha.ComputeHash(stream);
+                    return BitConverter.ToString(checksum).Replace("-", String.Empty);
+                }
+            }
+
             Logging.Verbose("UserId: {userId}", User.GetUserId());
             Logging.Verbose("Claims: {claims}", User.GetClaims());
             // Get Data
@@ -328,12 +345,15 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 UserId = User.GetUserId(),
                 Name = name,
+                Title = "Title",
                 Description = $"Data download on {name}",
-                QueryInput = JsonConvert.SerializeObject(input),
-                QueryURL = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/GetData?json={JsonConvert.SerializeObject(input)}",
-                DOI = "http://data.saeon.ac.za/10.11.12.13",
-                MetadataURL = "http://data.saeon.ac.za",
-                DownloadURL = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/ViewDownload",
+                Input = JsonConvert.SerializeObject(input),
+                RequeryUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Requery",
+                MetadataUrl = "http://datacite.org/10.15493/observations.1.2.3.4",
+                DownloadUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/ViewDownload/",
+                ZipFullName = HostingEnvironment.MapPath($"~/App_Data/Downloads/{date.ToString("yyyyMM")}"),
+                ZipCheckSum = "ABCD",
+                ZipUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/DownloadZip/",
                 Citation = "SAEON....",
                 AddedBy = User.GetUserId(),
                 UpdatedBy = User.GetUserId()
@@ -348,16 +368,29 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
             var folder = HostingEnvironment.MapPath($"~/App_Data/Downloads/{date.ToString("yyyyMM")}");
             var dirInfo = Directory.CreateDirectory(Path.Combine(folder, result.Id.ToString()));
-            result.DownloadURL = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Download/{result.Id}";
-            DbContext.SaveChanges();
+            result.RequeryUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Requery/{result.Id}";
+            result.DownloadUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/ViewDownload/{result.Id}";
+            result.ZipFullName = Path.Combine(folder, $"{result.Id}.zip");
+            result.DownloadUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/DownloadZip/{result.Id}";
             // Create files
             File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input));
             File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), JsonConvert.SerializeObject(new { }));
-            File.WriteAllText(Path.Combine(dirInfo.FullName, "Data.csv"), dataOutput.DataMatrix.AsCSV());
-            // Excel
-            // NetCDF
+            switch (input.DownloadFormat)
+            {
+                case DownloadFormats.CSV:
+                    File.WriteAllText(Path.Combine(dirInfo.FullName, "Data.csv"), dataOutput.DataMatrix.AsCSV());
+                    break;
+                case DownloadFormats.Excel:
+                    break;
+                case DownloadFormats.NetCDF:
+                    break;
+            }
+            // Create Zip
             ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
-            //dirInfo.Delete(true);
+            dirInfo.Delete(true);
+            // Generate Checksum
+            result.ZipCheckSum = GetChecksum(result.ZipFullName);
+            DbContext.SaveChanges();
             return result;
         }
 

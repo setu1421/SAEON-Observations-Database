@@ -28,6 +28,7 @@ namespace SAEON.Observations.QuerySite.Models
         public DataWizardApproximation Approximation { get; set; } = new DataWizardApproximation();
         public DataWizardDataOutput DataOutput { get; set; } = new DataWizardDataOutput();
         public bool IsAuthenticated { get; set; } = false;
+        public bool HaveSearched { get; set; } = false;
         public List<UserDownload> UserDownloads { get; } = new List<UserDownload>();
         public List<UserQuery> UserQueries { get; } = new List<UserQuery>();
 
@@ -49,6 +50,7 @@ namespace SAEON.Observations.QuerySite.Models
             Approximation = new DataWizardApproximation();
             DataOutput = new DataWizardDataOutput();
             IsAuthenticated = false;
+            HaveSearched = false;
             UserDownloads.Clear();
             UserQueries.Clear();
         }

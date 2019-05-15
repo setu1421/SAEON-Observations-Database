@@ -9,9 +9,11 @@ using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
+    [RoutePrefix("Health")]
     public class HealthController : Controller
     {
-        public async Task<JsonResult> Index()
+        [Route]
+        public async Task<JsonResult> IndexAsync()
         {
             using (Logging.MethodCall(GetType()))
             {
