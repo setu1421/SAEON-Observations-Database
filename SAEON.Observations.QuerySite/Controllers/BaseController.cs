@@ -6,6 +6,8 @@ using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -74,6 +76,19 @@ namespace SAEON.Observations.QuerySite.Controllers
                     throw;
                 }
             }
+        }
+
+        public List<string> ModelStateErrors
+        {
+            get
+            {
+                return ModelState.Values.SelectMany(v => v.Errors).Select(v => v.ErrorMessage + " " + v.Exception).ToList();
+            }
+        }
+
+        public List<string> GetValidationErrors(DbEntityValidationException ex)
+        {
+            return ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
         }
 
         protected async Task<List<TEntity>> GetListAsync<TEntity>(string resource)// where TEntity : BaseEntity

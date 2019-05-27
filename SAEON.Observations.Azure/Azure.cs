@@ -1,4 +1,4 @@
-﻿using SAEON.Azure.CosmosDB;
+﻿using SAEON.Azure.CosmosDB; 
 using SAEON.Azure.Storage;
 using SAEON.Logs;
 using System;
@@ -189,7 +189,7 @@ namespace SAEON.Observations.Azure
 
         public AzureCost AddObservation(ObservationDocument document)
         {
-            if (!Enabled || !CosmosDBEnabled) return new AzureCost(); 
+            if (!Enabled || !CosmosDBEnabled) return new AzureCost();
             using (Logging.MethodCall(GetType()))
             {
                 try
@@ -281,7 +281,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return await CosmosDB.UpsertItemsAsync(documents);
+                    return await CosmosDB.BulkUpsertItemsAsync(documents);
                 }
                 catch (Exception ex)
                 {
@@ -350,10 +350,11 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    //var resp = await CosmosDB.DeleteItemsAsync(i => i.Id, importBatchId.ToString(), i => i.ImportBatch.Id == importBatchId);
-                    //return resp;
-                    var resp = await CosmosDB.DeleteItemsAsync("ImportBatch.id","ImportBatch.id",importBatchId);
+                    var resp = await CosmosDB.DeleteItemsAsync(importBatchId.ToString(), i => i.Id, i => i.ImportBatch.Id == importBatchId);
                     return resp;
+                    // BulkExecutor version
+                    //var resp = await CosmosDB.BulkDeleteItemsAsync(importBatchId.ToString(), i => i.Id, i => i.ImportBatch.Id == importBatchId);
+                    //return resp;
                 }
                 catch (Exception ex)
                 {

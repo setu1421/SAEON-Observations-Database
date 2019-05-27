@@ -26,7 +26,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                 loc => new MapPoint { Key = loc.Key, Title = loc.Name, Latitude = loc.Latitude.Value, Longitude = loc.Longitude.Value, Elevation = loc.Elevation, Url = loc.Url });
             model.MapPoints.AddRange(mapPoints);
             model.IsAuthenticated = User.Identity.IsAuthenticated;
-            model.UserQueries.AddRange(await GetUserQueriesListAsync());
+            model.UserQueries.AddRange(await GetUserQueriesList());
             return model;
         }
 
@@ -417,13 +417,15 @@ namespace SAEON.Observations.QuerySite.Controllers
         #region Approximation
 
         [HttpGet]
-        public async Task<PartialViewResult> SetApproximationAsync()
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<PartialViewResult> SetApproximation()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {
                 try
                 {
-                    await GetApproximationAsync();
+                    await GetApproximation();
                     return PartialView("_ApproximationHtml", SessionModel);
                 }
                 catch (Exception ex)
@@ -435,7 +437,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetApproximationAsync()
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<JsonResult> GetApproximation()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -470,7 +474,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         #region Data
 
         [HttpGet]
-        public async Task<EmptyResult> GetDataAsync()
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<EmptyResult> GetData()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -550,7 +556,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         #region UserQueries
 
         //[Authorize]
-        private async Task<List<UserQuery>> GetUserQueriesListAsync()
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        private async Task<List<UserQuery>> GetUserQueriesList()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -582,7 +590,9 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<EmptyResult> LoadQueryAsync(LoadQueryModel input)
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<EmptyResult> LoadQuery(LoadQueryModel input)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -649,7 +659,9 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<EmptyResult> SaveQueryAsync(SaveQueryModel input)
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<EmptyResult> SaveQuery(SaveQueryModel input)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -676,7 +688,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     Logging.Verbose("UserQuery: {@UserQuery}", userQuery);
                     await PostEntityAsync<UserQuery, UserQuery>("Internal/UserQueries", userQuery);
                     model.UserQueries.Clear();
-                    model.UserQueries.AddRange(await GetUserQueriesListAsync());
+                    model.UserQueries.AddRange(await GetUserQueriesList());
                     SessionModel = model;
                     return null;
                 }
@@ -728,7 +740,9 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<JsonResult> GetDownloadAsync()
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<JsonResult> GetDownload()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {

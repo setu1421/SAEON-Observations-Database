@@ -352,12 +352,12 @@ var DataWizard;
     //    return approximation;
     //}
     function SetApproximation() {
-        $.get("/DataWizard/SetApproximationAsync")
+        $.get("/DataWizard/SetApproximation")
             .done(function (data) {
             $('#PartialApproximation').html(data);
         })
             .fail(function (jqXHR, status, error) {
-            ErrorInFunc("SetApproximationAsync", status, error);
+            ErrorInFunc("SetApproximation", status, error);
         });
     }
     DataWizard.SetApproximation = SetApproximation;
@@ -365,7 +365,7 @@ var DataWizard;
     var searched = false;
     function Search() {
         ShowWaiting();
-        $.get("/DataWizard/GetDataAsync")
+        $.get("/DataWizard/GetData")
             .done(function () {
             $("#PartialTable").load("/DataWizard/GetTableHtml", function () {
                 $("#PartialChart").load("/DataWizard/GetChartHtml", function () {
@@ -379,7 +379,7 @@ var DataWizard;
             });
         })
             .fail(function (jqXHR, status, error) {
-            ErrorInFunc("GetDataAsync", status, error);
+            ErrorInFunc("GetData", status, error);
         });
     }
     DataWizard.Search = Search;
@@ -522,7 +522,7 @@ var DataWizard;
         downloading = true;
         $("#dialogDownload").ejDialog("close");
         ShowWaiting();
-        $.get("/DataWizard/GetDownloadAsync")
+        $.get("/DataWizard/GetDownload")
             .done(function (data) {
             downloading = false;
             //EnableButtons();

@@ -98,11 +98,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var sql =
                 "Insert Into ImportBatchSummary" + Environment.NewLine +
                 "  (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance," + Environment.NewLine +
-                "   TopLatitude, BottomLatitude, LeftLongitude, RightLongitude, ElevationMinimum, ElevationMaximum, StartDate, EndDate)" + Environment.NewLine +
+                "   LatitudeNorth, LatitudeSouth, LongitudeWest, LongitudeEast, ElevationMinimum, ElevationMaximum, StartDate, EndDate)" + Environment.NewLine +
                 "Select" + Environment.NewLine +
                 "  ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, COUNT(DataValue) Count, MIN(DataValue) Minimum, MAX(DataValue) Maximum, AVG(DataValue) Average, " + Environment.NewLine +
                 "  STDEV(DataValue) StandardDeviation, VAR(DataValue) Variance, " + Environment.NewLine +
-                "  Max(Latitude) TopLatitude, Min(Latitude) BottomLatitude, Min(Longitude) LeftLongitude, Max(Longitude) RightLongitude, " + Environment.NewLine +
+                "  Max(Latitude) LatitudeNorth, Min(Latitude) LatitudeSouth, Min(Longitude) LongitudeWest, Max(Longitude) LongitudeEast, " + Environment.NewLine +
                 "  Min(Elevation) ElevationMinimum, Max(Elevation) ElevationMaximum, Min(ValueDate) StartDate, Max(ValueDate) EndDate" + Environment.NewLine +
                 "from" + Environment.NewLine +
                 "  vObservationExpansion" + Environment.NewLine +
@@ -194,8 +194,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         Phenomenon = new ObservationPhenomenon { Id = GetValue<Guid>(row, "Phenomenon.ID"), Code = GetValue<string>(row, "Phenomenon.Code"), Name = GetValue<string>(row, "Phenomenon.Name") },
                         Offering = new ObservationOffering { Id = GetValue<Guid>(row, "Offering.ID"), Code = GetValue<string>(row, "Offering.Code"), Name = GetValue<string>(row, "Offering.Name") },
                         Unit = new ObservationUnit { Id = GetValue<Guid>(row, "Unit.ID"), Code = GetValue<string>(row, "Unit.Code"), Name = GetValue<string>(row, "Unit.Name") },
-                        Status = new ObservationStatus { Id = GetValue<Guid>(row, "Status.ID"), Code = GetValue<string>(row, "Status.Code"), Name = GetValue<string>(row, "Status.Name") },
-                        StatusReason = new ObservationStatusReason { Id = GetValue<Guid>(row, "StatusReason.ID"), Code = GetValue<string>(row, "StatusReason.Code"), Name = GetValue<string>(row, "StatusReason.Name") },
+                        Status = row.IsNull("Status.ID") ? null : new ObservationStatus { Id = GetValue<Guid>(row, "Status.ID"), Code = GetValue<string>(row, "Status.Code"), Name = GetValue<string>(row, "Status.Name") },
+                        StatusReason = row.IsNull("StatusReason.ID") ? null : new ObservationStatusReason { Id = GetValue<Guid>(row, "StatusReason.ID"), Code = GetValue<string>(row, "StatusReason.Code"), Name = GetValue<string>(row, "StatusReason.Name") },
                     };
                     //Logging.Verbose("Adding {@Observation}", observation);
                     documents.Add(document);
@@ -208,7 +208,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     }
                 }
                 if (documents.Any())
-                { 
+                {
                     var batchCost = azure.UpsertObservations(documents);
                     cost += batchCost;
                     Logging.Information("Added batch of {BatchSize} for ImportBatch {ImportBatchId} Cost: {BatchCost}", documents.Count, importBatchId, batchCost);

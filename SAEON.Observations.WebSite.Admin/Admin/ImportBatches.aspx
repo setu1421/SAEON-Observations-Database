@@ -408,7 +408,7 @@
                                                 <ext:NumberColumn Header="Minimum" DataIndex="Minimum" Width="100" Format=",0.000" Align="Right" />
                                                 <ext:NumberColumn Header="Maximum" DataIndex="Maximum" Width="100" Format=",0.000" Align="Right" />
                                                 <ext:NumberColumn Header="Average" DataIndex="Average" Width="100" Format=",0.000" Align="Right" />
-                                                <ext:NumberColumn Header="Standard Dev." DataIndex="StandardDeviation" Width="100" Format=",0.000000" Align="Right" />
+                                                <ext:NumberColumn Header="Std. Deviation" DataIndex="StandardDeviation" Width="100" Format=",0.000000" Align="Right" />
                                                 <ext:NumberColumn Header="Variance" DataIndex="Variance" Width="100" Format=",0.000000" Align="Right" />
                                                 <ext:DateColumn Header="Start Date" DataIndex="StartDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
                                                 <ext:DateColumn Header="End Date" DataIndex="EndDate" Width="125" Format="dd MMM yyyy HH:mm:ss" />
