@@ -92,9 +92,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <param name="id">The Id of the UserDownload</param>
         /// <returns>UserDownload</returns>
         [ResponseType(typeof(UserDownload))]
-        public override async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
+        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
         {
-            return await base.GetByIdAsync(id);
+            return await base.GetById(id);
         }
 
         /// <summary>
@@ -103,9 +103,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <param name="item">The UserDownload to be created</param>
         [ResponseType(typeof(UserDownload))]
         [Route]
-        public override async Task<IHttpActionResult> PostAsync([FromBody]UserDownload item)
+        public override async Task<IHttpActionResult> Post([FromBody]UserDownload item)
         {
-            return await base.PostAsync(item);
+            return await base.Post(item);
         }
 
         /// <summary>
@@ -115,9 +115,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <param name="delta">The new UserDownload</param>
         /// <returns></returns>
         [Route("{id:guid}")]
-        public override Task<IHttpActionResult> PutByIdAsync(Guid id, [FromBody] UserDownload delta)
+        public override Task<IHttpActionResult> PutById(Guid id, [FromBody] UserDownload delta)
         {
-            return base.PutByIdAsync(id, delta);
+            return base.PutById(id, delta);
         }
 
         /// <summary>
@@ -126,9 +126,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <param name="id">Id of UserDownload</param>
         /// <returns></returns>
         [Route("{id:guid}")]
-        public override Task<IHttpActionResult> DeleteByIdAsync(Guid id)
+        public override Task<IHttpActionResult> DeleteById(Guid id)
         {
-            return base.DeleteByIdAsync(id);
+            return base.DeleteById(id);
         }
 
     }

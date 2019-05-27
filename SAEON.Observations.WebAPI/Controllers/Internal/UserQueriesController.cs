@@ -92,9 +92,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <param name="id">The Id of the UserQuery</param>
         /// <returns>UserQuery</returns>
         [ResponseType(typeof(UserQuery))]
-        public override async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
+        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
         {
-            return await base.GetByIdAsync(id);
+            return await base.GetById(id);
         }
 
         /// <summary>
@@ -103,9 +103,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <param name="item">The UserQuery to be created</param>
         [ResponseType(typeof(UserQuery))]
         [Route]
-        public override async Task<IHttpActionResult> PostAsync([FromBody]UserQuery item)
+        public override async Task<IHttpActionResult> Post([FromBody]UserQuery item)
         {
-            return await base.PostAsync(item);
+            return await base.Post(item);
         }
 
         /// <summary>
@@ -115,9 +115,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <param name="delta">The new UserQuery</param>
         /// <returns></returns>
         [Route("{id:guid}")]
-        public override Task<IHttpActionResult> PutByIdAsync(Guid id, [FromBody] UserQuery delta)
+        public override Task<IHttpActionResult> PutById(Guid id, [FromBody] UserQuery delta)
         {
-            return base.PutByIdAsync(id, delta);
+            return base.PutById(id, delta);
         }
 
         /// <summary>
@@ -126,9 +126,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <param name="id">Id of UserQuery</param>
         /// <returns></returns>
         [Route("{id:guid}")]
-        public override Task<IHttpActionResult> DeleteByIdAsync(Guid id)
+        public override Task<IHttpActionResult> DeleteById(Guid id)
         {
-            return base.DeleteByIdAsync(id);
+            return base.DeleteById(id);
         }
     }
 }

@@ -1,9 +1,13 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -215,10 +219,37 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var date = DateTime.MinValue;
             double? elevation = null;
             DataMatixRow row = null;
+            result.Description = "Observations collected from ";
+            var keywords = new List<string>();
+            var places = new List<string>();
             // Data Matrix
             foreach (var obs in observations)
             {
                 // DataMatrix
+                if (obs.SiteId != siteId)
+                {
+                    if (!string.IsNullOrEmpty(result.Title))
+                    {
+                        result.Title += "; ";
+                        result.Description += "; ";
+                    }
+                    result.Title += obs.SiteName;
+                    result.Description += obs.SiteName;
+                }
+                if (obs.StationId != stationId)
+                {
+                    var station = DbContext.Stations.First(i => i.Id == obs.StationId);
+                    if (station.Latitude.HasValue && station.Longitude.HasValue)
+                    {
+                        places.Add($"{station.Name}:South Africa:{station.Latitude}:{station.Longitude}");
+                    }
+                }
+                if ((obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId))
+                {
+                    result.Title += $", {obs.PhenomenonName}";
+                    result.Description += $", {obs.PhenomenonName} {obs.OfferingName} {obs.UnitName}";
+                    keywords.Add(obs.PhenomenonName);
+                }
                 if ((row == null) || (obs.SiteId != siteId) || (obs.StationId != stationId) || (obs.InstrumentId != instrumentId) || (obs.SensorId != sensorId) || (obs.ValueDate != date) || (obs.Elevation != elevation))
                 {
                     row = result.DataMatrix.AddRow();
@@ -238,14 +269,74 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 var name = $"{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}";
                 //Logging.Verbose("Name: {Name}",name);
                 row[name] = obs.DataValue;
-                if (obs.ValueDate < (result.StartDate ?? DateTime.MaxValue)) result.StartDate = obs.ValueDate;
-                if (obs.ValueDate > (result.EndDate ?? DateTime.MinValue)) result.EndDate = obs.ValueDate;
-                if (obs.Latitude.HasValue && (obs.Latitude.Value > (result.TopLatitude ?? double.MinValue))) result.TopLatitude = obs.Latitude;
-                if (obs.Latitude.HasValue && (obs.Latitude.Value < (result.BottomLatitude ?? double.MaxValue))) result.BottomLatitude = obs.Latitude;
-                if (obs.Longitude.HasValue && (obs.Longitude.Value < (result.LeftLongitude ?? double.MaxValue))) result.LeftLongitude = obs.Longitude;
-                if (obs.Longitude.HasValue && (obs.Longitude.Value > (result.RightLongitude ?? double.MinValue))) result.RightLongitude = obs.Longitude;
+                if (obs.ValueDate < (result.StartDate ?? DateTime.MaxValue))
+                {
+                    result.StartDate = obs.ValueDate;
+                }
+
+                if (obs.ValueDate > (result.EndDate ?? DateTime.MinValue))
+                {
+                    result.EndDate = obs.ValueDate;
+                }
+
+                if (obs.Latitude.HasValue && (obs.Latitude.Value > (result.LatitudeNorth ?? double.MinValue)))
+                {
+                    result.LatitudeNorth = obs.Latitude;
+                }
+
+                if (obs.Latitude.HasValue && (obs.Latitude.Value < (result.LatitudeSouth ?? double.MaxValue)))
+                {
+                    result.LatitudeSouth = obs.Latitude;
+                }
+
+                if (obs.Longitude.HasValue && (obs.Longitude.Value < (result.LongitudeWest ?? double.MaxValue)))
+                {
+                    result.LongitudeWest = obs.Longitude;
+                }
+
+                if (obs.Longitude.HasValue && (obs.Longitude.Value > (result.LongitudeEast ?? double.MinValue)))
+                {
+                    result.LongitudeEast = obs.Longitude;
+                }
+
+                if (obs.Elevation.HasValue && (obs.Elevation.Value < (result.ElevationMinimum ?? double.MaxValue)))
+                {
+                    result.ElevationMinimum = obs.Elevation;
+                }
+
+                if (obs.Elevation.HasValue && (obs.Elevation.Value > (result.ElevationMaximum ?? double.MinValue)))
+                {
+                    result.ElevationMaximum = obs.Elevation;
+                }
             }
             Logging.Verbose("DataMatrix: Rows: {Rows} Cols: {Cols}", result.DataMatrix.Rows.Count, result.DataMatrix.Columns.Count);
+            result.Title = result.Title.Replace("; ,", string.Empty);
+            result.Description = result.Description.Replace("; ,", string.Empty);
+            if (result.LatitudeNorth.HasValue && result.LatitudeSouth.HasValue && result.LongitudeWest.HasValue && result.LongitudeEast.HasValue)
+            {
+                result.Description += $" in area {result.LatitudeNorth:f5},{result.LongitudeWest:f5} N,W {result.LatitudeSouth:f5},{result.LongitudeEast:f5} S,E";
+            }
+            if (result.ElevationMinimum.HasValue && result.ElevationMaximum.HasValue)
+            {
+                if (result.ElevationMinimum.Value == result.ElevationMaximum.Value)
+                {
+                    result.Description += $" at {result.ElevationMaximum:f2}m above mean sea level";
+                }
+                else
+                {
+                    result.Description += $" between {result.ElevationMinimum:f2}m and {result.ElevationMaximum:f2}m above mean sea level";
+                }
+            }
+            if (result.StartDate.HasValue)
+            {
+                result.Description += $" from {result.StartDate.Value.ToString("yyyy-MM-dd HH:mm:ss")}";
+            }
+            if (result.EndDate.HasValue)
+            {
+                result.Description += $" to {result.EndDate.Value.ToString("yyyy-MM-dd HH:mm:ss")}";
+            }
+            result.Keywords.AddRange(keywords.Distinct());
+            result.Places.AddRange(places.Distinct());
             //Chart series
             if (includeChart)
             {
@@ -334,64 +425,332 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
             }
 
-            Logging.Verbose("UserId: {userId}", User.GetUserId());
-            Logging.Verbose("Claims: {claims}", User.GetClaims());
-            // Get Data
-            var dataOutput = GetData(input, false);
-            // Create Download
-            var date = DateTime.Now;
-            var name = date.ToString("yyyyMMdd HH:mm:ss.fff");
-            var result = new UserDownload
+            List<string> GetValidationErrors(DbEntityValidationException ex)
             {
-                UserId = User.GetUserId(),
-                Name = name,
-                Title = "Title",
-                Description = $"Data download on {name}",
-                Input = JsonConvert.SerializeObject(input),
-                RequeryUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Requery",
-                MetadataUrl = "http://datacite.org/10.15493/observations.1.2.3.4",
-                DownloadUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/ViewDownload/",
-                ZipFullName = HostingEnvironment.MapPath($"~/App_Data/Downloads/{date.ToString("yyyyMM")}"),
-                ZipCheckSum = "ABCD",
-                ZipUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/DownloadZip/",
-                Citation = "SAEON....",
-                AddedBy = User.GetUserId(),
-                UpdatedBy = User.GetUserId()
-            };
-            Logging.Verbose("UserDownload: {@UserDownload}", result);
-            DbContext.UserDownloads.Add(result);
-            DbContext.SaveChanges();
-            result = DbContext.UserDownloads.FirstOrDefault(i => i.Name == name);
-            if (result == null)
-            {
-                throw new InvalidOperationException($"Unable to find UserDownload {name}");
+                return ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
             }
-            var folder = HostingEnvironment.MapPath($"~/App_Data/Downloads/{date.ToString("yyyyMM")}");
-            var dirInfo = Directory.CreateDirectory(Path.Combine(folder, result.Id.ToString()));
-            result.RequeryUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Requery/{result.Id}";
-            result.DownloadUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/ViewDownload/{result.Id}";
-            result.ZipFullName = Path.Combine(folder, $"{result.Id}.zip");
-            result.DownloadUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/DownloadZip/{result.Id}";
-            // Create files
-            File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input));
-            File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), JsonConvert.SerializeObject(new { }));
-            switch (input.DownloadFormat)
+
+            void SaveChanges()
             {
-                case DownloadFormats.CSV:
-                    File.WriteAllText(Path.Combine(dirInfo.FullName, "Data.csv"), dataOutput.DataMatrix.AsCSV());
-                    break;
-                case DownloadFormats.Excel:
-                    break;
-                case DownloadFormats.NetCDF:
-                    break;
+                try
+                {
+                    DbContext.SaveChanges();
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    Logging.Exception(ex, string.Join("; ", GetValidationErrors(ex)));
+                    throw;
+                }
             }
-            // Create Zip
-            ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
-            dirInfo.Delete(true);
-            // Generate Checksum
-            result.ZipCheckSum = GetChecksum(result.ZipFullName);
-            DbContext.SaveChanges();
-            return result;
+
+            using (var transaction = DbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    Logging.Verbose("UserId: {userId}", User.GetUserId());
+                    Logging.Verbose("Claims: {claims}", User.GetClaims());
+                    // Get Data
+                    var output = GetData(input, false);
+                    // Create Download
+                    var name = output.Date.ToString("yyyyMMdd HH:mm:ss.fff");
+                    var doiName = $"Data download on {name}";
+                    // Get a DOI
+                    Logging.Verbose("Minting DOI");
+                    var doi = new DigitalObjectIdentifier { Name = doiName, AddedBy = User.GetUserId(), UpdatedBy = User.GetUserId() };
+                    Logging.Verbose("DOI: {@DOI}", doi);
+                    DbContext.DigitalObjectIdentifiers.Add(doi);
+                    SaveChanges();
+                    doi = DbContext.DigitalObjectIdentifiers.First(i => i.Name == doiName);
+                    if (doi == null)
+                    {
+                        throw new InvalidOperationException($"Unable to find DOI {doiName}");
+                    }
+                    Logging.Verbose("DOI: {@DOI}", doi);
+                    Logging.Verbose("Adding UserDownload");
+                    var result = new UserDownload
+                    {
+                        UserId = User.GetUserId(),
+                        Name = name,
+                        Title = output.Title,
+                        Description = output.Description,
+                        Citation = "SAEON....",
+                        Keywords = string.Join("; ", output.Keywords),
+                        Date = output.Date,
+                        DigitalObjectIdentifierId = doi.Id,
+                        Input = JsonConvert.SerializeObject(input),
+                        RequeryUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Requery",
+                        MetadataJson = "{}",
+                        MetadataUrl = "http://datacite.org/10.15493/obsdb.A0.B1.C2.D3",
+                        DownloadUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/ViewDownload/",
+                        ZipFullName = HostingEnvironment.MapPath($"~/App_Data/Downloads/{output.Date.ToString("yyyyMM")}"),
+                        ZipCheckSum = "ABCD",
+                        ZipUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/DownloadZip/",
+                        Places = string.Join("; ", output.Places),
+                        LatitudeNorth = output.LatitudeNorth,
+                        LatitudeSouth = output.LatitudeSouth,
+                        LongitudeWest = output.LongitudeWest,
+                        LongitudeEast = output.LongitudeEast,
+                        StartDate = output.StartDate.Value,
+                        EndDate = output.EndDate.Value,
+                        AddedBy = User.GetUserId(),
+                        UpdatedBy = User.GetUserId()
+                    };
+                    Logging.Verbose("UserDownload: {@UserDownload}", result);
+                    DbContext.UserDownloads.Add(result);
+                    SaveChanges();
+                    result = DbContext.UserDownloads.Include(i => i.DigitalObjectIdentifier).FirstOrDefault(i => i.Name == name);
+                    if (result == null)
+                    {
+                        throw new InvalidOperationException($"Unable to find UserDownload {name}");
+                    }
+                    Logging.Verbose("UserDownload: {@UserDownload}", result);
+                    result.Citation = $"Observations Database ({result.Date.Year}): {output.Title}. South African Environmental Observation Network (SAEON) (Dataset). {result.DigitalObjectIdentifier.DOIUrl}";
+                    result.Description += Environment.NewLine + "Please cite as follows:" + Environment.NewLine + result.Citation;
+                    result.RequeryUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Requery/{result.Id}";
+                    result.DownloadUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/ViewDownload/{result.Id}";
+                    var folder = HostingEnvironment.MapPath($"~/App_Data/Downloads/{output.Date.ToString("yyyyMM")}");
+                    var dirInfo = Directory.CreateDirectory(Path.Combine(folder, result.Id.ToString()));
+                    result.ZipFullName = Path.Combine(folder, $"{result.Id}.zip");
+                    result.ZipUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/DownloadZip/{result.Id}";
+                    // Create files
+                    Logging.Verbose("Creating files");
+                    File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input));
+                    //File.WriteAllText(Path.Combine(dirInfo.FullName, "Output.json"), JsonConvert.SerializeObject(output));
+                    var jSubjects =
+                        new JArray(
+                            new JObject(
+                                new JProperty("subject", "Observations")
+                            ),
+                            new JObject(
+                                new JProperty("subject", "South African Environmental Observation Network (SAEON)")
+                            ),
+                            new JObject(
+                                new JProperty("subjectScheme", "SOFTWARE_APP"),
+                                new JProperty("schemeURI", "http://www.saeon.ac.za/"),
+                                new JProperty("subject", "Observations Database")
+                            ),
+                            new JObject(
+                                new JProperty("subjectScheme", "SOFTWARE_URL"),
+                                new JProperty("schemeURI", "http://www.saeon.ac.za/"),
+                                new JProperty("subject", Properties.Settings.Default.QuerySiteUrl)
+                            )
+                        );
+                    foreach (var subject in output.Keywords)
+                    {
+                        jSubjects.Add(
+                            new JObject(
+                                new JProperty("subject", subject)
+                            )
+                        );
+                    }
+                    foreach (var place in output.Places)
+                    {
+                        jSubjects.Add(
+                            new JObject(
+                                new JProperty("subjectScheme", "name"),
+                                new JProperty("schemeURI", "http://www.geonames.org/"),
+                                new JProperty("subject", place)
+                            )
+                        );
+                    }
+                    var jGeoLocations = new JArray();
+                    foreach (var place in output.Places)
+                    {
+                        var splits = place.Split(new char[] { ':' });
+                        jGeoLocations.Add(
+                            new JObject(
+                                new JProperty("geoLocationPlace", $"{splits[0]}, {splits[1]}")
+                            )
+                        );
+                        jGeoLocations.Add(
+                            new JObject(
+                                new JProperty("geoLocationPoint", $"{splits[3]} {splits[2]}")
+                            )
+                        );
+                    }
+                    jGeoLocations.Add(
+                        new JObject(
+                            new JProperty("geoLocationBox", $"{result.LongitudeWest:f5} {result.LatitudeSouth:f5} {result.LongitudeEast:f5} {result.LatitudeNorth:f5}")
+                        )
+                    );
+                    var jMetadata =
+                        new JObject(
+                            new JProperty("json",
+                                new JObject(
+                                    new JProperty("dataSchema", "DataCite"),
+                                    new JProperty("identifier",
+                                        new JObject(
+                                            new JProperty("identifierType", "DOI"),
+                                            new JProperty("identifier", result.DigitalObjectIdentifier.DOI)
+                                        )
+                                    ),
+                                    new JProperty("resourceTypeGeneral", "Dataset"),
+                                    new JProperty("resourceType", "Tabular Data in Text File(s)"),
+                                    new JProperty("alternateIdentifiers",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("alternateIdentifierType", "Internal"),
+                                                new JProperty("alternateIdentifier", result.Id)
+                                            )
+                                        )
+                                    ),
+                                    new JProperty("publisher", "South African Environmental Observation Network (SAEON)"),
+                                    new JProperty("publicationYear", result.Date.Year),
+                                    new JProperty("dates",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("date", result.Date.ToString("yyyy-MM-dd")),
+                                                new JProperty("dateType", "accepted")
+                                            ),
+                                            new JObject(
+                                                new JProperty("date", result.Date.ToString("yyyy-MM-dd")),
+                                                new JProperty("dateType", "issued")
+                                            ),
+                                            new JObject(
+                                                new JProperty("date", result.StartDate.ToString("yyyy-MM-dd")),
+                                                new JProperty("dateType", "collected")
+                                            ),
+                                            new JObject(
+                                                new JProperty("date", result.EndDate.ToString("yyyy-MM-dd")),
+                                                new JProperty("dateType", "collected")
+                                            )
+                                        )
+                                    ),
+                                    new JProperty("rights",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("rights", "Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)"),
+                                                new JProperty("rightsURI", "https://creativecommons.org/licenses/by-sa/4.0/")
+                                            )
+                                        )
+                                    ),
+                                    new JProperty("creator",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("creatorName", "South African Environmental Observation Network (SAEON)"),
+                                                new JProperty("nameType", "Organizational")
+                                            ),
+                                            new JObject(
+                                                new JProperty("creatorName", "Observations Database Administrator"),
+                                                new JProperty("affiliation", "Organisation:South African Environmental Observation Network (SAEON);e-Mail Address:timpn@saeon.ac.za"),
+                                                new JProperty("nameType", "Personal"),
+                                                new JProperty("givenName", "Tim"),
+                                                new JProperty("familyName", "Parker-Nance"),
+                                                new JProperty("nameIdentifier", "0000-0001-7040-7736"),
+                                                new JProperty("nameIdentifierScheme", "ORCID")
+                                            )
+                                        )
+                                    ),
+                                    new JProperty("titles",
+                                        new JArray(
+                                            new JObject(
+                                                //new JProperty("titleType", ""),
+                                                new JProperty("title", result.Title)
+                                            )
+                                        )
+                                    ),
+                                    new JProperty("descriptions",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("descriptionType", "Abstract"),
+                                                new JProperty("description", result.Description)
+                                            )
+                                        )
+                                    ),
+                                    new JProperty("contributors",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("contributorType", "DataManager"),
+                                                new JProperty("contributorName", "SAEON uLwazi Node"),
+                                                new JProperty("affiliation", "Organisation:South African Environmental Observation Network (SAEON);e-Mail Address:wim@saeon.ac.za")
+                                            ),
+                                            new JObject(
+                                                new JProperty("contributorType", "DataCurator"),
+                                                new JProperty("contributorName", "SAEON uLwazi Node"),
+                                                new JProperty("affiliation", "Organisation:South African Environmental Observation Network (SAEON);e-Mail Address:wim@saeon.ac.za")
+                                            )
+                                        )
+                                    ),
+                                    new JProperty("subjects", jSubjects),
+                                    new JProperty("additionalFields",
+                                        new JObject(
+                                           new JProperty("onlineResources",
+                                                new JArray(
+                                                    new JObject(
+                                                        new JProperty("func", "download"),
+                                                        new JProperty("desc", $"Observations Database Data Download {result.Id}"),
+                                                        new JProperty("href", result.DownloadUrl)
+                                                    ),
+                                                    new JObject(
+                                                        new JProperty("func", "download"),
+                                                        new JProperty("desc", $"Observations Database Data Download {result.Id} as Zip"),
+                                                        new JProperty("href", result.ZipUrl),
+                                                        new JProperty("format", "zip")
+                                                    )
+                                                )
+                                            ),
+                                            new JProperty("coverageBegin", result.StartDate.ToString("yyyy-MM-dd")),
+                                            new JProperty("coverageEnd", result.EndDate.ToString("yyyy-MM-dd"))
+                                        )
+                                    ),
+                                    new JProperty("geoLocations", jGeoLocations),
+                                    new JProperty("bounds",
+                                        new JArray(
+                                            new JValue($"{result.LatitudeSouth:f5}"), new JValue($"{result.LongitudeWest:f5}"),
+                                            new JValue($"{result.LatitudeNorth:f5}"), new JValue($"{result.LongitudeEast:f5}")
+                                        )
+                                    )
+                                )
+                            ),
+                            new JProperty("schema", "datacite"),
+                            new JProperty("mode", "manual"),
+                            new JProperty("repository",
+                                new JObject(
+                                    new JProperty("URL", "http://test.sasdi.net/"),
+                                    new JProperty("username", "testfour"),
+                                    new JProperty("password", "testfour"),
+                                    new JProperty("institution", "south-african-environmental-observation-network")
+                                )
+                            ),
+                            new JProperty("target", "http://odp.org.za/test_sodp.aspx")
+                        );
+                    File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), jMetadata.ToString());
+                    switch (input.DownloadFormat)
+                    {
+                        case DownloadFormats.CSV:
+                            File.WriteAllText(Path.Combine(dirInfo.FullName, "Data.csv"), output.DataMatrix.AsCSV());
+                            break;
+                        case DownloadFormats.Excel:
+                            break;
+                        case DownloadFormats.NetCDF:
+                            break;
+                    }
+                    File.WriteAllText(Path.Combine(dirInfo.FullName, "Download.json"), JsonConvert.SerializeObject(result));
+                    // Create Zip
+                    ZipFile.CreateFromDirectory(dirInfo.FullName, Path.Combine(folder, $"{result.Id}.zip"));
+                    // Generate Checksum
+                    result.ZipCheckSum = GetChecksum(result.ZipFullName);
+                    Logging.Verbose("UserDownload: {@UserDownload}", result);
+                    SaveChanges();
+                    dirInfo.Delete(true);
+                    var jChecksum = new JObject(new JProperty("Checksum", result.ZipCheckSum));
+                    File.WriteAllText(Path.Combine(folder, $"{result.Id} Checksum.json"), jChecksum.ToString());
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    try
+                    {
+                        transaction.Rollback();
+                    }
+                    catch (Exception rex)
+                    {
+                        Logging.Exception(rex);
+                    }
+                    throw;
+                }
+            }
         }
 
         [HttpGet]

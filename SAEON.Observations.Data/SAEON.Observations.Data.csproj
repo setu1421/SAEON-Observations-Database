@@ -92,6 +92,8 @@
     <Compile Include="Generated\DataSourceTransformationController.cs" />
     <Compile Include="Generated\DataSourceType.cs" />
     <Compile Include="Generated\DataSourceTypeController.cs" />
+    <Compile Include="Generated\DigitalObjectIdentifier.cs" />
+    <Compile Include="Generated\DigitalObjectIdentifierController.cs" />
     <Compile Include="Generated\Enums.cs" />
     <Compile Include="Generated\ImportBatch.cs" />
     <Compile Include="Generated\ImportBatchController.cs" />
@@ -187,6 +189,7 @@
     <Compile Include="Generated\VStationInstrument.cs" />
     <Compile Include="Generated\VStationOrganisation.cs" />
     <Compile Include="Generated\VUnitOfMeasurePhenomena.cs" />
+    <Compile Include="Generated\VUserDownload.cs" />
     <Compile Include="Generated\VUserInfo.cs" />
     <Compile Include="Partials\DataSourceTransformation.cs" />
     <Compile Include="Partials\DataSourceType.cs" />

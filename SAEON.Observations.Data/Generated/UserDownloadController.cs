@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string UserId,string Name,string Description,string Title,string Input,string ReQueryURL,string Doi,string DOIUrl,string MetadataURL,string DownloadURL,string ZipFullName,string ZipCheckSum,string Citation,string Places,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
+	    public void Insert(Guid Id,string UserId,string Name,string Description,string MetadataURL,string DownloadURL,string Citation,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion,string Title,string Keywords,string Input,string RequeryURL,int DigitalObjectIdentifierID,string MetadataJson,string ZipFullName,string ZipCheckSum,string Places,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,DateTime DateX)
 	    {
 		    UserDownload item = new UserDownload();
 		    
@@ -92,25 +92,37 @@ namespace SAEON.Observations.Data
             
             item.Description = Description;
             
-            item.Title = Title;
-            
-            item.Input = Input;
-            
-            item.ReQueryURL = ReQueryURL;
-            
-            item.Doi = Doi;
-            
-            item.DOIUrl = DOIUrl;
-            
             item.MetadataURL = MetadataURL;
             
             item.DownloadURL = DownloadURL;
             
+            item.Citation = Citation;
+            
+            item.AddedAt = AddedAt;
+            
+            item.AddedBy = AddedBy;
+            
+            item.UpdatedAt = UpdatedAt;
+            
+            item.UpdatedBy = UpdatedBy;
+            
+            item.RowVersion = RowVersion;
+            
+            item.Title = Title;
+            
+            item.Keywords = Keywords;
+            
+            item.Input = Input;
+            
+            item.RequeryURL = RequeryURL;
+            
+            item.DigitalObjectIdentifierID = DigitalObjectIdentifierID;
+            
+            item.MetadataJson = MetadataJson;
+            
             item.ZipFullName = ZipFullName;
             
             item.ZipCheckSum = ZipCheckSum;
-            
-            item.Citation = Citation;
             
             item.Places = Places;
             
@@ -130,15 +142,7 @@ namespace SAEON.Observations.Data
             
             item.EndDate = EndDate;
             
-            item.AddedAt = AddedAt;
-            
-            item.AddedBy = AddedBy;
-            
-            item.UpdatedAt = UpdatedAt;
-            
-            item.UpdatedBy = UpdatedBy;
-            
-            item.RowVersion = RowVersion;
+            item.DateX = DateX;
             
 	    
 		    item.Save(UserName);
@@ -148,7 +152,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string UserId,string Name,string Description,string Title,string Input,string ReQueryURL,int DOIId,string Doi,string DOIUrl,string MetadataURL,string DownloadURL,string ZipFullName,string ZipCheckSum,string Citation,string Places,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion)
+	    public void Update(Guid Id,string UserId,string Name,string Description,string MetadataURL,string DownloadURL,string Citation,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion,string Title,string Keywords,string Input,string RequeryURL,int DigitalObjectIdentifierID,string MetadataJson,string ZipFullName,string ZipCheckSum,string Places,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,DateTime DateX)
 	    {
 		    UserDownload item = new UserDownload();
 	        item.MarkOld();
@@ -162,27 +166,37 @@ namespace SAEON.Observations.Data
 				
 			item.Description = Description;
 				
-			item.Title = Title;
-				
-			item.Input = Input;
-				
-			item.ReQueryURL = ReQueryURL;
-				
-			item.DOIId = DOIId;
-				
-			item.Doi = Doi;
-				
-			item.DOIUrl = DOIUrl;
-				
 			item.MetadataURL = MetadataURL;
 				
 			item.DownloadURL = DownloadURL;
 				
+			item.Citation = Citation;
+				
+			item.AddedAt = AddedAt;
+				
+			item.AddedBy = AddedBy;
+				
+			item.UpdatedAt = UpdatedAt;
+				
+			item.UpdatedBy = UpdatedBy;
+				
+			item.RowVersion = RowVersion;
+				
+			item.Title = Title;
+				
+			item.Keywords = Keywords;
+				
+			item.Input = Input;
+				
+			item.RequeryURL = RequeryURL;
+				
+			item.DigitalObjectIdentifierID = DigitalObjectIdentifierID;
+				
+			item.MetadataJson = MetadataJson;
+				
 			item.ZipFullName = ZipFullName;
 				
 			item.ZipCheckSum = ZipCheckSum;
-				
-			item.Citation = Citation;
 				
 			item.Places = Places;
 				
@@ -202,15 +216,7 @@ namespace SAEON.Observations.Data
 				
 			item.EndDate = EndDate;
 				
-			item.AddedAt = AddedAt;
-				
-			item.AddedBy = AddedBy;
-				
-			item.UpdatedAt = UpdatedAt;
-				
-			item.UpdatedBy = UpdatedBy;
-				
-			item.RowVersion = RowVersion;
+			item.DateX = DateX;
 				
 	        item.Save(UserName);
 	    }

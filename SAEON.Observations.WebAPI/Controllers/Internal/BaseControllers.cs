@@ -19,7 +19,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ClientAuthorization("SAEON.Observations.QuerySite")] //Uncomment when going live
+    //[ClientAuthorization("SAEON.Observations.QuerySite")] //Uncomment when going live
     [TenantAuthorization]
     public abstract class BaseController : ApiController
     {
@@ -189,7 +189,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpGet]
         [Route("{id:guid}")]
         //[ResponseType(typeof(TEntity))] required in derived classes
-        public virtual async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public virtual async Task<IHttpActionResult> GetById([FromUri] Guid id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {
@@ -234,7 +236,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         protected virtual void SetEntity(ref TEntity item, bool isPost)
         { }
 
-        protected List<string> ModelStateErrors
+        public List<string> ModelStateErrors
         {
             get
             {
@@ -242,9 +244,35 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        protected List<string> GetValidationErrors(DbEntityValidationException ex)
+        public List<string> GetValidationErrors(DbEntityValidationException ex)
         {
             return ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
+        }
+
+        public void SaveChanges()
+        {
+            try
+            {
+                DbContext.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                Logging.Exception(ex, string.Join("; ",GetValidationErrors(ex)));
+                throw;
+            }
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            try
+            {
+                await DbContext.SaveChangesAsync();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                Logging.Exception(ex, string.Join("; ", GetValidationErrors(ex)));
+                throw;
+            }
         }
 
         /// <summary>
@@ -253,7 +281,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <param name="item">The new TEntity </param>
         [HttpPost]
         //[Route] Required in derived classes
-        public virtual async Task<IHttpActionResult> PostAsync([FromBody]TEntity item)
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "item", item } }))
             {
@@ -323,7 +353,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpPut]
         [ResponseType(typeof(void))]
         //[Route("{id:guid}")] Required in derived classes
-        public virtual async Task<IHttpActionResult> PutByIdAsync(Guid id, [FromBody]TEntity delta)
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "id", id }, { "delta", delta } }))
             {
@@ -456,7 +488,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpDelete]
         [ResponseType(typeof(void))]
         //[Route("{id:guid}")] Required in derived classes
-        public virtual async Task<IHttpActionResult> DeleteByIdAsync(Guid id)
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public virtual async Task<IHttpActionResult> DeleteById(Guid id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
             {

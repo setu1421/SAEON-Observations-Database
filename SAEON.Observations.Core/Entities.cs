@@ -134,7 +134,7 @@ namespace SAEON.Observations.Core.Entities
         public string Url { get; set; }
         /// <summary>
         /// Update Frequency of the DataSource
-        /// Enum of {AdHoc, Daily, Weekly, Monthly, Quarterly, Annually, HoUrly}
+        /// Enum of {AdHoc, Daily, Weekly, Monthly, Quarterly, Annually, Hourly}
         /// </summary>
         public int UpdateFreq { get; set; }
         /// <summary>
@@ -167,6 +167,8 @@ namespace SAEON.Observations.Core.Entities
         [JsonProperty(Order = -99)]
         public Guid Id { get; set; }
         [Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false), HiddenInput]
+
+
         public byte[] RowVersion { get; set; }
         public Guid? UserId { get; set; }
 
@@ -185,6 +187,48 @@ namespace SAEON.Observations.Core.Entities
 
         // Navigation
         public List<DataSchema> DataSchemas { get; set; }
+    }
+
+    /// <summary>
+    /// DigitalObjectIdentifiers entity
+    /// </summary>
+    [Table("DigitalObjectIdentifiers")]
+
+    public class DigitalObjectIdentifier : BaseEntity
+    {
+        /// <summary>
+        /// Id of the DigitalObjectIdentifier
+        /// </summary>
+        //[Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ScaffoldColumn(false), HiddenInput]
+        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public string DOI { get; private set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public string DOIUrl { get; private set; }
+        /// <summary>
+        /// Name of the DigitalObjectIdentifier
+        /// </summary> 
+        [Required, StringLength(1000)]
+        public string Name { get; set; }
+        /// <summary>
+        /// <summary>
+        /// UserId of user who added the UserDownload
+        /// </summary>
+        [StringLength(128), ScaffoldColumn(false)]
+        public string AddedBy { get; set; }
+        /// <summary>
+        /// UserId of user who last updated the UserDownload
+        /// </summary>
+        [StringLength(128), ScaffoldColumn(false)]
+        public string UpdatedBy { get; set; }
+        [Timestamp,  ConcurrencyCheck, ScaffoldColumn(false), HiddenInput]
+        public byte[] RowVersion { get; set; }
+
+        // Navigation
+        public List<UserDownload> UserDownloads { get; set; }
     }
 
     /// <summary>
@@ -712,6 +756,21 @@ namespace SAEON.Observations.Core.Entities
         [Required, StringLength(5000)]
         public string Title { get; set; }
         /// <summary>
+        /// How this DownLoad should be cited
+        /// </summary> 
+        [Required, StringLength(5000)]
+        public string Citation { get; set; }
+        /// <summary>
+        /// Keywords of the Download, semi-colon separated
+        /// </summary>
+        [Required, StringLength(1000)]
+        public string Keywords { get; set; }
+        /// <summary>
+        /// When the query for the download was executed 
+        /// </summary>
+        [Required]
+        public DateTime Date { get; set;}
+        /// <summary>
         /// The input of the query that generated the download
         /// </summary>
         [Required, StringLength(5000), Display(Name = "Input")]
@@ -719,27 +778,27 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Requery Url for download
         /// </summary>
-        [Required, Url, StringLength(2000), Display(Name = "Requery Url")]
+        [Required, StringLength(2000), Display(Name = "Requery Url")]
         public string RequeryUrl { get; set; }
         /// <summary>
-        /// DOI of the download
+        /// DigitalObjectIdentifierID of the download
         /// </summary> 
-        [Required, StringLength(2000), Display(Name = "Digital Object Identifier (DOI)")]
-        public string DOI { get; set; }
+        [Required, Display(Name = "Digital Object Identifier (DOI)")]
+        public int DigitalObjectIdentifierId { get; set; }
         /// <summary>
-        /// DOI Url of the download
-        /// </summary> 
-        [Required, Url, StringLength(2000), Display(Name = "Digital Object Identifier (DOI) Url")]
-        public string DOIUrl { get; set; }
+        /// Json sent to metadata service
+        /// </summary>
+        [Required, StringLength(5000), Display(Name="Metadata Json")]
+        public string MetadataJson { get; set; }
         /// <summary>
         /// Metadata Url for download
         /// </summary>
-        [Required, Url, StringLength(2000), Display(Name = "Metadata Url")]
+        [Required, StringLength(2000), Display(Name = "Metadata Url")]
         public string MetadataUrl { get; set; }
         /// <summary>
         /// Url to view the download
         /// </summary> 
-        [Required, Url, StringLength(2000), Display(Name = "Download Url")]
+        [Required, StringLength(2000), Display(Name = "Download Url")]
         public string DownloadUrl { get; set; }
         /// <summary>
         /// Full file name of Zip on server
@@ -754,24 +813,37 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Url to Zip of the download
         /// </summary>
-        [Required, Url, StringLength(2000), Display(Name = "Download Url")]
+        [Required, StringLength(2000), Display(Name = "Download Url")]
         public string ZipUrl { get; set; }
         /// <summary>
-        /// How this DownLoad should be cited
-        /// </summary> 
-        [Required, StringLength(5000)]
-        public string Citation { get; set; }
-        /// <summary>
         /// Places of the DownLoad
-        /// Lookup on GeoNames in format Name:Country:Lat:Lon, comma separated
+        /// Lookup on GeoNames in format Name:Country:Lat:Lon, semi-colon separated
         /// </summary> 
         [Required, StringLength(5000)]
         public string Places { get; set; }
+        /// <summary>
+        /// North-most Latitude of the download
+        /// </summary>
         public double? LatitudeNorth { get; set; } // +N to -S
+        /// <summary>
+        /// South-most Latitude of the download
+        /// </summary>
         public double? LatitudeSouth { get; set; } // +N to -S
+        /// <summary>
+        /// West-morthmost Longitude of the download
+        /// </summary>
         public double? LongitudeWest { get; set; } // -W to +E
+        /// <summary>
+        /// East-morthmost Longitude of the download
+        /// </summary>
         public double? LongitudeEast { get; set; } // -W to +E
+        /// <summary>
+        /// Minimum elevation of the download
+        /// </summary>
         public double? ElevationMinimum { get; set; }
+        /// <summary>
+        /// Maximum elevation of the download
+        /// </summary>
         public double? ElevationMaximum { get; set; }
         /// <summary>
         /// Start date of the download
@@ -809,6 +881,9 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [ScaffoldColumn(false)]
         public DateTime? UpdatedAt { get; set; }
+
+        // Navigation
+        public DigitalObjectIdentifier DigitalObjectIdentifier { get; set; }
     }
 
     /// <summary>
@@ -1328,6 +1403,7 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<DataSchema> DataSchemas { get; set; }
         public DbSet<DataSource> DataSources { get; set; }
         public DbSet<DataSourceType> DataSourceTypes { get; set; }
+        public DbSet<DigitalObjectIdentifier> DigitalObjectIdentifiers { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
         //public DbSet<InventoryTotal> InventoryTotals { get; set; }
         //public DbSet<InventoryStation> InventoryStations { get; set; }

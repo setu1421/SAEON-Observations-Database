@@ -247,14 +247,14 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
                             };
                             datastream.UnitOfMeasurement.Name = $"{unit.Name}";
                             datastream.UnitOfMeasurement.Symbol = $"{unit.Symbol}";
-                            if (inventory.TopLatitude.HasValue && inventory.BottomLatitude.HasValue && inventory.LeftLongitude.HasValue && inventory.RightLongitude.HasValue)
+                            if (inventory.LatitudeNorth.HasValue && inventory.LatitudeSouth.HasValue && inventory.LongitudeWest.HasValue && inventory.LongitudeEast.HasValue)
                             {
                                 datastream.ObservedArea = new BoundingBox
                                 {
-                                    Top = inventory.TopLatitude.Value,
-                                    Bottom = inventory.BottomLatitude.Value,
-                                    Left = inventory.LeftLongitude.Value,
-                                    Right = inventory.RightLongitude.Value
+                                    Top = inventory.LatitudeNorth.Value,
+                                    Bottom = inventory.LatitudeSouth.Value,
+                                    Left = inventory.LongitudeWest.Value,
+                                    Right = inventory.LongitudeEast.Value
                                 };
                             }
                             if (inventory.StartDate.HasValue && inventory.EndDate.HasValue)

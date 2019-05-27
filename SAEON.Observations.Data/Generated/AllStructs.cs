@@ -52,6 +52,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string DataSourceType = @"DataSourceType";
         
+		public static readonly string DigitalObjectIdentifier = @"DigitalObjectIdentifiers";
+        
 		public static readonly string ImportBatch = @"ImportBatch";
         
 		public static readonly string ImportBatchSummary = @"ImportBatchSummary";
@@ -202,6 +204,11 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table DataSourceType
 		{
             get { return DataService.GetSchema("DataSourceType", "ObservationsDB"); }
+		}
+        
+		public static TableSchema.Table DigitalObjectIdentifier
+		{
+            get { return DataService.GetSchema("DigitalObjectIdentifiers", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table ImportBatch
@@ -429,6 +436,8 @@ namespace SAEON.Observations.Data
 		public static readonly string VStationOrganisation = @"vStationOrganisation";
         
 		public static readonly string VUnitOfMeasurePhenomena = @"vUnitOfMeasurePhenomena";
+        
+		public static readonly string VUserDownload = @"vUserDownloads";
         
 		public static readonly string VUserInfo = @"vUserInfo";
         

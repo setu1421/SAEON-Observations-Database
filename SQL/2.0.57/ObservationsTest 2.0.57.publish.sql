@@ -38,29 +38,20 @@ IF N'$(__IsSqlCmdEnabled)' NOT LIKE N'True'
 GO
 USE [$(DatabaseName)];
 
-
 GO
-PRINT N'Dropping [dbo].[DF_UserDownloads_UpdatedAt]...';
-
-
-GO
-ALTER TABLE [dbo].[UserDownloads] DROP CONSTRAINT [DF_UserDownloads_UpdatedAt];
+PRINT N'Dropping [dbo].[UX_UserDownloads_UserId_Name]...';
 
 
 GO
-PRINT N'Dropping [dbo].[DF_UserDownloads_AddedAt]...';
+ALTER TABLE [dbo].[UserDownloads] DROP CONSTRAINT [UX_UserDownloads_UserId_Name];
 
 
 GO
-ALTER TABLE [dbo].[UserDownloads] DROP CONSTRAINT [DF_UserDownloads_AddedAt];
+PRINT N'Dropping [dbo].[UX_UserQueries_UserId_Name]...';
 
 
 GO
-PRINT N'Dropping [dbo].[DF_UserDownloads_ID]...';
-
-
-GO
-ALTER TABLE [dbo].[UserDownloads] DROP CONSTRAINT [DF_UserDownloads_ID];
+ALTER TABLE [dbo].[UserQueries] DROP CONSTRAINT [UX_UserQueries_UserId_Name];
 
 
 GO
@@ -90,7 +81,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Starting rebuilding table [dbo].[UserDownloads]...';
+PRINT N'Altering [dbo].[UserDownloads]...';
 
 
 GO
@@ -98,92 +89,160 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
+ALTER TABLE [dbo].[UserDownloads] DROP COLUMN [DOI], COLUMN [QueryInput], COLUMN [QueryURL];
+
+
+GO
+ALTER TABLE [dbo].[UserDownloads] ALTER COLUMN [AddedBy] VARCHAR (128) NOT NULL;
+
+ALTER TABLE [dbo].[UserDownloads] ALTER COLUMN [Citation] VARCHAR (5000) NOT NULL;
+
+ALTER TABLE [dbo].[UserDownloads] ALTER COLUMN [Description] VARCHAR (5000) NOT NULL;
+
+ALTER TABLE [dbo].[UserDownloads] ALTER COLUMN [UpdatedBy] VARCHAR (128) NOT NULL;
+
+ALTER TABLE [dbo].[UserDownloads] ALTER COLUMN [UserId] VARCHAR (128) NOT NULL;
+
+
+GO
+ALTER TABLE [dbo].[UserDownloads]
+    ADD [Title]                     VARCHAR (5000) NOT NULL,
+        [Keywords]                  VARCHAR (1000) NOT NULL,
+        [Date]                      DATETIME       NOT NULL,
+        [Input]                     VARCHAR (5000) NOT NULL,
+        [RequeryURL]                VARCHAR (5000) NOT NULL,
+        [DigitalObjectIdentifierID] INT            NOT NULL,
+        [MetadataJson]              VARCHAR (5000) NOT NULL,
+        [ZipFullName]               VARCHAR (2000) NOT NULL,
+        [ZipCheckSum]               VARCHAR (64)   NOT NULL,
+        [ZipURL]                    VARCHAR (2000) NOT NULL,
+        [Places]                    VARCHAR (5000) NULL,
+        [LatitudeNorth]             FLOAT (53)     NULL,
+        [LatitudeSouth]             FLOAT (53)     NULL,
+        [LongitudeWest]             FLOAT (53)     NULL,
+        [LongitudeEast]             FLOAT (53)     NULL,
+        [ElevationMinimum]          FLOAT (53)     NULL,
+        [ElevationMaximum]          FLOAT (53)     NULL,
+        [StartDate]                 DATETIME       NULL,
+        [EndDate]                   DATETIME       NULL;
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[UX_UserDownloads_UserId_Name]...';
+
+
+GO
+ALTER TABLE [dbo].[UserDownloads]
+    ADD CONSTRAINT [UX_UserDownloads_UserId_Name] UNIQUE NONCLUSTERED ([UserId] ASC, [Name] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[UserDownloads].[IX_UserDownloads_DOI]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_UserDownloads_DOI]
+    ON [dbo].[UserDownloads]([DigitalObjectIdentifierID] ASC);
+
+
+GO
+PRINT N'Altering [dbo].[UserQueries]...';
+
+
+GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-BEGIN TRANSACTION;
+ALTER TABLE [dbo].[UserQueries] ALTER COLUMN [AddedBy] VARCHAR (128) NOT NULL;
 
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+ALTER TABLE [dbo].[UserQueries] ALTER COLUMN [UpdatedBy] VARCHAR (128) NOT NULL;
 
-SET XACT_ABORT ON;
+ALTER TABLE [dbo].[UserQueries] ALTER COLUMN [UserId] VARCHAR (128) NOT NULL;
 
-CREATE TABLE [dbo].[tmp_ms_xx_UserDownloads] (
-    [ID]               UNIQUEIDENTIFIER CONSTRAINT [DF_UserDownloads_ID] DEFAULT (newid()) NOT NULL,
-    [UserId]           NVARCHAR (128)   NOT NULL,
-    [Name]             VARCHAR (150)    NOT NULL,
-    [Description]      VARCHAR (5000)   NOT NULL,
-    [Title]            VARCHAR (5000)   NOT NULL,
-    [Input]            VARCHAR (5000)   NOT NULL,
-    [ReQueryURL]       VARCHAR (5000)   NOT NULL,
-    [DOIId]            INT              IDENTITY (1, 1) NOT NULL,
-    [DOI]              AS               '10.15493/obsdb.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), DOIId), 2), 5, 0, '.'),
-    [DOIUrl]           AS               'https://doi.org/10.15493/obsdb.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), DOIId), 2), 5, 0, '.'),
-    [MetadataURL]      VARCHAR (2000)   NOT NULL,
-    [DownloadURL]      VARCHAR (2000)   NOT NULL,
-    [ZipFullName]      VARCHAR (2000)   NOT NULL,
-    [ZipCheckSum]      VARCHAR (64)     NOT NULL,
-    [Citation]         VARCHAR (5000)   NOT NULL,
-    [Places]           VARCHAR (5000)   NULL,
-    [LatitudeNorth]    FLOAT (53)       NULL,
-    [LatitudeSouth]    FLOAT (53)       NULL,
-    [LongitudeWest]    FLOAT (53)       NULL,
-    [LongitudeEast]    FLOAT (53)       NULL,
-    [ElevationMinimum] FLOAT (53)       NULL,
-    [ElevationMaximum] FLOAT (53)       NULL,
-    [StartDate]        DATETIME         NULL,
-    [EndDate]          DATETIME         NULL,
-    [AddedAt]          DATETIME         CONSTRAINT [DF_UserDownloads_AddedAt] DEFAULT (getdate()) NULL,
-    [AddedBy]          NVARCHAR (128)   NOT NULL,
-    [UpdatedAt]        DATETIME         CONSTRAINT [DF_UserDownloads_UpdatedAt] DEFAULT (getdate()) NULL,
-    [UpdatedBy]        NVARCHAR (128)   NOT NULL,
-    [RowVersion]       ROWVERSION       NOT NULL,
-    CONSTRAINT [tmp_ms_xx_constraint_PK_UserDownloads1] PRIMARY KEY CLUSTERED ([ID] ASC),
-    CONSTRAINT [tmp_ms_xx_constraint_UX_UserDownloads_UserId_Name1] UNIQUE NONCLUSTERED ([UserId] ASC, [Name] ASC)
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[UX_UserQueries_UserId_Name]...';
+
+
+GO
+ALTER TABLE [dbo].[UserQueries]
+    ADD CONSTRAINT [UX_UserQueries_UserId_Name] UNIQUE NONCLUSTERED ([UserId] ASC, [Name] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[DigitalObjectIdentifiers]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[DigitalObjectIdentifiers] (
+    [ID]         INT            IDENTITY (1, 1) NOT NULL,
+    [DOI]        AS             '10.15493/obsdb.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
+    [DOIUrl]     AS             'https://doi.org/10.15493/obsdb.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
+    [Name]       VARCHAR (1000) NULL,
+    [AddedAt]    DATETIME       NULL,
+    [AddedBy]    VARCHAR (128)  NOT NULL,
+    [UpdatedAt]  DATETIME       NULL,
+    [UpdatedBy]  VARCHAR (128)  NOT NULL,
+    [RowVersion] ROWVERSION     NOT NULL,
+    CONSTRAINT [PK_DigitalObjectIdentifiers] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 
-IF EXISTS (SELECT TOP 1 1 
-           FROM   [dbo].[UserDownloads])
-    BEGIN
-        INSERT INTO [dbo].[tmp_ms_xx_UserDownloads] ([ID], [UserId], [Name], [Description], [MetadataURL], [DownloadURL], [Citation], [AddedAt], [AddedBy], [UpdatedAt], [UpdatedBy])
-        SELECT   [ID],
-                 [UserId],
-                 [Name],
-                 [Description],
-                 [MetadataURL],
-                 [DownloadURL],
-                 [Citation],
-                 [AddedAt],
-                 [AddedBy],
-                 [UpdatedAt],
-                 [UpdatedBy]
-        FROM     [dbo].[UserDownloads]
-        ORDER BY [ID] ASC;
-    END
-
-DROP TABLE [dbo].[UserDownloads];
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_UserDownloads]', N'UserDownloads';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_UserDownloads1]', N'PK_UserDownloads', N'OBJECT';
-
-EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_UX_UserDownloads_UserId_Name1]', N'UX_UserDownloads_UserId_Name', N'OBJECT';
-
-COMMIT TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-
 
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+PRINT N'Creating [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name]...';
 
 
 GO
-PRINT N'Creating [dbo].[TR_UserDownloads_Insert]...';
+CREATE NONCLUSTERED INDEX [IX_DigitalObjectIdentifiers_Name]
+    ON [dbo].[DigitalObjectIdentifiers]([Name] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[DF_DigitalObjectIdentifiers_AddedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[DigitalObjectIdentifiers]
+    ADD CONSTRAINT [DF_DigitalObjectIdentifiers_AddedAt] DEFAULT (getdate()) FOR [AddedAt];
+
+
+GO
+PRINT N'Creating [dbo].[DF_DigitalObjectIdentifiers_UpdatedAt]...';
+
+
+GO
+ALTER TABLE [dbo].[DigitalObjectIdentifiers]
+    ADD CONSTRAINT [DF_DigitalObjectIdentifiers_UpdatedAt] DEFAULT (getdate()) FOR [UpdatedAt];
+
+
+GO
+PRINT N'Creating [dbo].[FK_UserDownloads_DigitalObjectIdentifiers]...';
+
+
+GO
+ALTER TABLE [dbo].[UserDownloads] WITH NOCHECK
+    ADD CONSTRAINT [FK_UserDownloads_DigitalObjectIdentifiers] FOREIGN KEY ([DigitalObjectIdentifierID]) REFERENCES [dbo].[DigitalObjectIdentifiers] ([ID]);
+
+
+GO
+PRINT N'Creating [dbo].[TR_DigitalObjectIdentifiers_Insert]...';
 
 
 GO
@@ -191,7 +250,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-CREATE TRIGGER [dbo].[TR_UserDownloads_Insert] ON [dbo].[UserDownloads]
+CREATE TRIGGER [dbo].[TR_DigitalObjectIdentifiers_Insert] ON [dbo].[DigitalObjectIdentifiers]
 FOR INSERT
 AS
 BEGIN
@@ -202,7 +261,7 @@ BEGIN
       AddedAt = GetDate(),
       UpdatedAt = NULL
   from
-    UserDownloads src
+    DigitalObjectIdentifiers src
     inner join inserted ins
       on (ins.ID = src.ID)
 END
@@ -211,7 +270,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Creating [dbo].[TR_UserDownloads_Update]...';
+PRINT N'Creating [dbo].[TR_DigitalObjectIdentifiers_Update]...';
 
 
 GO
@@ -219,7 +278,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-CREATE TRIGGER [dbo].[TR_UserDownloads_Update] ON [dbo].[UserDownloads]
+CREATE TRIGGER [dbo].[TR_DigitalObjectIdentifiers_Update] ON [dbo].[DigitalObjectIdentifiers]
 FOR UPDATE
 AS
 BEGIN
@@ -230,7 +289,7 @@ BEGIN
     AddedAt = Coalesce(del.AddedAt, ins.AddedAt, GetDate()),
     UpdatedAt = GetDate()
   from
-    UserDownloads src
+    DigitalObjectIdentifiers src
     inner join inserted ins
       on (ins.ID = src.ID)
     inner join deleted del
@@ -318,6 +377,39 @@ group by
   PhenomenonOfferingID, OfferingCode, OfferingName, 
   PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit
 ) s
+GO
+PRINT N'Creating [dbo].[vUserDownloads]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vUserDownloads]
+AS 
+SELECT 
+  UserDownloads.*, DOI, DOIUrl
+FROM 
+  UserDownloads
+  inner join DigitalObjectIdentifiers
+    on (UserDownloads.DigitalObjectIdentifierID = DigitalObjectIdentifiers.ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Checking existing data against newly created constraints';
+
+
+GO
+USE [$(DatabaseName)];
+
+
+GO
+ALTER TABLE [dbo].[UserDownloads] WITH CHECK CHECK CONSTRAINT [FK_UserDownloads_DigitalObjectIdentifiers];
+
+
 GO
 PRINT N'Update complete.';
 

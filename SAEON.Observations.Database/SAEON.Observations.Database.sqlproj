@@ -522,6 +522,8 @@
     <Build Include="dbo\Views\vLocations.sql" />
     <Build Include="dbo\Views\vFeatures.sql" />
     <Build Include="dbo\Views\vObservationJSON.sql" />
+    <Build Include="dbo\Tables\DigitalObjectIdentifiers.sql" />
+    <Build Include="dbo\Views\vUserDownloads.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

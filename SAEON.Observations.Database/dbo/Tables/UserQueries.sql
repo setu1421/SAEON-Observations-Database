@@ -1,14 +1,14 @@
 ﻿Create Table [dbo].[UserQueries]
 (
     [ID] UniqueIdentifier Constraint [DF_UserQueries_ID] DEFAULT (newid()), 
-    [UserId] NVarChar(128) not Null,
+    [UserId] VarChar(128) not Null,
     [Name] VarChar(150) not Null, 
     [Description] VarChar(500) Null,
     [QueryInput] VarChar(5000) not Null,
     [AddedAt] DateTime null Constraint [DF_UserQueries_AddedAt] DEFAULT (getdate()),
-    [AddedBy] NVarChar(128) not Null,
+    [AddedBy] VarChar(128) not Null,
     [UpdatedAt] DateTime null Constraint [DF_UserQueries_UpdatedAt] DEFAULT (getdate()), 
-    [UpdatedBy] NVarChar(128) not Null,
+    [UpdatedBy] VarChar(128) not Null,
     [RowVersion] RowVersion not null,
     Constraint [PK_UserQueries] Primary Key Clustered ([ID]),
     Constraint [UX_UserQueries_UserId_Name] Unique ([UserId],[Name])

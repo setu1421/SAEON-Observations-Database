@@ -295,9 +295,9 @@ namespace SAEON.Observations.Core
     {
         public DataMatrix DataMatrix { get; } = new DataMatrix();
         public List<ChartSeries> ChartSeries { get; } = new List<ChartSeries>();
+        public DateTime Date { get; } = DateTime.Now;
         public string Title { get; set; }
         public string Description { get; set; }
-        public string Citation { get; set; }
         /// <summary>
         /// Semi-colon separated Name;Scheme;Uri
         /// </summary>
@@ -306,22 +306,14 @@ namespace SAEON.Observations.Core
         /// Lookup on GeoNames in format Name:Country:Lat:Lon
         /// </summary> 
         public List<string> Places { get; } = new List<string>();
-        public double? TopLatitude { get; set; } = null; // + N to -S
-        public double? BottomLatitude { get; set; } = null; // + N to -S
-        public double? LeftLongitude { get; set; } = null; // -W to +E
-        public double? RightLongitude { get; set; } = null; // -W to +E
-        public double? ElevationMinimum { get; set; }
-        public double? ElevationMaximum { get; set; }
+        public double? LatitudeNorth { get; set; } = null; // + N to -S
+        public double? LatitudeSouth { get; set; } = null; // + N to -S
+        public double? LongitudeWest { get; set; } = null; // -W to +E
+        public double? LongitudeEast { get; set; } = null; // -W to +E
+        public double? ElevationMinimum { get; set; } = null;
+        public double? ElevationMaximum { get; set; } = null;
         public DateTime? StartDate { get; set; } = null;
         public DateTime? EndDate { get; set; } = null;
-        /// <summary>
-        /// Json sent to metadata service
-        /// </summary>
-        public string MetadataJson { get; set; }
-        /// <summary>
-        /// SHA-256 checksum
-        /// </summary>
-        public string Checksum { get; set; }
     }
 
     public class DataWizardApproximation
