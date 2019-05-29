@@ -49,7 +49,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
             var client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson)); 
             client.DefaultRequestHeaders.Add(Constants.TenantHeader, Session[Constants.TenantSession].ToString());
             Logging.Verbose("Headers: {@Headers}", client.DefaultRequestHeaders);
             Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));

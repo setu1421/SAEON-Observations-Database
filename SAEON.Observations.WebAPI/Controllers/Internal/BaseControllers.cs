@@ -113,16 +113,25 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         /// <summary>
+        /// Overwrite for entity includes
+        /// </summary>
+        /// <returns>ListOf(PredicateOf(TEntity))</returns>
+        protected virtual List<Expression<Func<TEntity, object>>> GetIncludes()
+        {
+            return new List<Expression<Func<TEntity, object>>>();
+        }
+
+        /// <summary>
         /// query for items
         /// </summary>
         /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
             var query = DbContext.Set<TEntity>().AsQueryable();
-            //foreach (var include in GetIncludes())
-            //{
-            //    query = query.Include(include);
-            //}
+            foreach (var include in GetIncludes())
+            {
+                query = query.Include(include);
+            }
             foreach (var where in GetWheres())
             {
                 query = query.Where(where);
@@ -136,24 +145,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var orderBy = orderBys.FirstOrDefault();
             if (orderBy != null)
             {
-                if (orderBy.Ascending)
-                {
-                    query = query.OrderBy(orderBy.Expression);
-                }
-                else
-                {
-                    query = query.OrderByDescending(orderBy.Expression);
-                }
+                query = query.OrderByMember(orderBy.Expression, orderBy.Ascending);
                 foreach (var thenBy in orderBys.Skip(1))
                 {
-                    if (thenBy.Ascending)
-                    {
-                        query = ((IOrderedQueryable<TEntity>)query).ThenBy(thenBy.Expression);
-                    }
-                    else
-                    {
-                        query = ((IOrderedQueryable<TEntity>)query).ThenByDescending(thenBy.Expression);
-                    }
+                    query = query.ThenByMember(orderBy.Expression, orderBy.Ascending);
                 }
             }
             return query;
@@ -257,7 +252,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
             catch (DbEntityValidationException ex)
             {
-                Logging.Exception(ex, string.Join("; ",GetValidationErrors(ex)));
+                Logging.Exception(ex, string.Join("; ", GetValidationErrors(ex)));
                 throw;
             }
         }
@@ -578,6 +573,103 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
         */
+    }
+
+    public static class QueryableExtensions
+    {
+        /// <summary>
+        ///     Supports sorting of a given member as an expression when type is not known. It solves problem with LINQ to Entities unable to
+        ///     cast different types as 'System.DateTime', 'System.DateTime?' to type 'System.Object'.
+        ///     LINQ to Entities only supports casting Entity Data Model primitive types.
+        /// </summary>
+        /// <typeparam name="T">entity type</typeparam>
+        /// <param name="query">query to apply sorting on.</param>
+        /// <param name="expression">the member expression to apply</param>
+        /// <param name="ascending">the sort order to apply</param>
+        /// <returns>Query with sorting applied as IOrderedQueryable of type T</returns>
+        public static IOrderedQueryable<T> OrderByMember<T>(
+            this IQueryable<T> query,
+            Expression<Func<T, object>> expression,
+            bool ascending)
+        {
+            var body = expression.Body as UnaryExpression;
+
+            if (body != null)
+            {
+                var memberExpression = body.Operand as MemberExpression;
+
+                if (memberExpression != null)
+                {
+                    return
+                        (IOrderedQueryable<T>)
+                        query.Provider.CreateQuery(
+                            Expression.Call(
+                                typeof(Queryable),
+                                ascending ? "OrderBy" : "OrderByDescending",
+                                new[] { typeof(T), memberExpression.Type },
+                                query.Expression,
+                                Expression.Lambda(memberExpression, expression.Parameters)));
+                }
+            }
+
+            return ascending ? query.OrderBy(expression) : query.OrderByDescending(expression);
+        }
+
+        /// <summary>
+        ///     Supports sorting of a given member as an expression when type is not known. It solves problem with LINQ to Entities unable to
+        ///     cast different types as 'System.DateTime', 'System.DateTime?' to type 'System.Object'.
+        ///     LINQ to Entities only supports casting Entity Data Model primitive types.
+        /// </summary>
+        /// <typeparam name="T">entity type</typeparam>
+        /// <param name="query">query to apply sorting on.</param>
+        /// <param name="expression">the member expression to apply</param>
+        /// <param name="ascending">the sort order to apply</param>
+        /// <returns>Query with sorting applied as IOrderedQueryable of type T</returns>
+        public static IOrderedQueryable<T> ThenByMember<T>(
+            this IQueryable<T> query,
+            Expression<Func<T, object>> expression,
+            bool ascending)
+        {
+            return ((IOrderedQueryable<T>)query).ThenByMember(expression, ascending);
+        }
+
+        /// <summary>
+        ///     Supports sorting of a given member as an expression when type is not known. It solves problem with LINQ to Entities unable to
+        ///     cast different types as 'System.DateTime', 'System.DateTime?' to type 'System.Object'.
+        ///     LINQ to Entities only supports casting Entity Data Model primitive types.
+        /// </summary>
+        /// <typeparam name="T">entity type</typeparam>
+        /// <param name="query">query to apply sorting on.</param>
+        /// <param name="expression">the member expression to apply</param>
+        /// <param name="ascending">the sort order to apply</param>
+        /// <returns>Query with sorting applied as IOrderedQueryable of type T</returns>
+        public static IOrderedQueryable<T> ThenByMember<T>(
+            this IOrderedQueryable<T> query,
+            Expression<Func<T, object>> expression,
+            bool ascending)
+        {
+            var body = expression.Body as UnaryExpression;
+
+            if (body != null)
+            {
+                var memberExpression = body.Operand as MemberExpression;
+
+                if (memberExpression != null)
+                {
+                    return
+                        (IOrderedQueryable<T>)
+                        query.Provider.CreateQuery(
+                            Expression.Call(
+                                typeof(Queryable),
+                                ascending ? "ThenBy" : "ThenByDescending",
+                                new[] { typeof(T), memberExpression.Type },
+                                query.Expression,
+                                Expression.Lambda(memberExpression, expression.Parameters)));
+                }
+            }
+
+            return ascending ? query.ThenBy(expression) : query.ThenByDescending(expression);
+        }
     }
 }
 

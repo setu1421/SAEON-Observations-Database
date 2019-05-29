@@ -5,7 +5,13 @@
 }
 <div class="row">
     <div class="col-md">
-        <strong>Copyright</strong>
+        <strong>Digital Object Identifier (DOI)</strong>
+        <p><a href="@Model.DigitalObjectIdentifier.DOIUrl">@Model.DigitalObjectIdentifier.DOIUrl</a></p>
+        <strong>Title</strong>
+        <p>@Model.Title</p>
+        <strong>Description</strong>
+        <p>@Model.Description</p>
+        <strong>Copyright and license</strong>
         <p>
             &copy; @DateTime.Now.Year - South African Environmental Observation Network (SAEON)<br />
             <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
@@ -16,16 +22,10 @@
         </p>
         <strong>Attribution</strong>
         <p>
-            Please use the following dataset citation:
-            "From the <a href="https://observations.saeon.ac.za" target="_blank">Observations Database</a>
-            @Html.Raw(@Model.Citation)
-            by the <a href="http://www.saeon.ac.za" target="_blank">South African Environmental Observation Network (SAEON)</a>,
-            under a <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>,
-            accessed @Model.AddedAt.Value.ToString("dd MMM yyyy")"
+            Users of SAEON data are required to clearly acknowledge the source of the material derived from SAEON in the format:<br />
+            @Model.Citation
         </p>
         <p>
-            Users of SAEON data are required to clearly acknowledge the source of the material derived from SAEON in the format:
-            "Data was sourced from the <a href="http://www.saeon.ac.za" target="_blank">South African Environmental Observation Network (SAEON)</a>".
             If relevant, also credit other organisations involved in collection of this particular dataset (as listed in 'credit' in the metadata record).
         </p>
         <strong>Usage</strong>
@@ -37,7 +37,9 @@
             You accept all risks and responsibility for losses, damages, costs and other consequences resulting directly or indirectly from using this site
             and any information or material available from it.
         </p>
-        <p>Your download from the Observations Database is available @Html.ActionLink("here", "DownloadZip", "DataWizard")</p>
-        <p>The DataCite metadata record is <a href="@Model.MetadataURL" target="_blank">here</a>. Its Digital Object Identifier is <a href="@Model.DOI">here</a>.</p>
+        <strong>Metadata</strong>
+        <p>The metadata for your download from the Observations Database is available <a href="@Model.MetadataUrl">here"</a>.</p>
+        <strong>Zip download</strong>
+        <p>Your download from the Observations Database is available @Html.ActionLink("here", "DownloadZip", new { id = Model.Id })</p>
     </div>
 </div>

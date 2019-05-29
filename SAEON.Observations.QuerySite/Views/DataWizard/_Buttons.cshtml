@@ -71,6 +71,7 @@
         .Title("Data Download")
         .ShowOnInit(false)
         .Width("1024")
+        //.Width("auto")
         .ClientSideEvents(ev => ev.Close("DataWizard.DownloadClose"))
         .ContentType("ajax")
         .ContentUrl("/DataWizard/GetDownloadDialog")

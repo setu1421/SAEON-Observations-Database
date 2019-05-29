@@ -113,14 +113,14 @@ namespace SAEON.Observations.Core
         }
     }
 
-    public class DataMatixRow
+    public class DataMatrixRow
     {
         public List<Object> Columns { get; set; } = new List<object>();
         internal DataMatrix Matrix { get; set; } = null;
 
-        public DataMatixRow() { }
+        public DataMatrixRow() { }
 
-        public DataMatixRow(DataMatrix dataMatrix)
+        public DataMatrixRow(DataMatrix dataMatrix)
         {
             Matrix = dataMatrix;
         }
@@ -156,7 +156,7 @@ namespace SAEON.Observations.Core
     public class DataMatrix
     {
         public List<DataMatrixColumn> Columns { get; } = new List<DataMatrixColumn>();
-        public List<DataMatixRow> Rows { get; } = new List<DataMatixRow>();
+        public List<DataMatrixRow> Rows { get; } = new List<DataMatrixRow>();
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
@@ -178,10 +178,10 @@ namespace SAEON.Observations.Core
             return result;
         }
 
-        public DataMatixRow AddRow(params object[] values)
+        public DataMatrixRow AddRow(params object[] values)
 
         {
-            var result = new DataMatixRow(this);
+            var result = new DataMatrixRow(this);
             Rows.Add(result);
             for (int c = 0; c < Columns.Count; c++)
             {

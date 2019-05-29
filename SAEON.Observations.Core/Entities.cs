@@ -205,9 +205,9 @@ namespace SAEON.Observations.Core.Entities
         [ScaffoldColumn(false), HiddenInput]
         public int Id { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public string DOI { get; private set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public string DOIUrl { get; private set; }
+        public string DOI { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed), Display(Name = "DOI Url")]
+        public string DOIUrl { get; set; }
         /// <summary>
         /// Name of the DigitalObjectIdentifier
         /// </summary> 
@@ -788,7 +788,7 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Json sent to metadata service
         /// </summary>
-        [Required, StringLength(5000), Display(Name="Metadata Json")]
+        [Required, Display(Name="Metadata Json")]
         public string MetadataJson { get; set; }
         /// <summary>
         /// Metadata Url for download
@@ -864,17 +864,17 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// UserId of user who added the UserDownload
         /// </summary>
-        [StringLength(128), ScaffoldColumn(false)]
+        [Required, StringLength(128), ScaffoldColumn(false)]
         public string AddedBy { get; set; }
         /// <summary>
         /// Time the UserDownload was added
         /// </summary>
-        [ScaffoldColumn(false)]
+        [ScaffoldColumn(false)] 
         public DateTime? AddedAt { get; set; }
-        /// <summary>
-        /// UserId of user who last updated the UserDownload
-        /// </summary>
-        [StringLength(128), ScaffoldColumn(false)]
+        ///// <summary>
+        ///// UserId of user who last updated the UserDownload
+        ///// </summary>
+        [Required, StringLength(128), ScaffoldColumn(false)]
         public string UpdatedBy { get; set; }
         /// <summary>
         /// Time the UserDownload was updated

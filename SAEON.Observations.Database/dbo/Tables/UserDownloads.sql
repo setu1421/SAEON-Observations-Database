@@ -9,7 +9,7 @@
     [Input] VarChar(5000) not Null,
     [RequeryURL] VarChar(5000) not Null,
 	[DigitalObjectIdentifierID] Int not null,
-    [MetadataJson] VarChar(5000) not Null,
+    [MetadataJson] VarChar(Max) not Null,
     [MetadataURL] VarChar(2000) not Null,
     [DownloadURL] VarChar(2000) not Null,
 	[ZipFullName] VarChar(2000) not Null,

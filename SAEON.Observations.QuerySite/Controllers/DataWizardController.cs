@@ -761,7 +761,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.EndDate = model.EndDate.ToUniversalTime();
                     var userDownload = await PostEntityAsync<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
                     Logging.Verbose("UserDownload: {@userDownload}", userDownload);
-                    return Json(new { url = Url.Action("Details", "UserDownloads", new { userDownload.Id })}, JsonRequestBehavior.AllowGet);
+                    return Json(new { url = Url.Action("ViewDownload", new { userDownload.Id })}, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {
@@ -771,7 +771,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        [HttpGet, Authorize]
+        [HttpGet]
 #pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public async Task<ActionResult> ViewDownload(Guid id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
@@ -781,6 +781,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             return View(userDownload);
         }
 
+        [HttpGet]
 #pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public async Task<FilePathResult> DownloadZip(Guid id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods

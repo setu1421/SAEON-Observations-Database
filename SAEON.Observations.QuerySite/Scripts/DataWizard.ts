@@ -282,6 +282,7 @@
         let endDate = $("#EndDate").ejDatePicker("instance").getValue();
         $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate })
             .done(function (data) {
+                SetApproximation();
                 if (isClick) {
                     HideResults();
                 }

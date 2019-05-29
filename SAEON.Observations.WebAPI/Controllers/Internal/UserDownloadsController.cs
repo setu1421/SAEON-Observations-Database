@@ -1,4 +1,5 @@
-﻿using SAEON.Observations.Core;
+﻿using SAEON.Logs;
+using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,12 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             return result;
         }
 
+        protected override List<Expression<Func<UserDownload, object>>> GetIncludes()
+        {
+            var result = base.GetIncludes();
+            result.Add(i => i.DigitalObjectIdentifier);
+            return result;
+        }
         /// <summary>
         /// Check UserId is logged in UserId
         /// </summary>
