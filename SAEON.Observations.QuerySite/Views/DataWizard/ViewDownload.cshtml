@@ -22,10 +22,12 @@
         </p>
         <strong>Attribution</strong>
         <p>
-            Users of SAEON data are required to clearly acknowledge the source of the material derived from SAEON in the format:<br />
+            Publications using SAEON data should be cited as follows:<br />
             @Model.Citation
         </p>
         <p>
+            Users of SAEON data are required to clearly acknowledge the source of the material derived from SAEON in the format:
+            "Data was sourced from the <a href="http://www.saeon.ac.za" target="_blank">South African Environmental Observation Network (SAEON)</a>".<br />
             If relevant, also credit other organisations involved in collection of this particular dataset (as listed in 'credit' in the metadata record).
         </p>
         <strong>Usage</strong>
@@ -38,8 +40,8 @@
             and any information or material available from it.
         </p>
         <strong>Metadata</strong>
-        <p>The metadata for your download from the Observations Database is available <a href="@Model.MetadataUrl">here"</a>.</p>
+        <p>The metadata for your download from the Observations Database is available <a href="@Model.MetadataUrl">here</a>.</p>
         <strong>Zip download</strong>
-        <p>Your download from the Observations Database is available @Html.ActionLink("here", "DownloadZip", new { id = Model.Id })</p>
+        <p>Your download from the Observations Database is available @Html.ActionLink("here", "DownloadZip", new { id = Model.Id }).</p>
     </div>
 </div>

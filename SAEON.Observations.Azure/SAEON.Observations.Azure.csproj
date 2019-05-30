@@ -9,12 +9,12 @@
     <Description>SAEON Observations Azure</Description>
     <Copyright>© 2018-2019 South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.72</Version>
+    <Version>1.0.73</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.DocumentDB" Version="[2.1.3]" />
-    <PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.98" />
+    <PackageReference Include="Microsoft.Azure.DocumentDB" Version="2.4.0" />
+    <PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.99" />
     <PackageReference Include="SAEON.Azure.Storage" Version="1.0.52" />
     <PackageReference Include="SAEON.Logs" Version="1.0.42" />
   </ItemGroup>

@@ -389,7 +389,9 @@ namespace SAEON.Observations.Core.ConsoleTests
                     new XElement(ns + "format", "application/zip"),
                     new XElement(ns + "format", "text/csv")
                 ),
-                new XElement(ns + "geoLocations", geoLocations)
+                new XElement(ns + "geoLocations", geoLocations),
+                new XElement(ns + "url", result.DownloadUrl),
+                new XElement(ns + "contentUrl", result.ZipUrl)
             );
             Console.WriteLine(root);
             File.WriteAllText("DataCite.xml", root.ToString());
@@ -448,7 +450,7 @@ namespace SAEON.Observations.Core.ConsoleTests
                         new JProperty("geoLocationPlace", $"{splits[0]}, {splits[1]}"),
                         new JProperty("geoLocationPoint",
                             new JObject(
-                                new JProperty("pointLatitude",splits[2]),
+                                new JProperty("pointLatitude", splits[2]),
                                 new JProperty("pointLongitude", splits[3])
                             )
                         )
@@ -457,9 +459,9 @@ namespace SAEON.Observations.Core.ConsoleTests
             }
             jGeoLocations.Add(
                 new JObject(
-                    new JProperty("geoLocationBox", 
+                    new JProperty("geoLocationBox",
                         new JObject(
-                            new JProperty("westBoundLongitude",result.LongitudeWest),
+                            new JProperty("westBoundLongitude", result.LongitudeWest),
                             new JProperty("eastBoundLongitude", result.LongitudeEast),
                             new JProperty("northBoundLatitude", result.LatitudeNorth),
                             new JProperty("southBoundLatitude", result.LatitudeSouth)
@@ -580,7 +582,9 @@ namespace SAEON.Observations.Core.ConsoleTests
                             )
                         ),
                         new JProperty("subjects", jSubjects),
-                        new JProperty("geoLocations", jGeoLocations)
+                        new JProperty("geoLocations", jGeoLocations),
+                        new JProperty("url", result.DownloadUrl),
+                        new JProperty("contentUrl", result.ZipUrl)
                     )
                 )
             );

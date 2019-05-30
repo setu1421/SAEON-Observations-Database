@@ -6,6 +6,7 @@ using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mime;
@@ -777,18 +778,24 @@ namespace SAEON.Observations.QuerySite.Controllers
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
-            if (userDownload == null) throw new ArgumentNullException(nameof(id));
+            if (userDownload == null) throw new ArgumentException(nameof(id));
             return View(userDownload);
         }
 
         [HttpGet]
 #pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
-        public async Task<FilePathResult> DownloadZip(Guid id)
+        public async Task<FileResult> DownloadZip(Guid id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
-            if (userDownload == null) throw new ArgumentNullException(nameof(id));
-            return new FilePathResult(userDownload.ZipFullName, MediaTypeNames.Application.Zip);
+            if (userDownload == null) throw new ArgumentException(nameof(id));
+            var stream = await GetStreamAsync($"Internal/DataWizard/DownloadZip/{id}");
+            using (var memStream = new MemoryStream())
+            {
+                await stream.CopyToAsync(memStream);
+                var bytes = memStream.ToArray();
+                return File(bytes, MediaTypeNames.Application.Zip, Path.GetFileName(userDownload.ZipFullName));
+            }
         }
         #endregion Download
     }

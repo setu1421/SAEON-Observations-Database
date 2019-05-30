@@ -7,9 +7,11 @@ using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -33,6 +35,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var client = new HttpClient();
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Zip));
                     client.DefaultRequestHeaders.Add(Constants.TenantHeader, Session[Constants.TenantSession].ToString());
                     Logging.Verbose("Headers: {@Headers}", client.DefaultRequestHeaders);
                     Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
@@ -89,6 +92,35 @@ namespace SAEON.Observations.QuerySite.Controllers
         public List<string> GetValidationErrors(DbEntityValidationException ex)
         {
             return ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
+        }
+
+        protected async Task<Stream> GetStreamAsync(string resource)
+        {
+            using (Logging.MethodCall(GetType(), new ParameterList { { "Resource", resource } }))
+            {
+                try
+                {
+                    using (var client = await GetWebAPIClientAsync())
+                    {
+                        var url = $"{apiBaseUrl}/{resource}";
+                        Logging.Verbose("Calling: {url}", url);
+                        var response = await client.GetAsync(url);
+                        Logging.Verbose("Response: {response}", response);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
+                        }
+                        var data = await response.Content.ReadAsStreamAsync();
+                        //Logging.Verbose("Data: {@data}", data);
+                        return data;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
         }
 
         protected async Task<List<TEntity>> GetListAsync<TEntity>(string resource)// where TEntity : BaseEntity

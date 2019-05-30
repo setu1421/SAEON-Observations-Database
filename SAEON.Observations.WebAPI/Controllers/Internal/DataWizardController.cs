@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SAEON.AspNet.Common;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Core;
@@ -12,6 +13,10 @@ using System.Data.Entity.Validation;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -345,7 +350,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.Description = result.Description.TrimEnd(";");
             if (result.LatitudeNorth.HasValue && result.LatitudeSouth.HasValue && result.LongitudeWest.HasValue && result.LongitudeEast.HasValue)
             {
-                result.Description += $" in area {result.LatitudeNorth:f5},{result.LongitudeWest:f5} N,W {result.LatitudeSouth:f5},{result.LongitudeEast:f5} S,E";
+                result.Description += $" in area {result.LatitudeNorth:f5},{result.LongitudeWest:f5} (N,W) {result.LatitudeSouth:f5},{result.LongitudeEast:f5} (S,E)";
             }
             if (result.ElevationMinimum.HasValue && result.ElevationMaximum.HasValue)
             {
@@ -804,7 +809,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         new XElement(ns + "format", "application/zip"),
                         new XElement(ns + "format", "text/csv")
                     ),
-                    new XElement(ns + "geoLocations", geoLocations)
+                    new XElement(ns + "geoLocations", geoLocations),
+                    new XElement(ns + "url", result.DownloadUrl),
+                    new XElement(ns + "contentUrl", result.ZipUrl)
                 );
                 return root.ToString();
             }
@@ -992,7 +999,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                                 )
                             ),
                             new JProperty("subjects", jSubjects),
-                            new JProperty("geoLocations", jGeoLocations)
+                            new JProperty("geoLocations", jGeoLocations),
+                            new JProperty("url", result.DownloadUrl),
+                            new JProperty("contentUrl", result.ZipUrl)
                         )
                     )
                 );
@@ -1008,7 +1017,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     // Get Data
                     var output = GetData(input, false);
                     // Create Download
-                    var accessed = output.Date.ToString("yyyyMMdd HH:mm:ss.fff");
+                    var accessed = output.Date.ToString("yyyy-MM-dd HH:mm:ss.fff");
                     var doiName = $"Data download on {accessed}";
                     // Get a DOI
                     Logging.Verbose("Minting DOI");
@@ -1060,7 +1069,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         throw new InvalidOperationException($"Unable to find UserDownload {accessed}");
                     }
                     Logging.Verbose("UserDownload: {@UserDownload}", result);
-                    result.Citation = $"Observations Database ({result.Date.Year}): {output.Title}. South African Environmental Observation Network (SAEON) (Dataset). {result.DigitalObjectIdentifier.DOIUrl}. Accessed {accessed}.";
+                    result.Citation = $"Observations Database ({result.Date.Year}): {output.Title}. South African Environmental Observation Network (SAEON) (Dataset). " +
+                        $"{result.DigitalObjectIdentifier.DOIUrl}. Accessed {result.Date.ToString("yyyy-MM-dd HH:mm")}.";
                     result.Description += Environment.NewLine + "Please cite as follows:" + Environment.NewLine + result.Citation;
                     result.MetadataUrl = $"http://datacite.org/{result.DigitalObjectIdentifier.DOI}";
                     result.RequeryUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Requery/{result.Id}";
@@ -1159,6 +1169,37 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         throw new ArgumentNullException(nameof(input));
                     }
                     return GetDownload(input);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("DownloadZip/{id:guid}")]
+        public HttpResponseMessage DownloadZip(Guid id)
+        {
+            using (Logging.MethodCall<UserDownload>(GetType(), new ParameterList { { "Id", id } }))
+            {
+                try
+                {
+                    var userDownload = DbContext.UserDownloads.FirstOrDefault(i => i.Id == id);
+                    if (userDownload == null)
+                    {
+                        throw new ArgumentException($"UserDownload with Id: {id} not found!");
+                        //return Request.CreateErrorResponse(HttpStatusCode.NotFound, $"UserDownload with Id: {id} not found!");
+                    }
+                    var bytes = File.ReadAllBytes(userDownload.ZipFullName);
+                    var response = Request.CreateResponse(HttpStatusCode.OK);
+                    response.Content = new ByteArrayContent(bytes);
+                    response.Content.Headers.ContentLength = bytes.LongLength;
+                    response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+                    response.Content.Headers.ContentDisposition.FileName = Path.GetFileName(userDownload.ZipFullName);
+                    response.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Zip);
+                    return response;
                 }
                 catch (Exception ex)
                 {
