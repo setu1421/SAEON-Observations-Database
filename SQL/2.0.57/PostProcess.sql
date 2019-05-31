@@ -1,4 +1,4 @@
-Delete ImportBatchSummary
+﻿Delete ImportBatchSummary
 Insert Into ImportBatchSummary
   (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance, 
    LatitudeNorth, LatitudeSouth, LongitudeWest, LongitudeEast, ElevationMinimum, ElevationMaximum, StartDate, EndDate)
@@ -11,9 +11,11 @@ from
   vObservationExpansion
 group by
   ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID
+SET IDENTITY_INSERT DigitalObjectIdentifiers ON
 Insert into DigitalObjectIdentifiers
-  (Name,AddedBy,UpdatedBy)
+  (ID, Name,AddedBy,UpdatedBy)
 values
-  ('Observations Database',(Select UserID from aspnet_Users where UserName = 'TimPN'),(Select UserID from aspnet_Users where UserName = 'TimPN'))
+  (1, 'Observations Database',(Select UserID from aspnet_Users where UserName = 'TimPN'),(Select UserID from aspnet_Users where UserName = 'TimPN'))
+SET IDENTITY_INSERT DigitalObjectIdentifiers OFF
 
 

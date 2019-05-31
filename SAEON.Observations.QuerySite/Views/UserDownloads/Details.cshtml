@@ -5,7 +5,6 @@
 <div class="row">
     <div class="col-md">
         <div>
-            DOI: @(Model.DigitalObjectIdentifier == null ? "Null" : @Model.DigitalObjectIdentifier.DOIUrl)
             <dl class="dl-horizontal">
                 <dt>
                     @Html.DisplayNameFor(model => model.Id)
@@ -32,6 +31,12 @@
                     @Html.DisplayFor(model => model.Description)
                 </dd>
                 <dt>
+                    @Html.DisplayNameFor(model => model.Citation)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Citation)
+                </dd>
+                <dt>
                     @Html.DisplayNameFor(model => model.DigitalObjectIdentifier.DOI)
                 </dt>
                 <dd>
@@ -50,10 +55,10 @@
                     <a href="@Model.DownloadUrl">@Html.DisplayFor(model => model.DownloadUrl)</a>
                 </dd>
                 <dt>
-                    @Html.DisplayNameFor(model => model.Citation)
+                    @Html.DisplayNameFor(model => model.ZipUrl)
                 </dt>
                 <dd>
-                    @Html.DisplayFor(model => model.Citation)
+                    <a href="@Model.ZipUrl">@Html.DisplayFor(model => model.ZipUrl)</a>
                 </dd>
             </dl>
         </div>

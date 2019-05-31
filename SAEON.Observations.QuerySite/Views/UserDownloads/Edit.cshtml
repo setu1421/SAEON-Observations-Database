@@ -39,6 +39,12 @@
                 </div>
             </div>
             <div class="form-group">
+                @Html.LabelFor(model => model.Citation, htmlAttributes: new { @class = "col-md-2" })
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.Citation)
+                </div>
+            </div>
+            <div class="form-group">
                 @Html.LabelFor(model => model.DigitalObjectIdentifier.DOI, htmlAttributes: new { @class = "col-md-2" })
                 <div class="col-md-10">
                     <a href="@Model.DigitalObjectIdentifier.DOIUrl">@Html.DisplayFor(model => model.DigitalObjectIdentifier.DOIUrl)DownloadUrl</a>
@@ -57,9 +63,9 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.Citation, htmlAttributes: new { @class = "col-md-2" })
+                @Html.LabelFor(model => model.ZipUrl, htmlAttributes: new { @class = "col-md-2" })
                 <div class="col-md-10">
-                    @Html.DisplayFor(model => model.Citation)
+                    <a href="@Model.ZipUrl">@Html.DisplayFor(model => model.ZipUrl)</a>
                 </div>
             </div>
             <div class="form-group">

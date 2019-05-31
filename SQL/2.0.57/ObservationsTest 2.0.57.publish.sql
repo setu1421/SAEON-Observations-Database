@@ -188,7 +188,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 CREATE TABLE [dbo].[DigitalObjectIdentifiers] (
-    [ID]         INT            IDENTITY (1, 1) NOT NULL,
+    [ID]         INT            IDENTITY (1879048193, 1) NOT NULL,
     [DOI]        AS             '10.15493/obsdb.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
     [DOIUrl]     AS             'https://doi.org/10.15493/obsdb.' + Stuff(CONVERT (VARCHAR (20), CONVERT (VARBINARY (4), ID), 2), 5, 0, '.'),
     [Name]       VARCHAR (1000) NULL,
