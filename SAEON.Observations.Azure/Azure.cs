@@ -20,6 +20,7 @@ namespace SAEON.Observations.Azure
         public static bool Enabled { get; private set; } = false;
         public static bool StorageEnabled { get; private set; } = false;
         public static bool CosmosDBEnabled { get; private set; } = false;
+        public static bool CosmosDBBulkEnabled { get; private set; } = false;
         public int BatchSize { get { return int.Parse(ConfigurationManager.AppSettings["AzureBatchSize"] ?? AzureCosmosDB<ObservationDocument>.DefaultBatchSize.ToString()); } }
 
         private AzureStorage Storage = null;
@@ -36,8 +37,9 @@ namespace SAEON.Observations.Azure
                     {
                         StorageEnabled = bool.Parse(ConfigurationManager.AppSettings["AzureStorageEnabled"] ?? "false");
                         CosmosDBEnabled = bool.Parse(ConfigurationManager.AppSettings["AzureCosmosDBEnabled"] ?? "false");
+                        CosmosDBBulkEnabled = bool.Parse(ConfigurationManager.AppSettings["AzureCosmosDBBulkEnabled"] ?? "false");
                     }
-                    Logging.Information("Azure: {Enabled} Storage: {StorageEnabled} CosmosDB: {CosmosDBEnabled}", Enabled, StorageEnabled, CosmosDBEnabled);
+                    Logging.Information("Azure: {Enabled} Storage: {StorageEnabled} CosmosDB: {CosmosDBEnabled} CosmosDBBulk: {CosmosDBBulkEnabled}", Enabled, StorageEnabled, CosmosDBEnabled, CosmosDBBulkEnabled);
                 }
                 catch (Exception ex)
                 {
@@ -281,7 +283,14 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    return await CosmosDB.BulkUpsertItemsAsync(documents);
+                    if (CosmosDBBulkEnabled)
+                    {
+                        return await CosmosDB.BulkUpsertItemsAsync(documents);
+                    }
+                    else
+                    {
+                        return await CosmosDB.UpdateItemsAsync(documents);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -350,11 +359,16 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    var resp = await CosmosDB.DeleteItemsAsync(importBatchId.ToString(), i => i.Id, i => i.ImportBatch.Id == importBatchId);
-                    return resp;
-                    // BulkExecutor version
-                    //var resp = await CosmosDB.BulkDeleteItemsAsync(importBatchId.ToString(), i => i.Id, i => i.ImportBatch.Id == importBatchId);
-                    //return resp;
+                    //if (CosmosDBBulkEnabled)
+                    //{
+                    //    var resp = await CosmosDB.BulkDeleteItemsAsync(importBatchId.ToString(), i => i.Id, i => i.ImportBatch.Id == importBatchId);
+                    //    return resp;
+                    //}
+                    //else
+                    {
+                        var resp = await CosmosDB.DeleteItemsAsync(importBatchId.ToString(), i => i.Id, i => i.ImportBatch.Id == importBatchId);
+                        return resp;
+                    }
                 }
                 catch (Exception ex)
                 {
