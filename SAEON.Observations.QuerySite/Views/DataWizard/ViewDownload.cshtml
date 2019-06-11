@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-md">
         <strong>Digital Object Identifier (DOI)</strong>
-        <p><a href="@Model.DigitalObjectIdentifier.DOIUrl">@Model.DigitalObjectIdentifier.DOIUrl</a></p>
+        <p><a href="@Model.DigitalObjectIdentifier.DOIUrl">@Model.DigitalObjectIdentifier.DOIUrl.Replace("https://",string.Empty).Replace("http://",string.Empty)</a></p>
         <strong>Title</strong>
         <p>@Model.Title</p>
         <strong>Description</strong>
@@ -38,9 +38,9 @@
             and any information or material available from it.
         </p>
         <strong>Metadata</strong>
-        <p>The metadata for your download from the Observations Database is available <a href="@Model.MetadataUrl">here</a>.</p>
+        <p>The metadata for your download from the Observations Database is available at <a href="@Model.MetadataUrl">@Model.MetadataUrl.Replace("https://",string.Empty).Replace("http://",string.Empty)</a>.</p>
         <strong>Zip download</strong>
-        <p>Your download from the Observations Database is available @Html.ActionLink("here", "DownloadZip", new { id = Model.Id }).</p>
+        <p>Your download from the Observations Database is available at @Html.ActionLink(Model.ZipUrl.Replace("https://",string.Empty).Replace("http://",string.Empty), "DownloadZip", new { id = Model.Id }).</p>
         <strong>Checksum</strong>
         <p>The SHA 256 checkSum for your zip is @Model.ZipCheckSum</p>
     </div>

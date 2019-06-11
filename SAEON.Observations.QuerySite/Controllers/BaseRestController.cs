@@ -19,7 +19,6 @@ namespace SAEON.Observations.QuerySite.Controllers
     [HandleError, HandleForbidden]
     public class BaseRestController<TEntity> : Controller where TEntity : NamedEntity, new()
     {
-        protected int TimeOut { get; set; } = 1; // In minutes
         private readonly string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;
 
         private string resource = null;
@@ -36,46 +35,18 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         private async Task<HttpClient> GetWebAPIClientAsync()
         {
-            var discoClient = new HttpClient();
-            var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+            using (Logging.MethodCall(GetType()))
             {
-                Address = Properties.Settings.Default.IdentityServerUrl,
-                Policy = { RequireHttps = Properties.Settings.Default.RequireHTTPS && !Request.IsLocal }
-            });
-            if (disco.IsError)
-            {
-                Logging.Error("Error: {error}", disco.Error);
-                throw new HttpException(disco.Error);
-            }
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson)); 
-            client.DefaultRequestHeaders.Add(Constants.TenantHeader, Session[Constants.TenantSession].ToString());
-            Logging.Verbose("Headers: {@Headers}", client.DefaultRequestHeaders);
-            Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
-            var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
-            if (token == null)
-            {
-                var tokenClient = new HttpClient();
-                var tokenResponse = await tokenClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+                try
                 {
-                    Address = disco.TokenEndpoint,
-                    ClientId = "SAEON.Observations.QuerySite",
-                    ClientSecret = "It6fWPU5J708",
-                    Scope = "SAEON.Observations.WebAPI"
-                });
-
-                if (tokenResponse.IsError)
-                {
-                    Logging.Error("Error: {error}", tokenResponse.Error);
-                    throw new HttpException(tokenResponse.Error);
+                    return await WebAPIClient.GetWebAPIClientAsync(Request, Session, (ClaimsPrincipal)User, Request.IsLocal);
                 }
-                token = tokenResponse.AccessToken;
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
             }
-            Logging.Verbose("Token: {token}", token);
-            client.SetBearerToken(token);
-            client.Timeout = TimeSpan.FromMinutes(TimeOut);
-            return client;
         }
 
         // GET: TEntity

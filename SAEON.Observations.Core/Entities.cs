@@ -813,7 +813,7 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Url to Zip of the download
         /// </summary>
-        [Required, StringLength(2000), Display(Name = "Download Url")]
+        [Required, StringLength(2000), Display(Name = "Zip Url")]
         public string ZipUrl { get; set; }
         /// <summary>
         /// Places of the DownLoad
