@@ -46,7 +46,8 @@ namespace SAEON.Observations.WebAPI
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
                         AuthenticationType = "Cookies",
-                        ExpireTimeSpan = new TimeSpan(7, 0, 0, 0),
+                        CookieName = "SAEON.Observtions.WebAPI",
+                        ExpireTimeSpan = TimeSpan.FromDays(7),
                         SlidingExpiration = true
                     });
                     app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions

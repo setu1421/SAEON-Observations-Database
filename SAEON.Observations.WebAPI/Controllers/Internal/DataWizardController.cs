@@ -128,6 +128,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         private class DataFeature
         {
+            public Guid SensorID { get; set; }
             public Guid PhenomenonOfferingId { get; set; }
             public Guid PhenomenonUnitId { get; set; }
             public string Phenomenon { get; set; }
@@ -178,6 +179,17 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         private DataWizardDataOutput GetData(DataWizardDataInput input, bool includeChart)
         {
+            string GetCode(string sensorCode, string phenomenonCode, string offeringCode, string unitCode)
+            {
+                return $"{sensorCode.Replace("_", string.Empty)}_{phenomenonCode.Replace("_", string.Empty)}_{offeringCode.Replace("_", string.Empty)}_{unitCode.Replace("_", string.Empty)}".Replace(" ",string.Empty);
+            }
+
+            string GetName(string sensorName, string phenomenonName, string offeringName, string unitName)
+            {
+                return $"{sensorName.Replace(", ", "_")}, {phenomenonName.Replace(", ", "_")}, {offeringName.Replace(", ", "_")}, {unitName.Replace(", ", "_")}";
+            }
+
+
             var result = new DataWizardDataOutput();
             result.DataMatrix.AddColumn("SiteName", "Site", MaxtixDataType.String);
             result.DataMatrix.AddColumn("StationName", "Station", MaxtixDataType.String);
@@ -187,17 +199,18 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.DataMatrix.AddColumn("Elevation", "Elevation", MaxtixDataType.Double);
 
             var q = GetQuery(input);
-            var qFeatures = q.Select(i => new { i.PhenomenonOfferingId, i.PhenomenonUnitId, i.PhenomenonCode, i.PhenomenonName, i.OfferingCode, i.OfferingName, i.UnitCode, i.UnitName, i.UnitSymbol }).Distinct();
+            var qFeatures = q.Select(i => new { i.SensorId, i.SensorCode, i.SensorName, i.PhenomenonOfferingId, i.PhenomenonUnitId, i.PhenomenonCode, i.PhenomenonName, i.OfferingCode, i.OfferingName, i.UnitCode, i.UnitName, i.UnitSymbol }).Distinct();
             var features = qFeatures.ToList().Select(i => new DataFeature
             {
+                SensorID = i.SensorId,
                 PhenomenonOfferingId = i.PhenomenonOfferingId,
                 PhenomenonUnitId = i.PhenomenonUnitId,
                 Phenomenon = i.PhenomenonName,
                 Offering = i.OfferingName,
                 Unit = i.UnitName,
                 Symbol = i.UnitSymbol,
-                Name = $"{i.PhenomenonCode.Replace(" ", "")}_{i.OfferingCode.Replace(" ", "")}_{i.UnitCode.Replace(" ", "")}",
-                Caption = $"{i.PhenomenonName}, {i.OfferingName}, {i.UnitSymbol}"
+                Name = GetCode(i.SensorCode,i.PhenomenonCode,i.OfferingCode,i.UnitCode),
+                Caption = GetName(i.SensorName, i.PhenomenonName, i.OfferingName, i.UnitName)
             });
             foreach (var feature in features)
             {
@@ -293,7 +306,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     date = obs.ValueDate;
                     elevation = obs.Elevation;
                 }
-                var name = $"{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}";
+                var name = GetCode(obs.SensorCode, obs.PhenomenonCode, obs.OfferingCode, obs.UnitCode);
                 //Logging.Verbose("Name: {Name}",name);
                 row[name] = obs.DataValue;
                 if (obs.ValueDate < (result.StartDate ?? DateTime.MaxValue))
@@ -337,6 +350,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
             }
             Logging.Verbose("DataMatrix: Rows: {Rows} Cols: {Cols}", result.DataMatrix.Rows.Count, result.DataMatrix.Columns.Count);
+            Logging.Verbose("DataMatrix: {DataMatrix}", JsonConvert.SerializeObject(result.DataMatrix));
             if (!string.IsNullOrEmpty(result.Title))
             {
                 keywordsSiteShort = keywordsSiteShort.Distinct().ToList();
@@ -397,8 +411,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         series = new ChartSeries
                         {
-                            Name = $"{obs.SensorCode.Replace(" ", "")}_{obs.PhenomenonCode.Replace(" ", "")}_{obs.OfferingCode.Replace(" ", "")}_{obs.UnitCode.Replace(" ", "")}",
-                            Caption = $"{obs.SensorName}, {obs.PhenomenonName}, {obs.OfferingName}, {obs.UnitSymbol}"
+                            Name = GetCode(obs.SensorCode, obs.PhenomenonCode, obs.OfferingCode, obs.UnitCode),
+                            Caption = GetName(obs.SensorName, obs.PhenomenonName, obs.OfferingName, obs.UnitName)
                         };
                         result.ChartSeries.Add(series);
                         siteId = obs.SiteId;
@@ -1072,7 +1086,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     result.Citation = $"Observations Database ({result.Date.Year}): {output.Title}. South African Environmental Observation Network (SAEON) (Dataset). " +
                         $"{result.DigitalObjectIdentifier.DOIUrl}. Accessed {result.Date.ToString("yyyy-MM-dd HH:mm")}.";
                     result.Description += Environment.NewLine + "Please cite as follows:" + Environment.NewLine + result.Citation;
-                    result.MetadataUrl = $"http://datacite.org/{result.DigitalObjectIdentifier.DOI}";
+                    result.MetadataUrl = $"https://api.datacite.org/dois/{result.DigitalObjectIdentifier.DOI}";
                     result.RequeryUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/Requery/{result.Id}";
                     result.DownloadUrl = Properties.Settings.Default.QuerySiteUrl + $"/DataWizard/ViewDownload/{result.Id}";
                     var folder = HostingEnvironment.MapPath($"~/App_Data/Downloads/{output.Date.ToString("yyyyMM")}");
