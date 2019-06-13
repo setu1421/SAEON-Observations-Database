@@ -796,6 +796,10 @@ namespace SAEON.Observations.Core.Entities
         [Required, StringLength(2000), Display(Name = "Metadata Url")]
         public string MetadataUrl { get; set; }
         /// <summary>
+        /// ODI Id for the download
+        /// </summary>
+        public Guid OpenDataPlatformId { get; set; }
+        /// <summary>
         /// Url to view the download
         /// </summary> 
         [Required, StringLength(2000), Display(Name = "Download Url")]
