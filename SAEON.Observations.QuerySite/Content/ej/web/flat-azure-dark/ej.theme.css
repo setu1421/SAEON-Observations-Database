@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /*!
 *  filename: ej.theme.css
-*  version : 17.1.0.47
+*  version : 17.1.0.51
 *  Copyright Syncfusion Inc. 2001 - 2019. All rights reserved.
 *  Use of this code is subject to the terms of our license.
 *  A copy of the current license can be obtained at any time by e-mailing
@@ -19525,9 +19525,6 @@ table.pivotGridValueTable.rowFrozenTable tr td:last-child {
   /*other*/
   background-color: black;
 }
-.e-reportviewer-headerspan {
-  
-}
 .e-reportviewer-headerspan,
 .e-reportviewer-contentspan {
   
@@ -19680,6 +19677,13 @@ table.pivotGridValueTable.rowFrozenTable tr td:last-child {
 .e-reportviewer-popupli {
   color: #dddddd !important;
 }
+.e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box {
+  
+}
+.e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box .e-input,
+.e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box .e-select {
+  
+}
 .e-reportviewer-gotonext.e-reportviewer-disabled,
 .e-reportviewer-gotoprevious.e-reportviewer-disabled,
 .e-reportviewer-gotolast.e-reportviewer-disabled,
@@ -19695,8 +19699,10 @@ table.pivotGridValueTable.rowFrozenTable tr td:last-child {
   font-size: 40px;
 }
 .e-reportviewer-error-content {
-  background-color: #1d1d1d;
   font-size: 12.5px;
+}
+ {
+  background-color: #1d1d1d;
 }
 .e-reportviewer-scroller .e-scrollbar .e-icon {
   font-size: 0;
