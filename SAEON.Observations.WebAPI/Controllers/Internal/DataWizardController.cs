@@ -7,6 +7,7 @@ using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
@@ -18,6 +19,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Xml.Linq;
@@ -181,7 +183,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         {
             string GetCode(string sensorCode, string phenomenonCode, string offeringCode, string unitCode)
             {
-                return $"{sensorCode.Replace("_", string.Empty)}_{phenomenonCode.Replace("_", string.Empty)}_{offeringCode.Replace("_", string.Empty)}_{unitCode.Replace("_", string.Empty)}".Replace(" ",string.Empty);
+                return $"{sensorCode.Replace("_", string.Empty)}_{phenomenonCode.Replace("_", string.Empty)}_{offeringCode.Replace("_", string.Empty)}_{unitCode.Replace("_", string.Empty)}".Replace(" ", string.Empty);
             }
 
             string GetName(string sensorName, string phenomenonName, string offeringName, string unitName)
@@ -209,7 +211,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 Offering = i.OfferingName,
                 Unit = i.UnitName,
                 Symbol = i.UnitSymbol,
-                Name = GetCode(i.SensorCode,i.PhenomenonCode,i.OfferingCode,i.UnitCode),
+                Name = GetCode(i.SensorCode, i.PhenomenonCode, i.OfferingCode, i.UnitCode),
                 Caption = GetName(i.SensorName, i.PhenomenonName, i.OfferingName, i.UnitName)
             });
             foreach (var feature in features)
@@ -473,7 +475,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        private UserDownload GetDownload(DataWizardDownloadInput input)
+        private async Task<UserDownload> GetDownload(DataWizardDownloadInput input)
         {
             string GetChecksum(string file)
             {
@@ -490,11 +492,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 return ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
             }
 
-            void SaveChanges()
+            async void SaveChanges()
             {
                 try
                 {
-                    DbContext.SaveChanges();
+                    await DbContext.SaveChangesAsync();
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -503,6 +505,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
             }
 
+            /*
             string JohansAPIJson(UserDownload result)
             {
                 var jSubjects =
@@ -1021,6 +1024,244 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 );
                 return jDataCite.ToString();
             }
+            */
+
+            JObject ODPApiJson(UserDownload result)
+            {
+                var jSubjects =
+                    new JArray(
+                        new JObject(
+                            new JProperty("subject", "Observations")
+                        ),
+                        new JObject(
+                            new JProperty("subject", "South African Environmental Observation Network (SAEON)")
+                        ),
+                        new JObject(
+                            new JProperty("subjectScheme", "SOFTWARE_APP"),
+                            new JProperty("schemeURI", "http://www.saeon.ac.za/"),
+                            new JProperty("subject", "Observations Database")
+                        ),
+                        new JObject(
+                            new JProperty("subjectScheme", "SOFTWARE_URL"),
+                            new JProperty("schemeURI", "http://www.saeon.ac.za/"),
+                            new JProperty("subject", Properties.Settings.Default.QuerySiteUrl)
+                        )
+                    );
+                var keywords = result.Keywords.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var keyword in keywords)
+                {
+                    jSubjects.Add(
+                        new JObject(
+                            new JProperty("subject", keyword)
+                        )
+                    );
+                }
+                var places = result.Places.Split(new string[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var place in places)
+                {
+                    jSubjects.Add(
+                        new JObject(
+                            new JProperty("subjectScheme", "name"),
+                            new JProperty("schemeURI", "http://www.geonames.org/"),
+                            new JProperty("subject", place)
+                        )
+                    );
+                }
+
+                var jGeoLocations = new JArray();
+                foreach (var place in places)
+                {
+                    var splits = place.Split(new char[] { ':' });
+                    jGeoLocations.Add(
+                        new JObject(
+                            new JProperty("geoLocationPlace", $"{splits[0]}, {splits[1]}"),
+                            new JProperty("geoLocationPoint",
+                                new JObject(
+                                    new JProperty("pointLatitude", splits[2]),
+                                    new JProperty("pointLongitude", splits[3])
+                                )
+                            )
+                        )
+                    );
+                }
+                jGeoLocations.Add(
+                    new JObject(
+                        new JProperty("geoLocationBox",
+                            new JObject(
+                                new JProperty("westBoundLongitude", result.LongitudeWest.ToString()),
+                                new JProperty("eastBoundLongitude", result.LongitudeEast.ToString()),
+                                new JProperty("northBoundLatitude", result.LatitudeNorth.ToString()),
+                                new JProperty("southBoundLatitude", result.LatitudeSouth.ToString())
+                            )
+                        )
+                    )
+                );
+
+                var jODBApi =
+                    new JObject(
+                        new JProperty("identifier",
+                            new JObject(
+                                new JProperty("identifier", result.DigitalObjectIdentifier.DOI),
+                                new JProperty("identifierType", "DOI")
+                            )
+                        ),
+                        new JProperty("alternateIdentifiers",
+                            new JArray(
+                                new JObject(
+                                    new JProperty("alternateIdentifier", result.Id),
+                                    new JProperty("alternateIdentifierType", "Internal")
+                                )
+                            )
+                        ),
+                        new JProperty("language", "en-uk"),
+                        new JProperty("resourceType",
+                            new JObject(
+                                new JProperty("resourceTypeGeneral", "Dataset"),
+                                new JProperty("resourceType", "Tabular Data in Text File(s)")
+                            )
+                        ),
+                        new JProperty("publisher", "South African Environmental Observation Network (SAEON)"),
+                        new JProperty("publicationYear", $"{result.Date.Year}"),
+                        new JProperty("dates",
+                            new JArray(
+                                new JObject(
+                                    new JProperty("date", result.Date.ToString("yyyy-MM-dd")),
+                                    new JProperty("dateType", "Accepted")
+                                ),
+                                new JObject(
+                                    new JProperty("date", result.Date.ToString("yyyy-MM-dd")),
+                                    new JProperty("dateType", "Issued")
+                                ),
+                                new JObject(
+                                    new JProperty("date", result.StartDate.ToString("yyyy-MM-dd")),
+                                    new JProperty("dateType", "Collected")
+                                ),
+                                new JObject(
+                                    new JProperty("date", result.EndDate.ToString("yyyy-MM-dd")),
+                                    new JProperty("dateType", "Collected")
+                                )
+                            )
+                        ),
+                        new JProperty("rightsList",
+                            new JArray(
+                                new JObject(
+                                    new JProperty("rights", "Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)"),
+                                    new JProperty("rightsURI", "https://creativecommons.org/licenses/by-sa/4.0/"),
+                                    new JProperty("rightsIdentifier", "CC-BY-SA-4.0"),
+                                    new JProperty("rightsIdentifierScheme", "SPDX"),
+                                    new JProperty("schemeURI", "https://spdx.org/licenses/")
+                                )
+                            )
+                        ),
+                        new JProperty("creators",
+                            new JArray(
+                                new JObject(
+                                    new JProperty("creatorName", "South African Environmental Observation Network (SAEON)"),
+                                    new JProperty("nameType", "Organizational")
+                                ),
+                                new JObject(
+                                    new JProperty("creatorName", "Observations Database Administrator"),
+                                    new JProperty("nameType", "Personal"),
+                                    new JProperty("givenName", "Tim"),
+                                    new JProperty("familyName", "Parker-Nance"),
+                                    new JProperty("nameIdentifiers",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("nameIdentifier", "0000-0001-7040-7736"),
+                                                new JProperty("nameIdentifierScheme", "ORCID"),
+                                                new JProperty("schemeURI", "http://orcid.org/")
+                                            )
+                                        )
+                                    ),
+                                    new JProperty("affiliations",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("affiliation", "Organisation:South African Environmental Observation Network (SAEON);e-Mail Address:timpn@saeon.ac.za")
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        new JProperty("titles",
+                            new JArray(
+                                new JObject(
+                                    new JProperty("title", result.Title)
+                                )
+                            )
+                        ),
+                        new JProperty("descriptions",
+                            new JArray(
+                                new JObject(
+                                    new JProperty("descriptionType", "Abstract"),
+                                    new JProperty("description", result.Description)
+                                )
+                            )
+                        ),
+                        new JProperty("contributors",
+                            new JArray(
+                                new JObject(
+                                    new JProperty("contributorType", "ContactPerson"),
+                                    new JProperty("contributorName", "Parker-Nance, Tim"),
+                                    new JProperty("givenName", "Tim"),
+                                    new JProperty("familyName", "Parker-Nance"),
+                                    new JProperty("nameIdentifiers",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("nameIdentifier", "0000-0001-7040-7736"),
+                                                new JProperty("nameIdentifierScheme", "ORCID"),
+                                                new JProperty("schemeURI", "http://orcid.org/")
+                                            )
+                                        )
+                                    ),
+                                    new JProperty("affiliations",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("affiliation", "Organisation:South African Environmental Observation Network (SAEON);e-Mail Address:timpn@saeon.ac.za")
+                                            )
+                                        )
+                                    )
+                                ),
+                                new JObject(
+                                    new JProperty("contributorType", "DataManager"),
+                                    new JProperty("contributorName", "SAEON uLwazi Node"),
+                                    new JProperty("affiliations",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("affiliation", "Organisation:South African Environmental Observation Network (SAEON);e-Mail Address:wim@saeon.ac.za")
+                                            )
+                                        )
+                                    )
+                                ),
+                                new JObject(
+                                    new JProperty("contributorType", "DataCurator"),
+                                    new JProperty("contributorName", "SAEON uLwazi Node"),
+                                    new JProperty("affiliations",
+                                        new JArray(
+                                            new JObject(
+                                                new JProperty("affiliation", "Organisation:South African Environmental Observation Network (SAEON);e-Mail Address:wim@saeon.ac.za")
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        ),
+                        new JProperty("subjects", jSubjects),
+                        new JProperty("geoLocations", jGeoLocations),
+                        new JProperty("url", result.DownloadUrl),
+                        new JProperty("contentUrl", result.ZipUrl),
+                        new JProperty("immutableResource",
+                            new JObject(
+                                new JProperty("resourceURL", result.ZipUrl),
+                                new JProperty("resourceChecksum", result.ZipCheckSum),
+                                new JProperty("checksumAlgorithm", "sha256"),
+                                new JProperty("resourceName", result.Title),
+                                new JProperty("resourceDescription", result.Description)
+                            )
+                        )
+                    );
+                return jODBApi;
+            }
 
             using (var transaction = DbContext.Database.BeginTransaction())
             {
@@ -1083,6 +1324,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         throw new InvalidOperationException($"Unable to find UserDownload {accessed}");
                     }
                     Logging.Verbose("UserDownload: {@UserDownload}", result);
+                    result.ZipCheckSum = null;
                     result.Citation = $"Observations Database ({result.Date.Year}): {output.Title}. South African Environmental Observation Network (SAEON) (Dataset). " +
                         $"{result.DigitalObjectIdentifier.DOIUrl}. Accessed {result.Date.ToString("yyyy-MM-dd HH:mm")}.";
                     result.Description += Environment.NewLine + "Please cite as follows:" + Environment.NewLine + result.Citation;
@@ -1097,11 +1339,15 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     Logging.Verbose("Creating files");
                     File.WriteAllText(Path.Combine(dirInfo.FullName, "Input.json"), JsonConvert.SerializeObject(input, Formatting.Indented));
                     //File.WriteAllText(Path.Combine(dirInfo.FullName, "Output.json"), JsonConvert.SerializeObject(output));
-                    // Johan's API
-                    result.MetadataJson = JohansAPIJson(result);
+                    var jODP = new JObject(
+                        new JProperty("institution", "south-african-environmental-observation-network"),
+                        new JProperty("metadata_standard", "saeon-odp-4-2"),
+                        new JProperty("infrastructures", new JArray()),
+                        new JProperty("collection", "saeon-observations-database"),
+                        new JProperty("metadata", ODPApiJson(result))
+                    );
+                    result.MetadataJson = jODP.ToString();
                     File.WriteAllText(Path.Combine(dirInfo.FullName, "Metadata.json"), result.MetadataJson);
-                    File.WriteAllText(Path.Combine(dirInfo.FullName, "DataCite.xml"), DataCiteXml(result));
-                    File.WriteAllText(Path.Combine(dirInfo.FullName, "DataCite.json"), DataCiteJson(result));
                     switch (input.DownloadFormat)
                     {
                         case DownloadFormats.CSV:
@@ -1119,10 +1365,34 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     dirInfo.Delete(true);
                     // Generate Checksum
                     result.ZipCheckSum = GetChecksum(result.ZipFullName);
+                    jODP["metadata"] = ODPApiJson(result);
+                    result.MetadataJson = jODP.ToString();
                     Logging.Verbose("UserDownload: {@UserDownload}", result);
-                    SaveChanges();
                     var jChecksum = new JObject(new JProperty("Checksum", result.ZipCheckSum));
                     File.WriteAllText(Path.Combine(folder, $"{result.Id} Checksum.json"), jChecksum.ToString());
+                    var client = new HttpClient
+                    {
+                        BaseAddress = new Uri(Properties.Settings.Default.ODPUrl)
+                    };
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization",ConfigurationManager.AppSettings["ODPUrl"]);
+                    HttpResponseMessage response = await client.PostAsync("/metadata/", new StringContent(jODP.ToString()));
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        Logging.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                        Logging.Error("Body: {Body}", jODP.ToString());
+                        Logging.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                    }
+                    response.EnsureSuccessStatusCode();
+                    var jObj = JObject.Parse(await response.Content.ReadAsStringAsync());
+                    if (!bool.Parse(jObj.Value<string>("validated")))
+                    {
+                        Logging.Error("Unable to create metadata on Open Data Platform. Errors: {Errors}", jObj.Value<string>("errors"));
+                        throw new InvalidOperationException("Unable to create metadata on Open Data Platform");
+                    }
+                    result.OpenDataPlatformId = Guid.Parse(jObj.Value<string>("id"));
+                    SaveChanges();
                     transaction.Commit();
                     return result;
                 }
@@ -1145,7 +1415,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpGet]
         [Route("GetDownload")]
         [Authorize]
-        public UserDownload DownloadGet([FromUri] string input)
+        public async Task<UserDownload> DownloadGetAsync([FromUri] string input)
         {
             using (Logging.MethodCall<UserDownload>(GetType()))
             {
@@ -1157,7 +1427,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         throw new ArgumentNullException(nameof(input));
                     }
-                    return GetDownload(JsonConvert.DeserializeObject<DataWizardDownloadInput>(input));
+                    return await GetDownload(JsonConvert.DeserializeObject<DataWizardDownloadInput>(input));
                 }
                 catch (Exception ex)
                 {
@@ -1170,7 +1440,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpPost]
         [Route("GetDownload")]
         [Authorize]
-        public UserDownload DownloadPost([FromBody] DataWizardDownloadInput input)
+        public async Task<UserDownload> DownloadPostAsync([FromBody] DataWizardDownloadInput input)
         {
             using (Logging.MethodCall<UserDownload>(GetType()))
             {
@@ -1182,7 +1452,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         throw new ArgumentNullException(nameof(input));
                     }
-                    return GetDownload(input);
+                    return await GetDownload(input);
                 }
                 catch (Exception ex)
                 {

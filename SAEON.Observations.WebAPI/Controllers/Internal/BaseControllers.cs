@@ -34,6 +34,24 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             private set => dbContext = value;
         }
 
+        private IMapper Mapper { get; set; }
+
+        public BaseController()
+        {
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<UserDownload, UserDownload>()
+                    .ForMember(dest => dest.Id, opt => opt.Ignore())
+                    .ForMember(dest => dest.AddedBy, opt => opt.Ignore())
+                    .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
+                cfg.CreateMap<UserQuery, UserQuery>()
+                    .ForMember(dest => dest.Id, opt => opt.Ignore())
+                    .ForMember(dest => dest.AddedBy, opt => opt.Ignore())
+                    .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
+            });
+
+            Mapper = config.CreateMapper();
+        }
+
         ~BaseController()
         {
             DbContext = null;

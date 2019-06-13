@@ -11,6 +11,7 @@
 	[DigitalObjectIdentifierID] Int not null,
     [MetadataJson] VarChar(Max) not Null,
     [MetadataURL] VarChar(2000) not Null,
+	[OpenDataPlatformID] UniqueIdentifier not null,
     [DownloadURL] VarChar(2000) not Null,
 	[ZipFullName] VarChar(2000) not Null,
 	[ZipCheckSum] VarChar(64) not null,

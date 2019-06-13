@@ -92,6 +92,7 @@ ALTER TABLE [dbo].[UserDownloads]
         [RequeryURL]                VARCHAR (5000) NOT NULL,
         [DigitalObjectIdentifierID] INT            NOT NULL,
         [MetadataJson]              VARCHAR (Max) NOT NULL,
+		[OpenDataPlatformID]		UniqueIdentifier not null,
         [ZipFullName]               VARCHAR (2000) NOT NULL,
         [ZipCheckSum]               VARCHAR (64)   NOT NULL,
         [Places]                    VARCHAR (5000) NULL,
