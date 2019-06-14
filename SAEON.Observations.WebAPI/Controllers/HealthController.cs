@@ -30,6 +30,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         {
             using (Logging.MethodCall(GetType()))
             {
+                Logging.Information("Open Data Platform - Url: {ODPUrl} Key: {ODPApiKey}", Properties.Settings.Default.ODPUrl, ConfigurationManager.AppSettings["ODPApiKey"]);
                 var model = new HealthModel();
                 try
                 {

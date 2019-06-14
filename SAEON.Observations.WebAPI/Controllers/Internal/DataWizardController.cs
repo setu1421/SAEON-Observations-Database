@@ -475,7 +475,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         private async Task<UserDownload> GetDownload(DataWizardDownloadInput input)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             string GetChecksum(string file)
             {
@@ -492,7 +494,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 return ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
             }
 
-            async void SaveChanges()
+            async Task SaveChangesAsync()
             {
                 try
                 {
@@ -1279,8 +1281,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var doi = new DigitalObjectIdentifier { Name = doiName, AddedBy = User.GetUserId(), UpdatedBy = User.GetUserId() };
                     Logging.Verbose("DOI: {@DOI}", doi);
                     DbContext.DigitalObjectIdentifiers.Add(doi);
-                    SaveChanges();
-                    doi = DbContext.DigitalObjectIdentifiers.First(i => i.Name == doiName);
+                    await SaveChangesAsync();
+                    doi = await DbContext.DigitalObjectIdentifiers.FirstAsync(i => i.Name == doiName);
                     if (doi == null)
                     {
                         throw new InvalidOperationException($"Unable to find DOI {doiName}");
@@ -1317,8 +1319,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     };
                     Logging.Verbose("UserDownload: {@UserDownload}", result);
                     DbContext.UserDownloads.Add(result);
-                    SaveChanges();
-                    result = DbContext.UserDownloads.Include(i => i.DigitalObjectIdentifier).FirstOrDefault(i => i.Name == doiName);
+                    await SaveChangesAsync();
+                    result = await DbContext.UserDownloads.Include(i => i.DigitalObjectIdentifier).FirstOrDefaultAsync(i => i.Name == doiName);
                     if (result == null)
                     {
                         throw new InvalidOperationException($"Unable to find UserDownload {accessed}");
@@ -1377,7 +1379,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
                     //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization",ConfigurationManager.AppSettings["ODPUrl"]);
-                    HttpResponseMessage response = await client.PostAsync("/metadata/", new StringContent(jODP.ToString()));
+                    HttpResponseMessage response = await client.PostAsync("/metadata/", new StringContent(jODP.ToString(Formatting.None)));
                     if (!response.IsSuccessStatusCode)
                     {
                         Logging.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
@@ -1392,7 +1394,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         throw new InvalidOperationException("Unable to create metadata on Open Data Platform");
                     }
                     result.OpenDataPlatformId = Guid.Parse(jObj.Value<string>("id"));
-                    SaveChanges();
+                    await SaveChangesAsync();
                     transaction.Commit();
                     return result;
                 }
@@ -1480,8 +1482,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     var response = Request.CreateResponse(HttpStatusCode.OK);
                     response.Content = new ByteArrayContent(bytes);
                     response.Content.Headers.ContentLength = bytes.LongLength;
-                    response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-                    response.Content.Headers.ContentDisposition.FileName = Path.GetFileName(userDownload.ZipFullName);
+                    response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = Path.GetFileName(userDownload.ZipFullName)
+                    };
                     response.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Zip);
                     return response;
                 }
