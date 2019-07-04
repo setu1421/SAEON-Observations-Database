@@ -762,7 +762,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.EndDate = model.EndDate.ToUniversalTime();
                     var userDownload = await PostEntityAsync<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
                     Logging.Verbose("UserDownload: {@userDownload}", userDownload);
-                    return Json(new { url = Url.Action("ViewDownload", new { userDownload.Id })}, JsonRequestBehavior.AllowGet);
+                    return Json(new { url = Url.Action("ViewDownload", new { userDownload.Id }) }, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {
@@ -774,27 +774,69 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpGet]
 #pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
-        public async Task<ActionResult> ViewDownload(Guid id)
+        public async Task<ActionResult> ViewDownload(Guid? id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
-            if (userDownload == null) throw new ArgumentException(nameof(id));
-            return View(userDownload);
+            using (Logging.MethodCall(GetType(), new ParameterList { { "Id", id} }))
+            {
+                try
+                {
+                    Logging.Verbose("Id: {Id}", id);
+                    if ((id == null) || !id.HasValue)
+                    {
+                        return RedirectToAction("Index");
+                    }
+
+                    var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
+                    if (userDownload == null)
+                    {
+                        throw new ArgumentException($"Unable to find download {id}",nameof(id));
+                    }
+
+                    return View(userDownload);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
         }
 
         [HttpGet]
 #pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
-        public async Task<FileResult> DownloadZip(Guid id)
+        public async Task<FileResult> DownloadZip(Guid? id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
-            if (userDownload == null) throw new ArgumentException(nameof(id));
-            var stream = await GetStreamAsync($"Internal/DataWizard/DownloadZip/{id}");
-            using (var memStream = new MemoryStream())
+            using (Logging.MethodCall(GetType(), new ParameterList { { "Id", id } }))
             {
-                await stream.CopyToAsync(memStream);
-                var bytes = memStream.ToArray();
-                return File(bytes, MediaTypeNames.Application.Zip, Path.GetFileName(userDownload.ZipFullName));
+                try
+                {
+                    if ((id == null) || !id.HasValue)
+                    {
+                        RedirectToAction("Index");
+                        return null;
+                    }
+
+                    var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
+                    if (userDownload == null)
+                    {
+                        throw new ArgumentException($"Unable to find download {id}", nameof(id));
+                    }
+
+                    var stream = await GetStreamAsync($"Internal/DataWizard/DownloadZip/{id}");
+                    using (var memStream = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(memStream);
+                        var bytes = memStream.ToArray();
+                        return File(bytes, MediaTypeNames.Application.Zip, Path.GetFileName(userDownload.ZipFullName));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
             }
         }
         #endregion Download

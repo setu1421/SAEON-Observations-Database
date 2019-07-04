@@ -201,7 +201,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
                         Logging.Verbose("Data: {data}", data);
-                        if (data == null) RedirectToAction("Index");
+                        if (data == null) return RedirectToAction("Index");
                         return View(data);
                     }
                 }
