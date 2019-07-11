@@ -1,6 +1,7 @@
-﻿using System.Web.Optimization;
+﻿using System.Web;
+using System.Web.Optimization;
 
-namespace SAEON.Observations.WebAPI
+namespace SAEON.Observations.WebAPI.ComingSoon
 {
     public class BundleConfig
     {

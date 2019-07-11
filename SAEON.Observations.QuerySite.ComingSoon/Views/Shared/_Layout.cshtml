@@ -4,13 +4,13 @@
     <meta http-equiv="Content-Type" content="text/html" />
     <meta charset="utf-8">
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128063984-6"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128063984-4"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
-        gtag('config', 'UA-128063984-6');
+        gtag('config', 'UA-128063984-4'); /*Test site*/
+        //gtag('config', 'UA-128063984-5'); /*Live site*/
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @RenderSection("MetaTags", required: false)
@@ -22,7 +22,7 @@
     {
         <meta name="keywords" content="@ViewBag.MetaKeywords" />
     }
-    <title>@(ViewBag.Title == "Observations Database WebAPI" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database WebAPI" : "Observations Database WebAPI - " + @ViewBag.Title)</title>
+    <title>@(ViewBag.Title == "Observations Database" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database" : "Observations Database - " + @ViewBag.Title)</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="stylesheet" href="~/Content/Site.css" />
@@ -40,7 +40,7 @@
             function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } }
             var t = { config: config }, u = document, e = window, o = 'script', s = u.createElement(o), i, f; for (s.src = config.url || '//az416426.vo.msecnd.net/scripts/a/ai.0.js', u.getElementsByTagName(o)[0].parentNode.appendChild(s), t.cookie = u.cookie, t.queue = [], i = ['Event', 'Exception', 'Metric', 'PageView', 'Trace', 'Ajax']; i.length;) r('track' + i.pop()); return r('setAuthenticatedUserContext'), r('clearAuthenticatedUserContext'), config.disableExceptionTracking || (i = 'onerror', r('_' + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t['_' + i](config, r, u, e, o), s }), t
         }({
-            instrumentationKey: 'cf180c84-e427-4073-acbf-a78ded1b5f42'
+            instrumentationKey: '45bcc62c-61d7-408a-a268-a5703b8fc5ab'
         });
 
         window.appInsights = appInsights;
@@ -62,28 +62,17 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("API", "Index", "Help", new { area = "HelpPage" }, new { @class = "nav-link" })</li>
-                        @*                        <li class="nav-item">@Html.ActionLink("Swagger", "SwaggerFrame", "Home", new { area = "" }, new { @class = "nav-link" })</li>*@
-                        <li class="nav-item">@Html.ActionLink("Swagger", "", "Swagger", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("OData", "$metadata", "odata", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("SensorThings", "Index", "SensorThings", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("GraphQL", "GraphQL", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     </ul>
-                    @*<ul class="navbar-nav ml-auto">
-                            @Html.Partial("_LoginPartial")
-                        </ul>*@
                 </div>
             </nav>
             <h1>
-                @if (ViewBag.Title == "Observations Database WebAPI" || string.IsNullOrWhiteSpace(ViewBag.Title))
+                @if (ViewBag.Title == "Observations Database" || string.IsNullOrWhiteSpace(ViewBag.Title))
                 {
-                    <text>Observations Database WebAPI</text>
+                    <text>Observations Database</text>
                 }
                 else
                 {
-                    <text>Observations Database WebAPI</text> @:&ndash; @ViewBag.Title
+                    <text>Observations Database</text> @:&ndash; @ViewBag.Title
                     if (!string.IsNullOrWhiteSpace(ViewBag.Description))
                     {
                         <small>@Html.Raw(ViewBag.Description)</small>
@@ -106,7 +95,6 @@
                     <br />
                     <div style="clear: both">
                         Observations Database is licensed under a <a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a><br />
-                        @Html.ActionLink("How to cite", "HowToCite", "Home")
                     </div>
                 </div>
                 <div class="col-6">

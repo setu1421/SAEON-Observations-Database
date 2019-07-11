@@ -62,14 +62,6 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("API", "Index", "Help", new { area = "HelpPage" }, new { @class = "nav-link" })</li>
-                        @*                        <li class="nav-item">@Html.ActionLink("Swagger", "SwaggerFrame", "Home", new { area = "" }, new { @class = "nav-link" })</li>*@
-                        <li class="nav-item">@Html.ActionLink("Swagger", "", "Swagger", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("OData", "$metadata", "odata", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("SensorThings", "Index", "SensorThings", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("GraphQL", "GraphQL", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     </ul>
                     @*<ul class="navbar-nav ml-auto">
                             @Html.Partial("_LoginPartial")
@@ -106,7 +98,6 @@
                     <br />
                     <div style="clear: both">
                         Observations Database is licensed under a <a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a><br />
-                        @Html.ActionLink("How to cite", "HowToCite", "Home")
                     </div>
                 </div>
                 <div class="col-6">

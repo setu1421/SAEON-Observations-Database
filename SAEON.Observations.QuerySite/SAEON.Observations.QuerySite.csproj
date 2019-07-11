@@ -813,7 +813,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="Properties\PublishProfiles\SAEON Test.pubxml" />
+    <None Include="Properties\PublishProfiles\SAEON App03.pubxml" />
+    <None Include="Properties\PublishProfiles\SAEON App03 Test.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
