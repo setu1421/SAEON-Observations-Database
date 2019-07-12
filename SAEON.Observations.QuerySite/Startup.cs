@@ -27,7 +27,7 @@ namespace SAEON.Observations.QuerySite
         public Startup()
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            SyncfusionLicenseProvider.RegisterLicense("ODM1MzNAMzEzNzJlMzEyZTMwakZ4SElRK2RsT2VaUTdHV2JQYmgwYndHdFpKTjZKYTFDSG5oa0xuNlBYTT0=;ODM1MzRAMzEzNzJlMzEyZTMwYnh2UkI3aTRuOWFYRXlFa3d5elZxNURDQ0VXRkVKMDVtNE1qQlMycS9rdz0=;ODM1MzVAMzEzNzJlMzEyZTMwRU0rSVF1alp2TFVpd1lpcDh0eWFuV2doN1NXUENtVUFCV0o2bjdSRGZoVT0=");
+            SyncfusionLicenseProvider.RegisterLicense("MTE5NjMwQDMxMzcyZTMyMmUzMFdSR053T1d5L0hOS0poSitDUmpSaTlMRHFYdVErY3Q3TGJBWmFQV1N0RkE9;MTE5NjMxQDMxMzcyZTMyMmUzMGhxUDdjMFU3UWxoMEJyaVZURW1zV1ZQUFEvamdVemZDVmU1QlkrRVZlWFk9;MTE5NjMyQDMxMzcyZTMyMmUzMEZ4ZHVvNExFamVRWXFPMTRFL2lnR0pNSGozZ28rUlBGSk40QlZncDNVakE9;MTE5NjMzQDMxMzcyZTMyMmUzMGhxUDdjMFU3UWxoMEJyaVZURW1zV1ZQUFEvamdVemZDVmU1QlkrRVZlWFk9");
         }
 
         public void Configuration(IAppBuilder app)
