@@ -67,6 +67,12 @@ var DataWizard;
         }
     }
     DataWizard.TabActive = TabActive;
+    function TabCreate() {
+        //$("a[href='#LocationsTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Organisations, Sites, Stations"></i>');
+        //$("a[href='#FeaturesTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Phenomena, Offerings, Units"></i>');
+        //$("a[href='#FiltersTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Dates, Depth"></i>');
+    }
+    DataWizard.TabCreate = TabCreate;
     // State
     var State = /** @class */ (function () {
         function State() {
@@ -252,7 +258,7 @@ var DataWizard;
             }
         }
     }
-    // Filters 
+    // Filters
     function FiltersChanged() {
         UpdateFilters(true);
     }
@@ -261,7 +267,10 @@ var DataWizard;
         if (isClick === void 0) { isClick = false; }
         var startDate = $("#StartDate").ejDatePicker("instance").getValue();
         var endDate = $("#EndDate").ejDatePicker("instance").getValue();
-        $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate })
+        var range = $("#ElevationSlider").ejSlider("instance").getValue();
+        var elevationMinimum = range[0];
+        var elevationMaximum = range[1];
+        $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate, elevationMinimum: elevationMinimum, elevationMaximum: elevationMaximum })
             .done(function (data) {
             SetApproximation();
             if (isClick) {
@@ -273,7 +282,7 @@ var DataWizard;
             ErrorInFunc("UpdateFilters", status, error);
         });
     }
-    // Map 
+    // Map
     var MapPoint = /** @class */ (function () {
         function MapPoint() {
         }
@@ -375,6 +384,7 @@ var DataWizard;
                     searched = true;
                     EnableButtons();
                     HideWaiting();
+                    SelectTab(5);
                 });
                 //    });
             });

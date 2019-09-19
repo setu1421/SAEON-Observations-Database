@@ -9,7 +9,8 @@
         <div class="col-md">
             @(Html.EJ().Tab("DataWizardTabs").Items(tabs =>
                 {
-                    tabs.Add().ID("LocationsTab").Text("Locations").ContentTemplate(
+                    tabs.Add().ID("LocationsTab").Text("Locations")
+                        .ContentTemplate(
                                 @<div class="row">
                                     <div class="col-md-6" id="PartialLocations">
                                         @Html.Partial("_Locations", Model)
@@ -46,10 +47,16 @@
                                 @<div class="row">
                                     <div class="col-md" id="PartialChart">
                                     </div>
-                                </div>);
-                  })
-              .ClientSideEvents(ev => ev.ItemActive("DataWizard.TabActive"))
-            )
+                                </div>
+                                @<div class="row">
+                                    <div class="col-md">
+                                        <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Use mouse wheel to zoom, scrollbars to scroll, click on legend to enable/disable series"></i>
+                                    </div>
+                                </div>
+                                );
+                })
+                .ClientSideEvents(ev => ev.ItemActive("DataWizard.TabActive"))
+                .ClientSideEvents(ev => ev.Create("DataWizard.TabCreate")))
         </div>
     </div>
     <div class="row PaddedRow">
@@ -60,11 +67,13 @@
     <div id="PartialApproximation">
         @Html.Partial("_Approximation", Model)
     </div>
+@*    <div>Font Awesome <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom"></i></div>*@
 </div>
 @section Scripts {
     @Scripts.Render("~/Scripts/DataWizard.js")
     <script type="text/javascript">
         $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
             DataWizard.HideResults();
         });
     </script>

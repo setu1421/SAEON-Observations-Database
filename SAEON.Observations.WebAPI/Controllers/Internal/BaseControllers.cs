@@ -34,7 +34,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             private set => dbContext = value;
         }
 
-        private IMapper Mapper { get; set; }
+        protected IMapper Mapper { get; private set; }
 
         public BaseController()
         {

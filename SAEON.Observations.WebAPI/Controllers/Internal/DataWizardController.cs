@@ -43,14 +43,17 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 input.Units.AddRange(DbContext.PhenomenonUnits.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
             }
             input.StartDate = input.StartDate.Date;
-            input.EndDate = input.EndDate.Date.AddDays(1);
+            input.EndDate = input.EndDate.Date.AddDays(1).AddSeconds(-1);
             Logging.Verbose("Processed Input: {@Input}", input);
             var startDate = input.StartDate;
             var endDate = input.EndDate;
+            var elevationMinimum = input.ElevationMinimum;
+            var elevationMaximum = input.ElevationMaximum;
             return DbContext.ImportBatchSummary.Where(i =>
                 (input.Sites.Contains(i.SiteId) || input.Stations.Contains(i.StationId)) &&
                 ((!input.Offerings.Any() || input.Offerings.Contains(i.PhenomenonOfferingId)) && (!input.Units.Any() || input.Units.Contains(i.PhenomenonUnitId))) &&
-                (i.StartDate >= startDate && i.EndDate < endDate));
+                (i.StartDate >= startDate && i.EndDate <= endDate) &&
+                (i.ElevationMinimum >= elevationMinimum) && (i.ElevationMaximum <= elevationMaximum));
         }
 
         private DataWizardApproximation CalculateApproximation(DataWizardDataInput input)
@@ -67,11 +70,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     };
                     if (!(input.Organisations.Any() || input.Sites.Any() || input.Stations.Any()))
                     {
-                        result.Errors.Add("Please select at least one Organisation, Site or Station");
+                        result.Errors.Add("Please select at least one Organisation, Site or Station in the Locations tab");
                     }
                     if (!(input.Phenomena.Any() || input.Offerings.Any() || input.Units.Any()))
                     {
-                        result.Errors.Add("Please select at least one Phenomenon, Offering or Unit");
+                        result.Errors.Add("Please select at least one Phenomenon, Offering or Unit in the Features tab");
                     }
                     Logging.Verbose("Result: {@Result}", result);
                     return result;
@@ -225,6 +228,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             var observations = q.Join(DbContext.Observations.Where(i => (i.StatusId == null) || (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
                     .Where(i => phenomenonOfferingIds.Contains(i.PhenomenonOfferingId))
                     .Where(i => phenomenonUnitIds.Contains(i.PhenomenonUnitId))
+                    .Where(i => (i.ValueDate >= input.StartDate) && (i.ValueDate <= input.EndDate))
+                    .Where(i => i.Elevation.HasValue && (i.Elevation.Value >= input.ElevationMinimum) && (i.Elevation.Value <= input.ElevationMaximum))
                     .OrderBy(i => i.SiteName)
                     .ThenBy(i => i.StationName)
                     .ThenBy(i => i.InstrumentName)
@@ -792,6 +797,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         LatitudeSouth = output.LatitudeSouth,
                         LongitudeWest = output.LongitudeWest,
                         LongitudeEast = output.LongitudeEast,
+                        ElevationMinimum = output.ElevationMinimum,
+                        ElevationMaximum = output.ElevationMaximum,
                         StartDate = output.StartDate.Value,
                         EndDate = output.EndDate.Value,
                         AddedBy = User.GetUserId(),

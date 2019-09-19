@@ -289,6 +289,8 @@ namespace SAEON.Observations.Core
         public List<Guid> Units { get; } = new List<Guid>();
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
+        public float ElevationMinimum { get; set; } = -100; // m
+        public float ElevationMaximum { get; set; } = 3000; // m
     }
 
     public class DataWizardDataOutput
@@ -304,14 +306,14 @@ namespace SAEON.Observations.Core
         public List<string> Keywords { get; } = new List<string>();
         /// <summary>
         /// Lookup on GeoNames in format Name:Country:Lat:Lon
-        /// </summary> 
+        /// </summary>
         public List<string> Places { get; } = new List<string>();
         public double? LatitudeNorth { get; set; } = null; // + N to -S
         public double? LatitudeSouth { get; set; } = null; // + N to -S
         public double? LongitudeWest { get; set; } = null; // -W to +E
         public double? LongitudeEast { get; set; } = null; // -W to +E
-        public double? ElevationMinimum { get; set; } = null;
-        public double? ElevationMaximum { get; set; } = null;
+        public double? ElevationMinimum { get; set; } = null; // m
+        public double? ElevationMaximum { get; set; } = null; // m
         public DateTime? StartDate { get; set; } = null;
         public DateTime? EndDate { get; set; } = null;
     }

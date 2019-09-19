@@ -1,4 +1,4 @@
-﻿using SAEON.Azure.CosmosDB; 
+﻿using SAEON.Azure.CosmosDB;
 using SAEON.Azure.Storage;
 using SAEON.Logs;
 using System;

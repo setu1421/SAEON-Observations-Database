@@ -75,6 +75,12 @@
         }
     }
 
+    export function TabCreate() {
+        //$("a[href='#LocationsTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Organisations, Sites, Stations"></i>');
+        //$("a[href='#FeaturesTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Phenomena, Offerings, Units"></i>');
+        //$("a[href='#FiltersTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Dates, Depth"></i>');
+    }
+
     // State
     class State {
         IsAuthenticated: boolean;
@@ -271,7 +277,7 @@
         }
     }
 
-    // Filters 
+    // Filters
 
     export function FiltersChanged() {
         UpdateFilters(true);
@@ -280,7 +286,10 @@
     function UpdateFilters(isClick: boolean = false) {
         let startDate = $("#StartDate").ejDatePicker("instance").getValue();
         let endDate = $("#EndDate").ejDatePicker("instance").getValue();
-        $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate })
+        let range = $("#ElevationSlider").ejSlider("instance").getValue();
+        let elevationMinimum = range[0];
+        let elevationMaximum = range[1];
+        $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate, elevationMinimum: elevationMinimum, elevationMaximum: elevationMaximum })
             .done(function (data) {
                 SetApproximation();
                 if (isClick) {
@@ -293,7 +302,7 @@
             });
     }
 
-    // Map 
+    // Map
 
     class MapPoint {
         Title: string;
@@ -404,6 +413,7 @@
                         searched = true;
                         EnableButtons();
                         HideWaiting();
+                        SelectTab(5);
                     });
                     //    });
                 });

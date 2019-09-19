@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup> 
-    <TargetFrameworks>net461;net472;</TargetFrameworks>
+    <TargetFrameworks>net472;</TargetFrameworks>
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
     <Authors>Tim Parker-Nance</Authors>
     <Company>South African Environmental Observation Network (SAEON)</Company>
@@ -9,7 +9,7 @@
     <Description>SAEON Observations Core</Description>
     <Copyright>© 2017-2019 South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.109</Version>
+    <Version>1.0.112</Version>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -19,8 +19,8 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="SAEON.AspNet.Common" Version="1.0.10" />
-    <PackageReference Include="SAEON.Core" Version="1.0.12" />
-    <PackageReference Include="SAEON.Logs" Version="1.0.44" />
+    <PackageReference Include="SAEON.Core" Version="1.0.14" />
+    <PackageReference Include="SAEON.Logs" Version="1.0.46" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.7" />

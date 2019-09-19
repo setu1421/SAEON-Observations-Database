@@ -6,6 +6,7 @@ using System.Web.Security;
 using Ext.Net;
 using Serilog;
 using System.Threading;
+using SAEON.Logs;
 
 /// <summary>
 /// Summary description for Login
@@ -17,7 +18,16 @@ public partial class _Login : System.Web.UI.Page
         try
         {
             bool isValid = Membership.ValidateUser(this.txtUsername.Text, this.txtPassword.Text);
+            try
+            {
+                Auditing.Log(GetType(), new ParameterList {
+                    { "UserName", txtUsername.Text },
+                    { "Valid", IsValid },
+                });
 
+            }
+            catch (Exception)
+            { }
             if (isValid)
             {
 

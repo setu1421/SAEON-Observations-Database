@@ -16,10 +16,15 @@
         @Html.EJ().DatePickerFor(i => i.EndDate).DateFormat("dd MMM yyyy").ClientSideEvents(ev => ev.Change("DataWizard.FiltersChanged"))
     </div>
 </div>
-<script>
-    function onUpdateFilters() {
-        var startDate = $("#StartDate").ejDatePicker("instance").getValue();
-        var endDate = $("#EndDate").ejDatePicker("instance").getValue();
-        DataWizard.UpdateFilters(startDate, endDate);
-    }
-</script>
+<div class="row">
+    <div class="col-md text-center">
+        @Html.LabelFor(i => i.ElevationMinimum, "Elevation (m)")
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        @(Html.EJ().Slider("ElevationSlider").SliderType(SlideType.Range).MinValue(-100).MaxValue(3000).ShowScale(true).SmallStep(10).LargeStep(100).ClientSideEvents(ev => ev.Change("DataWizard.FiltersChanged")))
+    </div>
+    <div class="col-md-1"></div>
+</div>

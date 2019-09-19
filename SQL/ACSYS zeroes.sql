@@ -21,6 +21,14 @@ Select
 from
   SensorDates
 )
+--Select
+--  Sensor.Name, SensorZeroes.*
+--from
+--  SensorZeroes
+--  inner join Sensor
+--    on (SensorZeroes.ID = Sensor.ID)
+--order by
+--  Sensor.Name
 Select 
   SensorID, SiteName, StationName, InstrumentName, SensorName, PhenomenonName, ValueDate, DataValue, FirstNonZero, FirstZeroes, LastNonZero, LastZeroes
 from 

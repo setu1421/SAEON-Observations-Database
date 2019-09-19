@@ -371,16 +371,18 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpPost]
-        public EmptyResult UpdateFilters(DateTime startDate, DateTime endDate)
+        public EmptyResult UpdateFilters(DateTime startDate, DateTime endDate, float elevationMinimum, float elevationMaximum)
         {
             using (Logging.MethodCall(GetType()))
             {
                 try
                 {
-                    Logging.Verbose("StartDate: {startDate} EndDate: {endDate}", startDate, endDate);
+                    Logging.Verbose("StartDate: {startDate} EndDate: {endDate} ElevationMin: {elevationMin} ElevationMax: {elevationMax}", startDate, endDate, elevationMinimum, elevationMaximum);
                     var model = SessionModel;
                     model.StartDate = startDate;
                     model.EndDate = endDate;
+                    model.ElevationMinimum = elevationMinimum;
+                    model.ElevationMaximum = elevationMaximum;
                     SessionModel = model;
                     return null;
                 }
@@ -456,6 +458,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
+                    input.ElevationMinimum = model.ElevationMinimum;
+                    input.ElevationMaximum = model.ElevationMaximum;
                     model.Approximation = await PostEntityAsync<DataWizardDataInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
                     Logging.Verbose("RowCount: {RowCount}", model.Approximation.RowCount);
                     Logging.Verbose("Errors: {Errors}", model.Approximation.Errors);
@@ -493,6 +497,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
+                    input.ElevationMinimum = model.ElevationMinimum;
+                    input.ElevationMaximum = model.ElevationMaximum;
                     model.DataOutput = await PostEntityAsync<DataWizardDataInput, DataWizardDataOutput>("Internal/DataWizard/GetData", input);
                     model.HaveSearched = true;
                     SessionModel = model;
@@ -625,6 +631,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     // Filters
                     model.StartDate = wizardInput.StartDate;
                     model.EndDate = wizardInput.EndDate;
+                    model.ElevationMinimum = wizardInput.ElevationMinimum;
+                    model.ElevationMaximum = wizardInput.ElevationMaximum;
                     SessionModel = model;
                     //Logging.Verbose("Model: {@model}", model);
                     return null;
@@ -680,6 +688,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     queryInput.Units.AddRange(model.Units);
                     queryInput.StartDate = model.StartDate.ToUniversalTime();
                     queryInput.EndDate = model.EndDate.ToUniversalTime();
+                    queryInput.ElevationMinimum = model.ElevationMinimum;
+                    queryInput.ElevationMaximum = model.ElevationMaximum;
                     var userQuery = new UserQuery
                     {
                         Name = input.Name,
@@ -760,6 +770,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
+                    input.ElevationMinimum = model.ElevationMinimum;
+                    input.ElevationMaximum = model.ElevationMaximum;
                     var userDownload = await PostEntityAsync<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
                     Logging.Verbose("UserDownload: {@userDownload}", userDownload);
                     return Json(new { url = Url.Action("ViewDownload", new { userDownload.Id }) }, JsonRequestBehavior.AllowGet);
