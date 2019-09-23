@@ -45,12 +45,10 @@
                                 </div>);
                       tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
                                 @<div class="row">
-                                    <div class="col-md" id="PartialChart">
+                                    <div class="col-md-12" id="PartialChart">
                                     </div>
-                                </div>
-                                @<div class="row">
                                     <div class="col-md">
-                                        <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Use mouse wheel to zoom, scrollbars to scroll, click on legend to enable/disable series"></i>
+                                        <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Use mouse wheel to zoom, scrollbars to scroll and zoom, click on legend to enable/disable series"></i>
                                     </div>
                                 </div>
                                 );
@@ -67,7 +65,6 @@
     <div id="PartialApproximation">
         @Html.Partial("_Approximation", Model)
     </div>
-@*    <div>Font Awesome <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom"></i></div>*@
 </div>
 @section Scripts {
     @Scripts.Render("~/Scripts/DataWizard.js")
