@@ -20,18 +20,20 @@ public partial class _Login : System.Web.UI.Page
             bool isValid = Membership.ValidateUser(this.txtUsername.Text, this.txtPassword.Text);
             try
             {
+                Logging.Information("Login: {UserName} {Valid}", txtUsername.Text, isValid);
                 Auditing.Log(GetType(), new ParameterList {
                     { "UserName", txtUsername.Text },
-                    { "Valid", IsValid },
+                    { "Valid", isValid }
                 });
-
             }
-            catch (Exception)
-            { }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+            }
             if (isValid)
             {
 
-                X.MessageBox.Alert("Success", "Logged in").Show();
+                //X.MessageBox.Alert("Success", "Logged in").Show();
 
                 FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(this.txtUsername.Text, cbRememberMe.Checked, 480);
                 FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(ticket.Version, ticket.Name, ticket.IssueDate, ticket.Expiration, ticket.IsPersistent, this.txtUsername.Text, ticket.CookiePath);
