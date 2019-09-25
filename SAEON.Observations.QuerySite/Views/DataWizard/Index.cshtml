@@ -1,5 +1,5 @@
 ﻿@model SAEON.Observations.QuerySite.Models.DataWizardModel
-
+@using System.Configuration;
 @{
     ViewBag.Title = "Data";
 }
@@ -11,14 +11,14 @@
                 {
                     tabs.Add().ID("LocationsTab").Text("Locations")
                         .ContentTemplate(
-                                @<div class="row">
-                                    <div class="col-md-6" id="PartialLocations">
-                                        @Html.Partial("_Locations", Model)
-                                    </div>
-                                    <div class="col-md-6" id="PartialLocationsSelected">
-                                    </div>
-                                </div>);
-                      tabs.Add().ID("FeaturesTab").Text("Features").ContentTemplate(
+                                        @<div class="row">
+                                            <div class="col-md-6" id="PartialLocations">
+                                                @Html.Partial("_Locations", Model)
+                                            </div>
+                                            <div class="col-md-6" id="PartialLocationsSelected">
+                                            </div>
+                                        </div>);
+                        tabs.Add().ID("FeaturesTab").Text("Features").ContentTemplate(
                                 @<div class="row">
                                     <div class="col-md-6" id="PartialFeatures">
                                         @Html.Partial("_Features", Model)
@@ -26,35 +26,35 @@
                                     <div class="col-md-6" id="PartialFeaturesSelected">
                                     </div>
                                 </div>);
-                      tabs.Add().ID("FiltersTab").Text("Filters").ContentTemplate(
-                                @<div class="row">
-                                    <div class="col-md" id="PartialFilters">
-                                        @Html.Partial("_Filters", Model)
-                                    </div>
-                                </div>);
-                      tabs.Add().ID("StationsMapTab").Text("Stations").ContentTemplate(
-                            @<div class="row">
-                                <div class="col-md" id="PartialStationsMap">
-                                    @Html.Partial("_StationsMap", Model)
-                                </div>
-                            </div>);
-                      tabs.Add().ID("TableTab").Text("Table").ContentTemplate(
-                                @<div class="row">
-                                    <div class="col-md" id="PartialTable">
-                                    </div>
-                                </div>);
-                      tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
-                                @<div class="row">
-                                    <div class="col-md-12" id="PartialChart">
-                                    </div>
-                                    <div class="col-md">
-                                        <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Use mouse wheel to zoom, scrollbars to scroll and zoom, click on legend to enable/disable series"></i>
-                                    </div>
-                                </div>
-                                );
-                })
-                .ClientSideEvents(ev => ev.ItemActive("DataWizard.TabActive"))
-                .ClientSideEvents(ev => ev.Create("DataWizard.TabCreate")))
+                tabs.Add().ID("FiltersTab").Text("Filters").ContentTemplate(
+                        @<div class="row">
+                            <div class="col-md" id="PartialFilters">
+                                @Html.Partial("_Filters", Model)
+                            </div>
+                        </div>);
+        tabs.Add().ID("StationsMapTab").Text("Stations").ContentTemplate(
+            @<div class="row">
+                <div class="col-md" id="PartialStationsMap">
+                    @Html.Partial("_StationsMap", Model)
+                </div>
+            </div>);
+tabs.Add().ID("TableTab").Text("Table").ContentTemplate(
+        @<div class="row">
+            <div class="col-md" id="PartialTable">
+            </div>
+        </div>);
+tabs.Add().ID("ChartTab").Text("Chart").ContentTemplate(
+@<div class="row">
+    <div class="col-md-12" id="PartialChart">
+    </div>
+    <div class="col-md">
+        <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Use mouse wheel to zoom, scrollbars to scroll and zoom, click on legend to enable/disable series"></i>
+    </div>
+</div>
+);
+})
+.ClientSideEvents(ev => ev.ItemActive("DataWizard.TabActive"))
+.ClientSideEvents(ev => ev.Create("DataWizard.TabCreate")))
         </div>
     </div>
     <div class="row PaddedRow">
@@ -74,7 +74,7 @@
             DataWizard.HideResults();
         });
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6TVt9f_c9hnz3TJL5HMJuX04iNXa43RI&callback=DataWizard.InitMap">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=@ConfigurationManager.AppSettings["GoogleMapsAPIKey"]&callback=DataWizard.InitMap">
     </script>
 }
 <style type="text/css" class="cssStyles">
