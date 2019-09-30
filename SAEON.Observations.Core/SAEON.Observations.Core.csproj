@@ -21,7 +21,7 @@
     <PackageReference Include="SAEON.AspNet.Common" Version="1.0.10" />
     <PackageReference Include="SAEON.Core" Version="1.0.14" />
     <PackageReference Include="SAEON.Logs" Version="1.0.46" />
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="EntityFramework" Version="6.3.0" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.7" />
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.7" />

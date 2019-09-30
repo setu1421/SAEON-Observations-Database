@@ -77,7 +77,14 @@
         .ContentUrl("/DataWizard/GetDownloadDialog")
         .Render();
     <span style="width:5px" />
-    <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Login to enable Load, Save, Download"></i>
+    if (!Request.IsAuthenticated)
+    {
+        <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Login to enable Load, Save, Download"></i>
+    }
+    else
+    {
+        <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Search to enable Download"></i>
+    }
     //Html.EJ()
     //    .Button("btnTest")
     //    .Text("Test")
