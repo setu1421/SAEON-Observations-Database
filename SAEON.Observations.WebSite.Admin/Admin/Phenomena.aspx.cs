@@ -31,6 +31,9 @@ public partial class _Phenomena : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -64,17 +67,22 @@ public partial class _Phenomena : System.Web.UI.Page
 
         Phenomenon phenom = new Phenomenon();
 
-        if (String.IsNullOrEmpty(tfID.Text))
+        if (!tfID.HasValue())
             phenom.Id = Guid.NewGuid();
         else
-            phenom = new Phenomenon(tfID.Text.Trim());
+            phenom = new Phenomenon(tfID.Text);
 
-        phenom.Code = tfCode.Text.Trim();
-        phenom.Name = tfName.Text.Trim();
-        phenom.Description = tfDescription.Text.Trim();
+        if (tfCode.HasValue())
+            phenom.Code = tfCode.Text;
+        if (tfName.HasValue())
+            phenom.Name = tfName.Text;
+        if (tfDescription.HasValue())
+            phenom.Description = tfDescription.Text;
 
-        if (!String.IsNullOrEmpty(tfUrl.Text))
-            phenom.Url = tfUrl.Text.Trim();
+        if (tfUrl.HasValue())
+            phenom.Url = tfUrl.Text;
+        else
+            phenom.Url = null;
 
         phenom.UserId = AuthHelper.GetLoggedInUserId;
 
@@ -272,7 +280,7 @@ public partial class _Phenomena : System.Web.UI.Page
     protected void DoDelete(object sender, DirectEventArgs e)
     {
         string ActionType = e.ExtraParams["type"];
-        string recordID = e.ExtraParams["id"];	//offering id if ActionType = RemoveOffering || 
+        string recordID = e.ExtraParams["id"];	//offering id if ActionType = RemoveOffering ||
         string phenomenonID = e.ExtraParams["PhenomenonID"];
 
         if (ActionType == "RemoveOffering")

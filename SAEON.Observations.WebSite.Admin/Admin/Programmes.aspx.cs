@@ -28,6 +28,9 @@ public partial class Admin_Programmes : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -63,21 +66,25 @@ public partial class Admin_Programmes : System.Web.UI.Page
             try
             {
                 Programme programme = new Programme();
-                if (String.IsNullOrEmpty(tfID.Text))
+                if (!tfID.HasValue())
                     programme.Id = Guid.NewGuid();
                 else
-                    programme = new Programme(tfID.Text.Trim());
-                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                    programme.Code = tfCode.Text.Trim();
-                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                    programme.Name = tfName.Text.Trim();
-                programme.Description = tfDescription.Text.Trim();
-                programme.Url = tfUrl.Text.Trim();
-                if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+                    programme = new Programme(tfID.Text);
+                if (tfCode.HasValue())
+                    programme.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    programme.Name = tfName.Text;
+                if (tfDescription.HasValue())
+                    programme.Description = tfDescription.Text;
+                if (tfUrl.HasValue())
+                    programme.Url = tfUrl.Text;
+                else
+                    programme.Url = null;
+                if (dfStartDate.HasValue())
                     programme.StartDate = dfStartDate.SelectedDate;
                 else
                     programme.StartDate = null;
-                if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+                if (dfEndDate.HasValue())
                     programme.EndDate = dfEndDate.SelectedDate;
                 else
                     programme.EndDate = null;

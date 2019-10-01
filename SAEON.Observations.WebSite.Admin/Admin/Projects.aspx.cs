@@ -30,6 +30,9 @@ public partial class Admin_Projects : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -66,25 +69,29 @@ public partial class Admin_Projects : System.Web.UI.Page
             try
             {
                 Project project = new Project();
-                if (String.IsNullOrEmpty(tfID.Text))
+                if (!tfID.HasValue())
                     project.Id = Guid.NewGuid();
                 else
-                    project = new Project(tfID.Text.Trim());
-                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
+                    project = new Project(tfID.Text);
+                if (tfCode.HasValue())
                     project.Code = tfCode.Text.Trim();
-                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
+                if (tfName.HasValue())
                     project.Name = tfName.Text.Trim();
                 if (cbProgramme.SelectedItem.Value == null)
                     project.ProgrammeID = null;
                 else
                     project.ProgrammeID = Utilities.MakeGuid(cbProgramme.SelectedItem.Value.Trim());
-                project.Description = tfDescription.Text.Trim();
-                project.Url = tfUrl.Text.Trim();
-                if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+                if (tfDescription.HasValue())
+                    project.Description = tfDescription.Text;
+                if (tfUrl.HasValue())
+                    project.Url = tfUrl.Text;
+                else
+                    project.Url = null;
+                if (dfStartDate.HasValue())
                     project.StartDate = dfStartDate.SelectedDate;
                 else
                     project.StartDate = null;
-                if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+                if (dfEndDate.HasValue())
                     project.EndDate = dfEndDate.SelectedDate;
                 else
                     project.EndDate = null;

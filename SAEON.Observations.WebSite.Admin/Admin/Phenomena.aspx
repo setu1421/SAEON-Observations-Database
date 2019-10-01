@@ -86,10 +86,10 @@
                                         <ext:Column Header="Name" DataIndex="Name" Width="300" />
                                         <ext:Column Header="Description" DataIndex="Description" Width="500" />
                                         <ext:Column Header="Url" DataIndex="Url" Width="200" />
-                                        <ext:CommandColumn Width="50">
+                                        <ext:CommandColumn Width="125">
                                             <Commands>
-                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
-                                                <ext:GridCommand Icon="NoteDelete" CommandName="RemovePhenomenon" Text="" ToolTip-Text="Delete" />
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" ToolTip-Text="Edit" />
+                                                <ext:GridCommand Icon="NoteDelete" CommandName="RemovePhenomenon" Text="Delete" ToolTip-Text="Delete" />
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -251,7 +251,7 @@
                                                 <ext:Column Header="Symbol" DataIndex="UnitSymbol" Width="200" />
                                                 <ext:CommandColumn Width="50">
                                                     <Commands>
-                                                        <ext:GridCommand Icon="NoteDelete" CommandName="RemoveUOM" Text="" ToolTip-Text="Delete" />
+                                                        <ext:GridCommand Icon="NoteDelete" CommandName="RemoveUOM" Text="Delete" ToolTip-Text="Delete" />
                                                     </Commands>
                                                 </ext:CommandColumn>
                                             </Columns>
@@ -310,7 +310,8 @@
                     <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" FieldLabel="Description"
-                                AnchorHorizontal="96%">
+                                AnchorHorizontal="96%"  IsRemoteValidation="true" AllowBlank="false" BlankText="Description is a required">
+                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>

@@ -62,6 +62,9 @@ public partial class Admin_Sensors : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -100,16 +103,22 @@ public partial class Admin_Sensors : System.Web.UI.Page
 
                 Sensor sens = new Sensor();
 
-                if (String.IsNullOrEmpty(tfID.Text))
+                if (!tfID.HasValue())
                     sens.Id = Guid.NewGuid();
                 else
-                    sens = new Sensor(tfID.Text.Trim());
+                    sens = new Sensor(tfID.Text);
 
-                sens.Code = tfCode.Text.Trim();
-                sens.Name = tfName.Text.Trim();
-                sens.Description = tfDescription.Text.Trim();
+                if (tfCode.HasValue())
+                    sens.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    sens.Name = tfName.Text;
+                if (tfDescription.HasValue())
+                    sens.Description = tfDescription.Text;
                 sens.UserId = AuthHelper.GetLoggedInUserId;
-                sens.Url = tfUrl.Text.Trim();
+                if (tfUrl.HasValue())
+                    sens.Url = tfUrl.Text;
+                else
+                    sens.Url = null;
                 //sens.StationID = Guid.Parse(cbStation.SelectedItem.Value);
                 sens.PhenomenonID = Guid.Parse(cbPhenomenon.SelectedItem.Value);
                 sens.DataSourceID = Guid.Parse(cbDataSource.SelectedItem.Value);

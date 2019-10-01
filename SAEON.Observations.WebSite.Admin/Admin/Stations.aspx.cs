@@ -35,7 +35,9 @@ public partial class Admin_Stations : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
-
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
             if (e.ID == "tfCode")
@@ -70,17 +72,18 @@ public partial class Admin_Stations : System.Web.UI.Page
             {
                 Station station = new Station();
 
-                if (String.IsNullOrEmpty(tfID.Text))
+                if (!tfID.HasValue())
                     station.Id = Guid.NewGuid();
                 else
-                    station = new Station(tfID.Text.Trim());
+                    station = new Station(tfID.Text);
 
-                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                    station.Code = tfCode.Text.Trim();
-                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                    station.Name = tfName.Text.Trim();
+                if (tfCode.HasValue())
+                    station.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    station.Name = tfName.Text;
                 station.SiteID = Utilities.MakeGuid(cbSite.SelectedItem.Value.Trim());
-                station.Description = tfDescription.Text.Trim();
+                if (tfDescription.HasValue())
+                    station.Description = tfDescription.Text;
 
                 //if (!string.IsNullOrEmpty(nfLatitude.Text))
                 //    station.Latitude = double.Parse(nfLatitude.Text);
@@ -104,14 +107,16 @@ public partial class Admin_Stations : System.Web.UI.Page
                 else
                     station.Elevation = nfElevation.Number;
 
-                if (!string.IsNullOrEmpty(tfUrl.Text))
+                if (tfUrl.HasValue())
                     station.Url = tfUrl.Text;
+                else
+                    station.Url = null;
 
-                if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
+                if (dfStartDate.HasValue())
                     station.StartDate = dfStartDate.SelectedDate;
                 else
                     station.StartDate = null;
-                if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
+                if (dfEndDate.HasValue())
                     station.EndDate = dfEndDate.SelectedDate;
                 else
                     station.EndDate = null;

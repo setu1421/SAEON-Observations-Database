@@ -26,6 +26,9 @@ public partial class _Offerings : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -59,14 +62,17 @@ public partial class _Offerings : System.Web.UI.Page
 
         Offering org = new Offering();
 
-        if (String.IsNullOrEmpty(tfID.Text))
+        if (!tfID.HasValue())
             org.Id = Guid.NewGuid();
         else
-            org = new Offering(tfID.Text.Trim());
+            org = new Offering(tfID.Text);
 
-        org.Code = tfCode.Text.Trim();
-        org.Name = tfName.Text.Trim();
-        org.Description = tfDescription.Text.Trim();
+        if (tfCode.HasValue())
+            org.Code = tfCode.Text;
+        if (tfName.HasValue())
+            org.Name = tfName.Text;
+        if (tfDescription.HasValue())
+            org.Description = tfDescription.Text;
 
         org.UserId = AuthHelper.GetLoggedInUserId;
 

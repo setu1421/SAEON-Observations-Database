@@ -44,6 +44,9 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -98,20 +101,18 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
                 DataSchema schema = new DataSchema();
 
-                if (String.IsNullOrEmpty(tfID.Text))
-                {
+                if (!tfID.HasValue())
                     schema.Id = Guid.NewGuid();
-                }
                 else
-                {
-                    schema = new DataSchema(tfID.Text.Trim());
-                }
+                    schema = new DataSchema(tfID.Text);
+                if (tfCode.HasValue())
+                    schema.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    schema.Name = tfName.Text;
+                if (tfDescription.HasValue())
+                    schema.Description = tfDescription.Text;
 
-                schema.Code = Utilities.NullIfEmpty(tfCode.Text);
-                schema.Name = Utilities.NullIfEmpty(tfName.Text);
-                schema.Description = Utilities.NullIfEmpty(tfDescription.Text);
-
-                if (!String.IsNullOrEmpty(nfIgnoreFirst.Text))
+                if (!nfIgnoreFirst.IsEmpty)
                 {
                     schema.IgnoreFirst = Int32.Parse(nfIgnoreFirst.Text);
                 }
@@ -120,7 +121,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     schema.IgnoreFirst = 0;
                 }
 
-                if (!String.IsNullOrEmpty(nfIgnoreLast.Text))
+                if (!nfIgnoreLast.IsEmpty)
                 {
                     schema.IgnoreLast = Int32.Parse(nfIgnoreLast.Text);
                 }
@@ -131,7 +132,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
                 schema.Condition = Utilities.NullIfEmpty(tfCondition.Text);
 
-                if (!String.IsNullOrEmpty(tfSplit.Text))
+                if (tfSplit.HasValue())
                 {
                     schema.SplitSelector = tfSplit.Text;
                     schema.SplitIndex = int.Parse(nfSplitIndex.Value.ToString());

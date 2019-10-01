@@ -35,6 +35,9 @@ public partial class Admin_Instruments : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -71,19 +74,22 @@ public partial class Admin_Instruments : System.Web.UI.Page
             {
                 Instrument instrument = new Instrument();
 
-                if (String.IsNullOrEmpty(tfID.Text))
+                if (!tfID.HasValue())
                     instrument.Id = Guid.NewGuid();
                 else
-                    instrument = new Instrument(tfID.Text.Trim());
+                    instrument = new Instrument(tfID.Text);
 
-                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                    instrument.Code = tfCode.Text.Trim();
-                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                    instrument.Name = tfName.Text.Trim();
-                instrument.Description = tfDescription.Text.Trim();
+                if (tfCode.HasValue())
+                    instrument.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    instrument.Name = tfName.Text;
+                if (tfDescription.HasValue())
+                    instrument.Description = tfDescription.Text;
 
-                if (!string.IsNullOrEmpty(tfUrl.Text))
+                if (tfUrl.HasValue())
                     instrument.Url = tfUrl.Text;
+                else
+                    instrument.Url = null;
 
                 if (nfLatitude.IsEmpty)
                     instrument.Latitude = null;
@@ -98,11 +104,11 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 else
                     instrument.Elevation = nfElevation.Number;
 
-                if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
+                if (dfStartDate.HasValue())
                     instrument.StartDate = dfStartDate.SelectedDate;
                 else
                     instrument.StartDate = null;
-                if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
+                if (dfEndDate.HasValue())
                     instrument.EndDate = dfEndDate.SelectedDate;
                 else
                     instrument.EndDate = null;

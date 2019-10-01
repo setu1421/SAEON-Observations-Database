@@ -33,7 +33,9 @@ public partial class Admin_Sites : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
-
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
             if (e.ID == "tfCode")
@@ -68,22 +70,25 @@ public partial class Admin_Sites : System.Web.UI.Page
             try
             {
                 da.Site site = new da.Site();
-                if (String.IsNullOrEmpty(tfID.Text))
+                if (!tfID.HasValue())
                     site.Id = Guid.NewGuid();
                 else
-                    site = new da.Site(tfID.Text.Trim());
-                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                    site.Code = tfCode.Text.Trim();
-                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                    site.Name = tfName.Text.Trim();
-                if (string.IsNullOrEmpty(site.Name)) site.Name = null;
-                site.Description = tfDescription.Text.Trim();
-                site.Url = tfUrl.Text.Trim();
-                if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
+                    site = new da.Site(tfID.Text);
+                if (tfCode.HasValue())
+                    site.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    site.Name = tfName.Text;
+                if (tfDescription.HasValue())
+                    site.Description = tfDescription.Text;
+                if (tfUrl.HasValue())
+                    site.Url = tfUrl.Text;
+                else
+                    site.Url = null;
+                if (dfStartDate.HasValue())
                     site.StartDate = dfStartDate.SelectedDate;
                 else
                     site.StartDate = null;
-                if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
+                if (dfEndDate.HasValue())
                     site.EndDate = dfEndDate.SelectedDate;
                 else
                     site.EndDate = null;
