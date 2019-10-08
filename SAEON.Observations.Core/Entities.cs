@@ -20,7 +20,7 @@ namespace SAEON.Observations.Core.Entities
     {
         /// <summary>
         /// Id of Entity
-        /// </summary> 
+        /// </summary>
         public Guid? Id { get; set; } = null;
         /// <summary>
         /// Code of Entity
@@ -37,10 +37,7 @@ namespace SAEON.Observations.Core.Entities
     /// </summary>
     public abstract class BaseEntity { }
 
-    /// <summary>
-    /// Base for entities
-    /// </summary>
-    public abstract class IDEntity : BaseEntity
+    public abstract class BaseIDEntity : BaseEntity
     {
         /// <summary>
         /// Id of the Entity
@@ -51,6 +48,13 @@ namespace SAEON.Observations.Core.Entities
         [ScaffoldColumn(false), HiddenInput]
         [JsonProperty(Order = -99)]
         public Guid Id { get; set; }
+    }
+
+    /// <summary>
+    /// Base for entities
+    /// </summary>
+    public abstract class IDEntity : BaseIDEntity
+    {
         [Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false), HiddenInput]
         public byte[] RowVersion { get; set; }
         [Required]
@@ -63,7 +67,7 @@ namespace SAEON.Observations.Core.Entities
     {
         /// <summary>
         /// Name of the Entity
-        /// </summary> 
+        /// </summary>
         [Required, StringLength(150), JsonProperty(Order = -97)]
         public string Name { get; set; }
         [NotMapped, JsonIgnore]
@@ -210,7 +214,7 @@ namespace SAEON.Observations.Core.Entities
         public string DOIUrl { get; set; }
         /// <summary>
         /// Name of the DigitalObjectIdentifier
-        /// </summary> 
+        /// </summary>
         [Required, StringLength(1000)]
         public string Name { get; set; }
         /// <summary>
@@ -260,7 +264,7 @@ namespace SAEON.Observations.Core.Entities
         public double? Latitude { get; set; }
         /// <summary>
         /// Longitude of the Instrument
-        /// </summary> 
+        /// </summary>
         public double? Longitude { get; set; }
         /// <summary>
         /// Elevation of the Instrument, positive above sea level, negative below sea level
@@ -388,7 +392,7 @@ namespace SAEON.Observations.Core.Entities
 
         // Navigation
         /// <summary>
-        /// Offerings of this Phenomenon 
+        /// Offerings of this Phenomenon
         /// </summary>
         [JsonIgnore]
         public List<Offering> Offerings { get; set; }
@@ -396,7 +400,7 @@ namespace SAEON.Observations.Core.Entities
         public List<EntityListItem> OfferingsList => Offerings?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
-        /// Units of this Phenomenon 
+        /// Units of this Phenomenon
         /// </summary>
         [JsonIgnore]
         public List<Unit> Units { get; set; }
@@ -404,7 +408,7 @@ namespace SAEON.Observations.Core.Entities
         public List<EntityListItem> UnitsList => Units?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
-        /// Sensors linked to this Phenomenon 
+        /// Sensors linked to this Phenomenon
         /// </summary>
         [JsonIgnore]
         public List<Sensor> Sensors { get; set; }
@@ -414,7 +418,7 @@ namespace SAEON.Observations.Core.Entities
     }
 
     /// <summary>
-    /// PhenomenonOffering entity 
+    /// PhenomenonOffering entity
     /// </summary>
     public class PhenomenonOffering : IDEntity
     {
@@ -561,11 +565,11 @@ namespace SAEON.Observations.Core.Entities
         public Guid PhenomenonId { get; set; }
         /// <summary>
         /// Latitude of the Sensor
-        /// </summary>  
+        /// </summary>
         public double? Latitude { get; set; }
         /// <summary>
         /// Longitude of the Sensor
-        /// </summary> 
+        /// </summary>
         public double? Longitude { get; set; }
         /// <summary>
         /// Elevation of the Sensor, positive above sea level, negative below sea level
@@ -683,7 +687,7 @@ namespace SAEON.Observations.Core.Entities
 
         /// <summary>
         /// Site of the Station
-        /// </summary> 
+        /// </summary>
         [JsonIgnore]
         public Site Site { get; set; }
         [JsonProperty("Site"), NotMapped]
@@ -752,12 +756,12 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Title of the DownLoad
         /// DataCite Titles
-        /// </summary> 
+        /// </summary>
         [Required, StringLength(5000)]
         public string Title { get; set; }
         /// <summary>
         /// How this DownLoad should be cited
-        /// </summary> 
+        /// </summary>
         [Required, StringLength(5000)]
         public string Citation { get; set; }
         /// <summary>
@@ -766,7 +770,7 @@ namespace SAEON.Observations.Core.Entities
         [Required, StringLength(1000)]
         public string Keywords { get; set; }
         /// <summary>
-        /// When the query for the download was executed 
+        /// When the query for the download was executed
         /// </summary>
         [Required]
         public DateTime Date { get; set;}
@@ -782,7 +786,7 @@ namespace SAEON.Observations.Core.Entities
         public string RequeryUrl { get; set; }
         /// <summary>
         /// DigitalObjectIdentifierID of the download
-        /// </summary> 
+        /// </summary>
         [Required, Display(Name = "Digital Object Identifier (DOI)")]
         public int DigitalObjectIdentifierId { get; set; }
         /// <summary>
@@ -801,7 +805,7 @@ namespace SAEON.Observations.Core.Entities
         public Guid OpenDataPlatformId { get; set; }
         /// <summary>
         /// Url to view the download
-        /// </summary> 
+        /// </summary>
         [Required, StringLength(2000), Display(Name = "Download Url")]
         public string DownloadUrl { get; set; }
         /// <summary>
@@ -822,7 +826,7 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Places of the DownLoad
         /// Lookup on GeoNames in format Name:Country:Lat:Lon, semi-colon separated
-        /// </summary> 
+        /// </summary>
         [Required, StringLength(5000)]
         public string Places { get; set; }
         /// <summary>
@@ -873,7 +877,7 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Time the UserDownload was added
         /// </summary>
-        [ScaffoldColumn(false)] 
+        [ScaffoldColumn(false)]
         public DateTime? AddedAt { get; set; }
         ///// <summary>
         ///// UserId of user who last updated the UserDownload
@@ -908,7 +912,7 @@ namespace SAEON.Observations.Core.Entities
         public string QueryInput { get; set; }
         /// <summary>
         /// UserId of UserQuery
-        /// </summary> 
+        /// </summary>
         [ScaffoldColumn(false), HiddenInput]
         public new string UserId { get; set; }
         /// <summary>
@@ -918,7 +922,7 @@ namespace SAEON.Observations.Core.Entities
         public string AddedBy { get; set; }
         /// <summary>
         /// Time the UserDownload was added
-        /// </summary> 
+        /// </summary>
         [ScaffoldColumn(false)]
         public DateTime? AddedAt { get; set; }
         /// <summary>
@@ -1134,6 +1138,35 @@ namespace SAEON.Observations.Core.Entities
         public string StatusReasonDescription { get; set; }
     }
 
+    // SensorThings
+
+    [Table("vSensorThingsAPILocations")]
+    public class SensorThingsLocation : BaseIDEntity
+    {
+        [Required, MaxLength(150)]
+        public string Name { get; set; }
+        [MaxLength(5000)]
+        public string Description { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double? Elevation { get; set; }
+    }
+
+    [Table("vSensorThingsAPIThings")]
+    public class SensorThingsThing : BaseIDEntity
+    {
+        [Required, MaxLength(150)]
+        public string Name { get; set; }
+        [MaxLength(5000)]
+        public string Description { get; set; }
+        [MaxLength(10)]
+        public string Kind { get; set; }
+        [MaxLength(250)]
+        public string Url { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+    }
+
 #if !NET461
     //> Remove later once we have proper many to many in Entity Framework Core
     //[Table("Instrument_Sensor")]
@@ -1173,7 +1206,7 @@ namespace SAEON.Observations.Core.Entities
     }
 
     [Table("Project_Station")]
-    public class ProjectStation 
+    public class ProjectStation
     {
         public Guid ProjectId { get; set; }
         public Project Project { get; set; }
@@ -1315,10 +1348,10 @@ namespace SAEON.Observations.Core.Entities
     /// Inventory Instruments
     /// </summary>
     [Table("vInventoryInstruments")]
-    public class InventoryInstrument : InventoryBase 
+    public class InventoryInstrument : InventoryBase
     {
         public string Name { get; set; }
-        public string Status { get; set; } 
+        public string Status { get; set; }
         public int? Count { get; set; }
         public double? Minimum { get; set; }
         public double? Maximum { get; set; }
@@ -1400,7 +1433,7 @@ namespace SAEON.Observations.Core.Entities
             if (logLevel.Equals("Verbose", StringComparison.CurrentCultureIgnoreCase))
                 Database.Log = s => Logging.Verbose(s);
             //else
-            //    Database.Log = s => Logging.Information(s); 
+            //    Database.Log = s => Logging.Information(s);
             Database.CommandTimeout = 30 * 60;
         }
 
@@ -1436,11 +1469,15 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<Feature> Features { get; set; }
         public DbSet<Observation> Observations { get; set; }
 
+        // SensorThings
+        public DbSet<SensorThingsLocation> SensorThingsLocations { get; set; }
+        public DbSet<SensorThingsThing> SensorThingsThings { get; set; }
+
         //public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
         //public DbSet<vApiDataQuery> vApiDataQueries { get; set; }
         //public DbSet<vApiInventory> vApiInventory { get; set; }
         //public DbSet<vApiSpacialCoverage> vApiSpacialCoverages { get; set; }
-        //public DbSet<vApiTemporalCoverage> vApiTemporalCoverages { get; set; } 
+        //public DbSet<vApiTemporalCoverage> vApiTemporalCoverages { get; set; }
         //public DbSet<vSensorThingsDatastream> vSensorThingsDatastreams { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

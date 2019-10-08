@@ -1,0 +1,45 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[DigitalObjectIdentifiers]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[DigitalObjectIdentifiers] (Table)
+     Alter
+       [dbo].[Observation] (Table)
+     Create
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[DF_DigitalObjectIdentifiers_UpdatedAt] (Default Constraint)
+       [dbo].[DF_DigitalObjectIdentifiers_AddedAt] (Default Constraint)
+       [dbo].[FK_UserDownloads_DigitalObjectIdentifiers] (Foreign Key)
+     Create
+       [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[FK_UserDownloads_DigitalObjectIdentifiers] (Foreign Key)
+       [dbo].[TR_DigitalObjectIdentifiers_Insert] (Trigger)
+       [dbo].[TR_DigitalObjectIdentifiers_Update] (Trigger)
+     Refresh
+       [dbo].[vUserDownloads] (View)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsDatastreams] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+
+The source's object [Authentication] is different than the target's version of the object but the target object will not be updated.
+The source's object [Observations] is different than the target's version of the object but the target object will not be updated.
+The object [Authentication] already exists in database with a different definition and will not be altered.
+The object [Observations] already exists in database with a different definition and will not be altered.
+

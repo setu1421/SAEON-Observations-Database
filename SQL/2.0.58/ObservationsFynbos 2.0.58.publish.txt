@@ -1,0 +1,39 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[DigitalObjectIdentifiers]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[DigitalObjectIdentifiers] (Table)
+     Alter
+       [dbo].[Observation] (Table)
+     Create
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[DF_DigitalObjectIdentifiers_UpdatedAt] (Default Constraint)
+       [dbo].[DF_DigitalObjectIdentifiers_AddedAt] (Default Constraint)
+       [dbo].[FK_UserDownloads_DigitalObjectIdentifiers] (Foreign Key)
+     Create
+       [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[FK_UserDownloads_DigitalObjectIdentifiers] (Foreign Key)
+       [dbo].[TR_DigitalObjectIdentifiers_Insert] (Trigger)
+       [dbo].[TR_DigitalObjectIdentifiers_Update] (Trigger)
+     Refresh
+       [dbo].[vUserDownloads] (View)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsDatastreams] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)

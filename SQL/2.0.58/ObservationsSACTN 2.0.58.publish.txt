@@ -1,0 +1,78 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[DigitalObjectIdentifiers]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The type for column AddedBy in table [dbo].[DigitalObjectIdentifiers] is currently  NVARCHAR (128) NOT NULL but is being
+         changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+       The type for column Name in table [dbo].[DigitalObjectIdentifiers] is currently  NVARCHAR (500) NULL but is being
+         changed to  VARCHAR (1000) NULL. Data loss could occur.
+       The type for column UpdatedBy in table [dbo].[DigitalObjectIdentifiers] is currently  NVARCHAR (128) NOT NULL but is
+         being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+       The column [dbo].[UserDownloads].[ZipURL] on table [dbo].[UserDownloads] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The type for column AddedBy in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed to
+          VARCHAR (128) NOT NULL. Data loss could occur.
+       The type for column UpdatedBy in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed
+         to  VARCHAR (128) NOT NULL. Data loss could occur.
+       The type for column UserId in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed to 
+         VARCHAR (128) NOT NULL. Data loss could occur.
+       The type for column AddedBy in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to 
+         VARCHAR (128) NOT NULL. Data loss could occur.
+       The type for column UpdatedBy in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to
+          VARCHAR (128) NOT NULL. Data loss could occur.
+       The type for column UserId in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to 
+         VARCHAR (128) NOT NULL. Data loss could occur.
+
+** User actions
+     Table rebuild
+       [dbo].[DigitalObjectIdentifiers] (Table)
+     Alter
+       [dbo].[Observation] (Table)
+       [dbo].[UserDownloads] (Table)
+       [dbo].[UserQueries] (Table)
+     Create
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[DF_DigitalObjectIdentifiers_UpdatedAt] (Default Constraint)
+       [dbo].[DF_DigitalObjectIdentifiers_AddedAt] (Default Constraint)
+       [dbo].[FK_UserDownloads_DigitalObjectIdentifiers] (Foreign Key)
+       [dbo].[UX_UserDownloads_UserId_Name] (Unique Constraint)
+       [dbo].[UX_UserQueries_UserId_Name] (Unique Constraint)
+     Create
+       [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[UX_UserDownloads_UserId_Name] (Unique Constraint)
+       [dbo].[UX_UserQueries_UserId_Name] (Unique Constraint)
+       [dbo].[FK_UserDownloads_DigitalObjectIdentifiers] (Foreign Key)
+       [dbo].[TR_DigitalObjectIdentifiers_Insert] (Trigger)
+       [dbo].[TR_DigitalObjectIdentifiers_Update] (Trigger)
+     Refresh
+       [dbo].[vUserDownloads] (View)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vSensorThingsDatastreams] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+
+The type for column AddedBy in table [dbo].[DigitalObjectIdentifiers] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The type for column Name in table [dbo].[DigitalObjectIdentifiers] is currently  NVARCHAR (500) NULL but is being changed to  VARCHAR (1000) NULL. Data loss could occur.
+The type for column UpdatedBy in table [dbo].[DigitalObjectIdentifiers] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The column [dbo].[UserDownloads].[ZipURL] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The type for column AddedBy in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The type for column UpdatedBy in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The type for column UserId in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The type for column AddedBy in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The type for column UpdatedBy in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The type for column UserId in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+
