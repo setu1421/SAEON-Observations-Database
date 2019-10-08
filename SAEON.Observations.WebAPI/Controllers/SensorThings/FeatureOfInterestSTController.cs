@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+﻿/*
+ * using Newtonsoft.Json.Linq;
 using SAEON.SensorThings;
+using System;
 using System.Linq;
 using System.Web.Http;
 
@@ -18,17 +20,18 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
             return base.GetAll();
         }
 
-        [Route("~/SensorThings/FeaturesOfInterest({id:int})")]
-        public override JToken GetById([FromUri] int id)
+        [Route("~/SensorThings/FeaturesOfInterest({id:guid})")]
+        public override JToken GetById([FromUri] Guid id)
         {
             return base.GetById(id);
         }
 
-        [Route("~/SensorThings/FeaturesOfInterest({id:int})/Observations")]
-        public JToken GetObservations([FromUri] int id)
+        [Route("~/SensorThings/FeaturesOfInterest({id:guid})/Observations")]
+        public JToken GetObservations([FromUri] Guid id)
         {
             return GetMany(id, i => i.Observations);
         }
 
     }
 }
+*/

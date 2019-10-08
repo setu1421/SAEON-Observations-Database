@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Formatter.Serialization;
 using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNet.OData.Routing.Conventions;
+using Microsoft.OData;
 using Microsoft.OData.Edm;
 using Newtonsoft.Json;
 using SAEON.Core;
 using SAEON.Logs;
-using SAEON.Observations.Core.Entities;
+using db = SAEON.Observations.Core.Entities;
+using st = SAEON.Observations.SensorThings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,8 +77,7 @@ namespace SAEON.Observations.WebAPI
                    select t;
         }
 
-        public static ODataRoute MapControllerBoundODataServiceRoute(this HttpConfiguration configuration, string routeName, string routePrefix,
-            IEdmModel model)
+        public static ODataRoute MapControllerBoundODataServiceRoute(this HttpConfiguration configuration, string routeName, string routePrefix, IEdmModel model)
         {
             var controllers = GetTypesWith<ODataRouteNameAttribute>(true).Where(c =>
             {
@@ -86,11 +88,27 @@ namespace SAEON.Observations.WebAPI
             conventions.Insert(0, new ControllerBoundAttributeRoutingConvention(routeName, configuration, controllers));
             return configuration.MapODataServiceRoute(routeName, routePrefix, model, new DefaultODataPathHandler(), conventions);
         }
+
+        public static ODataRoute MapControllerBoundODataServiceRoute2(this HttpConfiguration configuration, string routeName, string routePrefix, IEdmModel model)
+        {
+            var controllers = GetTypesWith<ODataRouteNameAttribute>(true).Where(c =>
+            {
+                var attr = (ODataRouteNameAttribute)c.GetCustomAttributes(typeof(ODataRouteNameAttribute), true).FirstOrDefault();
+                return attr?.Name.Equals(routeName, StringComparison.CurrentCultureIgnoreCase) ?? false;
+            });
+            var conventions = ODataRoutingConventions.CreateDefault();
+            conventions.Insert(0, new ControllerBoundAttributeRoutingConvention(routeName, configuration, controllers));
+            return configuration.MapODataServiceRoute(routeName, routePrefix, builder =>
+                builder
+                    .AddService<IEdmModel>(ServiceLifetime.Singleton, sp => model)
+                    .AddService<ODataSerializerProvider, st.SensorThingsODataSerializerProvider>(ServiceLifetime.Singleton)
+                    .AddService<IEnumerable<IODataRoutingConvention>>(ServiceLifetime.Singleton, sp => conventions));
+        }
     }
 
     public static class ODataExtensions
     {
-        public static void IgnoreEntityItemLists<TEntity>(this EntitySetConfiguration<TEntity> source) where TEntity : NamedEntity
+        public static void IgnoreEntityItemLists<TEntity>(this EntitySetConfiguration<TEntity> source) where TEntity : db.NamedEntity
         {
             //using (Logging.MethodCall(typeof(ODataExtensions)))
             {
@@ -112,29 +130,29 @@ namespace SAEON.Observations.WebAPI
 
     public static class WebApiConfig
     {
-        public static IEdmModel GetObservationsEdmModel()
+        private static IEdmModel ObservationsEdmModel()
         {
-            ODataConventionModelBuilder odataModelBuilder = new ODataConventionModelBuilder { ContainerName = "Observations" };
-            odataModelBuilder.EntitySet<Instrument>("Instruments").IgnoreEntityItemLists();
-            odataModelBuilder.EntitySet<Inventory>("Inventory");
-            odataModelBuilder.EntitySet<Offering>("Offerings").IgnoreEntityItemLists();
-            odataModelBuilder.EntitySet<Organisation>("Organisations").IgnoreEntityItemLists();
-            odataModelBuilder.EntitySet<Phenomenon>("Phenomena").IgnoreEntityItemLists();
-            odataModelBuilder.EntitySet<Programme>("Programmes").IgnoreEntityItemLists();
-            odataModelBuilder.EntitySet<Project>("Projects").IgnoreEntityItemLists();
-            odataModelBuilder.EntitySet<Sensor>("Sensors").IgnoreEntityItemLists();
-            odataModelBuilder.EntitySet<Site>("Sites").IgnoreEntityItemLists();
-            odataModelBuilder.EntitySet<Station>("Stations").IgnoreEntityItemLists();
-            odataModelBuilder.EntitySet<Unit>("Units").IgnoreEntityItemLists();
-            return odataModelBuilder.GetEdmModel();
+            ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "Observations" };
+            builder.EntitySet<db.Instrument>("Instruments").IgnoreEntityItemLists();
+            builder.EntitySet<db.Inventory>("Inventory");
+            builder.EntitySet<db.Offering>("Offerings").IgnoreEntityItemLists();
+            builder.EntitySet<db.Organisation>("Organisations").IgnoreEntityItemLists();
+            builder.EntitySet<db.Phenomenon>("Phenomena").IgnoreEntityItemLists();
+            builder.EntitySet<db.Programme>("Programmes").IgnoreEntityItemLists();
+            builder.EntitySet<db.Project>("Projects").IgnoreEntityItemLists();
+            builder.EntitySet<db.Sensor>("Sensors").IgnoreEntityItemLists();
+            builder.EntitySet<db.Site>("Sites").IgnoreEntityItemLists();
+            builder.EntitySet<db.Station>("Stations").IgnoreEntityItemLists();
+            builder.EntitySet<db.Unit>("Units").IgnoreEntityItemLists();
+            return builder.GetEdmModel();
         }
 
-        public static IEdmModel GetInternalEdmModel()
+        private static IEdmModel InternalEdmModel()
         {
-            ODataConventionModelBuilder odataModelBuilder = new ODataConventionModelBuilder { ContainerName = "Internal" };
-            odataModelBuilder.EntitySet<Location>("Locations");
-            odataModelBuilder.EntitySet<Feature>("Features");
-            return odataModelBuilder.GetEdmModel();
+            ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "Internal" };
+            builder.EntitySet<db.Location>("Locations");
+            builder.EntitySet<db.Feature>("Features");
+            return builder.GetEdmModel();
         }
 
         public static void Register(HttpConfiguration config)
@@ -162,8 +180,15 @@ namespace SAEON.Observations.WebAPI
 
                 // OData
                 config.Filter().Expand().Select().OrderBy().MaxTop(null).Count();
-                config.MapControllerBoundODataServiceRoute("OData", "OData", GetObservationsEdmModel());
-                config.MapControllerBoundODataServiceRoute("Internal", "Internal", GetInternalEdmModel());
+                config.MapControllerBoundODataServiceRoute("OData", "OData", ObservationsEdmModel());
+                config.MapControllerBoundODataServiceRoute("Internal", "Internal", InternalEdmModel());
+                config.MapControllerBoundODataServiceRoute2("SensorThings", "SensorThings", st.SensorThingsConfig.GetEdmModel());
+                //config.MapControllerBoundODataServiceRoute("SensorThings", "SensorThings", builder =>
+                //    builder
+                //        .AddService<IEdmModel>(ServiceLifetime.Singleton, sp => SensorThingsEdmModel())
+                //        .AddService<ODataSerializerProvider, SensorThingsODataSerializerProvider>(ServiceLifetime.Singleton)
+                //        .AddService<IEnumerable<IODataRoutingConvention>>(ServiceLifetime.Singleton, sp =>
+                //               ODataRoutingConventions.CreateDefaultWithAttributeRouting("SensorThings", config)));
 
                 //config.Routes.MapHttpRoute(
                 //    name: "DefaultApi",

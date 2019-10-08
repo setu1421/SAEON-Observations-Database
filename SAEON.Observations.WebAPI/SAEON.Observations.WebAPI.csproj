@@ -158,11 +158,13 @@
     <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.5.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.OData.Core, Version=7.6.0.30605, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.OData.Core.7.6.0\lib\portable-net45+win8+wpa81\Microsoft.OData.Core.dll</HintPath>
+    <Reference Include="Microsoft.OData.Core, Version=7.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OData.Core.7.6.1\lib\portable-net45+win8+wpa81\Microsoft.OData.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.OData.Edm, Version=7.6.0.30605, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.OData.Edm.7.6.0\lib\portable-net45+win8+wpa81\Microsoft.OData.Edm.dll</HintPath>
+    <Reference Include="Microsoft.OData.Edm, Version=7.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OData.Edm.7.6.1\lib\portable-net45+win8+wpa81\Microsoft.OData.Edm.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -182,8 +184,9 @@
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Spatial, Version=7.6.0.30605, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Spatial.7.6.0\lib\portable-net45+win8+wpa81\Microsoft.Spatial.dll</HintPath>
+    <Reference Include="Microsoft.Spatial, Version=7.6.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Spatial.7.6.1\lib\portable-net45+win8+wpa81\Microsoft.Spatial.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -220,11 +223,8 @@
     <Reference Include="SAEON.Logs, Version=1.0.46.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Logs.1.0.46\lib\net472\SAEON.Logs.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.Core, Version=1.0.112.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.Core.1.0.112\lib\net472\SAEON.Observations.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="SAEON.SensorThings, Version=1.0.38.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.SensorThings.1.0.38\lib\net472\SAEON.SensorThings.dll</HintPath>
+    <Reference Include="SAEON.Observations.Core, Version=1.0.116.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.Core.1.0.116\lib\net472\SAEON.Observations.Core.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.8.0\lib\net46\Serilog.dll</HintPath>
@@ -618,8 +618,14 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.3.52\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.3.52\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.16\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.16\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAEON.Observations.SensorThings\SAEON.Observations.SensorThings.csproj">
+      <Project>{233e3c23-02e4-4751-ac8e-012b38deb1f6}</Project>
+      <Name>SAEON.Observations.SensorThings</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -676,7 +682,6 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.3.52\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.3.52\build\Microsoft.VisualStudio.Threading.Analyzers.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.targets'))" />
@@ -686,9 +691,9 @@
     <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.Web.2.11.0\build\Microsoft.ApplicationInsights.Web.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.Web.2.11.0\build\Microsoft.ApplicationInsights.Web.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.16\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.16\build\Microsoft.VisualStudio.Threading.Analyzers.targets'))" />
   </Target>
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
-  <Import Project="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.3.52\build\Microsoft.VisualStudio.Threading.Analyzers.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.3.52\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" />
   <Import Project="..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.SlowCheetah.3.2.26\build\Microsoft.VisualStudio.SlowCheetah.targets')" />
   <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" />
   <Import Project="..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.0\build\Microsoft.ApplicationInsights.DependencyCollector.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.0\build\Microsoft.ApplicationInsights.DependencyCollector.targets')" />
@@ -696,4 +701,5 @@
   <Import Project="..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.targets')" />
   <Import Project="..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.targets')" />
   <Import Project="..\packages\Microsoft.ApplicationInsights.Web.2.11.0\build\Microsoft.ApplicationInsights.Web.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.Web.2.11.0\build\Microsoft.ApplicationInsights.Web.targets')" />
+  <Import Project="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.16\build\Microsoft.VisualStudio.Threading.Analyzers.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.16\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" />
 </Project>

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿/*
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SAEON.AspNet.Mvc;
 using System.Collections.Generic;
@@ -41,3 +42,4 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
         }
     }
 }
+*/

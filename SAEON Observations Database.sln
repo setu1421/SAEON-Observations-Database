@@ -78,6 +78,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.WebAPI.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.QuerySite.ComingSoon", "SAEON.Observations.QuerySite.ComingSoon\SAEON.Observations.QuerySite.ComingSoon.csproj", "{93CF437C-7586-4232-9EED-86CD7871E0F8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAEON.Observations.SensorThings", "SAEON.Observations.SensorThings\SAEON.Observations.SensorThings.csproj", "{233E3C23-02E4-4751-AC8E-012B38DEB1F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (SQL Server Only)|Any CPU = Debug (SQL Server Only)|Any CPU
@@ -194,6 +196,14 @@ Global
 		{93CF437C-7586-4232-9EED-86CD7871E0F8}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
 		{93CF437C-7586-4232-9EED-86CD7871E0F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93CF437C-7586-4232-9EED-86CD7871E0F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{233E3C23-02E4-4751-AC8E-012B38DEB1F6}.Debug (SQL Server Only)|Any CPU.ActiveCfg = Debug|Any CPU
+		{233E3C23-02E4-4751-AC8E-012B38DEB1F6}.Debug (SQL Server Only)|Any CPU.Build.0 = Debug|Any CPU
+		{233E3C23-02E4-4751-AC8E-012B38DEB1F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{233E3C23-02E4-4751-AC8E-012B38DEB1F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{233E3C23-02E4-4751-AC8E-012B38DEB1F6}.Release (SQL Server Only)|Any CPU.ActiveCfg = Release|Any CPU
+		{233E3C23-02E4-4751-AC8E-012B38DEB1F6}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
+		{233E3C23-02E4-4751-AC8E-012B38DEB1F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{233E3C23-02E4-4751-AC8E-012B38DEB1F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

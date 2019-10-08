@@ -29,7 +29,7 @@ namespace SAEON.Observations.WebAPI
                     FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
                     RouteConfig.RegisterRoutes(RouteTable.Routes);
                     BundleConfig.RegisterBundles(BundleTable.Bundles);
-                    SensorThingsFactory.Load();
+                    //SensorThingsFactory.Load();
                     Directory.CreateDirectory(HostingEnvironment.MapPath($"~/App_Data/Downloads/{DateTime.Now.ToString("yyyyMM")}"));
                 }
                 catch (Exception ex)

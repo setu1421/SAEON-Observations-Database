@@ -1,4 +1,5 @@
-﻿using e = SAEON.Observations.Core.Entities;
+﻿/*
+ * using e = SAEON.Observations.Core.Entities;
 using SAEON.SensorThings;
 using System;
 using System.Collections.Generic;
@@ -26,13 +27,13 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
             Location AddLocation(Guid id, string name, string description, double latitude, double longitude, double? elevation)
             {
                 var location = Locations.FirstOrDefault(i => (i.Name == name) && (i.Description == description) &&
-                        (i.Coordinate.Latitude == latitude) && (i.Coordinate.Longitude == longitude) && 
+                        (i.Coordinate.Latitude == latitude) && (i.Coordinate.Longitude == longitude) &&
                         (!(i.Coordinate.Elevation.HasValue && elevation.HasValue) || (i.Coordinate.Elevation == elevation)));
                 if (location == null)
                 {
                     location = new Location
                     {
-                        Id = id.GetHashCode(),
+                        Id = id,
                         Name = name,
                         Description = description,
                         Coordinate = new Coordinate(latitude,longitude,elevation)
@@ -44,7 +45,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 
             Location AddStationLocation(e.Station station, Thing thing)
             {
-                Location location = null; 
+                Location location = null;
                 if (station.Latitude.HasValue && station.Longitude.HasValue)
                 {
                     location = AddLocation(station.Id, station.Name, station.Description, station.Latitude.Value, station.Longitude.Value, station.Elevation);
@@ -61,7 +62,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 
             Location GetStationLocation(e.Station station)
             {
-                return Locations.FirstOrDefault(i => (i.Id == station.Id.GetHashCode()) && (i.Name == station.Name) && (i.Description == station.Description) &&
+                return Locations.FirstOrDefault(i => (i.Id == station.Id) && (i.Name == station.Name) && (i.Description == station.Description) &&
                             (i.Coordinate.Latitude == station.Latitude) && (i.Coordinate.Longitude == station.Longitude) &&
                             (!(i.Coordinate.Elevation.HasValue && station.Elevation.HasValue) || (i.Coordinate.Elevation == station.Elevation)));
             }
@@ -92,7 +93,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 
             Location GetInstrumentLocation(e.Instrument instrument)
             {
-                return Locations.FirstOrDefault(i => (i.Id == instrument.Id.GetHashCode()) && (i.Name == instrument.Name) && (i.Description == instrument.Description) &&
+                return Locations.FirstOrDefault(i => (i.Id == instrument.Id) && (i.Name == instrument.Name) && (i.Description == instrument.Description) &&
                             (i.Coordinate.Latitude == instrument.Latitude) && (i.Coordinate.Longitude == instrument.Longitude) &&
                             (!(i.Coordinate.Elevation.HasValue && instrument.Elevation.HasValue) || (i.Coordinate.Elevation == instrument.Elevation)));
             }
@@ -123,7 +124,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 
             Location GetSensorLocation(e.Sensor sensor)
             {
-                return Locations.FirstOrDefault(i => (i.Id == sensor.Id.GetHashCode()) && (i.Name == sensor.Name) && (i.Description == sensor.Description) &&
+                return Locations.FirstOrDefault(i => (i.Id == sensor.Id) && (i.Name == sensor.Name) && (i.Description == sensor.Description) &&
                             (i.Coordinate.Latitude == sensor.Latitude) && (i.Coordinate.Longitude == sensor.Longitude) &&
                             (!(i.Coordinate.Elevation.HasValue && sensor.Elevation.HasValue) || (i.Coordinate.Elevation == sensor.Elevation)));
             }
@@ -153,7 +154,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
                             dbSensor = null;
                             var thing = new Thing
                             {
-                                Id = dbSite.Id.GetHashCode(),
+                                Id = dbSite.Id,
                                 Name = dbSite.Name,
                                 Description = dbSite.Description
                             };
@@ -170,7 +171,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
                             dbSensor = null;
                             var thing = new Thing
                             {
-                                Id = dbStation.Id.GetHashCode(),
+                                Id = dbStation.Id,
                                 Name = dbStation.Name,
                                 Description = dbStation.Description
                             };
@@ -187,7 +188,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
                             dbSensor = null;
                             var thing = new Thing
                             {
-                                Id = dbInstrument.Id.GetHashCode(),
+                                Id = dbInstrument.Id,
                                 Name = dbInstrument.Name,
                                 Description = dbInstrument.Description
                             };
@@ -202,7 +203,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
                                 // Feature of interest
                                 var featureOfInterest = new FeatureOfInterest
                                 {
-                                    Id = dbInstrument.Id.GetHashCode(),
+                                    Id = dbInstrument.Id,
                                     Name = dbInstrument.Name,
                                     Description = dbInstrument.Description,
                                     Coordinate = location.Coordinate
@@ -215,7 +216,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
                             dbSensor = db.Sensors.First(i => i.Code == inventory.SensorCode);
                             var thing = new Thing
                             {
-                                Id = dbSensor.Id.GetHashCode(),
+                                Id = dbSensor.Id,
                                 Name = dbSensor.Name,
                                 Description = dbSensor.Description
                             };
@@ -231,7 +232,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
                             // Sensor
                             var sensor = new Sensor
                             {
-                                Id = dbSensor.Id.GetHashCode(),
+                                Id = dbSensor.Id,
                                 Name = dbSensor.Name,
                                 Description = dbSensor.Description,
                                 Metadata = dbSensor.Url
@@ -240,7 +241,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
                             // Datastream
                             var datastream = new Datastream
                             {
-                                Id = dbSensor.Id.GetHashCode(),
+                                Id = dbSensor.Id,
                                 Name = $"{dbSensor.Name} - {phenomenon.Name} - {offering.Name} - {unit.Name}",
                                 Description = $"{phenomenon.Name} - {offering.Name} - {unit.Name}",
                                 Thing = thing
@@ -264,6 +265,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
                             Datastreams.Add(datastream);
                             sensor.Datastream = datastream;
                             datastream.Sensor = sensor;
+                            // Observerved Properties
                         }
                     }
 
@@ -271,7 +273,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
             }
         }
 
-        /*
+
         #region Things
         public static Thing ThingFromStation(e.Station station, Uri uri, Location location = null)
         {
@@ -432,6 +434,6 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
             return result;
         }
         #endregion
-        */
     }
 }
+*/
