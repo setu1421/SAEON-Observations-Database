@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Azure.CosmosDB.BulkImport, Version=2.5.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.CosmosDB.BulkExecutor.1.8.1\lib\net451\Microsoft.Azure.CosmosDB.BulkImport.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Azure.CosmosDB.BulkExecutor.1.8.4\lib\net451\Microsoft.Azure.CosmosDB.BulkImport.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.Documents.Client, Version=2.5.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.DocumentDB.2.5.1\lib\net461\Microsoft.Azure.Documents.Client.dll</HintPath>
@@ -85,23 +85,23 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MongoDB.Bson, Version=2.9.0.0, Culture=neutral, PublicKeyToken=15b1115599983c50, processorArchitecture=MSIL">
-      <HintPath>..\packages\MongoDB.Bson.signed.2.9.0\lib\net452\MongoDB.Bson.dll</HintPath>
+    <Reference Include="MongoDB.Bson, Version=2.9.2.0, Culture=neutral, PublicKeyToken=15b1115599983c50, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.signed.2.9.2\lib\net452\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Azure.CosmosDB, Version=1.0.102.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Azure.CosmosDB.1.0.102\lib\net472\SAEON.Azure.CosmosDB.dll</HintPath>
+    <Reference Include="SAEON.Azure.CosmosDB, Version=1.0.105.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Azure.CosmosDB.1.0.105\lib\net472\SAEON.Azure.CosmosDB.dll</HintPath>
     </Reference>
     <Reference Include="SAEON.Core, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Core.1.0.14\lib\net472\SAEON.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Logs, Version=1.0.46.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Logs.1.0.46\lib\net472\SAEON.Logs.dll</HintPath>
+    <Reference Include="SAEON.Logs, Version=1.0.48.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Logs.1.0.48\lib\net472\SAEON.Logs.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.2.8.0\lib\net46\Serilog.dll</HintPath>
+      <HintPath>..\packages\Serilog.2.9.0\lib\net46\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Formatting.Compact, Version=1.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Formatting.Compact.1.0.0\lib\net45\Serilog.Formatting.Compact.dll</HintPath>
