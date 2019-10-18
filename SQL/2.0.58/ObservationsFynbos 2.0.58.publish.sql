@@ -302,22 +302,6 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Refreshing [dbo].[vSensorThingsDatastreams]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-EXECUTE sp_refreshsqlmodule N'[dbo].[vSensorThingsDatastreams]';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
 PRINT N'Refreshing [dbo].[vObservation]...';
 
 
@@ -350,6 +334,89 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
+PRINT N'Altering [dbo].[vImportBatchSummary]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+ALTER VIEW [dbo].[vImportBatchSummary]
+AS
+Select
+  ImportBatchSummary.*,
+  Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription,
+  Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription,
+  UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  Sensor.Code SensorCode, Sensor.Name SensorName, Sensor.Description SensorDescription,
+  Instrument.Code InstrumentCode, Instrument.Name InstrumentName, Instrument.Description InstrumentDescription,
+  Station.Code StationCode, Station.Name StationName, Station.Description StationDescription,
+  Site.Code SiteCode, Site.Name SiteName, Site.Description SiteDescription
+From
+  ImportBatchSummary
+  inner join Sensor
+    on (ImportBatchSummary.SensorID = Sensor.ID)
+  inner join Instrument
+    on (ImportBatchSummary.InstrumentID = Instrument.ID)
+  inner join Station
+    on (ImportBatchSummary.StationID = Station.ID)
+  inner join Site
+    on (ImportBatchSummary.SiteID = Site.ID)
+  inner join PhenomenonOffering
+    on (ImportBatchSummary.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Phenomenon
+    on (PhenomenonOffering.PhenomenonID = Phenomenon.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
+  inner join PhenomenonUOM
+    on (ImportBatchSummary.PhenomenonUOMID = PhenomenonUOM.ID)
+  inner join UnitOfMeasure
+    on (PhenomenonUOM.UnitOfMeasureID = UnitOfMeasure.ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Refreshing [dbo].[vInventory]...';
+
+
+GO
+EXECUTE sp_refreshsqlmodule N'[dbo].[vInventory]';
+
+
+GO
+PRINT N'Creating [dbo].[vSensorThingsAPIDatastreams]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vSensorThingsAPIDatastreams]
+AS
+Select Distinct
+  Sensor.ID, Sensor.Code, Sensor.Name, Sensor.Description,
+  PhenomenonCode, PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
+  OfferingCode, OfferingName, Offering.Description OfferingDescription,
+  UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  StartDate, EndDate, LatitudeNorth, LatitudeSouth, LongitudeWest, LongitudeEast
+from
+  vInventory
+  inner join Sensor
+    on (vInventory.SensorID = Sensor.ID)
+  inner join Phenomenon
+    on (vInventory.PhenomenonCode = Phenomenon.Code)
+  inner join Offering
+    on (vInventory.OfferingCode = Offering.Code)
+  inner join UnitOfMeasure
+    on (vInventory.UnitOfMeasureCode = UnitOfMeasure.Code)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Creating [dbo].[vSensorThingsAPILocations]...';
 
 
@@ -362,7 +429,7 @@ CREATE VIEW [dbo].[vSensorThingsAPILocations]
 AS
 -- Stations
 Select
-  StationID ID, StationName Name, Station.Description, Station.Latitude, Station.Longitude, Station.Elevation
+  Station.ID, Station.Code, Station.Name, Station.Description, Station.Latitude, Station.Longitude, Station.Elevation
 from
   vInventory
   inner join Station
@@ -372,13 +439,55 @@ from
 union
 -- Instruments
 Select
-  InstrumentID ID, InstrumentName Name, Instrument.Description, Instrument.Latitude, Instrument.Longitude, Instrument.Elevation
+  Instrument.ID, Instrument.Code, Instrument.Name, Instrument.Description, Instrument.Latitude, Instrument.Longitude, Instrument.Elevation
 from
   vInventory
   inner join Instrument
     on (vInventory.InstrumentID = Instrument.ID)
   where
     (Instrument.Latitude is not null) and (Instrument.Longitude is not null)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vSensorThingsAPIObservedProperties]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vSensorThingsAPIObservedProperties]
+AS
+Select Distinct
+  Phenomenon.ID, Phenomenon.Code, Phenomenon.Name, Phenomenon.Description, Phenomenon.Url
+from
+  vInventory
+  inner join Phenomenon
+    on (vInventory.PhenomenonCode = Phenomenon.Code)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vSensorThingsAPISensors]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vSensorThingsAPISensors]
+AS
+Select Distinct
+  Sensor.ID, Sensor.Code, Sensor.Name, Sensor.Description, Sensor.Url
+from
+  vInventory
+  inner join Sensor
+    on (vInventory.SensorID = Sensor.ID)
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
@@ -396,7 +505,7 @@ CREATE VIEW [dbo].[vSensorThingsAPIThings]
 AS
 -- Sites
 Select
-  SiteID ID, SiteName Name, Site.Description, 'Site' Kind, Site.Url, Site.StartDate, Site.EndDate
+  Site.ID, Site.Code, Site.Name, Site.Description, 'Site' Kind, Site.Url, Site.StartDate, Site.EndDate
 from
   vInventory
   inner join Site
@@ -404,7 +513,7 @@ from
 union
 -- Stations
 Select
-  StationID ID, StationName Name, Station.Description, 'Station' Kind, Station.Url, Station.StartDate, Station.EndDate
+  Station.ID, Station.Code, Station.Name, Station.Description, 'Station' Kind, Station.Url, Station.StartDate, Station.EndDate
 from
   vInventory
   inner join Station
@@ -412,7 +521,7 @@ from
 union
 -- Instruments
 Select
-  InstrumentID ID, InstrumentName Name, Instrument.Description, 'Instrument' Kind, Instrument.Url, Instrument.StartDate, Instrument.EndDate
+  Instrument.ID, Instrument.Code, Instrument.Name, Instrument.Description, 'Instrument' Kind, Instrument.Url, Instrument.StartDate, Instrument.EndDate
 from
   vInventory
   inner join Instrument

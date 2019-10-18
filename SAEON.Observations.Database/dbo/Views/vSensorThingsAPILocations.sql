@@ -2,7 +2,7 @@
 AS
 -- Stations
 Select
-  StationID ID, StationName Name, Station.Description, Station.Latitude, Station.Longitude, Station.Elevation
+  Station.ID, Station.Code, Station.Name, Station.Description, Station.Latitude, Station.Longitude, Station.Elevation
 from
   vInventory
   inner join Station
@@ -12,7 +12,7 @@ from
 union
 -- Instruments
 Select
-  InstrumentID ID, InstrumentName Name, Instrument.Description, Instrument.Latitude, Instrument.Longitude, Instrument.Elevation
+  Instrument.ID, Instrument.Code, Instrument.Name, Instrument.Description, Instrument.Latitude, Instrument.Longitude, Instrument.Elevation
 from
   vInventory
   inner join Instrument

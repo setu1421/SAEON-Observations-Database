@@ -201,6 +201,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarRowVersion);
                 
+                TableSchema.TableColumn colvarDateX = new TableSchema.TableColumn(schema);
+                colvarDateX.ColumnName = "Date";
+                colvarDateX.DataType = DbType.DateTime;
+                colvarDateX.MaxLength = 0;
+                colvarDateX.AutoIncrement = false;
+                colvarDateX.IsNullable = false;
+                colvarDateX.IsPrimaryKey = false;
+                colvarDateX.IsForeignKey = false;
+                colvarDateX.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarDateX);
+                
                 TableSchema.TableColumn colvarTitle = new TableSchema.TableColumn(schema);
                 colvarTitle.ColumnName = "Title";
                 colvarTitle.DataType = DbType.AnsiString;
@@ -264,7 +276,7 @@ namespace SAEON.Observations.Data{
                 TableSchema.TableColumn colvarMetadataJson = new TableSchema.TableColumn(schema);
                 colvarMetadataJson.ColumnName = "MetadataJson";
                 colvarMetadataJson.DataType = DbType.AnsiString;
-                colvarMetadataJson.MaxLength = 5000;
+                colvarMetadataJson.MaxLength = -1;
                 colvarMetadataJson.AutoIncrement = false;
                 colvarMetadataJson.IsNullable = false;
                 colvarMetadataJson.IsPrimaryKey = false;
@@ -647,6 +659,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("DateX")]
+        [Bindable(true)]
+        public DateTime DateX 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime>("Date");
+		    }
+            set 
+		    {
+			    SetColumnValue("Date", value);
+            }
+        }
+	      
         [XmlAttribute("Title")]
         [Bindable(true)]
         public string Title 
@@ -943,6 +969,8 @@ namespace SAEON.Observations.Data{
             public static string UpdatedBy = @"UpdatedBy";
             
             public static string RowVersion = @"RowVersion";
+            
+            public static string DateX = @"Date";
             
             public static string Title = @"Title";
             

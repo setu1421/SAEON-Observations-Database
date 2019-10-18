@@ -13,8 +13,12 @@
        [dbo].[DigitalObjectIdentifiers] (Table)
      Alter
        [dbo].[Observation] (Table)
+       [dbo].[vImportBatchSummary] (View)
      Create
+       [dbo].[vSensorThingsAPIDatastreams] (View)
        [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
        [dbo].[vSensorThingsAPIThings] (View)
 
 ** Supporting actions
@@ -34,6 +38,9 @@
      Refresh
        [dbo].[vUserDownloads] (View)
        [dbo].[vObservationExpansion] (View)
-       [dbo].[vSensorThingsDatastreams] (View)
        [dbo].[vObservation] (View)
        [dbo].[vObservationJSON] (View)
+       [dbo].[vInventory] (View)
+
+If this deployment is executed, changes to [dbo].[Observation] might introduce run-time errors in [dbo].[vSensorThingsDatastreams].
+

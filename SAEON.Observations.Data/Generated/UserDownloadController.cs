@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,string UserId,string Name,string Description,string MetadataURL,string DownloadURL,string Citation,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion,string Title,string Keywords,string Input,string RequeryURL,int DigitalObjectIdentifierID,string MetadataJson,string ZipFullName,string ZipCheckSum,string Places,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,DateTime DateX)
+	    public void Insert(Guid Id,string UserId,string Name,string Description,string MetadataURL,string DownloadURL,string Citation,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion,DateTime DateX,string Title,string Keywords,string Input,string RequeryURL,int DigitalObjectIdentifierID,string MetadataJson,string ZipFullName,string ZipCheckSum,string Places,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,Guid OpenDataPlatformID)
 	    {
 		    UserDownload item = new UserDownload();
 		    
@@ -107,6 +107,8 @@ namespace SAEON.Observations.Data
             item.UpdatedBy = UpdatedBy;
             
             item.RowVersion = RowVersion;
+            
+            item.DateX = DateX;
             
             item.Title = Title;
             
@@ -142,7 +144,7 @@ namespace SAEON.Observations.Data
             
             item.EndDate = EndDate;
             
-            item.DateX = DateX;
+            item.OpenDataPlatformID = OpenDataPlatformID;
             
 	    
 		    item.Save(UserName);
@@ -152,7 +154,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,string UserId,string Name,string Description,string MetadataURL,string DownloadURL,string Citation,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion,string Title,string Keywords,string Input,string RequeryURL,int DigitalObjectIdentifierID,string MetadataJson,string ZipFullName,string ZipCheckSum,string Places,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,DateTime DateX)
+	    public void Update(Guid Id,string UserId,string Name,string Description,string MetadataURL,string DownloadURL,string Citation,DateTime? AddedAt,string AddedBy,DateTime? UpdatedAt,string UpdatedBy,byte[] RowVersion,DateTime DateX,string Title,string Keywords,string Input,string RequeryURL,int DigitalObjectIdentifierID,string MetadataJson,string ZipFullName,string ZipCheckSum,string Places,double? LatitudeNorth,double? LatitudeSouth,double? LongitudeWest,double? LongitudeEast,double? ElevationMinimum,double? ElevationMaximum,DateTime? StartDate,DateTime? EndDate,Guid OpenDataPlatformID)
 	    {
 		    UserDownload item = new UserDownload();
 	        item.MarkOld();
@@ -181,6 +183,8 @@ namespace SAEON.Observations.Data
 			item.UpdatedBy = UpdatedBy;
 				
 			item.RowVersion = RowVersion;
+				
+			item.DateX = DateX;
 				
 			item.Title = Title;
 				
@@ -216,7 +220,7 @@ namespace SAEON.Observations.Data
 				
 			item.EndDate = EndDate;
 				
-			item.DateX = DateX;
+			item.OpenDataPlatformID = OpenDataPlatformID;
 				
 	        item.Save(UserName);
 	    }
