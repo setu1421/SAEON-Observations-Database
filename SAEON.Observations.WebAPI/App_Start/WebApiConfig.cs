@@ -168,10 +168,10 @@ namespace SAEON.Observations.WebAPI
                 var querySiteUrl = Properties.Settings.Default.QuerySiteUrl.TrimEnd("//").Replace("https:","http:");
                 var corsUrls = querySiteUrl + "," + querySiteUrl.Replace("http:", "https:");
                 Logging.Information("CORS: {corsURLS}", corsUrls);
-                var corsAttr = new EnableCorsAttribute(corsUrls, "*", "*");
-                //{
-                //    SupportsCredentials = true
-                //};
+                var corsAttr = new EnableCorsAttribute(corsUrls, "*", "*")
+                {
+                    SupportsCredentials = true
+                };
                 config.EnableCors(corsAttr);
 
                 // Web API routes
@@ -182,7 +182,7 @@ namespace SAEON.Observations.WebAPI
                 config.Filter().Expand().Select().OrderBy().MaxTop(null).Count();
                 config.MapControllerBoundODataServiceRoute("OData", "OData", ObservationsEdmModel());
                 config.MapControllerBoundODataServiceRoute("Internal", "Internal", InternalEdmModel());
-                config.MapControllerBoundODataServiceRoute2("SensorThings", "SensorThings", st.SensorThingsConfig.GetEdmModel());
+                config.MapControllerBoundODataServiceRoute2("SensorThings", "SensorThings", st.Config.GetEdmModel());
                 //config.MapControllerBoundODataServiceRoute("SensorThings", "SensorThings", builder =>
                 //    builder
                 //        .AddService<IEdmModel>(ServiceLifetime.Singleton, sp => SensorThingsEdmModel())

@@ -102,7 +102,7 @@ namespace SAEON.Observations.SensorThings
             return query;
         }
 
-        protected IQueryable<TSensorThingsEntity> GetSensorThingsAll()
+        protected IQueryable<TSensorThingsEntity> GetSensorThingsMany()
         {
             var result = new List<TSensorThingsEntity>();
             foreach (var dbEntity in GetDbAll())
@@ -125,7 +125,7 @@ namespace SAEON.Observations.SensorThings
 
         private void UpdateRequest(bool isMany)
         {
-            SensorThingsConfig.BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/SensorThings";
+            Config.BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/SensorThings";
             if (isMany)
             {
                 var uri = Request.RequestUri.ToString();
@@ -144,7 +144,7 @@ namespace SAEON.Observations.SensorThings
         /// </summary>
         /// <returns>ListOf(TEntity)</returns>
         // GET: odata/TEntity
-        //[EnableQuery(PageSize = SensorThingsConfig.PageSize), ODataRoute] Required in derived class
+        //[EnableQuery(PageSize = Config.PageSize), ODataRoute] Required in derived class
         public virtual IQueryable<TSensorThingsEntity> GetAll()
         {
             using (Logging.MethodCall<TDbEntity>(GetType()))
@@ -153,7 +153,7 @@ namespace SAEON.Observations.SensorThings
                 {
                     UpdateRequest(true);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
-                    return GetSensorThingsAll();
+                    return GetSensorThingsMany();
                 }
                 catch (Exception ex)
                 {
@@ -163,7 +163,7 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        //[EnableQuery(PageSize = SensorThingsConfig.PageSize), ODataRoute("({id})")] Required in derived class
+        //[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})")] Required in derived class
         public virtual SingleResult<TSensorThingsEntity> GetById([FromODataUri] Guid id)
         {
             using (Logging.MethodCall<SingleResult<TDbEntity>>(GetType(), new ParameterList { { "Id", id } }))
@@ -182,8 +182,8 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        //[EnableQuery(PageSize = SensorThingsConfig.PageSize), ODataRoute("({id})/Related")] Required in derived class
-        public virtual SingleResult<TRelatedSensorThingsEntity> GetRelatedSingle<TRelatedSensorThingsEntity>([FromODataUri]Guid id, Expression<Func<TSensorThingsEntity, TRelatedSensorThingsEntity>> select) where TRelatedSensorThingsEntity : SensorThingsEntity
+        //[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Related")] Required in derived class
+        protected virtual SingleResult<TRelatedSensorThingsEntity> GetRelatedSingle<TRelatedSensorThingsEntity>([FromODataUri]Guid id, Expression<Func<TSensorThingsEntity, TRelatedSensorThingsEntity>> select) where TRelatedSensorThingsEntity : SensorThingsEntity
         {
             using (Logging.MethodCall<TSensorThingsEntity, TRelatedSensorThingsEntity>(GetType()))
             {
@@ -192,10 +192,7 @@ namespace SAEON.Observations.SensorThings
                     UpdateRequest(false);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TRelatedSensorThingsEntity>();
-                    var entity = GetSensorThingsSingle(id).FirstOrDefault();
-                    Logging.Verbose("Entity: {@Entity}", entity);
                     var relatedEntity = GetSensorThingsSingle(id).Select(select).FirstOrDefault();
-                    Logging.Verbose("RelatedEntity: {@RelatedEntity}", relatedEntity);
                     if (relatedEntity != null)
                     {
                         result.Add(relatedEntity);
@@ -210,41 +207,24 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        //[HttpGet]
-        ////[Route("Entity({id:int})/Related")]
-        //public virtual SingleResult<TSensorThingsEntity> GetSingle<TRelatedSensorThingsEntity>([FromODataUri]Guid id, Expression<Func<TSensorThingsEntity, TRelatedSensorThingsEntity>> select) where TRelatedSensorThingsEntity : SensorThingsEntity
-        //{
-        //    using (Logging.MethodCall<TSensorThingsEntity, TRelatedSensorThingsEntity>(GetType()))
-        //    {
-        //        try
-        //        {
-        //            SetBaseUrl();
-        //            Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
-        //            Request.Headers.TryAddWithoutValidation("Prefer", "odata.include-annotations=*");
-        //            var entites = new List<TSensorThingsEntity>();
-        //            var dbEntity = GetQuery(i => (i.Id == id)).FirstOrDefault();
-        //            if (dbEntity == null)
-        //            {
-        //                return null;
-        //            }
-
-        //            TRelatedSensorThingsEntity related = Entities.AsQueryable().Where(i => i.Id == id).Select(select).FirstOrDefault();
-        //            if (related == null)
-        //            {
-        //                return null;
-        //            }
-
-        //            Logging.Verbose("Related: {@Related}", related);
-        //            return related.AsJSON;
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logging.Exception(ex);
-        //            throw;
-        //        }
-        //    }
-        //}
-
-
+        //[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Related")] Required in derived class
+        protected virtual IQueryable<TRelatedSensorThingsEntity> GetRelatedMany<TRelatedSensorThingsEntity>([FromODataUri]Guid id, Expression<Func<TSensorThingsEntity, IEnumerable<TRelatedSensorThingsEntity>>> select) where TRelatedSensorThingsEntity : SensorThingsEntity
+        {
+            using (Logging.MethodCall<TSensorThingsEntity, TRelatedSensorThingsEntity>(GetType()))
+            {
+                try
+                {
+                    UpdateRequest(false);
+                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    var result = new List<TRelatedSensorThingsEntity>();
+                    return GetSensorThingsSingle(id).SelectMany(select);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
     }
 }

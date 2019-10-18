@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.OData;
+using Microsoft.Spatial;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace SAEON.Observations.SensorThings
 {
@@ -13,32 +16,38 @@ namespace SAEON.Observations.SensorThings
         public static readonly string OM_Measurement = "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement";
     }
 
-    public class GeometryPoint
+    #region HelperClasses
+
+    public class UnitOfMeasurement
     {
-        public string Type { get; set; } = "Point";
-        public double[] Coordinates { get; private set; }
-        public GeometryPoint(double latitude, double longitude, double? elevation)
-        {
-            if (elevation.HasValue)
-            {
-                Coordinates = new double[3] { longitude, latitude, elevation.Value };
-            }
-            else
-            {
-                Coordinates = new double[2] { longitude, latitude };
-            }
-        }
+        public string Name { get; set; }
+        public string Symbol { get; set; }
+        public string Definition { get; set; }
     }
 
-    public class GeometryLocation
+    public class TimeInterval
     {
-        public string Type { get; set; } = "Feature";
-        public GeometryPoint Geometry { get; set; }
-        public GeometryLocation(double latitude, double longitude, double? elevation)
+        [Required]
+        public DateTime Start { get; set; }
+        [Required]
+        public DateTime End { get; set; }
+
+        public TimeInterval()
         {
-            Geometry = new GeometryPoint(latitude, longitude, elevation);
+        }
+
+        public TimeInterval(DateTime start, DateTime end)
+        {
+            Start = start;
+            End = end;
+        }
+
+        public override string ToString()
+        {
+            return $"{Start.ToString("o")}/{End.ToString("o")}";
         }
     }
+    #endregion
 
     public abstract class SensorThingsEntity
     {
@@ -47,13 +56,15 @@ namespace SAEON.Observations.SensorThings
         [Key, Column("id")]
         public Guid Id { get; set; }
         [NotMapped]
-        public string SelfLink { get { return $"{SensorThingsConfig.BaseUrl}/{EntitySetName}({Id})"; } set {; } }
+        public string SelfLink { get { return $"{Config.BaseUrl}/{EntitySetName}({Id})"; } set {; } }
         [NotMapped]
         public List<string> NavigationLinks { get; } = new List<string>();
     }
 
     public abstract class NamedSensorThingsEntity : SensorThingsEntity
     {
+        [Required]
+        public string Code { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -64,7 +75,7 @@ namespace SAEON.Observations.SensorThings
     {
         public ODataNamedValueDictionary<string> Properties { get; } = new ODataNamedValueDictionary<string>();
         public Location Location { get; set; } = null;
-        //public List<HistoricalLocation> HistoricalLocations { get; } = new List<HistoricalLocation>();
+        public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
         //public List<Datastream> Datastreams { get; } = new List<Datastream>();
 
         public Thing() : base()
@@ -79,8 +90,9 @@ namespace SAEON.Observations.SensorThings
     public class Location : NamedSensorThingsEntity
     {
         public string EncodingType { get; private set; } = ValueCodes.GeoJson;
-        public GeometryLocation location { get; set; } = null;
-        //public List<HistoricalLocation> HistoricalLocations { get; } = new List<HistoricalLocation>();
+        public GeographyPoint location { get; set; } = null;
+        public List<Thing> Things { get; set; } = new List<Thing>();
+        public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
 
         public Location() : base()
         {
@@ -88,10 +100,47 @@ namespace SAEON.Observations.SensorThings
             NavigationLinks.Add("Things");
             NavigationLinks.Add("HistoricalLocations");
         }
+    }
 
-        // Navigation
-        [NotMapped]
-        public List<Thing> Things { get; set; }
+    public class HistoricalLocation : SensorThingsEntity
+    {
+        public DateTime Time { get; set; }
+        public List<Location> Locations { get; set; } = new List<Location>();
+        public Thing Thing { get; set; } = null;
+
+        public HistoricalLocation() : base()
+        {
+            EntitySetName = "HistoricalLocations";
+            NavigationLinks.Add("Locations");
+            NavigationLinks.Add("Thing");
+        }
+
+        public HistoricalLocation(DateTime? time) : this()
+        {
+            Time = time ?? DateTime.Now;
+        }
+    }
+
+    public class Datastream : NamedSensorThingsEntity
+    {
+        public UnitOfMeasurement UnitOfMeasurement { get; set; } = null;
+        public string ObservationType { get; set; } = ValueCodes.OM_Measurement;
+        public GeographyPolygon ObservedArea { get; set; } = null;
+        public TimeInterval PhenomenonTime { get; set; } = null;
+        public TimeInterval ResultTime { get; set; } = null;
+        public Thing Thing { get; set; } = null;
+        //public Sensor Sensor { get; set; } = null;
+        //public ObservedProperty ObservedProperty { get; set; } = null;
+        //public List<Observation> Observations { get; } = new List<Observation>();
+
+        public Datastream() : base()
+        {
+            EntitySetName = "Datastreams";
+            NavigationLinks.Add("Thing");
+            NavigationLinks.Add("Sensor");
+            NavigationLinks.Add("ObservedProperty");
+            NavigationLinks.Add("Observations");
+        }
     }
 
 }

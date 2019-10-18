@@ -38,14 +38,13 @@ namespace SAEON.Observations.SensorThings
         {
             ODataResource entry = base.CreateResource(selectExpandNode, resourceContext);
 
-
             if (entry != null && resourceContext.ResourceInstance is SensorThingsEntity entity)
             {
                 entry.InstanceAnnotations.Add(new ODataInstanceAnnotation("iot.id", new ODataPrimitiveValue(entity.Id)));
                 entry.InstanceAnnotations.Add(new ODataInstanceAnnotation("iot.selfLink", new ODataPrimitiveValue(entity.SelfLink)));
                 foreach (var link in entity.NavigationLinks)
                 {
-                    entry.InstanceAnnotations.Add(new ODataInstanceAnnotation($"iot.navigationLink-{link}", new ODataPrimitiveValue($"{SensorThingsConfig.BaseUrl}/{entity.EntitySetName}({entity.Id})/{link}")));
+                    entry.InstanceAnnotations.Add(new ODataInstanceAnnotation($"iot.navigationLink-{link}", new ODataPrimitiveValue($"{Config.BaseUrl}/{entity.EntitySetName}({entity.Id})/{link}")));
                 }
             }
 

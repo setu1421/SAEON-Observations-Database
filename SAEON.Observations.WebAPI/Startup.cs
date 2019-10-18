@@ -5,7 +5,7 @@ using Owin;
 using SAEON.AspNet.Common;
 using SAEON.Logs;
 using System;
-using System.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Web.Helpers;
 using System.Web.Http;
 
@@ -23,25 +23,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
-                    JwtSecurityTokenHandler.InboundClaimTypeMap.Clear();
-
-                    //var corsPolicy = new CorsPolicy
-                    //{
-                    //    AllowAnyMethod = true,
-                    //    AllowAnyHeader = true,
-                    //    SupportsCredentials = true
-                    //};
-                    //Logging.Verbose("CORS Origin: {cors}", Properties.Settings.Default.QuerySiteUrl);
-                    //corsPolicy.Origins.Add(Properties.Settings.Default.QuerySiteUrl);
-                    //var corsOptions = new CorsOptions
-                    //{
-                    //    PolicyProvider = new CorsPolicyProvider
-                    //    {
-                    //        PolicyResolver = context => Task.FromResult(corsPolicy)
-                    //    }
-                    //};
-                    //app.UseCors(corsOptions);
-                    //app.UseCors(CorsOptions.AllowAll);
+                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
@@ -56,18 +38,6 @@ namespace SAEON.Observations.WebAPI
                         RequiredScopes = new[] { "SAEON.Observations.WebAPI" },
                     });
 
-                    /*
-                    // add app local claims per request
-                    app.UseClaimsTransformation(incoming =>
-                    {
-                        // either add claims to incoming, or create new principal
-                        var appPrincipal = new ClaimsPrincipal(incoming);
-                        //incoming.Identities.First().AddClaim(new Claim("appSpecific", "some_value"));
-
-                        return Task.FromResult(appPrincipal);
-                    });
-                    */
-
                     // web api configuration
                     var config = new HttpConfiguration();
                     WebApiConfig.Register(config);
@@ -79,7 +49,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     Logging.Exception(ex, "Unable to configure application");
                     throw;
-                }
+                } 
             }
         }
     }
