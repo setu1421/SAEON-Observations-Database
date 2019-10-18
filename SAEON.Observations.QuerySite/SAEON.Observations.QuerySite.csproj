@@ -83,20 +83,20 @@
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.11.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.2\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.11.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.11.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.11.2\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.11.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.Web, Version=2.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.11.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    <Reference Include="Microsoft.AI.Web, Version=2.11.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.11.2\lib\net45\Microsoft.AI.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AI.WindowsServer, Version=2.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.11.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.2\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationInsights, Version=2.11.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.2.11.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
@@ -195,17 +195,17 @@
     <Reference Include="SAEON.Core, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Core.1.0.14\lib\net472\SAEON.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Logs, Version=1.0.46.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Logs.1.0.46\lib\net472\SAEON.Logs.dll</HintPath>
+    <Reference Include="SAEON.Logs, Version=1.0.48.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Logs.1.0.48\lib\net472\SAEON.Logs.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.Core, Version=1.0.113.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.Core.1.0.113\lib\net472\SAEON.Observations.Core.dll</HintPath>
+    <Reference Include="SAEON.Observations.Core, Version=1.0.117.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.Core.1.0.117\lib\net472\SAEON.Observations.Core.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.2.8.0\lib\net46\Serilog.dll</HintPath>
+      <HintPath>..\packages\Serilog.2.9.0\lib\net46\Serilog.dll</HintPath>
     </Reference>
-    <Reference Include="Serilog.Formatting.Compact, Version=1.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Formatting.Compact.1.0.0\lib\net45\Serilog.Formatting.Compact.dll</HintPath>
+    <Reference Include="Serilog.Formatting.Compact, Version=1.1.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Formatting.Compact.1.1.0\lib\net452\Serilog.Formatting.Compact.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Settings.AppSettings, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Settings.AppSettings.2.2.2\lib\net45\Serilog.Settings.AppSettings.dll</HintPath>
@@ -217,7 +217,7 @@
       <HintPath>..\packages\Serilog.Sinks.Console.3.1.1\lib\net45\Serilog.Sinks.Console.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Sinks.File, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.File.4.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
+      <HintPath>..\packages\Serilog.Sinks.File.4.1.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Sinks.PeriodicBatching, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.PeriodicBatching.2.2.0\lib\net45\Serilog.Sinks.PeriodicBatching.dll</HintPath>
@@ -228,38 +228,38 @@
     <Reference Include="Serilog.Sinks.Seq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.Seq.4.0.0\lib\net45\Serilog.Sinks.Seq.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Compression.Base, Version=17.2450.0.51, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.17.2.0.51\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Compression.Base, Version=17.3450.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.17.3.0.17\lib\net45\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.DocIO.Base, Version=17.2450.0.51, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.DocIO.AspNet.Mvc5.17.2.0.51\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.DocIO.Base, Version=17.3450.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.DocIO.AspNet.Mvc5.17.3.0.17\lib\net45\Syncfusion.DocIO.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ, Version=17.2450.0.51, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.17.2.0.51\lib\net45\Syncfusion.EJ.dll</HintPath>
+    <Reference Include="Syncfusion.EJ, Version=17.3450.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.17.3.0.17\lib\net45\Syncfusion.EJ.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ.Export, Version=17.2450.0.51, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.17.2.0.51\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.Export, Version=17.3450.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.17.3.0.17\lib\net45\Syncfusion.EJ.Export.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.EJ.MVC, Version=17.2500.0.51, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.17.2.0.51\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
+    <Reference Include="Syncfusion.EJ.MVC, Version=17.3500.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.17.3.0.17\lib\net45\Syncfusion.EJ.MVC.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Licensing, Version=17.2460.0.51, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Licensing.17.2.0.51\lib\net46\Syncfusion.Licensing.dll</HintPath>
+    <Reference Include="Syncfusion.Licensing, Version=17.3460.0.17, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Licensing.17.3.0.17\lib\net46\Syncfusion.Licensing.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Linq.Base, Version=17.2450.0.51, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Web.Base45.17.2.0.51\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Linq.Base, Version=17.3450.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Web.Base45.17.3.0.17\lib\net45\Syncfusion.Linq.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.OfficeChart.Base, Version=17.2450.0.51, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.17.2.0.51\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
+    <Reference Include="Syncfusion.OfficeChart.Base, Version=17.3450.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.AspNet.Mvc5.17.3.0.17\lib\net45\Syncfusion.OfficeChart.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Pdf.Base, Version=17.2450.0.51, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Pdf.AspNet.Mvc5.17.2.0.51\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Pdf.Base, Version=17.3450.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Pdf.AspNet.Mvc5.17.3.0.17\lib\net45\Syncfusion.Pdf.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Presentation.Base, Version=17.2450.0.51, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Presentation.AspNet.Mvc5.17.2.0.51\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Presentation.Base, Version=17.3450.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.Presentation.AspNet.Mvc5.17.3.0.17\lib\net45\Syncfusion.Presentation.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.XlsIO.Base, Version=17.2450.0.51, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.XlsIO.AspNet.Mvc5.17.2.0.51\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
+    <Reference Include="Syncfusion.XlsIO.Base, Version=17.3450.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syncfusion.XlsIO.AspNet.Mvc5.17.3.0.17\lib\net45\Syncfusion.XlsIO.Base.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -466,6 +466,7 @@
     <Content Include="Content\ej\mobile\windows-theme\ej.mobile.windows-core.min.css" />
     <Content Include="Content\ej\mobile\windows-theme\ej.mobile.windows.css" />
     <Content Include="Content\ej\mobile\windows-theme\ej.mobile.windows.min.css" />
+    <Content Include="Content\ej\web\bootstrap-theme\ej.reports.core.css" />
     <Content Include="Content\ej\web\bootstrap-theme\ej.theme.css" />
     <Content Include="Content\ej\web\bootstrap-theme\ej.theme.min.css" />
     <Content Include="Content\ej\web\bootstrap-theme\ej.web.all.min.css" />
@@ -571,22 +572,70 @@
     <Content Include="Content\ej\web\common-images\schedule\schedule_priority.png" />
     <Content Include="Content\ej\web\common-images\spellcheck\highlight.png" />
     <Content Include="Content\ej\web\common-images\spreadsheet\blank.png" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\bluedatabar.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\bwrcolorscale.svg" />
     <Content Include="Content\ej\web\common-images\spreadsheet\chart-sprites.png" />
     <Content Include="Content\ej\web\common-images\spreadsheet\charttab-sprites.png" />
     <Content Include="Content\ej\web\common-images\spreadsheet\charttype-sprites.png" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\cross.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\downarrow.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\downtriangle.svg" />
     <Content Include="Content\ej\web\common-images\spreadsheet\down_arrow_dark.cur" />
     <Content Include="Content\ej\web\common-images\spreadsheet\down_arrow_light.cur" />
     <Content Include="Content\ej\web\common-images\spreadsheet\draw_border_dark.cur" />
     <Content Include="Content\ej\web\common-images\spreadsheet\draw_border_grid_dark.cur" />
     <Content Include="Content\ej\web\common-images\spreadsheet\draw_border_grid_light.cur" />
     <Content Include="Content\ej\web\common-images\spreadsheet\draw_border_light.cur" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\drystar.svg" />
     <Content Include="Content\ej\web\common-images\spreadsheet\ejxlicons.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\exclam.svg" />
     <Content Include="Content\ej\web\common-images\spreadsheet\format_painter_dark.cur" />
     <Content Include="Content\ej\web\common-images\spreadsheet\format_painter_light.cur" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\fullstar.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\greenarrow.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\greencircle.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\greencircleindi.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\greendatabar.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\greenflag.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\gwcolorscale.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\gwrcolorscale.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\gycolorscale.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\gyrcolorscale.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\halfstar.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\lightbluedatabar.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\midarrow.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\midtriangle.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\orangedatabar.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\purpledatabar.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\redarrow.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\redcircle.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\redcircleindi.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\reddatabar.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\redflag.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\redsquare.svg" />
     <Content Include="Content\ej\web\common-images\spreadsheet\right_arrow_dark.cur" />
     <Content Include="Content\ej\web\common-images\spreadsheet\right_arrow_light.cur" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\rimgreencircle.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\rimredcircle.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\rimyellowcircle.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\rwbcolorscale.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\rwcolorscale.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\rwgcolorscale.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\rygcolorscale.svg" />
     <Content Include="Content\ej\web\common-images\spreadsheet\sprites.png" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\tick.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\uparrow.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\uptriangle.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\wgcolorscale.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\wrcolorscale.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\yellowarrow.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\yellowcircle.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\yellowcircleindi.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\yellowflag.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\yellowtri.svg" />
+    <Content Include="Content\ej\web\common-images\spreadsheet\ygcolorscale.svg" />
     <Content Include="Content\ej\web\common-images\treeview\drop-sibling-rtl.png" />
+    <Content Include="Content\ej\web\default-theme\ej.reports.core.css" />
     <Content Include="Content\ej\web\default-theme\ej.theme.css" />
     <Content Include="Content\ej\web\default-theme\ej.theme.min.css" />
     <Content Include="Content\ej\web\default-theme\ej.web.all.min.css" />
@@ -601,6 +650,7 @@
     <Content Include="Content\ej\web\ej.widgets.core.material.min.css" />
     <Content Include="Content\ej\web\ej.widgets.core.min.css" />
     <Content Include="Content\ej\web\ej.widgets.core.office-365.min.css" />
+    <Content Include="Content\ej\web\flat-azure-dark\ej.reports.core.css" />
     <Content Include="Content\ej\web\flat-azure-dark\ej.theme.css" />
     <Content Include="Content\ej\web\flat-azure-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-azure-dark\ej.web.all.min.css" />
@@ -611,6 +661,7 @@
     <Content Include="Content\ej\web\flat-azure-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-azure-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-azure-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\flat-lime-dark\ej.reports.core.css" />
     <Content Include="Content\ej\web\flat-lime-dark\ej.theme.css" />
     <Content Include="Content\ej\web\flat-lime-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-lime-dark\ej.web.all.min.css" />
@@ -621,6 +672,7 @@
     <Content Include="Content\ej\web\flat-lime-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-lime-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-lime-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\flat-lime\ej.reports.core.css" />
     <Content Include="Content\ej\web\flat-lime\ej.theme.css" />
     <Content Include="Content\ej\web\flat-lime\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-lime\ej.web.all.min.css" />
@@ -631,6 +683,7 @@
     <Content Include="Content\ej\web\flat-lime\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-lime\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-lime\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\flat-saffron-dark\ej.reports.core.css" />
     <Content Include="Content\ej\web\flat-saffron-dark\ej.theme.css" />
     <Content Include="Content\ej\web\flat-saffron-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-saffron-dark\ej.web.all.min.css" />
@@ -641,6 +694,7 @@
     <Content Include="Content\ej\web\flat-saffron-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-saffron-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-saffron-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\flat-saffron\ej.reports.core.css" />
     <Content Include="Content\ej\web\flat-saffron\ej.theme.css" />
     <Content Include="Content\ej\web\flat-saffron\ej.theme.min.css" />
     <Content Include="Content\ej\web\flat-saffron\ej.web.all.min.css" />
@@ -651,6 +705,7 @@
     <Content Include="Content\ej\web\flat-saffron\images\rotator-icon.png" />
     <Content Include="Content\ej\web\flat-saffron\images\slider-tick.png" />
     <Content Include="Content\ej\web\flat-saffron\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-azure-dark\ej.reports.core.css" />
     <Content Include="Content\ej\web\gradient-azure-dark\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-azure-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-azure-dark\ej.web.all.min.css" />
@@ -661,6 +716,7 @@
     <Content Include="Content\ej\web\gradient-azure-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-azure-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-azure-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-azure\ej.reports.core.css" />
     <Content Include="Content\ej\web\gradient-azure\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-azure\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-azure\ej.web.all.min.css" />
@@ -671,6 +727,7 @@
     <Content Include="Content\ej\web\gradient-azure\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-azure\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-azure\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-lime-dark\ej.reports.core.css" />
     <Content Include="Content\ej\web\gradient-lime-dark\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-lime-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-lime-dark\ej.web.all.min.css" />
@@ -681,6 +738,7 @@
     <Content Include="Content\ej\web\gradient-lime-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-lime-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-lime-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-lime\ej.reports.core.css" />
     <Content Include="Content\ej\web\gradient-lime\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-lime\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-lime\ej.web.all.min.css" />
@@ -691,6 +749,7 @@
     <Content Include="Content\ej\web\gradient-lime\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-lime\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-lime\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-saffron-dark\ej.reports.core.css" />
     <Content Include="Content\ej\web\gradient-saffron-dark\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-saffron-dark\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-saffron-dark\ej.web.all.min.css" />
@@ -701,6 +760,7 @@
     <Content Include="Content\ej\web\gradient-saffron-dark\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-saffron-dark\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-saffron-dark\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\gradient-saffron\ej.reports.core.css" />
     <Content Include="Content\ej\web\gradient-saffron\ej.theme.css" />
     <Content Include="Content\ej\web\gradient-saffron\ej.theme.min.css" />
     <Content Include="Content\ej\web\gradient-saffron\ej.web.all.min.css" />
@@ -711,6 +771,7 @@
     <Content Include="Content\ej\web\gradient-saffron\images\rotator-icon.png" />
     <Content Include="Content\ej\web\gradient-saffron\images\slider-tick.png" />
     <Content Include="Content\ej\web\gradient-saffron\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\high-contrast-01\ej.reports.core.css" />
     <Content Include="Content\ej\web\high-contrast-01\ej.theme.css" />
     <Content Include="Content\ej\web\high-contrast-01\ej.theme.min.css" />
     <Content Include="Content\ej\web\high-contrast-01\ej.web.all.min.css" />
@@ -721,6 +782,7 @@
     <Content Include="Content\ej\web\high-contrast-01\images\rotator-icon.png" />
     <Content Include="Content\ej\web\high-contrast-01\images\slider-tick.png" />
     <Content Include="Content\ej\web\high-contrast-01\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\high-contrast-02\ej.reports.core.css" />
     <Content Include="Content\ej\web\high-contrast-02\ej.theme.css" />
     <Content Include="Content\ej\web\high-contrast-02\ej.theme.min.css" />
     <Content Include="Content\ej\web\high-contrast-02\ej.web.all.min.css" />
@@ -731,6 +793,7 @@
     <Content Include="Content\ej\web\high-contrast-02\images\rotator-icon.png" />
     <Content Include="Content\ej\web\high-contrast-02\images\slider-tick.png" />
     <Content Include="Content\ej\web\high-contrast-02\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\material\ej.reports.core.css" />
     <Content Include="Content\ej\web\material\ej.theme.css" />
     <Content Include="Content\ej\web\material\ej.theme.min.css" />
     <Content Include="Content\ej\web\material\ej.web.all.min.css" />
@@ -742,6 +805,7 @@
     <Content Include="Content\ej\web\material\images\rotator-icon.png" />
     <Content Include="Content\ej\web\material\images\slider-tick.png" />
     <Content Include="Content\ej\web\material\images\waitingpopup.gif" />
+    <Content Include="Content\ej\web\office-365\ej.reports.core.css" />
     <Content Include="Content\ej\web\office-365\ej.theme.css" />
     <Content Include="Content\ej\web\office-365\ej.theme.min.css" />
     <Content Include="Content\ej\web\office-365\ej.web.all.min.css" />
@@ -766,6 +830,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Banner.jpg" />
+    <Content Include="Images\DSI logo.jpg" />
     <Content Include="Images\DST logo.png" />
     <Content Include="Images\Logo.png" />
     <Content Include="Images\SAEON 20th Logo.png" />
@@ -1123,21 +1188,21 @@
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.0\build\Microsoft.ApplicationInsights.DependencyCollector.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.0\build\Microsoft.ApplicationInsights.DependencyCollector.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.11.0\build\Microsoft.ApplicationInsights.PerfCounterCollector.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.11.0\build\Microsoft.ApplicationInsights.PerfCounterCollector.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.Web.2.11.0\build\Microsoft.ApplicationInsights.Web.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.Web.2.11.0\build\Microsoft.ApplicationInsights.Web.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.16\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.16\build\Microsoft.VisualStudio.Threading.Analyzers.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.2\build\Microsoft.ApplicationInsights.DependencyCollector.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.2\build\Microsoft.ApplicationInsights.DependencyCollector.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.11.2\build\Microsoft.ApplicationInsights.PerfCounterCollector.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.11.2\build\Microsoft.ApplicationInsights.PerfCounterCollector.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.2\build\Microsoft.ApplicationInsights.WindowsServer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.2\build\Microsoft.ApplicationInsights.WindowsServer.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.ApplicationInsights.Web.2.11.2\build\Microsoft.ApplicationInsights.Web.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ApplicationInsights.Web.2.11.2\build\Microsoft.ApplicationInsights.Web.targets'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" />
-  <Import Project="..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.0\build\Microsoft.ApplicationInsights.DependencyCollector.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.0\build\Microsoft.ApplicationInsights.DependencyCollector.targets')" />
-  <Import Project="..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.11.0\build\Microsoft.ApplicationInsights.PerfCounterCollector.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.11.0\build\Microsoft.ApplicationInsights.PerfCounterCollector.targets')" />
   <Import Project="..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.targets')" />
-  <Import Project="..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.0\build\Microsoft.ApplicationInsights.WindowsServer.targets')" />
-  <Import Project="..\packages\Microsoft.ApplicationInsights.Web.2.11.0\build\Microsoft.ApplicationInsights.Web.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.Web.2.11.0\build\Microsoft.ApplicationInsights.Web.targets')" />
   <Import Project="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.16\build\Microsoft.VisualStudio.Threading.Analyzers.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.16\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" />
+  <Import Project="..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.2\build\Microsoft.ApplicationInsights.DependencyCollector.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.11.2\build\Microsoft.ApplicationInsights.DependencyCollector.targets')" />
+  <Import Project="..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.11.2\build\Microsoft.ApplicationInsights.PerfCounterCollector.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.11.2\build\Microsoft.ApplicationInsights.PerfCounterCollector.targets')" />
+  <Import Project="..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.2\build\Microsoft.ApplicationInsights.WindowsServer.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.WindowsServer.2.11.2\build\Microsoft.ApplicationInsights.WindowsServer.targets')" />
+  <Import Project="..\packages\Microsoft.ApplicationInsights.Web.2.11.2\build\Microsoft.ApplicationInsights.Web.targets" Condition="Exists('..\packages\Microsoft.ApplicationInsights.Web.2.11.2\build\Microsoft.ApplicationInsights.Web.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

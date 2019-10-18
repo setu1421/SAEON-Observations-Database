@@ -6,7 +6,7 @@
     <Authors>Tim Parker-Nance</Authors>
     <Company>South African Environmental Observation Network (SAEON)</Company>
     <Product>SAEON Observations Database</Product>
-    <Description>SAEON Observations Azure</Description>
+    <Description>SAEON Observations - Azure</Description>
     <Copyright>© 2018-2019 South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.0.79</Version>

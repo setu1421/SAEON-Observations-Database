@@ -8,7 +8,6 @@ using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
 using SAEON.AspNet.Common;
 using SAEON.Logs;
-using SAEON.Observations.Core;
 using Syncfusion.Licensing;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -27,7 +26,7 @@ namespace SAEON.Observations.QuerySite
         public Startup()
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            SyncfusionLicenseProvider.RegisterLicense("MTE5NjMwQDMxMzcyZTMyMmUzMFdSR053T1d5L0hOS0poSitDUmpSaTlMRHFYdVErY3Q3TGJBWmFQV1N0RkE9;MTE5NjMxQDMxMzcyZTMyMmUzMGhxUDdjMFU3UWxoMEJyaVZURW1zV1ZQUFEvamdVemZDVmU1QlkrRVZlWFk9;MTE5NjMyQDMxMzcyZTMyMmUzMEZ4ZHVvNExFamVRWXFPMTRFL2lnR0pNSGozZ28rUlBGSk40QlZncDNVakE9;MTE5NjMzQDMxMzcyZTMyMmUzMGhxUDdjMFU3UWxoMEJyaVZURW1zV1ZQUFEvamdVemZDVmU1QlkrRVZlWFk9");
+            SyncfusionLicenseProvider.RegisterLicense("MTU3OTY4QDMxMzcyZTMzMmUzMFJaUmQzY2tvOWxYM3BTeFNjdHJoMjVUUDlwY1E4OFNpY01TZDRwblhMTDQ9;MTU3OTY5QDMxMzcyZTMzMmUzMFFHZDBla05RVnk0QytGWFQybXcxMmZoeU85SmRoaExIb2Y1V2hwb05CZG89");
         }
 
         public void Configuration(IAppBuilder app)
@@ -38,12 +37,11 @@ namespace SAEON.Observations.QuerySite
                 {
                     Logging.Verbose("IdentityServer: {name} RequireHttps: {RequireHTTPS}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.RequireHTTPS);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
-
                     //app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
                         AuthenticationType = "Cookies",
-                        CookieName="SAEON.Observations.QuerySite",
+                        CookieName = "SAEON.Observations.QuerySite",
                         ExpireTimeSpan = TimeSpan.FromDays(7),
                         SlidingExpiration = true
                     });
@@ -103,7 +101,7 @@ namespace SAEON.Observations.QuerySite
                                     Address = disco.TokenEndpoint,
                                     ClientId = "SAEON.Observations.QuerySite",
                                     ClientSecret = "It6fWPU5J708",
-                                    Code= n.Code,
+                                    Code = n.Code,
                                     RedirectUri = n.RedirectUri
                                 });
                                 if (tokenResponse.IsError)

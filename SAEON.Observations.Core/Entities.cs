@@ -1138,11 +1138,44 @@ namespace SAEON.Observations.Core.Entities
         public string StatusReasonDescription { get; set; }
     }
 
-    // SensorThings
+    #region SensorThingsAPI
+
+    [Table("vSensorThingsAPIDatastreams")]
+    public class SensorThingsDatastream : BaseIDEntity
+    {
+        [Required, MaxLength(50)]
+        public string Code { get; set; }
+        [Required, MaxLength(150)]
+        public string Name { get; set; }
+        [MaxLength(5000)]
+        public string Description { get; set; }
+        [MaxLength(150)]
+        public string PhenomenonName { get; set; }
+        [MaxLength(5000)]
+        public string PhenomenonDescription { get; set; }
+        [MaxLength(2500)]
+        public string PhenomenonUrl { get; set; }
+        [MaxLength(150)]
+        public string OfferingName { get; set; }
+        [MaxLength(5000)]
+        public string OfferingDescription { get; set; }
+        [MaxLength(100)]
+        public string UnitOfMeasureUnit { get; set; }
+        [MaxLength(20)]
+        public string UnitOfMeasureSymbol { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public double? LatitudeNorth { get; set; }
+        public double? LatitudeSouth { get; set; }
+        public double? LongitudeWest { get; set; }
+        public double? LongitudeEast { get; set; }
+    }
 
     [Table("vSensorThingsAPILocations")]
     public class SensorThingsLocation : BaseIDEntity
     {
+        [Required, MaxLength(50)]
+        public string Code { get; set; }
         [Required, MaxLength(150)]
         public string Name { get; set; }
         [MaxLength(5000)]
@@ -1152,9 +1185,37 @@ namespace SAEON.Observations.Core.Entities
         public double? Elevation { get; set; }
     }
 
+    [Table("vSensorThingsAPIObserverdProperty")]
+    public class SensorThingsObservedPropery : BaseIDEntity
+    {
+        [Required, MaxLength(50)]
+        public string Code { get; set; }
+        [Required, MaxLength(150)]
+        public string Name { get; set; }
+        [MaxLength(5000)]
+        public string Description { get; set; }
+        [MaxLength(250)]
+        public string Url { get; set; }
+    }
+
+    [Table("vSensorThingsAPISensors")]
+    public class SensorThingsSensor : BaseIDEntity
+    {
+        [Required, MaxLength(50)]
+        public string Code { get; set; }
+        [Required, MaxLength(150)]
+        public string Name { get; set; }
+        [MaxLength(5000)]
+        public string Description { get; set; }
+        [MaxLength(250)]
+        public string Url { get; set; }
+    }
+
     [Table("vSensorThingsAPIThings")]
     public class SensorThingsThing : BaseIDEntity
     {
+        [Required, MaxLength(50)]
+        public string Code { get; set; }
         [Required, MaxLength(150)]
         public string Name { get; set; }
         [MaxLength(5000)]
@@ -1166,6 +1227,7 @@ namespace SAEON.Observations.Core.Entities
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }
+    #endregion
 
 #if !NET461
     //> Remove later once we have proper many to many in Entity Framework Core
@@ -1470,7 +1532,10 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<Observation> Observations { get; set; }
 
         // SensorThings
+        public DbSet<SensorThingsDatastream> SensorThingsDatastreams { get; set; }
         public DbSet<SensorThingsLocation> SensorThingsLocations { get; set; }
+        public DbSet<SensorThingsObservedPropery> SensorThingsObservedProperies { get; set; }
+        public DbSet<SensorThingsSensor> SensorThingsSensors { get; set; }
         public DbSet<SensorThingsThing> SensorThingsThings { get; set; }
 
         //public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
