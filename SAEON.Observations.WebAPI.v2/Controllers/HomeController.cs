@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SAEON.Observations.QuerySite.v2.Models;
+using SAEON.Observations.WebAPI.v2.Models;
+using System.Diagnostics;
 
-namespace SAEON.Observations.QuerySite.v2.Controllers
+namespace SAEON.Observations.WebAPI.v2.Controllers
 {
     public class HomeController : Controller
     {
@@ -16,6 +12,30 @@ namespace SAEON.Observations.QuerySite.v2.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+        }
+
+        [Route("About")]
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        [Route("Contact")]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
+        [Route("GraphQL")]
+        public IActionResult GraphQL()
+        {
+            return View();
+        }
+
+        [Route("HowToCite")]
+        public ActionResult HowToCite()
+        {
+            return View();
         }
 
         public IActionResult Index()
