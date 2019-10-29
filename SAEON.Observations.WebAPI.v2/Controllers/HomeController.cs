@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SAEON.Observations.WebAPI.v2.Models;
 using System.Diagnostics;
 
-namespace SAEON.Observations.WebAPI.v2.Controllers
+namespace SAEON.Observations.WebAPI.Controllers
 {
     public class HomeController : Controller
     {
@@ -43,15 +42,16 @@ namespace SAEON.Observations.WebAPI.v2.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        //public IActionResult Privacy()
+        //{
+        //    return View();
+        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

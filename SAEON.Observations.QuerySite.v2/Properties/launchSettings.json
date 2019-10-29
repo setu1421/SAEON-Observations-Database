@@ -3,7 +3,7 @@
     "windowsAuthentication": false, 
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:54330"
+      "applicationUrl": "http://localhost:54340"
     }
   },
   "profiles": {
@@ -14,10 +14,10 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SAEON.Observations.WebAPI.v2": {
+    "SAEON.Observations.QuerySite.v2": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:54330",
+      "applicationUrl": "http://localhost:54340",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

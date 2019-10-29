@@ -2,18 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <ApplicationIcon>SAEON.ico</ApplicationIcon>
+    <RootNamespace>SAEON.Observations.QuerySite</RootNamespace>
     <Authors>Tim Parker-Nance</Authors>
     <Company>South African Environmental Observation Network (SAEON)</Company>
     <Product>SAEON Observations Database</Product>
-    <Description>SAEON Observations - QuerySite</Description>
+    <Description>SAEON Observations - Query Site</Description>
     <Copyright>© 2017-2019 South African Environmental Observation Network (SAEON)</Copyright>
-    <ApplicationInsightsResourceId>/subscriptions/53cea979-29f9-43db-aa3d-8349a5bd3452/resourcegroups/SAEON.Observations/providers/microsoft.insights/components/SAEON.Observations.QuerySite</ApplicationInsightsResourceId>
+    <ApplicationIcon>SAEON.ico</ApplicationIcon>
+    <ApplicationInsightsResourceId>/subscriptions/53cea979-29f9-43db-aa3d-8349a5bd3452/resourcegroups/SAEON.Observations/providers/microsoft.insights/components/SAEON.Observations.QuerySite.Test</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.1" />
+    <PackageReference Include="SAEON.Logging" Version="1.0.4" />
   </ItemGroup>
 
   <!--<ItemGroup>
@@ -28,12 +30,11 @@
   </ItemGroup>-->
 
   <ItemGroup>
-    <WCFMetadata Include="Connected Services" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
-namespace SAEON.Observations.WebAPI.Models
+using System;
+
+namespace SAEON.Observations.QuerySite.v2.Models
 {
     public class ErrorViewModel
     {

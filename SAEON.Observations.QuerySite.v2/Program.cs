@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace SAEON.Observations.WebAPI
+namespace SAEON.Observations.QuerySite
 {
     public class Program
     {

@@ -1,19 +1,12 @@
-using IdentityModel;
-using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using SAEON.Logs;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
 
-namespace SAEON.Observations.WebAPI.v2
+namespace SAEON.Observations.WebAPI
 {
     public class Startup
     {
@@ -28,8 +21,6 @@ namespace SAEON.Observations.WebAPI.v2
             {
                 try
                 {
-                    Configuration = configuration;
-                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
                     Logging.Verbose("IdentityServer: {name}", Configuration["IdentityServerUrl"]);
                 }
                 catch (Exception ex)
@@ -47,53 +38,16 @@ namespace SAEON.Observations.WebAPI.v2
             {
                 try
                 {
+                    services.AddCors();
                     services.AddControllersWithViews();
                     services.AddApplicationInsightsTelemetry();
-                    services.AddHttpClient();
-
-                    services.AddSingleton<IDiscoveryCache>(r =>
-                    {
-                        var factory = r.GetRequiredService<IHttpClientFactory>();
-                        return new DiscoveryCache(Configuration["IdentityServerUrl"], () => factory.CreateClient());
-                    });
-                    services.AddAuthentication(options =>
-                    {
-                        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                        options.DefaultChallengeScheme = "oidc";
-                    })
-                        .AddCookie(options =>
-                        {
-                            options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                            options.Cookie.Name = "SAEON.Observations.WebAPI";
-                        })
-                        .AddOpenIdConnect("oidc", options =>
-                        {
-                            options.Authority = Configuration["IdentityServerUrl"];
-                            options.RequireHttpsMetadata = false;
-
-                            options.ClientSecret = "secret";
-                            options.ClientId = "SAEON.Observations.WebAPI";
-
-                            options.ResponseType = "code id_token";
-
-                            options.Scope.Clear();
-                            options.Scope.Add("openid");
-                            options.Scope.Add("profile");
-                            options.Scope.Add("email");
-                            options.Scope.Add("SAEON.Observations.WebAPI");
-                            options.Scope.Add("offline_access");
-
-                            options.ClaimActions.MapAllExcept("iss", "nbf", "exp", "aud", "nonce", "iat", "c_hash");
-
-                            options.GetClaimsFromUserInfoEndpoint = true;
-                            options.SaveTokens = true;
-
-                            options.TokenValidationParameters = new TokenValidationParameters
-                            {
-                                NameClaimType = JwtClaimTypes.Name,
-                                RoleClaimType = JwtClaimTypes.Role,
-                            };
-                        });
+                    services.AddAuthentication("Bearer")
+                         .AddJwtBearer("Bearer", options =>
+                         {
+                             options.Authority = Configuration["IdentityServerUrl"];
+                             options.RequireHttpsMetadata = false;
+                             options.Audience = "SAEON.Observations.WebAPI";
+                         });
                 }
                 catch (Exception ex)
                 {
@@ -124,7 +78,9 @@ namespace SAEON.Observations.WebAPI.v2
                     app.UseStaticFiles();
 
                     app.UseRouting();
+                    app.UseCors();
 
+                    app.UseAuthentication();
                     app.UseAuthorization();
 
                     app.UseEndpoints(endpoints =>
