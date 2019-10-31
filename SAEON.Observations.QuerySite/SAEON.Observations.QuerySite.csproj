@@ -195,8 +195,8 @@
     <Reference Include="SAEON.Core, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Core.1.0.14\lib\net472\SAEON.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Logs, Version=1.0.48.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Logs.1.0.48\lib\net472\SAEON.Logs.dll</HintPath>
+    <Reference Include="SAEON.Logs, Version=1.0.49.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Logs.1.0.49\lib\net472\SAEON.Logs.dll</HintPath>
     </Reference>
     <Reference Include="SAEON.Observations.Core, Version=1.0.117.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Observations.Core.1.0.117\lib\net472\SAEON.Observations.Core.dll</HintPath>
