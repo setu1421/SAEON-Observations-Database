@@ -1,10 +1,9 @@
 ﻿using SAEON.Logs;
-using SAEON.Observations.Core.Entities;
 using System;
-using System.Data.Entity;
 
 namespace SAEON.Observations.Core
 {
+    [Obsolete("BootStrapper is obsolete", true)]
     public static class BootStrapper
     {
         public static void Initialize()
@@ -13,7 +12,7 @@ namespace SAEON.Observations.Core
             {
                 try
                 {
-                    Database.SetInitializer<ObservationsDbContext>(null);
+                    //Database.SetInitializer<ObservationsDbContext>(null);
                 }
                 catch (Exception ex)
                 {

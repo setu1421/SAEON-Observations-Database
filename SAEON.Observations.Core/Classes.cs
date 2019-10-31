@@ -75,41 +75,29 @@ namespace SAEON.Observations.Core
 
         public Type AsType()
         {
-            switch (DataType)
+            return DataType switch
             {
-                case MaxtixDataType.Boolean:
-                    return typeof(bool);
-                case MaxtixDataType.Date:
-                    return typeof(DateTime);
-                case MaxtixDataType.Double:
-                    return typeof(double);
-                case MaxtixDataType.Int:
-                    return typeof(int);
-                case MaxtixDataType.String:
-                    return typeof(string);
-                default:
-                    return typeof(object);
-            }
+                MaxtixDataType.Boolean => typeof(bool),
+                MaxtixDataType.Date => typeof(DateTime),
+                MaxtixDataType.Double => typeof(double),
+                MaxtixDataType.Int => typeof(int),
+                MaxtixDataType.String => typeof(string),
+                _ => typeof(object),
+            };
         }
 
         public string AsString(object value)
         {
             if (value == null) return string.Empty;
-            switch (DataType)
+            return DataType switch
             {
-                case MaxtixDataType.Boolean:
-                    return ((bool)value).ToString();
-                case MaxtixDataType.Date:
-                    return ((DateTime)value).ToString("o");
-                case MaxtixDataType.Double:
-                    return ((double)value).ToString();
-                case MaxtixDataType.Int:
-                    return ((int)value).ToString();
-                case MaxtixDataType.String:
-                    return ((string)value).DoubleQuoted();
-                default:
-                    return value.ToString();
-            }
+                MaxtixDataType.Boolean => ((bool)value).ToString(),
+                MaxtixDataType.Date => ((DateTime)value).ToString("o"),
+                MaxtixDataType.Double => ((double)value).ToString(),
+                MaxtixDataType.Int => ((int)value).ToString(),
+                MaxtixDataType.String => ((string)value).DoubleQuoted(),
+                _ => value.ToString(),
+            };
         }
     }
 

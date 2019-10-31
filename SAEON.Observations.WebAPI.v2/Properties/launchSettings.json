@@ -14,7 +14,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SAEON.Observations.WebAPI.v2": {
+    "SAEON.Observations.WebAPI": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "http://localhost:54330",

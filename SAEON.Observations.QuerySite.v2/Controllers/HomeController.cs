@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SAEON.Observations.QuerySite.v2.Models;
+using SAEON.AspNet.Common;
+using SAEON.Logs;
+using SAEON.Observations.QuerySite.Models;
+using System.Diagnostics;
 
-namespace SAEON.Observations.QuerySite.v2.Controllers
+namespace SAEON.Observations.QuerySite.Controllers
 {
     public class HomeController : Controller
     {
@@ -23,7 +22,20 @@ namespace SAEON.Observations.QuerySite.v2.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [Route("About")]
+        public ActionResult About()
+        {
+            return View();
+        }
+
+        [Route("Contact")]
+        public ActionResult Contact()
+        {
+            return View();
+        }
+
+        [Route("HowToCite")]
+        public ActionResult HowToCite()
         {
             return View();
         }
@@ -32,6 +44,16 @@ namespace SAEON.Observations.QuerySite.v2.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [Route("SetTenant/{Name}")]
+        public ActionResult SetTenant(string Name)
+        {
+            using (Logging.MethodCall(GetType(), new ParameterList { { "Name", Name } }))
+            {
+                HttpContext.Session.SetString(Constants.TenantSession, Name);
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }

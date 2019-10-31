@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SAEON.Observations.WebAPI.Models;
 using System.Diagnostics;
 
 namespace SAEON.Observations.WebAPI.Controllers

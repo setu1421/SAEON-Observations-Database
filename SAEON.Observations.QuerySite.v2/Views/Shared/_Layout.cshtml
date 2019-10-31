@@ -73,13 +73,13 @@
                                 @*@Html.ActionLink("Temporal Coverage", "Index", "TemporalCoverage", null, new { @class = "dropdown-item" })*@
                             </div>
                         </li>
-                        @Html.Partial("_AdminPartial")
+                        <partial name="_AdminPartial" />
                         <li class="nav-item">@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link" })</li>
                         <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        @Html.Partial("_DataSourcesPartial")
-                        @Html.Partial("_LoginPartial")
+                        <partial name="_DataSourcesPartial" />
+                        <partial name="_LoginPartial"/>
                     </ul>
                 </div>
             </nav>
@@ -125,7 +125,6 @@
             </div>
         </footer>
     </div>
-
     <environment names="Development">
         <!-- JQuery -->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -148,7 +147,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.6/js/mdb.min.js"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
-@*    @Scripts.Render("~/Scripts/ej/web/ej.web.all.min.js")*@
+    @*    @Scripts.Render("~/Scripts/ej/web/ej.web.all.min.js")*@
     @RenderSection("Scripts", required: false)
     @*@Html.EJ().ScriptManager()*@
 </body>

@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.2" />
   </ItemGroup>
@@ -33,6 +37,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
   </ItemGroup>
 
 

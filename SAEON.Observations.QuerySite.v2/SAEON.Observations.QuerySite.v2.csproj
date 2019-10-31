@@ -13,28 +13,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.1" />
-    <PackageReference Include="SAEON.Logging" Version="1.0.4" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.2" />
+    <PackageReference Include="SAEON.AspNet.Common" Version="1.0.12" />
+    <PackageReference Include="SAEON.Observations.Core" Version="1.0.128" />
   </ItemGroup>
 
-  <!--<ItemGroup>
-    <Content Update="wwwroot\css\SAEON.css">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Update="wwwroot\css\site.css">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>-->
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="bundleconfig.json" />
+  </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\lib\" />
+    <None Include="bundleconfig.json" />
   </ItemGroup>
 
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SAEON.Core;
 using SAEON.Logs;
 using System;
 
@@ -15,13 +16,12 @@ namespace SAEON.Observations.WebAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            Logging.CreateConfiguration("Logs/SAEON.Identity.Service.txt", configuration).Create();
-
             using (Logging.MethodCall(GetType()))
             {
                 try
                 {
-                    Logging.Verbose("IdentityServer: {name}", Configuration["IdentityServerUrl"]);
+                    Logging.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, Logging.LogLevel);
+                    Logging.Debug("IdentityServer: {name}", Configuration["IdentityServerUrl"]);
                 }
                 catch (Exception ex)
                 {
@@ -73,8 +73,8 @@ namespace SAEON.Observations.WebAPI
                         app.UseExceptionHandler("/Home/Error");
                         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                         app.UseHsts();
+                        app.UseHttpsRedirection();
                     }
-                    app.UseHttpsRedirection();
                     app.UseStaticFiles();
 
                     app.UseRouting();

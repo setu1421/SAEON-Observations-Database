@@ -1,7 +1,11 @@
-﻿@using System.Configuration
+﻿@using SAEON.AspNet.Common
+@using Microsoft.Extensions.Configuration;
+@using Microsoft.AspNetCore.Http
+@inject IConfiguration config
+@inject IHttpContextAccessor httpContextAccessor
 @{
     List<(string id, string name)> tenants = new List<(string id, string name)>();
-    var tenantList = ConfigurationManager.AppSettings[Constants.TenantTenants].Split(new char[] { ';' });
+    var tenantList = config[Constants.TenantTenants].Split(new char[] { ';' });
     foreach (var tenantItem in tenantList)
     {
         var split = tenantItem.Split(new char[] { ',' });
@@ -15,7 +19,7 @@
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownDataSource">
             @foreach (var tenant in tenants)
             {
-                @Html.ActionLink(tenant.name, "SetTenant", "Home", new { Name = tenant.id }, new { @class = (string)Session[Constants.TenantSession] == tenant.id ? "dropdown-item active" : "dropdown-item" })
+                @Html.ActionLink(tenant.name, "SetTenant", "Home", new { Name = tenant.id }, new { @class = httpContextAccessor.HttpContext.Session.GetString(Constants.TenantSession) == tenant.id ? "dropdown-item active" : "dropdown-item" })
             }
         </div>
     </li>

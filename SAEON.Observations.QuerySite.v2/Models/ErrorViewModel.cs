@@ -1,6 +1,6 @@
 using System;
 
-namespace SAEON.Observations.QuerySite.v2.Models
+namespace SAEON.Observations.QuerySite.Models
 {
     public class ErrorViewModel
     {
