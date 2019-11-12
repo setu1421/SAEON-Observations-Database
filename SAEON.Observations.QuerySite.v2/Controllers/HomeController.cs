@@ -1,20 +1,29 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using SAEON.AspNet.Common;
 using SAEON.Logs;
 using SAEON.Observations.QuerySite.Models;
 using System.Diagnostics;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IConfiguration _config;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IConfiguration config)
         {
             _logger = logger;
+            _config = config;
         }
 
         public IActionResult Index()
@@ -55,5 +64,26 @@ namespace SAEON.Observations.QuerySite.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+
+        [Authorize]
+        public IActionResult Secure()
+        {
+            ViewData["Message"] = "Secure page.";
+
+            return View();
+        }
+
+        public async Task<IActionResult> CallApi()
+        {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var content = await client.GetStringAsync(_config["IdentityServerUrl"]);
+
+            ViewBag.Json = JArray.Parse(content).ToString();
+            return View("json");
+        }
+
     }
 }

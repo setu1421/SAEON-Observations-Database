@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using SAEON.Logs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SAEON.Observations.Core.Entities
 {
@@ -44,7 +48,7 @@ namespace SAEON.Observations.Core.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [ScaffoldColumn(false), HiddenInput]
-        [JsonProperty(Order = -99)]
+        //[JsonProperty Order = -99)]
         public Guid Id { get; set; }
     }
 
@@ -53,11 +57,12 @@ namespace SAEON.Observations.Core.Entities
     /// </summary>
     public abstract class IDEntity : BaseIDEntity
     {
-        [Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false), HiddenInput]
+        [JsonIgnore, Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false), HiddenInput]
         public byte[] RowVersion { get; set; }
-        [Required]
+        [JsonIgnore, Required]
         public Guid UserId { get; set; }
 
+        [NotMapped, JsonIgnore]
         public virtual EntityListItem AsEntityListItem => new EntityListItem { Id = Id };
     }
 
@@ -66,7 +71,8 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Name of the Entity
         /// </summary>
-        [Required, StringLength(150), JsonProperty(Order = -97)]
+        //[Required, StringLength(150), JsonProperty(Order = -97)]
+        [Required, StringLength(150)]
         public string Name { get; set; }
         [NotMapped, JsonIgnore]
         public override EntityListItem AsEntityListItem
@@ -85,8 +91,10 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Code of the Entity
         /// </summary>
-        [Required, StringLength(50), JsonProperty(Order = -98)]
+        //[Required, StringLength(50), JsonProperty(Order = -98)]
+        [Required, StringLength(50)]
         public string Code { get; set; }
+        [NotMapped, JsonIgnore]
         public override EntityListItem AsEntityListItem
         {
             get
@@ -169,7 +177,7 @@ namespace SAEON.Observations.Core.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [ScaffoldColumn(false), HiddenInput]
-        [JsonProperty(Order = -99)]
+        //[JsonProperty(Order = -99)]
         public Guid Id { get; set; }
         [Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false), HiddenInput]
 
@@ -177,12 +185,13 @@ namespace SAEON.Observations.Core.Entities
         public byte[] RowVersion { get; set; }
         public Guid? UserId { get; set; }
 
-        public EntityListItem AsEntityListItem => new EntityListItem { Id = Id, Code = Code };
+        //public EntityListItem AsEntityListItem => new EntityListItem { Id = Id, Code = Code };
 
         /// <summary>
         /// Code of the Entity
         /// </summary>
-        [Required, StringLength(50), JsonProperty(Order = -98)]
+        //[Required, StringLength(50), JsonProperty(Order = -98)]
+        [Required, StringLength(50)]
         public string Code { get; set; }
         /// <summary>
         /// Description of the Instrument
@@ -275,28 +284,31 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// The Organisations linked to this Instrument
         /// </summary>
-        //[JsonIgnore]
-        //public List<Organisation> Organisations { get; set; }
-        //[JsonProperty("Organisations")]
-        //public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Organisation> Organisations => OrganisationInstruments?.Select(oi => oi.Organisation).ToList();
+        [NotMapped, JsonPropertyName("organisations")]
+        public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<OrganisationInstrument> OrganisationInstruments { get; set; }
 
         /// <summary>
         /// Stations linked to this Instrument
         /// </summary>
-        //[JsonIgnore]
-        //public List<Station> Stations { get; set; }
-        //[JsonProperty("Stations")]
-        //public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Station> Stations => StationInstruments?.Select(si => si.Station).ToList();
+        [NotMapped, JsonPropertyName("stations")]
+        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<StationInstrument> StationInstruments { get; set; }
 
         /// <summary>
         /// Sensors linked to this Instrument
         /// </summary>
-        //[JsonIgnore]
-        //public List<Sensor> Sensors { get; set; }
-        //[JsonProperty("Sensors")]
-        //public List<EntityListItem> SensorsList => Sensors?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Sensor> Sensors => InstrumentSensors?.Select(i => i.Sensor).ToList();
+        [NotMapped, JsonPropertyName("sensors")]
+        public List<EntityListItem> SensorsList => Sensors?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<InstrumentSensor> InstrumentSensors { get; set; }
     }
 
@@ -315,10 +327,11 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Phenomena of this Offering
         /// </summary>
-        //[JsonIgnore]
-        //public List<Phenomenon> Phenomena { get; set; }
-        //[JsonProperty("Phenomena")]
-        //public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Phenomenon> Phenomena => PhenomenonOfferings?.Select(po => po.Phenomenon).ToList();
+        [NotMapped, JsonPropertyName("phenomena")]
+        public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
     }
 
@@ -345,28 +358,31 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// The Instruments linked to this Organisation
         /// </summary>
-        //[JsonIgnore]
-        //public List<Instrument> Instruments { get; set; }
-        //[JsonProperty("Instruments")]
-        //public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Instrument> Instruments => OrganisationInstruments?.Select(oi => oi.Instrument).ToList();
+        [NotMapped, JsonPropertyName("instruments")]
+        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<OrganisationInstrument> OrganisationInstruments { get; set; }
 
         /// <summary>
         /// The Sites linked to this Organisation
         /// </summary>
-        //[JsonIgnore]
-        //public List<Site> Sites { get; set; }
-        //[JsonProperty("Sites")]
-        //public List<EntityListItem> SitesList => Sites?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Site> Sites => OrganisationSites?.Select(os => os.Site).ToList();
+        [NotMapped, JsonPropertyName("sites")]
+        public List<EntityListItem> SitesList => Sites?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<OrganisationSite> OrganisationSites { get; set; }
 
         /// <summary>
         /// The Stations linked to this Organisation
         /// </summary>
-        //[JsonIgnore]
-        //public List<Station> Stations { get; set; }
-        //[JsonProperty("Stations")]
-        //public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Station> Stations => OrganisationStations?.Select(os => os.Station).ToList();
+        [NotMapped, JsonPropertyName("stations")]
+        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<OrganisationStation> OrganisationStations { get; set; }
     }
 
@@ -403,28 +419,29 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Offerings of this Phenomenon
         /// </summary>
-        //[JsonIgnore]
-        //public List<Offering> Offerings { get; set; }
-        //[JsonProperty("Offerings"), NotMapped]
-        //public List<EntityListItem> OfferingsList => Offerings?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Offering> Offerings => PhenomenonOfferings?.Select(ph => ph.Offering).ToList();
+        [NotMapped, JsonPropertyName("offerings")]
+        public List<EntityListItem> OfferingsList => Offerings?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
 
         /// <summary>
         /// Units of this Phenomenon
         /// </summary>
-        //[JsonIgnore]
-        //public List<Unit> Units { get; set; }
-        //[JsonProperty("Units"), NotMapped]
-        //public List<EntityListItem> UnitsList => Units?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Unit> Units => PhenomenonUnits?.Select(pu => pu.Unit).ToList();
+        [NotMapped, JsonPropertyName("units")]
+        public List<EntityListItem> UnitsList => Units?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<PhenomenonUnit> PhenomenonUnits { get; set; }
 
         /// <summary>
         /// Sensors linked to this Phenomenon
         /// </summary>
-        //[JsonIgnore]
-        //public List<Sensor> Sensors { get; set; }
-        //[JsonProperty("Sensors"), NotMapped]
-        //public List<EntityListItem> SensorsList => Sensors?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonPropertyName("sensors")]
+        public List<EntityListItem> SensorsList => Sensors?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<Sensor> Sensors { get; set; }
     }
 
@@ -458,10 +475,9 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// The Projects linked to this Programme
         /// </summary>
-        //[JsonIgnore]
-        //public List<Project> Projects { get; set; }
-        //[JsonProperty("Projects"), NotMapped]
-        //public List<EntityListItem> ProjectList => Projects?.Select(i => i.AsEntityListItem).Where(i => i != null).ToList();
+        [NotMapped, JsonPropertyName("projects")]
+        public List<EntityListItem> ProjectList => Projects?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<Project> Projects { get; set; }
     }
 
@@ -500,18 +516,19 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// The Programme of the Project
         /// </summary>
-        //[JsonIgnore]
+        [JsonIgnore]
         public Programme Programme { get; set; }
-        //[JsonProperty("Programme"), NotMapped]
-        //public EntityListItem ProgrammeItem => Programme?.AsEntityListItem;
+        [NotMapped, JsonPropertyName("programme")]
+        public EntityListItem ProgrammeItem => Programme?.AsEntityListItem;
 
         /// <summary>
         /// The Stations linked to this Project
         /// </summary>
-        //[JsonIgnore]
-        //public List<Station> Stations { get; set; }
-        //[JsonProperty("Stations"), NotMapped]
-        //public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Station> Stations => ProjectStations?.Select(ps => ps.Station).ToList();
+        [NotMapped, JsonPropertyName("stations")]
+        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<ProjectStation> ProjectStations { get; set; }
     }
 
@@ -556,19 +573,20 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Phenomenon of the Sensor
         /// </summary>
-        //[JsonIgnore]
+        [JsonIgnore]
         public Phenomenon Phenomenon { get; set; }
-        //[JsonProperty("Phenomenon")]
-        //public EntityListItem PhenomenonName => Phenomenon?.AsEntityListItem;
+        [NotMapped, JsonPropertyName("phenomenon")]
+        public EntityListItem PhenomenonName => Phenomenon?.AsEntityListItem;
 
         // Navigation
         /// <summary>
         /// Instruments linked to this Sensor
         /// </summary>
-        //[JsonIgnore]
-        //public List<Instrument> Instruments { get; set; }
-        //[JsonProperty("Instruments")]
-        //public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Instrument> Instruments => InstrumentSensors?.Select(i => i.Instrument).ToList();
+        [NotMapped, JsonPropertyName("instruments")]
+        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped]
         public List<InstrumentSensor> InstrumentSensors { get; set; }
     }
 
@@ -604,19 +622,19 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// The Organisations linked to this Site
         /// </summary>
-        //[JsonIgnore]
-        //public List<Organisation> Organisations { get; set; }
-        //[JsonProperty("Organisations"), NotMapped]
-        //public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Organisation> Organisations => OrganisationSites?.Select(os => os.Organisation).ToList();
+        [NotMapped, JsonPropertyName("organisations")]
+        public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<OrganisationSite> OrganisationSites { get; set; }
 
         /// <summary>
         /// The Stations linked to this Site
         /// </summary>
-        //[JsonIgnore]
-        //public List<Station> Stations { get; set; }
-        //[JsonProperty("Stations"), NotMapped]
-        //public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonPropertyName("stations")]
+        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<Station> Stations { get; set; }
     }
 
@@ -667,37 +685,39 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Site of the Station
         /// </summary>
-        //[JsonIgnore]
+        [JsonIgnore]
         public Site Site { get; set; }
-        //[JsonProperty("Site"), NotMapped]
-        //public EntityListItem SiteName => Site?.AsEntityListItem;
+        [NotMapped, JsonPropertyName("site")]
+        public EntityListItem SiteName => Site?.AsEntityListItem;
 
         /// <summary>
         /// The Organisations linked to this Station
         /// </summary>
-        //[JsonIgnore]
-        //public List<Organisation> Organisations { get; set; }
-        //[JsonIgnore]
-        //[JsonProperty("Organisations"), NotMapped]
-        //public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Organisation> Organisations => OrganisationStations?.Select(os => os.Organisation).ToList();
+        [NotMapped, JsonPropertyName("organisations")]
+        public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<OrganisationStation> OrganisationStations { get; set; }
 
         /// <summary>
         /// The Projects linked to this Station
         /// </summary>
-        //[JsonIgnore]
-        //public List<Project> Projects { get; set; }
-        //[JsonProperty("Projects"), NotMapped]
-        //public List<EntityListItem> ProjectsList => Projects?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Project> Projects => ProjectStations?.Select(ps => ps.Project).ToList();
+        [NotMapped, JsonPropertyName("projects")]
+        public List<EntityListItem> ProjectsList => Projects?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<ProjectStation> ProjectStations { get; set; }
 
         /// <summary>
         /// Instruments linked to this Station
         /// </summary>
-        //[JsonIgnore]
-        //public List<Instrument> Instruments { get; set; }
-        //[JsonProperty("Instruments"), NotMapped]
-        //public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Instrument> Instruments => StationInstruments?.Select(si => si.Instrument).ToList();
+        [NotMapped, JsonPropertyName("instruments")]
+        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<StationInstrument> StationInstruments { get; set; }
     }
 
@@ -717,10 +737,11 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Phenomena of this Unit
         /// </summary>
-        //[JsonIgnore]
-        //public List<Phenomenon> Phenomena { get; set; }
-        //[JsonProperty("Phenomena")]
-        //public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
+        [NotMapped, JsonIgnore]
+        public List<Phenomenon> Phenomena => PhenomenonUnits?.Select(pu => pu.Phenomenon).ToList();
+        [NotMapped, JsonPropertyName("phenomena")]
+        public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
+        [JsonIgnore]
         public List<PhenomenonUnit> PhenomenonUnits { get; set; }
     }
 
@@ -1011,16 +1032,12 @@ namespace SAEON.Observations.Core.Entities
         //public PhenomenonUnit PhenomenonUnit { get; set; }
     }
 
-    [Table("vLocations")]
     public class Location
     {
-        [Key, Column(Order = 1)]
         public Guid OrganisationID { get; set; }
         public string OrganisationName { get; set; }
-        [Key, Column(Order = 2)]
         public Guid SiteID { get; set; }
         public string SiteName { get; set; }
-        [Key, Column(Order = 3)]
         public Guid StationID { get; set; }
         public string StationName { get; set; }
         public double? Latitude { get; set; }
@@ -1029,22 +1046,18 @@ namespace SAEON.Observations.Core.Entities
         public string Url { get; set; }
 
         // Navigation
-        //public Organisation Organisation { get; set; }
-        //public Site Site { get; set; }
-        //public Station Station { get; set; }
+        public Organisation Organisation { get; set; }
+        public Site Site { get; set; }
+        public Station Station { get; set; }
     }
 
-    [Table("vFeatures")]
     public class Feature
     {
-        [Key, Column(Order = 1)]
         public Guid PhenomenonID { get; set; }
         public string PhenomenonName { get; set; }
-        [Key, Column(Order = 2)]
         public Guid PhenomenonOfferingID { get; set; }
         public Guid OfferingID { get; set; }
         public string OfferingName { get; set; }
-        [Key, Column("PhenomenonUOMID", Order = 3)]
         public Guid PhenomenonUnitID { get; set; }
         [Column("UnitOfMeasureID")]
         public Guid UnitID { get; set; }
@@ -1212,6 +1225,7 @@ namespace SAEON.Observations.Core.Entities
 
     #region ManyToManyTables
     //> Remove once EFCore has many to many
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Table("Instrument_Sensor")]
     public class InstrumentSensor
     {
@@ -1222,6 +1236,7 @@ namespace SAEON.Observations.Core.Entities
         public Sensor Sensor { get; set; }
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Table("Organisation_Instrument")]
     public class OrganisationInstrument : IDEntity
     {
@@ -1232,6 +1247,7 @@ namespace SAEON.Observations.Core.Entities
         public Instrument Instrument { get; set; }
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Table("Organisation_Site")]
     public class OrganisationSite : IDEntity
     {
@@ -1242,6 +1258,7 @@ namespace SAEON.Observations.Core.Entities
         public Site Site { get; set; }
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Table("Organisation_Station")]
     public class OrganisationStation : IDEntity
     {
@@ -1252,6 +1269,7 @@ namespace SAEON.Observations.Core.Entities
         public Station Station { get; set; }
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Table("PhenomenonOffering")]
     public class PhenomenonOffering : IDEntity
     {
@@ -1265,6 +1283,7 @@ namespace SAEON.Observations.Core.Entities
         public Offering Offering { get; set; }
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Table("PhenomenonUOM")]
     public class PhenomenonUnit : IDEntity
     {
@@ -1278,6 +1297,7 @@ namespace SAEON.Observations.Core.Entities
         public Unit Unit { get; set; }
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Table("Project_Station")]
     public class ProjectStation : IDEntity
     {
@@ -1288,6 +1308,7 @@ namespace SAEON.Observations.Core.Entities
         public Station Station { get; set; }
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Table("Station_Instrument")]
     public class StationInstrument : IDEntity
     {
@@ -1499,8 +1520,15 @@ namespace SAEON.Observations.Core.Entities
 
     public class ObservationsDbContext : DbContext
     {
-        public ObservationsDbContext(DbContextOptions<ObservationsDbContext> options) : base(options)
+        private readonly IConfiguration _config;
+        private readonly ILogger<ObservationsDbContext> _logger;
+        private readonly IHttpContextAccessor _httpContectAccessor;
+
+        public ObservationsDbContext(DbContextOptions<ObservationsDbContext> options, IConfiguration config, ILogger<ObservationsDbContext> logger, IHttpContextAccessor httpContextAccessor) : base(options)
         {
+            _config = config;
+            _logger = logger;
+            _httpContectAccessor = httpContextAccessor;
             Database.SetCommandTimeout(30 * 60);
         }
 
@@ -1548,9 +1576,23 @@ namespace SAEON.Observations.Core.Entities
         //public DbSet<vApiTemporalCoverage> vApiTemporalCoverages { get; set; }
         //public DbSet<vSensorThingsDatastream> vSensorThingsDatastreams { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            using (_logger.MethodCall(GetType()))
+            {
+                var tenant = TenantAuthorizationHandler.GetTenantFromHeaders(_httpContectAccessor.HttpContext.Request, _config);
+                var connectionString = _config.GetConnectionString(tenant);
+                _logger.LogDebug("Tenant: {Tenant} ConnectionString: {ConnectionString}", tenant, connectionString);
+                optionsBuilder.UseSqlServer(connectionString);
+                base.OnConfiguring(optionsBuilder);
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Feature>().HasNoKey().ToView("vFeatures");
+            modelBuilder.Entity<Location>().HasNoKey().ToView("vLocations");
             //> Remove once EFCore has many to many
             modelBuilder.Entity<InstrumentSensor>().HasKey(e => new { e.InstrumentId, e.SensorId });
             modelBuilder.Entity<InstrumentSensor>().HasOne(i => i.Instrument).WithMany(i => i.InstrumentSensors).HasForeignKey(pt => pt.InstrumentId);

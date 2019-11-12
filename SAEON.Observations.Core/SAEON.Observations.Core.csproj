@@ -9,7 +9,11 @@
     <Description>SAEON Observations - Core</Description>
     <Copyright>© 2017-2019 South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.128</Version>
+    <Version>1.0.162</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -20,7 +24,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="SAEON.Core" Version="1.0.16" />
-    <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.9" />
+    <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.18" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using SAEON.Core;
 using SAEON.Logs;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace SAEON.Observations.QuerySite
 {
@@ -40,6 +41,7 @@ namespace SAEON.Observations.QuerySite
                 try
                 {
                     services.AddControllersWithViews();
+                    JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
                     services.AddApplicationInsightsTelemetry();
                     services.AddDistributedMemoryCache();
 
@@ -49,6 +51,29 @@ namespace SAEON.Observations.QuerySite
                         options.Cookie.HttpOnly = true;
                         options.Cookie.IsEssential = true;
                     });
+
+                    services.AddAuthentication(options =>
+                        {
+                            options.DefaultScheme = "Cookies";
+                            options.DefaultChallengeScheme = "oidc";
+                        })
+                        .AddCookie("Cookies")
+                        .AddOpenIdConnect("oidc", options =>
+                        {
+                            options.SignInScheme = "Cookies";
+                            options.Authority = Configuration["IdentityServerUrl"];
+                            options.RequireHttpsMetadata = false;
+                            options.ClientId = "SAEON.Observations.QuerySite";
+                            options.ClientSecret = "It6fWPU5J708";
+                            options.ResponseType = "code id_token";
+                            options.SaveTokens = true;
+                            options.GetClaimsFromUserInfoEndpoint = true;
+                            options.Scope.Add("SAEON.Observations.WebAPI");
+                            options.Scope.Add("offline_access");
+                            //options.ClaimActions.MapJsonKey("website", "website");
+                            //options.SignedOutCallbackPath = "/Home/Index";
+                        });
+
                 }
                 catch (Exception ex)
                 {
@@ -80,6 +105,7 @@ namespace SAEON.Observations.QuerySite
                     app.UseSession();
                     app.UseRouting();
 
+                    app.UseAuthentication();
                     app.UseAuthorization();
 
                     app.UseEndpoints(endpoints =>

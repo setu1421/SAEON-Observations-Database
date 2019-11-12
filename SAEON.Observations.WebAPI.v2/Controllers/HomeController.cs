@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Models;
 using System.Diagnostics;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -33,7 +37,7 @@ namespace SAEON.Observations.WebAPI.Controllers
         }
 
         [Route("HowToCite")]
-        public ActionResult HowToCite()
+        public IActionResult HowToCite()
         {
             return View();
         }
@@ -42,11 +46,6 @@ namespace SAEON.Observations.WebAPI.Controllers
         {
             return View();
         }
-
-        //public IActionResult Privacy()
-        //{
-        //    return View();
-        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
