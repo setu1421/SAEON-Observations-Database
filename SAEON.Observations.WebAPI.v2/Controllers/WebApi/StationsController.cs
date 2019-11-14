@@ -69,7 +69,7 @@ namespace SAEON.Observations.WebAPI.v2.Controllers.WebApi
         }
 
         /// <summary>
-        /// This Station's site
+        /// This Station's Site
         /// </summary>
         /// <param name="id">Id of the Station</param>
         /// <returns>Site</returns>
