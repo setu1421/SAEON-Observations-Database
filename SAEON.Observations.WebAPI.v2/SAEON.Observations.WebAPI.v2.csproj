@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
@@ -34,7 +35,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
-    <PackageReference Include="SAEON.Observations.Core" Version="1.0.162" />
+    <PackageReference Include="SAEON.Observations.Core" Version="1.0.168" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
   </ItemGroup>
 
@@ -43,7 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Internal\" />
     <Folder Include="Controllers\SensorThings\" />
     <Folder Include="Controllers\OData\" />
     <Folder Include="Logs\" />

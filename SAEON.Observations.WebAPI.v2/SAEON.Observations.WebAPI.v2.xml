@@ -4,6 +4,18 @@
         <name>SAEON.Observations.WebAPI.v2</name>
     </assembly>
     <members>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.Internal.BaseListController`2.GetList">
+            <summary>
+            query for items
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SAEON.Observations.WebAPI.Controllers.Internal.BaseListController`2.GetAll">
+            <summary>
+            Get all TEntity
+            </summary>
+            <returns>ListOf(TEntity)</returns>
+        </member>
         <member name="M:SAEON.Observations.WebAPI.Controllers.WebApi.InstrumentsController.GetAll">
             <summary>
             All Instruments

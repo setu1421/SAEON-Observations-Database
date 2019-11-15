@@ -16,6 +16,8 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Net.Mime;
+using Microsoft.AspNet.OData.Extensions;
+using AutoMapper;
 
 namespace SAEON.Observations.WebAPI
 {
@@ -46,6 +48,7 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     services.AddCors();
+                    services.AddAutoMapper(typeof(Startup));
                     services.AddMvc().AddJsonOptions(options =>
                     {
                         options.JsonSerializerOptions.IgnoreNullValues = true;
@@ -83,6 +86,7 @@ namespace SAEON.Observations.WebAPI
 
                         });
                         c.IncludeXmlComments("SAEON.Observations.WebAPI.v2.xml");
+                        c.SchemaFilter<SwaggerIgnoreFilter>();
                     });
                     //services.AddOData();
                 }

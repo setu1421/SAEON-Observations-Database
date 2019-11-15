@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SAEON.Core;
 using SAEON.Logs;
+using Syncfusion.Licensing;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -17,12 +18,14 @@ namespace SAEON.Observations.QuerySite
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            SyncfusionLicenseProvider.RegisterLicense("MTcxMDU4QDMxMzcyZTMzMmUzME1WOGhZUHRaaVVwUzAwaGpyMGhVbXdQazJrd2lnMmh1bi9FOTFSTHUwOFk9;MTcxMDU5QDMxMzcyZTMzMmUzMEtJN1pmeW9kMUFqaE5NQVFmZkxQN3VkdCt1UmZ2UFFEWERySzdrRnhsMlk9");
+
             //Logging.CreateConfiguration(configuration).Create();
             using (Logging.MethodCall(GetType()))
             {
                 try
                 {
-                    Logging.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, Logging.LogLevel);
+                    Logging.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, Logging.Level);
                     Logging.Debug("IdentityServer: {name}", Configuration["IdentityServerUrl"]);
                 }
                 catch (Exception ex)
