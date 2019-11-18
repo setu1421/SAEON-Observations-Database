@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿#if NETCOREAPP3_0
+using Microsoft.OpenApi.Models;
 using SAEON.Logs;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -39,4 +40,4 @@ namespace SAEON.Observations.Core
         }
     }
 }
-
+#endif

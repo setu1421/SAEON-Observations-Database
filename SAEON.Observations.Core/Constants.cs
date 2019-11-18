@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NETCOREAPP3_0
+using System;
 
 namespace SAEON.Observations.Core
 {
@@ -22,3 +23,4 @@ namespace SAEON.Observations.Core
         public const string TenantPolicy = "TenantHeaderPolicy";
     }
 }
+#endif

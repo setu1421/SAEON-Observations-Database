@@ -75,6 +75,23 @@ namespace SAEON.Observations.Core
 
         public Type AsType()
         {
+#if NET472
+            switch (DataType)
+            {
+                case MaxtixDataType.Boolean:
+                    return typeof(bool);
+                case MaxtixDataType.Date:
+                    return typeof(DateTime);
+                case MaxtixDataType.Double:
+                    return typeof(double);
+                case MaxtixDataType.Int:
+                    return typeof(int);
+                case MaxtixDataType.String:
+                    return typeof(string);
+                default:
+                    return typeof(object);
+            }
+#else
             return DataType switch
             {
                 MaxtixDataType.Boolean => typeof(bool),
@@ -84,11 +101,29 @@ namespace SAEON.Observations.Core
                 MaxtixDataType.String => typeof(string),
                 _ => typeof(object),
             };
+#endif
         }
 
         public string AsString(object value)
         {
             if (value == null) return string.Empty;
+#if NET472
+            switch (DataType)
+            {
+                case MaxtixDataType.Boolean:
+                    return ((bool)value).ToString();
+                case MaxtixDataType.Date:
+                    return ((DateTime)value).ToString("o");
+                case MaxtixDataType.Double:
+                    return ((double)value).ToString();
+                case MaxtixDataType.Int:
+                    return ((int)value).ToString();
+                case MaxtixDataType.String:
+                    return ((string)value).DoubleQuoted();
+                default:
+                    return value.ToString();
+            }
+#else
             return DataType switch
             {
                 MaxtixDataType.Boolean => ((bool)value).ToString(),
@@ -98,6 +133,7 @@ namespace SAEON.Observations.Core
                 MaxtixDataType.String => ((string)value).DoubleQuoted(),
                 _ => value.ToString(),
             };
+#endif
         }
     }
 
@@ -320,9 +356,9 @@ namespace SAEON.Observations.Core
         public DownloadFormats DownloadFormat { get; set; } = DownloadFormats.CSV;
     }
 
-    #endregion
+#endregion
 
-    #region SpacialCoverage
+#region SpacialCoverage
     /*
     public class SpacialCoverageInput : DataQueryInput { }
 
@@ -384,9 +420,9 @@ namespace SAEON.Observations.Core
         public List<SpacialStation> Stations { get; private set; } = new List<SpacialStation>();
     }
     */
-    #endregion
+#endregion
 
-    #region TemporalCoverage
+#region TemporalCoverage
     /*
     public class TemporalCoverageInput : DataQueryInput { }
 
@@ -396,9 +432,9 @@ namespace SAEON.Observations.Core
         public List<ExpandoObject> Data { get; private set; } = new List<ExpandoObject>();
     }
     */
-    #endregion
+#endregion
 
-    #region Inventory
+#region Inventory
     /*
     public class InventoryInput
     {
@@ -498,5 +534,5 @@ namespace SAEON.Observations.Core
         public List<InventoryOrganisationItem> Organisations { get; private set; } = new List<InventoryOrganisationItem>();
     }
     */
-    #endregion
+#endregion
 }
