@@ -32,11 +32,6 @@ namespace SAEON.Observations.SensorThings
             Mapper = GetMapperConfiguration().CreateMapper();
         }
 
-        ~SensorThingsController()
-        {
-            DbContext = null;
-        }
-
         protected virtual void CreateRelatedMappings(MapperConfigurationExpression cfg) { }
 
         protected MapperConfiguration GetMapperConfiguration()

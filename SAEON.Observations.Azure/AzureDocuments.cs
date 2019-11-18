@@ -27,21 +27,21 @@ namespace SAEON.Observations.Azure
     public class ObservationSite : ObservationSubDocument { }
 
     public class ObservationStation : ObservationSubDocument { }
-    
+
     public class ObservationInstrument : ObservationSubDocument { }
-    
+
     public class ObservationSensor : ObservationSubDocument { }
-    
+
     public class ObservationPhenomenon : ObservationSubDocument { }
-    
+
     public class ObservationOffering : ObservationSubDocument { }
-    
+
     public class ObservationUnit : ObservationSubDocument { }
-    
+
     public class ObservationStatus : ObservationSubDocument { }
-    
+
     public class ObservationStatusReason : ObservationSubDocument { }
-    
+
     public class ObservationDocument : AzureDocument
     {
         public ObservationImportBatch ImportBatch { get; set; }
