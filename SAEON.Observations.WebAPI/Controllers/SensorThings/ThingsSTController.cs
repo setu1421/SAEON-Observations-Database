@@ -28,18 +28,18 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
                 if (dbLocation != null)
                 {
                     result.Location = Converters.ConvertLocation(Mapper, dbLocation);
-                    var historicalLocation = new HistoricalLocation(dbEntity.StartDate)
-                    {
-                        Id = result.Id,
-                        Thing = result
-                    };
-                    historicalLocation.Locations.Add(result.Location);
-                    result.HistoricalLocations.Add(historicalLocation);
                 }
                 Logging.Verbose("Result: {@Result}", result);
                 return result;
             }
         }
+
+        //protected override TRelatedSensorThingsEntity ConvertRelated<TRelatedSensorThingsEntity, TRelatedDbEntity>(TRelatedDbEntity dbEnitity)
+        //{
+        //    var result = base.ConvertRelated<TRelatedSensorThingsEntity, TRelatedDbEntity>(dbEnitity);
+        //    result.location = new GeometryLocation(dbEnitity.Latitude, dbEnitity.Longitude, dbEnitity.Elevation);
+        //    return result;
+        //}
 
         [EnableQuery(PageSize = Config.PageSize), ODataRoute]
         public override IQueryable<Thing> GetAll()
@@ -58,12 +58,55 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
         {
             return GetRelatedSingle(id, i => i.Location);
         }
-
-        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/HistoricalLocations")]
-        public IQueryable<HistoricalLocation> GetHistoricalLocations([FromUri] Guid id)
-        {
-            return GetRelatedMany(id, i => i.HistoricalLocations);
-        }
     }
 }
 
+/*
+using Newtonsoft.Json.Linq;
+using SAEON.SensorThings;
+using System;
+using System.Linq;
+using System.Web.Http;
+
+namespace SAEON.Observations.WebAPI.Controllers.SensorThings
+{
+    [RoutePrefix("SensorThings/Things")]
+    public class ThingsSTController : BaseController<Thing>
+    {
+        public ThingsSTController()
+        {
+            Entities.AddRange(SensorThingsFactory.Things.OrderBy(i => i.Name));
+        }
+
+        public override JToken GetAll()
+        {
+            return base.GetAll();
+        }
+
+        [Route("~/SensorThings/Things({id:guid})")]
+        public override JToken GetById([FromUri] Guid id)
+        {
+            return base.GetById(id);
+        }
+
+        [Route("~/SensorThings/Things({id:guid})/Location")]
+        public JToken GetLocation([FromUri] Guid id)
+        {
+            return GetSingle(id, i => i.Location);
+        }
+
+        [Route("~/SensorThings/Things({id:guid})/HistoricalLocations")]
+        public JToken GetHistoricalLocations([FromUri] Guid id)
+        {
+            return GetMany(id, i => i.HistoricalLocations);
+        }
+
+        [Route("~/SensorThings/Things({id:guid})/Datastreams")]
+        public JToken GetDatastreams([FromUri] Guid id)
+        {
+            return GetMany(id, i => i.Datastreams);
+        }
+
+    }
+}
+*/

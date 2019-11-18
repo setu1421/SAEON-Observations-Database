@@ -7,6 +7,7 @@ using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
@@ -21,6 +22,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
+using System.Xml.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
@@ -434,6 +436,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         [HttpGet]
         [Route("GetData")]
+        [Authorize]
         public DataWizardDataOutput DataGet([FromUri] string input)
         {
             using (Logging.MethodCall<DataWizardDataOutput>(GetType()))
@@ -456,6 +459,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         [HttpPost]
         [Route("GetData")]
+        [Authorize]
         public DataWizardDataOutput DataPost([FromBody] DataWizardDataInput input)
         {
             using (Logging.MethodCall<DataWizardDataOutput>(GetType()))
@@ -949,7 +953,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         [HttpGet]
         [Route("DownloadZip/{id:guid}")]
-        [Authorize]
         public HttpResponseMessage DownloadZip(Guid id)
         {
             using (Logging.MethodCall<UserDownload>(GetType(), new ParameterList { { "Id", id } }))

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -19,7 +20,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
     [ApiExplorerSettings(IgnoreApi = true)]
     //[ClientAuthorization("SAEON.Observations.QuerySite")] //Uncomment when going live
-    //[TenantAuthorization]
+    [TenantAuthorization]
     public abstract class BaseController : ApiController
     {
         private ObservationsDbContext dbContext = null;
@@ -35,10 +36,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         protected IMapper Mapper { get; private set; }
 
-        protected BaseController()
+        public BaseController()
         {
-            var config = new MapperConfiguration(cfg =>
-            {
+            var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<UserDownload, UserDownload>()
                     .ForMember(dest => dest.Id, opt => opt.Ignore())
                     .ForMember(dest => dest.AddedBy, opt => opt.Ignore())
@@ -52,10 +52,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             Mapper = config.CreateMapper();
         }
 
-        //~BaseController()
-        //{
-        //    DbContext = null;
-        //}
+        ~BaseController()
+        {
+            DbContext = null;
+        }
     }
 
     public abstract class BaseListController<TEntity> : BaseController where TEntity : BaseEntity

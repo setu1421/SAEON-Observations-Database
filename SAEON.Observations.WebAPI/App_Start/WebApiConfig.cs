@@ -168,10 +168,10 @@ namespace SAEON.Observations.WebAPI
                 var querySiteUrl = Properties.Settings.Default.QuerySiteUrl.TrimEnd("//").Replace("https:","http:");
                 var corsUrls = querySiteUrl + "," + querySiteUrl.Replace("http:", "https:");
                 Logging.Information("CORS: {corsURLS}", corsUrls);
-                var corsAttr = new EnableCorsAttribute(corsUrls, "*", "*")
-                {
-                    SupportsCredentials = true
-                };
+                var corsAttr = new EnableCorsAttribute(corsUrls, "*", "*");
+                //{
+                //    SupportsCredentials = true
+                //};
                 config.EnableCors(corsAttr);
 
                 // Web API routes
