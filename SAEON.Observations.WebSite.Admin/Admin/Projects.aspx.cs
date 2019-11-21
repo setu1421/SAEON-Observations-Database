@@ -98,7 +98,7 @@ public partial class Admin_Projects : System.Web.UI.Page
                 project.UserId = AuthHelper.GetLoggedInUserId;
 
                 project.Save();
-                Auditing.Log(GetType(), new ParameterList { { "ID", project.Id }, { "Code", project.Code }, { "Name", project.Name } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", project.Id }, { "Code", project.Code }, { "Name", project.Name } });
 
                 ProjectsGrid.DataBind();
 
@@ -184,7 +184,7 @@ public partial class Admin_Projects : System.Web.UI.Page
                     projectStation.EndDate = dfStationEndDate.SelectedDate;
                 projectStation.UserId = AuthHelper.GetLoggedInUserId;
                 projectStation.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "ProjectID", projectStation.ProjectID },
                 { "ProjectCode", projectStation.Project.Name },
                 { "StationID", projectStation.StationID},
@@ -215,12 +215,12 @@ public partial class Admin_Projects : System.Web.UI.Page
     [DirectMethod]
     public void DeleteStationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 ProjectStation.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 StationLinksGrid.DataBind();
             }
             catch (Exception ex)

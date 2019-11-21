@@ -204,7 +204,7 @@ public class BaseRepository
 
     public static void Export(SqlQuery query, string visCols, string exportType, string fileName, HttpResponse response, Action<DataTable> doLogging = null)
     {
-        using (Logging.MethodCall(typeof(BaseRepository), new ParameterList { { "Columns", visCols }, { "ExportType", exportType }, { "FileName", fileName } }))
+        using (Logging.MethodCall(typeof(BaseRepository), new MethodCallParameters { { "Columns", visCols }, { "ExportType", exportType }, { "FileName", fileName } }))
         {
             var result = -1;
             try
@@ -270,7 +270,7 @@ public class BaseRepository
 
     public static void Export(string tableName, string filters, string visCols, string sortCol, string sortDir, string exportType, string fileName, HttpResponse response)
     {
-        using (Logging.MethodCall(typeof(BaseRepository), new ParameterList { { "TableName", tableName }, { "Filters", filters }, { "Columns", visCols }, { "SortBy", sortCol },
+        using (Logging.MethodCall(typeof(BaseRepository), new MethodCallParameters { { "TableName", tableName }, { "Filters", filters }, { "Columns", visCols }, { "SortBy", sortCol },
             { "SortDir", sortDir }, { "ExportType", exportType }, { "FileName", fileName } }))
         {
             try

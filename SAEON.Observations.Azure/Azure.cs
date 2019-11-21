@@ -135,7 +135,7 @@ namespace SAEON.Observations.Azure
         public async Task UploadAsync(string folder, string fileName, string fileContents)
         {
             if (!Enabled || !StorageEnabled) return;
-            using (Logging.MethodCall(GetType(), new ParameterList { { "Folder", folder }, { "FileName", fileName } }))
+            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Folder", folder }, { "FileName", fileName } }))
             {
                 try
                 {
@@ -155,7 +155,7 @@ namespace SAEON.Observations.Azure
         public void Upload(string folder, string fileName, string fileContents)
         {
             if (!Enabled || !StorageEnabled) return;
-            using (Logging.MethodCall(GetType(), new ParameterList { { "Folder", folder }, { "FileName", fileName } }))
+            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Folder", folder }, { "FileName", fileName } }))
             {
                 try
                 {

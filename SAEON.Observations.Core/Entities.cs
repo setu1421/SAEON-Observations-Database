@@ -464,14 +464,14 @@ namespace SAEON.Observations.Core.Entities
 #endif
     }
 
-    ///// <summary>
-    ///// OrganisationRole enitity
-    ///// </summary>
-    //public class OrganisationRole : CodedEntity
-    //{
-    //    // Navigation
-    //    //public List<Organisation> Organisations { get; set; }
-    //}
+    /// <summary>
+    /// OrganisationRole entity
+    /// </summary>
+    public class OrganisationRole : CodedEntity
+    {
+        // Navigation
+        //public List<Organisation> Organisations { get; set; }
+    }
 
     /// <summary>
     /// Phenomenon entity
@@ -1268,9 +1268,9 @@ namespace SAEON.Observations.Core.Entities
         public string Url { get; set; }
 
         // Navigation
-        public Organisation Organisation { get; set; }
-        public Site Site { get; set; }
-        public Station Station { get; set; }
+        //public Organisation Organisation { get; set; }
+        //public Site Site { get; set; }
+        //public Station Station { get; set; }
     }
 
 #if NET472
@@ -1279,13 +1279,19 @@ namespace SAEON.Observations.Core.Entities
     public class Feature
     {
 #if NET472
-        [Key]
+        [Key, Column(Order = 1)]
 #endif
-        public Guid PhenomenonOfferingID { get; set; }
         public Guid PhenomenonID { get; set; }
         public string PhenomenonName { get; set; }
+#if NET472
+        [Key, Column(Order = 2)]
+#endif
+        public Guid PhenomenonOfferingID { get; set; }
         public Guid OfferingID { get; set; }
         public string OfferingName { get; set; }
+#if NET472
+        [Key, Column("PhenomenonUOMID", Order = 3)]
+#endif
         public Guid PhenomenonUnitID { get; set; }
         [Column("UnitOfMeasureID")]
         public Guid UnitID { get; set; }
@@ -1788,7 +1794,7 @@ namespace SAEON.Observations.Core.Entities
         //public DbSet<InventoryOrganisation> InventoryOrganisations { get; set; }
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
-        //public DbSet<OrganisationRole> OrganisationRoles { get; set; }
+        public DbSet<OrganisationRole> OrganisationRoles { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }
         public DbSet<PhenomenonOffering> PhenomenonOfferings { get; set; }
         public DbSet<PhenomenonUnit> PhenomenonUnits { get; set; }

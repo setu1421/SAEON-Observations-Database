@@ -56,7 +56,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         protected async Task<Stream> GetStreamAsync(string resource)
         {
-            using (Logging.MethodCall(GetType(), new ParameterList { { "Resource", resource } }))
+            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Resource", resource } }))
             {
                 try
                 {
@@ -85,7 +85,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         protected async Task<List<TEntity>> GetListAsync<TEntity>(string resource)// where TEntity : BaseEntity
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Resource", resource } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Resource", resource } }))
             {
                 try
                 {
@@ -114,7 +114,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         protected async Task<TOutput> GetEntityAsync<TOutput>(string resource)
         {
-            using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
+            using (Logging.MethodCall<TOutput>(GetType(), new MethodCallParameters { { "Resource", resource } }))
             {
                 try
                 {
@@ -151,7 +151,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     return $"?json={JsonConvert.SerializeObject(input)}";
             }
 
-            using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
+            using (Logging.MethodCall<TOutput>(GetType(), new MethodCallParameters { { "Resource", resource } }))
             {
                 try
                 {
@@ -180,7 +180,7 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         protected async Task<TOutput> PostEntityAsync<TInput, TOutput>(string resource, TInput input)
         {
-            using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
+            using (Logging.MethodCall<TOutput>(GetType(), new MethodCallParameters { { "Resource", resource } }))
             {
                 try
                 {
@@ -247,9 +247,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             return model;
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         protected virtual async Task<TModel> LoadModelAsync(TModel model)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             throw new NotImplementedException();
         }

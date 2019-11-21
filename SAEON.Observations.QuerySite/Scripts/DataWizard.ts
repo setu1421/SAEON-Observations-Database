@@ -54,7 +54,7 @@
     let locationsSelected: boolean = false;
     let locationsExpand: boolean = false;
     let featuresSelected: boolean = false;
-    let featuresExpand: boolean = true;
+    let featuresExpand: boolean = false;
 
     export function TabActive() {
         let selectedTab = SelectedTab();

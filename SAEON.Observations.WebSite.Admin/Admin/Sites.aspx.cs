@@ -95,7 +95,7 @@ public partial class Admin_Sites : System.Web.UI.Page
                 site.UserId = AuthHelper.GetLoggedInUserId;
 
                 site.Save();
-                Auditing.Log(GetType(), new ParameterList { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
 
                 SitesGrid.DataBind();
 
@@ -196,7 +196,7 @@ public partial class Admin_Sites : System.Web.UI.Page
                     siteOrganisation.EndDate = null;
                 siteOrganisation.UserId = AuthHelper.GetLoggedInUserId;
                 siteOrganisation.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "SiteID", siteOrganisation.SiteID },
                 { "SiteCode", siteOrganisation.Site.Code },
                 { "OrganisationID", siteOrganisation.OrganisationID},
@@ -229,12 +229,12 @@ public partial class Admin_Sites : System.Web.UI.Page
     [DirectMethod]
     public void DeleteOrganisationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 da.OrganisationSite.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 OrganisationLinksGrid.DataBind();
             }
             catch (Exception ex)
@@ -310,7 +310,7 @@ public partial class Admin_Sites : System.Web.UI.Page
                             station.SiteID = new Guid(siteID);
                             station.UserId = AuthHelper.GetLoggedInUserId;
                             station.Save();
-                            Auditing.Log(GetType(), new ParameterList {
+                            Auditing.Log(GetType(), new MethodCallParameters {
                             { "SiteID", station.SiteID},
                             { "SiteCode", station.Site.Code},
                             { "StationID", station.Id },

@@ -89,7 +89,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         public virtual async Task<ActionResult> Details(Guid? id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
@@ -149,7 +149,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Authorize]
         public virtual async Task<ActionResult> Create(TEntity item)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Name", item?.Name }, { "Item", item } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Name", item?.Name }, { "Item", item } }))
             {
                 try
                 {
@@ -189,7 +189,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         public virtual async Task<ActionResult> Edit(Guid? id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
@@ -226,7 +226,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         public virtual async Task<ActionResult> Edit(TEntity delta)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", delta?.Id }, { "Delta", delta } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", delta?.Id }, { "Delta", delta } }))
             {
                 try
                 {
@@ -268,7 +268,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         public virtual async Task<ActionResult> Delete(Guid? id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
@@ -305,7 +305,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         public virtual async Task<ActionResult> DeleteConfirmed(Guid id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {

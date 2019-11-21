@@ -8,9 +8,9 @@ using System.Runtime.CompilerServices;
 /// </summary>
 public static class Auditing
 {
-    public static void Log(Type type, ParameterList parameters = null, [CallerMemberName] string methodName = "")
+    public static void Log(Type type, MethodCallParameters parameters = null, [CallerMemberName] string methodName = "")
     {
-        using (Logging.MethodCall(typeof(Auditing), new ParameterList { { "methodName", methodName }, { "parameters", parameters } }))
+        using (Logging.MethodCall(typeof(Auditing), new MethodCallParameters { { "methodName", methodName }, { "parameters", parameters } }))
         {
             try
             {
@@ -18,7 +18,7 @@ public static class Auditing
                 {
                     AddedAt = null,
                     UpdatedAt = null,
-                    Description = Logging.MethodSignature(type, methodName, parameters),
+                    Description = MethodCalls.MethodSignature(type, methodName, parameters),
                     UserId = AuthHelper.GetLoggedInUserId
                 };
                 auditLog.Save();

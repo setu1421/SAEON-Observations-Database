@@ -89,7 +89,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
 
     private void CreateSummary(SharedDbConnectionScope connScope, Guid importBatchId)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ImportBatchID", importBatchId } }))
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -137,7 +137,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
 
         if (!(Azure.Enabled && Azure.CosmosDBEnabled)) return;
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ImportBatchID", importBatchId } }))
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -221,7 +221,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     private void DeleteDocuments(Guid importBatchId)
     {
         if (!(Azure.Enabled && Azure.CosmosDBEnabled)) return;
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ImportBatchID", importBatchId } }))
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -512,7 +512,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             CreateSummary(connScope, batch.Id);
                             // Documents
                             CreateDocuments(connScope, batch.Id);
-                            Auditing.Log(GetType(), new ParameterList { { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status } });
+                            Auditing.Log(GetType(), new MethodCallParameters { { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status } });
                             batch.DurationInSecs = (int)durationStopWatch.Elapsed.TotalSeconds;
                             batch.Save();
                             tranScope.Complete();
@@ -635,7 +635,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     /// <returns></returns>
     private List<SchemaValue> Import(Guid DataSourceId, ImportBatch batch)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatch", batch.Code } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ImportBatch", batch.Code } }))
         {
             DataSource ds = new DataSource(DataSourceId);
             List<SchemaValue> ImportValues = new List<SchemaValue>();
@@ -862,7 +862,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void DeleteBatch(Guid importBatchId)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", importBatchId } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ImportBatchID", importBatchId } }))
         {
             try
             {
@@ -932,7 +932,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void MoveBatch(Guid ImportBatchId)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ImportBatchID", ImportBatchId } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ImportBatchID", ImportBatchId } }))
         {
             try
             {
@@ -1011,7 +1011,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void DeleteEntry(Guid Id)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", Id } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", Id } }))
         {
             try
             {
@@ -1085,7 +1085,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
     [DirectMethod]
     public void MoveToObservation(Guid Id)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "Id", Id } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Id", Id } }))
         {
             try
             {

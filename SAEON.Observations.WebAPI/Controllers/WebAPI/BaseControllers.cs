@@ -122,7 +122,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
@@ -246,7 +246,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetByNameAsync([FromUri] string name)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Name", name } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Name", name } }))
             {
                 try
                 {
@@ -286,7 +286,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         //[ResponseType(typeof(TEntity))] required in derived classes
         public virtual async Task<IHttpActionResult> GetByCodeAsync([FromUri] string code)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Code", code } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Code", code } }))
             {
                 try
                 {

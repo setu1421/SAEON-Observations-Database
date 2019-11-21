@@ -149,7 +149,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
                 schema.UserId = AuthHelper.GetLoggedInUserId;
                 schema.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "ID", schema.Id }, { "Code", schema.Code }, { "Name", schema.Name } });
                 DataSchemasGrid.DataBind();
                 SchemaPickerStore.DataBind();
@@ -226,7 +226,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSchema(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -244,7 +244,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     }
                     ts.Complete();
                 }
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 DataSchemasGrid.DataBind();
                 SchemaColumnsGrid.DataBind();
                 SchemaPickerStore.DataBind();
@@ -426,7 +426,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 }
                 schemaColumn.UserId = AuthHelper.GetLoggedInUserId;
                 schemaColumn.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "DataSchemaID", schemaColumn.DataSchemaID },
                 { "DataSchemaCode", schemaColumn.DataSchema.Code },
                 { "Name", schemaColumn.Name },
@@ -465,12 +465,12 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSchemaColumn(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
                 SchemaColumn.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 SchemaColumnsGrid.DataBind();
             }
             catch (Exception ex)
@@ -609,7 +609,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void SchemaColumnUp(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -642,7 +642,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     }
                 }
 
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 SchemaColumnsGrid.DataBind();
             }
             catch (Exception ex)
@@ -656,7 +656,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void SchemaColumnDown(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -689,7 +689,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     }
                 }
 
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 SchemaColumnsGrid.DataBind();
             }
             catch (Exception ex)
@@ -739,7 +739,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteDataSource(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -748,7 +748,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     DataSchemaID = null
                 };
                 dataSource.Save();
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 DataSourcesGrid.DataBind();
             }
             catch (Exception ex)
@@ -798,7 +798,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                             dataSource.DataSchemaID = new Guid(DataSchemaID);
                             dataSource.UserId = AuthHelper.GetLoggedInUserId;
                             dataSource.Save();
-                            Auditing.Log(GetType(), new ParameterList {
+                            Auditing.Log(GetType(), new MethodCallParameters {
                                 { "DataSchemaID", dataSource.DataSchemaID},
                                 { "DataSchemaCode", dataSource.DataSchema.Code},
                                 { "DataSourceID", dataSource.Id },
@@ -870,7 +870,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
                             newSchemaCol.Save();
-                            Auditing.Log(GetType(), new ParameterList {
+                            Auditing.Log(GetType(), new MethodCallParameters {
                                 { "DataSchemaID", newSchemaCol.DataSchemaID },
                                 { "DataSchemaCode", newSchemaCol.DataSchema.Code },
                                 { "Name", newSchemaCol.Name },
@@ -969,7 +969,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                             UserId = AuthHelper.GetLoggedInUserId
                         };
                         newSchema.Save();
-                        Auditing.Log(GetType(), new ParameterList { { "ID", newSchema.Id }, { "Code", newSchema.Code }, { "Name", newSchema.Name } });
+                        Auditing.Log(GetType(), new MethodCallParameters { { "ID", newSchema.Id }, { "Code", newSchema.Code }, { "Name", newSchema.Name } });
                         var oldSchemaCols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, masterID).Load();
                         foreach (var oldSchemaCol in oldSchemaCols)
                         {
@@ -989,7 +989,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
                             newSchemaCol.Save();
-                            Auditing.Log(GetType(), new ParameterList {
+                            Auditing.Log(GetType(), new MethodCallParameters {
                                 { "DataSchemaID", newSchemaCol.DataSchemaID },
                                 { "DataSchemaCode", newSchemaCol.DataSchema.Code },
                                 { "Name", newSchemaCol.Name },

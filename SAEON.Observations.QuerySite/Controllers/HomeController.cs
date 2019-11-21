@@ -38,7 +38,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Route("SetTenant/{Name}")]
         public ActionResult SetTenant(string Name)
         {
-            using (Logging.MethodCall(GetType(), new ParameterList { { "Name", Name } }))
+            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Name", Name } }))
             {
                 Session[Constants.TenantSession] = Name;
                 return RedirectToAction("Index","Home");

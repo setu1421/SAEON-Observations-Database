@@ -47,7 +47,7 @@ var DataWizard;
     var locationsSelected = false;
     var locationsExpand = false;
     var featuresSelected = false;
-    var featuresExpand = true;
+    var featuresExpand = false;
     function TabActive() {
         var selectedTab = SelectedTab();
         if (selectedTab == 0) {

@@ -123,7 +123,7 @@ public partial class Admin_Stations : System.Web.UI.Page
                 station.UserId = AuthHelper.GetLoggedInUserId;
 
                 station.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
 
                 StationsGrid.DataBind();
@@ -231,7 +231,7 @@ public partial class Admin_Stations : System.Web.UI.Page
                     stationOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
                 stationOrganisation.UserId = AuthHelper.GetLoggedInUserId;
                 stationOrganisation.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "StationID", stationOrganisation.StationID },
                 { "StationCode", stationOrganisation.Station.Code },
                 { "OrganisationID", stationOrganisation.OrganisationID},
@@ -264,12 +264,12 @@ public partial class Admin_Stations : System.Web.UI.Page
     [DirectMethod]
     public void DeleteOrganisationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 OrganisationStation.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 OrganisationLinksGrid.DataBind();
             }
             catch (Exception ex)
@@ -349,7 +349,7 @@ public partial class Admin_Stations : System.Web.UI.Page
                     projectStation.EndDate = null;
                 projectStation.UserId = AuthHelper.GetLoggedInUserId;
                 projectStation.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "StationID", projectStation.StationID },
                 { "StationCode", projectStation.Station.Code },
                 { "ProjectID", projectStation.ProjectID},
@@ -380,12 +380,12 @@ public partial class Admin_Stations : System.Web.UI.Page
     [DirectMethod]
     public void DeleteProjectLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 ProjectStation.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 ProjectLinksGrid.DataBind();
             }
             catch (Exception ex)
@@ -477,7 +477,7 @@ public partial class Admin_Stations : System.Web.UI.Page
                     stationInstrument.EndDate = null;
                 stationInstrument.UserId = AuthHelper.GetLoggedInUserId;
                 stationInstrument.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "StationID", stationInstrument.StationID },
                 { "StationCode", stationInstrument.Station.Code },
                 { "InstrumentID", stationInstrument.InstrumentID},
@@ -511,12 +511,12 @@ public partial class Admin_Stations : System.Web.UI.Page
     [DirectMethod]
     public void DeleteInstrumentLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 StationInstrument.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 InstrumentLinksGrid.DataBind();
             }
             catch (Exception ex)

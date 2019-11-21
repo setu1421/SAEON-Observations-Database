@@ -789,7 +789,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         public async Task<ActionResult> ViewDownload(Guid? id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall(GetType(), new ParameterList { { "Id", id} }))
+            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Id", id} }))
             {
                 try
                 {
@@ -820,7 +820,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         public async Task<FileResult> DownloadZip(Guid? id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {

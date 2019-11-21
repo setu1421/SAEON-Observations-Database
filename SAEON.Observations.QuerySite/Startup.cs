@@ -8,6 +8,7 @@ using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
 using SAEON.AspNet.Common;
 using SAEON.Logs;
+using SAEON.Observations.Core;
 using Syncfusion.Licensing;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -37,11 +38,12 @@ namespace SAEON.Observations.QuerySite
                 {
                     Logging.Verbose("IdentityServer: {name} RequireHttps: {RequireHTTPS}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.RequireHTTPS);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
+
                     //app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
                         AuthenticationType = "Cookies",
-                        CookieName = "SAEON.Observations.QuerySite",
+                        CookieName="SAEON.Observations.QuerySite",
                         ExpireTimeSpan = TimeSpan.FromDays(7),
                         SlidingExpiration = true
                     });
@@ -101,7 +103,7 @@ namespace SAEON.Observations.QuerySite
                                     Address = disco.TokenEndpoint,
                                     ClientId = "SAEON.Observations.QuerySite",
                                     ClientSecret = "It6fWPU5J708",
-                                    Code = n.Code,
+                                    Code= n.Code,
                                     RedirectUri = n.RedirectUri
                                 });
                                 if (tokenResponse.IsError)

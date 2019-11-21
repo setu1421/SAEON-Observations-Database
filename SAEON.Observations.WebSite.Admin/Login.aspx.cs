@@ -21,7 +21,7 @@ public partial class _Login : System.Web.UI.Page
             try
             {
                 Logging.Information("Login: {UserName} {Valid}", txtUsername.Text, isValid);
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                     { "UserName", txtUsername.Text },
                     { "Valid", isValid }
                 });

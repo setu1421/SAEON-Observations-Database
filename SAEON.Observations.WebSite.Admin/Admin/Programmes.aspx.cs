@@ -91,7 +91,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
                 programme.UserId = AuthHelper.GetLoggedInUserId;
 
                 programme.Save();
-                Auditing.Log(GetType(), new ParameterList { { "ID", programme.Id }, { "Code", programme.Code }, { "Name", programme.Name } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", programme.Id }, { "Code", programme.Code }, { "Name", programme.Name } });
 
                 ProgrammesGrid.DataBind();
 
@@ -178,7 +178,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
                             project.ProgrammeID = new Guid(programmeID);
                             project.UserId = AuthHelper.GetLoggedInUserId;
                             project.Save();
-                            Auditing.Log(GetType(), new ParameterList {
+                            Auditing.Log(GetType(), new MethodCallParameters {
                                 { "ProgrammeID", project.ProgrammeID},
                                 { "ProgrammeCode", project.Programme.Code},
                                 { "ProjectID", project.Id },
@@ -246,7 +246,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
     [DirectMethod]
     public void DeleteProjectLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {

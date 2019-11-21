@@ -206,7 +206,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         public virtual async Task<IHttpActionResult> GetById([FromUri] Guid id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
@@ -298,7 +298,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "item", item } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "item", item } }))
             {
                 try
                 {
@@ -370,7 +370,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "id", id }, { "delta", delta } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "id", id }, { "delta", delta } }))
             {
                 try
                 {
@@ -437,7 +437,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> PutByName(string name, [FromBody]TEntity delta)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "name", name }, { "delta", delta } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "name", name }, { "delta", delta } }))
             {
                 try
                 {
@@ -505,7 +505,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         public virtual async Task<IHttpActionResult> DeleteById(Guid id)
 #pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
@@ -553,7 +553,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> DeleteByName(string name)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Name", name } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Name", name } }))
             {
                 try
                 {

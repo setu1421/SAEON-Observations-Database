@@ -158,7 +158,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
                     sens.DataSchemaID = null;
 
                 sens.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "ID", sens.Id }, { "Code", sens.Code }, { "Name", sens.Name } });
 
 
@@ -274,7 +274,7 @@ public partial class Admin_Sensors : System.Web.UI.Page
                     instrumentSensor.EndDate = DateTime.Parse(dfInstrumentEndDate.RawText);
                 instrumentSensor.UserId = AuthHelper.GetLoggedInUserId;
                 instrumentSensor.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "SensorID", instrumentSensor.SensorID },
                 { "SensorCode", instrumentSensor.Sensor.Code },
                 { "InstrumentID", instrumentSensor.InstrumentID},
@@ -308,12 +308,12 @@ public partial class Admin_Sensors : System.Web.UI.Page
     [DirectMethod]
     public void DeleteInstrumentLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 InstrumentSensor.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 InstrumentLinksGrid.DataBind();
             }
             catch (Exception ex)

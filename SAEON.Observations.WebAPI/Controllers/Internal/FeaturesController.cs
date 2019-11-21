@@ -47,7 +47,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     };
                     result.Add(offering);
                 }
-                if (unit?.Id != feature.PhenomenonUnitID)
+                if (unit?.Id != feature. PhenomenonUnitID)
                 {
                     unit = new FeatureNode
                     {

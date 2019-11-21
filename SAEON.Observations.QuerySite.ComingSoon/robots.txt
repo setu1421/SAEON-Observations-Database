@@ -1,5 +1,0 @@
-﻿# Allow all
-User-agent: *
-Allow: /
-
-Sitemap: https://observations.saeon.ac.za/sitemap.xml

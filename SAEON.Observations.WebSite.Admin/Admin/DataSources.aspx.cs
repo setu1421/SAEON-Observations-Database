@@ -234,7 +234,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 ds.UserId = AuthHelper.GetLoggedInUserId;
 
                 ds.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "ID", ds.Id }, { "Code", ds.Code }, { "Name", ds.Name } });
                 DataSourcesGrid.DataBind();
 
@@ -252,7 +252,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSensorSchemas(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -431,7 +431,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 dstransform.ParamX = tfParamX.IsEmpty ? null : (double?)tfParamX.Number;
                 dstransform.ParamY = tfParamY.IsEmpty ? null : (double?)tfParamY.Number;
                 dstransform.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "DataSourceID", dstransform.DataSourceID},
                 { "DataSourceCode", dstransform.DataSource.Code},
                 { "TransformationTypeID", dstransform.TransformationTypeID},
@@ -497,12 +497,12 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void DeleteTransformation(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
                 DataSourceTransformation.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 TransformationsGrid.GetStore().DataBind();
             }
             catch (Exception ex)
@@ -753,7 +753,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void LoadCombos(string transformationTypeID, string phenomenonID, string offeringID, string unitOfMeasureID, string newPhenomenonID, string newOfferingID, string newUnitOfMeasureID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "TransformationTypeID", transformationTypeID },
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "TransformationTypeID", transformationTypeID },
             { "PhenomenonID", phenomenonID }, { "OfferingID", offeringID }, {"UnitOfMeasureID", unitOfMeasureID },
             { "NewPhenomenonID", newPhenomenonID }, { "NewOfferingID", newOfferingID }, { "NewUnitOfMeasureID", newUnitOfMeasureID } }))
         {

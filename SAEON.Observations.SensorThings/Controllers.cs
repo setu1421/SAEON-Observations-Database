@@ -161,7 +161,7 @@ namespace SAEON.Observations.SensorThings
         //[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})")] Required in derived class
         public virtual SingleResult<TSensorThingsEntity> GetById([FromODataUri] Guid id)
         {
-            using (Logging.MethodCall<SingleResult<TDbEntity>>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<SingleResult<TDbEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
