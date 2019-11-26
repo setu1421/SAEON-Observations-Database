@@ -21,8 +21,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
-    <PackageReference Include="SAEON.Observations.Core" Version="1.0.178" />
-    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="17.3.0.28" />
+    <PackageReference Include="SAEON.Observations.Core" Version="1.0.179" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="17.3.0.29" />
   </ItemGroup>
 
   <ItemGroup>

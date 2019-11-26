@@ -21,6 +21,9 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Cors;
 using System.Web.Http.Routing;
+using System.Reflection;
+using System.Text;
+using System.IO;
 
 namespace SAEON.Observations.WebAPI
 {
@@ -79,14 +82,43 @@ namespace SAEON.Observations.WebAPI
 
         public static ODataRoute MapControllerBoundODataServiceRoute(this HttpConfiguration configuration, string routeName, string routePrefix, IEdmModel model)
         {
-            var controllers = GetTypesWith<ODataRouteNameAttribute>(true).Where(c =>
+            try
             {
-                var attr = (ODataRouteNameAttribute)c.GetCustomAttributes(typeof(ODataRouteNameAttribute), true).FirstOrDefault();
-                return attr?.Name.Equals(routeName, StringComparison.CurrentCultureIgnoreCase) ?? false;
-            });
-            var conventions = ODataRoutingConventions.CreateDefault();
-            conventions.Insert(0, new ControllerBoundAttributeRoutingConvention(routeName, configuration, controllers));
-            return configuration.MapODataServiceRoute(routeName, routePrefix, model, new DefaultODataPathHandler(), conventions);
+                var controllers = GetTypesWith<ODataRouteNameAttribute>(true).Where(c =>
+                {
+                    var attr = (ODataRouteNameAttribute)c.GetCustomAttributes(typeof(ODataRouteNameAttribute), true).FirstOrDefault();
+                    return attr?.Name.Equals(routeName, StringComparison.CurrentCultureIgnoreCase) ?? false;
+                });
+                var conventions = ODataRoutingConventions.CreateDefault();
+                conventions.Insert(0, new ControllerBoundAttributeRoutingConvention(routeName, configuration, controllers));
+                return configuration.MapODataServiceRoute(routeName, routePrefix, model, new DefaultODataPathHandler(), conventions);
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (Exception exSub in ex.LoaderExceptions)
+                {
+                    sb.AppendLine(exSub.Message);
+                    FileNotFoundException exFileNotFound = exSub as FileNotFoundException;
+                    if (exFileNotFound != null)
+                    {
+                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
+                        {
+                            sb.AppendLine("Fusion Log:");
+                            sb.AppendLine(exFileNotFound.FusionLog);
+                        }
+                    }
+                    sb.AppendLine();
+                }
+                string errorMessage = sb.ToString();
+                Logging.Exception(ex, errorMessage);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                throw;
+            }
         }
 
         public static ODataRoute MapControllerBoundODataServiceRoute2(this HttpConfiguration configuration, string routeName, string routePrefix, IEdmModel model)
@@ -164,6 +196,7 @@ namespace SAEON.Observations.WebAPI
                 config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
                 config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+                config.MessageHandlers.Add(new LoggingHandler());
 
                 var querySiteUrl = Properties.Settings.Default.QuerySiteUrl.TrimEnd("//").Replace("https:","http:");
                 var corsUrls = querySiteUrl + "," + querySiteUrl.Replace("http:", "https:");

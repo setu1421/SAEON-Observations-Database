@@ -3,6 +3,8 @@ using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Controllers.SensorThings;
 using System;
 using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -44,6 +46,7 @@ namespace SAEON.Observations.WebAPI
         {
             Logging.ShutDown();
         }
+
     }
 }
 

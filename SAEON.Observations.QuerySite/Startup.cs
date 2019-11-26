@@ -69,6 +69,7 @@ namespace SAEON.Observations.QuerySite
                             {
                                 Logging.Verbose("AuthorizationCodeReceived notification");
                                 var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType);
+                                Logging.Verbose("IsAuthenticated: {IsAuthenticated} ", identity.IsAuthenticated);
 
                                 var discoClient = new HttpClient();
                                 var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest

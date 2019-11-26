@@ -52,6 +52,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             using (Logging.MethodCall(GetType()))
             {
                 var client = await WebAPIClient.GetWebAPIClientAsync(Request, Session, (ClaimsPrincipal)User , Request.IsLocal);
+                Logging.Verbose("Call: {url}", Properties.Settings.Default.WebAPIUrl + "/claims");
                 var result = await client.GetStringAsync(Properties.Settings.Default.WebAPIUrl + "/claims");
                 ViewBag.Json = JArray.Parse(result);
                 return View("ShowApiResult");

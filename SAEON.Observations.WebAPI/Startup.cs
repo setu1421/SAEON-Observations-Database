@@ -1,4 +1,5 @@
 ﻿using IdentityServer3.AccessTokenValidation;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
@@ -6,6 +7,7 @@ using SAEON.AspNet.Common;
 using SAEON.Logs;
 using System;
 using System.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Web.Helpers;
 using System.Web.Http;
 
@@ -23,7 +25,10 @@ namespace SAEON.Observations.WebAPI
                 {
                     Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
-                    JwtSecurityTokenHandler.InboundClaimTypeMap.Clear();
+                    //JwtSecurityTokenHandler.InboundClaimTypeMap.Clear();
+                    //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+                    var identityServerUri = new Uri(Properties.Settings.Default.IdentityServerUrl);
+                    IdentityModelEventSource.ShowPII = identityServerUri.Scheme.ToLowerInvariant() == "https";
 
                     //var corsPolicy = new CorsPolicy
                     //{
@@ -54,25 +59,14 @@ namespace SAEON.Observations.WebAPI
                     {
                         Authority = Properties.Settings.Default.IdentityServerUrl,
                         RequiredScopes = new[] { "SAEON.Observations.WebAPI" },
+                        RequireHttps = identityServerUri.Scheme.ToLowerInvariant() == "https"
                     });
-
-                    /*
-                    // add app local claims per request
-                    app.UseClaimsTransformation(incoming =>
-                    {
-                        // either add claims to incoming, or create new principal
-                        var appPrincipal = new ClaimsPrincipal(incoming);
-                        //incoming.Identities.First().AddClaim(new Claim("appSpecific", "some_value"));
-
-                        return Task.FromResult(appPrincipal);
-                    });
-                    */
 
                     // web api configuration
                     var config = new HttpConfiguration();
+                    config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
                     WebApiConfig.Register(config);
                     app.UseWebApi(config);
-                    config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
                 }
                 catch (Exception ex)
