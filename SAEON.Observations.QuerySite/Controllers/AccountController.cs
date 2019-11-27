@@ -22,8 +22,8 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         public ActionResult LogOut()
         {
-            //Request.GetOwinContext().Authentication.SignOut("Cookies");
-            Request.GetOwinContext().Authentication.SignOut();
+            Request.GetOwinContext().Authentication.SignOut("Cookies");
+            //Request.GetOwinContext().Authentication.SignOut();
             return Redirect("/");
         }
 

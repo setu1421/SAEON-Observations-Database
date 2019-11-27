@@ -305,7 +305,8 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
                 {
                     ms = new MemoryStream();
                     content = new ObjectContent(type, value, formatter, mediaType);
-                    formatter.WriteToStreamAsync(type, value, ms, content, null).Wait();
+                    //formatter.WriteToStreamAsync(type, value, ms, content, null).Wait();
+                    formatter.WriteToStreamAsync(type, value, ms, content, null).RunSynchronously();
                     ms.Position = 0;
                     StreamReader reader = new StreamReader(ms);
                     string serializedSampleString = reader.ReadToEnd();

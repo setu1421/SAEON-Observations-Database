@@ -25,8 +25,7 @@ namespace SAEON.Observations.WebAPI
                 {
                     Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
-                    //JwtSecurityTokenHandler.InboundClaimTypeMap.Clear();
-                    //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
                     var identityServerUri = new Uri(Properties.Settings.Default.IdentityServerUrl);
                     IdentityModelEventSource.ShowPII = identityServerUri.Scheme.ToLowerInvariant() == "https";
 

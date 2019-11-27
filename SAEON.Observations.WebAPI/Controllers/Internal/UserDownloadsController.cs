@@ -42,6 +42,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.Add(i => i.DigitalObjectIdentifier);
             return result;
         }
+
         /// <summary>
         /// Check UserId is logged in UserId
         /// </summary>

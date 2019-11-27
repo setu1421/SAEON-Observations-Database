@@ -36,7 +36,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         protected IMapper Mapper { get; private set; }
 
-        public BaseController()
+        protected BaseController()
         {
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<UserDownload, UserDownload>()
@@ -52,10 +52,10 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             Mapper = config.CreateMapper();
         }
 
-        ~BaseController()
-        {
-            DbContext = null;
-        }
+        //~BaseController()
+        //{
+        //    DbContext = null;
+        //}
     }
 
     public abstract class BaseListController<TEntity> : BaseController where TEntity : BaseEntity
@@ -82,6 +82,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
+                    //return new List<TEntity>().AsQueryable();
                     return GetList().AsQueryable();
                 }
                 catch (Exception ex)
@@ -110,7 +111,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
     }
 
-    public abstract class BaseContoller<TEntity> : BaseController where TEntity : IDEntity
+    public abstract class BaseReadController<TEntity> : BaseController where TEntity : IDEntity
     {
         /// <summary>
         /// Overwrite to filter entities
@@ -159,7 +160,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 query = query.Where(extraWhere);
             }
             var orderBys = GetOrderBys();
-            //Logging.Information("OrderBys: {orderBys}", orderBys?.Count);
+            Logging.Information("OrderBys: {orderBys}", orderBys?.Count);
             var orderBy = orderBys.FirstOrDefault();
             if (orderBy != null)
             {
@@ -228,7 +229,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     }
 
     [Authorize]
-    public abstract class BaseWriteController<TEntity> : BaseContoller<TEntity> where TEntity : NamedEntity
+    public abstract class BaseWriteController<TEntity> : BaseReadController<TEntity> where TEntity : NamedEntity
     {
         /// <summary>
         /// Overwrite to do additional checks before Post or Put

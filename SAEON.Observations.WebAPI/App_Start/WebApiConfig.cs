@@ -102,7 +102,7 @@ namespace SAEON.Observations.WebAPI
                     FileNotFoundException exFileNotFound = exSub as FileNotFoundException;
                     if (exFileNotFound != null)
                     {
-                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
+                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog)) 
                         {
                             sb.AppendLine("Fusion Log:");
                             sb.AppendLine(exFileNotFound.FusionLog);

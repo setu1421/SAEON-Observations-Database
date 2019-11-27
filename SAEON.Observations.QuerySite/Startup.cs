@@ -24,12 +24,6 @@ namespace SAEON.Observations.QuerySite
 {
     public class Startup
     {
-        public Startup()
-        {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            SyncfusionLicenseProvider.RegisterLicense("MTU3OTY4QDMxMzcyZTMzMmUzMFJaUmQzY2tvOWxYM3BTeFNjdHJoMjVUUDlwY1E4OFNpY01TZDRwblhMTDQ9;MTU3OTY5QDMxMzcyZTMzMmUzMFFHZDBla05RVnk0QytGWFQybXcxMmZoeU85SmRoaExIb2Y1V2hwb05CZG89");
-        }
-
         public void Configuration(IAppBuilder app)
         {
             using (Logging.MethodCall(GetType()))
@@ -38,6 +32,8 @@ namespace SAEON.Observations.QuerySite
                 {
                     Logging.Verbose("IdentityServer: {name} RequireHttps: {RequireHTTPS}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.RequireHTTPS);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
+                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+                    SyncfusionLicenseProvider.RegisterLicense("MTU3OTY4QDMxMzcyZTMzMmUzMFJaUmQzY2tvOWxYM3BTeFNjdHJoMjVUUDlwY1E4OFNpY01TZDRwblhMTDQ9;MTU3OTY5QDMxMzcyZTMzMmUzMFFHZDBla05RVnk0QytGWFQybXcxMmZoeU85SmRoaExIb2Y1V2hwb05CZG89");
 
                     //app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -54,7 +50,7 @@ namespace SAEON.Observations.QuerySite
                         Scope = "openid profile email roles SAEON.Observations.WebAPI offline_access",
                         ResponseType = "id_token code token",
                         RedirectUri = Properties.Settings.Default.QuerySiteUrl + "/signin-oidc",
-                        PostLogoutRedirectUri = Properties.Settings.Default.QuerySiteUrl,
+                        PostLogoutRedirectUri = Properties.Settings.Default.QuerySiteUrl+ "/signout-callback-oidc",
                         TokenValidationParameters = new TokenValidationParameters
                         {
                             NameClaimType = JwtClaimTypes.Name,

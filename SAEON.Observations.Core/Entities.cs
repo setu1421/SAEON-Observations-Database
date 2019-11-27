@@ -223,6 +223,9 @@ namespace SAEON.Observations.Core.Entities
     /// <summary>
     /// DigitalObjectIdentifiers entity
     /// </summary>
+#if NET472
+    [Table("DigitalObjectIdentifiers")]
+#endif
     public class DigitalObjectIdentifier : BaseEntity
     {
         /// <summary>
@@ -958,6 +961,9 @@ namespace SAEON.Observations.Core.Entities
     /// <summary>
     /// UserDownload entity
     /// </summary>
+#if NET472
+    [Table("UserDownloads")]
+#endif
     public class UserDownload : NamedEntity
     {
         /// <summary>
@@ -1110,6 +1116,9 @@ namespace SAEON.Observations.Core.Entities
     /// <summary>
     /// UserQuery entity
     /// </summary>
+#if NET472
+    [Table("UserQueries")]
+#endif
     public class UserQuery : NamedEntity
     {
         /// <summary>
@@ -1366,7 +1375,7 @@ namespace SAEON.Observations.Core.Entities
         public string StatusReasonDescription { get; set; }
     }
 
-#region SensorThingsAPI
+    #region SensorThingsAPI
 
     [Table("vSensorThingsAPIDatastreams")]
     public class SensorThingsDatastream : BaseIDEntity
@@ -1455,9 +1464,9 @@ namespace SAEON.Observations.Core.Entities
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }
-#endregion
+    #endregion
 
-#region ManyToManyTables
+    #region ManyToManyTables
     //> Remove once EFCore has many to many
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Instrument_Sensor")]
@@ -1553,7 +1562,7 @@ namespace SAEON.Observations.Core.Entities
         public Instrument Instrument { get; set; }
     }
     //< Remove once EFCore has many to many
-#endregion
+    #endregion
 
     /*
     public class vApiDataBase
