@@ -45,9 +45,9 @@ var DataWizard;
     }
     // Features fix on 1st load
     var locationsSelected = false;
-    var locationsExpand = false;
+    var locationsExpand = true;
     var featuresSelected = false;
-    var featuresExpand = false;
+    var featuresExpand = true;
     function TabActive() {
         var selectedTab = SelectedTab();
         if (selectedTab == 0) {

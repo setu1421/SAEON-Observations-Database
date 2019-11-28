@@ -52,9 +52,9 @@
     // Features fix on 1st load
 
     let locationsSelected: boolean = false;
-    let locationsExpand: boolean = false;
+    let locationsExpand: boolean = true;
     let featuresSelected: boolean = false;
-    let featuresExpand: boolean = false;
+    let featuresExpand: boolean = true;
 
     export function TabActive() {
         let selectedTab = SelectedTab();
