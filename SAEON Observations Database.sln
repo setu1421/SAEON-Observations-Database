@@ -72,6 +72,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAEON.Observations.WebAPI.v
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAEON.Observations.QuerySite.v2", "SAEON.Observations.QuerySite.v2\SAEON.Observations.QuerySite.v2.csproj", "{FD941C5A-B0B0-44FD-8C26-E96D1DDADFAD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.Azure.ConsoleTests", "SAEON.Observations.Azure.ConsoleTests\SAEON.Observations.Azure.ConsoleTests.csproj", "{4336A90F-6590-4569-9873-1DCEF8404F7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (SQL Server Only)|Any CPU = Debug (SQL Server Only)|Any CPU
@@ -188,6 +190,14 @@ Global
 		{FD941C5A-B0B0-44FD-8C26-E96D1DDADFAD}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
 		{FD941C5A-B0B0-44FD-8C26-E96D1DDADFAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD941C5A-B0B0-44FD-8C26-E96D1DDADFAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4336A90F-6590-4569-9873-1DCEF8404F7E}.Debug (SQL Server Only)|Any CPU.ActiveCfg = Debug|Any CPU
+		{4336A90F-6590-4569-9873-1DCEF8404F7E}.Debug (SQL Server Only)|Any CPU.Build.0 = Debug|Any CPU
+		{4336A90F-6590-4569-9873-1DCEF8404F7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4336A90F-6590-4569-9873-1DCEF8404F7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4336A90F-6590-4569-9873-1DCEF8404F7E}.Release (SQL Server Only)|Any CPU.ActiveCfg = Release|Any CPU
+		{4336A90F-6590-4569-9873-1DCEF8404F7E}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
+		{4336A90F-6590-4569-9873-1DCEF8404F7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4336A90F-6590-4569-9873-1DCEF8404F7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

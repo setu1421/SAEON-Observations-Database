@@ -44,15 +44,27 @@ namespace SAEON.Observations.Azure
 
     public class ObservationDocument : AzureDocument
     {
+        [JsonProperty("importBatchId")]
+        public Guid ImportBatchId => ImportBatch?.Id ?? new Guid();
+        [JsonProperty("importBatch")]
         public ObservationImportBatch ImportBatch { get; set; }
+        [JsonProperty("site")]
         public ObservationSite Site { get; set; }
+        [JsonProperty("station")]
         public ObservationStation Station { get; set; }
+        [JsonProperty("instrument")]
         public ObservationInstrument Instrument { get; set; }
+        [JsonProperty("sensor")]
         public ObservationSensor Sensor { get; set; }
+        [JsonProperty("phenomenon")]
         public ObservationPhenomenon Phenomenon { get; set; }
+        [JsonProperty("offering")]
         public ObservationOffering Offering { get; set; }
+        [JsonProperty("unit")]
         public ObservationUnit Unit { get; set; }
+        [JsonProperty("status")]
         public ObservationStatus Status { get; set; }
+        [JsonProperty("statusReason")]
         public ObservationStatusReason StatusReason { get; set; }
         [JsonProperty("valueDate")]
         public EpochDate ValueDate { get; set; }

@@ -15,7 +15,8 @@ namespace SAEON.Observations.Azure
         //private const string ObservationsStorageTable = "Observations";
         private const string CosmosDBDatabase = "saeon-observations";
         private const string CosmosDBCollection = "Observations";
-        private const string CosmosDBPartitionKey = "/ImportBatch/id";
+        //private const string CosmosDBPartitionKey = "/importBatch/id";
+        private const string CosmosDBPartitionKey = "/importBatchId";
 
         public static bool Enabled { get; private set; } = false;
         public static bool StorageEnabled { get; private set; } = false;
@@ -359,12 +360,12 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    //if (CosmosDBBulkEnabled)
-                    //{
-                    //    var resp = await CosmosDB.BulkDeleteItemsAsync(importBatchId.ToString(), i => i.Id, i => i.ImportBatch.Id == importBatchId);
-                    //    return resp;
-                    //}
-                    //else
+                    if (CosmosDBBulkEnabled)
+                    {
+                        var resp = await CosmosDB.BulkDeleteItemsAsync(importBatchId.ToString(), i => i.Id, i => i.ImportBatch.Id == importBatchId);
+                        return resp;
+                    }
+                    else
                     {
                         var resp = await CosmosDB.DeleteItemsAsync(importBatchId.ToString(), i => i.Id, i => i.ImportBatch.Id == importBatchId);
                         return resp;
