@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>SAEON.Observations.WebAPI.ComingSoon</RootNamespace>
     <Authors>Tim Parker-Nance</Authors>
     <Company>South African Environmental Observation Network (SAEON)</Company>
     <Product>SAEON Observations Database</Product>
     <Description>SAEON Observations - WebAPI</Description>
-    <Copyright>© 2017-2019 South African Environmental Observation Network (SAEON)</Copyright>
+    <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
     <ApplicationInsightsResourceId>/subscriptions/53cea979-29f9-43db-aa3d-8349a5bd3452/resourcegroups/SAEON.Observations/providers/microsoft.insights/components/SAEON.Observations.WebAPI</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/53cea979-29f9-43db-aa3d-8349a5bd3452/resourcegroups/SAEON.Observations/providers/microsoft.insights/components/SAEON.Observations.WebAPI</ApplicationInsightsAnnotationResourceId>
@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.12.0" />
   </ItemGroup>
 
   <ItemGroup>

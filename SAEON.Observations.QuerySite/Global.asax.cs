@@ -22,6 +22,7 @@ namespace SAEON.Observations.QuerySite
                 try
                 {
                     Logging.Verbose("Starting application");
+                    Logging.Information("LogLevel: {LogLevel}", Logging.LogLevel);
                     BootStrapper.Initialize();
                     AreaRegistration.RegisterAllAreas();
                     FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

@@ -24,7 +24,7 @@ using System.Web.UI;
 
 //[assembly: AssemblyKeyFileAttribute("subsonic.snk")]
 [assembly: AssemblyProduct("SAEON SubSonic")]
-[assembly: AssemblyCopyright("© 2016-2019 South African Environmental Observation Network (SAEON)")]
+[assembly: AssemblyCopyright("Copyright © South African Environmental Observation Network (SAEON)")]
 [assembly: AssemblyVersionAttribute("2.2.1.0")]
 [assembly: AssemblyFileVersionAttribute("2.2.1.0")]
 [assembly: AssemblyCompany("South African Environmental Observation Network (SAEON)")]

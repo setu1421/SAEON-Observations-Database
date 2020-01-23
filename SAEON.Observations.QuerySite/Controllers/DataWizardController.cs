@@ -55,7 +55,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         IsAuthenticated = model.IsAuthenticated,
                         LoadEnabled = model.IsAuthenticated && model.UserQueries.Any(),
                         SaveEnabled = model.IsAuthenticated && model.LocationsSelected.Any() && model.FeaturesSelected.Any(),
-                        SearchEnabled = model.LocationsSelected.Any() && model.FeaturesSelected.Any(),
+                        SearchEnabled = model.LocationsSelected.Any() && model.FeaturesSelected.Any() && (model.Approximation.RowCount > 0),
                         DownloadEnabled = model.IsAuthenticated && model.LocationsSelected.Any() && model.FeaturesSelected.Any() && model.HaveSearched
                     };
                     Logging.Verbose("State: {@State}", result);
@@ -461,8 +461,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.ElevationMinimum = model.ElevationMinimum;
                     input.ElevationMaximum = model.ElevationMaximum;
                     model.Approximation = await PostEntityAsync<DataWizardDataInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
-                    Logging.Verbose("RowCount: {RowCount}", model.Approximation.RowCount);
-                    Logging.Verbose("Errors: {Errors}", model.Approximation.Errors);
+                    Logging.Verbose("RowCount: {RowCount} Errors: {Errors}", model.Approximation.RowCount, model.Approximation.Errors);
                     SessionModel = model;
                     return Json(SessionModel.Approximation, JsonRequestBehavior.AllowGet);
                 }

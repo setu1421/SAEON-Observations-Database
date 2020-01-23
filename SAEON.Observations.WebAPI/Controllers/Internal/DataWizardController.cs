@@ -29,7 +29,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     [RoutePrefix("Internal/DataWizard")]
     public class DataWizardController : BaseController
     {
-        private IQueryable<ImportBatchSummary> GetQuery(DataWizardDataInput input)
+        private void CleanInput(ref DataWizardDataInput input)
         {
             Logging.Verbose("Input: {@Input}", input);
             foreach (var orgId in input.Organisations)
@@ -43,17 +43,28 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 input.Units.AddRange(DbContext.PhenomenonUnits.Where(i => i.PhenomenonId == phenomenonId).Select(i => i.Id));
             }
             input.StartDate = input.StartDate.Date;
-            input.EndDate = input.EndDate.Date.AddDays(1).AddSeconds(-1);
+            input.EndDate = input.EndDate.Date.AddDays(1);
             Logging.Verbose("Processed Input: {@Input}", input);
+        }
+
+        private IQueryable<ImportBatchSummary> GetQuery(ref DataWizardDataInput input)
+        {
+            CleanInput(ref input);
+            var sites = input.Sites.Distinct();
+            var stations = input.Stations.Distinct();
+            var phenomena = input.Phenomena.Distinct();
+            var offerings = input.Offerings.Distinct();
+            var units = input.Units.Distinct();
             var startDate = input.StartDate;
             var endDate = input.EndDate;
             var elevationMinimum = input.ElevationMinimum;
             var elevationMaximum = input.ElevationMaximum;
             return DbContext.ImportBatchSummary.Where(i =>
-                (input.Sites.Contains(i.SiteId) || input.Stations.Contains(i.StationId)) &&
-                ((!input.Offerings.Any() || input.Offerings.Contains(i.PhenomenonOfferingId)) && (!input.Units.Any() || input.Units.Contains(i.PhenomenonUnitId))) &&
-                (i.StartDate >= startDate && i.EndDate <= endDate) &&
-                (i.ElevationMinimum >= elevationMinimum) && (i.ElevationMaximum <= elevationMaximum));
+                (sites.Contains(i.SiteId) || stations.Contains(i.StationId)) &&
+                ((!offerings.Any() || offerings.Contains(i.PhenomenonOfferingId)) && (!units.Any() || units.Contains(i.PhenomenonUnitId))) &&
+                ((i.StartDate >= startDate) && (i.EndDate < endDate)) &&
+                (!i.ElevationMinimum.HasValue || (i.ElevationMinimum >= elevationMinimum)) &&
+                (!i.ElevationMaximum.HasValue || (i.ElevationMaximum <= elevationMaximum)));
         }
 
         private DataWizardApproximation CalculateApproximation(DataWizardDataInput input)
@@ -62,11 +73,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
-                    var q = GetQuery(input);
-                    var dateRows = q.ToList().Sum(i => i.Count);
+                    var q = GetQuery(ref input);
+                    var rows = q.Select(i => i.Count).ToList().Sum();
                     var result = new DataWizardApproximation
                     {
-                        RowCount = dateRows
+                        RowCount = rows
                     };
                     if (!(input.Organisations.Any() || input.Sites.Any() || input.Stations.Any()))
                     {
@@ -76,6 +87,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         result.Errors.Add("Please select at least one Phenomenon, Offering or Unit in the Features tab");
                     }
+                    //Logging.Information("RowCount: {RowCount} Info: {@input}", rows, input);
                     Logging.Verbose("Result: {@Result}", result);
                     return result;
                 }
@@ -203,7 +215,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             result.DataMatrix.AddColumn("Date", "Date", MaxtixDataType.Date);
             result.DataMatrix.AddColumn("Elevation", "Elevation", MaxtixDataType.Double);
 
-            var q = GetQuery(input);
+            var q = GetQuery(ref input);
             var qFeatures = q.Select(i => new { i.SensorId, i.SensorCode, i.SensorName, i.PhenomenonOfferingId, i.PhenomenonUnitId, i.PhenomenonCode, i.PhenomenonName, i.OfferingCode, i.OfferingName, i.UnitCode, i.UnitName, i.UnitSymbol }).Distinct();
             var features = qFeatures.ToList().Select(i => new DataFeature
             {
@@ -229,7 +241,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     .Where(i => phenomenonOfferingIds.Contains(i.PhenomenonOfferingId))
                     .Where(i => phenomenonUnitIds.Contains(i.PhenomenonUnitId))
                     .Where(i => (i.ValueDate >= input.StartDate) && (i.ValueDate <= input.EndDate))
-                    .Where(i => i.Elevation.HasValue && (i.Elevation.Value >= input.ElevationMinimum) && (i.Elevation.Value <= input.ElevationMaximum))
+                    .Where(i => !i.Elevation.HasValue || ((i.Elevation.Value >= input.ElevationMinimum) && (i.Elevation.Value <= input.ElevationMaximum)))
                     .OrderBy(i => i.SiteName)
                     .ThenBy(i => i.StationName)
                     .ThenBy(i => i.InstrumentName)
@@ -859,28 +871,27 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     Logging.Verbose("UserDownload: {@UserDownload}", result);
                     var jChecksum = new JObject(new JProperty("Checksum", result.ZipCheckSum));
                     File.WriteAllText(Path.Combine(folder, $"{result.Id} Checksum.json"), jChecksum.ToString());
-                    var client = new HttpClient
+                    using (var client = new HttpClient { BaseAddress = new Uri(Properties.Settings.Default.ODPUrl) })
                     {
-                        BaseAddress = new Uri(Properties.Settings.Default.ODPUrl)
-                    };
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
-                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization",ConfigurationManager.AppSettings["ODPUrl"]);
-                    HttpResponseMessage response = await client.PostAsync("/metadata/", new StringContent(jODP.ToString(Formatting.None)));
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        Logging.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
-                        Logging.Error("Body: {Body}", jODP.ToString());
-                        Logging.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "bearer " + ConfigurationManager.AppSettings["ODPApiKey"]);
+                        HttpResponseMessage response = await client.PostAsync("/metadata/", new StringContent(jODP.ToString(Formatting.None)));
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            Logging.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                            Logging.Error("Body: {Body}", jODP.ToString());
+                            Logging.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                        }
+                        response.EnsureSuccessStatusCode();
+                        var jObj = JObject.Parse(await response.Content.ReadAsStringAsync());
+                        if (!bool.Parse(jObj.Value<string>("validated")))
+                        {
+                            Logging.Error("Unable to create metadata on Open Data Platform. Errors: {Errors}", jObj.Value<string>("errors"));
+                            throw new InvalidOperationException("Unable to create metadata on Open Data Platform");
+                        }
+                        result.OpenDataPlatformId = Guid.Parse(jObj.Value<string>("id"));
                     }
-                    response.EnsureSuccessStatusCode();
-                    var jObj = JObject.Parse(await response.Content.ReadAsStringAsync());
-                    if (!bool.Parse(jObj.Value<string>("validated")))
-                    {
-                        Logging.Error("Unable to create metadata on Open Data Platform. Errors: {Errors}", jObj.Value<string>("errors"));
-                        throw new InvalidOperationException("Unable to create metadata on Open Data Platform");
-                    }
-                    result.OpenDataPlatformId = Guid.Parse(jObj.Value<string>("id"));
                     await SaveChangesAsync();
                     transaction.Commit();
                     return result;
@@ -984,7 +995,78 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
+        [HttpGet]
+        [Route("ReprocessDOIs")]
+        //[Authorize("SysAdmin")]
+
+        public async Task<IHttpActionResult> ReprocessDOIsAsync()
+        {
+            async Task<bool> Exists(HttpClient client, string doi)
+            {
+                HttpResponseMessage response = await client.GetAsync("/metadata/" + doi);
+                if (!response.IsSuccessStatusCode)
+                {
+                    Logging.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                    Logging.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                }
+                response.EnsureSuccessStatusCode();
+                return true;
+            }
+
+            async Task<Guid> Create(HttpClient client, string metadataJson)
+            {
+                HttpResponseMessage response = await client.PostAsync("/metadata/", new StringContent(metadataJson));
+                if (!response.IsSuccessStatusCode)
+                {
+                    Logging.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                    Logging.Error("Body: {Body}", metadataJson);
+                    Logging.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                }
+                response.EnsureSuccessStatusCode();
+                var jObj = JObject.Parse(await response.Content.ReadAsStringAsync());
+                if (!bool.Parse(jObj.Value<string>("validated")))
+                {
+                    Logging.Error("Unable to create metadata on Open Data Platform. Errors: {Errors}", jObj.Value<string>("errors"));
+                    throw new InvalidOperationException("Unable to create metadata on Open Data Platform");
+                }
+                return Guid.Parse(jObj.Value<string>("id"));
+            }
+
+            using (Logging.MethodCall<UserDownload>(GetType()))
+            {
+                try
+                {
+                    var result = new List<string>();
+                    using (var client = new HttpClient { BaseAddress = new Uri(Properties.Settings.Default.ODPUrl) })
+                    {
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "bearer " + ConfigurationManager.AppSettings["ODPApiKey"]);
+                        foreach (var download in DbContext.UserDownloads.Include(ud => ud.DigitalObjectIdentifier))
+                        {
+                            if (await Exists(client, download.DigitalObjectIdentifier.DOI))
+                            {
+                                Logging.Verbose("Ignoring {doi}", download.DigitalObjectIdentifier.DOI);
+                            }
+                            else
+                            {
+                                Logging.Verbose("Adding {doi}", download.DigitalObjectIdentifier.DOI);
+                                download.OpenDataPlatformId = await Create(client, download.MetadataJson);
+                                await DbContext.SaveChangesAsync();
+                            }
+                        }
+                    }
+
+                    return Ok(result);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
     }
 
 }
-
