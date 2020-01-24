@@ -42,7 +42,7 @@ namespace SAEON.Observations.SensorThings
             return new MapperConfiguration(config);
         }
 
-        protected abstract TSensorThingsEntity ConvertDbEntity(TDbEntity dbEnitity);
+        protected abstract TSensorThingsEntity ConvertDbEntity(TDbEntity dbEntity);
 
         /// <summary>
         /// Overwrite to filter entities

@@ -27,19 +27,13 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
                 var dbLocation = DbContext.SensorThingsLocations.Where(i => i.Id == dbEntity.Id).FirstOrDefault();
                 if (dbLocation != null)
                 {
-                    result.Location = Converters.ConvertLocation(Mapper, dbLocation);
+                    result.Locations.Add(Converters.ConvertLocation(Mapper, dbLocation));
+                    result.HistoricalLocations.Add(Converters.ConvertHistoricalLocation(Mapper, dbLocation, dbEntity));
                 }
                 Logging.Verbose("Result: {@Result}", result);
                 return result;
             }
         }
-
-        //protected override TRelatedSensorThingsEntity ConvertRelated<TRelatedSensorThingsEntity, TRelatedDbEntity>(TRelatedDbEntity dbEnitity)
-        //{
-        //    var result = base.ConvertRelated<TRelatedSensorThingsEntity, TRelatedDbEntity>(dbEnitity);
-        //    result.location = new GeometryLocation(dbEnitity.Latitude, dbEnitity.Longitude, dbEnitity.Elevation);
-        //    return result;
-        //}
 
         [EnableQuery(PageSize = Config.PageSize), ODataRoute]
         public override IQueryable<Thing> GetAll()
@@ -53,11 +47,19 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
             return base.GetById(id);
         }
 
-        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Location")]
-        public SingleResult<Location> GetLocation([FromUri] Guid id)
+        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Locations")]
+        public IQueryable<Location> GetLocations([FromUri] Guid id)
         {
-            return GetRelatedSingle(id, i => i.Location);
+            return GetRelatedMany(id, i => i.Locations);
         }
+
+        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/HistoricalLocations")]
+        public IQueryable<HistoricalLocation> GetHistoricalLocations([FromUri] Guid id)
+        {
+            return GetRelatedMany(id, i => i.HistoricalLocations);
+        }
+
+
     }
 }
 

@@ -2,6 +2,7 @@
 AS
 Select Distinct
   Sensor.ID, Sensor.Code, Sensor.Name, Sensor.Description,
+  InstrumentID, InstrumentCode, InstrumentName,
   PhenomenonCode, PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
   OfferingCode, OfferingName, Offering.Description OfferingDescription,
   UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,

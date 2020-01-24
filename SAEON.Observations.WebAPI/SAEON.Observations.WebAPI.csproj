@@ -111,6 +111,7 @@
     <Compile Include="Controllers\SensorThings\BaseController.cs" />
     <Compile Include="Controllers\SensorThings\DatastreamsSTController.cs" />
     <Compile Include="Controllers\SensorThings\FeatureOfInterestSTController.cs" />
+    <Compile Include="Controllers\SensorThings\HistoricalLocationsSTController.cs" />
     <Compile Include="Controllers\SensorThings\LocationsSTController.cs" />
     <Compile Include="Controllers\SensorThings\ObservationSTController.cs" />
     <Compile Include="Controllers\SensorThings\ObservedPropertySTController.cs" />
@@ -393,11 +394,11 @@
     <Reference Include="SAEON.Logs.NetFramework, Version=1.0.11.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Logs.NetFramework.1.0.11\lib\net472\SAEON.Logs.NetFramework.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.Core, Version=1.0.186.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.Core.1.0.186\lib\net472\SAEON.Observations.Core.dll</HintPath>
+    <Reference Include="SAEON.Observations.Core, Version=1.0.188.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.Core.1.0.188\lib\net472\SAEON.Observations.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.SensorThings, Version=1.0.39.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.SensorThings.1.0.39\lib\net472\SAEON.Observations.SensorThings.dll</HintPath>
+    <Reference Include="SAEON.Observations.SensorThings, Version=1.0.45.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.SensorThings.1.0.45\lib\net472\SAEON.Observations.SensorThings.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.9.0\lib\net46\Serilog.dll</HintPath>

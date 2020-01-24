@@ -1380,25 +1380,18 @@ namespace SAEON.Observations.Core.Entities
     [Table("vSensorThingsAPIDatastreams")]
     public class SensorThingsDatastream : BaseIDEntity
     {
-        [Required, MaxLength(50)]
         public string Code { get; set; }
-        [Required, MaxLength(150)]
         public string Name { get; set; }
-        [MaxLength(5000)]
         public string Description { get; set; }
-        [MaxLength(150)]
+        public Guid InstrumentId { get; set; }
+        public string InstrumentCode { get; set; }
+        public string InstrumentName { get; set; }
         public string PhenomenonName { get; set; }
-        [MaxLength(5000)]
         public string PhenomenonDescription { get; set; }
-        [MaxLength(2500)]
         public string PhenomenonUrl { get; set; }
-        [MaxLength(150)]
         public string OfferingName { get; set; }
-        [MaxLength(5000)]
         public string OfferingDescription { get; set; }
-        [MaxLength(100)]
         public string UnitOfMeasureUnit { get; set; }
-        [MaxLength(20)]
         public string UnitOfMeasureSymbol { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -1411,55 +1404,44 @@ namespace SAEON.Observations.Core.Entities
     [Table("vSensorThingsAPILocations")]
     public class SensorThingsLocation : BaseIDEntity
     {
-        [Required, MaxLength(50)]
         public string Code { get; set; }
-        [Required, MaxLength(150)]
         public string Name { get; set; }
-        [MaxLength(5000)]
         public string Description { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double? Elevation { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 
-    [Table("vSensorThingsAPIObserverdProperty")]
+    [Table("vSensorThingsAPIObservedProperties")]
     public class SensorThingsObservedPropery : BaseIDEntity
     {
-        [Required, MaxLength(50)]
-        public string Code { get; set; }
-        [Required, MaxLength(150)]
-        public string Name { get; set; }
-        [MaxLength(5000)]
-        public string Description { get; set; }
-        [MaxLength(250)]
-        public string Url { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public string PhenomenonDescription { get; set; }
+        public string PhenomenonUrl { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        public string OfferingDescription { get; set; }
     }
 
     [Table("vSensorThingsAPISensors")]
     public class SensorThingsSensor : BaseIDEntity
     {
-        [Required, MaxLength(50)]
         public string Code { get; set; }
-        [Required, MaxLength(150)]
         public string Name { get; set; }
-        [MaxLength(5000)]
         public string Description { get; set; }
-        [MaxLength(250)]
         public string Url { get; set; }
     }
 
     [Table("vSensorThingsAPIThings")]
     public class SensorThingsThing : BaseIDEntity
     {
-        [Required, MaxLength(50)]
         public string Code { get; set; }
-        [Required, MaxLength(150)]
         public string Name { get; set; }
-        [MaxLength(5000)]
         public string Description { get; set; }
-        [MaxLength(10)]
         public string Kind { get; set; }
-        [MaxLength(250)]
         public string Url { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }

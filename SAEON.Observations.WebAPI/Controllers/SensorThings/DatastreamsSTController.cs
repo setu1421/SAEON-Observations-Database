@@ -1,4 +1,63 @@
-﻿/*
+﻿using AutoMapper.Configuration;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Routing;
+using SAEON.Logs;
+using SAEON.Observations.SensorThings;
+using System;
+using System.Linq;
+using System.Web.Http;
+using db = SAEON.Observations.Core.Entities;
+
+namespace SAEON.Observations.WebAPI.Controllers.SensorThings
+{
+
+    [ODataRoutePrefix("Datastreams")]
+    public class DatastreamsSTController : BaseController<Datastream, db.SensorThingsDatastream>
+    {
+        protected override void CreateRelatedMappings(MapperConfigurationExpression cfg)
+        {
+            base.CreateRelatedMappings(cfg);
+            cfg.CreateMap<db.SensorThingsThing, Thing>();
+        }
+
+        protected override Datastream ConvertDbEntity(db.SensorThingsDatastream dbEntity)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                var dbThing = DbContext.SensorThingsThings.Where(i => i.Id == dbEntity.InstrumentID).First();
+                var result = Converters.ConvertDatastream(Mapper, dbEntity, dbThing);
+                //var dbLocation = DbContext.SensorThingsLocations.Where(i => i.Id == dbEntity.Id).FirstOrDefault();
+                //if (dbLocation != null)
+                //{
+                //    result.Locations.Add(Converters.ConvertLocation(Mapper, dbLocation));
+                //    result.HistoricalLocations.Add(Converters.ConvertHistoricalLocation(Mapper, dbLocation, dbEntity));
+                //}
+                Logging.Verbose("Result: {@Result}", result);
+                return result;
+            }
+        }
+
+        [EnableQuery(PageSize = Config.PageSize), ODataRoute]
+        public override IQueryable<Datastream> GetAll()
+        {
+            return base.GetAll();
+        }
+
+        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})")]
+        public override SingleResult<Datastream> GetById([FromODataUri] Guid id)
+        {
+            return base.GetById(id);
+        }
+
+        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Thing")]
+        public SingleResult<Thing> GetThing([FromUri] Guid id)
+        {
+            return GetRelatedSingle(id, i => i.Thing);
+        }
+
+    }
+}
+/*
 using Newtonsoft.Json.Linq;
 using SAEON.SensorThings;
 using System;

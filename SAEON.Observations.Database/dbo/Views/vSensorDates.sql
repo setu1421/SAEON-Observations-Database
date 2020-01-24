@@ -1,5 +1,5 @@
 ﻿CREATE VIEW [dbo].[vSensorDates]
-AS 
+AS
 Select
   Sensor.ID SensorID,
   Sensor.Name SensorName,
@@ -9,15 +9,15 @@ Select
   Station.Name StationName, Station.StartDate StationStartDate, Station.EndDate StationEndDate,
   Site.Name SiteName, Site.StartDate SiteStartDate, Site.EndDate SiteEndDate,
   (
-  Select 
-    Max(v) 
-  from 
+  Select
+    Min(v)
+  from
     (Values (Instrument_Sensor.StartDate),(Instrument.StartDate),(Station_Instrument.StartDate),(Station.StartDate),(Site.StartDate)) as Value(v)
   ) StartDate,
   (
-  Select 
-    Min(v) 
-  from 
+  Select
+    Max(v)
+  from
     (Values (Instrument_Sensor.EndDate),(Instrument.EndDate),(Station_Instrument.EndDate),(Station.EndDate),(Site.EndDate)) as Value(v)
   ) EndDate
 from

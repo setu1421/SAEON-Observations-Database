@@ -1,10 +1,8 @@
-﻿using Microsoft.OData;
-using Microsoft.Spatial;
+﻿using Microsoft.Spatial;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 namespace SAEON.Observations.SensorThings
 {
@@ -63,42 +61,30 @@ namespace SAEON.Observations.SensorThings
 
     public abstract class NamedSensorThingsEntity : SensorThingsEntity
     {
-        [Required]
         public string Code { get; set; }
-        [Required]
         public string Name { get; set; }
-        [Required]
         public string Description { get; set; }
     }
 
-    public class Thing : NamedSensorThingsEntity
+    public class Datastream : NamedSensorThingsEntity
     {
-        public ODataNamedValueDictionary<string> Properties { get; } = new ODataNamedValueDictionary<string>();
-        public Location Location { get; set; } = null;
-        public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
-        //public List<Datastream> Datastreams { get; } = new List<Datastream>();
+        public UnitOfMeasurement UnitOfMeasurement { get; set; } = null;
+        public string ObservationType { get; set; } = ValueCodes.OM_Measurement;
+        public GeographyPolygon ObservedArea { get; set; } = null;
+        public TimeInterval PhenomenonTime { get; set; } = null;
+        public TimeInterval ResultTime { get; set; } = null;
+        public Thing Thing { get; set; } = null;
+        //public Sensor Sensor { get; set; } = null;
+        public ObservedProperty ObservedProperty { get; set; } = null;
+        //public List<Observation> Observations { get; } = new List<Observation>();
 
-        public Thing() : base()
+        public Datastream() : base()
         {
-            EntitySetName = "Things";
-            NavigationLinks.Add("Location");
-            NavigationLinks.Add("HistoricalLocations");
-            NavigationLinks.Add("Datastreams");
-        }
-    }
-
-    public class Location : NamedSensorThingsEntity
-    {
-        public string EncodingType { get; private set; } = ValueCodes.GeoJson;
-        public GeographyPoint location { get; set; } = null;
-        public List<Thing> Things { get; set; } = new List<Thing>();
-        public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
-
-        public Location() : base()
-        {
-            EntitySetName = "Locations";
-            NavigationLinks.Add("Things");
-            NavigationLinks.Add("HistoricalLocations");
+            EntitySetName = "Datastreams";
+            NavigationLinks.Add("Thing");
+            //NavigationLinks.Add("Sensor");
+            NavigationLinks.Add("ObservedProperty");
+            //NavigationLinks.Add("Observations");
         }
     }
 
@@ -121,25 +107,44 @@ namespace SAEON.Observations.SensorThings
         }
     }
 
-    public class Datastream : NamedSensorThingsEntity
+    public class Location : NamedSensorThingsEntity
     {
-        public UnitOfMeasurement UnitOfMeasurement { get; set; } = null;
-        public string ObservationType { get; set; } = ValueCodes.OM_Measurement;
-        public GeographyPolygon ObservedArea { get; set; } = null;
-        public TimeInterval PhenomenonTime { get; set; } = null;
-        public TimeInterval ResultTime { get; set; } = null;
-        public Thing Thing { get; set; } = null;
-        //public Sensor Sensor { get; set; } = null;
-        //public ObservedProperty ObservedProperty { get; set; } = null;
-        //public List<Observation> Observations { get; } = new List<Observation>();
+        public string EncodingType { get; private set; } = ValueCodes.GeoJson;
+        public GeographyPoint location { get; set; } = null;
+        public List<Thing> Things { get; set; } = new List<Thing>();
+        public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
 
-        public Datastream() : base()
+        public Location() : base()
         {
-            EntitySetName = "Datastreams";
-            NavigationLinks.Add("Thing");
-            NavigationLinks.Add("Sensor");
-            NavigationLinks.Add("ObservedProperty");
-            NavigationLinks.Add("Observations");
+            EntitySetName = "Locations";
+            NavigationLinks.Add("Things");
+            NavigationLinks.Add("HistoricalLocations");
+        }
+    }
+
+    public class ObservedProperty : NamedSensorThingsEntity
+    {
+        public string Definition { get; set; }
+        public ObservedProperty():base()
+        {
+            EntitySetName = "ObservedProperties";
+            NavigationLinks.Add("Datastreams");
+        }
+    }
+
+    public class Thing : NamedSensorThingsEntity
+    {
+        public ODataNamedValueDictionary<string> Properties { get; } = new ODataNamedValueDictionary<string>();
+        public List<Location> Locations { get; set; } = new List<Location>();
+        public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
+        //public List<Datastream> Datastreams { get; } = new List<Datastream>();
+
+        public Thing() : base()
+        {
+            EntitySetName = "Things";
+            NavigationLinks.Add("Locations");
+            NavigationLinks.Add("HistoricalLocations");
+            NavigationLinks.Add("Datastreams");
         }
     }
 

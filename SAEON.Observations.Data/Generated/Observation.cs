@@ -126,19 +126,6 @@ namespace SAEON.Observations.Data
 				schema.SchemaName = @"dbo";
 				//columns
 				
-				TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
-				colvarId.ColumnName = "ID";
-				colvarId.DataType = DbType.Int32;
-				colvarId.MaxLength = 0;
-				colvarId.AutoIncrement = true;
-				colvarId.IsNullable = false;
-				colvarId.IsPrimaryKey = true;
-				colvarId.IsForeignKey = false;
-				colvarId.IsReadOnly = false;
-				colvarId.DefaultSetting = @"";
-				colvarId.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarId);
-				
 				TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
 				colvarSensorID.ColumnName = "SensorID";
 				colvarSensorID.DataType = DbType.Guid;
@@ -165,19 +152,6 @@ namespace SAEON.Observations.Data
 				colvarValueDate.DefaultSetting = @"";
 				colvarValueDate.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarValueDate);
-				
-				TableSchema.TableColumn colvarTextValue = new TableSchema.TableColumn(schema);
-				colvarTextValue.ColumnName = "TextValue";
-				colvarTextValue.DataType = DbType.AnsiString;
-				colvarTextValue.MaxLength = 10;
-				colvarTextValue.AutoIncrement = false;
-				colvarTextValue.IsNullable = true;
-				colvarTextValue.IsPrimaryKey = false;
-				colvarTextValue.IsForeignKey = false;
-				colvarTextValue.IsReadOnly = false;
-				colvarTextValue.DefaultSetting = @"";
-				colvarTextValue.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarTextValue);
 				
 				TableSchema.TableColumn colvarRawValue = new TableSchema.TableColumn(schema);
 				colvarRawValue.ColumnName = "RawValue";
@@ -301,45 +275,6 @@ namespace SAEON.Observations.Data
 				colvarCorrelationID.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarCorrelationID);
 				
-				TableSchema.TableColumn colvarLatitude = new TableSchema.TableColumn(schema);
-				colvarLatitude.ColumnName = "Latitude";
-				colvarLatitude.DataType = DbType.Double;
-				colvarLatitude.MaxLength = 0;
-				colvarLatitude.AutoIncrement = false;
-				colvarLatitude.IsNullable = true;
-				colvarLatitude.IsPrimaryKey = false;
-				colvarLatitude.IsForeignKey = false;
-				colvarLatitude.IsReadOnly = false;
-				colvarLatitude.DefaultSetting = @"";
-				colvarLatitude.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarLatitude);
-				
-				TableSchema.TableColumn colvarLongitude = new TableSchema.TableColumn(schema);
-				colvarLongitude.ColumnName = "Longitude";
-				colvarLongitude.DataType = DbType.Double;
-				colvarLongitude.MaxLength = 0;
-				colvarLongitude.AutoIncrement = false;
-				colvarLongitude.IsNullable = true;
-				colvarLongitude.IsPrimaryKey = false;
-				colvarLongitude.IsForeignKey = false;
-				colvarLongitude.IsReadOnly = false;
-				colvarLongitude.DefaultSetting = @"";
-				colvarLongitude.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarLongitude);
-				
-				TableSchema.TableColumn colvarElevation = new TableSchema.TableColumn(schema);
-				colvarElevation.ColumnName = "Elevation";
-				colvarElevation.DataType = DbType.Double;
-				colvarElevation.MaxLength = 0;
-				colvarElevation.AutoIncrement = false;
-				colvarElevation.IsNullable = true;
-				colvarElevation.IsPrimaryKey = false;
-				colvarElevation.IsForeignKey = false;
-				colvarElevation.IsReadOnly = false;
-				colvarElevation.DefaultSetting = @"";
-				colvarElevation.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarElevation);
-				
 				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
 				colvarUserId.ColumnName = "UserId";
 				colvarUserId.DataType = DbType.Guid;
@@ -396,6 +331,19 @@ namespace SAEON.Observations.Data
 				colvarUpdatedAt.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarUpdatedAt);
 				
+				TableSchema.TableColumn colvarId = new TableSchema.TableColumn(schema);
+				colvarId.ColumnName = "ID";
+				colvarId.DataType = DbType.Int32;
+				colvarId.MaxLength = 0;
+				colvarId.AutoIncrement = true;
+				colvarId.IsNullable = false;
+				colvarId.IsPrimaryKey = true;
+				colvarId.IsForeignKey = false;
+				colvarId.IsReadOnly = false;
+				colvarId.DefaultSetting = @"";
+				colvarId.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarId);
+				
 				TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
 				colvarRowVersion.ColumnName = "RowVersion";
 				colvarRowVersion.DataType = DbType.Binary;
@@ -408,6 +356,58 @@ namespace SAEON.Observations.Data
 				colvarRowVersion.DefaultSetting = @"";
 				colvarRowVersion.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRowVersion);
+				
+				TableSchema.TableColumn colvarTextValue = new TableSchema.TableColumn(schema);
+				colvarTextValue.ColumnName = "TextValue";
+				colvarTextValue.DataType = DbType.AnsiString;
+				colvarTextValue.MaxLength = 10;
+				colvarTextValue.AutoIncrement = false;
+				colvarTextValue.IsNullable = true;
+				colvarTextValue.IsPrimaryKey = false;
+				colvarTextValue.IsForeignKey = false;
+				colvarTextValue.IsReadOnly = false;
+				colvarTextValue.DefaultSetting = @"";
+				colvarTextValue.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarTextValue);
+				
+				TableSchema.TableColumn colvarElevation = new TableSchema.TableColumn(schema);
+				colvarElevation.ColumnName = "Elevation";
+				colvarElevation.DataType = DbType.Double;
+				colvarElevation.MaxLength = 0;
+				colvarElevation.AutoIncrement = false;
+				colvarElevation.IsNullable = true;
+				colvarElevation.IsPrimaryKey = false;
+				colvarElevation.IsForeignKey = false;
+				colvarElevation.IsReadOnly = false;
+				colvarElevation.DefaultSetting = @"";
+				colvarElevation.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarElevation);
+				
+				TableSchema.TableColumn colvarLatitude = new TableSchema.TableColumn(schema);
+				colvarLatitude.ColumnName = "Latitude";
+				colvarLatitude.DataType = DbType.Double;
+				colvarLatitude.MaxLength = 0;
+				colvarLatitude.AutoIncrement = false;
+				colvarLatitude.IsNullable = true;
+				colvarLatitude.IsPrimaryKey = false;
+				colvarLatitude.IsForeignKey = false;
+				colvarLatitude.IsReadOnly = false;
+				colvarLatitude.DefaultSetting = @"";
+				colvarLatitude.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarLatitude);
+				
+				TableSchema.TableColumn colvarLongitude = new TableSchema.TableColumn(schema);
+				colvarLongitude.ColumnName = "Longitude";
+				colvarLongitude.DataType = DbType.Double;
+				colvarLongitude.MaxLength = 0;
+				colvarLongitude.AutoIncrement = false;
+				colvarLongitude.IsNullable = true;
+				colvarLongitude.IsPrimaryKey = false;
+				colvarLongitude.IsForeignKey = false;
+				colvarLongitude.IsReadOnly = false;
+				colvarLongitude.DefaultSetting = @"";
+				colvarLongitude.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarLongitude);
 				
 				TableSchema.TableColumn colvarValueDay = new TableSchema.TableColumn(schema);
 				colvarValueDay.ColumnName = "ValueDay";
@@ -458,14 +458,6 @@ namespace SAEON.Observations.Data
 		
 		#region Props
 		  
-		[XmlAttribute("Id")]
-		[Bindable(true)]
-		public int Id 
-		{
-			get { return GetColumnValue<int>(Columns.Id); }
-			set { SetColumnValue(Columns.Id, value); }
-		}
-		  
 		[XmlAttribute("SensorID")]
 		[Bindable(true)]
 		public Guid SensorID 
@@ -480,14 +472,6 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<DateTime>(Columns.ValueDate); }
 			set { SetColumnValue(Columns.ValueDate, value); }
-		}
-		  
-		[XmlAttribute("TextValue")]
-		[Bindable(true)]
-		public string TextValue 
-		{
-			get { return GetColumnValue<string>(Columns.TextValue); }
-			set { SetColumnValue(Columns.TextValue, value); }
 		}
 		  
 		[XmlAttribute("RawValue")]
@@ -562,30 +546,6 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.CorrelationID, value); }
 		}
 		  
-		[XmlAttribute("Latitude")]
-		[Bindable(true)]
-		public double? Latitude 
-		{
-			get { return GetColumnValue<double?>(Columns.Latitude); }
-			set { SetColumnValue(Columns.Latitude, value); }
-		}
-		  
-		[XmlAttribute("Longitude")]
-		[Bindable(true)]
-		public double? Longitude 
-		{
-			get { return GetColumnValue<double?>(Columns.Longitude); }
-			set { SetColumnValue(Columns.Longitude, value); }
-		}
-		  
-		[XmlAttribute("Elevation")]
-		[Bindable(true)]
-		public double? Elevation 
-		{
-			get { return GetColumnValue<double?>(Columns.Elevation); }
-			set { SetColumnValue(Columns.Elevation, value); }
-		}
-		  
 		[XmlAttribute("UserId")]
 		[Bindable(true)]
 		public Guid UserId 
@@ -618,12 +578,52 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.UpdatedAt, value); }
 		}
 		  
+		[XmlAttribute("Id")]
+		[Bindable(true)]
+		public int Id 
+		{
+			get { return GetColumnValue<int>(Columns.Id); }
+			set { SetColumnValue(Columns.Id, value); }
+		}
+		  
 		[XmlAttribute("RowVersion")]
 		[Bindable(true)]
 		public byte[] RowVersion 
 		{
 			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
 			set { SetColumnValue(Columns.RowVersion, value); }
+		}
+		  
+		[XmlAttribute("TextValue")]
+		[Bindable(true)]
+		public string TextValue 
+		{
+			get { return GetColumnValue<string>(Columns.TextValue); }
+			set { SetColumnValue(Columns.TextValue, value); }
+		}
+		  
+		[XmlAttribute("Elevation")]
+		[Bindable(true)]
+		public double? Elevation 
+		{
+			get { return GetColumnValue<double?>(Columns.Elevation); }
+			set { SetColumnValue(Columns.Elevation, value); }
+		}
+		  
+		[XmlAttribute("Latitude")]
+		[Bindable(true)]
+		public double? Latitude 
+		{
+			get { return GetColumnValue<double?>(Columns.Latitude); }
+			set { SetColumnValue(Columns.Latitude, value); }
+		}
+		  
+		[XmlAttribute("Longitude")]
+		[Bindable(true)]
+		public double? Longitude 
+		{
+			get { return GetColumnValue<double?>(Columns.Longitude); }
+			set { SetColumnValue(Columns.Longitude, value); }
 		}
 		  
 		[XmlAttribute("ValueDay")]
@@ -748,15 +748,13 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varSensorID,DateTime varValueDate,string varTextValue,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,double? varLatitude,double? varLongitude,double? varElevation,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,DateTime? varValueDay,int? varValueYear,int? varValueDecade)
+		public static void Insert(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,string varTextValue,double? varElevation,double? varLatitude,double? varLongitude,DateTime? varValueDay,int? varValueYear,int? varValueDecade)
 		{
 			Observation item = new Observation();
 			
 			item.SensorID = varSensorID;
 			
 			item.ValueDate = varValueDate;
-			
-			item.TextValue = varTextValue;
 			
 			item.RawValue = varRawValue;
 			
@@ -776,12 +774,6 @@ namespace SAEON.Observations.Data
 			
 			item.CorrelationID = varCorrelationID;
 			
-			item.Latitude = varLatitude;
-			
-			item.Longitude = varLongitude;
-			
-			item.Elevation = varElevation;
-			
 			item.UserId = varUserId;
 			
 			item.AddedDate = varAddedDate;
@@ -791,6 +783,14 @@ namespace SAEON.Observations.Data
 			item.UpdatedAt = varUpdatedAt;
 			
 			item.RowVersion = varRowVersion;
+			
+			item.TextValue = varTextValue;
+			
+			item.Elevation = varElevation;
+			
+			item.Latitude = varLatitude;
+			
+			item.Longitude = varLongitude;
 			
 			item.ValueDay = varValueDay;
 			
@@ -808,17 +808,13 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(int varId,Guid varSensorID,DateTime varValueDate,string varTextValue,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,double? varLatitude,double? varLongitude,double? varElevation,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,DateTime? varValueDay,int? varValueYear,int? varValueDecade)
+		public static void Update(Guid varSensorID,DateTime varValueDate,double? varRawValue,double? varDataValue,string varComment,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,Guid varImportBatchID,Guid? varStatusID,Guid? varStatusReasonID,Guid? varCorrelationID,Guid varUserId,DateTime varAddedDate,DateTime? varAddedAt,DateTime? varUpdatedAt,int varId,byte[] varRowVersion,string varTextValue,double? varElevation,double? varLatitude,double? varLongitude,DateTime? varValueDay,int? varValueYear,int? varValueDecade)
 		{
 			Observation item = new Observation();
-			
-				item.Id = varId;
 			
 				item.SensorID = varSensorID;
 			
 				item.ValueDate = varValueDate;
-			
-				item.TextValue = varTextValue;
 			
 				item.RawValue = varRawValue;
 			
@@ -838,12 +834,6 @@ namespace SAEON.Observations.Data
 			
 				item.CorrelationID = varCorrelationID;
 			
-				item.Latitude = varLatitude;
-			
-				item.Longitude = varLongitude;
-			
-				item.Elevation = varElevation;
-			
 				item.UserId = varUserId;
 			
 				item.AddedDate = varAddedDate;
@@ -852,7 +842,17 @@ namespace SAEON.Observations.Data
 			
 				item.UpdatedAt = varUpdatedAt;
 			
+				item.Id = varId;
+			
 				item.RowVersion = varRowVersion;
+			
+				item.TextValue = varTextValue;
+			
+				item.Elevation = varElevation;
+			
+				item.Latitude = varLatitude;
+			
+				item.Longitude = varLongitude;
 			
 				item.ValueDay = varValueDay;
 			
@@ -873,147 +873,147 @@ namespace SAEON.Observations.Data
         #region Typed Columns
         
         
-        public static TableSchema.TableColumn IdColumn
+        public static TableSchema.TableColumn SensorIDColumn
         {
             get { return Schema.Columns[0]; }
         }
         
         
         
-        public static TableSchema.TableColumn SensorIDColumn
+        public static TableSchema.TableColumn ValueDateColumn
         {
             get { return Schema.Columns[1]; }
         }
         
         
         
-        public static TableSchema.TableColumn ValueDateColumn
+        public static TableSchema.TableColumn RawValueColumn
         {
             get { return Schema.Columns[2]; }
         }
         
         
         
-        public static TableSchema.TableColumn TextValueColumn
+        public static TableSchema.TableColumn DataValueColumn
         {
             get { return Schema.Columns[3]; }
         }
         
         
         
-        public static TableSchema.TableColumn RawValueColumn
+        public static TableSchema.TableColumn CommentColumn
         {
             get { return Schema.Columns[4]; }
         }
         
         
         
-        public static TableSchema.TableColumn DataValueColumn
+        public static TableSchema.TableColumn PhenomenonOfferingIDColumn
         {
             get { return Schema.Columns[5]; }
         }
         
         
         
-        public static TableSchema.TableColumn CommentColumn
+        public static TableSchema.TableColumn PhenomenonUOMIDColumn
         {
             get { return Schema.Columns[6]; }
         }
         
         
         
-        public static TableSchema.TableColumn PhenomenonOfferingIDColumn
+        public static TableSchema.TableColumn ImportBatchIDColumn
         {
             get { return Schema.Columns[7]; }
         }
         
         
         
-        public static TableSchema.TableColumn PhenomenonUOMIDColumn
+        public static TableSchema.TableColumn StatusIDColumn
         {
             get { return Schema.Columns[8]; }
         }
         
         
         
-        public static TableSchema.TableColumn ImportBatchIDColumn
+        public static TableSchema.TableColumn StatusReasonIDColumn
         {
             get { return Schema.Columns[9]; }
         }
         
         
         
-        public static TableSchema.TableColumn StatusIDColumn
+        public static TableSchema.TableColumn CorrelationIDColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn StatusReasonIDColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn CorrelationIDColumn
+        public static TableSchema.TableColumn AddedDateColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn LatitudeColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn LongitudeColumn
+        public static TableSchema.TableColumn UpdatedAtColumn
         {
             get { return Schema.Columns[14]; }
         }
         
         
         
-        public static TableSchema.TableColumn ElevationColumn
+        public static TableSchema.TableColumn IdColumn
         {
             get { return Schema.Columns[15]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn RowVersionColumn
         {
             get { return Schema.Columns[16]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedDateColumn
+        public static TableSchema.TableColumn TextValueColumn
         {
             get { return Schema.Columns[17]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn ElevationColumn
         {
             get { return Schema.Columns[18]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn LatitudeColumn
         {
             get { return Schema.Columns[19]; }
         }
         
         
         
-        public static TableSchema.TableColumn RowVersionColumn
+        public static TableSchema.TableColumn LongitudeColumn
         {
             get { return Schema.Columns[20]; }
         }
@@ -1045,10 +1045,8 @@ namespace SAEON.Observations.Data
 		#region Columns Struct
 		public struct Columns
 		{
-			 public static string Id = @"ID";
 			 public static string SensorID = @"SensorID";
 			 public static string ValueDate = @"ValueDate";
-			 public static string TextValue = @"TextValue";
 			 public static string RawValue = @"RawValue";
 			 public static string DataValue = @"DataValue";
 			 public static string Comment = @"Comment";
@@ -1058,14 +1056,16 @@ namespace SAEON.Observations.Data
 			 public static string StatusID = @"StatusID";
 			 public static string StatusReasonID = @"StatusReasonID";
 			 public static string CorrelationID = @"CorrelationID";
-			 public static string Latitude = @"Latitude";
-			 public static string Longitude = @"Longitude";
-			 public static string Elevation = @"Elevation";
 			 public static string UserId = @"UserId";
 			 public static string AddedDate = @"AddedDate";
 			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
+			 public static string Id = @"ID";
 			 public static string RowVersion = @"RowVersion";
+			 public static string TextValue = @"TextValue";
+			 public static string Elevation = @"Elevation";
+			 public static string Latitude = @"Latitude";
+			 public static string Longitude = @"Longitude";
 			 public static string ValueDay = @"ValueDay";
 			 public static string ValueYear = @"ValueYear";
 			 public static string ValueDecade = @"ValueDecade";

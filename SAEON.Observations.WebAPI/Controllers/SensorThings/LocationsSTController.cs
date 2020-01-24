@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.OData;
+﻿using AutoMapper.Configuration;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
 using SAEON.Logs;
 using SAEON.Observations.SensorThings;
@@ -12,11 +13,20 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
     [ODataRoutePrefix("Locations")]
     public class LocationsSTController : BaseController<Location, db.SensorThingsLocation>
     {
+        protected override void CreateRelatedMappings(MapperConfigurationExpression cfg)
+        {
+            base.CreateRelatedMappings(cfg);
+            cfg.CreateMap<db.SensorThingsThing, Thing>();
+        }
+
         protected override Location ConvertDbEntity(db.SensorThingsLocation dbEntity)
         {
             using (Logging.MethodCall(GetType()))
             {
                 var result = Converters.ConvertLocation(Mapper, dbEntity);
+                var dbThing = DbContext.SensorThingsThings.Where(i => i.Id == dbEntity.Id).First();
+                result.Things.Add(Converters.ConvertThing(Mapper, dbThing));
+                result.HistoricalLocations.Add(Converters.ConvertHistoricalLocation(Mapper, dbEntity, dbThing));
                 Logging.Information("Result: {@Result}", result);
                 return result;
             }
@@ -33,6 +43,19 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
         {
             return base.GetById(id);
         }
+
+        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Things")]
+        public IQueryable<Thing> GetThings([FromUri] Guid id)
+        {
+            return GetRelatedMany(id, i => i.Things);
+        }
+
+        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/HistoricalLocations")]
+        public IQueryable<HistoricalLocation> GetHistoricalLocations([FromUri] Guid id)
+        {
+            return GetRelatedMany(id, i => i.HistoricalLocations);
+        }
+
     }
 }
 

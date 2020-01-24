@@ -10,16 +10,22 @@ from
 union
 -- Stations
 Select
-  Station.ID, Station.Code, Station.Name, Station.Description, 'Station' Kind, Station.Url, Station.StartDate, Station.EndDate
+  Station.ID, Station.Code, Station.Name, Station.Description, 'Station' Kind, Station.Url,
+  vSensorThingsAPIStationDates.StartDate, vSensorThingsAPIStationDates.EndDate
 from
   vInventory
   inner join Station
     on (vInventory.StationID = Station.ID)
+  left join vSensorThingsAPIStationDates
+    on (vSensorThingsAPIStationDates.ID = Station.ID)
 union
 -- Instruments
 Select
-  Instrument.ID, Instrument.Code, Instrument.Name, Instrument.Description, 'Instrument' Kind, Instrument.Url, Instrument.StartDate, Instrument.EndDate
+  Instrument.ID, Instrument.Code, Instrument.Name, Instrument.Description, 'Instrument' Kind, Instrument.Url,
+  vSensorThingsAPIInstrumentDates.StartDate, vSensorThingsAPIInstrumentDates.EndDate
 from
   vInventory
   inner join Instrument
     on (vInventory.InstrumentID = Instrument.ID)
+  left join vSensorThingsAPIInstrumentDates
+    on (vSensorThingsAPIInstrumentDates.ID = Instrument.ID)

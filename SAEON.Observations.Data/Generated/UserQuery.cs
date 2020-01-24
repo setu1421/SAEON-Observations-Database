@@ -142,7 +142,7 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
 				colvarUserId.ColumnName = "UserId";
-				colvarUserId.DataType = DbType.String;
+				colvarUserId.DataType = DbType.AnsiString;
 				colvarUserId.MaxLength = 128;
 				colvarUserId.AutoIncrement = false;
 				colvarUserId.IsNullable = false;
@@ -208,7 +208,7 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarAddedBy = new TableSchema.TableColumn(schema);
 				colvarAddedBy.ColumnName = "AddedBy";
-				colvarAddedBy.DataType = DbType.String;
+				colvarAddedBy.DataType = DbType.AnsiString;
 				colvarAddedBy.MaxLength = 128;
 				colvarAddedBy.AutoIncrement = false;
 				colvarAddedBy.IsNullable = false;
@@ -235,7 +235,7 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarUpdatedBy = new TableSchema.TableColumn(schema);
 				colvarUpdatedBy.ColumnName = "UpdatedBy";
-				colvarUpdatedBy.DataType = DbType.String;
+				colvarUpdatedBy.DataType = DbType.AnsiString;
 				colvarUpdatedBy.MaxLength = 128;
 				colvarUpdatedBy.AutoIncrement = false;
 				colvarUpdatedBy.IsNullable = false;

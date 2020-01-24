@@ -427,6 +427,20 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VSensorLocation = @"vSensorLocation";
         
+		public static readonly string VSensorThingsAPIDatastream = @"vSensorThingsAPIDatastreams";
+        
+		public static readonly string VSensorThingsAPIInstrumentDate = @"vSensorThingsAPIInstrumentDates";
+        
+		public static readonly string VSensorThingsAPILocation = @"vSensorThingsAPILocations";
+        
+		public static readonly string VSensorThingsAPIObservedProperty = @"vSensorThingsAPIObservedProperties";
+        
+		public static readonly string VSensorThingsAPISensor = @"vSensorThingsAPISensors";
+        
+		public static readonly string VSensorThingsAPIStationDate = @"vSensorThingsAPIStationDates";
+        
+		public static readonly string VSensorThingsAPIThing = @"vSensorThingsAPIThings";
+        
 		public static readonly string VSiteOrganisation = @"vSiteOrganisation";
         
 		public static readonly string VStation = @"vStation";

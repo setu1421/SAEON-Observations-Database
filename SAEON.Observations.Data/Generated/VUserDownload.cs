@@ -71,7 +71,7 @@ namespace SAEON.Observations.Data{
                 
                 TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
                 colvarUserId.ColumnName = "UserId";
-                colvarUserId.DataType = DbType.String;
+                colvarUserId.DataType = DbType.AnsiString;
                 colvarUserId.MaxLength = 128;
                 colvarUserId.AutoIncrement = false;
                 colvarUserId.IsNullable = false;
@@ -104,6 +104,66 @@ namespace SAEON.Observations.Data{
                 colvarDescription.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarDescription);
+                
+                TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+                colvarAddedAt.ColumnName = "AddedAt";
+                colvarAddedAt.DataType = DbType.DateTime;
+                colvarAddedAt.MaxLength = 0;
+                colvarAddedAt.AutoIncrement = false;
+                colvarAddedAt.IsNullable = true;
+                colvarAddedAt.IsPrimaryKey = false;
+                colvarAddedAt.IsForeignKey = false;
+                colvarAddedAt.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarAddedAt);
+                
+                TableSchema.TableColumn colvarAddedBy = new TableSchema.TableColumn(schema);
+                colvarAddedBy.ColumnName = "AddedBy";
+                colvarAddedBy.DataType = DbType.AnsiString;
+                colvarAddedBy.MaxLength = 128;
+                colvarAddedBy.AutoIncrement = false;
+                colvarAddedBy.IsNullable = false;
+                colvarAddedBy.IsPrimaryKey = false;
+                colvarAddedBy.IsForeignKey = false;
+                colvarAddedBy.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarAddedBy);
+                
+                TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+                colvarUpdatedAt.ColumnName = "UpdatedAt";
+                colvarUpdatedAt.DataType = DbType.DateTime;
+                colvarUpdatedAt.MaxLength = 0;
+                colvarUpdatedAt.AutoIncrement = false;
+                colvarUpdatedAt.IsNullable = true;
+                colvarUpdatedAt.IsPrimaryKey = false;
+                colvarUpdatedAt.IsForeignKey = false;
+                colvarUpdatedAt.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUpdatedAt);
+                
+                TableSchema.TableColumn colvarUpdatedBy = new TableSchema.TableColumn(schema);
+                colvarUpdatedBy.ColumnName = "UpdatedBy";
+                colvarUpdatedBy.DataType = DbType.AnsiString;
+                colvarUpdatedBy.MaxLength = 128;
+                colvarUpdatedBy.AutoIncrement = false;
+                colvarUpdatedBy.IsNullable = false;
+                colvarUpdatedBy.IsPrimaryKey = false;
+                colvarUpdatedBy.IsForeignKey = false;
+                colvarUpdatedBy.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUpdatedBy);
+                
+                TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
+                colvarRowVersion.ColumnName = "RowVersion";
+                colvarRowVersion.DataType = DbType.Binary;
+                colvarRowVersion.MaxLength = 0;
+                colvarRowVersion.AutoIncrement = false;
+                colvarRowVersion.IsNullable = false;
+                colvarRowVersion.IsPrimaryKey = false;
+                colvarRowVersion.IsForeignKey = false;
+                colvarRowVersion.IsReadOnly = true;
+                
+                schema.Columns.Add(colvarRowVersion);
                 
                 TableSchema.TableColumn colvarMetadataURL = new TableSchema.TableColumn(schema);
                 colvarMetadataURL.ColumnName = "MetadataURL";
@@ -141,78 +201,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarCitation);
                 
-                TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
-                colvarAddedAt.ColumnName = "AddedAt";
-                colvarAddedAt.DataType = DbType.DateTime;
-                colvarAddedAt.MaxLength = 0;
-                colvarAddedAt.AutoIncrement = false;
-                colvarAddedAt.IsNullable = true;
-                colvarAddedAt.IsPrimaryKey = false;
-                colvarAddedAt.IsForeignKey = false;
-                colvarAddedAt.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarAddedAt);
-                
-                TableSchema.TableColumn colvarAddedBy = new TableSchema.TableColumn(schema);
-                colvarAddedBy.ColumnName = "AddedBy";
-                colvarAddedBy.DataType = DbType.String;
-                colvarAddedBy.MaxLength = 128;
-                colvarAddedBy.AutoIncrement = false;
-                colvarAddedBy.IsNullable = false;
-                colvarAddedBy.IsPrimaryKey = false;
-                colvarAddedBy.IsForeignKey = false;
-                colvarAddedBy.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarAddedBy);
-                
-                TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
-                colvarUpdatedAt.ColumnName = "UpdatedAt";
-                colvarUpdatedAt.DataType = DbType.DateTime;
-                colvarUpdatedAt.MaxLength = 0;
-                colvarUpdatedAt.AutoIncrement = false;
-                colvarUpdatedAt.IsNullable = true;
-                colvarUpdatedAt.IsPrimaryKey = false;
-                colvarUpdatedAt.IsForeignKey = false;
-                colvarUpdatedAt.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarUpdatedAt);
-                
-                TableSchema.TableColumn colvarUpdatedBy = new TableSchema.TableColumn(schema);
-                colvarUpdatedBy.ColumnName = "UpdatedBy";
-                colvarUpdatedBy.DataType = DbType.String;
-                colvarUpdatedBy.MaxLength = 128;
-                colvarUpdatedBy.AutoIncrement = false;
-                colvarUpdatedBy.IsNullable = false;
-                colvarUpdatedBy.IsPrimaryKey = false;
-                colvarUpdatedBy.IsForeignKey = false;
-                colvarUpdatedBy.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarUpdatedBy);
-                
-                TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
-                colvarRowVersion.ColumnName = "RowVersion";
-                colvarRowVersion.DataType = DbType.Binary;
-                colvarRowVersion.MaxLength = 0;
-                colvarRowVersion.AutoIncrement = false;
-                colvarRowVersion.IsNullable = false;
-                colvarRowVersion.IsPrimaryKey = false;
-                colvarRowVersion.IsForeignKey = false;
-                colvarRowVersion.IsReadOnly = true;
-                
-                schema.Columns.Add(colvarRowVersion);
-                
-                TableSchema.TableColumn colvarDateX = new TableSchema.TableColumn(schema);
-                colvarDateX.ColumnName = "Date";
-                colvarDateX.DataType = DbType.DateTime;
-                colvarDateX.MaxLength = 0;
-                colvarDateX.AutoIncrement = false;
-                colvarDateX.IsNullable = false;
-                colvarDateX.IsPrimaryKey = false;
-                colvarDateX.IsForeignKey = false;
-                colvarDateX.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarDateX);
-                
                 TableSchema.TableColumn colvarTitle = new TableSchema.TableColumn(schema);
                 colvarTitle.ColumnName = "Title";
                 colvarTitle.DataType = DbType.AnsiString;
@@ -236,6 +224,18 @@ namespace SAEON.Observations.Data{
                 colvarKeywords.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarKeywords);
+                
+                TableSchema.TableColumn colvarDateX = new TableSchema.TableColumn(schema);
+                colvarDateX.ColumnName = "Date";
+                colvarDateX.DataType = DbType.DateTime;
+                colvarDateX.MaxLength = 0;
+                colvarDateX.AutoIncrement = false;
+                colvarDateX.IsNullable = false;
+                colvarDateX.IsPrimaryKey = false;
+                colvarDateX.IsForeignKey = false;
+                colvarDateX.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarDateX);
                 
                 TableSchema.TableColumn colvarInput = new TableSchema.TableColumn(schema);
                 colvarInput.ColumnName = "Input";
@@ -308,6 +308,18 @@ namespace SAEON.Observations.Data{
                 colvarZipCheckSum.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarZipCheckSum);
+                
+                TableSchema.TableColumn colvarZipURL = new TableSchema.TableColumn(schema);
+                colvarZipURL.ColumnName = "ZipURL";
+                colvarZipURL.DataType = DbType.AnsiString;
+                colvarZipURL.MaxLength = 2000;
+                colvarZipURL.AutoIncrement = false;
+                colvarZipURL.IsNullable = false;
+                colvarZipURL.IsPrimaryKey = false;
+                colvarZipURL.IsForeignKey = false;
+                colvarZipURL.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarZipURL);
                 
                 TableSchema.TableColumn colvarPlaces = new TableSchema.TableColumn(schema);
                 colvarPlaces.ColumnName = "Places";
@@ -416,6 +428,18 @@ namespace SAEON.Observations.Data{
                 colvarEndDate.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarEndDate);
+                
+                TableSchema.TableColumn colvarOpenDataPlatformID = new TableSchema.TableColumn(schema);
+                colvarOpenDataPlatformID.ColumnName = "OpenDataPlatformID";
+                colvarOpenDataPlatformID.DataType = DbType.Guid;
+                colvarOpenDataPlatformID.MaxLength = 0;
+                colvarOpenDataPlatformID.AutoIncrement = false;
+                colvarOpenDataPlatformID.IsNullable = false;
+                colvarOpenDataPlatformID.IsPrimaryKey = false;
+                colvarOpenDataPlatformID.IsForeignKey = false;
+                colvarOpenDataPlatformID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOpenDataPlatformID);
                 
                 TableSchema.TableColumn colvarDoi = new TableSchema.TableColumn(schema);
                 colvarDoi.ColumnName = "DOI";
@@ -547,48 +571,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("MetadataURL")]
-        [Bindable(true)]
-        public string MetadataURL 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("MetadataURL");
-		    }
-            set 
-		    {
-			    SetColumnValue("MetadataURL", value);
-            }
-        }
-	      
-        [XmlAttribute("DownloadURL")]
-        [Bindable(true)]
-        public string DownloadURL 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("DownloadURL");
-		    }
-            set 
-		    {
-			    SetColumnValue("DownloadURL", value);
-            }
-        }
-	      
-        [XmlAttribute("Citation")]
-        [Bindable(true)]
-        public string Citation 
-	    {
-		    get
-		    {
-			    return GetColumnValue<string>("Citation");
-		    }
-            set 
-		    {
-			    SetColumnValue("Citation", value);
-            }
-        }
-	      
         [XmlAttribute("AddedAt")]
         [Bindable(true)]
         public DateTime? AddedAt 
@@ -659,17 +641,45 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("DateX")]
+        [XmlAttribute("MetadataURL")]
         [Bindable(true)]
-        public DateTime DateX 
+        public string MetadataURL 
 	    {
 		    get
 		    {
-			    return GetColumnValue<DateTime>("Date");
+			    return GetColumnValue<string>("MetadataURL");
 		    }
             set 
 		    {
-			    SetColumnValue("Date", value);
+			    SetColumnValue("MetadataURL", value);
+            }
+        }
+	      
+        [XmlAttribute("DownloadURL")]
+        [Bindable(true)]
+        public string DownloadURL 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("DownloadURL");
+		    }
+            set 
+		    {
+			    SetColumnValue("DownloadURL", value);
+            }
+        }
+	      
+        [XmlAttribute("Citation")]
+        [Bindable(true)]
+        public string Citation 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("Citation");
+		    }
+            set 
+		    {
+			    SetColumnValue("Citation", value);
             }
         }
 	      
@@ -698,6 +708,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("Keywords", value);
+            }
+        }
+	      
+        [XmlAttribute("DateX")]
+        [Bindable(true)]
+        public DateTime DateX 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime>("Date");
+		    }
+            set 
+		    {
+			    SetColumnValue("Date", value);
             }
         }
 	      
@@ -782,6 +806,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("ZipCheckSum", value);
+            }
+        }
+	      
+        [XmlAttribute("ZipURL")]
+        [Bindable(true)]
+        public string ZipURL 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("ZipURL");
+		    }
+            set 
+		    {
+			    SetColumnValue("ZipURL", value);
             }
         }
 	      
@@ -911,6 +949,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("OpenDataPlatformID")]
+        [Bindable(true)]
+        public Guid OpenDataPlatformID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("OpenDataPlatformID");
+		    }
+            set 
+		    {
+			    SetColumnValue("OpenDataPlatformID", value);
+            }
+        }
+	      
         [XmlAttribute("Doi")]
         [Bindable(true)]
         public string Doi 
@@ -954,12 +1006,6 @@ namespace SAEON.Observations.Data{
             
             public static string Description = @"Description";
             
-            public static string MetadataURL = @"MetadataURL";
-            
-            public static string DownloadURL = @"DownloadURL";
-            
-            public static string Citation = @"Citation";
-            
             public static string AddedAt = @"AddedAt";
             
             public static string AddedBy = @"AddedBy";
@@ -970,11 +1016,17 @@ namespace SAEON.Observations.Data{
             
             public static string RowVersion = @"RowVersion";
             
-            public static string DateX = @"Date";
+            public static string MetadataURL = @"MetadataURL";
+            
+            public static string DownloadURL = @"DownloadURL";
+            
+            public static string Citation = @"Citation";
             
             public static string Title = @"Title";
             
             public static string Keywords = @"Keywords";
+            
+            public static string DateX = @"Date";
             
             public static string Input = @"Input";
             
@@ -987,6 +1039,8 @@ namespace SAEON.Observations.Data{
             public static string ZipFullName = @"ZipFullName";
             
             public static string ZipCheckSum = @"ZipCheckSum";
+            
+            public static string ZipURL = @"ZipURL";
             
             public static string Places = @"Places";
             
@@ -1005,6 +1059,8 @@ namespace SAEON.Observations.Data{
             public static string StartDate = @"StartDate";
             
             public static string EndDate = @"EndDate";
+            
+            public static string OpenDataPlatformID = @"OpenDataPlatformID";
             
             public static string Doi = @"DOI";
             

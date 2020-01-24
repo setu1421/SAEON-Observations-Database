@@ -345,6 +345,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarPhenomenonName);
                 
+                TableSchema.TableColumn colvarPhenomenonDescription = new TableSchema.TableColumn(schema);
+                colvarPhenomenonDescription.ColumnName = "PhenomenonDescription";
+                colvarPhenomenonDescription.DataType = DbType.AnsiString;
+                colvarPhenomenonDescription.MaxLength = 5000;
+                colvarPhenomenonDescription.AutoIncrement = false;
+                colvarPhenomenonDescription.IsNullable = true;
+                colvarPhenomenonDescription.IsPrimaryKey = false;
+                colvarPhenomenonDescription.IsForeignKey = false;
+                colvarPhenomenonDescription.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarPhenomenonDescription);
+                
                 TableSchema.TableColumn colvarOfferingCode = new TableSchema.TableColumn(schema);
                 colvarOfferingCode.ColumnName = "OfferingCode";
                 colvarOfferingCode.DataType = DbType.AnsiString;
@@ -368,6 +380,18 @@ namespace SAEON.Observations.Data{
                 colvarOfferingName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarOfferingName);
+                
+                TableSchema.TableColumn colvarOfferingDescription = new TableSchema.TableColumn(schema);
+                colvarOfferingDescription.ColumnName = "OfferingDescription";
+                colvarOfferingDescription.DataType = DbType.AnsiString;
+                colvarOfferingDescription.MaxLength = 5000;
+                colvarOfferingDescription.AutoIncrement = false;
+                colvarOfferingDescription.IsNullable = true;
+                colvarOfferingDescription.IsPrimaryKey = false;
+                colvarOfferingDescription.IsForeignKey = false;
+                colvarOfferingDescription.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOfferingDescription);
                 
                 TableSchema.TableColumn colvarUnitOfMeasureCode = new TableSchema.TableColumn(schema);
                 colvarUnitOfMeasureCode.ColumnName = "UnitOfMeasureCode";
@@ -429,6 +453,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarSensorName);
                 
+                TableSchema.TableColumn colvarSensorDescription = new TableSchema.TableColumn(schema);
+                colvarSensorDescription.ColumnName = "SensorDescription";
+                colvarSensorDescription.DataType = DbType.AnsiString;
+                colvarSensorDescription.MaxLength = 5000;
+                colvarSensorDescription.AutoIncrement = false;
+                colvarSensorDescription.IsNullable = true;
+                colvarSensorDescription.IsPrimaryKey = false;
+                colvarSensorDescription.IsForeignKey = false;
+                colvarSensorDescription.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSensorDescription);
+                
                 TableSchema.TableColumn colvarInstrumentCode = new TableSchema.TableColumn(schema);
                 colvarInstrumentCode.ColumnName = "InstrumentCode";
                 colvarInstrumentCode.DataType = DbType.AnsiString;
@@ -452,6 +488,18 @@ namespace SAEON.Observations.Data{
                 colvarInstrumentName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarInstrumentName);
+                
+                TableSchema.TableColumn colvarInstrumentDescription = new TableSchema.TableColumn(schema);
+                colvarInstrumentDescription.ColumnName = "InstrumentDescription";
+                colvarInstrumentDescription.DataType = DbType.AnsiString;
+                colvarInstrumentDescription.MaxLength = 5000;
+                colvarInstrumentDescription.AutoIncrement = false;
+                colvarInstrumentDescription.IsNullable = true;
+                colvarInstrumentDescription.IsPrimaryKey = false;
+                colvarInstrumentDescription.IsForeignKey = false;
+                colvarInstrumentDescription.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarInstrumentDescription);
                 
                 TableSchema.TableColumn colvarStationCode = new TableSchema.TableColumn(schema);
                 colvarStationCode.ColumnName = "StationCode";
@@ -477,6 +525,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarStationName);
                 
+                TableSchema.TableColumn colvarStationDescription = new TableSchema.TableColumn(schema);
+                colvarStationDescription.ColumnName = "StationDescription";
+                colvarStationDescription.DataType = DbType.AnsiString;
+                colvarStationDescription.MaxLength = 5000;
+                colvarStationDescription.AutoIncrement = false;
+                colvarStationDescription.IsNullable = true;
+                colvarStationDescription.IsPrimaryKey = false;
+                colvarStationDescription.IsForeignKey = false;
+                colvarStationDescription.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarStationDescription);
+                
                 TableSchema.TableColumn colvarSiteCode = new TableSchema.TableColumn(schema);
                 colvarSiteCode.ColumnName = "SiteCode";
                 colvarSiteCode.DataType = DbType.AnsiString;
@@ -500,6 +560,18 @@ namespace SAEON.Observations.Data{
                 colvarSiteName.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarSiteName);
+                
+                TableSchema.TableColumn colvarSiteDescription = new TableSchema.TableColumn(schema);
+                colvarSiteDescription.ColumnName = "SiteDescription";
+                colvarSiteDescription.DataType = DbType.AnsiString;
+                colvarSiteDescription.MaxLength = 5000;
+                colvarSiteDescription.AutoIncrement = false;
+                colvarSiteDescription.IsNullable = true;
+                colvarSiteDescription.IsPrimaryKey = false;
+                colvarSiteDescription.IsForeignKey = false;
+                colvarSiteDescription.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSiteDescription);
                 
                 
                 BaseSchema = schema;
@@ -887,6 +959,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("PhenomenonDescription")]
+        [Bindable(true)]
+        public string PhenomenonDescription 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("PhenomenonDescription");
+		    }
+            set 
+		    {
+			    SetColumnValue("PhenomenonDescription", value);
+            }
+        }
+	      
         [XmlAttribute("OfferingCode")]
         [Bindable(true)]
         public string OfferingCode 
@@ -912,6 +998,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("OfferingName", value);
+            }
+        }
+	      
+        [XmlAttribute("OfferingDescription")]
+        [Bindable(true)]
+        public string OfferingDescription 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("OfferingDescription");
+		    }
+            set 
+		    {
+			    SetColumnValue("OfferingDescription", value);
             }
         }
 	      
@@ -985,6 +1085,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("SensorDescription")]
+        [Bindable(true)]
+        public string SensorDescription 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("SensorDescription");
+		    }
+            set 
+		    {
+			    SetColumnValue("SensorDescription", value);
+            }
+        }
+	      
         [XmlAttribute("InstrumentCode")]
         [Bindable(true)]
         public string InstrumentCode 
@@ -1010,6 +1124,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("InstrumentName", value);
+            }
+        }
+	      
+        [XmlAttribute("InstrumentDescription")]
+        [Bindable(true)]
+        public string InstrumentDescription 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("InstrumentDescription");
+		    }
+            set 
+		    {
+			    SetColumnValue("InstrumentDescription", value);
             }
         }
 	      
@@ -1041,6 +1169,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("StationDescription")]
+        [Bindable(true)]
+        public string StationDescription 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("StationDescription");
+		    }
+            set 
+		    {
+			    SetColumnValue("StationDescription", value);
+            }
+        }
+	      
         [XmlAttribute("SiteCode")]
         [Bindable(true)]
         public string SiteCode 
@@ -1066,6 +1208,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("SiteName", value);
+            }
+        }
+	      
+        [XmlAttribute("SiteDescription")]
+        [Bindable(true)]
+        public string SiteDescription 
+	    {
+		    get
+		    {
+			    return GetColumnValue<string>("SiteDescription");
+		    }
+            set 
+		    {
+			    SetColumnValue("SiteDescription", value);
             }
         }
 	    
@@ -1124,9 +1280,13 @@ namespace SAEON.Observations.Data{
             
             public static string PhenomenonName = @"PhenomenonName";
             
+            public static string PhenomenonDescription = @"PhenomenonDescription";
+            
             public static string OfferingCode = @"OfferingCode";
             
             public static string OfferingName = @"OfferingName";
+            
+            public static string OfferingDescription = @"OfferingDescription";
             
             public static string UnitOfMeasureCode = @"UnitOfMeasureCode";
             
@@ -1138,17 +1298,25 @@ namespace SAEON.Observations.Data{
             
             public static string SensorName = @"SensorName";
             
+            public static string SensorDescription = @"SensorDescription";
+            
             public static string InstrumentCode = @"InstrumentCode";
             
             public static string InstrumentName = @"InstrumentName";
+            
+            public static string InstrumentDescription = @"InstrumentDescription";
             
             public static string StationCode = @"StationCode";
             
             public static string StationName = @"StationName";
             
+            public static string StationDescription = @"StationDescription";
+            
             public static string SiteCode = @"SiteCode";
             
             public static string SiteName = @"SiteName";
+            
+            public static string SiteDescription = @"SiteDescription";
             
 	    }
 	    #endregion
