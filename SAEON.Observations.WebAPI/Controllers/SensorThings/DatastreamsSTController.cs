@@ -14,29 +14,6 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
     [ODataRoutePrefix("Datastreams")]
     public class DatastreamsSTController : BaseController<Datastream, db.SensorThingsDatastream>
     {
-        protected override void CreateRelatedMappings(MapperConfigurationExpression cfg)
-        {
-            base.CreateRelatedMappings(cfg);
-            cfg.CreateMap<db.SensorThingsThing, Thing>();
-        }
-
-        protected override Datastream ConvertDbEntity(db.SensorThingsDatastream dbEntity)
-        {
-            using (Logging.MethodCall(GetType()))
-            {
-                var dbThing = DbContext.SensorThingsThings.Where(i => i.Id == dbEntity.InstrumentID).First();
-                var result = Converters.ConvertDatastream(Mapper, dbEntity, dbThing);
-                //var dbLocation = DbContext.SensorThingsLocations.Where(i => i.Id == dbEntity.Id).FirstOrDefault();
-                //if (dbLocation != null)
-                //{
-                //    result.Locations.Add(Converters.ConvertLocation(Mapper, dbLocation));
-                //    result.HistoricalLocations.Add(Converters.ConvertHistoricalLocation(Mapper, dbLocation, dbEntity));
-                //}
-                Logging.Verbose("Result: {@Result}", result);
-                return result;
-            }
-        }
-
         [EnableQuery(PageSize = Config.PageSize), ODataRoute]
         public override IQueryable<Datastream> GetAll()
         {
@@ -49,59 +26,22 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
             return base.GetById(id);
         }
 
+        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/ObservedProperty")]
+        public SingleResult<ObservedProperty> GetObservedProperty([FromUri] Guid id)
+        {
+            return GetRelatedSingle(id, i => i.ObservedProperty);
+        }
+
+        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Sensor")]
+        public SingleResult<Sensor> GetSensor([FromUri] Guid id)
+        {
+            return GetRelatedSingle(id, i => i.Sensor);
+        }
+
         [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Thing")]
         public SingleResult<Thing> GetThing([FromUri] Guid id)
         {
             return GetRelatedSingle(id, i => i.Thing);
         }
-
     }
 }
-/*
-using Newtonsoft.Json.Linq;
-using SAEON.SensorThings;
-using System;
-using System.Linq;
-using System.Web.Http;
-
-namespace SAEON.Observations.WebAPI.Controllers.SensorThings
-{
-    [RoutePrefix("SensorThings/Datastreams")]
-    public class DatastreamsSTController : BaseController<Datastream>
-    {
-        public DatastreamsSTController()
-        {
-            Entities.AddRange(SensorThingsFactory.Datastreams.OrderBy(i => i.Name));
-        }
-
-        public override JToken GetAll()
-        {
-            return base.GetAll();
-        }
-
-        [Route("~/SensorThings/Datastreams({id:guid})")]
-        public override JToken GetById([FromUri] Guid id)
-        {
-            return base.GetById(id);
-        }
-
-        [Route("~/SensorThings/Datastreams({id:guid})/Sensor")]
-        public JToken GetSensor([FromUri] Guid id)
-        {
-            return GetSingle(id, i => i.Sensor);
-        }
-
-        [Route("~/SensorThings/Datastreams({id:guid})/ObservedProperty")]
-        public JToken GetObservedProperty([FromUri] Guid id)
-        {
-            return GetSingle(id, i => i.ObservedProperty);
-        }
-
-        [Route("~/SensorThings/Datastreams({id:guid})/Observations")]
-        public JToken GetObservations([FromUri] Guid id)
-        {
-            return GetMany(id, i => i.Observations);
-        }
-    }
-}
-*/

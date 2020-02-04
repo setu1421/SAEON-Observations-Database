@@ -1415,7 +1415,7 @@ namespace SAEON.Observations.Core.Entities
     }
 
     [Table("vSensorThingsAPIObservedProperties")]
-    public class SensorThingsObservedPropery : BaseIDEntity
+    public class SensorThingsObservedProperty : BaseIDEntity
     {
         public string PhenomenonCode { get; set; }
         public string PhenomenonName { get; set; }
@@ -1433,6 +1433,7 @@ namespace SAEON.Observations.Core.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public string Url { get; set; }
+        public Guid PhenomenonOfferingId { get; set; }
     }
 
     [Table("vSensorThingsAPIThings")]
@@ -1807,7 +1808,7 @@ namespace SAEON.Observations.Core.Entities
         // SensorThings
         public DbSet<SensorThingsDatastream> SensorThingsDatastreams { get; set; }
         public DbSet<SensorThingsLocation> SensorThingsLocations { get; set; }
-        public DbSet<SensorThingsObservedPropery> SensorThingsObservedProperies { get; set; }
+        public DbSet<SensorThingsObservedProperty> SensorThingsObservedProperies { get; set; }
         public DbSet<SensorThingsSensor> SensorThingsSensors { get; set; }
         public DbSet<SensorThingsThing> SensorThingsThings { get; set; }
 

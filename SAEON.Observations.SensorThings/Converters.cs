@@ -1,61 +1,35 @@
 ﻿using AutoMapper;
 using Microsoft.Spatial;
 using SAEON.Logs;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using db = SAEON.Observations.Core.Entities;
 
 namespace SAEON.Observations.SensorThings
 {
-    public static class Converters
+    public class Converter
     {
-        public static Thing ConvertThing(IMapper mapper, db.SensorThingsThing dbThing)
+        protected db.ObservationsDbContext DbContext { get; private set; } = null;
+        protected IMapper Mapper { get; private set; } = null;
+
+        public Converter(db.ObservationsDbContext dbContext, IMapper mapper)
         {
-            using (Logging.MethodCall(typeof(Converters)))
-            {
-                var result = mapper.Map<Thing>(dbThing);
-                result.Properties.Add("kind", dbThing.Kind);
-                if (!string.IsNullOrWhiteSpace(dbThing.Url)) result.Properties.Add("url", dbThing.Url);
-                if (dbThing.StartDate.HasValue) result.Properties.Add("startDate", dbThing.StartDate.Value.ToString("o"));
-                if (dbThing.EndDate.HasValue) result.Properties.Add("endDate", dbThing.EndDate.Value.ToString("o"));
-                //Logging.Verbose("Result: {@Result}", result);
-                return result;
-            }
+            DbContext = dbContext;
+            Mapper = mapper;
         }
 
-        public static Location ConvertLocation(IMapper mapper, db.SensorThingsLocation dbLocation)
-        {
-            using (Logging.MethodCall(typeof(Converters)))
-            {
-                var result = mapper.Map<Location>(dbLocation);
-                result.location = GeographyPoint.Create(dbLocation.Latitude, dbLocation.Longitude, dbLocation.Elevation);
-                //Logging.Verbose("Result: {@Result}", result);
-                return result;
-            }
-        }
-
-        public static HistoricalLocation ConvertHistoricalLocation(IMapper mapper, db.SensorThingsLocation dbLocation, db.SensorThingsThing dbThing)
-        {
-            using (Logging.MethodCall(typeof(Converters)))
-            {
-                var location = ConvertLocation(mapper, dbLocation);
-                var thing = ConvertThing(mapper, dbThing);
-                var result = new HistoricalLocation { Id = location.Id, Time = dbLocation.StartDate ?? dbLocation.EndDate ?? DateTime.Now, Thing = thing, Locations = new List<Location> { location } };
-                //Logging.Verbose("Result: {@Result}", result);
-                return result;
-            }
-        }
-
-        public static Datastream ConvertDatastream(IMapper mapper, db.SensorThingsDatastream dbDatastream, db.SensorThingsThing dbThing)
+        public Datastream ConvertDatastream(db.SensorThingsDatastream dbDatastream, Thing thing = null, Sensor sensor = null, ObservedProperty observedProperty = null)
         {
             GeographyPolygon CreatePolygon(double top, double left, double bottom, double right)
             {
                 return GeographyFactory.Polygon().Ring(left, top).LineTo(left, top).LineTo(right, top).LineTo(right, bottom).LineTo(left, bottom).LineTo(left, top).Build();
             }
 
-            using (Logging.MethodCall(typeof(Converters)))
+            using (Logging.MethodCall(GetType()))
             {
-                var result = mapper.Map<Datastream>(dbDatastream);
+                var result = Mapper.Map<Datastream>(dbDatastream);
                 result.UnitOfMeasurement = new UnitOfMeasurement
                 {
                     Name = $"{dbDatastream.PhenomenonName} - {dbDatastream.OfferingName} - {dbDatastream.UnitOfMeasureUnit}",
@@ -73,17 +47,123 @@ namespace SAEON.Observations.SensorThings
                     result.PhenomenonTime = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
                     result.ResultTime = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
                 }
-                result.Thing = ConvertThing(mapper, dbThing);
+                if (thing == null)
+                {
+                    var dbThing = DbContext.SensorThingsThings.First(i => i.Id == dbDatastream.InstrumentId);
+                    thing = ConvertThing(dbThing);
+                }
+                result.Thing = thing;
+                if (sensor == null)
+                {
+                    var dbSensor = DbContext.SensorThingsSensors.First(i => i.Id == dbDatastream.Id);
+                    sensor = ConvertSensor(dbSensor);
+                    if (observedProperty == null)
+                    {
+                        var dbObservedPropery = DbContext.SensorThingsObservedProperies.First(i => i.Id == dbSensor.PhenomenonOfferingId);
+                        observedProperty = ConvertObservedProperty(dbObservedPropery);
+                    }
+                }
+                result.Sensor = sensor;
+                result.ObservedProperty = observedProperty;
                 //Logging.Verbose("Result: {@Result}", result);
                 return result;
             }
         }
 
-        public static ObservedProperty ConverObservedProperty(IMapper mapper, db.SensorThingsObservedPropery dbObservedProperty)
+        public HistoricalLocation ConvertHistoricalLocation(db.SensorThingsLocation dbLocation, Thing thing = null)
         {
-            var result = mapper.Map<ObservedProperty>(dbObservedProperty);
-            //Logging.Verbose("Result: {@Result}", result);
-            return result;
+            using (Logging.MethodCall(GetType()))
+            {
+                var location = ConvertLocation(dbLocation);
+                if (thing == null)
+                {
+                    var dbThing = DbContext.SensorThingsThings.First(i => i.Id == dbLocation.Id);
+                    thing = ConvertThing(dbThing);
+                }
+                var result = ConvertHistoricalLocation(dbLocation.StartDate ?? dbLocation.EndDate ?? DateTime.Now, location, thing);
+                //Logging.Verbose("Result: {@Result}", result);
+                return result;
+            }
         }
+
+        private HistoricalLocation ConvertHistoricalLocation(DateTime time, Location location, Thing thing)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                var result = new HistoricalLocation { Id = location.Id, Time = time, Thing = thing, Locations = new List<Location> { location } };
+                //Logging.Verbose("Result: {@Result}", result);
+                return result;
+            }
+        }
+
+        public Location ConvertLocation(db.SensorThingsLocation dbLocation, Thing thing = null)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                var result = Mapper.Map<Location>(dbLocation);
+                result.location = new GeoJSONPoint(GeographyPoint.Create(dbLocation.Latitude, dbLocation.Longitude, dbLocation.Elevation));
+                if (thing == null)
+                {
+                    var dbThing = DbContext.SensorThingsThings.First(i => i.Id == dbLocation.Id);
+                    thing = ConvertThing(dbThing);
+                }
+                result.Things.Add(thing);
+                result.HistoricalLocations.Add(ConvertHistoricalLocation(dbLocation.StartDate ?? dbLocation.EndDate ?? DateTime.Now, result, thing));
+                //Logging.Verbose("Result: {@Result}", result);
+                return result;
+            }
+        }
+
+        public ObservedProperty ConvertObservedProperty(db.SensorThingsObservedProperty dbObservedProperty)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                var result = Mapper.Map<ObservedProperty>(dbObservedProperty);
+                result.Code = $"{dbObservedProperty.PhenomenonCode} {dbObservedProperty.OfferingCode}";
+                result.Name = $"{dbObservedProperty.PhenomenonName} {dbObservedProperty.OfferingName}";
+                result.Definition = dbObservedProperty.PhenomenonUrl;
+                result.Description = $"{dbObservedProperty.PhenomenonName}, {dbObservedProperty.OfferingName}";
+                //Logging.Verbose("Result: {@Result}", result);
+                return result;
+            }
+        }
+
+        public Sensor ConvertSensor(db.SensorThingsSensor dbSensor)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                var result = Mapper.Map<Sensor>(dbSensor);
+                result.Metdadata = dbSensor.Url;
+                //Logging.Verbose("Result: {@Result}", result);
+                return result;
+            }
+        }
+
+        public Thing ConvertThing(db.SensorThingsThing dbThing)
+        {
+            using (Logging.MethodCall(GetType()))
+            {
+                var result = Mapper.Map<Thing>(dbThing);
+                result.Properties.Add("kind", dbThing.Kind);
+                if (!string.IsNullOrWhiteSpace(dbThing.Url)) result.Properties.Add("url", dbThing.Url);
+                if (dbThing.StartDate.HasValue) result.Properties.Add("startDate", dbThing.StartDate.Value.ToString("o"));
+                if (dbThing.EndDate.HasValue) result.Properties.Add("endDate", dbThing.EndDate.Value.ToString("o"));
+                var dbLocation = DbContext.SensorThingsLocations.Where(i => i.Id == dbThing.Id).FirstOrDefault();
+                if (dbLocation != null)
+                {
+                    var location = ConvertLocation(dbLocation, result);
+                    result.Locations.Add(location);
+                    result.HistoricalLocations.Add(ConvertHistoricalLocation(dbLocation.StartDate ?? dbLocation.EndDate ?? DateTime.Now, location, result));
+                }
+                var dbDatastreams = DbContext.SensorThingsDatastreams.Where(i => i.InstrumentId == dbThing.Id);
+                foreach (var dbDatastream in dbDatastreams)
+                {
+                    result.Datastreams.Add(ConvertDatastream(dbDatastream, result));
+                }
+                //Logging.Verbose("Result: {@Result}", result);
+                return result;
+            }
+        }
+
     }
 }

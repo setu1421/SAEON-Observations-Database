@@ -13,10 +13,12 @@ namespace SAEON.Observations.SensorThings
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "SensorThingsAPI" };
             builder.EnableLowerCamelCase();
             builder.AddComplexType(typeof(ODataNamedValueDictionary<string>));
-            builder.EntitySet<Thing>("Things");
-            builder.EntitySet<Location>("Locations");
-            builder.EntitySet<HistoricalLocation>("HistoricalLocations");
             builder.EntitySet<Datastream>("Datastreams");
+            builder.EntitySet<HistoricalLocation>("HistoricalLocations");
+            builder.EntitySet<Location>("Locations");
+            builder.EntitySet<HistoricalLocation>("ObservedProperties");
+            builder.EntitySet<Thing>("Sensors");
+            builder.EntitySet<Thing>("Things");
             return builder.GetEdmModel();
         }
     }

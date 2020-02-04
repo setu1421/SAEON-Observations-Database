@@ -3,7 +3,7 @@ using AutoMapper.Configuration;
 using Microsoft.AspNet.OData;
 using SAEON.AspNet.WebApi;
 using SAEON.Logs;
-using SAEON.Observations.Core.Entities;
+using db = SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,36 +13,71 @@ using System.Web.Http;
 
 namespace SAEON.Observations.SensorThings
 {
-    public abstract class SensorThingsController<TSensorThingsEntity, TDbEntity> : ODataController where TSensorThingsEntity : SensorThingsEntity, new() where TDbEntity : BaseIDEntity
+    public abstract class SensorThingsController<TSensorThingsEntity, TDbEntity> : ODataController where TSensorThingsEntity : SensorThingsEntity, new() where TDbEntity : db.BaseIDEntity
     {
-        private ObservationsDbContext dbContext = null;
-        protected ObservationsDbContext DbContext
+        private db.ObservationsDbContext dbContext = null;
+        protected db.ObservationsDbContext DbContext
         {
             get
             {
-                if (dbContext == null) dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
+                if (dbContext == null) dbContext = new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
                 return dbContext;
             }
-            private set => dbContext = value;
         }
         protected IMapper Mapper { get; private set; } = null;
+        private Converter converter = null;
+        protected Converter Converter
+        {
+            get
+            {
+                if (converter == null) converter = new Converter(DbContext, Mapper);
+                return converter;
+            }
+        }
 
         public SensorThingsController() : base()
         {
-            Mapper = GetMapperConfiguration().CreateMapper();
-        }
-
-        protected virtual void CreateRelatedMappings(MapperConfigurationExpression cfg) { }
-
-        protected MapperConfiguration GetMapperConfiguration()
-        {
             var config = new MapperConfigurationExpression();
-            config.CreateMap<TDbEntity, TSensorThingsEntity>();
-            CreateRelatedMappings(config);
-            return new MapperConfiguration(config);
+            config.CreateMap<db.SensorThingsDatastream, Datastream>();
+            config.CreateMap<db.SensorThingsLocation, HistoricalLocation>();
+            config.CreateMap<db.SensorThingsLocation, Location>();
+            config.CreateMap<db.SensorThingsObservedProperty, ObservedProperty>();
+            config.CreateMap<db.SensorThingsSensor, Sensor>();
+            config.CreateMap<db.SensorThingsThing, Thing>();
+            Mapper = new MapperConfiguration(config).CreateMapper();
         }
 
-        protected abstract TSensorThingsEntity ConvertDbEntity(TDbEntity dbEntity);
+        protected T ConvertDbEntity<T>(TDbEntity dbEntity) where T : SensorThingsEntity
+        {
+            using (Logging.MethodCall<T, TDbEntity>(GetType()))
+            {
+                object result = default(T);
+                switch (dbEntity)
+                {
+                    case db.SensorThingsDatastream dbDatastream:
+                        result = Converter.ConvertDatastream(dbDatastream);
+                        break;
+                    case db.SensorThingsLocation dbLocation when typeof(T) == typeof(Location):
+                        result = Converter.ConvertLocation(dbLocation);
+                        break;
+                    case db.SensorThingsLocation dbLocation when typeof(T) == typeof(HistoricalLocation):
+                        result = Converter.ConvertHistoricalLocation(dbLocation);
+                        break;
+                    case db.SensorThingsObservedProperty dbObservedProperty:
+                        result = Converter.ConvertObservedProperty(dbObservedProperty);
+                        break;
+                    case db.SensorThingsSensor dbSensor:
+                        result = Converter.ConvertSensor(dbSensor);
+                        break;
+                    case db.SensorThingsThing dbThing:
+                        result = Converter.ConvertThing(dbThing);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+                return (T)result;
+            }
+        }
 
         /// <summary>
         /// Overwrite to filter entities
@@ -102,7 +137,7 @@ namespace SAEON.Observations.SensorThings
             var result = new List<TSensorThingsEntity>();
             foreach (var dbEntity in GetDbAll())
             {
-                result.Add(ConvertDbEntity(dbEntity));
+                result.Add(ConvertDbEntity<TSensorThingsEntity>(dbEntity));
             }
             return result.AsQueryable();
         }
@@ -113,7 +148,7 @@ namespace SAEON.Observations.SensorThings
             var dbEntity = GetDbAll(i => i.Id == id).FirstOrDefault();
             if (dbEntity != null)
             {
-                result.Add(ConvertDbEntity(dbEntity));
+                result.Add(ConvertDbEntity<TSensorThingsEntity>(dbEntity));
             }
             return result.AsQueryable();
         }
