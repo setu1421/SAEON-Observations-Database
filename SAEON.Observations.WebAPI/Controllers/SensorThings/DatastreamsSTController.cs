@@ -1,7 +1,5 @@
-﻿using AutoMapper.Configuration;
-using Microsoft.AspNet.OData;
+﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
-using SAEON.Logs;
 using SAEON.Observations.SensorThings;
 using System;
 using System.Linq;

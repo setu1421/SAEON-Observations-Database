@@ -26,7 +26,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
         [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Datastreams")]
         public IQueryable<Datastream> GetDatastreams([FromUri] Guid id)
         {
-            return GetRelatedMany(id, i => i.Datastreams);
+            return GetDbRelatedMany(id, i => i.Datastreams);
         }
 
         [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Locations")]

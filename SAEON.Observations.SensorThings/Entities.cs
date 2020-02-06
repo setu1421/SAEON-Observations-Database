@@ -99,6 +99,18 @@ namespace SAEON.Observations.SensorThings
         }
     }
 
+    public class FeatureOfInterest : SensorThingsEntity
+    {
+        public string EncodingType { get; set; } = ValueCodes.GeoJson;
+        public GeoJSONPoint Feature { get; set; } = null;
+
+        public FeatureOfInterest() : base()
+        {
+            EntitySetName = "FeaturesOfInterest";
+            NavigationLinks.Add("Observation");
+        }
+    }
+
     public class HistoricalLocation : SensorThingsEntity
     {
         public DateTime Time { get; set; }
@@ -121,7 +133,7 @@ namespace SAEON.Observations.SensorThings
     public class Location : NamedSensorThingsEntity
     {
         public string EncodingType { get; set; } = ValueCodes.GeoJson;
-        public GeoJSONPoint location { get; set;} = null;
+        public GeoJSONPoint location { get; set; } = null;
         //public GeographyPoint location { get; set; } = null;
         public List<Thing> Things { get; set; } = new List<Thing>();
         public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
@@ -147,7 +159,7 @@ namespace SAEON.Observations.SensorThings
 
     public class Sensor : NamedSensorThingsEntity
     {
-        public string EncodingType { get; } = ValueCodes.Pdf;
+        public string EncodingType { get; set; } = ValueCodes.Pdf;
         public string Metdadata { get; set; }
         public List<Datastream> Datastreams { get; set; } = new List<Datastream>();
         public Sensor() : base()

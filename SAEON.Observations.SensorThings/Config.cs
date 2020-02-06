@@ -15,6 +15,7 @@ namespace SAEON.Observations.SensorThings
             builder.AddComplexType(typeof(ODataNamedValueDictionary<string>));
             builder.EntitySet<Datastream>("Datastreams");
             builder.EntitySet<HistoricalLocation>("HistoricalLocations");
+            builder.EntitySet<FeatureOfInterest>("FeaturesOfInterest");
             builder.EntitySet<Location>("Locations");
             builder.EntitySet<HistoricalLocation>("ObservedProperties");
             builder.EntitySet<Thing>("Sensors");

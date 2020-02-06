@@ -5,9 +5,9 @@ as
 (
 Select Distinct
   Station.ID, Station.Code, Station.Name, Station.Description,
-  Coalesce(Sensor.Latitude, Instrument_Sensor.Latitude, Instrument.Latitude, Station_Instrument.Latitude, Station.Latitude) Latitude,
-  Coalesce(Sensor.Longitude, Instrument_Sensor.Longitude, Instrument.Longitude, Station_Instrument.Longitude, Station.Longitude) Longitude,
-  Coalesce(Sensor.Elevation, Instrument_Sensor.Elevation, Instrument.Elevation, Station_Instrument.Elevation, Station.Elevation) Elevation,
+  Coalesce(Station.Latitude, Station_Instrument.Latitude, Instrument.Latitude, Instrument_Sensor.Latitude, Sensor.Latitude) Latitude,
+  Coalesce(Station.Longitude, Station_Instrument.Longitude, Instrument.Longitude, Instrument_Sensor.Longitude, Sensor.Longitude) Longitude,
+  Coalesce(Station.Elevation, Station_Instrument.Elevation, Instrument.Elevation, Instrument_Sensor.Elevation, Sensor.Elevation) Elevation,
   vSensorThingsAPIInstrumentDates.StartDate, vSensorThingsAPIInstrumentDates.EndDate
 from
   vInventory
@@ -29,9 +29,9 @@ as
 (
 Select Distinct
   Instrument.ID, Instrument.Code, Instrument.Name, Instrument.Description,
-  Coalesce(Sensor.Latitude, Instrument_Sensor.Latitude, Instrument.Latitude, Station_Instrument.Latitude, Station.Latitude) Latitude,
-  Coalesce(Sensor.Longitude, Instrument_Sensor.Longitude, Instrument.Longitude, Station_Instrument.Longitude, Station.Longitude) Longitude,
-  Coalesce(Sensor.Elevation, Instrument_Sensor.Elevation, Instrument.Elevation, Station_Instrument.Elevation, Station.Elevation) Elevation,
+  Coalesce(Instrument.Latitude, Instrument_Sensor.Latitude, Sensor.Latitude, Station_Instrument.Latitude, Station.Latitude) Latitude,
+  Coalesce(Instrument.Longitude, Instrument_Sensor.Longitude, Sensor.Longitude, Station_Instrument.Longitude, Station.Longitude) Longitude,
+  Coalesce(Instrument.Elevation, Instrument_Sensor.Elevation, Sensor.Elevation, Station_Instrument.Elevation, Station.Elevation) Elevation,
   vSensorThingsAPIInstrumentDates.StartDate, vSensorThingsAPIInstrumentDates.EndDate
 from
   vInventory

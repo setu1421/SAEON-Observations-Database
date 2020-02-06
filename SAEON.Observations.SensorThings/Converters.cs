@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Spatial;
 using SAEON.Logs;
-using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +13,20 @@ namespace SAEON.Observations.SensorThings
         protected db.ObservationsDbContext DbContext { get; private set; } = null;
         protected IMapper Mapper { get; private set; } = null;
 
+        //private List<Datastream> Datastreams => new List<Datastream>();
+        //private List<HistoricalLocation> HistoricalLocations => new List<HistoricalLocation>();
+        //private List<Location> Locations => new List<Location>();
+        //private List<ObservedProperty> ObservedProperties => new List<ObservedProperty>();
+        //private List<Sensor> Sensors => new List<Sensor>();
+        //private List<Thing> Things => new List<Thing>();
+
         public Converter(db.ObservationsDbContext dbContext, IMapper mapper)
         {
             DbContext = dbContext;
             Mapper = mapper;
         }
 
-        public Datastream ConvertDatastream(db.SensorThingsDatastream dbDatastream, Thing thing = null, Sensor sensor = null, ObservedProperty observedProperty = null)
+        public Datastream ConvertDatastream(db.SensorThingsDatastream dbDatastream/*, Thing thing = null, Sensor sensor = null, ObservedProperty observedProperty = null*/)
         {
             GeographyPolygon CreatePolygon(double top, double left, double bottom, double right)
             {
@@ -47,24 +53,24 @@ namespace SAEON.Observations.SensorThings
                     result.PhenomenonTime = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
                     result.ResultTime = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
                 }
-                if (thing == null)
-                {
-                    var dbThing = DbContext.SensorThingsThings.First(i => i.Id == dbDatastream.InstrumentId);
-                    thing = ConvertThing(dbThing);
-                }
-                result.Thing = thing;
-                if (sensor == null)
-                {
-                    var dbSensor = DbContext.SensorThingsSensors.First(i => i.Id == dbDatastream.Id);
-                    sensor = ConvertSensor(dbSensor);
-                    if (observedProperty == null)
-                    {
-                        var dbObservedPropery = DbContext.SensorThingsObservedProperies.First(i => i.Id == dbSensor.PhenomenonOfferingId);
-                        observedProperty = ConvertObservedProperty(dbObservedPropery);
-                    }
-                }
-                result.Sensor = sensor;
-                result.ObservedProperty = observedProperty;
+                //if (thing == null)
+                //{
+                //    var dbThing = DbContext.SensorThingsThings.First(i => i.Id == dbDatastream.InstrumentId);
+                //    thing = ConvertThing(dbThing, new List<Datastream> { result });
+                //}
+                //result.Thing = thing;
+                //if (sensor == null)
+                //{
+                //    var dbSensor = DbContext.SensorThingsSensors.First(i => i.Id == dbDatastream.Id);
+                //    sensor = ConvertSensor(dbSensor);
+                //    if (observedProperty == null)
+                //    {
+                //        var dbObservedPropery = DbContext.SensorThingsObservedProperies.First(i => i.Id == dbSensor.PhenomenonOfferingId);
+                //        observedProperty = ConvertObservedProperty(dbObservedPropery);
+                //    }
+                //}
+                //result.Sensor = sensor;
+                //result.ObservedProperty = observedProperty;
                 //Logging.Verbose("Result: {@Result}", result);
                 return result;
             }
@@ -128,18 +134,28 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        public Sensor ConvertSensor(db.SensorThingsSensor dbSensor)
+        public Sensor ConvertSensor(db.SensorThingsSensor dbSensor/*, List<Datastream> datastreams = null*/)
         {
             using (Logging.MethodCall(GetType()))
             {
                 var result = Mapper.Map<Sensor>(dbSensor);
                 result.Metdadata = dbSensor.Url;
+                //if (datastreams == null)
+                //{
+                //    datastreams = new List<Datastream>();
+                //    var dbDatastreams = DbContext.SensorThingsDatastreams.Where(i => i.Id == dbSensor.Id);
+                //    foreach (var dbDatastream in dbDatastreams)
+                //    {
+                //        datastreams.Add(ConvertDatastream(dbDatastream, sensor: result));
+                //    }
+                //}
+                //result.Datastreams.AddRange(datastreams);
                 //Logging.Verbose("Result: {@Result}", result);
                 return result;
             }
         }
 
-        public Thing ConvertThing(db.SensorThingsThing dbThing)
+        public Thing ConvertThing(db.SensorThingsThing dbThing/*, List<Datastream> datastreams = null*/)
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -148,18 +164,23 @@ namespace SAEON.Observations.SensorThings
                 if (!string.IsNullOrWhiteSpace(dbThing.Url)) result.Properties.Add("url", dbThing.Url);
                 if (dbThing.StartDate.HasValue) result.Properties.Add("startDate", dbThing.StartDate.Value.ToString("o"));
                 if (dbThing.EndDate.HasValue) result.Properties.Add("endDate", dbThing.EndDate.Value.ToString("o"));
-                var dbLocation = DbContext.SensorThingsLocations.Where(i => i.Id == dbThing.Id).FirstOrDefault();
-                if (dbLocation != null)
-                {
-                    var location = ConvertLocation(dbLocation, result);
-                    result.Locations.Add(location);
-                    result.HistoricalLocations.Add(ConvertHistoricalLocation(dbLocation.StartDate ?? dbLocation.EndDate ?? DateTime.Now, location, result));
-                }
-                var dbDatastreams = DbContext.SensorThingsDatastreams.Where(i => i.InstrumentId == dbThing.Id);
-                foreach (var dbDatastream in dbDatastreams)
-                {
-                    result.Datastreams.Add(ConvertDatastream(dbDatastream, result));
-                }
+                //var dbLocation = DbContext.SensorThingsLocations.Where(i => i.Id == dbThing.Id).FirstOrDefault();
+                //if (dbLocation != null)
+                //{
+                //    var location = ConvertLocation(dbLocation, result);
+                //    result.Locations.Add(location);
+                //    result.HistoricalLocations.Add(ConvertHistoricalLocation(dbLocation.StartDate ?? dbLocation.EndDate ?? DateTime.Now, location, result));
+                //}
+                //if (datastreams == null)
+                //{
+                //    datastreams = new List<Datastream>();
+                //    var dbDatastreams = DbContext.SensorThingsDatastreams.Where(i => i.InstrumentId == dbThing.Id);
+                //    foreach (var dbDatastream in dbDatastreams)
+                //    {
+                //        datastreams.Add(ConvertDatastream(dbDatastream, result));
+                //    }
+                //}
+                //result.Datastreams.AddRange(datastreams);
                 //Logging.Verbose("Result: {@Result}", result);
                 return result;
             }
