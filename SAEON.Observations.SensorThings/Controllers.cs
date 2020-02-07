@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration;
 using Microsoft.AspNet.OData;
+using Microsoft.Spatial;
 using SAEON.AspNet.WebApi;
 using SAEON.Logs;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Web.Http;
 using db = SAEON.Observations.Core.Entities;
 
@@ -25,15 +24,6 @@ namespace SAEON.Observations.SensorThings
             }
         }
         protected IMapper Mapper { get; private set; } = null;
-        private Converter converter = null;
-        protected Converter Converter
-        {
-            get
-            {
-                if (converter == null) converter = new Converter(DbContext, Mapper);
-                return converter;
-            }
-        }
 
         protected SensorThingsController() : base()
         {
@@ -55,87 +45,143 @@ namespace SAEON.Observations.SensorThings
                 switch (dbEntity)
                 {
                     case db.SensorThingsDatastream dbDatastream:
-                        result = Converter.ConvertDatastream(dbDatastream);
+                        result = ConvertDatastream(dbDatastream);
                         break;
                     case db.SensorThingsLocation dbLocation when typeof(T) == typeof(Location):
-                        result = Converter.ConvertLocation(dbLocation);
+                        result = ConvertLocation(dbLocation);
                         break;
                     case db.SensorThingsLocation dbLocation when typeof(T) == typeof(HistoricalLocation):
-                        result = Converter.ConvertHistoricalLocation(dbLocation);
+                        result = ConvertHistoricalLocation(dbLocation);
                         break;
                     case db.SensorThingsObservedProperty dbObservedProperty:
-                        result = Converter.ConvertObservedProperty(dbObservedProperty);
+                        result = ConvertObservedProperty(dbObservedProperty);
                         break;
                     case db.SensorThingsSensor dbSensor:
-                        result = Converter.ConvertSensor(dbSensor);
+                        result = ConvertSensor(dbSensor);
                         break;
                     case db.SensorThingsThing dbThing:
-                        result = Converter.ConvertThing(dbThing);
+                        result = ConvertThing(dbThing);
                         break;
                     default:
                         throw new NotImplementedException();
                 }
                 return (T)result;
             }
+
+            Datastream ConvertDatastream(db.SensorThingsDatastream dbDatastream)
+            {
+                GeographyPolygon CreatePolygon(double top, double left, double bottom, double right)
+                {
+                    return GeographyFactory.Polygon().Ring(left, top).LineTo(left, top).LineTo(right, top).LineTo(right, bottom).LineTo(left, bottom).LineTo(left, top).Build();
+                }
+
+                using (Logging.MethodCall(GetType()))
+                {
+                    var result = Mapper.Map<Datastream>(dbDatastream);
+                    result.UnitOfMeasurement = new UnitOfMeasurement
+                    {
+                        Name = $"{dbDatastream.PhenomenonName} - {dbDatastream.OfferingName} - {dbDatastream.UnitOfMeasureUnit}",
+                        Symbol = dbDatastream.UnitOfMeasureSymbol,
+                        Definition = string.IsNullOrWhiteSpace(dbDatastream.PhenomenonUrl) ? "http://data.saeon.ac.za" : dbDatastream.PhenomenonUrl
+                    };
+                    result.Name = $"{dbDatastream.Name} - {dbDatastream.PhenomenonName} - {dbDatastream.OfferingName} - {dbDatastream.UnitOfMeasureUnit}";
+                    result.Description = $"{dbDatastream.Description} - {dbDatastream.PhenomenonDescription} - {dbDatastream.OfferingDescription} - {dbDatastream.UnitOfMeasureUnit}";
+                    if (dbDatastream.LatitudeNorth.HasValue && dbDatastream.LongitudeWest.HasValue && dbDatastream.LatitudeSouth.HasValue && dbDatastream.LongitudeEast.HasValue)
+                    {
+                        result.ObservedArea = CreatePolygon(dbDatastream.LatitudeNorth.Value, dbDatastream.LongitudeWest.Value, dbDatastream.LatitudeSouth.Value, dbDatastream.LongitudeEast.Value);
+                    }
+                    if (dbDatastream.StartDate.HasValue && dbDatastream.EndDate.HasValue)
+                    {
+                        result.PhenomenonTime = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
+                        result.ResultTime = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
+                    }
+                    //Logging.Verbose("Result: {@Result}", result);
+                    return result;
+                }
+            }
+
+            HistoricalLocation ConvertHistoricalLocation(db.SensorThingsLocation dbLocation, Location location = null, Thing thing = null)
+            {
+                using (Logging.MethodCall(GetType()))
+                {
+                    if (location == null)
+                    {
+                        location = ConvertLocation(dbLocation);
+                    }
+                    if (thing == null)
+                    {
+                        var dbThing = DbContext.SensorThingsThings.First(i => i.Id == dbLocation.Id);
+                        thing = ConvertThing(dbThing);
+                    }
+                    var result = new HistoricalLocation { Id = location.Id, Time = dbLocation.StartDate ?? dbLocation.EndDate ?? DateTime.Now, Thing = thing, Locations = new List<Location> { location } };
+                    //Logging.Verbose("Result: {@Result}", result);
+                    return result;
+                }
+            }
+
+            Location ConvertLocation(db.SensorThingsLocation dbLocation, Thing thing = null)
+            {
+                using (Logging.MethodCall(GetType()))
+                {
+                    var result = Mapper.Map<Location>(dbLocation);
+                    result.location = new GeoJSONPoint(GeographyPoint.Create(dbLocation.Latitude, dbLocation.Longitude, dbLocation.Elevation));
+                    if (thing == null)
+                    {
+                        var dbThing = DbContext.SensorThingsThings.First(i => i.Id == dbLocation.Id);
+                        thing = ConvertThing(dbThing);
+                    }
+                    result.Things.Add(thing);
+                    result.HistoricalLocations.Add(ConvertHistoricalLocation(dbLocation, result, thing));
+                    //Logging.Verbose("Result: {@Result}", result);
+                    return result;
+                }
+            }
+
+            ObservedProperty ConvertObservedProperty(db.SensorThingsObservedProperty dbObservedProperty)
+            {
+                using (Logging.MethodCall(GetType()))
+                {
+                    var result = Mapper.Map<ObservedProperty>(dbObservedProperty);
+                    result.Code = $"{dbObservedProperty.PhenomenonCode} {dbObservedProperty.OfferingCode}";
+                    result.Name = $"{dbObservedProperty.PhenomenonName} {dbObservedProperty.OfferingName}";
+                    result.Definition = dbObservedProperty.PhenomenonUrl;
+                    result.Description = $"{dbObservedProperty.PhenomenonName}, {dbObservedProperty.OfferingName}";
+                    //Logging.Verbose("Result: {@Result}", result);
+                    return result;
+                }
+            }
+
+            Sensor ConvertSensor(db.SensorThingsSensor dbSensor)
+            {
+                using (Logging.MethodCall(GetType()))
+                {
+                    var result = Mapper.Map<Sensor>(dbSensor);
+                    result.Metdadata = dbSensor.Url;
+                    //Logging.Verbose("Result: {@Result}", result);
+                    return result;
+                }
+            }
+
+            Thing ConvertThing(db.SensorThingsThing dbThing)
+            {
+                using (Logging.MethodCall(GetType()))
+                {
+                    var result = Mapper.Map<Thing>(dbThing);
+                    result.Properties.Add("kind", dbThing.Kind);
+                    if (!string.IsNullOrWhiteSpace(dbThing.Url)) result.Properties.Add("url", dbThing.Url);
+                    if (dbThing.StartDate.HasValue) result.Properties.Add("startDate", dbThing.StartDate.Value.ToString("o"));
+                    if (dbThing.EndDate.HasValue) result.Properties.Add("endDate", dbThing.EndDate.Value.ToString("o"));
+                    //Logging.Verbose("Result: {@Result}", result);
+                    return result;
+                }
+            }
+
         }
 
         private T ConvertDbEntity<T>(TDbEntity dbEntity) where T : SensorThingsEntity
         {
             return ConvertDbEntity<T, TDbEntity>(dbEntity);
         }
-
-        ///// <summary>
-        ///// Overwrite to filter entities
-        ///// </summary>
-        ///// <returns>ListOf(PredicateOf(TEntity))</returns>
-        //protected virtual List<Expression<Func<TDbEntity, bool>>> GetWheres()
-        //{
-        //    return new List<Expression<Func<TDbEntity, bool>>>();
-        //}
-
-        ///// <summary>
-        ///// Overwrite to order of entities
-        ///// </summary>
-        ///// <returns>ListOf(PredicateOf(TEntity))</returns>
-        //protected virtual List<Expression<Func<TDbEntity, object>>> GetOrderBys()
-        //{
-        //    return new List<Expression<Func<TDbEntity, object>>>();
-        //}
-
-        ///// <summary>
-        ///// Overwrite for entity includes
-        ///// </summary>
-        ///// <returns>ListOf(PredicateOf(TEntity))</returns>
-        //protected virtual List<Expression<Func<TDbEntity, bool>>> GetIncludes()
-        //{
-        //    return new List<Expression<Func<TDbEntity, bool>>>();
-        //}
-
-        ///// <summary>
-        ///// query for items
-        ///// </summary>
-        ///// <returns></returns>
-        //protected IQueryable<TDbEntity> GetDbAll(Expression<Func<TDbEntity, bool>> extraWhere = null)
-        //{
-        //    var query = DbContext.Set<TDbEntity>().AsQueryable().AsNoTracking();
-        //    foreach (var include in GetIncludes())
-        //    {
-        //        query = query.Include(include);
-        //    }
-        //    foreach (var where in GetWheres())
-        //    {
-        //        query = query.Where(where);
-        //    }
-        //    if (extraWhere != null)
-        //    {
-        //        query = query.Where(extraWhere);
-        //    }
-        //    foreach (var orderBy in GetOrderBys())
-        //    {
-        //        query = query.OrderBy(orderBy);
-        //    }
-        //    return query;
-        //}
 
         private void UpdateRequest(bool isMany)
         {
@@ -207,51 +253,6 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        ////[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Related")] Required in derived class
-        //protected virtual SingleResult<TRelatedSensorThingsEntity> GetRelatedSingle<TRelatedSensorThingsEntity>([FromODataUri]Guid id, Expression<Func<TEntity, TRelatedSensorThingsEntity>> select) where TRelatedSensorThingsEntity : SensorThingsEntity
-        //{
-        //    using (Logging.MethodCall<TEntity, TRelatedSensorThingsEntity>(GetType()))
-        //    {
-        //        try
-        //        {
-        //            UpdateRequest(false);
-        //            Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
-        //            var result = new List<TRelatedSensorThingsEntity>();
-        //            var relatedEntity = GetSensorThingsSingle(id).Select(select).FirstOrDefault();
-        //            if (relatedEntity != null)
-        //            {
-        //                result.Add(relatedEntity);
-        //            }
-        //            return SingleResult.Create(result.AsQueryable());
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logging.Exception(ex);
-        //            throw;
-        //        }
-        //    }
-        //}
-
-        ////[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Related")] Required in derived class
-        //protected virtual IQueryable<TRelatedSensorThingsEntity> GetRelatedMany<TRelatedSensorThingsEntity>([FromODataUri]Guid id, Expression<Func<TEntity, IEnumerable<TRelatedSensorThingsEntity>>> select) where TRelatedSensorThingsEntity : SensorThingsEntity
-        //{
-        //    using (Logging.MethodCall<TEntity, TRelatedSensorThingsEntity>(GetType()))
-        //    {
-        //        try
-        //        {
-        //            UpdateRequest(true);
-        //            Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
-        //            var result = new List<TRelatedSensorThingsEntity>();
-        //            return GetSensorThingsSingle(id).SelectMany(select);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logging.Exception(ex);
-        //            throw;
-        //        }
-        //    }
-        //}
-
         private TDbRelatedEntity LoadRelatedSingle<TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.BaseIDEntity
         {
             using (Logging.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
@@ -312,7 +313,7 @@ namespace SAEON.Observations.SensorThings
             {
                 try
                 {
-                    var dbEntity = default(TDbRelatedEntity);
+                    var dbEntity = DbContext.Set<TDbEntity>().AsNoTracking().First(i => i.Id == id);
                     switch (dbEntity)
                     {
                         // Datastream
@@ -350,7 +351,7 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        protected SingleResult<TRelatedEntity> GetDbRelatedSingle<TRelatedEntity, TDbRelatedEntity>(Guid id, Expression<Func<TDbEntity, TDbRelatedEntity>> select) where TDbRelatedEntity : db.BaseIDEntity where TRelatedEntity : SensorThingsEntity
+        protected SingleResult<TRelatedEntity> GetRelatedSingle<TRelatedEntity, TDbRelatedEntity>(Guid id) where TRelatedEntity : SensorThingsEntity where TDbRelatedEntity : db.BaseIDEntity
         {
             using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
             {
@@ -374,7 +375,7 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        protected IQueryable<TRelatedEntity> GetDbRelatedMany<TRelatedEntity, TDbRelatedEntity>(Guid id, Expression<Func<TDbEntity, TDbRelatedEntity>> select) where TDbRelatedEntity : db.BaseIDEntity where TRelatedEntity : SensorThingsEntity
+        protected IQueryable<TRelatedEntity> GetRelatedMany<TRelatedEntity, TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.BaseIDEntity where TRelatedEntity : SensorThingsEntity
         {
             using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
             {

@@ -12,22 +12,13 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
     public class ObservedPropertiesSTController : BaseController<ObservedProperty, db.SensorThingsObservedProperty>
     {
         [EnableQuery(PageSize = Config.PageSize), ODataRoute]
-        public override IQueryable<ObservedProperty> GetAll()
-        {
-            return base.GetAll();
-        }
+        public override IQueryable<ObservedProperty> GetAll() => base.GetAll();
 
         [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})")]
-        public override SingleResult<ObservedProperty> GetById([FromODataUri] Guid id)
-        {
-            return base.GetById(id);
-        }
+        public override SingleResult<ObservedProperty> GetById([FromODataUri] Guid id) => base.GetById(id);
 
         //[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Datastreams")]
-        //public IQueryable<Datastream> GetDatastreams([FromUri] Guid id)
-        //{
-        //    return GetRelatedMany(id, i => i.Datastreams);
-        //}
+        //public IQueryable<Datastream> GetDatastreams([FromUri] Guid id) => GetRelatedMany<Datastream, db.SensorThingsDatastream>(id);
     }
 }
 
