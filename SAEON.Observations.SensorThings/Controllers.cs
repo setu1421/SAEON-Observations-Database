@@ -111,31 +111,31 @@ namespace SAEON.Observations.SensorThings
         //    return new List<Expression<Func<TDbEntity, bool>>>();
         //}
 
-        /// <summary>
-        /// query for items
-        /// </summary>
-        /// <returns></returns>
-        protected IQueryable<TDbEntity> GetDbAll(Expression<Func<TDbEntity, bool>> extraWhere = null)
-        {
-            var query = DbContext.Set<TDbEntity>().AsQueryable().AsNoTracking();
-            //foreach (var include in GetIncludes())
-            //{
-            //    query = query.Include(include);
-            //}
-            //foreach (var where in GetWheres())
-            //{
-            //    query = query.Where(where);
-            //}
-            //if (extraWhere != null)
-            //{
-            //    query = query.Where(extraWhere);
-            //}
-            //foreach (var orderBy in GetOrderBys())
-            //{
-            //    query = query.OrderBy(orderBy);
-            //}
-            return query;
-        }
+        ///// <summary>
+        ///// query for items
+        ///// </summary>
+        ///// <returns></returns>
+        //protected IQueryable<TDbEntity> GetDbAll(Expression<Func<TDbEntity, bool>> extraWhere = null)
+        //{
+        //    var query = DbContext.Set<TDbEntity>().AsQueryable().AsNoTracking();
+        //    foreach (var include in GetIncludes())
+        //    {
+        //        query = query.Include(include);
+        //    }
+        //    foreach (var where in GetWheres())
+        //    {
+        //        query = query.Where(where);
+        //    }
+        //    if (extraWhere != null)
+        //    {
+        //        query = query.Where(extraWhere);
+        //    }
+        //    foreach (var orderBy in GetOrderBys())
+        //    {
+        //        query = query.OrderBy(orderBy);
+        //    }
+        //    return query;
+        //}
 
         private void UpdateRequest(bool isMany)
         {
@@ -168,7 +168,7 @@ namespace SAEON.Observations.SensorThings
                     UpdateRequest(true);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
-                    foreach (var dbEntity in GetDbAll())
+                    foreach (var dbEntity in DbContext.Set<TDbEntity>().AsNoTracking())
                     {
                         result.Add(ConvertDbEntity<TEntity>(dbEntity));
                     }
@@ -192,7 +192,7 @@ namespace SAEON.Observations.SensorThings
                     UpdateRequest(false);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
-                    var dbEntity = GetDbAll(i => i.Id == id).FirstOrDefault();
+                    var dbEntity = DbContext.Set<TDbEntity>().AsNoTracking().FirstOrDefault(i => i.Id == id);
                     if (dbEntity != null)
                     {
                         result.Add(ConvertDbEntity<TEntity>(dbEntity));
@@ -252,38 +252,92 @@ namespace SAEON.Observations.SensorThings
         //    }
         //}
 
+        private TDbRelatedEntity LoadRelatedSingle<TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.BaseIDEntity
+        {
+            using (Logging.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
+            {
+                try
+                {
+                    object result = default(TDbRelatedEntity);
+                    var dbEntity = DbContext.Set<TDbEntity>().AsNoTracking().First(i => i.Id == id);
+                    switch (dbEntity)
+                    {
+                        // Datastream
+                        case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsThing):
+                            result = dbContext.SensorThingsThings.AsNoTracking().FirstOrDefault(i => i.Id == datastream.InstrumentId);
+                            break;
+                        case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsSensor):
+                            result = dbContext.SensorThingsSensors.AsNoTracking().FirstOrDefault(i => i.Id == datastream.Id);
+                            break;
+                        case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsObservedProperty):
+                            var dbDatastreamSensor = dbContext.SensorThingsSensors.AsNoTracking().First(i => i.Id == datastream.Id);
+                            result = dbContext.SensorThingsObservedProperies.AsNoTracking().FirstOrDefault(i => i.Id == dbDatastreamSensor.PhenomenonOfferingId);
+                            break;
+                        // Location
+                        case db.SensorThingsLocation location when typeof(TDbRelatedEntity) == typeof(db.SensorThingsThing):
+                            result = dbContext.SensorThingsThings.AsNoTracking().FirstOrDefault(i => i.Id == location.Id);
+                            break;
+                        // ObservedProperty
+                        case db.SensorThingsObservedProperty observedProperty when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
+                            var dbObservedPropertySensor = dbContext.SensorThingsSensors.AsNoTracking().First(i => i.PhenomenonOfferingId == observedProperty.Id);
+                            result = dbContext.SensorThingsDatastreams.AsNoTracking().FirstOrDefault(i => i.Id == dbObservedPropertySensor.PhenomenonOfferingId);
+                            break;
+                        // Sensor
+                        case db.SensorThingsSensor sensor when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
+                            result = dbContext.SensorThingsDatastreams.AsNoTracking().FirstOrDefault(i => i.Id == sensor.Id);
+                            break;
+                        // Thing
+                        case db.SensorThingsThing thing when typeof(TDbRelatedEntity) == typeof(db.SensorThingsLocation):
+                            result = dbContext.SensorThingsLocations.AsNoTracking().FirstOrDefault(i => i.Id == thing.Id);
+                            break;
+                        case db.SensorThingsThing thing when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
+                            result = dbContext.SensorThingsDatastreams.AsNoTracking().FirstOrDefault(i => i.InstrumentId == thing.Id);
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                    return (TDbRelatedEntity)result;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
         private IQueryable<TDbRelatedEntity> LoadRelatedMany<TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.BaseIDEntity
         {
             using (Logging.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
             {
                 try
                 {
-                    var dbEntity = DbContext.Set<TDbEntity>().First(i => i.Id == id);
+                    var dbEntity = default(TDbRelatedEntity);
                     switch (dbEntity)
                     {
                         // Datastream
                         case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsThing):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsThings.Where(i => i.Id == datastream.InstrumentId);
+                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsThings.AsNoTracking().Where(i => i.Id == datastream.InstrumentId);
                         case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsSensor):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsSensors.Where(i => i.Id == datastream.Id);
+                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsSensors.AsNoTracking().Where(i => i.Id == datastream.Id);
                         case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsObservedProperty):
-                            var dbDatastreamSensor = dbContext.SensorThingsSensors.First(i => i.Id == datastream.Id);
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsObservedProperies.Where(i => i.Id == dbDatastreamSensor.PhenomenonOfferingId);
+                            var dbDatastreamSensor = dbContext.SensorThingsSensors.AsNoTracking().First(i => i.Id == datastream.Id);
+                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsObservedProperies.AsNoTracking().Where(i => i.Id == dbDatastreamSensor.PhenomenonOfferingId);
                         // Location
                         case db.SensorThingsLocation location when typeof(TDbRelatedEntity) == typeof(db.SensorThingsThing):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsThings.Where(i => i.Id == location.Id);
+                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsThings.AsNoTracking().Where(i => i.Id == location.Id);
                         // ObservedProperty
                         case db.SensorThingsObservedProperty observedProperty when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
-                            var dbObservedPropertySensor = dbContext.SensorThingsSensors.First(i => i.PhenomenonOfferingId == observedProperty.Id);
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsDatastreams.Where(i => i.Id == dbObservedPropertySensor.PhenomenonOfferingId);
+                            var dbObservedPropertySensor = dbContext.SensorThingsSensors.AsNoTracking().First(i => i.PhenomenonOfferingId == observedProperty.Id);
+                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsDatastreams.AsNoTracking().Where(i => i.Id == dbObservedPropertySensor.PhenomenonOfferingId);
                         // Sensor
                         case db.SensorThingsSensor sensor when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsDatastreams.Where(i => i.Id == sensor.Id);
+                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsDatastreams.AsNoTracking().Where(i => i.Id == sensor.Id);
                         // Thing
                         case db.SensorThingsThing thing when typeof(TDbRelatedEntity) == typeof(db.SensorThingsLocation):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsLocations.Where(i => i.Id == thing.Id);
+                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsLocations.AsNoTracking().Where(i => i.Id == thing.Id);
                         case db.SensorThingsThing thing when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsDatastreams.Where(i => i.InstrumentId == thing.Id);
+                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsDatastreams.AsNoTracking().Where(i => i.InstrumentId == thing.Id);
                         default:
                             throw new NotImplementedException();
                     }
@@ -305,8 +359,8 @@ namespace SAEON.Observations.SensorThings
                     UpdateRequest(true);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TRelatedEntity>();
-                    var dbRelatedEntities = LoadRelatedMany<TDbRelatedEntity>(id).Take(1);
-                    foreach (var dbRelatedEntity in dbRelatedEntities)
+                    var dbRelatedEntity = LoadRelatedSingle<TDbRelatedEntity>(id);
+                    if (dbRelatedEntity != null)
                     {
                         result.Add(ConvertDbEntity<TRelatedEntity, TDbRelatedEntity>(dbRelatedEntity));
                     }
@@ -329,8 +383,7 @@ namespace SAEON.Observations.SensorThings
                     UpdateRequest(true);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TRelatedEntity>();
-                    var dbRelatedEntities = LoadRelatedMany<TDbRelatedEntity>(id);
-                    foreach (var dbRelatedEntity in dbRelatedEntities)
+                    foreach (var dbRelatedEntity in LoadRelatedMany<TDbRelatedEntity>(id))
                     {
                         result.Add(ConvertDbEntity<TRelatedEntity, TDbRelatedEntity>(dbRelatedEntity));
                     }
