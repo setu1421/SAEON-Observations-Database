@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.Serialization;
 
 namespace SAEON.Observations.SensorThings
 {
@@ -22,6 +21,29 @@ namespace SAEON.Observations.SensorThings
         public string Name { get; set; }
         public string Symbol { get; set; }
         public string Definition { get; set; }
+    }
+
+    public class TimeString
+    {
+        [Required]
+        public DateTime Time { get; set; }
+
+        public TimeString() { }
+
+        public TimeString(DateTime time)
+        {
+            Time = time;
+        }
+
+        public TimeString(DateTime? time)
+        {
+            Time = time ?? DateTime.Now;
+        }
+
+        public override string ToString()
+        {
+            return Time.ToString("o");
+        }
     }
 
     public class TimeInterval
@@ -84,6 +106,7 @@ namespace SAEON.Observations.SensorThings
         public GeographyPolygon ObservedArea { get; set; } = null;
         public TimeInterval PhenomenonTime { get; set; } = null;
         public TimeInterval ResultTime { get; set; } = null;
+
         public Thing Thing { get; set; } = null;
         public Sensor Sensor { get; set; } = null;
         public ObservedProperty ObservedProperty { get; set; } = null;
@@ -104,16 +127,19 @@ namespace SAEON.Observations.SensorThings
         public string EncodingType { get; set; } = ValueCodes.GeoJson;
         public GeoJSONPoint Feature { get; set; } = null;
 
+        public List<Observation> Observations { get; set; } = new List<Observation>();
+
         public FeatureOfInterest() : base()
         {
             EntitySetName = "FeaturesOfInterest";
-            NavigationLinks.Add("Observation");
+            NavigationLinks.Add("Observations");
         }
     }
 
     public class HistoricalLocation : SensorThingsEntity
     {
-        public DateTime Time { get; set; }
+        public TimeString Time { get; set; } = new TimeString();
+
         public List<Location> Locations { get; set; } = new List<Location>();
         public Thing Thing { get; set; } = null;
 
@@ -126,7 +152,7 @@ namespace SAEON.Observations.SensorThings
 
         public HistoricalLocation(DateTime? time) : this()
         {
-            Time = time ?? DateTime.Now;
+            Time.Time = time ?? DateTime.Now;
         }
     }
 
@@ -134,7 +160,7 @@ namespace SAEON.Observations.SensorThings
     {
         public string EncodingType { get; set; } = ValueCodes.GeoJson;
         public GeoJSONPoint location { get; set; } = null;
-        //public GeographyPoint location { get; set; } = null;
+
         public List<Thing> Things { get; set; } = new List<Thing>();
         public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
 
@@ -146,10 +172,32 @@ namespace SAEON.Observations.SensorThings
         }
     }
 
+    public class Observation : NamedSensorThingsEntity
+    {
+        public TimeString PhenomenonTime { get; set; } = null;
+        public Double? Result { get; set; } = null;
+        public TimeString ResultTime { get; set; } = null;
+        public string ResultQuality { get; set; }
+        public TimeInterval ValidTime { get; set; } = null;
+        public ODataNamedValueDictionary<string> Parameters { get; } = new ODataNamedValueDictionary<string>();
+
+        public Datastream Datastream { get; set; } = null;
+        public FeatureOfInterest FeatureOfInterest { get; set; } = null;
+
+        public Observation() : base()
+        {
+            EntitySetName = "Observation";
+            NavigationLinks.Add("Datastream");
+            NavigationLinks.Add("FeatureOfInterest");
+        }
+    }
+
     public class ObservedProperty : NamedSensorThingsEntity
     {
         public string Definition { get; set; }
+
         public List<Datastream> Datastreams { get; set; } = new List<Datastream>();
+
         public ObservedProperty() : base()
         {
             EntitySetName = "ObservedProperties";
@@ -161,7 +209,9 @@ namespace SAEON.Observations.SensorThings
     {
         public string EncodingType { get; set; } = ValueCodes.Pdf;
         public string Metdadata { get; set; }
+
         public List<Datastream> Datastreams { get; set; } = new List<Datastream>();
+
         public Sensor() : base()
         {
             EntitySetName = "Sensors";
@@ -172,6 +222,7 @@ namespace SAEON.Observations.SensorThings
     public class Thing : NamedSensorThingsEntity
     {
         public ODataNamedValueDictionary<string> Properties { get; } = new ODataNamedValueDictionary<string>();
+
         public List<Location> Locations { get; set; } = new List<Location>();
         public List<HistoricalLocation> HistoricalLocations { get; set; } = new List<HistoricalLocation>();
         public List<Datastream> Datastreams { get; } = new List<Datastream>();

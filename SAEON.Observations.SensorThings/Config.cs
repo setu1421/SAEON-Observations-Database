@@ -17,8 +17,9 @@ namespace SAEON.Observations.SensorThings
             builder.EntitySet<HistoricalLocation>("HistoricalLocations");
             builder.EntitySet<FeatureOfInterest>("FeaturesOfInterest");
             builder.EntitySet<Location>("Locations");
-            builder.EntitySet<HistoricalLocation>("ObservedProperties");
-            builder.EntitySet<Thing>("Sensors");
+            builder.EntitySet<Observation>("Observations");
+            builder.EntitySet<ObservedProperty>("ObservedProperties");
+            builder.EntitySet<Sensor>("Sensors");
             builder.EntitySet<Thing>("Things");
             return builder.GetEdmModel();
         }

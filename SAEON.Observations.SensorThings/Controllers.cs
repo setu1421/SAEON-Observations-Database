@@ -29,8 +29,10 @@ namespace SAEON.Observations.SensorThings
         {
             var config = new MapperConfigurationExpression();
             config.CreateMap<db.SensorThingsDatastream, Datastream>();
+            config.CreateMap<db.SensorThingsFeatureOfInterest, FeatureOfInterest>();
             config.CreateMap<db.SensorThingsHistoricalLocation, HistoricalLocation>();
             config.CreateMap<db.SensorThingsLocation, Location>();
+            config.CreateMap<db.SensorThingsObservation, Observation>();
             config.CreateMap<db.SensorThingsObservedProperty, ObservedProperty>();
             config.CreateMap<db.SensorThingsSensor, Sensor>();
             config.CreateMap<db.SensorThingsThing, Thing>();
@@ -115,7 +117,7 @@ namespace SAEON.Observations.SensorThings
                         var dbThing = DbContext.SensorThingsThings.AsNoTracking().First(i => i.Id == dbHistoricalLocation.Id);
                         thing = ConvertThing(dbThing);
                     }
-                    result.Time = dbHistoricalLocation.StartDate ?? dbHistoricalLocation.EndDate ?? DateTime.Now;
+                    result.Time = new TimeString(dbHistoricalLocation.StartDate ?? dbHistoricalLocation.EndDate);
                     result.Thing = thing;
                     result.Locations.Add(location);
                     //Logging.Verbose("Result: {@Result}", result);
@@ -385,7 +387,7 @@ namespace SAEON.Observations.SensorThings
             {
                 try
                 {
-                    UpdateRequest(true);
+                    UpdateRequest(false);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TRelatedEntity>();
                     var dbRelatedEntity = LoadRelatedSingle<TDbRelatedEntity>(id);

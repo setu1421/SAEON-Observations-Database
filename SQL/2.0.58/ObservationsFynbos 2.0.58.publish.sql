@@ -24,7 +24,7 @@ GO
 /*
 Detect SQLCMD mode and disable script execution if SQLCMD mode is not supported.
 To re-enable the script after enabling SQLCMD mode, execute the following:
-SET NOEXEC OFF; 
+SET NOEXEC OFF;
 */
 :setvar __IsSqlCmdEnabled "True"
 GO
@@ -45,7 +45,7 @@ USE [$(DatabaseName)];
 --           WHERE  [name] = N'$(DatabaseName)')
 --    BEGIN
 --        ALTER DATABASE [$(DatabaseName)]
---            SET TEMPORAL_HISTORY_RETENTION ON 
+--            SET TEMPORAL_HISTORY_RETENTION ON
 --            WITH ROLLBACK IMMEDIATE;
 --    END
 
@@ -57,6 +57,14 @@ The column [dbo].[UserDownloads].[OpenDataPlatformID] on table [dbo].[UserDownlo
 
 --IF EXISTS (select top 1 1 from [dbo].[UserDownloads])
 --    RAISERROR (N'Rows were detected. The schema update is terminating because data loss might occur.', 16, 127) WITH NOWAIT
+
+GO
+PRINT N'Dropping [dbo].[Observation].[vSensorThingsDatastreams]...';
+
+
+GO
+DROP VIEW [vSensorThingsDatastreams];
+
 
 GO
 PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDecade]...';
@@ -132,7 +140,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_DigitalObjectIdentifiers] (
     CONSTRAINT [tmp_ms_xx_constraint_PK_DigitalObjectIdentifiers1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 
-IF EXISTS (SELECT TOP 1 1 
+IF EXISTS (SELECT TOP 1 1
            FROM   [dbo].[DigitalObjectIdentifiers])
     BEGIN
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_DigitalObjectIdentifiers] ON;
@@ -368,9 +376,9 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 ALTER VIEW [dbo].[vImportBatchSummary]
-AS 
+AS
 Select
-  ImportBatchSummary.*, 
+  ImportBatchSummary.*,
   Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription,
   Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription,
   UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
@@ -425,8 +433,8 @@ Select Distinct
   Sensor.ID, Sensor.Code, Sensor.Name, Sensor.Description,
   InstrumentID, InstrumentCode, InstrumentName,
   PhenomenonCode, PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
-  OfferingCode, OfferingName, Offering.Description OfferingDescription,
-  UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  PhenomenonOfferingID, OfferingCode, OfferingName, Offering.Description OfferingDescription,
+  PhenomenonUOMID PhenomenonUnitID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
   StartDate, EndDate, LatitudeNorth, LatitudeSouth, LongitudeWest, LongitudeEast
 from
   vInventory
@@ -568,6 +576,25 @@ from
 Select * from StationLocations where (Latitude is not null) and (Longitude is not null)
 union
 Select * from InstrumentLocations where (Latitude is not null) and (Longitude is not null)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vSensorThingsAPIObservations]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vSensorThingsAPIObservations]
+AS
+Select
+  ID, SensorID, PhenomenonOfferingID, PhenomenonUOMID PhenomenonUnitID, ValueDate, DataValue
+from
+  Observation
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
@@ -748,6 +775,25 @@ from
     on (vInventory.InstrumentID = Instrument.ID)
   left join vSensorThingsAPIInstrumentDates
     on (vSensorThingsAPIInstrumentDates.ID = Instrument.ID)
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vSensorThingsAPIFeaturesOfInterest]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vSensorThingsAPIFeaturesOfInterest]
+AS
+Select
+  *
+from
+  vSensorThingsAPILocations
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 

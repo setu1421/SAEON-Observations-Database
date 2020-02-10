@@ -1386,11 +1386,14 @@ namespace SAEON.Observations.Core.Entities
         public Guid InstrumentId { get; set; }
         public string InstrumentCode { get; set; }
         public string InstrumentName { get; set; }
+        public Guid PhenomenonId { get; set; }
         public string PhenomenonName { get; set; }
         public string PhenomenonDescription { get; set; }
         public string PhenomenonUrl { get; set; }
+        public Guid PhenomenonOfferingId { get; set; }
         public string OfferingName { get; set; }
         public string OfferingDescription { get; set; }
+        public Guid PhenomenonUnitId { get; set; }
         public string UnitOfMeasureUnit { get; set; }
         public string UnitOfMeasureSymbol { get; set; }
         public DateTime? StartDate { get; set; }
@@ -1399,6 +1402,17 @@ namespace SAEON.Observations.Core.Entities
         public double? LatitudeSouth { get; set; }
         public double? LongitudeWest { get; set; }
         public double? LongitudeEast { get; set; }
+    }
+
+    [Table("vSensorThingsAPIFeaturesOfInterest")]
+    public class SensorThingsFeatureOfInterest : BaseIDEntity
+    {
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double? Elevation { get; set; }
     }
 
     [Table("vSensorThingsAPIHistoricalLocations")]
@@ -1425,6 +1439,16 @@ namespace SAEON.Observations.Core.Entities
         public double? Elevation { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+    }
+
+    [Table("vSensorThingsAPIObservations")]
+    public class SensorThingsObservation : BaseIDEntity
+    {
+        public Guid SensorId { get; set; }
+        public Guid PhenomenonOfferingID { get; set; }
+        public Guid PhenomenonUnitId { get; set; }
+        public DateTime Date { get; set; }
+        public double? Value { get; set; } = null;
     }
 
     [Table("vSensorThingsAPIObservedProperties")]
@@ -1820,8 +1844,10 @@ namespace SAEON.Observations.Core.Entities
 
         // SensorThings
         public DbSet<SensorThingsDatastream> SensorThingsDatastreams { get; set; }
+        public DbSet<SensorThingsFeatureOfInterest> SensorThingsFeateuresOfInterest { get; set; }
         public DbSet<SensorThingsHistoricalLocation> SensorThingsHistoricalLocations { get; set; }
         public DbSet<SensorThingsLocation> SensorThingsLocations { get; set; }
+        public DbSet<SensorThingsObservation> SensorThingsObservations { get; set; }
         public DbSet<SensorThingsObservedProperty> SensorThingsObservedProperies { get; set; }
         public DbSet<SensorThingsSensor> SensorThingsSensors { get; set; }
         public DbSet<SensorThingsThing> SensorThingsThings { get; set; }

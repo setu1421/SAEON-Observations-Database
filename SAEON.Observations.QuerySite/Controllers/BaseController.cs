@@ -247,7 +247,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             return model;
         }
 
-        protected virtual async Task<TModel> LoadModelAsync(TModel model)
+        protected virtual Task<TModel> LoadModelAsync(TModel model)
         {
             throw new NotImplementedException();
         }
