@@ -24,7 +24,7 @@ GO
 /*
 Detect SQLCMD mode and disable script execution if SQLCMD mode is not supported.
 To re-enable the script after enabling SQLCMD mode, execute the following:
-SET NOEXEC OFF;
+SET NOEXEC OFF; 
 */
 :setvar __IsSqlCmdEnabled "True"
 GO
@@ -45,7 +45,7 @@ USE [$(DatabaseName)];
 --           WHERE  [name] = N'$(DatabaseName)')
 --    BEGIN
 --        ALTER DATABASE [$(DatabaseName)]
---            SET TEMPORAL_HISTORY_RETENTION ON
+--            SET TEMPORAL_HISTORY_RETENTION ON 
 --            WITH ROLLBACK IMMEDIATE;
 --    END
 
@@ -132,7 +132,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_DigitalObjectIdentifiers] (
     CONSTRAINT [tmp_ms_xx_constraint_PK_DigitalObjectIdentifiers1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 
-IF EXISTS (SELECT TOP 1 1
+IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[DigitalObjectIdentifiers])
     BEGIN
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_DigitalObjectIdentifiers] ON;
@@ -368,9 +368,9 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 ALTER VIEW [dbo].[vImportBatchSummary]
-AS
+AS 
 Select
-  ImportBatchSummary.*,
+  ImportBatchSummary.*, 
   Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription,
   Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription,
   UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
@@ -411,53 +411,6 @@ EXECUTE sp_refreshsqlmodule N'[dbo].[vInventory]';
 
 
 GO
-PRINT N'Altering [dbo].[vSensorDates]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-ALTER VIEW [dbo].[vSensorDates]
-AS
-Select
-  Sensor.ID SensorID,
-  Sensor.Name SensorName,
-  Instrument_Sensor.StartDate InstrumenSensorStartDate, Instrument_Sensor.EndDate InstrumenSensorEndDate,
-  Instrument.Name InstrumentName, Instrument.StartDate InstrumentStartDate, Instrument.EndDate InstrumentEndDate,
-  Station_Instrument.StartDate StationInstrumentStartDate, Station_Instrument.EndDate StationInstrumentEndDate,
-  Station.Name StationName, Station.StartDate StationStartDate, Station.EndDate StationEndDate,
-  Site.Name SiteName, Site.StartDate SiteStartDate, Site.EndDate SiteEndDate,
-  (
-  Select
-    Min(v)
-  from
-    (Values (Instrument_Sensor.StartDate),(Instrument.StartDate),(Station_Instrument.StartDate),(Station.StartDate),(Site.StartDate)) as Value(v)
-  ) StartDate,
-  (
-  Select
-    Max(v)
-  from
-    (Values (Instrument_Sensor.EndDate),(Instrument.EndDate),(Station_Instrument.EndDate),(Station.EndDate),(Site.EndDate)) as Value(v)
-  ) EndDate
-from
-  Sensor
-  left join Instrument_Sensor
-    on (Instrument_Sensor.SensorID = Sensor.ID)
-  left join Instrument
-    on (Instrument_Sensor.InstrumentID = Instrument.ID)
-  left join Station_Instrument
-    on (Station_Instrument.InstrumentID = Instrument.ID)
-  left join Station
-    on (Station_Instrument.StationID = Station.ID)
-  inner join Site
-    on (Station.SiteID = Site.ID)
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
 PRINT N'Creating [dbo].[vSensorThingsAPIDatastreams]...';
 
 
@@ -470,6 +423,7 @@ CREATE VIEW [dbo].[vSensorThingsAPIDatastreams]
 AS
 Select Distinct
   Sensor.ID, Sensor.Code, Sensor.Name, Sensor.Description,
+  InstrumentID, InstrumentCode, InstrumentName,
   PhenomenonCode, PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
   OfferingCode, OfferingName, Offering.Description OfferingDescription,
   UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
@@ -509,21 +463,111 @@ Select
   StartDate InstrumentStartDate,
   -- Instrument_Sensor
   (Select Min(Instrument_Sensor.StartDate) from Instrument_Sensor where Instrument_Sensor.InstrumentID = Instrument.ID) InstrumentSensorStartDate,
+  -- StationInstrument
+  (Select Min(Station_Instrument.StartDate) from Station_Instrument where Station_Instrument.InstrumentID = Instrument.ID) StationInstrumentStartDate,
+  -- Station
+  (
+  Select
+    Min(Station.StartDate)
+  from
+    Station_Instrument
+      inner join Station
+        on (Station_Instrument.StationID = Station.ID)
+  where
+    Station_Instrument.InstrumentID = Instrument.ID) StationStartDate,
   -- EndDate
   -- Instrument
   EndDate InstrumentEndDate,
   -- Instrument_Sensor
-  (Select Max(Instrument_Sensor.EndDate) from Instrument_Sensor where Instrument_Sensor.InstrumentID = Instrument.ID) InstrumentSensorEndDate
+  (Select Max(Instrument_Sensor.EndDate) from Instrument_Sensor where Instrument_Sensor.InstrumentID = Instrument.ID) InstrumentSensorEndDate,
+  -- StationInstrument
+  (Select Max(Station_Instrument.EndDate) from Station_Instrument where Station_Instrument.InstrumentID = Instrument.ID) StationInstrumentEndDate,
+  -- Station
+  (
+  Select
+    Max(Station.EndDate)
+  from
+    Station_Instrument
+      inner join Station
+        on (Station_Instrument.StationID = Station.ID)
+  where
+    Station_Instrument.InstrumentID = Instrument.ID) StationEndDate
 from
   Instrument
 )
 Select
   --*,
   ID, Name,
-  (Select Min(Value) from (Values (InstrumentStartDate), (InstrumentSensorStartDate)) as x(Value)) StartDate,
-  (Select Max(Value) from (Values (InstrumentEndDate), (InstrumentSensorEndDate)) as x(Value)) EndDate
+  (Select Min(Value) from (Values (InstrumentStartDate), (InstrumentSensorStartDate), (StationInstrumentStartDate), (StationStartDate)) as x(Value)) StartDate,
+  (Select Max(Value) from (Values (InstrumentEndDate), (InstrumentSensorEndDate), (StationInstrumentEndDate), (StationEndDate)) as x(Value)) EndDate
 from
   Dates
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vSensorThingsAPILocations]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vSensorThingsAPILocations]
+AS
+With StationLocations
+as
+(
+Select Distinct
+  Station.ID, Station.Code, Station.Name, Station.Description,
+  Coalesce(Station.Latitude, Station_Instrument.Latitude, Instrument.Latitude, Instrument_Sensor.Latitude, Sensor.Latitude) Latitude,
+  Coalesce(Station.Longitude, Station_Instrument.Longitude, Instrument.Longitude, Instrument_Sensor.Longitude, Sensor.Longitude) Longitude,
+  Coalesce(Station.Elevation, Station_Instrument.Elevation, Instrument.Elevation, Instrument_Sensor.Elevation, Sensor.Elevation) Elevation,
+  vSensorThingsAPIInstrumentDates.StartDate, vSensorThingsAPIInstrumentDates.EndDate
+from
+  vInventory
+  inner join Station
+    on (vInventory.StationID = Station.ID)
+  inner join Station_Instrument
+    on (Station_Instrument.StationID = Station.ID)
+  inner join Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.InstrumentID = Instrument.ID)
+  inner join Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID)
+  left join vSensorThingsAPIInstrumentDates
+    on (vSensorThingsAPIInstrumentDates.ID = Instrument.ID)
+),
+InstrumentLocations
+as
+(
+Select Distinct
+  Instrument.ID, Instrument.Code, Instrument.Name, Instrument.Description,
+  Coalesce(Instrument.Latitude, Instrument_Sensor.Latitude, Sensor.Latitude, Station_Instrument.Latitude, Station.Latitude) Latitude,
+  Coalesce(Instrument.Longitude, Instrument_Sensor.Longitude, Sensor.Longitude, Station_Instrument.Longitude, Station.Longitude) Longitude,
+  Coalesce(Instrument.Elevation, Instrument_Sensor.Elevation, Sensor.Elevation, Station_Instrument.Elevation, Station.Elevation) Elevation,
+  vSensorThingsAPIInstrumentDates.StartDate, vSensorThingsAPIInstrumentDates.EndDate
+from
+  vInventory
+  inner join Instrument
+    on (vInventory.InstrumentID = Instrument.ID)
+  inner join Instrument_Sensor
+    on (Instrument_Sensor.InstrumentID = Instrument.ID)
+  inner join Sensor
+    on (Instrument_Sensor.SensorID = Sensor.ID)
+  inner join Station_Instrument
+    on (Station_Instrument.InstrumentID = Instrument.ID)
+  inner join Station
+    on(Station_Instrument.StationID = Station.ID)
+  left join vSensorThingsAPIInstrumentDates
+    on (vSensorThingsAPIInstrumentDates.ID = Instrument.ID)
+)
+Select * from StationLocations where (Latitude is not null) and (Longitude is not null)
+union
+Select * from InstrumentLocations where (Latitude is not null) and (Longitude is not null)
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
@@ -540,11 +584,17 @@ GO
 CREATE VIEW [dbo].[vSensorThingsAPIObservedProperties]
 AS
 Select Distinct
-  Phenomenon.ID, Phenomenon.Code, Phenomenon.Name, Phenomenon.Description, Phenomenon.Url
+  PhenomenonOfferingID ID,
+  PhenomenonCode, PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
+  OfferingCode, OfferingName, Offering.Description OfferingDescription
 from
   vInventory
   inner join Phenomenon
     on (vInventory.PhenomenonCode = Phenomenon.Code)
+  inner join PhenomenonOffering
+    on (vInventory.PhenomenonOfferingID = PhenomenonOffering.ID)
+  inner join Offering
+    on (PhenomenonOffering.OfferingID = Offering.ID)
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
@@ -561,7 +611,7 @@ GO
 CREATE VIEW [dbo].[vSensorThingsAPISensors]
 AS
 Select Distinct
-  Sensor.ID, Sensor.Code, Sensor.Name, Sensor.Description, Sensor.Url
+  Sensor.ID, Sensor.Code, Sensor.Name, Sensor.Description, Sensor.Url, PhenomenonOfferingID
 from
   vInventory
   inner join Sensor
@@ -703,7 +753,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Creating [dbo].[vSensorThingsAPILocations]...';
+PRINT N'Creating [dbo].[vSensorThingsAPIHistoricalLocations]...';
 
 
 GO
@@ -711,33 +761,12 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-CREATE VIEW [dbo].[vSensorThingsAPILocations]
+CREATE VIEW [dbo].[vSensorThingsAPIHistoricalLocations]
 AS
--- Stations
 Select
-  Station.ID, Station.Code, Station.Name, Station.Description, Station.Latitude, Station.Longitude, Station.Elevation,
-  vSensorThingsAPIStationDates.StartDate, vSensorThingsAPIStationDates.EndDate
+  *
 from
-  vInventory
-  inner join Station
-    on (vInventory.StationID = Station.ID)
-  left join vSensorThingsAPIStationDates
-    on (vSensorThingsAPIStationDates.ID = Station.ID)
-  where
-    (Station.Latitude is not null) and (Station.Longitude is not null)
-union
--- Instruments
-Select
-  Instrument.ID, Instrument.Code, Instrument.Name, Instrument.Description, Instrument.Latitude, Instrument.Longitude, Instrument.Elevation,
-  vSensorThingsAPIInstrumentDates.StartDate, vSensorThingsAPIInstrumentDates.EndDate
-from
-  vInventory
-  inner join Instrument
-    on (vInventory.InstrumentID = Instrument.ID)
-  left join vSensorThingsAPIInstrumentDates
-    on (vSensorThingsAPIInstrumentDates.ID = Instrument.ID)
-  where
-    (Instrument.Latitude is not null) and (Instrument.Longitude is not null)
+  vSensorThingsAPILocations
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 

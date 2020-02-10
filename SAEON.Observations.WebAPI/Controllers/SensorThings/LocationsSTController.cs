@@ -21,7 +21,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
         public IQueryable<Thing> GetThings([FromUri] Guid id) => GetRelatedMany<Thing, db.SensorThingsThing>(id);
 
         [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/HistoricalLocations")]
-        public IQueryable<HistoricalLocation> GetHistoricalLocations([FromUri] Guid id) => GetRelatedMany<HistoricalLocation, db.SensorThingsLocation>(id);
+        public IQueryable<HistoricalLocation> GetHistoricalLocations([FromUri] Guid id) => GetRelatedMany<HistoricalLocation, db.SensorThingsHistoricalLocation>(id);
 
     }
 }

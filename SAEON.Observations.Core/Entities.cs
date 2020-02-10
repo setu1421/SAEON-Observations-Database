@@ -1401,6 +1401,19 @@ namespace SAEON.Observations.Core.Entities
         public double? LongitudeEast { get; set; }
     }
 
+    [Table("vSensorThingsAPIHistoricalLocations")]
+    public class SensorThingsHistoricalLocation : BaseIDEntity
+    {
+        public string Code { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+    }
+
     [Table("vSensorThingsAPILocations")]
     public class SensorThingsLocation : BaseIDEntity
     {
@@ -1807,6 +1820,7 @@ namespace SAEON.Observations.Core.Entities
 
         // SensorThings
         public DbSet<SensorThingsDatastream> SensorThingsDatastreams { get; set; }
+        public DbSet<SensorThingsHistoricalLocation> SensorThingsHistoricalLocations { get; set; }
         public DbSet<SensorThingsLocation> SensorThingsLocations { get; set; }
         public DbSet<SensorThingsObservedProperty> SensorThingsObservedProperies { get; set; }
         public DbSet<SensorThingsSensor> SensorThingsSensors { get; set; }

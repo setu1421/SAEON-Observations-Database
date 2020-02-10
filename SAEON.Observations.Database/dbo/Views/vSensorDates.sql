@@ -10,13 +10,13 @@ Select
   Site.Name SiteName, Site.StartDate SiteStartDate, Site.EndDate SiteEndDate,
   (
   Select
-    Min(v)
+    Max(v)
   from
     (Values (Instrument_Sensor.StartDate),(Instrument.StartDate),(Station_Instrument.StartDate),(Station.StartDate),(Site.StartDate)) as Value(v)
   ) StartDate,
   (
   Select
-    Max(v)
+    Min(v)
   from
     (Values (Instrument_Sensor.EndDate),(Instrument.EndDate),(Station_Instrument.EndDate),(Station.EndDate),(Site.EndDate)) as Value(v)
   ) EndDate
