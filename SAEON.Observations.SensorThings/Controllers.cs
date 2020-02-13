@@ -19,7 +19,11 @@ namespace SAEON.Observations.SensorThings
         {
             get
             {
-                if (dbContext == null) dbContext = new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
+                if (dbContext == null)
+                {
+                    dbContext = new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
+                    //dbContext.Configuration.AutoDetectChangesEnabled = false;
+                }
                 return dbContext;
             }
         }
@@ -49,11 +53,17 @@ namespace SAEON.Observations.SensorThings
                     case db.SensorThingsDatastream dbDatastream:
                         result = ConvertDatastream(dbDatastream);
                         break;
+                    case db.SensorThingsFeatureOfInterest dbFeatureOfInterest:
+                        result = ConvertFeatureOfInterest(dbFeatureOfInterest);
+                        break;
                     case db.SensorThingsHistoricalLocation dbHistoricalLocation:
                         result = ConvertHistoricalLocation(dbHistoricalLocation);
                         break;
                     case db.SensorThingsLocation dbLocation:
                         result = ConvertLocation(dbLocation);
+                        break;
+                    case db.SensorThingsObservation dbObservation:
+                        result = ConvertObservation(dbObservation);
                         break;
                     case db.SensorThingsObservedProperty dbObservedProperty:
                         result = ConvertObservedProperty(dbObservedProperty);
@@ -94,53 +104,90 @@ namespace SAEON.Observations.SensorThings
                     }
                     if (dbDatastream.StartDate.HasValue && dbDatastream.EndDate.HasValue)
                     {
-                        result.PhenomenonTime = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
-                        result.ResultTime = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
+                        result.PhenomenonTimeInterval = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
+                        result.ResultTimeInterval = new TimeInterval(dbDatastream.StartDate.Value, dbDatastream.EndDate.Value);
                     }
                     //Logging.Verbose("Result: {@Result}", result);
                     return result;
                 }
             }
 
-            HistoricalLocation ConvertHistoricalLocation(db.SensorThingsHistoricalLocation dbHistoricalLocation, Location location = null, Thing thing = null)
+            FeatureOfInterest ConvertFeatureOfInterest(db.SensorThingsFeatureOfInterest dbFeatureOfInterest)
+            {
+                using (Logging.MethodCall(GetType()))
+                {
+                    var result = Mapper.Map<FeatureOfInterest>(dbFeatureOfInterest);
+                    var dbLocation = DbContext.SensorThingsLocations.AsNoTracking().First(i => i.Id == dbFeatureOfInterest.Id);
+                    result.Feature = new GeoJSONPoint(GeographyPoint.Create(dbLocation.Latitude, dbLocation.Longitude, dbLocation.Elevation));
+                    //Logging.Verbose("Result: {@Result}", result);
+                    return result;
+                }
+            }
+
+            HistoricalLocation ConvertHistoricalLocation(db.SensorThingsHistoricalLocation dbHistoricalLocation/*, Location location = null, Thing thing = null*/)
             {
                 using (Logging.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<HistoricalLocation>(dbHistoricalLocation);
-                    if (location == null)
-                    {
-                        var dbLocation = DbContext.SensorThingsLocations.AsNoTracking().First(i => i.Id == dbHistoricalLocation.Id);
-                        location = ConvertLocation(dbLocation);
-                    }
-                    if (thing == null)
-                    {
-                        var dbThing = DbContext.SensorThingsThings.AsNoTracking().First(i => i.Id == dbHistoricalLocation.Id);
-                        thing = ConvertThing(dbThing);
-                    }
-                    result.Time = new TimeString(dbHistoricalLocation.StartDate ?? dbHistoricalLocation.EndDate);
-                    result.Thing = thing;
-                    result.Locations.Add(location);
+                    result.TimeString = new TimeString(dbHistoricalLocation.StartDate ?? dbHistoricalLocation.EndDate);
+                    //if (location == null)
+                    //{
+                    //    var dbLocation = DbContext.SensorThingsLocations.AsNoTracking().First(i => i.Id == dbHistoricalLocation.Id);
+                    //    location = ConvertLocation(dbLocation);
+                    //}
+                    //if (thing == null)
+                    //{
+                    //    var dbThing = DbContext.SensorThingsThings.AsNoTracking().First(i => i.Id == dbHistoricalLocation.Id);
+                    //    thing = ConvertThing(dbThing);
+                    //}
+                    //result.Thing = thing;
+                    //result.Locations.Add(location);
                     //Logging.Verbose("Result: {@Result}", result);
                     return result;
                 }
             }
 
-            Location ConvertLocation(db.SensorThingsLocation dbLocation, Thing thing = null)
+            Location ConvertLocation(db.SensorThingsLocation dbLocation/*, Thing thing = null*/)
             {
                 using (Logging.MethodCall(GetType()))
                 {
                     var result = Mapper.Map<Location>(dbLocation);
                     result.location = new GeoJSONPoint(GeographyPoint.Create(dbLocation.Latitude, dbLocation.Longitude, dbLocation.Elevation));
-                    if (thing == null)
-                    {
-                        var dbThing = DbContext.SensorThingsThings.AsNoTracking().First(i => i.Id == dbLocation.Id);
-                        thing = ConvertThing(dbThing);
-                    }
-                    result.Things.Add(thing);
-                    var dbHistoricalLocation = DbContext.SensorThingsHistoricalLocations.AsNoTracking().First(i => i.Id == dbLocation.Id);
-                    result.HistoricalLocations.Add(ConvertHistoricalLocation(dbHistoricalLocation, result, thing));
+                    //if (thing == null)
+                    //{
+                    //    var dbThing = DbContext.SensorThingsThings.AsNoTracking().First(i => i.Id == dbLocation.Id);
+                    //    thing = ConvertThing(dbThing);
+                    //}
+                    //result.Things.Add(thing);
+                    //var dbHistoricalLocation = DbContext.SensorThingsHistoricalLocations.AsNoTracking().First(i => i.Id == dbLocation.Id);
+                    //result.HistoricalLocations.Add(ConvertHistoricalLocation(dbHistoricalLocation, result, thing));
                     //Logging.Verbose("Result: {@Result}", result);
                     return result;
+                }
+            }
+
+            Observation ConvertObservation(db.SensorThingsObservation dbObservation/*, Datastream datastream = null, FeatureOfInterest featureOfInterest = null*/)
+            {
+                using (Logging.MethodCall(GetType()))
+                {
+                    var result = Mapper.Map<Observation>(dbObservation);
+                    result.PhenomenonTimeString = new TimeString(dbObservation.Date);
+                    result.ResultTimeString = new TimeString(dbObservation.Date);
+                    result.Result = dbObservation.Value;
+                    //if (datastream == null)
+                    //{
+                    //    var dbDatastream = DbContext.SensorThingsDatastreams.AsNoTracking().First(i => i.Id == dbObservation.SensorId);
+                    //    datastream = ConvertDatastream(dbDatastream);
+                    //}
+                    //result.Datastream = datastream;
+                    //if (featureOfInterest == null)
+                    //{
+
+                    //}
+                    //result.FeatureOfInterest = featureOfInterest;
+                    //Logging.Verbose("Result: {@Result}", result);
+                    return result;
+
                 }
             }
 
@@ -221,7 +268,7 @@ namespace SAEON.Observations.SensorThings
                     UpdateRequest(true);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
-                    foreach (var dbEntity in DbContext.Set<TDbEntity>().AsNoTracking())
+                    foreach (var dbEntity in DbContext.Set<TDbEntity>())
                     {
                         result.Add(ConvertDbEntity<TEntity>(dbEntity));
                     }
@@ -267,57 +314,6 @@ namespace SAEON.Observations.SensorThings
                 try
                 {
                     var result = LoadRelatedMany<TDbRelatedEntity>(id).FirstOrDefault();
-                    //object result = default(TDbRelatedEntity);
-                    //var dbEntity = DbContext.Set<TDbEntity>().AsNoTracking().First(i => i.Id == id);
-                    //switch (dbEntity)
-                    //{
-                    //    // Datastream
-                    //    case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsObservedProperty):
-                    //        var dbDatastreamSensor = dbContext.SensorThingsSensors.AsNoTracking().First(i => i.Id == datastream.Id);
-                    //        result = dbContext.SensorThingsObservedProperies.AsNoTracking().FirstOrDefault(i => i.Id == dbDatastreamSensor.PhenomenonOfferingId);
-                    //        break;
-                    //    case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsSensor):
-                    //        result = dbContext.SensorThingsSensors.AsNoTracking().FirstOrDefault(i => i.Id == datastream.Id);
-                    //        break;
-                    //    case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsThing):
-                    //        result = dbContext.SensorThingsThings.AsNoTracking().FirstOrDefault(i => i.Id == datastream.InstrumentId);
-                    //        break;
-                    //    // HistoricalLocation
-                    //    case db.SensorThingsHistoricalLocation historicalLocation when typeof(TDbRelatedEntity) == typeof(db.SensorThingsLocation):
-                    //        result = dbContext.SensorThingsLocations.AsNoTracking().FirstOrDefault(i => i.Id == historicalLocation.Id);
-                    //        break;
-                    //    case db.SensorThingsHistoricalLocation historicalLocation when typeof(TDbRelatedEntity) == typeof(db.SensorThingsThing):
-                    //        result = dbContext.SensorThingsThings.AsNoTracking().FirstOrDefault(i => i.Id == historicalLocation.Id);
-                    //        break;
-                    //    // Location
-                    //    case db.SensorThingsLocation location when typeof(TDbRelatedEntity) == typeof(db.SensorThingsHistoricalLocation):
-                    //        result = dbContext.SensorThingsHistoricalLocations.AsNoTracking().FirstOrDefault(i => i.Id == location.Id);
-                    //        break;
-                    //    case db.SensorThingsLocation location when typeof(TDbRelatedEntity) == typeof(db.SensorThingsThing):
-                    //        result = dbContext.SensorThingsThings.AsNoTracking().FirstOrDefault(i => i.Id == location.Id);
-                    //        break;
-                    //    // ObservedProperty
-                    //    case db.SensorThingsObservedProperty observedProperty when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
-                    //        var dbObservedPropertySensor = dbContext.SensorThingsSensors.AsNoTracking().First(i => i.PhenomenonOfferingId == observedProperty.Id);
-                    //        result = dbContext.SensorThingsDatastreams.AsNoTracking().FirstOrDefault(i => i.Id == dbObservedPropertySensor.PhenomenonOfferingId);
-                    //        break;
-                    //    // Sensor
-                    //    case db.SensorThingsSensor sensor when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
-                    //        result = dbContext.SensorThingsDatastreams.AsNoTracking().FirstOrDefault(i => i.Id == sensor.Id);
-                    //        break;
-                    //    // Thing
-                    //    case db.SensorThingsThing thing when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
-                    //        result = dbContext.SensorThingsDatastreams.AsNoTracking().FirstOrDefault(i => i.InstrumentId == thing.Id);
-                    //        break;
-                    //    case db.SensorThingsThing thing when typeof(TDbRelatedEntity) == typeof(db.SensorThingsHistoricalLocation):
-                    //        result = dbContext.SensorThingsHistoricalLocations.AsNoTracking().FirstOrDefault(i => i.Id == thing.Id);
-                    //        break;
-                    //    case db.SensorThingsThing thing when typeof(TDbRelatedEntity) == typeof(db.SensorThingsLocation):
-                    //        result = dbContext.SensorThingsLocations.AsNoTracking().FirstOrDefault(i => i.Id == thing.Id);
-                    //        break;
-                    //    default:
-                    //        throw new NotImplementedException();
-                    //}
                     return (TDbRelatedEntity)result;
                 }
                 catch (Exception ex)
@@ -339,36 +335,49 @@ namespace SAEON.Observations.SensorThings
                     {
                         // Datastream
                         case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsThing):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsThings.AsNoTracking().Where(i => i.Id == datastream.InstrumentId);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsThings.AsNoTracking().Where(i => i.Id == datastream.InstrumentId);
                         case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsSensor):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsSensors.AsNoTracking().Where(i => i.Id == datastream.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsSensors.AsNoTracking().Where(i => i.Id == datastream.Id);
                         case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsObservedProperty):
-                            var dbDatastreamSensor = dbContext.SensorThingsSensors.AsNoTracking().First(i => i.Id == datastream.Id);
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsObservedProperies.AsNoTracking().Where(i => i.Id == dbDatastreamSensor.PhenomenonOfferingId);
+                            var dbSensor = DbContext.SensorThingsSensors.AsNoTracking().First(i => i.Id == datastream.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsObservedProperies.AsNoTracking().Where(i => i.Id == dbSensor.PhenomenonOfferingId);
+                        case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsObservation):
+                            dbSensor = DbContext.SensorThingsSensors.AsNoTracking().First(i => i.Id == datastream.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsObservations.AsNoTracking().Where(i =>
+                                (i.SensorId == dbSensor.Id) && (i.PhenomenonOfferingID == dbSensor.PhenomenonOfferingId) && (i.PhenomenonUnitId == datastream.PhenomenonUnitId));
+                        // FeatureOfInterest
+                        //case db.SensorThingsFeatureOfInterest featureOfInterest when typeof(TDbRelatedEntity) == typeof(db.SensorThingsObservation):
+                        //    return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsObservations.AsNoTracking().Where(i => i.Id == new Guid());
                         // HistoricalLocation
                         case db.SensorThingsHistoricalLocation historicalLocation when typeof(TDbRelatedEntity) == typeof(db.SensorThingsLocation):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsLocations.AsNoTracking().Where(i => i.Id == historicalLocation.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsLocations.AsNoTracking().Where(i => i.Id == historicalLocation.Id);
                         case db.SensorThingsHistoricalLocation historicalLocation when typeof(TDbRelatedEntity) == typeof(db.SensorThingsThing):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsThings.AsNoTracking().Where(i => i.Id == historicalLocation.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsThings.AsNoTracking().Where(i => i.Id == historicalLocation.Id);
                         // Location
                         case db.SensorThingsLocation location when typeof(TDbRelatedEntity) == typeof(db.SensorThingsHistoricalLocation):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsHistoricalLocations.AsNoTracking().Where(i => i.Id == location.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsHistoricalLocations.AsNoTracking().Where(i => i.Id == location.Id);
                         case db.SensorThingsLocation location when typeof(TDbRelatedEntity) == typeof(db.SensorThingsThing):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsThings.AsNoTracking().Where(i => i.Id == location.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsThings.AsNoTracking().Where(i => i.Id == location.Id);
+                        // Observation
+                        case db.SensorThingsObservation observation when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsDatastreams.AsNoTracking().Where(i =>
+                                (i.Id == observation.SensorId) && (i.PhenomenonOfferingId == observation.PhenomenonOfferingID) && (i.PhenomenonUnitId == observation.PhenomenonUnitId));
+                        //case db.SensorThingsObservation observation when typeof(TDbRelatedEntity) == typeof(db.SensorThingsFeatureOfInterest):
+                        //    return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsFeateuresOfInterest.AsNoTracking().Where(i => i.Id == observation.SensorId);
                         // ObservedProperty
                         case db.SensorThingsObservedProperty observedProperty when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
-                            var dbObservedPropertySensor = dbContext.SensorThingsSensors.AsNoTracking().First(i => i.PhenomenonOfferingId == observedProperty.Id);
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsDatastreams.AsNoTracking().Where(i => i.Id == dbObservedPropertySensor.PhenomenonOfferingId);
+                            dbSensor = DbContext.SensorThingsSensors.AsNoTracking().First(i => i.PhenomenonOfferingId == observedProperty.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsDatastreams.AsNoTracking().Where(i => i.Id == dbSensor.PhenomenonOfferingId);
                         // Sensor
                         case db.SensorThingsSensor sensor when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsDatastreams.AsNoTracking().Where(i => i.Id == sensor.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsDatastreams.AsNoTracking().Where(i => i.Id == sensor.Id);
                         // Thing
                         case db.SensorThingsThing thing when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsDatastreams.AsNoTracking().Where(i => i.InstrumentId == thing.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsDatastreams.AsNoTracking().Where(i => i.InstrumentId == thing.Id);
                         case db.SensorThingsThing thing when typeof(TDbRelatedEntity) == typeof(db.SensorThingsHistoricalLocation):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsHistoricalLocations.AsNoTracking().Where(i => i.Id == thing.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsHistoricalLocations.AsNoTracking().Where(i => i.Id == thing.Id);
                         case db.SensorThingsThing thing when typeof(TDbRelatedEntity) == typeof(db.SensorThingsLocation):
-                            return (IQueryable<TDbRelatedEntity>)dbContext.SensorThingsLocations.AsNoTracking().Where(i => i.Id == thing.Id);
+                            return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsLocations.AsNoTracking().Where(i => i.Id == thing.Id);
                         default:
                             throw new NotImplementedException();
                     }

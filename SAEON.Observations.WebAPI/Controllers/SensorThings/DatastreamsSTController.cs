@@ -18,6 +18,9 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
         [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})")]
         public override SingleResult<Datastream> GetById([FromODataUri] Guid id) => base.GetById(id);
 
+        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Observations")]
+        public SingleResult<Observation> GetObservations([FromUri] Guid id) => GetRelatedSingle<Observation, db.SensorThingsObservation>(id);
+
         [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/ObservedProperty")]
         public SingleResult<ObservedProperty> GetObservedProperty([FromUri] Guid id) => GetRelatedSingle<ObservedProperty, db.SensorThingsObservedProperty>(id);
 

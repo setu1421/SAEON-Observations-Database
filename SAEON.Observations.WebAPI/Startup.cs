@@ -6,7 +6,6 @@ using Owin;
 using SAEON.AspNet.Common;
 using SAEON.Logs;
 using System;
-using System.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Web.Helpers;
 using System.Web.Http;
