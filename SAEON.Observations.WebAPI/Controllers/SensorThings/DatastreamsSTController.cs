@@ -10,7 +10,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
 
     [ODataRoutePrefix("Datastreams")]
-    public class DatastreamsSTController : BaseController<Datastream, db.SensorThingsDatastream>
+    public class DatastreamsSTController : BaseGuidIdController<Datastream, db.SensorThingsDatastream>
     {
         [EnableQuery(PageSize = Config.PageSize), ODataRoute]
         public override IQueryable<Datastream> GetAll() => base.GetAll();
@@ -19,7 +19,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
         public override SingleResult<Datastream> GetById([FromODataUri] Guid id) => base.GetById(id);
 
         [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Observations")]
-        public SingleResult<Observation> GetObservations([FromUri] Guid id) => GetRelatedSingle<Observation, db.SensorThingsObservation>(id);
+        public IQueryable<Observation> GetObservations([FromUri] Guid id) => GetRelatedManyIntId<Observation, db.SensorThingsObservation>(id);
 
         [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/ObservedProperty")]
         public SingleResult<ObservedProperty> GetObservedProperty([FromUri] Guid id) => GetRelatedSingle<ObservedProperty, db.SensorThingsObservedProperty>(id);

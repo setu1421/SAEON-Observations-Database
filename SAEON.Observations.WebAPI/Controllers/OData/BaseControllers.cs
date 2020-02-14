@@ -17,6 +17,8 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     [TenantAuthorization]
     public abstract class BaseController<TEntity> : ODataController where TEntity : BaseEntity
     {
+        protected const int MaxAll = 1000;
+
         private ObservationsDbContext dbContext = null;
         protected ObservationsDbContext DbContext
         {
@@ -26,11 +28,6 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
                 return dbContext;
             }
             private set => dbContext = value;
-        }
-
-        ~BaseController()
-        {
-            DbContext = null;
         }
 
         /// <summary>
@@ -98,7 +95,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             {
                 try
                 {
-                    return GetQuery();
+                    return GetQuery().Take(MaxAll);
                 }
                 catch (Exception ex)
                 {
@@ -152,13 +149,13 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>SingleResultOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : IDEntity
+        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<SingleResult<TRelated>>(GetType()))
             {
                 try
                 {
-                    return SingleResult.Create(GetQuery(i => (i.Id == id)).Select(select).Include(include));
+                    return SingleResult.Create(GetQuery(i => i.Id == id).Select(select).Include(include));
                 }
                 catch (Exception ex)
                 {
@@ -178,7 +175,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>SingleResultOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : IDEntity
+        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<SingleResult<TRelated>>(GetType()))
             {
@@ -204,13 +201,13 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>IQueryableOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : IDEntity
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<TRelated>(GetType()))
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include);
+                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include).Take(MaxAll);
                 }
                 catch (Exception ex)
                 {
@@ -230,13 +227,13 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>IQueryableOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : IDEntity
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<TRelated>(GetType()))
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include);
+                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include).Take(MaxAll);
                 }
                 catch (Exception ex)
                 {

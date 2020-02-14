@@ -111,7 +111,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
     }
 
-    public abstract class BaseReadController<TEntity> : BaseController where TEntity : IDEntity
+    public abstract class BaseReadController<TEntity> : BaseController where TEntity : IdEntity
     {
         /// <summary>
         /// Overwrite to filter entities

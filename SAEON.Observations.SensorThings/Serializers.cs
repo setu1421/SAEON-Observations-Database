@@ -37,17 +37,27 @@ namespace SAEON.Observations.SensorThings
         public override ODataResource CreateResource(SelectExpandNode selectExpandNode, ResourceContext resourceContext)
         {
             ODataResource entry = base.CreateResource(selectExpandNode, resourceContext);
-
-            if (entry != null && resourceContext.ResourceInstance is SensorThingsEntity entity)
+            if (entry != null)
             {
-                entry.InstanceAnnotations.Add(new ODataInstanceAnnotation("iot.id", new ODataPrimitiveValue(entity.Id)));
-                entry.InstanceAnnotations.Add(new ODataInstanceAnnotation("iot.selfLink", new ODataPrimitiveValue(entity.SelfLink)));
-                foreach (var link in entity.NavigationLinks)
+                if (entry != null && resourceContext.ResourceInstance is SensorThingsGuidIdEntity guidIdEntity)
                 {
-                    entry.InstanceAnnotations.Add(new ODataInstanceAnnotation($"iot.navigationLink-{link}", new ODataPrimitiveValue($"{Config.BaseUrl}/{entity.EntitySetName}({entity.Id})/{link}")));
+                    entry.InstanceAnnotations.Add(new ODataInstanceAnnotation("iot.id", new ODataPrimitiveValue(guidIdEntity.Id)));
+                    entry.InstanceAnnotations.Add(new ODataInstanceAnnotation("iot.selfLink", new ODataPrimitiveValue(guidIdEntity.SelfLink)));
+                    foreach (var link in guidIdEntity.NavigationLinks)
+                    {
+                        entry.InstanceAnnotations.Add(new ODataInstanceAnnotation($"iot.navigationLink-{link}", new ODataPrimitiveValue($"{Config.BaseUrl}/{guidIdEntity.EntitySetName}({guidIdEntity.Id})/{link}")));
+                    }
+                }
+                else if (entry != null && resourceContext.ResourceInstance is SensorThingsIntIdEntity intIdEntity)
+                {
+                    entry.InstanceAnnotations.Add(new ODataInstanceAnnotation("iot.id", new ODataPrimitiveValue(intIdEntity.Id)));
+                    entry.InstanceAnnotations.Add(new ODataInstanceAnnotation("iot.selfLink", new ODataPrimitiveValue(intIdEntity.SelfLink)));
+                    foreach (var link in intIdEntity.NavigationLinks)
+                    {
+                        entry.InstanceAnnotations.Add(new ODataInstanceAnnotation($"iot.navigationLink-{link}", new ODataPrimitiveValue($"{Config.BaseUrl}/{intIdEntity.EntitySetName}({intIdEntity.Id})/{link}")));
+                    }
                 }
             }
-
             return entry;
         }
     }

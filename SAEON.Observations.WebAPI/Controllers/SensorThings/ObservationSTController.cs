@@ -1,43 +1,25 @@
-﻿/*
-using Newtonsoft.Json.Linq;
-using SAEON.SensorThings;
-using System;
+﻿using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Routing;
+using SAEON.Observations.SensorThings;
 using System.Linq;
 using System.Web.Http;
+using db = SAEON.Observations.Core.Entities;
 
 namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
-    [RoutePrefix("SensorThings/Observations")]
-    public class ObservationSTController : BaseController<Observation>
+    [ODataRoutePrefix("Observations")]
+    public class ObservationsSTController : BaseIntIdController<Observation, db.SensorThingsObservation>
     {
-        public ObservationSTController() : base()
-        {
-            Entities.AddRange(SensorThingsFactory.Observations.OrderBy(i => i.ResultTime));
-        }
+        [ODataRoute]
+        public override IQueryable<Observation> GetAll() => base.GetAll();
 
-        public override JToken GetAll()
-        {
-            return base.GetAll();
-        }
+        [ODataRoute("({id})")]
+        public override SingleResult<Observation> GetById([FromODataUri] int id) => base.GetById(id);
 
-        [Route("~/SensorThings/Observations({id:guid})")]
-        public override JToken GetById([FromUri] Guid id)
-        {
-            return base.GetById(id);
-        }
+        //[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Datastream")]
+        //public SingleResult<Datastream> GetDatastream([FromUri] int id) => GetRelatedSingle<Datastream, db.SensorThingsDatastream>(id);
 
-        [Route("~/SensorThings/Observations({id:guid})/Datastream")]
-        public JToken GetDatastream([FromUri] Guid id)
-        {
-            return GetSingle(id, i => i.Datastream);
-        }
-
-        [Route("~/SensorThings/Observations({id:guid})/FeatureOfInterest")]
-        public JToken GetFeatureOfInterest([FromUri] Guid id)
-        {
-            return GetSingle(id, i => i.FeatureOfInterest);
-        }
-
+        //[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/FeatureOfInterest")]
+        //public SingleResult<FeatureOfInterest> GetFeatureOfInterest([FromUri] int id) => GetRelatedSingle<FeatureOfInterest, db.SensorThingsFeatureOfInterest>(id);
     }
 }
-*/

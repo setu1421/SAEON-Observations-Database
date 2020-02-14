@@ -46,7 +46,7 @@ namespace SAEON.Observations.Core.Entities
     /// </summary>
     public abstract class BaseEntity { }
 
-    public abstract class BaseIDEntity : BaseEntity
+    public abstract class GuidIdEntity : BaseEntity
     {
         /// <summary>
         /// Id of the Entity
@@ -61,10 +61,25 @@ namespace SAEON.Observations.Core.Entities
         public Guid Id { get; set; }
     }
 
+    public abstract class IntIdEntity : BaseEntity
+    {
+        /// <summary>
+        /// Id of the Entity
+        /// </summary>
+        //[Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ScaffoldColumn(false), HiddenInput]
+#if NET472
+        [JsonProperty(Order = -99)]
+#endif
+        public int Id { get; set; }
+    }
+
     /// <summary>
     /// Base for entities
     /// </summary>
-    public abstract class IDEntity : BaseIDEntity
+    public abstract class IdEntity : GuidIdEntity
     {
         [JsonIgnore, Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false), HiddenInput]
         public byte[] RowVersion { get; set; }
@@ -75,7 +90,7 @@ namespace SAEON.Observations.Core.Entities
         public virtual EntityListItem AsEntityListItem => new EntityListItem { Id = Id };
     }
 
-    public abstract class NamedEntity : IDEntity
+    public abstract class NamedEntity : IdEntity
     {
         /// <summary>
         /// Name of the Entity
@@ -1159,10 +1174,8 @@ namespace SAEON.Observations.Core.Entities
     }
 
     [Table("vImportBatchSummary")]
-    public class ImportBatchSummary
+    public class ImportBatchSummary : GuidIdEntity
     {
-        [Key]
-        public Guid Id { get; set; }
         public Guid ImportBatchId { get; set; }
         public Guid SiteId { get; set; }
         public string SiteCode { get; set; }
@@ -1254,7 +1267,7 @@ namespace SAEON.Observations.Core.Entities
 #if NET472
     [Table("vLocations")]
 #endif
-    public class Location
+    public class Location : BaseEntity
     {
 #if NET472
         [Key, Column(Order = 1)]
@@ -1285,7 +1298,7 @@ namespace SAEON.Observations.Core.Entities
 #if NET472
     [Table("vFeatures")]
 #endif
-    public class Feature
+    public class Feature : BaseEntity
     {
 #if NET472
         [Key, Column(Order = 1)]
@@ -1309,10 +1322,8 @@ namespace SAEON.Observations.Core.Entities
     }
 
     [Table("vObservationExpansion")]
-    public class Observation
+    public class Observation : IntIdEntity
     {
-        [Key]
-        public int Id { get; set; }
         public Guid ImportBatchId { get; set; }
         public Guid SiteId { get; set; }
         public string SiteCode { get; set; }
@@ -1378,7 +1389,7 @@ namespace SAEON.Observations.Core.Entities
     #region SensorThingsAPI
 
     [Table("vSensorThingsAPIDatastreams")]
-    public class SensorThingsDatastream : BaseIDEntity
+    public class SensorThingsDatastream : GuidIdEntity
     {
         public string Code { get; set; }
         public string Name { get; set; }
@@ -1405,7 +1416,7 @@ namespace SAEON.Observations.Core.Entities
     }
 
     [Table("vSensorThingsAPIFeaturesOfInterest")]
-    public class SensorThingsFeatureOfInterest : BaseIDEntity
+    public class SensorThingsFeatureOfInterest : GuidIdEntity
     {
         public string Code { get; set; }
         public string Name { get; set; }
@@ -1416,7 +1427,7 @@ namespace SAEON.Observations.Core.Entities
     }
 
     [Table("vSensorThingsAPIHistoricalLocations")]
-    public class SensorThingsHistoricalLocation : BaseIDEntity
+    public class SensorThingsHistoricalLocation : GuidIdEntity
     {
         public string Code { get; set; }
         public string Name { get; set; }
@@ -1429,7 +1440,7 @@ namespace SAEON.Observations.Core.Entities
     }
 
     [Table("vSensorThingsAPILocations")]
-    public class SensorThingsLocation : BaseIDEntity
+    public class SensorThingsLocation : GuidIdEntity
     {
         public string Code { get; set; }
         public string Name { get; set; }
@@ -1442,15 +1453,8 @@ namespace SAEON.Observations.Core.Entities
     }
 
     [Table("vSensorThingsAPIObservations")]
-    public class SensorThingsObservation : BaseEntity
+    public class SensorThingsObservation : IntIdEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ScaffoldColumn(false), HiddenInput]
-#if NET472
-        [JsonProperty(Order = -99)]
-#endif
-        public int Id { get; set; }
         public Guid SensorId { get; set; }
         public Guid PhenomenonOfferingID { get; set; }
         public Guid PhenomenonUnitId { get; set; }
@@ -1461,7 +1465,7 @@ namespace SAEON.Observations.Core.Entities
     }
 
     [Table("vSensorThingsAPIObservedProperties")]
-    public class SensorThingsObservedProperty : BaseIDEntity
+    public class SensorThingsObservedProperty : GuidIdEntity
     {
         public string PhenomenonCode { get; set; }
         public string PhenomenonName { get; set; }
@@ -1473,7 +1477,7 @@ namespace SAEON.Observations.Core.Entities
     }
 
     [Table("vSensorThingsAPISensors")]
-    public class SensorThingsSensor : BaseIDEntity
+    public class SensorThingsSensor : GuidIdEntity
     {
         public string Code { get; set; }
         public string Name { get; set; }
@@ -1483,7 +1487,7 @@ namespace SAEON.Observations.Core.Entities
     }
 
     [Table("vSensorThingsAPIThings")]
-    public class SensorThingsThing : BaseIDEntity
+    public class SensorThingsThing : GuidIdEntity
     {
         public string Code { get; set; }
         public string Name { get; set; }
@@ -1499,7 +1503,7 @@ namespace SAEON.Observations.Core.Entities
     //> Remove once EFCore has many to many
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Instrument_Sensor")]
-    public class InstrumentSensor
+    public class InstrumentSensor : IdEntity
     {
         public Guid InstrumentId { get; set; }
         public Guid SensorId { get; set; }
@@ -1510,7 +1514,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Organisation_Instrument")]
-    public class OrganisationInstrument : IDEntity
+    public class OrganisationInstrument : IdEntity
     {
         public Guid OrganisationId { get; set; }
         public Guid InstrumentId { get; set; }
@@ -1521,7 +1525,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Organisation_Site")]
-    public class OrganisationSite : IDEntity
+    public class OrganisationSite : IdEntity
     {
         public Guid OrganisationId { get; set; }
         public Guid SiteId { get; set; }
@@ -1532,7 +1536,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Organisation_Station")]
-    public class OrganisationStation : IDEntity
+    public class OrganisationStation : IdEntity
     {
         public Guid OrganisationId { get; set; }
         public Guid StationId { get; set; }
@@ -1543,7 +1547,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("PhenomenonOffering")]
-    public class PhenomenonOffering : IDEntity
+    public class PhenomenonOffering : IdEntity
     {
         [Required]
         public Guid PhenomenonId { get; set; }
@@ -1557,7 +1561,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("PhenomenonUOM")]
-    public class PhenomenonUnit : IDEntity
+    public class PhenomenonUnit : IdEntity
     {
         [Required]
         public Guid PhenomenonId { get; set; }
@@ -1571,7 +1575,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Project_Station")]
-    public class ProjectStation : IDEntity
+    public class ProjectStation : IdEntity
     {
         public Guid ProjectId { get; set; }
         public Guid StationId { get; set; }
@@ -1582,7 +1586,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Station_Instrument")]
-    public class StationInstrument : IDEntity
+    public class StationInstrument : IdEntity
     {
         public Guid StationId { get; set; }
         public Guid InstrumentId { get; set; }
@@ -1797,7 +1801,6 @@ namespace SAEON.Observations.Core.Entities
         {
             //Configuration.ProxyCreationEnabled = false;
             //Configuration.LazyLoadingEnabled = false;
-            //Configuration.AutoDetectChangesEnabled = false;
             var logLevel = ConfigurationManager.AppSettings["EntityFrameworkLogging"] ?? "Information";
             if (logLevel.Equals("Verbose", StringComparison.CurrentCultureIgnoreCase))
                 Database.Log = s => Logging.Verbose(s);

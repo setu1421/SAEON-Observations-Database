@@ -26,10 +26,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
 
-        ~BaseController()
-        {
-            DbContext = null;
-        }
+        //~BaseController()
+        //{
+        //    DbContext = null;
+        //}
     }
 
     public abstract class BaseEntityController<TEntity> : BaseController where TEntity : BaseEntity
@@ -110,7 +110,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
     }
 
-    public abstract class IDEntityController<TEntity> : BaseEntityController<TEntity> where TEntity : IDEntity
+    public abstract class IDEntityController<TEntity> : BaseEntityController<TEntity> where TEntity : GuidIdEntity
     {
         /// <summary>
         /// Get a TEntity by Id
@@ -153,7 +153,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [HttpGet]
         //[ResponseType(typeof(TRelated))] Required in derived classes
         //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected async Task<IHttpActionResult> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : IDEntity
+        protected async Task<IHttpActionResult> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {

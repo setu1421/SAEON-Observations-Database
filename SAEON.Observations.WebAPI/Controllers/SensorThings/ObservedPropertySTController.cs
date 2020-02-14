@@ -9,7 +9,7 @@ using db = SAEON.Observations.Core.Entities;
 namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
     [ODataRoutePrefix("ObservedProperties")]
-    public class ObservedPropertiesSTController : BaseController<ObservedProperty, db.SensorThingsObservedProperty>
+    public class ObservedPropertiesSTController : BaseGuidIdController<ObservedProperty, db.SensorThingsObservedProperty>
     {
         [EnableQuery(PageSize = Config.PageSize), ODataRoute]
         public override IQueryable<ObservedProperty> GetAll() => base.GetAll();

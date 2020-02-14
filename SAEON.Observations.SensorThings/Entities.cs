@@ -73,15 +73,27 @@ namespace SAEON.Observations.SensorThings
     {
         [NotMapped]
         public string EntitySetName { get; protected set; }
-        [Key, Column("id")]
-        public Guid Id { get; set; }
-        [NotMapped]
-        public string SelfLink { get { return $"{Config.BaseUrl}/{EntitySetName}({Id})"; } set {; } }
         [NotMapped]
         public List<string> NavigationLinks { get; } = new List<string>();
     }
 
-    public abstract class NamedSensorThingsEntity : SensorThingsEntity
+    public abstract class SensorThingsGuidIdEntity : SensorThingsEntity
+    {
+        [Key, Column("id")]
+        public Guid Id { get; set; }
+        [NotMapped]
+        public string SelfLink { get { return $"{Config.BaseUrl}/{EntitySetName}({Id})"; } set {; } }
+    }
+
+    public abstract class SensorThingsIntIdEntity : SensorThingsEntity
+    {
+        [Key, Column("id")]
+        public int Id { get; set; }
+        [NotMapped]
+        public string SelfLink { get { return $"{Config.BaseUrl}/{EntitySetName}({Id})"; } set {; } }
+    }
+
+    public abstract class NamedSensorThingsEntity : SensorThingsGuidIdEntity
     {
         public string Code { get; set; }
         public string Name { get; set; }
@@ -116,7 +128,7 @@ namespace SAEON.Observations.SensorThings
         }
     }
 
-    public class FeatureOfInterest : SensorThingsEntity
+    public class FeatureOfInterest : SensorThingsGuidIdEntity
     {
         public string EncodingType { get; set; } = ValueCodes.GeoJson;
         public GeoJSONPoint Feature { get; set; } = null;
@@ -131,7 +143,7 @@ namespace SAEON.Observations.SensorThings
         }
     }
 
-    public class HistoricalLocation : SensorThingsEntity
+    public class HistoricalLocation : SensorThingsGuidIdEntity
     {
         [NotMapped]
         public TimeString TimeString { get; set; } = null;
@@ -173,7 +185,7 @@ namespace SAEON.Observations.SensorThings
         }
     }
 
-    public class Observation : NamedSensorThingsEntity
+    public class Observation : SensorThingsIntIdEntity
     {
         [NotMapped]
         public TimeString PhenomenonTimeString { get; set; } = null;

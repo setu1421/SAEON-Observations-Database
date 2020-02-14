@@ -10,7 +10,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
 
     [ODataRoutePrefix("Sensors")]
-    public class SensorsSTController : BaseController<Sensor, db.SensorThingsSensor>
+    public class SensorsSTController : BaseGuidIdController<Sensor, db.SensorThingsSensor>
     {
         [EnableQuery(PageSize = Config.PageSize), ODataRoute]
         public override IQueryable<Sensor> GetAll() => base.GetAll();
