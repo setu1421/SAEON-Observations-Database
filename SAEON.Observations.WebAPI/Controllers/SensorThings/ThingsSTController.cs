@@ -11,19 +11,22 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
     [ODataRoutePrefix("Things")]
     public class ThingsSTController : BaseGuidIdController<Thing, db.SensorThingsThing>
     {
-        [EnableQuery(PageSize = Config.PageSize), ODataRoute]
+        [ODataRoute]
         public override IQueryable<Thing> GetAll() => base.GetAll();
 
-        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})")]
+        [ODataRoute("({id})")]
         public override SingleResult<Thing> GetById([FromODataUri] Guid id) => base.GetById(id);
 
-        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Datastreams")]
+        [ODataRoute("({id})/Datastreams")]
+        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
         public IQueryable<Datastream> GetDatastreams([FromUri] Guid id) => GetRelatedMany<Datastream, db.SensorThingsDatastream>(id);
 
-        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Locations")]
+        [ODataRoute("({id})/Locations")]
+        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
         public IQueryable<Location> GetLocations([FromUri] Guid id) => GetRelatedMany<Location, db.SensorThingsLocation>(id);
 
-        [EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/HistoricalLocations")]
+        [ODataRoute("({id})/HistoricalLocations")]
+        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
         public IQueryable<HistoricalLocation> GetHistoricalLocations([FromUri] Guid id) => GetRelatedMany<HistoricalLocation, db.SensorThingsHistoricalLocation>(id);
     }
 }

@@ -30,7 +30,7 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Id of Entity
         /// </summary>
-        public Guid? Id { get; set; } = null;
+        public Guid? Id { get; set; } = null; 
         /// <summary>
         /// Code of Entity
         /// </summary>

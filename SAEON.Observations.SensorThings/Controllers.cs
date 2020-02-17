@@ -22,7 +22,6 @@ namespace SAEON.Observations.SensorThings
                 if (dbContext == null)
                 {
                     dbContext = new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
-                    //dbContext.Configuration.AutoDetectChangesEnabled = false;
                 }
                 return dbContext;
             }
@@ -43,7 +42,7 @@ namespace SAEON.Observations.SensorThings
             Mapper = new MapperConfiguration(config).CreateMapper();
         }
 
-        private T ConvertDbEntity<T, TDb>(TDb dbEntity) where T : SensorThingsGuidIdEntity where TDb : db.GuidIdEntity
+        private T ConvertDbEntityGuidId<T, TDb>(TDb dbEntity) where T : SensorThingsGuidIdEntity where TDb : db.GuidIdEntity
         {
             using (Logging.MethodCall<T, TDb>(GetType()))
             {
@@ -200,9 +199,9 @@ namespace SAEON.Observations.SensorThings
 
         }
 
-        private T ConvertDbEntity<T>(TDbEntity dbEntity) where T : SensorThingsGuidIdEntity
+        private T ConvertDbEntityGuidId<T>(TDbEntity dbEntity) where T : SensorThingsGuidIdEntity
         {
-            return ConvertDbEntity<T, TDbEntity>(dbEntity);
+            return ConvertDbEntityGuidId<T, TDbEntity>(dbEntity);
         }
 
         private T ConvertDbEntityIntId<T, TDb>(TDb dbEntity) where T : SensorThingsIntIdEntity where TDb : db.IntIdEntity
@@ -233,7 +232,6 @@ namespace SAEON.Observations.SensorThings
                     return result;
                 }
             }
-
         }
 
         private void UpdateRequest(bool isMany)
@@ -257,7 +255,8 @@ namespace SAEON.Observations.SensorThings
         /// </summary>
         /// <returns>ListOf(TEntity)</returns>
         // GET: odata/TEntity
-        //[EnableQuery(PageSize = Config.PageSize), ODataRoute] Required in derived class
+        //[ODataRoute] required on derived class
+        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
         public virtual IQueryable<TEntity> GetAll()
         {
             using (Logging.MethodCall<TDbEntity>(GetType()))
@@ -267,9 +266,9 @@ namespace SAEON.Observations.SensorThings
                     UpdateRequest(true);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
-                    foreach (var dbEntity in DbContext.Set<TDbEntity>().Take(Config.MaxAll))
+                    foreach (var dbEntity in DbContext.Set<TDbEntity>().AsNoTracking().Take(Config.MaxAll))
                     {
-                        result.Add(ConvertDbEntity<TEntity>(dbEntity));
+                        result.Add(ConvertDbEntityGuidId<TEntity>(dbEntity));
                     }
                     return result.AsQueryable();
                 }
@@ -281,7 +280,8 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        //[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})")] Required in derived class
+        //[ODataRoute("({id})")] required on derived class
+        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
         public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
         {
             using (Logging.MethodCall<SingleResult<TDbEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
@@ -294,7 +294,7 @@ namespace SAEON.Observations.SensorThings
                     var dbEntity = DbContext.Set<TDbEntity>().AsNoTracking().FirstOrDefault(i => i.Id == id);
                     if (dbEntity != null)
                     {
-                        result.Add(ConvertDbEntity<TEntity>(dbEntity));
+                        result.Add(ConvertDbEntityGuidId<TEntity>(dbEntity));
                     }
                     return SingleResult.Create(result.AsQueryable());
                 }
@@ -345,14 +345,15 @@ namespace SAEON.Observations.SensorThings
                             result = (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsObservedProperies.AsNoTracking().Where(i => i.Id == dbSensor.PhenomenonOfferingId);
                             break;
                         case db.SensorThingsDatastream datastream when typeof(TDbRelatedEntity) == typeof(db.SensorThingsObservation):
-                            dbSensor = DbContext.SensorThingsSensors.AsNoTracking().First(i => i.Id == datastream.Id);
                             result = (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsObservations.AsNoTracking().Where(i =>
-                                (i.SensorId == dbSensor.Id) && (i.PhenomenonOfferingID == dbSensor.PhenomenonOfferingId) && (i.PhenomenonUnitId == datastream.PhenomenonUnitId));
+                                (i.SensorId == datastream.Id) && (i.PhenomenonOfferingID == datastream.PhenomenonOfferingId) && (i.PhenomenonUnitId == datastream.PhenomenonUnitId));
                             break;
                         // FeatureOfInterest
                         //case db.SensorThingsFeatureOfInterest featureOfInterest when typeof(TDbRelatedEntity) == typeof(db.SensorThingsObservation):
-                        //    result =  (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsObservations.AsNoTracking().Where(i => i.Id == new Guid());
-                        //break;
+                        //    var dbDatastream = DbContext.SensorThingsDatastreams.AsNoTracking().First(i => i.InstrumentId == featureOfInterest.Id);
+                        //    result = (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsObservations.AsNoTracking().Where(i =>
+                        //        (i.SensorId == dbDatastream.Id) && (i.PhenomenonOfferingID == dbDatastream.PhenomenonOfferingId) && (i.PhenomenonUnitId == dbDatastream.PhenomenonUnitId));
+                        //    break;
                         // HistoricalLocation
                         case db.SensorThingsHistoricalLocation historicalLocation when typeof(TDbRelatedEntity) == typeof(db.SensorThingsLocation):
                             result = (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsLocations.AsNoTracking().Where(i => i.Id == historicalLocation.Id);
@@ -372,9 +373,6 @@ namespace SAEON.Observations.SensorThings
                             result = (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsDatastreams.AsNoTracking().Where(i =>
                                 (i.Id == observation.SensorId) && (i.PhenomenonOfferingId == observation.PhenomenonOfferingID) && (i.PhenomenonUnitId == observation.PhenomenonUnitId));
                             break;
-                        //case db.SensorThingsObservation observation when typeof(TDbRelatedEntity) == typeof(db.SensorThingsFeatureOfInterest):
-                        //    result =  (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsFeateuresOfInterest.AsNoTracking().Where(i => i.Id == observation.SensorId);
-                        //break;
                         // ObservedProperty
                         case db.SensorThingsObservedProperty observedProperty when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
                             dbSensor = DbContext.SensorThingsSensors.AsNoTracking().First(i => i.PhenomenonOfferingId == observedProperty.Id);
@@ -425,8 +423,11 @@ namespace SAEON.Observations.SensorThings
                                 (i.SensorId == dbSensor.Id) && (i.PhenomenonOfferingID == dbSensor.PhenomenonOfferingId) && (i.PhenomenonUnitId == datastream.PhenomenonUnitId));
                             break;
                         // FeatureOfInterest
-                        //case db.SensorThingsFeatureOfInterest featureOfInterest when typeof(TDbRelatedEntity) == typeof(db.SensorThingsObservation):
-                        //    return (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsObservations.AsNoTracking().Where(i => i.Id == new Guid());
+                        case db.SensorThingsFeatureOfInterest featureOfInterest when typeof(TDbRelatedEntity) == typeof(db.SensorThingsObservation):
+                            var dbDatastream = DbContext.SensorThingsDatastreams.AsNoTracking().First(i => i.InstrumentId == featureOfInterest.Id);
+                            result = (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsObservations.AsNoTracking().Where(i =>
+                                (i.SensorId == dbDatastream.Id) && (i.PhenomenonOfferingID == dbDatastream.PhenomenonOfferingId) && (i.PhenomenonUnitId == dbDatastream.PhenomenonUnitId));
+                            break;
                         default:
                             throw new NotImplementedException();
                     }
@@ -440,6 +441,9 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
+        //[ODataRoute("({id}/MethodCall)]")] required on calling class
+        //[EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop) required on calling class
+
         protected SingleResult<TRelatedEntity> GetRelatedSingle<TRelatedEntity, TDbRelatedEntity>(Guid id) where TRelatedEntity : SensorThingsGuidIdEntity where TDbRelatedEntity : db.GuidIdEntity
         {
             using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
@@ -452,7 +456,7 @@ namespace SAEON.Observations.SensorThings
                     var dbRelatedEntity = LoadRelatedSingle<TDbRelatedEntity>(id);
                     if (dbRelatedEntity != null)
                     {
-                        result.Add(ConvertDbEntity<TRelatedEntity, TDbRelatedEntity>(dbRelatedEntity));
+                        result.Add(ConvertDbEntityGuidId<TRelatedEntity, TDbRelatedEntity>(dbRelatedEntity));
                     }
                     return SingleResult.Create(result.AsQueryable());
                 }
@@ -464,6 +468,8 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
+        //[ODataRoute("({id}/MethodCall)]")] required on calling class
+        //[EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop) required on calling class
         protected IQueryable<TRelatedEntity> GetRelatedMany<TRelatedEntity, TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.GuidIdEntity where TRelatedEntity : SensorThingsGuidIdEntity
         {
             using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
@@ -475,7 +481,7 @@ namespace SAEON.Observations.SensorThings
                     var result = new List<TRelatedEntity>();
                     foreach (var dbRelatedEntity in LoadRelatedMany<TDbRelatedEntity>(id))
                     {
-                        result.Add(ConvertDbEntity<TRelatedEntity, TDbRelatedEntity>(dbRelatedEntity));
+                        result.Add(ConvertDbEntityGuidId<TRelatedEntity, TDbRelatedEntity>(dbRelatedEntity));
                     }
                     return result.AsQueryable();
                 }
@@ -486,6 +492,9 @@ namespace SAEON.Observations.SensorThings
                 }
             }
         }
+
+        //[ODataRoute("({id}/MethodCall)]")] required on calling class
+        //[EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop) required on calling class
         protected IQueryable<TRelatedEntity> GetRelatedManyIntId<TRelatedEntity, TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.IntIdEntity where TRelatedEntity : SensorThingsIntIdEntity
         {
             using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
@@ -520,7 +529,6 @@ namespace SAEON.Observations.SensorThings
                 if (dbContext == null)
                 {
                     dbContext = new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
-                    //dbContext.Configuration.AutoDetectChangesEnabled = false;
                 }
                 return dbContext;
             }
@@ -536,7 +544,43 @@ namespace SAEON.Observations.SensorThings
             Mapper = new MapperConfiguration(config).CreateMapper();
         }
 
-        private T ConvertDbEntity<T, TDb>(TDb dbEntity) where T : SensorThingsIntIdEntity where TDb : db.IntIdEntity
+        private T ConvertDbEntityIntId<T, TDb>(TDb dbEntity) where T : SensorThingsIntIdEntity where TDb : db.IntIdEntity
+        {
+            using (Logging.MethodCall<T, TDb>(GetType()))
+            {
+                object result = default(T);
+                switch (dbEntity)
+                {
+                    case db.SensorThingsObservation dbObservation:
+                        result = ConvertObservation(dbObservation);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+                return (T)result;
+            }
+
+            Observation ConvertObservation(db.SensorThingsObservation dbObservation)
+            {
+                using (Logging.MethodCall(GetType()))
+                {
+                    var result = Mapper.Map<Observation>(dbObservation);
+                    result.PhenomenonTimeString = new TimeString(dbObservation.Date);
+                    result.ResultTimeString = new TimeString(dbObservation.Date);
+                    result.Result = dbObservation.Value;
+                    //Logging.Verbose("Result: {@Result}", result);
+                    return result;
+
+                }
+            }
+        }
+
+        private T ConvertDbEntityIntId<T>(TDbEntity dbEntity) where T : SensorThingsIntIdEntity
+        {
+            return ConvertDbEntityIntId<T, TDbEntity>(dbEntity);
+        }
+
+        private T ConvertDbEntityGuidId<T, TDb>(TDb dbEntity) where T : SensorThingsGuidIdEntity where TDb : db.GuidIdEntity
         {
             using (Logging.MethodCall<T, TDb>(GetType()))
             {
@@ -548,9 +592,6 @@ namespace SAEON.Observations.SensorThings
                         break;
                     case db.SensorThingsFeatureOfInterest dbFeatureOfInterest:
                         result = ConvertFeatureOfInterest(dbFeatureOfInterest);
-                        break;
-                    case db.SensorThingsObservation dbObservation:
-                        result = ConvertObservation(dbObservation);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -601,26 +642,6 @@ namespace SAEON.Observations.SensorThings
                     return result;
                 }
             }
-
-            Observation ConvertObservation(db.SensorThingsObservation dbObservation)
-            {
-                using (Logging.MethodCall(GetType()))
-                {
-                    var result = Mapper.Map<Observation>(dbObservation);
-                    result.PhenomenonTimeString = new TimeString(dbObservation.Date);
-                    result.ResultTimeString = new TimeString(dbObservation.Date);
-                    result.Result = dbObservation.Value;
-                    //Logging.Verbose("Result: {@Result}", result);
-                    return result;
-
-                }
-            }
-
-        }
-
-        private T ConvertDbEntity<T>(TDbEntity dbEntity) where T : SensorThingsIntIdEntity
-        {
-            return ConvertDbEntity<T, TDbEntity>(dbEntity);
         }
 
         private void UpdateRequest(bool isMany)
@@ -644,7 +665,8 @@ namespace SAEON.Observations.SensorThings
         /// </summary>
         /// <returns>ListOf(TEntity)</returns>
         // GET: odata/TEntity
-        //[EnableQuery(PageSize = Config.PageSize), ODataRoute] Required in derived class
+        //[ODataRoute] required on derived class
+        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
         public virtual IQueryable<TEntity> GetAll()
         {
             using (Logging.MethodCall<TDbEntity>(GetType()))
@@ -656,7 +678,7 @@ namespace SAEON.Observations.SensorThings
                     var result = new List<TEntity>();
                     foreach (var dbEntity in DbContext.Set<TDbEntity>().Take(Config.MaxAll))
                     {
-                        result.Add(ConvertDbEntity<TEntity>(dbEntity));
+                        result.Add(ConvertDbEntityIntId<TEntity>(dbEntity));
                     }
                     return result.AsQueryable();
                 }
@@ -668,7 +690,8 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        //[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})")] Required in derived class
+        //[ODataRoute("({id})")] required on derived class
+        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
         public virtual SingleResult<TEntity> GetById([FromODataUri] int id)
         {
             using (Logging.MethodCall<SingleResult<TDbEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
@@ -681,7 +704,7 @@ namespace SAEON.Observations.SensorThings
                     var dbEntity = DbContext.Set<TDbEntity>().AsNoTracking().FirstOrDefault(i => i.Id == id);
                     if (dbEntity != null)
                     {
-                        result.Add(ConvertDbEntity<TEntity>(dbEntity));
+                        result.Add(ConvertDbEntityIntId<TEntity>(dbEntity));
                     }
                     return SingleResult.Create(result.AsQueryable());
                 }
@@ -692,6 +715,85 @@ namespace SAEON.Observations.SensorThings
                 }
             }
         }
+
+        private TDbRelatedEntity LoadRelatedSingle<TDbRelatedEntity>(int id) where TDbRelatedEntity : db.GuidIdEntity
+        {
+            using (Logging.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
+            {
+                try
+                {
+                    var result = LoadRelatedMany<TDbRelatedEntity>(id).FirstOrDefault();
+                    return (TDbRelatedEntity)result;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        private IQueryable<TDbRelatedEntity> LoadRelatedMany<TDbRelatedEntity>(int id) where TDbRelatedEntity : db.GuidIdEntity
+        {
+            using (Logging.MethodCall<TDbEntity, TDbRelatedEntity>(GetType()))
+            {
+                try
+                {
+                    var dbEntity = DbContext.Set<TDbEntity>().AsNoTracking().First(i => i.Id == id);
+                    var result = default(IQueryable<TDbRelatedEntity>);
+                    switch (dbEntity)
+                    {
+                        // Observation
+                        case db.SensorThingsObservation observation when typeof(TDbRelatedEntity) == typeof(db.SensorThingsDatastream):
+                            result = (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsDatastreams.AsNoTracking().Where(i =>
+                                (i.Id == observation.SensorId) && (i.PhenomenonOfferingId == observation.PhenomenonOfferingID) && (i.PhenomenonUnitId == observation.PhenomenonUnitId));
+                            break;
+                        case db.SensorThingsObservation observation when typeof(TDbRelatedEntity) == typeof(db.SensorThingsFeatureOfInterest):
+                            var dbDatastream = DbContext.SensorThingsDatastreams.AsNoTracking().First(i =>
+                                (i.Id == observation.SensorId) && (i.PhenomenonOfferingId == observation.PhenomenonOfferingID) && (i.PhenomenonUnitId == observation.PhenomenonUnitId));
+                            result = (IQueryable<TDbRelatedEntity>)DbContext.SensorThingsFeaturesOfInterest.AsNoTracking().Where(i => i.Id == dbDatastream.InstrumentId);
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                    return result.Take(Config.MaxAll);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        //[ODataRoute("({id}/MethodCall)]")] required on calling class
+        //[EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop) required on calling class
+
+        protected SingleResult<TRelatedEntity> GetRelatedSingle<TRelatedEntity, TDbRelatedEntity>(int id) where TRelatedEntity : SensorThingsGuidIdEntity where TDbRelatedEntity : db.GuidIdEntity
+        {
+            using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
+            {
+                try
+                {
+                    UpdateRequest(false);
+                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    var result = new List<TRelatedEntity>();
+                    var dbRelatedEntity = LoadRelatedSingle<TDbRelatedEntity>(id);
+                    if (dbRelatedEntity != null)
+                    {
+                        result.Add(ConvertDbEntityGuidId<TRelatedEntity, TDbRelatedEntity>(dbRelatedEntity));
+                    }
+                    return SingleResult.Create(result.AsQueryable());
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+
 
     }
 }

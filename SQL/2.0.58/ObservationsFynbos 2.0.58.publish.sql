@@ -24,7 +24,7 @@ GO
 /*
 Detect SQLCMD mode and disable script execution if SQLCMD mode is not supported.
 To re-enable the script after enabling SQLCMD mode, execute the following:
-SET NOEXEC OFF;
+SET NOEXEC OFF; 
 */
 :setvar __IsSqlCmdEnabled "True"
 GO
@@ -45,7 +45,7 @@ USE [$(DatabaseName)];
 --           WHERE  [name] = N'$(DatabaseName)')
 --    BEGIN
 --        ALTER DATABASE [$(DatabaseName)]
---            SET TEMPORAL_HISTORY_RETENTION ON
+--            SET TEMPORAL_HISTORY_RETENTION ON 
 --            WITH ROLLBACK IMMEDIATE;
 --    END
 
@@ -140,7 +140,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_DigitalObjectIdentifiers] (
     CONSTRAINT [tmp_ms_xx_constraint_PK_DigitalObjectIdentifiers1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 
-IF EXISTS (SELECT TOP 1 1
+IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[DigitalObjectIdentifiers])
     BEGIN
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_DigitalObjectIdentifiers] ON;
@@ -376,9 +376,9 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 ALTER VIEW [dbo].[vImportBatchSummary]
-AS
+AS 
 Select
-  ImportBatchSummary.*,
+  ImportBatchSummary.*, 
   Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription,
   Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription,
   UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,

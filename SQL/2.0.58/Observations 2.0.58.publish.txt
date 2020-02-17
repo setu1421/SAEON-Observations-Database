@@ -35,9 +35,18 @@
        [dbo].[Observation] (Table)
        [dbo].[UserDownloads] (Table)
        [dbo].[UserQueries] (Table)
+       [dbo].[vImportBatchSummary] (View)
      Create
+       [dbo].[vSensorThingsAPIDatastreams] (View)
+       [dbo].[vSensorThingsAPIInstrumentDates] (View)
        [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIObservations] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
+       [dbo].[vSensorThingsAPIStationDates] (View)
        [dbo].[vSensorThingsAPIThings] (View)
+       [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
+       [dbo].[vSensorThingsAPIHistoricalLocations] (View)
 
 ** Supporting actions
      Drop
@@ -55,9 +64,9 @@
      Refresh
        [dbo].[vUserDownloads] (View)
        [dbo].[vObservationExpansion] (View)
-       [dbo].[vSensorThingsDatastreams] (View)
        [dbo].[vObservation] (View)
        [dbo].[vObservationJSON] (View)
+       [dbo].[vInventory] (View)
 
 The type for column AddedBy in table [dbo].[DigitalObjectIdentifiers] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
 The type for column Name in table [dbo].[DigitalObjectIdentifiers] is currently  NVARCHAR (500) NULL but is being changed to  VARCHAR (1000) NULL. Data loss could occur.
@@ -69,4 +78,5 @@ The type for column UserId in table [dbo].[UserDownloads] is currently  NVARCHAR
 The type for column AddedBy in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
 The type for column UpdatedBy in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
 The type for column UserId in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+If this deployment is executed, changes to [dbo].[Observation] might introduce run-time errors in [dbo].[vSensorThingsDatastreams].
 

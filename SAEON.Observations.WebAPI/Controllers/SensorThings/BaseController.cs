@@ -16,7 +16,6 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
     [ApiExplorerSettings(IgnoreApi = true)]
     [ODataRouteName("SensorThings")]
     [TenantAuthorization]
-    [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
     public abstract class BaseIntIdController<TSensorThingsEntity, TDbEntity> : SensorThingsIntIdController<TSensorThingsEntity, TDbEntity> where TSensorThingsEntity : SensorThingsIntIdEntity, new() where TDbEntity : IntIdEntity
     {
     }

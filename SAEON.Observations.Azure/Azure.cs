@@ -33,7 +33,7 @@ namespace SAEON.Observations.Azure
             {
                 try
                 {
-                    Enabled = Convert.ToBoolean(ConfigurationManager.AppSettings["AzureEnabled"] ?? "false");
+                    Enabled = Convert.ToBoolean(ConfigurationManager.AppSettings["AzureEnabled"] ?? "false"); 
                     if (Enabled)
                     {
                         StorageEnabled = bool.Parse(ConfigurationManager.AppSettings["AzureStorageEnabled"] ?? "false");

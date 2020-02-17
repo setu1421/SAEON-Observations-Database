@@ -41,15 +41,17 @@
        [dbo].[UserDownloads] (Table)
        [dbo].[UserQueries] (Table)
        [dbo].[vImportBatchSummary] (View)
-       [dbo].[vSensorDates] (View)
      Create
        [dbo].[vSensorThingsAPIDatastreams] (View)
        [dbo].[vSensorThingsAPIInstrumentDates] (View)
        [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIObservations] (View)
        [dbo].[vSensorThingsAPIObservedProperties] (View)
        [dbo].[vSensorThingsAPISensors] (View)
        [dbo].[vSensorThingsAPIStationDates] (View)
        [dbo].[vSensorThingsAPIThings] (View)
+       [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
+       [dbo].[vSensorThingsAPIHistoricalLocations] (View)
 
 ** Supporting actions
      Drop

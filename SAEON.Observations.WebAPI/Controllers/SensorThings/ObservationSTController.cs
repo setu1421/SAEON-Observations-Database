@@ -16,10 +16,12 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
         [ODataRoute("({id})")]
         public override SingleResult<Observation> GetById([FromODataUri] int id) => base.GetById(id);
 
-        //[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/Datastream")]
-        //public SingleResult<Datastream> GetDatastream([FromUri] int id) => GetRelatedSingle<Datastream, db.SensorThingsDatastream>(id);
+        [ODataRoute("({id})/Datastream")]
+        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
+        public SingleResult<Datastream> GetDatastream([FromUri] int id) => GetRelatedSingle<Datastream, db.SensorThingsDatastream>(id);
 
-        //[EnableQuery(PageSize = Config.PageSize), ODataRoute("({id})/FeatureOfInterest")]
-        //public SingleResult<FeatureOfInterest> GetFeatureOfInterest([FromUri] int id) => GetRelatedSingle<FeatureOfInterest, db.SensorThingsFeatureOfInterest>(id);
+        [ODataRoute("({id})/FeatureOfInterest")]
+        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
+        public SingleResult<FeatureOfInterest> GetFeatureOfInterest([FromUri] int id) => GetRelatedSingle<FeatureOfInterest, db.SensorThingsFeatureOfInterest>(id);
     }
 }

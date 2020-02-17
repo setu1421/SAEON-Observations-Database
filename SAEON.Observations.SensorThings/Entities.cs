@@ -93,14 +93,14 @@ namespace SAEON.Observations.SensorThings
         public string SelfLink { get { return $"{Config.BaseUrl}/{EntitySetName}({Id})"; } set {; } }
     }
 
-    public abstract class NamedSensorThingsEntity : SensorThingsGuidIdEntity
+    public abstract class SensorThingsNamedEntity : SensorThingsGuidIdEntity
     {
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }
 
-    public class Datastream : NamedSensorThingsEntity
+    public class Datastream : SensorThingsNamedEntity
     {
         public UnitOfMeasurement UnitOfMeasurement { get; set; } = null;
         public string ObservationType { get; set; } = ValueCodes.OM_Measurement;
@@ -128,7 +128,7 @@ namespace SAEON.Observations.SensorThings
         }
     }
 
-    public class FeatureOfInterest : SensorThingsGuidIdEntity
+    public class FeatureOfInterest : SensorThingsNamedEntity
     {
         public string EncodingType { get; set; } = ValueCodes.GeoJson;
         public GeoJSONPoint Feature { get; set; } = null;
@@ -166,7 +166,7 @@ namespace SAEON.Observations.SensorThings
         }
     }
 
-    public class Location : NamedSensorThingsEntity
+    public class Location : SensorThingsNamedEntity
     {
         public string EncodingType { get; set; } = ValueCodes.GeoJson;
 #pragma warning disable IDE1006 // Naming Styles
@@ -212,7 +212,7 @@ namespace SAEON.Observations.SensorThings
         }
     }
 
-    public class ObservedProperty : NamedSensorThingsEntity
+    public class ObservedProperty : SensorThingsNamedEntity
     {
         public string Definition { get; set; }
 
@@ -226,7 +226,7 @@ namespace SAEON.Observations.SensorThings
         }
     }
 
-    public class Sensor : NamedSensorThingsEntity
+    public class Sensor : SensorThingsNamedEntity
     {
         public string EncodingType { get; set; } = ValueCodes.Pdf;
         public string Metdadata { get; set; }
@@ -241,7 +241,7 @@ namespace SAEON.Observations.SensorThings
         }
     }
 
-    public class Thing : NamedSensorThingsEntity
+    public class Thing : SensorThingsNamedEntity
     {
         public ODataNamedValueDictionary<string> Properties { get; } = new ODataNamedValueDictionary<string>();
 
