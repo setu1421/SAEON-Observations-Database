@@ -676,7 +676,7 @@ namespace SAEON.Observations.SensorThings
                     UpdateRequest(true);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
-                    foreach (var dbEntity in DbContext.Set<TDbEntity>().Take(Config.MaxAll))
+                    foreach (var dbEntity in DbContext.Set<TDbEntity>().AsNoTracking().Take(Config.MaxAll))
                     {
                         result.Add(ConvertDbEntityIntId<TEntity>(dbEntity));
                     }
