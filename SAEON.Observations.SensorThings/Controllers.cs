@@ -22,7 +22,6 @@ namespace SAEON.Observations.SensorThings
                 if (dbContext == null)
                 {
                     dbContext = new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
-                    //dbContext.Configuration.AutoDetectChangesEnabled = false;
                 }
                 return dbContext;
             }
@@ -267,7 +266,7 @@ namespace SAEON.Observations.SensorThings
                     UpdateRequest(true);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
-                    foreach (var dbEntity in DbContext.Set<TDbEntity>().Take(Config.MaxAll))
+                    foreach (var dbEntity in DbContext.Set<TDbEntity>().AsNoTracking().Take(Config.MaxAll))
                     {
                         result.Add(ConvertDbEntity<TEntity>(dbEntity));
                     }
