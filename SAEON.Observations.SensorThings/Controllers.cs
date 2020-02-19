@@ -14,18 +14,12 @@ namespace SAEON.Observations.SensorThings
 {
     public abstract class SensorThingsGuidIdController<TEntity, TDbEntity> : ODataController where TEntity : SensorThingsGuidIdEntity, new() where TDbEntity : db.GuidIdEntity
     {
+        protected static string BaseUrl { get; set; }
+        public const int PageSize = 25;
+        public const int MaxTop = 500;
+        public const int MaxAll = 10000;
         private db.ObservationsDbContext dbContext = null;
-        protected db.ObservationsDbContext DbContext
-        {
-            get
-            {
-                if (dbContext == null)
-                {
-                    dbContext = new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
-                }
-                return dbContext;
-            }
-        }
+        protected db.ObservationsDbContext DbContext => dbContext ?? (dbContext = new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request)));
         protected IMapper Mapper { get; private set; } = null;
 
         protected SensorThingsGuidIdController() : base()
@@ -236,7 +230,7 @@ namespace SAEON.Observations.SensorThings
 
         private void UpdateRequest(bool isMany)
         {
-            Config.BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/SensorThings";
+            BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/SensorThings";
             if (isMany)
             {
                 var uri = Request.RequestUri.ToString();
@@ -256,7 +250,7 @@ namespace SAEON.Observations.SensorThings
         /// <returns>ListOf(TEntity)</returns>
         // GET: odata/TEntity
         //[ODataRoute] required on derived class
-        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public virtual IQueryable<TEntity> GetAll()
         {
             using (Logging.MethodCall<TDbEntity>(GetType()))
@@ -266,7 +260,7 @@ namespace SAEON.Observations.SensorThings
                     UpdateRequest(true);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
-                    foreach (var dbEntity in DbContext.Set<TDbEntity>().AsNoTracking().Take(Config.MaxAll))
+                    foreach (var dbEntity in DbContext.Set<TDbEntity>().AsNoTracking().Take(MaxAll))
                     {
                         result.Add(ConvertDbEntityGuidId<TEntity>(dbEntity));
                     }
@@ -281,7 +275,7 @@ namespace SAEON.Observations.SensorThings
         }
 
         //[ODataRoute("({id})")] required on derived class
-        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
         {
             using (Logging.MethodCall<SingleResult<TDbEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
@@ -396,7 +390,7 @@ namespace SAEON.Observations.SensorThings
                         default:
                             throw new NotImplementedException();
                     }
-                    return result.Take(Config.MaxAll);
+                    return result.Take(MaxAll);
                 }
                 catch (Exception ex)
                 {
@@ -431,7 +425,7 @@ namespace SAEON.Observations.SensorThings
                         default:
                             throw new NotImplementedException();
                     }
-                    return result.Take(Config.MaxAll);
+                    return result.Take(MaxAll);
                 }
                 catch (Exception ex)
                 {
@@ -441,8 +435,8 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        //[ODataRoute("({id}/MethodCall)]")] required on calling class
-        //[EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop) required on calling class
+        //[ODataRoute("({id}/TRelatedEntity)]")] required on calling class
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop) required on calling class
 
         protected SingleResult<TRelatedEntity> GetRelatedSingle<TRelatedEntity, TDbRelatedEntity>(Guid id) where TRelatedEntity : SensorThingsGuidIdEntity where TDbRelatedEntity : db.GuidIdEntity
         {
@@ -468,8 +462,8 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        //[ODataRoute("({id}/MethodCall)]")] required on calling class
-        //[EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop) required on calling class
+        //[ODataRoute("({id}/TRelatedEntities)]")] required on calling class
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop) required on calling class
         protected IQueryable<TRelatedEntity> GetRelatedMany<TRelatedEntity, TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.GuidIdEntity where TRelatedEntity : SensorThingsGuidIdEntity
         {
             using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
@@ -493,8 +487,8 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        //[ODataRoute("({id}/MethodCall)]")] required on calling class
-        //[EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop) required on calling class
+        //[ODataRoute("({id}/TRelatedEntities)]")] required on calling class
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop) required on calling class
         protected IQueryable<TRelatedEntity> GetRelatedManyIntId<TRelatedEntity, TDbRelatedEntity>(Guid id) where TDbRelatedEntity : db.IntIdEntity where TRelatedEntity : SensorThingsIntIdEntity
         {
             using (Logging.MethodCall<TRelatedEntity, TDbRelatedEntity>(GetType()))
@@ -521,18 +515,12 @@ namespace SAEON.Observations.SensorThings
 
     public abstract class SensorThingsIntIdController<TEntity, TDbEntity> : ODataController where TEntity : SensorThingsIntIdEntity, new() where TDbEntity : db.IntIdEntity
     {
+        protected static string BaseUrl { get; set; }
+        public const int PageSize = 25;
+        public const int MaxTop = 500;
+        public const int MaxAll = 10000;
         private db.ObservationsDbContext dbContext = null;
-        protected db.ObservationsDbContext DbContext
-        {
-            get
-            {
-                if (dbContext == null)
-                {
-                    dbContext = new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
-                }
-                return dbContext;
-            }
-        }
+        protected db.ObservationsDbContext DbContext => (dbContext != null) ? dbContext : new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
         protected IMapper Mapper { get; private set; } = null;
 
         protected SensorThingsIntIdController() : base()
@@ -646,7 +634,7 @@ namespace SAEON.Observations.SensorThings
 
         private void UpdateRequest(bool isMany)
         {
-            Config.BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/SensorThings";
+            BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/SensorThings";
             if (isMany)
             {
                 var uri = Request.RequestUri.ToString();
@@ -666,7 +654,7 @@ namespace SAEON.Observations.SensorThings
         /// <returns>ListOf(TEntity)</returns>
         // GET: odata/TEntity
         //[ODataRoute] required on derived class
-        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public virtual IQueryable<TEntity> GetAll()
         {
             using (Logging.MethodCall<TDbEntity>(GetType()))
@@ -676,7 +664,7 @@ namespace SAEON.Observations.SensorThings
                     UpdateRequest(true);
                     Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     var result = new List<TEntity>();
-                    foreach (var dbEntity in DbContext.Set<TDbEntity>().AsNoTracking().Take(Config.MaxAll))
+                    foreach (var dbEntity in DbContext.Set<TDbEntity>().AsNoTracking().Take(MaxAll))
                     {
                         result.Add(ConvertDbEntityIntId<TEntity>(dbEntity));
                     }
@@ -691,7 +679,7 @@ namespace SAEON.Observations.SensorThings
         }
 
         //[ODataRoute("({id})")] required on derived class
-        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public virtual SingleResult<TEntity> GetById([FromODataUri] int id)
         {
             using (Logging.MethodCall<SingleResult<TDbEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
@@ -756,7 +744,7 @@ namespace SAEON.Observations.SensorThings
                         default:
                             throw new NotImplementedException();
                     }
-                    return result.Take(Config.MaxAll);
+                    return result.Take(MaxAll);
                 }
                 catch (Exception ex)
                 {
@@ -766,8 +754,8 @@ namespace SAEON.Observations.SensorThings
             }
         }
 
-        //[ODataRoute("({id}/MethodCall)]")] required on calling class
-        //[EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop) required on calling class
+        //[ODataRoute("({id}/TRelatedEntity)]")] required on calling class
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop) required on calling class
 
         protected SingleResult<TRelatedEntity> GetRelatedSingle<TRelatedEntity, TDbRelatedEntity>(int id) where TRelatedEntity : SensorThingsGuidIdEntity where TDbRelatedEntity : db.GuidIdEntity
         {

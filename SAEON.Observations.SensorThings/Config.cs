@@ -6,12 +6,6 @@ namespace SAEON.Observations.SensorThings
     public static class Config
     {
         public static string BaseUrl { get; set; }
-        public const int PageSize = 25;
-        public const int MaxTop = 500;
-        public const int MaxAll = 10000;
-        //public static int PageSize =>  int.Parse(ConfigurationManager.AppSettings["ODataPageSize"] ?? "25");
-        //public static int MaxTop => int.Parse(ConfigurationManager.AppSettings["ODataMaxTop"] ?? "500");
-        //public static int MaxAll => int.Parse(ConfigurationManager.AppSettings["ODataMaxTop"] ?? "1000");
 
         public static IEdmModel GetEdmModel()
         {

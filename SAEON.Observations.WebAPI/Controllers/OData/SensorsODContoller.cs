@@ -19,7 +19,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// Get all Sensors
         /// </summary>
         /// <returns>ListOf(Sensor)</returns>
-        [EnableQuery, ODataRoute]
+        [ODataRoute]
         public override IQueryable<Sensor> GetAll()
         {
             return base.GetAll();
@@ -31,7 +31,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of Sensor</param>
         /// <returns>Sensor</returns>
-        [EnableQuery, ODataRoute("({id})")]
+        [ODataRoute("({id})")]
         public override SingleResult<Sensor> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -43,10 +43,10 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of the Sensor</param>
         /// <returns>ListOf(Phenomenon)</returns>
-        [EnableQuery, ODataRoute("({id})/Phenomenon")]
-        public SingleResult<Phenomenon> GetPhenomenon([FromODataUri] Guid id)
+        [ODataRoute("({id})/Phenomenon")]
+        public Phenomenon GetPhenomenon([FromODataUri] Guid id)
         {
-            return GetSingle(id, s => s.Phenomenon, i => i.Sensors);
+            return GetSingle(id, s => s.Phenomenon);
         }
 
         // GET: odata/Sensors(5)/Instruments
@@ -55,10 +55,10 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of the Sensor</param>
         /// <returns>ListOf(Instrument)</returns>
-        [EnableQuery, ODataRoute("({id})/Instruments")]
+        [ODataRoute("({id})/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromODataUri] Guid id)
         {
-            return GetMany<Instrument>(id, s => s.Instruments, i => i.Sensors);
+            return GetMany<Instrument>(id, s => s.Instruments);
         }
 
     }

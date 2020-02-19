@@ -19,7 +19,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// Get all Instruments
         /// </summary>
         /// <returns>ListOf(Instrument)</returns>
-        [EnableQuery, ODataRoute]
+        [ODataRoute]
         public override IQueryable<Instrument> GetAll()
         {
             return base.GetAll();
@@ -31,7 +31,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of Instrument</param>
         /// <returns>Instrument</returns>
-        [EnableQuery, ODataRoute("({id})")]
+        [ODataRoute("({id})")]
         public override SingleResult<Instrument> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -43,10 +43,10 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of Instrument</param>
         /// <returns>ListOf(Organisation)</returns>
-        [EnableQuery, ODataRoute("({id})/Organisations")]
+        [ODataRoute("({id})/Organisations")]
         public IQueryable<Organisation> GetOrganisations([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Organisations, i => i.Instruments);
+            return GetMany(id, s => s.Organisations);
         }
 
         // GET: odata/Instruments(5)/Stations
@@ -55,10 +55,10 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of Instrument</param>
         /// <returns>ListOf(Station)</returns>
-        [EnableQuery, ODataRoute("({id})/Stations")]
+        [ODataRoute("({id})/Stations")]
         public IQueryable<Station> GetStations([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Stations, i => i.Instruments);
+            return GetMany(id, s => s.Stations);
         }
 
         // GET: odata/Instruments(5)/Sensors
@@ -67,10 +67,10 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of Instrument</param>
         /// <returns>ListOf(Sensor)</returns>
-        [EnableQuery, ODataRoute("({id})/Sensors")]
+        [ODataRoute("({id})/Sensors")]
         public IQueryable<Sensor> GetSensors([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Sensors, i => i.Instruments);
+            return GetMany(id, s => s.Sensors);
         }
 
     }

@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ObservationsSACTN 2.0.58.publish.txt = ObservationsSACTN 2.0.58.publish.txt
 		ObservationsTest 2.0.58.publish.sql = ObservationsTest 2.0.58.publish.sql
 		ObservationsTest 2.0.58.publish.txt = ObservationsTest 2.0.58.publish.txt
+		PreProcess.sql = PreProcess.sql
 	EndProjectSection
 EndProject
 Global
@@ -20,7 +21,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{33C0E0B7-52DB-4808-996E-781740A34975}.Default|Default.ActiveCfg = Default
+		{48BC4BEB-F25D-4C5A-836F-2F499D67E8FF}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

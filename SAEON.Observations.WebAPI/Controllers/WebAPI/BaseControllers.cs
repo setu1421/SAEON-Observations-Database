@@ -15,21 +15,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     public abstract class BaseController : ApiController
     {
         private ObservationsDbContext dbContext = null;
-        protected ObservationsDbContext DbContext
-        {
-            get
-            {
-                if (dbContext == null) dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
-                return dbContext;
-            }
-            private set => dbContext = value;
-        }
-
-
-        //~BaseController()
-        //{
-        //    DbContext = null;
-        //}
+        protected ObservationsDbContext DbContext => dbContext ?? (dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request)));
     }
 
     public abstract class BaseEntityController<TEntity> : BaseController where TEntity : BaseEntity

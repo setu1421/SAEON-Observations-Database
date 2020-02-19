@@ -102,7 +102,7 @@ namespace SAEON.Observations.WebAPI
                     FileNotFoundException exFileNotFound = exSub as FileNotFoundException;
                     if (exFileNotFound != null)
                     {
-                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog)) 
+                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
                         {
                             sb.AppendLine("Fusion Log:");
                             sb.AppendLine(exFileNotFound.FusionLog);
@@ -140,7 +140,7 @@ namespace SAEON.Observations.WebAPI
 
     public static class ODataExtensions
     {
-        public static void IgnoreEntityItemLists<TEntity>(this EntitySetConfiguration<TEntity> source) where TEntity : db.NamedEntity
+        public static EntitySetConfiguration<TEntity> IgnoreEntityItemLists<TEntity>(this EntitySetConfiguration<TEntity> source) where TEntity : db.NamedEntity
         {
             //using (Logging.MethodCall(typeof(ODataExtensions)))
             {
@@ -157,6 +157,27 @@ namespace SAEON.Observations.WebAPI
                        .Invoke(source.EntityType, new[] { lambda });
                 }
             }
+            return source;
+        }
+
+        public static EntitySetConfiguration<TEntity> IgnoreProperty<TEntity>(this EntitySetConfiguration<TEntity> source, string propertyName) where TEntity : db.NamedEntity
+        {
+            //using (Logging.MethodCall(typeof(ODataExtensions)))
+            {
+                var type = typeof(TEntity);
+                foreach (var prop in type.GetProperties().Where(i => i.Name.Equals(propertyName, StringComparison.CurrentCultureIgnoreCase)))
+                {
+                    var parameter = Expression.Parameter(type, "entity");
+                    var property = Expression.Property(parameter, prop);
+                    var funcType = typeof(Func<,>).MakeGenericType(type, prop.PropertyType);
+                    var lambda = Expression.Lambda(funcType, property, parameter);
+                    source.EntityType.GetType()
+                       .GetMethod("Ignore")
+                       .MakeGenericMethod(prop.PropertyType)
+                       .Invoke(source.EntityType, new[] { lambda });
+                }
+            }
+            return source;
         }
     }
 
@@ -165,17 +186,17 @@ namespace SAEON.Observations.WebAPI
         private static IEdmModel ObservationsEdmModel()
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "Observations" };
-            builder.EntitySet<db.Instrument>("Instruments").IgnoreEntityItemLists();
             builder.EntitySet<db.Inventory>("Inventory");
-            builder.EntitySet<db.Offering>("Offerings").IgnoreEntityItemLists();
-            builder.EntitySet<db.Organisation>("Organisations").IgnoreEntityItemLists();
-            builder.EntitySet<db.Phenomenon>("Phenomena").IgnoreEntityItemLists();
-            builder.EntitySet<db.Programme>("Programmes").IgnoreEntityItemLists();
-            builder.EntitySet<db.Project>("Projects").IgnoreEntityItemLists();
-            builder.EntitySet<db.Sensor>("Sensors").IgnoreEntityItemLists();
-            builder.EntitySet<db.Site>("Sites").IgnoreEntityItemLists();
-            builder.EntitySet<db.Station>("Stations").IgnoreEntityItemLists();
-            builder.EntitySet<db.Unit>("Units").IgnoreEntityItemLists();
+            builder.EntitySet<db.Instrument>("Instruments").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Offering>("Offerings").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Organisation>("Organisations").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Phenomenon>("Phenomena").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Programme>("Programmes").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Project>("Projects").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Sensor>("Sensors").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Site>("Sites").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Station>("Stations").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Unit>("Units").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             return builder.GetEdmModel();
         }
 

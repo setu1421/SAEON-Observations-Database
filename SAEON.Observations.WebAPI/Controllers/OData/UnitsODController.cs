@@ -19,7 +19,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// All Units
         /// </summary>
         /// <returns>ListOf(Unit)</returns>
-        [EnableQuery, ODataRoute]
+        [ODataRoute]
         public override IQueryable<Unit> GetAll()
         {
             return base.GetAll();
@@ -31,7 +31,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of Unit</param>
         /// <returns>Unit</returns>
-        [EnableQuery, ODataRoute("({id})")]
+        [ODataRoute("({id})")]
         public override SingleResult<Unit> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -43,10 +43,10 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of the Unit</param>
         /// <returns>ListOf(Phenomenon)</returns>
-        [EnableQuery, ODataRoute("({id})/Phenomena")]
+        [ODataRoute("({id})/Phenomena")]
         public IQueryable<Phenomenon> GetPhenomena([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Phenomena, i => i.Units);
+            return GetMany(id, s => s.Phenomena);
         }
     }
 }

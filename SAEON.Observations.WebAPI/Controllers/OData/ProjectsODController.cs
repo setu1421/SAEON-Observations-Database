@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
+using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
@@ -13,13 +16,12 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
     [ODataRoutePrefix("Projects")]
     public class ProjectsODController : NamedController<Project>
     {
-
         // GET: odata/Projects
         /// <summary>
         /// Get all Projects
         /// </summary>
         /// <returns>ListOf(Project)</returns>
-        [EnableQuery, ODataRoute]
+        [ODataRoute]
         public override IQueryable<Project> GetAll()
         {
             return base.GetAll();
@@ -31,22 +33,22 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of Project</param>
         /// <returns>Project</returns>
-        [EnableQuery, ODataRoute("({id})")]
+        [ODataRoute("({id})")]
         public override SingleResult<Project> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
         }
 
-        // GET: odata/Projects(5)/Programme
-        /// <summary>
-        /// Programme for the Project
-        /// </summary>
-        /// <param name="id">Id of the Project</param>
-        /// <returns>Programme</returns>
-        [EnableQuery, ODataRoute("({id})/Programme")]
-        public SingleResult<Programme> GetProgramme([FromODataUri] Guid id)
+        //// GET: odata/Projects(5)/Programme
+        ///// <summary>
+        ///// Programme for the Project
+        ///// </summary>
+        ///// <param name="id">Id of the Project</param>
+        ///// <returns>Programme</returns>
+        [ODataRoute("({id})/Programme")]
+        public Programme GetProgramme([FromODataUri] Guid id)
         {
-            return GetSingle(id, s => s.Programme, i => i.Projects);
+            return GetSingle(id, i => i.Programme);
         }
 
         // GET: odata/Projects(5)/Stations
@@ -55,10 +57,10 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of the Project</param>
         /// <returns>ListOf(Station(</returns>
-        [EnableQuery, ODataRoute("({id})/Stations")]
+        [ODataRoute("({id})/Stations")]
         public IQueryable<Station> GetStations([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Stations, i => i.Projects);
+            return GetMany(id, s => s.Stations);
         }
 
     }
