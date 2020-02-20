@@ -46,7 +46,9 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [ODataRoute("({id})/Organisations")]
         public IQueryable<Organisation> GetOrganisations([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Organisations);
+            var siteOrganisations = GetMany(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations);
+            var stationOrganisations = GetMany(id, s => s.Stations).SelectMany(i => i.Organisations);
+            return GetMany(id, s => s.Organisations).Union(stationOrganisations).Union(siteOrganisations);
         }
 
         // GET: odata/Instruments(5)/Stations

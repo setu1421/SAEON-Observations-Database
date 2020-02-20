@@ -12,22 +12,17 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
     public class HistoricalLocationsSTController : BaseGuidIdController<HistoricalLocation, db.SensorThingsHistoricalLocation>
     {
         [ODataRoute]
-        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
-
         public override IQueryable<HistoricalLocation> GetAll() => base.GetAll();
 
         [ODataRoute("({id})")]
-
         public override SingleResult<HistoricalLocation> GetById([FromODataUri] Guid id) => base.GetById(id);
 
         [ODataRoute("({id})/Thing")]
-        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
-
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public SingleResult<Thing> GetThing([FromUri] Guid id) => GetRelatedSingle<Thing, db.SensorThingsThing>(id);
 
         [ODataRoute("({id})/Locations")]
-        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
-
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Location> GetLocations([FromUri] Guid id) => GetRelatedMany<Location, db.SensorThingsLocation>(id);
 
     }

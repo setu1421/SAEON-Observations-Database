@@ -13,31 +13,25 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
     public class DatastreamsSTController : BaseGuidIdController<Datastream, db.SensorThingsDatastream>
     {
         [ODataRoute]
-
         public override IQueryable<Datastream> GetAll() => base.GetAll();
 
         [ODataRoute("({id})")]
-
         public override SingleResult<Datastream> GetById([FromODataUri] Guid id) => base.GetById(id);
 
         [ODataRoute("({id})/Observations")]
-        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
-
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Observation> GetObservations([FromUri] Guid id) => GetRelatedManyIntId<Observation, db.SensorThingsObservation>(id);
 
         [ODataRoute("({id})/ObservedProperty")]
-        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
-
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public SingleResult<ObservedProperty> GetObservedProperty([FromUri] Guid id) => GetRelatedSingle<ObservedProperty, db.SensorThingsObservedProperty>(id);
 
         [ODataRoute("({id})/Sensor")]
-        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
-
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public SingleResult<Sensor> GetSensor([FromUri] Guid id) => GetRelatedSingle<Sensor, db.SensorThingsSensor>(id);
 
         [ODataRoute("({id})/Thing")]
-        [EnableQuery(PageSize = Config.PageSize, MaxTop = Config.MaxTop)]
-
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public SingleResult<Thing> GetThing([FromUri] Guid id) => GetRelatedSingle<Thing, db.SensorThingsThing>(id);
     }
 }

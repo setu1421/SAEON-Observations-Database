@@ -1827,12 +1827,6 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<DataSourceType> DataSourceTypes { get; set; }
         public DbSet<DigitalObjectIdentifier> DigitalObjectIdentifiers { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
-        //public DbSet<InventoryTotal> InventoryTotals { get; set; }
-        //public DbSet<InventoryStation> InventoryStations { get; set; }
-        //public DbSet<InventoryInstrument> InventoryInstruments { get; set; }
-        //public DbSet<InventoryPhenomenonOffering> InventoryPhenomenaOfferings { get; set; }
-        //public DbSet<InventoryYear> InventoryYears { get; set; }
-        //public DbSet<InventoryOrganisation> InventoryOrganisations { get; set; }
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<OrganisationRole> OrganisationRoles { get; set; }
