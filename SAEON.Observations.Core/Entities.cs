@@ -386,13 +386,15 @@ namespace SAEON.Observations.Core.Entities
 
         // Navigation
 #if NET472
-        /// <summary>
-        /// Phenomena of this Offering
-        /// </summary>
-        [JsonIgnore]
-        public List<Phenomenon> Phenomena { get; set; }
-        [JsonProperty("Phenomena")]
-        public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
+        ///// <summary>
+        ///// Phenomena of this Offering
+        ///// </summary>
+        //[JsonIgnore]
+        //public List<Phenomenon> Phenomena { get; set; }
+        //[JsonProperty("Phenomena")]
+        //public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
+        public List<Phenomenon> Phenomena => PhenomenonOfferings?.Select(i => i.Phenomenon).ToList();
+        public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
 #else
         /// <summary>
         /// Phenomena of this Offering
@@ -440,7 +442,14 @@ namespace SAEON.Observations.Core.Entities
         [JsonIgnore]
         public List<Station> Stations { get; set; }
         [JsonProperty("Stations")]
-        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
+        public List<EntityListItem> StationsList
+        {
+            get
+            {
+                var siteStations = Sites?.SelectMany(i => i.Stations);
+                return Stations?.Union(siteStations).Select(i => i.AsEntityListItem).ToList();
+            }
+        }
 
         /// <summary>
         /// The Instruments linked to this Organisation
@@ -516,18 +525,22 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Offerings of this Phenomenon
         /// </summary>
-        [JsonIgnore]
-        public List<Offering> Offerings { get; set; }
-        [JsonProperty("Offerings"), NotMapped]
-        public List<EntityListItem> OfferingsList => Offerings?.Select(i => i.AsEntityListItem).ToList();
+        //[JsonIgnore]
+        //public List<Offering> Offerings { get; set; }
+        //[JsonProperty("Offerings"), NotMapped]
+        //public List<EntityListItem> OfferingsList => Offerings?.Select(i => i.AsEntityListItem).ToList();
+        public List<Offering> Offerings => PhenomenonOfferings.Select(i => i.Offering).ToList();
+        public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
 
-        /// <summary>
-        /// Units of this Phenomenon
-        /// </summary>
-        [JsonIgnore]
-        public List<Unit> Units { get; set; }
-        [JsonProperty("Units"), NotMapped]
-        public List<EntityListItem> UnitsList => Units?.Select(i => i.AsEntityListItem).ToList();
+        ///// <summary>
+        ///// Units of this Phenomenon
+        ///// </summary>
+        //[JsonIgnore]
+        //public List<Unit> Units { get; set; }
+        //[JsonProperty("Units"), NotMapped]
+        //public List<EntityListItem> UnitsList => Units?.Select(i => i.AsEntityListItem).ToList();
+        public List<Unit> Units => PhenomenonUnits.Select(i => i.Unit).ToList();
+        public List<PhenomenonUnit> PhenomenonUnits { get; set; }
 
         /// <summary>
         /// Sensors linked to this Phenomenon
@@ -956,10 +969,12 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Phenomena of this Unit
         /// </summary>
-        [JsonIgnore]
-        public List<Phenomenon> Phenomena { get; set; }
-        [JsonProperty("Phenomena")]
-        public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
+        //[JsonIgnore]
+        //public List<Phenomenon> Phenomena { get; set; }
+        //[JsonProperty("Phenomena")]
+        //public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
+        public List<Phenomenon> Phenomena => PhenomenonUnits.Select(i => i.Phenomenon).ToList();
+        public List<PhenomenonUnit> PhenomenonUnits { get; set; }
 #else
         /// <summary>
         /// Phenomena of this Unit
@@ -1870,6 +1885,24 @@ namespace SAEON.Observations.Core.Entities
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            //modelBuilder.Entity<Phenomenon>()
+            //    .HasMany<Offering>(l => l.Offerings)
+            //    .WithMany(r => r.Phenomena)
+            //    .Map(cs =>
+            //    {
+            //        cs.MapLeftKey("PhenomenonID");
+            //        cs.MapRightKey("OfferingID");
+            //        cs.ToTable("PhenomenonOffering");
+            //    });
+            //modelBuilder.Entity<Phenomenon>()
+            //    .HasMany<Unit>(l => l.Units)
+            //    .WithMany(r => r.Phenomena)
+            //    .Map(cs =>
+            //    {
+            //        cs.MapLeftKey("PhenomenonID");
+            //        cs.MapRightKey("UnitOfMeasureID");
+            //        cs.ToTable("PhenomenonUOM");
+            //    });
             modelBuilder.Entity<Instrument>()
                 .HasMany<Sensor>(l => l.Sensors)
                 .WithMany(r => r.Instruments)
@@ -1906,15 +1939,6 @@ namespace SAEON.Observations.Core.Entities
                     cs.MapRightKey("InstrumentID");
                     cs.ToTable("Organisation_Instrument");
                 });
-            //modelBuilder.Entity<Phenomenon>()
-            //    .HasMany<Offering>(l => l.Offerings)
-            //    .WithMany(r => r.Phenomena)
-            //    .Map(cs =>
-            //    {
-            //        cs.MapLeftKey("PhenomenonID");
-            //        cs.MapRightKey("OfferingID");
-            //        cs.ToTable("PhenomenonOffering");
-            //    });
             modelBuilder.Entity<Project>()
                 .HasMany<Station>(l => l.Stations)
                 .WithMany(r => r.Projects)
@@ -1934,15 +1958,6 @@ namespace SAEON.Observations.Core.Entities
                     cs.ToTable("Station_Instrument");
                 });
             modelBuilder.Entity<Unit>().Property(p => p.Name).HasColumnName("Unit");
-            //modelBuilder.Entity<Phenomenon>()
-            //    .HasMany<Unit>(l => l.Units)
-            //    .WithMany(r => r.Phenomena)
-            //    .Map(cs =>
-            //    {
-            //        cs.MapLeftKey("PhenomenonID");
-            //        cs.MapRightKey("UnitOfMeasureID");
-            //        cs.ToTable("PhenomenonUOM");
-            //    });
         }
 #else
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

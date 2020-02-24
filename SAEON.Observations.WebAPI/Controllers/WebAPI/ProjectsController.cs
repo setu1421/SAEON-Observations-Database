@@ -1,8 +1,6 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -14,13 +12,13 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Projects")]
     public class ProjectsController : CodedApiController<Project>
     {
-        protected override List<Expression<Func<Project, object>>> GetIncludes()
-        {
-            var list = base.GetIncludes();
-            list.Add(i => i.Programme);
-            list.Add(i => i.Stations);
-            return list;
-        }
+        //protected override List<Expression<Func<Project, object>>> GetIncludes()
+        //{
+        //    var list = base.GetIncludes();
+        //    list.Add(i => i.Programme);
+        //    list.Add(i => i.Stations);
+        //    return list;
+        //}
 
         /// <summary>
         /// All Projects
@@ -74,7 +72,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [ResponseType(typeof(Programme))]
         public async Task<IHttpActionResult> ProgrammeAsync([FromUri] Guid id)
         {
-            return await GetSingleAsync<Programme>(id, s => s.Programme, i => i.Projects);
+            return await GetSingleAsync<Programme>(id, s => s.Programme);
         }
 
         //GET: Projects/5/Stations
@@ -86,7 +84,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            return GetMany<Station>(id, s => s.Stations, i => i.Projects);
+            return GetMany<Station>(id, s => s.Stations);
         }
 
     }

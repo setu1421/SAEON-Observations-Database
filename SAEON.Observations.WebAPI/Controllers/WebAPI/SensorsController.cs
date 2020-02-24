@@ -1,8 +1,6 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -14,13 +12,13 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Sensors")]
     public class SensorsController : CodedApiController<Sensor>
     {
-        protected override List<Expression<Func<Sensor, object>>> GetIncludes()
-        {
-            var list = base.GetIncludes();
-            list.Add(i => i.Instruments);
-            list.Add(i => i.Phenomenon);
-            return list;
-        }
+        //protected override List<Expression<Func<Sensor, object>>> GetIncludes()
+        //{
+        //    var list = base.GetIncludes();
+        //    list.Add(i => i.Instruments);
+        //    list.Add(i => i.Phenomenon);
+        //    return list;
+        //}
 
         /// <summary>
         /// All Sensors
@@ -76,7 +74,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [ResponseType(typeof(Phenomenon))]
         public async Task<IHttpActionResult> GetPhenomenonAsync(Guid id)
         {
-            return await GetSingleAsync<Phenomenon>(id, s => s.Phenomenon, i => i.Sensors);
+            return await GetSingleAsync<Phenomenon>(id, s => s.Phenomenon);
         }
 
         // GET: Sensors/5/Instruments
@@ -88,7 +86,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
-            return GetMany<Instrument>(id, s => s.Instruments, i => i.Sensors);
+            return GetMany<Instrument>(id, s => s.Instruments);
         }
 
     }

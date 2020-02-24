@@ -46,7 +46,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [ODataRoute("({id})/Phenomena")]
         public IQueryable<Phenomenon> GetPhenomena([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Phenomena);
+            return GetMany(id, s => s.PhenomenonUnits).Select(i => i.Phenomenon);
         }
     }
 }

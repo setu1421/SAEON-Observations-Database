@@ -1,8 +1,6 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -14,13 +12,13 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Instruments")]
     public class InstrumentsController : CodedApiController<Instrument>
     {
-        protected override List<Expression<Func<Instrument, object>>> GetIncludes()
-        {
-            var list = base.GetIncludes();
-            list.Add(i => i.Stations);
-            list.Add(i => i.Sensors);
-            return list;
-        }
+        //protected override List<Expression<Func<Instrument, object>>> GetIncludes()
+        //{
+        //    var list = base.GetIncludes();
+        //    list.Add(i => i.Stations);
+        //    list.Add(i => i.Sensors);
+        //    return list;
+        //}
 
         /// <summary>
         /// All Instruments
@@ -73,7 +71,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Organisations")]
         public IQueryable<Organisation> Getorganisations([FromUri] Guid id)
         {
-            return GetMany<Organisation>(id, s => s.Organisations, i => i.Instruments);
+            return GetMany<Organisation>(id, s => s.Organisations);
         }
 
         // GET: Instruments/5/Stations
@@ -85,7 +83,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            return GetMany<Station>(id, s => s.Stations, i => i.Instruments);
+            return GetMany<Station>(id, s => s.Stations);
         }
 
         // GET: Instruments/5/Sensors
@@ -97,7 +95,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Sensors")]
         public IQueryable<Sensor> GetSensors([FromUri] Guid id)
         {
-            return GetMany<Sensor>(id, s => s.Sensors, i => i.Instruments);
+            return GetMany<Sensor>(id, s => s.Sensors);
         }
 
     }

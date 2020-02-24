@@ -14,19 +14,25 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [TenantAuthorization]
     public abstract class BaseController : ApiController
     {
+        public static string BaseUrl { get; set; }
+        protected const int PageSize = 25;
+        protected const int MaxTop = 500;
+        protected const int MaxAll = 1000;
+
         private ObservationsDbContext dbContext = null;
         protected ObservationsDbContext DbContext => dbContext ?? (dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request)));
     }
 
     public abstract class BaseEntityController<TEntity> : BaseController where TEntity : BaseEntity
     {
+        /// Overwrite for entity includes
         /// <summary>
         /// Overwrite to filter entities
         /// </summary>
         /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, bool>>> GetWheres()
+        protected virtual List<Expression<Func<TEntity, object>>> GetIncludes()
         {
-            return new List<Expression<Func<TEntity, bool>>>();
+            return new List<Expression<Func<TEntity, object>>>();
         }
 
         /// <summary>
@@ -39,28 +45,15 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
         /// <summary>
-        /// Overwrite for entity includes
-        /// </summary>
-        /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, object>>> GetIncludes()
-        {
-            return new List<Expression<Func<TEntity, object>>>();
-        }
-
-        /// <summary>
         /// query for items
         /// </summary>
         /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
-            var query = DbContext.Set<TEntity>().AsQueryable();
+            var query = DbContext.Set<TEntity>().AsNoTracking().AsQueryable();
             foreach (var include in GetIncludes())
             {
                 query = query.Include(include);
-            }
-            foreach (var where in GetWheres())
-            {
-                query = query.Where(where);
             }
             if (extraWhere != null)
             {
@@ -134,12 +127,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select TRelated</param>
-        /// <param name="include">Lamda to include TRelated.ListOf(TEntrity)</param>
         /// <returns>TaskOf(IHttpActionResult)</returns>
         [HttpGet]
         //[ResponseType(typeof(TRelated))] Required in derived classes
         //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected async Task<IHttpActionResult> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : GuidIdEntity
+        protected async Task<IHttpActionResult> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
@@ -150,7 +142,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                         Logging.Error("{id} not found", id);
                         return NotFound();
                     }
-                    return Ok(await GetQuery(i => (i.Id == id)).Select(select).Include(include).FirstOrDefaultAsync());
+                    return Ok(await GetQuery(i => (i.Id == id)).Select(select).FirstOrDefaultAsync());
                 }
                 catch (Exception ex)
                 {
@@ -166,17 +158,16 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <param name="include">Lambda to include TRelated.TEntity</param>
         /// <returns>IQueryableOf(TRelated)</returns>
         [HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : NamedEntity
+        protected IQueryable<TRelated> GetManyIdEntity<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IdEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include);
+                    return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)
                 {
@@ -192,17 +183,16 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <param name="include">Lambda to include TRelated.ListOf(TEntity)</param>
         /// <returns>IQueryableOf(TRelated)</returns>
         [HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : NamedEntity
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : NamedEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include);
+                    return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)
                 {

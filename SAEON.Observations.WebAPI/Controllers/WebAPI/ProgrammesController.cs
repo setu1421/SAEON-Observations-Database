@@ -1,8 +1,6 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -12,14 +10,14 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     /// <summary>
     /// </summary>
     [RoutePrefix("Api/Programmes")]
-    public class ProgrammesController :  CodedApiController<Programme>
+    public class ProgrammesController : CodedApiController<Programme>
     {
-        protected override List<Expression<Func<Programme, object>>> GetIncludes()
-        {
-            var list = base.GetIncludes();
-            list.Add(i => i.Projects);
-            return list;
-        }
+        //protected override List<Expression<Func<Programme, object>>> GetIncludes()
+        //{
+        //    var list = base.GetIncludes();
+        //    list.Add(i => i.Projects);
+        //    return list;
+        //}
 
         /// <summary>
         /// All Programmes
@@ -72,7 +70,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Projects")]
         public IQueryable<Project> GetProjects([FromUri] Guid id)
         {
-            return GetMany<Project>(id, s => s.Projects, i => i.Programme);
+            return GetMany<Project>(id, s => s.Projects);
         }
 
     }

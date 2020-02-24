@@ -18,6 +18,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         {
             var list = base.GetIncludes();
             list.Add(i => i.Sites);
+            list.Add(i => i.Stations);
+            list.Add(i => i.Instruments);
             return list;
         }
 
@@ -72,7 +74,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Sites")]
         public IQueryable<Site> GetSites([FromUri] Guid id)
         {
-            return GetMany<Site>(id, s => s.Sites, i => i.Organisations);
+            return GetMany<Site>(id, s => s.Sites);
         }
 
         //GET: Organisations/5/Stations
@@ -84,7 +86,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            return GetMany<Station>(id, s => s.Stations, i => i.Organisations);
+            return GetMany<Station>(id, s => s.Stations);
         }
 
         //GET: Organisations/5/Instruments
@@ -96,7 +98,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
-            return GetMany<Instrument>(id, s => s.Instruments, i => i.Organisations);
+            return GetMany<Instrument>(id, s => s.Instruments);
         }
 
     }

@@ -1,26 +1,24 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-   
+
     /// <summary>
     /// </summary>
     [RoutePrefix("Api/Offerings")]
     public class OfferingsController : CodedApiController<Offering>
     {
-        protected override List<Expression<Func<Offering, object>>> GetIncludes()
-        {
-            var list = base.GetIncludes();
-            list.Add(i => i.Phenomena);
-            return list;
-        }
+        //protected override List<Expression<Func<Offering, object>>> GetIncludes()
+        //{
+        //    var list = base.GetIncludes();
+        //    list.Add(i => i.Phenomena);
+        //    return list;
+        //}
 
         /// <summary>
         /// All Offerings
@@ -73,9 +71,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Phenomena")]
         public IQueryable<Phenomenon> GetPhenomena([FromUri] Guid id)
         {
-            return GetMany<Phenomenon>(id, s => s.Phenomena, i => i.Offerings);
+            return GetManyIdEntity<PhenomenonOffering>(id, s => s.PhenomenonOfferings).Select(i => i.Phenomenon);
         }
-       
+
     }
-    
+
 }
