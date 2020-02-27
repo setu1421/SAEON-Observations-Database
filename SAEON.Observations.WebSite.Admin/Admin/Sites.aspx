@@ -159,15 +159,15 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnStationLinksAdd" runat="server" Icon="LinkAdd" Text="Link Stations" ClientIDMode="Static">
+<%--                                            <ext:Button ID="btnStationLinksAdd" runat="server" Icon="LinkAdd" Text="Link Stations" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>
                                                 <Listeners>
-                                                    <%--<Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{StationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />--%>
+                                                    <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{StationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                                     <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{AvailableStationsGridStore}.reload();#{AvailableStationsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                                 </Listeners>
-                                            </ext:Button>
+                                            </ext:Button>--%>
                                             <%-- 
                                             <ext:Button ID="btnAddStation" runat="server" Icon="Add" Text="Add Station">
                                                 <ToolTips>

@@ -356,9 +356,9 @@ namespace SAEON.Observations.Core
         public DownloadFormats DownloadFormat { get; set; } = DownloadFormats.CSV;
     }
 
-#endregion
+    #endregion
 
-#region SpacialCoverage
+    #region SpacialCoverage
     /*
     public class SpacialCoverageInput : DataQueryInput { }
 
@@ -420,9 +420,9 @@ namespace SAEON.Observations.Core
         public List<SpacialStation> Stations { get; private set; } = new List<SpacialStation>();
     }
     */
-#endregion
+    #endregion
 
-#region TemporalCoverage
+    #region TemporalCoverage
     /*
     public class TemporalCoverageInput : DataQueryInput { }
 
@@ -432,9 +432,9 @@ namespace SAEON.Observations.Core
         public List<ExpandoObject> Data { get; private set; } = new List<ExpandoObject>();
     }
     */
-#endregion
+    #endregion
 
-#region Inventory
+    #region Inventory
     /*
     public class InventoryInput
     {
@@ -534,5 +534,5 @@ namespace SAEON.Observations.Core
         public List<InventoryOrganisationItem> Organisations { get; private set; } = new List<InventoryOrganisationItem>();
     }
     */
-#endregion
+    #endregion
 }
