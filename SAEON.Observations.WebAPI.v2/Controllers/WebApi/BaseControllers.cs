@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SAEON.Logs;
@@ -99,7 +98,7 @@ namespace SAEON.Observations.WebAPI.v2.Controllers.WebApi
         }
     }
 
-    public abstract class IDEntityController<TController, TEntity> : BaseEntityController<TController, TEntity> where TController : BaseController<TController> where TEntity : IDEntity
+    public abstract class IDEntityController<TController, TEntity> : BaseEntityController<TController, TEntity> where TController : BaseController<TController> where TEntity : IdEntity
     {
         /// <summary>
         /// Get a TEntity by Id
@@ -137,7 +136,7 @@ namespace SAEON.Observations.WebAPI.v2.Controllers.WebApi
         /// <param name="select">Lambda to select TRelated</param>
         /// <returns>ActionResult&lt;TRelated&gt;</returns>
         //[HttpGet("{id:guid}/TRelated")] Required in derived classes
-        protected async Task<ActionResult<TRelated>> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : IDEntity
+        protected async Task<ActionResult<TRelated>> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : IdEntity
         {
             using (Logger.MethodCall<TEntity, TRelated>(GetType()))
             {
