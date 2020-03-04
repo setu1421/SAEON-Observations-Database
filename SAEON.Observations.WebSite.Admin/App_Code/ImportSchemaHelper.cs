@@ -626,12 +626,30 @@ public class ImportSchemaHelper : IDisposable
                     var elapsed = stopwatch.Elapsed.TotalMinutes;
                     if (reportPorgress)
                     {
-                        Logging.Information("{row} of {rows} {progress:p0} {min:n2} of {mins:n2}", i + 1, rows, progress, elapsed, elapsed / progress);
+                        Logging.Information("{row:n0} of {rows:n0} {progress:p0} {min:n2} of {mins:n2} min", i + 1, rows, progress, elapsed, elapsed / progress);
                         lastProgress100 = progress100;
                     }
                     DataRow dr = dtResults.Rows[i];
                     ProcessRow(dr, i + 1);
                 }
+                Logging.Information("Checking for duplicates in batch");
+                var dupGroups = SchemaValues.GroupBy(i => new { i.SensorID, i.DateValue, i.DataValue, i.PhenomenonOfferingID, i.PhenomenonUOMID, i.Elevation }).Where(g => g.Count() > 1).ToList();
+                var dupValues = dupGroups.SelectMany(i => i).ToList();
+                if (dupGroups.Any())
+                {
+                    foreach (var value in dupValues.Take(100))
+                    {
+                        Logging.Information("RowNum: {rowNum} Date: {date}", value.RowNum, value.DateValue);
+                    }
+                    Logging.Information("Bad Rows: {badRows}", dupValues.Select(i => i.RowNum).ToArray());
+                }
+                Logging.Information("Duplicates: Groups: {groups} Values: {values}", dupGroups.Count, dupValues.Count);
+                foreach (var schval in dupValues)
+                {
+                    schval.IsDuplicate = true;
+                    schval.InvalidStatuses.Insert(0, Status.Duplicate);
+                }
+                Logging.Information("Found {count} duplicates in batch", dupGroups.Count());
                 stopwatch.Stop();
                 Logging.Information("Processed {rows:n0} rows in {time}", rows, stopwatch.Elapsed);
             }
@@ -973,6 +991,7 @@ public class ImportSchemaHelper : IDisposable
 
                         CheckIsDuplicate(rec);
                         CheckIsDuplicateOfNull(rec);
+                        //CheckIsDuplicateInBatch(rec);
 
                         SchemaValues.Add(rec);
                     }
@@ -1024,6 +1043,19 @@ public class ImportSchemaHelper : IDisposable
             }
             return result;
         }
+
+        //bool CheckIsDuplicateInBatch(SchemaValue schval)
+        //{
+        //    return false;
+        //    var result = SchemaValues.Any(i => (i.SensorID == schval.SensorID) && (i.DateValue == schval.DateValue) && (i.DataValue == schval.DataValue) &&
+        //                    (i.PhenomenonOfferingID == schval.PhenomenonOfferingID) && (i.PhenomenonUOMID == schval.PhenomenonUOMID) && (i.Elevation == schval.Elevation));
+        //    if (result)
+        //    {
+        //        schval.IsDuplicate = true;
+        //        schval.InvalidStatuses.Insert(0, Status.Duplicate);
+        //    }
+        //    return result;
+        //}
     }
 
     /// <summary>

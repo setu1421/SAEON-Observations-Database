@@ -228,6 +228,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\SAEON App03-1 Test.pubxml" />
     <None Include="Properties\PublishProfiles\SAEON App03.pubxml" />
     <None Include="Properties\PublishProfiles\SAEON App03 Test.pubxml" />
     <None Include="Properties\Settings.settings">
@@ -396,11 +397,11 @@
     <Reference Include="SAEON.Logs.NetFramework, Version=1.0.11.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Logs.NetFramework.1.0.11\lib\net472\SAEON.Logs.NetFramework.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.Core, Version=1.0.217.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.Core.1.0.217\lib\net472\SAEON.Observations.Core.dll</HintPath>
+    <Reference Include="SAEON.Observations.Core, Version=1.0.218.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.Core.1.0.218\lib\net472\SAEON.Observations.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.SensorThings, Version=1.0.111.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.SensorThings.1.0.111\lib\net472\SAEON.Observations.SensorThings.dll</HintPath>
+    <Reference Include="SAEON.Observations.SensorThings, Version=1.0.112.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.SensorThings.1.0.112\lib\net472\SAEON.Observations.SensorThings.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.9.0\lib\net46\Serilog.dll</HintPath>
@@ -418,7 +419,7 @@
       <HintPath>..\packages\Serilog.Sinks.File.4.1.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Sinks.PeriodicBatching, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <HintPath>..\packages\Serilog.Sinks.PeriodicBatching.2.2.0\lib\net45\Serilog.Sinks.PeriodicBatching.dll</HintPath>
+      <HintPath>..\packages\Serilog.Sinks.PeriodicBatching.2.3.0\lib\net45\Serilog.Sinks.PeriodicBatching.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.Sinks.RollingFile, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.RollingFile.3.3.0\lib\net45\Serilog.Sinks.RollingFile.dll</HintPath>

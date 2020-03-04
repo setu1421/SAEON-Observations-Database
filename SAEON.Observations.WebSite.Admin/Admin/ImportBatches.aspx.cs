@@ -352,7 +352,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 var elapsed = saveStopwatch.Elapsed.TotalMinutes;
                                 if (reportPorgress)
                                 {
-                                    Logging.Information("{row} of {rows} {progress:p0} {min:n2} of {mins:n2}", i + 1, rows, progress, elapsed, elapsed / progress);
+                                    Logging.Information("{row:n0} of {rows:n0} {progress:p0} {min:n2} of {mins:n2} min", i + 1, rows, progress, elapsed, elapsed / progress);
                                     lastProgress100 = progress100;
                                 }
 
@@ -385,52 +385,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                             Logging.Information("DataRow: {row}", dataRow.AsString());
                                         }
 
-                                        //Observation Obrecord = new Observation()
-                                        //{
-                                        //    SensorID = schval.SensorID.Value,
-                                        //    ValueDate = schval.DateValue,
-                                        //    TextValue = schval.TextValue,
-                                        //    RawValue = schval.RawValue,
-                                        //    DataValue = schval.DataValue,
-                                        //    PhenomenonOfferingID = schval.PhenomenonOfferingID.Value,
-                                        //    PhenomenonUOMID = schval.PhenomenonUOMID.Value,
-                                        //    Latitude = schval.Latitude,
-                                        //    Longitude = schval.Longitude,
-                                        //    Elevation = schval.Elevation,
-                                        //    ImportBatchID = batch.Id,
-                                        //    CorrelationID = schval.CorrelationID,
-                                        //    Comment = schval.Comment,
-                                        //    UserId = AuthHelper.GetLoggedInUserId,
-                                        //    AddedDate = DateTime.Now
-                                        //};
-                                        //if (string.IsNullOrWhiteSpace(schval.Comment))
-                                        //{
-                                        //    Obrecord.Comment = null;
-                                        //}
-                                        //else
-                                        //{
-                                        //    Obrecord.Comment = schval.Comment;
-                                        //}
-
-                                        //if (string.IsNullOrWhiteSpace(schval.TextValue))
-                                        //{
-                                        //    Obrecord.TextValue = null;
-                                        //}
-                                        //else
-                                        //{
-                                        //    Obrecord.TextValue = schval.TextValue;
-                                        //}
-
-                                        //Obrecord.Save();
                                     }
-                                    //catch (SqlException ex) when (ex.Number == 2627)
-                                    //{
-                                    //    isDuplicate = true;
-                                    //    duplicates++;
-                                    //}
-                                    //catch (SqlException ex) when (ex.Number == 55555)
-                                    //{
-                                    //}
                                     catch (SqlException ex)
                                     {
                                         Logging.Exception(ex, "Error: {num}", ex.Number);
@@ -567,7 +522,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             batch.DurationInSecs = (int)durationStopWatch.Elapsed.TotalSeconds;
                             batch.Save();
                             tranScope.Complete();
-                            Logging.Information("Saved {count:N0} observations, summary and documents in {time}", values.Count, durationStopWatch.Elapsed);
+                            Logging.Information("Import: Saved {count:N0} observations, summary and documents in {time}", values.Count, durationStopWatch.Elapsed);
                         }
                         catch (Exception ex)
                         {
