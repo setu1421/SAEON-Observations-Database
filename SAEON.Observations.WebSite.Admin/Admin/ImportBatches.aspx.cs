@@ -287,14 +287,14 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 var fi = new FileInfo(DataFileUpload.PostedFile.FileName);
                 batch.FileName = fi.Name;
 
-                var durationStopWatch = new Stopwatch();
-                durationStopWatch.Start();
-                var importStopWatch = new Stopwatch();
-                importStopWatch.Start();
+                var durationStopwatch = new Stopwatch();
+                durationStopwatch.Start();
+                var stageStopwatch = new Stopwatch();
+                stageStopwatch.Start();
                 Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.45, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
-                importStopWatch.Stop();
-                Logging.Information("Imported {count:N0} values in {elapsed}", values.Count, importStopWatch.Elapsed);
+                stageStopwatch.Stop();
+                Logging.Information("Imported {count:N0} values in {elapsed}", values.Count, stageStopwatch.Elapsed);
 
                 if (!values.Any())
                 {
@@ -306,6 +306,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     var saveStopwatch = new Stopwatch();
                     saveStopwatch.Start();
                     Logging.Information("Saving {count:N0} observations.", values.Count);
+
+                    // Create DataTable from good values
+                    Logging.Information("Creating DataTable");
                     var dtObservations = new DataTable("Observations");
                     dtObservations.Columns.Add("ImportBatchID", typeof(Guid));
                     dtObservations.Columns.Add("SensorID", typeof(Guid));
@@ -323,6 +326,56 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     dtObservations.Columns.Add("AddedDate", typeof(DateTime));
                     dtObservations.Columns.Add("UserId", typeof(Guid));
                     //dtObservations.Columns.Add("", typeof());
+                    var lastProgress100 = -1;
+                    var goodValues = values.Where(i => i.IsValid).OrderBy(i => i.RowNum).ToList();
+                    var nMax = goodValues.Count;
+                    int n = 1;
+                    stageStopwatch.Start();
+                    foreach (var value in goodValues)
+                    {
+                        var progress = (double)n++ / nMax;
+                        var progress100 = (int)(progress * 100);
+                        var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
+                        var elapsed = stageStopwatch.Elapsed.TotalMinutes;
+                        if (reportPorgress)
+                        {
+                            Logging.Information("{progress:p0} {value:n0} of {values:n0} values {min:n2} of {mins:n2} min", progress, n, nMax, elapsed, elapsed / progress);
+                            lastProgress100 = progress100;
+                        }
+                        try
+                        {
+                            var dataRow = dtObservations.NewRow();
+                            dataRow.SetValue<Guid>("ImportBatchID", batch.Id);
+                            dataRow.SetValue<Guid>("SensorID", value.SensorID.Value);
+                            dataRow.SetValue<DateTime>("ValueDate", value.DateValue);
+                            dataRow.SetValue<string>("TextValue", value.TextValue);
+                            dataRow.SetValue<double?>("RawValue", value.RawValue);
+                            dataRow.SetValue<double?>("DataValue", value.DataValue);
+                            dataRow.SetValue<Guid>("PhenomenonOfferingID", value.PhenomenonOfferingID.Value);
+                            dataRow.SetValue<Guid>("PhenomenonUOMID", value.PhenomenonUOMID.Value);
+                            dataRow.SetValue<double?>("Latitude", value.Latitude);
+                            dataRow.SetValue<double?>("Longitude", value.Longitude);
+                            dataRow.SetValue<double?>("Elevation", value.Elevation);
+                            dataRow.SetValue<Guid>("CorrelationID", value.CorrelationID);
+                            dataRow.SetValue<string>("Comment", value.Comment);
+                            dataRow.SetValue<Guid>("UserId", AuthHelper.GetLoggedInUserId);
+                            dataRow.SetValue<DateTime>("AddedDate", DateTime.Now);
+                            //dataRow.SetValue<>("", value.);
+                            dtObservations.Rows.Add(dataRow);
+                            if (reportPorgress)
+                            {
+                                Logging.Information("DataRow: {row}", dataRow.AsString());
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.Exception(ex, "Unable to add DataRow: {row}", value.RowNum);
+                            throw;
+                        }
+                    }
+                    stageStopwatch.Stop();
+                    Logging.Information("Created DataTable {count:n0} rows in {elapsed}", dtObservations.Rows.Count, stageStopwatch.Elapsed);
 
                     using (TransactionScope tranScope = Utilities.NewTransactionScope())
                     using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
@@ -342,164 +395,124 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             batch.UserId = AuthHelper.GetLoggedInUserId;
                             batch.Save();
 
-                            var lastProgress100 = -1;
-                            var rows = values.Count;
-                            for (int i = 0; i < rows; i++)
+                            Logging.Information("Creating error logs");
+                            lastProgress100 = -1;
+                            var badValues = values.Where(i => !i.IsValid).OrderBy(i => i.RowNum).ToList();
+                            nMax = badValues.Count;
+                            n = 1;
+                            stageStopwatch.Start();
+                            foreach (var value in badValues)
                             {
-                                var progress = (i + 1.0) / rows;
+                                var progress = (double)n++ / nMax;
                                 var progress100 = (int)(progress * 100);
                                 var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
                                 var elapsed = saveStopwatch.Elapsed.TotalMinutes;
                                 if (reportPorgress)
                                 {
-                                    Logging.Information("{row:n0} of {rows:n0} {progress:p0} {min:n2} of {mins:n2} min", i + 1, rows, progress, elapsed, elapsed / progress);
+                                    Logging.Information("{progress:p0} {value:n0} of {values:n0} values {min:n2} of {mins:n2} min", progress, n, nMax, elapsed, elapsed / progress);
                                     lastProgress100 = progress100;
                                 }
 
-                                SchemaValue schval = values[i];
-
-                                if (schval.IsValid)
+                                Logging.Error("RowNum: {RowNum:N0} IsValid: {isValid} IsDuplicate: {isDuplicate} IsDuplicateOfNull: {isDuplicateOfNull}", value.RowNum, value.IsValid, value.IsDuplicate, value.IsDuplicateOfNull);
+                                if (batch.Status != (int)ImportBatchStatus.DatalogWithErrors)
                                 {
-                                    try
-                                    {
-                                        var dataRow = dtObservations.NewRow();
-                                        dataRow.SetValue<Guid>("ImportBatchID", batch.Id);
-                                        dataRow.SetValue<Guid>("SensorID", schval.SensorID.Value);
-                                        dataRow.SetValue<DateTime>("ValueDate", schval.DateValue);
-                                        dataRow.SetValue<string>("TextValue", schval.TextValue);
-                                        dataRow.SetValue<double?>("RawValue", schval.RawValue);
-                                        dataRow.SetValue<double?>("DataValue", schval.DataValue);
-                                        dataRow.SetValue<Guid>("PhenomenonOfferingID", schval.PhenomenonOfferingID.Value);
-                                        dataRow.SetValue<Guid>("PhenomenonUOMID", schval.PhenomenonUOMID.Value);
-                                        dataRow.SetValue<double?>("Latitude", schval.Latitude);
-                                        dataRow.SetValue<double?>("Longitude", schval.Longitude);
-                                        dataRow.SetValue<double?>("Elevation", schval.Elevation);
-                                        dataRow.SetValue<Guid>("CorrelationID", schval.CorrelationID);
-                                        dataRow.SetValue<string>("Comment", schval.Comment);
-                                        dataRow.SetValue<Guid>("UserId", AuthHelper.GetLoggedInUserId);
-                                        dataRow.SetValue<DateTime>("AddedDate", DateTime.Now);
-                                        //dataRow.SetValue<>("", schval.);
-                                        dtObservations.Rows.Add(dataRow);
-                                        if (reportPorgress)
-                                        {
-                                            Logging.Information("DataRow: {row}", dataRow.AsString());
-                                        }
+                                    batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
+                                    batch.Save();
+                                }
 
-                                    }
-                                    catch (SqlException ex)
-                                    {
-                                        Logging.Exception(ex, "Error: {num}", ex.Number);
-                                        throw;
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Logging.Exception(ex);
-                                        throw;
-                                    }
+                                DataLog logrecord = new DataLog()
+                                {
+                                    SensorID = value.SensorID
+                                };
+                                if (value.DateValueInvalid)
+                                {
+                                    logrecord.InvalidDateValue = value.InvalidDateValue;
+                                }
+                                else if (value.DateValue != DateTime.MinValue)
+                                {
+                                    logrecord.ValueDate = value.DateValue;
+                                }
+
+                                if (value.TimeValueInvalid)
+                                {
+                                    logrecord.InvalidTimeValue = value.InvalidTimeValue;
+                                }
+
+                                if (value.TimeValue.HasValue && value.TimeValue != DateTime.MinValue)
+                                {
+                                    logrecord.ValueTime = value.TimeValue;
+                                }
+
+                                if (value.RawValueInvalid)
+                                {
+                                    logrecord.ValueText = value.InvalidRawValue;
                                 }
                                 else
                                 {
-                                    Logging.Error("RowNum: {RowNum:N0} IsValid: {isValid} IsDuplicate: {isDuplicate} IsDuplicateOfNull: {isDuplicateOfNull}", schval.RowNum, schval.IsValid, schval.IsDuplicate, schval.IsDuplicateOfNull);
-                                    if (batch.Status != (int)ImportBatchStatus.DatalogWithErrors)
-                                    {
-                                        batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
-                                        batch.Save();
-                                    }
-                                    //
+                                    logrecord.RawValue = value.RawValue;
+                                }
 
-                                    DataLog logrecord = new DataLog()
-                                    {
-                                        SensorID = schval.SensorID
-                                    };
-                                    if (schval.DateValueInvalid)
-                                    {
-                                        logrecord.InvalidDateValue = schval.InvalidDateValue;
-                                    }
-                                    else if (schval.DateValue != DateTime.MinValue)
-                                    {
-                                        logrecord.ValueDate = schval.DateValue;
-                                    }
+                                if (value.DataValueInvalid)
+                                {
+                                    logrecord.TransformValueText = value.InvalidDataValue;
+                                }
+                                else
+                                {
+                                    logrecord.DataValue = value.DataValue;
+                                }
 
-                                    if (schval.TimeValueInvalid)
-                                    {
-                                        logrecord.InvalidTimeValue = schval.InvalidTimeValue;
-                                    }
+                                if (value.InvalidOffering)
+                                {
+                                    logrecord.InvalidOffering = value.PhenomenonOfferingID.Value.ToString();
+                                }
+                                else
+                                {
+                                    logrecord.PhenomenonOfferingID = value.PhenomenonOfferingID.Value;
+                                }
 
-                                    if (schval.TimeValue.HasValue && schval.TimeValue != DateTime.MinValue)
-                                    {
-                                        logrecord.ValueTime = schval.TimeValue;
-                                    }
+                                if (value.InvalidUOM)
+                                {
+                                    logrecord.InvalidUOM = value.PhenomenonUOMID.Value.ToString();
+                                }
+                                else
+                                {
+                                    logrecord.PhenomenonUOMID = value.PhenomenonUOMID.Value;
+                                }
 
-                                    if (schval.RawValueInvalid)
-                                    {
-                                        logrecord.ValueText = schval.InvalidRawValue;
-                                    }
-                                    else
-                                    {
-                                        logrecord.RawValue = schval.RawValue;
-                                    }
+                                logrecord.RawFieldValue = String.IsNullOrWhiteSpace(value.FieldRawValue) ? "" : value.FieldRawValue;
+                                logrecord.ImportDate = DateTime.Now;
+                                logrecord.ImportBatchID = batch.Id;
 
-                                    if (schval.DataValueInvalid)
-                                    {
-                                        logrecord.TransformValueText = schval.InvalidDataValue;
-                                    }
-                                    else
-                                    {
-                                        logrecord.DataValue = schval.DataValue;
-                                    }
+                                logrecord.DataSourceTransformationID = value.DataSourceTransformationID;
+                                logrecord.ImportStatus = String.Join(",", value.InvalidStatuses.Select(s => new Status(s).Name));
+                                logrecord.StatusID = new Guid(value.InvalidStatuses[0]);
+                                logrecord.UserId = AuthHelper.GetLoggedInUserId;
 
-                                    if (schval.InvalidOffering)
-                                    {
-                                        logrecord.InvalidOffering = schval.PhenomenonOfferingID.Value.ToString();
-                                    }
-                                    else
-                                    {
-                                        logrecord.PhenomenonOfferingID = schval.PhenomenonOfferingID.Value;
-                                    }
+                                if (!string.IsNullOrWhiteSpace(value.Comment))
+                                {
+                                    logrecord.Comment = value.Comment.TrimEnd();
+                                }
 
-                                    if (schval.InvalidUOM)
-                                    {
-                                        logrecord.InvalidUOM = schval.PhenomenonUOMID.Value.ToString();
-                                    }
-                                    else
-                                    {
-                                        logrecord.PhenomenonUOMID = schval.PhenomenonUOMID.Value;
-                                    }
-
-                                    logrecord.RawFieldValue = String.IsNullOrWhiteSpace(schval.FieldRawValue) ? "" : schval.FieldRawValue;
-                                    logrecord.ImportDate = DateTime.Now;
-                                    logrecord.ImportBatchID = batch.Id;
-
-                                    logrecord.DataSourceTransformationID = schval.DataSourceTransformationID;
-                                    logrecord.ImportStatus = String.Join(",", schval.InvalidStatuses.Select(s => new Status(s).Name));
-                                    logrecord.StatusID = new Guid(schval.InvalidStatuses[0]);
-                                    logrecord.UserId = AuthHelper.GetLoggedInUserId;
-
-                                    if (!string.IsNullOrWhiteSpace(schval.Comment))
-                                    {
-                                        logrecord.Comment = schval.Comment.TrimEnd();
-                                    }
-
-                                    logrecord.Latitude = schval.Latitude;
-                                    logrecord.Longitude = schval.Longitude;
-                                    logrecord.Elevation = schval.Elevation;
-                                    logrecord.CorrelationID = schval.CorrelationID;
-                                    Logging.Verbose("BatchID: {id} Status: {status} ImportStatus: {importstatus}", batch.Id, logrecord.StatusID, logrecord.ImportStatus);
-                                    try
-                                    {
-                                        logrecord.Save();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Logging.Exception(ex);
-                                        throw;
-                                    }
+                                logrecord.Latitude = value.Latitude;
+                                logrecord.Longitude = value.Longitude;
+                                logrecord.Elevation = value.Elevation;
+                                logrecord.CorrelationID = value.CorrelationID;
+                                Logging.Verbose("BatchID: {id} Status: {status} ImportStatus: {importStatus}", batch.Id, logrecord.StatusID, logrecord.ImportStatus);
+                                try
+                                {
+                                    logrecord.Save();
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logging.Exception(ex, "Unable to create ErroLog: {rowNum}", value.RowNum);
+                                    throw;
                                 }
                             }
-                            Logging.Information("Saved {count:N0} observations in {time}", values.Count, saveStopwatch.Elapsed);
+                            stageStopwatch.Stop();
+                            Logging.Information("Created {count:N0} error logs in {time}", nMax, stageStopwatch.Elapsed);
                             // Bulk insert
-                            var bulkStopwatch = new Stopwatch();
-                            bulkStopwatch.Start();
+                            stageStopwatch = new Stopwatch();
+                            Logging.Information("Starting bulk insert");
                             using (var bulkInsert = new SqlBulkCopy((SqlConnection)connScope.CurrentConnection, SqlBulkCopyOptions.CheckConstraints | SqlBulkCopyOptions.FireTriggers, null))
                             {
                                 bulkInsert.BatchSize = 10000;
@@ -513,20 +526,21 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                                 bulkInsert.WriteToServer(dtObservations);
                             }
-                            Logging.Information("Bulk inserted {count:N0} observations in {time}", values.Count, bulkStopwatch.Elapsed);
+                            stageStopwatch.Stop();
+                            Logging.Information("Bulk inserted {count:N0} observations in {time}", goodValues.Count, stageStopwatch.Elapsed);
                             // Summaries
                             CreateSummary(connScope, batch.Id);
                             // Documents
                             CreateDocuments(connScope, batch.Id);
                             Auditing.Log(GetType(), new MethodCallParameters { { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status } });
-                            batch.DurationInSecs = (int)durationStopWatch.Elapsed.TotalSeconds;
+                            batch.DurationInSecs = (int)durationStopwatch.Elapsed.TotalSeconds;
                             batch.Save();
                             tranScope.Complete();
-                            Logging.Information("Import: Saved {count:N0} observations, summary and documents in {time}", values.Count, durationStopWatch.Elapsed);
+                            Logging.Information("Import: {count:N0} observations, summary and documents in {duration}", values.Count, durationStopwatch.Elapsed);
                         }
                         catch (Exception ex)
                         {
-                            Logging.Exception(ex, "Unable to save {count:N0} observations in {duration}", values.Count, durationStopWatch.Elapsed);
+                            Logging.Exception(ex, "Unable to save {count:N0} observations in {duration}", values.Count, durationStopwatch.Elapsed);
                             throw;
                         }
                     }

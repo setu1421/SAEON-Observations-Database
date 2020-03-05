@@ -612,25 +612,23 @@ public class ImportSchemaHelper : IDisposable
                 stopwatch.Start();
                 Logging.Information("Building schema definition");
                 BuildSchemaDefinition();
-                stopwatch.Stop();
                 Logging.Information("Built schema definition in {time}", stopwatch.Elapsed);
-                stopwatch.Start();
-                Logging.Information("Processing {rows:n0} rows", dtResults.Rows.Count);
                 var lastProgress100 = -1;
-                var rows = dtResults.Rows.Count;
-                for (int i = 0; i < rows; i++)
+                var nMax = dtResults.Rows.Count;
+                var n = 1;
+                Logging.Information("Processing {count:n0} rows", nMax);
+                foreach (DataRow row in dtResults.Rows)
                 {
-                    var progress = (i + 1.0) / rows;
+                    var progress = (double)n++ / nMax;
                     var progress100 = (int)(progress * 100);
                     var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
                     var elapsed = stopwatch.Elapsed.TotalMinutes;
                     if (reportPorgress)
                     {
-                        Logging.Information("{row:n0} of {rows:n0} {progress:p0} {min:n2} of {mins:n2} min", i + 1, rows, progress, elapsed, elapsed / progress);
+                        Logging.Information("{progress:p0} {row:n0} of {rows:n0} rows {min:n2} of {mins:n2} min", progress, n, nMax, elapsed, elapsed / progress);
                         lastProgress100 = progress100;
                     }
-                    DataRow dr = dtResults.Rows[i];
-                    ProcessRow(dr, i + 1);
+                    ProcessRow(row, n);
                 }
                 Logging.Information("Checking for duplicates in batch");
                 var dupGroups = SchemaValues.GroupBy(i => new { i.SensorID, i.DateValue, i.DataValue, i.PhenomenonOfferingID, i.PhenomenonUOMID, i.Elevation }).Where(g => g.Count() > 1).ToList();
@@ -641,17 +639,17 @@ public class ImportSchemaHelper : IDisposable
                     {
                         Logging.Information("RowNum: {rowNum} Date: {date}", value.RowNum, value.DateValue);
                     }
-                    Logging.Information("Bad Rows: {badRows}", dupValues.Select(i => i.RowNum).ToArray());
+                    //Logging.Information("Bad Rows: {badRows}", dupValues.Select(i => i.RowNum).ToArray());
+                    Logging.Information("Duplicates: Groups: {groups} Values: {values}", dupGroups.Count, dupValues.Count);
+                    foreach (var schval in dupValues)
+                    {
+                        schval.IsDuplicate = true;
+                        schval.InvalidStatuses.Insert(0, Status.Duplicate);
+                    }
+                    Logging.Information("Found {count} duplicates in batch", dupValues.Count());
                 }
-                Logging.Information("Duplicates: Groups: {groups} Values: {values}", dupGroups.Count, dupValues.Count);
-                foreach (var schval in dupValues)
-                {
-                    schval.IsDuplicate = true;
-                    schval.InvalidStatuses.Insert(0, Status.Duplicate);
-                }
-                Logging.Information("Found {count} duplicates in batch", dupGroups.Count());
                 stopwatch.Stop();
-                Logging.Information("Processed {rows:n0} rows in {time}", rows, stopwatch.Elapsed);
+                Logging.Information("Processed {rows:n0} rows in {time}", nMax, stopwatch.Elapsed);
             }
             catch (Exception ex)
             {
