@@ -397,8 +397,8 @@
     <Reference Include="SAEON.Logs.NetFramework, Version=1.0.11.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Logs.NetFramework.1.0.11\lib\net472\SAEON.Logs.NetFramework.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.Core, Version=1.0.218.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.Core.1.0.218\lib\net472\SAEON.Observations.Core.dll</HintPath>
+    <Reference Include="SAEON.Observations.Core, Version=1.0.229.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.Core.1.0.229\lib\net472\SAEON.Observations.Core.dll</HintPath>
     </Reference>
     <Reference Include="SAEON.Observations.SensorThings, Version=1.0.112.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Observations.SensorThings.1.0.112\lib\net472\SAEON.Observations.SensorThings.dll</HintPath>

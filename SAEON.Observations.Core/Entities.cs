@@ -323,7 +323,17 @@ namespace SAEON.Observations.Core.Entities
         [JsonIgnore]
         public List<Organisation> Organisations { get; set; }
         [JsonProperty("Organisations")]
-        public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
+        public List<EntityListItem> OrganisationsList
+        {
+            get
+            {
+                var organisations = new List<Organisation>();
+                if (Organisations != null) organisations.AddRange(Organisations);
+                organisations.AddRange(Stations?.SelectMany(i => i.Organisations));
+                organisations.AddRange(Stations?.SelectMany(i => i.Site.Organisations));
+                return organisations.Distinct().Select(i => i.AsEntityListItem).ToList();
+            }
+        }
 
         /// <summary>
         /// Stations linked to this Instrument
@@ -446,8 +456,10 @@ namespace SAEON.Observations.Core.Entities
         {
             get
             {
-                var siteStations = Sites?.SelectMany(i => i.Stations);
-                return Stations?.Union(siteStations).Select(i => i.AsEntityListItem).ToList();
+                var stations = new List<Station>();
+                stations.AddRange(Sites?.SelectMany(i => i.Stations));
+                if (Stations != null) stations.AddRange(Stations);
+                return stations.Distinct().Select(i => i.AsEntityListItem).ToList();
             }
         }
 
@@ -457,7 +469,18 @@ namespace SAEON.Observations.Core.Entities
         [JsonIgnore]
         public List<Instrument> Instruments { get; set; }
         [JsonProperty("Instruments")]
-        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
+        public List<EntityListItem> InstrumentsList
+        {
+            get
+            {
+                var instruments = new List<Instrument>();
+                instruments.AddRange(Sites?.SelectMany(i => i.Stations).SelectMany(i => i.Instruments));
+                instruments.AddRange(Stations?.SelectMany(i => i.Instruments));
+                if (Instruments != null) instruments.AddRange(Instruments);
+                return instruments.Distinct().Select(i => i.AsEntityListItem).ToList();
+            }
+        }
+
 #else
         /// <summary>
         /// The Instruments linked to this Organisation

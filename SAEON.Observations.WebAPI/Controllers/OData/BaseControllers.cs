@@ -20,7 +20,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         public static string BaseUrl { get; set; }
         protected const int PageSize = 25;
         protected const int MaxTop = 500;
-        protected const int MaxAll = 1000;
+        protected const int MaxAll = 10000;
 
         private ObservationsDbContext dbContext = null;
         protected ObservationsDbContext DbContext => dbContext ?? (dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request)));

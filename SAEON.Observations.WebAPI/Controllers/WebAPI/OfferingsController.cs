@@ -1,6 +1,8 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -13,12 +15,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Offerings")]
     public class OfferingsController : CodedApiController<Offering>
     {
-        //protected override List<Expression<Func<Offering, object>>> GetIncludes()
-        //{
-        //    var list = base.GetIncludes();
-        //    list.Add(i => i.Phenomena);
-        //    return list;
-        //}
+        protected override IQueryable<Offering> GetQuery(Expression<Func<Offering, bool>> extraWhere = null)
+        {
+            return base.GetQuery(extraWhere).Include(i => i.PhenomenonOfferings.Select(po => po.Phenomenon));
+        }
 
         /// <summary>
         /// All Offerings

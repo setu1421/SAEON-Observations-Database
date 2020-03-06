@@ -1,6 +1,10 @@
-﻿using SAEON.Observations.Core.Entities;
+﻿using SAEON.Logs;
+using SAEON.Observations.Core.Entities;
 using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -19,6 +23,17 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         //    list.Add(i => i.Sensors);
         //    return list;
         //}
+
+        protected override IQueryable<Instrument> GetQuery(Expression<Func<Instrument, bool>> extraWhere = null)
+        {
+            return base.GetQuery(extraWhere)
+                .Include(i => i.Organisations)
+                .Include(i => i.Sensors)
+                .Include(i => i.Stations)
+                .Include(i => i.Stations.Select(s => s.Organisations))
+                .Include(i => i.Stations.Select(s => s.Site))
+                .Include(i => i.Stations.Select(s => s.Site).Select(ss => ss.Organisations));
+        }
 
         /// <summary>
         /// All Instruments
@@ -69,9 +84,16 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of the Instrument</param>
         /// <returns>ListOf(Organisation)</returns>
         [Route("{id:guid}/Organisations")]
-        public IQueryable<Organisation> Getorganisations([FromUri] Guid id)
+        public IQueryable<Organisation> GetOrganisations([FromUri] Guid id)
         {
-            return GetMany<Organisation>(id, s => s.Organisations);
+            var organisations = new List<Organisation>();
+            Logging.Information("Stations: {@Stations}", GetMany(id, s => s.Stations));
+            Logging.Information("StationsSites: {@StationsSites}", GetMany(id, s => s.Stations).Select(i => i.Site));
+            Logging.Information("StationsSitesOrganisations: {@StationsSitesORganisations}", GetMany(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations));
+            //organisations.AddRange(GetMany(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations));
+            organisations.AddRange(GetMany(id, s => s.Stations).SelectMany(i => i.Organisations));
+            organisations.AddRange(GetMany(id, s => s.Organisations));
+            return organisations.AsQueryable();
         }
 
         // GET: Instruments/5/Stations

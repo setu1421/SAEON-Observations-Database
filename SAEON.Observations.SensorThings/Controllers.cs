@@ -242,7 +242,6 @@ namespace SAEON.Observations.SensorThings
                 }
             }
             Request.Headers.TryAddWithoutValidation("Prefer", "odata.include-annotations=*");
-            Request.Headers.TryAddWithoutValidation("Prefer", "odata.metadata=full");
         }
 
         /// <summary>

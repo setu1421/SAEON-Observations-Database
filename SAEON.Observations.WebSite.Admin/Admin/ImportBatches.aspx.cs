@@ -303,11 +303,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 else
                 {
 
-                    var saveStopwatch = new Stopwatch();
-                    saveStopwatch.Start();
                     Logging.Information("Saving {count:N0} observations.", values.Count);
 
                     // Create DataTable from good values
+                    stageStopwatch.Start();
                     Logging.Information("Creating DataTable");
                     var dtObservations = new DataTable("Observations");
                     dtObservations.Columns.Add("ImportBatchID", typeof(Guid));
@@ -330,7 +329,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     var goodValues = values.Where(i => i.IsValid).OrderBy(i => i.RowNum).ToList();
                     var nMax = goodValues.Count;
                     int n = 1;
-                    stageStopwatch.Start();
                     foreach (var value in goodValues)
                     {
                         var progress = (double)n++ / nMax;
@@ -396,17 +394,17 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             batch.Save();
 
                             Logging.Information("Creating error logs");
+                            stageStopwatch.Start();
                             lastProgress100 = -1;
                             var badValues = values.Where(i => !i.IsValid).OrderBy(i => i.RowNum).ToList();
                             nMax = badValues.Count;
                             n = 1;
-                            stageStopwatch.Start();
                             foreach (var value in badValues)
                             {
                                 var progress = (double)n++ / nMax;
                                 var progress100 = (int)(progress * 100);
                                 var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
-                                var elapsed = saveStopwatch.Elapsed.TotalMinutes;
+                                var elapsed = stageStopwatch.Elapsed.TotalMinutes;
                                 if (reportPorgress)
                                 {
                                     Logging.Information("{progress:p0} {value:n0} of {values:n0} values {min:n2} of {mins:n2} min", progress, n, nMax, elapsed, elapsed / progress);
@@ -511,7 +509,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             stageStopwatch.Stop();
                             Logging.Information("Created {count:N0} error logs in {time}", nMax, stageStopwatch.Elapsed);
                             // Bulk insert
-                            stageStopwatch = new Stopwatch();
+                            stageStopwatch.Start();
                             Logging.Information("Starting bulk insert");
                             using (var bulkInsert = new SqlBulkCopy((SqlConnection)connScope.CurrentConnection, SqlBulkCopyOptions.CheckConstraints | SqlBulkCopyOptions.FireTriggers, null))
                             {
