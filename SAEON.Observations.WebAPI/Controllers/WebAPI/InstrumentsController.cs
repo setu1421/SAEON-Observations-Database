@@ -1,7 +1,5 @@
-﻿using SAEON.Logs;
-using SAEON.Observations.Core.Entities;
+﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
@@ -86,14 +84,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Organisations")]
         public IQueryable<Organisation> GetOrganisations([FromUri] Guid id)
         {
-            var organisations = new List<Organisation>();
-            Logging.Information("Stations: {@Stations}", GetMany(id, s => s.Stations));
-            Logging.Information("StationsSites: {@StationsSites}", GetMany(id, s => s.Stations).Select(i => i.Site));
-            Logging.Information("StationsSitesOrganisations: {@StationsSitesORganisations}", GetMany(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations));
-            //organisations.AddRange(GetMany(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations));
-            organisations.AddRange(GetMany(id, s => s.Stations).SelectMany(i => i.Organisations));
-            organisations.AddRange(GetMany(id, s => s.Organisations));
-            return organisations.AsQueryable();
+            var siteOrganisations = GetMany(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations);
+            var stationOrganisations = GetMany(id, s => s.Stations).SelectMany(i => i.Organisations);
+            return GetMany(id, s => s.Organisations).Union(stationOrganisations).Union(siteOrganisations);
         }
 
         // GET: Instruments/5/Stations

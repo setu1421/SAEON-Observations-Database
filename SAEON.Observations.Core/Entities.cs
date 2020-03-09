@@ -21,30 +21,21 @@ using System.Linq;
 
 namespace SAEON.Observations.Core.Entities
 {
-    /// <summary>
-    /// Entity List Item
-    /// Used instead of full Entity expansion
-    /// </summary>
-    public class EntityListItem
+    public static class EntityConfig
     {
-        /// <summary>
-        /// Id of Entity
-        /// </summary>
-        public Guid? Id { get; set; } = null;
-        /// <summary>
-        /// Code of Entity
-        /// </summary>
-        public string Code { get; set; } = null;
-        /// <summary>
-        /// Name of Entity
-        /// </summary>
-        public string Name { get; set; } = null;
+        public static string BaseUrl { get; set; }
     }
 
     /// <summary>
     /// Absolute base class
     /// </summary>
-    public abstract class BaseEntity { }
+    public abstract class BaseEntity
+    {
+        [NotMapped, JsonIgnore]
+        public string EntitySetName { get; protected set; }
+        [NotMapped, JsonIgnore]
+        public List<string> Links { get; } = new List<string>();
+    }
 
     public abstract class GuidIdEntity : BaseEntity
     {
@@ -59,6 +50,23 @@ namespace SAEON.Observations.Core.Entities
         [JsonProperty(Order = -99)]
 #endif
         public Guid Id { get; set; }
+
+        [NotMapped]
+        public Dictionary<string, string> NavigationLinks
+        {
+            get
+            {
+                var result = new Dictionary<string, string>
+                {
+                    { "Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}" }
+                };
+                foreach (var link in Links.OrderBy(i => i))
+                {
+                    result.Add(link, $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}/{link}");
+                }
+                return result;
+            }
+        }
     }
 
     public abstract class IntIdEntity : BaseEntity
@@ -74,6 +82,23 @@ namespace SAEON.Observations.Core.Entities
         [JsonProperty(Order = -99)]
 #endif
         public int Id { get; set; }
+
+        [NotMapped]
+        public Dictionary<string, string> NavigationLinks
+        {
+            get
+            {
+                var result = new Dictionary<string, string>
+                {
+                    { "Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}" }
+                };
+                foreach (var link in Links)
+                {
+                    result.Add(link, $"{EntityConfig.BaseUrl}/{link}/{Id}");
+                }
+                return result;
+            }
+        }
     }
 
     /// <summary>
@@ -85,9 +110,6 @@ namespace SAEON.Observations.Core.Entities
         public byte[] RowVersion { get; set; }
         [JsonIgnore, Required]
         public Guid UserId { get; set; }
-
-        [NotMapped, JsonIgnore]
-        public virtual EntityListItem AsEntityListItem => new EntityListItem { Id = Id };
     }
 
     public abstract class NamedEntity : IdEntity
@@ -100,16 +122,6 @@ namespace SAEON.Observations.Core.Entities
         [JsonProperty(Order = -97)]
 #endif
         public string Name { get; set; }
-        [NotMapped, JsonIgnore]
-        public override EntityListItem AsEntityListItem
-        {
-            get
-            {
-                var result = base.AsEntityListItem;
-                result.Name = Name;
-                return result;
-            }
-        }
     }
 
     public abstract class CodedEntity : NamedEntity
@@ -122,16 +134,6 @@ namespace SAEON.Observations.Core.Entities
         [JsonProperty(Order = -98)]
 #endif
         public string Code { get; set; }
-        [NotMapped, JsonIgnore]
-        public override EntityListItem AsEntityListItem
-        {
-            get
-            {
-                var result = base.AsEntityListItem;
-                result.Code = Code;
-                return result;
-            }
-        }
     }
 
     /// <summary>
@@ -322,42 +324,24 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public List<Organisation> Organisations { get; set; }
-        [JsonProperty("Organisations")]
-        public List<EntityListItem> OrganisationsList
-        {
-            get
-            {
-                var organisations = new List<Organisation>();
-                if (Organisations != null) organisations.AddRange(Organisations);
-                organisations.AddRange(Stations?.SelectMany(i => i.Organisations));
-                organisations.AddRange(Stations?.SelectMany(i => i.Site.Organisations));
-                return organisations.Distinct().Select(i => i.AsEntityListItem).ToList();
-            }
-        }
 
         /// <summary>
         /// Stations linked to this Instrument
         /// </summary>
         [JsonIgnore]
         public List<Station> Stations { get; set; }
-        [JsonProperty("Stations")]
-        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
         /// Sensors linked to this Instrument
         /// </summary>
         [JsonIgnore]
         public List<Sensor> Sensors { get; set; }
-        [JsonProperty("Sensors")]
-        public List<EntityListItem> SensorsList => Sensors?.Select(i => i.AsEntityListItem).ToList();
 #else
         /// <summary>
         /// The Organisations linked to this Instrument
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Organisation> Organisations => OrganisationInstruments?.Select(oi => oi.Organisation).ToList();
-        [NotMapped, JsonPropertyName("organisations")]
-        public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<OrganisationInstrument> OrganisationInstruments { get; set; }
 
@@ -366,8 +350,6 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Station> Stations => StationInstruments?.Select(si => si.Station).ToList();
-        [NotMapped, JsonPropertyName("stations")]
-        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<StationInstrument> StationInstruments { get; set; }
 
@@ -376,11 +358,17 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Sensor> Sensors => InstrumentSensors?.Select(i => i.Sensor).ToList();
-        [NotMapped, JsonPropertyName("sensors")]
-        public List<EntityListItem> SensorsList => Sensors?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<InstrumentSensor> InstrumentSensors { get; set; }
 #endif
+
+        public Instrument() : base()
+        {
+            EntitySetName = "Instruments";
+            Links.Add("Organisations");
+            Links.Add("Stations");
+            Links.Add("Sensors");
+        }
     }
 
     /// <summary>
@@ -401,8 +389,6 @@ namespace SAEON.Observations.Core.Entities
         ///// </summary>
         //[JsonIgnore]
         //public List<Phenomenon> Phenomena { get; set; }
-        //[JsonProperty("Phenomena")]
-        //public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
         public List<Phenomenon> Phenomena => PhenomenonOfferings?.Select(i => i.Phenomenon).ToList();
         public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
 #else
@@ -411,10 +397,15 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Phenomenon> Phenomena => PhenomenonOfferings?.Select(po => po.Phenomenon).ToList();
-        [NotMapped, JsonPropertyName("phenomena")]
-        public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
+
+        public Offering() : base()
+        {
+            EntitySetName = "Offerings";
+            Links.Add("Phenomena");
+
+        }
 #endif
     }
 
@@ -435,7 +426,6 @@ namespace SAEON.Observations.Core.Entities
         [Url, StringLength(250)]
         public string Url { get; set; }
 
-        //public bool HasSites { get { return Sites?.Any() ?? false; } }
         // Navigation
 #if NET472
         /// <summary>
@@ -443,52 +433,24 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public List<Site> Sites { get; set; }
-        [JsonProperty("Sites")]
-        public List<EntityListItem> SitesList => Sites?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
         /// The Stations linked to this Organisation
         /// </summary>
         [JsonIgnore]
         public List<Station> Stations { get; set; }
-        [JsonProperty("Stations")]
-        public List<EntityListItem> StationsList
-        {
-            get
-            {
-                var stations = new List<Station>();
-                stations.AddRange(Sites?.SelectMany(i => i.Stations));
-                if (Stations != null) stations.AddRange(Stations);
-                return stations.Distinct().Select(i => i.AsEntityListItem).ToList();
-            }
-        }
 
         /// <summary>
         /// The Instruments linked to this Organisation
         /// </summary>
         [JsonIgnore]
         public List<Instrument> Instruments { get; set; }
-        [JsonProperty("Instruments")]
-        public List<EntityListItem> InstrumentsList
-        {
-            get
-            {
-                var instruments = new List<Instrument>();
-                instruments.AddRange(Sites?.SelectMany(i => i.Stations).SelectMany(i => i.Instruments));
-                instruments.AddRange(Stations?.SelectMany(i => i.Instruments));
-                if (Instruments != null) instruments.AddRange(Instruments);
-                return instruments.Distinct().Select(i => i.AsEntityListItem).ToList();
-            }
-        }
-
 #else
         /// <summary>
         /// The Instruments linked to this Organisation
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Instrument> Instruments => OrganisationInstruments?.Select(oi => oi.Instrument).ToList();
-        [NotMapped, JsonPropertyName("instruments")]
-        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<OrganisationInstrument> OrganisationInstruments { get; set; }
 
@@ -497,8 +459,6 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Site> Sites => OrganisationSites?.Select(os => os.Site).ToList();
-        [NotMapped, JsonPropertyName("sites")]
-        public List<EntityListItem> SitesList => Sites?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<OrganisationSite> OrganisationSites { get; set; }
 
@@ -507,11 +467,16 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Station> Stations => OrganisationStations?.Select(os => os.Station).ToList();
-        [NotMapped, JsonPropertyName("stations")]
-        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<OrganisationStation> OrganisationStations { get; set; }
 #endif
+        public Organisation() : base()
+        {
+            EntitySetName = "Organisations";
+            Links.Add("Sites");
+            Links.Add("Stations");
+            Links.Add("Instruments");
+        }
     }
 
     /// <summary>
@@ -550,8 +515,6 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         //[JsonIgnore]
         //public List<Offering> Offerings { get; set; }
-        //[JsonProperty("Offerings"), NotMapped]
-        //public List<EntityListItem> OfferingsList => Offerings?.Select(i => i.AsEntityListItem).ToList();
         public List<Offering> Offerings => PhenomenonOfferings.Select(i => i.Offering).ToList();
         public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
 
@@ -560,8 +523,6 @@ namespace SAEON.Observations.Core.Entities
         ///// </summary>
         //[JsonIgnore]
         //public List<Unit> Units { get; set; }
-        //[JsonProperty("Units"), NotMapped]
-        //public List<EntityListItem> UnitsList => Units?.Select(i => i.AsEntityListItem).ToList();
         public List<Unit> Units => PhenomenonUnits.Select(i => i.Unit).ToList();
         public List<PhenomenonUnit> PhenomenonUnits { get; set; }
 
@@ -570,16 +531,12 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public List<Sensor> Sensors { get; set; }
-        [JsonProperty("Sensors"), NotMapped]
-        public List<EntityListItem> SensorsList => Sensors?.Select(i => i.AsEntityListItem).ToList();
 #else
         /// <summary>
         /// Offerings of this Phenomenon
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Offering> Offerings => PhenomenonOfferings?.Select(ph => ph.Offering).ToList();
-        [NotMapped, JsonPropertyName("offerings")]
-        public List<EntityListItem> OfferingsList => Offerings?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
 
@@ -588,19 +545,23 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Unit> Units => PhenomenonUnits?.Select(pu => pu.Unit).ToList();
-        [NotMapped, JsonPropertyName("units")]
-        public List<EntityListItem> UnitsList => Units?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<PhenomenonUnit> PhenomenonUnits { get; set; }
 
         /// <summary>
         /// Sensors linked to this Phenomenon
         /// </summary>
-        [NotMapped, JsonPropertyName("sensors")]
-        public List<EntityListItem> SensorsList => Sensors?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<Sensor> Sensors { get; set; }
 #endif
+
+        public Phenomenon() : base()
+        {
+            EntitySetName = "Phenomena";
+            Links.Add("Offerings");
+            Links.Add("Sensors");
+            Links.Add("Units");
+        }
     }
 
     /// <summary>
@@ -635,17 +596,19 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public List<Project> Projects { get; set; }
-        [JsonProperty("Projects"), NotMapped]
-        public List<EntityListItem> ProjectList => Projects?.Select(i => i.AsEntityListItem).Where(i => i != null).ToList();
 #else
         /// <summary>
         /// The Projects linked to this Programme
         /// </summary>
-        [NotMapped, JsonPropertyName("projects")]
-        public List<EntityListItem> ProjectList => Projects?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore]
         public List<Project> Projects { get; set; }
 #endif
+
+        public Programme() : base()
+        {
+            EntitySetName = "Programmes";
+            Links.Add("Projects");
+        }
     }
 
     /// <summary>
@@ -686,35 +649,34 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public Programme Programme { get; set; }
-        [JsonProperty("Programme"), NotMapped]
-        public EntityListItem ProgrammeItem => Programme?.AsEntityListItem;
 
         /// <summary>
         /// The Stations linked to this Project
         /// </summary>
         [JsonIgnore]
         public List<Station> Stations { get; set; }
-        [JsonProperty("Stations"), NotMapped]
-        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
 #else
         /// <summary>
         /// The Programme of the Project
         /// </summary>
         [JsonIgnore]
         public Programme Programme { get; set; }
-        [NotMapped, JsonPropertyName("programme")]
-        public EntityListItem ProgrammeItem => Programme?.AsEntityListItem;
 
         /// <summary>
         /// The Stations linked to this Project
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Station> Stations => ProjectStations?.Select(ps => ps.Station).ToList();
-        [NotMapped, JsonPropertyName("stations")]
-        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<ProjectStation> ProjectStations { get; set; }
 #endif
+
+        public Project() : base()
+        {
+            EntitySetName = "Projects";
+            Links.Add("Programmes");
+            Links.Add("Stations");
+        }
     }
 
     /// <summary>
@@ -762,35 +724,36 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public Phenomenon Phenomenon { get; set; }
-        [JsonProperty("Phenomenon")]
-        public EntityListItem PhenomenonName => Phenomenon?.AsEntityListItem;
 
         /// <summary>
         /// Instruments linked to this Sensor
         /// </summary>
         [JsonIgnore]
         public List<Instrument> Instruments { get; set; }
-        [JsonProperty("Instruments")]
-        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
 #else
         /// <summary>
         /// Phenomenon of the Sensor
         /// </summary>
         [JsonIgnore]
         public Phenomenon Phenomenon { get; set; }
-        [NotMapped, JsonPropertyName("phenomenon")]
-        public EntityListItem PhenomenonName => Phenomenon?.AsEntityListItem;
 
         /// <summary>
         /// Instruments linked to this Sensor
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Instrument> Instruments => InstrumentSensors?.Select(i => i.Instrument).ToList();
-        [NotMapped, JsonPropertyName("instruments")]
-        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<InstrumentSensor> InstrumentSensors { get; set; }
 #endif
+
+        public Sensor() : base()
+        {
+            EntitySetName = "Sensors";
+            Links.Add("Site");
+            Links.Add("Organisations");
+            Links.Add("Projects");
+            Links.Add("Instruments");
+        }
     }
 
     /// <summary>
@@ -818,8 +781,6 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         public DateTime? EndDate { get; set; }
 
-        //public bool HasStations { get { return Stations?.Any() ?? false; } }
-
         // Navigation
 #if NET472
         /// <summary>
@@ -827,35 +788,34 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public List<Organisation> Organisations { get; set; }
-        [JsonProperty("Organisations"), NotMapped]
-        public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
         /// The Stations linked to this Site
         /// </summary>
         [JsonIgnore]
         public List<Station> Stations { get; set; }
-        [JsonProperty("Stations"), NotMapped]
-        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
 #else
         /// <summary>
         /// The Organisations linked to this Site
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Organisation> Organisations => OrganisationSites?.Select(os => os.Organisation).ToList();
-        [NotMapped, JsonPropertyName("organisations")]
-        public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<OrganisationSite> OrganisationSites { get; set; }
 
         /// <summary>
         /// The Stations linked to this Site
         /// </summary>
-        [NotMapped, JsonPropertyName("stations")]
-        public List<EntityListItem> StationsList => Stations?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<Station> Stations { get; set; }
 #endif
+
+        public Site() : base()
+        {
+            EntitySetName = "Sites";
+            Links.Add("Organisations");
+            Links.Add("Stations");
+        }
     }
 
     /// <summary>
@@ -907,49 +867,36 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public Site Site { get; set; }
-        [JsonProperty("Site"), NotMapped]
-        public EntityListItem SiteName => Site?.AsEntityListItem;
 
         /// <summary>
         /// The Organisations linked to this Station
         /// </summary>
         [JsonIgnore]
         public List<Organisation> Organisations { get; set; }
-        [JsonIgnore]
-        [JsonProperty("Organisations"), NotMapped]
-        public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
         /// The Projects linked to this Station
         /// </summary>
         [JsonIgnore]
         public List<Project> Projects { get; set; }
-        [JsonProperty("Projects"), NotMapped]
-        public List<EntityListItem> ProjectsList => Projects?.Select(i => i.AsEntityListItem).ToList();
 
         /// <summary>
         /// Instruments linked to this Station
         /// </summary>
         [JsonIgnore]
         public List<Instrument> Instruments { get; set; }
-        [JsonProperty("Instruments"), NotMapped]
-        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
 #else
         /// <summary>
         /// Site of the Station
         /// </summary>
         [JsonIgnore]
         public Site Site { get; set; }
-        [NotMapped, JsonPropertyName("site")]
-        public EntityListItem SiteName => Site?.AsEntityListItem;
 
         /// <summary>
         /// The Organisations linked to this Station
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Organisation> Organisations => OrganisationStations?.Select(os => os.Organisation).ToList();
-        [NotMapped, JsonPropertyName("organisations")]
-        public List<EntityListItem> OrganisationsList => Organisations?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<OrganisationStation> OrganisationStations { get; set; }
 
@@ -958,8 +905,6 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Project> Projects => ProjectStations?.Select(ps => ps.Project).ToList();
-        [NotMapped, JsonPropertyName("projects")]
-        public List<EntityListItem> ProjectsList => Projects?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<ProjectStation> ProjectStations { get; set; }
 
@@ -968,11 +913,18 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Instrument> Instruments => StationInstruments?.Select(si => si.Instrument).ToList();
-        [NotMapped, JsonPropertyName("instruments")]
-        public List<EntityListItem> InstrumentsList => Instruments?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<StationInstrument> StationInstruments { get; set; }
 #endif
+
+        public Station() : base()
+        {
+            EntitySetName = "Stations";
+            Links.Add("Site");
+            Links.Add("Organisations");
+            Links.Add("Projects");
+            Links.Add("Instruments");
+        }
     }
 
     /// <summary>
@@ -994,8 +946,6 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         //[JsonIgnore]
         //public List<Phenomenon> Phenomena { get; set; }
-        //[JsonProperty("Phenomena")]
-        //public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
         public List<Phenomenon> Phenomena => PhenomenonUnits.Select(i => i.Phenomenon).ToList();
         public List<PhenomenonUnit> PhenomenonUnits { get; set; }
 #else
@@ -1004,11 +954,15 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [NotMapped, JsonIgnore]
         public List<Phenomenon> Phenomena => PhenomenonUnits?.Select(pu => pu.Phenomenon).ToList();
-        [NotMapped, JsonPropertyName("phenomena")]
-        public List<EntityListItem> PhenomenaList => Phenomena?.Select(i => i.AsEntityListItem).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<PhenomenonUnit> PhenomenonUnits { get; set; }
 #endif
+
+        public Unit() : base()
+        {
+            EntitySetName = "Units";
+            Links.Add("Phenomena");
+        }
     }
 
     /// <summary>
