@@ -14,7 +14,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Organisations")]
     public class OrganisationsController : CodedApiController<Organisation>
     {
-
         protected override IQueryable<Organisation> GetQuery(Expression<Func<Organisation, bool>> extraWhere = null)
         {
             return base.GetQuery(extraWhere)
@@ -87,7 +86,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            return GetMany<Station>(id, s => s.Stations);
+            var siteStations = GetMany<Site>(id, s => s.Sites).SelectMany(i => i.Stations);
+            return GetMany<Station>(id, s => s.Stations).Union(siteStations);
         }
 
         //GET: Organisations/5/Instruments
@@ -99,7 +99,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
-            return GetMany<Instrument>(id, s => s.Instruments);
+            var siteInstruments = GetMany<Site>(id, s => s.Sites).SelectMany(i => i.Stations).SelectMany(i => i.Instruments);
+            var stationInstruments = GetMany<Station>(id, s => s.Stations).SelectMany(i => i.Instruments);
+            return GetMany<Instrument>(id, s => s.Instruments).Union(siteInstruments).Union(stationInstruments);
         }
 
     }

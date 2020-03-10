@@ -59,15 +59,11 @@ The column [dbo].[UserDownloads].[OpenDataPlatformID] on table [dbo].[UserDownlo
 --    RAISERROR (N'Rows were detected. The schema update is terminating because data loss might occur.', 16, 127) WITH NOWAIT
 
 GO
-PRINT N'Dropping [dbo].[Observation].[vSensorThingsDatastreams]...';
-
-
-GO
-DROP VIEW [vSensorThingsDatastreams];
-
-
-GO
 PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDecade]...';
+
+
+GO
+PRINT N'Dropping [dbo].[Observation].[vSensorThingsDatastreams]...';
 
 
 GO
@@ -233,6 +229,33 @@ ALTER TABLE [dbo].[UserDownloads]
 
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[UX_Project_ProgramID_Code]...';
+
+
+GO
+ALTER TABLE [dbo].[Project]
+    ADD CONSTRAINT [UX_Project_ProgramID_Code] UNIQUE NONCLUSTERED ([ProgrammeID] ASC, [Code] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[UX_Project_ProgramID_Name]...';
+
+
+GO
+ALTER TABLE [dbo].[Project]
+    ADD CONSTRAINT [UX_Project_ProgramID_Name] UNIQUE NONCLUSTERED ([ProgrammeID] ASC, [Name] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Project].[IX_Project_ProgrammeID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Project_ProgrammeID]
+    ON [dbo].[Project]([ProgrammeID] ASC);
 
 
 GO

@@ -9,21 +9,20 @@ using Microsoft.OData.Edm;
 using Newtonsoft.Json;
 using SAEON.Core;
 using SAEON.Logs;
-using db = SAEON.Observations.Core.Entities;
-using st = SAEON.Observations.SensorThings;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http.Formatting;
-using System.Net.Http.Headers;
+using System.Reflection;
+using System.Text;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Cors;
 using System.Web.Http.Routing;
-using System.Reflection;
-using System.Text;
-using System.IO;
+using db = SAEON.Observations.Core.Entities;
+using st = SAEON.Observations.SensorThings;
 
 namespace SAEON.Observations.WebAPI
 {
@@ -215,11 +214,13 @@ namespace SAEON.Observations.WebAPI
                 config.Formatters.Clear();
                 config.Formatters.Add(new JsonMediaTypeFormatter());
                 config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
-                config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+                //config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                //config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
+                //config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+                //config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
                 config.MessageHandlers.Add(new LoggingHandler());
 
-                var querySiteUrl = Properties.Settings.Default.QuerySiteUrl.TrimEnd("//").Replace("https:","http:");
+                var querySiteUrl = Properties.Settings.Default.QuerySiteUrl.TrimEnd("//").Replace("https:", "http:");
                 var corsUrls = querySiteUrl + "," + querySiteUrl.Replace("http:", "https:");
                 Logging.Information("CORS: {corsURLS}", corsUrls);
                 var corsAttr = new EnableCorsAttribute(corsUrls, "*", "*");

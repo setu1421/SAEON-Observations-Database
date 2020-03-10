@@ -19,6 +19,9 @@
        [dbo].[UserDownloads] (Table)
        [dbo].[vImportBatchSummary] (View)
      Create
+       [dbo].[UX_Project_ProgramID_Code] (Unique Constraint)
+       [dbo].[UX_Project_ProgramID_Name] (Unique Constraint)
+       [dbo].[Project].[IX_Project_ProgrammeID] (Index)
        [dbo].[vSensorThingsAPIDatastreams] (View)
        [dbo].[vSensorThingsAPIInstrumentDates] (View)
        [dbo].[vSensorThingsAPILocations] (View)

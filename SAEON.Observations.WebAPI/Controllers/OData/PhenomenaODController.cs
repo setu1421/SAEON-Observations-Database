@@ -43,6 +43,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of the Phenomenon</param>
         /// <returns>ListOf(Offering)</returns>
         [ODataRoute("({id})/Offerings")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Offering> GetOfferings([FromODataUri] Guid id)
         {
             return GetMany(id, s => s.PhenomenonOfferings).Select(i => i.Offering);
@@ -55,6 +56,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of the Phenomenon</param>
         /// <returns>ListOf(Unit)</returns>
         [ODataRoute("({id})/Units")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Unit> GetUnits([FromODataUri] Guid id)
         {
             return GetMany(id, s => s.PhenomenonUnits).Select(i => i.Unit);
@@ -67,6 +69,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of the Phenomenon</param>
         /// <returns>ListOf(Sensor)</returns>
         [ODataRoute("({id})/Sensors")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Sensor> GetSensors([FromODataUri] Guid id)
         {
             return GetMany(id, s => s.Sensors);

@@ -140,7 +140,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>TRelated</returns>
         // GET: odata/TEntity(5)/TRelated
         //[ODataRoute("({id})/TRelated")] required on calling class
-        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)] required on calling class
         protected TRelated GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<SingleResult<TRelated>>(GetType()))
@@ -168,7 +168,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>IQueryableOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
         //[ODataRoute("({id})/TRelated")] required on calling class
-        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)] required on calling class
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<TRelated>(GetType()))

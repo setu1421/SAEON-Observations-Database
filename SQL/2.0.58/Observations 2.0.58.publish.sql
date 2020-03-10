@@ -39,7 +39,7 @@ GO
 USE [$(DatabaseName)];
 
 
---GO
+GO
 --IF EXISTS (SELECT 1
 --           FROM   [master].[dbo].[sysdatabases]
 --           WHERE  [name] = N'$(DatabaseName)')
@@ -64,6 +64,8 @@ The type for column UpdatedBy in table [dbo].[DigitalObjectIdentifiers] is curre
 
 GO
 /*
+The column [dbo].[UserDownloads].[OpenDataPlatformID] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+
 The column [dbo].[UserDownloads].[ZipURL] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
 
 The type for column AddedBy in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
@@ -90,10 +92,6 @@ The type for column UserId in table [dbo].[UserQueries] is currently  NVARCHAR (
 
 GO
 PRINT N'Dropping [dbo].[Observation].[vSensorThingsDatastreams]...';
-
-
-GO
-DROP VIEW [vSensorThingsDatastreams];
 
 
 GO
@@ -220,7 +218,8 @@ ALTER TABLE [dbo].[UserDownloads] ALTER COLUMN [UserId] VARCHAR (128) NOT NULL;
 
 GO
 ALTER TABLE [dbo].[UserDownloads]
-    ADD [ZipURL] VARCHAR (2000) NOT NULL;
+    ADD [OpenDataPlatformID] UNIQUEIDENTIFIER NOT NULL,
+        [ZipURL]             VARCHAR (2000)   NOT NULL;
 
 
 GO
@@ -263,6 +262,33 @@ PRINT N'Creating [dbo].[UX_UserQueries_UserId_Name]...';
 GO
 ALTER TABLE [dbo].[UserQueries]
     ADD CONSTRAINT [UX_UserQueries_UserId_Name] UNIQUE NONCLUSTERED ([UserId] ASC, [Name] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[UX_Project_ProgramID_Code]...';
+
+
+GO
+ALTER TABLE [dbo].[Project]
+    ADD CONSTRAINT [UX_Project_ProgramID_Code] UNIQUE NONCLUSTERED ([ProgrammeID] ASC, [Code] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[UX_Project_ProgramID_Name]...';
+
+
+GO
+ALTER TABLE [dbo].[Project]
+    ADD CONSTRAINT [UX_Project_ProgramID_Name] UNIQUE NONCLUSTERED ([ProgrammeID] ASC, [Name] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Project].[IX_Project_ProgrammeID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Project_ProgrammeID]
+    ON [dbo].[Project]([ProgrammeID] ASC);
 
 
 GO

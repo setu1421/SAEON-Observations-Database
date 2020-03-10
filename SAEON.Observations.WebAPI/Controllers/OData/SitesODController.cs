@@ -43,6 +43,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of Site</param>
         /// <returns>ListOf(Organisation)</returns>
         [ODataRoute("({id})/Organisations")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Organisation> GetOrganisations([FromODataUri] Guid id)
         {
             return GetMany<Organisation>(id, s => s.Organisations);
@@ -55,6 +56,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of Site</param>
         /// <returns>ListOf(Station)</returns>
         [ODataRoute("({id})/Stations")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Station> GetStations([FromODataUri] Guid id)
         {
             return GetMany<Station>(id, s => s.Stations);

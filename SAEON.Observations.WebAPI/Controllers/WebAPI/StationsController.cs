@@ -1,6 +1,8 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -12,13 +14,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Stations")]
     public class StationsController : CodedApiController<Station>
     {
-        //protected override List<Expression<Func<Station, object>>> GetIncludes()
-        //{
-        //    var list = base.GetIncludes();
-        //    list.Add(i => i.Site);
-        //    list.Add(i => i.Instruments);
-        //    return list;
-        //}
+        protected override IQueryable<Station> GetQuery(Expression<Func<Station, bool>> extraWhere = null)
+        {
+            return base.GetQuery(extraWhere).Include(i => i.Site).Include(i => i.Instruments);
+        }
 
         /// <summary>
         /// All Stations
@@ -96,7 +95,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Organisations")]
         public IQueryable<Organisation> GetOrganisations([FromUri] Guid id)
         {
-            return GetMany<Organisation>(id, s => s.Organisations);
+            var site = GetSingle(id, s => s.Site);
+            var siteOrganiations = DbContext.Sites.Where(i => i.Id == site.Id).SelectMany(i => i.Organisations);
+            return GetMany(id, s => s.Organisations).Union(siteOrganiations); ;
         }
 
         // GET: Stations/5/Projects

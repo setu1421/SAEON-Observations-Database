@@ -42,6 +42,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of the Station</param>
         /// <returns>Site</returns>
         [ODataRoute("({id})/Site")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public Site GetSite([FromODataUri] Guid id)
         {
             return GetSingle(id, s => s.Site);
@@ -54,11 +55,12 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of the Station</param>
         /// <returns>ListOf(Organisation(</returns>
         [ODataRoute("({id})/Organisations")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Organisation> GetOrganisations([FromODataUri] Guid id)
         {
             var site = GetSingle(id, s => s.Site);
             var siteOrganiations = DbContext.Sites.Where(i => i.Id == site.Id).SelectMany(i => i.Organisations);
-            return GetMany(id, s => s.Organisations).Union(siteOrganiations);;
+            return GetMany(id, s => s.Organisations).Union(siteOrganiations); ;
         }
 
         // GET: odata/Stations(5)/Projects
@@ -68,6 +70,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of the Station</param>
         /// <returns>ListOf(Project(</returns>
         [ODataRoute("({id})/Projects")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Project> GetProjects([FromODataUri] Guid id)
         {
             return GetMany(id, s => s.Projects);
@@ -80,6 +83,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of the Station</param>
         /// <returns>ListOf(Instrument(</returns>
         [ODataRoute("({id})/Instruments")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Instrument> GetInstruments([FromODataUri] Guid id)
         {
             return GetMany(id, s => s.Instruments);

@@ -44,6 +44,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of the Unit</param>
         /// <returns>ListOf(Phenomenon)</returns>
         [ODataRoute("({id})/Phenomena")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Phenomenon> GetPhenomena([FromODataUri] Guid id)
         {
             return GetMany(id, s => s.PhenomenonUnits).Select(i => i.Phenomenon);

@@ -1,6 +1,8 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -12,13 +14,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Projects")]
     public class ProjectsController : CodedApiController<Project>
     {
-        //protected override List<Expression<Func<Project, object>>> GetIncludes()
-        //{
-        //    var list = base.GetIncludes();
-        //    list.Add(i => i.Programme);
-        //    list.Add(i => i.Stations);
-        //    return list;
-        //}
+        protected override IQueryable<Project> GetQuery(Expression<Func<Project, bool>> extraWhere = null)
+        {
+            return base.GetQuery(extraWhere).Include(i => i.Programme).Include(i => i.Stations);
+        }
 
         /// <summary>
         /// All Projects
@@ -68,6 +67,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// </summary>
         /// <param name="id">Id of Project</param>
         /// <returns>Programme</returns>
+        [HttpGet] // No idea why required here
         [Route("{id:guid}/Programme")]
         [ResponseType(typeof(Programme))]
         public async Task<IHttpActionResult> ProgrammeAsync([FromUri] Guid id)

@@ -14,14 +14,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Instruments")]
     public class InstrumentsController : CodedApiController<Instrument>
     {
-        //protected override List<Expression<Func<Instrument, object>>> GetIncludes()
-        //{
-        //    var list = base.GetIncludes();
-        //    list.Add(i => i.Stations);
-        //    list.Add(i => i.Sensors);
-        //    return list;
-        //}
-
         protected override IQueryable<Instrument> GetQuery(Expression<Func<Instrument, bool>> extraWhere = null)
         {
             return base.GetQuery(extraWhere)

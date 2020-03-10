@@ -44,6 +44,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of Instrument</param>
         /// <returns>ListOf(Organisation)</returns>
         [ODataRoute("({id})/Organisations")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Organisation> GetOrganisations([FromODataUri] Guid id)
         {
             var siteOrganisations = GetMany(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations);
@@ -58,6 +59,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of Instrument</param>
         /// <returns>ListOf(Station)</returns>
         [ODataRoute("({id})/Stations")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Station> GetStations([FromODataUri] Guid id)
         {
             return GetMany(id, s => s.Stations);
@@ -70,6 +72,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id">Id of Instrument</param>
         /// <returns>ListOf(Sensor)</returns>
         [ODataRoute("({id})/Sensors")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Sensor> GetSensors([FromODataUri] Guid id)
         {
             return GetMany(id, s => s.Sensors);

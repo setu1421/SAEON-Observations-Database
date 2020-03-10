@@ -95,10 +95,6 @@ PRINT N'Dropping [dbo].[Observation].[vSensorThingsDatastreams]...';
 
 
 GO
-DROP VIEW [vSensorThingsDatastreams];
-
-
-GO
 PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDecade]...';
 
 
@@ -328,6 +324,33 @@ PRINT N'Creating [dbo].[UX_UserQueries_UserId_Name]...';
 GO
 ALTER TABLE [dbo].[UserQueries]
     ADD CONSTRAINT [UX_UserQueries_UserId_Name] UNIQUE NONCLUSTERED ([UserId] ASC, [Name] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[UX_Project_ProgramID_Code]...';
+
+
+GO
+ALTER TABLE [dbo].[Project]
+    ADD CONSTRAINT [UX_Project_ProgramID_Code] UNIQUE NONCLUSTERED ([ProgrammeID] ASC, [Code] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[UX_Project_ProgramID_Name]...';
+
+
+GO
+ALTER TABLE [dbo].[Project]
+    ADD CONSTRAINT [UX_Project_ProgramID_Name] UNIQUE NONCLUSTERED ([ProgrammeID] ASC, [Name] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Project].[IX_Project_ProgrammeID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Project_ProgrammeID]
+    ON [dbo].[Project]([ProgrammeID] ASC);
 
 
 GO

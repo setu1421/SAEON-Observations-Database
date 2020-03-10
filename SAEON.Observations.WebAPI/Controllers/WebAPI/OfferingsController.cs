@@ -1,6 +1,5 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -17,7 +16,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     {
         protected override IQueryable<Offering> GetQuery(Expression<Func<Offering, bool>> extraWhere = null)
         {
-            return base.GetQuery(extraWhere).Include(i => i.PhenomenonOfferings.Select(po => po.Phenomenon));
+            return base.GetQuery(extraWhere);//.Include(i => i.PhenomenonOfferings.Select(po => po.Phenomenon));
         }
 
         /// <summary>

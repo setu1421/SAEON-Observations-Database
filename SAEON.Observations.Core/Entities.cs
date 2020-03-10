@@ -51,6 +51,9 @@ namespace SAEON.Observations.Core.Entities
 #endif
         public Guid Id { get; set; }
 
+        /// <summary>
+        /// Navigation links of this Entity
+        /// </summary>
         [NotMapped]
         public Dictionary<string, string> NavigationLinks
         {
@@ -83,6 +86,9 @@ namespace SAEON.Observations.Core.Entities
 #endif
         public int Id { get; set; }
 
+        /// <summary>
+        /// Navigation links of this Entity
+        /// </summary>
         [NotMapped]
         public Dictionary<string, string> NavigationLinks
         {
@@ -387,9 +393,9 @@ namespace SAEON.Observations.Core.Entities
         ///// <summary>
         ///// Phenomena of this Offering
         ///// </summary>
-        //[JsonIgnore]
-        //public List<Phenomenon> Phenomena { get; set; }
+        [JsonIgnore]
         public List<Phenomenon> Phenomena => PhenomenonOfferings?.Select(i => i.Phenomenon).ToList();
+        [JsonIgnore]
         public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
 #else
         /// <summary>
@@ -399,6 +405,7 @@ namespace SAEON.Observations.Core.Entities
         public List<Phenomenon> Phenomena => PhenomenonOfferings?.Select(po => po.Phenomenon).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
+#endif
 
         public Offering() : base()
         {
@@ -406,7 +413,6 @@ namespace SAEON.Observations.Core.Entities
             Links.Add("Phenomena");
 
         }
-#endif
     }
 
     /// <summary>
@@ -505,25 +511,22 @@ namespace SAEON.Observations.Core.Entities
         [Url, StringLength(250)]
         public string Url { get; set; }
 
-        //public bool HasOfferings { get { return Offerings?.Any() ?? false; } }
-        //public bool HasUnits { get { return Units.Any() ?? false; } }
-
         // Navigation
 #if NET472
         /// <summary>
         /// Offerings of this Phenomenon
         /// </summary>
-        //[JsonIgnore]
-        //public List<Offering> Offerings { get; set; }
-        public List<Offering> Offerings => PhenomenonOfferings.Select(i => i.Offering).ToList();
+        [JsonIgnore]
+        public List<Offering> Offerings => PhenomenonOfferings?.Select(i => i.Offering).ToList();
+        [JsonIgnore]
         public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
 
         ///// <summary>
         ///// Units of this Phenomenon
         ///// </summary>
-        //[JsonIgnore]
-        //public List<Unit> Units { get; set; }
-        public List<Unit> Units => PhenomenonUnits.Select(i => i.Unit).ToList();
+        [JsonIgnore]
+        public List<Unit> Units => PhenomenonUnits?.Select(i => i.Unit).ToList();
+        [JsonIgnore]
         public List<PhenomenonUnit> PhenomenonUnits { get; set; }
 
         /// <summary>
@@ -535,7 +538,7 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Offerings of this Phenomenon
         /// </summary>
-        [NotMapped, JsonIgnore]
+        [JsonIgnore]
         public List<Offering> Offerings => PhenomenonOfferings?.Select(ph => ph.Offering).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<PhenomenonOffering> PhenomenonOfferings { get; set; }
@@ -543,7 +546,7 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Units of this Phenomenon
         /// </summary>
-        [NotMapped, JsonIgnore]
+        [JsonIgnore]
         public List<Unit> Units => PhenomenonUnits?.Select(pu => pu.Unit).ToList();
         [JsonIgnore, SwaggerIgnore]
         public List<PhenomenonUnit> PhenomenonUnits { get; set; }
@@ -944,9 +947,9 @@ namespace SAEON.Observations.Core.Entities
         /// <summary>
         /// Phenomena of this Unit
         /// </summary>
-        //[JsonIgnore]
-        //public List<Phenomenon> Phenomena { get; set; }
-        public List<Phenomenon> Phenomena => PhenomenonUnits.Select(i => i.Phenomenon).ToList();
+        [JsonIgnore]
+        public List<Phenomenon> Phenomena => PhenomenonUnits?.Select(i => i.Phenomenon).ToList();
+        [JsonIgnore]
         public List<PhenomenonUnit> PhenomenonUnits { get; set; }
 #else
         /// <summary>

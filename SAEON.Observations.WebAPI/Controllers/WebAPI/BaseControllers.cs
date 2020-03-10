@@ -123,9 +123,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select TRelated</param>
         /// <returns>TaskOf(IHttpActionResult)</returns>
-        [HttpGet]
-        //[ResponseType(typeof(TRelated))] Required in derived classes
-        //[Route("{id:guid}/TRelated")] Required in derived classes
+        //[HttpGet] Required in calling classes
+        //[ResponseType(typeof(TRelated))] Required in calling classes
+        //[Route("{id:guid}/TRelated")] Required in calling classes
         protected async Task<IHttpActionResult> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
@@ -148,6 +148,37 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             }
         }
 
+        /// <summary>
+        /// Related Entity TEntity.TRelated
+        /// </summary>
+        /// <typeparam name="TRelated"></typeparam>
+        /// <param name="id">Id of TEntity</param>
+        /// <param name="select">Lambda to select TRelated</param>
+        /// <returns>TaskOf(IHttpActionResult)</returns>
+        //[HttpGet] Required in calling classes
+        //[ResponseType(typeof(TRelated))] Required in calling classes
+        //[Route("{id:guid}/TRelated")] Required in calling classes
+        protected TRelated GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
+        {
+            using (Logging.MethodCall<TEntity, TRelated>(GetType()))
+            {
+                try
+                {
+                    SetBaseUrl();
+                    if (!GetQuery(i => (i.Id == id)).Any())
+                    {
+                        Logging.Error("{id} not found", id);
+                        throw new ArgumentException($"{id} not found");
+                    }
+                    return GetQuery(i => (i.Id == id)).Select(select).FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
 
         /// <summary>
         /// Get IQueryableOf(TRelated)
@@ -156,7 +187,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
         /// <returns>IQueryableOf(TRelated)</returns>
-        [HttpGet]
+        //[HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected IQueryable<TRelated> GetManyIdEntity<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IdEntity
         {
@@ -182,7 +213,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
         /// <returns>IQueryableOf(TRelated)</returns>
-        [HttpGet]
+        //[HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
         protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : NamedEntity
         {

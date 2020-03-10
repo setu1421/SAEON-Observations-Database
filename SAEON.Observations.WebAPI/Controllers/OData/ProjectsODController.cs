@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
-using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.OData
@@ -46,6 +43,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         ///// <param name="id">Id of the Project</param>
         ///// <returns>Programme</returns>
         [ODataRoute("({id})/Programme")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public Programme GetProgramme([FromODataUri] Guid id)
         {
             return GetSingle(id, i => i.Programme);
@@ -57,6 +55,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of the Project</param>
         /// <returns>ListOf(Station(</returns>
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         [ODataRoute("({id})/Stations")]
         public IQueryable<Station> GetStations([FromODataUri] Guid id)
         {
