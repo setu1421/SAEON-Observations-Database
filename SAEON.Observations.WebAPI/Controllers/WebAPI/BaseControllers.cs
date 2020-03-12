@@ -27,7 +27,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [NotMapped]
         public List<string> NavigationLinks { get; } = new List<string>();
 
-        protected void SetBaseUrl()
+        protected void UpdateRequest(bool isMany)
         {
             EntityConfig.BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/Api";
         }
@@ -71,7 +71,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    SetBaseUrl();
+                    UpdateRequest(true);
                     return GetQuery();
                 }
                 catch (Exception ex)
@@ -99,7 +99,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    SetBaseUrl();
+                    UpdateRequest(false);
                     TEntity item = await GetQuery(i => (i.Id == id)).FirstOrDefaultAsync();
                     if (item == null)
                     {
@@ -132,7 +132,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    SetBaseUrl();
+                    UpdateRequest(false);
                     if (!await GetQuery(i => (i.Id == id)).AnyAsync())
                     {
                         Logging.Error("{id} not found", id);
@@ -164,7 +164,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    SetBaseUrl();
+                    UpdateRequest(false);
                     if (!GetQuery(i => (i.Id == id)).Any())
                     {
                         Logging.Error("{id} not found", id);
@@ -195,7 +195,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    SetBaseUrl();
+                    UpdateRequest(true);
                     return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)
@@ -221,7 +221,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    SetBaseUrl();
+                    UpdateRequest(true);
                     return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)
@@ -256,7 +256,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    SetBaseUrl();
+                    UpdateRequest(false);
                     TEntity item = await GetQuery(i => (i.Name == name)).FirstOrDefaultAsync();
                     if (item == null)
                     {
@@ -297,7 +297,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
-                    SetBaseUrl();
+                    UpdateRequest(false);
                     TEntity item = await GetQuery(i => (i.Code == code)).FirstOrDefaultAsync();
                     if (item == null)
                     {

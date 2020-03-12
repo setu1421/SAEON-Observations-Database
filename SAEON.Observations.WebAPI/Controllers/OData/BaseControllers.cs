@@ -55,16 +55,19 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         protected void UpdateRequest(bool isMany)
         {
             BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/OData";
-            var uri = Request.RequestUri.ToString();
-            if (isMany && !uri.ToLowerInvariant().Contains("$expand="))
-            {
-                if (!uri.ToLowerInvariant().Contains("$count=true"))
-                {
-                    if (!uri.Contains("?")) uri += "?";
-                    uri += "$count=true";
-                    Request.RequestUri = new Uri(uri);
-                }
-            }
+            //if (isMany)
+            //{
+            //    var uri = Request.RequestUri.ToString();
+            //    var query = Request.RequestUri.Query.ToLowerInvariant();
+            //    if (!query.Contains("$count=true"))
+            //    {
+            //        if (string.IsNullOrWhiteSpace(query))
+            //            uri += "?$count = true";
+            //        else
+            //            uri += "&$count=true";
+            //        Request.RequestUri = new Uri(uri);
+            //    }
+            //}
             Request.Headers.TryAddWithoutValidation("Prefer", "odata.include-annotations=*");
         }
 

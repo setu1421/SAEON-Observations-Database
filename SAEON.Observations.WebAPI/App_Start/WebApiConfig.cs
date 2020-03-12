@@ -234,7 +234,7 @@ namespace SAEON.Observations.WebAPI
                 config.MapHttpAttributeRoutes(new InheritedDirectRouteProvider());
 
                 // OData
-                config.Filter().Expand().Select().OrderBy().MaxTop(null).Count();
+                config.Filter().Expand().Select().OrderBy().MaxTop(null).Count().MaxTop(500);
                 config.MapControllerBoundODataServiceRoute("OData", "OData", ObservationsEdmModel());
                 config.MapControllerBoundODataServiceRoute("Internal", "Internal", InternalEdmModel());
                 config.MapControllerBoundODataServiceRoute2("SensorThings", "SensorThings", st.Config.GetEdmModel());
