@@ -59,7 +59,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [ODataRoute("({id})/Stations")]
         public IQueryable<Station> GetStations([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Stations);
+            return GetManyWithGuidId(id, s => s.Stations);
         }
 
     }

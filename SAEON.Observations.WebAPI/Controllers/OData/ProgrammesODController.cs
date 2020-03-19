@@ -47,7 +47,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Project> GetProjects([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Projects);
+            return GetManyWithGuidId(id, s => s.Projects);
         }
     }
 }

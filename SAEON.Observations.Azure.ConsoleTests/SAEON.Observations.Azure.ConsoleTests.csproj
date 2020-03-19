@@ -71,8 +71,8 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Azure.CosmosDB, Version=1.0.119.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Azure.CosmosDB.1.0.119\lib\net472\SAEON.Azure.CosmosDB.dll</HintPath>
+    <Reference Include="SAEON.Azure.CosmosDB, Version=1.0.120.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Azure.CosmosDB.1.0.120\lib\net472\SAEON.Azure.CosmosDB.dll</HintPath>
     </Reference>
     <Reference Include="SAEON.Azure.Storage, Version=1.0.58.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Azure.Storage.1.0.58\lib\net472\SAEON.Azure.Storage.dll</HintPath>

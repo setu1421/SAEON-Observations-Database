@@ -172,7 +172,35 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         // GET: odata/TEntity(5)/TRelated
         //[ODataRoute("({id})/TRelated")] required on calling class
         //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)] required on calling class
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : GuidIdEntity
+        protected IQueryable<TRelated> GetManyWithGuidId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : GuidIdEntity
+        {
+            using (Logging.MethodCall<TRelated>(GetType()))
+            {
+                try
+                {
+                    UpdateRequest(true);
+                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    return GetQuery(i => i.Id == id).SelectMany(select).Take(MaxAll);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get IQueryableOf(TRelated)
+        /// </summary>
+        /// <typeparam name="TRelated"></typeparam>
+        /// <param name="id">Id of TEntity</param>
+        /// <param name="select">Lambda to select ListOf(TRelated)</param>
+        /// <returns>IQueryableOf(TRelated)</returns>
+        // GET: odata/TEntity(5)/TRelated
+        //[ODataRoute("({id})/TRelated")] required on calling class
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)] required on calling class
+        protected IQueryable<TRelated> GetManyWithIntId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IntIdEntity
         {
             using (Logging.MethodCall<TRelated>(GetType()))
             {

@@ -291,7 +291,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopwatch.Start();
                 var stageStopwatch = new Stopwatch();
                 stageStopwatch.Start();
-                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.45, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.46, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 stageStopwatch.Stop();
                 Logging.Information("Imported {count:N0} values in {elapsed}", values.Count, stageStopwatch.Elapsed);
@@ -306,7 +306,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     Logging.Information("Saving {count:N0} observations.", values.Count);
 
                     // Create DataTable from good values
-                    stageStopwatch.Start();
+                    stageStopwatch.Restart();
                     Logging.Information("Creating DataTable");
                     var dtObservations = new DataTable("Observations");
                     dtObservations.Columns.Add("ImportBatchID", typeof(Guid));
@@ -394,7 +394,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             batch.Save();
 
                             Logging.Information("Creating error logs");
-                            stageStopwatch.Start();
+                            stageStopwatch.Restart();
                             lastProgress100 = -1;
                             var badValues = values.Where(i => !i.IsValid).OrderBy(i => i.RowNum).ToList();
                             nMax = badValues.Count;
@@ -509,11 +509,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             stageStopwatch.Stop();
                             Logging.Information("Created {count:N0} error logs in {time}", nMax, stageStopwatch.Elapsed);
                             // Bulk insert
-                            stageStopwatch.Start();
+                            stageStopwatch.Restart();
                             Logging.Information("Starting bulk insert");
                             using (var bulkInsert = new SqlBulkCopy((SqlConnection)connScope.CurrentConnection, SqlBulkCopyOptions.CheckConstraints | SqlBulkCopyOptions.FireTriggers, null))
                             {
-                                bulkInsert.BatchSize = 10000;
+                                bulkInsert.BatchSize = 25000;
                                 bulkInsert.BulkCopyTimeout = 5 * 60 * 60;
                                 bulkInsert.NotifyAfter = bulkInsert.BatchSize;
                                 bulkInsert.SqlRowsCopied += BulkInsert_SqlRowsCopied;
@@ -531,6 +531,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             // Documents
                             CreateDocuments(connScope, batch.Id);
                             Auditing.Log(GetType(), new MethodCallParameters { { "ID", batch.Id }, { "Code", batch.Code }, { "Status", batch.Status } });
+                            durationStopwatch.Stop();
                             batch.DurationInSecs = (int)durationStopwatch.Elapsed.TotalSeconds;
                             batch.Save();
                             tranScope.Complete();

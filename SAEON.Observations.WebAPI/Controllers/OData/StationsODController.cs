@@ -60,7 +60,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         {
             var site = GetSingle(id, s => s.Site);
             var siteOrganiations = DbContext.Sites.Where(i => i.Id == site.Id).SelectMany(i => i.Organisations);
-            return GetMany(id, s => s.Organisations).Union(siteOrganiations); ;
+            return GetManyWithGuidId(id, s => s.Organisations).Union(siteOrganiations); ;
         }
 
         // GET: odata/Stations(5)/Projects
@@ -73,7 +73,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Project> GetProjects([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Projects);
+            return GetManyWithGuidId(id, s => s.Projects);
         }
 
         // GET: odata/Stations(5)/Instruments
@@ -86,7 +86,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Instrument> GetInstruments([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Instruments);
+            return GetManyWithGuidId(id, s => s.Instruments);
         }
     }
 }

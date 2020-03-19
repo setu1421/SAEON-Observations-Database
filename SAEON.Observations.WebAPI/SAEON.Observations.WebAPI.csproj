@@ -382,14 +382,14 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.AspNet.Common, Version=1.0.22.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.AspNet.Common.1.0.22\lib\net472\SAEON.AspNet.Common.dll</HintPath>
+    <Reference Include="SAEON.AspNet.Common, Version=1.0.23.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.AspNet.Common.1.0.23\lib\net472\SAEON.AspNet.Common.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.AspNet.Mvc, Version=1.0.40.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.AspNet.Mvc.1.0.40\lib\net472\SAEON.AspNet.Mvc.dll</HintPath>
+    <Reference Include="SAEON.AspNet.Mvc, Version=1.0.41.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.AspNet.Mvc.1.0.41\lib\net472\SAEON.AspNet.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.AspNet.WebApi, Version=1.0.67.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.AspNet.WebApi.1.0.67\lib\net472\SAEON.AspNet.WebApi.dll</HintPath>
+    <Reference Include="SAEON.AspNet.WebApi, Version=1.0.69.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.AspNet.WebApi.1.0.69\lib\net472\SAEON.AspNet.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="SAEON.Core, Version=1.0.21.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Core.1.0.21\lib\net472\SAEON.Core.dll</HintPath>
@@ -397,11 +397,11 @@
     <Reference Include="SAEON.Logs.NetFramework, Version=1.0.12.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Logs.NetFramework.1.0.12\lib\net472\SAEON.Logs.NetFramework.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.Core, Version=1.0.242.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.Core.1.0.242\lib\net472\SAEON.Observations.Core.dll</HintPath>
+    <Reference Include="SAEON.Observations.Core, Version=1.0.247.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.Core.1.0.247\lib\net472\SAEON.Observations.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.SensorThings, Version=1.0.116.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.SensorThings.1.0.116\lib\net472\SAEON.Observations.SensorThings.dll</HintPath>
+    <Reference Include="SAEON.Observations.SensorThings, Version=1.0.121.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.SensorThings.1.0.121\lib\net472\SAEON.Observations.SensorThings.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.9.0\lib\net46\Serilog.dll</HintPath>

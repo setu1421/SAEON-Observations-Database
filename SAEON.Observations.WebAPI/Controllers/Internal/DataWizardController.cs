@@ -8,7 +8,6 @@ using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.IO;
@@ -22,7 +21,6 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
-using System.Xml.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
@@ -236,8 +234,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
             var phenomenonOfferingIds = features.Select(f => f.PhenomenonOfferingId);
             var phenomenonUnitIds = features.Select(f => f.PhenomenonUnitId);
-            //var observations = q.Join(db.Observations.Where(i => (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
-            var observations = q.Join(DbContext.Observations.Where(i => (i.StatusId == null) || (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
+            //var observations = q.Join(db.ObservationExpansions.Where(i => (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
+            var observations = q.Join(DbContext.ObservationExpansions.Where(i => (i.StatusId == null) || (i.StatusName == "Verified")), l => l.ImportBatchId, r => r.ImportBatchId, (l, r) => r)
                     .Where(i => phenomenonOfferingIds.Contains(i.PhenomenonOfferingId))
                     .Where(i => phenomenonUnitIds.Contains(i.PhenomenonUnitId))
                     .Where(i => (i.ValueDate >= input.StartDate) && (i.ValueDate <= input.EndDate))

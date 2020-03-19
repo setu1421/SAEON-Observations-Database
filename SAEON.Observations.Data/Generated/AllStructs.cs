@@ -407,6 +407,8 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VObservationJSON = @"vObservationJSON";
         
+		public static readonly string VObservationODatum = @"vObservationOData";
+        
 		public static readonly string VOfferingPhenomena = @"vOfferingPhenomena";
         
 		public static readonly string VOrganisationInstrument = @"vOrganisationInstrument";

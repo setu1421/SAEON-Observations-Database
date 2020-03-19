@@ -46,7 +46,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Site> GetSites([FromODataUri] Guid id)
         {
-            return GetMany<Site>(id, s => s.Sites);
+            return GetManyWithGuidId<Site>(id, s => s.Sites);
         }
 
         //GET: odata/Organisations(5)/Stations
@@ -59,8 +59,8 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Station> GetStations([FromODataUri] Guid id)
         {
-            var siteStations = GetMany<Site>(id, s => s.Sites).SelectMany(i => i.Stations);
-            return GetMany<Station>(id, s => s.Stations).Union(siteStations);
+            var siteStations = GetManyWithGuidId<Site>(id, s => s.Sites).SelectMany(i => i.Stations);
+            return GetManyWithGuidId<Station>(id, s => s.Stations).Union(siteStations);
         }
 
         //GET: odata/Organisations(5)/Instruments
@@ -73,9 +73,9 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Instrument> GetInstruments([FromODataUri] Guid id)
         {
-            var siteInstruments = GetMany<Site>(id, s => s.Sites).SelectMany(i => i.Stations).SelectMany(i => i.Instruments);
-            var stationInstruments = GetMany<Station>(id, s => s.Stations).SelectMany(i => i.Instruments);
-            return GetMany<Instrument>(id, s => s.Instruments).Union(siteInstruments).Union(stationInstruments);
+            var siteInstruments = GetManyWithGuidId<Site>(id, s => s.Sites).SelectMany(i => i.Stations).SelectMany(i => i.Instruments);
+            var stationInstruments = GetManyWithGuidId<Station>(id, s => s.Stations).SelectMany(i => i.Instruments);
+            return GetManyWithGuidId<Instrument>(id, s => s.Instruments).Union(siteInstruments).Union(stationInstruments);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SAEON.AspNet.Common;
 using SAEON.AspNet.WebApi;
 using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
@@ -11,7 +12,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -19,7 +19,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    //[ClientAuthorization("SAEON.Observations.QuerySite")] //Uncomment when going live
+    [ClientAuthorization(Constants.ClientIDQuerySite)]
     [TenantAuthorization]
     public abstract class BaseController : ApiController
     {
@@ -30,7 +30,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 
         protected BaseController()
         {
-            var config = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<UserDownload, UserDownload>()
                     .ForMember(dest => dest.Id, opt => opt.Ignore())
                     .ForMember(dest => dest.AddedBy, opt => opt.Ignore())

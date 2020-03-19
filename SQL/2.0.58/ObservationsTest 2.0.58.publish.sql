@@ -60,6 +60,7 @@ The column [dbo].[UserDownloads].[OpenDataPlatformID] on table [dbo].[UserDownlo
 
 GO
 PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDecade]...';
+Drop view vSensorThingsDatastreams;
 
 
 GO

@@ -234,40 +234,6 @@ public partial class Admin_Programmes : System.Web.UI.Page
     //    }
     //}
 
-    [DirectMethod]
-    public void ConfirmDeleteProjectLink(Guid aID)
-    {
-        MessageBoxes.Confirm(
-            "Confirm Delete",
-            String.Format("DirectCall.DeleteProjectLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
-            "Are you sure you want to delete this project link?");
-    }
-
-    [DirectMethod]
-    public void DeleteProjectLink(Guid aID)
-    {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
-        {
-            try
-            {
-                Project project = new Project(aID);
-                project.ProgrammeID = null;
-                project.Save();
-                ProjectLinksGrid.DataBind();
-            }
-            catch (Exception ex)
-            {
-                Logging.Exception(ex);
-                MessageBoxes.Error(ex, "Error", "Unable to delete project link");
-            }
-        }
-    }
-
-    [DirectMethod]
-    public void AddProjectClick(object sender, DirectEventArgs e)
-    {
-        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Projects"));
-    }
     #endregion
 
 }

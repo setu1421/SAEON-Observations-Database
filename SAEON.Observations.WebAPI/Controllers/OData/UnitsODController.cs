@@ -47,7 +47,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Phenomenon> GetPhenomena([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.PhenomenonUnits).Select(i => i.Phenomenon);
+            return GetManyWithGuidId(id, s => s.PhenomenonUnits).Select(i => i.Phenomenon);
         }
     }
 }

@@ -139,27 +139,27 @@ namespace SAEON.Observations.WebAPI
 
     public static class ODataExtensions
     {
-        public static EntitySetConfiguration<TEntity> IgnoreEntityItemLists<TEntity>(this EntitySetConfiguration<TEntity> source) where TEntity : db.NamedEntity
-        {
-            //using (Logging.MethodCall(typeof(ODataExtensions)))
-            {
-                var type = typeof(TEntity);
-                foreach (var prop in type.GetProperties().Where(i => i.Name.EndsWith("List")))
-                {
-                    var parameter = Expression.Parameter(type, "entity");
-                    var property = Expression.Property(parameter, prop);
-                    var funcType = typeof(Func<,>).MakeGenericType(type, prop.PropertyType);
-                    var lambda = Expression.Lambda(funcType, property, parameter);
-                    source.EntityType.GetType()
-                       .GetMethod("Ignore")
-                       .MakeGenericMethod(prop.PropertyType)
-                       .Invoke(source.EntityType, new[] { lambda });
-                }
-            }
-            return source;
-        }
+        //public static EntitySetConfiguration<TEntity> IgnoreEntityItemLists<TEntity>(this EntitySetConfiguration<TEntity> source) where TEntity : db.NamedEntity
+        //{
+        //    //using (Logging.MethodCall(typeof(ODataExtensions)))
+        //    {
+        //        var type = typeof(TEntity);
+        //        foreach (var prop in type.GetProperties().Where(i => i.Name.EndsWith("List")))
+        //        {
+        //            var parameter = Expression.Parameter(type, "entity");
+        //            var property = Expression.Property(parameter, prop);
+        //            var funcType = typeof(Func<,>).MakeGenericType(type, prop.PropertyType);
+        //            var lambda = Expression.Lambda(funcType, property, parameter);
+        //            source.EntityType.GetType()
+        //               .GetMethod("Ignore")
+        //               .MakeGenericMethod(prop.PropertyType)
+        //               .Invoke(source.EntityType, new[] { lambda });
+        //        }
+        //    }
+        //    return source;
+        //}
 
-        public static EntitySetConfiguration<TEntity> IgnoreProperty<TEntity>(this EntitySetConfiguration<TEntity> source, string propertyName) where TEntity : db.NamedEntity
+        public static EntitySetConfiguration<TEntity> IgnoreProperty<TEntity>(this EntitySetConfiguration<TEntity> source, string propertyName) where TEntity : db.BaseEntity
         {
             //using (Logging.MethodCall(typeof(ODataExtensions)))
             {
@@ -186,16 +186,18 @@ namespace SAEON.Observations.WebAPI
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "Observations" };
             builder.EntitySet<db.Inventory>("Inventory");
-            builder.EntitySet<db.Instrument>("Instruments").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.Offering>("Offerings").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.Organisation>("Organisations").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.Phenomenon>("Phenomena").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.Programme>("Programmes").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.Project>("Projects").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.Sensor>("Sensors").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.Site>("Sites").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.Station>("Stations").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.Unit>("Units").IgnoreEntityItemLists().IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.ObservationExpansion>("ObservationExpansions").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.ObservationOData>("Observations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Instrument>("Instruments").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Offering>("Offerings").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Organisation>("Organisations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Phenomenon>("Phenomena").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Programme>("Programmes").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Project>("Projects").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Sensor>("Sensors").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Site>("Sites").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Station>("Stations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Unit>("Units").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             return builder.GetEdmModel();
         }
 

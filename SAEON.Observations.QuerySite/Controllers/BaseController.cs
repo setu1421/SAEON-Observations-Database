@@ -1,8 +1,5 @@
-﻿using IdentityModel.Client;
-using Newtonsoft.Json;
-using SAEON.AspNet.Common;
+﻿using Newtonsoft.Json;
 using SAEON.Logs;
-using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
@@ -10,8 +7,6 @@ using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Mime;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;

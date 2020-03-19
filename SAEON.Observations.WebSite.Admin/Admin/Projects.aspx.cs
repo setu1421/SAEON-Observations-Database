@@ -77,10 +77,7 @@ public partial class Admin_Projects : System.Web.UI.Page
                     project.Code = tfCode.Text.Trim();
                 if (tfName.HasValue())
                     project.Name = tfName.Text.Trim();
-                if (cbProgramme.SelectedItem.Value == null)
-                    project.ProgrammeID = null;
-                else
-                    project.ProgrammeID = Utilities.MakeGuid(cbProgramme.SelectedItem.Value.Trim());
+                project.ProgrammeID = Utilities.MakeGuid(cbProgramme.SelectedItem.Value.Trim());
                 if (tfDescription.HasValue())
                     project.Description = tfDescription.Text;
                 if (tfUrl.HasValue())

@@ -92,6 +92,7 @@ The type for column UserId in table [dbo].[UserQueries] is currently  NVARCHAR (
 
 GO
 PRINT N'Dropping [dbo].[Observation].[vSensorThingsDatastreams]...';
+Drop view vSensorThingsDatastreams;
 
 
 GO
