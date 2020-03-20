@@ -1,14 +1,14 @@
-using System.Web.Http;
-using WebActivatorEx;
+using SAEON.AspNet.Common;
 using SAEON.Observations.WebAPI;
 using Swashbuckle.Application;
 using Swashbuckle.Swagger;
-using System.Linq;
-using System.Web.Hosting;
-using System.Web.Http.Description;
 using System.Collections.Generic;
 using System.Configuration;
-using SAEON.AspNet.Common;
+using System.Linq;
+using System.Web.Hosting;
+using System.Web.Http;
+using System.Web.Http.Description;
+using WebActivatorEx;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -66,7 +66,7 @@ namespace SAEON.Observations.WebAPI
                     @in = "header",
                     type = "string",
                     description = "Tenant ID",
-                    @default = ConfigurationManager.AppSettings[Constants.TenantDefault] ?? "SAEON",
+                    @default = ConfigurationManager.AppSettings[AspNetConstants.TenantDefault] ?? "SAEON",
                     required = true
                 });
             }
@@ -325,7 +325,7 @@ namespace SAEON.Observations.WebAPI
                     // "apiKeyIn" can either be "query" or "header"                                                
                     //
                     //c.EnableApiKeySupport("apiKey", "header");
-                }); 
+                });
         }
     }
 }

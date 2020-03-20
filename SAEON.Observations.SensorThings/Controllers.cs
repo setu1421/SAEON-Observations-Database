@@ -238,7 +238,7 @@ namespace SAEON.Observations.SensorThings
                 if (!query.Contains("$count=true"))
                 {
                     if (string.IsNullOrWhiteSpace(query))
-                        uri += "?$count = true";
+                        uri += "?$count=true";
                     else
                         uri += "&$count=true";
                     Request.RequestUri = new Uri(uri);
@@ -641,10 +641,13 @@ namespace SAEON.Observations.SensorThings
             if (isMany)
             {
                 var uri = Request.RequestUri.ToString();
-                if (!uri.ToLowerInvariant().Contains("$count=true"))
+                var query = Request.RequestUri.Query.ToLowerInvariant();
+                if (!query.Contains("$count=true"))
                 {
-                    if (!uri.Contains("?")) uri += "?";
-                    uri += "$count=true";
+                    if (string.IsNullOrWhiteSpace(query))
+                        uri += "?$count=true";
+                    else
+                        uri += "&$count=true";
                     Request.RequestUri = new Uri(uri);
                 }
             }

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
-using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using SAEON.Observations.WebAPI.Models;
 using System;
@@ -14,7 +14,7 @@ namespace SAEON.Observations.WebAPI.v2.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize(Policy = Constants.TenantPolicy)]
+    [Authorize(Policy = AspNetConstants.TenantPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
 
     public class HealthController : ControllerBase
@@ -55,7 +55,7 @@ namespace SAEON.Observations.WebAPI.v2.Controllers
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, "Health");
                 var client = _clientFactory.CreateClient("IdentityServer");
-                _logger.LogDebug("Calling: {url}", client.BaseAddress+request.RequestUri.ToString());
+                _logger.LogDebug("Calling: {url}", client.BaseAddress + request.RequestUri.ToString());
                 var response = await client.SendAsync(request);
                 response.EnsureSuccessStatusCode();
             }

@@ -23,7 +23,7 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
-                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
+                    AntiForgeryConfig.UniqueClaimTypeIdentifier = AspNetConstants.ClaimSubject;
                     JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
                     var identityServerUri = new Uri(Properties.Settings.Default.IdentityServerUrl);
                     IdentityModelEventSource.ShowPII = identityServerUri.Scheme.ToLowerInvariant() == "https";

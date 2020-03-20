@@ -22,8 +22,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var client = new HttpClient();
                     client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
-                    client.DefaultRequestHeaders.Add(Constants.TenantHeader, Session[Constants.TenantSession].ToString());
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(AspNetConstants.ApplicationJson));
+                    client.DefaultRequestHeaders.Add(AspNetConstants.TenantHeader, Session[AspNetConstants.TenantSession].ToString());
                     Logging.Verbose("Headers: {@Headers}", client.DefaultRequestHeaders);
                     var url = Properties.Settings.Default.IdentityServerUrl + "/Health";
                     Logging.Verbose("Calling: {url}", url);
@@ -42,7 +42,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var client = new HttpClient();
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add(Constants.TenantHeader, Session[Constants.TenantSession].ToString());
+                    client.DefaultRequestHeaders.Add(AspNetConstants.TenantHeader, Session[AspNetConstants.TenantSession].ToString());
                     Logging.Verbose("Headers: {@Headers}", client.DefaultRequestHeaders);
                     var url = Properties.Settings.Default.WebAPIUrl + "/Health";
                     Logging.Verbose("Calling: {url}", url);

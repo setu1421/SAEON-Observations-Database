@@ -8,7 +8,6 @@ using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
 using SAEON.AspNet.Common;
 using SAEON.Logs;
-using SAEON.Observations.Core;
 using Syncfusion.Licensing;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -31,7 +30,7 @@ namespace SAEON.Observations.QuerySite
                 try
                 {
                     Logging.Verbose("IdentityServer: {name} RequireHttps: {RequireHTTPS}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.RequireHTTPS);
-                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
+                    AntiForgeryConfig.UniqueClaimTypeIdentifier = AspNetConstants.ClaimSubject;
                     JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
                     SyncfusionLicenseProvider.RegisterLicense("MjAwMjc3QDMxMzcyZTM0MmUzMEpJdWhtRUE4ZE1sbWdXbDZqQnZIbEx3NUoxcG16dVcwNWV3K0VNa0o2Qlk9;MjAwMjc4QDMxMzcyZTM0MmUzMGNpZndnd084TEd2VDlpMWltaUtFakdZZzdOS0NXV2RHdm5pOXhIYzJFM2c9");
 
@@ -39,7 +38,7 @@ namespace SAEON.Observations.QuerySite
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
                         AuthenticationType = "Cookies",
-                        CookieName="SAEON.Observations.QuerySite",
+                        CookieName = "SAEON.Observations.QuerySite",
                         ExpireTimeSpan = TimeSpan.FromDays(7),
                         SlidingExpiration = true
                     });
@@ -50,7 +49,7 @@ namespace SAEON.Observations.QuerySite
                         Scope = "openid profile email roles SAEON.Observations.WebAPI offline_access",
                         ResponseType = "id_token code token",
                         RedirectUri = Properties.Settings.Default.QuerySiteUrl + "/signin-oidc",
-                        PostLogoutRedirectUri = Properties.Settings.Default.QuerySiteUrl+ "/signout-callback-oidc",
+                        PostLogoutRedirectUri = Properties.Settings.Default.QuerySiteUrl + "/signout-callback-oidc",
                         TokenValidationParameters = new TokenValidationParameters
                         {
                             NameClaimType = JwtClaimTypes.Name,
@@ -100,7 +99,7 @@ namespace SAEON.Observations.QuerySite
                                     Address = disco.TokenEndpoint,
                                     ClientId = "SAEON.Observations.QuerySite",
                                     ClientSecret = "It6fWPU5J708",
-                                    Code= n.Code,
+                                    Code = n.Code,
                                     RedirectUri = n.RedirectUri
                                 });
                                 if (tokenResponse.IsError)

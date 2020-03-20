@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
-using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using System.Diagnostics;
 using System.Net.Http;
@@ -60,7 +60,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Name", Name } }))
             {
-                HttpContext.Session.SetString(Constants.TenantSession, Name);
+                HttpContext.Session.SetString(AspNetConstants.TenantSession, Name);
                 return RedirectToAction("Index", "Home");
             }
         }

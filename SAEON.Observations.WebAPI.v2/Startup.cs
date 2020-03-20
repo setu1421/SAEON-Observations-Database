@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -8,16 +9,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
+using SAEON.AspNet.Common;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Net.Mime;
-using Microsoft.AspNet.OData.Extensions;
-using AutoMapper;
 
 namespace SAEON.Observations.WebAPI
 {
@@ -63,7 +61,7 @@ namespace SAEON.Observations.WebAPI
                              options.Audience = "SAEON.Observations.WebAPI";
                          });
                     services.AddAuthorization(options =>
-                        options.AddPolicy(Constants.TenantPolicy, policy => policy.AddRequirements(new TenantAuthorizationRequirement(_config[Constants.TenantTenants], _config[Constants.TenantDefault])))
+                        options.AddPolicy(AspNetConstants.TenantPolicy, policy => policy.AddRequirements(new TenantAuthorizationRequirement(_config[AspNetConstants.TenantTenants], _config[AspNetConstants.TenantDefault])))
                     );
                     services.AddHttpContextAccessor();
                     services.AddScoped<HttpContext>(p => p.GetService<IHttpContextAccessor>()?.HttpContext);
