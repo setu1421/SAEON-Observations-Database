@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{300D8F1C-69FF-463D-AC48-25E2A0D50571}"
 	ProjectSection(SolutionItems) = preProject
+		Admin - Create Folders.sql = Admin - Create Folders.sql
+		Admin - Import Setup.sql = Admin - Import Setup.sql
 		Update Modules.sql = Update Modules.sql
 	EndProjectSection
 EndProject
@@ -13,7 +15,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{69A53523-19BA-46EA-86EA-5908D5034725}.Default|Default.ActiveCfg = Default
+		{B01EF0BE-07A3-46AB-B771-D666D1D8A5D2}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

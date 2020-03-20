@@ -1,11 +1,12 @@
 ﻿using IdentityServer3.AccessTokenValidation;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
-using SAEON.Observations.Core;
 using System;
-using System.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Web.Helpers;
 using System.Web.Http;
 
@@ -22,8 +23,10 @@ namespace SAEON.Observations.WebAPI
                 try
                 {
                     Logging.Verbose("IdentityServer: {name}", Properties.Settings.Default.IdentityServerUrl);
-                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
-                    JwtSecurityTokenHandler.InboundClaimTypeMap.Clear();
+                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
+                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+                    var identityServerUri = new Uri(Properties.Settings.Default.IdentityServerUrl);
+                    IdentityModelEventSource.ShowPII = identityServerUri.Scheme.ToLowerInvariant() == "https";
 
                     //var corsPolicy = new CorsPolicy
                     //{
@@ -46,32 +49,22 @@ namespace SAEON.Observations.WebAPI
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
                         AuthenticationType = "Cookies",
-                        ExpireTimeSpan = new TimeSpan(7, 0, 0, 0),
+                        CookieName = "SAEON.Observtions.WebAPI",
+                        ExpireTimeSpan = TimeSpan.FromDays(7),
                         SlidingExpiration = true
                     });
                     app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions
                     {
                         Authority = Properties.Settings.Default.IdentityServerUrl,
                         RequiredScopes = new[] { "SAEON.Observations.WebAPI" },
+                        RequireHttps = identityServerUri.Scheme.ToLowerInvariant() == "https"
                     });
-
-                    /*
-                    // add app local claims per request
-                    app.UseClaimsTransformation(incoming =>
-                    {
-                        // either add claims to incoming, or create new principal
-                        var appPrincipal = new ClaimsPrincipal(incoming);
-                        //incoming.Identities.First().AddClaim(new Claim("appSpecific", "some_value"));
-
-                        return Task.FromResult(appPrincipal);
-                    });
-                    */
 
                     // web api configuration
                     var config = new HttpConfiguration();
+                    config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
                     WebApiConfig.Register(config);
                     app.UseWebApi(config);
-                    config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
                 }
                 catch (Exception ex)

@@ -1,10 +1,12 @@
-﻿using IdentityModel.Client;
+﻿using IdentityModel;
+using IdentityModel.Client;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using Syncfusion.Licensing;
@@ -22,12 +24,6 @@ namespace SAEON.Observations.QuerySite
 {
     public class Startup
     {
-        public Startup()
-        {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            SyncfusionLicenseProvider.RegisterLicense("NTg2NTBAMzEzNjJlMzQyZTMwVjcvTjFsbHJOODZQaFR5eHlHeGZ6RTdCTHZOR3owa08xdXptTUNUVDBZYz0=;NTg2NTFAMzEzNjJlMzQyZTMwZCtCbjIwQjQ3YzdMQXpDMGJpTmJ2N0k4azFJU29lckdySndyUkFSbElhTT0=;NTg2NTJAMzEzNjJlMzQyZTMwV0RFa2VPbnFFUHhRdnRWeUo2OWRWVk5XOWhEL1pQZXUvcCtGTW9UZDNYND0=");
-        }
-
         public void Configuration(IAppBuilder app)
         {
             using (Logging.MethodCall(GetType()))
@@ -35,87 +31,41 @@ namespace SAEON.Observations.QuerySite
                 try
                 {
                     Logging.Verbose("IdentityServer: {name} RequireHttps: {RequireHTTPS}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.RequireHTTPS);
-                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.Subject;
+                    AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimSubject;
+                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+                    SyncfusionLicenseProvider.RegisterLicense("MjAwMjc3QDMxMzcyZTM0MmUzMEpJdWhtRUE4ZE1sbWdXbDZqQnZIbEx3NUoxcG16dVcwNWV3K0VNa0o2Qlk9;MjAwMjc4QDMxMzcyZTM0MmUzMGNpZndnd084TEd2VDlpMWltaUtFakdZZzdOS0NXV2RHdm5pOXhIYzJFM2c9");
 
                     //app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
                         AuthenticationType = "Cookies",
-                        ExpireTimeSpan = new TimeSpan(7, 0, 0, 0),
+                        CookieName="SAEON.Observations.QuerySite",
+                        ExpireTimeSpan = TimeSpan.FromDays(7),
                         SlidingExpiration = true
                     });
                     app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                     {
                         Authority = Properties.Settings.Default.IdentityServerUrl,
                         ClientId = "SAEON.Observations.QuerySite",
-                        Scope = "openid profile email offline_access roles SAEON.Observations.WebAPI",
-                        ResponseType = "id_token token code",
+                        Scope = "openid profile email roles SAEON.Observations.WebAPI offline_access",
+                        ResponseType = "id_token code token",
                         RedirectUri = Properties.Settings.Default.QuerySiteUrl + "/signin-oidc",
-                        PostLogoutRedirectUri = Properties.Settings.Default.QuerySiteUrl,
+                        PostLogoutRedirectUri = Properties.Settings.Default.QuerySiteUrl+ "/signout-callback-oidc",
                         TokenValidationParameters = new TokenValidationParameters
                         {
-                            NameClaimType = "name",
-                            RoleClaimType = "role"
+                            NameClaimType = JwtClaimTypes.Name,
+                            RoleClaimType = JwtClaimTypes.Role
                         },
                         SignInAsAuthenticationType = "Cookies",
                         UseTokenLifetime = false,
                         RequireHttpsMetadata = Properties.Settings.Default.RequireHTTPS && !HttpContext.Current.Request.IsLocal,
-
                         Notifications = new OpenIdConnectAuthenticationNotifications
                         {
                             AuthorizationCodeReceived = async n =>
                             {
+                                Logging.Verbose("AuthorizationCodeReceived notification");
                                 var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType);
-
-                                // UserInfoClient Obsolete
-                                //var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
-                                //var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
-                                //identity.AddClaims(userInfo.Claims);
-
-                                var discoClient = new HttpClient();
-                                var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest {
-                                    Address = Properties.Settings.Default.IdentityServerUrl,
-                                    Policy = {RequireHttps = Properties.Settings.Default.RequireHTTPS && !HttpContext.Current.Request.IsLocal }
-                                });
-                                if (disco.IsError)
-                                {
-                                    Logging.Error("Error: {error}", disco.Error);
-                                    throw new HttpException(disco.Error);
-                                }
-
-                                var userInfoClient = new HttpClient();
-                                var userInfoResponse = await userInfoClient.GetUserInfoAsync(new UserInfoRequest
-                                {
-                                    Address = disco.UserInfoEndpoint,
-                                    Token = n.ProtocolMessage.AccessToken
-                                });
-                                if (userInfoResponse.IsError)
-                                {
-                                    Logging.Error("Error: {error}", userInfoResponse.Error);
-                                    throw new HttpException(userInfoResponse.Error);
-
-                                }
-                                identity.AddClaims(userInfoResponse.Claims);
-
-                                // keep the id_token for logout
-                                identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
-
-                                // add access token for sample API
-                                identity.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
-
-                                // keep track of access token expiration
-                                identity.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
-
-                                n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
-                            },
-                            SecurityTokenValidated = async n =>
-                            {
-                                var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType, "given_name", "role");
-
-                                // UserInfoClient Obsolete
-                                //var userInfoClient = new UserInfoClient(new Uri(n.Options.Authority + "/connect/userinfo").ToString());
-                                //var userInfo = await userInfoClient.GetAsync(n.ProtocolMessage.AccessToken);
-                                //identity.AddClaims(userInfo.Claims);
+                                Logging.Verbose("IsAuthenticated: {IsAuthenticated} ", identity.IsAuthenticated);
 
                                 var discoClient = new HttpClient();
                                 var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
@@ -125,7 +75,7 @@ namespace SAEON.Observations.QuerySite
                                 });
                                 if (disco.IsError)
                                 {
-                                    Logging.Error("Error: {error}", disco.Error);
+                                    Logging.Error("Disco Error: {error}", disco.Error);
                                     throw new HttpException(disco.Error);
                                 }
 
@@ -137,34 +87,48 @@ namespace SAEON.Observations.QuerySite
                                 });
                                 if (userInfoResponse.IsError)
                                 {
-                                    Logging.Error("Error: {error}", userInfoResponse.Error);
+                                    Logging.Error("UserInfo Error: {error}", userInfoResponse.Error);
                                     throw new HttpException(userInfoResponse.Error);
+
                                 }
                                 identity.AddClaims(userInfoResponse.Claims);
 
-                                // keep the id_token for logout
+                                Logging.Verbose("Code: {Code} RedirectURI: {RedirectURI}", n.Code, n.RedirectUri);
+                                var tokenClient = new HttpClient();
+                                var tokenResponse = await tokenClient.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
+                                {
+                                    Address = disco.TokenEndpoint,
+                                    ClientId = "SAEON.Observations.QuerySite",
+                                    ClientSecret = "It6fWPU5J708",
+                                    Code= n.Code,
+                                    RedirectUri = n.RedirectUri
+                                });
+                                if (tokenResponse.IsError)
+                                {
+                                    Logging.Error("Token Error: {error}", tokenResponse.Error);
+                                    throw new HttpException(tokenResponse.Error);
+                                }
+
                                 identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
-
-                                // add access token for sample API
                                 identity.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
-
-                                // keep track of access token expiration
-                                identity.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString()));
+                                identity.AddClaim(new Claim("refresh_token", tokenResponse.RefreshToken));
+                                identity.AddClaim(new Claim("expires_at", DateTimeOffset.Now.AddSeconds(int.Parse(n.ProtocolMessage.ExpiresIn)).ToString("o")));
 
                                 n.AuthenticationTicket = new AuthenticationTicket(identity, n.AuthenticationTicket.Properties);
                             },
                             RedirectToIdentityProvider = n =>
-                            {
-                                if (n.ProtocolMessage.RequestType == Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectRequestType.Logout)
                                 {
-                                    var idTokenHint = n.OwinContext.Authentication.User.FindFirst("id_token");
-                                    if (idTokenHint != null)
+                                    Logging.Verbose("RedirectToIdentityProvider notification");
+                                    if (n.ProtocolMessage.RequestType == Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectRequestType.Logout)
                                     {
-                                        n.ProtocolMessage.IdTokenHint = idTokenHint.Value;
+                                        var idTokenHint = n.OwinContext.Authentication.User.FindFirst("id_token");
+                                        if (idTokenHint != null)
+                                        {
+                                            n.ProtocolMessage.IdTokenHint = idTokenHint.Value;
+                                        }
                                     }
+                                    return Task.FromResult(0);
                                 }
-                                return Task.FromResult(0);
-                            }
                         },
                     });
                     // Make sure WebAPI is available

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAEON.Logs;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -64,6 +65,7 @@ public static class Utilities
     public static TransactionScope NewTransactionScope()
     {
         var timeout = TimeSpan.Parse(ConfigurationManager.AppSettings["TransactionTimeout"]);
+        Logging.Information("Transaction: Config {config} Default {Default}", timeout, TransactionManager.DefaultTimeout);
         return new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted, Timeout = timeout });
     }
 }

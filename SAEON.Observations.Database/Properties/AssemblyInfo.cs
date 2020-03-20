@@ -8,7 +8,7 @@
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("South African Environmental Observation Network (SAEON)")]
 [assembly: AssemblyProduct("SAEON Observations Database")]
-[assembly: AssemblyCopyright("Copyright © 2016")]
+[assembly: AssemblyCopyright("Copyright © South African Environmental Observation Network (SAEON)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

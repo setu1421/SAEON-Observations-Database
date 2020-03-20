@@ -1,6 +1,7 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
@@ -10,9 +11,10 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     public class InventoryController : BaseEntityController<Inventory>
     {
         /// <summary>
-        /// All Inventory
+        /// Inventory of sensors
         /// </summary>
         /// <returns>ListOf(Inventory)</returns>
+        [ResponseType(typeof(Inventory))]
         public override IQueryable<Inventory> GetAll()
         {
             return base.GetAll();

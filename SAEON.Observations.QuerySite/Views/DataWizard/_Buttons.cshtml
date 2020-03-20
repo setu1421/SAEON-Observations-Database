@@ -71,18 +71,28 @@
         .Title("Data Download")
         .ShowOnInit(false)
         .Width("1024")
+        //.Width("auto")
         .ClientSideEvents(ev => ev.Close("DataWizard.DownloadClose"))
         .ContentType("ajax")
         .ContentUrl("/DataWizard/GetDownloadDialog")
         .Render();
-    Html.EJ()
-        .Button("btnTest")
-        .Text("Test")
-        .ShowRoundedCorner(true)
-        .Type(ButtonType.Button)
-        .Size(ButtonSize.Medium)
-        .ContentType(ContentType.TextOnly)
-        .Enabled(true)
-        .ClientSideEvents(e => e.Click("DataWizard.Test"))
-        .Render();
+    <span style="width:5px" />
+    if (!Request.IsAuthenticated)
+    {
+        <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Login to enable Load, Save, Download"></i>
+    }
+    else
+    {
+        <i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Search to enable Download"></i>
+    }
+    //Html.EJ()
+    //    .Button("btnTest")
+    //    .Text("Test")
+    //    .ShowRoundedCorner(true)
+    //    .Type(ButtonType.Button)
+    //    .Size(ButtonSize.Medium)
+    //    .ContentType(ContentType.TextOnly)
+    //    .Enabled(true)
+    //    .ClientSideEvents(e => e.Click("DataWizard.Test"))
+    //    .Render();
 }

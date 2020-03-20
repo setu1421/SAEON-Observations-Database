@@ -1,40 +1,27 @@
-﻿using Newtonsoft.Json.Linq;
-using SAEON.SensorThings;
+﻿using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Routing;
+using SAEON.Observations.SensorThings;
 using System.Linq;
 using System.Web.Http;
+using db = SAEON.Observations.Core.Entities;
 
 namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
-    [RoutePrefix("SensorThings/Observations")]
-    public class ObservationSTController : BaseController<Observation>
+    [ODataRoutePrefix("Observations")]
+    public class ObservationsSTController : BaseIntIdController<Observation, db.SensorThingsObservation>
     {
-        public ObservationSTController() : base()
-        {
-            Entities.AddRange(SensorThingsFactory.Observations.OrderBy(i => i.ResultTime));
-        }
+        [ODataRoute]
+        public override IQueryable<Observation> GetAll() => base.GetAll();
 
-        public override JToken GetAll()
-        {
-            return base.GetAll();
-        }
+        [ODataRoute("({id})")]
+        public override SingleResult<Observation> GetById([FromODataUri] int id) => base.GetById(id);
 
-        [Route("~/SensorThings/Observations({id:int})")]
-        public override JToken GetById([FromUri] int id)
-        {
-            return base.GetById(id);
-        }
+        [ODataRoute("({id})/Datastream")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        public SingleResult<Datastream> GetDatastream([FromUri] int id) => GetRelatedSingle<Datastream, db.SensorThingsDatastream>(id);
 
-        [Route("~/SensorThings/Observations({id:int})/Datastream")]
-        public JToken GetDatastream([FromUri] int id)
-        {
-            return GetSingle(id, i => i.Datastream);
-        }
-
-        [Route("~/SensorThings/Observations({id:int})/FeatureOfInterest")]
-        public JToken GetFeatureOfInterest([FromUri] int id)
-        {
-            return GetSingle(id, i => i.FeatureOfInterest);
-        }
-
+        [ODataRoute("({id})/FeatureOfInterest")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        public SingleResult<FeatureOfInterest> GetFeatureOfInterest([FromUri] int id) => GetRelatedSingle<FeatureOfInterest, db.SensorThingsFeatureOfInterest>(id);
     }
 }

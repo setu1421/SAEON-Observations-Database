@@ -3,7 +3,10 @@
 @(
 Html.EJ().TreeView("treeViewLocations")
     .TreeViewFields(field => field
-        .Datasource(ds => ds.URL("/DataWizard/GetLocations").Adaptor(AdaptorType.WebApiAdaptor))
+        .Datasource(ds => ds.URL("/DataWizard/GetLocations")
+            .Headers(new { Tenant = Session["Tenant"] })
+            .CrossDomain(true)
+            .Adaptor(AdaptorType.WebApiAdaptor))
         .Id("Key")
         .ParentId("ParentKey")
         .Text("Text")
@@ -19,5 +22,5 @@ Html.EJ().TreeView("treeViewLocations")
         .Ready("DataWizard.LocationsReady")
         )
     .ShowCheckbox(true)
-    .AutoCheck(false)
+    .AutoCheck(true)
 )

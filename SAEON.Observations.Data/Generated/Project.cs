@@ -145,7 +145,7 @@ namespace SAEON.Observations.Data
 				colvarProgrammeID.DataType = DbType.Guid;
 				colvarProgrammeID.MaxLength = 0;
 				colvarProgrammeID.AutoIncrement = false;
-				colvarProgrammeID.IsNullable = true;
+				colvarProgrammeID.IsNullable = false;
 				colvarProgrammeID.IsPrimaryKey = false;
 				colvarProgrammeID.IsForeignKey = true;
 				colvarProgrammeID.IsReadOnly = false;
@@ -307,9 +307,9 @@ namespace SAEON.Observations.Data
 		  
 		[XmlAttribute("ProgrammeID")]
 		[Bindable(true)]
-		public Guid? ProgrammeID 
+		public Guid ProgrammeID 
 		{
-			get { return GetColumnValue<Guid?>(Columns.ProgrammeID); }
+			get { return GetColumnValue<Guid>(Columns.ProgrammeID); }
 			set { SetColumnValue(Columns.ProgrammeID, value); }
 		}
 		  
@@ -452,7 +452,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid? varProgrammeID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
+		public static void Insert(Guid varId,Guid varProgrammeID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			Project item = new Project();
 			
@@ -490,7 +490,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid? varProgrammeID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
+		public static void Update(Guid varId,Guid varProgrammeID,string varCode,string varName,string varDescription,string varUrl,DateTime? varStartDate,DateTime? varEndDate,Guid varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			Project item = new Project();
 			

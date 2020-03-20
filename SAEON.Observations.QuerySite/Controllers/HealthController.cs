@@ -1,4 +1,5 @@
-﻿using SAEON.Logs;
+﻿using SAEON.AspNet.Common;
+using SAEON.Logs;
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Net.Http;
@@ -8,10 +9,11 @@ using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
-    //[RoutePrefix("Health")]
+    [RoutePrefix("Health")]
     public class HealthController : Controller
     {
-        public async Task<JsonResult> Index()
+        [Route]
+        public async Task<JsonResult> IndexAsync()
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -20,7 +22,9 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var client = new HttpClient();
                     client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+                    client.DefaultRequestHeaders.Add(Constants.TenantHeader, Session[Constants.TenantSession].ToString());
+                    Logging.Verbose("Headers: {@Headers}", client.DefaultRequestHeaders);
                     var url = Properties.Settings.Default.IdentityServerUrl + "/Health";
                     Logging.Verbose("Calling: {url}", url);
                     var response = await client.GetAsync(url);
@@ -38,6 +42,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     var client = new HttpClient();
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add(Constants.TenantHeader, Session[Constants.TenantSession].ToString());
+                    Logging.Verbose("Headers: {@Headers}", client.DefaultRequestHeaders);
                     var url = Properties.Settings.Default.WebAPIUrl + "/Health";
                     Logging.Verbose("Calling: {url}", url);
                     var response = await client.GetAsync(url);

@@ -39,7 +39,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     protected void NodeLoad(object sender, NodeLoadEventArgs e)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "NodeID", e.NodeID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "NodeID", e.NodeID } }))
             try
             {
                 if (e.NodeID.StartsWith("Organisations"))
@@ -260,7 +260,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
             var end = Convert.ToDateTime(i.Compute("Max(ValueDate)", ""));
             Logging.Verbose("Count: {count} Start: {start} End: {end}", count, start, end);
             log += $" Result -> Rows: {count:N0} Start: {start.ToString("dd MMM yyyy")} End: {end.ToString("dd MMM yyyy")}";
-            Auditing.Log(GetType(), new ParameterList { { "Log", log } });
+            Auditing.Log(GetType(), new MethodCallParameters { { "Log", log } });
         });
     }
 
@@ -271,7 +271,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     private SqlQuery BuildQuery(out string log, string[] columns = null)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "Columns", columns } })) 
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Columns", columns } })) 
         {
             try
             {

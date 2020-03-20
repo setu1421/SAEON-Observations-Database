@@ -44,6 +44,9 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -98,20 +101,18 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
                 DataSchema schema = new DataSchema();
 
-                if (String.IsNullOrEmpty(tfID.Text))
-                {
+                if (!tfID.HasValue())
                     schema.Id = Guid.NewGuid();
-                }
                 else
-                {
-                    schema = new DataSchema(tfID.Text.Trim());
-                }
+                    schema = new DataSchema(tfID.Text);
+                if (tfCode.HasValue())
+                    schema.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    schema.Name = tfName.Text;
+                if (tfDescription.HasValue())
+                    schema.Description = tfDescription.Text;
 
-                schema.Code = Utilities.NullIfEmpty(tfCode.Text);
-                schema.Name = Utilities.NullIfEmpty(tfName.Text);
-                schema.Description = Utilities.NullIfEmpty(tfDescription.Text);
-
-                if (!String.IsNullOrEmpty(nfIgnoreFirst.Text))
+                if (!nfIgnoreFirst.IsEmpty)
                 {
                     schema.IgnoreFirst = Int32.Parse(nfIgnoreFirst.Text);
                 }
@@ -120,7 +121,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     schema.IgnoreFirst = 0;
                 }
 
-                if (!String.IsNullOrEmpty(nfIgnoreLast.Text))
+                if (!nfIgnoreLast.IsEmpty)
                 {
                     schema.IgnoreLast = Int32.Parse(nfIgnoreLast.Text);
                 }
@@ -131,7 +132,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
                 schema.Condition = Utilities.NullIfEmpty(tfCondition.Text);
 
-                if (!String.IsNullOrEmpty(tfSplit.Text))
+                if (tfSplit.HasValue())
                 {
                     schema.SplitSelector = tfSplit.Text;
                     schema.SplitIndex = int.Parse(nfSplitIndex.Value.ToString());
@@ -148,7 +149,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
 
                 schema.UserId = AuthHelper.GetLoggedInUserId;
                 schema.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "ID", schema.Id }, { "Code", schema.Code }, { "Name", schema.Name } });
                 DataSchemasGrid.DataBind();
                 SchemaPickerStore.DataBind();
@@ -225,7 +226,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSchema(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -243,7 +244,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     }
                     ts.Complete();
                 }
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 DataSchemasGrid.DataBind();
                 SchemaColumnsGrid.DataBind();
                 SchemaPickerStore.DataBind();
@@ -425,7 +426,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                 }
                 schemaColumn.UserId = AuthHelper.GetLoggedInUserId;
                 schemaColumn.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "DataSchemaID", schemaColumn.DataSchemaID },
                 { "DataSchemaCode", schemaColumn.DataSchema.Code },
                 { "Name", schemaColumn.Name },
@@ -464,12 +465,12 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSchemaColumn(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
                 SchemaColumn.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 SchemaColumnsGrid.DataBind();
             }
             catch (Exception ex)
@@ -608,7 +609,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void SchemaColumnUp(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -641,7 +642,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     }
                 }
 
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 SchemaColumnsGrid.DataBind();
             }
             catch (Exception ex)
@@ -655,7 +656,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void SchemaColumnDown(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -688,7 +689,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     }
                 }
 
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 SchemaColumnsGrid.DataBind();
             }
             catch (Exception ex)
@@ -738,7 +739,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
     [DirectMethod]
     public void DeleteDataSource(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -747,7 +748,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                     DataSchemaID = null
                 };
                 dataSource.Save();
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 DataSourcesGrid.DataBind();
             }
             catch (Exception ex)
@@ -797,7 +798,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                             dataSource.DataSchemaID = new Guid(DataSchemaID);
                             dataSource.UserId = AuthHelper.GetLoggedInUserId;
                             dataSource.Save();
-                            Auditing.Log(GetType(), new ParameterList {
+                            Auditing.Log(GetType(), new MethodCallParameters {
                                 { "DataSchemaID", dataSource.DataSchemaID},
                                 { "DataSchemaCode", dataSource.DataSchema.Code},
                                 { "DataSourceID", dataSource.Id },
@@ -869,7 +870,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
                             newSchemaCol.Save();
-                            Auditing.Log(GetType(), new ParameterList {
+                            Auditing.Log(GetType(), new MethodCallParameters {
                                 { "DataSchemaID", newSchemaCol.DataSchemaID },
                                 { "DataSchemaCode", newSchemaCol.DataSchema.Code },
                                 { "Name", newSchemaCol.Name },
@@ -968,7 +969,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                             UserId = AuthHelper.GetLoggedInUserId
                         };
                         newSchema.Save();
-                        Auditing.Log(GetType(), new ParameterList { { "ID", newSchema.Id }, { "Code", newSchema.Code }, { "Name", newSchema.Name } });
+                        Auditing.Log(GetType(), new MethodCallParameters { { "ID", newSchema.Id }, { "Code", newSchema.Code }, { "Name", newSchema.Name } });
                         var oldSchemaCols = new SchemaColumnCollection().Where(SchemaColumn.Columns.DataSchemaID, masterID).Load();
                         foreach (var oldSchemaCol in oldSchemaCols)
                         {
@@ -988,7 +989,7 @@ public partial class Admin_DataSchemas : System.Web.UI.Page
                                 UserId = AuthHelper.GetLoggedInUserId
                             };
                             newSchemaCol.Save();
-                            Auditing.Log(GetType(), new ParameterList {
+                            Auditing.Log(GetType(), new MethodCallParameters {
                                 { "DataSchemaID", newSchemaCol.DataSchemaID },
                                 { "DataSchemaCode", newSchemaCol.DataSchema.Code },
                                 { "Name", newSchemaCol.Name },

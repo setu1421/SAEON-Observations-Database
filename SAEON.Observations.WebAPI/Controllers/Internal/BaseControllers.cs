@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using SAEON.AspNet.Common;
+using SAEON.AspNet.WebApi;
 using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
@@ -17,23 +19,32 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    //[ClientAuthorization("SAEON.Observations.QuerySite")] Uncomment when going live
+    [ClientAuthorization(Constants.ClientIdQuerySite)]
+    [TenantAuthorization]
     public abstract class BaseController : ApiController
     {
-        protected ObservationsDbContext db = null;
+        private ObservationsDbContext dbContext = null;
+        protected ObservationsDbContext DbContext => dbContext ?? (dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request)));
 
-        public BaseController() : base()
+        protected IMapper Mapper { get; private set; }
+
+        protected BaseController()
         {
-            using (Logging.MethodCall(GetType()))
+            var config = new MapperConfiguration(cfg =>
             {
-                db = new ObservationsDbContext();
-            }
+                cfg.CreateMap<UserDownload, UserDownload>()
+                    .ForMember(dest => dest.Id, opt => opt.Ignore())
+                    .ForMember(dest => dest.AddedBy, opt => opt.Ignore())
+                    .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
+                cfg.CreateMap<UserQuery, UserQuery>()
+                    .ForMember(dest => dest.Id, opt => opt.Ignore())
+                    .ForMember(dest => dest.AddedBy, opt => opt.Ignore())
+                    .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore());
+            });
+
+            Mapper = config.CreateMapper();
         }
 
-        ~BaseController()
-        {
-            db = null;
-        }
     }
 
     public abstract class BaseListController<TEntity> : BaseController where TEntity : BaseEntity
@@ -60,6 +71,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 try
                 {
+                    //return new List<TEntity>().AsQueryable();
                     return GetList().AsQueryable();
                 }
                 catch (Exception ex)
@@ -88,7 +100,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
     }
 
-    public abstract class BaseContoller<TEntity> : BaseController where TEntity : IDEntity
+    public abstract class BaseReadController<TEntity> : BaseController where TEntity : IdEntity
     {
         /// <summary>
         /// Overwrite to filter entities
@@ -109,16 +121,25 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         }
 
         /// <summary>
+        /// Overwrite for entity includes
+        /// </summary>
+        /// <returns>ListOf(PredicateOf(TEntity))</returns>
+        protected virtual List<Expression<Func<TEntity, object>>> GetIncludes()
+        {
+            return new List<Expression<Func<TEntity, object>>>();
+        }
+
+        /// <summary>
         /// query for items
         /// </summary>
         /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
-            var query = db.Set<TEntity>().AsQueryable();
-            //foreach (var include in GetIncludes())
-            //{
-            //    query = query.Include(include);
-            //}
+            var query = DbContext.Set<TEntity>().AsQueryable();
+            foreach (var include in GetIncludes())
+            {
+                query = query.Include(include);
+            }
             foreach (var where in GetWheres())
             {
                 query = query.Where(where);
@@ -128,28 +149,14 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 query = query.Where(extraWhere);
             }
             var orderBys = GetOrderBys();
-            //Logging.Information("OrderBys: {orderBys}", orderBys?.Count);
+            Logging.Information("OrderBys: {orderBys}", orderBys?.Count);
             var orderBy = orderBys.FirstOrDefault();
             if (orderBy != null)
             {
-                if (orderBy.Ascending)
-                {
-                    query = query.OrderBy(orderBy.Expression);
-                }
-                else
-                {
-                    query = query.OrderByDescending(orderBy.Expression);
-                }
+                query = query.OrderByMember(orderBy.Expression, orderBy.Ascending);
                 foreach (var thenBy in orderBys.Skip(1))
                 {
-                    if (thenBy.Ascending)
-                    {
-                        query = ((IOrderedQueryable<TEntity>)query).ThenBy(thenBy.Expression);
-                    }
-                    else
-                    {
-                        query = ((IOrderedQueryable<TEntity>)query).ThenByDescending(thenBy.Expression);
-                    }
+                    query = query.ThenByMember(orderBy.Expression, orderBy.Ascending);
                 }
             }
             return query;
@@ -185,9 +192,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpGet]
         [Route("{id:guid}")]
         //[ResponseType(typeof(TEntity))] required in derived classes
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public virtual async Task<IHttpActionResult> GetById([FromUri] Guid id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
@@ -209,7 +218,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
     }
 
     [Authorize]
-    public abstract class BaseWriteController<TEntity> : BaseContoller<TEntity> where TEntity : NamedEntity
+    public abstract class BaseWriteController<TEntity> : BaseReadController<TEntity> where TEntity : NamedEntity
     {
         /// <summary>
         /// Overwrite to do additional checks before Post or Put
@@ -230,7 +239,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         protected virtual void SetEntity(ref TEntity item, bool isPost)
         { }
 
-        protected List<string> ModelStateErrors
+        public List<string> ModelStateErrors
         {
             get
             {
@@ -238,9 +247,35 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
 
-        protected List<string> GetValidationErrors(DbEntityValidationException ex)
+        public List<string> GetValidationErrors(DbEntityValidationException ex)
         {
             return ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
+        }
+
+        public void SaveChanges()
+        {
+            try
+            {
+                DbContext.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                Logging.Exception(ex, string.Join("; ", GetValidationErrors(ex)));
+                throw;
+            }
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            try
+            {
+                await DbContext.SaveChangesAsync();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                Logging.Exception(ex, string.Join("; ", GetValidationErrors(ex)));
+                throw;
+            }
         }
 
         /// <summary>
@@ -249,9 +284,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         /// <param name="item">The new TEntity </param>
         [HttpPost]
         //[Route] Required in derived classes
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public virtual async Task<IHttpActionResult> Post([FromBody]TEntity item)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "item", item } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "item", item } }))
             {
                 try
                 {
@@ -275,8 +312,8 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     {
                         SetEntity(ref item, true);
                         Logging.Verbose("Add {@item}", item);
-                        db.Set<TEntity>().Add(item);
-                        await db.SaveChangesAsync();
+                        DbContext.Set<TEntity>().Add(item);
+                        await DbContext.SaveChangesAsync();
                     }
                     catch (DbEntityValidationException ex)
                     {
@@ -319,9 +356,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpPut]
         [ResponseType(typeof(void))]
         //[Route("{id:guid}")] Required in derived classes
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public virtual async Task<IHttpActionResult> PutById(Guid id, [FromBody]TEntity delta)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "id", id }, { "delta", delta } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "id", id }, { "delta", delta } }))
             {
                 try
                 {
@@ -354,7 +393,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                         //Logging.Verbose("Mapped delta {@item}", item);
                         SetEntity(ref item, false);
                         Logging.Verbose("Set {@item}", item);
-                        await db.SaveChangesAsync();
+                        await DbContext.SaveChangesAsync();
                     }
                     catch (DbEntityValidationException ex)
                     {
@@ -388,7 +427,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> PutByName(string name, [FromBody]TEntity delta)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "name", name }, { "delta", delta } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "name", name }, { "delta", delta } }))
             {
                 try
                 {
@@ -452,9 +491,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpDelete]
         [ResponseType(typeof(void))]
         //[Route("{id:guid}")] Required in derived classes
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public virtual async Task<IHttpActionResult> DeleteById(Guid id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
@@ -467,9 +508,9 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     }
                     try
                     {
-                        db.Set<TEntity>().Remove(item);
+                        DbContext.Set<TEntity>().Remove(item);
                         Logging.Verbose("Delete {@item}", item);
-                        await db.SaveChangesAsync();
+                        await DbContext.SaveChangesAsync();
                     }
                     catch (DbEntityValidationException ex)
                     {
@@ -502,7 +543,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         //[Route] Required in derived classes
         public virtual async Task<IHttpActionResult> DeleteByName(string name)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Name", name } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Name", name } }))
             {
                 try
                 {
@@ -540,6 +581,103 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             }
         }
         */
+    }
+
+    public static class QueryableExtensions
+    {
+        /// <summary>
+        ///     Supports sorting of a given member as an expression when type is not known. It solves problem with LINQ to Entities unable to
+        ///     cast different types as 'System.DateTime', 'System.DateTime?' to type 'System.Object'.
+        ///     LINQ to Entities only supports casting Entity Data Model primitive types.
+        /// </summary>
+        /// <typeparam name="T">entity type</typeparam>
+        /// <param name="query">query to apply sorting on.</param>
+        /// <param name="expression">the member expression to apply</param>
+        /// <param name="ascending">the sort order to apply</param>
+        /// <returns>Query with sorting applied as IOrderedQueryable of type T</returns>
+        public static IOrderedQueryable<T> OrderByMember<T>(
+            this IQueryable<T> query,
+            Expression<Func<T, object>> expression,
+            bool ascending)
+        {
+            var body = expression.Body as UnaryExpression;
+
+            if (body != null)
+            {
+                var memberExpression = body.Operand as MemberExpression;
+
+                if (memberExpression != null)
+                {
+                    return
+                        (IOrderedQueryable<T>)
+                        query.Provider.CreateQuery(
+                            Expression.Call(
+                                typeof(Queryable),
+                                ascending ? "OrderBy" : "OrderByDescending",
+                                new[] { typeof(T), memberExpression.Type },
+                                query.Expression,
+                                Expression.Lambda(memberExpression, expression.Parameters)));
+                }
+            }
+
+            return ascending ? query.OrderBy(expression) : query.OrderByDescending(expression);
+        }
+
+        /// <summary>
+        ///     Supports sorting of a given member as an expression when type is not known. It solves problem with LINQ to Entities unable to
+        ///     cast different types as 'System.DateTime', 'System.DateTime?' to type 'System.Object'.
+        ///     LINQ to Entities only supports casting Entity Data Model primitive types.
+        /// </summary>
+        /// <typeparam name="T">entity type</typeparam>
+        /// <param name="query">query to apply sorting on.</param>
+        /// <param name="expression">the member expression to apply</param>
+        /// <param name="ascending">the sort order to apply</param>
+        /// <returns>Query with sorting applied as IOrderedQueryable of type T</returns>
+        public static IOrderedQueryable<T> ThenByMember<T>(
+            this IQueryable<T> query,
+            Expression<Func<T, object>> expression,
+            bool ascending)
+        {
+            return ((IOrderedQueryable<T>)query).ThenByMember(expression, ascending);
+        }
+
+        /// <summary>
+        ///     Supports sorting of a given member as an expression when type is not known. It solves problem with LINQ to Entities unable to
+        ///     cast different types as 'System.DateTime', 'System.DateTime?' to type 'System.Object'.
+        ///     LINQ to Entities only supports casting Entity Data Model primitive types.
+        /// </summary>
+        /// <typeparam name="T">entity type</typeparam>
+        /// <param name="query">query to apply sorting on.</param>
+        /// <param name="expression">the member expression to apply</param>
+        /// <param name="ascending">the sort order to apply</param>
+        /// <returns>Query with sorting applied as IOrderedQueryable of type T</returns>
+        public static IOrderedQueryable<T> ThenByMember<T>(
+            this IOrderedQueryable<T> query,
+            Expression<Func<T, object>> expression,
+            bool ascending)
+        {
+            var body = expression.Body as UnaryExpression;
+
+            if (body != null)
+            {
+                var memberExpression = body.Operand as MemberExpression;
+
+                if (memberExpression != null)
+                {
+                    return
+                        (IOrderedQueryable<T>)
+                        query.Provider.CreateQuery(
+                            Expression.Call(
+                                typeof(Queryable),
+                                ascending ? "ThenBy" : "ThenByDescending",
+                                new[] { typeof(T), memberExpression.Type },
+                                query.Expression,
+                                Expression.Lambda(memberExpression, expression.Parameters)));
+                }
+            }
+
+            return ascending ? query.ThenBy(expression) : query.ThenByDescending(expression);
+        }
     }
 }
 

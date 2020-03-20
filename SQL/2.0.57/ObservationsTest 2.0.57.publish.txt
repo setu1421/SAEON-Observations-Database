@@ -1,0 +1,126 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[ImportBatchSummary].[BottomLatitude] is being dropped, data loss could occur.
+       The column [dbo].[ImportBatchSummary].[LeftLongitude] is being dropped, data loss could occur.
+       The column [dbo].[ImportBatchSummary].[RightLongitude] is being dropped, data loss could occur.
+       The column [dbo].[ImportBatchSummary].[TopLatitude] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[DOI] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[QueryInput] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[QueryURL] is being dropped, data loss could occur.
+       The column [dbo].[UserDownloads].[Date] on table [dbo].[UserDownloads] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[DigitalObjectIdentifierID] on table [dbo].[UserDownloads] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[Input] on table [dbo].[UserDownloads] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[Keywords] on table [dbo].[UserDownloads] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[MetadataJson] on table [dbo].[UserDownloads] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[RequeryURL] on table [dbo].[UserDownloads] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[Title] on table [dbo].[UserDownloads] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[ZipCheckSum] on table [dbo].[UserDownloads] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[ZipFullName] on table [dbo].[UserDownloads] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[UserDownloads].[ZipURL] on table [dbo].[UserDownloads] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The type for column AddedBy in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed to
+          VARCHAR (128) NOT NULL. Data loss could occur.
+       The type for column UpdatedBy in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed
+         to  VARCHAR (128) NOT NULL. Data loss could occur.
+       The type for column UserId in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed to 
+         VARCHAR (128) NOT NULL. Data loss could occur.
+       The type for column AddedBy in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to 
+         VARCHAR (128) NOT NULL. Data loss could occur.
+       The type for column UpdatedBy in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to
+          VARCHAR (128) NOT NULL. Data loss could occur.
+       The type for column UserId in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to 
+         VARCHAR (128) NOT NULL. Data loss could occur.
+
+** User actions
+     Alter
+       [dbo].[ImportBatchSummary] (Table)
+       [dbo].[UserDownloads] (Table)
+       [dbo].[UserQueries] (Table)
+       [dbo].[vInventory] (View)
+     Create
+       [dbo].[UserDownloads].[IX_UserDownloads_DOI] (Index)
+       [dbo].[DigitalObjectIdentifiers] (Table)
+       [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name] (Index)
+       [dbo].[DF_DigitalObjectIdentifiers_AddedAt] (Default Constraint)
+       [dbo].[DF_DigitalObjectIdentifiers_UpdatedAt] (Default Constraint)
+       [dbo].[FK_UserDownloads_DigitalObjectIdentifiers] (Foreign Key)
+       [dbo].[TR_DigitalObjectIdentifiers_Insert] (Trigger)
+       [dbo].[TR_DigitalObjectIdentifiers_Update] (Trigger)
+       [dbo].[vUserDownloads] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[UX_UserDownloads_UserId_Name] (Unique Constraint)
+       [dbo].[UX_UserQueries_UserId_Name] (Unique Constraint)
+     Create
+       [dbo].[UX_UserDownloads_UserId_Name] (Unique Constraint)
+       [dbo].[UX_UserQueries_UserId_Name] (Unique Constraint)
+     Refresh
+       [dbo].[vFeatures] (View)
+       [dbo].[vImportBatchSummary] (View)
+       [dbo].[vLocations] (View)
+
+The source's object [Authentication] is different than the target's version of the object but the target object will not be updated.
+The source's object [Observations] is different than the target's version of the object but the target object will not be updated.
+The object [Authentication] already exists in database with a different definition and will not be altered.
+The object [Observations] already exists in database with a different definition and will not be altered.
+The column [dbo].[ImportBatchSummary].[BottomLatitude] is being dropped, data loss could occur.
+The column [dbo].[ImportBatchSummary].[LeftLongitude] is being dropped, data loss could occur.
+The column [dbo].[ImportBatchSummary].[RightLongitude] is being dropped, data loss could occur.
+The column [dbo].[ImportBatchSummary].[TopLatitude] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[DOI] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[QueryInput] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[QueryURL] is being dropped, data loss could occur.
+The column [dbo].[UserDownloads].[Date] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[DigitalObjectIdentifierID] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[Input] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[Keywords] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[MetadataJson] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[RequeryURL] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[Title] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[ZipCheckSum] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[ZipFullName] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[UserDownloads].[ZipURL] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The type for column AddedBy in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The column Description on table [dbo].[UserDownloads] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The type for column UpdatedBy in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The type for column UserId in table [dbo].[UserDownloads] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The type for column AddedBy in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The type for column UpdatedBy in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+The type for column UserId in table [dbo].[UserQueries] is currently  NVARCHAR (128) NOT NULL but is being changed to  VARCHAR (128) NOT NULL. Data loss could occur.
+

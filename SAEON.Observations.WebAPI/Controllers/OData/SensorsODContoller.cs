@@ -19,7 +19,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// Get all Sensors
         /// </summary>
         /// <returns>ListOf(Sensor)</returns>
-        [EnableQuery, ODataRoute]
+        [ODataRoute]
         public override IQueryable<Sensor> GetAll()
         {
             return base.GetAll();
@@ -31,7 +31,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of Sensor</param>
         /// <returns>Sensor</returns>
-        [EnableQuery, ODataRoute("({id})")]
+        [ODataRoute("({id})")]
         public override SingleResult<Sensor> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -43,10 +43,11 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of the Sensor</param>
         /// <returns>ListOf(Phenomenon)</returns>
-        [EnableQuery, ODataRoute("({id})/Phenomenon")]
-        public SingleResult<Phenomenon> GetPhenomenon([FromODataUri] Guid id)
+        [ODataRoute("({id})/Phenomenon")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        public Phenomenon GetPhenomenon([FromODataUri] Guid id)
         {
-            return GetSingle(id, s => s.Phenomenon, i => i.Sensors);
+            return GetSingle(id, s => s.Phenomenon);
         }
 
         // GET: odata/Sensors(5)/Instruments
@@ -55,11 +56,43 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of the Sensor</param>
         /// <returns>ListOf(Instrument)</returns>
-        [EnableQuery, ODataRoute("({id})/Instruments")]
+        [ODataRoute("({id})/Instruments")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Instrument> GetInstruments([FromODataUri] Guid id)
         {
-            return GetMany<Instrument>(id, s => s.Instruments, i => i.Sensors);
+            return GetManyWithGuidId<Instrument>(id, s => s.Instruments);
         }
 
+        // GET: odata/Sensors(5)/Observations
+        /// <summary>
+        /// Ovservations for the Sensor
+        /// </summary>
+        /// <param name="id">Id of the Sensor</param>
+        /// <returns>ListOf(ObservationExpansion)</returns>
+        [ODataRoute("({id})/Observations")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        //[ClientAuthorization(Constants.ClientIdQuerySite, Constants.ClientIdNodes, Constants.ClientIdPostman)]
+        [Authorize]
+        public IQueryable<ObservationOData> GetObservations([FromODataUri] Guid id)
+        {
+            return GetManyWithIntId<ObservationOData>(id, s => s.Observations);
+        }
+
+        //// GET: odata/Sensors(5)/Observations
+        ///// <summary>
+        ///// Ovservations for the Sensor
+        ///// </summary>
+        ///// <param name="id">Id of the Sensor</param>
+        ///// <param name="start">Start date of the Observations</param>
+        ///// <param name="end">End date of the Observations</param>
+        ///// <returns>ListOf(ObservationExpansion)</returns>
+        //[ODataRoute("({id})/Observations")]
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        //public IQueryable<ObservationOData> GetObservationsRange([FromODataUri] Guid id, DateTime start, DateTime end)
+        //{
+        //    start = start.Date;
+        //    end = end.Date.AddDays(1);
+        //    return GetManyWithIntId<ObservationOData>(id, s => s.Observations).Where(i => (i.ValueDate >= start) && (i.ValueDate < end));
+        //}
     }
 }

@@ -1,4 +1,5 @@
-﻿using SAEON.Observations.Core;
+﻿using SAEON.Logs;
+using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,14 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         protected override List<OrderBy<UserDownload>> GetOrderBys()
         {
             var result = base.GetOrderBys();
-            result.Add(new OrderBy<UserDownload>(i => i.Name));
+            result.Add(new OrderBy<UserDownload>(i => i.AddedAt,false));
+            return result;
+        }
+
+        protected override List<Expression<Func<UserDownload, object>>> GetIncludes()
+        {
+            var result = base.GetIncludes();
+            result.Add(i => i.DigitalObjectIdentifier);
             return result;
         }
 

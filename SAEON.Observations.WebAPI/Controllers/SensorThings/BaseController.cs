@@ -1,27 +1,22 @@
-﻿using SAEON.Logs;
+﻿using Microsoft.AspNet.OData;
+using SAEON.AspNet.WebApi;
 using SAEON.Observations.Core.Entities;
-using SAEON.SensorThings;
+using SAEON.Observations.SensorThings;
 using System.Web.Http.Description;
 
 namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    public abstract class BaseController<TEntity> : SensorThingsApiController<TEntity> where TEntity : SensorThingEntity
+    [ODataRouteName("SensorThings")]
+    [TenantAuthorization]
+    public abstract class BaseGuidIdController<TSensorThingsEntity, TDbEntity> : SensorThingsGuidIdController<TSensorThingsEntity, TDbEntity> where TSensorThingsEntity : SensorThingsGuidIdEntity, new() where TDbEntity : GuidIdEntity
     {
-        protected ObservationsDbContext db = null;
+    }
 
-        public BaseController()
-        {
-            using (Logging.MethodCall(GetType()))
-            {
-                db = new ObservationsDbContext();
-            }
-        }
-
-        ~BaseController()
-        {
-            db = null;
-        }
-
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [ODataRouteName("SensorThings")]
+    [TenantAuthorization]
+    public abstract class BaseIntIdController<TSensorThingsEntity, TDbEntity> : SensorThingsIntIdController<TSensorThingsEntity, TDbEntity> where TSensorThingsEntity : SensorThingsIntIdEntity, new() where TDbEntity : IntIdEntity
+    {
     }
 }

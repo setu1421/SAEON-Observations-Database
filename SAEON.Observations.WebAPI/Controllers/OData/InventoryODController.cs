@@ -17,7 +17,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// Get all Instruments
         /// </summary>
         /// <returns>ListOf(Instrument)</returns>
-        [EnableQuery, ODataRoute]
+        [ODataRoute]
         public override IQueryable<Inventory> GetAll()
         {
             return base.GetAll();

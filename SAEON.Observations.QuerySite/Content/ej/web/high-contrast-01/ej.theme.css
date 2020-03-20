@@ -1,8 +1,8 @@
 @charset "UTF-8";
 /*!
 *  filename: ej.theme.css
-*  version : 17.1.0.38
-*  Copyright Syncfusion Inc. 2001 - 2019. All rights reserved.
+*  version : 17.4.0.55
+*  Copyright Syncfusion Inc. 2001 - 2020. All rights reserved.
 *  Use of this code is subject to the terms of our license.
 *  A copy of the current license can be obtained at any time by e-mailing
 *  licensing@syncfusion.com. Any infringement will be prosecuted under
@@ -11323,6 +11323,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-uploaddialog.e-dialog .e-btn.e-select:hover {
   background: #035103;
+  color: white;
 }
 .e-uploaddialog.e-dialog .e-btn.e-select:active {
   
@@ -11335,6 +11336,13 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-uploaddialog.e-dialog .e-btn.e-select {
   
+}
+.e-uploaddialog.e-dialog .e-btn.e-select {
+  background: black;
+  color: white;
+}
+.e-uploaddialog.e-dialog .e-btn.e-select {
+  background: black;
 }
 .e-uploaddialog.e-dialog .e-btn.e-select {
   
@@ -19651,9 +19659,6 @@ table.pivotGridValueTable.rowFrozenTable tr td:last-child {
   /*other*/
   background-color: black;
 }
-.e-reportviewer-headerspan {
-  
-}
 .e-reportviewer-headerspan,
 .e-reportviewer-contentspan {
   
@@ -19806,6 +19811,13 @@ table.pivotGridValueTable.rowFrozenTable tr td:last-child {
 .e-reportviewer-popupli {
   color: #dbdb00 !important;
 }
+.e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box {
+  
+}
+.e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box .e-input,
+.e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box .e-select {
+  
+}
 .e-reportviewer-gotonext.e-reportviewer-disabled,
 .e-reportviewer-gotoprevious.e-reportviewer-disabled,
 .e-reportviewer-gotolast.e-reportviewer-disabled,
@@ -19821,8 +19833,10 @@ table.pivotGridValueTable.rowFrozenTable tr td:last-child {
   font-size: 40px;
 }
 .e-reportviewer-error-content {
-  background-color: #1d1d1d;
   font-size: 12.5px;
+}
+.e-reportviewer-error-content {
+  background-color: #1d1d1d;
 }
 .e-reportviewer-scroller .e-scrollbar .e-icon {
   font-size: 0;
@@ -22939,6 +22953,9 @@ ej-ribbon {
 .e-spreadsheet .e-ss-object {
   background-color: black;
 }
+.e-spreadsheet .e-ss-image {
+  background-color: transparent;
+}
 .e-spreadsheet .e-ss-charttheme {
   background-color: #999900;
 }
@@ -23237,6 +23254,14 @@ ej-ribbon {
 }
 .e-spreadsheet .e-ribbon.e-js .e-rbn-button.e-tbtn.e-select:active .e-icon {
   
+}
+.e-spreadsheet .e-ss-databar-span:hover,
+.e-spreadsheet .e-ss-iconsets-wrapper:hover,
+.e-spreadsheet .e-ss-colorscale-span:hover {
+  border-color: #035103;
+}
+.e-spreadsheet .e-ss-iconset-title {
+  color: white;
 }
 /*-------------------------------------SpreadSheet End -----------------------*/
 

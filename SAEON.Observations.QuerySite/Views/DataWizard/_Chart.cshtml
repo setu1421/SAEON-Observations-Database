@@ -18,8 +18,8 @@
                 .Add();
         }
     })
-    .Legend(lgn => lgn.Visible(true))
-    .Size(sz => sz.Width("1200").Height("800"))
+    .Legend(lgn => lgn.Visible(true).ColumnCount(1))
+    .Size(sz => sz.Width("1600").Height("1200"))
     .EnableCanvasRendering(true)
     .IsResponsive(true)
     .Zooming(zm => zm

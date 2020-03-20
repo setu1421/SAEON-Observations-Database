@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <ApplicationIcon>SAEON.ico</ApplicationIcon>
+    <Authors>Tim Parker-Nance</Authors>
+    <Company>South African Environmental Observation Network (SAEON)</Company>
+    <Product>SAEON Observations Database</Product>
+    <Description>SAEON Observations Sensor Things</Description>
+    <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.123</Version>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="echo rd /s /q &quot;D:\Development\NuGet\$(ProjectName)&quot;&#xD;&#xA;rd /s /q &quot;D:\Development\NuGet\$(ProjectName)&quot;&#xD;&#xA;echo nuget init &quot;$(ProjectDir)bin\Release&quot; D:\Development\NuGet&#xD;&#xA;nuget init &quot;$(ProjectDir)bin\Release&quot; D:\Development\NuGet&#xD;&#xA;" />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNet.OData" Version="7.3.0" />
+    <PackageReference Include="Microsoft.Spatial" Version="[7.6.1]" />
+    <PackageReference Include="SAEON.AspNet.WebApi" Version="1.0.71" />
+    <PackageReference Include="SAEON.Observations.Core" Version="1.0.247" />
+  </ItemGroup>
+
+</Project>
+

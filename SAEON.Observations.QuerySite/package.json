@@ -10,9 +10,8 @@
   },
   "dependencies": {
     "@types/ej.web.all": "^16.4.3",
-    "@types/google-maps": "^3.2.0",
-    "@types/googlemaps": "^3.30.18",
-    "@types/jquery": "^3.3.29",
-    "mdbootstrap": "^4.7.4"
+    "@types/google-maps": "^3.2.1",
+    "@types/googlemaps": "^3.38.1",
+    "@types/jquery": "^3.3.31"
   }
 }

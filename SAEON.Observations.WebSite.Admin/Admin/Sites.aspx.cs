@@ -33,7 +33,9 @@ public partial class Admin_Sites : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
-
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
             if (e.ID == "tfCode")
@@ -68,29 +70,32 @@ public partial class Admin_Sites : System.Web.UI.Page
             try
             {
                 da.Site site = new da.Site();
-                if (String.IsNullOrEmpty(tfID.Text))
+                if (!tfID.HasValue())
                     site.Id = Guid.NewGuid();
                 else
-                    site = new da.Site(tfID.Text.Trim());
-                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                    site.Code = tfCode.Text.Trim();
-                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                    site.Name = tfName.Text.Trim();
-                if (string.IsNullOrEmpty(site.Name)) site.Name = null;
-                site.Description = tfDescription.Text.Trim();
-                site.Url = tfUrl.Text.Trim();
-                if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
+                    site = new da.Site(tfID.Text);
+                if (tfCode.HasValue())
+                    site.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    site.Name = tfName.Text;
+                if (tfDescription.HasValue())
+                    site.Description = tfDescription.Text;
+                if (tfUrl.HasValue())
+                    site.Url = tfUrl.Text;
+                else
+                    site.Url = null;
+                if (dfStartDate.HasValue())
                     site.StartDate = dfStartDate.SelectedDate;
                 else
                     site.StartDate = null;
-                if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
+                if (dfEndDate.HasValue())
                     site.EndDate = dfEndDate.SelectedDate;
                 else
                     site.EndDate = null;
                 site.UserId = AuthHelper.GetLoggedInUserId;
 
                 site.Save();
-                Auditing.Log(GetType(), new ParameterList { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", site.Id }, { "Code", site.Code }, { "Name", site.Name } });
 
                 SitesGrid.DataBind();
 
@@ -191,7 +196,7 @@ public partial class Admin_Sites : System.Web.UI.Page
                     siteOrganisation.EndDate = null;
                 siteOrganisation.UserId = AuthHelper.GetLoggedInUserId;
                 siteOrganisation.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "SiteID", siteOrganisation.SiteID },
                 { "SiteCode", siteOrganisation.Site.Code },
                 { "OrganisationID", siteOrganisation.OrganisationID},
@@ -224,12 +229,12 @@ public partial class Admin_Sites : System.Web.UI.Page
     [DirectMethod]
     public void DeleteOrganisationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 da.OrganisationSite.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 OrganisationLinksGrid.DataBind();
             }
             catch (Exception ex)
@@ -305,7 +310,7 @@ public partial class Admin_Sites : System.Web.UI.Page
                             station.SiteID = new Guid(siteID);
                             station.UserId = AuthHelper.GetLoggedInUserId;
                             station.Save();
-                            Auditing.Log(GetType(), new ParameterList {
+                            Auditing.Log(GetType(), new MethodCallParameters {
                             { "SiteID", station.SiteID},
                             { "SiteCode", station.Site.Code},
                             { "StationID", station.Id },

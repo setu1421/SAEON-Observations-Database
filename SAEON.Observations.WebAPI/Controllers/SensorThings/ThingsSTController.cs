@@ -1,46 +1,32 @@
-﻿using Newtonsoft.Json.Linq;
-using SAEON.SensorThings;
+﻿using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Routing;
+using SAEON.Observations.SensorThings;
+using System;
 using System.Linq;
 using System.Web.Http;
+using db = SAEON.Observations.Core.Entities;
 
 namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
-    [RoutePrefix("SensorThings/Things")]
-    public class ThingsSTController : BaseController<Thing>
+    [ODataRoutePrefix("Things")]
+    public class ThingsSTController : BaseGuidIdController<Thing, db.SensorThingsThing>
     {
-        public ThingsSTController()
-        {
-            Entities.AddRange(SensorThingsFactory.Things.OrderBy(i => i.Name));
-        }
+        [ODataRoute]
+        public override IQueryable<Thing> GetAll() => base.GetAll();
 
-        public override JToken GetAll()
-        {
-            return base.GetAll();
-        }
+        [ODataRoute("({id})")]
+        public override SingleResult<Thing> GetById([FromODataUri] Guid id) => base.GetById(id);
 
-        [Route("~/SensorThings/Things({id:int})")]
-        public override JToken GetById([FromUri] int id)
-        {
-            return base.GetById(id);
-        }
+        [ODataRoute("({id})/Datastreams")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        public IQueryable<Datastream> GetDatastreams([FromUri] Guid id) => GetRelatedMany<Datastream, db.SensorThingsDatastream>(id);
 
-        [Route("~/SensorThings/Things({id:int})/Location")]
-        public JToken GetLocation([FromUri] int id)
-        {
-            return GetSingle(id, i => i.Location);
-        }
+        [ODataRoute("({id})/Locations")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        public IQueryable<Location> GetLocations([FromUri] Guid id) => GetRelatedMany<Location, db.SensorThingsLocation>(id);
 
-        [Route("~/SensorThings/Things({id:int})/HistoricalLocations")]
-        public JToken GetHistoricalLocations([FromUri] int id)
-        {
-            return GetMany(id, i => i.HistoricalLocations);
-        }
-
-        [Route("~/SensorThings/Things({id:int})/Datastreams")]
-        public JToken GetDatastreams([FromUri] int id)
-        {
-            return GetMany(id, i => i.Datastreams);
-        }
-
+        [ODataRoute("({id})/HistoricalLocations")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        public IQueryable<HistoricalLocation> GetHistoricalLocations([FromUri] Guid id) => GetRelatedMany<HistoricalLocation, db.SensorThingsHistoricalLocation>(id);
     }
 }

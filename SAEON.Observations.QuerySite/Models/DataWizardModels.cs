@@ -25,9 +25,14 @@ namespace SAEON.Observations.QuerySite.Models
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
         [DisplayName("End Date")]
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
+        [DisplayName("Minimum elevation")]
+        public float ElevationMinimum { get; set; }
+        [DisplayName("Maximum elevation")]
+        public float ElevationMaximum { get; set; }
         public DataWizardApproximation Approximation { get; set; } = new DataWizardApproximation();
         public DataWizardDataOutput DataOutput { get; set; } = new DataWizardDataOutput();
         public bool IsAuthenticated { get; set; } = false;
+        public bool HaveSearched { get; set; } = false;
         public List<UserDownload> UserDownloads { get; } = new List<UserDownload>();
         public List<UserQuery> UserQueries { get; } = new List<UserQuery>();
 
@@ -46,9 +51,12 @@ namespace SAEON.Observations.QuerySite.Models
             Units.Clear();
             StartDate = DateTime.Now.AddYears(-100).Date;
             EndDate = DateTime.Now.Date;
+            ElevationMinimum = -100;
+            ElevationMaximum = 3000;
             Approximation = new DataWizardApproximation();
             DataOutput = new DataWizardDataOutput();
             IsAuthenticated = false;
+            HaveSearched = false;
             UserDownloads.Clear();
             UserQueries.Clear();
         }

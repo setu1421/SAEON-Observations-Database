@@ -9,7 +9,6 @@
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
         gtag('config', 'UA-128063984-6');
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,9 +24,14 @@
     <title>@(ViewBag.Title == "Observations Database WebAPI" || string.IsNullOrEmpty(ViewBag.Title) ? "Observations Database WebAPI" : "Observations Database WebAPI - " + @ViewBag.Title)</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
-    @Styles.Render("~/Content/css")
-    <link rel="stylesheet" href="~/node_modules/mdbootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/node_modules/mdbootstrap/css/mdb.min.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="stylesheet" href="~/Content/SAEON.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
     @RenderSection("Styles", required: false)
     @Scripts.Render("~/bundles/modernizr")
     <script>
@@ -35,7 +39,7 @@
             function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } }
             var t = { config: config }, u = document, e = window, o = 'script', s = u.createElement(o), i, f; for (s.src = config.url || '//az416426.vo.msecnd.net/scripts/a/ai.0.js', u.getElementsByTagName(o)[0].parentNode.appendChild(s), t.cookie = u.cookie, t.queue = [], i = ['Event', 'Exception', 'Metric', 'PageView', 'Trace', 'Ajax']; i.length;) r('track' + i.pop()); return r('setAuthenticatedUserContext'), r('clearAuthenticatedUserContext'), config.disableExceptionTracking || (i = 'onerror', r('_' + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t['_' + i](config, r, u, e, o), s }), t
         }({
-            instrumentationKey: 'cf180c84-e427-4073-acbf-a78ded1b5f42'
+            instrumentationKey: 'f8e54b1e-96bf-4dcb-a5e2-4e9f3653a539'
         });
 
         window.appInsights = appInsights;
@@ -67,8 +71,8 @@
                         <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     </ul>
                     @*<ul class="navbar-nav ml-auto">
-                        @Html.Partial("_LoginPartial")
-                    </ul>*@
+                            @Html.Partial("_LoginPartial")
+                        </ul>*@
                 </div>
             </nav>
             <h1>
@@ -100,13 +104,14 @@
                     </a>
                     <br />
                     <div style="clear: both">
-                        Observations Database is licensed under a <a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                        Observations Database is licensed under a <a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a><br />
+                        @Html.ActionLink("How to cite", "HowToCite", "Home")
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="float-right">
                         <a href="https://www.dst.gov.za/" target="_blank">
-                            <img class="footer-image" src="~/Images/DST logo.png" alt="Department of Science and Technology logo" title="Department of Science and Technology" />
+                            <img class="footer-image dsi-logo" src="~/Images/DSI logo.jpg" alt="Department of Science and Innovation logo" title="Department of Science and Innovation" />
                         </a>
                     </div>
                 </div>
@@ -114,10 +119,14 @@
         </footer>
     </div>
 
-    <script src="~/node_modules/mdbootstrap/js/jquery-3.3.1.min.js"></script>
-    <script src="~/node_modules/mdbootstrap/js/popper.min.js"></script>
-    <script src="~/node_modules/mdbootstrap/js/bootstrap.min.js"></script>
-    <script src="~/node_modules/mdbootstrap/js/mdb.min.js"></script>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/js/mdb.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

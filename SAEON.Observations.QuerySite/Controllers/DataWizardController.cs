@@ -6,8 +6,10 @@ using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -19,8 +21,8 @@ namespace SAEON.Observations.QuerySite.Controllers
         protected override async Task<DataWizardModel> LoadModelAsync(DataWizardModel model)
         {
             model.Clear();
-            model.Locations.AddRange(await GetList<LocationNode>("Internal/Locations"));
-            model.Features.AddRange(await GetList<FeatureNode>("Internal/Features"));
+            model.Locations.AddRange(await GetListAsync<LocationNode>("Internal/Locations"));
+            model.Features.AddRange(await GetListAsync<FeatureNode>("Internal/Features"));
             var mapPoints = model.Locations.Where(i => i.Key.StartsWith("STA~")).Select(
                 loc => new MapPoint { Key = loc.Key, Title = loc.Name, Latitude = loc.Latitude.Value, Longitude = loc.Longitude.Value, Elevation = loc.Elevation, Url = loc.Url });
             model.MapPoints.AddRange(mapPoints);
@@ -29,8 +31,11 @@ namespace SAEON.Observations.QuerySite.Controllers
             return model;
         }
 
+
         // GET: Data
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public async Task<ActionResult> Index()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             ViewBag.WebAPIUrl = Properties.Settings.Default.WebAPIUrl;
             return View(await CreateModelAsync());
@@ -50,7 +55,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                         IsAuthenticated = model.IsAuthenticated,
                         LoadEnabled = model.IsAuthenticated && model.UserQueries.Any(),
                         SaveEnabled = model.IsAuthenticated && model.LocationsSelected.Any() && model.FeaturesSelected.Any(),
-                        SearchEnabled = model.LocationsSelected.Any() && model.FeaturesSelected.Any()
+                        SearchEnabled = model.LocationsSelected.Any() && model.FeaturesSelected.Any() && (model.Approximation.RowCount > 0),
+                        DownloadEnabled = model.IsAuthenticated && model.LocationsSelected.Any() && model.FeaturesSelected.Any() && model.HaveSearched
                     };
                     Logging.Verbose("State: {@State}", result);
                     return Json(result, JsonRequestBehavior.AllowGet);
@@ -365,16 +371,18 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpPost]
-        public EmptyResult UpdateFilters(DateTime startDate, DateTime endDate)
+        public EmptyResult UpdateFilters(DateTime startDate, DateTime endDate, float elevationMinimum, float elevationMaximum)
         {
             using (Logging.MethodCall(GetType()))
             {
                 try
                 {
-                    Logging.Verbose("StartDate: {startDate} EndDate: {endDate}", startDate, endDate);
+                    Logging.Verbose("StartDate: {startDate} EndDate: {endDate} ElevationMin: {elevationMin} ElevationMax: {elevationMax}", startDate, endDate, elevationMinimum, elevationMaximum);
                     var model = SessionModel;
                     model.StartDate = startDate;
                     model.EndDate = endDate;
+                    model.ElevationMinimum = elevationMinimum;
+                    model.ElevationMaximum = elevationMaximum;
                     SessionModel = model;
                     return null;
                 }
@@ -412,7 +420,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         #region Approximation
 
         [HttpGet]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public async Task<PartialViewResult> SetApproximation()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -430,7 +440,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         [HttpGet]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public async Task<JsonResult> GetApproximation()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -446,9 +458,10 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
-                    model.Approximation = await PostEntity<DataWizardDataInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
-                    Logging.Verbose("RowCount: {RowCount}", model.Approximation.RowCount);
-                    Logging.Verbose("Errors: {Errors}", model.Approximation.Errors);
+                    input.ElevationMinimum = model.ElevationMinimum;
+                    input.ElevationMaximum = model.ElevationMaximum;
+                    model.Approximation = await PostEntityAsync<DataWizardDataInput, DataWizardApproximation>("Internal/DataWizard/Approximation", input);
+                    Logging.Verbose("RowCount: {RowCount} Errors: {Errors}", model.Approximation.RowCount, model.Approximation.Errors);
                     SessionModel = model;
                     return Json(SessionModel.Approximation, JsonRequestBehavior.AllowGet);
                 }
@@ -465,7 +478,9 @@ namespace SAEON.Observations.QuerySite.Controllers
         #region Data
 
         [HttpGet]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public async Task<EmptyResult> GetData()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -481,7 +496,10 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
-                    model.DataOutput = await PostEntity<DataWizardDataInput, DataWizardDataOutput>("Internal/DataWizard/GetData", input);
+                    input.ElevationMinimum = model.ElevationMinimum;
+                    input.ElevationMaximum = model.ElevationMaximum;
+                    model.DataOutput = await PostEntityAsync<DataWizardDataInput, DataWizardDataOutput>("Internal/DataWizard/GetData", input);
+                    model.HaveSearched = true;
                     SessionModel = model;
                     return new EmptyResult();
                 }
@@ -544,11 +562,13 @@ namespace SAEON.Observations.QuerySite.Controllers
         #region UserQueries
 
         //[Authorize]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         private async Task<List<UserQuery>> GetUserQueriesList()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             if (User.Identity.IsAuthenticated)
             {
-                return (await GetList<UserQuery>("Internal/UserQueries"));
+                return (await GetListAsync<UserQuery>("Internal/UserQueries"));
             }
             else
             {
@@ -576,7 +596,9 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpPost]
         [Authorize]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public async Task<EmptyResult> LoadQuery(LoadQueryModel input)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -608,6 +630,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     // Filters
                     model.StartDate = wizardInput.StartDate;
                     model.EndDate = wizardInput.EndDate;
+                    model.ElevationMinimum = wizardInput.ElevationMinimum;
+                    model.ElevationMaximum = wizardInput.ElevationMaximum;
                     SessionModel = model;
                     //Logging.Verbose("Model: {@model}", model);
                     return null;
@@ -643,7 +667,9 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpPost]
         [Authorize]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public async Task<EmptyResult> SaveQuery(SaveQueryModel input)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -661,6 +687,8 @@ namespace SAEON.Observations.QuerySite.Controllers
                     queryInput.Units.AddRange(model.Units);
                     queryInput.StartDate = model.StartDate.ToUniversalTime();
                     queryInput.EndDate = model.EndDate.ToUniversalTime();
+                    queryInput.ElevationMinimum = model.ElevationMinimum;
+                    queryInput.ElevationMaximum = model.ElevationMaximum;
                     var userQuery = new UserQuery
                     {
                         Name = input.Name,
@@ -668,7 +696,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         QueryInput = JsonConvert.SerializeObject(queryInput)
                     };
                     Logging.Verbose("UserQuery: {@UserQuery}", userQuery);
-                    await PostEntity<UserQuery, UserQuery>("Internal/UserQueries", userQuery);
+                    await PostEntityAsync<UserQuery, UserQuery>("Internal/UserQueries", userQuery);
                     model.UserQueries.Clear();
                     model.UserQueries.AddRange(await GetUserQueriesList());
                     SessionModel = model;
@@ -722,7 +750,9 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult> GetDownload()
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<JsonResult> GetDownload()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall(GetType()))
             {
@@ -739,9 +769,11 @@ namespace SAEON.Observations.QuerySite.Controllers
                     input.Units.AddRange(model.Units);
                     input.StartDate = model.StartDate.ToUniversalTime();
                     input.EndDate = model.EndDate.ToUniversalTime();
-                    var userDownload = await PostEntity<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
+                    input.ElevationMinimum = model.ElevationMinimum;
+                    input.ElevationMaximum = model.ElevationMaximum;
+                    var userDownload = await PostEntityAsync<DataWizardDataInput, UserDownload>("Internal/DataWizard/GetDownload", input);
                     Logging.Verbose("UserDownload: {@userDownload}", userDownload);
-                    return RedirectToAction("Details", "UserDownloads", new { Id = userDownload.Id.ToString() });
+                    return Json(new { url = Url.Action("ViewDownload", new { userDownload.Id }) }, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)
                 {
@@ -751,6 +783,73 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
+        [HttpGet]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<ActionResult> ViewDownload(Guid? id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
+        {
+            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Id", id} }))
+            {
+                try
+                {
+                    Logging.Verbose("Id: {Id}", id);
+                    if ((id == null) || !id.HasValue)
+                    {
+                        return RedirectToAction("Index");
+                    }
+
+                    var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
+                    if (userDownload == null)
+                    {
+                        throw new ArgumentException($"Unable to find download {id}",nameof(id));
+                    }
+
+                    return View(userDownload);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        [HttpGet]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
+        public async Task<FileResult> DownloadZip(Guid? id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
+        {
+            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Id", id } }))
+            {
+                try
+                {
+                    if ((id == null) || !id.HasValue)
+                    {
+                        RedirectToAction("Index");
+                        return null;
+                    }
+
+                    var userDownload = await GetEntityAsync<UserDownload>($"Internal/UserDownloads/{id}");
+                    if (userDownload == null)
+                    {
+                        throw new ArgumentException($"Unable to find download {id}", nameof(id));
+                    }
+
+                    var stream = await GetStreamAsync($"Internal/DataWizard/DownloadZip/{id}");
+                    using (var memStream = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(memStream);
+                        var bytes = memStream.ToArray();
+                        return File(bytes, MediaTypeNames.Application.Zip, Path.GetFileName(userDownload.ZipFullName));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
         #endregion Download
     }
 }

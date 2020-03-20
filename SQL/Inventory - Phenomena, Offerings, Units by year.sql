@@ -37,8 +37,7 @@ from
 	   ((Site.EndDate is null) or (Observation.ValueDay <= Site.EndDate))
   left join Status
     on (Observation.StatusID = Status.ID)
-where
-  (Phenomenon.Name not in ('Current Direction','Current speed','Depth')) --and
+--where
   --(Status.Name = 'Verified')
 group by
   Phenomenon.Name, Offering.Name, UnitOfMeasure.Unit, Site.Name, Station.Name, /*Status.Name,*/ Observation.ValueYear

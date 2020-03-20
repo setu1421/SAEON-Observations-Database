@@ -2,13 +2,13 @@
 AS 
 Select
   ImportBatchSummary.*, 
-  Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName,
-  Offering.Code OfferingCode, Offering.Name OfferingName,
+  Phenomenon.Code PhenomenonCode, Phenomenon.Name PhenomenonName, Phenomenon.Description PhenomenonDescription,
+  Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription,
   UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
-  Sensor.Code SensorCode, Sensor.Name SensorName,
-  Instrument.Code InstrumentCode, Instrument.Name InstrumentName,
-  Station.Code StationCode, Station.Name StationName,
-  Site.Code SiteCode, Site.Name SiteName
+  Sensor.Code SensorCode, Sensor.Name SensorName, Sensor.Description SensorDescription,
+  Instrument.Code InstrumentCode, Instrument.Name InstrumentName, Instrument.Description InstrumentDescription,
+  Station.Code StationCode, Station.Name StationName, Station.Description StationDescription,
+  Site.Code SiteCode, Site.Name SiteName, Site.Description SiteDescription
 From
   ImportBatchSummary
   inner join Sensor

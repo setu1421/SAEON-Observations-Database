@@ -1,0 +1,59 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[DigitalObjectIdentifiers]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[UserDownloads].[OpenDataPlatformID] on table [dbo].[UserDownloads] must be added, but the column has
+         no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid
+         this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation
+         of smart-defaults as a deployment option.
+
+** User actions
+     Table rebuild
+       [dbo].[DigitalObjectIdentifiers] (Table)
+     Alter
+       [dbo].[Observation] (Table)
+       [dbo].[UserDownloads] (Table)
+       [dbo].[vImportBatchSummary] (View)
+     Create
+       [dbo].[UX_Project_ProgramID_Code] (Unique Constraint)
+       [dbo].[UX_Project_ProgramID_Name] (Unique Constraint)
+       [dbo].[Project].[IX_Project_ProgrammeID] (Index)
+       [dbo].[vSensorThingsAPIDatastreams] (View)
+       [dbo].[vSensorThingsAPIInstrumentDates] (View)
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIObservations] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
+       [dbo].[vSensorThingsAPIStationDates] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
+       [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
+       [dbo].[vSensorThingsAPIHistoricalLocations] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[DF_DigitalObjectIdentifiers_UpdatedAt] (Default Constraint)
+       [dbo].[DF_DigitalObjectIdentifiers_AddedAt] (Default Constraint)
+       [dbo].[FK_UserDownloads_DigitalObjectIdentifiers] (Foreign Key)
+     Create
+       [dbo].[DigitalObjectIdentifiers].[IX_DigitalObjectIdentifiers_Name] (Index)
+       [dbo].[Observation].[IX_Observation_ValueDecade] (Index)
+       [dbo].[Observation].[IX_Observation_ValueYear] (Index)
+       [dbo].[FK_UserDownloads_DigitalObjectIdentifiers] (Foreign Key)
+       [dbo].[TR_DigitalObjectIdentifiers_Insert] (Trigger)
+       [dbo].[TR_DigitalObjectIdentifiers_Update] (Trigger)
+     Refresh
+       [dbo].[vUserDownloads] (View)
+       [dbo].[vObservationExpansion] (View)
+       [dbo].[vObservation] (View)
+       [dbo].[vObservationJSON] (View)
+       [dbo].[vInventory] (View)
+
+The column [dbo].[UserDownloads].[OpenDataPlatformID] on table [dbo].[UserDownloads] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+If this deployment is executed, changes to [dbo].[Observation] might introduce run-time errors in [dbo].[vSensorThingsDatastreams].
+

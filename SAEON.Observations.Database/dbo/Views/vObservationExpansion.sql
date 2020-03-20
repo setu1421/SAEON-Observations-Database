@@ -16,7 +16,8 @@ Select
   Offering.ID OfferingID, Offering.Code OfferingCode, Offering.Name OfferingName, Offering.Description OfferingDescription,
   Observation.PhenomenonUOMID, UnitOfMeasure.ID UnitOfMeasureID, UnitOfMeasure.Code UnitOfMeasureCode, UnitOfMeasure.Unit UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
   Observation.StatusID, Status.Code StatusCode, Status.Name StatusName, Status.Description StatusDescription,
-  Observation.StatusReasonID, StatusReason.Code StatusReasonCode, StatusReason.Name StatusReasonName, StatusReason.Description StatusReasonDescription
+  Observation.StatusReasonID, StatusReason.Code StatusReasonCode, StatusReason.Name StatusReasonName, StatusReason.Description StatusReasonDescription,
+  Observation.UserId, Observation.AddedDate, Observation.AddedAt, Observation.UpdatedAt
 from
   Observation
   inner join ImportBatch

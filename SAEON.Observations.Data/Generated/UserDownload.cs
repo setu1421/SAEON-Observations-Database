@@ -142,7 +142,7 @@ namespace SAEON.Observations.Data
 				
 				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
 				colvarUserId.ColumnName = "UserId";
-				colvarUserId.DataType = DbType.String;
+				colvarUserId.DataType = DbType.AnsiString;
 				colvarUserId.MaxLength = 128;
 				colvarUserId.AutoIncrement = false;
 				colvarUserId.IsNullable = false;
@@ -171,7 +171,7 @@ namespace SAEON.Observations.Data
 				colvarDescription.DataType = DbType.AnsiString;
 				colvarDescription.MaxLength = 5000;
 				colvarDescription.AutoIncrement = false;
-				colvarDescription.IsNullable = true;
+				colvarDescription.IsNullable = false;
 				colvarDescription.IsPrimaryKey = false;
 				colvarDescription.IsForeignKey = false;
 				colvarDescription.IsReadOnly = false;
@@ -179,44 +179,72 @@ namespace SAEON.Observations.Data
 				colvarDescription.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarDescription);
 				
-				TableSchema.TableColumn colvarQueryInput = new TableSchema.TableColumn(schema);
-				colvarQueryInput.ColumnName = "QueryInput";
-				colvarQueryInput.DataType = DbType.AnsiString;
-				colvarQueryInput.MaxLength = 5000;
-				colvarQueryInput.AutoIncrement = false;
-				colvarQueryInput.IsNullable = false;
-				colvarQueryInput.IsPrimaryKey = false;
-				colvarQueryInput.IsForeignKey = false;
-				colvarQueryInput.IsReadOnly = false;
-				colvarQueryInput.DefaultSetting = @"";
-				colvarQueryInput.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarQueryInput);
+				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+				colvarAddedAt.ColumnName = "AddedAt";
+				colvarAddedAt.DataType = DbType.DateTime;
+				colvarAddedAt.MaxLength = 0;
+				colvarAddedAt.AutoIncrement = false;
+				colvarAddedAt.IsNullable = true;
+				colvarAddedAt.IsPrimaryKey = false;
+				colvarAddedAt.IsForeignKey = false;
+				colvarAddedAt.IsReadOnly = false;
 				
-				TableSchema.TableColumn colvarQueryURL = new TableSchema.TableColumn(schema);
-				colvarQueryURL.ColumnName = "QueryURL";
-				colvarQueryURL.DataType = DbType.AnsiString;
-				colvarQueryURL.MaxLength = 5000;
-				colvarQueryURL.AutoIncrement = false;
-				colvarQueryURL.IsNullable = false;
-				colvarQueryURL.IsPrimaryKey = false;
-				colvarQueryURL.IsForeignKey = false;
-				colvarQueryURL.IsReadOnly = false;
-				colvarQueryURL.DefaultSetting = @"";
-				colvarQueryURL.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarQueryURL);
+						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedAt);
 				
-				TableSchema.TableColumn colvarDoi = new TableSchema.TableColumn(schema);
-				colvarDoi.ColumnName = "DOI";
-				colvarDoi.DataType = DbType.AnsiString;
-				colvarDoi.MaxLength = 2000;
-				colvarDoi.AutoIncrement = false;
-				colvarDoi.IsNullable = false;
-				colvarDoi.IsPrimaryKey = false;
-				colvarDoi.IsForeignKey = false;
-				colvarDoi.IsReadOnly = false;
-				colvarDoi.DefaultSetting = @"";
-				colvarDoi.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarDoi);
+				TableSchema.TableColumn colvarAddedBy = new TableSchema.TableColumn(schema);
+				colvarAddedBy.ColumnName = "AddedBy";
+				colvarAddedBy.DataType = DbType.AnsiString;
+				colvarAddedBy.MaxLength = 128;
+				colvarAddedBy.AutoIncrement = false;
+				colvarAddedBy.IsNullable = false;
+				colvarAddedBy.IsPrimaryKey = false;
+				colvarAddedBy.IsForeignKey = false;
+				colvarAddedBy.IsReadOnly = false;
+				colvarAddedBy.DefaultSetting = @"";
+				colvarAddedBy.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedBy);
+				
+				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+				colvarUpdatedAt.ColumnName = "UpdatedAt";
+				colvarUpdatedAt.DataType = DbType.DateTime;
+				colvarUpdatedAt.MaxLength = 0;
+				colvarUpdatedAt.AutoIncrement = false;
+				colvarUpdatedAt.IsNullable = true;
+				colvarUpdatedAt.IsPrimaryKey = false;
+				colvarUpdatedAt.IsForeignKey = false;
+				colvarUpdatedAt.IsReadOnly = false;
+				
+						colvarUpdatedAt.DefaultSetting = @"(getdate())";
+				colvarUpdatedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUpdatedAt);
+				
+				TableSchema.TableColumn colvarUpdatedBy = new TableSchema.TableColumn(schema);
+				colvarUpdatedBy.ColumnName = "UpdatedBy";
+				colvarUpdatedBy.DataType = DbType.AnsiString;
+				colvarUpdatedBy.MaxLength = 128;
+				colvarUpdatedBy.AutoIncrement = false;
+				colvarUpdatedBy.IsNullable = false;
+				colvarUpdatedBy.IsPrimaryKey = false;
+				colvarUpdatedBy.IsForeignKey = false;
+				colvarUpdatedBy.IsReadOnly = false;
+				colvarUpdatedBy.DefaultSetting = @"";
+				colvarUpdatedBy.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUpdatedBy);
+				
+				TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
+				colvarRowVersion.ColumnName = "RowVersion";
+				colvarRowVersion.DataType = DbType.Binary;
+				colvarRowVersion.MaxLength = 0;
+				colvarRowVersion.AutoIncrement = false;
+				colvarRowVersion.IsNullable = false;
+				colvarRowVersion.IsPrimaryKey = false;
+				colvarRowVersion.IsForeignKey = false;
+				colvarRowVersion.IsReadOnly = true;
+				colvarRowVersion.DefaultSetting = @"";
+				colvarRowVersion.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarRowVersion);
 				
 				TableSchema.TableColumn colvarMetadataURL = new TableSchema.TableColumn(schema);
 				colvarMetadataURL.ColumnName = "MetadataURL";
@@ -247,7 +275,7 @@ namespace SAEON.Observations.Data
 				TableSchema.TableColumn colvarCitation = new TableSchema.TableColumn(schema);
 				colvarCitation.ColumnName = "Citation";
 				colvarCitation.DataType = DbType.AnsiString;
-				colvarCitation.MaxLength = 1000;
+				colvarCitation.MaxLength = 5000;
 				colvarCitation.AutoIncrement = false;
 				colvarCitation.IsNullable = false;
 				colvarCitation.IsPrimaryKey = false;
@@ -257,72 +285,266 @@ namespace SAEON.Observations.Data
 				colvarCitation.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarCitation);
 				
-				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
-				colvarAddedAt.ColumnName = "AddedAt";
-				colvarAddedAt.DataType = DbType.DateTime;
-				colvarAddedAt.MaxLength = 0;
-				colvarAddedAt.AutoIncrement = false;
-				colvarAddedAt.IsNullable = true;
-				colvarAddedAt.IsPrimaryKey = false;
-				colvarAddedAt.IsForeignKey = false;
-				colvarAddedAt.IsReadOnly = false;
+				TableSchema.TableColumn colvarTitle = new TableSchema.TableColumn(schema);
+				colvarTitle.ColumnName = "Title";
+				colvarTitle.DataType = DbType.AnsiString;
+				colvarTitle.MaxLength = 5000;
+				colvarTitle.AutoIncrement = false;
+				colvarTitle.IsNullable = false;
+				colvarTitle.IsPrimaryKey = false;
+				colvarTitle.IsForeignKey = false;
+				colvarTitle.IsReadOnly = false;
+				colvarTitle.DefaultSetting = @"";
+				colvarTitle.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarTitle);
 				
-						colvarAddedAt.DefaultSetting = @"(getdate())";
-				colvarAddedAt.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarAddedAt);
+				TableSchema.TableColumn colvarKeywords = new TableSchema.TableColumn(schema);
+				colvarKeywords.ColumnName = "Keywords";
+				colvarKeywords.DataType = DbType.AnsiString;
+				colvarKeywords.MaxLength = 1000;
+				colvarKeywords.AutoIncrement = false;
+				colvarKeywords.IsNullable = false;
+				colvarKeywords.IsPrimaryKey = false;
+				colvarKeywords.IsForeignKey = false;
+				colvarKeywords.IsReadOnly = false;
+				colvarKeywords.DefaultSetting = @"";
+				colvarKeywords.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarKeywords);
 				
-				TableSchema.TableColumn colvarAddedBy = new TableSchema.TableColumn(schema);
-				colvarAddedBy.ColumnName = "AddedBy";
-				colvarAddedBy.DataType = DbType.String;
-				colvarAddedBy.MaxLength = 128;
-				colvarAddedBy.AutoIncrement = false;
-				colvarAddedBy.IsNullable = false;
-				colvarAddedBy.IsPrimaryKey = false;
-				colvarAddedBy.IsForeignKey = false;
-				colvarAddedBy.IsReadOnly = false;
-				colvarAddedBy.DefaultSetting = @"";
-				colvarAddedBy.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarAddedBy);
+				TableSchema.TableColumn colvarDateX = new TableSchema.TableColumn(schema);
+				colvarDateX.ColumnName = "Date";
+				colvarDateX.DataType = DbType.DateTime;
+				colvarDateX.MaxLength = 0;
+				colvarDateX.AutoIncrement = false;
+				colvarDateX.IsNullable = false;
+				colvarDateX.IsPrimaryKey = false;
+				colvarDateX.IsForeignKey = false;
+				colvarDateX.IsReadOnly = false;
+				colvarDateX.DefaultSetting = @"";
+				colvarDateX.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarDateX);
 				
-				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
-				colvarUpdatedAt.ColumnName = "UpdatedAt";
-				colvarUpdatedAt.DataType = DbType.DateTime;
-				colvarUpdatedAt.MaxLength = 0;
-				colvarUpdatedAt.AutoIncrement = false;
-				colvarUpdatedAt.IsNullable = true;
-				colvarUpdatedAt.IsPrimaryKey = false;
-				colvarUpdatedAt.IsForeignKey = false;
-				colvarUpdatedAt.IsReadOnly = false;
+				TableSchema.TableColumn colvarInput = new TableSchema.TableColumn(schema);
+				colvarInput.ColumnName = "Input";
+				colvarInput.DataType = DbType.AnsiString;
+				colvarInput.MaxLength = 5000;
+				colvarInput.AutoIncrement = false;
+				colvarInput.IsNullable = false;
+				colvarInput.IsPrimaryKey = false;
+				colvarInput.IsForeignKey = false;
+				colvarInput.IsReadOnly = false;
+				colvarInput.DefaultSetting = @"";
+				colvarInput.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarInput);
 				
-						colvarUpdatedAt.DefaultSetting = @"(getdate())";
-				colvarUpdatedAt.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarUpdatedAt);
+				TableSchema.TableColumn colvarRequeryURL = new TableSchema.TableColumn(schema);
+				colvarRequeryURL.ColumnName = "RequeryURL";
+				colvarRequeryURL.DataType = DbType.AnsiString;
+				colvarRequeryURL.MaxLength = 5000;
+				colvarRequeryURL.AutoIncrement = false;
+				colvarRequeryURL.IsNullable = false;
+				colvarRequeryURL.IsPrimaryKey = false;
+				colvarRequeryURL.IsForeignKey = false;
+				colvarRequeryURL.IsReadOnly = false;
+				colvarRequeryURL.DefaultSetting = @"";
+				colvarRequeryURL.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarRequeryURL);
 				
-				TableSchema.TableColumn colvarUpdatedBy = new TableSchema.TableColumn(schema);
-				colvarUpdatedBy.ColumnName = "UpdatedBy";
-				colvarUpdatedBy.DataType = DbType.String;
-				colvarUpdatedBy.MaxLength = 128;
-				colvarUpdatedBy.AutoIncrement = false;
-				colvarUpdatedBy.IsNullable = false;
-				colvarUpdatedBy.IsPrimaryKey = false;
-				colvarUpdatedBy.IsForeignKey = false;
-				colvarUpdatedBy.IsReadOnly = false;
-				colvarUpdatedBy.DefaultSetting = @"";
-				colvarUpdatedBy.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarUpdatedBy);
+				TableSchema.TableColumn colvarDigitalObjectIdentifierID = new TableSchema.TableColumn(schema);
+				colvarDigitalObjectIdentifierID.ColumnName = "DigitalObjectIdentifierID";
+				colvarDigitalObjectIdentifierID.DataType = DbType.Int32;
+				colvarDigitalObjectIdentifierID.MaxLength = 0;
+				colvarDigitalObjectIdentifierID.AutoIncrement = false;
+				colvarDigitalObjectIdentifierID.IsNullable = false;
+				colvarDigitalObjectIdentifierID.IsPrimaryKey = false;
+				colvarDigitalObjectIdentifierID.IsForeignKey = true;
+				colvarDigitalObjectIdentifierID.IsReadOnly = false;
+				colvarDigitalObjectIdentifierID.DefaultSetting = @"";
 				
-				TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
-				colvarRowVersion.ColumnName = "RowVersion";
-				colvarRowVersion.DataType = DbType.Binary;
-				colvarRowVersion.MaxLength = 0;
-				colvarRowVersion.AutoIncrement = false;
-				colvarRowVersion.IsNullable = false;
-				colvarRowVersion.IsPrimaryKey = false;
-				colvarRowVersion.IsForeignKey = false;
-				colvarRowVersion.IsReadOnly = true;
-				colvarRowVersion.DefaultSetting = @"";
-				colvarRowVersion.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarRowVersion);
+					colvarDigitalObjectIdentifierID.ForeignKeyTableName = "DigitalObjectIdentifiers";
+				schema.Columns.Add(colvarDigitalObjectIdentifierID);
+				
+				TableSchema.TableColumn colvarMetadataJson = new TableSchema.TableColumn(schema);
+				colvarMetadataJson.ColumnName = "MetadataJson";
+				colvarMetadataJson.DataType = DbType.AnsiString;
+				colvarMetadataJson.MaxLength = -1;
+				colvarMetadataJson.AutoIncrement = false;
+				colvarMetadataJson.IsNullable = false;
+				colvarMetadataJson.IsPrimaryKey = false;
+				colvarMetadataJson.IsForeignKey = false;
+				colvarMetadataJson.IsReadOnly = false;
+				colvarMetadataJson.DefaultSetting = @"";
+				colvarMetadataJson.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarMetadataJson);
+				
+				TableSchema.TableColumn colvarZipFullName = new TableSchema.TableColumn(schema);
+				colvarZipFullName.ColumnName = "ZipFullName";
+				colvarZipFullName.DataType = DbType.AnsiString;
+				colvarZipFullName.MaxLength = 2000;
+				colvarZipFullName.AutoIncrement = false;
+				colvarZipFullName.IsNullable = false;
+				colvarZipFullName.IsPrimaryKey = false;
+				colvarZipFullName.IsForeignKey = false;
+				colvarZipFullName.IsReadOnly = false;
+				colvarZipFullName.DefaultSetting = @"";
+				colvarZipFullName.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarZipFullName);
+				
+				TableSchema.TableColumn colvarZipCheckSum = new TableSchema.TableColumn(schema);
+				colvarZipCheckSum.ColumnName = "ZipCheckSum";
+				colvarZipCheckSum.DataType = DbType.AnsiString;
+				colvarZipCheckSum.MaxLength = 64;
+				colvarZipCheckSum.AutoIncrement = false;
+				colvarZipCheckSum.IsNullable = false;
+				colvarZipCheckSum.IsPrimaryKey = false;
+				colvarZipCheckSum.IsForeignKey = false;
+				colvarZipCheckSum.IsReadOnly = false;
+				colvarZipCheckSum.DefaultSetting = @"";
+				colvarZipCheckSum.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarZipCheckSum);
+				
+				TableSchema.TableColumn colvarZipURL = new TableSchema.TableColumn(schema);
+				colvarZipURL.ColumnName = "ZipURL";
+				colvarZipURL.DataType = DbType.AnsiString;
+				colvarZipURL.MaxLength = 2000;
+				colvarZipURL.AutoIncrement = false;
+				colvarZipURL.IsNullable = false;
+				colvarZipURL.IsPrimaryKey = false;
+				colvarZipURL.IsForeignKey = false;
+				colvarZipURL.IsReadOnly = false;
+				colvarZipURL.DefaultSetting = @"";
+				colvarZipURL.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarZipURL);
+				
+				TableSchema.TableColumn colvarPlaces = new TableSchema.TableColumn(schema);
+				colvarPlaces.ColumnName = "Places";
+				colvarPlaces.DataType = DbType.AnsiString;
+				colvarPlaces.MaxLength = 5000;
+				colvarPlaces.AutoIncrement = false;
+				colvarPlaces.IsNullable = true;
+				colvarPlaces.IsPrimaryKey = false;
+				colvarPlaces.IsForeignKey = false;
+				colvarPlaces.IsReadOnly = false;
+				colvarPlaces.DefaultSetting = @"";
+				colvarPlaces.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarPlaces);
+				
+				TableSchema.TableColumn colvarLatitudeNorth = new TableSchema.TableColumn(schema);
+				colvarLatitudeNorth.ColumnName = "LatitudeNorth";
+				colvarLatitudeNorth.DataType = DbType.Double;
+				colvarLatitudeNorth.MaxLength = 0;
+				colvarLatitudeNorth.AutoIncrement = false;
+				colvarLatitudeNorth.IsNullable = true;
+				colvarLatitudeNorth.IsPrimaryKey = false;
+				colvarLatitudeNorth.IsForeignKey = false;
+				colvarLatitudeNorth.IsReadOnly = false;
+				colvarLatitudeNorth.DefaultSetting = @"";
+				colvarLatitudeNorth.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarLatitudeNorth);
+				
+				TableSchema.TableColumn colvarLatitudeSouth = new TableSchema.TableColumn(schema);
+				colvarLatitudeSouth.ColumnName = "LatitudeSouth";
+				colvarLatitudeSouth.DataType = DbType.Double;
+				colvarLatitudeSouth.MaxLength = 0;
+				colvarLatitudeSouth.AutoIncrement = false;
+				colvarLatitudeSouth.IsNullable = true;
+				colvarLatitudeSouth.IsPrimaryKey = false;
+				colvarLatitudeSouth.IsForeignKey = false;
+				colvarLatitudeSouth.IsReadOnly = false;
+				colvarLatitudeSouth.DefaultSetting = @"";
+				colvarLatitudeSouth.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarLatitudeSouth);
+				
+				TableSchema.TableColumn colvarLongitudeWest = new TableSchema.TableColumn(schema);
+				colvarLongitudeWest.ColumnName = "LongitudeWest";
+				colvarLongitudeWest.DataType = DbType.Double;
+				colvarLongitudeWest.MaxLength = 0;
+				colvarLongitudeWest.AutoIncrement = false;
+				colvarLongitudeWest.IsNullable = true;
+				colvarLongitudeWest.IsPrimaryKey = false;
+				colvarLongitudeWest.IsForeignKey = false;
+				colvarLongitudeWest.IsReadOnly = false;
+				colvarLongitudeWest.DefaultSetting = @"";
+				colvarLongitudeWest.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarLongitudeWest);
+				
+				TableSchema.TableColumn colvarLongitudeEast = new TableSchema.TableColumn(schema);
+				colvarLongitudeEast.ColumnName = "LongitudeEast";
+				colvarLongitudeEast.DataType = DbType.Double;
+				colvarLongitudeEast.MaxLength = 0;
+				colvarLongitudeEast.AutoIncrement = false;
+				colvarLongitudeEast.IsNullable = true;
+				colvarLongitudeEast.IsPrimaryKey = false;
+				colvarLongitudeEast.IsForeignKey = false;
+				colvarLongitudeEast.IsReadOnly = false;
+				colvarLongitudeEast.DefaultSetting = @"";
+				colvarLongitudeEast.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarLongitudeEast);
+				
+				TableSchema.TableColumn colvarElevationMinimum = new TableSchema.TableColumn(schema);
+				colvarElevationMinimum.ColumnName = "ElevationMinimum";
+				colvarElevationMinimum.DataType = DbType.Double;
+				colvarElevationMinimum.MaxLength = 0;
+				colvarElevationMinimum.AutoIncrement = false;
+				colvarElevationMinimum.IsNullable = true;
+				colvarElevationMinimum.IsPrimaryKey = false;
+				colvarElevationMinimum.IsForeignKey = false;
+				colvarElevationMinimum.IsReadOnly = false;
+				colvarElevationMinimum.DefaultSetting = @"";
+				colvarElevationMinimum.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarElevationMinimum);
+				
+				TableSchema.TableColumn colvarElevationMaximum = new TableSchema.TableColumn(schema);
+				colvarElevationMaximum.ColumnName = "ElevationMaximum";
+				colvarElevationMaximum.DataType = DbType.Double;
+				colvarElevationMaximum.MaxLength = 0;
+				colvarElevationMaximum.AutoIncrement = false;
+				colvarElevationMaximum.IsNullable = true;
+				colvarElevationMaximum.IsPrimaryKey = false;
+				colvarElevationMaximum.IsForeignKey = false;
+				colvarElevationMaximum.IsReadOnly = false;
+				colvarElevationMaximum.DefaultSetting = @"";
+				colvarElevationMaximum.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarElevationMaximum);
+				
+				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
+				colvarStartDate.ColumnName = "StartDate";
+				colvarStartDate.DataType = DbType.DateTime;
+				colvarStartDate.MaxLength = 0;
+				colvarStartDate.AutoIncrement = false;
+				colvarStartDate.IsNullable = true;
+				colvarStartDate.IsPrimaryKey = false;
+				colvarStartDate.IsForeignKey = false;
+				colvarStartDate.IsReadOnly = false;
+				colvarStartDate.DefaultSetting = @"";
+				colvarStartDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarStartDate);
+				
+				TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
+				colvarEndDate.ColumnName = "EndDate";
+				colvarEndDate.DataType = DbType.DateTime;
+				colvarEndDate.MaxLength = 0;
+				colvarEndDate.AutoIncrement = false;
+				colvarEndDate.IsNullable = true;
+				colvarEndDate.IsPrimaryKey = false;
+				colvarEndDate.IsForeignKey = false;
+				colvarEndDate.IsReadOnly = false;
+				colvarEndDate.DefaultSetting = @"";
+				colvarEndDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarEndDate);
+				
+				TableSchema.TableColumn colvarOpenDataPlatformID = new TableSchema.TableColumn(schema);
+				colvarOpenDataPlatformID.ColumnName = "OpenDataPlatformID";
+				colvarOpenDataPlatformID.DataType = DbType.Guid;
+				colvarOpenDataPlatformID.MaxLength = 0;
+				colvarOpenDataPlatformID.AutoIncrement = false;
+				colvarOpenDataPlatformID.IsNullable = false;
+				colvarOpenDataPlatformID.IsPrimaryKey = false;
+				colvarOpenDataPlatformID.IsForeignKey = false;
+				colvarOpenDataPlatformID.IsReadOnly = false;
+				colvarOpenDataPlatformID.DefaultSetting = @"";
+				colvarOpenDataPlatformID.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarOpenDataPlatformID);
 				
 				BaseSchema = schema;
 				//add this schema to the provider
@@ -366,54 +588,6 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.Description, value); }
 		}
 		  
-		[XmlAttribute("QueryInput")]
-		[Bindable(true)]
-		public string QueryInput 
-		{
-			get { return GetColumnValue<string>(Columns.QueryInput); }
-			set { SetColumnValue(Columns.QueryInput, value); }
-		}
-		  
-		[XmlAttribute("QueryURL")]
-		[Bindable(true)]
-		public string QueryURL 
-		{
-			get { return GetColumnValue<string>(Columns.QueryURL); }
-			set { SetColumnValue(Columns.QueryURL, value); }
-		}
-		  
-		[XmlAttribute("Doi")]
-		[Bindable(true)]
-		public string Doi 
-		{
-			get { return GetColumnValue<string>(Columns.Doi); }
-			set { SetColumnValue(Columns.Doi, value); }
-		}
-		  
-		[XmlAttribute("MetadataURL")]
-		[Bindable(true)]
-		public string MetadataURL 
-		{
-			get { return GetColumnValue<string>(Columns.MetadataURL); }
-			set { SetColumnValue(Columns.MetadataURL, value); }
-		}
-		  
-		[XmlAttribute("DownloadURL")]
-		[Bindable(true)]
-		public string DownloadURL 
-		{
-			get { return GetColumnValue<string>(Columns.DownloadURL); }
-			set { SetColumnValue(Columns.DownloadURL, value); }
-		}
-		  
-		[XmlAttribute("Citation")]
-		[Bindable(true)]
-		public string Citation 
-		{
-			get { return GetColumnValue<string>(Columns.Citation); }
-			set { SetColumnValue(Columns.Citation, value); }
-		}
-		  
 		[XmlAttribute("AddedAt")]
 		[Bindable(true)]
 		public DateTime? AddedAt 
@@ -453,13 +627,210 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
 			set { SetColumnValue(Columns.RowVersion, value); }
 		}
+		  
+		[XmlAttribute("MetadataURL")]
+		[Bindable(true)]
+		public string MetadataURL 
+		{
+			get { return GetColumnValue<string>(Columns.MetadataURL); }
+			set { SetColumnValue(Columns.MetadataURL, value); }
+		}
+		  
+		[XmlAttribute("DownloadURL")]
+		[Bindable(true)]
+		public string DownloadURL 
+		{
+			get { return GetColumnValue<string>(Columns.DownloadURL); }
+			set { SetColumnValue(Columns.DownloadURL, value); }
+		}
+		  
+		[XmlAttribute("Citation")]
+		[Bindable(true)]
+		public string Citation 
+		{
+			get { return GetColumnValue<string>(Columns.Citation); }
+			set { SetColumnValue(Columns.Citation, value); }
+		}
+		  
+		[XmlAttribute("Title")]
+		[Bindable(true)]
+		public string Title 
+		{
+			get { return GetColumnValue<string>(Columns.Title); }
+			set { SetColumnValue(Columns.Title, value); }
+		}
+		  
+		[XmlAttribute("Keywords")]
+		[Bindable(true)]
+		public string Keywords 
+		{
+			get { return GetColumnValue<string>(Columns.Keywords); }
+			set { SetColumnValue(Columns.Keywords, value); }
+		}
+		  
+		[XmlAttribute("DateX")]
+		[Bindable(true)]
+		public DateTime DateX 
+		{
+			get { return GetColumnValue<DateTime>(Columns.DateX); }
+			set { SetColumnValue(Columns.DateX, value); }
+		}
+		  
+		[XmlAttribute("Input")]
+		[Bindable(true)]
+		public string Input 
+		{
+			get { return GetColumnValue<string>(Columns.Input); }
+			set { SetColumnValue(Columns.Input, value); }
+		}
+		  
+		[XmlAttribute("RequeryURL")]
+		[Bindable(true)]
+		public string RequeryURL 
+		{
+			get { return GetColumnValue<string>(Columns.RequeryURL); }
+			set { SetColumnValue(Columns.RequeryURL, value); }
+		}
+		  
+		[XmlAttribute("DigitalObjectIdentifierID")]
+		[Bindable(true)]
+		public int DigitalObjectIdentifierID 
+		{
+			get { return GetColumnValue<int>(Columns.DigitalObjectIdentifierID); }
+			set { SetColumnValue(Columns.DigitalObjectIdentifierID, value); }
+		}
+		  
+		[XmlAttribute("MetadataJson")]
+		[Bindable(true)]
+		public string MetadataJson 
+		{
+			get { return GetColumnValue<string>(Columns.MetadataJson); }
+			set { SetColumnValue(Columns.MetadataJson, value); }
+		}
+		  
+		[XmlAttribute("ZipFullName")]
+		[Bindable(true)]
+		public string ZipFullName 
+		{
+			get { return GetColumnValue<string>(Columns.ZipFullName); }
+			set { SetColumnValue(Columns.ZipFullName, value); }
+		}
+		  
+		[XmlAttribute("ZipCheckSum")]
+		[Bindable(true)]
+		public string ZipCheckSum 
+		{
+			get { return GetColumnValue<string>(Columns.ZipCheckSum); }
+			set { SetColumnValue(Columns.ZipCheckSum, value); }
+		}
+		  
+		[XmlAttribute("ZipURL")]
+		[Bindable(true)]
+		public string ZipURL 
+		{
+			get { return GetColumnValue<string>(Columns.ZipURL); }
+			set { SetColumnValue(Columns.ZipURL, value); }
+		}
+		  
+		[XmlAttribute("Places")]
+		[Bindable(true)]
+		public string Places 
+		{
+			get { return GetColumnValue<string>(Columns.Places); }
+			set { SetColumnValue(Columns.Places, value); }
+		}
+		  
+		[XmlAttribute("LatitudeNorth")]
+		[Bindable(true)]
+		public double? LatitudeNorth 
+		{
+			get { return GetColumnValue<double?>(Columns.LatitudeNorth); }
+			set { SetColumnValue(Columns.LatitudeNorth, value); }
+		}
+		  
+		[XmlAttribute("LatitudeSouth")]
+		[Bindable(true)]
+		public double? LatitudeSouth 
+		{
+			get { return GetColumnValue<double?>(Columns.LatitudeSouth); }
+			set { SetColumnValue(Columns.LatitudeSouth, value); }
+		}
+		  
+		[XmlAttribute("LongitudeWest")]
+		[Bindable(true)]
+		public double? LongitudeWest 
+		{
+			get { return GetColumnValue<double?>(Columns.LongitudeWest); }
+			set { SetColumnValue(Columns.LongitudeWest, value); }
+		}
+		  
+		[XmlAttribute("LongitudeEast")]
+		[Bindable(true)]
+		public double? LongitudeEast 
+		{
+			get { return GetColumnValue<double?>(Columns.LongitudeEast); }
+			set { SetColumnValue(Columns.LongitudeEast, value); }
+		}
+		  
+		[XmlAttribute("ElevationMinimum")]
+		[Bindable(true)]
+		public double? ElevationMinimum 
+		{
+			get { return GetColumnValue<double?>(Columns.ElevationMinimum); }
+			set { SetColumnValue(Columns.ElevationMinimum, value); }
+		}
+		  
+		[XmlAttribute("ElevationMaximum")]
+		[Bindable(true)]
+		public double? ElevationMaximum 
+		{
+			get { return GetColumnValue<double?>(Columns.ElevationMaximum); }
+			set { SetColumnValue(Columns.ElevationMaximum, value); }
+		}
+		  
+		[XmlAttribute("StartDate")]
+		[Bindable(true)]
+		public DateTime? StartDate 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.StartDate); }
+			set { SetColumnValue(Columns.StartDate, value); }
+		}
+		  
+		[XmlAttribute("EndDate")]
+		[Bindable(true)]
+		public DateTime? EndDate 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
+			set { SetColumnValue(Columns.EndDate, value); }
+		}
+		  
+		[XmlAttribute("OpenDataPlatformID")]
+		[Bindable(true)]
+		public Guid OpenDataPlatformID 
+		{
+			get { return GetColumnValue<Guid>(Columns.OpenDataPlatformID); }
+			set { SetColumnValue(Columns.OpenDataPlatformID, value); }
+		}
 		
 		#endregion
 		
 		
 			
 		
-		//no foreign key tables defined (0)
+		#region ForeignKey Properties
+		
+		/// <summary>
+		/// Returns a DigitalObjectIdentifier ActiveRecord object related to this UserDownload
+		/// 
+		/// </summary>
+		public SAEON.Observations.Data.DigitalObjectIdentifier DigitalObjectIdentifier
+		{
+			get { return SAEON.Observations.Data.DigitalObjectIdentifier.FetchByID(this.DigitalObjectIdentifierID); }
+			set { SetColumnValue("DigitalObjectIdentifierID", value.Id); }
+		}
+		
+		
+		#endregion
 		
 		
 		
@@ -473,7 +844,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,string varQueryURL,string varDoi,string varMetadataURL,string varDownloadURL,string varCitation,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion)
+		public static void Insert(Guid varId,string varUserId,string varName,string varDescription,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,string varMetadataURL,string varDownloadURL,string varCitation,string varTitle,string varKeywords,DateTime varDateX,string varInput,string varRequeryURL,int varDigitalObjectIdentifierID,string varMetadataJson,string varZipFullName,string varZipCheckSum,string varZipURL,string varPlaces,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate,Guid varOpenDataPlatformID)
 		{
 			UserDownload item = new UserDownload();
 			
@@ -485,18 +856,6 @@ namespace SAEON.Observations.Data
 			
 			item.Description = varDescription;
 			
-			item.QueryInput = varQueryInput;
-			
-			item.QueryURL = varQueryURL;
-			
-			item.Doi = varDoi;
-			
-			item.MetadataURL = varMetadataURL;
-			
-			item.DownloadURL = varDownloadURL;
-			
-			item.Citation = varCitation;
-			
 			item.AddedAt = varAddedAt;
 			
 			item.AddedBy = varAddedBy;
@@ -506,6 +865,52 @@ namespace SAEON.Observations.Data
 			item.UpdatedBy = varUpdatedBy;
 			
 			item.RowVersion = varRowVersion;
+			
+			item.MetadataURL = varMetadataURL;
+			
+			item.DownloadURL = varDownloadURL;
+			
+			item.Citation = varCitation;
+			
+			item.Title = varTitle;
+			
+			item.Keywords = varKeywords;
+			
+			item.DateX = varDateX;
+			
+			item.Input = varInput;
+			
+			item.RequeryURL = varRequeryURL;
+			
+			item.DigitalObjectIdentifierID = varDigitalObjectIdentifierID;
+			
+			item.MetadataJson = varMetadataJson;
+			
+			item.ZipFullName = varZipFullName;
+			
+			item.ZipCheckSum = varZipCheckSum;
+			
+			item.ZipURL = varZipURL;
+			
+			item.Places = varPlaces;
+			
+			item.LatitudeNorth = varLatitudeNorth;
+			
+			item.LatitudeSouth = varLatitudeSouth;
+			
+			item.LongitudeWest = varLongitudeWest;
+			
+			item.LongitudeEast = varLongitudeEast;
+			
+			item.ElevationMinimum = varElevationMinimum;
+			
+			item.ElevationMaximum = varElevationMaximum;
+			
+			item.StartDate = varStartDate;
+			
+			item.EndDate = varEndDate;
+			
+			item.OpenDataPlatformID = varOpenDataPlatformID;
 			
 		
 			if (System.Web.HttpContext.Current != null)
@@ -517,7 +922,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,string varUserId,string varName,string varDescription,string varQueryInput,string varQueryURL,string varDoi,string varMetadataURL,string varDownloadURL,string varCitation,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion)
+		public static void Update(Guid varId,string varUserId,string varName,string varDescription,DateTime? varAddedAt,string varAddedBy,DateTime? varUpdatedAt,string varUpdatedBy,byte[] varRowVersion,string varMetadataURL,string varDownloadURL,string varCitation,string varTitle,string varKeywords,DateTime varDateX,string varInput,string varRequeryURL,int varDigitalObjectIdentifierID,string varMetadataJson,string varZipFullName,string varZipCheckSum,string varZipURL,string varPlaces,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate,Guid varOpenDataPlatformID)
 		{
 			UserDownload item = new UserDownload();
 			
@@ -529,18 +934,6 @@ namespace SAEON.Observations.Data
 			
 				item.Description = varDescription;
 			
-				item.QueryInput = varQueryInput;
-			
-				item.QueryURL = varQueryURL;
-			
-				item.Doi = varDoi;
-			
-				item.MetadataURL = varMetadataURL;
-			
-				item.DownloadURL = varDownloadURL;
-			
-				item.Citation = varCitation;
-			
 				item.AddedAt = varAddedAt;
 			
 				item.AddedBy = varAddedBy;
@@ -550,6 +943,52 @@ namespace SAEON.Observations.Data
 				item.UpdatedBy = varUpdatedBy;
 			
 				item.RowVersion = varRowVersion;
+			
+				item.MetadataURL = varMetadataURL;
+			
+				item.DownloadURL = varDownloadURL;
+			
+				item.Citation = varCitation;
+			
+				item.Title = varTitle;
+			
+				item.Keywords = varKeywords;
+			
+				item.DateX = varDateX;
+			
+				item.Input = varInput;
+			
+				item.RequeryURL = varRequeryURL;
+			
+				item.DigitalObjectIdentifierID = varDigitalObjectIdentifierID;
+			
+				item.MetadataJson = varMetadataJson;
+			
+				item.ZipFullName = varZipFullName;
+			
+				item.ZipCheckSum = varZipCheckSum;
+			
+				item.ZipURL = varZipURL;
+			
+				item.Places = varPlaces;
+			
+				item.LatitudeNorth = varLatitudeNorth;
+			
+				item.LatitudeSouth = varLatitudeSouth;
+			
+				item.LongitudeWest = varLongitudeWest;
+			
+				item.LongitudeEast = varLongitudeEast;
+			
+				item.ElevationMinimum = varElevationMinimum;
+			
+				item.ElevationMaximum = varElevationMaximum;
+			
+				item.StartDate = varStartDate;
+			
+				item.EndDate = varEndDate;
+			
+				item.OpenDataPlatformID = varOpenDataPlatformID;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -592,79 +1031,198 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn QueryInputColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[4]; }
         }
         
         
         
-        public static TableSchema.TableColumn QueryURLColumn
+        public static TableSchema.TableColumn AddedByColumn
         {
             get { return Schema.Columns[5]; }
         }
         
         
         
-        public static TableSchema.TableColumn DoiColumn
+        public static TableSchema.TableColumn UpdatedAtColumn
         {
             get { return Schema.Columns[6]; }
         }
         
         
         
-        public static TableSchema.TableColumn MetadataURLColumn
+        public static TableSchema.TableColumn UpdatedByColumn
         {
             get { return Schema.Columns[7]; }
         }
         
         
         
-        public static TableSchema.TableColumn DownloadURLColumn
+        public static TableSchema.TableColumn RowVersionColumn
         {
             get { return Schema.Columns[8]; }
         }
         
         
         
-        public static TableSchema.TableColumn CitationColumn
+        public static TableSchema.TableColumn MetadataURLColumn
         {
             get { return Schema.Columns[9]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn DownloadURLColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedByColumn
+        public static TableSchema.TableColumn CitationColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn TitleColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedByColumn
+        public static TableSchema.TableColumn KeywordsColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn RowVersionColumn
+        public static TableSchema.TableColumn DateXColumn
         {
             get { return Schema.Columns[14]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn InputColumn
+        {
+            get { return Schema.Columns[15]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn RequeryURLColumn
+        {
+            get { return Schema.Columns[16]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn DigitalObjectIdentifierIDColumn
+        {
+            get { return Schema.Columns[17]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn MetadataJsonColumn
+        {
+            get { return Schema.Columns[18]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ZipFullNameColumn
+        {
+            get { return Schema.Columns[19]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ZipCheckSumColumn
+        {
+            get { return Schema.Columns[20]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ZipURLColumn
+        {
+            get { return Schema.Columns[21]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn PlacesColumn
+        {
+            get { return Schema.Columns[22]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn LatitudeNorthColumn
+        {
+            get { return Schema.Columns[23]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn LatitudeSouthColumn
+        {
+            get { return Schema.Columns[24]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn LongitudeWestColumn
+        {
+            get { return Schema.Columns[25]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn LongitudeEastColumn
+        {
+            get { return Schema.Columns[26]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ElevationMinimumColumn
+        {
+            get { return Schema.Columns[27]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn ElevationMaximumColumn
+        {
+            get { return Schema.Columns[28]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn StartDateColumn
+        {
+            get { return Schema.Columns[29]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn EndDateColumn
+        {
+            get { return Schema.Columns[30]; }
+        }
+        
+        
+        
+        public static TableSchema.TableColumn OpenDataPlatformIDColumn
+        {
+            get { return Schema.Columns[31]; }
         }
         
         
@@ -677,17 +1235,34 @@ namespace SAEON.Observations.Data
 			 public static string UserId = @"UserId";
 			 public static string Name = @"Name";
 			 public static string Description = @"Description";
-			 public static string QueryInput = @"QueryInput";
-			 public static string QueryURL = @"QueryURL";
-			 public static string Doi = @"DOI";
-			 public static string MetadataURL = @"MetadataURL";
-			 public static string DownloadURL = @"DownloadURL";
-			 public static string Citation = @"Citation";
 			 public static string AddedAt = @"AddedAt";
 			 public static string AddedBy = @"AddedBy";
 			 public static string UpdatedAt = @"UpdatedAt";
 			 public static string UpdatedBy = @"UpdatedBy";
 			 public static string RowVersion = @"RowVersion";
+			 public static string MetadataURL = @"MetadataURL";
+			 public static string DownloadURL = @"DownloadURL";
+			 public static string Citation = @"Citation";
+			 public static string Title = @"Title";
+			 public static string Keywords = @"Keywords";
+			 public static string DateX = @"Date";
+			 public static string Input = @"Input";
+			 public static string RequeryURL = @"RequeryURL";
+			 public static string DigitalObjectIdentifierID = @"DigitalObjectIdentifierID";
+			 public static string MetadataJson = @"MetadataJson";
+			 public static string ZipFullName = @"ZipFullName";
+			 public static string ZipCheckSum = @"ZipCheckSum";
+			 public static string ZipURL = @"ZipURL";
+			 public static string Places = @"Places";
+			 public static string LatitudeNorth = @"LatitudeNorth";
+			 public static string LatitudeSouth = @"LatitudeSouth";
+			 public static string LongitudeWest = @"LongitudeWest";
+			 public static string LongitudeEast = @"LongitudeEast";
+			 public static string ElevationMinimum = @"ElevationMinimum";
+			 public static string ElevationMaximum = @"ElevationMaximum";
+			 public static string StartDate = @"StartDate";
+			 public static string EndDate = @"EndDate";
+			 public static string OpenDataPlatformID = @"OpenDataPlatformID";
 						
 		}
 		#endregion

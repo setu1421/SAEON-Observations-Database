@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Project]
 (
     [ID] UNIQUEIDENTIFIER CONSTRAINT [DF_Project_ID] DEFAULT (newid()), 
-    [ProgrammeID] UNIQUEIDENTIFIER NULL,
+    [ProgrammeID] UNIQUEIDENTIFIER NOT NULL,
     [Code] VARCHAR(50) NOT NULL, 
     [Name] VARCHAR(150) NOT NULL, 
     [Description] VARCHAR(5000) NULL,

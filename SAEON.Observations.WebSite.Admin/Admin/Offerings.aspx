@@ -88,7 +88,7 @@
                                         <ext:Column Header="Description" DataIndex="Description" Width="500" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
-                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" ToolTip-Text="Edit" />
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -193,7 +193,8 @@
                     <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server"
-                                FieldLabel="Description" AnchorHorizontal="96%">
+                                FieldLabel="Description" AnchorHorizontal="96%" IsRemoteValidation="true" AllowBlank="false" BlankText="Description is a required">
+                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Panel>

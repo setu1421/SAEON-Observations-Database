@@ -1,6 +1,6 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -14,12 +14,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Sites")]
     public class SitesController : CodedApiController<Site>
     {
-        protected override List<Expression<Func<Site, object>>> GetIncludes()
+        protected override IQueryable<Site> GetQuery(Expression<Func<Site, bool>> extraWhere = null)
         {
-            var list = base.GetIncludes();
-            list.Add(i => i.Organisations);
-            list.Add(i => i.Stations);
-            return list;
+            return base.GetQuery(extraWhere).Include(i => i.Organisations).Include(i => i.Stations);
         }
 
         /// <summary>
@@ -37,9 +34,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Site</param>
         /// <returns>Site</returns>
         [ResponseType(typeof(Site))]
-        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
+        public override async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
         {
-            return await base.GetById(id);
+            return await base.GetByIdAsync(id);
         }
 
         /// <summary>
@@ -48,9 +45,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Site</param>
         /// <returns>Site</returns>
         [ResponseType(typeof(Site))]
-        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
+        public override async Task<IHttpActionResult> GetByNameAsync([FromUri] string name)
         {
-            return await base.GetByName(name);
+            return await base.GetByNameAsync(name);
         }
 
         /// <summary>
@@ -59,9 +56,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="code">The Code of the Site</param>
         /// <returns>Site</returns>
         [ResponseType(typeof(Site))]
-        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        public override async Task<IHttpActionResult> GetByCodeAsync([FromUri] string code)
         {
-            return await base.GetByCode(code);
+            return await base.GetByCodeAsync(code);
         }
 
         //GET: Sites/5/Organisations
@@ -73,7 +70,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Organisations")]
         public IQueryable<Organisation> GetOrganisations([FromUri] Guid id)
         {
-            return GetMany<Organisation>(id, s => s.Organisations, i => i.Sites);
+            return GetMany<Organisation>(id, s => s.Organisations);
         }
 
         //GET: Sites/5/Stations
@@ -85,7 +82,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            return GetMany<Station>(id, s => s.Stations, i => i.Site);
+            return GetMany<Station>(id, s => s.Stations);
         }
 
     }

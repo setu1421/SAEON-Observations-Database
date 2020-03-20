@@ -1,34 +1,26 @@
-﻿using Newtonsoft.Json.Linq;
-using SAEON.SensorThings;
+﻿using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Routing;
+using SAEON.Observations.SensorThings;
+using System;
 using System.Linq;
 using System.Web.Http;
+using db = SAEON.Observations.Core.Entities;
 
 namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
-    [RoutePrefix("SensorThings/FeaturesOfInterest")]
-    public class FeatureOfInterestSTController : BaseController<FeatureOfInterest>
+
+    [ODataRoutePrefix("FeaturesOfInterest")]
+    public class FeaturesOfInterestSTController : BaseGuidIdController<FeatureOfInterest, db.SensorThingsFeatureOfInterest>
     {
-        public FeatureOfInterestSTController() : base()
-        {
-            Entities.AddRange(SensorThingsFactory.FeaturesOfInterest.OrderBy(i => i.Name));
-        }
+        [ODataRoute]
+        public override IQueryable<FeatureOfInterest> GetAll() => base.GetAll();
 
-        public override JToken GetAll()
-        {
-            return base.GetAll();
-        }
+        [ODataRoute("({id})")]
+        public override SingleResult<FeatureOfInterest> GetById([FromODataUri] Guid id) => base.GetById(id);
 
-        [Route("~/SensorThings/FeaturesOfInterest({id:int})")]
-        public override JToken GetById([FromUri] int id)
-        {
-            return base.GetById(id);
-        }
-
-        [Route("~/SensorThings/FeaturesOfInterest({id:int})/Observations")]
-        public JToken GetObservations([FromUri] int id)
-        {
-            return GetMany(id, i => i.Observations);
-        }
-
+        [ODataRoute("({id})/Observations")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        [Authorize]
+        public IQueryable<Observation> GetObservations([FromUri] Guid id) => GetRelatedManyIntId<Observation, db.SensorThingsObservation>(id);
     }
 }

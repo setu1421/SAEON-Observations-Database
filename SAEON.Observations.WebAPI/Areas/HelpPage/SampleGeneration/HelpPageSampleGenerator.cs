@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +12,6 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Web.Http.Description;
 using System.Xml.Linq;
-using Newtonsoft.Json;
 
 namespace SAEON.Observations.WebAPI.Areas.HelpPage
 {
@@ -166,7 +166,7 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
         }
 
         /// <summary>
-        /// Gets the sample object that will be serialized by the formatters. 
+        /// Gets the sample object that will be serialized by the formatters.
         /// First, it will look at the <see cref="SampleObjects"/>. If no sample object is found, it will try to create
         /// one using <see cref="DefaultSampleObjectFactory"/> (which wraps an <see cref="ObjectGenerator"/>) and other
         /// factories in <see cref="SampleObjectFactories"/>.
@@ -305,7 +305,9 @@ namespace SAEON.Observations.WebAPI.Areas.HelpPage
                 {
                     ms = new MemoryStream();
                     content = new ObjectContent(type, value, formatter, mediaType);
-                    formatter.WriteToStreamAsync(type, value, ms, content, null).Wait();
+                    //formatter.WriteToStreamAsync(type, value, ms, content, null).Wait();
+                    //formatter.WriteToStreamAsync(type, value, ms, content, null).RunSynchronously();
+                    formatter.WriteToStreamAsync(type, value, ms, content, null).GetAwaiter().GetResult();
                     ms.Position = 0;
                     StreamReader reader = new StreamReader(ms);
                     string serializedSampleString = reader.ReadToEnd();

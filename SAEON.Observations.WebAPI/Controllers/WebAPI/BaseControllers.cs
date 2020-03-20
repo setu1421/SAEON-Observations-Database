@@ -1,7 +1,9 @@
-﻿using SAEON.Logs;
+﻿using SAEON.AspNet.WebApi;
+using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
@@ -10,33 +12,24 @@ using System.Web.Http;
 
 namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
-    public abstract class BaseController : ApiController
+    [TenantAuthorization]
+    public abstract class BaseEntityController<TEntity> : ApiController where TEntity : BaseEntity
     {
-        protected ObservationsDbContext db = null;
+        //protected const int PageSize = 25;
+        //protected const int MaxTop = 500;
+        //protected const int MaxAll = 10000;
 
-        public BaseController() : base()
-        {
-            using (Logging.MethodCall(GetType()))
-            {
-                db = new ObservationsDbContext();
-            }
-        }
+        private ObservationsDbContext dbContext = null;
+        protected ObservationsDbContext DbContext => dbContext ?? (dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request)));
 
-        ~BaseController()
-        {
-            db = null;
-        }
-    }
+        [NotMapped]
+        public string EntitySetName { get; protected set; }
+        [NotMapped]
+        public List<string> NavigationLinks { get; } = new List<string>();
 
-    public abstract class BaseEntityController<TEntity> : BaseController where TEntity : BaseEntity
-    {
-        /// <summary>
-        /// Overwrite to filter entities
-        /// </summary>
-        /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, bool>>> GetWheres()
+        protected void UpdateRequest(bool isMany)
         {
-            return new List<Expression<Func<TEntity, bool>>>();
+            EntityConfig.BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/Api";
         }
 
         /// <summary>
@@ -49,29 +42,12 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
 
         /// <summary>
-        /// Overwrite for entity includes
-        /// </summary>
-        /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, object>>> GetIncludes()
-        {
-            return new List<Expression<Func<TEntity, object>>>();
-        }
-
-        /// <summary>
         /// query for items
         /// </summary>
         /// <returns></returns>
-        protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
+        protected virtual IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
-            var query = db.Set<TEntity>().AsQueryable();
-            foreach (var include in GetIncludes())
-            {
-                query = query.Include(include);
-            }
-            foreach (var where in GetWheres())
-            {
-                query = query.Where(where);
-            }
+            var query = DbContext.Set<TEntity>().AsNoTracking().AsQueryable();
             if (extraWhere != null)
             {
                 query = query.Where(extraWhere);
@@ -95,6 +71,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             {
                 try
                 {
+                    UpdateRequest(true);
                     return GetQuery();
                 }
                 catch (Exception ex)
@@ -106,7 +83,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         }
     }
 
-    public abstract class IDEntityController<TEntity> : BaseEntityController<TEntity> where TEntity : IDEntity
+    public abstract class IDEntityController<TEntity> : BaseEntityController<TEntity> where TEntity : GuidIdEntity
     {
         /// <summary>
         /// Get a TEntity by Id
@@ -116,12 +93,13 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [HttpGet]
         [Route("{id:guid}")]
         //[ResponseType(typeof(TEntity))] required in derived classes
-        public virtual async Task<IHttpActionResult> GetById([FromUri] Guid id)
+        public virtual async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
+                    UpdateRequest(false);
                     TEntity item = await GetQuery(i => (i.Id == id)).FirstOrDefaultAsync();
                     if (item == null)
                     {
@@ -144,23 +122,55 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select TRelated</param>
-        /// <param name="include">Lamda to include TRelated.ListOf(TEntrity)</param>
         /// <returns>TaskOf(IHttpActionResult)</returns>
-        [HttpGet]
-        //[ResponseType(typeof(TRelated))] Required in derived classes
-        //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected async Task<IHttpActionResult> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : IDEntity
+        //[HttpGet] Required in calling classes
+        //[ResponseType(typeof(TRelated))] Required in calling classes
+        //[Route("{id:guid}/TRelated")] Required in calling classes
+        protected async Task<IHttpActionResult> GetSingleAsync<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
                 try
                 {
+                    UpdateRequest(false);
                     if (!await GetQuery(i => (i.Id == id)).AnyAsync())
                     {
                         Logging.Error("{id} not found", id);
                         return NotFound();
                     }
-                    return Ok(await GetQuery(i => (i.Id == id)).Select(select).Include(include).FirstOrDefaultAsync());
+                    return Ok(await GetQuery(i => (i.Id == id)).Select(select).FirstOrDefaultAsync());
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Related Entity TEntity.TRelated
+        /// </summary>
+        /// <typeparam name="TRelated"></typeparam>
+        /// <param name="id">Id of TEntity</param>
+        /// <param name="select">Lambda to select TRelated</param>
+        /// <returns>TaskOf(IHttpActionResult)</returns>
+        //[HttpGet] Required in calling classes
+        //[ResponseType(typeof(TRelated))] Required in calling classes
+        //[Route("{id:guid}/TRelated")] Required in calling classes
+        protected TRelated GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
+        {
+            using (Logging.MethodCall<TEntity, TRelated>(GetType()))
+            {
+                try
+                {
+                    UpdateRequest(false);
+                    if (!GetQuery(i => (i.Id == id)).Any())
+                    {
+                        Logging.Error("{id} not found", id);
+                        throw new ArgumentException($"{id} not found");
+                    }
+                    return GetQuery(i => (i.Id == id)).Select(select).FirstOrDefault();
                 }
                 catch (Exception ex)
                 {
@@ -176,17 +186,17 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <param name="include">Lambda to include TRelated.TEntity</param>
         /// <returns>IQueryableOf(TRelated)</returns>
-        [HttpGet]
+        //[HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : NamedEntity
+        protected IQueryable<TRelated> GetManyIdEntity<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IdEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include);
+                    UpdateRequest(true);
+                    return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)
                 {
@@ -202,17 +212,17 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <param name="include">Lambda to include TRelated.ListOf(TEntity)</param>
         /// <returns>IQueryableOf(TRelated)</returns>
-        [HttpGet]
+        //[HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : NamedEntity
+        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : NamedEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include);
+                    UpdateRequest(true);
+                    return GetQuery(i => i.Id == id).SelectMany(select);
                 }
                 catch (Exception ex)
                 {
@@ -240,12 +250,13 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [HttpGet]
         [Route]
         //[ResponseType(typeof(TEntity))] required in derived classes
-        public virtual async Task<IHttpActionResult> GetByName([FromUri] string name)
+        public virtual async Task<IHttpActionResult> GetByNameAsync([FromUri] string name)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Name", name } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Name", name } }))
             {
                 try
                 {
+                    UpdateRequest(false);
                     TEntity item = await GetQuery(i => (i.Name == name)).FirstOrDefaultAsync();
                     if (item == null)
                     {
@@ -280,12 +291,13 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [HttpGet]
         [Route]
         //[ResponseType(typeof(TEntity))] required in derived classes
-        public virtual async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        public virtual async Task<IHttpActionResult> GetByCodeAsync([FromUri] string code)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Code", code } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Code", code } }))
             {
                 try
                 {
+                    UpdateRequest(false);
                     TEntity item = await GetQuery(i => (i.Code == code)).FirstOrDefaultAsync();
                     if (item == null)
                     {

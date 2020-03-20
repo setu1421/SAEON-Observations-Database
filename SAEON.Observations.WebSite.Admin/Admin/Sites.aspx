@@ -159,15 +159,15 @@
                                 <TopBar>
                                     <ext:Toolbar ID="Toolbar2" runat="server">
                                         <Items>
-                                            <ext:Button ID="btnStationLinksAdd" runat="server" Icon="LinkAdd" Text="Link Stations" ClientIDMode="Static">
+<%--                                            <ext:Button ID="btnStationLinksAdd" runat="server" Icon="LinkAdd" Text="Link Stations" ClientIDMode="Static">
                                                 <ToolTips>
                                                     <ext:ToolTip ID="ToolTip2" runat="server" Html="Link" />
                                                 </ToolTips>
                                                 <Listeners>
-                                                    <%--<Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{StationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />--%>
+                                                    <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{StationLinkWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                                     <Click Handler="if(Ext.getCmp('#{SitesGrid}') && #{SitesGrid}.getSelectionModel().hasSelection()){#{AvailableStationsGridStore}.reload();#{AvailableStationsWindow}.show()}else{Ext.Msg.alert('Invalid Selection','Select a site.')}" />
                                                 </Listeners>
-                                            </ext:Button>
+                                            </ext:Button>--%>
                                             <%-- 
                                             <ext:Button ID="btnAddStation" runat="server" Icon="Add" Text="Add Station">
                                                 <ToolTips>
@@ -323,7 +323,7 @@
             </ext:BorderLayout>
         </Items>
     </ext:Viewport>
-    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="300" Closable="true" Hidden="true" Collapsible="false" Title="Site Detail"
+    <ext:Window ID="DetailWindow" runat="server" Width="800" Height="450" Closable="true" Hidden="true" Collapsible="false" Title="Site Detail"
         Maximizable="false" Layout="Fit" ClientIDMode="Static">
         <Content>
             <ext:FormPanel ID="DetailsFormPanel" runat="server" Title="" MonitorPoll="500" MonitorValid="true"
@@ -347,7 +347,7 @@
                     </ext:Panel>
                     <ext:Panel ID="Panel3" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
-                            <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true"
+                            <ext:TextField ID="tfName" DataIndex="Name" MaxLength="150" IsRemoteValidation="true" 
                                 runat="server" FieldLabel="Name" AnchorHorizontal="96%" ClientIDMode="Static"
                                 AllowBlank="false" BlankText="Name is a required" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField" />
@@ -357,7 +357,7 @@
                     <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="FormLayout">
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" MaxLength="150" runat="server" IsRemoteValidation="true"
-                                FieldLabel="Description" AnchorHorizontal="96%" ClientIDMode="Static"
+                                FieldLabel="Description" AnchorHorizontal="96%" ClientIDMode="Static" 
                                 AllowBlank="false" BlankText="Description is a required" MsgTarget="Side">
                                 <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>

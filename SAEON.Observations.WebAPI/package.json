@@ -9,7 +9,5 @@
     "url": "git://github.com/SAEON-Data/Observations-Database.git"
   },
   "dependencies": {
-    "jquery-validation-unobtrusive": "^3.2.11",
-    "mdbootstrap": "^4.7.4"
   }
 }

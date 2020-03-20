@@ -1,40 +1,29 @@
-﻿using Newtonsoft.Json.Linq;
-using SAEON.SensorThings;
+﻿using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Routing;
+using SAEON.Observations.SensorThings;
+using System;
 using System.Linq;
 using System.Web.Http;
+using db = SAEON.Observations.Core.Entities;
 
 namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 {
-    [RoutePrefix("SensorThings/Locations")]
-    public class LocationsSTController : BaseController<Location>
+    [ODataRoutePrefix("Locations")]
+    public class LocationsSTController : BaseGuidIdController<Location, db.SensorThingsLocation>
     {
-        public LocationsSTController()
-        {
-            Entities.AddRange(SensorThingsFactory.Locations.OrderBy(i => i.Name));
-        }
+        [ODataRoute]
+        public override IQueryable<Location> GetAll() => base.GetAll();
 
-        public override JToken GetAll()
-        {
-            return base.GetAll();
-        }
+        [ODataRoute("({id})")]
+        public override SingleResult<Location> GetById([FromODataUri] Guid id) => base.GetById(id);
 
-        [Route("~/SensorThings/Locations({id:int})")]
-        public override JToken GetById([FromUri] int id)
-        {
-            return base.GetById(id);
-        }
+        [ODataRoute("({id})/Things")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        public IQueryable<Thing> GetThings([FromUri] Guid id) => GetRelatedMany<Thing, db.SensorThingsThing>(id);
 
-        [Route("~/SensorThings/Locations({id:int})/Things")]
-        public JToken GetThings([FromUri] int id)
-        {
-            return GetMany(id, i => i.Things);
-        }
-
-        [Route("~/SensorThings/Locations({id:int})/HistoricalLocations")]
-        public JToken GetHistoricalLocations([FromUri] int id)
-        {
-            return GetMany(id, i => i.HistoricalLocations);
-        }
+        [ODataRoute("({id})/HistoricalLocations")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        public IQueryable<HistoricalLocation> GetHistoricalLocations([FromUri] Guid id) => GetRelatedMany<HistoricalLocation, db.SensorThingsHistoricalLocation>(id);
 
     }
 }

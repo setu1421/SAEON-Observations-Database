@@ -9,10 +9,8 @@
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-        gtag('config', 'UA-128063984-4'); /*Test site*/
-        //gtag('config', 'UA-128063984-5'); /*Live site*/
+        gtag('config', 'UA-128063984-4');
     </script>
-
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     @RenderSection("MetaTags", required: false)
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDescription))
@@ -28,8 +26,12 @@
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="stylesheet" href="~/Content/Site.css" />
     <link rel="stylesheet" href="~/Content/SAEON.css" />
-    @Styles.Render("~/node_modules/mdbootstrap/css/bootstrap.min.css")
-    @Styles.Render("~/node_modules/mdbootstrap/css/mdb.min.css")
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
     @Styles.Render("~/Content/ej/web/bootstrap-theme/ej.web.all.min.css")
     @RenderSection("Styles", required: false)
     <script>
@@ -37,7 +39,7 @@
             function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } }
             var t = { config: config }, u = document, e = window, o = 'script', s = u.createElement(o), i, f; for (s.src = config.url || '//az416426.vo.msecnd.net/scripts/a/ai.0.js', u.getElementsByTagName(o)[0].parentNode.appendChild(s), t.cookie = u.cookie, t.queue = [], i = ['Event', 'Exception', 'Metric', 'PageView', 'Trace', 'Ajax']; i.length;) r('track' + i.pop()); return r('setAuthenticatedUserContext'), r('clearAuthenticatedUserContext'), config.disableExceptionTracking || (i = 'onerror', r('_' + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t['_' + i](config, r, u, e, o), s }), t
         }({
-            instrumentationKey: 'cf180c84-e427-4073-acbf-a78ded1b5f42'
+            instrumentationKey: 'ab8abeba-cc7e-4238-a3d1-00781fb48938'
         });
 
         window.appInsights = appInsights;
@@ -60,12 +62,12 @@
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Query</a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownQuery" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Query</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownQuery">
                                 @Html.ActionLink("Inventory", "Index", "Inventory", null, new { @class = "dropdown-item" })
                                 @Html.ActionLink("Data", "Index", "DataWizard", null, new { @class = "dropdown-item" })
-                                @*<a class="dropdown-item" href="#">Spacial Coverage</a>
-                                    <a class="dropdown-item" href="#">Temporal Coverage</a>*@
+                                @*@Html.ActionLink("Spacial Coverage", "Index", "SpacialCoverage", null, new { @class = "dropdown-item" })*@
+                                @*@Html.ActionLink("Temporal Coverage", "Index", "TemporalCoverage", null, new { @class = "dropdown-item" })*@
                             </div>
                         </li>
                         @Html.Partial("_AdminPartial")
@@ -73,6 +75,7 @@
                         <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })</li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
+                        @Html.Partial("_DataSourcesPartial")
                         @Html.Partial("_LoginPartial")
                     </ul>
                 </div>
@@ -105,23 +108,28 @@
                     </a>
                     <br />
                     <div style="clear: both">
-                        Observations Database is licensed under a <a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+                        Observations Database is licensed under a <a rel="license" target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a><br />
+                        @Html.ActionLink("How to cite", "HowToCite", "Home")
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="float-right">
                         <a href="https://www.dst.gov.za/" target="_blank">
-                            <img class="footer-image" src="~/Images/DST logo.png" alt="Department of Science and Technology logo" title="Department of Science and Technology" />
+                            <img class="footer-image dsi-logo" src="~/Images/DSI logo.jpg" alt="Department of Science and Innovation logo" title="Department of Science and Innovation" />
                         </a>
                     </div>
                 </div>
             </div>
         </footer>
     </div>
-    @Scripts.Render("~/node_modules/mdbootstrap/js/jquery-3.3.1.min.js")
-    @Scripts.Render("~/node_modules/mdbootstrap/js/popper.min.js")
-    @Scripts.Render("~/node_modules/mdbootstrap/js/bootstrap.min.js")
-    @Scripts.Render("~/node_modules/mdbootstrap/js/mdb.min.js")
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/js/mdb.min.js"></script>
     @Scripts.Render("~/Scripts/jsrender.min.js")
     @Scripts.Render("~/Scripts/ej/web/ej.web.all.min.js")
     @Scripts.Render("~/bundles/modernizr")

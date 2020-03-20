@@ -28,6 +28,9 @@ public partial class Admin_Programmes : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -63,28 +66,32 @@ public partial class Admin_Programmes : System.Web.UI.Page
             try
             {
                 Programme programme = new Programme();
-                if (String.IsNullOrEmpty(tfID.Text))
+                if (!tfID.HasValue())
                     programme.Id = Guid.NewGuid();
                 else
-                    programme = new Programme(tfID.Text.Trim());
-                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                    programme.Code = tfCode.Text.Trim();
-                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                    programme.Name = tfName.Text.Trim();
-                programme.Description = tfDescription.Text.Trim();
-                programme.Url = tfUrl.Text.Trim();
-                if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+                    programme = new Programme(tfID.Text);
+                if (tfCode.HasValue())
+                    programme.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    programme.Name = tfName.Text;
+                if (tfDescription.HasValue())
+                    programme.Description = tfDescription.Text;
+                if (tfUrl.HasValue())
+                    programme.Url = tfUrl.Text;
+                else
+                    programme.Url = null;
+                if (dfStartDate.HasValue())
                     programme.StartDate = dfStartDate.SelectedDate;
                 else
                     programme.StartDate = null;
-                if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+                if (dfEndDate.HasValue())
                     programme.EndDate = dfEndDate.SelectedDate;
                 else
                     programme.EndDate = null;
                 programme.UserId = AuthHelper.GetLoggedInUserId;
 
                 programme.Save();
-                Auditing.Log(GetType(), new ParameterList { { "ID", programme.Id }, { "Code", programme.Code }, { "Name", programme.Name } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", programme.Id }, { "Code", programme.Code }, { "Name", programme.Name } });
 
                 ProgrammesGrid.DataBind();
 
@@ -171,7 +178,7 @@ public partial class Admin_Programmes : System.Web.UI.Page
                             project.ProgrammeID = new Guid(programmeID);
                             project.UserId = AuthHelper.GetLoggedInUserId;
                             project.Save();
-                            Auditing.Log(GetType(), new ParameterList {
+                            Auditing.Log(GetType(), new MethodCallParameters {
                                 { "ProgrammeID", project.ProgrammeID},
                                 { "ProgrammeCode", project.Programme.Code},
                                 { "ProjectID", project.Id },
@@ -227,40 +234,6 @@ public partial class Admin_Programmes : System.Web.UI.Page
     //    }
     //}
 
-    [DirectMethod]
-    public void ConfirmDeleteProjectLink(Guid aID)
-    {
-        MessageBoxes.Confirm(
-            "Confirm Delete",
-            String.Format("DirectCall.DeleteProjectLink(\"{0}\",{{ eventMask: {{ showMask: true}}}});", aID.ToString()),
-            "Are you sure you want to delete this project link?");
-    }
-
-    [DirectMethod]
-    public void DeleteProjectLink(Guid aID)
-    {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
-        {
-            try
-            {
-                Project project = new Project(aID);
-                project.ProgrammeID = null;
-                project.Save();
-                ProjectLinksGrid.DataBind();
-            }
-            catch (Exception ex)
-            {
-                Logging.Exception(ex);
-                MessageBoxes.Error(ex, "Error", "Unable to delete project link");
-            }
-        }
-    }
-
-    [DirectMethod]
-    public void AddProjectClick(object sender, DirectEventArgs e)
-    {
-        //X.Redirect(X.ResourceManager.ResolveUrl("Admin/Projects"));
-    }
     #endregion
 
 }

@@ -52,7 +52,7 @@
     // Features fix on 1st load
 
     let locationsSelected: boolean = false;
-    let locationsExpand: boolean = false;
+    let locationsExpand: boolean = true;
     let featuresSelected: boolean = false;
     let featuresExpand: boolean = true;
 
@@ -73,6 +73,12 @@
         else if (selectedTab == 3) {
             FitMap();
         }
+    }
+
+    export function TabCreate() {
+        //$("a[href='#LocationsTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Organisations, Sites, Stations"></i>');
+        //$("a[href='#FeaturesTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Phenomena, Offerings, Units"></i>');
+        //$("a[href='#FiltersTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Dates, Depth"></i>');
     }
 
     // State
@@ -137,10 +143,21 @@
     // Locations
 
     let locationsReady: boolean = false;
+    let locationsLoaded: boolean = false;
 
     export function LocationsReady() {
         locationsReady = true;
         CheckReady();
+    }
+
+    export function LocationsLoadComplete() {
+        if (!locationsLoaded) {
+            locationsLoaded = true;
+            //UpdateLocationsSelected();
+            //UpdateFeaturesSelected();
+            HideWaiting();
+            EnableButtons();
+        }
     }
 
     export function LocationsChanged() {
@@ -207,8 +224,8 @@
         if (locationsReady && featuresReady) {
             UpdateLocationsSelected();
             UpdateFeaturesSelected();
-            HideWaiting();
-            EnableButtons();
+            //HideWaiting();
+            //EnableButtons();
         }
     }
 
@@ -260,7 +277,7 @@
         }
     }
 
-    // Filters 
+    // Filters
 
     export function FiltersChanged() {
         UpdateFilters(true);
@@ -269,8 +286,12 @@
     function UpdateFilters(isClick: boolean = false) {
         let startDate = $("#StartDate").ejDatePicker("instance").getValue();
         let endDate = $("#EndDate").ejDatePicker("instance").getValue();
-        $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate })
+        let range = $("#ElevationSlider").ejSlider("instance").getValue();
+        let elevationMinimum = range[0];
+        let elevationMaximum = range[1];
+        $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate, elevationMinimum: elevationMinimum, elevationMaximum: elevationMaximum })
             .done(function (data) {
+                SetApproximation();
                 if (isClick) {
                     HideResults();
                 }
@@ -281,7 +302,7 @@
             });
     }
 
-    // Map 
+    // Map
 
     class MapPoint {
         Title: string;
@@ -392,6 +413,7 @@
                         searched = true;
                         EnableButtons();
                         HideWaiting();
+                        SelectTab(5);
                     });
                     //    });
                 });
@@ -528,19 +550,26 @@
         $("#dialogDownload").ejDialog("open");
     }
 
+    let downloading: boolean = false;
+
     export function DownloadClose() {
         $("#dialogDownload").ejDialog("close");
-        HideWaiting();
-        EnableButtons();
+        if (!downloading) {
+            HideWaiting();
+            EnableButtons();
+        }
     }
 
     export function Download() {
+        downloading = true;
         $("#dialogDownload").ejDialog("close");
         ShowWaiting();
         $.get("/DataWizard/GetDownload")
             .done(function (data) {
-                EnableButtons();
+                downloading = false;
+                //EnableButtons();
                 HideWaiting();
+                window.location = data.url;
             })
             .fail(function (jqXHR, status, error) {
                 ErrorInFunc("GetDownload", status, error)

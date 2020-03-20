@@ -75,6 +75,7 @@ namespace SAEON.Observations.Core
 
         public Type AsType()
         {
+#if NET472
             switch (DataType)
             {
                 case MaxtixDataType.Boolean:
@@ -90,10 +91,23 @@ namespace SAEON.Observations.Core
                 default:
                     return typeof(object);
             }
+#else
+            return DataType switch
+            {
+                MaxtixDataType.Boolean => typeof(bool),
+                MaxtixDataType.Date => typeof(DateTime),
+                MaxtixDataType.Double => typeof(double),
+                MaxtixDataType.Int => typeof(int),
+                MaxtixDataType.String => typeof(string),
+                _ => typeof(object),
+            };
+#endif
         }
 
         public string AsString(object value)
         {
+            if (value == null) return string.Empty;
+#if NET472
             switch (DataType)
             {
                 case MaxtixDataType.Boolean:
@@ -109,17 +123,28 @@ namespace SAEON.Observations.Core
                 default:
                     return value.ToString();
             }
+#else
+            return DataType switch
+            {
+                MaxtixDataType.Boolean => ((bool)value).ToString(),
+                MaxtixDataType.Date => ((DateTime)value).ToString("o"),
+                MaxtixDataType.Double => ((double)value).ToString(),
+                MaxtixDataType.Int => ((int)value).ToString(),
+                MaxtixDataType.String => ((string)value).DoubleQuoted(),
+                _ => value.ToString(),
+            };
+#endif
         }
     }
 
-    public class DataMatixRow
+    public class DataMatrixRow
     {
         public List<Object> Columns { get; set; } = new List<object>();
         internal DataMatrix Matrix { get; set; } = null;
 
-        public DataMatixRow() { }
+        public DataMatrixRow() { }
 
-        public DataMatixRow(DataMatrix dataMatrix)
+        public DataMatrixRow(DataMatrix dataMatrix)
         {
             Matrix = dataMatrix;
         }
@@ -155,7 +180,7 @@ namespace SAEON.Observations.Core
     public class DataMatrix
     {
         public List<DataMatrixColumn> Columns { get; } = new List<DataMatrixColumn>();
-        public List<DataMatixRow> Rows { get; } = new List<DataMatixRow>();
+        public List<DataMatrixRow> Rows { get; } = new List<DataMatrixRow>();
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
@@ -177,14 +202,14 @@ namespace SAEON.Observations.Core
             return result;
         }
 
-        public DataMatixRow AddRow(params object[] values)
+        public DataMatrixRow AddRow(params object[] values)
 
         {
-            var result = new DataMatixRow(this);
+            var result = new DataMatrixRow(this);
             Rows.Add(result);
             for (int c = 0; c < Columns.Count; c++)
             {
-                var col = Columns[c];
+                //var col = Columns[c];
                 if (c < values.Length)
                 {
                     result.Columns.Add(values[c]);
@@ -226,10 +251,13 @@ namespace SAEON.Observations.Core
             var isFirst = true;
             foreach (var dmCol in Columns)
             {
-                if (!isFirst)
+                if (isFirst)
+                {
+                    isFirst = false;
+                }
+                else
                 {
                     sb.Append(",");
-                    isFirst = false;
                 }
                 sb.Append(dmCol.Name);
             }
@@ -239,10 +267,13 @@ namespace SAEON.Observations.Core
                 isFirst = true;
                 foreach (var dmCol in Columns)
                 {
-                    if (!isFirst)
+                    if (isFirst)
+                    {
+                        isFirst = false;
+                    }
+                    else
                     {
                         sb.Append(",");
-                        isFirst = false;
                     }
                     sb.Append(dmCol.AsString(dmRow[dmCol.Name]));
                 }
@@ -282,12 +313,33 @@ namespace SAEON.Observations.Core
         public List<Guid> Units { get; } = new List<Guid>();
         public DateTime StartDate { get; set; } = DateTime.Now.AddYears(-100).Date;
         public DateTime EndDate { get; set; } = DateTime.Now.Date;
+        public float ElevationMinimum { get; set; } = -100; // m
+        public float ElevationMaximum { get; set; } = 3000; // m
     }
 
     public class DataWizardDataOutput
     {
         public DataMatrix DataMatrix { get; } = new DataMatrix();
         public List<ChartSeries> ChartSeries { get; } = new List<ChartSeries>();
+        public DateTime Date { get; } = DateTime.Now;
+        public string Title { get; set; }
+        public string Description { get; set; }
+        /// <summary>
+        /// Semi-colon separated Name;Scheme;Uri
+        /// </summary>
+        public List<string> Keywords { get; } = new List<string>();
+        /// <summary>
+        /// Lookup on GeoNames in format Name:Country:Lat:Lon
+        /// </summary>
+        public List<string> Places { get; } = new List<string>();
+        public double? LatitudeNorth { get; set; } = null; // + N to -S
+        public double? LatitudeSouth { get; set; } = null; // + N to -S
+        public double? LongitudeWest { get; set; } = null; // -W to +E
+        public double? LongitudeEast { get; set; } = null; // -W to +E
+        public double? ElevationMinimum { get; set; } = null; // m
+        public double? ElevationMaximum { get; set; } = null; // m
+        public DateTime? StartDate { get; set; } = null;
+        public DateTime? EndDate { get; set; } = null;
     }
 
     public class DataWizardApproximation

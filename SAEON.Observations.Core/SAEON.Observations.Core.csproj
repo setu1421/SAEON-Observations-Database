@@ -1,31 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup> 
-    <TargetFrameworks>net461;net472;</TargetFrameworks>
+  <PropertyGroup>
+    <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
     <Authors>Tim Parker-Nance</Authors>
     <Company>South African Environmental Observation Network (SAEON)</Company>
-    <Product>DatabaseSAEON Observations</Product>
-    <Description>SAEON Observations Core</Description>
-    <Copyright>© 2017-2019 South African Environmental Observation Network (SAEON)</Copyright>
+    <Product>SAEON Observations Database</Product>
+    <Description>SAEON Observations - Core</Description>
+    <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.47</Version>
+    <Version>1.0.248</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="echo rd /s /q &quot;D:\Development\NuGet\$(ProjectName)&quot;&#xD;&#xA;rd /s /q &quot;D:\Development\NuGet\$(ProjectName)&quot;&#xD;&#xA;echo nuget init &quot;$(ProjectDir)bin\Release&quot; D:\Development\NuGet&#xD;&#xA;nuget init &quot;$(ProjectDir)bin\Release&quot; D:\Development\NuGet&#xD;&#xA;" />
   </Target>
- 
+
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="SAEON.Core" Version="1.0.12" />
-    <PackageReference Include="SAEON.Logs" Version="1.0.38" />
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="SAEON.Core" Version="1.0.21" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="SAEON.AspNet.Common" Version="1.0.24" />
+    <PackageReference Include="SAEON.Logs.NetFramework" Version="1.0.14" />
+    <PackageReference Include="EntityFramework" Version="6.4.0" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.7" />
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.7" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+    <PackageReference Include="SAEON.Logs.NetCore" Version="1.0.26" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.1.0" />
   </ItemGroup>
 
 </Project>

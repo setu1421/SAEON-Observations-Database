@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.OData;
+using SAEON.AspNet.WebApi;
 using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using System;
@@ -13,28 +14,16 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [ODataRouteName("OData")]
+    [TenantAuthorization]
     public abstract class BaseController<TEntity> : ODataController where TEntity : BaseEntity
     {
-        protected ObservationsDbContext db = null;
+        public static string BaseUrl { get; set; }
+        protected const int PageSize = 25;
+        protected const int MaxTop = 500;
+        protected const int MaxAll = 10000;
 
-        public BaseController()
-        {
-            db = new ObservationsDbContext();
-        }
-
-        ~BaseController()
-        {
-            db = null;
-        }
-
-        /// <summary>
-        /// Overwrite to filter entities
-        /// </summary>
-        /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, bool>>> GetWheres()
-        {
-            return new List<Expression<Func<TEntity, bool>>>();
-        }
+        private ObservationsDbContext dbContext = null;
+        protected ObservationsDbContext DbContext => dbContext ?? (dbContext = new ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request)));
 
         /// <summary>
         /// Overwrite to order of entities
@@ -46,29 +35,12 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         }
 
         /// <summary>
-        /// Overwrite for entity includes
-        /// </summary>
-        /// <returns>ListOf(PredicateOf(TEntity))</returns>
-        protected virtual List<Expression<Func<TEntity, bool>>> GetIncludes()
-        {
-            return new List<Expression<Func<TEntity, bool>>>();
-        }
-
-        /// <summary>
         /// query for items
         /// </summary>
         /// <returns></returns>
         protected IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> extraWhere = null)
         {
-            var query = db.Set<TEntity>().AsQueryable().AsNoTracking();
-            foreach (var include in GetIncludes())
-            {
-                query = query.Include(include);
-            }
-            foreach (var where in GetWheres())
-            {
-                query = query.Where(where);
-            }
+            var query = DbContext.Set<TEntity>().AsNoTracking().AsQueryable();
             if (extraWhere != null)
             {
                 query = query.Where(extraWhere);
@@ -80,19 +52,42 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return query;
         }
 
+        protected void UpdateRequest(bool isMany)
+        {
+            BaseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority) + "/OData";
+            //if (isMany)
+            //{
+            //    var uri = Request.RequestUri.ToString();
+            //    var query = Request.RequestUri.Query.ToLowerInvariant();
+            //    if (!query.Contains("$count=true"))
+            //    {
+            //        if (string.IsNullOrWhiteSpace(query))
+            //            uri += "?$count = true";
+            //        else
+            //            uri += "&$count=true";
+            //        Request.RequestUri = new Uri(uri);
+            //    }
+            //}
+            Request.Headers.TryAddWithoutValidation("Prefer", "odata.include-annotations=*");
+        }
+
+
         /// <summary>
         /// Get all entities
         /// </summary>
         /// <returns>ListOf(TEntity)</returns>
         // GET: odata/TEntity
-        //[EnableQuery, ODataRoute] Required in derived class
+        //[ODataRoute] required on derived class
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public virtual IQueryable<TEntity> GetAll()
         {
             using (Logging.MethodCall<TEntity>(GetType()))
             {
                 try
                 {
-                    return GetQuery();
+                    UpdateRequest(true);
+                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    return GetQuery().Take(MaxAll);
                 }
                 catch (Exception ex)
                 {
@@ -119,13 +114,16 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <param name="id"></param>
         /// <returns>TEntity</returns>
         // GET: odata/TEntity(5)
-        //[EnableQuery, ODataRoute("({id})")] Required in derived class
+        //[ODataRoute("({id})")] required on derived class
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public virtual SingleResult<TEntity> GetById([FromODataUri] Guid id)
         {
-            using (Logging.MethodCall<SingleResult<TEntity>>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<SingleResult<TEntity>>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
+                    UpdateRequest(false);
+                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
                     return SingleResult.Create(GetQuery(i => (i.Id == id)));
                 }
                 catch (Exception ex)
@@ -142,43 +140,19 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select TRelated</param>
-        /// <param name="include">Lamda to include TRelated.TEntity</param>
-        /// <returns>SingleResultOf(TRelated)</returns>
+        /// <returns>TRelated</returns>
         // GET: odata/TEntity(5)/TRelated
-        //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : IDEntity
+        //[ODataRoute("({id})/TRelated")] required on calling class
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)] required on calling class
+        protected TRelated GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<SingleResult<TRelated>>(GetType()))
             {
                 try
                 {
-                    return SingleResult.Create(GetQuery(i => (i.Id == id)).Select(select).Include(include));
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex, "Unable to get {id}", id);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Related Entity TEntity.TRelated
-        /// </summary>
-        /// <typeparam name="TRelated"></typeparam>
-        /// <param name="id">Id of TEntity</param>
-        /// <param name="select">Lambda to select TRelated</param>
-        /// <param name="include">Lamda to include TRelated.ListOf(TEntity)</param>
-        /// <returns>SingleResultOf(TRelated)</returns>
-        // GET: odata/TEntity(5)/TRelated
-        //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected SingleResult<TRelated> GetSingle<TRelated>(Guid id, Expression<Func<TEntity, TRelated>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : IDEntity
-        {
-            using (Logging.MethodCall<SingleResult<TRelated>>(GetType()))
-            {
-                try
-                {
-                    return SingleResult.Create(GetQuery(i => (i.Id == id)).Select(select).Include(include));
+                    UpdateRequest(false);
+                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    return GetQuery(i => i.Id == id).Select(select).FirstOrDefault();
                 }
                 catch (Exception ex)
                 {
@@ -194,17 +168,19 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <param name="include">Lambda to include TRelated.TEntity</param>
         /// <returns>IQueryableOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
-        //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, TEntity>> include) where TRelated : IDEntity
+        //[ODataRoute("({id})/TRelated")] required on calling class
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)] required on calling class
+        protected IQueryable<TRelated> GetManyWithGuidId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<TRelated>(GetType()))
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include);
+                    UpdateRequest(true);
+                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    return GetQuery(i => i.Id == id).SelectMany(select).Take(MaxAll);
                 }
                 catch (Exception ex)
                 {
@@ -220,17 +196,19 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <typeparam name="TRelated"></typeparam>
         /// <param name="id">Id of TEntity</param>
         /// <param name="select">Lambda to select ListOf(TRelated)</param>
-        /// <param name="include">Lambda to include TRelated.ListOf(TEntity)</param>
         /// <returns>IQueryableOf(TRelated)</returns>
         // GET: odata/TEntity(5)/TRelated
-        //[EnableQuery, ODataRoute("({id})/TRelated")] Required in derived class
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select, Expression<Func<TRelated, IEnumerable<TEntity>>> include) where TRelated : IDEntity
+        //[ODataRoute("({id})/TRelated")] required on calling class
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)] required on calling class
+        protected IQueryable<TRelated> GetManyWithIntId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IntIdEntity
         {
             using (Logging.MethodCall<TRelated>(GetType()))
             {
                 try
                 {
-                    return GetQuery(i => i.Id == id).SelectMany(select).Include(include);
+                    UpdateRequest(true);
+                    Logging.Verbose("uri: {uri}", Request.RequestUri.ToString());
+                    return GetQuery(i => i.Id == id).SelectMany(select).Take(MaxAll);
                 }
                 catch (Exception ex)
                 {

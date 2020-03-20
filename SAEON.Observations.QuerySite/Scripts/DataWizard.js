@@ -45,7 +45,7 @@ var DataWizard;
     }
     // Features fix on 1st load
     var locationsSelected = false;
-    var locationsExpand = false;
+    var locationsExpand = true;
     var featuresSelected = false;
     var featuresExpand = true;
     function TabActive() {
@@ -67,6 +67,12 @@ var DataWizard;
         }
     }
     DataWizard.TabActive = TabActive;
+    function TabCreate() {
+        //$("a[href='#LocationsTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Organisations, Sites, Stations"></i>');
+        //$("a[href='#FeaturesTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Phenomena, Offerings, Units"></i>');
+        //$("a[href='#FiltersTab']").append('&nbsp<i class="fa fa-info" data-toggle="tooltip" data-placement="bottom" title="Dates, Depth"></i>');
+    }
+    DataWizard.TabCreate = TabCreate;
     // State
     var State = /** @class */ (function () {
         function State() {
@@ -124,11 +130,22 @@ var DataWizard;
     DataWizard.DisableButtons = DisableButtons;
     // Locations
     var locationsReady = false;
+    var locationsLoaded = false;
     function LocationsReady() {
         locationsReady = true;
         CheckReady();
     }
     DataWizard.LocationsReady = LocationsReady;
+    function LocationsLoadComplete() {
+        if (!locationsLoaded) {
+            locationsLoaded = true;
+            //UpdateLocationsSelected();
+            //UpdateFeaturesSelected();
+            HideWaiting();
+            EnableButtons();
+        }
+    }
+    DataWizard.LocationsLoadComplete = LocationsLoadComplete;
     function LocationsChanged() {
         UpdateLocationsSelected(true);
     }
@@ -189,8 +206,8 @@ var DataWizard;
         if (locationsReady && featuresReady) {
             UpdateLocationsSelected();
             UpdateFeaturesSelected();
-            HideWaiting();
-            EnableButtons();
+            //HideWaiting();
+            //EnableButtons();
         }
     }
     function FeaturesChanged() {
@@ -241,7 +258,7 @@ var DataWizard;
             }
         }
     }
-    // Filters 
+    // Filters
     function FiltersChanged() {
         UpdateFilters(true);
     }
@@ -250,8 +267,12 @@ var DataWizard;
         if (isClick === void 0) { isClick = false; }
         var startDate = $("#StartDate").ejDatePicker("instance").getValue();
         var endDate = $("#EndDate").ejDatePicker("instance").getValue();
-        $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate })
+        var range = $("#ElevationSlider").ejSlider("instance").getValue();
+        var elevationMinimum = range[0];
+        var elevationMaximum = range[1];
+        $.post("/DataWizard/UpdateFilters", { startDate: startDate, endDate: endDate, elevationMinimum: elevationMinimum, elevationMaximum: elevationMaximum })
             .done(function (data) {
+            SetApproximation();
             if (isClick) {
                 HideResults();
             }
@@ -261,7 +282,7 @@ var DataWizard;
             ErrorInFunc("UpdateFilters", status, error);
         });
     }
-    // Map 
+    // Map
     var MapPoint = /** @class */ (function () {
         function MapPoint() {
         }
@@ -363,6 +384,7 @@ var DataWizard;
                     searched = true;
                     EnableButtons();
                     HideWaiting();
+                    SelectTab(5);
                 });
                 //    });
             });
@@ -498,19 +520,25 @@ var DataWizard;
         $("#dialogDownload").ejDialog("open");
     }
     DataWizard.DownloadOpen = DownloadOpen;
+    var downloading = false;
     function DownloadClose() {
         $("#dialogDownload").ejDialog("close");
-        HideWaiting();
-        EnableButtons();
+        if (!downloading) {
+            HideWaiting();
+            EnableButtons();
+        }
     }
     DataWizard.DownloadClose = DownloadClose;
     function Download() {
+        downloading = true;
         $("#dialogDownload").ejDialog("close");
         ShowWaiting();
         $.get("/DataWizard/GetDownload")
             .done(function (data) {
-            EnableButtons();
+            downloading = false;
+            //EnableButtons();
             HideWaiting();
+            window.location = data.url;
         })
             .fail(function (jqXHR, status, error) {
             ErrorInFunc("GetDownload", status, error);

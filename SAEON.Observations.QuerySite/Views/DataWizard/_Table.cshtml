@@ -10,7 +10,8 @@
     .AllowSorting()
     .AllowFiltering()
     .AllowResizing()
-    .AllowResizeToFit()
+    .AllowScrolling()
+    .MinWidth(1024)
     .FilterSettings(filter => { filter.FilterType(FilterType.Excel); })
     .Columns(col =>
     {

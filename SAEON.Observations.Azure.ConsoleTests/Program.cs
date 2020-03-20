@@ -20,18 +20,20 @@ namespace SAEON.Observations.Azure.ConsoleTests
                         Logging.Information("Initializing");
                         var azure = new Azure();
                         azure.Initialize();
-                        Logging.Information("Adding documents");
-                        var doc = new ObservationDocument
-                        {
-                            Sensor = new ObservationSensor { Code = "Algoa Bay" },
-                            Phenomenon = new ObservationPhenomenon { Code = "Air Temperature"},
-                            Offering = new ObservationOffering { Code = "Actual"},
-                            Unit = new ObservationUnit { Code = "C"},
-                            ValueDate = new EpochDate(DateTime.Now),
-                            RawValue = 1.2,
-                            DataValue = 1.2
-                        };
-                        azure.AddObservation(doc);
+                        //Logging.Information("Adding documents");
+                        //var doc = new ObservationDocument
+                        //{
+                        //    ImportBatch = new ObservationImportBatch { Id = Guid.NewGuid(), Code = 123 },
+                        //    Sensor = new ObservationSensor { Id = Guid.NewGuid(), Code = "Algoa Bay" },
+                        //    Phenomenon = new ObservationPhenomenon { Id = Guid.NewGuid(), Code = "Air Temperature" },
+                        //    Offering = new ObservationOffering { Id = Guid.NewGuid(), Code = "Actual" },
+                        //    Unit = new ObservationUnit { Id = Guid.NewGuid(), Code = "C" },
+                        //    ValueDate = new EpochDate(DateTime.Now),
+                        //    RawValue = 1.2,
+                        //    DataValue = 1.2
+                        //};
+                        //azure.AddObservation(doc);
+                        azure.DeleteImportBatch(new Guid("426170df-73fa-4c25-81c0-ea00264d60c8"));
                         Logging.Information("Done");
                     }
                     catch (Exception ex)

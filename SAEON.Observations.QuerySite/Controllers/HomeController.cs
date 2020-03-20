@@ -1,4 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using SAEON.AspNet.Common;
+using SAEON.Logs;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
 {
@@ -23,6 +27,22 @@ namespace SAEON.Observations.QuerySite.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        [Route("HowToCite")]
+        public ActionResult HowToCite()
+        {
+            return View();
+        }
+
+        [Route("SetTenant/{Name}")]
+        public ActionResult SetTenant(string Name)
+        {
+            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Name", Name } }))
+            {
+                Session[Constants.TenantSession] = Name;
+                return RedirectToAction("Index","Home");
+            }
         }
     }
 }

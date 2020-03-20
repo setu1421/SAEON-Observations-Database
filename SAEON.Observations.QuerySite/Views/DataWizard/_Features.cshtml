@@ -3,7 +3,10 @@
 @(
 Html.EJ().TreeView("treeViewFeatures")
     .TreeViewFields(field => field
-        .Datasource(ds => ds.URL("/DataWizard/GetFeatures").Adaptor(AdaptorType.WebApiAdaptor))
+        .Datasource(ds => ds.URL("/DataWizard/GetFeatures")
+            .Headers(new { Tenant = Session["Tenant"] })
+            .CrossDomain(true)
+            .Adaptor(AdaptorType.WebApiAdaptor))
         .Id("Key")
         .ParentId("ParentKey")
         .Text("Text")
@@ -19,7 +22,7 @@ Html.EJ().TreeView("treeViewFeatures")
         .Ready("DataWizard.FeaturesReady")
         )
     .ShowCheckbox(true)
-    .AutoCheck(false)
+    .AutoCheck(true)
 )
 
 

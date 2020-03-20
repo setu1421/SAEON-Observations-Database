@@ -1,50 +1,51 @@
-﻿@model SAEON.Observations.QuerySite.Models.DownloadModel
+﻿@model SAEON.Observations.Core.Entities.UserDownload
 
 @{
-    ViewBag.Title = "View";
+    ViewBag.Title = "View Download";
 }
-
-<h2>View</h2>
-
-<div>
-    <h4>DownloadModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.MetadataURL)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.MetadataURL)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DataURL)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DataURL)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DOI)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DOI)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Citation)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Citation)
-        </dd>
-
-    </dl>
+@section MetaTags {
+    <meta name="dc.identifier" content="@Model.DigitalObjectIdentifier.DOI" />
+    <meta name="citation_doi" content="@Model.DigitalObjectIdentifier.DOI">
+}
+<div class="row">
+    <div class="col-md">
+        <strong>Digital Object Identifier (DOI)</strong>
+        <p><a href="@Model.DigitalObjectIdentifier.DOIUrl">@Model.DigitalObjectIdentifier.DOI</a></p>
+        <strong>Title</strong>
+        <p>@Model.Title</p>
+        <strong>Description</strong>
+        <p>@Model.Description</p>
+        <strong>Copyright and license</strong>
+        <p>
+            &copy; @DateTime.Now.Year - South African Environmental Observation Network (SAEON)<br />
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
+                <img alt="Creative Commons License" class="image-respoonsive footer-left-image" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" />
+            </a>
+            <br />
+            <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Observations Database</span> is licensed under a <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+        </p>
+        <strong>Attribution</strong>
+        <p>
+            Users of SAEON data are required to clearly acknowledge the source of the material derived from SAEON. Please cite as follows:<br />
+            <br />
+            @Model.Citation<br />
+            <br />
+            If relevant, also credit other organisations involved in collection of this particular dataset (as listed in 'credit' in the metadata record).
+        </p>
+        <strong>Usage</strong>
+        <p>
+            Data, products and services from SAEON are provided "as is" without any warranty as to fitness for a particular purpose.
+        </p>
+        <p>
+            By using this data you are accepting the license agreement and terms specified above.
+            You accept all risks and responsibility for losses, damages, costs and other consequences resulting directly or indirectly from using this site
+            and any information or material available from it.
+        </p>
+        <strong>Metadata</strong>
+        <p>The metadata for your download from the Observations Database is available at <a href="@Model.MetadataUrl">@Model.MetadataUrl.Replace("https://", string.Empty).Replace("http://", string.Empty)</a>.</p>
+        <strong>Download Zip</strong>
+        <p>Your download from the Observations Database is available at @Html.ActionLink(Model.ZipUrl.Replace("https://", string.Empty).Replace("http://", string.Empty), "DownloadZip", new { id = Model.Id }).</p>
+        <strong>Checksum</strong>
+        <p>The SHA 256 checkSum for your zip is @Model.ZipCheckSum</p>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

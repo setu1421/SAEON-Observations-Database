@@ -319,3 +319,5 @@ Logs/
 [sS]ecrets.*.json
 [sS]ecrets.*.config
 Observations*.zip
+SAEON.Observations.WebAPI.v1.5
+SAEON.Observations.QuerySite.v1.5

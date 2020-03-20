@@ -90,7 +90,7 @@
                                         <ext:Column Header="Symbol" DataIndex="UnitSymbol" Width="200" />
                                         <ext:CommandColumn Width="50">
                                             <Commands>
-                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="" ToolTip-Text="Edit" />
+                                                <ext:GridCommand Icon="NoteEdit" CommandName="Edit" Text="Edit" ToolTip-Text="Edit" />
                                             </Commands>
                                         </ext:CommandColumn>
                                     </Columns>
@@ -194,7 +194,8 @@
                     <ext:Panel ID="Panel4" runat="server" Border="false" Header="false" Layout="Form">
                         <Items>
                             <ext:TextField ID="tfSymbol" DataIndex="UnitSymbol" MaxLength="10" runat="server" AllowBlank="false" BlankText="Symbol is required"
-                                FieldLabel="Symbol" AnchorHorizontal="96%" MsgTarget="Side">
+                                FieldLabel="Symbol" AnchorHorizontal="96%" MsgTarget="Side" IsRemoteValidation="true">
+                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextField>
                         </Items>
                     </ext:Panel>

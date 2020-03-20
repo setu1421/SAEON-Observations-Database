@@ -16045,6 +16045,7 @@ font-size: 200px;
     .high-contrast-upload-btn-hover-color;
     .material-upload-background;
     background: @default-bg-stcolor;
+	color: @hover-font-color;
 }
  .e-uploaddialog.e-dialog .e-btn.e-select:active{ 
     & when (@skin="material") { 
@@ -16061,6 +16062,13 @@ font-size: 200px;
     }
 }
  .e-uploaddialog.e-dialog .e-btn.e-select{
+   & when not (@skin="material") {
+   & when not(@skin="office-365") {
+        .bs-default-gradient();
+        background: @default-bg-stcolor;
+        color: @default-font-color;
+    }
+	}
     & when (@skin="material") { 
         color: @accent-color;
         background: @content-bg-color;
@@ -25649,9 +25657,6 @@ border:1px solid @neutral-light;
     & when (@skin= "material") {
         /*material*/
         background-color:@content-bg-color !important;
-        -moz-box-shadow: 0px 8px 10px 0px rgba(0,0,0,0.24);
-        -webkit-box-shadow: 0px 8px 10px 0px rgba(0,0,0,0.24);
-        box-shadow: 0px 8px 10px 0px rgba(0,0,0,0.24);
     }
     & when not (@skin = "material") {
         /*other*/
@@ -25665,9 +25670,6 @@ border:1px solid @neutral-light;
     & when (@skin= "material") {
         /*material*/
         background-color:@content-bg-color !important;
-        -moz-box-shadow: 0px 8px 10px 0px rgba(0,0,0,0.24);
-        -webkit-box-shadow: 0px 8px 10px 0px rgba(0,0,0,0.24);
-        box-shadow: 0px 8px 10px 0px rgba(0,0,0,0.24);
     }
     & when not (@skin = "material") {
         /*other*/
@@ -25685,13 +25687,6 @@ border:1px solid @neutral-light;
        background-color:@content-bg-color;
     }
     border-color:@content-border-color;
-}
-
- .e-reportviewer-headerspan{
-     & when (@skin= "material") {
-        /*material*/
-        padding-left: 2px;
-    }
 }
 
  .e-reportviewer-headerspan, .e-reportviewer-contentspan{
@@ -25886,7 +25881,10 @@ border:1px solid @neutral-light;
     & when (@skin= "office-365") {
         background-color: @default-bg-stcolor;
     }
-    & when not (@skin = "office-365") {
+    & when (@skin = "material"){
+        background-color: @grey-200;
+    }
+    & when not (@skin = "office-365") and not (@skin = "material") {
         background-color:@hover-bg-stcolor;
     }
 }
@@ -25901,6 +25899,19 @@ border:1px solid @neutral-light;
     font-family: @font-family !important;
     font-size: @content-font-size !important;
     font-weight: @content-font-weight !important;
+}
+
+ .e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box {
+    & when (@skin= "material") {
+        border-style: none;
+    }
+}
+
+ .e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box .e-input,
+ .e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box .e-select {
+    & when (@skin= "material") {
+        background-color: transparent;
+    }
 }
 
  .e-reportviewer-gotonext.e-reportviewer-disabled,
@@ -25927,7 +25938,9 @@ border:1px solid @neutral-light;
 }
 
  .e-reportviewer-error-content {
-    background-color: @disable-control-background-color;
+    & when not (@skin = "material") {
+         background-color: @disable-control-background-color;
+    }
     font-size: @rv-viewerblock-font-size;
 }
 
@@ -30014,6 +30027,9 @@ box-shadow: -1px 0 10px 0 black;
 .e-spreadsheet .e-ss-object {
     background-color: @content-bg-color;
 }
+.e-spreadsheet .e-ss-image {
+    background-color: transparent;
+}
 .e-spreadsheet .e-ss-charttheme {
     background-color: @sschart-darktheme-bgcolor;
 }
@@ -30396,6 +30412,15 @@ box-shadow: -1px 0 10px 0 black;
 	 	color: @hover-icon-color;
     }
 }
+.e-spreadsheet .e-ss-databar-span:hover,
+.e-spreadsheet .e-ss-iconsets-wrapper:hover,
+.e-spreadsheet .e-ss-colorscale-span:hover {
+    border-color: @hover-bg-stcolor;
+}
+.e-spreadsheet .e-ss-iconset-title {
+    color: @default-font-color;
+}
+
 /*-------------------------------------SpreadSheet End -----------------------*/
 
 

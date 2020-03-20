@@ -108,7 +108,7 @@
                                 </ColumnModel>
                                 <LoadMask ShowMask="true" />
                                 <Plugins>
-                                    <ext:GridFilters runat="server" ID="InventoryGridFilters">
+                                    <ext:GridFilters runat="server" ID="InventoryGridFilters" ClientIDMode="Static">
                                         <Filters>
                                             <ext:StringFilter DataIndex="SiteCode" />
                                             <ext:StringFilter DataIndex="SiteName" />

@@ -19,7 +19,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// Get all Programmes
         /// </summary>
         /// <returns>ListOf(Programme)</returns>
-        [EnableQuery, ODataRoute]
+        [ODataRoute]
         public override IQueryable<Programme> GetAll()
         {
             return base.GetAll();
@@ -31,7 +31,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of Programme</param>
         /// <returns>Programme</returns>
-        [EnableQuery, ODataRoute("({id})")]
+        [ODataRoute("({id})")]
         public override SingleResult<Programme> GetById([FromODataUri] Guid id)
         {
             return base.GetById(id);
@@ -43,10 +43,11 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// </summary>
         /// <param name="id">Id of the Programme</param>
         /// <returns>ListOf(Project)</returns>
-        [EnableQuery, ODataRoute("({id})/Projects")]
+        [ODataRoute("({id})/Projects")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Project> GetProjects([FromODataUri] Guid id)
         {
-            return GetMany(id, s => s.Projects, i => i.Programme);
+            return GetManyWithGuidId(id, s => s.Projects);
         }
     }
 }

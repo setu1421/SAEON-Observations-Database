@@ -50,6 +50,9 @@ public partial class Admin_DataSources : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -101,18 +104,18 @@ public partial class Admin_DataSources : System.Web.UI.Page
         //{
         //    if (cbUpdateFrequency.SelectedItem.Text == "Ad-Hoc")
         //    {
-        //        e.Success = true; 
+        //        e.Success = true;
         //    }
         //    else
         //    {
         //        if (tfUrl.Text.Length != 0)
         //        {
-        //            e.Success = true; 
+        //            e.Success = true;
         //        }
         //        else
         //        {
         //            e.Success = false;
-        //            e.ErrorMessage = errorMessage; 
+        //            e.ErrorMessage = errorMessage;
         //        }
         //    }
         //}
@@ -164,19 +167,21 @@ public partial class Admin_DataSources : System.Web.UI.Page
             {
                 DataSource ds = new DataSource();
 
-                if (String.IsNullOrEmpty(tfID.Text))
-                {
+                if (!tfID.HasValue())
                     ds.Id = Guid.NewGuid();
-                }
                 else
-                {
-                    ds = new DataSource(tfID.Text.Trim());
-                }
+                    ds = new DataSource(tfID.Text);
 
-                ds.Code = tfCode.Text.Trim();
-                ds.Name = tfName.Text.Trim();
-                ds.Description = tfDescription.Text.Trim();
-                ds.Url = tfUrl.Text;
+                if (tfCode.HasValue())
+                    ds.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    ds.Name = tfName.Text;
+                if (tfDescription.HasValue())
+                    ds.Description = tfDescription.Text;
+                if (tfUrl.HasValue())
+                    ds.Url = tfUrl.Text;
+                else
+                    ds.Url = null;
                 //ds.DataSourceTypeID = new Guid(cbDataSourceType.SelectedItem.Value);
                 //ds.DefaultNullValue = Int64.Parse(nfDefaultValue.Value.ToString());
 
@@ -208,7 +213,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 }
 
 
-                if (dfStartDate.SelectedDate.Date.Year < 1900)
+                if (!dfStartDate.HasValue())
                 {
                     ds.StartDate = null;
                 }
@@ -217,7 +222,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                     ds.StartDate = dfStartDate.SelectedDate;
                 }
 
-                if (dfEndDate.SelectedDate.Date.Year < 1900)
+                if (!dfEndDate.HasValue())
                 {
                     ds.EndDate = null;
                 }
@@ -229,7 +234,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 ds.UserId = AuthHelper.GetLoggedInUserId;
 
                 ds.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "ID", ds.Id }, { "Code", ds.Code }, { "Name", ds.Name } });
                 DataSourcesGrid.DataBind();
 
@@ -247,7 +252,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSensorSchemas(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
@@ -426,7 +431,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                 dstransform.ParamX = tfParamX.IsEmpty ? null : (double?)tfParamX.Number;
                 dstransform.ParamY = tfParamY.IsEmpty ? null : (double?)tfParamY.Number;
                 dstransform.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "DataSourceID", dstransform.DataSourceID},
                 { "DataSourceCode", dstransform.DataSource.Code},
                 { "TransformationTypeID", dstransform.TransformationTypeID},
@@ -492,12 +497,12 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void DeleteTransformation(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "aID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "aID", aID } }))
         {
             try
             {
                 DataSourceTransformation.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 TransformationsGrid.GetStore().DataBind();
             }
             catch (Exception ex)
@@ -726,7 +731,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
                             {
                                 expr.Parameters["y"] = tfParamY.Number;
                             }
-                            var message = string.Empty; 
+                            var message = string.Empty;
                             if (TryEvaluate(expr, double.MaxValue, out message) && TryEvaluate(expr, double.MinValue, out message) && TryEvaluate(expr, 0.0, out message))
                                 e.Success = true;
                             else
@@ -748,7 +753,7 @@ public partial class Admin_DataSources : System.Web.UI.Page
     [DirectMethod]
     public void LoadCombos(string transformationTypeID, string phenomenonID, string offeringID, string unitOfMeasureID, string newPhenomenonID, string newOfferingID, string newUnitOfMeasureID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "TransformationTypeID", transformationTypeID },
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "TransformationTypeID", transformationTypeID },
             { "PhenomenonID", phenomenonID }, { "OfferingID", offeringID }, {"UnitOfMeasureID", unitOfMeasureID },
             { "NewPhenomenonID", newPhenomenonID }, { "NewOfferingID", newOfferingID }, { "NewUnitOfMeasureID", newUnitOfMeasureID } }))
         {

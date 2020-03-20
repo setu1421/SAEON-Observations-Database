@@ -11,7 +11,7 @@ namespace SAEON.Observations.WebAPI.Controllers
     [RoutePrefix("Claims")]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize]
-    [ClientAuthorization("SAEON.Observations.QuerySite")]
+    //[ClientAuthorization("SAEON.Observations.QuerySite")]
     public class ClaimsController : ApiController
     {
         [HttpGet]

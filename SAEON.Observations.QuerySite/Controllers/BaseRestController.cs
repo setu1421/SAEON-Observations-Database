@@ -1,4 +1,5 @@
 ﻿using IdentityModel.Client;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
@@ -18,7 +19,6 @@ namespace SAEON.Observations.QuerySite.Controllers
     [HandleError, HandleForbidden]
     public class BaseRestController<TEntity> : Controller where TEntity : NamedEntity, new()
     {
-        protected int TimeOut { get; set; } = 1; // In minutes
         private readonly string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;
 
         private string resource = null;
@@ -35,49 +35,25 @@ namespace SAEON.Observations.QuerySite.Controllers
 
         private async Task<HttpClient> GetWebAPIClientAsync()
         {
-            var discoClient = new HttpClient();
-            var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+            using (Logging.MethodCall(GetType()))
             {
-                Address = Properties.Settings.Default.IdentityServerUrl,
-                Policy = { RequireHttps = Properties.Settings.Default.RequireHTTPS && !Request.IsLocal }
-            });
-            if (disco.IsError)
-            {
-                Logging.Error("Error: {error}", disco.Error);
-                throw new HttpException(disco.Error);
-            }
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
-            var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
-            if (token == null)
-            {
-                var tokenClient = new HttpClient();
-                var tokenResponse = await tokenClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+                try
                 {
-                    Address = disco.TokenEndpoint,
-                    ClientId = "SAEON.Observations.QuerySite",
-                    ClientSecret = "It6fWPU5J708",
-                    Scope = "SAEON.Observations.WebAPI"
-                });
-
-                if (tokenResponse.IsError)
-                {
-                    Logging.Error("Error: {error}", tokenResponse.Error);
-                    throw new HttpException(tokenResponse.Error);
+                    return await WebAPIClient.GetWebAPIClientAsync(Request, Session, (ClaimsPrincipal)User, Request.IsLocal);
                 }
-                token = tokenResponse.AccessToken;
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
             }
-            Logging.Verbose("Token: {token}", token);
-            client.SetBearerToken(token);
-            client.Timeout = TimeSpan.FromMinutes(TimeOut);
-            return client;
         }
 
         // GET: TEntity
         [HttpGet]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public virtual async Task<ActionResult> Index()
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
             using (Logging.MethodCall<TEntity>(GetType()))
             {
@@ -109,9 +85,11 @@ namespace SAEON.Observations.QuerySite.Controllers
         /// <returns>View(TEntity)</returns>
         [HttpGet]
         [Route("{id:guid}")]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public virtual async Task<ActionResult> Details(Guid? id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
@@ -171,7 +149,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         [Authorize]
         public virtual async Task<ActionResult> Create(TEntity item)
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Name", item?.Name }, { "Item", item } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Name", item?.Name }, { "Item", item } }))
             {
                 try
                 {
@@ -207,9 +185,11 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [Authorize]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public virtual async Task<ActionResult> Edit(Guid? id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
@@ -221,7 +201,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                         response.EnsureSuccessStatusCode();
                         var data = await response.Content.ReadAsAsync<TEntity>();
                         Logging.Verbose("Data: {data}", data);
-                        if (data == null) RedirectToAction("Index");
+                        if (data == null) return RedirectToAction("Index");
                         return View(data);
                     }
                 }
@@ -242,9 +222,11 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public virtual async Task<ActionResult> Edit(TEntity delta)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", delta?.Id }, { "Delta", delta } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", delta?.Id }, { "Delta", delta } }))
             {
                 try
                 {
@@ -282,9 +264,11 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [Authorize]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public virtual async Task<ActionResult> Delete(Guid? id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {
@@ -317,9 +301,11 @@ namespace SAEON.Observations.QuerySite.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]
+#pragma warning disable VSTHRD200 // Use "Async" suffix for async methods
         public virtual async Task<ActionResult> DeleteConfirmed(Guid id)
+#pragma warning restore VSTHRD200 // Use "Async" suffix for async methods
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Id", id } }))
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Id", id } }))
             {
                 try
                 {

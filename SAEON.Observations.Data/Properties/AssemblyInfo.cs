@@ -8,8 +8,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("SAEON Observations Database - Data Access Layer")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("South African Environmental Observation Network (SAEON)")]
-[assembly: AssemblyProduct("SAEON Observations Database")]
-[assembly: AssemblyCopyright("© 2016-2019 South African Environmental Observation Network (SAEON)")]
+[assembly: AssemblyProduct("SAEON Observations - Database")]
+[assembly: AssemblyCopyright("Copyright © South African Environmental Observation Network (SAEON)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

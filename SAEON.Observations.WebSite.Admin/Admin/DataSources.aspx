@@ -321,7 +321,8 @@
                     <ext:Container ID="Container4" runat="server" Layout="Form">
                         <Items>
                             <ext:TextArea ID="tfDescription" DataIndex="Description" runat="server" AllowBlank="false" AnchorHorizontal="96%"
-                                BlankText="Description is required" MsgTarget="Side" FieldLabel="Description">
+                                BlankText="Description is required" MsgTarget="Side" FieldLabel="Description" IsRemoteValidation="true">
+                                <RemoteValidation OnValidation="ValidateField" />
                             </ext:TextArea>
                         </Items>
                     </ext:Container>

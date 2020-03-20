@@ -38,13 +38,33 @@ public static class StringExtensions
     }
 }
 
-public class SchemaDefinition
+public static class DataRowExtensions
 {
-    public SchemaDefinition()
+    public static string AsString(this DataRow dataRow, bool oneLine = true)
     {
-        this.DataSourceTransformationIDs = new List<Guid>();
+        List<string> result = new List<string>();
+        foreach (DataColumn col in dataRow.Table.Columns)
+            result.Add($"{col.ColumnName}: {dataRow[col.ColumnName]}");
+        return string.Join(oneLine ? "; " : Environment.NewLine, result);
     }
 
+    public static T GetValue<T>(this DataRow dataRow, string columnName)
+    {
+        return (T)dataRow[columnName];
+    }
+
+    public static T SetValue<T>(this DataRow dataRow, string columnName, T value)
+    {
+        if (value == null)
+            dataRow[columnName] = DBNull.Value;
+        else
+            dataRow[columnName] = value;
+        return value;
+    }
+}
+
+public class SchemaDefinition
+{
     public int Index { get; set; }
     public string FieldName { get; set; }
     public bool IsDate { get; set; }
@@ -60,7 +80,7 @@ public class SchemaDefinition
     public Guid? PhenomenonUOMID { get; set; }
     public PhenomenonUOM PhenomenonOUM { get; set; } = null;
     public bool InValidUOM { get; set; }
-    public List<Guid> DataSourceTransformationIDs { get; set; }
+    public List<Guid> DataSourceTransformationIDs { get; set; } = new List<Guid>();
     public bool IsEmptyValue { get; set; }
     public string EmptyValue { get; set; }
     public bool IsOffering { get; set; }
@@ -72,6 +92,7 @@ public class SchemaDefinition
 
     //public Guid? SensorID { get; set; }
     public List<Sensor> Sensors { get; set; } = new List<Sensor>();
+    public List<VSensorDate> SensorDates { get; set; } = new List<VSensorDate>();
 
     public bool SensorNotFound { get; set; }
 }
@@ -81,12 +102,6 @@ public class SchemaDefinition
 /// </summary>
 public class SchemaValue
 {
-    public SchemaValue()
-    {
-        this.InvalidStatuses = new List<string>();
-        this.Comment = String.Empty;
-    }
-
     public DateTime DateValue { get; set; }
     public DateTime? TimeValue { get; set; }
     public string InvalidDateValue { get; set; }
@@ -103,23 +118,26 @@ public class SchemaValue
     public string InvalidRawValue { get; set; }
     public bool DataValueInvalid { get; set; }
     public string InvalidDataValue { get; set; }
-    public List<string> InvalidStatuses { get; set; }
+    public List<string> InvalidStatuses { get; private set; } = new List<string>();
     public Guid? DataSourceTransformationID { get; set; }
     public Guid? SensorID { get; set; }
     public bool SensorNotFound { get; set; }
     public string FieldRawValue { get; set; }
-    public string Comment { get; set; }
+    public string Comment { get; set; } = null;
 
     public Guid? RawPhenomenonOfferingID { get; set; }
     public Guid? RawPhenomenonUOMID { get; set; }
 
     public Guid CorrelationID { get; set; }
-    public string TextValue { get; set; }
+    public string TextValue { get; set; } = null;
 
-    public double? Latitude { get; set; }
-    public double? Longitude { get; set; }
-    public double? Elevation { get; set; }
+    public double? Latitude { get; set; } = null;
+    public double? Longitude { get; set; } = null;
+    public double? Elevation { get; set; } = null;
     public int RowNum { get; set; }
+
+    public bool IsDuplicate { get; set; } = false;
+    public bool IsDuplicateOfNull { get; set; } = false;
 
     /// <summary>
     ///
@@ -128,13 +146,7 @@ public class SchemaValue
     {
         get
         {
-            return !DateValueInvalid &&
-                   !TimeValueInvalid &&
-                   !InvalidOffering &&
-                   !InvalidUOM &&
-                   !RawValueInvalid &&
-                   !DataValueInvalid &&
-                   !SensorNotFound;
+            return !(DateValueInvalid || TimeValueInvalid || InvalidOffering || InvalidUOM || RawValueInvalid || DataValueInvalid || SensorNotFound || IsDuplicate || IsDuplicateOfNull);
         }
     }
 }
@@ -145,15 +157,14 @@ public class SchemaValue
 public class ImportSchemaHelper : IDisposable
 {
     private bool disposed = false;
-    private FileHelperEngine engine;
-    private DataTable dtResults;
-    private DataSource dataSource;
-    private DataSchema dataSchema;
-    private List<DataSourceTransformation> transformations;
-    private List<SchemaDefinition> schemaDefs;
+    private readonly FileHelperEngine engine;
+    private readonly DataTable dtResults;
+    private readonly DataSource dataSource;
+    private readonly DataSchema dataSchema;
+    private readonly List<DataSourceTransformation> transformations;
+    private readonly List<SchemaDefinition> schemaDefs;
     public List<SchemaValue> SchemaValues;
     private readonly Sensor Sensor = null;
-    private readonly ImportBatch batch = null;
 
     /// <summary>
     /// Gap Record Helper
@@ -192,31 +203,31 @@ public class ImportSchemaHelper : IDisposable
         return result;
     }
 
-    private List<string> LoadColumnNamesFixedWidth(DataSchema schema, string data)
-    {
-        List<string> result = new List<string>();
-        string[] lines = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-        int columnNamesLine = schema.IgnoreFirst;
-        if (columnNamesLine >= lines.Length)
-        {
-            throw new IndexOutOfRangeException("Column Names line greater than lines in source file");
-        }
-        List<string> columnNames = lines[columnNamesLine]
-            .Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None)
-            .Select(i => i.RemoveQuotes())
-            .ToList();
-        List<string> badColumnNames = columnNames
-            .GroupBy(x => x)
-            .Where(g => g.Count() > 1)
-            .Select(y => y.Key)
-            .ToList();
-        if (badColumnNames.Any())
-        {
-            throw new InvalidOperationException("Duplicate column names found " + string.Join(", ", columnNames));
-        }
-        result.AddRange(columnNames);
-        return result;
-    }
+    //private List<string> LoadColumnNamesFixedWidth(DataSchema schema, string data)
+    //{
+    //    List<string> result = new List<string>();
+    //    string[] lines = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+    //    int columnNamesLine = schema.IgnoreFirst;
+    //    if (columnNamesLine >= lines.Length)
+    //    {
+    //        throw new IndexOutOfRangeException("Column Names line greater than lines in source file");
+    //    }
+    //    List<string> columnNames = lines[columnNamesLine]
+    //        .Split(new string[] { schema.Delimiter.Replace("\\t", "\t") }, StringSplitOptions.None)
+    //        .Select(i => i.RemoveQuotes())
+    //        .ToList();
+    //    List<string> badColumnNames = columnNames
+    //        .GroupBy(x => x)
+    //        .Where(g => g.Count() > 1)
+    //        .Select(y => y.Key)
+    //        .ToList();
+    //    if (badColumnNames.Any())
+    //    {
+    //        throw new InvalidOperationException("Duplicate column names found " + string.Join(", ", columnNames));
+    //    }
+    //    result.AddRange(columnNames);
+    //    return result;
+    //}
 
     /// <summary>
     ///
@@ -225,11 +236,10 @@ public class ImportSchemaHelper : IDisposable
     /// <param name="InputStream"></param>
     public ImportSchemaHelper(DataSource ds, DataSchema schema, string data, ImportBatch batch, Sensor sensor = null)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "DataSource", ds.Name }, { "Schema", schema.Name }, { "ImportBatch", batch.Code }, { "Sensor", sensor?.Name } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "DataSource", ds.Name }, { "Schema", schema.Name }, { "ImportBatch", batch.Code }, { "Sensor", sensor?.Name } }))
         {
             dataSource = ds;
             dataSchema = schema;
-            this.batch = batch;
             Sensor = sensor;
             Logging.Information("Checking Schema");
             if (schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Time") && !schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Date"))
@@ -387,7 +397,7 @@ public class ImportSchemaHelper : IDisposable
             Logging.Information("Saving import file");
             SaveDocument(fileName, data);
             stopwatch.Stop();
-            Logging.Information("Saved import file in {time}",stopwatch.Elapsed);
+            Logging.Information("Saved import file in {time}", stopwatch.Elapsed);
             stopwatch.Start();
             Logging.Information("Reading DataTable");
             //dtResults = engine.ReadStringAsDT(data);
@@ -405,8 +415,10 @@ public class ImportSchemaHelper : IDisposable
     public void SaveDocument(string fileName, string fileContents)
     {
         string docPath = HostingEnvironment.MapPath(Path.Combine(ConfigurationManager.AppSettings["DocumentsPath"], "Uploads"));
-        File.WriteAllText(Path.Combine(docPath, fileName), fileContents);
-        Azure.Upload($"Uploads/{DateTime.Now.ToString("yyyyMM")}", fileName, fileContents);
+        var yearMonth = DateTime.Now.ToString("yyyyMM");
+        Directory.CreateDirectory(Path.Combine(docPath, yearMonth));
+        File.WriteAllText(Path.Combine(docPath, yearMonth, fileName), fileContents);
+        Azure.Upload($"Uploads/{yearMonth}", fileName, fileContents);
     }
 
     /// <summary>
@@ -497,6 +509,8 @@ public class ImportSchemaHelper : IDisposable
                                 //def.SensorID = Sensor.Id;
                                 def.Sensors.Clear();
                                 def.Sensors.Add(Sensor);
+                                def.SensorDates.Clear();
+                                def.SensorDates.Add(new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, Sensor.Id).Load().FirstOrDefault());
                             }
                             else
                             {
@@ -514,6 +528,11 @@ public class ImportSchemaHelper : IDisposable
                                     //def.SensorID = colsens[0].Id;
                                     def.Sensors.Clear();
                                     def.Sensors.AddRange(colsens.ToList());
+                                    def.SensorDates.Clear();
+                                    foreach (var sensor in def.Sensors)
+                                    {
+                                        def.SensorDates.Add(new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault());
+                                    }
                                 }
                             }
                             if (!string.IsNullOrEmpty(schemaCol.EmptyValue))
@@ -593,17 +612,44 @@ public class ImportSchemaHelper : IDisposable
                 stopwatch.Start();
                 Logging.Information("Building schema definition");
                 BuildSchemaDefinition();
-                stopwatch.Stop();
                 Logging.Information("Built schema definition in {time}", stopwatch.Elapsed);
-                stopwatch.Start();
-                Logging.Information("Processing {rows} rows", dtResults.Rows.Count);
-                for (int i = 0; i < dtResults.Rows.Count; i++)
+                var lastProgress100 = -1;
+                var nMax = dtResults.Rows.Count;
+                var n = 1;
+                Logging.Information("Processing {count:n0} rows", nMax);
+                foreach (DataRow row in dtResults.Rows)
                 {
-                    DataRow dr = dtResults.Rows[i];
-                    ProcessRow(dr, i + 1);
+                    var progress = (double)n++ / nMax;
+                    var progress100 = (int)(progress * 100);
+                    var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
+                    var elapsed = stopwatch.Elapsed.TotalMinutes;
+                    if (reportPorgress)
+                    {
+                        Logging.Information("{progress:p0} {row:n0} of {rows:n0} rows {min:n2} of {mins:n2} min", progress, n, nMax, elapsed, elapsed / progress);
+                        lastProgress100 = progress100;
+                    }
+                    ProcessRow(row, n);
+                }
+                Logging.Information("Checking for duplicates in batch");
+                var dupGroups = SchemaValues.GroupBy(i => new { i.SensorID, i.DateValue, i.DataValue, i.PhenomenonOfferingID, i.PhenomenonUOMID, i.Elevation }).Where(g => g.Count() > 1).ToList();
+                var dupValues = dupGroups.SelectMany(i => i).ToList();
+                if (dupGroups.Any())
+                {
+                    foreach (var value in dupValues.Take(100))
+                    {
+                        Logging.Information("RowNum: {rowNum} Date: {date}", value.RowNum, value.DateValue);
+                    }
+                    //Logging.Information("Bad Rows: {badRows}", dupValues.Select(i => i.RowNum).ToArray());
+                    Logging.Information("Duplicates: Groups: {groups} Values: {values}", dupGroups.Count, dupValues.Count);
+                    foreach (var schval in dupValues)
+                    {
+                        schval.IsDuplicate = true;
+                        schval.InvalidStatuses.Insert(0, Status.Duplicate);
+                    }
+                    Logging.Information("Found {count} duplicates in batch", dupValues.Count());
                 }
                 stopwatch.Stop();
-                Logging.Information("Processed {rows} rows in {time}", dtResults.Rows.Count, stopwatch.Elapsed);
+                Logging.Information("Processed {rows:n0} rows in {time}", nMax, stopwatch.Elapsed);
             }
             catch (Exception ex)
             {
@@ -635,14 +681,9 @@ public class ImportSchemaHelper : IDisposable
                        RowComment = String.Empty;
 
                 SchemaDefinition dtdef = schemaDefs.FirstOrDefault(t => t.IsDate);
-                SchemaDefinition tmdef = schemaDefs.FirstOrDefault(t => t.IsTime);
+                SchemaDefinition tmdef = schemaDefs.FirstOrDefault(t => t.IsTime) ?? schemaDefs.FirstOrDefault(t => t.IsFixedTime);
 
                 Guid correlationID = Guid.NewGuid();
-
-                if (tmdef == null)
-                {
-                    tmdef = schemaDefs.FirstOrDefault(t => t.IsFixedTime);
-                }
 
                 if (dtdef != null)
                 {
@@ -797,7 +838,9 @@ public class ImportSchemaHelper : IDisposable
                             foreach (var sensor in def.Sensors)
                             {
                                 // Sensor x Instrument_Sensor x Instrument x Station_Instrument x Station x Site
-                                var dates = new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault();
+                                var index = def.Sensors.IndexOf(sensor);
+                                var dates = def.SensorDates.ElementAt(index);
+                                //var dates = new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault();
                                 if (dates == null)
                                 {
                                     continue;
@@ -937,27 +980,16 @@ public class ImportSchemaHelper : IDisposable
                             }
                         }
 
-                        //// If still null try get from sensor/instrument/station location
-                        //if (!(rec.Latitude.HasValue && rec.Longitude.HasValue) || !rec.Elevation.HasValue)
-                        //{
-                        //    var loc = new VSensorLocation(VSensorLocation.Columns.SensorID, rec.SensorID);
-                        //    if (loc != null)
-                        //    {
-                        //        if (!(rec.Latitude.HasValue && rec.Longitude.HasValue) && (loc.Latitude.HasValue && loc.Longitude.HasValue))
-                        //        {
-                        //            rec.Latitude = loc.Latitude;
-                        //            rec.Longitude = loc.Longitude;
-                        //        }
-                        //        if (!rec.Elevation.HasValue && loc.Elevation.HasValue)
-                        //            rec.Elevation = loc.Elevation;
-                        //    }
-                        //}
-                        if (RowComment.Trim().Length > 0)
+                        if (!string.IsNullOrWhiteSpace(RowComment))
                         {
                             rec.Comment = RowComment.TrimEnd();
                         }
 
                         rec.CorrelationID = correlationID;
+
+                        CheckIsDuplicate(rec);
+                        CheckIsDuplicateOfNull(rec);
+                        //CheckIsDuplicateInBatch(rec);
 
                         SchemaValues.Add(rec);
                     }
@@ -969,6 +1001,59 @@ public class ImportSchemaHelper : IDisposable
                 throw;
             }
         }
+
+        bool CheckIsDuplicate(SchemaValue schval)
+        {
+            SqlQuery q = new Select().From(Observation.Schema)
+                .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
+                .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
+                .And(Observation.Columns.DataValue).IsEqualTo(schval.DataValue)
+                .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
+                .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
+
+            ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
+
+            var result = oCol.Any();
+            if (result)
+            {
+                schval.IsDuplicate = true;
+                schval.InvalidStatuses.Insert(0, Status.Duplicate);
+            }
+            return result;
+        }
+
+        bool CheckIsDuplicateOfNull(SchemaValue schval)
+        {
+            SqlQuery q = new Select().From(Observation.Schema)
+                .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
+                .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
+                .And(Observation.Columns.DataValue).IsNull()
+                .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
+                .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
+
+            ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
+
+            var result = oCol.Any();
+            if (result)
+            {
+                schval.IsDuplicateOfNull = true;
+                schval.InvalidStatuses.Insert(0, Status.DuplicateOfNull);
+            }
+            return result;
+        }
+
+        //bool CheckIsDuplicateInBatch(SchemaValue schval)
+        //{
+        //    return false;
+        //    var result = SchemaValues.Any(i => (i.SensorID == schval.SensorID) && (i.DateValue == schval.DateValue) && (i.DataValue == schval.DataValue) &&
+        //                    (i.PhenomenonOfferingID == schval.PhenomenonOfferingID) && (i.PhenomenonUOMID == schval.PhenomenonUOMID) && (i.Elevation == schval.Elevation));
+        //    if (result)
+        //    {
+        //        schval.IsDuplicate = true;
+        //        schval.InvalidStatuses.Insert(0, Status.Duplicate);
+        //    }
+        //    return result;
+        //}
     }
 
     /// <summary>
@@ -1278,7 +1363,7 @@ public class ImportSchemaHelper : IDisposable
     /// <returns></returns>
     public static string GetWorkingStream(DataSchema ds, StreamReader reader)
     {
-        String Result = String.Empty;
+        String Result;
 
         if (!String.IsNullOrEmpty(ds.SplitSelector))
         {

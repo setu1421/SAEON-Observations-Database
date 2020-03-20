@@ -1,6 +1,6 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -12,13 +12,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     /// <summary>
     /// </summary>
     [RoutePrefix("Api/Programmes")]
-    public class ProgrammesController :  CodedApiController<Programme>
+    public class ProgrammesController : CodedApiController<Programme>
     {
-        protected override List<Expression<Func<Programme, object>>> GetIncludes()
+        protected override IQueryable<Programme> GetQuery(Expression<Func<Programme, bool>> extraWhere = null)
         {
-            var list = base.GetIncludes();
-            list.Add(i => i.Projects);
-            return list;
+            return base.GetQuery(extraWhere).Include(i => i.Projects);
         }
 
         /// <summary>
@@ -36,9 +34,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Programme</param>
         /// <returns>Programme</returns>
         [ResponseType(typeof(Programme))]
-        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
+        public override async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
         {
-            return await base.GetById(id);
+            return await base.GetByIdAsync(id);
         }
 
         /// <summary>
@@ -47,9 +45,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="code">The Code of the Programme</param>
         /// <returns>Programme</returns>
         [ResponseType(typeof(Programme))]
-        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        public override async Task<IHttpActionResult> GetByCodeAsync([FromUri] string code)
         {
-            return await base.GetByCode(code);
+            return await base.GetByCodeAsync(code);
         }
 
         /// <summary>
@@ -58,9 +56,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Programme</param>
         /// <returns>Programme</returns>
         [ResponseType(typeof(Programme))]
-        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
+        public override async Task<IHttpActionResult> GetByNameAsync([FromUri] string name)
         {
-            return await base.GetByName(name);
+            return await base.GetByNameAsync(name);
         }
 
         //GET: Programmes/5/Projects
@@ -72,7 +70,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Projects")]
         public IQueryable<Project> GetProjects([FromUri] Guid id)
         {
-            return GetMany<Project>(id, s => s.Projects, i => i.Programme);
+            return GetMany<Project>(id, s => s.Projects);
         }
 
     }

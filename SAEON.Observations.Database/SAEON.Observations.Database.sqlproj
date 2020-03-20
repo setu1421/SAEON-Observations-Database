@@ -511,7 +511,6 @@
     <Build Include="dbo\Tables\UserQueries.sql" />
     <Build Include="dbo\Tables\UserDownloads.sql" />
     <Build Include="dbo\Views\vSensorDates.sql" />
-    <Build Include="dbo\Views\vSensorThingsDatastreams.sql" />
     <Build Include="dbo\Views\vOfferingPhenomena.sql" />
     <Build Include="dbo\Views\vUnitOfMeasurePhenomena.sql" />
     <Build Include="dbo\Views\vSensorLocation.sql" />
@@ -522,6 +521,19 @@
     <Build Include="dbo\Views\vLocations.sql" />
     <Build Include="dbo\Views\vFeatures.sql" />
     <Build Include="dbo\Views\vObservationJSON.sql" />
+    <Build Include="dbo\Tables\DigitalObjectIdentifiers.sql" />
+    <Build Include="dbo\Views\vUserDownloads.sql" />
+    <Build Include="dbo\Views\vSensorThingsAPIThings.sql" />
+    <Build Include="dbo\Views\vSensorThingsAPILocations.sql" />
+    <Build Include="dbo\Views\vSensorThingsAPIDatastreams.sql" />
+    <Build Include="dbo\Views\vSensorThingsAPISensors.sql" />
+    <Build Include="dbo\Views\vSensorThingsAPIObservedProperties.sql" />
+    <Build Include="dbo\Views\vSensorThingsAPIInstrumentDates.sql" />
+    <Build Include="dbo\Views\vSensorThingsAPIStationDates.sql" />
+    <Build Include="dbo\Views\vSensorThingsAPIHistoricalLocations.sql" />
+    <Build Include="dbo\Views\vSensorThingsAPIFeaturesOfInterest.sql" />
+    <Build Include="dbo\Views\vSensorThingsAPIObservations.sql" />
+    <Build Include="dbo\Views\vObservationOData.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

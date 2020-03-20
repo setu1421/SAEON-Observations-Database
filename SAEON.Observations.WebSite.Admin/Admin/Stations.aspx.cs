@@ -35,7 +35,9 @@ public partial class Admin_Stations : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
-
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
             if (e.ID == "tfCode")
@@ -70,17 +72,18 @@ public partial class Admin_Stations : System.Web.UI.Page
             {
                 Station station = new Station();
 
-                if (String.IsNullOrEmpty(tfID.Text))
+                if (!tfID.HasValue())
                     station.Id = Guid.NewGuid();
                 else
-                    station = new Station(tfID.Text.Trim());
+                    station = new Station(tfID.Text);
 
-                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                    station.Code = tfCode.Text.Trim();
-                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                    station.Name = tfName.Text.Trim();
+                if (tfCode.HasValue())
+                    station.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    station.Name = tfName.Text;
                 station.SiteID = Utilities.MakeGuid(cbSite.SelectedItem.Value.Trim());
-                station.Description = tfDescription.Text.Trim();
+                if (tfDescription.HasValue())
+                    station.Description = tfDescription.Text;
 
                 //if (!string.IsNullOrEmpty(nfLatitude.Text))
                 //    station.Latitude = double.Parse(nfLatitude.Text);
@@ -104,21 +107,23 @@ public partial class Admin_Stations : System.Web.UI.Page
                 else
                     station.Elevation = nfElevation.Number;
 
-                if (!string.IsNullOrEmpty(tfUrl.Text))
+                if (tfUrl.HasValue())
                     station.Url = tfUrl.Text;
+                else
+                    station.Url = null;
 
-                if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
+                if (dfStartDate.HasValue())
                     station.StartDate = dfStartDate.SelectedDate;
                 else
                     station.StartDate = null;
-                if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
+                if (dfEndDate.HasValue())
                     station.EndDate = dfEndDate.SelectedDate;
                 else
                     station.EndDate = null;
                 station.UserId = AuthHelper.GetLoggedInUserId;
 
                 station.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "ID", station.Id }, { "Code", station.Code }, { "Name", station.Name } });
 
                 StationsGrid.DataBind();
@@ -226,7 +231,7 @@ public partial class Admin_Stations : System.Web.UI.Page
                     stationOrganisation.EndDate = dfOrganisationEndDate.SelectedDate;
                 stationOrganisation.UserId = AuthHelper.GetLoggedInUserId;
                 stationOrganisation.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "StationID", stationOrganisation.StationID },
                 { "StationCode", stationOrganisation.Station.Code },
                 { "OrganisationID", stationOrganisation.OrganisationID},
@@ -259,12 +264,12 @@ public partial class Admin_Stations : System.Web.UI.Page
     [DirectMethod]
     public void DeleteOrganisationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 OrganisationStation.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 OrganisationLinksGrid.DataBind();
             }
             catch (Exception ex)
@@ -344,7 +349,7 @@ public partial class Admin_Stations : System.Web.UI.Page
                     projectStation.EndDate = null;
                 projectStation.UserId = AuthHelper.GetLoggedInUserId;
                 projectStation.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "StationID", projectStation.StationID },
                 { "StationCode", projectStation.Station.Code },
                 { "ProjectID", projectStation.ProjectID},
@@ -375,12 +380,12 @@ public partial class Admin_Stations : System.Web.UI.Page
     [DirectMethod]
     public void DeleteProjectLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 ProjectStation.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 ProjectLinksGrid.DataBind();
             }
             catch (Exception ex)
@@ -472,7 +477,7 @@ public partial class Admin_Stations : System.Web.UI.Page
                     stationInstrument.EndDate = null;
                 stationInstrument.UserId = AuthHelper.GetLoggedInUserId;
                 stationInstrument.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "StationID", stationInstrument.StationID },
                 { "StationCode", stationInstrument.Station.Code },
                 { "InstrumentID", stationInstrument.InstrumentID},
@@ -506,12 +511,12 @@ public partial class Admin_Stations : System.Web.UI.Page
     [DirectMethod]
     public void DeleteInstrumentLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 StationInstrument.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 InstrumentLinksGrid.DataBind();
             }
             catch (Exception ex)

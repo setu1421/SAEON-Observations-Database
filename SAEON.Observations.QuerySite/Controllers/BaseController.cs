@@ -1,12 +1,12 @@
-﻿using IdentityModel.Client;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SAEON.Logs;
-using SAEON.Observations.Core;
 using SAEON.Observations.QuerySite.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -18,8 +18,7 @@ namespace SAEON.Observations.QuerySite.Controllers
     [HandleError, HandleForbidden]
     public class BaseController : Controller
     {
-        protected int TimeOut { get; set; } = 30; // In minutes
-        private readonly string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;
+        private static readonly string apiBaseUrl = Properties.Settings.Default.WebAPIUrl;
 
         private async Task<HttpClient> GetWebAPIClientAsync()
         {
@@ -27,43 +26,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             {
                 try
                 {
-                    var client = new HttpClient();
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    Logging.Verbose("Claims: {claims}", string.Join("; ", User.GetClaims()));
-                    var token = (User as ClaimsPrincipal)?.FindFirst("access_token")?.Value;
-                    if (token == null)
-                    {
-                        var discoClient = new HttpClient();
-                        var disco = await discoClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
-                        {
-                            Address = Properties.Settings.Default.IdentityServerUrl,
-                            Policy = { RequireHttps = Properties.Settings.Default.RequireHTTPS && !Request.IsLocal }
-                        });
-                        if (disco.IsError)
-                        {
-                            Logging.Error("Error: {error}", disco.Error);
-                            throw new HttpException(disco.Error);
-                        }
-                        var tokenClient = new HttpClient();
-                        var tokenResponse = await tokenClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
-                        {
-                            Address = disco.TokenEndpoint,
-                            ClientId = "SAEON.Observations.QuerySite",
-                            ClientSecret = "It6fWPU5J708",
-                            Scope = "SAEON.Observations.WebAPI"
-                        });
-                        if (tokenResponse.IsError)
-                        {
-                            Logging.Error("Error: {error}", tokenResponse.Error);
-                            throw new HttpException(tokenResponse.Error);
-                        }
-                        token = tokenResponse.AccessToken;
-                    }
-                    Logging.Verbose("Token: {token}", token);
-                    client.SetBearerToken(token);
-                    client.Timeout = TimeSpan.FromMinutes(TimeOut);
-                    return client;
+                    return await WebAPIClient.GetWebAPIClientAsync(Request, Session, (ClaimsPrincipal)User, Request.IsLocal);
                 }
                 catch (Exception ex)
                 {
@@ -73,9 +36,51 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<List<TEntity>> GetList<TEntity>(string resource)// where TEntity : BaseEntity
+        public List<string> ModelStateErrors
         {
-            using (Logging.MethodCall<TEntity>(GetType(), new ParameterList { { "Resource", resource } }))
+            get
+            {
+                return ModelState.Values.SelectMany(v => v.Errors).Select(v => v.ErrorMessage + " " + v.Exception).ToList();
+            }
+        }
+
+        public List<string> GetValidationErrors(DbEntityValidationException ex)
+        {
+            return ex.EntityValidationErrors.SelectMany(e => e.ValidationErrors.Select(m => m.PropertyName + ": " + m.ErrorMessage)).ToList();
+        }
+
+        protected async Task<Stream> GetStreamAsync(string resource)
+        {
+            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Resource", resource } }))
+            {
+                try
+                {
+                    using (var client = await GetWebAPIClientAsync())
+                    {
+                        var url = $"{apiBaseUrl}/{resource}";
+                        Logging.Verbose("Calling: {url}", url);
+                        var response = await client.GetAsync(url);
+                        Logging.Verbose("Response: {response}", response);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            throw new HttpException((int)response.StatusCode, response.ReasonPhrase);
+                        }
+                        var data = await response.Content.ReadAsStreamAsync();
+                        //Logging.Verbose("Data: {@data}", data);
+                        return data;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+            }
+        }
+
+        protected async Task<List<TEntity>> GetListAsync<TEntity>(string resource)// where TEntity : BaseEntity
+        {
+            using (Logging.MethodCall<TEntity>(GetType(), new MethodCallParameters { { "Resource", resource } }))
             {
                 try
                 {
@@ -102,9 +107,9 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<TOutput> GetEntity<TOutput>(string resource)
+        protected async Task<TOutput> GetEntityAsync<TOutput>(string resource)
         {
-            using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
+            using (Logging.MethodCall<TOutput>(GetType(), new MethodCallParameters { { "Resource", resource } }))
             {
                 try
                 {
@@ -131,7 +136,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<TOutput> GetEntity<TInput, TOutput>(string resource, TInput input)
+        protected async Task<TOutput> GetEntityAsync<TInput, TOutput>(string resource, TInput input)
         {
             string GenerateQueryString()
             {
@@ -141,7 +146,7 @@ namespace SAEON.Observations.QuerySite.Controllers
                     return $"?json={JsonConvert.SerializeObject(input)}";
             }
 
-            using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
+            using (Logging.MethodCall<TOutput>(GetType(), new MethodCallParameters { { "Resource", resource } }))
             {
                 try
                 {
@@ -168,9 +173,9 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
         }
 
-        protected async Task<TOutput> PostEntity<TInput, TOutput>(string resource, TInput input)
+        protected async Task<TOutput> PostEntityAsync<TInput, TOutput>(string resource, TInput input)
         {
-            using (Logging.MethodCall<TOutput>(GetType(), new ParameterList { { "Resource", resource } }))
+            using (Logging.MethodCall<TOutput>(GetType(), new MethodCallParameters { { "Resource", resource } }))
             {
                 try
                 {
@@ -237,7 +242,7 @@ namespace SAEON.Observations.QuerySite.Controllers
             return model;
         }
 
-        protected virtual async Task<TModel> LoadModelAsync(TModel model)
+        protected virtual Task<TModel> LoadModelAsync(TModel model)
         {
             throw new NotImplementedException();
         }

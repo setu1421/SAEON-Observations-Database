@@ -28,6 +28,9 @@ public partial class _UnitsOfMeasure : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfUnit.HasValue();
+        tfSymbol.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -60,14 +63,17 @@ public partial class _UnitsOfMeasure : System.Web.UI.Page
 
         UnitOfMeasure prosite = new UnitOfMeasure();
 
-        if (String.IsNullOrEmpty(tfID.Text))
+        if (!tfID.HasValue())
             prosite.Id = Guid.NewGuid();
         else
-            prosite = new UnitOfMeasure(tfID.Text.Trim());
+            prosite = new UnitOfMeasure(tfID.Text);
 
-        prosite.Code = tfCode.Text.Trim();
-        prosite.Unit = tfUnit.Text.Trim();
-        prosite.UnitSymbol = tfSymbol.Text.Trim();
+        if (tfCode.HasValue())
+            prosite.Code = tfCode.Text;
+        if (tfUnit.HasValue())
+            prosite.Unit = tfUnit.Text;
+        if (tfSymbol.HasValue())
+            prosite.UnitSymbol = tfSymbol.Text;
 
         prosite.UserId = AuthHelper.GetLoggedInUserId;
 

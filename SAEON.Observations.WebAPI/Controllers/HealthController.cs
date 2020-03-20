@@ -1,7 +1,10 @@
-﻿using SAEON.Logs;
+﻿using SAEON.AspNet.Common;
+using SAEON.AspNet.WebApi;
+using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using SAEON.Observations.WebAPI.Models;
 using System;
+using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -18,15 +21,16 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         public HealthController()
         {
-            db = new ObservationsDbContext();
+            db = new ObservationsDbContext(ConfigurationManager.AppSettings[Constants.TenantDefault] ?? "SAEON");
         }
 
         [HttpGet]
         [Route]
-        public async Task<IHttpActionResult> Get()
+        public async Task<IHttpActionResult> GetAsync()
         {
             using (Logging.MethodCall(GetType()))
             {
+                Logging.Information("Open Data Platform - Url: {ODPUrl} Key: {ODPApiKey}", Properties.Settings.Default.ODPUrl, ConfigurationManager.AppSettings["ODPApiKey"]);
                 var model = new HealthModel();
                 try
                 {

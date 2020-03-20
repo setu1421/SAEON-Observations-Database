@@ -1,8 +1,8 @@
 @charset "UTF-8";
 /*!
 *  filename: ej.theme.css
-*  version : 17.1.0.38
-*  Copyright Syncfusion Inc. 2001 - 2019. All rights reserved.
+*  version : 17.4.0.55
+*  Copyright Syncfusion Inc. 2001 - 2020. All rights reserved.
 *  Use of this code is subject to the terms of our license.
 *  A copy of the current license can be obtained at any time by e-mailing
 *  licensing@syncfusion.com. Any infringement will be prosecuted under
@@ -13476,6 +13476,7 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-uploaddialog.e-dialog .e-btn.e-select:hover {
   background: whitesmoke;
+  color: #282827;
 }
 .e-uploaddialog.e-dialog .e-btn.e-select:active {
   
@@ -13488,6 +13489,29 @@ input.e-fe-dialog-text:not(.e-textbox),
 }
 .e-uploaddialog.e-dialog .e-btn.e-select {
   
+}
+.e-uploaddialog.e-dialog .e-btn.e-select {
+  background: whitesmoke;
+  color: #333333;
+}
+.e-uploaddialog.e-dialog .e-btn.e-select {
+  background: whitesmoke;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, whitesmoke, #dddddd);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, whitesmoke), color-stop(100%, #dddddd));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, whitesmoke, #dddddd);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, whitesmoke, #dddddd);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, whitesmoke, #dddddd);
+  /* IE10+ */
+  background: linear-gradient(to bottom, whitesmoke, #dddddd);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='whitesmoke', endColorstr='#dddddd', GradientType=0);
+  /* IE6-9 */
+
 }
 .e-uploaddialog.e-dialog .e-btn.e-select {
   
@@ -22279,9 +22303,6 @@ table.pivotGridValueTable.rowFrozenTable tr td:last-child {
   /*other*/
   background-color: white;
 }
-.e-reportviewer-headerspan {
-  
-}
 .e-reportviewer-headerspan,
 .e-reportviewer-contentspan {
   
@@ -22450,6 +22471,13 @@ table.pivotGridValueTable.rowFrozenTable tr td:last-child {
 .e-reportviewer-popupli {
   color: #333333 !important;
 }
+.e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box {
+  
+}
+.e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box .e-input,
+.e-reportviewer-toolbarli.e-reportviewer-ejdropdownlist .e-rptviewer-drpdown .e-in-wrap.e-box .e-select {
+  
+}
 .e-reportviewer-gotonext.e-reportviewer-disabled,
 .e-reportviewer-gotoprevious.e-reportviewer-disabled,
 .e-reportviewer-gotolast.e-reportviewer-disabled,
@@ -22465,8 +22493,10 @@ table.pivotGridValueTable.rowFrozenTable tr td:last-child {
   font-size: 40px;
 }
 .e-reportviewer-error-content {
-  background-color: whitesmoke;
   font-size: 12.5px;
+}
+.e-reportviewer-error-content {
+  background-color: whitesmoke;
 }
 .e-reportviewer-scroller .e-scrollbar .e-icon {
   font-size: 0;
@@ -26278,6 +26308,9 @@ ej-ribbon {
 .e-spreadsheet .e-ss-object {
   background-color: white;
 }
+.e-spreadsheet .e-ss-image {
+  background-color: transparent;
+}
 .e-spreadsheet .e-ss-charttheme {
   background-color: #121212;
 }
@@ -26640,6 +26673,14 @@ ej-ribbon {
 }
 .e-spreadsheet .e-ribbon.e-js .e-rbn-button.e-tbtn.e-select:active .e-icon {
   
+}
+.e-spreadsheet .e-ss-databar-span:hover,
+.e-spreadsheet .e-ss-iconsets-wrapper:hover,
+.e-spreadsheet .e-ss-colorscale-span:hover {
+  border-color: #fde3c2;
+}
+.e-spreadsheet .e-ss-iconset-title {
+  color: #333333;
 }
 /*-------------------------------------SpreadSheet End -----------------------*/
 

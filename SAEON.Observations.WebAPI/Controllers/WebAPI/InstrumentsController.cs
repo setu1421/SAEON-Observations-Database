@@ -1,6 +1,6 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -14,12 +14,15 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Instruments")]
     public class InstrumentsController : CodedApiController<Instrument>
     {
-        protected override List<Expression<Func<Instrument, object>>> GetIncludes()
+        protected override IQueryable<Instrument> GetQuery(Expression<Func<Instrument, bool>> extraWhere = null)
         {
-            var list = base.GetIncludes();
-            list.Add(i => i.Stations);
-            list.Add(i => i.Sensors);
-            return list;
+            return base.GetQuery(extraWhere)
+                .Include(i => i.Organisations)
+                .Include(i => i.Sensors)
+                .Include(i => i.Stations)
+                .Include(i => i.Stations.Select(s => s.Organisations))
+                .Include(i => i.Stations.Select(s => s.Site))
+                .Include(i => i.Stations.Select(s => s.Site).Select(ss => ss.Organisations));
         }
 
         /// <summary>
@@ -37,9 +40,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Instrument</param>
         /// <returns>Instrument</returns>
         [ResponseType(typeof(Instrument))]
-        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
+        public override async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
         {
-            return await base.GetById(id);
+            return await base.GetByIdAsync(id);
         }
 
         /// <summary>
@@ -48,9 +51,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Instrument</param>
         /// <returns>Instrument</returns>
         [ResponseType(typeof(Instrument))]
-        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
+        public override async Task<IHttpActionResult> GetByNameAsync([FromUri] string name)
         {
-            return await base.GetByName(name);
+            return await base.GetByNameAsync(name);
         }
 
         /// <summary>
@@ -59,9 +62,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="code">The Code of the Instrument</param>
         /// <returns>Instrument</returns>
         [ResponseType(typeof(Instrument))]
-        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        public override async Task<IHttpActionResult> GetByCodeAsync([FromUri] string code)
         {
-            return await base.GetByCode(code);
+            return await base.GetByCodeAsync(code);
         }
 
         // GET: Instruments/5/Organisations
@@ -71,9 +74,11 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">Id of the Instrument</param>
         /// <returns>ListOf(Organisation)</returns>
         [Route("{id:guid}/Organisations")]
-        public IQueryable<Organisation> Getorganisations([FromUri] Guid id)
+        public IQueryable<Organisation> GetOrganisations([FromUri] Guid id)
         {
-            return GetMany<Organisation>(id, s => s.Organisations, i => i.Instruments);
+            var siteOrganisations = GetMany(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations);
+            var stationOrganisations = GetMany(id, s => s.Stations).SelectMany(i => i.Organisations);
+            return GetMany(id, s => s.Organisations).Union(stationOrganisations).Union(siteOrganisations);
         }
 
         // GET: Instruments/5/Stations
@@ -85,7 +90,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            return GetMany<Station>(id, s => s.Stations, i => i.Instruments);
+            return GetMany<Station>(id, s => s.Stations);
         }
 
         // GET: Instruments/5/Sensors
@@ -97,7 +102,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Sensors")]
         public IQueryable<Sensor> GetSensors([FromUri] Guid id)
         {
-            return GetMany<Sensor>(id, s => s.Sensors, i => i.Instruments);
+            return GetMany<Sensor>(id, s => s.Sensors);
         }
 
     }

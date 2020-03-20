@@ -1,6 +1,6 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -14,12 +14,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Sensors")]
     public class SensorsController : CodedApiController<Sensor>
     {
-        protected override List<Expression<Func<Sensor, object>>> GetIncludes()
+        protected override IQueryable<Sensor> GetQuery(Expression<Func<Sensor, bool>> extraWhere = null)
         {
-            var list = base.GetIncludes();
-            list.Add(i => i.Instruments);
-            list.Add(i => i.Phenomenon);
-            return list;
+            return base.GetQuery(extraWhere).Include(i => i.Phenomenon).Include(i => i.Instruments);
         }
 
         /// <summary>
@@ -37,9 +34,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Sensor</param>
         /// <returns>Sensor</returns>
         [ResponseType(typeof(Sensor))]
-        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
+        public override async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
         {
-            return await base.GetById(id);
+            return await base.GetByIdAsync(id);
         }
 
         /// <summary>
@@ -48,9 +45,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="code">The Code of the Sensor</param>
         /// <returns>Sensor</returns>
         [ResponseType(typeof(Sensor))]
-        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        public override async Task<IHttpActionResult> GetByCodeAsync([FromUri] string code)
         {
-            return await base.GetByCode(code);
+            return await base.GetByCodeAsync(code);
         }
 
 
@@ -60,9 +57,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Sensor</param>
         /// <returns>Sensor</returns>
         [ResponseType(typeof(Sensor))]
-        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
+        public override async Task<IHttpActionResult> GetByNameAsync([FromUri] string name)
         {
-            return await base.GetByName(name);
+            return await base.GetByNameAsync(name);
         }
 
 
@@ -74,9 +71,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>Phenomenon</returns>
         [Route("{id:guid}/Phenomenon")]
         [ResponseType(typeof(Phenomenon))]
-        public async Task<IHttpActionResult> GetPhenomenon(Guid id)
+        public async Task<IHttpActionResult> GetPhenomenonAsync(Guid id)
         {
-            return await GetSingle<Phenomenon>(id, s => s.Phenomenon, i => i.Sensors);
+            return await GetSingleAsync<Phenomenon>(id, s => s.Phenomenon);
         }
 
         // GET: Sensors/5/Instruments
@@ -88,7 +85,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
-            return GetMany<Instrument>(id, s => s.Instruments, i => i.Sensors);
+            return GetMany<Instrument>(id, s => s.Instruments);
         }
 
     }

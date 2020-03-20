@@ -30,6 +30,9 @@ public partial class Admin_Projects : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -66,32 +69,33 @@ public partial class Admin_Projects : System.Web.UI.Page
             try
             {
                 Project project = new Project();
-                if (String.IsNullOrEmpty(tfID.Text))
+                if (!tfID.HasValue())
                     project.Id = Guid.NewGuid();
                 else
-                    project = new Project(tfID.Text.Trim());
-                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
+                    project = new Project(tfID.Text);
+                if (tfCode.HasValue())
                     project.Code = tfCode.Text.Trim();
-                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
+                if (tfName.HasValue())
                     project.Name = tfName.Text.Trim();
-                if (cbProgramme.SelectedItem.Value == null)
-                    project.ProgrammeID = null;
+                project.ProgrammeID = Utilities.MakeGuid(cbProgramme.SelectedItem.Value.Trim());
+                if (tfDescription.HasValue())
+                    project.Description = tfDescription.Text;
+                if (tfUrl.HasValue())
+                    project.Url = tfUrl.Text;
                 else
-                    project.ProgrammeID = Utilities.MakeGuid(cbProgramme.SelectedItem.Value.Trim());
-                project.Description = tfDescription.Text.Trim();
-                project.Url = tfUrl.Text.Trim();
-                if (!String.IsNullOrEmpty(dfStartDate.Text) && (dfStartDate.SelectedDate.Year >= 1900))
+                    project.Url = null;
+                if (dfStartDate.HasValue())
                     project.StartDate = dfStartDate.SelectedDate;
                 else
                     project.StartDate = null;
-                if (!String.IsNullOrEmpty(dfEndDate.Text) && (dfEndDate.SelectedDate.Year >= 1900))
+                if (dfEndDate.HasValue())
                     project.EndDate = dfEndDate.SelectedDate;
                 else
                     project.EndDate = null;
                 project.UserId = AuthHelper.GetLoggedInUserId;
 
                 project.Save();
-                Auditing.Log(GetType(), new ParameterList { { "ID", project.Id }, { "Code", project.Code }, { "Name", project.Name } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", project.Id }, { "Code", project.Code }, { "Name", project.Name } });
 
                 ProjectsGrid.DataBind();
 
@@ -177,7 +181,7 @@ public partial class Admin_Projects : System.Web.UI.Page
                     projectStation.EndDate = dfStationEndDate.SelectedDate;
                 projectStation.UserId = AuthHelper.GetLoggedInUserId;
                 projectStation.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "ProjectID", projectStation.ProjectID },
                 { "ProjectCode", projectStation.Project.Name },
                 { "StationID", projectStation.StationID},
@@ -208,12 +212,12 @@ public partial class Admin_Projects : System.Web.UI.Page
     [DirectMethod]
     public void DeleteStationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 ProjectStation.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 StationLinksGrid.DataBind();
             }
             catch (Exception ex)

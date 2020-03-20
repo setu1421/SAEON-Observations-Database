@@ -35,6 +35,9 @@ public partial class Admin_Instruments : System.Web.UI.Page
         string checkColumn = String.Empty;
         string errorMessage = String.Empty;
         e.Success = true;
+        tfCode.HasValue();
+        tfName.HasValue();
+        tfDescription.HasValue();
 
         if (e.ID == "tfCode" || e.ID == "tfName")
         {
@@ -71,19 +74,22 @@ public partial class Admin_Instruments : System.Web.UI.Page
             {
                 Instrument instrument = new Instrument();
 
-                if (String.IsNullOrEmpty(tfID.Text))
+                if (!tfID.HasValue())
                     instrument.Id = Guid.NewGuid();
                 else
-                    instrument = new Instrument(tfID.Text.Trim());
+                    instrument = new Instrument(tfID.Text);
 
-                if (!string.IsNullOrEmpty(tfCode.Text.Trim()))
-                    instrument.Code = tfCode.Text.Trim();
-                if (!string.IsNullOrEmpty(tfName.Text.Trim()))
-                    instrument.Name = tfName.Text.Trim();
-                instrument.Description = tfDescription.Text.Trim();
+                if (tfCode.HasValue())
+                    instrument.Code = tfCode.Text;
+                if (tfName.HasValue())
+                    instrument.Name = tfName.Text;
+                if (tfDescription.HasValue())
+                    instrument.Description = tfDescription.Text;
 
-                if (!string.IsNullOrEmpty(tfUrl.Text))
+                if (tfUrl.HasValue())
                     instrument.Url = tfUrl.Text;
+                else
+                    instrument.Url = null;
 
                 if (nfLatitude.IsEmpty)
                     instrument.Latitude = null;
@@ -98,11 +104,11 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 else
                     instrument.Elevation = nfElevation.Number;
 
-                if (!dfStartDate.IsEmpty && (dfStartDate.SelectedDate.Year >= 1900))
+                if (dfStartDate.HasValue())
                     instrument.StartDate = dfStartDate.SelectedDate;
                 else
                     instrument.StartDate = null;
-                if (!dfEndDate.IsEmpty && (dfEndDate.SelectedDate.Year >= 1900))
+                if (dfEndDate.HasValue())
                     instrument.EndDate = dfEndDate.SelectedDate;
                 else
                     instrument.EndDate = null;
@@ -110,7 +116,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 instrument.UserId = AuthHelper.GetLoggedInUserId;
 
                 instrument.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                     { "ID", instrument.Id },
                     { "Code", instrument.Code },
                     { "Name", instrument.Name },
@@ -219,7 +225,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
                     organisationInstrument.EndDate = null;
                 organisationInstrument.UserId = AuthHelper.GetLoggedInUserId;
                 organisationInstrument.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "InstrumentID", organisationInstrument.InstrumentID },
                 { "InstrumentCode", organisationInstrument.Instrument.Code },
                 { "OrganisationID", organisationInstrument.OrganisationID},
@@ -252,12 +258,12 @@ public partial class Admin_Instruments : System.Web.UI.Page
     [DirectMethod]
     public void DeleteOrganisationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 OrganisationInstrument.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 OrganisationLinksGrid.DataBind();
             }
             catch (Exception ex)
@@ -359,7 +365,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
                     stationInstrument.EndDate = null;
                 stationInstrument.UserId = AuthHelper.GetLoggedInUserId;
                 stationInstrument.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "InstrumentID", stationInstrument.InstrumentID },
                 { "InstrumentCode", stationInstrument.Instrument.Code },
                 { "StationID", stationInstrument.StationID},
@@ -393,12 +399,12 @@ public partial class Admin_Instruments : System.Web.UI.Page
     [DirectMethod]
     public void DeleteStationLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 StationInstrument.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 StationLinksGrid.DataBind();
             }
             catch (Exception ex)
@@ -494,7 +500,7 @@ public partial class Admin_Instruments : System.Web.UI.Page
                 }
                 instrumentSensor.UserId = AuthHelper.GetLoggedInUserId;
                 instrumentSensor.Save();
-                Auditing.Log(GetType(), new ParameterList {
+                Auditing.Log(GetType(), new MethodCallParameters {
                 { "InstrumentID", instrumentSensor.InstrumentID },
                 { "InstrumentCode", instrumentSensor.Instrument.Code },
                 { "SensorID", instrumentSensor.SensorID},
@@ -525,12 +531,12 @@ public partial class Admin_Instruments : System.Web.UI.Page
     [DirectMethod]
     public void DeleteSensorLink(Guid aID)
     {
-        using (Logging.MethodCall(GetType(), new ParameterList { { "ID", aID } }))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "ID", aID } }))
         {
             try
             {
                 InstrumentSensor.Delete(aID);
-                Auditing.Log(GetType(), new ParameterList { { "ID", aID } });
+                Auditing.Log(GetType(), new MethodCallParameters { { "ID", aID } });
                 SensorLinksGrid.DataBind();
             }
             catch (Exception ex)

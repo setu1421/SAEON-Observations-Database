@@ -1,6 +1,6 @@
 ﻿using SAEON.Observations.Core.Entities;
 using System;
-using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -14,11 +14,13 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Organisations")]
     public class OrganisationsController : CodedApiController<Organisation>
     {
-        protected override List<Expression<Func<Organisation, object>>> GetIncludes()
+        protected override IQueryable<Organisation> GetQuery(Expression<Func<Organisation, bool>> extraWhere = null)
         {
-            var list = base.GetIncludes();
-            list.Add(i => i.Sites);
-            return list;
+            return base.GetQuery(extraWhere)
+                .Include(i => i.Sites.Select(s => s.Stations))
+                .Include(i => i.Sites.Select(s => s.Stations.Select(ss => ss.Instruments)))
+                .Include(i => i.Stations.Select(s => s.Instruments))
+                .Include(i => i.Instruments);
         }
 
         /// <summary>
@@ -36,9 +38,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="id">The Id of the Organisation</param>
         /// <returns>Organisation</returns>
         [ResponseType(typeof(Organisation))]
-        public override async Task<IHttpActionResult> GetById([FromUri] Guid id)
+        public override async Task<IHttpActionResult> GetByIdAsync([FromUri] Guid id)
         {
-            return await base.GetById(id);
+            return await base.GetByIdAsync(id);
         }
 
         /// <summary>
@@ -47,9 +49,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="name">The Name of the Organisation</param>
         /// <returns>Organisation</returns>
         [ResponseType(typeof(Organisation))]
-        public override async Task<IHttpActionResult> GetByName([FromUri] string name)
+        public override async Task<IHttpActionResult> GetByNameAsync([FromUri] string name)
         {
-            return await base.GetByName(name);
+            return await base.GetByNameAsync(name);
         }
 
         /// <summary>
@@ -58,9 +60,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <param name="code">The Code of the Organisation</param>
         /// <returns>Organisation</returns>
         [ResponseType(typeof(Organisation))]
-        public override async Task<IHttpActionResult> GetByCode([FromUri] string code)
+        public override async Task<IHttpActionResult> GetByCodeAsync([FromUri] string code)
         {
-            return await base.GetByCode(code);
+            return await base.GetByCodeAsync(code);
         }
 
         //GET: Organisations/5/Sites
@@ -72,7 +74,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Sites")]
         public IQueryable<Site> GetSites([FromUri] Guid id)
         {
-            return GetMany<Site>(id, s => s.Sites, i => i.Organisations);
+            return GetMany<Site>(id, s => s.Sites);
         }
 
         //GET: Organisations/5/Stations
@@ -84,7 +86,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            return GetMany<Station>(id, s => s.Stations, i => i.Organisations);
+            var siteStations = GetMany<Site>(id, s => s.Sites).SelectMany(i => i.Stations);
+            return GetMany<Station>(id, s => s.Stations).Union(siteStations);
         }
 
         //GET: Organisations/5/Instruments
@@ -96,7 +99,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
-            return GetMany<Instrument>(id, s => s.Instruments, i => i.Organisations);
+            var siteInstruments = GetMany<Site>(id, s => s.Sites).SelectMany(i => i.Stations).SelectMany(i => i.Instruments);
+            var stationInstruments = GetMany<Station>(id, s => s.Stations).SelectMany(i => i.Instruments);
+            return GetMany<Instrument>(id, s => s.Instruments).Union(siteInstruments).Union(stationInstruments);
         }
 
     }

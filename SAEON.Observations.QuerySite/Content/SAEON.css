@@ -18,6 +18,10 @@
     border: none;
 }
 
+.dsi-logo {
+    height: 85px;
+}
+
 .PaddedRow {
     padding-top: 5px;
 }

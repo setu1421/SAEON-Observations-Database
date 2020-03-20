@@ -7,6 +7,8 @@ using System.Linq;
 using System.Web.Hosting;
 using System.Web.Http.Description;
 using System.Collections.Generic;
+using System.Configuration;
+using SAEON.AspNet.Common;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -50,6 +52,27 @@ namespace SAEON.Observations.WebAPI
                 operation.security.Add(oAuthRequirements);
             }
         }
+
+        public class TenantHeader : IOperationFilter
+        {
+            public void Apply(Operation operation, SchemaRegistry schemaRegistry, ApiDescription apiDescription)
+            {
+                if (operation.parameters == null)
+                    operation.parameters = new List<Parameter>();
+
+                operation.parameters.Add(new Parameter
+                {
+                    name = "Tenant",
+                    @in = "header",
+                    type = "string",
+                    description = "Tenant ID",
+                    @default = ConfigurationManager.AppSettings[Constants.TenantDefault] ?? "SAEON",
+                    required = true
+                });
+            }
+
+        }
+
         public static void Register()
         {
             var thisAssembly = typeof(SwaggerConfig).Assembly;
@@ -205,6 +228,7 @@ namespace SAEON.Observations.WebAPI
                     // to execute the operation
                     //
                     c.OperationFilter<AssignOAuth2SecurityRequirements>();
+                    c.OperationFilter<TenantHeader>();
 
                     // Post-modify the entire Swagger document by wiring up one or more Document filters.
                     // This gives full control to modify the final SwaggerDocument. You should have a good understanding of
