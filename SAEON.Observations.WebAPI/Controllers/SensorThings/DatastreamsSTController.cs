@@ -20,6 +20,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
 
         [ODataRoute("({id})/Observations")]
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        [Authorize]
         public IQueryable<Observation> GetObservations([FromUri] Guid id) => GetRelatedManyIntId<Observation, db.SensorThingsObservation>(id);
 
         [ODataRoute("({id})/ObservedProperty")]

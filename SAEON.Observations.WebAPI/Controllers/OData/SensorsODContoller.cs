@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
-using SAEON.AspNet.Common;
-using SAEON.AspNet.WebApi;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Linq;
@@ -73,7 +71,8 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// <returns>ListOf(ObservationExpansion)</returns>
         [ODataRoute("({id})/Observations")]
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
-        [ClientAuthorization(Constants.ClientIDQuerySite, Constants.ClientIDNodes)]
+        //[ClientAuthorization(Constants.ClientIdQuerySite, Constants.ClientIdNodes, Constants.ClientIdPostman)]
+        [Authorize]
         public IQueryable<ObservationOData> GetObservations([FromODataUri] Guid id)
         {
             return GetManyWithIntId<ObservationOData>(id, s => s.Observations);

@@ -19,7 +19,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    [ClientAuthorization(Constants.ClientIDQuerySite)]
+    [ClientAuthorization(Constants.ClientIdQuerySite)]
     [TenantAuthorization]
     public abstract class BaseController : ApiController
     {
@@ -45,10 +45,6 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             Mapper = config.CreateMapper();
         }
 
-        //~BaseController()
-        //{
-        //    DbContext = null;
-        //}
     }
 
     public abstract class BaseListController<TEntity> : BaseController where TEntity : BaseEntity
