@@ -1322,8 +1322,8 @@ namespace SAEON.Observations.Core.Entities
         public string UnitName { get; set; }
     }
 
-    [Table("vObservationOData")]
-    public class ObservationOData : IntIdEntity
+    [Table("vObservationApi")]
+    public class ObservationApi : IntIdEntity
     {
         //public Guid ImportBatchId { get; set; } 
         public Guid SensorId { get; set; }
@@ -1368,6 +1368,8 @@ namespace SAEON.Observations.Core.Entities
         public Sensor Sensor { get; set; }
     }
 
+    [Table("vObservationOData")]
+    public class ObservationOData : ObservationApi { }
 
     [Table("vObservationExpansion")]
     public class ObservationExpansion : IntIdEntity
@@ -1876,6 +1878,7 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<DigitalObjectIdentifier> DigitalObjectIdentifiers { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Offering> Offerings { get; set; }
+        public DbSet<ObservationApi> ObservationsApi { get; set; }
         public DbSet<ObservationExpansion> ObservationExpansions { get; set; }
         public DbSet<ObservationOData> ObservationsOData { get; set; }
         public DbSet<Organisation> Organisations { get; set; }

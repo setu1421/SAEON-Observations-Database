@@ -534,6 +534,7 @@
     <Build Include="dbo\Views\vSensorThingsAPIFeaturesOfInterest.sql" />
     <Build Include="dbo\Views\vSensorThingsAPIObservations.sql" />
     <Build Include="dbo\Views\vObservationOData.sql" />
+    <Build Include="dbo\Views\vObservationApi.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />
