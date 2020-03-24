@@ -74,7 +74,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Sites")]
         public IQueryable<Site> GetSites([FromUri] Guid id)
         {
-            return GetMany<Site>(id, s => s.Sites);
+            return GetManyWithGuidId<Site>(id, s => s.Sites);
         }
 
         //GET: Organisations/5/Stations
@@ -86,8 +86,8 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            var siteStations = GetMany<Site>(id, s => s.Sites).SelectMany(i => i.Stations);
-            return GetMany<Station>(id, s => s.Stations).Union(siteStations);
+            var siteStations = GetManyWithGuidId<Site>(id, s => s.Sites).SelectMany(i => i.Stations);
+            return GetManyWithGuidId<Station>(id, s => s.Stations).Union(siteStations);
         }
 
         //GET: Organisations/5/Instruments
@@ -99,9 +99,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
-            var siteInstruments = GetMany<Site>(id, s => s.Sites).SelectMany(i => i.Stations).SelectMany(i => i.Instruments);
-            var stationInstruments = GetMany<Station>(id, s => s.Stations).SelectMany(i => i.Instruments);
-            return GetMany<Instrument>(id, s => s.Instruments).Union(siteInstruments).Union(stationInstruments);
+            var siteInstruments = GetManyWithGuidId<Site>(id, s => s.Sites).SelectMany(i => i.Stations).SelectMany(i => i.Instruments);
+            var stationInstruments = GetManyWithGuidId<Station>(id, s => s.Stations).SelectMany(i => i.Instruments);
+            return GetManyWithGuidId<Instrument>(id, s => s.Instruments).Union(siteInstruments).Union(stationInstruments);
         }
 
     }

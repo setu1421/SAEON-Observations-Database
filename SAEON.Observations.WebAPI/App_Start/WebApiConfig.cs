@@ -184,11 +184,10 @@ namespace SAEON.Observations.WebAPI
     {
         private static IEdmModel ObservationsEdmModel()
         {
-            ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "Observations" };
+            ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "OData" };
             builder.EntitySet<db.Inventory>("Inventory");
-            builder.EntitySet<db.ObservationExpansion>("ObservationExpansions").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.ObservationOData>("Observations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Instrument>("Instruments").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Observation>("Observations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Offering>("Offerings").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Organisation>("Organisations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Phenomenon>("Phenomena").IgnoreProperty("RowVersion").IgnoreProperty("UserId");

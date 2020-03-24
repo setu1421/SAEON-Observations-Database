@@ -70,7 +70,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Projects")]
         public IQueryable<Project> GetProjects([FromUri] Guid id)
         {
-            return GetMany<Project>(id, s => s.Projects);
+            return GetManyWithGuidId<Project>(id, s => s.Projects);
         }
 
     }

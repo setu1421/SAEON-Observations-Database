@@ -1,4 +1,6 @@
-﻿using SAEON.Observations.Core.Entities;
+﻿using SAEON.AspNet.WebApi;
+using SAEON.Observations.Core;
+using SAEON.Observations.Core.Entities;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -85,7 +87,21 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
-            return GetMany<Instrument>(id, s => s.Instruments);
+            return GetManyWithGuidId<Instrument>(id, s => s.Instruments);
+        }
+
+        // GET: Sensors/5/Observations
+        /// <summary>
+        /// Observations for the Sensor
+        /// </summary>
+        /// <param name="id">Id of the Sensor</param>
+        /// <returns>ListOf(Observation)</returns>
+        [Route("{id:guid}/Observations")]
+        [Authorize]
+        [DenyClientAuthorization(Constants.ClientIdPostman, Constants.ClientIdSwagger)]
+        public IQueryable<ObservationApi> GetObservations([FromUri] Guid id)
+        {
+            return GetManyWithIntId<ObservationApi>(id, s => s.ObservationsApi);
         }
 
     }

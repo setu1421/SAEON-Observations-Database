@@ -67,17 +67,17 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
 
         // GET: odata/Sensors(5)/Observations
         /// <summary>
-        /// Ovservations for the Sensor
+        /// Observations for the Sensor
         /// </summary>
         /// <param name="id">Id of the Sensor</param>
-        /// <returns>ListOf(ObservationExpansion)</returns>
+        /// <returns>ListOf(Observations)</returns>
         [ODataRoute("({id})/Observations")]
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         [Authorize]
         [DenyClientAuthorization(Constants.ClientIdPostman, Constants.ClientIdSwagger)]
-        public IQueryable<ObservationOData> GetObservations([FromODataUri] Guid id)
+        public IQueryable<Observation> GetObservations([FromODataUri] Guid id)
         {
-            return GetManyWithIntId<ObservationOData>(id, s => s.Observations);
+            return GetManyWithIntId<Observation>(id, s => s.Observations);
         }
     }
 }

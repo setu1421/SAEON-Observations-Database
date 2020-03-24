@@ -189,7 +189,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>IQueryableOf(TRelated)</returns>
         //[HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected IQueryable<TRelated> GetManyIdEntity<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IdEntity
+        protected IQueryable<TRelated> GetManyWithGuidId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : GuidIdEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
@@ -215,7 +215,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         /// <returns>IQueryableOf(TRelated)</returns>
         //[HttpGet]
         //[Route("{id:guid}/TRelated")] Required in derived classes
-        protected IQueryable<TRelated> GetMany<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : NamedEntity
+        protected IQueryable<TRelated> GetManyWithIntId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : IntIdEntity
         {
             using (Logging.MethodCall<TEntity, TRelated>(GetType()))
             {
@@ -231,6 +231,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
                 }
             }
         }
+
     }
 
     public abstract class NamedApiController<TEntity> : IDEntityController<TEntity> where TEntity : NamedEntity

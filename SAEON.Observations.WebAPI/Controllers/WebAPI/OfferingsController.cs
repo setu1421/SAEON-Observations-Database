@@ -70,7 +70,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Phenomena")]
         public IQueryable<Phenomenon> GetPhenomena([FromUri] Guid id)
         {
-            return GetManyIdEntity<PhenomenonOffering>(id, s => s.PhenomenonOfferings).Select(i => i.Phenomenon);
+            return GetManyWithGuidId<PhenomenonOffering>(id, s => s.PhenomenonOfferings).Select(i => i.Phenomenon);
         }
 
     }

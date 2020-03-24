@@ -76,9 +76,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Organisations")]
         public IQueryable<Organisation> GetOrganisations([FromUri] Guid id)
         {
-            var siteOrganisations = GetMany(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations);
-            var stationOrganisations = GetMany(id, s => s.Stations).SelectMany(i => i.Organisations);
-            return GetMany(id, s => s.Organisations).Union(stationOrganisations).Union(siteOrganisations);
+            var siteOrganisations = GetManyWithGuidId(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations);
+            var stationOrganisations = GetManyWithGuidId(id, s => s.Stations).SelectMany(i => i.Organisations);
+            return GetManyWithGuidId(id, s => s.Organisations).Union(stationOrganisations).Union(siteOrganisations);
         }
 
         // GET: Instruments/5/Stations
@@ -90,7 +90,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            return GetMany<Station>(id, s => s.Stations);
+            return GetManyWithGuidId<Station>(id, s => s.Stations);
         }
 
         // GET: Instruments/5/Sensors
@@ -102,7 +102,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Sensors")]
         public IQueryable<Sensor> GetSensors([FromUri] Guid id)
         {
-            return GetMany<Sensor>(id, s => s.Sensors);
+            return GetManyWithGuidId<Sensor>(id, s => s.Sensors);
         }
 
     }

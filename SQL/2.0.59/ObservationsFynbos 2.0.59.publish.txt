@@ -12,6 +12,7 @@
      Alter
        [dbo].[Observation] (Table)
      Create
+       [dbo].[vObservationApi] (View)
        [dbo].[vObservationOData] (View)
 
 ** Supporting actions

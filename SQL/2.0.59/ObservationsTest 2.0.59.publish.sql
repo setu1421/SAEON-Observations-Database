@@ -49,10 +49,11 @@ USE [$(DatabaseName)];
 --            WITH ROLLBACK IMMEDIATE;
 --    END
 
-
 GO
 PRINT N'Dropping [dbo].[Observation].[vSensorThingsDatastreams]...';
 Drop view vSensorThingsDatastreams;
+
+
 
 GO
 PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDecade]...';
@@ -171,7 +172,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Creating [dbo].[vObservationOData]...';
+PRINT N'Creating [dbo].[vObservationApi]...';
 
 
 GO
@@ -179,7 +180,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-CREATE VIEW [dbo].[vObservationOData]
+CREATE VIEW [dbo].[vObservationApi]
 AS
 Select
   ID,
@@ -212,6 +213,22 @@ Select
   StatusReasonDescription
 from
   vObservationExpansion
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vObservationOData]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vObservationOData]
+AS
+Select * from vObservationApi
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 

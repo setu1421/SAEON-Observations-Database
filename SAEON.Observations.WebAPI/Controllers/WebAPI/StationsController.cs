@@ -83,7 +83,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
-            return GetMany<Instrument>(id, s => s.Instruments);
+            return GetManyWithGuidId<Instrument>(id, s => s.Instruments);
         }
 
         // GET: Stations/5/Organisations
@@ -97,7 +97,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         {
             var site = GetSingle(id, s => s.Site);
             var siteOrganiations = DbContext.Sites.Where(i => i.Id == site.Id).SelectMany(i => i.Organisations);
-            return GetMany(id, s => s.Organisations).Union(siteOrganiations); ;
+            return GetManyWithGuidId(id, s => s.Organisations).Union(siteOrganiations); ;
         }
 
         // GET: Stations/5/Projects
@@ -109,7 +109,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Projects")]
         public IQueryable<Project> GetProjects([FromUri] Guid id)
         {
-            return GetMany<Project>(id, s => s.Projects);
+            return GetManyWithGuidId<Project>(id, s => s.Projects);
         }
 
     }

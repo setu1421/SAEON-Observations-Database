@@ -32,7 +32,7 @@ namespace SAEON.Observations.Core.Entities
     public abstract class BaseEntity
     {
         [NotMapped, JsonIgnore]
-        public string EntitySetName { get; protected set; }
+        public string EntitySetName { get; protected set; } = null;
         [NotMapped, JsonIgnore]
         public List<string> Links { get; } = new List<string>();
     }
@@ -59,15 +59,18 @@ namespace SAEON.Observations.Core.Entities
         {
             get
             {
-                var result = new Dictionary<string, string>
+                if (string.IsNullOrWhiteSpace(EntitySetName))
+                    return null;
+                else
                 {
-                    { "Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}" }
+                    var result = new Dictionary<string, string>();
+                    result.Add("Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}");
+                    foreach (var link in Links.OrderBy(i => i))
+                    {
+                        result.Add(link, $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}/{link}");
+                    }
+                    return result;
                 };
-                foreach (var link in Links.OrderBy(i => i))
-                {
-                    result.Add(link, $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}/{link}");
-                }
-                return result;
             }
         }
     }
@@ -94,15 +97,18 @@ namespace SAEON.Observations.Core.Entities
         {
             get
             {
-                var result = new Dictionary<string, string>
+                if (string.IsNullOrWhiteSpace(EntitySetName))
+                    return null;
+                else
                 {
-                    { "Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}" }
+                    var result = new Dictionary<string, string>();
+                    result.Add("Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}");
+                    foreach (var link in Links.OrderBy(i => i))
+                    {
+                        result.Add(link, $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}/{link}");
+                    }
+                    return result;
                 };
-                foreach (var link in Links)
-                {
-                    result.Add(link, $"{EntityConfig.BaseUrl}/{link}/{Id}");
-                }
-                return result;
             }
         }
     }
@@ -738,7 +744,13 @@ namespace SAEON.Observations.Core.Entities
         /// Observations linked to this Sensor
         /// </summary>
         [JsonIgnore]
-        public List<ObservationOData> Observations { get; set; }
+        public List<ObservationApi> ObservationsApi { get; set; }
+
+        /// <summary>
+        /// Observations linked to this Sensor
+        /// </summary>
+        [JsonIgnore]
+        public List<Observation> Observations { get; set; }
 #else
         /// <summary>
         /// Phenomenon of the Sensor
@@ -762,6 +774,7 @@ namespace SAEON.Observations.Core.Entities
             Links.Add("Organisations");
             Links.Add("Projects");
             Links.Add("Instruments");
+            Links.Add("Observations");
         }
     }
 
@@ -1365,11 +1378,60 @@ namespace SAEON.Observations.Core.Entities
         public string StatusReasonDescription { get; set; }
 
         // Navigation
+        [JsonIgnore]
         public Sensor Sensor { get; set; }
+
+        //public ObservationApi() : base()
+        //{
+        //    Links.Add("Sensors");
+        //}
     }
 
     [Table("vObservationOData")]
-    public class ObservationOData : ObservationApi { }
+    public class Observation : IntIdEntity
+    {
+        //public Guid ImportBatchId { get; set; } 
+        public Guid SensorId { get; set; }
+        public DateTime ValueDate { get; set; }
+        //public double? RawValue { get; set; }
+        public double? DataValue { get; set; }
+        public string TextValue { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public Guid PhenomenonId { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public string PhenomenonDescription { get; set; }
+        //public Guid PhenomenonOfferingId { get; set; }
+        public Guid OfferingId { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        public string OfferingDescription { get; set; }
+        //[Column("PhenomenonUOMID")]
+        //public Guid PhenomenonUnitId { get; set; }
+        [Column("UnitOfMeasureID")]
+        public Guid UnitId { get; set; }
+        [Column("UnitOfMeasureCode")]
+        public string UnitCode { get; set; }
+        [Column("UnitOfMeasureUnit")]
+        public string UnitName { get; set; }
+        [Column("UnitOfMeasureSymbol")]
+        public string UnitSymbol { get; set; }
+        public string Comment { get; set; }
+        public Guid? CorrelationId { get; set; }
+        //public Guid? StatusId { get; set; }
+        public string StatusCode { get; set; }
+        public string StatusName { get; set; }
+        public string StatusDescription { get; set; }
+        //public Guid? StatusReasonId { get; set; }
+        public string StatusReasonCode { get; set; }
+        public string StatusReasonName { get; set; }
+        public string StatusReasonDescription { get; set; }
+
+        // Navigation
+        public Sensor Sensor { get; set; }
+    }
 
     [Table("vObservationExpansion")]
     public class ObservationExpansion : IntIdEntity
@@ -1880,7 +1942,7 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<ObservationApi> ObservationsApi { get; set; }
         public DbSet<ObservationExpansion> ObservationExpansions { get; set; }
-        public DbSet<ObservationOData> ObservationsOData { get; set; }
+        public DbSet<Observation> Observations { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<OrganisationRole> OrganisationRoles { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }

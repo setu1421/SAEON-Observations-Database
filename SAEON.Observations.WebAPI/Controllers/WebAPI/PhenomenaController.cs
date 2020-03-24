@@ -72,7 +72,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Offerings")]
         public IQueryable<Offering> GetOfferings([FromUri] Guid id)
         {
-            return GetManyIdEntity<PhenomenonOffering>(id, s => s.PhenomenonOfferings).Select(i => i.Offering);
+            return GetManyWithGuidId<PhenomenonOffering>(id, s => s.PhenomenonOfferings).Select(i => i.Offering);
         }
 
         // GET: Phenomena/5/Units
@@ -84,7 +84,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Units")]
         public IQueryable<Unit> GetUnits([FromUri] Guid id)
         {
-            return GetManyIdEntity<PhenomenonUnit>(id, s => s.PhenomenonUnits).Select(i => i.Unit);
+            return GetManyWithGuidId<PhenomenonUnit>(id, s => s.PhenomenonUnits).Select(i => i.Unit);
         }
 
         // GET: Phenomena/5/Sensors
@@ -96,7 +96,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Sensors")]
         public IQueryable<Sensor> GetSensors([FromUri] Guid id)
         {
-            return GetMany<Sensor>(id, s => s.Sensors);
+            return GetManyWithGuidId<Sensor>(id, s => s.Sensors);
         }
 
     }

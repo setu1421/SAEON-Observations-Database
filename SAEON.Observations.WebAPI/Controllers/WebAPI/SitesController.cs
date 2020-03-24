@@ -70,7 +70,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Organisations")]
         public IQueryable<Organisation> GetOrganisations([FromUri] Guid id)
         {
-            return GetMany<Organisation>(id, s => s.Organisations);
+            return GetManyWithGuidId<Organisation>(id, s => s.Organisations);
         }
 
         //GET: Sites/5/Stations
@@ -82,7 +82,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            return GetMany<Station>(id, s => s.Stations);
+            return GetManyWithGuidId<Station>(id, s => s.Stations);
         }
 
     }
