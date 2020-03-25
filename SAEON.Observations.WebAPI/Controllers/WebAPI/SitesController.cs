@@ -63,7 +63,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         //GET: Sites/5/Organisations
         /// <summary>
-        /// Organisations for the Site
+        /// Organisations of the Site
         /// </summary>
         /// <param name="id">Id of Site</param>
         /// <returns>ListOf(Organisation)</returns>
@@ -75,7 +75,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         //GET: Sites/5/Stations
         /// <summary>
-        /// Stations for the Site
+        /// Stations of the Site
         /// </summary>
         /// <param name="id">Id of Site</param>
         /// <returns>ListOf(Station)</returns>

@@ -67,7 +67,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Sensors/5/Phenomenon
         /// <summary>
-        /// Phenomenon of a Sensor
+        /// Phenomenon of the Sensor
         /// </summary>
         /// <param name="id">The Id of the Sensor</param>
         /// <returns>Phenomenon</returns>
@@ -80,7 +80,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Sensors/5/Instruments
         /// <summary>
-        /// Instruments for the Sensor
+        /// Instruments of the Sensor
         /// </summary>
         /// <param name="id">Id of the Sensor</param>
         /// <returns>ListOf(Instrument)</returns>
@@ -92,7 +92,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Sensors/5/Observations
         /// <summary>
-        /// Observations for the Sensor
+        /// Observations of the Sensor
         /// </summary>
         /// <param name="id">Id of the Sensor</param>
         /// <returns>ListOf(Observation)</returns>

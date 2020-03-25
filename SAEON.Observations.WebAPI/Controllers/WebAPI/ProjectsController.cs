@@ -63,7 +63,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         //GET: Projects/5/Programme
         /// <summary>
-        /// Programme for the Project
+        /// Programme of the Project
         /// </summary>
         /// <param name="id">Id of Project</param>
         /// <returns>Programme</returns>
@@ -77,7 +77,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         //GET: Projects/5/Stations
         /// <summary>
-        /// Stations for the Project
+        /// Stations of the Project
         /// </summary>
         /// <param name="id">Id of Project</param>
         /// <returns>ListOf(Station)</returns>

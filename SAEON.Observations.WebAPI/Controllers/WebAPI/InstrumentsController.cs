@@ -69,7 +69,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Instruments/5/Organisations
         /// <summary>
-        /// Organisations linked to this Instrument
+        /// Organisations of the Instrument
         /// </summary>
         /// <param name="id">Id of the Instrument</param>
         /// <returns>ListOf(Organisation)</returns>
@@ -83,7 +83,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Instruments/5/Stations
         /// <summary>
-        /// Stations linked to this Instrument
+        /// Stations of the Instrument
         /// </summary>
         /// <param name="id">Id of the Instrument</param>
         /// <returns>ListOf(Station)</returns>
@@ -95,7 +95,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Instruments/5/Sensors
         /// <summary>
-        /// Sensors linked to this Instrument
+        /// Sensors of the Instrument
         /// </summary>
         /// <param name="id">Id of the Instrument</param>
         /// <returns>ListOf(Sensor)</returns>

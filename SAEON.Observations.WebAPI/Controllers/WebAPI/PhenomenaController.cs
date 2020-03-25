@@ -12,15 +12,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Phenomena")]
     public class PhenomenaController : CodedApiController<Phenomenon>
     {
-        //protected override List<Expression<Func<Phenomenon, object>>> GetIncludes()
-        //{
-        //    var list = base.GetIncludes();
-        //    list.Add(i => i.Offerings);
-        //    list.Add(i => i.Units);
-        //    list.Add(i => i.Sensors);
-        //    return list;
-        //}
-
         /// <summary>
         /// All Phenomena
         /// </summary>
@@ -65,7 +56,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Phenomena/5/Offerings
         /// <summary>
-        /// Offerings for the Phenomenon
+        /// Offerings of the Phenomenon
         /// </summary>
         /// <param name="id">Id of the Phenomenon</param>
         /// <returns>ListOf(Offering)</returns>
@@ -77,7 +68,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Phenomena/5/Units
         /// <summary>
-        /// Units for the Phenomenon
+        /// Units of the Phenomenon
         /// </summary>
         /// <param name="id">Id of the Phenomenon</param>
         /// <returns>ListOf(Unit)</returns>
@@ -89,7 +80,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Phenomena/5/Sensors
         /// <summary>
-        /// Sensors for the Phenomenon
+        /// Sensors of the Phenomenon
         /// </summary>
         /// <param name="id">Id of the Phenomenon</param>
         /// <returns>ListOf(Sensor)</returns>
