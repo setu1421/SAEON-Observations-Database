@@ -12,6 +12,6 @@
         public const string BatchRetracted = "302c69b6-f9d4-4d9f-82bb-a61cfc5dd80b";
         public const string Duplicate = "0B03DCBF-DDD1-4FE1-95D9-3C80BEF2D643";
         public const string DuplicateOfNull = "EDB0A37C-F68D-4693-8BA6-D14D1B4FABE8";
-
+        public const string DuplicateInBatch = "6489cd1a-0dd8-4f00-88f0-a7ad1009aff2";
     }
 }

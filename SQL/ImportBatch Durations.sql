@@ -8,5 +8,7 @@ from
     on (ImportBatch.DataSourceID = DataSource.ID)
 where 
   DurationInSecs is not null
+--order by
+--  DurationInSecs Desc
 order by
-  DurationInSecs Desc
+  ImportDate Desc
