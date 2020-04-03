@@ -744,13 +744,8 @@ namespace SAEON.Observations.Core.Entities
         /// Observations linked to this Sensor
         /// </summary>
         [JsonIgnore]
-        public List<ObservationApi> ObservationsApi { get; set; }
+        public List<SensorObservation> SensorObservations { get; set; }
 
-        /// <summary>
-        /// Observations linked to this Sensor
-        /// </summary>
-        [JsonIgnore]
-        public List<Observation> Observations { get; set; }
 #else
         /// <summary>
         /// Phenomenon of the Sensor
@@ -891,6 +886,12 @@ namespace SAEON.Observations.Core.Entities
         public Site Site { get; set; }
 
         /// <summary>
+        /// DataStreams linked to this Station
+        /// </summary>
+        [JsonIgnore]
+        public List<StationDataStream> StationDataStreams { get; set; }
+
+        /// <summary>
         /// The Organisations linked to this Station
         /// </summary>
         [JsonIgnore]
@@ -907,6 +908,12 @@ namespace SAEON.Observations.Core.Entities
         /// </summary>
         [JsonIgnore]
         public List<Instrument> Instruments { get; set; }
+
+        /// <summary>
+        /// DataStreams linked to this Station
+        /// </summary>
+        [JsonIgnore]
+        public List<StationObservation> StationObservations { get; set; }
 #else
         /// <summary>
         /// Site of the Station
@@ -948,6 +955,7 @@ namespace SAEON.Observations.Core.Entities
             Links.Add("Instruments");
         }
     }
+
 
     /// <summary>
     /// Unit Entity
@@ -1335,104 +1343,6 @@ namespace SAEON.Observations.Core.Entities
         public string UnitName { get; set; }
     }
 
-    [Table("vObservationApi")]
-    public class ObservationApi : IntIdEntity
-    {
-        //public Guid ImportBatchId { get; set; } 
-        public Guid SensorId { get; set; }
-        public DateTime ValueDate { get; set; }
-        //public double? RawValue { get; set; }
-        public double? DataValue { get; set; }
-        public string TextValue { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
-        public double? Elevation { get; set; }
-        public Guid PhenomenonId { get; set; }
-        public string PhenomenonCode { get; set; }
-        public string PhenomenonName { get; set; }
-        public string PhenomenonDescription { get; set; }
-        //public Guid PhenomenonOfferingId { get; set; }
-        public Guid OfferingId { get; set; }
-        public string OfferingCode { get; set; }
-        public string OfferingName { get; set; }
-        public string OfferingDescription { get; set; }
-        //[Column("PhenomenonUOMID")]
-        //public Guid PhenomenonUnitId { get; set; }
-        [Column("UnitOfMeasureID")]
-        public Guid UnitId { get; set; }
-        [Column("UnitOfMeasureCode")]
-        public string UnitCode { get; set; }
-        [Column("UnitOfMeasureUnit")]
-        public string UnitName { get; set; }
-        [Column("UnitOfMeasureSymbol")]
-        public string UnitSymbol { get; set; }
-        public string Comment { get; set; }
-        public Guid? CorrelationId { get; set; }
-        //public Guid? StatusId { get; set; }
-        public string StatusCode { get; set; }
-        public string StatusName { get; set; }
-        public string StatusDescription { get; set; }
-        //public Guid? StatusReasonId { get; set; }
-        public string StatusReasonCode { get; set; }
-        public string StatusReasonName { get; set; }
-        public string StatusReasonDescription { get; set; }
-
-        // Navigation
-        [JsonIgnore]
-        public Sensor Sensor { get; set; }
-
-        //public ObservationApi() : base()
-        //{
-        //    Links.Add("Sensors");
-        //}
-    }
-
-    [Table("vObservationOData")]
-    public class Observation : IntIdEntity
-    {
-        //public Guid ImportBatchId { get; set; } 
-        public Guid SensorId { get; set; }
-        public DateTime ValueDate { get; set; }
-        //public double? RawValue { get; set; }
-        public double? DataValue { get; set; }
-        public string TextValue { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
-        public double? Elevation { get; set; }
-        public Guid PhenomenonId { get; set; }
-        public string PhenomenonCode { get; set; }
-        public string PhenomenonName { get; set; }
-        public string PhenomenonDescription { get; set; }
-        //public Guid PhenomenonOfferingId { get; set; }
-        public Guid OfferingId { get; set; }
-        public string OfferingCode { get; set; }
-        public string OfferingName { get; set; }
-        public string OfferingDescription { get; set; }
-        //[Column("PhenomenonUOMID")]
-        //public Guid PhenomenonUnitId { get; set; }
-        [Column("UnitOfMeasureID")]
-        public Guid UnitId { get; set; }
-        [Column("UnitOfMeasureCode")]
-        public string UnitCode { get; set; }
-        [Column("UnitOfMeasureUnit")]
-        public string UnitName { get; set; }
-        [Column("UnitOfMeasureSymbol")]
-        public string UnitSymbol { get; set; }
-        public string Comment { get; set; }
-        public Guid? CorrelationId { get; set; }
-        //public Guid? StatusId { get; set; }
-        public string StatusCode { get; set; }
-        public string StatusName { get; set; }
-        public string StatusDescription { get; set; }
-        //public Guid? StatusReasonId { get; set; }
-        public string StatusReasonCode { get; set; }
-        public string StatusReasonName { get; set; }
-        public string StatusReasonDescription { get; set; }
-
-        // Navigation
-        public Sensor Sensor { get; set; }
-    }
-
     [Table("vObservationExpansion")]
     public class ObservationExpansion : IntIdEntity
     {
@@ -1498,6 +1408,149 @@ namespace SAEON.Observations.Core.Entities
         public string StatusReasonDescription { get; set; }
     }
 
+    [Table("vSensorObservation")]
+    public class SensorObservation : IntIdEntity
+    {
+        //public Guid ImportBatchId { get; set; } 
+        public Guid SensorId { get; set; }
+        public DateTime ValueDate { get; set; }
+        //public double? RawValue { get; set; }
+        public double? DataValue { get; set; }
+        public string TextValue { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public Guid PhenomenonId { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public string PhenomenonDescription { get; set; }
+        //public Guid PhenomenonOfferingId { get; set; }
+        public Guid OfferingId { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        public string OfferingDescription { get; set; }
+        //[Column("PhenomenonUOMID")]
+        //public Guid PhenomenonUnitId { get; set; }
+        [Column("UnitOfMeasureID")]
+        public Guid UnitId { get; set; }
+        [Column("UnitOfMeasureCode")]
+        public string UnitCode { get; set; }
+        [Column("UnitOfMeasureUnit")]
+        public string UnitName { get; set; }
+        [Column("UnitOfMeasureSymbol")]
+        public string UnitSymbol { get; set; }
+        public string Comment { get; set; }
+        public Guid? CorrelationId { get; set; }
+        //public Guid? StatusId { get; set; }
+        public string StatusCode { get; set; }
+        public string StatusName { get; set; }
+        public string StatusDescription { get; set; }
+        //public Guid? StatusReasonId { get; set; }
+        public string StatusReasonCode { get; set; }
+        public string StatusReasonName { get; set; }
+        public string StatusReasonDescription { get; set; }
+
+        // Navigation
+        [JsonIgnore]
+        public Sensor Sensor { get; set; }
+    }
+
+    [Table("vStationDataStreams")]
+    public class StationDataStream : IntIdEntity
+    {
+        public Guid StationId { get; set; }
+        public string StationCode { get; set; }
+        public string StationName { get; set; }
+        public string StationDescription { get; set; }
+        public Guid PhenomenonId { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public string PhenomenonDescription { get; set; }
+        //public Guid PhenomenonOfferingID { get; set; }
+        public Guid OfferingId { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        public string OfferingDescription { get; set; }
+        //[Column("PhenomenonUOMID")]
+        //public Guid PhenomenonUnitID { get; set; }
+        [Column("UnitOfMeasureID")]
+        public Guid UnitId { get; set; }
+        [Column("UnitOfMeasureCode")]
+        public string UnitCode { get; set; }
+        [Column("UnitOfMeasureUnit")]
+        public string UnitName { get; set; }
+        [Column("UnitOfMeasureSymbol")]
+        public string UnitSymbol { get; set; }
+        public int? Count { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public double? LatitudeNorth { get; set; }
+        public double? LatitudeSouth { get; set; }
+        public double? LongitudeNorth { get; set; }
+        public double? LongitudeSouth { get; set; }
+        public double? ElevationMinimum { get; set; }
+        public double? ElevationMaximum { get; set; }
+
+        // Navigation
+        [JsonIgnore]
+        public Station Station { get; set; }
+    }
+
+    [Table("vStationObservations")]
+    public class StationObservation : IntIdEntity
+    {
+        //public Guid ImportBatchId { get; set; } 
+        public Guid StationId { get; set; }
+        public Guid InstrumentId { get; set; }
+        public string InstrumentCode { get; set; }
+        public string InstrumentName { get; set; }
+        public string InstrumentDescription { get; set; }
+        public Guid SensorId { get; set; }
+        public string SensorCode { get; set; }
+        public string SensorName { get; set; }
+        public string SensorDescription { get; set; }
+        public DateTime ValueDate { get; set; }
+        //public double? RawValue { get; set; }
+        public double? DataValue { get; set; }
+        public string TextValue { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public double? Elevation { get; set; }
+        public Guid PhenomenonId { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public string PhenomenonDescription { get; set; }
+        //public Guid PhenomenonOfferingId { get; set; }
+        public Guid OfferingId { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        public string OfferingDescription { get; set; }
+        //[Column("PhenomenonUOMID")]
+        //public Guid PhenomenonUnitId { get; set; }
+        [Column("UnitOfMeasureID")]
+        public Guid UnitId { get; set; }
+        [Column("UnitOfMeasureCode")]
+        public string UnitCode { get; set; }
+        [Column("UnitOfMeasureUnit")]
+        public string UnitName { get; set; }
+        [Column("UnitOfMeasureSymbol")]
+        public string UnitSymbol { get; set; }
+        public string Comment { get; set; }
+        public Guid? CorrelationId { get; set; }
+        //public Guid? StatusId { get; set; }
+        public string StatusCode { get; set; }
+        public string StatusName { get; set; }
+        public string StatusDescription { get; set; }
+        //public Guid? StatusReasonId { get; set; }
+        public string StatusReasonCode { get; set; }
+        public string StatusReasonName { get; set; }
+        public string StatusReasonDescription { get; set; }
+
+        // Navigation
+        [JsonIgnore]
+        public Station Station { get; set; }
+    }
+
     #region SensorThingsAPI
 
     [Table("vSensorThingsAPIDatastreams")]
@@ -1513,10 +1566,12 @@ namespace SAEON.Observations.Core.Entities
         public string PhenomenonName { get; set; }
         public string PhenomenonDescription { get; set; }
         public string PhenomenonUrl { get; set; }
-        public Guid PhenomenonOfferingId { get; set; }
+        //public Guid PhenomenonOfferingId { get; set; }
+        public Guid OfferingId { get; set; }
         public string OfferingName { get; set; }
         public string OfferingDescription { get; set; }
-        public Guid PhenomenonUnitId { get; set; }
+        //public Guid PhenomenonUnitId { get; set; }
+        public Guid UnitOfMeasureId { get; set; }
         public string UnitOfMeasureUnit { get; set; }
         public string UnitOfMeasureSymbol { get; set; }
         public DateTime? StartDate { get; set; }
@@ -1940,9 +1995,7 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<DigitalObjectIdentifier> DigitalObjectIdentifiers { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Offering> Offerings { get; set; }
-        public DbSet<ObservationApi> ObservationsApi { get; set; }
         public DbSet<ObservationExpansion> ObservationExpansions { get; set; }
-        public DbSet<Observation> Observations { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<OrganisationRole> OrganisationRoles { get; set; }
         public DbSet<Phenomenon> Phenomena { get; set; }
@@ -1951,8 +2004,11 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<Programme> Programmes { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Sensor> Sensors { get; set; }
+        public DbSet<SensorObservation> SensorObservations { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Station> Stations { get; set; }
+        public DbSet<StationDataStream> StationDataStreams { get; set; }
+        public DbSet<StationObservation> StationObservations { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }

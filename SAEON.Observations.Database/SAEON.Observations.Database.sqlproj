@@ -533,8 +533,9 @@
     <Build Include="dbo\Views\vSensorThingsAPIHistoricalLocations.sql" />
     <Build Include="dbo\Views\vSensorThingsAPIFeaturesOfInterest.sql" />
     <Build Include="dbo\Views\vSensorThingsAPIObservations.sql" />
-    <Build Include="dbo\Views\vObservationOData.sql" />
-    <Build Include="dbo\Views\vObservationApi.sql" />
+    <Build Include="dbo\Views\vSensorObservations.sql" />
+    <Build Include="dbo\Views\vStationDataStreams.sql" />
+    <Build Include="dbo\Views\vStationObservations.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

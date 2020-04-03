@@ -300,18 +300,6 @@ namespace SAEON.Observations.Data
         }
         
 		
-		public SAEON.Observations.Data.AspnetMembershipCollection AspnetMembershipRecords()
-		{
-			return new SAEON.Observations.Data.AspnetMembershipCollection().Where(AspnetMembership.Columns.UserId, UserId).Load();
-		}
-		public SAEON.Observations.Data.AspnetPersonalizationPerUserCollection AspnetPersonalizationPerUserRecords()
-		{
-			return new SAEON.Observations.Data.AspnetPersonalizationPerUserCollection().Where(AspnetPersonalizationPerUser.Columns.UserId, UserId).Load();
-		}
-		public SAEON.Observations.Data.AspnetProfileCollection AspnetProfileRecords()
-		{
-			return new SAEON.Observations.Data.AspnetProfileCollection().Where(AspnetProfile.Columns.UserId, UserId).Load();
-		}
 		public SAEON.Observations.Data.AspnetUsersInRoleCollection AspnetUsersInRoles()
 		{
 			return new SAEON.Observations.Data.AspnetUsersInRoleCollection().Where(AspnetUsersInRole.Columns.UserId, UserId).Load();

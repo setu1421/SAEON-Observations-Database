@@ -11,9 +11,11 @@
 ** User actions
      Alter
        [dbo].[Observation] (Table)
+       [dbo].[vImportBatchSummary] (View)
      Create
        [dbo].[vObservationApi] (View)
        [dbo].[vObservationOData] (View)
+       [dbo].[vStationDataStreams] (View)
 
 ** Supporting actions
      Drop
@@ -27,6 +29,14 @@
        [dbo].[vSensorThingsAPIObservations] (View)
        [dbo].[vObservation] (View)
        [dbo].[vObservationJSON] (View)
+       [dbo].[vInventory] (View)
+       [dbo].[vSensorThingsAPIDatastreams] (View)
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
+       [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
+       [dbo].[vSensorThingsAPIHistoricalLocations] (View)
 
 The source's object [Authentication] is different than the target's version of the object but the target object will not be updated.
 The source's object [Observations] is different than the target's version of the object but the target object will not be updated.

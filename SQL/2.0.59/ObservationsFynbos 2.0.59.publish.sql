@@ -233,6 +233,47 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
+PRINT N'Creating [dbo].[vStationDataStreams]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vStationDataStreams]
+AS
+Select
+  Row_Number() over (order by StationCode, PhenomenonCode, OfferingCode, UnitOfMeasureCode) ID, s.*
+from
+(
+Select
+  StationID, StationCode, StationName, StationDescription,
+  PhenomenonCode, PhenomenonName, PhenomenonDescription,
+  PhenomenonOfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
+  Sum(Count) Count,
+  Min(StartDate) StartDate,
+  Max(EndDate) EndDate,
+  Max(LatitudeNorth) LatitudeNorth,
+  Min(LatitudeSouth) LatitudeSouth,
+  Min(LongitudeWest) LongitudeWest,
+  Max(LongitudeEast) LongitudeEast,
+  Min(ElevationMinimum) ElevationMinimum,
+  Max(ElevationMaximum) ElevationMaximum
+from
+  vImportBatchSummary
+group by
+  StationID, StationCode, StationName, StationDescription,
+  PhenomenonCode, PhenomenonName, PhenomenonDescription,
+  PhenomenonOfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol
+) s
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Update complete.';
 
 

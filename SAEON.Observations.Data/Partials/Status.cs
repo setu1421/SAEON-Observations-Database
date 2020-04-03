@@ -13,5 +13,7 @@
         public const string Duplicate = "0B03DCBF-DDD1-4FE1-95D9-3C80BEF2D643";
         public const string DuplicateOfNull = "EDB0A37C-F68D-4693-8BA6-D14D1B4FABE8";
         public const string DuplicateInBatch = "6489cd1a-0dd8-4f00-88f0-a7ad1009aff2";
+        public const string QueuedForImport = "9aa26462-1750-4ba0-8e63-62008946dcd2";
+        public const string Importing = "5b6c2125-2cf5-4857-a772-f2f8515c66d9";
     }
 }
