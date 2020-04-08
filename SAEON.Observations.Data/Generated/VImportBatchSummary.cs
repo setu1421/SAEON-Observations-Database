@@ -321,6 +321,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarElevationMaximum);
                 
+                TableSchema.TableColumn colvarPhenomenonID = new TableSchema.TableColumn(schema);
+                colvarPhenomenonID.ColumnName = "PhenomenonID";
+                colvarPhenomenonID.DataType = DbType.Guid;
+                colvarPhenomenonID.MaxLength = 0;
+                colvarPhenomenonID.AutoIncrement = false;
+                colvarPhenomenonID.IsNullable = false;
+                colvarPhenomenonID.IsPrimaryKey = false;
+                colvarPhenomenonID.IsForeignKey = false;
+                colvarPhenomenonID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarPhenomenonID);
+                
                 TableSchema.TableColumn colvarPhenomenonCode = new TableSchema.TableColumn(schema);
                 colvarPhenomenonCode.ColumnName = "PhenomenonCode";
                 colvarPhenomenonCode.DataType = DbType.AnsiString;
@@ -357,6 +369,18 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarPhenomenonDescription);
                 
+                TableSchema.TableColumn colvarOfferingID = new TableSchema.TableColumn(schema);
+                colvarOfferingID.ColumnName = "OfferingID";
+                colvarOfferingID.DataType = DbType.Guid;
+                colvarOfferingID.MaxLength = 0;
+                colvarOfferingID.AutoIncrement = false;
+                colvarOfferingID.IsNullable = false;
+                colvarOfferingID.IsPrimaryKey = false;
+                colvarOfferingID.IsForeignKey = false;
+                colvarOfferingID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarOfferingID);
+                
                 TableSchema.TableColumn colvarOfferingCode = new TableSchema.TableColumn(schema);
                 colvarOfferingCode.ColumnName = "OfferingCode";
                 colvarOfferingCode.DataType = DbType.AnsiString;
@@ -392,6 +416,18 @@ namespace SAEON.Observations.Data{
                 colvarOfferingDescription.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarOfferingDescription);
+                
+                TableSchema.TableColumn colvarUnitOfMeasureID = new TableSchema.TableColumn(schema);
+                colvarUnitOfMeasureID.ColumnName = "UnitOfMeasureID";
+                colvarUnitOfMeasureID.DataType = DbType.Guid;
+                colvarUnitOfMeasureID.MaxLength = 0;
+                colvarUnitOfMeasureID.AutoIncrement = false;
+                colvarUnitOfMeasureID.IsNullable = false;
+                colvarUnitOfMeasureID.IsPrimaryKey = false;
+                colvarUnitOfMeasureID.IsForeignKey = false;
+                colvarUnitOfMeasureID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUnitOfMeasureID);
                 
                 TableSchema.TableColumn colvarUnitOfMeasureCode = new TableSchema.TableColumn(schema);
                 colvarUnitOfMeasureCode.ColumnName = "UnitOfMeasureCode";
@@ -931,6 +967,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("PhenomenonID")]
+        [Bindable(true)]
+        public Guid PhenomenonID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("PhenomenonID");
+		    }
+            set 
+		    {
+			    SetColumnValue("PhenomenonID", value);
+            }
+        }
+	      
         [XmlAttribute("PhenomenonCode")]
         [Bindable(true)]
         public string PhenomenonCode 
@@ -973,6 +1023,20 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("OfferingID")]
+        [Bindable(true)]
+        public Guid OfferingID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("OfferingID");
+		    }
+            set 
+		    {
+			    SetColumnValue("OfferingID", value);
+            }
+        }
+	      
         [XmlAttribute("OfferingCode")]
         [Bindable(true)]
         public string OfferingCode 
@@ -1012,6 +1076,20 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("OfferingDescription", value);
+            }
+        }
+	      
+        [XmlAttribute("UnitOfMeasureID")]
+        [Bindable(true)]
+        public Guid UnitOfMeasureID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid>("UnitOfMeasureID");
+		    }
+            set 
+		    {
+			    SetColumnValue("UnitOfMeasureID", value);
             }
         }
 	      
@@ -1276,17 +1354,23 @@ namespace SAEON.Observations.Data{
             
             public static string ElevationMaximum = @"ElevationMaximum";
             
+            public static string PhenomenonID = @"PhenomenonID";
+            
             public static string PhenomenonCode = @"PhenomenonCode";
             
             public static string PhenomenonName = @"PhenomenonName";
             
             public static string PhenomenonDescription = @"PhenomenonDescription";
             
+            public static string OfferingID = @"OfferingID";
+            
             public static string OfferingCode = @"OfferingCode";
             
             public static string OfferingName = @"OfferingName";
             
             public static string OfferingDescription = @"OfferingDescription";
+            
+            public static string UnitOfMeasureID = @"UnitOfMeasureID";
             
             public static string UnitOfMeasureCode = @"UnitOfMeasureCode";
             

@@ -255,11 +255,20 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
-    protected void FileSelected(object sender, DirectEventArgs e)
+    public void FileSelected(object sender, DirectEventArgs e)
     {
         using (Logging.MethodCall(GetType()))
         {
             Logging.Information("Import file selected");
+        }
+    }
+
+    [DirectMethod]
+    public void LogStartUpload()
+    {
+        using (Logging.MethodCall(GetType()))
+        {
+            Logging.Information("Import file upload");
         }
     }
 
@@ -320,7 +329,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopwatch.Start();
                 var stageStopwatch = new Stopwatch();
                 stageStopwatch.Start();
-                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.47, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.48, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 stageStopwatch.Stop();
                 Logging.Information("Imported {count:N0} values in {elapsed}", values.Count, stageStopwatch.Elapsed.TimeStr());

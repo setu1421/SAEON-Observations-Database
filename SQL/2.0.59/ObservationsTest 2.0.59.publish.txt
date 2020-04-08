@@ -13,9 +13,9 @@
        [dbo].[Observation] (Table)
        [dbo].[vImportBatchSummary] (View)
      Create
-       [dbo].[vObservationApi] (View)
-       [dbo].[vObservationOData] (View)
+       [dbo].[vSensorObservations] (View)
        [dbo].[vStationDataStreams] (View)
+       [dbo].[vStationObservations] (View)
 
 ** Supporting actions
      Drop

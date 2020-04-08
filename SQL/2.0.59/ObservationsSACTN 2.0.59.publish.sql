@@ -53,6 +53,7 @@ GO
 PRINT N'Dropping [dbo].[Observation].[vSensorThingsDatastreams]...';
 Drop view vSensorThingsDatastreams;
 
+
 GO
 PRINT N'Dropping [dbo].[Observation].[IX_Observation_ValueDecade]...';
 
@@ -334,7 +335,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
-PRINT N'Creating [dbo].[vObservationApi]...';
+PRINT N'Creating [dbo].[vSensorObservations]...';
 
 
 GO
@@ -342,7 +343,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 
 GO
-CREATE VIEW [dbo].[vObservationApi]
+CREATE VIEW [dbo].[vSensorObservations]
 AS
 Select
   ID,
@@ -353,46 +354,17 @@ Select
   Latitude,
   Longitude,
   Elevation,
-  PhenomenonID,
-  PhenomenonCode,
-  PhenomenonName,
-  PhenomenonDescription,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription,
   PhenomenonOfferingID,
-  OfferingID,
-  OfferingCode,
-  OfferingName,
-  OfferingDescription,
+  OfferingID, OfferingCode, OfferingName, OfferingDescription,
   PhenomenonUOMID,
-  UnitOfMeasureID,
-  UnitOfMeasureCode,
-  UnitOfMeasureUnit,
-  UnitOfMeasureSymbol,
+  UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
   CorrelationID,
   Comment,
-  StatusCode,
-  StatusName,
-  StatusDescription,
-  StatusReasonCode,
-  StatusReasonName,
-  StatusReasonDescription
+  StatusCode, StatusName, StatusDescription,
+  StatusReasonCode, StatusReasonName, StatusReasonDescription
 from
   vObservationExpansion
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
-PRINT N'Creating [dbo].[vObservationOData]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-CREATE VIEW [dbo].[vObservationOData]
-AS
-Select * from vObservationApi
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
@@ -434,6 +406,43 @@ group by
   PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
   PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol
 ) s
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[vStationObservations]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE VIEW [dbo].[vStationObservations]
+AS
+Select
+  ID,
+  StationID,
+  InstrumentID, InstrumentCode, InstrumentName, InstrumentDescription,
+  SensorID, SensorCode, SensorName, SensorDescription,
+  ValueDate,
+  DataValue,
+  TextValue,
+  Latitude,
+  Longitude,
+  Elevation,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription,
+  PhenomenonOfferingID,
+  OfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID,
+  UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
+  CorrelationID,
+  Comment,
+  StatusCode, StatusName, StatusDescription,
+  StatusReasonCode, StatusReasonName, StatusReasonDescription
+from
+  vObservationExpansion
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
