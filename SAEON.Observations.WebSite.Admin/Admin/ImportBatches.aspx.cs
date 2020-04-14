@@ -1,4 +1,6 @@
-﻿using Ext.Net;
+﻿//#define DeleteIndivdualObservations
+//#define BulkInsert
+using Ext.Net;
 using SAEON.Azure.CosmosDB;
 using SAEON.Logs;
 using SAEON.Observations.Azure;
@@ -17,12 +19,12 @@ using System.Transactions;
 public partial class Admin_ImportBatches : System.Web.UI.Page
 {
     private bool DeleteIndivdualObservations = false;
-    private bool UseBulkInsert = false;
+    private bool BulkInsert = false;
 
     protected void Page_Load(object sender, EventArgs e)
     {
         DeleteIndivdualObservations = ConfigurationManager.AppSettings["DeleteIndivdualObservations"].IsTrue();
-        UseBulkInsert = ConfigurationManager.AppSettings["BulkInsert"].IsTrue();
+        BulkInsert = ConfigurationManager.AppSettings["BulkInsert"].IsTrue();
         if (!X.IsAjaxRequest)
         {
             Store store = cbDataSource.GetStore();
@@ -94,6 +96,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             Logging.Information("Deleting observations for ImportBatch {ImportBatchID}", importBatchId);
+            //#if DeleteIndivdualObservations
             if (DeleteIndivdualObservations)
             {
                 Logging.Information("Deleting observations for ImportBatch {ImportBatchID}", importBatchId);
@@ -102,6 +105,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             else
             {
+                //#else
                 using (var cmd = connScope.CurrentConnection.CreateCommand())
                 {
                     cmd.CommandText = "Delete Observation where (ImportBatchId = @ImportBatchID)";
@@ -115,6 +119,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     Logging.Information("Deleted {count} observations for ImportBatch {ImportBatchID} in {Elapsed}", count, importBatchId, stopwatch.Elapsed.TimeStr());
                 }
             }
+            //#endif
         }
     }
 
@@ -279,7 +284,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             try
             {
                 Guid DataSourceId = new Guid(cbDataSource.SelectedItem.Value);
-                Logging.Information("BulkInsert: {BulkInsert}", UseBulkInsert);
+                //#if BulkInsert
+                Logging.Information("BulkInsert: {BulkInsert}", BulkInsert);
+                //Logging.Information("BulkInsert: {BulkInsert}", true);
+                //#endif
 
                 //
                 //add check to see that either datasource or linked sensor has a dataschema
@@ -329,7 +337,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopwatch.Start();
                 var stageStopwatch = new Stopwatch();
                 stageStopwatch.Start();
-                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.48, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.49, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 stageStopwatch.Stop();
                 Logging.Information("Imported {count:N0} values in {elapsed}", values.Count, stageStopwatch.Elapsed.TimeStr());
@@ -347,11 +355,12 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     var goodValues = values.Where(i => i.IsValid).OrderBy(i => i.RowNum).ToList();
                     var badValues = values.Where(i => !i.IsValid).OrderBy(i => i.RowNum).ToList();
                     var dtObservations = new DataTable("Observations");
-                    if (UseBulkInsert)
+                    //#if BulkInsert
+                    if (BulkInsert)
                     {
                         // Create DataTable from good values
                         stageStopwatch.Restart();
-                        Logging.Information("Creating DataTable");
+                        Logging.Information("Creating DataTable for {count:n0} good values", goodValues.Count);
                         dtObservations.Columns.Add("ImportBatchID", typeof(Guid));
                         dtObservations.Columns.Add("SensorID", typeof(Guid));
                         dtObservations.Columns.Add("ValueDate", typeof(DateTime));
@@ -379,7 +388,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
                             if (reportPorgress)
                             {
-                                Logging.Information("{progress:p0} {value:n0} of {values:n0} values in {min} of {mins}", progress, n, nMax, elapsed.TimeStr(), total.TimeStr());
+                                Logging.Information("{progress:p0} {value:n0} of {values:n0} values in {min} of {mins}, {rowTime}/row, {rowsPerSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
                                 lastProgress100 = progress100;
                             }
                             try
@@ -418,6 +427,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         stageStopwatch.Stop();
                         Logging.Information("Created DataTable {count:n0} observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                     }
+                    //#endif
                     try
                     {
                         using (TransactionScope tranScope = Utilities.NewTransactionScope())
@@ -437,7 +447,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 batch.UserId = AuthHelper.GetLoggedInUserId;
                                 batch.Save();
 
-                                Logging.Information("Creating error logs");
+                                Logging.Information("Creating {count:n0} error logs", badValues.Count);
                                 stageStopwatch.Restart();
                                 lastProgress100 = -1;
                                 nMax = badValues.Count;
@@ -455,7 +465,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         lastProgress100 = progress100;
                                     }
 
-                                    Logging.Verbose("RowNum: {RowNum:N0} IsValid: {isValid} IsDuplicate: {isDuplicate} IsDuplicateOfNull: {isDuplicateOfNull}", value.RowNum, value.IsValid, value.IsDuplicate, value.IsDuplicateOfNull);
+                                    Logging.Error("Value: {@value}", value);
                                     if (batch.Status != (int)ImportBatchStatus.DatalogWithErrors)
                                     {
                                         batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
@@ -553,100 +563,111 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                                 stageStopwatch.Stop();
                                 Logging.Information("Created {count:N0} error logs in {time}", nMax, stageStopwatch.Elapsed.TimeStr());
-                                Logging.Information("Saving {good} values", goodValues.Count);
-                                stageStopwatch.Restart();
-                                if (UseBulkInsert)
+                                if (goodValues.Any())
                                 {
-                                    // Bulk insert
-                                    Logging.Information("Starting bulk inserts");
-                                    nMax = goodValues.Count;
-                                    using (var bulkInsert = new SqlBulkCopy((SqlConnection)connScope.CurrentConnection, SqlBulkCopyOptions.CheckConstraints | SqlBulkCopyOptions.FireTriggers, null))
+                                    Logging.Information("Saving {good} good values", goodValues.Count);
+                                    stageStopwatch.Restart();
+                                    //#if BulkInsert
+                                    if (BulkInsert)
                                     {
-                                        bulkInsert.BatchSize = 25000;
-                                        bulkInsert.BulkCopyTimeout = 15 * 60 * 60;
-                                        bulkInsert.NotifyAfter = bulkInsert.BatchSize;
-                                        bulkInsert.SqlRowsCopied += BulkInsert_SqlRowsCopied;
-                                        bulkInsert.DestinationTableName = "Observation";
-                                        foreach (DataColumn col in dtObservations.Columns)
+                                        // Bulk insert
+                                        Logging.Information("Starting bulk inserts");
+                                        nMax = goodValues.Count;
+                                        using (var bulkInsert = new SqlBulkCopy((SqlConnection)connScope.CurrentConnection, SqlBulkCopyOptions.CheckConstraints | SqlBulkCopyOptions.FireTriggers, null))
                                         {
-                                            bulkInsert.ColumnMappings.Add(col.ColumnName, col.ColumnName);
+                                            bulkInsert.BatchSize = 25000;
+                                            bulkInsert.BulkCopyTimeout = 15 * 60 * 60;
+                                            bulkInsert.NotifyAfter = bulkInsert.BatchSize;
+                                            bulkInsert.SqlRowsCopied += BulkInsert_SqlRowsCopied;
+                                            bulkInsert.DestinationTableName = "Observation";
+                                            foreach (DataColumn col in dtObservations.Columns)
+                                            {
+                                                bulkInsert.ColumnMappings.Add(col.ColumnName, col.ColumnName);
+                                            }
+                                            bulkInsert.WriteToServer(dtObservations);
                                         }
-                                        bulkInsert.WriteToServer(dtObservations);
+                                        stageStopwatch.Stop();
+                                        //Logging.Information("Elapsed: {elapsed}", stageStopwatch.Elapsed.TimeStr());
+                                        Logging.Information("Bulk inserted {count:n0} observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                                     }
-                                    stageStopwatch.Stop();
-                                    //Logging.Information("Elapsed: {elapsed}", stageStopwatch.Elapsed.TimeStr());
-                                    Logging.Information("Bulk inserted {count:n0} observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
-                                }
-                                else
-                                {
-                                    Logging.Information("Starting inserts");
-                                    lastProgress100 = -1;
-                                    nMax = goodValues.Count;
-                                    n = 1;
-                                    foreach (var schval in goodValues)
+                                    else
                                     {
-                                        var progress = (double)n / nMax;
-                                        var progress100 = (int)(progress * 100);
-                                        var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
-                                        var elapsed = stageStopwatch.Elapsed;
-                                        var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
-                                        if (reportPorgress)
+                                        //#else
+                                        Logging.Information("Starting inserts");
+                                        lastProgress100 = -1;
+                                        nMax = goodValues.Count;
+                                        n = 1;
+                                        foreach (var schval in goodValues)
                                         {
-                                            Logging.Information("{progress:p0} {value:n0} of {values:n0} values in {min} of {mins}", progress, n, nMax, elapsed.TimeStr(), total.TimeStr());
-                                            lastProgress100 = progress100;
-                                        }
-                                        try
-                                        {
-                                            Observation Obrecord = new Observation()
+                                            var progress = (double)n / nMax;
+                                            var progress100 = (int)(progress * 100);
+                                            var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
+                                            var elapsed = stageStopwatch.Elapsed;
+                                            var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
+                                            if (reportPorgress)
                                             {
-                                                SensorID = schval.SensorID.Value,
-                                                ValueDate = schval.DateValue,
-                                                RawValue = schval.RawValue,
-                                                DataValue = schval.DataValue,
-                                                PhenomenonOfferingID = schval.PhenomenonOfferingID.Value,
-                                                PhenomenonUOMID = schval.PhenomenonUOMID.Value,
-                                                Latitude = schval.Latitude,
-                                                Longitude = schval.Longitude,
-                                                Elevation = schval.Elevation,
-                                                ImportBatchID = batch.Id,
-                                                CorrelationID = schval.CorrelationID,
-                                                UserId = AuthHelper.GetLoggedInUserId,
-                                                AddedDate = DateTime.Now
-                                            };
-                                            if (string.IsNullOrWhiteSpace(schval.Comment))
-                                            {
-                                                Obrecord.Comment = null;
+                                                Logging.Information("{progress:p0} {value:n0} of {values:n0} values in {min} of {mins}, {rowTime}/row, {rowsPerSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
+                                                lastProgress100 = progress100;
                                             }
-                                            else
+                                            try
                                             {
-                                                Obrecord.Comment = schval.Comment;
-                                            }
+                                                Observation Obrecord = new Observation()
+                                                {
+                                                    SensorID = schval.SensorID.Value,
+                                                    ValueDate = schval.DateValue,
+                                                    RawValue = schval.RawValue,
+                                                    DataValue = schval.DataValue,
+                                                    PhenomenonOfferingID = schval.PhenomenonOfferingID.Value,
+                                                    PhenomenonUOMID = schval.PhenomenonUOMID.Value,
+                                                    Latitude = schval.Latitude,
+                                                    Longitude = schval.Longitude,
+                                                    Elevation = schval.Elevation,
+                                                    ImportBatchID = batch.Id,
+                                                    CorrelationID = schval.CorrelationID,
+                                                    UserId = AuthHelper.GetLoggedInUserId,
+                                                    AddedDate = DateTime.Now
+                                                };
+                                                if (string.IsNullOrWhiteSpace(schval.Comment))
+                                                {
+                                                    Obrecord.Comment = null;
+                                                }
+                                                else
+                                                {
+                                                    Obrecord.Comment = schval.Comment;
+                                                }
 
-                                            if (string.IsNullOrWhiteSpace(schval.TextValue))
-                                            {
-                                                Obrecord.TextValue = null;
-                                            }
-                                            else
-                                            {
-                                                Obrecord.TextValue = schval.TextValue;
-                                            }
+                                                if (string.IsNullOrWhiteSpace(schval.TextValue))
+                                                {
+                                                    Obrecord.TextValue = null;
+                                                }
+                                                else
+                                                {
+                                                    Obrecord.TextValue = schval.TextValue;
+                                                }
 
-                                            Obrecord.Save();
+                                                Obrecord.Save();
+                                            }
+                                            catch (SqlException ex) when (ex.Number == 2627)
+                                            {
+                                                Logging.Exception(ex, "Duplicate! Number: {num} Value: {@value}", ex.Number, schval);
+                                                throw;
+                                            }
+                                            catch (SqlException ex)
+                                            {
+                                                Logging.Exception(ex, "Number: {num} Value: {@value}", ex.Number, schval);
+                                                throw;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Logging.Exception(ex);
+                                                throw;
+                                            }
+                                            n++;
                                         }
-                                        catch (SqlException ex)
-                                        {
-                                            Logging.Exception(ex, "Number: {num}", ex.Number);
-                                            throw;
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Logging.Exception(ex);
-                                            throw;
-                                        }
-                                        n++;
+                                        stageStopwatch.Stop();
+                                        Logging.Information("Inserted {count:n0} observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                                     }
-                                    stageStopwatch.Stop();
-                                    Logging.Information("Inserted {count:n0} observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
+                                    //#endif
                                 }
                                 // Summaries
                                 CreateSummary(connScope, batch.Id);

@@ -48,7 +48,6 @@ public class SchemaDefinition
     //public Guid? SensorID { get; set; }
     public List<Sensor> Sensors { get; set; } = new List<Sensor>();
     public List<VSensorDate> SensorDates { get; set; } = new List<VSensorDate>();
-    public ObservationCollection Observations { get; set; } = null;
     public bool SensorNotFound { get; set; }
 }
 
@@ -121,7 +120,6 @@ public class ImportSchemaHelper : IDisposable
     private readonly List<SchemaDefinition> schemaDefs;
     public List<SchemaValue> SchemaValues;
     private readonly Sensor Sensor = null;
-    private readonly bool UseDefinitionObservations = false;
 
     /// <summary>
     /// Gap Record Helper
@@ -195,8 +193,6 @@ public class ImportSchemaHelper : IDisposable
     {
         using (Logging.MethodCall(GetType(), new MethodCallParameters { { "DataSource", ds.Name }, { "Schema", schema.Name }, { "ImportBatch", batch.Code }, { "Sensor", sensor?.Name } }))
         {
-            UseDefinitionObservations = ConfigurationManager.AppSettings["UseDefinitionObservations"].IsTrue();
-            Logging.Information("UseDefinitionObservations: {UseDefinitionObservations}", UseDefinitionObservations);
             dataSource = ds;
             dataSchema = schema;
             Sensor = sensor;
@@ -470,14 +466,6 @@ public class ImportSchemaHelper : IDisposable
                                 def.Sensors.Add(Sensor);
                                 def.SensorDates.Clear();
                                 def.SensorDates.Add(new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, Sensor.Id).Load().FirstOrDefault());
-                                SqlQuery q = new Select().From(Observation.Schema)
-                                    .Where(Observation.Columns.SensorID).IsEqualTo(Sensor.Id)
-                                    .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(def.PhenomenonOfferingID)
-                                    .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(def.PhenomenonUOMID);
-                                if (UseDefinitionObservations)
-                                {
-                                    def.Observations = q.ExecuteAsCollection<ObservationCollection>();
-                                }
                             }
                             else
                             {
@@ -499,14 +487,6 @@ public class ImportSchemaHelper : IDisposable
                                     foreach (var sensor in def.Sensors)
                                     {
                                         def.SensorDates.Add(new VSensorDateCollection().Where(VSensorDate.Columns.SensorID, sensor.Id).Load().FirstOrDefault());
-                                        SqlQuery q = new Select().From(Observation.Schema)
-                                            .Where(Observation.Columns.SensorID).IsEqualTo(sensor.Id)
-                                            .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(def.PhenomenonOfferingID)
-                                            .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(def.PhenomenonUOMID);
-                                        if (UseDefinitionObservations)
-                                        {
-                                            def.Observations = q.ExecuteAsCollection<ObservationCollection>();
-                                        }
                                     }
                                 }
                             }
@@ -601,11 +581,11 @@ public class ImportSchemaHelper : IDisposable
                     var progress = (double)n / nMax;
                     var progress100 = (int)(progress * 100);
                     var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
-                    var elapsed = stopwatch.Elapsed;
+                    var elapsed = stageStopwatch.Elapsed;
                     var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
                     if (reportPorgress)
                     {
-                        Logging.Information("{progress:p0} {row:n0} of {rows:n0} rows in {min} of {mins}", progress, n, nMax, elapsed.TimeStr(), total.TimeStr());
+                        Logging.Information("{progress:p0} {row:n0} of {rows:n0} rows in {min} of {mins}, {rowTime}/row, {numRowsInSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
                         lastProgress100 = progress100;
                     }
                     ProcessRow(row, n);
@@ -998,16 +978,22 @@ public class ImportSchemaHelper : IDisposable
 
                         rec.CorrelationID = correlationID;
 
-                        CheckIsDuplicate(def, rec);
+                        CheckDuplicate(def, rec);
 #if VeryDetailedLogging
-                        Logging.Information("IsDuplicate {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        Logging.Information("Duplicate {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
                         stageStart = stopwatch.Elapsed;
 #endif
-                        CheckIsDuplicateOfNull(def, rec);
-#if VeryDetailedLogging
-                        Logging.Information("IsDuplicateOfNull {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
-                        stageStart = stopwatch.Elapsed;
-#endif
+
+                        //                        CheckIsDuplicate(def, rec);
+                        //#if VeryDetailedLogging
+                        //                        Logging.Information("IsDuplicate {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        //                        stageStart = stopwatch.Elapsed;
+                        //#endif
+                        //                        CheckIsDuplicateOfNull(def, rec);
+                        //#if VeryDetailedLogging
+                        //                        Logging.Information("IsDuplicateOfNull {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        //                        stageStart = stopwatch.Elapsed;
+                        //#endif
                         SchemaValues.Add(rec);
                     }
                 }
@@ -1022,60 +1008,72 @@ public class ImportSchemaHelper : IDisposable
             }
         }
 
-        bool CheckIsDuplicate(SchemaDefinition def, SchemaValue schval)
+        bool CheckDuplicate(SchemaDefinition def, SchemaValue schval)
         {
             var result = false;
-            if (UseDefinitionObservations)
-            {
-                result = def.Observations.Any(i => (i.ValueDate == schval.DateValue) && (i.DataValue == schval.DataValue));
-            }
-            else
-            {
-                SqlQuery q = new Select().From(Observation.Schema)
-                    .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
-                    .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
-                    .And(Observation.Columns.DataValue).IsEqualTo(schval.DataValue)
-                    .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
-                    .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
-
-                ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
-                result = oCol.Any();
-            }
-            if (result)
-            {
-                schval.IsDuplicate = true;
-                schval.InvalidStatuses.Insert(0, Status.Duplicate);
-            }
-            return result;
-        }
-
-        bool CheckIsDuplicateOfNull(SchemaDefinition def, SchemaValue schval)
-        {
-            var result = false;
-            if (UseDefinitionObservations)
-            {
-                result = def.Observations.Any(i => (i.ValueDate == schval.DateValue) && !i.DataValue.HasValue);
-            }
-            else
-            {
-                SqlQuery q = new Select().From(Observation.Schema)
+            SqlQuery q = new Select().From(Observation.Schema)
                 .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
                 .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
-                .And(Observation.Columns.DataValue).IsNull()
                 .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
                 .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
-
-                ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
-                result = oCol.Any();
-            }
+            ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
+            result = oCol.Any();
             if (result)
             {
-                schval.IsDuplicateOfNull = true;
-                schval.InvalidStatuses.Insert(0, Status.DuplicateOfNull);
+                var obs = oCol.FirstOrDefault();
+                if (obs == null)
+                {
+                    schval.IsDuplicateOfNull = true;
+                    schval.InvalidStatuses.Insert(0, Status.DuplicateOfNull);
+                }
+                else
+                {
+                    schval.IsDuplicate = true;
+                    schval.InvalidStatuses.Insert(0, Status.Duplicate);
+                }
             }
             return result;
         }
 
+        //bool CheckIsDuplicate(SchemaDefinition def, SchemaValue schval)
+        //{
+        //    var result = false;
+        //        SqlQuery q = new Select().From(Observation.Schema)
+        //        .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
+        //        .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
+        //        .And(Observation.Columns.DataValue).IsEqualTo(schval.DataValue)
+        //        .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
+        //        .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
+
+        //        ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
+        //        result = oCol.Any();
+        //    if (result)
+        //    {
+        //        schval.IsDuplicate = true;
+        //        schval.InvalidStatuses.Insert(0, Status.Duplicate);
+        //    }
+        //    return result;
+        //}
+
+        //bool CheckIsDuplicateOfNull(SchemaDefinition def, SchemaValue schval)
+        //{
+        //    var result = false;
+        //        SqlQuery q = new Select().From(Observation.Schema)
+        //    .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
+        //    .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
+        //    .And(Observation.Columns.DataValue).IsNull()
+        //    .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
+        //    .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
+
+        //        ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
+        //        result = oCol.Any();
+        //    if (result)
+        //    {
+        //        schval.IsDuplicateOfNull = true;
+        //        schval.InvalidStatuses.Insert(0, Status.DuplicateOfNull);
+        //    }
+        //    return result;
+        //}
     }
 
     /// <summary>
