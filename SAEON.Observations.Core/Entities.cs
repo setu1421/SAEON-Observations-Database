@@ -1566,11 +1566,11 @@ namespace SAEON.Observations.Core.Entities
         public string PhenomenonName { get; set; }
         public string PhenomenonDescription { get; set; }
         public string PhenomenonUrl { get; set; }
-        //public Guid PhenomenonOfferingId { get; set; }
+        public Guid PhenomenonOfferingId { get; set; }
         public Guid OfferingId { get; set; }
         public string OfferingName { get; set; }
         public string OfferingDescription { get; set; }
-        //public Guid PhenomenonUnitId { get; set; }
+        public Guid PhenomenonUnitId { get; set; }
         public Guid UnitOfMeasureId { get; set; }
         public string UnitOfMeasureUnit { get; set; }
         public string UnitOfMeasureSymbol { get; set; }

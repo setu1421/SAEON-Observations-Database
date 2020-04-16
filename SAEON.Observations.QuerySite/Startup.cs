@@ -32,7 +32,7 @@ namespace SAEON.Observations.QuerySite
                     Logging.Verbose("IdentityServer: {name} RequireHttps: {RequireHTTPS}", Properties.Settings.Default.IdentityServerUrl, Properties.Settings.Default.RequireHTTPS);
                     AntiForgeryConfig.UniqueClaimTypeIdentifier = AspNetConstants.ClaimSubject;
                     JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-                    SyncfusionLicenseProvider.RegisterLicense("MjAwMjc3QDMxMzcyZTM0MmUzMEpJdWhtRUE4ZE1sbWdXbDZqQnZIbEx3NUoxcG16dVcwNWV3K0VNa0o2Qlk9;MjAwMjc4QDMxMzcyZTM0MmUzMGNpZndnd084TEd2VDlpMWltaUtFakdZZzdOS0NXV2RHdm5pOXhIYzJFM2c9");
+                    SyncfusionLicenseProvider.RegisterLicense("MjQxNTUzQDMxMzgyZTMxMmUzMGlBNEsrd0E0ZnVNdVM2T0lFQ1hiSTAxWUM0cUhDUWJEams2SDFIUStEK2M9;MjQxNTU0QDMxMzgyZTMxMmUzMGQ1cFVHTWFTR21wVDd3blBsUG5FUkdWdWJSMU9hcE1IMDM3TDZERWI2WFE9");
 
                     //app.UseResourceAuthorization(new AuthorizationManager());
                     app.UseCookieAuthentication(new CookieAuthenticationOptions

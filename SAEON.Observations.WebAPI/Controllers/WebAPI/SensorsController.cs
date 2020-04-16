@@ -99,9 +99,9 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         [Route("{id:guid}/Observations")]
         [Authorize]
         [DenyClientAuthorization(Constants.ClientIdPostman, Constants.ClientIdSwagger)]
-        public IQueryable<ObservationApi> GetObservations([FromUri] Guid id)
+        public IQueryable<SensorObservation> GetObservations([FromUri] Guid id)
         {
-            return GetManyWithIntId<ObservationApi>(id, s => s.ObservationsApi);
+            return GetManyWithIntId<SensorObservation>(id, s => s.SensorObservations);
         }
 
     }

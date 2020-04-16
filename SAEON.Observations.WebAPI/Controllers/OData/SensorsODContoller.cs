@@ -75,9 +75,9 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         [Authorize]
         [DenyClientAuthorization(Constants.ClientIdPostman, Constants.ClientIdSwagger)]
-        public IQueryable<Observation> GetObservations([FromODataUri] Guid id)
+        public IQueryable<SensorObservation> GetObservations([FromODataUri] Guid id)
         {
-            return GetManyWithIntId<Observation>(id, s => s.Observations);
+            return GetManyWithIntId<SensorObservation>(id, s => s.SensorObservations);
         }
     }
 }

@@ -356,7 +356,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     var badValues = values.Where(i => !i.IsValid).OrderBy(i => i.RowNum).ToList();
                     var dtObservations = new DataTable("Observations");
                     //#if BulkInsert
-                    if (BulkInsert)
+                    if (BulkInsert && goodValues.Any())
                     {
                         // Create DataTable from good values
                         stageStopwatch.Restart();
@@ -434,7 +434,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         {
                             using (SharedDbConnectionScope connScope = new SharedDbConnectionScope())
                             {
-                                if (values.FirstOrDefault(t => t.IsValid) == null)
+                                if (!values.Any(t => t.IsValid))
                                 {
                                     Logging.Verbose("Error: IsValid: {count:N0}", values.Where(t => !t.IsValid).Count());
                                     batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
@@ -447,122 +447,125 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 batch.UserId = AuthHelper.GetLoggedInUserId;
                                 batch.Save();
 
-                                Logging.Information("Creating {count:n0} error logs", badValues.Count);
-                                stageStopwatch.Restart();
-                                lastProgress100 = -1;
-                                nMax = badValues.Count;
-                                n = 1;
-                                foreach (var value in badValues)
+                                if (badValues.Any())
                                 {
-                                    var progress = (double)n / nMax;
-                                    var progress100 = (int)(progress * 100);
-                                    var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
-                                    var elapsed = stageStopwatch.Elapsed;
-                                    var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
-                                    if (reportPorgress)
+                                    Logging.Information("Creating {count:n0} error logs", badValues.Count);
+                                    stageStopwatch.Restart();
+                                    lastProgress100 = -1;
+                                    nMax = badValues.Count;
+                                    n = 1;
+                                    foreach (var value in badValues)
                                     {
-                                        Logging.Information("{progress:p0} {value:n0} of {values:n0} values in {min} of {mins}", progress, n, nMax, elapsed.TimeStr(), total.TimeStr());
-                                        lastProgress100 = progress100;
-                                    }
+                                        var progress = (double)n / nMax;
+                                        var progress100 = (int)(progress * 100);
+                                        var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
+                                        var elapsed = stageStopwatch.Elapsed;
+                                        var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
+                                        if (reportPorgress)
+                                        {
+                                            Logging.Information("{progress:p0} {value:n0} of {values:n0} values in {min} of {mins}", progress, n, nMax, elapsed.TimeStr(), total.TimeStr());
+                                            lastProgress100 = progress100;
+                                        }
 
-                                    Logging.Error("Value: {@value}", value);
-                                    if (batch.Status != (int)ImportBatchStatus.DatalogWithErrors)
-                                    {
-                                        batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
-                                        batch.Save();
-                                    }
+                                        Logging.Error("Value: {@value}", value);
+                                        if (batch.Status != (int)ImportBatchStatus.DatalogWithErrors)
+                                        {
+                                            batch.Status = (int)ImportBatchStatus.DatalogWithErrors;
+                                            batch.Save();
+                                        }
 
-                                    DataLog logrecord = new DataLog()
-                                    {
-                                        SensorID = value.SensorID
-                                    };
-                                    if (value.DateValueInvalid)
-                                    {
-                                        logrecord.InvalidDateValue = value.InvalidDateValue;
-                                    }
-                                    else if (value.DateValue != DateTime.MinValue)
-                                    {
-                                        logrecord.ValueDate = value.DateValue;
-                                    }
+                                        DataLog logrecord = new DataLog()
+                                        {
+                                            SensorID = value.SensorID
+                                        };
+                                        if (value.DateValueInvalid)
+                                        {
+                                            logrecord.InvalidDateValue = value.InvalidDateValue;
+                                        }
+                                        else if (value.DateValue != DateTime.MinValue)
+                                        {
+                                            logrecord.ValueDate = value.DateValue;
+                                        }
 
-                                    if (value.TimeValueInvalid)
-                                    {
-                                        logrecord.InvalidTimeValue = value.InvalidTimeValue;
-                                    }
+                                        if (value.TimeValueInvalid)
+                                        {
+                                            logrecord.InvalidTimeValue = value.InvalidTimeValue;
+                                        }
 
-                                    if (value.TimeValue.HasValue && value.TimeValue != DateTime.MinValue)
-                                    {
-                                        logrecord.ValueTime = value.TimeValue;
-                                    }
+                                        if (value.TimeValue.HasValue && value.TimeValue != DateTime.MinValue)
+                                        {
+                                            logrecord.ValueTime = value.TimeValue;
+                                        }
 
-                                    if (value.RawValueInvalid)
-                                    {
-                                        logrecord.ValueText = value.InvalidRawValue;
-                                    }
-                                    else
-                                    {
-                                        logrecord.RawValue = value.RawValue;
-                                    }
+                                        if (value.RawValueInvalid)
+                                        {
+                                            logrecord.ValueText = value.InvalidRawValue;
+                                        }
+                                        else
+                                        {
+                                            logrecord.RawValue = value.RawValue;
+                                        }
 
-                                    if (value.DataValueInvalid)
-                                    {
-                                        logrecord.TransformValueText = value.InvalidDataValue;
-                                    }
-                                    else
-                                    {
-                                        logrecord.DataValue = value.DataValue;
-                                    }
+                                        if (value.DataValueInvalid)
+                                        {
+                                            logrecord.TransformValueText = value.InvalidDataValue;
+                                        }
+                                        else
+                                        {
+                                            logrecord.DataValue = value.DataValue;
+                                        }
 
-                                    if (value.InvalidOffering)
-                                    {
-                                        logrecord.InvalidOffering = value.PhenomenonOfferingID.Value.ToString();
-                                    }
-                                    else
-                                    {
-                                        logrecord.PhenomenonOfferingID = value.PhenomenonOfferingID.Value;
-                                    }
+                                        if (value.InvalidOffering)
+                                        {
+                                            logrecord.InvalidOffering = value.PhenomenonOfferingID.Value.ToString();
+                                        }
+                                        else
+                                        {
+                                            logrecord.PhenomenonOfferingID = value.PhenomenonOfferingID.Value;
+                                        }
 
-                                    if (value.InvalidUOM)
-                                    {
-                                        logrecord.InvalidUOM = value.PhenomenonUOMID.Value.ToString();
-                                    }
-                                    else
-                                    {
-                                        logrecord.PhenomenonUOMID = value.PhenomenonUOMID.Value;
-                                    }
+                                        if (value.InvalidUOM)
+                                        {
+                                            logrecord.InvalidUOM = value.PhenomenonUOMID.Value.ToString();
+                                        }
+                                        else
+                                        {
+                                            logrecord.PhenomenonUOMID = value.PhenomenonUOMID.Value;
+                                        }
 
-                                    logrecord.RawFieldValue = String.IsNullOrWhiteSpace(value.FieldRawValue) ? "" : value.FieldRawValue;
-                                    logrecord.ImportDate = DateTime.Now;
-                                    logrecord.ImportBatchID = batch.Id;
+                                        logrecord.RawFieldValue = String.IsNullOrWhiteSpace(value.FieldRawValue) ? "" : value.FieldRawValue;
+                                        logrecord.ImportDate = DateTime.Now;
+                                        logrecord.ImportBatchID = batch.Id;
 
-                                    logrecord.DataSourceTransformationID = value.DataSourceTransformationID;
-                                    logrecord.ImportStatus = String.Join(",", value.InvalidStatuses.Select(s => new Status(s).Name));
-                                    logrecord.StatusID = new Guid(value.InvalidStatuses[0]);
-                                    logrecord.UserId = AuthHelper.GetLoggedInUserId;
+                                        logrecord.DataSourceTransformationID = value.DataSourceTransformationID;
+                                        logrecord.ImportStatus = String.Join(",", value.InvalidStatuses.Select(s => new Status(s).Name));
+                                        logrecord.StatusID = new Guid(value.InvalidStatuses[0]);
+                                        logrecord.UserId = AuthHelper.GetLoggedInUserId;
 
-                                    if (!string.IsNullOrWhiteSpace(value.Comment))
-                                    {
-                                        logrecord.Comment = value.Comment.TrimEnd();
-                                    }
+                                        if (!string.IsNullOrWhiteSpace(value.Comment))
+                                        {
+                                            logrecord.Comment = value.Comment.TrimEnd();
+                                        }
 
-                                    logrecord.Latitude = value.Latitude;
-                                    logrecord.Longitude = value.Longitude;
-                                    logrecord.Elevation = value.Elevation;
-                                    logrecord.CorrelationID = value.CorrelationID;
-                                    Logging.Verbose("BatchID: {id} Status: {status} ImportStatus: {importStatus}", batch.Id, logrecord.StatusID, logrecord.ImportStatus);
-                                    try
-                                    {
-                                        logrecord.Save();
+                                        logrecord.Latitude = value.Latitude;
+                                        logrecord.Longitude = value.Longitude;
+                                        logrecord.Elevation = value.Elevation;
+                                        logrecord.CorrelationID = value.CorrelationID;
+                                        //Logging.Verbose("BatchID: {id} Status: {status} ImportStatus: {importStatus}", batch.Id, logrecord.StatusID, logrecord.ImportStatus);
+                                        try
+                                        {
+                                            logrecord.Save();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Logging.Exception(ex, "Unable to create ErroLog: {rowNum}", value.RowNum);
+                                            throw;
+                                        }
+                                        n++;
                                     }
-                                    catch (Exception ex)
-                                    {
-                                        Logging.Exception(ex, "Unable to create ErroLog: {rowNum}", value.RowNum);
-                                        throw;
-                                    }
-                                    n++;
+                                    stageStopwatch.Stop();
+                                    Logging.Information("Created {count:N0} error logs in {time}", nMax, stageStopwatch.Elapsed.TimeStr());
                                 }
-                                stageStopwatch.Stop();
-                                Logging.Information("Created {count:N0} error logs in {time}", nMax, stageStopwatch.Elapsed.TimeStr());
                                 if (goodValues.Any())
                                 {
                                     Logging.Information("Saving {good} good values", goodValues.Count);

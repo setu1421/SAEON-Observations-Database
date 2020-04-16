@@ -9,7 +9,7 @@
     <Description>SAEON Observations - Azure</Description>
     <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.103</Version>
+    <Version>1.0.104</Version>
   </PropertyGroup>
 
   <ItemGroup>

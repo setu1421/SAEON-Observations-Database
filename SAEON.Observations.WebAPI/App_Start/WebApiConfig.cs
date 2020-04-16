@@ -187,15 +187,17 @@ namespace SAEON.Observations.WebAPI
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "OData" };
             builder.EntitySet<db.Inventory>("Inventory");
             builder.EntitySet<db.Instrument>("Instruments").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.Observation>("Observations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Offering>("Offerings").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Organisation>("Organisations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Phenomenon>("Phenomena").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Programme>("Programmes").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Project>("Projects").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Sensor>("Sensors").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.SensorObservation>("SensorObservations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Site>("Sites").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Station>("Stations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.StationDataStream>("StationDataStreams").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.StationObservation>("StationObservations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Unit>("Units").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             return builder.GetEdmModel();
         }
