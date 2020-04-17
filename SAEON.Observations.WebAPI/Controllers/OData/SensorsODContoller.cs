@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
-using SAEON.AspNet.WebApi;
-using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Linq;
@@ -65,19 +63,19 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
             return GetManyWithGuidId<Instrument>(id, s => s.Instruments);
         }
 
-        // GET: odata/Sensors(5)/Observations
-        /// <summary>
-        /// Observations for the Sensor
-        /// </summary>
-        /// <param name="id">Id of the Sensor</param>
-        /// <returns>ListOf(Observations)</returns>
-        [ODataRoute("({id})/Observations")]
-        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
-        [Authorize]
-        [DenyClientAuthorization(Constants.ClientIdPostman, Constants.ClientIdSwagger)]
-        public IQueryable<SensorObservation> GetObservations([FromODataUri] Guid id)
-        {
-            return GetManyWithIntId<SensorObservation>(id, s => s.SensorObservations);
-        }
+        //// GET: odata/Sensors(5)/Observations
+        ///// <summary>
+        ///// Observations for the Sensor
+        ///// </summary>
+        ///// <param name="id">Id of the Sensor</param>
+        ///// <returns>ListOf(Observations)</returns>
+        //[ODataRoute("({id})/SensorObservations")]
+        //[EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        //[Authorize]
+        ////[DenyClientAuthorization(Constants.ClientIdPostman, Constants.ClientIdSwagger)]
+        //public IQueryable<SensorObservation> GetSensorObservations([FromODataUri] Guid id)
+        //{
+        //    return GetManyWithIntId<SensorObservation>(id, s => s.SensorObservations);
+        //}
     }
 }

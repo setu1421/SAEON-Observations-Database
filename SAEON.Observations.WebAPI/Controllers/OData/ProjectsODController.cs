@@ -54,7 +54,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// Stations for the Project
         /// </summary>
         /// <param name="id">Id of the Project</param>
-        /// <returns>ListOf(Station(</returns>
+        /// <returns>ListOf(Station)</returns>
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         [ODataRoute("({id})/Stations")]
         public IQueryable<Station> GetStations([FromODataUri] Guid id)
