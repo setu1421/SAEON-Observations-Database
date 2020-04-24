@@ -232,6 +232,32 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
             }
         }
 
+        /// <summary>
+        /// Get IQueryableOf(TRelated)
+        /// </summary>
+        /// <typeparam name="TRelated"></typeparam>
+        /// <param name="id">Id of TEntity</param>
+        /// <param name="select">Lambda to select ListOf(TRelated)</param>
+        /// <returns>IQueryableOf(TRelated)</returns>
+        //[HttpGet]
+        //[Route("{id:guid}/TRelated")] Required in derived classes
+        protected IQueryable<TRelated> GetManyWithLongId<TRelated>(Guid id, Expression<Func<TEntity, IEnumerable<TRelated>>> select) where TRelated : LongIdEntity
+        {
+            using (Logging.MethodCall<TEntity, TRelated>(GetType()))
+            {
+                try
+                {
+                    UpdateRequest(true);
+                    return GetQuery(i => i.Id == id).SelectMany(select);
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex, "Unable to get {id}", id);
+                    throw;
+                }
+            }
+        }
+
     }
 
     public abstract class NamedApiController<TEntity> : IDEntityController<TEntity> where TEntity : NamedEntity
