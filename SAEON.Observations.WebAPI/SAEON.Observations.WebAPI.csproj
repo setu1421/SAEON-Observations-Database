@@ -96,7 +96,8 @@
     <Compile Include="Controllers\Internal\UserDownloadsController.cs" />
     <Compile Include="Controllers\Internal\UserQueriesController.cs" />
     <Compile Include="Controllers\OData\BaseControllers.cs" />
-    <Compile Include="Controllers\OData\InventoryODController.cs" />
+    <Compile Include="Controllers\OData\InventoryDataStreamsODController.cs" />
+    <Compile Include="Controllers\OData\InventorySensorsODController.cs" />
     <Compile Include="Controllers\OData\InstrumentsODController.cs" />
     <Compile Include="Controllers\OData\OfferingsODController.cs" />
     <Compile Include="Controllers\OData\OrganisationsODController.cs" />
@@ -118,7 +119,8 @@
     <Compile Include="Controllers\SensorThings\SensorThingsController.cs" />
     <Compile Include="Controllers\SensorThings\ThingsSTController.cs" />
     <Compile Include="Controllers\WebAPI\BaseControllers.cs" />
-    <Compile Include="Controllers\WebAPI\InventoryController.cs" />
+    <Compile Include="Controllers\WebAPI\InventoryDataStreamsController.cs" />
+    <Compile Include="Controllers\WebAPI\InventorySensorsController.cs" />
     <Compile Include="Controllers\WebAPI\InstrumentsController.cs" />
     <Compile Include="Controllers\WebAPI\OfferingsController.cs" />
     <Compile Include="Controllers\WebAPI\OrganisationsController.cs" />
@@ -403,11 +405,11 @@
     <Reference Include="SAEON.Logs.NetFramework, Version=1.0.14.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SAEON.Logs.NetFramework.1.0.14\lib\net472\SAEON.Logs.NetFramework.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.Core, Version=1.0.272.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.Core.1.0.272\lib\net472\SAEON.Observations.Core.dll</HintPath>
+    <Reference Include="SAEON.Observations.Core, Version=1.0.273.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.Core.1.0.273\lib\net472\SAEON.Observations.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SAEON.Observations.SensorThings, Version=1.0.136.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SAEON.Observations.SensorThings.1.0.136\lib\net472\SAEON.Observations.SensorThings.dll</HintPath>
+    <Reference Include="SAEON.Observations.SensorThings, Version=1.0.137.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SAEON.Observations.SensorThings.1.0.137\lib\net472\SAEON.Observations.SensorThings.dll</HintPath>
     </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.9.0\lib\net46\Serilog.dll</HintPath>

@@ -1280,8 +1280,39 @@ namespace SAEON.Observations.Core.Entities
         public DateTime? EndDate { get; set; }
     }
 
-    [Table("vInventory")]
-    public class Inventory : BaseEntity
+    [Table("vInventoryDataStreams")]
+    public class InventoryDataStream : BaseEntity
+    {
+        [Key]
+        public long Id { get; set; }
+        public Guid SiteId { get; set; }
+        public string SiteCode { get; set; }
+        public string SiteName { get; set; }
+        public Guid StationId { get; set; }
+        public string StationCode { get; set; }
+        public string StationName { get; set; }
+        public string PhenomenonCode { get; set; }
+        public string PhenomenonName { get; set; }
+        public Guid PhenomenonOfferingId { get; set; }
+        public string OfferingCode { get; set; }
+        public string OfferingName { get; set; }
+        [Column("PhenomenonUOMID")]
+        public Guid PhenomenonUnitId { get; set; }
+        [Column("UnitOfMeasureCode")]
+        public string UnitCode { get; set; }
+        [Column("UnitOfMeasureUnit")]
+        public string UnitName { get; set; }
+        public int Count { get; set; }
+        public double? LatitudeNorth { get; set; } // +N to -S
+        public double? LatitudeSouth { get; set; } // +N to -S
+        public double? LongitudeWest { get; set; } // -W to +E
+        public double? LongitudeEast { get; set; } // -W to +E
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+    }
+
+    [Table("vInventorySensors")]
+    public class InventorySensor : BaseEntity
     {
         [Key]
         public long Id { get; set; }
@@ -1315,15 +1346,6 @@ namespace SAEON.Observations.Core.Entities
         public double? LongitudeEast { get; set; } // -W to +E
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-
-        // Navigation
-        //public Site Site { get; set; }
-        //public Station Station { get; set; }
-        //public Instrument Instrument { get; set; }
-        //public Sensor Sensor { get; set; }
-        //public PhenomenonOffering PhenomenonOffering { get; set; }
-        //[ForeignKey("PhenomenonUnitId")]
-        //public PhenomenonUnit PhenomenonUnit { get; set; }
     }
 
 #if NET472
@@ -2033,6 +2055,10 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<DataSource> DataSources { get; set; }
         public DbSet<DataSourceType> DataSourceTypes { get; set; }
         public DbSet<DigitalObjectIdentifier> DigitalObjectIdentifiers { get; set; }
+
+        public DbSet<ImportBatchSummary> ImportBatchSummary { get; set; }
+        public DbSet<InventoryDataStream> InventoryDataStreams { get; set; }
+        public DbSet<InventorySensor> InventorySensors { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<ObservationExpansion> ObservationExpansions { get; set; }
@@ -2053,8 +2079,6 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<UserDownload> UserDownloads { get; set; }
         public DbSet<UserQuery> UserQueries { get; set; }
 
-        public DbSet<ImportBatchSummary> ImportBatchSummary { get; set; }
-        public DbSet<Inventory> Inventory { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Feature> Features { get; set; }
 
@@ -2067,13 +2091,6 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<SensorThingsObservedProperty> SensorThingsObservedProperies { get; set; }
         public DbSet<SensorThingsSensor> SensorThingsSensors { get; set; }
         public DbSet<SensorThingsThing> SensorThingsThings { get; set; }
-
-        //public DbSet<vApiDataDownload> vApiDataDownloads { get; set; }
-        //public DbSet<vApiDataQuery> vApiDataQueries { get; set; }
-        //public DbSet<vApiInventory> vApiInventory { get; set; }
-        //public DbSet<vApiSpacialCoverage> vApiSpacialCoverages { get; set; }
-        //public DbSet<vApiTemporalCoverage> vApiTemporalCoverages { get; set; }
-        //public DbSet<vSensorThingsDatastream> vSensorThingsDatastreams { get; set; }
 
 #if NET472
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

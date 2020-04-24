@@ -185,7 +185,8 @@ namespace SAEON.Observations.WebAPI
         private static IEdmModel ObservationsEdmModel()
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "OData" };
-            builder.EntitySet<db.Inventory>("Inventory");
+            builder.EntitySet<db.InventoryDataStream>("InventoryDataStreams");
+            builder.EntitySet<db.InventorySensor>("InventorySensors");
             builder.EntitySet<db.Instrument>("Instruments").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Offering>("Offerings").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Organisation>("Organisations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");

@@ -64,8 +64,10 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownQuery" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Query</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownQuery">
-                                @Html.ActionLink("Inventory", "Index", "Inventory", null, new { @class = "dropdown-item" })
                                 @Html.ActionLink("Data", "Index", "DataWizard", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Data Streams", "Index", "DataStreams", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Sensor Inventory", "Index", "Inventory", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Coverage", "Index", "Coverage", null, new { @class = "dropdown-item" })
                                 @*@Html.ActionLink("Spacial Coverage", "Index", "SpacialCoverage", null, new { @class = "dropdown-item" })*@
                                 @*@Html.ActionLink("Temporal Coverage", "Index", "TemporalCoverage", null, new { @class = "dropdown-item" })*@
                             </div>

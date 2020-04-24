@@ -279,7 +279,7 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Views\vInventory.sql">
+    <Build Include="dbo\Views\vInventorySensors.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -536,6 +536,7 @@
     <Build Include="dbo\Views\vSensorObservations.sql" />
     <Build Include="dbo\Views\vStationDataStreams.sql" />
     <Build Include="dbo\Views\vStationObservations.sql" />
+    <Build Include="dbo\Views\vInventoryDataStreams.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />

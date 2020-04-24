@@ -19,9 +19,9 @@ public class InventoryRepository : BaseRepository
     public static List<object> GetPagedList(StoreRefreshDataEventArgs e, string paramPrefix)
     {
 
-        SqlQuery q = new Select().From(VInventory.Schema);
+        SqlQuery q = new Select().From(VInventorySensor.Schema);
         GetPagedQuery(ref q, e, paramPrefix);
-        VInventoryCollection col = q.ExecuteAsCollection<VInventoryCollection>();
+        VInventorySensorCollection col = q.ExecuteAsCollection<VInventorySensorCollection>();
 
         return col.ToList<object>();
 

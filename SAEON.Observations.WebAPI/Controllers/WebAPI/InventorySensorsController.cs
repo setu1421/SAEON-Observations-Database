@@ -7,15 +7,15 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 {
     /// <summary>
     /// </summary>
-    [RoutePrefix("Api/Inventory")]
-    public class InventoryController : BaseEntityController<Inventory>
+    [RoutePrefix("Api/InventorySensors")]
+    public class InventorySensorsController : BaseEntityController<InventorySensor>
     {
         /// <summary>
-        /// Inventory of sensors
+        /// Inventory of Sensors
         /// </summary>
-        /// <returns>ListOf(Inventory)</returns>
-        [ResponseType(typeof(Inventory))]
-        public override IQueryable<Inventory> GetAll()
+        /// <returns>ListOf(InventorySensor)</returns>
+        [ResponseType(typeof(InventorySensor))]
+        public override IQueryable<InventorySensor> GetAll()
         {
             return base.GetAll();
         }

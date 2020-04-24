@@ -1,13 +1,13 @@
-﻿CREATE VIEW [dbo].[vStationDataStreams]
-AS
+﻿CREATE VIEW [dbo].[vInventoryDataStreams]
+AS 
 Select
   Row_Number() over (order by StationCode, PhenomenonCode, OfferingCode, UnitOfMeasureCode) ID, s.*
 from
 (
 Select
-  SiteID, SiteCode, SiteName, SiteDescription,
-  StationID, StationCode, StationName, StationDescription,
-  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
   PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
   PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
   Sum(Count) Count,
@@ -22,9 +22,9 @@ Select
 from
   vImportBatchSummary
 group by
-  SiteID, SiteCode, SiteName, SiteDescription,
-  StationID, StationCode, StationName, StationDescription,
-  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription,
+  SiteID, SiteCode, SiteName, SiteDescription, SiteUrl,
+  StationID, StationCode, StationName, StationDescription, StationUrl,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
   PhenomenonOfferingID, OfferingID, OfferingCode, OfferingName, OfferingDescription,
   PhenomenonUOMID, UnitOfMeasureID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol
 ) s

@@ -12,7 +12,14 @@
      Alter
        [dbo].[Observation] (Table)
        [dbo].[vImportBatchSummary] (View)
+       [dbo].[vSensorThingsAPIDatastreams] (View)
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
      Create
+       [dbo].[vInventoryDataStreams] (View)
+       [dbo].[vInventorySensors] (View)
        [dbo].[vSensorObservations] (View)
        [dbo].[vStationDataStreams] (View)
        [dbo].[vStationObservations] (View)
@@ -29,14 +36,9 @@
        [dbo].[vSensorThingsAPIObservations] (View)
        [dbo].[vObservation] (View)
        [dbo].[vObservationJSON] (View)
-       [dbo].[vInventory] (View)
-       [dbo].[vSensorThingsAPIDatastreams] (View)
-       [dbo].[vSensorThingsAPILocations] (View)
-       [dbo].[vSensorThingsAPIObservedProperties] (View)
-       [dbo].[vSensorThingsAPISensors] (View)
-       [dbo].[vSensorThingsAPIThings] (View)
        [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
        [dbo].[vSensorThingsAPIHistoricalLocations] (View)
 
 If this deployment is executed, changes to [dbo].[Observation] might introduce run-time errors in [dbo].[vSensorThingsDatastreams].
+If this deployment is executed, changes to [dbo].[vImportBatchSummary] might introduce run-time errors in [dbo].[vInventory].
 

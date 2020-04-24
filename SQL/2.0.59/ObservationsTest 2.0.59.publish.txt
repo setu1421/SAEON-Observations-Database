@@ -12,7 +12,14 @@
      Alter
        [dbo].[Observation] (Table)
        [dbo].[vImportBatchSummary] (View)
+       [dbo].[vSensorThingsAPIDatastreams] (View)
+       [dbo].[vSensorThingsAPILocations] (View)
+       [dbo].[vSensorThingsAPIObservedProperties] (View)
+       [dbo].[vSensorThingsAPISensors] (View)
+       [dbo].[vSensorThingsAPIThings] (View)
      Create
+       [dbo].[vInventoryDataStreams] (View)
+       [dbo].[vInventorySensors] (View)
        [dbo].[vSensorObservations] (View)
        [dbo].[vStationDataStreams] (View)
        [dbo].[vStationObservations] (View)
@@ -29,12 +36,6 @@
        [dbo].[vSensorThingsAPIObservations] (View)
        [dbo].[vObservation] (View)
        [dbo].[vObservationJSON] (View)
-       [dbo].[vInventory] (View)
-       [dbo].[vSensorThingsAPIDatastreams] (View)
-       [dbo].[vSensorThingsAPILocations] (View)
-       [dbo].[vSensorThingsAPIObservedProperties] (View)
-       [dbo].[vSensorThingsAPISensors] (View)
-       [dbo].[vSensorThingsAPIThings] (View)
        [dbo].[vSensorThingsAPIFeaturesOfInterest] (View)
        [dbo].[vSensorThingsAPIHistoricalLocations] (View)
 
@@ -43,4 +44,5 @@ The source's object [Observations] is different than the target's version of the
 The object [Authentication] already exists in database with a different definition and will not be altered.
 The object [Observations] already exists in database with a different definition and will not be altered.
 If this deployment is executed, changes to [dbo].[Observation] might introduce run-time errors in [dbo].[vSensorThingsDatastreams].
+If this deployment is executed, changes to [dbo].[vImportBatchSummary] might introduce run-time errors in [dbo].[vInventory].
 
