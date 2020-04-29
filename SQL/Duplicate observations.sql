@@ -1,3 +1,4 @@
+use Observations;
 with Duplicates
 as
 (
@@ -11,7 +12,8 @@ having
   (Count(*) > 1)
 )
 Select 
-  ImportBatch.Code, o.* 
+  --Code, o.* 
+  Code, SiteName, StationName, InstrumentName, SensorName, o.* 
 from 
   Duplicates d
   inner join Observation o
@@ -22,7 +24,13 @@ from
 	   (((d.Elevation is null) and (o.Elevation is null)) or (d.Elevation = o.Elevation))
   inner join ImportBatch
     on (o.ImportBatchID = ImportBatch.ID)
+  inner join vImportBatchSummary
+    on (o.ImportBatchID = vImportBatchSummary.ImportBatchID) and
+	   (o.SensorID = vImportBatchSummary.SensorID) and
+	   (o.PhenomenonOfferingID = vImportBatchSummary.PhenomenonOfferingID) and
+	   (o.PhenomenonUOMID = vImportBatchSummary.PhenomenonUOMID)
+--where
+--  (Code = 4825)
 order by 
-  SensorID, ValueDate, PhenomenonOfferingID, PhenomenonUOMID, Elevation
---order by
---  ImportBatchCode, SiteName, StationName, InstrumentName, SensorName, ValueDate, DataValue, OfferingName, UnitOfMeasureUnit, Elevation
+  --Code, ValueDate, SensorID, PhenomenonOfferingID, PhenomenonUOMID, Elevation
+  Code, SiteName, StationName, InstrumentName, ValueDate, SensorName, DataValue, OfferingName, UnitOfMeasureUnit, Elevation

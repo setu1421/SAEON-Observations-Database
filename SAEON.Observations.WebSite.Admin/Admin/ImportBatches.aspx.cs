@@ -1,6 +1,4 @@
-﻿//#define DeleteIndivdualObservations
-//#define BulkInsert
-using Ext.Net;
+﻿using Ext.Net;
 using SAEON.Azure.CosmosDB;
 using SAEON.Logs;
 using SAEON.Observations.Azure;
@@ -96,7 +94,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             Logging.Information("Deleting observations for ImportBatch {ImportBatchID}", importBatchId);
-            //#if DeleteIndivdualObservations
             if (DeleteIndivdualObservations)
             {
                 Logging.Information("Deleting observations for ImportBatch {ImportBatchID}", importBatchId);
@@ -105,7 +102,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             else
             {
-                //#else
                 using (var cmd = connScope.CurrentConnection.CreateCommand())
                 {
                     cmd.CommandText = "Delete Observation where (ImportBatchId = @ImportBatchID)";
@@ -119,7 +115,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     Logging.Information("Deleted {count} observations for ImportBatch {ImportBatchID} in {Elapsed}", count, importBatchId, stopwatch.Elapsed.TimeStr());
                 }
             }
-            //#endif
         }
     }
 
@@ -284,10 +279,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             try
             {
                 Guid DataSourceId = new Guid(cbDataSource.SelectedItem.Value);
-                //#if BulkInsert
                 Logging.Information("BulkInsert: {BulkInsert}", BulkInsert);
-                //Logging.Information("BulkInsert: {BulkInsert}", true);
-                //#endif
 
                 //
                 //add check to see that either datasource or linked sensor has a dataschema
@@ -355,7 +347,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     var goodValues = values.Where(i => i.IsValid).OrderBy(i => i.RowNum).ToList();
                     var badValues = values.Where(i => !i.IsValid).OrderBy(i => i.RowNum).ToList();
                     var dtObservations = new DataTable("Observations");
-                    //#if BulkInsert
                     if (BulkInsert && goodValues.Any())
                     {
                         // Create DataTable from good values
@@ -427,7 +418,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                         stageStopwatch.Stop();
                         Logging.Information("Created DataTable {count:n0} observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                     }
-                    //#endif
                     try
                     {
                         using (TransactionScope tranScope = Utilities.NewTransactionScope())
@@ -570,7 +560,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 {
                                     Logging.Information("Saving {good} good values", goodValues.Count);
                                     stageStopwatch.Restart();
-                                    //#if BulkInsert
                                     if (BulkInsert)
                                     {
                                         // Bulk insert
@@ -595,7 +584,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                     }
                                     else
                                     {
-                                        //#else
                                         Logging.Information("Starting inserts");
                                         lastProgress100 = -1;
                                         nMax = goodValues.Count;
@@ -670,7 +658,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         stageStopwatch.Stop();
                                         Logging.Information("Inserted {count:n0} observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                                     }
-                                    //#endif
                                 }
                                 // Summaries
                                 CreateSummary(connScope, batch.Id);

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{39023EE1-BD0D-43AE-AFBE-8E1AFCA89433}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\SAEON.Observations.Database\bin\Release\Observations 2.0.59-1.publish.sql = ..\..\SAEON.Observations.Database\bin\Release\Observations 2.0.59-1.publish.sql
+		..\..\SAEON.Observations.Database\bin\Release\Observations 2.0.59-1.publish.txt = ..\..\SAEON.Observations.Database\bin\Release\Observations 2.0.59-1.publish.txt
 		Observations 2.0.59.publish.sql = Observations 2.0.59.publish.sql
 		Observations 2.0.59.publish.txt = Observations 2.0.59.publish.txt
 		ObservationsFynbos 2.0.59.publish.sql = ObservationsFynbos 2.0.59.publish.sql
@@ -14,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ObservationsTest 2.0.59.publish.sql = ObservationsTest 2.0.59.publish.sql
 		ObservationsTest 2.0.59.publish.txt = ObservationsTest 2.0.59.publish.txt
 		Post Process.sql = Post Process.sql
+		Pre Process.sql = Pre Process.sql
 	EndProjectSection
 EndProject
 Global
@@ -21,7 +24,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0C11A3DD-1FC0-4464-ABB6-660F4D3567D2}.Default|Default.ActiveCfg = Default
+		{1EA96A2E-BAF2-4FC8-8CA0-A5B580F7743B}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
