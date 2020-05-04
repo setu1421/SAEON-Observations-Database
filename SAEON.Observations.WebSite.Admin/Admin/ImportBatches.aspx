@@ -669,6 +669,7 @@
                             <ext:FileUploadField ID="DataFileUpload" runat="server" EmptyText="Select a File"
                                 AllowBlank="false" FieldLabel="Data File" ButtonText="" Icon="Zoom" BlankText="input file is required"
                                 ClientIDMode="Static">
+                                
                                 <DirectEvents>
                                     <FileSelected OnEvent="FileSelected" />
                                 </DirectEvents>
@@ -681,10 +682,12 @@
                         </Listeners>
                         <Buttons>
                             <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept">
+                                <%--                                                                             Ext.Msg.wait('Uploading and processing...', 'Processing');--%>
+
                                 <DirectEvents>
                                     <Click OnEvent="UploadClick" Before="if (!#{BasicForm}.getForm().isValid()) { return false; }
-                                                                         Ext.Msg.wait('Uploading and processing...', 'Processing');
                                                                          return true;"
+                                        After ="window.status = 'Some text in the status bar!!'; return true;"
                                         Failure="Ext.Msg.show({
                                                     title   : 'Error',
                                                     msg     : 'Error during uploading',
@@ -693,6 +696,7 @@
                                                     icon    : Ext.Msg.ERROR,
                                                     buttons : Ext.Msg.OK
                                                 });">
+                                        <EventMask ShowMask="true" Msg="Uploading and processing..." RemoveMask="true" />
                                     </Click>
                                 </DirectEvents>
                             </ext:Button>

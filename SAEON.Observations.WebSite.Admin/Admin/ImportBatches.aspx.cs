@@ -329,7 +329,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopwatch.Start();
                 var stageStopwatch = new Stopwatch();
                 stageStopwatch.Start();
-                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.49, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.51, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 stageStopwatch.Stop();
                 Logging.Information("Imported {count:N0} values in {elapsed}", values.Count, stageStopwatch.Elapsed.TimeStr());
@@ -681,7 +681,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     SummaryGridStore.DataBind();
                     DataLogGrid.GetStore().DataBind();
                     ImportWindow.Hide();
-                    X.Msg.Hide();
                 }
             }
             catch (Exception ex)
@@ -694,7 +693,10 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 ErrorGridStore.DataSource = errors;
                 ErrorGrid.DataBind();
                 MessageBoxes.Error("Error", $"An error occurred while importing - {ex.Message}");
-                X.Msg.Hide();
+            }
+            finally
+            {
+                X.Mask.Hide();
             }
         }
     }
@@ -956,7 +958,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         {
             Yes = new MessageBoxButtonConfig
             {
-                Handler = String.Concat("DirectCall.DeleteBatch('", ImportBatchId, "',{ eventMask: { showMask: true}});"),
+                Handler = $"Ext.getBody().mask('Deleting batch...'); DirectCall.DeleteBatch('{ImportBatchId}');",
                 Text = "Yes",
             },
             No = new MessageBoxButtonConfig
@@ -1007,12 +1009,16 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 DataLogGridStore.DataBind();
                 SummaryGridStore.DataBind();
                 ObservationsGridStore.DataBind();
-
             }
+
             catch (Exception ex)
             {
                 Logging.Exception(ex);
                 throw;
+            }
+            finally
+            {
+                X.Mask.Hide();
             }
         }
     }
