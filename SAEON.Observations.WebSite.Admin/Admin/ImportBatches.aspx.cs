@@ -255,20 +255,36 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 
-    public void FileSelected(object sender, DirectEventArgs e)
+    //public void FileSelected(object sender, DirectEventArgs e)
+    //{
+    //    using (Logging.MethodCall(GetType()))
+    //    {
+    //        Logging.Information("Import file selected");
+    //    }
+    //}
+
+    [DirectMethod]
+    public void UploadLogging(string msg)
     {
         using (Logging.MethodCall(GetType()))
         {
-            Logging.Information("Import file selected");
+            Logging.Information(msg);
         }
     }
 
-    [DirectMethod]
-    public void LogStartUpload()
+    protected void LogStartClick(object sender, DirectEventArgs e)
     {
         using (Logging.MethodCall(GetType()))
         {
-            Logging.Information("Import file upload");
+            Logging.Information("LogStart");
+        }
+    }
+
+    protected void TestUploadClick(object sender, DirectEventArgs e)
+    {
+        using (Logging.MethodCall(GetType()))
+        {
+            Logging.Information("TestUpload");
         }
     }
 

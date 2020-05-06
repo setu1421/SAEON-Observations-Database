@@ -12,7 +12,7 @@
             VisCols.setValue(viscolsNew);
             FormatType.setValue(format);
             SortInfo.setValue(ContentPlaceHolder1_GridFilters1.store.sortInfo.field + "|" + ContentPlaceHolder1_GridFilters1.store.sortInfo.direction);
-            ImportBatchesGrid.submitData(false);
+            ImportBatchesGrid.submitData(false, { isUpload: true });
         };
     </script>
     <style type="text/css">
@@ -113,7 +113,7 @@
                                             <ext:Parameter Name="dir" Value="" />
                                         </BaseParams>
                                         <SortInfo Field="ImportDate" Direction="DESC" />
-                                        <DirectEventConfig IsUpload="true" />
+                                        <%--<DirectEventConfig IsUpload="true" />--%>
                                     </ext:Store>
                                 </Store>
                                 <ColumnModel ID="ColumnModel1" runat="server">
@@ -633,6 +633,10 @@
         <%-- <Listeners>
             <Hide Fn="closepreview" />
         </Listeners>--%>
+        <Listeners>
+            <Hide Handler="#{DataFileUpload}.disable();" />
+            <Show Handler="#{DataFileUpload}.enable();" />
+        </Listeners>
         <Items>
             <ext:BorderLayout ID="BorderLayout2" runat="server">
                 <North MarginsSummary="5 5 5 5">
@@ -669,26 +673,76 @@
                             <ext:FileUploadField ID="DataFileUpload" runat="server" EmptyText="Select a File"
                                 AllowBlank="false" FieldLabel="Data File" ButtonText="" Icon="Zoom" BlankText="input file is required"
                                 ClientIDMode="Static">
-                                
-                                <DirectEvents>
-                                    <FileSelected OnEvent="FileSelected" />
-                                </DirectEvents>
+                                <Listeners>
+                                    <FileSelected Handler="#{DataFileUpload}.disable();" />
+                                </Listeners>
+                                <%--                                <DirectEvents>
+                                    <FileSelected OnEvent="FileSelected"  IsUpload="false"/>
+                                </DirectEvents>--%>
                             </ext:FileUploadField>
                             <%--                            <ext:FileUploadField ID="LogFileUpload" runat="server" AllowBlank="true" EmptyText="Select a log File"
                                 FieldLabel="Log File" ButtonText="" Icon="Zoom" ClientIDMode="Static" />--%>
                         </Items>
                         <Listeners>
-                            <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);" />
+                            <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);#{LogStartButton}.setDisabled(!valid);#{TestUploadButton}.setDisabled(!valid);" />
                         </Listeners>
                         <Buttons>
-                            <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept">
-                                <%--                                                                             Ext.Msg.wait('Uploading and processing...', 'Processing');--%>
-
+                            <ext:Button ID="LogStartButton" runat="server" Text="Log Start" Icon="ApplicationLightning">
+                                <Listeners>
+                                    <Click Handler="DirectCall.UploadLogging('LogStartClick'); #{DataFileUpload}.enable(); return true;" />
+                                </Listeners>
+                            </ext:Button>
+                            <ext:Button ID="TestUploadButton" runat="server" Text="Test Upload" Icon="ApplicationLightning">
                                 <DirectEvents>
-                                    <Click OnEvent="UploadClick" Before="if (!#{BasicForm}.getForm().isValid()) { return false; }
-                                                                         return true;"
-                                        After ="window.status = 'Some text in the status bar!!'; return true;"
-                                        Failure="Ext.Msg.show({
+                                    <Click OnEvent="TestUploadClick" IsUpload="true">
+                                        <EventMask ShowMask="true" Msg="Testing upload..." RemoveMask="true" />
+                                    </Click>
+                                </DirectEvents>
+                            </ext:Button>
+
+                            <%--                            
+     <ext:Button ID="LogStartButton" runat="server" Text="Log Start" Icon="ApplicationLightning">
+                                <DirectEvents>
+                                    <Click OnEvent="LogStartClick" IsUpload="false"
+                                        Before="if (!#{BasicForm}.getForm().isValid()) { return false; }; DirectCall.UploadLogging('LogStartClick',{isUpload:false}); return false;"
+                                        Failure="DirectCall.UploadLogging('LogStartClickFailure');
+                                                 Ext.Msg.show({
+                                                    title   : 'Error',
+                                                    msg     : 'Error during uploading',
+                                                    minWidth: 200,
+                                                    modal   : true,
+                                                    icon    : Ext.Msg.ERROR,
+                                                    buttons : Ext.Msg.OK
+                                                });">
+                                    </Click>
+                                </DirectEvents>
+                            </ext:Button>
+                           <ext:Button ID="TestUploadButton" runat="server" Text="Test Upload" Icon="ApplicationLightning">
+                                <DirectEvents>
+                                    <Click OnEvent="TestUploadClick" IsUpload="true"
+                                        Before="return #{BasicForm}.getForm().isValid();"
+                                        After="DirectCall.UploadLogging('TestUploadClickAfter');"
+                                        Failure="DirectCall.UploadLogging('TestUploadClickFailure');
+                                                 Ext.Msg.show({
+                                                    title   : 'Error',
+                                                    msg     : 'Error during uploading',
+                                                    minWidth: 200,
+                                                    modal   : true,
+                                                    icon    : Ext.Msg.ERROR,
+                                                    buttons : Ext.Msg.OK
+                                                });">
+                                        <EventMask ShowMask="true" Msg="Testing upload..." RemoveMask="true" />
+                                    </Click>
+                                </DirectEvents>
+                            </ext:Button>
+                            --%>
+                            <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept">
+                                <DirectEvents>
+                                    <Click OnEvent="UploadClick" IsUpload="true"
+                                        Before="return #{BasicForm}.getForm().isValid();"
+                                        After="DirectCall.UploadLogging('SaveClickAfter'); return true;"
+                                        Failure="DirectCall.UploadLogging('SaveClickFailure');
+                                                 Ext.Msg.show({
                                                     title   : 'Error',
                                                     msg     : 'Error during uploading',
                                                     minWidth: 200,

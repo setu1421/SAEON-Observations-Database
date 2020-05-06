@@ -3,7 +3,7 @@
     [Code]             VARCHAR (50)     NOT NULL,
     [Name]             VARCHAR (150)    NOT NULL,
     [Description]      VARCHAR (5000)   NULL,
-    [Url]              VARCHAR (250)    NOT NULL,
+    [Url]              VARCHAR (250)    NULL,
     [DefaultNullValue] FLOAT            NULL,
     [ErrorEstimate]    FLOAT            NULL,
     [UpdateFreq]       INT              NOT NULL,
