@@ -3,13 +3,13 @@
     [LoweredApplicationName] NVARCHAR (256)   NOT NULL,
     [ApplicationId]          UNIQUEIDENTIFIER DEFAULT (newid()) NOT NULL,
     [Description]            NVARCHAR (256)   NULL,
-    CONSTRAINT [PK_aspnet_Applications] PRIMARY KEY NONCLUSTERED ([ApplicationId]) ON [Authentication],
-    CONSTRAINT [UX_aspnet_Applications_ApplicationName] UNIQUE ([ApplicationName]) ON [Authentication],
-    CONSTRAINT [UX_aspnet_Applications_LoweredApplicationName] UNIQUE ([LoweredApplicationName]) ON [Authentication]
+    CONSTRAINT [PK_aspnet_Applications] PRIMARY KEY NONCLUSTERED ([ApplicationId]) ON [Primary],
+    CONSTRAINT [UX_aspnet_Applications_ApplicationName] UNIQUE ([ApplicationName]) ON [Primary],
+    CONSTRAINT [UX_aspnet_Applications_LoweredApplicationName] UNIQUE ([LoweredApplicationName]) ON [Primary]
 )
-  ON [Authentication];
+  ON [Primary];
 
 
 GO
-CREATE CLUSTERED INDEX [aspnet_Applications_Index] ON [dbo].[aspnet_Applications]([LoweredApplicationName]) ON [Authentication];
+CREATE CLUSTERED INDEX [aspnet_Applications_Index] ON [dbo].[aspnet_Applications]([LoweredApplicationName]) ON [Primary];
 

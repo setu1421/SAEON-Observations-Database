@@ -673,22 +673,17 @@
                             <ext:FileUploadField ID="DataFileUpload" runat="server" EmptyText="Select a File"
                                 AllowBlank="false" FieldLabel="Data File" ButtonText="" Icon="Zoom" BlankText="input file is required"
                                 ClientIDMode="Static">
-                                <Listeners>
+<%--                                <Listeners>
                                     <FileSelected Handler="#{DataFileUpload}.disable();" />
-                                </Listeners>
-                                <%--                                <DirectEvents>
-                                    <FileSelected OnEvent="FileSelected"  IsUpload="false"/>
-                                </DirectEvents>--%>
+                                </Listeners>--%>
                             </ext:FileUploadField>
-                            <%--                            <ext:FileUploadField ID="LogFileUpload" runat="server" AllowBlank="true" EmptyText="Select a log File"
-                                FieldLabel="Log File" ButtonText="" Icon="Zoom" ClientIDMode="Static" />--%>
                         </Items>
                         <Listeners>
                             <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);#{LogStartButton}.setDisabled(!valid);#{TestUploadButton}.setDisabled(!valid);" />
                         </Listeners>
                         <Buttons>
-                            <ext:Button ID="LogStartButton" runat="server" Text="Log Start" Icon="ApplicationLightning">
-                                <Listeners>
+<%--                             <ext:Button ID="LogStartButton" runat="server" Text="Log Start" Icon="ApplicationLightning">
+                               <Listeners>
                                     <Click Handler="DirectCall.UploadLogging('LogStartClick'); #{DataFileUpload}.enable(); return true;" />
                                 </Listeners>
                             </ext:Button>
@@ -698,44 +693,8 @@
                                         <EventMask ShowMask="true" Msg="Testing upload..." RemoveMask="true" />
                                     </Click>
                                 </DirectEvents>
-                            </ext:Button>
+                            </ext:Button>--%>
 
-                            <%--                            
-     <ext:Button ID="LogStartButton" runat="server" Text="Log Start" Icon="ApplicationLightning">
-                                <DirectEvents>
-                                    <Click OnEvent="LogStartClick" IsUpload="false"
-                                        Before="if (!#{BasicForm}.getForm().isValid()) { return false; }; DirectCall.UploadLogging('LogStartClick',{isUpload:false}); return false;"
-                                        Failure="DirectCall.UploadLogging('LogStartClickFailure');
-                                                 Ext.Msg.show({
-                                                    title   : 'Error',
-                                                    msg     : 'Error during uploading',
-                                                    minWidth: 200,
-                                                    modal   : true,
-                                                    icon    : Ext.Msg.ERROR,
-                                                    buttons : Ext.Msg.OK
-                                                });">
-                                    </Click>
-                                </DirectEvents>
-                            </ext:Button>
-                           <ext:Button ID="TestUploadButton" runat="server" Text="Test Upload" Icon="ApplicationLightning">
-                                <DirectEvents>
-                                    <Click OnEvent="TestUploadClick" IsUpload="true"
-                                        Before="return #{BasicForm}.getForm().isValid();"
-                                        After="DirectCall.UploadLogging('TestUploadClickAfter');"
-                                        Failure="DirectCall.UploadLogging('TestUploadClickFailure');
-                                                 Ext.Msg.show({
-                                                    title   : 'Error',
-                                                    msg     : 'Error during uploading',
-                                                    minWidth: 200,
-                                                    modal   : true,
-                                                    icon    : Ext.Msg.ERROR,
-                                                    buttons : Ext.Msg.OK
-                                                });">
-                                        <EventMask ShowMask="true" Msg="Testing upload..." RemoveMask="true" />
-                                    </Click>
-                                </DirectEvents>
-                            </ext:Button>
-                            --%>
                             <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept">
                                 <DirectEvents>
                                     <Click OnEvent="UploadClick" IsUpload="true"

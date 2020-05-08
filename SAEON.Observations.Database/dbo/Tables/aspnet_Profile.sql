@@ -3,11 +3,12 @@
     [PropertyNames]        NTEXT            NOT NULL,
     [PropertyValuesString] NTEXT            NOT NULL,
     [PropertyValuesBinary] IMAGE            NOT NULL,
+    [Test] INT NULL, 
     [LastUpdatedDate]      DATETIME         NOT NULL,
-    CONSTRAINT [PK_aspnet_Profile] PRIMARY KEY CLUSTERED ([UserId]) ON [Authentication],
+    CONSTRAINT [PK_aspnet_Profile] PRIMARY KEY CLUSTERED ([UserId]) ON [Primary],
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 )
-  ON [Authentication];
+  ON [Primary];
 
 GO
 EXECUTE sp_tableoption @TableNamePattern = N'[dbo].[aspnet_Profile]', @OptionName = N'text in row', @OptionValue = N'6000';
