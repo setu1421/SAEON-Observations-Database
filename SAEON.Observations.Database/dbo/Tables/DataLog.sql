@@ -27,10 +27,10 @@
     [RawRecordData]              VARCHAR (500)    NULL,
     [RawFieldValue]              VARCHAR (50)     NOT NULL,
     [CorrelationID] UNIQUEIDENTIFIER NULL,
+    [ValueDay]             as (CONVERT([date],[ValueDate])),
     [AddedAt] DATETIME NULL CONSTRAINT [DF_DataLog_AddedAt] DEFAULT (getdate()), 
     [UpdatedAt] DATETIME NULL CONSTRAINT [DF_DataLog_UpdatedAt] DEFAULT (getdate()), 
     [RowVersion] RowVersion not null,
-    [ValueDay]             as (CONVERT([date],[ValueDate])),
     CONSTRAINT [PK_DataLog] PRIMARY KEY CLUSTERED ([ID]),
     CONSTRAINT [FK_DataLog_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
     CONSTRAINT [FK_DataLog_DataSourceTransformation] FOREIGN KEY ([DataSourceTransformationID]) REFERENCES [dbo].[DataSourceTransformation] ([ID]),
@@ -46,8 +46,6 @@ GO
 CREATE INDEX [IX_DataLog_ImportBatchID] ON [dbo].[DataLog]([ImportBatchID]);
 GO
 CREATE INDEX [IX_DataLog_SensorID] ON [dbo].[DataLog] ([SensorID]);
-GO
-CREATE INDEX [IX_DataLog_ValueDay] ON [dbo].[DataLog] ([ValueDay]);
 GO
 CREATE INDEX [IX_DataLog_DataSourceTransformationID] ON [dbo].[DataLog] ([DataSourceTransformationID])
 GO

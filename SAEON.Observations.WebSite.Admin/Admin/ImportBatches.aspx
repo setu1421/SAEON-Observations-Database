@@ -673,13 +673,11 @@
                             <ext:FileUploadField ID="DataFileUpload" runat="server" EmptyText="Select a File"
                                 AllowBlank="false" FieldLabel="Data File" ButtonText="" Icon="Zoom" BlankText="input file is required"
                                 ClientIDMode="Static">
-<%--                                <Listeners>
-                                    <FileSelected Handler="#{DataFileUpload}.disable();" />
-                                </Listeners>--%>
                             </ext:FileUploadField>
                         </Items>
                         <Listeners>
-                            <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);#{LogStartButton}.setDisabled(!valid);#{TestUploadButton}.setDisabled(!valid);" />
+<%--                            <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);#{LogStartButton}.setDisabled(!valid);#{TestUploadButton}.setDisabled(!valid);" />--%>
+                            <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);" />
                         </Listeners>
                         <Buttons>
 <%--                             <ext:Button ID="LogStartButton" runat="server" Text="Log Start" Icon="ApplicationLightning">
@@ -697,9 +695,8 @@
 
                             <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept">
                                 <DirectEvents>
-                                    <Click OnEvent="UploadClick" IsUpload="true"
+                                    <Click OnEvent="UploadClick" IsUpload="true" 
                                         Before="return #{BasicForm}.getForm().isValid();"
-                                        After="DirectCall.UploadLogging('SaveClickAfter'); return true;"
                                         Failure="DirectCall.UploadLogging('SaveClickFailure');
                                                  Ext.Msg.show({
                                                     title   : 'Error',

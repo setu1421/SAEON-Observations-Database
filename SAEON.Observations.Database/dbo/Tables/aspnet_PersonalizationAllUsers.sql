@@ -1,7 +1,6 @@
 ﻿CREATE TABLE [dbo].[aspnet_PersonalizationAllUsers] (
     [PathId]          UNIQUEIDENTIFIER NOT NULL,
     [PageSettings]    IMAGE            NOT NULL,
-    [Test] INT NULL, 
     [LastUpdatedDate] DATETIME         NOT NULL,
     CONSTRAINT [PK_aspnet_PersonalizationAllUsers] PRIMARY KEY CLUSTERED ([PathId]) ON [Primary],
     FOREIGN KEY ([PathId]) REFERENCES [dbo].[aspnet_Paths] ([PathId])

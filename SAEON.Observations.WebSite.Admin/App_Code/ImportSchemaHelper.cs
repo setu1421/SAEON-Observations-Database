@@ -132,6 +132,8 @@ public class ImportSchemaHelper : IDisposable
 
     private readonly Azure Azure = new Azure();
 
+    private bool LogBadValues = false;
+
     private List<string> LoadColumnNamesDelimited(DataSchema schema, string data)
     {
         List<string> result = new List<string>();
@@ -196,6 +198,7 @@ public class ImportSchemaHelper : IDisposable
             dataSource = ds;
             dataSchema = schema;
             Sensor = sensor;
+            LogBadValues = ConfigurationManager.AppSettings["LogBadValues"].IsTrue();
             Logging.Information("Checking Schema");
             if (schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Time") && !schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Date"))
             {
@@ -850,7 +853,10 @@ public class ImportSchemaHelper : IDisposable
                                     continue; // Ignore
                                 }
 
-                                Logging.Error("Row#: {row} Index: {Index} FieldName: {FieldName} Sensor not found Sensors: {sensors}", rowNum, def.Index, def.FieldName, def.Sensors.Select(s => s.Name).ToList());
+                                if (LogBadValues)
+                                {
+                                    Logging.Error("Row#: {row} Index: {Index} FieldName: {FieldName} Sensor not found Sensors: {sensors}", rowNum, def.Index, def.FieldName, def.Sensors.Select(s => s.Name).ToList());
+                                }
                                 rec.SensorNotFound = true;
                                 rec.SensorID = def.Sensors.FirstOrDefault()?.Id;
                                 rec.InvalidStatuses.Add(Status.SensorNotFound);

@@ -3,7 +3,6 @@
     [PropertyNames]        NTEXT            NOT NULL,
     [PropertyValuesString] NTEXT            NOT NULL,
     [PropertyValuesBinary] IMAGE            NOT NULL,
-    [Test] INT NULL, 
     [LastUpdatedDate]      DATETIME         NOT NULL,
     CONSTRAINT [PK_aspnet_Profile] PRIMARY KEY CLUSTERED ([UserId]) ON [Primary],
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
