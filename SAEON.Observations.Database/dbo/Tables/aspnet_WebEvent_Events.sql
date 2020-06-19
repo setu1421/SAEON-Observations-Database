@@ -14,7 +14,7 @@
     [RequestUrl]             NVARCHAR (1024) NULL,
     [ExceptionType]          NVARCHAR (256)  NULL,
     [Details]                NTEXT           NULL,
-    CONSTRAINT [PK_aspnet_WebEvent_Events] PRIMARY KEY CLUSTERED ([EventId]) ON [Primary]
+    CONSTRAINT [PK_aspnet_WebEvent_Events] PRIMARY KEY CLUSTERED ([EventId]) ON [PRIMARY]
 )
-  ON [Primary];
+  ON [PRIMARY];
 

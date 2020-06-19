@@ -225,30 +225,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarVariance);
                 
-                TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
-                colvarStartDate.ColumnName = "StartDate";
-                colvarStartDate.DataType = DbType.DateTime;
-                colvarStartDate.MaxLength = 0;
-                colvarStartDate.AutoIncrement = false;
-                colvarStartDate.IsNullable = true;
-                colvarStartDate.IsPrimaryKey = false;
-                colvarStartDate.IsForeignKey = false;
-                colvarStartDate.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarStartDate);
-                
-                TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
-                colvarEndDate.ColumnName = "EndDate";
-                colvarEndDate.DataType = DbType.DateTime;
-                colvarEndDate.MaxLength = 0;
-                colvarEndDate.AutoIncrement = false;
-                colvarEndDate.IsNullable = true;
-                colvarEndDate.IsPrimaryKey = false;
-                colvarEndDate.IsForeignKey = false;
-                colvarEndDate.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarEndDate);
-                
                 TableSchema.TableColumn colvarLatitudeNorth = new TableSchema.TableColumn(schema);
                 colvarLatitudeNorth.ColumnName = "LatitudeNorth";
                 colvarLatitudeNorth.DataType = DbType.Double;
@@ -320,6 +296,30 @@ namespace SAEON.Observations.Data{
                 colvarElevationMaximum.IsReadOnly = false;
                 
                 schema.Columns.Add(colvarElevationMaximum);
+                
+                TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
+                colvarStartDate.ColumnName = "StartDate";
+                colvarStartDate.DataType = DbType.DateTime;
+                colvarStartDate.MaxLength = 0;
+                colvarStartDate.AutoIncrement = false;
+                colvarStartDate.IsNullable = true;
+                colvarStartDate.IsPrimaryKey = false;
+                colvarStartDate.IsForeignKey = false;
+                colvarStartDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarStartDate);
+                
+                TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
+                colvarEndDate.ColumnName = "EndDate";
+                colvarEndDate.DataType = DbType.DateTime;
+                colvarEndDate.MaxLength = 0;
+                colvarEndDate.AutoIncrement = false;
+                colvarEndDate.IsNullable = true;
+                colvarEndDate.IsPrimaryKey = false;
+                colvarEndDate.IsForeignKey = false;
+                colvarEndDate.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarEndDate);
                 
                 TableSchema.TableColumn colvarPhenomenonID = new TableSchema.TableColumn(schema);
                 colvarPhenomenonID.ColumnName = "PhenomenonID";
@@ -915,34 +915,6 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
-        [XmlAttribute("StartDate")]
-        [Bindable(true)]
-        public DateTime? StartDate 
-	    {
-		    get
-		    {
-			    return GetColumnValue<DateTime?>("StartDate");
-		    }
-            set 
-		    {
-			    SetColumnValue("StartDate", value);
-            }
-        }
-	      
-        [XmlAttribute("EndDate")]
-        [Bindable(true)]
-        public DateTime? EndDate 
-	    {
-		    get
-		    {
-			    return GetColumnValue<DateTime?>("EndDate");
-		    }
-            set 
-		    {
-			    SetColumnValue("EndDate", value);
-            }
-        }
-	      
         [XmlAttribute("LatitudeNorth")]
         [Bindable(true)]
         public double? LatitudeNorth 
@@ -1024,6 +996,34 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("ElevationMaximum", value);
+            }
+        }
+	      
+        [XmlAttribute("StartDate")]
+        [Bindable(true)]
+        public DateTime? StartDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("StartDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("StartDate", value);
+            }
+        }
+	      
+        [XmlAttribute("EndDate")]
+        [Bindable(true)]
+        public DateTime? EndDate 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("EndDate");
+		    }
+            set 
+		    {
+			    SetColumnValue("EndDate", value);
             }
         }
 	      
@@ -1468,10 +1468,6 @@ namespace SAEON.Observations.Data{
             
             public static string Variance = @"Variance";
             
-            public static string StartDate = @"StartDate";
-            
-            public static string EndDate = @"EndDate";
-            
             public static string LatitudeNorth = @"LatitudeNorth";
             
             public static string LatitudeSouth = @"LatitudeSouth";
@@ -1483,6 +1479,10 @@ namespace SAEON.Observations.Data{
             public static string ElevationMinimum = @"ElevationMinimum";
             
             public static string ElevationMaximum = @"ElevationMaximum";
+            
+            public static string StartDate = @"StartDate";
+            
+            public static string EndDate = @"EndDate";
             
             public static string PhenomenonID = @"PhenomenonID";
             

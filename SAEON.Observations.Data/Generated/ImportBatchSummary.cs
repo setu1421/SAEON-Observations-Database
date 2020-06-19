@@ -316,32 +316,6 @@ namespace SAEON.Observations.Data
 				colvarVariance.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarVariance);
 				
-				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
-				colvarStartDate.ColumnName = "StartDate";
-				colvarStartDate.DataType = DbType.DateTime;
-				colvarStartDate.MaxLength = 0;
-				colvarStartDate.AutoIncrement = false;
-				colvarStartDate.IsNullable = true;
-				colvarStartDate.IsPrimaryKey = false;
-				colvarStartDate.IsForeignKey = false;
-				colvarStartDate.IsReadOnly = false;
-				colvarStartDate.DefaultSetting = @"";
-				colvarStartDate.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarStartDate);
-				
-				TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
-				colvarEndDate.ColumnName = "EndDate";
-				colvarEndDate.DataType = DbType.DateTime;
-				colvarEndDate.MaxLength = 0;
-				colvarEndDate.AutoIncrement = false;
-				colvarEndDate.IsNullable = true;
-				colvarEndDate.IsPrimaryKey = false;
-				colvarEndDate.IsForeignKey = false;
-				colvarEndDate.IsReadOnly = false;
-				colvarEndDate.DefaultSetting = @"";
-				colvarEndDate.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarEndDate);
-				
 				TableSchema.TableColumn colvarLatitudeNorth = new TableSchema.TableColumn(schema);
 				colvarLatitudeNorth.ColumnName = "LatitudeNorth";
 				colvarLatitudeNorth.DataType = DbType.Double;
@@ -419,6 +393,32 @@ namespace SAEON.Observations.Data
 				colvarElevationMaximum.DefaultSetting = @"";
 				colvarElevationMaximum.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarElevationMaximum);
+				
+				TableSchema.TableColumn colvarStartDate = new TableSchema.TableColumn(schema);
+				colvarStartDate.ColumnName = "StartDate";
+				colvarStartDate.DataType = DbType.DateTime;
+				colvarStartDate.MaxLength = 0;
+				colvarStartDate.AutoIncrement = false;
+				colvarStartDate.IsNullable = true;
+				colvarStartDate.IsPrimaryKey = false;
+				colvarStartDate.IsForeignKey = false;
+				colvarStartDate.IsReadOnly = false;
+				colvarStartDate.DefaultSetting = @"";
+				colvarStartDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarStartDate);
+				
+				TableSchema.TableColumn colvarEndDate = new TableSchema.TableColumn(schema);
+				colvarEndDate.ColumnName = "EndDate";
+				colvarEndDate.DataType = DbType.DateTime;
+				colvarEndDate.MaxLength = 0;
+				colvarEndDate.AutoIncrement = false;
+				colvarEndDate.IsNullable = true;
+				colvarEndDate.IsPrimaryKey = false;
+				colvarEndDate.IsForeignKey = false;
+				colvarEndDate.IsReadOnly = false;
+				colvarEndDate.DefaultSetting = @"";
+				colvarEndDate.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarEndDate);
 				
 				BaseSchema = schema;
 				//add this schema to the provider
@@ -542,22 +542,6 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.Variance, value); }
 		}
 		  
-		[XmlAttribute("StartDate")]
-		[Bindable(true)]
-		public DateTime? StartDate 
-		{
-			get { return GetColumnValue<DateTime?>(Columns.StartDate); }
-			set { SetColumnValue(Columns.StartDate, value); }
-		}
-		  
-		[XmlAttribute("EndDate")]
-		[Bindable(true)]
-		public DateTime? EndDate 
-		{
-			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
-			set { SetColumnValue(Columns.EndDate, value); }
-		}
-		  
 		[XmlAttribute("LatitudeNorth")]
 		[Bindable(true)]
 		public double? LatitudeNorth 
@@ -604,6 +588,22 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<double?>(Columns.ElevationMaximum); }
 			set { SetColumnValue(Columns.ElevationMaximum, value); }
+		}
+		  
+		[XmlAttribute("StartDate")]
+		[Bindable(true)]
+		public DateTime? StartDate 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.StartDate); }
+			set { SetColumnValue(Columns.StartDate, value); }
+		}
+		  
+		[XmlAttribute("EndDate")]
+		[Bindable(true)]
+		public DateTime? EndDate 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.EndDate); }
+			set { SetColumnValue(Columns.EndDate, value); }
 		}
 		
 		#endregion
@@ -704,7 +704,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,DateTime? varStartDate,DateTime? varEndDate,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum)
+		public static void Insert(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -736,10 +736,6 @@ namespace SAEON.Observations.Data
 			
 			item.Variance = varVariance;
 			
-			item.StartDate = varStartDate;
-			
-			item.EndDate = varEndDate;
-			
 			item.LatitudeNorth = varLatitudeNorth;
 			
 			item.LatitudeSouth = varLatitudeSouth;
@@ -752,6 +748,10 @@ namespace SAEON.Observations.Data
 			
 			item.ElevationMaximum = varElevationMaximum;
 			
+			item.StartDate = varStartDate;
+			
+			item.EndDate = varEndDate;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -762,7 +762,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,DateTime? varStartDate,DateTime? varEndDate,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum)
+		public static void Update(Guid varId,Guid varImportBatchID,Guid varSensorID,Guid varInstrumentID,Guid varStationID,Guid varSiteID,Guid varPhenomenonOfferingID,Guid varPhenomenonUOMID,int varCount,double? varMinimum,double? varMaximum,double? varAverage,double? varStandardDeviation,double? varVariance,double? varLatitudeNorth,double? varLatitudeSouth,double? varLongitudeWest,double? varLongitudeEast,double? varElevationMinimum,double? varElevationMaximum,DateTime? varStartDate,DateTime? varEndDate)
 		{
 			ImportBatchSummary item = new ImportBatchSummary();
 			
@@ -794,10 +794,6 @@ namespace SAEON.Observations.Data
 			
 				item.Variance = varVariance;
 			
-				item.StartDate = varStartDate;
-			
-				item.EndDate = varEndDate;
-			
 				item.LatitudeNorth = varLatitudeNorth;
 			
 				item.LatitudeSouth = varLatitudeSouth;
@@ -809,6 +805,10 @@ namespace SAEON.Observations.Data
 				item.ElevationMinimum = varElevationMinimum;
 			
 				item.ElevationMaximum = varElevationMaximum;
+			
+				item.StartDate = varStartDate;
+			
+				item.EndDate = varEndDate;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -921,56 +921,56 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn StartDateColumn
+        public static TableSchema.TableColumn LatitudeNorthColumn
         {
             get { return Schema.Columns[14]; }
         }
         
         
         
-        public static TableSchema.TableColumn EndDateColumn
+        public static TableSchema.TableColumn LatitudeSouthColumn
         {
             get { return Schema.Columns[15]; }
         }
         
         
         
-        public static TableSchema.TableColumn LatitudeNorthColumn
+        public static TableSchema.TableColumn LongitudeWestColumn
         {
             get { return Schema.Columns[16]; }
         }
         
         
         
-        public static TableSchema.TableColumn LatitudeSouthColumn
+        public static TableSchema.TableColumn LongitudeEastColumn
         {
             get { return Schema.Columns[17]; }
         }
         
         
         
-        public static TableSchema.TableColumn LongitudeWestColumn
+        public static TableSchema.TableColumn ElevationMinimumColumn
         {
             get { return Schema.Columns[18]; }
         }
         
         
         
-        public static TableSchema.TableColumn LongitudeEastColumn
+        public static TableSchema.TableColumn ElevationMaximumColumn
         {
             get { return Schema.Columns[19]; }
         }
         
         
         
-        public static TableSchema.TableColumn ElevationMinimumColumn
+        public static TableSchema.TableColumn StartDateColumn
         {
             get { return Schema.Columns[20]; }
         }
         
         
         
-        public static TableSchema.TableColumn ElevationMaximumColumn
+        public static TableSchema.TableColumn EndDateColumn
         {
             get { return Schema.Columns[21]; }
         }
@@ -995,14 +995,14 @@ namespace SAEON.Observations.Data
 			 public static string Average = @"Average";
 			 public static string StandardDeviation = @"StandardDeviation";
 			 public static string Variance = @"Variance";
-			 public static string StartDate = @"StartDate";
-			 public static string EndDate = @"EndDate";
 			 public static string LatitudeNorth = @"LatitudeNorth";
 			 public static string LatitudeSouth = @"LatitudeSouth";
 			 public static string LongitudeWest = @"LongitudeWest";
 			 public static string LongitudeEast = @"LongitudeEast";
 			 public static string ElevationMinimum = @"ElevationMinimum";
 			 public static string ElevationMaximum = @"ElevationMaximum";
+			 public static string StartDate = @"StartDate";
+			 public static string EndDate = @"EndDate";
 						
 		}
 		#endregion

@@ -353,10 +353,6 @@
     <Build Include="dbo\Stored Procedures\aspnet_RegisterSchemaVersion.sql">
       <AnsiNulls>On</AnsiNulls>
     </Build>
-    <Build Include="dbo\Stored Procedures\ExecuteView.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Stored Procedures\aspnet_CheckSchemaVersion.sql">
       <AnsiNulls>On</AnsiNulls>
     </Build>

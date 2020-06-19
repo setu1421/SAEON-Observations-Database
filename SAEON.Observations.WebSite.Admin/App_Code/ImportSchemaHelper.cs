@@ -3,6 +3,7 @@
 using FileHelpers;
 using FileHelpers.Dynamic;
 using NCalc;
+using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Azure;
 using SAEON.Observations.Data;
@@ -130,9 +131,9 @@ public class ImportSchemaHelper : IDisposable
 
     private bool concatedatetime = false;
 
-    private readonly Azure Azure = new Azure();
+    private readonly ObservationsAzure Azure = new ObservationsAzure();
 
-    private bool LogBadValues = false;
+    private readonly bool LogBadValues = false;
 
     private List<string> LoadColumnNamesDelimited(DataSchema schema, string data)
     {
@@ -339,7 +340,7 @@ public class ImportSchemaHelper : IDisposable
 
             //List<object> list = engine.ReadStringAsList(data);
 
-            var fileName = $"{ds.Name}~~{DateTime.Now.ToString("yyyyMMdd HHmmss")}~~{Path.GetFileName(batch.FileName)}";
+            var fileName = $"{ds.Name}~~{DateTime.Now:yyyyMMdd HHmmss}~~{Path.GetFileName(batch.FileName)}";
             foreach (var c in Path.GetInvalidFileNameChars())
             {
                 fileName = fileName.Replace(c, '_');
@@ -1097,8 +1098,8 @@ public class ImportSchemaHelper : IDisposable
                     rowNum, trns?.Phenomenon?.Name, trns?.PhenomenonOffering?.Offering?.Name, trns?.PhenomenonOfferingID, rec?.PhenomenonOfferingID,
                     trns?.PhenomenonUOM?.UnitOfMeasure?.Unit, trns?.PhenomenonUOMID, rec?.PhenomenonUOMID, trns?.StartDate, trns?.EndDate, rec.DateValue);
 
-                bool process = trns.PhenomenonOfferingID.HasValue ? trns.PhenomenonOfferingID.Value == rec.PhenomenonOfferingID.Value : true &&
-                        trns.PhenomenonUOMID.HasValue ? trns.PhenomenonUOMID.Value == rec.PhenomenonUOMID.Value : true;
+                bool process = trns.PhenomenonOfferingID.HasValue ? trns.PhenomenonOfferingID.Value == rec.PhenomenonOfferingID.Value : false ||
+                                !trns.PhenomenonUOMID.HasValue || trns.PhenomenonUOMID.Value == rec.PhenomenonUOMID.Value;
                 if (process)
                 {
                     if (trns.StartDate.HasValue && (rec.DateValue < trns.StartDate.Value))

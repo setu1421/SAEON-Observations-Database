@@ -1,7 +1,4 @@
 ﻿using Ext.Net;
-using System;
-using System.Collections.Generic;
-using System.Data;
 
 public static class TextFieldExtensions
 {
@@ -65,49 +62,6 @@ public static class StringExtensions
             return result;
         else
             return false;
-    }
-}
-
-public static class DataRowExtensions
-{
-    public static string AsString(this DataRow dataRow, bool oneLine = true)
-    {
-        List<string> result = new List<string>();
-        foreach (DataColumn col in dataRow.Table.Columns)
-            result.Add($"{col.ColumnName}: {dataRow[col.ColumnName]}");
-        return string.Join(oneLine ? "; " : Environment.NewLine, result);
-    }
-
-    public static T GetValue<T>(this DataRow dataRow, string columnName)
-    {
-        if (dataRow.IsNull(columnName))
-            return default;
-        else
-            return (T)dataRow[columnName];
-    }
-
-    public static T SetValue<T>(this DataRow dataRow, string columnName, T value)
-    {
-        if (value == null)
-            dataRow[columnName] = DBNull.Value;
-        else
-            dataRow[columnName] = value;
-        return value;
-    }
-}
-
-public static class TimeSpanExtensions
-{
-    public static string TimeStr(this TimeSpan timeSpan)
-    {
-        if (timeSpan.Days > 0)
-            return $"{timeSpan.Days}d {timeSpan.Hours}h {timeSpan.Minutes}m {timeSpan.Seconds}.{timeSpan.Milliseconds:D3}s";
-        else if (timeSpan.Hours > 0)
-            return $"{timeSpan.Hours}h {timeSpan.Minutes}m {timeSpan.Seconds}.{timeSpan.Milliseconds:D3}s";
-        else if (timeSpan.Minutes > 0)
-            return $"{timeSpan.Minutes}m {timeSpan.Seconds}.{timeSpan.Milliseconds:D3}s";
-        else
-            return $"{timeSpan.Seconds}.{timeSpan.Milliseconds:D3}s";
     }
 }
 

@@ -3,7 +3,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <script type="text/javascript" src="../JS/ImportBatches.js"></script>
     <script type="text/javascript" src="../JS/generic.js"></script>
-    <%--<script type="text/javascript" src="../Scripts/jquery-3.2.1.js"></script>--%>
     <script type="text/javascript">
         var submitValue = function (format) {
             GridData.setValue(Ext.encode(ContentPlaceHolder1_GridFilters1.buildQuery(ContentPlaceHolder1_GridFilters1.getFilterData())));
@@ -15,13 +14,6 @@
             ImportBatchesGrid.submitData(false, { isUpload: true });
         };
     </script>
-    <style type="text/css">
-        .myTextField {
-            border: none;
-            background-image: none;
-            background-color: transparent;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <ext:Store ID="StatusStore" runat="server">
@@ -670,20 +662,31 @@
                                     </ext:Store>
                                 </Store>
                             </ext:ComboBox>
-                            <ext:FileUploadField ID="DataFileUpload" runat="server" EmptyText="Select a File"
+                            <ext:FileUploadField ID="DataFileUpload" runat="server" EmptyText="Select a File" Enabled="false"
                                 AllowBlank="false" FieldLabel="Data File" ButtonText="" Icon="Zoom" BlankText="input file is required"
                                 ClientIDMode="Static">
+                                <Listeners>
+                                    <FileSelected Handler="#{DataFileUpload}.disable();" />
+                                </Listeners>
                             </ext:FileUploadField>
                         </Items>
                         <Listeners>
-<%--                            <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);#{LogStartButton}.setDisabled(!valid);#{TestUploadButton}.setDisabled(!valid);" />--%>
-                            <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);" />
+                            <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);#{LogStartButton}.setDisabled(!valid);#{TestUploadButton}.setDisabled(!valid);" />
+                            <%--<ClientValidation Handler="#{SaveButton}.setDisabled(!valid);" />--%>
                         </Listeners>
                         <Buttons>
-<%--                             <ext:Button ID="LogStartButton" runat="server" Text="Log Start" Icon="ApplicationLightning">
-                               <Listeners>
+                            <ext:Button ID="TestCosmos" runat="server" Text="Test CosmosDB">
+                                <DirectEvents>
+                                    <Click OnEvent="TestCosmosDB" IsUpload="false" />
+                                </DirectEvents>
+                            </ext:Button>
+                            <ext:Button ID="LogStartButton" runat="server" Text="Log Start" Icon="ApplicationLightning">
+                                <%--                               <Listeners>
                                     <Click Handler="DirectCall.UploadLogging('LogStartClick'); #{DataFileUpload}.enable(); return true;" />
-                                </Listeners>
+                                </Listeners>--%>
+                                <DirectEvents>
+                                    <Click OnEvent="LogStartClick" IsUpload="false" After="#{DataFileUpload}.enable();" />
+                                </DirectEvents>
                             </ext:Button>
                             <ext:Button ID="TestUploadButton" runat="server" Text="Test Upload" Icon="ApplicationLightning">
                                 <DirectEvents>
@@ -691,12 +694,13 @@
                                         <EventMask ShowMask="true" Msg="Testing upload..." RemoveMask="true" />
                                     </Click>
                                 </DirectEvents>
-                            </ext:Button>--%>
+                            </ext:Button>
 
-                            <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept">
+                            <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept" ClientIDMode="Static">
                                 <DirectEvents>
-                                    <Click OnEvent="UploadClick" IsUpload="true" 
+                                    <Click OnEvent="UploadClick" IsUpload="true"
                                         Before="return #{BasicForm}.getForm().isValid();"
+                                        After="#{DataFileUpload}.disable();return true;"
                                         Failure="DirectCall.UploadLogging('SaveClickFailure');
                                                  Ext.Msg.show({
                                                     title   : 'Error',

@@ -4,7 +4,7 @@ using System;
 
 namespace SAEON.Observations.Azure
 {
-    public class ObservationImportBatch : AzureSubDocument
+    public class ObservationImportBatch
     {
         [JsonProperty("id")]
         public Guid Id { get; set; }
@@ -14,7 +14,7 @@ namespace SAEON.Observations.Azure
         public EpochDate Date { get; set; }
     }
 
-    public class ObservationSubDocument : AzureSubDocument
+    public class ObservationSubItem
     {
         [JsonProperty("id")]
         public Guid Id { get; set; }
@@ -24,25 +24,25 @@ namespace SAEON.Observations.Azure
         public string Name { get; set; }
     }
 
-    public class ObservationSite : ObservationSubDocument { }
+    public class ObservationSite : ObservationSubItem { }
 
-    public class ObservationStation : ObservationSubDocument { }
+    public class ObservationStation : ObservationSubItem { }
 
-    public class ObservationInstrument : ObservationSubDocument { }
+    public class ObservationInstrument : ObservationSubItem { }
 
-    public class ObservationSensor : ObservationSubDocument { }
+    public class ObservationSensor : ObservationSubItem { }
 
-    public class ObservationPhenomenon : ObservationSubDocument { }
+    public class ObservationPhenomenon : ObservationSubItem { }
 
-    public class ObservationOffering : ObservationSubDocument { }
+    public class ObservationOffering : ObservationSubItem { }
 
-    public class ObservationUnit : ObservationSubDocument { }
+    public class ObservationUnit : ObservationSubItem { }
 
-    public class ObservationStatus : ObservationSubDocument { }
+    public class ObservationStatus : ObservationSubItem { }
 
-    public class ObservationStatusReason : ObservationSubDocument { }
+    public class ObservationStatusReason : ObservationSubItem { }
 
-    public class ObservationDocument : AzureDocument
+    public class ObservationItem : CosmosDBItem
     {
         [JsonProperty("importBatchId")]
         public Guid ImportBatchId => ImportBatch?.Id ?? new Guid();

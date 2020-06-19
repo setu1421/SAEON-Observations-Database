@@ -249,117 +249,6 @@ namespace SAEON.Observations.Data
 				colvarDefinition.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarDefinition);
 				
-				TableSchema.TableColumn colvarNewPhenomenonOfferingID = new TableSchema.TableColumn(schema);
-				colvarNewPhenomenonOfferingID.ColumnName = "NewPhenomenonOfferingID";
-				colvarNewPhenomenonOfferingID.DataType = DbType.Guid;
-				colvarNewPhenomenonOfferingID.MaxLength = 0;
-				colvarNewPhenomenonOfferingID.AutoIncrement = false;
-				colvarNewPhenomenonOfferingID.IsNullable = true;
-				colvarNewPhenomenonOfferingID.IsPrimaryKey = false;
-				colvarNewPhenomenonOfferingID.IsForeignKey = true;
-				colvarNewPhenomenonOfferingID.IsReadOnly = false;
-				colvarNewPhenomenonOfferingID.DefaultSetting = @"";
-				
-					colvarNewPhenomenonOfferingID.ForeignKeyTableName = "PhenomenonOffering";
-				schema.Columns.Add(colvarNewPhenomenonOfferingID);
-				
-				TableSchema.TableColumn colvarNewPhenomenonUOMID = new TableSchema.TableColumn(schema);
-				colvarNewPhenomenonUOMID.ColumnName = "NewPhenomenonUOMID";
-				colvarNewPhenomenonUOMID.DataType = DbType.Guid;
-				colvarNewPhenomenonUOMID.MaxLength = 0;
-				colvarNewPhenomenonUOMID.AutoIncrement = false;
-				colvarNewPhenomenonUOMID.IsNullable = true;
-				colvarNewPhenomenonUOMID.IsPrimaryKey = false;
-				colvarNewPhenomenonUOMID.IsForeignKey = true;
-				colvarNewPhenomenonUOMID.IsReadOnly = false;
-				colvarNewPhenomenonUOMID.DefaultSetting = @"";
-				
-					colvarNewPhenomenonUOMID.ForeignKeyTableName = "PhenomenonUOM";
-				schema.Columns.Add(colvarNewPhenomenonUOMID);
-				
-				TableSchema.TableColumn colvarRank = new TableSchema.TableColumn(schema);
-				colvarRank.ColumnName = "Rank";
-				colvarRank.DataType = DbType.Int32;
-				colvarRank.MaxLength = 0;
-				colvarRank.AutoIncrement = false;
-				colvarRank.IsNullable = true;
-				colvarRank.IsPrimaryKey = false;
-				colvarRank.IsForeignKey = false;
-				colvarRank.IsReadOnly = false;
-				
-						colvarRank.DefaultSetting = @"((0))";
-				colvarRank.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarRank);
-				
-				TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
-				colvarSensorID.ColumnName = "SensorID";
-				colvarSensorID.DataType = DbType.Guid;
-				colvarSensorID.MaxLength = 0;
-				colvarSensorID.AutoIncrement = false;
-				colvarSensorID.IsNullable = true;
-				colvarSensorID.IsPrimaryKey = false;
-				colvarSensorID.IsForeignKey = true;
-				colvarSensorID.IsReadOnly = false;
-				colvarSensorID.DefaultSetting = @"";
-				
-					colvarSensorID.ForeignKeyTableName = "Sensor";
-				schema.Columns.Add(colvarSensorID);
-				
-				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
-				colvarUserId.ColumnName = "UserId";
-				colvarUserId.DataType = DbType.Guid;
-				colvarUserId.MaxLength = 0;
-				colvarUserId.AutoIncrement = false;
-				colvarUserId.IsNullable = true;
-				colvarUserId.IsPrimaryKey = false;
-				colvarUserId.IsForeignKey = true;
-				colvarUserId.IsReadOnly = false;
-				colvarUserId.DefaultSetting = @"";
-				
-					colvarUserId.ForeignKeyTableName = "aspnet_Users";
-				schema.Columns.Add(colvarUserId);
-				
-				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
-				colvarAddedAt.ColumnName = "AddedAt";
-				colvarAddedAt.DataType = DbType.DateTime;
-				colvarAddedAt.MaxLength = 0;
-				colvarAddedAt.AutoIncrement = false;
-				colvarAddedAt.IsNullable = true;
-				colvarAddedAt.IsPrimaryKey = false;
-				colvarAddedAt.IsForeignKey = false;
-				colvarAddedAt.IsReadOnly = false;
-				
-						colvarAddedAt.DefaultSetting = @"(getdate())";
-				colvarAddedAt.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarAddedAt);
-				
-				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
-				colvarUpdatedAt.ColumnName = "UpdatedAt";
-				colvarUpdatedAt.DataType = DbType.DateTime;
-				colvarUpdatedAt.MaxLength = 0;
-				colvarUpdatedAt.AutoIncrement = false;
-				colvarUpdatedAt.IsNullable = true;
-				colvarUpdatedAt.IsPrimaryKey = false;
-				colvarUpdatedAt.IsForeignKey = false;
-				colvarUpdatedAt.IsReadOnly = false;
-				
-						colvarUpdatedAt.DefaultSetting = @"(getdate())";
-				colvarUpdatedAt.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarUpdatedAt);
-				
-				TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
-				colvarRowVersion.ColumnName = "RowVersion";
-				colvarRowVersion.DataType = DbType.Binary;
-				colvarRowVersion.MaxLength = 0;
-				colvarRowVersion.AutoIncrement = false;
-				colvarRowVersion.IsNullable = false;
-				colvarRowVersion.IsPrimaryKey = false;
-				colvarRowVersion.IsForeignKey = false;
-				colvarRowVersion.IsReadOnly = true;
-				colvarRowVersion.DefaultSetting = @"";
-				colvarRowVersion.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarRowVersion);
-				
 				TableSchema.TableColumn colvarParamA = new TableSchema.TableColumn(schema);
 				colvarParamA.ColumnName = "ParamA";
 				colvarParamA.DataType = DbType.Double;
@@ -699,6 +588,117 @@ namespace SAEON.Observations.Data
 					colvarNewPhenomenonID.ForeignKeyTableName = "Phenomenon";
 				schema.Columns.Add(colvarNewPhenomenonID);
 				
+				TableSchema.TableColumn colvarNewPhenomenonOfferingID = new TableSchema.TableColumn(schema);
+				colvarNewPhenomenonOfferingID.ColumnName = "NewPhenomenonOfferingID";
+				colvarNewPhenomenonOfferingID.DataType = DbType.Guid;
+				colvarNewPhenomenonOfferingID.MaxLength = 0;
+				colvarNewPhenomenonOfferingID.AutoIncrement = false;
+				colvarNewPhenomenonOfferingID.IsNullable = true;
+				colvarNewPhenomenonOfferingID.IsPrimaryKey = false;
+				colvarNewPhenomenonOfferingID.IsForeignKey = true;
+				colvarNewPhenomenonOfferingID.IsReadOnly = false;
+				colvarNewPhenomenonOfferingID.DefaultSetting = @"";
+				
+					colvarNewPhenomenonOfferingID.ForeignKeyTableName = "PhenomenonOffering";
+				schema.Columns.Add(colvarNewPhenomenonOfferingID);
+				
+				TableSchema.TableColumn colvarNewPhenomenonUOMID = new TableSchema.TableColumn(schema);
+				colvarNewPhenomenonUOMID.ColumnName = "NewPhenomenonUOMID";
+				colvarNewPhenomenonUOMID.DataType = DbType.Guid;
+				colvarNewPhenomenonUOMID.MaxLength = 0;
+				colvarNewPhenomenonUOMID.AutoIncrement = false;
+				colvarNewPhenomenonUOMID.IsNullable = true;
+				colvarNewPhenomenonUOMID.IsPrimaryKey = false;
+				colvarNewPhenomenonUOMID.IsForeignKey = true;
+				colvarNewPhenomenonUOMID.IsReadOnly = false;
+				colvarNewPhenomenonUOMID.DefaultSetting = @"";
+				
+					colvarNewPhenomenonUOMID.ForeignKeyTableName = "PhenomenonUOM";
+				schema.Columns.Add(colvarNewPhenomenonUOMID);
+				
+				TableSchema.TableColumn colvarRank = new TableSchema.TableColumn(schema);
+				colvarRank.ColumnName = "Rank";
+				colvarRank.DataType = DbType.Int32;
+				colvarRank.MaxLength = 0;
+				colvarRank.AutoIncrement = false;
+				colvarRank.IsNullable = true;
+				colvarRank.IsPrimaryKey = false;
+				colvarRank.IsForeignKey = false;
+				colvarRank.IsReadOnly = false;
+				
+						colvarRank.DefaultSetting = @"((0))";
+				colvarRank.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarRank);
+				
+				TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
+				colvarSensorID.ColumnName = "SensorID";
+				colvarSensorID.DataType = DbType.Guid;
+				colvarSensorID.MaxLength = 0;
+				colvarSensorID.AutoIncrement = false;
+				colvarSensorID.IsNullable = true;
+				colvarSensorID.IsPrimaryKey = false;
+				colvarSensorID.IsForeignKey = true;
+				colvarSensorID.IsReadOnly = false;
+				colvarSensorID.DefaultSetting = @"";
+				
+					colvarSensorID.ForeignKeyTableName = "Sensor";
+				schema.Columns.Add(colvarSensorID);
+				
+				TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
+				colvarUserId.ColumnName = "UserId";
+				colvarUserId.DataType = DbType.Guid;
+				colvarUserId.MaxLength = 0;
+				colvarUserId.AutoIncrement = false;
+				colvarUserId.IsNullable = true;
+				colvarUserId.IsPrimaryKey = false;
+				colvarUserId.IsForeignKey = true;
+				colvarUserId.IsReadOnly = false;
+				colvarUserId.DefaultSetting = @"";
+				
+					colvarUserId.ForeignKeyTableName = "aspnet_Users";
+				schema.Columns.Add(colvarUserId);
+				
+				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+				colvarAddedAt.ColumnName = "AddedAt";
+				colvarAddedAt.DataType = DbType.DateTime;
+				colvarAddedAt.MaxLength = 0;
+				colvarAddedAt.AutoIncrement = false;
+				colvarAddedAt.IsNullable = true;
+				colvarAddedAt.IsPrimaryKey = false;
+				colvarAddedAt.IsForeignKey = false;
+				colvarAddedAt.IsReadOnly = false;
+				
+						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarAddedAt);
+				
+				TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+				colvarUpdatedAt.ColumnName = "UpdatedAt";
+				colvarUpdatedAt.DataType = DbType.DateTime;
+				colvarUpdatedAt.MaxLength = 0;
+				colvarUpdatedAt.AutoIncrement = false;
+				colvarUpdatedAt.IsNullable = true;
+				colvarUpdatedAt.IsPrimaryKey = false;
+				colvarUpdatedAt.IsForeignKey = false;
+				colvarUpdatedAt.IsReadOnly = false;
+				
+						colvarUpdatedAt.DefaultSetting = @"(getdate())";
+				colvarUpdatedAt.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarUpdatedAt);
+				
+				TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
+				colvarRowVersion.ColumnName = "RowVersion";
+				colvarRowVersion.DataType = DbType.Binary;
+				colvarRowVersion.MaxLength = 0;
+				colvarRowVersion.AutoIncrement = false;
+				colvarRowVersion.IsNullable = false;
+				colvarRowVersion.IsPrimaryKey = false;
+				colvarRowVersion.IsForeignKey = false;
+				colvarRowVersion.IsReadOnly = true;
+				colvarRowVersion.DefaultSetting = @"";
+				colvarRowVersion.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarRowVersion);
+				
 				BaseSchema = schema;
 				//add this schema to the provider
 				//so we can query it later
@@ -779,70 +779,6 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<string>(Columns.Definition); }
 			set { SetColumnValue(Columns.Definition, value); }
-		}
-		  
-		[XmlAttribute("NewPhenomenonOfferingID")]
-		[Bindable(true)]
-		public Guid? NewPhenomenonOfferingID 
-		{
-			get { return GetColumnValue<Guid?>(Columns.NewPhenomenonOfferingID); }
-			set { SetColumnValue(Columns.NewPhenomenonOfferingID, value); }
-		}
-		  
-		[XmlAttribute("NewPhenomenonUOMID")]
-		[Bindable(true)]
-		public Guid? NewPhenomenonUOMID 
-		{
-			get { return GetColumnValue<Guid?>(Columns.NewPhenomenonUOMID); }
-			set { SetColumnValue(Columns.NewPhenomenonUOMID, value); }
-		}
-		  
-		[XmlAttribute("Rank")]
-		[Bindable(true)]
-		public int? Rank 
-		{
-			get { return GetColumnValue<int?>(Columns.Rank); }
-			set { SetColumnValue(Columns.Rank, value); }
-		}
-		  
-		[XmlAttribute("SensorID")]
-		[Bindable(true)]
-		public Guid? SensorID 
-		{
-			get { return GetColumnValue<Guid?>(Columns.SensorID); }
-			set { SetColumnValue(Columns.SensorID, value); }
-		}
-		  
-		[XmlAttribute("UserId")]
-		[Bindable(true)]
-		public Guid? UserId 
-		{
-			get { return GetColumnValue<Guid?>(Columns.UserId); }
-			set { SetColumnValue(Columns.UserId, value); }
-		}
-		  
-		[XmlAttribute("AddedAt")]
-		[Bindable(true)]
-		public DateTime? AddedAt 
-		{
-			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
-			set { SetColumnValue(Columns.AddedAt, value); }
-		}
-		  
-		[XmlAttribute("UpdatedAt")]
-		[Bindable(true)]
-		public DateTime? UpdatedAt 
-		{
-			get { return GetColumnValue<DateTime?>(Columns.UpdatedAt); }
-			set { SetColumnValue(Columns.UpdatedAt, value); }
-		}
-		  
-		[XmlAttribute("RowVersion")]
-		[Bindable(true)]
-		public byte[] RowVersion 
-		{
-			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
-			set { SetColumnValue(Columns.RowVersion, value); }
 		}
 		  
 		[XmlAttribute("ParamA")]
@@ -1052,6 +988,70 @@ namespace SAEON.Observations.Data
 			get { return GetColumnValue<Guid?>(Columns.NewPhenomenonID); }
 			set { SetColumnValue(Columns.NewPhenomenonID, value); }
 		}
+		  
+		[XmlAttribute("NewPhenomenonOfferingID")]
+		[Bindable(true)]
+		public Guid? NewPhenomenonOfferingID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.NewPhenomenonOfferingID); }
+			set { SetColumnValue(Columns.NewPhenomenonOfferingID, value); }
+		}
+		  
+		[XmlAttribute("NewPhenomenonUOMID")]
+		[Bindable(true)]
+		public Guid? NewPhenomenonUOMID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.NewPhenomenonUOMID); }
+			set { SetColumnValue(Columns.NewPhenomenonUOMID, value); }
+		}
+		  
+		[XmlAttribute("Rank")]
+		[Bindable(true)]
+		public int? Rank 
+		{
+			get { return GetColumnValue<int?>(Columns.Rank); }
+			set { SetColumnValue(Columns.Rank, value); }
+		}
+		  
+		[XmlAttribute("SensorID")]
+		[Bindable(true)]
+		public Guid? SensorID 
+		{
+			get { return GetColumnValue<Guid?>(Columns.SensorID); }
+			set { SetColumnValue(Columns.SensorID, value); }
+		}
+		  
+		[XmlAttribute("UserId")]
+		[Bindable(true)]
+		public Guid? UserId 
+		{
+			get { return GetColumnValue<Guid?>(Columns.UserId); }
+			set { SetColumnValue(Columns.UserId, value); }
+		}
+		  
+		[XmlAttribute("AddedAt")]
+		[Bindable(true)]
+		public DateTime? AddedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.AddedAt); }
+			set { SetColumnValue(Columns.AddedAt, value); }
+		}
+		  
+		[XmlAttribute("UpdatedAt")]
+		[Bindable(true)]
+		public DateTime? UpdatedAt 
+		{
+			get { return GetColumnValue<DateTime?>(Columns.UpdatedAt); }
+			set { SetColumnValue(Columns.UpdatedAt, value); }
+		}
+		  
+		[XmlAttribute("RowVersion")]
+		[Bindable(true)]
+		public byte[] RowVersion 
+		{
+			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
+			set { SetColumnValue(Columns.RowVersion, value); }
+		}
 		
 		#endregion
 		
@@ -1200,7 +1200,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,double? varParamA,double? varParamB,double? varParamC,double? varParamD,double? varParamE,double? varParamF,double? varParamG,double? varParamH,double? varParamI,double? varParamJ,double? varParamK,double? varParamL,double? varParamM,double? varParamN,double? varParamO,double? varParamP,double? varParamQ,double? varParamR,double? varParamSX,double? varParamT,double? varParamU,double? varParamV,double? varParamW,double? varParamX,double? varParamY,Guid? varNewPhenomenonID)
+		public static void Insert(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,double? varParamA,double? varParamB,double? varParamC,double? varParamD,double? varParamE,double? varParamF,double? varParamG,double? varParamH,double? varParamI,double? varParamJ,double? varParamK,double? varParamL,double? varParamM,double? varParamN,double? varParamO,double? varParamP,double? varParamQ,double? varParamR,double? varParamSX,double? varParamT,double? varParamU,double? varParamV,double? varParamW,double? varParamX,double? varParamY,Guid? varNewPhenomenonID,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -1221,22 +1221,6 @@ namespace SAEON.Observations.Data
 			item.DataSourceID = varDataSourceID;
 			
 			item.Definition = varDefinition;
-			
-			item.NewPhenomenonOfferingID = varNewPhenomenonOfferingID;
-			
-			item.NewPhenomenonUOMID = varNewPhenomenonUOMID;
-			
-			item.Rank = varRank;
-			
-			item.SensorID = varSensorID;
-			
-			item.UserId = varUserId;
-			
-			item.AddedAt = varAddedAt;
-			
-			item.UpdatedAt = varUpdatedAt;
-			
-			item.RowVersion = varRowVersion;
 			
 			item.ParamA = varParamA;
 			
@@ -1290,6 +1274,22 @@ namespace SAEON.Observations.Data
 			
 			item.NewPhenomenonID = varNewPhenomenonID;
 			
+			item.NewPhenomenonOfferingID = varNewPhenomenonOfferingID;
+			
+			item.NewPhenomenonUOMID = varNewPhenomenonUOMID;
+			
+			item.Rank = varRank;
+			
+			item.SensorID = varSensorID;
+			
+			item.UserId = varUserId;
+			
+			item.AddedAt = varAddedAt;
+			
+			item.UpdatedAt = varUpdatedAt;
+			
+			item.RowVersion = varRowVersion;
+			
 		
 			if (System.Web.HttpContext.Current != null)
 				item.Save(System.Web.HttpContext.Current.User.Identity.Name);
@@ -1300,7 +1300,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,double? varParamA,double? varParamB,double? varParamC,double? varParamD,double? varParamE,double? varParamF,double? varParamG,double? varParamH,double? varParamI,double? varParamJ,double? varParamK,double? varParamL,double? varParamM,double? varParamN,double? varParamO,double? varParamP,double? varParamQ,double? varParamR,double? varParamSX,double? varParamT,double? varParamU,double? varParamV,double? varParamW,double? varParamX,double? varParamY,Guid? varNewPhenomenonID)
+		public static void Update(Guid varId,Guid varTransformationTypeID,Guid varPhenomenonID,Guid? varPhenomenonOfferingID,Guid? varPhenomenonUOMID,DateTime? varStartDate,DateTime? varEndDate,Guid varDataSourceID,string varDefinition,double? varParamA,double? varParamB,double? varParamC,double? varParamD,double? varParamE,double? varParamF,double? varParamG,double? varParamH,double? varParamI,double? varParamJ,double? varParamK,double? varParamL,double? varParamM,double? varParamN,double? varParamO,double? varParamP,double? varParamQ,double? varParamR,double? varParamSX,double? varParamT,double? varParamU,double? varParamV,double? varParamW,double? varParamX,double? varParamY,Guid? varNewPhenomenonID,Guid? varNewPhenomenonOfferingID,Guid? varNewPhenomenonUOMID,int? varRank,Guid? varSensorID,Guid? varUserId,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			DataSourceTransformation item = new DataSourceTransformation();
 			
@@ -1321,22 +1321,6 @@ namespace SAEON.Observations.Data
 				item.DataSourceID = varDataSourceID;
 			
 				item.Definition = varDefinition;
-			
-				item.NewPhenomenonOfferingID = varNewPhenomenonOfferingID;
-			
-				item.NewPhenomenonUOMID = varNewPhenomenonUOMID;
-			
-				item.Rank = varRank;
-			
-				item.SensorID = varSensorID;
-			
-				item.UserId = varUserId;
-			
-				item.AddedAt = varAddedAt;
-			
-				item.UpdatedAt = varUpdatedAt;
-			
-				item.RowVersion = varRowVersion;
 			
 				item.ParamA = varParamA;
 			
@@ -1389,6 +1373,22 @@ namespace SAEON.Observations.Data
 				item.ParamY = varParamY;
 			
 				item.NewPhenomenonID = varNewPhenomenonID;
+			
+				item.NewPhenomenonOfferingID = varNewPhenomenonOfferingID;
+			
+				item.NewPhenomenonUOMID = varNewPhenomenonUOMID;
+			
+				item.Rank = varRank;
+			
+				item.SensorID = varSensorID;
+			
+				item.UserId = varUserId;
+			
+				item.AddedAt = varAddedAt;
+			
+				item.UpdatedAt = varUpdatedAt;
+			
+				item.RowVersion = varRowVersion;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -1466,238 +1466,238 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn NewPhenomenonOfferingIDColumn
+        public static TableSchema.TableColumn ParamAColumn
         {
             get { return Schema.Columns[9]; }
         }
         
         
         
-        public static TableSchema.TableColumn NewPhenomenonUOMIDColumn
+        public static TableSchema.TableColumn ParamBColumn
         {
             get { return Schema.Columns[10]; }
         }
         
         
         
-        public static TableSchema.TableColumn RankColumn
+        public static TableSchema.TableColumn ParamCColumn
         {
             get { return Schema.Columns[11]; }
         }
         
         
         
-        public static TableSchema.TableColumn SensorIDColumn
+        public static TableSchema.TableColumn ParamDColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn UserIdColumn
+        public static TableSchema.TableColumn ParamEColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn ParamFColumn
         {
             get { return Schema.Columns[14]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn ParamGColumn
         {
             get { return Schema.Columns[15]; }
         }
         
         
         
-        public static TableSchema.TableColumn RowVersionColumn
+        public static TableSchema.TableColumn ParamHColumn
         {
             get { return Schema.Columns[16]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamAColumn
+        public static TableSchema.TableColumn ParamIColumn
         {
             get { return Schema.Columns[17]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamBColumn
+        public static TableSchema.TableColumn ParamJColumn
         {
             get { return Schema.Columns[18]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamCColumn
+        public static TableSchema.TableColumn ParamKColumn
         {
             get { return Schema.Columns[19]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamDColumn
+        public static TableSchema.TableColumn ParamLColumn
         {
             get { return Schema.Columns[20]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamEColumn
+        public static TableSchema.TableColumn ParamMColumn
         {
             get { return Schema.Columns[21]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamFColumn
+        public static TableSchema.TableColumn ParamNColumn
         {
             get { return Schema.Columns[22]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamGColumn
+        public static TableSchema.TableColumn ParamOColumn
         {
             get { return Schema.Columns[23]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamHColumn
+        public static TableSchema.TableColumn ParamPColumn
         {
             get { return Schema.Columns[24]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamIColumn
+        public static TableSchema.TableColumn ParamQColumn
         {
             get { return Schema.Columns[25]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamJColumn
+        public static TableSchema.TableColumn ParamRColumn
         {
             get { return Schema.Columns[26]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamKColumn
+        public static TableSchema.TableColumn ParamSXColumn
         {
             get { return Schema.Columns[27]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamLColumn
+        public static TableSchema.TableColumn ParamTColumn
         {
             get { return Schema.Columns[28]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamMColumn
+        public static TableSchema.TableColumn ParamUColumn
         {
             get { return Schema.Columns[29]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamNColumn
+        public static TableSchema.TableColumn ParamVColumn
         {
             get { return Schema.Columns[30]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamOColumn
+        public static TableSchema.TableColumn ParamWColumn
         {
             get { return Schema.Columns[31]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamPColumn
+        public static TableSchema.TableColumn ParamXColumn
         {
             get { return Schema.Columns[32]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamQColumn
+        public static TableSchema.TableColumn ParamYColumn
         {
             get { return Schema.Columns[33]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamRColumn
+        public static TableSchema.TableColumn NewPhenomenonIDColumn
         {
             get { return Schema.Columns[34]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamSXColumn
+        public static TableSchema.TableColumn NewPhenomenonOfferingIDColumn
         {
             get { return Schema.Columns[35]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamTColumn
+        public static TableSchema.TableColumn NewPhenomenonUOMIDColumn
         {
             get { return Schema.Columns[36]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamUColumn
+        public static TableSchema.TableColumn RankColumn
         {
             get { return Schema.Columns[37]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamVColumn
+        public static TableSchema.TableColumn SensorIDColumn
         {
             get { return Schema.Columns[38]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamWColumn
+        public static TableSchema.TableColumn UserIdColumn
         {
             get { return Schema.Columns[39]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamXColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[40]; }
         }
         
         
         
-        public static TableSchema.TableColumn ParamYColumn
+        public static TableSchema.TableColumn UpdatedAtColumn
         {
             get { return Schema.Columns[41]; }
         }
         
         
         
-        public static TableSchema.TableColumn NewPhenomenonIDColumn
+        public static TableSchema.TableColumn RowVersionColumn
         {
             get { return Schema.Columns[42]; }
         }
@@ -1717,14 +1717,6 @@ namespace SAEON.Observations.Data
 			 public static string EndDate = @"EndDate";
 			 public static string DataSourceID = @"DataSourceID";
 			 public static string Definition = @"Definition";
-			 public static string NewPhenomenonOfferingID = @"NewPhenomenonOfferingID";
-			 public static string NewPhenomenonUOMID = @"NewPhenomenonUOMID";
-			 public static string Rank = @"Rank";
-			 public static string SensorID = @"SensorID";
-			 public static string UserId = @"UserId";
-			 public static string AddedAt = @"AddedAt";
-			 public static string UpdatedAt = @"UpdatedAt";
-			 public static string RowVersion = @"RowVersion";
 			 public static string ParamA = @"ParamA";
 			 public static string ParamB = @"ParamB";
 			 public static string ParamC = @"ParamC";
@@ -1751,6 +1743,14 @@ namespace SAEON.Observations.Data
 			 public static string ParamX = @"ParamX";
 			 public static string ParamY = @"ParamY";
 			 public static string NewPhenomenonID = @"NewPhenomenonID";
+			 public static string NewPhenomenonOfferingID = @"NewPhenomenonOfferingID";
+			 public static string NewPhenomenonUOMID = @"NewPhenomenonUOMID";
+			 public static string Rank = @"Rank";
+			 public static string SensorID = @"SensorID";
+			 public static string UserId = @"UserId";
+			 public static string AddedAt = @"AddedAt";
+			 public static string UpdatedAt = @"UpdatedAt";
+			 public static string RowVersion = @"RowVersion";
 						
 		}
 		#endregion

@@ -9,12 +9,16 @@
     <Description>SAEON Observations - Azure</Description>
     <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.105</Version>
+    <Version>1.0.133</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.122" />
-    <PackageReference Include="SAEON.Azure.Storage" Version="1.0.58" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SAEON.Azure.CosmosDB" Version="1.0.146" />
+    <PackageReference Include="SAEON.Azure.Storage" Version="1.0.62" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

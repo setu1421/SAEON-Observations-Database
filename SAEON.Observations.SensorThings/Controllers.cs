@@ -19,7 +19,7 @@ namespace SAEON.Observations.SensorThings
         public const int MaxTop = 500;
         public const int MaxAll = 10000;
         private db.ObservationsDbContext dbContext = null;
-        protected db.ObservationsDbContext DbContext => dbContext ?? (dbContext = new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request)));
+        protected db.ObservationsDbContext DbContext => dbContext ??= new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
         protected IMapper Mapper { get; private set; } = null;
 
         protected SensorThingsGuidIdController() : base()
@@ -522,8 +522,8 @@ namespace SAEON.Observations.SensorThings
         public const int PageSize = 25;
         public const int MaxTop = 500;
         public const int MaxAll = 10000;
-        private db.ObservationsDbContext dbContext = null;
-        protected db.ObservationsDbContext DbContext => (dbContext != null) ? dbContext : new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
+        private readonly db.ObservationsDbContext dbContext = null;
+        protected db.ObservationsDbContext DbContext => dbContext ?? new db.ObservationsDbContext(TenantAuthorizationAttribute.GetTenantFromHeaders(Request));
         protected IMapper Mapper { get; private set; } = null;
 
         protected SensorThingsIntIdController() : base()

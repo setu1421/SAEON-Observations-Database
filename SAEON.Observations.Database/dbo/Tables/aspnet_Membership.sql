@@ -20,16 +20,16 @@
     [FailedPasswordAnswerAttemptCount]       INT              NOT NULL,
     [FailedPasswordAnswerAttemptWindowStart] DATETIME         NOT NULL,
     [Comment]                                NTEXT            NULL,
-    CONSTRAINT [PK_aspnet_Membership] PRIMARY KEY NONCLUSTERED ([UserId]) ON [Primary],
+    CONSTRAINT [PK_aspnet_Membership] PRIMARY KEY NONCLUSTERED ([UserId]) ON [PRIMARY],
     FOREIGN KEY ([ApplicationId]) REFERENCES [dbo].[aspnet_Applications] ([ApplicationId]),
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 )
-  ON [Primary];
+  ON [PRIMARY];
 
 GO
 EXECUTE sp_tableoption @TableNamePattern = N'[dbo].[aspnet_Membership]', @OptionName = N'text in row', @OptionValue = N'3000';
 
 
 GO
-CREATE CLUSTERED INDEX [aspnet_Membership_index] ON [dbo].[aspnet_Membership]([ApplicationId] ASC, [LoweredEmail]) ON [Primary];
+CREATE CLUSTERED INDEX [aspnet_Membership_index] ON [dbo].[aspnet_Membership]([ApplicationId] ASC, [LoweredEmail]) ON [PRIMARY];
 

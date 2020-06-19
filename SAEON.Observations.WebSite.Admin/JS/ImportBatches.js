@@ -1,4 +1,5 @@
-﻿function ImportBatchRowSelect(e, record) {
+﻿
+function ImportBatchRowSelect(e, record) {
     if (tpCenter.isVisible()) {
         DataLogGrid.getStore().reload();
         SummaryGrid.getStore().reload();

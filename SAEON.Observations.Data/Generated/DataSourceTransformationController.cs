@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime? StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int? Rank,Guid? SensorID,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,double? ParamA,double? ParamB,double? ParamC,double? ParamD,double? ParamE,double? ParamF,double? ParamG,double? ParamH,double? ParamI,double? ParamJ,double? ParamK,double? ParamL,double? ParamM,double? ParamN,double? ParamO,double? ParamP,double? ParamQ,double? ParamR,double? ParamSX,double? ParamT,double? ParamU,double? ParamV,double? ParamW,double? ParamX,double? ParamY,Guid? NewPhenomenonID)
+	    public void Insert(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime? StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,double? ParamA,double? ParamB,double? ParamC,double? ParamD,double? ParamE,double? ParamF,double? ParamG,double? ParamH,double? ParamI,double? ParamJ,double? ParamK,double? ParamL,double? ParamM,double? ParamN,double? ParamO,double? ParamP,double? ParamQ,double? ParamR,double? ParamSX,double? ParamT,double? ParamU,double? ParamV,double? ParamW,double? ParamX,double? ParamY,Guid? NewPhenomenonID,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int? Rank,Guid? SensorID,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    DataSourceTransformation item = new DataSourceTransformation();
 		    
@@ -101,22 +101,6 @@ namespace SAEON.Observations.Data
             item.DataSourceID = DataSourceID;
             
             item.Definition = Definition;
-            
-            item.NewPhenomenonOfferingID = NewPhenomenonOfferingID;
-            
-            item.NewPhenomenonUOMID = NewPhenomenonUOMID;
-            
-            item.Rank = Rank;
-            
-            item.SensorID = SensorID;
-            
-            item.UserId = UserId;
-            
-            item.AddedAt = AddedAt;
-            
-            item.UpdatedAt = UpdatedAt;
-            
-            item.RowVersion = RowVersion;
             
             item.ParamA = ParamA;
             
@@ -170,6 +154,22 @@ namespace SAEON.Observations.Data
             
             item.NewPhenomenonID = NewPhenomenonID;
             
+            item.NewPhenomenonOfferingID = NewPhenomenonOfferingID;
+            
+            item.NewPhenomenonUOMID = NewPhenomenonUOMID;
+            
+            item.Rank = Rank;
+            
+            item.SensorID = SensorID;
+            
+            item.UserId = UserId;
+            
+            item.AddedAt = AddedAt;
+            
+            item.UpdatedAt = UpdatedAt;
+            
+            item.RowVersion = RowVersion;
+            
 	    
 		    item.Save(UserName);
 	    }
@@ -178,7 +178,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime? StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int? Rank,Guid? SensorID,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,double? ParamA,double? ParamB,double? ParamC,double? ParamD,double? ParamE,double? ParamF,double? ParamG,double? ParamH,double? ParamI,double? ParamJ,double? ParamK,double? ParamL,double? ParamM,double? ParamN,double? ParamO,double? ParamP,double? ParamQ,double? ParamR,double? ParamSX,double? ParamT,double? ParamU,double? ParamV,double? ParamW,double? ParamX,double? ParamY,Guid? NewPhenomenonID)
+	    public void Update(Guid Id,Guid TransformationTypeID,Guid PhenomenonID,Guid? PhenomenonOfferingID,Guid? PhenomenonUOMID,DateTime? StartDate,DateTime? EndDate,Guid DataSourceID,string Definition,double? ParamA,double? ParamB,double? ParamC,double? ParamD,double? ParamE,double? ParamF,double? ParamG,double? ParamH,double? ParamI,double? ParamJ,double? ParamK,double? ParamL,double? ParamM,double? ParamN,double? ParamO,double? ParamP,double? ParamQ,double? ParamR,double? ParamSX,double? ParamT,double? ParamU,double? ParamV,double? ParamW,double? ParamX,double? ParamY,Guid? NewPhenomenonID,Guid? NewPhenomenonOfferingID,Guid? NewPhenomenonUOMID,int? Rank,Guid? SensorID,Guid? UserId,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    DataSourceTransformation item = new DataSourceTransformation();
 	        item.MarkOld();
@@ -201,22 +201,6 @@ namespace SAEON.Observations.Data
 			item.DataSourceID = DataSourceID;
 				
 			item.Definition = Definition;
-				
-			item.NewPhenomenonOfferingID = NewPhenomenonOfferingID;
-				
-			item.NewPhenomenonUOMID = NewPhenomenonUOMID;
-				
-			item.Rank = Rank;
-				
-			item.SensorID = SensorID;
-				
-			item.UserId = UserId;
-				
-			item.AddedAt = AddedAt;
-				
-			item.UpdatedAt = UpdatedAt;
-				
-			item.RowVersion = RowVersion;
 				
 			item.ParamA = ParamA;
 				
@@ -269,6 +253,22 @@ namespace SAEON.Observations.Data
 			item.ParamY = ParamY;
 				
 			item.NewPhenomenonID = NewPhenomenonID;
+				
+			item.NewPhenomenonOfferingID = NewPhenomenonOfferingID;
+				
+			item.NewPhenomenonUOMID = NewPhenomenonUOMID;
+				
+			item.Rank = Rank;
+				
+			item.SensorID = SensorID;
+				
+			item.UserId = UserId;
+				
+			item.AddedAt = AddedAt;
+				
+			item.UpdatedAt = UpdatedAt;
+				
+			item.RowVersion = RowVersion;
 				
 	        item.Save(UserName);
 	    }

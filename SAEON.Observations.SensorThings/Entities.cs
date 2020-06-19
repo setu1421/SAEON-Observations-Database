@@ -54,7 +54,7 @@ namespace SAEON.Observations.SensorThings
 
         public override string ToString()
         {
-            return $"{_start.ToString("o")}/{_end.ToString("o")}";
+            return $"{_start:o}/{_end:o}";
         }
     }
 

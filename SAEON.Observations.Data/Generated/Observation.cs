@@ -298,8 +298,7 @@ namespace SAEON.Observations.Data
 				colvarAddedDate.IsPrimaryKey = false;
 				colvarAddedDate.IsForeignKey = false;
 				colvarAddedDate.IsReadOnly = false;
-				
-						colvarAddedDate.DefaultSetting = @"(getdate())";
+				colvarAddedDate.DefaultSetting = @"";
 				colvarAddedDate.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarAddedDate);
 				
@@ -312,8 +311,7 @@ namespace SAEON.Observations.Data
 				colvarAddedAt.IsPrimaryKey = false;
 				colvarAddedAt.IsForeignKey = false;
 				colvarAddedAt.IsReadOnly = false;
-				
-						colvarAddedAt.DefaultSetting = @"(getdate())";
+				colvarAddedAt.DefaultSetting = @"";
 				colvarAddedAt.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarAddedAt);
 				
@@ -326,8 +324,7 @@ namespace SAEON.Observations.Data
 				colvarUpdatedAt.IsPrimaryKey = false;
 				colvarUpdatedAt.IsForeignKey = false;
 				colvarUpdatedAt.IsReadOnly = false;
-				
-						colvarUpdatedAt.DefaultSetting = @"(getdate())";
+				colvarUpdatedAt.DefaultSetting = @"";
 				colvarUpdatedAt.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarUpdatedAt);
 				

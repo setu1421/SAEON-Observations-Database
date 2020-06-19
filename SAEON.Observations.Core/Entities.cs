@@ -63,8 +63,10 @@ namespace SAEON.Observations.Core.Entities
                     return null;
                 else
                 {
-                    var result = new Dictionary<string, string>();
-                    result.Add("Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}");
+                    var result = new Dictionary<string, string>
+                    {
+                        { "Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}" }
+                    };
                     foreach (var link in Links.OrderBy(i => i))
                     {
                         result.Add(link, $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}/{link}");
@@ -101,8 +103,10 @@ namespace SAEON.Observations.Core.Entities
                     return null;
                 else
                 {
-                    var result = new Dictionary<string, string>();
-                    result.Add("Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}");
+                    var result = new Dictionary<string, string>
+                    {
+                        { "Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}" }
+                    };
                     foreach (var link in Links.OrderBy(i => i))
                     {
                         result.Add(link, $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}/{link}");
@@ -139,8 +143,10 @@ namespace SAEON.Observations.Core.Entities
                     return null;
                 else
                 {
-                    var result = new Dictionary<string, string>();
-                    result.Add("Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}");
+                    var result = new Dictionary<string, string>
+                    {
+                        { "Self", $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}" }
+                    };
                     foreach (var link in Links.OrderBy(i => i))
                     {
                         result.Add(link, $"{EntityConfig.BaseUrl}/{EntitySetName}/{Id}/{link}");
