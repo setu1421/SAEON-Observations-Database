@@ -288,6 +288,19 @@ namespace SAEON.Observations.Data
 				colvarIssues.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarIssues);
 				
+				TableSchema.TableColumn colvarDurationInSecs = new TableSchema.TableColumn(schema);
+				colvarDurationInSecs.ColumnName = "DurationInSecs";
+				colvarDurationInSecs.DataType = DbType.Int32;
+				colvarDurationInSecs.MaxLength = 0;
+				colvarDurationInSecs.AutoIncrement = false;
+				colvarDurationInSecs.IsNullable = true;
+				colvarDurationInSecs.IsPrimaryKey = false;
+				colvarDurationInSecs.IsForeignKey = false;
+				colvarDurationInSecs.IsReadOnly = false;
+				colvarDurationInSecs.DefaultSetting = @"";
+				colvarDurationInSecs.ForeignKeyTableName = "";
+				schema.Columns.Add(colvarDurationInSecs);
+				
 				TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
 				colvarAddedAt.ColumnName = "AddedAt";
 				colvarAddedAt.DataType = DbType.DateTime;
@@ -328,19 +341,6 @@ namespace SAEON.Observations.Data
 				colvarRowVersion.DefaultSetting = @"";
 				colvarRowVersion.ForeignKeyTableName = "";
 				schema.Columns.Add(colvarRowVersion);
-				
-				TableSchema.TableColumn colvarDurationInSecs = new TableSchema.TableColumn(schema);
-				colvarDurationInSecs.ColumnName = "DurationInSecs";
-				colvarDurationInSecs.DataType = DbType.Int32;
-				colvarDurationInSecs.MaxLength = 0;
-				colvarDurationInSecs.AutoIncrement = false;
-				colvarDurationInSecs.IsNullable = true;
-				colvarDurationInSecs.IsPrimaryKey = false;
-				colvarDurationInSecs.IsForeignKey = false;
-				colvarDurationInSecs.IsReadOnly = false;
-				colvarDurationInSecs.DefaultSetting = @"";
-				colvarDurationInSecs.ForeignKeyTableName = "";
-				schema.Columns.Add(colvarDurationInSecs);
 				
 				BaseSchema = schema;
 				//add this schema to the provider
@@ -448,6 +448,14 @@ namespace SAEON.Observations.Data
 			set { SetColumnValue(Columns.Issues, value); }
 		}
 		  
+		[XmlAttribute("DurationInSecs")]
+		[Bindable(true)]
+		public int? DurationInSecs 
+		{
+			get { return GetColumnValue<int?>(Columns.DurationInSecs); }
+			set { SetColumnValue(Columns.DurationInSecs, value); }
+		}
+		  
 		[XmlAttribute("AddedAt")]
 		[Bindable(true)]
 		public DateTime? AddedAt 
@@ -470,14 +478,6 @@ namespace SAEON.Observations.Data
 		{
 			get { return GetColumnValue<byte[]>(Columns.RowVersion); }
 			set { SetColumnValue(Columns.RowVersion, value); }
-		}
-		  
-		[XmlAttribute("DurationInSecs")]
-		[Bindable(true)]
-		public int? DurationInSecs 
-		{
-			get { return GetColumnValue<int?>(Columns.DurationInSecs); }
-			set { SetColumnValue(Columns.DurationInSecs, value); }
 		}
 		
 		#endregion
@@ -569,7 +569,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Inserts a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Insert(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varIssues,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,int? varDurationInSecs)
+		public static void Insert(Guid varId,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varIssues,int? varDurationInSecs,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -595,13 +595,13 @@ namespace SAEON.Observations.Data
 			
 			item.Issues = varIssues;
 			
+			item.DurationInSecs = varDurationInSecs;
+			
 			item.AddedAt = varAddedAt;
 			
 			item.UpdatedAt = varUpdatedAt;
 			
 			item.RowVersion = varRowVersion;
-			
-			item.DurationInSecs = varDurationInSecs;
 			
 		
 			if (System.Web.HttpContext.Current != null)
@@ -613,7 +613,7 @@ namespace SAEON.Observations.Data
 		/// <summary>
 		/// Updates a record, can be used with the Object Data Source
 		/// </summary>
-		public static void Update(Guid varId,int varCode,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varIssues,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion,int? varDurationInSecs)
+		public static void Update(Guid varId,int varCode,Guid varDataSourceID,DateTime varImportDate,int varStatus,Guid varUserId,string varFileName,string varLogFileName,string varComment,Guid? varStatusID,Guid? varStatusReasonID,string varIssues,int? varDurationInSecs,DateTime? varAddedAt,DateTime? varUpdatedAt,byte[] varRowVersion)
 		{
 			ImportBatch item = new ImportBatch();
 			
@@ -641,13 +641,13 @@ namespace SAEON.Observations.Data
 			
 				item.Issues = varIssues;
 			
+				item.DurationInSecs = varDurationInSecs;
+			
 				item.AddedAt = varAddedAt;
 			
 				item.UpdatedAt = varUpdatedAt;
 			
 				item.RowVersion = varRowVersion;
-			
-				item.DurationInSecs = varDurationInSecs;
 			
 			item.IsNew = false;
 			if (System.Web.HttpContext.Current != null)
@@ -746,28 +746,28 @@ namespace SAEON.Observations.Data
         
         
         
-        public static TableSchema.TableColumn AddedAtColumn
+        public static TableSchema.TableColumn DurationInSecsColumn
         {
             get { return Schema.Columns[12]; }
         }
         
         
         
-        public static TableSchema.TableColumn UpdatedAtColumn
+        public static TableSchema.TableColumn AddedAtColumn
         {
             get { return Schema.Columns[13]; }
         }
         
         
         
-        public static TableSchema.TableColumn RowVersionColumn
+        public static TableSchema.TableColumn UpdatedAtColumn
         {
             get { return Schema.Columns[14]; }
         }
         
         
         
-        public static TableSchema.TableColumn DurationInSecsColumn
+        public static TableSchema.TableColumn RowVersionColumn
         {
             get { return Schema.Columns[15]; }
         }
@@ -790,10 +790,10 @@ namespace SAEON.Observations.Data
 			 public static string StatusID = @"StatusID";
 			 public static string StatusReasonID = @"StatusReasonID";
 			 public static string Issues = @"Issues";
+			 public static string DurationInSecs = @"DurationInSecs";
 			 public static string AddedAt = @"AddedAt";
 			 public static string UpdatedAt = @"UpdatedAt";
 			 public static string RowVersion = @"RowVersion";
-			 public static string DurationInSecs = @"DurationInSecs";
 						
 		}
 		#endregion

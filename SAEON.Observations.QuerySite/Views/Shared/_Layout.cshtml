@@ -51,7 +51,7 @@
         <header id="Header">
             <div class="row">
                 <div class="col-md text-center">
-                    <img class="Logo img-fluid" src="~/Images/SAEON 20th Logo.png" alt="SAEON Banner" title="© SAEON" />
+                    <img class="Logo img-fluid" src="~/Images/Banner.jpg" alt="SAEON Banner" title="© SAEON" />
                 </div>
             </div>
             <nav class="navbar navbar-expand-sm navbar-dark bg-SAEON rounded">
@@ -64,8 +64,10 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownQuery" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Query</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownQuery">
-                                @Html.ActionLink("Inventory", "Index", "Inventory", null, new { @class = "dropdown-item" })
                                 @Html.ActionLink("Data", "Index", "DataWizard", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Data Streams", "Index", "DataStreams", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Sensor Inventory", "Index", "Inventory", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Coverage", "Index", "Coverage", null, new { @class = "dropdown-item" })
                                 @*@Html.ActionLink("Spacial Coverage", "Index", "SpacialCoverage", null, new { @class = "dropdown-item" })*@
                                 @*@Html.ActionLink("Temporal Coverage", "Index", "TemporalCoverage", null, new { @class = "dropdown-item" })*@
                             </div>

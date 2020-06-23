@@ -63,14 +63,14 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Offerings/5/Phenomena
         /// <summary>
-        /// Phenomena for the Offering
+        /// Phenomena of the Offering
         /// </summary>
         /// <param name="id">Id of the Offering</param>
         /// <returns>ListOf(Phenomemon)</returns>
         [Route("{id:guid}/Phenomena")]
         public IQueryable<Phenomenon> GetPhenomena([FromUri] Guid id)
         {
-            return GetManyIdEntity<PhenomenonOffering>(id, s => s.PhenomenonOfferings).Select(i => i.Phenomenon);
+            return GetManyWithGuidId<PhenomenonOffering>(id, s => s.PhenomenonOfferings).Select(i => i.Phenomenon);
         }
 
     }

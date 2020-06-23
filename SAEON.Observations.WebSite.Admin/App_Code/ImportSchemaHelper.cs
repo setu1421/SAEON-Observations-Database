@@ -1,6 +1,9 @@
-﻿using FileHelpers;
+﻿//#define DetailedLogging
+//#define VeryDetailedLogging
+using FileHelpers;
 using FileHelpers.Dynamic;
 using NCalc;
+using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Azure;
 using SAEON.Observations.Data;
@@ -15,53 +18,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web.Hosting;
-
-public static class StringExtensions
-{
-    public static bool IsQuoted(this string value)
-    {
-        return (value.StartsWith("\"") && value.EndsWith("\""));
-    }
-
-    public static string RemoveQuotes(this string value)
-    {
-        if (!value.IsQuoted())
-        {
-            return value;
-        }
-        else
-        {
-            value = value.Remove(0, 1);
-            value = value.Remove(value.Length - 1, 1);
-            return value;
-        }
-    }
-}
-
-public static class DataRowExtensions
-{
-    public static string AsString(this DataRow dataRow, bool oneLine = true)
-    {
-        List<string> result = new List<string>();
-        foreach (DataColumn col in dataRow.Table.Columns)
-            result.Add($"{col.ColumnName}: {dataRow[col.ColumnName]}");
-        return string.Join(oneLine ? "; " : Environment.NewLine, result);
-    }
-
-    public static T GetValue<T>(this DataRow dataRow, string columnName)
-    {
-        return (T)dataRow[columnName];
-    }
-
-    public static T SetValue<T>(this DataRow dataRow, string columnName, T value)
-    {
-        if (value == null)
-            dataRow[columnName] = DBNull.Value;
-        else
-            dataRow[columnName] = value;
-        return value;
-    }
-}
 
 public class SchemaDefinition
 {
@@ -93,7 +49,6 @@ public class SchemaDefinition
     //public Guid? SensorID { get; set; }
     public List<Sensor> Sensors { get; set; } = new List<Sensor>();
     public List<VSensorDate> SensorDates { get; set; } = new List<VSensorDate>();
-
     public bool SensorNotFound { get; set; }
 }
 
@@ -138,6 +93,7 @@ public class SchemaValue
 
     public bool IsDuplicate { get; set; } = false;
     public bool IsDuplicateOfNull { get; set; } = false;
+    public bool IsDuplicateInBatch { get; set; } = false;
 
     /// <summary>
     ///
@@ -146,7 +102,7 @@ public class SchemaValue
     {
         get
         {
-            return !(DateValueInvalid || TimeValueInvalid || InvalidOffering || InvalidUOM || RawValueInvalid || DataValueInvalid || SensorNotFound || IsDuplicate || IsDuplicateOfNull);
+            return !(DateValueInvalid || TimeValueInvalid || InvalidOffering || InvalidUOM || RawValueInvalid || DataValueInvalid || SensorNotFound || IsDuplicate || IsDuplicateOfNull || IsDuplicateInBatch);
         }
     }
 }
@@ -175,7 +131,9 @@ public class ImportSchemaHelper : IDisposable
 
     private bool concatedatetime = false;
 
-    private readonly Azure Azure = new Azure();
+    private readonly ObservationsAzure Azure = new ObservationsAzure();
+
+    private readonly bool LogBadValues = false;
 
     private List<string> LoadColumnNamesDelimited(DataSchema schema, string data)
     {
@@ -241,6 +199,7 @@ public class ImportSchemaHelper : IDisposable
             dataSource = ds;
             dataSchema = schema;
             Sensor = sensor;
+            LogBadValues = ConfigurationManager.AppSettings["LogBadValues"].IsTrue();
             Logging.Information("Checking Schema");
             if (schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Time") && !schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Date"))
             {
@@ -381,7 +340,7 @@ public class ImportSchemaHelper : IDisposable
 
             //List<object> list = engine.ReadStringAsList(data);
 
-            var fileName = $"{ds.Name}~~{DateTime.Now.ToString("yyyyMMdd HHmmss")}~~{Path.GetFileName(batch.FileName)}";
+            var fileName = $"{ds.Name}~~{DateTime.Now:yyyyMMdd HHmmss}~~{Path.GetFileName(batch.FileName)}";
             foreach (var c in Path.GetInvalidFileNameChars())
             {
                 fileName = fileName.Replace(c, '_');
@@ -397,14 +356,14 @@ public class ImportSchemaHelper : IDisposable
             Logging.Information("Saving import file");
             SaveDocument(fileName, data);
             stopwatch.Stop();
-            Logging.Information("Saved import file in {time}", stopwatch.Elapsed);
-            stopwatch.Start();
+            Logging.Information("Saved import file in {time}", stopwatch.Elapsed.TimeStr());
+            stopwatch.Restart();
             Logging.Information("Reading DataTable");
             //dtResults = engine.ReadStringAsDT(data);
             dtResults = CommonEngine.RecordsToDataTable(engine.ReadString(data), recordType);
             //Logging.Information(dtResults.Dump());
             stopwatch.Stop();
-            Logging.Information("Read DataTable in {time}", stopwatch.Elapsed);
+            Logging.Information("Read DataTable in {time}", stopwatch.Elapsed.TimeStr());
             dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
             transformations = new List<DataSourceTransformation>();
             schemaDefs = new List<SchemaDefinition>();
@@ -557,7 +516,7 @@ public class ImportSchemaHelper : IDisposable
                 concatedatetime = true;
             }
 
-            Logging.Verbose("Schema: {Count} Columns: {Columns}", schemaDefs.Count, schemaDefs.Select(i => i.FieldName).ToList());
+            Logging.Verbose("Schema: {Count:n0} Columns: {Columns:n0}", schemaDefs.Count, schemaDefs.Select(i => i.FieldName).ToList());
         }
     }
 
@@ -608,29 +567,38 @@ public class ImportSchemaHelper : IDisposable
         {
             try
             {
+                Logging.Information("Processing schema");
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
+                var stageStopwatch = new Stopwatch();
+                stageStopwatch.Start();
                 Logging.Information("Building schema definition");
                 BuildSchemaDefinition();
-                Logging.Information("Built schema definition in {time}", stopwatch.Elapsed);
+                Logging.Information("Built schema definition in {time}", stageStopwatch.Elapsed.TimeStr());
                 var lastProgress100 = -1;
                 var nMax = dtResults.Rows.Count;
                 var n = 1;
                 Logging.Information("Processing {count:n0} rows", nMax);
+                stageStopwatch.Restart();
                 foreach (DataRow row in dtResults.Rows)
                 {
-                    var progress = (double)n++ / nMax;
+                    var progress = (double)n / nMax;
                     var progress100 = (int)(progress * 100);
                     var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
-                    var elapsed = stopwatch.Elapsed.TotalMinutes;
+                    var elapsed = stageStopwatch.Elapsed;
+                    var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
                     if (reportPorgress)
                     {
-                        Logging.Information("{progress:p0} {row:n0} of {rows:n0} rows {min:n2} of {mins:n2} min", progress, n, nMax, elapsed, elapsed / progress);
+                        Logging.Information("{progress:p0} {row:n0} of {rows:n0} rows in {min} of {mins}, {rowTime}/row, {numRowsInSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
                         lastProgress100 = progress100;
                     }
                     ProcessRow(row, n);
+                    n++;
                 }
+                stageStopwatch.Stop();
+                Logging.Information("Processed {count:n0} rows in {elapsed}, {rowTime}/row, {numRowsInSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                 Logging.Information("Checking for duplicates in batch");
+                stageStopwatch.Restart();
                 var dupGroups = SchemaValues.GroupBy(i => new { i.SensorID, i.DateValue, i.DataValue, i.PhenomenonOfferingID, i.PhenomenonUOMID, i.Elevation }).Where(g => g.Count() > 1).ToList();
                 var dupValues = dupGroups.SelectMany(i => i).ToList();
                 if (dupGroups.Any())
@@ -643,17 +611,19 @@ public class ImportSchemaHelper : IDisposable
                     Logging.Information("Duplicates: Groups: {groups} Values: {values}", dupGroups.Count, dupValues.Count);
                     foreach (var schval in dupValues)
                     {
-                        schval.IsDuplicate = true;
-                        schval.InvalidStatuses.Insert(0, Status.Duplicate);
+                        schval.IsDuplicateInBatch = true;
+                        schval.InvalidStatuses.Insert(0, Status.DuplicateInBatch);
                     }
-                    Logging.Information("Found {count} duplicates in batch", dupValues.Count());
+                    Logging.Information("Found {count:n0} duplicates in batch", dupValues.Count());
                 }
+                stageStopwatch.Stop();
+                Logging.Information("Checked for duplicates in batch in {elapsed}", stageStopwatch.Elapsed.TimeStr());
                 stopwatch.Stop();
-                Logging.Information("Processed {rows:n0} rows in {time}", nMax, stopwatch.Elapsed);
+                Logging.Information("Processed Schema in {time}", stopwatch.Elapsed.TimeStr());
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex, "Unprocessed");
+                Logging.Exception(ex);
                 throw;
             }
         }
@@ -665,10 +635,16 @@ public class ImportSchemaHelper : IDisposable
     /// <param name="dr"></param>
     private void ProcessRow(DataRow dr, int rowNum)
     {
-        using (Logging.MethodCall(GetType()))
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Row", rowNum } }))
         {
             try
             {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                var stageStart = stopwatch.Elapsed;
+#if VeryDetailedLogging
+                Logging.Information("ProcessRow({RowNum})", rowNum);
+#endif
                 //Logging.Verbose(dr.Dump());
                 DateTime dttme = DateTime.MinValue,
                 dt = DateTime.MinValue,
@@ -758,12 +734,17 @@ public class ImportSchemaHelper : IDisposable
                     }
                 }
 
+
                 for (int i = 0; i < schemaDefs.Count; i++)
                 {
                     SchemaDefinition def = schemaDefs[i];
 
                     if (def.IsOffering)
                     {
+#if VeryDetailedLogging
+                        Logging.Information("Sensor: {sensor} {elapsed} {stage}", i + 1, stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        stageStart = stopwatch.Elapsed;
+#endif
                         var rec = new SchemaValue()
                         {
                             SensorNotFound = def.SensorNotFound,
@@ -827,6 +808,10 @@ public class ImportSchemaHelper : IDisposable
 
                         if (!ErrorInDate)
                         {
+#if VeryDetailedLogging
+                            Logging.Information("Error checks {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                            stageStart = stopwatch.Elapsed;
+#endif
                             // Find sensor based on DateValue
                             bool found = false;
                             bool foundTooEarly = false;
@@ -869,13 +854,19 @@ public class ImportSchemaHelper : IDisposable
                                     continue; // Ignore
                                 }
 
-                                Logging.Error("Row#: {row} Index: {Index} FieldName: {FieldName} Sensor not found Sensors: {sensors}", rowNum, def.Index, def.FieldName, def.Sensors.Select(s => s.Name).ToList());
+                                if (LogBadValues)
+                                {
+                                    Logging.Error("Row#: {row} Index: {Index} FieldName: {FieldName} Sensor not found Sensors: {sensors}", rowNum, def.Index, def.FieldName, def.Sensors.Select(s => s.Name).ToList());
+                                }
                                 rec.SensorNotFound = true;
                                 rec.SensorID = def.Sensors.FirstOrDefault()?.Id;
                                 rec.InvalidStatuses.Add(Status.SensorNotFound);
                             }
                         }
-
+#if VeryDetailedLogging
+                        Logging.Information("Sensor lookup {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        stageStart = stopwatch.Elapsed;
+#endif
                         //if (!ErrorInDate && LogHelper != null && LogHelper.CheckRecordGap(rec.DateValue))
                         //{
                         //    rec.RawValue = null;
@@ -936,6 +927,10 @@ public class ImportSchemaHelper : IDisposable
                                 }
                             }
                         }
+#if VeryDetailedLogging
+                        Logging.Information("Transformations {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        stageStart = stopwatch.Elapsed;
+#endif
                         // Location
                         var defLatitude = schemaDefs.FirstOrDefault(d => d.IsLatitude);
                         var defLongitude = schemaDefs.FirstOrDefault(d => d.IsLongitude);
@@ -979,7 +974,10 @@ public class ImportSchemaHelper : IDisposable
                                 }
                             }
                         }
-
+#if VeryDetailedLogging
+                        Logging.Verbose("Location {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        stageStart = stopwatch.Elapsed;
+#endif
                         if (!string.IsNullOrWhiteSpace(RowComment))
                         {
                             rec.Comment = RowComment.TrimEnd();
@@ -987,13 +985,28 @@ public class ImportSchemaHelper : IDisposable
 
                         rec.CorrelationID = correlationID;
 
-                        CheckIsDuplicate(rec);
-                        CheckIsDuplicateOfNull(rec);
-                        //CheckIsDuplicateInBatch(rec);
+                        CheckDuplicate(def, rec);
+#if VeryDetailedLogging
+                        Logging.Information("Duplicate {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        stageStart = stopwatch.Elapsed;
+#endif
 
+                        //                        CheckIsDuplicate(def, rec);
+                        //#if VeryDetailedLogging
+                        //                        Logging.Information("IsDuplicate {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        //                        stageStart = stopwatch.Elapsed;
+                        //#endif
+                        //                        CheckIsDuplicateOfNull(def, rec);
+                        //#if VeryDetailedLogging
+                        //                        Logging.Information("IsDuplicateOfNull {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
+                        //                        stageStart = stopwatch.Elapsed;
+                        //#endif
                         SchemaValues.Add(rec);
                     }
                 }
+#if DetailedLogging || VeryDetailedLogging
+                Logging.Information("ProcessRow({RowNum}) in {elapsed}", rowNum, stopwatch.Elapsed.TimeStr());
+#endif
             }
             catch (Exception ex)
             {
@@ -1002,55 +1015,69 @@ public class ImportSchemaHelper : IDisposable
             }
         }
 
-        bool CheckIsDuplicate(SchemaValue schval)
+        bool CheckDuplicate(SchemaDefinition def, SchemaValue schval)
         {
+            var result = false;
             SqlQuery q = new Select().From(Observation.Schema)
                 .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
                 .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
-                .And(Observation.Columns.DataValue).IsEqualTo(schval.DataValue)
                 .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
                 .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
-
             ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
-
-            var result = oCol.Any();
+            result = oCol.Any();
             if (result)
             {
-                schval.IsDuplicate = true;
-                schval.InvalidStatuses.Insert(0, Status.Duplicate);
+                var obs = oCol.FirstOrDefault();
+                if (obs == null)
+                {
+                    schval.IsDuplicateOfNull = true;
+                    schval.InvalidStatuses.Insert(0, Status.DuplicateOfNull);
+                }
+                else
+                {
+                    schval.IsDuplicate = true;
+                    schval.InvalidStatuses.Insert(0, Status.Duplicate);
+                }
             }
             return result;
         }
 
-        bool CheckIsDuplicateOfNull(SchemaValue schval)
-        {
-            SqlQuery q = new Select().From(Observation.Schema)
-                .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
-                .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
-                .And(Observation.Columns.DataValue).IsNull()
-                .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
-                .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
-
-            ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
-
-            var result = oCol.Any();
-            if (result)
-            {
-                schval.IsDuplicateOfNull = true;
-                schval.InvalidStatuses.Insert(0, Status.DuplicateOfNull);
-            }
-            return result;
-        }
-
-        //bool CheckIsDuplicateInBatch(SchemaValue schval)
+        //bool CheckIsDuplicate(SchemaDefinition def, SchemaValue schval)
         //{
-        //    return false;
-        //    var result = SchemaValues.Any(i => (i.SensorID == schval.SensorID) && (i.DateValue == schval.DateValue) && (i.DataValue == schval.DataValue) &&
-        //                    (i.PhenomenonOfferingID == schval.PhenomenonOfferingID) && (i.PhenomenonUOMID == schval.PhenomenonUOMID) && (i.Elevation == schval.Elevation));
+        //    var result = false;
+        //        SqlQuery q = new Select().From(Observation.Schema)
+        //        .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
+        //        .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
+        //        .And(Observation.Columns.DataValue).IsEqualTo(schval.DataValue)
+        //        .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
+        //        .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
+
+        //        ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
+        //        result = oCol.Any();
         //    if (result)
         //    {
         //        schval.IsDuplicate = true;
         //        schval.InvalidStatuses.Insert(0, Status.Duplicate);
+        //    }
+        //    return result;
+        //}
+
+        //bool CheckIsDuplicateOfNull(SchemaDefinition def, SchemaValue schval)
+        //{
+        //    var result = false;
+        //        SqlQuery q = new Select().From(Observation.Schema)
+        //    .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
+        //    .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
+        //    .And(Observation.Columns.DataValue).IsNull()
+        //    .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
+        //    .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
+
+        //        ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
+        //        result = oCol.Any();
+        //    if (result)
+        //    {
+        //        schval.IsDuplicateOfNull = true;
+        //        schval.InvalidStatuses.Insert(0, Status.DuplicateOfNull);
         //    }
         //    return result;
         //}
@@ -1071,8 +1098,8 @@ public class ImportSchemaHelper : IDisposable
                     rowNum, trns?.Phenomenon?.Name, trns?.PhenomenonOffering?.Offering?.Name, trns?.PhenomenonOfferingID, rec?.PhenomenonOfferingID,
                     trns?.PhenomenonUOM?.UnitOfMeasure?.Unit, trns?.PhenomenonUOMID, rec?.PhenomenonUOMID, trns?.StartDate, trns?.EndDate, rec.DateValue);
 
-                bool process = trns.PhenomenonOfferingID.HasValue ? trns.PhenomenonOfferingID.Value == rec.PhenomenonOfferingID.Value : true &&
-                        trns.PhenomenonUOMID.HasValue ? trns.PhenomenonUOMID.Value == rec.PhenomenonUOMID.Value : true;
+                bool process = trns.PhenomenonOfferingID.HasValue ? trns.PhenomenonOfferingID.Value == rec.PhenomenonOfferingID.Value : false ||
+                                !trns.PhenomenonUOMID.HasValue || trns.PhenomenonUOMID.Value == rec.PhenomenonUOMID.Value;
                 if (process)
                 {
                     if (trns.StartDate.HasValue && (rec.DateValue < trns.StartDate.Value))

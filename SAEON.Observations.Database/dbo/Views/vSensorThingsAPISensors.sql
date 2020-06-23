@@ -1,8 +1,6 @@
 ﻿CREATE VIEW [dbo].[vSensorThingsAPISensors]
 AS
 Select Distinct
-  Sensor.ID, Sensor.Code, Sensor.Name, Sensor.Description, Sensor.Url, PhenomenonOfferingID
+  SensorID ID, SensorCode Code, SensorName Name, SensorDescription Description, SensorUrl Url, PhenomenonOfferingID
 from
-  vInventory
-  inner join Sensor
-    on (vInventory.SensorID = Sensor.ID)
+  vInventorySensors

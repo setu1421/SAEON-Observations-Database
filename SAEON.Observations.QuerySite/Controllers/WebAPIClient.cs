@@ -1,16 +1,12 @@
 ﻿using IdentityModel.Client;
-using Microsoft.Owin.Security;
 using SAEON.AspNet.Common;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using System;
-using System.Configuration;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -29,9 +25,9 @@ namespace SAEON.Observations.QuerySite.Controllers
             }
             var client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(AspNetConstants.ApplicationJson));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Zip));
-            client.DefaultRequestHeaders.Add(Constants.TenantHeader, session[Constants.TenantSession].ToString());
+            client.DefaultRequestHeaders.Add(AspNetConstants.TenantHeader, session[AspNetConstants.TenantSession].ToString());
             //Logging.Verbose("Headers: {@Headers}", client.DefaultRequestHeaders);
             Logging.Verbose("IsAuthenticated: {IsAuthenticated} Claims: {claims}", user?.Identity.IsAuthenticated, string.Join("; ", user.GetClaims()));
             var idToken = user.FindFirst("id_token")?.Value;

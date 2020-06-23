@@ -12,14 +12,7 @@ public static class Utilities
 {
     public static Guid MakeGuid(object value)
     {
-        if ((value == null) || ((value is string) && string.IsNullOrEmpty((string)value)))
-        {
-            return Guid.Empty;
-        }
-        else
-        {
-            return new Guid(value.ToString());
-        }
+        return (value == null) || ((value is string @string) && string.IsNullOrEmpty(@string)) ? Guid.Empty : new Guid(value.ToString());
     }
 
     public static string NullIfEmpty(string value)

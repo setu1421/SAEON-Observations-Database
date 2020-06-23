@@ -39,7 +39,7 @@ namespace SAEON.Observations.QuerySite
 
         void Session_Start(object sender, EventArgs e)
         {
-            Session[Constants.TenantSession] = ConfigurationManager.AppSettings[Constants.TenantDefault] ?? "Fynbos";
+            Session[AspNetConstants.TenantSession] = ConfigurationManager.AppSettings[AspNetConstants.TenantDefault] ?? "Fynbos";
         }
 
     }

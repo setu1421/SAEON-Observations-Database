@@ -67,41 +67,41 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         //GET: Organisations/5/Sites
         /// <summary>
-        /// Sites for the Organisation
+        /// Sites of the Organisation
         /// </summary>
         /// <param name="id">Id of Organisation</param>
         /// <returns>ListOf(Site)</returns>
         [Route("{id:guid}/Sites")]
         public IQueryable<Site> GetSites([FromUri] Guid id)
         {
-            return GetMany<Site>(id, s => s.Sites);
+            return GetManyWithGuidId<Site>(id, s => s.Sites);
         }
 
         //GET: Organisations/5/Stations
         /// <summary>
-        /// Stations for the Organisation
+        /// Stations of the Organisation
         /// </summary>
         /// <param name="id">Id of Organisation</param>
         /// <returns>ListOf(Station)</returns>
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            var siteStations = GetMany<Site>(id, s => s.Sites).SelectMany(i => i.Stations);
-            return GetMany<Station>(id, s => s.Stations).Union(siteStations);
+            var siteStations = GetManyWithGuidId<Site>(id, s => s.Sites).SelectMany(i => i.Stations);
+            return GetManyWithGuidId<Station>(id, s => s.Stations).Union(siteStations);
         }
 
         //GET: Organisations/5/Instruments
         /// <summary>
-        /// Instruments for the Organisation
+        /// Instruments of the Organisation
         /// </summary>
         /// <param name="id">Id of Organisation</param>
         /// <returns>ListOf(Instrument)</returns>
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
-            var siteInstruments = GetMany<Site>(id, s => s.Sites).SelectMany(i => i.Stations).SelectMany(i => i.Instruments);
-            var stationInstruments = GetMany<Station>(id, s => s.Stations).SelectMany(i => i.Instruments);
-            return GetMany<Instrument>(id, s => s.Instruments).Union(siteInstruments).Union(stationInstruments);
+            var siteInstruments = GetManyWithGuidId<Site>(id, s => s.Sites).SelectMany(i => i.Stations).SelectMany(i => i.Instruments);
+            var stationInstruments = GetManyWithGuidId<Station>(id, s => s.Stations).SelectMany(i => i.Instruments);
+            return GetManyWithGuidId<Instrument>(id, s => s.Instruments).Union(siteInstruments).Union(stationInstruments);
         }
 
     }

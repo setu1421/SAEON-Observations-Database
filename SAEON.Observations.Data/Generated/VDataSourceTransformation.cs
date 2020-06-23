@@ -165,102 +165,6 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarDefinition);
                 
-                TableSchema.TableColumn colvarNewPhenomenonOfferingID = new TableSchema.TableColumn(schema);
-                colvarNewPhenomenonOfferingID.ColumnName = "NewPhenomenonOfferingID";
-                colvarNewPhenomenonOfferingID.DataType = DbType.Guid;
-                colvarNewPhenomenonOfferingID.MaxLength = 0;
-                colvarNewPhenomenonOfferingID.AutoIncrement = false;
-                colvarNewPhenomenonOfferingID.IsNullable = true;
-                colvarNewPhenomenonOfferingID.IsPrimaryKey = false;
-                colvarNewPhenomenonOfferingID.IsForeignKey = false;
-                colvarNewPhenomenonOfferingID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarNewPhenomenonOfferingID);
-                
-                TableSchema.TableColumn colvarNewPhenomenonUOMID = new TableSchema.TableColumn(schema);
-                colvarNewPhenomenonUOMID.ColumnName = "NewPhenomenonUOMID";
-                colvarNewPhenomenonUOMID.DataType = DbType.Guid;
-                colvarNewPhenomenonUOMID.MaxLength = 0;
-                colvarNewPhenomenonUOMID.AutoIncrement = false;
-                colvarNewPhenomenonUOMID.IsNullable = true;
-                colvarNewPhenomenonUOMID.IsPrimaryKey = false;
-                colvarNewPhenomenonUOMID.IsForeignKey = false;
-                colvarNewPhenomenonUOMID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarNewPhenomenonUOMID);
-                
-                TableSchema.TableColumn colvarRank = new TableSchema.TableColumn(schema);
-                colvarRank.ColumnName = "Rank";
-                colvarRank.DataType = DbType.Int32;
-                colvarRank.MaxLength = 0;
-                colvarRank.AutoIncrement = false;
-                colvarRank.IsNullable = true;
-                colvarRank.IsPrimaryKey = false;
-                colvarRank.IsForeignKey = false;
-                colvarRank.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarRank);
-                
-                TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
-                colvarSensorID.ColumnName = "SensorID";
-                colvarSensorID.DataType = DbType.Guid;
-                colvarSensorID.MaxLength = 0;
-                colvarSensorID.AutoIncrement = false;
-                colvarSensorID.IsNullable = true;
-                colvarSensorID.IsPrimaryKey = false;
-                colvarSensorID.IsForeignKey = false;
-                colvarSensorID.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarSensorID);
-                
-                TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
-                colvarUserId.ColumnName = "UserId";
-                colvarUserId.DataType = DbType.Guid;
-                colvarUserId.MaxLength = 0;
-                colvarUserId.AutoIncrement = false;
-                colvarUserId.IsNullable = true;
-                colvarUserId.IsPrimaryKey = false;
-                colvarUserId.IsForeignKey = false;
-                colvarUserId.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarUserId);
-                
-                TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
-                colvarAddedAt.ColumnName = "AddedAt";
-                colvarAddedAt.DataType = DbType.DateTime;
-                colvarAddedAt.MaxLength = 0;
-                colvarAddedAt.AutoIncrement = false;
-                colvarAddedAt.IsNullable = true;
-                colvarAddedAt.IsPrimaryKey = false;
-                colvarAddedAt.IsForeignKey = false;
-                colvarAddedAt.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarAddedAt);
-                
-                TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
-                colvarUpdatedAt.ColumnName = "UpdatedAt";
-                colvarUpdatedAt.DataType = DbType.DateTime;
-                colvarUpdatedAt.MaxLength = 0;
-                colvarUpdatedAt.AutoIncrement = false;
-                colvarUpdatedAt.IsNullable = true;
-                colvarUpdatedAt.IsPrimaryKey = false;
-                colvarUpdatedAt.IsForeignKey = false;
-                colvarUpdatedAt.IsReadOnly = false;
-                
-                schema.Columns.Add(colvarUpdatedAt);
-                
-                TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
-                colvarRowVersion.ColumnName = "RowVersion";
-                colvarRowVersion.DataType = DbType.Binary;
-                colvarRowVersion.MaxLength = 0;
-                colvarRowVersion.AutoIncrement = false;
-                colvarRowVersion.IsNullable = false;
-                colvarRowVersion.IsPrimaryKey = false;
-                colvarRowVersion.IsForeignKey = false;
-                colvarRowVersion.IsReadOnly = true;
-                
-                schema.Columns.Add(colvarRowVersion);
-                
                 TableSchema.TableColumn colvarParamA = new TableSchema.TableColumn(schema);
                 colvarParamA.ColumnName = "ParamA";
                 colvarParamA.DataType = DbType.Double;
@@ -573,6 +477,102 @@ namespace SAEON.Observations.Data{
                 
                 schema.Columns.Add(colvarNewPhenomenonID);
                 
+                TableSchema.TableColumn colvarNewPhenomenonOfferingID = new TableSchema.TableColumn(schema);
+                colvarNewPhenomenonOfferingID.ColumnName = "NewPhenomenonOfferingID";
+                colvarNewPhenomenonOfferingID.DataType = DbType.Guid;
+                colvarNewPhenomenonOfferingID.MaxLength = 0;
+                colvarNewPhenomenonOfferingID.AutoIncrement = false;
+                colvarNewPhenomenonOfferingID.IsNullable = true;
+                colvarNewPhenomenonOfferingID.IsPrimaryKey = false;
+                colvarNewPhenomenonOfferingID.IsForeignKey = false;
+                colvarNewPhenomenonOfferingID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarNewPhenomenonOfferingID);
+                
+                TableSchema.TableColumn colvarNewPhenomenonUOMID = new TableSchema.TableColumn(schema);
+                colvarNewPhenomenonUOMID.ColumnName = "NewPhenomenonUOMID";
+                colvarNewPhenomenonUOMID.DataType = DbType.Guid;
+                colvarNewPhenomenonUOMID.MaxLength = 0;
+                colvarNewPhenomenonUOMID.AutoIncrement = false;
+                colvarNewPhenomenonUOMID.IsNullable = true;
+                colvarNewPhenomenonUOMID.IsPrimaryKey = false;
+                colvarNewPhenomenonUOMID.IsForeignKey = false;
+                colvarNewPhenomenonUOMID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarNewPhenomenonUOMID);
+                
+                TableSchema.TableColumn colvarRank = new TableSchema.TableColumn(schema);
+                colvarRank.ColumnName = "Rank";
+                colvarRank.DataType = DbType.Int32;
+                colvarRank.MaxLength = 0;
+                colvarRank.AutoIncrement = false;
+                colvarRank.IsNullable = true;
+                colvarRank.IsPrimaryKey = false;
+                colvarRank.IsForeignKey = false;
+                colvarRank.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarRank);
+                
+                TableSchema.TableColumn colvarSensorID = new TableSchema.TableColumn(schema);
+                colvarSensorID.ColumnName = "SensorID";
+                colvarSensorID.DataType = DbType.Guid;
+                colvarSensorID.MaxLength = 0;
+                colvarSensorID.AutoIncrement = false;
+                colvarSensorID.IsNullable = true;
+                colvarSensorID.IsPrimaryKey = false;
+                colvarSensorID.IsForeignKey = false;
+                colvarSensorID.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarSensorID);
+                
+                TableSchema.TableColumn colvarUserId = new TableSchema.TableColumn(schema);
+                colvarUserId.ColumnName = "UserId";
+                colvarUserId.DataType = DbType.Guid;
+                colvarUserId.MaxLength = 0;
+                colvarUserId.AutoIncrement = false;
+                colvarUserId.IsNullable = true;
+                colvarUserId.IsPrimaryKey = false;
+                colvarUserId.IsForeignKey = false;
+                colvarUserId.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUserId);
+                
+                TableSchema.TableColumn colvarAddedAt = new TableSchema.TableColumn(schema);
+                colvarAddedAt.ColumnName = "AddedAt";
+                colvarAddedAt.DataType = DbType.DateTime;
+                colvarAddedAt.MaxLength = 0;
+                colvarAddedAt.AutoIncrement = false;
+                colvarAddedAt.IsNullable = true;
+                colvarAddedAt.IsPrimaryKey = false;
+                colvarAddedAt.IsForeignKey = false;
+                colvarAddedAt.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarAddedAt);
+                
+                TableSchema.TableColumn colvarUpdatedAt = new TableSchema.TableColumn(schema);
+                colvarUpdatedAt.ColumnName = "UpdatedAt";
+                colvarUpdatedAt.DataType = DbType.DateTime;
+                colvarUpdatedAt.MaxLength = 0;
+                colvarUpdatedAt.AutoIncrement = false;
+                colvarUpdatedAt.IsNullable = true;
+                colvarUpdatedAt.IsPrimaryKey = false;
+                colvarUpdatedAt.IsForeignKey = false;
+                colvarUpdatedAt.IsReadOnly = false;
+                
+                schema.Columns.Add(colvarUpdatedAt);
+                
+                TableSchema.TableColumn colvarRowVersion = new TableSchema.TableColumn(schema);
+                colvarRowVersion.ColumnName = "RowVersion";
+                colvarRowVersion.DataType = DbType.Binary;
+                colvarRowVersion.MaxLength = 0;
+                colvarRowVersion.AutoIncrement = false;
+                colvarRowVersion.IsNullable = false;
+                colvarRowVersion.IsPrimaryKey = false;
+                colvarRowVersion.IsForeignKey = false;
+                colvarRowVersion.IsReadOnly = true;
+                
+                schema.Columns.Add(colvarRowVersion);
+                
                 TableSchema.TableColumn colvarTransformationName = new TableSchema.TableColumn(schema);
                 colvarTransformationName.ColumnName = "TransformationName";
                 colvarTransformationName.DataType = DbType.AnsiString;
@@ -842,118 +842,6 @@ namespace SAEON.Observations.Data{
             set 
 		    {
 			    SetColumnValue("Definition", value);
-            }
-        }
-	      
-        [XmlAttribute("NewPhenomenonOfferingID")]
-        [Bindable(true)]
-        public Guid? NewPhenomenonOfferingID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid?>("NewPhenomenonOfferingID");
-		    }
-            set 
-		    {
-			    SetColumnValue("NewPhenomenonOfferingID", value);
-            }
-        }
-	      
-        [XmlAttribute("NewPhenomenonUOMID")]
-        [Bindable(true)]
-        public Guid? NewPhenomenonUOMID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid?>("NewPhenomenonUOMID");
-		    }
-            set 
-		    {
-			    SetColumnValue("NewPhenomenonUOMID", value);
-            }
-        }
-	      
-        [XmlAttribute("Rank")]
-        [Bindable(true)]
-        public int? Rank 
-	    {
-		    get
-		    {
-			    return GetColumnValue<int?>("Rank");
-		    }
-            set 
-		    {
-			    SetColumnValue("Rank", value);
-            }
-        }
-	      
-        [XmlAttribute("SensorID")]
-        [Bindable(true)]
-        public Guid? SensorID 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid?>("SensorID");
-		    }
-            set 
-		    {
-			    SetColumnValue("SensorID", value);
-            }
-        }
-	      
-        [XmlAttribute("UserId")]
-        [Bindable(true)]
-        public Guid? UserId 
-	    {
-		    get
-		    {
-			    return GetColumnValue<Guid?>("UserId");
-		    }
-            set 
-		    {
-			    SetColumnValue("UserId", value);
-            }
-        }
-	      
-        [XmlAttribute("AddedAt")]
-        [Bindable(true)]
-        public DateTime? AddedAt 
-	    {
-		    get
-		    {
-			    return GetColumnValue<DateTime?>("AddedAt");
-		    }
-            set 
-		    {
-			    SetColumnValue("AddedAt", value);
-            }
-        }
-	      
-        [XmlAttribute("UpdatedAt")]
-        [Bindable(true)]
-        public DateTime? UpdatedAt 
-	    {
-		    get
-		    {
-			    return GetColumnValue<DateTime?>("UpdatedAt");
-		    }
-            set 
-		    {
-			    SetColumnValue("UpdatedAt", value);
-            }
-        }
-	      
-        [XmlAttribute("RowVersion")]
-        [Bindable(true)]
-        public byte[] RowVersion 
-	    {
-		    get
-		    {
-			    return GetColumnValue<byte[]>("RowVersion");
-		    }
-            set 
-		    {
-			    SetColumnValue("RowVersion", value);
             }
         }
 	      
@@ -1321,6 +1209,118 @@ namespace SAEON.Observations.Data{
             }
         }
 	      
+        [XmlAttribute("NewPhenomenonOfferingID")]
+        [Bindable(true)]
+        public Guid? NewPhenomenonOfferingID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid?>("NewPhenomenonOfferingID");
+		    }
+            set 
+		    {
+			    SetColumnValue("NewPhenomenonOfferingID", value);
+            }
+        }
+	      
+        [XmlAttribute("NewPhenomenonUOMID")]
+        [Bindable(true)]
+        public Guid? NewPhenomenonUOMID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid?>("NewPhenomenonUOMID");
+		    }
+            set 
+		    {
+			    SetColumnValue("NewPhenomenonUOMID", value);
+            }
+        }
+	      
+        [XmlAttribute("Rank")]
+        [Bindable(true)]
+        public int? Rank 
+	    {
+		    get
+		    {
+			    return GetColumnValue<int?>("Rank");
+		    }
+            set 
+		    {
+			    SetColumnValue("Rank", value);
+            }
+        }
+	      
+        [XmlAttribute("SensorID")]
+        [Bindable(true)]
+        public Guid? SensorID 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid?>("SensorID");
+		    }
+            set 
+		    {
+			    SetColumnValue("SensorID", value);
+            }
+        }
+	      
+        [XmlAttribute("UserId")]
+        [Bindable(true)]
+        public Guid? UserId 
+	    {
+		    get
+		    {
+			    return GetColumnValue<Guid?>("UserId");
+		    }
+            set 
+		    {
+			    SetColumnValue("UserId", value);
+            }
+        }
+	      
+        [XmlAttribute("AddedAt")]
+        [Bindable(true)]
+        public DateTime? AddedAt 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("AddedAt");
+		    }
+            set 
+		    {
+			    SetColumnValue("AddedAt", value);
+            }
+        }
+	      
+        [XmlAttribute("UpdatedAt")]
+        [Bindable(true)]
+        public DateTime? UpdatedAt 
+	    {
+		    get
+		    {
+			    return GetColumnValue<DateTime?>("UpdatedAt");
+		    }
+            set 
+		    {
+			    SetColumnValue("UpdatedAt", value);
+            }
+        }
+	      
+        [XmlAttribute("RowVersion")]
+        [Bindable(true)]
+        public byte[] RowVersion 
+	    {
+		    get
+		    {
+			    return GetColumnValue<byte[]>("RowVersion");
+		    }
+            set 
+		    {
+			    SetColumnValue("RowVersion", value);
+            }
+        }
+	      
         [XmlAttribute("TransformationName")]
         [Bindable(true)]
         public string TransformationName 
@@ -1458,22 +1458,6 @@ namespace SAEON.Observations.Data{
             
             public static string Definition = @"Definition";
             
-            public static string NewPhenomenonOfferingID = @"NewPhenomenonOfferingID";
-            
-            public static string NewPhenomenonUOMID = @"NewPhenomenonUOMID";
-            
-            public static string Rank = @"Rank";
-            
-            public static string SensorID = @"SensorID";
-            
-            public static string UserId = @"UserId";
-            
-            public static string AddedAt = @"AddedAt";
-            
-            public static string UpdatedAt = @"UpdatedAt";
-            
-            public static string RowVersion = @"RowVersion";
-            
             public static string ParamA = @"ParamA";
             
             public static string ParamB = @"ParamB";
@@ -1525,6 +1509,22 @@ namespace SAEON.Observations.Data{
             public static string ParamY = @"ParamY";
             
             public static string NewPhenomenonID = @"NewPhenomenonID";
+            
+            public static string NewPhenomenonOfferingID = @"NewPhenomenonOfferingID";
+            
+            public static string NewPhenomenonUOMID = @"NewPhenomenonUOMID";
+            
+            public static string Rank = @"Rank";
+            
+            public static string SensorID = @"SensorID";
+            
+            public static string UserId = @"UserId";
+            
+            public static string AddedAt = @"AddedAt";
+            
+            public static string UpdatedAt = @"UpdatedAt";
+            
+            public static string RowVersion = @"RowVersion";
             
             public static string TransformationName = @"TransformationName";
             

@@ -76,19 +76,19 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Stations/5/Instruments
         /// <summary>
-        /// Instruments for the Station
+        /// Instruments of the Station
         /// </summary>
         /// <param name="id">Id of the Station</param>
         /// <returns>ListOf(Instrument)</returns>
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
-            return GetMany<Instrument>(id, s => s.Instruments);
+            return GetManyWithGuidId<Instrument>(id, s => s.Instruments);
         }
 
         // GET: Stations/5/Organisations
         /// <summary>
-        /// Organisations for the Station
+        /// Organisations of the Station
         /// </summary>
         /// <param name="id">Id of the Station</param>
         /// <returns>ListOf(Organisation)</returns>
@@ -97,19 +97,46 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
         {
             var site = GetSingle(id, s => s.Site);
             var siteOrganiations = DbContext.Sites.Where(i => i.Id == site.Id).SelectMany(i => i.Organisations);
-            return GetMany(id, s => s.Organisations).Union(siteOrganiations); ;
+            return GetManyWithGuidId(id, s => s.Organisations).Union(siteOrganiations); ;
         }
 
         // GET: Stations/5/Projects
         /// <summary>
-        /// Projects for the Station
+        /// Projects of the Station
         /// </summary>
         /// <param name="id">Id of the Station</param>
         /// <returns>ListOf(Project)</returns>
         [Route("{id:guid}/Projects")]
         public IQueryable<Project> GetProjects([FromUri] Guid id)
         {
-            return GetMany<Project>(id, s => s.Projects);
+            return GetManyWithGuidId<Project>(id, s => s.Projects);
+        }
+
+        // GET: Stations/5/DataStreams
+        /// <summary>
+        /// DataStreams of the Station
+        /// </summary>
+        /// <param name="id">Id of the Station</param>
+        /// <returns>ListOf(DataStream)</returns>
+        [Route("{id:guid}/DataStreams")]
+        public IQueryable<DataStream> GetDataStreams([FromUri] Guid id)
+        {
+            return GetManyWithLongId<DataStream>(id, s => s.DataStreams);
+        }
+
+        // GET: Stations/5/Observations
+        /// <summary>
+        /// Observations of the Station
+        /// </summary>
+        /// <param name="id">Id of the Station</param>
+        /// <param name="phenomenonId">PhenomenonId of the Observations</param>
+        /// <param name="offeringId">OfferingId of the Observations</param>
+        /// <param name="unitId">UnitId of the Observations</param>
+        /// <returns>ListOf(Observation)</returns>
+        [Route("{id:guid}/Observations/{phenomenonId:guid}/{offeringId:guid}/{unitId:guid}")]
+        public IQueryable<Observation> GetObservations([FromUri] Guid id, [FromUri] Guid phenomenonId, [FromUri] Guid offeringId, [FromUri] Guid unitId)
+        {
+            return GetManyWithIntId<Observation>(id, s => s.Observations).Where(i => (i.PhenomenonId == phenomenonId) && (i.OfferingId == offeringId) && (i.UnitId == unitId));
         }
 
     }

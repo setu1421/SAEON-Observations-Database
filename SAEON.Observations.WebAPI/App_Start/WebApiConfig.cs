@@ -184,10 +184,9 @@ namespace SAEON.Observations.WebAPI
     {
         private static IEdmModel ObservationsEdmModel()
         {
-            ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "Observations" };
-            builder.EntitySet<db.Inventory>("Inventory");
-            builder.EntitySet<db.ObservationExpansion>("ObservationExpansions").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
-            builder.EntitySet<db.ObservationOData>("Observations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "OData" };
+            builder.EntitySet<db.InventoryDataStream>("InventoryDataStreams");
+            builder.EntitySet<db.InventorySensor>("InventorySensors");
             builder.EntitySet<db.Instrument>("Instruments").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Offering>("Offerings").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Organisation>("Organisations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
@@ -195,8 +194,11 @@ namespace SAEON.Observations.WebAPI
             builder.EntitySet<db.Programme>("Programmes").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Project>("Projects").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Sensor>("Sensors").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            //builder.EntitySet<db.SensorObservation>("SensorObservations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Site>("Sites").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Station>("Stations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.DataStream>("DataStreams").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
+            builder.EntitySet<db.Observation>("Observations").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             builder.EntitySet<db.Unit>("Units").IgnoreProperty("RowVersion").IgnoreProperty("UserId");
             return builder.GetEdmModel();
         }

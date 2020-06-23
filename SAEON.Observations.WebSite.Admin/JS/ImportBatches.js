@@ -1,4 +1,5 @@
-﻿function ImportBatchRowSelect(e, record) {
+﻿
+function ImportBatchRowSelect(e, record) {
     if (tpCenter.isVisible()) {
         DataLogGrid.getStore().reload();
         SummaryGrid.getStore().reload();
@@ -231,11 +232,11 @@ function SelectSensor() {
 
 function onBatchCommand(e, record) {
     if (e === 'Delete') {
-        DirectCall.ConfirmDeleteBatch(record.get('Id'), { eventMask: { showMask: true}});
+        DirectCall.ConfirmDeleteBatch(record.get('Id'));
     }
     else if (e === 'Move')
     {
-        DirectCall.ConfirmMoveBatch(record.get('Id'),{eventMask: {showMask:true}});
+        DirectCall.ConfirmMoveBatch(record.get('Id'));
     }
 }
 

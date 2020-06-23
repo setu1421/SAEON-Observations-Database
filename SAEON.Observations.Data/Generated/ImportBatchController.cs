@@ -80,7 +80,7 @@ namespace SAEON.Observations.Data
 	    /// Inserts a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Insert, true)]
-	    public void Insert(Guid Id,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,string Issues,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,int? DurationInSecs)
+	    public void Insert(Guid Id,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,string Issues,int? DurationInSecs,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    ImportBatch item = new ImportBatch();
 		    
@@ -106,13 +106,13 @@ namespace SAEON.Observations.Data
             
             item.Issues = Issues;
             
+            item.DurationInSecs = DurationInSecs;
+            
             item.AddedAt = AddedAt;
             
             item.UpdatedAt = UpdatedAt;
             
             item.RowVersion = RowVersion;
-            
-            item.DurationInSecs = DurationInSecs;
             
 	    
 		    item.Save(UserName);
@@ -122,7 +122,7 @@ namespace SAEON.Observations.Data
 	    /// Updates a record, can be used with the Object Data Source
 	    /// </summary>
         [DataObjectMethod(DataObjectMethodType.Update, true)]
-	    public void Update(Guid Id,int Code,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,string Issues,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion,int? DurationInSecs)
+	    public void Update(Guid Id,int Code,Guid DataSourceID,DateTime ImportDate,int Status,Guid UserId,string FileName,string LogFileName,string Comment,Guid? StatusID,Guid? StatusReasonID,string Issues,int? DurationInSecs,DateTime? AddedAt,DateTime? UpdatedAt,byte[] RowVersion)
 	    {
 		    ImportBatch item = new ImportBatch();
 	        item.MarkOld();
@@ -152,13 +152,13 @@ namespace SAEON.Observations.Data
 				
 			item.Issues = Issues;
 				
+			item.DurationInSecs = DurationInSecs;
+				
 			item.AddedAt = AddedAt;
 				
 			item.UpdatedAt = UpdatedAt;
 				
 			item.RowVersion = RowVersion;
-				
-			item.DurationInSecs = DurationInSecs;
 				
 	        item.Save(UserName);
 	    }

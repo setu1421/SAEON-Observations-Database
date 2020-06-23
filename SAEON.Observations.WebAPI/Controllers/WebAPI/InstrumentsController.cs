@@ -69,40 +69,40 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Instruments/5/Organisations
         /// <summary>
-        /// Organisations linked to this Instrument
+        /// Organisations of the Instrument
         /// </summary>
         /// <param name="id">Id of the Instrument</param>
         /// <returns>ListOf(Organisation)</returns>
         [Route("{id:guid}/Organisations")]
         public IQueryable<Organisation> GetOrganisations([FromUri] Guid id)
         {
-            var siteOrganisations = GetMany(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations);
-            var stationOrganisations = GetMany(id, s => s.Stations).SelectMany(i => i.Organisations);
-            return GetMany(id, s => s.Organisations).Union(stationOrganisations).Union(siteOrganisations);
+            var siteOrganisations = GetManyWithGuidId(id, s => s.Stations).Select(i => i.Site).SelectMany(i => i.Organisations);
+            var stationOrganisations = GetManyWithGuidId(id, s => s.Stations).SelectMany(i => i.Organisations);
+            return GetManyWithGuidId(id, s => s.Organisations).Union(stationOrganisations).Union(siteOrganisations);
         }
 
         // GET: Instruments/5/Stations
         /// <summary>
-        /// Stations linked to this Instrument
+        /// Stations of the Instrument
         /// </summary>
         /// <param name="id">Id of the Instrument</param>
         /// <returns>ListOf(Station)</returns>
         [Route("{id:guid}/Stations")]
         public IQueryable<Station> GetStations([FromUri] Guid id)
         {
-            return GetMany<Station>(id, s => s.Stations);
+            return GetManyWithGuidId<Station>(id, s => s.Stations);
         }
 
         // GET: Instruments/5/Sensors
         /// <summary>
-        /// Sensors linked to this Instrument
+        /// Sensors of the Instrument
         /// </summary>
         /// <param name="id">Id of the Instrument</param>
         /// <returns>ListOf(Sensor)</returns>
         [Route("{id:guid}/Sensors")]
         public IQueryable<Sensor> GetSensors([FromUri] Guid id)
         {
-            return GetMany<Sensor>(id, s => s.Sensors);
+            return GetManyWithGuidId<Sensor>(id, s => s.Sensors);
         }
 
     }

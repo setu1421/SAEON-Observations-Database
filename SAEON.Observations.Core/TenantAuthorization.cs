@@ -1,8 +1,9 @@
-﻿#if NETCOREAPP3_0
+﻿#if NETCOREAPP3_0 || NETCOREAPP3_1
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
 using System;
 using System.Linq;
@@ -71,9 +72,9 @@ namespace SAEON.Observations.Core
         {
             using (Logging.MethodCall(typeof(TenantAuthorizationHandler)))
             {
-                var tenant = request?.Headers[Constants.TenantHeader].FirstOrDefault();
-                Logging.Debug("Request: {Request} Config: {Config}", tenant, config[Constants.TenantDefault]);
-                if (string.IsNullOrWhiteSpace(tenant)) tenant = config[Constants.TenantDefault];
+                var tenant = request?.Headers[AspNetConstants.TenantHeader].FirstOrDefault();
+                Logging.Debug("Request: {Request} Config: {Config}", tenant, config[AspNetConstants.TenantDefault]);
+                if (string.IsNullOrWhiteSpace(tenant)) tenant = config[AspNetConstants.TenantDefault];
                 return tenant;
             }
         }

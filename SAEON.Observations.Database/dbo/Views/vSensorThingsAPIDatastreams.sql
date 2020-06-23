@@ -1,19 +1,11 @@
 ﻿CREATE VIEW [dbo].[vSensorThingsAPIDatastreams]
 AS
 Select Distinct
-  Sensor.ID, Sensor.Code, Sensor.Name, Sensor.Description,
+  SensorID ID, SensorCode Code, SensorName Name, SensorDescription Description,
   InstrumentID, InstrumentCode, InstrumentName,
-  PhenomenonID, PhenomenonCode, PhenomenonName, Phenomenon.Description PhenomenonDescription, Phenomenon.Url PhenomenonUrl,
-  PhenomenonOfferingID, OfferingCode, OfferingName, Offering.Description OfferingDescription,
-  PhenomenonUOMID PhenomenonUnitID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasure.UnitSymbol UnitOfMeasureSymbol,
+  PhenomenonID, PhenomenonCode, PhenomenonName, PhenomenonDescription, PhenomenonUrl,
+  PhenomenonOfferingID, OfferingCode, OfferingName, OfferingDescription,
+  PhenomenonUOMID PhenomenonUnitID, UnitOfMeasureCode, UnitOfMeasureUnit, UnitOfMeasureSymbol,
   StartDate, EndDate, LatitudeNorth, LatitudeSouth, LongitudeWest, LongitudeEast
 from
-  vInventory
-  inner join Sensor
-    on (vInventory.SensorID = Sensor.ID)
-  inner join Phenomenon
-    on (vInventory.PhenomenonCode = Phenomenon.Code)
-  inner join Offering
-    on (vInventory.OfferingCode = Offering.Code)
-  inner join UnitOfMeasure
-    on (vInventory.UnitOfMeasureCode = UnitOfMeasure.Code)
+  vInventorySensors

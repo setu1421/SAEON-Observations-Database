@@ -4,18 +4,18 @@ AS
 Select
   Site.ID, Site.Code, Site.Name, Site.Description, 'Site' Kind, Site.Url, Site.StartDate, Site.EndDate
 from
-  vInventory
+  vInventorySensors
   inner join Site
-    on (vInventory.SiteID = Site.ID)
+    on (vInventorySensors.SiteID = Site.ID)
 union
 -- Stations
 Select
   Station.ID, Station.Code, Station.Name, Station.Description, 'Station' Kind, Station.Url,
   vSensorThingsAPIStationDates.StartDate, vSensorThingsAPIStationDates.EndDate
 from
-  vInventory
+  vInventorySensors
   inner join Station
-    on (vInventory.StationID = Station.ID)
+    on (vInventorySensors.StationID = Station.ID)
   left join vSensorThingsAPIStationDates
     on (vSensorThingsAPIStationDates.ID = Station.ID)
 union
@@ -24,8 +24,8 @@ Select
   Instrument.ID, Instrument.Code, Instrument.Name, Instrument.Description, 'Instrument' Kind, Instrument.Url,
   vSensorThingsAPIInstrumentDates.StartDate, vSensorThingsAPIInstrumentDates.EndDate
 from
-  vInventory
+  vInventorySensors
   inner join Instrument
-    on (vInventory.InstrumentID = Instrument.ID)
+    on (vInventorySensors.InstrumentID = Instrument.ID)
   left join vSensorThingsAPIInstrumentDates
     on (vSensorThingsAPIInstrumentDates.ID = Instrument.ID)

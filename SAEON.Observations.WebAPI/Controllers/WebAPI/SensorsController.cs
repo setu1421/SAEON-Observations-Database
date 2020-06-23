@@ -65,7 +65,7 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Sensors/5/Phenomenon
         /// <summary>
-        /// Phenomenon of a Sensor
+        /// Phenomenon of the Sensor
         /// </summary>
         /// <param name="id">The Id of the Sensor</param>
         /// <returns>Phenomenon</returns>
@@ -78,15 +78,31 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Sensors/5/Instruments
         /// <summary>
-        /// Instruments for the Sensor
+        /// Instruments of the Sensor
         /// </summary>
         /// <param name="id">Id of the Sensor</param>
         /// <returns>ListOf(Instrument)</returns>
         [Route("{id:guid}/Instruments")]
         public IQueryable<Instrument> GetInstruments([FromUri] Guid id)
         {
-            return GetMany<Instrument>(id, s => s.Instruments);
+            return GetManyWithGuidId<Instrument>(id, s => s.Instruments);
         }
 
+        //// GET: Sensors/5/Observations
+        ///// <summary>
+        ///// Observations of the Sensor
+        ///// </summary>
+        ///// <param name="id">Id of the Sensor</param>
+        ///// <returns>ListOf(Observation)</returns>
+        //[Route("{id:guid}/Observations")]
+        //[Authorize]
+        //[DenyClientAuthorization(Constants.ClientIdPostman, Constants.ClientIdSwagger)]
+        //public IQueryable<SensorObservation> GetObservations([FromUri] Guid id)
+        //{
+        //    return GetManyWithIntId<SensorObservation>(id, s => s.SensorObservations);
+        //}
+
     }
+
 }
+

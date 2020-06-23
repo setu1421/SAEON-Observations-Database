@@ -872,7 +872,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     using (var client = new HttpClient { BaseAddress = new Uri(Properties.Settings.Default.ODPUrl) })
                     {
                         client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(AspNetConstants.ApplicationJson));
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "bearer " + ConfigurationManager.AppSettings["ODPApiKey"]);
                         HttpResponseMessage response = await client.PostAsync("/metadata/", new StringContent(jODP.ToString(Formatting.None)));
                         if (!response.IsSuccessStatusCode)
@@ -1038,7 +1038,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                     using (var client = new HttpClient { BaseAddress = new Uri(Properties.Settings.Default.ODPUrl) })
                     {
                         client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Constants.ApplicationJson));
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(AspNetConstants.ApplicationJson));
                         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "bearer " + ConfigurationManager.AppSettings["ODPApiKey"]);
                         foreach (var download in DbContext.UserDownloads.Include(ud => ud.DigitalObjectIdentifier))
                         {

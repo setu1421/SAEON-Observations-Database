@@ -4,19 +4,19 @@
     [UserId]          UNIQUEIDENTIFIER NULL,
     [PageSettings]    IMAGE            NOT NULL,
     [LastUpdatedDate] DATETIME         NOT NULL,
-    CONSTRAINT [PK_aspnet_PersonalizationPerUser] PRIMARY KEY NONCLUSTERED ([Id]) ON [Authentication],
+    CONSTRAINT [PK_aspnet_PersonalizationPerUser] PRIMARY KEY NONCLUSTERED ([Id]) ON [PRIMARY],
     FOREIGN KEY ([PathId]) REFERENCES [dbo].[aspnet_Paths] ([PathId]),
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId])
 )
-  ON [Authentication];
+  ON [PRIMARY];
 
 GO
 EXECUTE sp_tableoption @TableNamePattern = N'[dbo].[aspnet_PersonalizationPerUser]', @OptionName = N'text in row', @OptionValue = N'6000';
 
 
 GO
-CREATE UNIQUE CLUSTERED INDEX [aspnet_PersonalizationPerUser_index1] ON [dbo].[aspnet_PersonalizationPerUser]([PathId] ASC, [UserId]) ON [Authentication];
+CREATE UNIQUE CLUSTERED INDEX [aspnet_PersonalizationPerUser_index1] ON [dbo].[aspnet_PersonalizationPerUser]([PathId] ASC, [UserId]) ON [PRIMARY];
 
 GO
-CREATE UNIQUE INDEX [aspnet_PersonalizationPerUser_ncindex2] ON [dbo].[aspnet_PersonalizationPerUser]([UserId] ASC, [PathId]) ON [Authentication];
+CREATE UNIQUE INDEX [aspnet_PersonalizationPerUser_ncindex2] ON [dbo].[aspnet_PersonalizationPerUser]([UserId] ASC, [PathId]) ON [PRIMARY];
 

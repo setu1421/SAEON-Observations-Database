@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Routing;
+using SAEON.AspNet.WebApi;
+using SAEON.Observations.Core;
 using SAEON.Observations.SensorThings;
 using System;
 using System.Linq;
@@ -21,6 +23,7 @@ namespace SAEON.Observations.WebAPI.Controllers.SensorThings
         [ODataRoute("({id})/Observations")]
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         [Authorize]
+        [DenyClientAuthorization(Constants.ClientIdPostman, Constants.ClientIdSwagger)]
         public IQueryable<Observation> GetObservations([FromUri] Guid id) => GetRelatedManyIntId<Observation, db.SensorThingsObservation>(id);
     }
 }

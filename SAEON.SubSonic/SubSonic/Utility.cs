@@ -12,6 +12,7 @@
  * rights and limitations under the License.
 */
 
+using SubSonic.Sugar;
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -25,8 +26,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using SubSonic.Sugar;
-using Calendar=System.Web.UI.WebControls.Calendar;
+using Calendar = System.Web.UI.WebControls.Calendar;
 
 namespace SubSonic.Utilities
 {
@@ -47,7 +47,7 @@ namespace SubSonic.Utilities
         {
             get
             {
-                if(!_isRunningInMediumTrust.HasValue)
+                if (!_isRunningInMediumTrust.HasValue)
                     _isRunningInMediumTrust = (GetCurrentTrustLevel() == AspNetHostingPermissionLevel.Medium);
                 return _isRunningInMediumTrust.Value;
             }
@@ -59,21 +59,21 @@ namespace SubSonic.Utilities
         /// <param name="message">The message to write</param>
         public static void WriteTrace(string message)
         {
-            if(DataService.EnableTrace)
+            if (DataService.EnableTrace)
             {
-                if(HttpContext.Current != null && HttpContext.Current.Trace.IsEnabled)
+                if (HttpContext.Current != null && HttpContext.Current.Trace.IsEnabled)
                 {
                     message = String.Concat(DateTime.Now.ToString("H:mm:ss:fff"), " > ", message);
                     HttpContext.Current.Trace.Write("SubSonic", message);
                 }
-                else if(!IsRunningInMediumTrust)
+                else if (!IsRunningInMediumTrust)
                     FullTrustTrace(message);
             }
         }
 
         private static void FullTrustTrace(string message)
         {
-            if(Debug.Listeners.Count > 0)
+            if (Debug.Listeners.Count > 0)
             {
                 message = String.Concat(DateTime.Now.ToString("H:mm:ss:fff"), " > ", message);
                 Debug.WriteLine(message, "SubSonic");
@@ -83,7 +83,7 @@ namespace SubSonic.Utilities
 
         private static AspNetHostingPermissionLevel GetCurrentTrustLevel()
         {
-            foreach(AspNetHostingPermissionLevel trustLevel in
+            foreach (AspNetHostingPermissionLevel trustLevel in
                 new[]
                     {
                         AspNetHostingPermissionLevel.Unrestricted,
@@ -97,7 +97,7 @@ namespace SubSonic.Utilities
                 {
                     new AspNetHostingPermission(trustLevel).Demand();
                 }
-                catch(SecurityException)
+                catch (SecurityException)
                 {
                     continue;
                 }
@@ -120,28 +120,28 @@ namespace SubSonic.Utilities
         public static string DataTableToHtmlTable(DataTable tbl, string tableWidth)
         {
             StringBuilder sb = new StringBuilder();
-            if(String.IsNullOrEmpty(tableWidth))
+            if (String.IsNullOrEmpty(tableWidth))
                 tableWidth = "70%";
 
-            if(tbl != null)
+            if (tbl != null)
             {
                 sb.AppendFormat("<table style=\"width: {0}\" cellpadding=\"4\" cellspacing=\"0\"><thead style=\"background-color: #dcdcdc\">", tableWidth);
 
                 //header
-                foreach(DataColumn col in tbl.Columns)
+                foreach (DataColumn col in tbl.Columns)
                     sb.AppendFormat("<th><span style=\"font-weight: bold\">{0}</span></th>", col.ColumnName);
                 sb.Append("</thead>");
 
                 //rows
                 bool isEven = false;
-                foreach(DataRow dr in tbl.Rows)
+                foreach (DataRow dr in tbl.Rows)
                 {
-                    if(isEven)
+                    if (isEven)
                         sb.Append("<tr>");
                     else
                         sb.Append("<tr style=\"background-color: #f5f5f5\">");
 
-                    foreach(DataColumn col in tbl.Columns)
+                    foreach (DataColumn col in tbl.Columns)
                         sb.AppendFormat("<td>{0}</td>", dr[col]);
                     sb.Append("</tr>");
 
@@ -172,7 +172,7 @@ namespace SubSonic.Utilities
         /// </returns>
         public static bool IsSql2000(DataProvider provider)
         {
-			return provider.DatabaseVersion.IndexOf("SQL Server 2000") > -1;
+            return provider.DatabaseVersion.IndexOf("SQL Server 2000") > -1;
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace SubSonic.Utilities
         /// </returns>
         public static bool IsSql2005(DataProvider provider)
         {
-			return provider.DatabaseVersion.IndexOf("SQL Server 2005") > -1;
+            return provider.DatabaseVersion.IndexOf("SQL Server 2005") > -1;
         }
 
         /// <summary>
@@ -270,9 +270,9 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static bool MatchesOne(string stringA, params string[] matchStrings)
         {
-            for(int i = 0; i < matchStrings.Length; i++)
+            for (int i = 0; i < matchStrings.Length; i++)
             {
-                if(IsMatch(stringA, matchStrings[i]))
+                if (IsMatch(stringA, matchStrings[i]))
                     return true;
             }
             return false;
@@ -290,7 +290,7 @@ namespace SubSonic.Utilities
         /// </returns>
         public static bool IsMatch(string stringA, string stringB, bool trimStrings)
         {
-            if(trimStrings)
+            if (trimStrings)
                 return String.Equals(stringA.Trim(), stringB.Trim(), StringComparison.InvariantCultureIgnoreCase);
 
             return String.Equals(stringA, stringB, StringComparison.InvariantCultureIgnoreCase);
@@ -316,7 +316,7 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static string StripWhitespace(string inputString)
         {
-            if(!String.IsNullOrEmpty(inputString))
+            if (!String.IsNullOrEmpty(inputString))
                 return Regex.Replace(inputString, @"\s", String.Empty);
 
             return inputString;
@@ -334,7 +334,7 @@ namespace SubSonic.Utilities
             {
                 s = s.Trim();
                 if (s.StartsWith("[") && s.EndsWith("]"))
-                    return s.Substring(1,s.Length - 1);
+                    return s.Substring(1, s.Length - 1);
             }
             return s;
         }
@@ -361,7 +361,7 @@ namespace SubSonic.Utilities
         /// </returns>
         public static bool IsNumeric(TableSchema.TableColumn column)
         {
-            switch(column.DataType)
+            switch (column.DataType)
             {
                 case DbType.Currency:
                 case DbType.Decimal:
@@ -385,7 +385,7 @@ namespace SubSonic.Utilities
         /// </returns>
         public static bool IsString(TableSchema.TableColumn column)
         {
-            switch(column.DataType)
+            switch (column.DataType)
             {
                 case DbType.String:
                 case DbType.AnsiString:
@@ -406,12 +406,12 @@ namespace SubSonic.Utilities
         /// </returns>
         public static bool IsNullableDbType(DbType dbType)
         {
-            switch(dbType)
+            switch (dbType)
             {
                 case DbType.AnsiString:
                 case DbType.AnsiStringFixedLength:
                 case DbType.Binary:
-                    //case DbType.Byte:
+                //case DbType.Byte:
                 case DbType.Object:
                 case DbType.String:
                 case DbType.StringFixedLength:
@@ -429,7 +429,7 @@ namespace SubSonic.Utilities
         {
             HttpContext context = HttpContext.Current;
 
-            if(context.User != null && context.User.Identity != null && !String.IsNullOrEmpty(context.User.Identity.Name))
+            if (context.User != null && context.User.Identity != null && !String.IsNullOrEmpty(context.User.Identity.Name))
                 return true;
 
             return false;
@@ -462,7 +462,7 @@ namespace SubSonic.Utilities
         /// </returns>
         public static bool IsParsable(DbType dbType)
         {
-            switch(dbType)
+            switch (dbType)
             {
                 case DbType.AnsiString:
                 case DbType.AnsiStringFixedLength:
@@ -509,7 +509,7 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static SqlDbType GetSqlDBType(DbType dbType)
         {
-            switch(dbType)
+            switch (dbType)
             {
                 case DbType.AnsiString:
                     return SqlDbType.VarChar;
@@ -575,7 +575,7 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static string GetSystemType(DbType dbType)
         {
-            switch(dbType)
+            switch (dbType)
             {
                 case DbType.AnsiString:
                     return "System.String";
@@ -638,7 +638,7 @@ namespace SubSonic.Utilities
         public static string ByteArrayToString(byte[] arrInput)
         {
             StringBuilder sOutput = new StringBuilder(arrInput.Length * 2);
-            for(int i = 0; i < arrInput.Length; i++)
+            for (int i = 0; i < arrInput.Length; i++)
                 sOutput.Append(arrInput[i].ToString("x2"));
 
             return sOutput.ToString();
@@ -665,16 +665,17 @@ namespace SubSonic.Utilities
         ///// <param name="parameter">The parameter to evaluate</param>
         ///// <param name="provider">The provider where the parameter will be used</param>
         ///// <returns></returns>
-		public static string PrefixParameter(string parameter, DataProvider provider) {
-			//added this check for Unit Testing weirdness - RC
-			if (provider == null)
-				provider = DataService.Provider;
+        public static string PrefixParameter(string parameter, DataProvider provider)
+        {
+            //added this check for Unit Testing weirdness - RC
+            if (provider == null)
+                provider = DataService.Provider;
 
-			string prefix = provider.GetParameterPrefix();
-			if (!parameter.StartsWith(prefix))
-				parameter = String.Concat(prefix, parameter.Replace(" ", String.Empty));
-			return parameter;
-		}
+            string prefix = provider.GetParameterPrefix();
+            if (!parameter.StartsWith(prefix))
+                parameter = String.Concat(prefix, parameter.Replace(" ", String.Empty));
+            return parameter;
+        }
 
         /// <summary>
         /// Helper method to format a specific passed string as a SQL function
@@ -686,7 +687,7 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static string MakeFunction(string functionName, string columnName, bool isDistinct, DataProvider provider)
         {
-            if(isDistinct)
+            if (isDistinct)
                 return String.Concat(functionName, "(", SqlFragment.DISTINCT, provider.FormatIdentifier(columnName), ")");
 
             return MakeFunction(functionName, columnName, provider);
@@ -717,39 +718,42 @@ namespace SubSonic.Utilities
             return String.Concat(provider.FormatIdentifier(columnName), " = ", provider.FormatParameterNameForSQL(parameterName));
         }
 
-		/// <summary>
-		/// Fully qualifies qualifies a column name using the [table].[column] format (SQL Server),
-		/// or other format appropriate to a given provider.
-		/// </summary>
-		/// <param name="tableName">Name of the table</param>
-		/// <param name="columnName">Name of the column</param>
-		/// <param name="provider">The provider that the format is being qualified for</param>
-		/// <returns></returns>
-		public static string QualifyColumnName(string tableName, string columnName, DataProvider provider) {
-			return provider.QualifyColumnName("", tableName, columnName);
-		}
+        /// <summary>
+        /// Fully qualifies qualifies a column name using the [table].[column] format (SQL Server),
+        /// or other format appropriate to a given provider.
+        /// </summary>
+        /// <param name="tableName">Name of the table</param>
+        /// <param name="columnName">Name of the column</param>
+        /// <param name="provider">The provider that the format is being qualified for</param>
+        /// <returns></returns>
+        public static string QualifyColumnName(string tableName, string columnName, DataProvider provider)
+        {
+            return provider.QualifyColumnName("", tableName, columnName);
+        }
 
-		/// <summary>
-		/// Fully qualifies a table reference using the [schema].[table] format (SQL Server),
-		/// or other format appropriate to a given provider.
-		/// </summary>
-		/// <param name="schemaName">Name of the schema</param>
-		/// <param name="tableName">Name of the table</param>
-		/// <param name="provider">The provider that the format is being qualified for</param>
-		/// <returns></returns>
-		public static string QualifyTableName(string schemaName, string tableName, DataProvider provider) {
-			return provider.QualifyTableName(schemaName, tableName);
-		}
+        /// <summary>
+        /// Fully qualifies a table reference using the [schema].[table] format (SQL Server),
+        /// or other format appropriate to a given provider.
+        /// </summary>
+        /// <param name="schemaName">Name of the schema</param>
+        /// <param name="tableName">Name of the table</param>
+        /// <param name="provider">The provider that the format is being qualified for</param>
+        /// <returns></returns>
+        public static string QualifyTableName(string schemaName, string tableName, DataProvider provider)
+        {
+            return provider.QualifyTableName(schemaName, tableName);
+        }
 
-		/// <summary>
-		/// Fully qualifies a table reference using the [schema].[table] format (SQL Server),
-		/// or other format appropriate to a given provider.
-		/// </summary>
-		/// <param name="table">The TableSchema.Table whose name will be qualified</param>
-		/// <returns></returns>
-		public static string QualifyTableName(TableSchema.Table table) {
-			return table.Provider.QualifyTableName(table.SchemaName, table.TableName);
-		}
+        /// <summary>
+        /// Fully qualifies a table reference using the [schema].[table] format (SQL Server),
+        /// or other format appropriate to a given provider.
+        /// </summary>
+        /// <param name="table">The TableSchema.Table whose name will be qualified</param>
+        /// <returns></returns>
+        public static string QualifyTableName(TableSchema.Table table)
+        {
+            return table.Provider.QualifyTableName(table.SchemaName, table.TableName);
+        }
 
         /// <summary>
 		/// Adds a string to a qualified name, inserting inside enclosing square brackets if necessary
@@ -757,12 +761,14 @@ namespace SubSonic.Utilities
 		/// <param name="qname">The qualified name</param>
 		/// <param name="addTo">The string to add</param>
 		/// <returns></returns>
-		public static string AddStringToQualifiedName(string qname, string addTo) {
-			if (qname.EndsWith("]")) {
-				return String.Concat(qname.Substring(0, qname.Length - 1), addTo, "]");
-			}
-			return qname + addTo;
-		}
+		public static string AddStringToQualifiedName(string qname, string addTo)
+        {
+            if (qname.EndsWith("]"))
+            {
+                return String.Concat(qname.Substring(0, qname.Length - 1), addTo, "]");
+            }
+            return qname + addTo;
+        }
 
         /// <summary>
         /// Using a set of criteria including primary/foreign key references and positions,
@@ -775,20 +781,20 @@ namespace SubSonic.Utilities
         /// </returns>
         public static bool IsMappingTable(TableSchema.Table schema, string relatedTableColumn)
         {
-            if(schema.Columns.Count == 2)
+            if (schema.Columns.Count == 2)
             {
-                if(schema.Columns[0].IsPrimaryKey && schema.Columns[0].IsForeignKey && schema.Columns[1].IsPrimaryKey && schema.Columns[1].IsForeignKey)
+                if (schema.Columns[0].IsPrimaryKey && schema.Columns[0].IsForeignKey && schema.Columns[1].IsPrimaryKey && schema.Columns[1].IsForeignKey)
                 {
-                    if(IsMatch(schema.Columns[0].ColumnName, relatedTableColumn) || IsMatch(schema.Columns[1].ColumnName, relatedTableColumn))
+                    if (IsMatch(schema.Columns[0].ColumnName, relatedTableColumn) || IsMatch(schema.Columns[1].ColumnName, relatedTableColumn))
                         return true;
                 }
             }
-            if(schema.Columns.Count == 3)
+            if (schema.Columns.Count == 3)
             {
-                if((schema.Columns[0].IsPrimaryKey && !schema.Columns[0].IsForeignKey) && (schema.Columns[1].IsPrimaryKey && schema.Columns[1].IsForeignKey) &&
+                if ((schema.Columns[0].IsPrimaryKey && !schema.Columns[0].IsForeignKey) && (schema.Columns[1].IsPrimaryKey && schema.Columns[1].IsForeignKey) &&
                    (schema.Columns[2].IsPrimaryKey && schema.Columns[2].IsForeignKey))
                 {
-                    if(IsMatch(schema.Columns[1].ColumnName, relatedTableColumn) || IsMatch(schema.Columns[2].ColumnName, relatedTableColumn))
+                    if (IsMatch(schema.Columns[1].ColumnName, relatedTableColumn) || IsMatch(schema.Columns[2].ColumnName, relatedTableColumn))
                         return true;
                 }
             }
@@ -805,10 +811,10 @@ namespace SubSonic.Utilities
         /// </returns>
         public static bool IsMappingTable(TableSchema.Table schema)
         {
-            if(schema.Columns.Count == 2 && schema.Columns[0].IsPrimaryKey && schema.Columns[0].IsForeignKey && schema.Columns[1].IsPrimaryKey && schema.Columns[1].IsForeignKey)
+            if (schema.Columns.Count == 2 && schema.Columns[0].IsPrimaryKey && schema.Columns[0].IsForeignKey && schema.Columns[1].IsPrimaryKey && schema.Columns[1].IsForeignKey)
                 return true;
 
-            if(schema.Columns.Count == 3 &&
+            if (schema.Columns.Count == 3 &&
                (schema.Columns[0].IsPrimaryKey && !schema.Columns[0].IsForeignKey) &&
                (schema.Columns[1].IsPrimaryKey && schema.Columns[1].IsForeignKey) &&
                (schema.Columns[2].IsPrimaryKey && schema.Columns[2].IsForeignKey))
@@ -824,14 +830,14 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static object GetDefaultSetting(TableSchema.TableColumn column)
         {
-            if(column.IsNullable)
+            if (column.IsNullable)
                 return null;
-            if(IsMatch(column.ColumnName, ReservedColumnName.CREATED_ON) || IsMatch(column.ColumnName, ReservedColumnName.MODIFIED_ON))
+            if (IsMatch(column.ColumnName, ReservedColumnName.CREATED_ON) || IsMatch(column.ColumnName, ReservedColumnName.MODIFIED_ON))
                 return column.Table.Provider.Now;
-            if(IsLogicalDeleteColumn(column.ColumnName))
+            if (IsLogicalDeleteColumn(column.ColumnName))
                 return false;
 
-            switch(column.DataType)
+            switch (column.DataType)
             {
                 case DbType.Xml:
                 case DbType.String:
@@ -865,49 +871,49 @@ namespace SubSonic.Utilities
             object oVal = null;
             string colName = col.ColumnName;
 
-            if(IsMatch(colName, ReservedColumnName.MODIFIED_BY))
+            if (IsMatch(colName, ReservedColumnName.MODIFIED_BY))
                 oVal = HttpContext.Current.User.Identity.Name;
-            else if(IsMatch(colName, ReservedColumnName.MODIFIED_ON))
+            else if (IsMatch(colName, ReservedColumnName.MODIFIED_ON))
                 oVal = col.Table.Provider.Now;
-            else if(IsMatch(colName, ReservedColumnName.CREATED_BY))
+            else if (IsMatch(colName, ReservedColumnName.CREATED_BY))
             {
-                if(isAdd)
+                if (isAdd)
                     oVal = HttpContext.Current.User.Identity.Name;
-                else if(ctrl != null)
+                else if (ctrl != null)
                     oVal = ((Label)ctrl).Text;
             }
-            else if(IsMatch(colName, ReservedColumnName.CREATED_ON))
+            else if (IsMatch(colName, ReservedColumnName.CREATED_ON))
             {
-                if(isAdd)
+                if (isAdd)
                     oVal = col.Table.Provider.Now;
-                else if(ctrl != null)
+                else if (ctrl != null)
                     oVal = ((Label)ctrl).Text;
             }
-            else if(ctrl is TextBox)
+            else if (ctrl is TextBox)
                 oVal = ((TextBox)ctrl).Text;
-            else if(ctrl is CheckBox)
+            else if (ctrl is CheckBox)
                 oVal = ((CheckBox)ctrl).Checked;
-            else if(ctrl is DropDownList)
+            else if (ctrl is DropDownList)
                 oVal = ((DropDownList)ctrl).SelectedValue;
-            else if(ctrl is Calendar)
+            else if (ctrl is Calendar)
             {
                 Calendar cal = (Calendar)ctrl;
-                if(cal.SelectedDate > DateTime.MinValue)
+                if (cal.SelectedDate > DateTime.MinValue)
                     oVal = ((Calendar)ctrl).SelectedDate;
                 else
                 {
-                    if(!col.IsNullable)
+                    if (!col.IsNullable)
                         oVal = col.Table.Provider.Now;
                 }
             }
-            else if(ctrl is Label)
+            else if (ctrl is Label)
                 oVal = ((Label)ctrl).Text;
 
-            if(!col.IsPrimaryKey && !col.AutoIncrement)
+            if (!col.IsPrimaryKey && !col.AutoIncrement)
             {
-                if(oVal == null || oVal.ToString().Length == 0)
+                if (oVal == null || oVal.ToString().Length == 0)
                 {
-                    if(col.IsNullable)
+                    if (col.IsNullable)
                         oVal = returnDBNull ? DBNull.Value : null;
                     else
                         oVal = GetDefaultSetting(col);
@@ -938,12 +944,12 @@ namespace SubSonic.Utilities
         {
             // Note: This if block was taken from Convert.ChangeType as is, and is needed here since we're
             // checking properties on conversionType below.
-            if(conversionType == null)
+            if (conversionType == null)
                 throw new ArgumentNullException("conversionType");
 
             // If it's not a nullable type, just pass through the parameters to Convert.ChangeType
 
-            if(conversionType.IsGenericType && conversionType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            if (conversionType.IsGenericType && conversionType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
             {
                 // It's a nullable type, so instead of calling Convert.ChangeType directly which would throw a
                 // InvalidCastException (per http://weblogs.asp.net/pjohnson/archive/2006/02/07/437631.aspx),
@@ -953,7 +959,7 @@ namespace SubSonic.Utilities
                 // Note: We only do this check if we're converting to a nullable type, since doing it outside
                 // would diverge from Convert.ChangeType's behavior, which throws an InvalidCastException if
                 // value is null and conversionType is a value type.
-                if(value == null)
+                if (value == null)
                     return null;
 
                 // It's a nullable type, and not null, so that means it can be converted to its underlying type,
@@ -980,14 +986,14 @@ namespace SubSonic.Utilities
         public static string ParseCamelToProper(string sIn)
         {
             //No transformation if string is alread all caps
-            if(Validation.IsUpperCase(sIn))
+            if (Validation.IsUpperCase(sIn))
                 return sIn;
 
             char[] letters = sIn.ToCharArray();
             StringBuilder sOut = new StringBuilder();
             int index = 0;
 
-            if(sIn.Contains("ID"))
+            if (sIn.Contains("ID"))
             {
                 //just upper the first letter
                 sOut.Append(letters[0]);
@@ -995,14 +1001,14 @@ namespace SubSonic.Utilities
             }
             else
             {
-                foreach(char c in letters)
+                foreach (char c in letters)
                 {
-                    if(index == 0)
+                    if (index == 0)
                     {
                         sOut.Append(" ");
                         sOut.Append(c.ToString().ToUpper());
                     }
-                    else if(Char.IsUpper(c))
+                    else if (Char.IsUpper(c))
                     {
                         //it's uppercase, add a space
                         sOut.Append(" ");
@@ -1041,7 +1047,7 @@ namespace SubSonic.Utilities
         public static string GetProperName(string sIn, DataProvider provider)
         {
             string propertyName = sIn;
-            if(provider.FixDatabaseObjectCasing)
+            if (provider.FixDatabaseObjectCasing)
                 propertyName = Inflector.ToPascalCase(propertyName, provider.RemoveUnderscores);
             //if(propertyName.EndsWith("TypeCode"))
             //    propertyName = propertyName.Substring(0, propertyName.Length - 4);
@@ -1083,14 +1089,14 @@ namespace SubSonic.Utilities
             //    newWord =  word + appendWith;
 
             //Can't have a property with same name as class.
-            if(word == table)
+            if (word == table)
                 return newWord;
 
             string evalWord = word.ToLower();
 
-            switch(evalWord)
+            switch (evalWord)
             {
-                    // C# keywords
+                // C# keywords
                 case "abstract":
                 case "as":
                 case "base":
@@ -1171,18 +1177,18 @@ namespace SubSonic.Utilities
                 case "volatile":
                 case "void":
                 case "while":
-                    // C# contextual keywords
+                // C# contextual keywords
                 case "get":
                 case "partial":
                 case "set":
                 case "value":
                 case "where":
                 case "yield":
-                    // VB.NET keywords (commented out keywords that are the same as in C#)
+                // VB.NET keywords (commented out keywords that are the same as in C#)
                 case "alias":
                 case "addHandler":
                 case "ansi":
-                    //case "as": 
+                //case "as": 
                 case "assembly":
                 case "auto":
                 case "binary":
@@ -1238,7 +1244,7 @@ namespace SubSonic.Utilities
                 case "widening":
                 case "withevents":
                 case "writeonly":
-                    // VB.NET unreserved keywords
+                // VB.NET unreserved keywords
                 case "compare":
                 case "isfalse":
                 case "istrue":
@@ -1261,7 +1267,7 @@ namespace SubSonic.Utilities
         public static string KeyWordCheck(string word, string table, DataProvider provider)
         {
             string appendWith = "X";
-            if(!String.IsNullOrEmpty(provider.AppendWith))
+            if (!String.IsNullOrEmpty(provider.AppendWith))
                 appendWith = provider.AppendWith;
 
             return KeyWordCheck(word, table, appendWith);
@@ -1301,10 +1307,10 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static string FastReplace(string original, string pattern, string replacement, StringComparison comparisonType)
         {
-            if(original == null)
+            if (original == null)
                 return null;
 
-            if(String.IsNullOrEmpty(pattern))
+            if (String.IsNullOrEmpty(pattern))
                 return original;
 
             int lenPattern = pattern.Length;
@@ -1313,11 +1319,11 @@ namespace SubSonic.Utilities
 
             StringBuilder result = new StringBuilder();
 
-            while(true)
+            while (true)
             {
                 idxPattern = original.IndexOf(pattern, idxPattern + 1, comparisonType);
 
-                if(idxPattern < 0)
+                if (idxPattern < 0)
                 {
                     result.Append(original, idxLast, original.Length - idxLast);
                     break;
@@ -1340,12 +1346,12 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static string StripText(string inputString, string stripString)
         {
-            if(!String.IsNullOrEmpty(stripString))
+            if (!String.IsNullOrEmpty(stripString))
             {
-                string[] replace = stripString.Split(new[] {','});
-                for(int i = 0; i < replace.Length; i++)
+                string[] replace = stripString.Split(new[] { ',' });
+                for (int i = 0; i < replace.Length; i++)
                 {
-                    if(!String.IsNullOrEmpty(inputString))
+                    if (!String.IsNullOrEmpty(inputString))
                         inputString = Regex.Replace(inputString, replace[i], String.Empty);
                 }
             }
@@ -1360,7 +1366,7 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static string GetParameterName(string name, DataProvider provider)
         {
-            if(String.IsNullOrEmpty(name))
+            if (String.IsNullOrEmpty(name))
                 return String.Empty;
 
             string newName = name;
@@ -1395,7 +1401,7 @@ namespace SubSonic.Utilities
             //these are illegal characters - remove zem
             const string stripList = ".'?\\/><$!@%^*&+,;:\"(){}[]|-#";
 
-            for(int i = 0; i < stripList.Length; i++)
+            for (int i = 0; i < stripList.Length; i++)
                 sb.Replace(stripList[i], cReplace);
 
             sb.Replace(cReplace.ToString(), String.Empty);
@@ -1414,13 +1420,13 @@ namespace SubSonic.Utilities
         {
             string[] findList = Split(find);
             string newWord = word;
-            foreach(string f in findList)
+            foreach (string f in findList)
             {
-                if(f.Length > 0)
+                if (f.Length > 0)
                     newWord = newWord.Replace(f, replaceWith);
             }
 
-            if(removeUnderscores)
+            if (removeUnderscores)
                 return newWord.Replace(" ", String.Empty).Replace("_", String.Empty).Trim();
             return newWord.Replace(" ", String.Empty).Trim();
         }
@@ -1435,14 +1441,14 @@ namespace SubSonic.Utilities
         /// </returns>
         public static bool StartsWith(string word, string list)
         {
-            if(string.IsNullOrEmpty(list))
+            if (string.IsNullOrEmpty(list))
                 return true;
 
             string[] find = Split(list);
 
-            foreach(string f in find)
+            foreach (string f in find)
             {
-                if(word.StartsWith(f, StringComparison.CurrentCultureIgnoreCase))
+                if (word.StartsWith(f, StringComparison.CurrentCultureIgnoreCase))
                     return true;
             }
 
@@ -1459,11 +1465,11 @@ namespace SubSonic.Utilities
             string[] find;
             try
             {
-                find = list.Split(new[] {", ", ","}, StringSplitOptions.RemoveEmptyEntries);
+                find = list.Split(new[] { ", ", "," }, StringSplitOptions.RemoveEmptyEntries);
             }
             catch
             {
-                find = new[] {String.Empty};
+                find = new[] { String.Empty };
             }
             return find;
         }
@@ -1477,7 +1483,7 @@ namespace SubSonic.Utilities
         public static string ShortenText(object sIn, int length)
         {
             string sOut = sIn.ToString();
-            if(sOut.Length > length)
+            if (sOut.Length > length)
                 sOut = String.Concat(sOut.Substring(0, length), " ...");
 
             return sOut;
@@ -1490,7 +1496,7 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static int GetEffectiveMaxLength(TableSchema.TableColumn tableColumn)
         {
-            if(tableColumn.DataType == DbType.String && tableColumn.MaxLength == -1)
+            if (tableColumn.DataType == DbType.String && tableColumn.MaxLength == -1)
                 return Int32.MaxValue;
 
             return tableColumn.MaxLength;
@@ -1498,14 +1504,14 @@ namespace SubSonic.Utilities
 
         public static TableSchema.TableColumn GetDisplayTableColumn(TableSchema.Table table)
         {
-            if(table.Columns.Count == 1)
+            if (table.Columns.Count == 1)
                 return table.Columns[0];
-            if(table.Columns.Count > 1 && table.Columns[1].IsString)
+            if (table.Columns.Count > 1 && table.Columns[1].IsString)
                 return table.Columns[1];
 
-            foreach(TableSchema.TableColumn column in table.Columns)
+            foreach (TableSchema.TableColumn column in table.Columns)
             {
-                if(column.IsString)
+                if (column.IsString)
                     return column;
             }
             return table.Columns[1];
@@ -1521,14 +1527,14 @@ namespace SubSonic.Utilities
         {
             string checkedString;
 
-            if(stringToCheck.Length <= maxLength)
+            if (stringToCheck.Length <= maxLength)
                 return stringToCheck;
 
             // If the string to check is longer than maxLength 
             // and has no whitespace we need to trim it down.
-            if((stringToCheck.Length > maxLength) && (stringToCheck.IndexOf(" ") == -1))
+            if ((stringToCheck.Length > maxLength) && (stringToCheck.IndexOf(" ") == -1))
                 checkedString = String.Concat(stringToCheck.Substring(0, maxLength), "...");
-            else if(stringToCheck.Length > 0)
+            else if (stringToCheck.Length > 0)
                 checkedString = String.Concat(stringToCheck.Substring(0, maxLength), "...");
             else
                 checkedString = stringToCheck;
@@ -1556,16 +1562,16 @@ namespace SubSonic.Utilities
             sOut = sOut.Replace("&nbsp;", String.Empty);
             sOut = sOut.Replace("&amp;", "&");
 
-            if(stripExcessSpaces)
+            if (stripExcessSpaces)
             {
                 // If there is excess whitespace, this will remove
                 // like "THE      WORD".
-                char[] delim = {' '};
+                char[] delim = { ' ' };
                 string[] lines = sOut.Split(delim, StringSplitOptions.RemoveEmptyEntries);
 
                 //sOut = "";
                 StringBuilder sb = new StringBuilder();
-                foreach(string s in lines)
+                foreach (string s in lines)
                 {
                     sb.Append(s);
                     sb.Append(" ");
@@ -1590,9 +1596,9 @@ namespace SubSonic.Utilities
         {
             object oOut = null;
 
-            foreach(FieldInfo fi in t.GetFields())
+            foreach (FieldInfo fi in t.GetFields())
             {
-                if(IsMatch(fi.Name, Value))
+                if (IsMatch(fi.Name, Value))
                     oOut = fi.GetValue(null);
             }
 
@@ -1612,20 +1618,20 @@ namespace SubSonic.Utilities
         {
             string port = HttpContext.Current.Request.ServerVariables[ServerVariable.SERVER_PORT];
 
-            if(port == null || port == Ports.HTTP || port == Ports.HTTPS)
+            if (port == null || port == Ports.HTTP || port == Ports.HTTPS)
                 port = String.Empty;
             else
                 port = String.Concat(":", port);
 
             string protocol = HttpContext.Current.Request.ServerVariables[ServerVariable.SERVER_PORT_SECURE];
-            if(protocol == null || protocol == "0")
+            if (protocol == null || protocol == "0")
                 protocol = ProtocolPrefix.HTTP;
             else
                 protocol = ProtocolPrefix.HTTPS;
 
             string appPath = HttpContext.Current.Request.ApplicationPath;
 
-            if(appPath == "/")
+            if (appPath == "/")
                 appPath = String.Empty;
 
             string sOut = protocol + HttpContext.Current.Request.ServerVariables[ServerVariable.SERVER_NAME] + port + appPath;
@@ -1640,7 +1646,7 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static string GetParameter(string sParam)
         {
-            if(HttpContext.Current.Request.QueryString[sParam] != null)
+            if (HttpContext.Current.Request.QueryString[sParam] != null)
                 return HttpContext.Current.Request[sParam];
             return String.Empty;
         }
@@ -1653,10 +1659,10 @@ namespace SubSonic.Utilities
         public static int GetIntParameter(string sParam)
         {
             int iOut = 0;
-            if(HttpContext.Current.Request.QueryString[sParam] != null)
+            if (HttpContext.Current.Request.QueryString[sParam] != null)
             {
                 string sOut = HttpContext.Current.Request[sParam];
-                if(!String.IsNullOrEmpty(sOut))
+                if (!String.IsNullOrEmpty(sOut))
                     int.TryParse(sOut, out iOut);
             }
             return iOut;
@@ -1670,10 +1676,10 @@ namespace SubSonic.Utilities
         public static Guid GetGuidParameter(string sParam)
         {
             Guid gOut = Guid.Empty;
-            if(HttpContext.Current.Request.QueryString[sParam] != null)
+            if (HttpContext.Current.Request.QueryString[sParam] != null)
             {
                 string sOut = HttpContext.Current.Request[sParam];
-                if(Validation.IsGuid(sOut))
+                if (Validation.IsGuid(sOut))
                     gOut = new Guid(sOut);
             }
             return gOut;
@@ -1707,12 +1713,12 @@ namespace SubSonic.Utilities
         {
             StringBuilder builder = new StringBuilder();
             Random random = new Random();
-            for(int i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
                 char ch = Convert.ToChar(Convert.ToInt32(26 * random.NextDouble() + 65));
                 builder.Append(ch);
             }
-            if(lowerCase)
+            if (lowerCase)
                 return builder.ToString().ToLower();
             return builder.ToString();
         }
@@ -1762,11 +1768,11 @@ namespace SubSonic.Utilities
         {
             listControl.Items.Clear();
 
-            if(closeReader)
+            if (closeReader)
             {
-                using(dataReader)
+                using (dataReader)
                 {
-                    while(dataReader.Read())
+                    while (dataReader.Read())
                     {
                         string sText = dataReader[1].ToString();
                         string sVal = dataReader[0].ToString();
@@ -1777,7 +1783,7 @@ namespace SubSonic.Utilities
             }
             else
             {
-                while(dataReader.Read())
+                while (dataReader.Read())
                 {
                     string sText = dataReader[1].ToString();
                     string sVal = dataReader[0].ToString();
@@ -1796,14 +1802,14 @@ namespace SubSonic.Utilities
         /// <param name="valField">The val field.</param>
         public static void LoadListItems(ListItemCollection list, DataTable tblBind, DataTable tblVals, string textField, string valField)
         {
-            for(int i = 0; i < tblBind.Rows.Count; i++)
+            for (int i = 0; i < tblBind.Rows.Count; i++)
             {
                 ListItem l = new ListItem(tblBind.Rows[i][textField].ToString(), tblBind.Rows[i][valField].ToString());
 
-                for(int x = 0; x < tblVals.Rows.Count; x++)
+                for (int x = 0; x < tblVals.Rows.Count; x++)
                 {
                     DataRow dr = tblVals.Rows[x];
-                    if(IsMatch(dr[valField].ToString(), l.Value))
+                    if (IsMatch(dr[valField].ToString(), l.Value))
                         l.Selected = true;
                 }
                 list.Add(l);
@@ -1823,17 +1829,17 @@ namespace SubSonic.Utilities
         {
             listCollection.Clear();
 
-            if(closeReader)
+            if (closeReader)
             {
-                using(dataReader)
+                using (dataReader)
                 {
-                    while(dataReader.Read())
+                    while (dataReader.Read())
                     {
                         string sText = dataReader[textField].ToString();
                         string sVal = dataReader[valueField].ToString();
 
                         ListItem l = new ListItem(sText, sVal);
-                        if(!String.IsNullOrEmpty(selectedValue))
+                        if (!String.IsNullOrEmpty(selectedValue))
                             l.Selected = IsMatch(selectedValue, sVal);
                         listCollection.Add(l);
                     }
@@ -1842,13 +1848,13 @@ namespace SubSonic.Utilities
             }
             else
             {
-                while(dataReader.Read())
+                while (dataReader.Read())
                 {
                     string sText = dataReader[textField].ToString();
                     string sVal = dataReader[valueField].ToString();
 
                     ListItem l = new ListItem(sText, sVal);
-                    if(!String.IsNullOrEmpty(selectedValue))
+                    if (!String.IsNullOrEmpty(selectedValue))
                         l.Selected = IsMatch(selectedValue, sVal);
                     listCollection.Add(l);
                 }
@@ -1862,9 +1868,9 @@ namespace SubSonic.Utilities
         /// <param name="Selection">The selection.</param>
         public static void SetListSelection(ListItemCollection lc, string Selection)
         {
-            for(int i = 0; i < lc.Count; i++)
+            for (int i = 0; i < lc.Count; i++)
             {
-                if(lc[i].Value == Selection)
+                if (lc[i].Value == Selection)
                 {
                     lc[i].Selected = true;
                     break;
@@ -1880,25 +1886,25 @@ namespace SubSonic.Utilities
         /// <returns></returns>
         public static string RegexTransform(string inputText, DataProvider provider)
         {
-            if(provider.UseRegexReplace)
+            if (provider.UseRegexReplace)
             {
                 Regex rx;
 
-                if(!String.IsNullOrEmpty(provider.RegexMatchExpression))
+                if (!String.IsNullOrEmpty(provider.RegexMatchExpression))
                 {
                     rx = provider.RegexIgnoreCase ? new Regex(provider.RegexMatchExpression, RegexOptions.IgnoreCase) : new Regex(provider.RegexMatchExpression);
                     inputText = rx.Replace(inputText, provider.RegexReplaceExpression);
                 }
 
-                if(!String.IsNullOrEmpty(provider.RegexDictionaryReplace) && !String.IsNullOrEmpty(inputText))
+                if (!String.IsNullOrEmpty(provider.RegexDictionaryReplace) && !String.IsNullOrEmpty(inputText))
                 {
                     string regexString = Regex.Replace(provider.RegexDictionaryReplace, "[\r\n\t]", String.Empty);
 
                     string[] pairs = Regex.Split(regexString, ";");
-                    foreach(string pair in pairs)
+                    foreach (string pair in pairs)
                     {
                         string[] keys = Regex.Split(pair, ",");
-                        if(keys.Length == 2)
+                        if (keys.Length == 2)
                         {
                             rx = provider.RegexIgnoreCase ? new Regex(keys[0], RegexOptions.IgnoreCase) : new Regex(keys[0]);
                             inputText = rx.Replace(inputText, keys[1]);
@@ -1925,7 +1931,7 @@ namespace SubSonic.Utilities
         {
             string outS;
 
-            if(isOn)
+            if (isOn)
                 outS = text.Replace(Environment.NewLine, "<br />");
             else
             {
@@ -1957,9 +1963,9 @@ namespace SubSonic.Utilities
             const string defaultDatePattern = "MMMM d, yyyy";
             const string defaultTimePattern = "hh:mm tt";
 
-            if(pattern == null)
+            if (pattern == null)
             {
-                if(showTime)
+                if (showTime)
                     pattern = defaultDatePattern + " " + defaultTimePattern;
                 else
                     pattern = defaultDatePattern;

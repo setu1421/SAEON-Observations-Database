@@ -34,3 +34,34 @@ public static class HiddenExtensions
         return !field.IsEmpty;
     }
 }
+
+public static class StringExtensions
+{
+    public static bool IsQuoted(this string value)
+    {
+        return (value.StartsWith("\"") && value.EndsWith("\""));
+    }
+
+    public static string RemoveQuotes(this string value)
+    {
+        if (!value.IsQuoted())
+        {
+            return value;
+        }
+        else
+        {
+            value = value.Remove(0, 1);
+            value = value.Remove(value.Length - 1, 1);
+            return value;
+        }
+    }
+
+    public static bool IsTrue(this string value)
+    {
+        if (bool.TryParse(value, out bool result))
+            return result;
+        else
+            return false;
+    }
+}
+

@@ -340,10 +340,6 @@ namespace SAEON.Observations.Data
         }
         
 		
-		public SAEON.Observations.Data.UserDownloadCollection UserDownloads()
-		{
-			return new SAEON.Observations.Data.UserDownloadCollection().Where(UserDownload.Columns.DigitalObjectIdentifierID, Id).Load();
-		}
 		#endregion
 		
 			

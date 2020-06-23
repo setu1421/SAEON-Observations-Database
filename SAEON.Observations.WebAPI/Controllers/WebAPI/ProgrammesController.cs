@@ -63,14 +63,14 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         //GET: Programmes/5/Projects
         /// <summary>
-        /// Projects for the Programme
+        /// Projects of the Programme
         /// </summary>
         /// <param name="id">Id of Programme</param>
         /// <returns>ListOf(Project)</returns>
         [Route("{id:guid}/Projects")]
         public IQueryable<Project> GetProjects([FromUri] Guid id)
         {
-            return GetMany<Project>(id, s => s.Projects);
+            return GetManyWithGuidId<Project>(id, s => s.Projects);
         }
 
     }

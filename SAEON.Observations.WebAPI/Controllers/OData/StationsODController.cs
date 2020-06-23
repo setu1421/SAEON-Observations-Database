@@ -53,7 +53,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// Organisations for the Station
         /// </summary>
         /// <param name="id">Id of the Station</param>
-        /// <returns>ListOf(Organisation(</returns>
+        /// <returns>ListOf(Organisation)</returns>
         [ODataRoute("({id})/Organisations")]
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Organisation> GetOrganisations([FromODataUri] Guid id)
@@ -68,7 +68,7 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// Projects for the Station
         /// </summary>
         /// <param name="id">Id of the Station</param>
-        /// <returns>ListOf(Project(</returns>
+        /// <returns>ListOf(Project)</returns>
         [ODataRoute("({id})/Projects")]
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Project> GetProjects([FromODataUri] Guid id)
@@ -81,12 +81,38 @@ namespace SAEON.Observations.WebAPI.Controllers.OData
         /// Instruments for the Station
         /// </summary>
         /// <param name="id">Id of the Station</param>
-        /// <returns>ListOf(Instrument(</returns>
+        /// <returns>ListOf(Instrument)</returns>
         [ODataRoute("({id})/Instruments")]
         [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
         public IQueryable<Instrument> GetInstruments([FromODataUri] Guid id)
         {
             return GetManyWithGuidId(id, s => s.Instruments);
+        }
+
+        // GET: odata/Stations(5)/DataStreams
+        /// <summary>
+        /// DataStreams for the Station
+        /// </summary>
+        /// <param name="id">Id of the Station</param>
+        /// <returns>ListOf(DataStream)</returns>
+        [ODataRoute("({id})/DataStreams")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        public IQueryable<DataStream> GetDataStreams([FromODataUri] Guid id)
+        {
+            return GetManyWithLongId(id, s => s.DataStreams);
+        }
+
+        // GET: odata/Stations(5)/Observations
+        /// <summary>
+        /// Observations for the Station
+        /// </summary>
+        /// <param name="id">Id of the Station</param>
+        /// <returns>ListOf(Observation))</returns>
+        [ODataRoute("({id})/Observations")]
+        [EnableQuery(PageSize = PageSize, MaxTop = MaxTop)]
+        public IQueryable<Observation> GetObservations([FromODataUri] Guid id)
+        {
+            return GetManyWithIntId(id, s => s.Observations);
         }
     }
 }

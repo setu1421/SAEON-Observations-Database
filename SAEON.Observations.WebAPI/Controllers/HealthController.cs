@@ -1,5 +1,4 @@
 ﻿using SAEON.AspNet.Common;
-using SAEON.AspNet.WebApi;
 using SAEON.Logs;
 using SAEON.Observations.Core.Entities;
 using SAEON.Observations.WebAPI.Models;
@@ -21,7 +20,7 @@ namespace SAEON.Observations.WebAPI.Controllers
 
         public HealthController()
         {
-            db = new ObservationsDbContext(ConfigurationManager.AppSettings[Constants.TenantDefault] ?? "SAEON");
+            db = new ObservationsDbContext(ConfigurationManager.AppSettings[AspNetConstants.TenantDefault] ?? "SAEON");
         }
 
         [HttpGet]

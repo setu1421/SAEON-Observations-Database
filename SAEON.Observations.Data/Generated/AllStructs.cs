@@ -20,25 +20,11 @@ namespace SAEON.Observations.Data
 		
 		public static readonly string AspnetApplication = @"aspnet_Applications";
         
-		public static readonly string AspnetMembership = @"aspnet_Membership";
-        
-		public static readonly string AspnetPath = @"aspnet_Paths";
-        
-		public static readonly string AspnetPersonalizationAllUser = @"aspnet_PersonalizationAllUsers";
-        
-		public static readonly string AspnetPersonalizationPerUser = @"aspnet_PersonalizationPerUser";
-        
-		public static readonly string AspnetProfile = @"aspnet_Profile";
-        
 		public static readonly string AspnetRole = @"aspnet_Roles";
-        
-		public static readonly string AspnetSchemaVersion = @"aspnet_SchemaVersions";
         
 		public static readonly string AspnetUser = @"aspnet_Users";
         
 		public static readonly string AspnetUsersInRole = @"aspnet_UsersInRoles";
-        
-		public static readonly string AspnetWebEventEvent = @"aspnet_WebEvent_Events";
         
 		public static readonly string AuditLog = @"AuditLog";
         
@@ -112,10 +98,6 @@ namespace SAEON.Observations.Data
         
 		public static readonly string UnitOfMeasure = @"UnitOfMeasure";
         
-		public static readonly string UserDownload = @"UserDownloads";
-        
-		public static readonly string UserQuery = @"UserQueries";
-        
 	}
 	#endregion
     #region Schemas
@@ -126,39 +108,9 @@ namespace SAEON.Observations.Data
             get { return DataService.GetSchema("aspnet_Applications", "ObservationsDB"); }
 		}
         
-		public static TableSchema.Table AspnetMembership
-		{
-            get { return DataService.GetSchema("aspnet_Membership", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table AspnetPath
-		{
-            get { return DataService.GetSchema("aspnet_Paths", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table AspnetPersonalizationAllUser
-		{
-            get { return DataService.GetSchema("aspnet_PersonalizationAllUsers", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table AspnetPersonalizationPerUser
-		{
-            get { return DataService.GetSchema("aspnet_PersonalizationPerUser", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table AspnetProfile
-		{
-            get { return DataService.GetSchema("aspnet_Profile", "ObservationsDB"); }
-		}
-        
 		public static TableSchema.Table AspnetRole
 		{
             get { return DataService.GetSchema("aspnet_Roles", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table AspnetSchemaVersion
-		{
-            get { return DataService.GetSchema("aspnet_SchemaVersions", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table AspnetUser
@@ -169,11 +121,6 @@ namespace SAEON.Observations.Data
 		public static TableSchema.Table AspnetUsersInRole
 		{
             get { return DataService.GetSchema("aspnet_UsersInRoles", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table AspnetWebEventEvent
-		{
-            get { return DataService.GetSchema("aspnet_WebEvent_Events", "ObservationsDB"); }
 		}
         
 		public static TableSchema.Table AuditLog
@@ -356,16 +303,6 @@ namespace SAEON.Observations.Data
             get { return DataService.GetSchema("UnitOfMeasure", "ObservationsDB"); }
 		}
         
-		public static TableSchema.Table UserDownload
-		{
-            get { return DataService.GetSchema("UserDownloads", "ObservationsDB"); }
-		}
-        
-		public static TableSchema.Table UserQuery
-		{
-            get { return DataService.GetSchema("UserQueries", "ObservationsDB"); }
-		}
-        
 	
     }
     #endregion
@@ -385,8 +322,6 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VDataSourceTransformation = @"vDataSourceTransformation";
         
-		public static readonly string VFeature = @"vFeatures";
-        
 		public static readonly string VImportBatch = @"vImportBatch";
         
 		public static readonly string VImportBatchSummary = @"vImportBatchSummary";
@@ -395,7 +330,9 @@ namespace SAEON.Observations.Data
         
 		public static readonly string VInstrumentSensor = @"vInstrumentSensor";
         
-		public static readonly string VInventory = @"vInventory";
+		public static readonly string VInventoryDataStream = @"vInventoryDataStreams";
+        
+		public static readonly string VInventorySensor = @"vInventorySensors";
         
 		public static readonly string VLocation = @"vLocations";
         
@@ -406,8 +343,6 @@ namespace SAEON.Observations.Data
 		public static readonly string VObservationExpansion = @"vObservationExpansion";
         
 		public static readonly string VObservationJSON = @"vObservationJSON";
-        
-		public static readonly string VObservationODatum = @"vObservationOData";
         
 		public static readonly string VOfferingPhenomena = @"vOfferingPhenomena";
         
@@ -438,8 +373,6 @@ namespace SAEON.Observations.Data
 		public static readonly string VStationOrganisation = @"vStationOrganisation";
         
 		public static readonly string VUnitOfMeasurePhenomena = @"vUnitOfMeasurePhenomena";
-        
-		public static readonly string VUserDownload = @"vUserDownloads";
         
 		public static readonly string VUserInfo = @"vUserInfo";
         

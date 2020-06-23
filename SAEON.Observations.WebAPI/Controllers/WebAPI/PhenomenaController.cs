@@ -12,15 +12,6 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
     [RoutePrefix("Api/Phenomena")]
     public class PhenomenaController : CodedApiController<Phenomenon>
     {
-        //protected override List<Expression<Func<Phenomenon, object>>> GetIncludes()
-        //{
-        //    var list = base.GetIncludes();
-        //    list.Add(i => i.Offerings);
-        //    list.Add(i => i.Units);
-        //    list.Add(i => i.Sensors);
-        //    return list;
-        //}
-
         /// <summary>
         /// All Phenomena
         /// </summary>
@@ -65,38 +56,38 @@ namespace SAEON.Observations.WebAPI.Controllers.WebAPI
 
         // GET: Phenomena/5/Offerings
         /// <summary>
-        /// Offerings for the Phenomenon
+        /// Offerings of the Phenomenon
         /// </summary>
         /// <param name="id">Id of the Phenomenon</param>
         /// <returns>ListOf(Offering)</returns>
         [Route("{id:guid}/Offerings")]
         public IQueryable<Offering> GetOfferings([FromUri] Guid id)
         {
-            return GetManyIdEntity<PhenomenonOffering>(id, s => s.PhenomenonOfferings).Select(i => i.Offering);
+            return GetManyWithGuidId<PhenomenonOffering>(id, s => s.PhenomenonOfferings).Select(i => i.Offering);
         }
 
         // GET: Phenomena/5/Units
         /// <summary>
-        /// Units for the Phenomenon
+        /// Units of the Phenomenon
         /// </summary>
         /// <param name="id">Id of the Phenomenon</param>
         /// <returns>ListOf(Unit)</returns>
         [Route("{id:guid}/Units")]
         public IQueryable<Unit> GetUnits([FromUri] Guid id)
         {
-            return GetManyIdEntity<PhenomenonUnit>(id, s => s.PhenomenonUnits).Select(i => i.Unit);
+            return GetManyWithGuidId<PhenomenonUnit>(id, s => s.PhenomenonUnits).Select(i => i.Unit);
         }
 
         // GET: Phenomena/5/Sensors
         /// <summary>
-        /// Sensors for the Phenomenon
+        /// Sensors of the Phenomenon
         /// </summary>
         /// <param name="id">Id of the Phenomenon</param>
         /// <returns>ListOf(Sensor)</returns>
         [Route("{id:guid}/Sensors")]
         public IQueryable<Sensor> GetSensors([FromUri] Guid id)
         {
-            return GetMany<Sensor>(id, s => s.Sensors);
+            return GetManyWithGuidId<Sensor>(id, s => s.Sensors);
         }
 
     }

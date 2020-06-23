@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SAEON.AspNet.Common;
 using SAEON.Logs;
-using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [Route("internal/[controller]")]
     [ApiController]
-    [Authorize(Policy = Constants.TenantPolicy)]
+    [Authorize(Policy = AspNetConstants.TenantPolicy)]
     //[Authorize(Policy = Constants. ClientPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class BaseController<TController> : ControllerBase where TController : BaseController<TController>

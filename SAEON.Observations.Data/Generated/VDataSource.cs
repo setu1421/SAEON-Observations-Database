@@ -110,7 +110,7 @@ namespace SAEON.Observations.Data{
                 colvarUrl.DataType = DbType.AnsiString;
                 colvarUrl.MaxLength = 250;
                 colvarUrl.AutoIncrement = false;
-                colvarUrl.IsNullable = false;
+                colvarUrl.IsNullable = true;
                 colvarUrl.IsPrimaryKey = false;
                 colvarUrl.IsForeignKey = false;
                 colvarUrl.IsReadOnly = false;

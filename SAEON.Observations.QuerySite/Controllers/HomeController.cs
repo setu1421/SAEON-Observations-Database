@@ -1,7 +1,5 @@
 ﻿using SAEON.AspNet.Common;
 using SAEON.Logs;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Web.Mvc;
 
 namespace SAEON.Observations.QuerySite.Controllers
@@ -40,8 +38,8 @@ namespace SAEON.Observations.QuerySite.Controllers
         {
             using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Name", Name } }))
             {
-                Session[Constants.TenantSession] = Name;
-                return RedirectToAction("Index","Home");
+                Session[AspNetConstants.TenantSession] = Name;
+                return RedirectToAction("Index", "Home");
             }
         }
     }

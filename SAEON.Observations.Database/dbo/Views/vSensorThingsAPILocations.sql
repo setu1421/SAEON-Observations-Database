@@ -10,9 +10,9 @@ Select Distinct
   Coalesce(Station.Elevation, Station_Instrument.Elevation, Instrument.Elevation, Instrument_Sensor.Elevation, Sensor.Elevation) Elevation,
   vSensorThingsAPIInstrumentDates.StartDate, vSensorThingsAPIInstrumentDates.EndDate
 from
-  vInventory
+  vInventorySensors
   inner join Station
-    on (vInventory.StationID = Station.ID)
+    on (vInventorySensors.StationID = Station.ID)
   inner join Station_Instrument
     on (Station_Instrument.StationID = Station.ID)
   inner join Instrument
@@ -34,9 +34,9 @@ Select Distinct
   Coalesce(Instrument.Elevation, Instrument_Sensor.Elevation, Sensor.Elevation, Station_Instrument.Elevation, Station.Elevation) Elevation,
   vSensorThingsAPIInstrumentDates.StartDate, vSensorThingsAPIInstrumentDates.EndDate
 from
-  vInventory
+  vInventorySensors
   inner join Instrument
-    on (vInventory.InstrumentID = Instrument.ID)
+    on (vInventorySensors.InstrumentID = Instrument.ID)
   inner join Instrument_Sensor
     on (Instrument_Sensor.InstrumentID = Instrument.ID)
   inner join Sensor
