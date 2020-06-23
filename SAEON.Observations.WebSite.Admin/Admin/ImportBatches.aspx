@@ -675,11 +675,6 @@
                             <%--<ClientValidation Handler="#{SaveButton}.setDisabled(!valid);" />--%>
                         </Listeners>
                         <Buttons>
-                            <ext:Button ID="TestCosmos" runat="server" Text="Test CosmosDB">
-                                <DirectEvents>
-                                    <Click OnEvent="TestCosmosDB" IsUpload="false" />
-                                </DirectEvents>
-                            </ext:Button>
                             <ext:Button ID="LogStartButton" runat="server" Text="Log Start" Icon="ApplicationLightning">
                                 <%--                               <Listeners>
                                     <Click Handler="DirectCall.UploadLogging('LogStartClick'); #{DataFileUpload}.enable(); return true;" />

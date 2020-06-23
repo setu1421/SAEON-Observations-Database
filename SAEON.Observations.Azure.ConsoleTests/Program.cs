@@ -20,6 +20,7 @@ namespace SAEON.Observations.Azure.ConsoleTests
                     {
                         Logging.Information("Initializing");
                         var azure = new ObservationsAzure();
+                        azure.DeleteImportBatch(new Guid("aea07399-300f-442a-8a46-7cf8a878417f"));
                         var importBatchId = new Guid("426170df-73fa-4c25-81c0-ea00264d60c8");
                         Logging.Information("Adding items");
                         var item = new ObservationItem

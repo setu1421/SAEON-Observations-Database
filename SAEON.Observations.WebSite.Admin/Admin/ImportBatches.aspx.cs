@@ -29,11 +29,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         {
             try
             {
-                Logging.Information("PageLoad Start");
+                Logging.Verbose("PageLoad Start");
                 DeleteIndivdualObservations = ConfigurationManager.AppSettings["DeleteIndivdualObservations"].IsTrue();
                 BulkInsert = ConfigurationManager.AppSettings["BulkInsert"].IsTrue();
                 LogBadValues = ConfigurationManager.AppSettings["LogBadValues"].IsTrue();
-                Logging.Information("IsPostBack: {IsPostBack} IsAjaxRequest: {IsAjax}", IsPostBack, X.IsAjaxRequest);
+                Logging.Verbose("IsPostBack: {IsPostBack} IsAjaxRequest: {IsAjax}", IsPostBack, X.IsAjaxRequest);
                 if (!X.IsAjaxRequest)
                 {
                     Store store = cbDataSource.GetStore();
@@ -73,7 +73,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             finally
             {
-                Logging.Information("PageLoad End");
+                Logging.Verbose("PageLoad End");
             }
         }
     }
@@ -86,7 +86,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         {
             try
             {
-                Logging.Information("ImportBatchesGridStore_RefreshData Start");
+                Logging.Verbose("ImportBatchesGridStore_RefreshData Start");
                 ImportBatchesGridStore.DataSource = ImportBatchRepository.GetPagedList(e, e.Parameters[GridFilters1.ParamPrefix]);
                 ImportBatchesGridStore.DataBind();
                 //(ImportBatchesGridStore.Proxy[0] as PageProxy).Total = ImportBatchesGridStore.DataSource
@@ -98,7 +98,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             finally
             {
-                Logging.Information("ImportBatchesGridStore_RefreshData End");
+                Logging.Verbose("ImportBatchesGridStore_RefreshData End");
             }
         }
     }
@@ -109,7 +109,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         {
             try
             {
-                Logging.Information("DataLogGrid_RefreshData Start");
+                Logging.Verbose("DataLogGrid_RefreshData Start");
                 if (e.Parameters["ImportBatchID"] != null && e.Parameters["ImportBatchID"].ToString() != "-1")
                 {
                     Guid BatchId = Utilities.MakeGuid(e.Parameters["ImportBatchID"].ToString());
@@ -124,7 +124,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             finally
             {
-                Logging.Information("DataLogGrid_RefreshData End");
+                Logging.Verbose("DataLogGrid_RefreshData End");
             }
         }
     }
@@ -207,78 +207,93 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var azure = new ObservationsAzure();
-            Logging.Information("Adding CosmosDB items for ImportBatch {ImportBatchId}", importBatchId);
-            var sql =
-                "Select" + Environment.NewLine +
-                "  *" + Environment.NewLine +
-                "from" + Environment.NewLine +
-                "  vObservationJSON" + Environment.NewLine +
-                "where" + Environment.NewLine +
-                "  ([ImportBatch.ID] = @ImportBatchID)";
-            using (var cmd = connScope.CurrentConnection.CreateCommand())
+            try
             {
-                cmd.CommandText = sql;
-                cmd.CommandTimeout = Convert.ToInt32(TimeSpan.Parse(ConfigurationManager.AppSettings["TransactionTimeout"]).TotalSeconds);
-                var param = cmd.CreateParameter();
-                param.DbType = DbType.Guid;
-                param.ParameterName = "@ImportBatchID";
-                param.Value = importBatchId;
-                cmd.Parameters.Add(param);
-                var reader = cmd.ExecuteReader();
-                var table = new DataTable("Observations");
-                table.Load(reader);
-                var cost = new CosmosDBCost<ObservationItem>();
-                var items = new List<ObservationItem>();
-                var batchSize = azure.BatchSize;
-                foreach (DataRow row in table.Rows)
+                Logging.Information("Adding CosmosDB items for ImportBatch {ImportBatchId} BulkEnabled: {BulkEnabled}", importBatchId, ObservationsAzure.CosmosDBBulkEnabled);
+                var sql =
+                    "Select" + Environment.NewLine +
+                    "  *" + Environment.NewLine +
+                    "from" + Environment.NewLine +
+                    "  vObservationJSON" + Environment.NewLine +
+                    "where" + Environment.NewLine +
+                    "  ([ImportBatch.ID] = @ImportBatchID)";
+                using (var cmd = connScope.CurrentConnection.CreateCommand())
                 {
-                    var item = new ObservationItem
+                    cmd.CommandText = sql;
+                    cmd.CommandTimeout = Convert.ToInt32(TimeSpan.Parse(ConfigurationManager.AppSettings["TransactionTimeout"]).TotalSeconds);
+                    var param = cmd.CreateParameter();
+                    param.DbType = DbType.Guid;
+                    param.ParameterName = "@ImportBatchID";
+                    param.Value = importBatchId;
+                    cmd.Parameters.Add(param);
+                    var reader = cmd.ExecuteReader();
+                    var table = new DataTable("Observations");
+                    table.Load(reader);
+                    var cost = new CosmosDBCost<ObservationItem>();
+                    var items = new List<ObservationItem>();
+                    var batchSize = azure.BatchSize;
+                    foreach (DataRow row in table.Rows)
                     {
-                        Id = row.GetValue<int>("ID").ToString(),
-                        ValueDate = new EpochDate(row.GetValue<DateTime>("ValueDate")),
-                        ValueDay = new EpochDate(row.GetValue<DateTime>("ValueDay")),
-                        ValueYear = row.GetValue<int>("ValueYear"),
-                        ValueDecade = row.GetValue<int>("ValueDecade"),
-                        TextValue = row.GetValue<string>("TextValue"),
-                        RawValue = row.GetValue<double?>("RawValue"),
-                        DataValue = row.GetValue<double?>("DataValue"),
-                        Comment = row.GetValue<string>("Comment"),
-                        CorrelationId = row.GetValue<Guid?>("CorrelationId"),
-                        Latitude = row.GetValue<double?>("Latitude"),
-                        Longitude = row.GetValue<double?>("Longitude"),
-                        Elevation = row.GetValue<double?>("Elevation"),
-                        UserId = row.GetValue<Guid>("UserId"),
-                        AddedDate = new EpochDate(row.GetValue<DateTime>("AddedDate")),
-                        AddedAt = new EpochDate(row.GetValue<DateTime>("AddedAt")),
-                        UpdatedAt = new EpochDate(row.GetValue<DateTime>("UpdatedAt")),
-                        ImportBatch = new ObservationImportBatch { Id = row.GetValue<Guid>("ImportBatch.ID"), Code = row.GetValue<int>("ImportBatch.Code"), Date = new EpochDate(row.GetValue<DateTime>("ImportBatch.Date")) },
-                        Site = new ObservationSite { Id = row.GetValue<Guid>("Site.ID"), Code = row.GetValue<string>("Site.Code"), Name = row.GetValue<string>("Site.Name") },
-                        Station = new ObservationStation { Id = row.GetValue<Guid>("Station.ID"), Code = row.GetValue<string>("Station.Code"), Name = row.GetValue<string>("Station.Name") },
-                        Instrument = new ObservationInstrument { Id = row.GetValue<Guid>("Instrument.ID"), Code = row.GetValue<string>("Instrument.Code"), Name = row.GetValue<string>("Instrument.Name") },
-                        Sensor = new ObservationSensor { Id = row.GetValue<Guid>("Sensor.ID"), Code = row.GetValue<string>("Sensor.Code"), Name = row.GetValue<string>("Sensor.Name") },
-                        Phenomenon = new ObservationPhenomenon { Id = row.GetValue<Guid>("Phenomenon.ID"), Code = row.GetValue<string>("Phenomenon.Code"), Name = row.GetValue<string>("Phenomenon.Name") },
-                        Offering = new ObservationOffering { Id = row.GetValue<Guid>("Offering.ID"), Code = row.GetValue<string>("Offering.Code"), Name = row.GetValue<string>("Offering.Name") },
-                        Unit = new ObservationUnit { Id = row.GetValue<Guid>("Unit.ID"), Code = row.GetValue<string>("Unit.Code"), Name = row.GetValue<string>("Unit.Name") },
-                        Status = row.IsNull("Status.ID") ? null : new ObservationStatus { Id = row.GetValue<Guid>("Status.ID"), Code = row.GetValue<string>("Status.Code"), Name = row.GetValue<string>("Status.Name") },
-                        StatusReason = row.IsNull("StatusReason.ID") ? null : new ObservationStatusReason { Id = row.GetValue<Guid>("StatusReason.ID"), Code = row.GetValue<string>("StatusReason.Code"), Name = row.GetValue<string>("StatusReason.Name") },
-                    };
-                    //Logging.Verbose("Adding {@Observation}", observation);
-                    items.Add(item);
-                    if (items.Count >= batchSize)
+                        var item = new ObservationItem
+                        {
+                            Id = row.GetValue<int>("ID").ToString(),
+                            ValueDate = new EpochDate(row.GetValue<DateTime>("ValueDate")),
+                            ValueDay = new EpochDate(row.GetValue<DateTime>("ValueDay")),
+                            ValueYear = row.GetValue<int>("ValueYear"),
+                            ValueDecade = row.GetValue<int>("ValueDecade"),
+                            TextValue = row.GetValue<string>("TextValue"),
+                            RawValue = row.GetValue<double?>("RawValue"),
+                            DataValue = row.GetValue<double?>("DataValue"),
+                            Comment = row.GetValue<string>("Comment"),
+                            CorrelationId = row.GetValue<Guid?>("CorrelationId"),
+                            Latitude = row.GetValue<double?>("Latitude"),
+                            Longitude = row.GetValue<double?>("Longitude"),
+                            Elevation = row.GetValue<double?>("Elevation"),
+                            UserId = row.GetValue<Guid>("UserId"),
+                            AddedDate = new EpochDate(row.GetValue<DateTime>("AddedDate")),
+                            AddedAt = new EpochDate(row.GetValue<DateTime>("AddedAt")),
+                            UpdatedAt = new EpochDate(row.GetValue<DateTime>("UpdatedAt")),
+                            ImportBatch = new ObservationImportBatch { Id = row.GetValue<Guid>("ImportBatch.ID"), Code = row.GetValue<int>("ImportBatch.Code"), Date = new EpochDate(row.GetValue<DateTime>("ImportBatch.Date")) },
+                            Site = new ObservationSite { Id = row.GetValue<Guid>("Site.ID"), Code = row.GetValue<string>("Site.Code"), Name = row.GetValue<string>("Site.Name") },
+                            Station = new ObservationStation { Id = row.GetValue<Guid>("Station.ID"), Code = row.GetValue<string>("Station.Code"), Name = row.GetValue<string>("Station.Name") },
+                            Instrument = new ObservationInstrument { Id = row.GetValue<Guid>("Instrument.ID"), Code = row.GetValue<string>("Instrument.Code"), Name = row.GetValue<string>("Instrument.Name") },
+                            Sensor = new ObservationSensor { Id = row.GetValue<Guid>("Sensor.ID"), Code = row.GetValue<string>("Sensor.Code"), Name = row.GetValue<string>("Sensor.Name") },
+                            Phenomenon = new ObservationPhenomenon { Id = row.GetValue<Guid>("Phenomenon.ID"), Code = row.GetValue<string>("Phenomenon.Code"), Name = row.GetValue<string>("Phenomenon.Name") },
+                            Offering = new ObservationOffering { Id = row.GetValue<Guid>("Offering.ID"), Code = row.GetValue<string>("Offering.Code"), Name = row.GetValue<string>("Offering.Name") },
+                            Unit = new ObservationUnit { Id = row.GetValue<Guid>("Unit.ID"), Code = row.GetValue<string>("Unit.Code"), Name = row.GetValue<string>("Unit.Name") },
+                            Status = row.IsNull("Status.ID") ? null : new ObservationStatus { Id = row.GetValue<Guid>("Status.ID"), Code = row.GetValue<string>("Status.Code"), Name = row.GetValue<string>("Status.Name") },
+                            StatusReason = row.IsNull("StatusReason.ID") ? null : new ObservationStatusReason { Id = row.GetValue<Guid>("StatusReason.ID"), Code = row.GetValue<string>("StatusReason.Code"), Name = row.GetValue<string>("StatusReason.Name") },
+                        };
+                        //Logging.Verbose("Adding {@Observation}", observation);
+                        items.Add(item);
+                        if (items.Count >= batchSize)
+                        {
+                            var batchCost = azure.UpsertObservations(items);
+                            cost += batchCost;
+                            Logging.Information("Added batch of {BatchSize:N0} for ImportBatch {ImportBatchId} Cost: {BatchCost}", items.Count, importBatchId, batchCost);
+                            items.Clear();
+                        }
+                    }
+                    if (items.Any())
                     {
                         var batchCost = azure.UpsertObservations(items);
                         cost += batchCost;
                         Logging.Information("Added batch of {BatchSize:N0} for ImportBatch {ImportBatchId} Cost: {BatchCost}", items.Count, importBatchId, batchCost);
-                        items.Clear();
                     }
+                    Logging.Information("Added {Items:N0} CosmosDB items for ImportBatch {ImportBatchId} in {elapsed}, Cost: {Cost}", table.Rows.Count, importBatchId, stopwatch.Elapsed.TimeStr(), cost);
                 }
-                if (items.Any())
+            }
+            catch (Exception ex)
+            {
+                Logging.Exception(ex);
+                try
                 {
-                    var batchCost = azure.UpsertObservations(items);
-                    cost += batchCost;
-                    Logging.Information("Added batch of {BatchSize:N0} for ImportBatch {ImportBatchId} Cost: {BatchCost}", items.Count, importBatchId, batchCost);
+                    azure.DeleteImportBatch(importBatchId);
                 }
-                Logging.Information("Added {Items:N0} CosmosDB items for ImportBatch {ImportBatchId} in {elapsed}, Cost: {Cost}", table.Rows.Count, importBatchId, stopwatch.Elapsed.TimeStr(), cost);
+                catch (Exception)
+                {
+                }
+                throw;
             }
         }
     }
@@ -291,9 +306,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var azure = new ObservationsAzure();
-            Logging.Information("Deleting CosmosDB items for ImportBatch {importBatchId}", importBatchId);
-            var cost = azure.DeleteImportBatch(importBatchId);
-            Logging.Information("Deleted CosmosDB items for ImportBatch {importBatchId} in {elapsed}, Cost: {Cost}", importBatchId, stopwatch.Elapsed.TimeStr(), cost);
+            Logging.Information("Deleting CosmosDB items for ImportBatch {importBatchId} BulkEnabled: {BulkEnabled}", importBatchId, ObservationsAzure.CosmosDBBulkEnabled);
+            var (totalCost, readCost, deleteCost) = azure.DeleteImportBatch(importBatchId);
+            Logging.Information("Deleted CosmosDB items for ImportBatch {importBatchId} in {elapsed}, ReadCost: {ReadCost} DeleteCost: {DeleteCost} TotalCost: {TotalCost}", importBatchId, stopwatch.Elapsed.TimeStr(), readCost, deleteCost, totalCost);
         }
     }
 
@@ -354,36 +369,6 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         }
     }
 #endif
-
-    protected void TestCosmosDB(object sender, DirectEventArgs e)
-    {
-        using (Logging.MethodCall(GetType()))
-        {
-            try
-            {
-                Logging.Information("Loading Azure");
-                var azure = new ObservationsAzure();
-                var importBatchId = new Guid("426170df-73fa-4c25-81c0-ea00264d60c8");
-                var item = new ObservationItem
-                {
-                    Id = "123",
-                    ImportBatch = new ObservationImportBatch { Id = importBatchId, Code = 123 }
-                };
-                Logging.Information("Item: {@Item}", azure.GetObservation(item));
-                var obs = azure.GetObservations(i => i.ImportBatchId == importBatchId);
-                Logging.Information("Count: {Count}", obs.Count());
-                importBatchId = new Guid("756F7BB7-4F2E-4DE6-9B91-0B37ADEBDECE");
-                Logging.Information("Deleting batch {importBatchId}", importBatchId);
-                var cost = azure.DeleteImportBatch(importBatchId);
-                Logging.Information("Cost: {Cost}", cost);
-            }
-            catch (Exception ex)
-            {
-                Logging.Exception(ex);
-                throw;
-            }
-        }
-    }
 
     protected void UploadClick(object sender, DirectEventArgs e)
     {
@@ -1533,7 +1518,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
         {
             try
             {
-                Logging.Information("ObservationsGridStore_RefreshData Start");
+                Logging.Verbose("ObservationsGridStore_RefreshData Start");
                 if (e.Parameters["ImportBatchID"] != null && e.Parameters["ImportBatchID"].ToString() != "-1")
                 {
                     Guid Id = Guid.Parse(e.Parameters["ImportBatchID"].ToString());
@@ -1563,7 +1548,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             }
             finally
             {
-                Logging.Information("ObservationsGridStore_RefreshData End");
+                Logging.Verbose("ObservationsGridStore_RefreshData End");
             }
         }
     }

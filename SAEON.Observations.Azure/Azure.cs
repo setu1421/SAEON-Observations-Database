@@ -22,7 +22,7 @@ namespace SAEON.Observations.Azure
         public static bool StorageEnabled { get; private set; } = false;
         public static bool CosmosDBEnabled { get; private set; } = false;
         public static bool CosmosDBBulkEnabled { get; private set; } = false;
-        public int BatchSize { get { return int.Parse(ConfigurationManager.AppSettings["AzureBatchSize"] ?? AzureCosmosDB<ObservationItem>.DefaultBatchSize.ToString()); } }
+        public int BatchSize { get { return int.Parse(ConfigurationManager.AppSettings["AzureCosmosDBBatchSize"] ?? AzureCosmosDB<ObservationItem>.DefaultBatchSize.ToString()); } }
 
         private AzureStorage Storage = null;
         private AzureCosmosDB<ObservationItem> CosmosDB = null;
@@ -370,9 +370,9 @@ namespace SAEON.Observations.Azure
             return DeleteObservationAsync(item).GetAwaiter().GetResult();
         }
 
-        public async Task<CosmosDBCost<ObservationItem>> DeleteImportBatchAsync(Guid importBatchId)
+        public async Task<(CosmosDBCost<ObservationItem> totalCost, CosmosDBCost<ObservationItem> readCost, CosmosDBCost<ObservationItem> deleteCost)> DeleteImportBatchAsync(Guid importBatchId)
         {
-            if (!Enabled || !CosmosDBEnabled) return new CosmosDBCost<ObservationItem>();
+            if (!Enabled || !CosmosDBEnabled) return default;
             using (Logging.MethodCall(GetType()))
             {
                 try
@@ -387,7 +387,7 @@ namespace SAEON.Observations.Azure
             }
         }
 
-        public CosmosDBCost<ObservationItem> DeleteImportBatch(Guid importBatchId)
+        public (CosmosDBCost<ObservationItem> totalCost, CosmosDBCost<ObservationItem> readCost, CosmosDBCost<ObservationItem> deleteCost) DeleteImportBatch(Guid importBatchId)
         {
             return DeleteImportBatchAsync(importBatchId).GetAwaiter().GetResult();
         }
