@@ -666,19 +666,21 @@
                                 AllowBlank="false" FieldLabel="Data File" ButtonText="" Icon="Zoom" BlankText="input file is required"
                                 ClientIDMode="Static">
                                 <Listeners>
+                                <%--                                    
                                     <FileSelected Handler="#{DataFileUpload}.disable();" />
+                                --%>
                                 </Listeners>
                             </ext:FileUploadField>
                         </Items>
                         <Listeners>
+                            <%--                            
                             <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);#{LogStartButton}.setDisabled(!valid);#{TestUploadButton}.setDisabled(!valid);" />
-                            <%--<ClientValidation Handler="#{SaveButton}.setDisabled(!valid);" />--%>
+                            --%>
+                            <ClientValidation Handler="#{SaveButton}.setDisabled(!valid);" />
                         </Listeners>
                         <Buttons>
+                            <%--
                             <ext:Button ID="LogStartButton" runat="server" Text="Log Start" Icon="ApplicationLightning">
-                                <%--                               <Listeners>
-                                    <Click Handler="DirectCall.UploadLogging('LogStartClick'); #{DataFileUpload}.enable(); return true;" />
-                                </Listeners>--%>
                                 <DirectEvents>
                                     <Click OnEvent="LogStartClick" IsUpload="false" After="#{DataFileUpload}.enable();" />
                                 </DirectEvents>
@@ -690,6 +692,7 @@
                                     </Click>
                                 </DirectEvents>
                             </ext:Button>
+                            --%>
 
                             <ext:Button ID="SaveButton" runat="server" Text="Import file" Icon="Accept" ClientIDMode="Static">
                                 <DirectEvents>

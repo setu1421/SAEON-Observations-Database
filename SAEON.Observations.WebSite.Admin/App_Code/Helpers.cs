@@ -56,12 +56,5 @@ public static class StringExtensions
         }
     }
 
-    public static bool IsTrue(this string value)
-    {
-        if (bool.TryParse(value, out bool result))
-            return result;
-        else
-            return false;
-    }
 }
 

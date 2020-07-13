@@ -498,9 +498,11 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
             {
                 using (FileStream stream = File.OpenRead(file))
                 {
-                    var sha = new SHA256Managed();
-                    byte[] checksum = sha.ComputeHash(stream);
-                    return BitConverter.ToString(checksum).Replace("-", String.Empty);
+                    using (var sha = new SHA256Managed())
+                    {
+                        byte[] checksum = sha.ComputeHash(stream);
+                        return BitConverter.ToString(checksum).Replace("-", String.Empty);
+                    }
                 }
             }
 

@@ -1,8 +1,4 @@
-﻿using IdentityModel;
-using IdentityModel.Client;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
+﻿using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
@@ -11,9 +7,6 @@ using SAEON.Logs;
 using Syncfusion.Licensing;
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
 
@@ -38,9 +31,9 @@ namespace SAEON.Observations.QuerySite
                     app.UseCookieAuthentication(new CookieAuthenticationOptions
                     {
                         AuthenticationType = "Cookies",
-                        CookieName = "SAEON.Observations.QuerySite",
-                        ExpireTimeSpan = TimeSpan.FromDays(7),
-                        SlidingExpiration = true
+                        ////CookieName = "SAEON.Observations.QuerySite",
+                        ////ExpireTimeSpan = TimeSpan.FromDays(7),
+                        ////SlidingExpiration = true
                     });
                     app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                     {
@@ -50,14 +43,21 @@ namespace SAEON.Observations.QuerySite
                         ResponseType = "id_token code token",
                         RedirectUri = Properties.Settings.Default.QuerySiteUrl + "/signin-oidc",
                         PostLogoutRedirectUri = Properties.Settings.Default.QuerySiteUrl + "/signout-callback-oidc",
-                        TokenValidationParameters = new TokenValidationParameters
-                        {
-                            NameClaimType = JwtClaimTypes.Name,
-                            RoleClaimType = JwtClaimTypes.Role
-                        },
+                        ////TokenValidationParameters = new TokenValidationParameters
+                        ////{
+                        ////    NameClaimType = JwtClaimTypes.Name,
+                        ////    RoleClaimType = JwtClaimTypes.Role
+                        ////},
                         SignInAsAuthenticationType = "Cookies",
-                        UseTokenLifetime = false,
                         RequireHttpsMetadata = Properties.Settings.Default.RequireHTTPS && !HttpContext.Current.Request.IsLocal,
+
+                        UseTokenLifetime = false,
+
+                        RedeemCode = true,
+                        SaveTokens = true,
+                        ClientSecret = "It6fWPU5J708"
+
+                        /*
                         Notifications = new OpenIdConnectAuthenticationNotifications
                         {
                             AuthorizationCodeReceived = async n =>
@@ -129,6 +129,7 @@ namespace SAEON.Observations.QuerySite
                                     return Task.FromResult(0);
                                 }
                         },
+                        */
                     });
                     // Make sure WebAPI is available
                 }

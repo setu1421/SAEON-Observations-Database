@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web.Script.Serialization;
 using System.Web.UI.WebControls;
 
 public partial class Admin_DataQuery : System.Web.UI.Page
@@ -255,7 +254,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
         SqlQuery query = BuildQ(json, visCols, sortCol, sortDir, out log);
         BaseRepository.Export(query, visCols, type, "Data Query", Response, i =>
         {
-            var count = Convert.ToInt64(i.Compute("Count(ValueDate)",""));
+            var count = Convert.ToInt64(i.Compute("Count(ValueDate)", ""));
             var start = Convert.ToDateTime(i.Compute("Min(ValueDate)", ""));
             var end = Convert.ToDateTime(i.Compute("Max(ValueDate)", ""));
             Logging.Verbose("Count: {count} Start: {start} End: {end}", count, start, end);
@@ -271,7 +270,7 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
     private SqlQuery BuildQuery(out string log, string[] columns = null)
     {
-        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Columns", columns } })) 
+        using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Columns", columns } }))
         {
             try
             {
@@ -281,9 +280,9 @@ public partial class Admin_DataQuery : System.Web.UI.Page
 
                 SqlQuery q = null;
                 if ((columns == null) || (columns.Length == 0))
-                    q = new Select().From(VObservation.Schema);
+                    q = new Select().From(VObservationExpansion.Schema);
                 else
-                    q = new Select(columns).From(VObservation.Schema);
+                    q = new Select(columns).From(VObservationExpansion.Schema);
 
                 if (FilterTree.CheckedNodes != null)
                 {
@@ -320,11 +319,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
                                 station = new Station(new Guid(GetItem(items, "Station")));
                                 site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                                q.OrExpression(VObservation.Columns.PhenomenonOfferingID).IsEqualTo(phenomenonOffering.Id)
-                                    .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
-                                    .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
-                                    .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
-                                    .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                q.OrExpression(VObservationExpansion.Columns.PhenomenonOfferingID).IsEqualTo(phenomenonOffering.Id)
+                                    .And(VObservationExpansion.Columns.SensorID).IsEqualTo(sensor.Id)
+                                    .And(VObservationExpansion.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                                    .And(VObservationExpansion.Columns.StationID).IsEqualTo(station.Id)
+                                    .And(VObservationExpansion.Columns.SiteID).IsEqualTo(site.Id);
                                 log += $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name} Phenomenon: {phenomenonOffering.Phenomenon.Name} Offering: {phenomenonOffering.Offering.Name}";
                                 break;
                             case "Phenomenon":
@@ -334,11 +333,11 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
                                 station = new Station(new Guid(GetItem(items, "Station")));
                                 site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                                q.OrExpression(VObservation.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
-                                    .And(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
-                                    .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
-                                    .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
-                                    .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                q.OrExpression(VObservationExpansion.Columns.PhenomenonID).IsEqualTo(phenomenon.Id)
+                                    .And(VObservationExpansion.Columns.SensorID).IsEqualTo(sensor.Id)
+                                    .And(VObservationExpansion.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                                    .And(VObservationExpansion.Columns.StationID).IsEqualTo(station.Id)
+                                    .And(VObservationExpansion.Columns.SiteID).IsEqualTo(site.Id);
                                 log += $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name} Phenomenon: {phenomenonOffering.Phenomenon.Name}";
                                 break;
                             case "Sensor":
@@ -347,10 +346,10 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 instrument = new Instrument(new Guid(GetItem(items, "Instrument")));
                                 station = new Station(new Guid(GetItem(items, "Station")));
                                 site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                                q.OrExpression(VObservation.Columns.SensorID).IsEqualTo(sensor.Id)
-                                    .And(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
-                                    .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
-                                    .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                q.OrExpression(VObservationExpansion.Columns.SensorID).IsEqualTo(sensor.Id)
+                                    .And(VObservationExpansion.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                                    .And(VObservationExpansion.Columns.StationID).IsEqualTo(station.Id)
+                                    .And(VObservationExpansion.Columns.SiteID).IsEqualTo(site.Id);
                                 log += $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name} Sensor: {sensor.Name}";
                                 break;
                             case "Instrument":
@@ -358,23 +357,23 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                                 instrument = new Instrument(item.ID);
                                 station = new Station(new Guid(GetItem(items, "Station")));
                                 site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                                q.OrExpression(VObservation.Columns.InstrumentID).IsEqualTo(instrument.Id)
-                                    .And(VObservation.Columns.StationID).IsEqualTo(station.Id)
-                                    .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                q.OrExpression(VObservationExpansion.Columns.InstrumentID).IsEqualTo(instrument.Id)
+                                    .And(VObservationExpansion.Columns.StationID).IsEqualTo(station.Id)
+                                    .And(VObservationExpansion.Columns.SiteID).IsEqualTo(site.Id);
                                 log += $"Site: {site.Name} Station: {station.Name} Instrument: {instrument.Name}";
                                 break;
                             case "Station":
                                 count++;
                                 station = new Station(item.ID);
                                 site = new SAEON.Observations.Data.Site(new Guid(GetItem(items, "Site")));
-                                q.OrExpression(VObservation.Columns.StationID).IsEqualTo(station.Id)
-                                    .And(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                q.OrExpression(VObservationExpansion.Columns.StationID).IsEqualTo(station.Id)
+                                    .And(VObservationExpansion.Columns.SiteID).IsEqualTo(site.Id);
                                 log += $"Site: {site.Name} Station: {station.Name}";
                                 break;
                             case "Site":
                                 count++;
                                 site = new SAEON.Observations.Data.Site(item.ID);
-                                q.OrExpression(VObservation.Columns.SiteID).IsEqualTo(site.Id);
+                                q.OrExpression(VObservationExpansion.Columns.SiteID).IsEqualTo(site.Id);
                                 log += $"Site: {site.Name}";
                                 break;
                         }
@@ -383,13 +382,13 @@ public partial class Admin_DataQuery : System.Web.UI.Page
                         {
                             if (fromDate.ToString() != "0001/01/01 00:00:00")
                             {
-                                q.And(VObservation.Columns.ValueDate).IsGreaterThanOrEqualTo(fromDate.ToString());
+                                q.And(VObservationExpansion.Columns.ValueDate).IsGreaterThanOrEqualTo(fromDate.ToString());
                                 log += $" Start: {fromDate.ToString("dd MMM yyyy")}";
 
                             }
                             if (toDate.ToString() != "0001/01/01 00:00:00")
                             {
-                                q.And(VObservation.Columns.ValueDate).IsLessThanOrEqualTo(toDate.AddHours(23).AddMinutes(59).AddSeconds(59).ToString());
+                                q.And(VObservationExpansion.Columns.ValueDate).IsLessThanOrEqualTo(toDate.AddHours(23).AddMinutes(59).AddSeconds(59).ToString());
                                 log += $" End: {toDate.ToString("dd MMM yyyy")}";
                             }
                             //DataQueryRepository.qFilterNSort(ref q, ref e);

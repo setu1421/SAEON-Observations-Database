@@ -1,4 +1,4 @@
-﻿#define IsTest
+﻿//#define IsTest
 
 using Ext.Net;
 using SAEON.Azure.CosmosDB;

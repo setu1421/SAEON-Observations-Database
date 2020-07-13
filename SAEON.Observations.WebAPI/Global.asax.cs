@@ -1,12 +1,8 @@
 ﻿using SAEON.Logs;
 using SAEON.Observations.Core;
-using SAEON.Observations.WebAPI.Controllers.SensorThings;
 using System;
 using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Web.Hosting;
-using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -28,7 +24,7 @@ namespace SAEON.Observations.WebAPI
                     Logging.Information("LogLevel: {LogLevel}", Logging.LogLevel);
                     BootStrapper.Initialize();
                     AreaRegistration.RegisterAllAreas();
-                    GlobalConfiguration.Configure(WebApiConfig.Register);
+                    //GlobalConfiguration.Configure(WebApiConfig.Register);
                     FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
                     RouteConfig.RegisterRoutes(RouteTable.Routes);
                     BundleConfig.RegisterBundles(BundleTable.Bundles);

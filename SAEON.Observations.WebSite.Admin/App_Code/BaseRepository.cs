@@ -7,6 +7,7 @@ using SAEON.OpenXML;
 using SubSonic;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -19,12 +20,14 @@ public static class DataTableExtensions
 {
     public static byte[] ToCsv(this DataTable dataTable)
     {
+        var UTF16 = ConfigurationManager.AppSettings["UTF16CSVs"].IsTrue();
+        var separator = UTF16 ? "/t" : ",";
         var sb = new StringBuilder();
         IEnumerable<String> headerValues = dataTable
             .Columns
             .OfType<DataColumn>()
             .Select(column => column.Caption);
-        sb.AppendLine(String.Join(",", headerValues));
+        sb.AppendLine(String.Join(separator, headerValues));
         foreach (DataRow row in dataTable.Rows)
         {
             var values = new List<string>();
@@ -55,9 +58,12 @@ public static class DataTableExtensions
                     }
                 }
             }
-            sb.AppendLine(string.Join(",", values));
+            sb.AppendLine(string.Join(separator, values));
         }
-        return Encoding.Unicode.GetPreamble().Concat(Encoding.Unicode.GetBytes(sb.ToString())).ToArray();
+        if (!UTF16)
+            return Encoding.UTF8.GetBytes(sb.ToString());
+        else
+            return Encoding.Unicode.GetPreamble().Concat(Encoding.Unicode.GetBytes(sb.ToString())).ToArray();
     }
 
     public static byte[] ToExcel(this DataTable dataTable)
@@ -196,7 +202,7 @@ public class BaseRepository
                 q.Paged(currentPage, e.Total);
             else
                 q.Paged(currentPage, e.Limit);
-            //Logging.Verbose("Sql: {sql}", q.BuildSqlStatement());
+            Logging.Verbose("Sql: {sql}", q.BuildSqlStatement());
         }
     }
 
@@ -240,7 +246,8 @@ public class BaseRepository
                 {
                     case "csv": //ExportTypes.Csv:
                         response.ContentType = "text/csv";
-                        response.Charset = "UTF-16";
+                        var UTF16 = ConfigurationManager.AppSettings["UTF16CSVs"].IsTrue();
+                        response.Charset = UTF16 ? "UTF-16" : "UTF-8";
                         response.AddHeader("Content-Disposition", $"attachment; filename={fileName}.csv");
                         bytes = dt.ToCsv();
                         response.AddHeader("Content-Length", bytes.Length.ToString());
