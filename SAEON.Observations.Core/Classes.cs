@@ -64,7 +64,7 @@ namespace SAEON.Observations.Core
 
     #region DataWizard
 
-    public enum MaxtixDataType { String, Int, Double, Date, Boolean };
+    public enum MaxtixDataType { mdtString, mdtInt, mdtDouble, mdtDate, mdtBoolean };
 
     public class DataMatrixColumn
     {
@@ -75,71 +75,35 @@ namespace SAEON.Observations.Core
 
         public Type AsType()
         {
-#if NET472
-            switch (DataType)
-            {
-                case MaxtixDataType.Boolean:
-                    return typeof(bool);
-                case MaxtixDataType.Date:
-                    return typeof(DateTime);
-                case MaxtixDataType.Double:
-                    return typeof(double);
-                case MaxtixDataType.Int:
-                    return typeof(int);
-                case MaxtixDataType.String:
-                    return typeof(string);
-                default:
-                    return typeof(object);
-            }
-#else
             return DataType switch
             {
-                MaxtixDataType.Boolean => typeof(bool),
-                MaxtixDataType.Date => typeof(DateTime),
-                MaxtixDataType.Double => typeof(double),
-                MaxtixDataType.Int => typeof(int),
-                MaxtixDataType.String => typeof(string),
+                MaxtixDataType.mdtBoolean => typeof(bool),
+                MaxtixDataType.mdtDate => typeof(DateTime),
+                MaxtixDataType.mdtDouble => typeof(double),
+                MaxtixDataType.mdtInt => typeof(int),
+                MaxtixDataType.mdtString => typeof(string),
                 _ => typeof(object),
             };
-#endif
         }
 
         public string AsString(object value)
         {
             if (value == null) return string.Empty;
-#if NET472
-            switch (DataType)
-            {
-                case MaxtixDataType.Boolean:
-                    return ((bool)value).ToString();
-                case MaxtixDataType.Date:
-                    return ((DateTime)value).ToString("o");
-                case MaxtixDataType.Double:
-                    return ((double)value).ToString();
-                case MaxtixDataType.Int:
-                    return ((int)value).ToString();
-                case MaxtixDataType.String:
-                    return ((string)value).DoubleQuoted();
-                default:
-                    return value.ToString();
-            }
-#else
             return DataType switch
             {
-                MaxtixDataType.Boolean => ((bool)value).ToString(),
-                MaxtixDataType.Date => ((DateTime)value).ToString("o"),
-                MaxtixDataType.Double => ((double)value).ToString(),
-                MaxtixDataType.Int => ((int)value).ToString(),
-                MaxtixDataType.String => ((string)value).DoubleQuoted(),
+                MaxtixDataType.mdtBoolean => ((bool)value).ToString(),
+                MaxtixDataType.mdtDate => ((DateTime)value).ToString("o"),
+                MaxtixDataType.mdtDouble => ((double)value).ToString(),
+                MaxtixDataType.mdtInt => ((int)value).ToString(),
+                MaxtixDataType.mdtString => ((string)value).DoubleQuoted(),
                 _ => value.ToString(),
             };
-#endif
         }
     }
 
     public class DataMatrixRow
     {
-        public List<Object> Columns { get; set; } = new List<object>();
+        public List<Object> Columns { get; } = new List<object>();
         internal DataMatrix Matrix { get; set; } = null;
 
         public DataMatrixRow() { }
@@ -174,7 +138,6 @@ namespace SAEON.Observations.Core
             var val = this[name];
             return (val == null);
         }
-
     }
 
     public class DataMatrix
@@ -281,7 +244,6 @@ namespace SAEON.Observations.Core
             }
             return sb.ToString();
         }
-
     }
 
     public class ChartData
@@ -345,15 +307,15 @@ namespace SAEON.Observations.Core
     public class DataWizardApproximation
     {
         public long RowCount { get; set; } = 0;
-        public List<string> Errors { get; set; } = new List<string>();
+        public List<string> Errors { get; } = new List<string>();
     }
 
-    public enum DownloadFormats { CSV, Excel, NetCDF }
+    public enum DownloadFormat { CSV, Excel, NetCDF }
 
     public class DataWizardDownloadInput : DataWizardDataInput
     {
         [JsonConverter(typeof(StringEnumConverter))]
-        public DownloadFormats DownloadFormat { get; set; } = DownloadFormats.CSV;
+        public DownloadFormat DownloadFormat { get; set; } = DownloadFormat.CSV;
     }
 
     #endregion
@@ -434,105 +396,4 @@ namespace SAEON.Observations.Core
     */
     #endregion
 
-    #region Inventory
-    /*
-    public class InventoryInput
-    {
-        public List<Guid> Stations { get; set; }
-        public List<Guid> Offerings { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public Guid? UserQuery { get; set; }
-        public bool? Full { get; set; }
-        public bool? Statistics { get; set; }
-    }
-
-    public class InventoryTotalItem
-    {
-        public string Status { get; set; }
-        public int? Count { get; set; }
-        public double? Minimum { get; set; }
-        public double? Maximum { get; set; }
-        public double? Average { get; set; }
-        public double? StandardDeviation { get; set; }
-        public double? Variance { get; set; }
-    }
-
-    public class InventoryStationItem
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
-        public string Status { get; set; }
-        public int? Count { get; set; }
-        public double? Minimum { get; set; }
-        public double? Maximum { get; set; }
-        public double? Average { get; set; }
-        public double? StandardDeviation { get; set; }
-        public double? Variance { get; set; }
-    }
-
-    public class InventoryPhenomenonOfferingItem
-    {
-        public string Phenomenon { get; set; }
-        public string Offering { get; set; }
-        public string Status { get; set; }
-        public int? Count { get; set; }
-        public double? Minimum { get; set; }
-        public double? Maximum { get; set; }
-        public double? Average { get; set; }
-        public double? StandardDeviation { get; set; }
-        public double? Variance { get; set; }
-    }
-
-    public class InventoryInstrumentItem
-    {
-        public string Name { get; set; }
-        public string Status { get; set; }
-        public int? Count { get; set; }
-        public double? Minimum { get; set; }
-        public double? Maximum { get; set; }
-        public double? Average { get; set; }
-        public double? StandardDeviation { get; set; }
-        public double? Variance { get; set; }
-    }
-
-    public class InventoryYearItem
-    {
-        public int Year { get; set; }
-        public string Status { get; set; }
-        public int? Count { get; set; }
-        public double? Minimum { get; set; }
-        public double? Maximum { get; set; }
-        public double? Average { get; set; }
-        public double? StandardDeviation { get; set; }
-        public double? Variance { get; set; }
-    }
-
-    public class InventoryOrganisationItem
-    {
-        public string Name { get; set; }
-        public string Status { get; set; }
-        public int? Count { get; set; }
-        public double? Minimum { get; set; }
-        public double? Maximum { get; set; }
-        public double? Average { get; set; }
-        public double? StandardDeviation { get; set; }
-        public double? Variance { get; set; }
-    }
-
-    public class InventoryOutput
-    {
-        public bool Success { get; set; }
-        public List<string> ErrorMessage { get; private set; } = new List<string>();
-        public List<InventoryTotalItem> Totals { get; private set; } = new List<InventoryTotalItem>();
-        public List<InventoryStationItem> Stations { get; private set; } = new List<InventoryStationItem>();
-        public List<InventoryInstrumentItem> Instruments { get; private set; } = new List<InventoryInstrumentItem>();
-        public List<InventoryPhenomenonOfferingItem> PhenomenaOfferings { get; private set; } = new List<InventoryPhenomenonOfferingItem>();
-        public List<InventoryYearItem> Years { get; private set; } = new List<InventoryYearItem>();
-        public List<InventoryOrganisationItem> Organisations { get; private set; } = new List<InventoryOrganisationItem>();
-    }
-    */
-    #endregion
 }

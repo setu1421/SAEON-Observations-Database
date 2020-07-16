@@ -160,7 +160,7 @@ namespace SAEON.Observations.Core.Entities
     /// <summary>
     /// Base for entities
     /// </summary>
-    public abstract class IdEntity : GuidIdEntity
+    public abstract class IdedEntity : GuidIdEntity
     {
         [JsonIgnore, Timestamp, Column(Order = 10000), ConcurrencyCheck, ScaffoldColumn(false), HiddenInput]
         public byte[] RowVersion { get; set; }
@@ -168,7 +168,7 @@ namespace SAEON.Observations.Core.Entities
         public Guid UserId { get; set; }
     }
 
-    public abstract class NamedEntity : IdEntity
+    public abstract class NamedEntity : IdedEntity
     {
         /// <summary>
         /// Name of the Entity
@@ -1403,6 +1403,8 @@ namespace SAEON.Observations.Core.Entities
         public string OfferingName { get; set; }
 #if NET472
         [Key, Column("PhenomenonUOMID", Order = 3)]
+#else
+        [Column("PhenomenonUOMID")]
 #endif
         public Guid PhenomenonUnitID { get; set; }
         [Column("UnitOfMeasureID")]
@@ -1738,7 +1740,7 @@ namespace SAEON.Observations.Core.Entities
     //> Remove once EFCore has many to many
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Instrument_Sensor")]
-    public class InstrumentSensor : IdEntity
+    public class InstrumentSensor : IdedEntity
     {
         public Guid InstrumentId { get; set; }
         public Guid SensorId { get; set; }
@@ -1749,7 +1751,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Organisation_Instrument")]
-    public class OrganisationInstrument : IdEntity
+    public class OrganisationInstrument : IdedEntity
     {
         public Guid OrganisationId { get; set; }
         public Guid InstrumentId { get; set; }
@@ -1760,7 +1762,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Organisation_Site")]
-    public class OrganisationSite : IdEntity
+    public class OrganisationSite : IdedEntity
     {
         public Guid OrganisationId { get; set; }
         public Guid SiteId { get; set; }
@@ -1771,7 +1773,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Organisation_Station")]
-    public class OrganisationStation : IdEntity
+    public class OrganisationStation : IdedEntity
     {
         public Guid OrganisationId { get; set; }
         public Guid StationId { get; set; }
@@ -1782,7 +1784,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("PhenomenonOffering")]
-    public class PhenomenonOffering : IdEntity
+    public class PhenomenonOffering : IdedEntity
     {
         [Required]
         public Guid PhenomenonId { get; set; }
@@ -1796,7 +1798,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("PhenomenonUOM")]
-    public class PhenomenonUnit : IdEntity
+    public class PhenomenonUnit : IdedEntity
     {
         [Required]
         public Guid PhenomenonId { get; set; }
@@ -1810,7 +1812,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Project_Station")]
-    public class ProjectStation : IdEntity
+    public class ProjectStation : IdedEntity
     {
         public Guid ProjectId { get; set; }
         public Guid StationId { get; set; }
@@ -1821,7 +1823,7 @@ namespace SAEON.Observations.Core.Entities
 
     //[ApiExplorerSettings(IgnoreApi = true)]
     [Table("Station_Instrument")]
-    public class StationInstrument : IdEntity
+    public class StationInstrument : IdedEntity
     {
         public Guid StationId { get; set; }
         public Guid InstrumentId { get; set; }
@@ -2102,6 +2104,7 @@ namespace SAEON.Observations.Core.Entities
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            if (modelBuilder == null) throw new ArgumentNullException(nameof(modelBuilder));
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             //modelBuilder.Entity<Phenomenon>()
             //    .HasMany<Offering>(l => l.Offerings)
@@ -2192,6 +2195,7 @@ namespace SAEON.Observations.Core.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            if (modelBuilder == null) throw new ArgumentNullException(nameof(modelBuilder));
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Feature>().HasNoKey().ToView("vFeatures");
             modelBuilder.Entity<Location>().HasNoKey().ToView("vLocations");
