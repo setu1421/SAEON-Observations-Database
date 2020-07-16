@@ -1,9 +1,10 @@
-﻿{
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:44330"
+      "applicationUrl": "http://localhost:54330",
+      "sslPort": 0
     }
   },
   "profiles": {
@@ -14,13 +15,20 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SAEON.Observations.WebAPI": {
+    "SAEON.Observations.WebAPI.v2": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:44330",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true,
+      "useSSL": true
     }
   }
 }

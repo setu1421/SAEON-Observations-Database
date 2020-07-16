@@ -1,35 +1,32 @@
 using AutoMapper;
-using Microsoft.AspNet.OData.Builder;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
-using SAEON.AspNet.Common;
 using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
 using System;
-using System.Net.Mime;
 
 namespace SAEON.Observations.WebAPI
 {
     public class Startup
     {
-        private IConfiguration _config { get; }
-
-        public Startup(IConfiguration config)
+        public Startup(IConfiguration configuration)
         {
-            _config = config;
+            Configuration = configuration;
             try
             {
                 Logging.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, Logging.Level);
-                Logging.Debug("IdentityServer: {name}", _config["IdentityServerUrl"]);
+                Logging.Debug("AuthServerUrl: {AuthServerUrl} AuthIntrospectionUrl: {AuthIntrospectionUrl}", Configuration[Constants.AuthServerUrl], Configuration[Constants.AuthIntrospectionUrl]);
             }
             catch (Exception ex)
             {
@@ -37,6 +34,8 @@ namespace SAEON.Observations.WebAPI
                 throw;
             }
         }
+
+        protected IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -52,26 +51,23 @@ namespace SAEON.Observations.WebAPI
                         options.JsonSerializerOptions.IgnoreNullValues = true;
                     });
                     services.AddControllersWithViews();
-                    services.AddApplicationInsightsTelemetry();
-                    services.AddAuthentication("Bearer")
-                         .AddJwtBearer("Bearer", options =>
-                         {
-                             options.Authority = _config["IdentityServerUrl"];
-                             options.RequireHttpsMetadata = false;
-                             options.Audience = "SAEON.Observations.WebAPI";
-                         });
+                    services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
+                    services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                        .AddCookie();
                     services.AddAuthorization(options =>
-                        options.AddPolicy(AspNetConstants.TenantPolicy, policy => policy.AddRequirements(new TenantAuthorizationRequirement(_config[AspNetConstants.TenantTenants], _config[AspNetConstants.TenantDefault])))
-                    );
+                    {
+                        options.AddPolicy(Constants.TenantAuthorizationPolicy, policy => policy.AddRequirements(new TenantAuthorizationRequirement(Configuration[Constants.TenantTenants], Configuration[Constants.TenantDefault])));
+                        options.AddPolicy(Constants.ODPAuthorizationPolicy, policy => policy.AddRequirements(new ODPAuthorizationRequirement()));
+                    });
+                    services.AddScoped<IAuthorizationHandler, TenantAuthorizationHandler>();
+                    //services.AddScoped<IAuthorizationHandler, ODPAuthorizationHandler>();
                     services.AddHttpContextAccessor();
                     services.AddScoped<HttpContext>(p => p.GetService<IHttpContextAccessor>()?.HttpContext);
-                    services.AddScoped<IAuthorizationHandler, TenantAuthorizationHandler>();
+                    services.AddHealthChecks()
+                        .AddUrlGroup(new Uri(Configuration[Constants.AuthServerHealthCheckUrl]), Constants.AuthServerUrl)
+                        .AddUrlGroup(new Uri(Configuration[Constants.AuthIntrospectionHealthCheckUrl]), Constants.AuthIntrospectionUrl)
+                        .AddDbContextCheck<ObservationsDbContext>("ObservationsDatabase");
                     services.AddDbContext<ObservationsDbContext>();
-                    services.AddHttpClient("IdentityServer", c =>
-                    {
-                        c.BaseAddress = new Uri(_config["IdentityServerUrl"]);
-                        c.DefaultRequestHeaders.Add("Accept", MediaTypeNames.Application.Json);
-                    });
                     services.AddSwaggerGen(c =>
                     {
                         c.SwaggerDoc("v1", new OpenApiInfo
@@ -86,7 +82,6 @@ namespace SAEON.Observations.WebAPI
                         c.IncludeXmlComments("SAEON.Observations.WebAPI.v2.xml");
                         c.SchemaFilter<SwaggerIgnoreFilter>();
                     });
-                    //services.AddOData();
                 }
                 catch (Exception ex)
                 {
@@ -94,13 +89,6 @@ namespace SAEON.Observations.WebAPI
                     throw;
                 }
             }
-        }
-
-        private static IEdmModel GetODataEdmModel()
-        {
-            ODataConventionModelBuilder builder = new ODataConventionModelBuilder { ContainerName = "Observations" };
-            builder.EntitySet<Instrument>("Instruments");
-            return builder.GetEdmModel();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -121,12 +109,6 @@ namespace SAEON.Observations.WebAPI
                         app.UseHsts();
                         app.UseHttpsRedirection();
                     }
-                    app.UseSwagger();
-                    app.UseSwaggerUI(c =>
-                    {
-                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SAEON.Observations.WebAPI");
-                    });
-
                     app.UseStaticFiles();
 
                     app.UseRouting();
@@ -135,8 +117,19 @@ namespace SAEON.Observations.WebAPI
                     app.UseAuthentication();
                     app.UseAuthorization();
 
+                    app.UseSwagger();
+                    app.UseSwaggerUI(c =>
+                    {
+                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SAEON.Observations.WebAPI");
+                    });
+
                     app.UseEndpoints(endpoints =>
                     {
+                        endpoints.MapHealthChecks("/health", new HealthCheckOptions()
+                        {
+                            Predicate = _ => true,
+                            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        });
                         endpoints.MapControllerRoute(
                             name: "default",
                             pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -151,3 +144,4 @@ namespace SAEON.Observations.WebAPI
         }
     }
 }
+

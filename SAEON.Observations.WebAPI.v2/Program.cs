@@ -26,8 +26,8 @@ namespace SAEON.Observations.WebAPI
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSAEONLogs((hostingContext, loggerConfiguration) => loggerConfiguration.InitializeSAEONLogs(hostingContext.Configuration))
-                .ConfigureWebHostDefaults(webBuilder =>
+                  .UseSAEONLogs((hostingContext, loggerConfiguration) => loggerConfiguration.InitializeSAEONLogs(hostingContext.Configuration))
+              .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });

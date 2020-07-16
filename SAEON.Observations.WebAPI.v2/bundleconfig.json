@@ -1,11 +1,5 @@
 [
   {
-    "outputFileName": "wwwroot/css/SAEON.min.css",
-    "inputFiles": [
-      "wwwroot/css/SAEON.css"
-    ]
-  },
-  {
     "outputFileName": "wwwroot/css/site.min.css",
     "inputFiles": [
       "wwwroot/css/site.css"
@@ -15,6 +9,12 @@
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
       "wwwroot/js/site.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/SAEON.min.css",
+    "inputFiles": [
+      "wwwroot/css/SAEON.css"
     ]
   }
 ]

@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SAEON.Observations.Core;
 using SAEON.Observations.WebAPI.Models;
 using System.Diagnostics;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -52,6 +49,5 @@ namespace SAEON.Observations.WebAPI.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
     }
 }
