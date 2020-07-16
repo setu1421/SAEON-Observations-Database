@@ -10,7 +10,7 @@
     <Description>SAEON Observations Sensor Things</Description>
     <Copyright>Copyright © South African Environmental Observation Network (SAEON)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.145</Version>
+    <Version>1.0.146</Version>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -18,10 +18,10 @@
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNet.OData" Version="7.4.1" />
-    <PackageReference Include="SAEON.AspNet.WebApi" Version="1.0.80" />
-    <PackageReference Include="SAEON.Observations.Core" Version="1.0.278" />
+    <PackageReference Include="SAEON.AspNet.WebApi" Version="1.0.92" />
+    <PackageReference Include="SAEON.Observations.Core" Version="1.0.287" />
   </ItemGroup>
 
 </Project>
