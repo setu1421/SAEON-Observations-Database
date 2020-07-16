@@ -654,79 +654,86 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
+        SAEON.Observations.Data.AspnetUser _AspnetUser = null;
 		/// <summary>
 		/// Returns a AspnetUser ActiveRecord object related to this Observation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
-			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }
+			get { return _AspnetUser ?? (_AspnetUser = SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId)); }
 			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
+        SAEON.Observations.Data.ImportBatch _ImportBatch = null;
 		/// <summary>
 		/// Returns a ImportBatch ActiveRecord object related to this Observation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.ImportBatch ImportBatch
 		{
-			get { return SAEON.Observations.Data.ImportBatch.FetchByID(this.ImportBatchID); }
+			get { return _ImportBatch ?? (_ImportBatch = SAEON.Observations.Data.ImportBatch.FetchByID(this.ImportBatchID)); }
 			set { SetColumnValue("ImportBatchID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.PhenomenonOffering _PhenomenonOffering = null;
 		/// <summary>
 		/// Returns a PhenomenonOffering ActiveRecord object related to this Observation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonOffering PhenomenonOffering
 		{
-			get { return SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.PhenomenonOfferingID); }
+			get { return _PhenomenonOffering ?? (_PhenomenonOffering = SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.PhenomenonOfferingID)); }
 			set { SetColumnValue("PhenomenonOfferingID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.PhenomenonUOM _PhenomenonUOM = null;
 		/// <summary>
 		/// Returns a PhenomenonUOM ActiveRecord object related to this Observation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonUOM PhenomenonUOM
 		{
-			get { return SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.PhenomenonUOMID); }
+			get { return _PhenomenonUOM ?? (_PhenomenonUOM = SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.PhenomenonUOMID)); }
 			set { SetColumnValue("PhenomenonUOMID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.Sensor _Sensor = null;
 		/// <summary>
 		/// Returns a Sensor ActiveRecord object related to this Observation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Sensor Sensor
 		{
-			get { return SAEON.Observations.Data.Sensor.FetchByID(this.SensorID); }
+			get { return _Sensor ?? (_Sensor = SAEON.Observations.Data.Sensor.FetchByID(this.SensorID)); }
 			set { SetColumnValue("SensorID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.Status _Status = null;
 		/// <summary>
 		/// Returns a Status ActiveRecord object related to this Observation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Status Status
 		{
-			get { return SAEON.Observations.Data.Status.FetchByID(this.StatusID); }
+			get { return _Status ?? (_Status = SAEON.Observations.Data.Status.FetchByID(this.StatusID)); }
 			set { SetColumnValue("StatusID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.StatusReason _StatusReason = null;
 		/// <summary>
 		/// Returns a StatusReason ActiveRecord object related to this Observation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.StatusReason StatusReason
 		{
-			get { return SAEON.Observations.Data.StatusReason.FetchByID(this.StatusReasonID); }
+			get { return _StatusReason ?? (_StatusReason = SAEON.Observations.Data.StatusReason.FetchByID(this.StatusReasonID)); }
 			set { SetColumnValue("StatusReasonID", value.Id); }
 		}
 		

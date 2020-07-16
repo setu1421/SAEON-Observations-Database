@@ -312,13 +312,14 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
+        SAEON.Observations.Data.ModuleX _ParentModuleX = null;
 		/// <summary>
 		/// Returns a ModuleX ActiveRecord object related to this ModuleX
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.ModuleX ParentModuleX
 		{
-			get { return SAEON.Observations.Data.ModuleX.FetchByID(this.ModuleID); }
+			get { return _ParentModuleX ?? (_ParentModuleX = SAEON.Observations.Data.ModuleX.FetchByID(this.ModuleID)); }
 			set { SetColumnValue("ModuleID", value.Id); }
 		}
 		

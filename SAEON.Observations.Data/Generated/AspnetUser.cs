@@ -438,13 +438,14 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
+        SAEON.Observations.Data.AspnetApplication _AspnetApplication = null;
 		/// <summary>
 		/// Returns a AspnetApplication ActiveRecord object related to this AspnetUser
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetApplication AspnetApplication
 		{
-			get { return SAEON.Observations.Data.AspnetApplication.FetchByID(this.ApplicationId); }
+			get { return _AspnetApplication ?? (_AspnetApplication = SAEON.Observations.Data.AspnetApplication.FetchByID(this.ApplicationId)); }
 			set { SetColumnValue("ApplicationId", value.ApplicationId); }
 		}
 		

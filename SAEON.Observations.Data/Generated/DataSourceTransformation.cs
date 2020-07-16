@@ -1076,112 +1076,122 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
+        SAEON.Observations.Data.AspnetUser _AspnetUser = null;
 		/// <summary>
 		/// Returns a AspnetUser ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
-			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }
+			get { return _AspnetUser ?? (_AspnetUser = SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId)); }
 			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
+        SAEON.Observations.Data.DataSource _DataSource = null;
 		/// <summary>
 		/// Returns a DataSource ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.DataSource DataSource
 		{
-			get { return SAEON.Observations.Data.DataSource.FetchByID(this.DataSourceID); }
+			get { return _DataSource ?? (_DataSource = SAEON.Observations.Data.DataSource.FetchByID(this.DataSourceID)); }
 			set { SetColumnValue("DataSourceID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.Phenomenon _Phenomenon = null;
 		/// <summary>
 		/// Returns a Phenomenon ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Phenomenon Phenomenon
 		{
-			get { return SAEON.Observations.Data.Phenomenon.FetchByID(this.NewPhenomenonID); }
+			get { return _Phenomenon ?? (_Phenomenon = SAEON.Observations.Data.Phenomenon.FetchByID(this.NewPhenomenonID)); }
 			set { SetColumnValue("NewPhenomenonID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.Phenomenon _PhenomenonToPhenomenonID = null;
 		/// <summary>
 		/// Returns a Phenomenon ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Phenomenon PhenomenonToPhenomenonID
 		{
-			get { return SAEON.Observations.Data.Phenomenon.FetchByID(this.PhenomenonID); }
+			get { return _PhenomenonToPhenomenonID ?? (_PhenomenonToPhenomenonID = SAEON.Observations.Data.Phenomenon.FetchByID(this.PhenomenonID)); }
 			set { SetColumnValue("PhenomenonID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.PhenomenonOffering _PhenomenonOffering = null;
 		/// <summary>
 		/// Returns a PhenomenonOffering ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonOffering PhenomenonOffering
 		{
-			get { return SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.NewPhenomenonOfferingID); }
+			get { return _PhenomenonOffering ?? (_PhenomenonOffering = SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.NewPhenomenonOfferingID)); }
 			set { SetColumnValue("NewPhenomenonOfferingID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.PhenomenonOffering _PhenomenonOfferingToPhenomenonOfferingID = null;
 		/// <summary>
 		/// Returns a PhenomenonOffering ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonOffering PhenomenonOfferingToPhenomenonOfferingID
 		{
-			get { return SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.PhenomenonOfferingID); }
+			get { return _PhenomenonOfferingToPhenomenonOfferingID ?? (_PhenomenonOfferingToPhenomenonOfferingID = SAEON.Observations.Data.PhenomenonOffering.FetchByID(this.PhenomenonOfferingID)); }
 			set { SetColumnValue("PhenomenonOfferingID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.PhenomenonUOM _PhenomenonUOM = null;
 		/// <summary>
 		/// Returns a PhenomenonUOM ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonUOM PhenomenonUOM
 		{
-			get { return SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.NewPhenomenonUOMID); }
+			get { return _PhenomenonUOM ?? (_PhenomenonUOM = SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.NewPhenomenonUOMID)); }
 			set { SetColumnValue("NewPhenomenonUOMID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.PhenomenonUOM _PhenomenonUOMToPhenomenonUOMID = null;
 		/// <summary>
 		/// Returns a PhenomenonUOM ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.PhenomenonUOM PhenomenonUOMToPhenomenonUOMID
 		{
-			get { return SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.PhenomenonUOMID); }
+			get { return _PhenomenonUOMToPhenomenonUOMID ?? (_PhenomenonUOMToPhenomenonUOMID = SAEON.Observations.Data.PhenomenonUOM.FetchByID(this.PhenomenonUOMID)); }
 			set { SetColumnValue("PhenomenonUOMID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.Sensor _Sensor = null;
 		/// <summary>
 		/// Returns a Sensor ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Sensor Sensor
 		{
-			get { return SAEON.Observations.Data.Sensor.FetchByID(this.SensorID); }
+			get { return _Sensor ?? (_Sensor = SAEON.Observations.Data.Sensor.FetchByID(this.SensorID)); }
 			set { SetColumnValue("SensorID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.TransformationType _TransformationType = null;
 		/// <summary>
 		/// Returns a TransformationType ActiveRecord object related to this DataSourceTransformation
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.TransformationType TransformationType
 		{
-			get { return SAEON.Observations.Data.TransformationType.FetchByID(this.TransformationTypeID); }
+			get { return _TransformationType ?? (_TransformationType = SAEON.Observations.Data.TransformationType.FetchByID(this.TransformationTypeID)); }
 			set { SetColumnValue("TransformationTypeID", value.Id); }
 		}
 		

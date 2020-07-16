@@ -531,24 +531,26 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
+        SAEON.Observations.Data.AspnetUser _AspnetUser = null;
 		/// <summary>
 		/// Returns a AspnetUser ActiveRecord object related to this DataSchema
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
-			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }
+			get { return _AspnetUser ?? (_AspnetUser = SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId)); }
 			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
+        SAEON.Observations.Data.DataSourceType _DataSourceType = null;
 		/// <summary>
 		/// Returns a DataSourceType ActiveRecord object related to this DataSchema
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.DataSourceType DataSourceType
 		{
-			get { return SAEON.Observations.Data.DataSourceType.FetchByID(this.DataSourceTypeID); }
+			get { return _DataSourceType ?? (_DataSourceType = SAEON.Observations.Data.DataSourceType.FetchByID(this.DataSourceTypeID)); }
 			set { SetColumnValue("DataSourceTypeID", value.Id); }
 		}
 		

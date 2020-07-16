@@ -209,24 +209,26 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
+        SAEON.Observations.Data.AspnetRole _AspnetRole = null;
 		/// <summary>
 		/// Returns a AspnetRole ActiveRecord object related to this RoleModule
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetRole AspnetRole
 		{
-			get { return SAEON.Observations.Data.AspnetRole.FetchByID(this.RoleId); }
+			get { return _AspnetRole ?? (_AspnetRole = SAEON.Observations.Data.AspnetRole.FetchByID(this.RoleId)); }
 			set { SetColumnValue("RoleId", value.RoleId); }
 		}
 		
 		
+        SAEON.Observations.Data.ModuleX _ModuleX = null;
 		/// <summary>
 		/// Returns a ModuleX ActiveRecord object related to this RoleModule
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.ModuleX ModuleX
 		{
-			get { return SAEON.Observations.Data.ModuleX.FetchByID(this.ModuleID); }
+			get { return _ModuleX ?? (_ModuleX = SAEON.Observations.Data.ModuleX.FetchByID(this.ModuleID)); }
 			set { SetColumnValue("ModuleID", value.Id); }
 		}
 		

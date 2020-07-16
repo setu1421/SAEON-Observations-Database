@@ -360,46 +360,50 @@ namespace SAEON.Observations.Data
 		
 		#region ForeignKey Properties
 		
+        SAEON.Observations.Data.AspnetUser _AspnetUser = null;
 		/// <summary>
 		/// Returns a AspnetUser ActiveRecord object related to this OrganisationInstrument
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.AspnetUser AspnetUser
 		{
-			get { return SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId); }
+			get { return _AspnetUser ?? (_AspnetUser = SAEON.Observations.Data.AspnetUser.FetchByID(this.UserId)); }
 			set { SetColumnValue("UserId", value.UserId); }
 		}
 		
 		
+        SAEON.Observations.Data.Instrument _Instrument = null;
 		/// <summary>
 		/// Returns a Instrument ActiveRecord object related to this OrganisationInstrument
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Instrument Instrument
 		{
-			get { return SAEON.Observations.Data.Instrument.FetchByID(this.InstrumentID); }
+			get { return _Instrument ?? (_Instrument = SAEON.Observations.Data.Instrument.FetchByID(this.InstrumentID)); }
 			set { SetColumnValue("InstrumentID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.Organisation _Organisation = null;
 		/// <summary>
 		/// Returns a Organisation ActiveRecord object related to this OrganisationInstrument
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.Organisation Organisation
 		{
-			get { return SAEON.Observations.Data.Organisation.FetchByID(this.OrganisationID); }
+			get { return _Organisation ?? (_Organisation = SAEON.Observations.Data.Organisation.FetchByID(this.OrganisationID)); }
 			set { SetColumnValue("OrganisationID", value.Id); }
 		}
 		
 		
+        SAEON.Observations.Data.OrganisationRole _OrganisationRole = null;
 		/// <summary>
 		/// Returns a OrganisationRole ActiveRecord object related to this OrganisationInstrument
 		/// 
 		/// </summary>
 		public SAEON.Observations.Data.OrganisationRole OrganisationRole
 		{
-			get { return SAEON.Observations.Data.OrganisationRole.FetchByID(this.OrganisationRoleID); }
+			get { return _OrganisationRole ?? (_OrganisationRole = SAEON.Observations.Data.OrganisationRole.FetchByID(this.OrganisationRoleID)); }
 			set { SetColumnValue("OrganisationRoleID", value.Id); }
 		}
 		
