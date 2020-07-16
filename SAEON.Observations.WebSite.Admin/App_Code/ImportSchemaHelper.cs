@@ -7,6 +7,7 @@ using SAEON.Core;
 using SAEON.Logs;
 using SAEON.Observations.Azure;
 using SAEON.Observations.Data;
+using Serilog.Events;
 using SubSonic;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,8 @@ public class SchemaDefinition
     public Guid? PhenomenonUOMID { get; set; }
     public PhenomenonUOM PhenomenonOUM { get; set; } = null;
     public bool InValidUOM { get; set; }
-    public List<Guid> DataSourceTransformationIDs { get; set; } = new List<Guid>();
+    //public List<Guid> DataSourceTransformationIDs { get; set; } = new List<Guid>();
+    public List<DataSourceTransformation> DataSourceTransformations { get; set; } = new List<DataSourceTransformation>();
     public bool IsEmptyValue { get; set; }
     public string EmptyValue { get; set; }
     public bool IsOffering { get; set; }
@@ -117,7 +119,7 @@ public class ImportSchemaHelper : IDisposable
     private readonly DataTable dtResults;
     private readonly DataSource dataSource;
     private readonly DataSchema dataSchema;
-    private readonly List<DataSourceTransformation> transformations;
+    //private readonly List<DataSourceTransformation> transformations;
     private readonly List<SchemaDefinition> schemaDefs;
     public List<SchemaValue> SchemaValues;
     private readonly Sensor Sensor = null;
@@ -365,7 +367,6 @@ public class ImportSchemaHelper : IDisposable
             stopwatch.Stop();
             Logging.Information("Read DataTable in {time}", stopwatch.Elapsed.TimeStr());
             dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-            transformations = new List<DataSourceTransformation>();
             schemaDefs = new List<SchemaDefinition>();
             SchemaValues = new List<SchemaValue>();
         }
@@ -453,7 +454,7 @@ public class ImportSchemaHelper : IDisposable
                             }
                             else
                             {
-                                def.DataSourceTransformationIDs = LoadTransformations(def.PhenomenonOfferingID.Value);
+                                def.DataSourceTransformations = LoadTransformations(def.PhenomenonOfferingID.Value);
                             }
 
                             def.PhenomenonUOMID = schemaCol.PhenomenonUOMID;
@@ -520,14 +521,8 @@ public class ImportSchemaHelper : IDisposable
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
-    private List<Guid> LoadTransformations(Guid offId)
+    private List<DataSourceTransformation> LoadTransformations(Guid offId)
     {
-        List<Guid> transforms = new List<Guid>();
-
         DataSourceTransformationCollection col = new Select()
                                                 .From(DataSourceTransformation.Schema)
                                                 .InnerJoin(Phenomenon.IdColumn, DataSourceTransformation.PhenomenonIDColumn)
@@ -544,18 +539,7 @@ public class ImportSchemaHelper : IDisposable
                                                 .OrderAsc(TransformationType.IorderColumn.QualifiedName)
                                                 .OrderAsc(DataSourceTransformation.RankColumn.QualifiedName)
                                                 .ExecuteAsCollection<DataSourceTransformationCollection>();
-
-        foreach (var item in col)
-        {
-            if (transformations.FirstOrDefault(t => t.Id == item.Id) == null)
-            {
-                transformations.Add(item);
-            }
-
-            transforms.Add(item.Id);
-        }
-
-        return transforms;
+        return col.Distinct().ToList();
     }
 
     /// <summary>
@@ -772,8 +756,11 @@ public class ImportSchemaHelper : IDisposable
                             rec.InvalidStatuses.Add(Status.UOMInvalid);
                         }
 
-                        Logging.Verbose("Row#: {row} Index: {Index} Column: {Column} Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
-                            rowNum, def.Index, def.FieldName, def.PhenomenonOffering?.Phenomenon?.Name, def.PhenomenonOffering?.Offering?.Name, def.PhenomenonOUM?.Phenomenon?.Name, def.PhenomenonOUM?.UnitOfMeasure?.Unit);
+                        if (Logging.Level == LogEventLevel.Verbose)
+                        {
+                            Logging.Verbose("Row#: {row} Index: {Index} Column: {Column} Phenomenon: {Phenomenon} Offering: {Offering} Phenomenon: {Phenomenon} UnitOfMeasure: {UnitOfMeasure}",
+                                rowNum, def.Index, def.FieldName, def.PhenomenonOffering?.Phenomenon?.Name, def.PhenomenonOffering?.Offering?.Name, def.PhenomenonOUM?.Phenomenon?.Name, def.PhenomenonOUM?.UnitOfMeasure?.Unit);
+                        }
                         if (ErrorInTime)
                         {
                             rec.TimeValueInvalid = true;
@@ -879,9 +866,9 @@ public class ImportSchemaHelper : IDisposable
                             rec.TextValue = RawValue;
                             rec.RawValue = null; // dataSource.DefaultNullValue;
                             rec.DataValue = null; // dataSource.DefaultNullValue;
-                            foreach (var transform in transformations.Where(t => def.DataSourceTransformationIDs.Contains(t.Id)))
+                            foreach (var transform in def.DataSourceTransformations)
                             {
-                                TransformValue(transform.Id, ref rec, rowNum, true);
+                                TransformValue(transform, ref rec, rowNum, true);
                             }
                         }
                         else
@@ -894,9 +881,9 @@ public class ImportSchemaHelper : IDisposable
                             if (!double.TryParse(RawValue, out dvalue))
                             {
                                 rec.TextValue = RawValue;
-                                foreach (var transform in transformations.Where(t => t.TransformationType.Name == "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
+                                foreach (var transform in def.DataSourceTransformations.Where(t => t.TransformationType.Name == "Lookup"))
                                 {
-                                    TransformValue(transform.Id, ref rec, rowNum);
+                                    TransformValue(transform, ref rec, rowNum);
                                     if (rec.RawValue.HasValue)
                                     {
                                         RawValue = rec.RawValue.Value.ToString();
@@ -921,9 +908,9 @@ public class ImportSchemaHelper : IDisposable
                             {
                                 rec.RawValue = dvalue;
                                 rec.DataValue = rec.RawValue;
-                                foreach (var transform in transformations.Where(t => t.TransformationType.Name != "Lookup" && def.DataSourceTransformationIDs.Contains(t.Id)))
+                                foreach (var transform in def.DataSourceTransformations.Where(t => t.TransformationType.Name != "Lookup"))
                                 {
-                                    TransformValue(transform.Id, ref rec, rowNum);
+                                    TransformValue(transform, ref rec, rowNum);
                                 }
                             }
                         }
@@ -1017,14 +1004,13 @@ public class ImportSchemaHelper : IDisposable
 
         bool CheckDuplicate(SchemaDefinition def, SchemaValue schval)
         {
-            var result = false;
             SqlQuery q = new Select().From(Observation.Schema)
                 .Where(Observation.Columns.SensorID).IsEqualTo(schval.SensorID)
                 .And(Observation.Columns.ValueDate).IsEqualTo(schval.DateValue)
                 .And(Observation.Columns.PhenomenonOfferingID).IsEqualTo(schval.PhenomenonOfferingID)
                 .And(Observation.Columns.PhenomenonUOMID).IsEqualTo(schval.PhenomenonUOMID);
             ObservationCollection oCol = q.ExecuteAsCollection<ObservationCollection>();
-            result = oCol.Any();
+            var result = oCol.Any();
             if (result)
             {
                 var obs = oCol.FirstOrDefault();
@@ -1086,18 +1072,19 @@ public class ImportSchemaHelper : IDisposable
     /// <summary>
     ///
     /// </summary>
-    private void TransformValue(Guid dtid, ref SchemaValue rec, int rowNum, bool isEmpty = false)
+    private void TransformValue(DataSourceTransformation trns, ref SchemaValue rec, int rowNum, bool isEmpty = false)
     {
         using (Logging.MethodCall(GetType()))
         {
             try
             {
                 bool valid = true;
-                var trns = transformations.FirstOrDefault(t => t.Id == dtid);
-                Logging.Verbose("Row#: {row} Phenomenon: {Phenomenon} Offering: {Offering} {TransOfferingID} {RecOfferingID} UnitOfMeasure: {UnitOfMeasure} {TransUnitOfMeasureID} {RecUnitOfMeasureID} StartDate: {StartDate} EndDate: {EndDate} Date: {Date}",
-                    rowNum, trns?.Phenomenon?.Name, trns?.PhenomenonOffering?.Offering?.Name, trns?.PhenomenonOfferingID, rec?.PhenomenonOfferingID,
-                    trns?.PhenomenonUOM?.UnitOfMeasure?.Unit, trns?.PhenomenonUOMID, rec?.PhenomenonUOMID, trns?.StartDate, trns?.EndDate, rec.DateValue);
-
+                if (Logging.Level == LogEventLevel.Verbose)
+                {
+                    Logging.Verbose("Row#: {row} Phenomenon: {Phenomenon} Offering: {Offering} {TransOfferingID} {RecOfferingID} UnitOfMeasure: {UnitOfMeasure} {TransUnitOfMeasureID} {RecUnitOfMeasureID} StartDate: {StartDate} EndDate: {EndDate} Date: {Date}",
+                        rowNum, trns?.Phenomenon?.Name, trns?.PhenomenonOffering?.Offering?.Name, trns?.PhenomenonOfferingID, rec?.PhenomenonOfferingID,
+                        trns?.PhenomenonUOM?.UnitOfMeasure?.Unit, trns?.PhenomenonUOMID, rec?.PhenomenonUOMID, trns?.StartDate, trns?.EndDate, rec.DateValue);
+                }
                 bool process = trns.PhenomenonOfferingID.HasValue ? trns.PhenomenonOfferingID.Value == rec.PhenomenonOfferingID.Value : false ||
                                 !trns.PhenomenonUOMID.HasValue || trns.PhenomenonUOMID.Value == rec.PhenomenonUOMID.Value;
                 if (process)
@@ -1336,7 +1323,7 @@ public class ImportSchemaHelper : IDisposable
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex, "Row#: {row} dtid: {dtid} rec: {@rec})", rowNum, dtid, rec);
+                Logging.Exception(ex, "Row#: {row} dtid: {dtid} rec: {@rec})", rowNum, trns.Id, rec);
                 throw;
             }
         }
@@ -1345,20 +1332,20 @@ public class ImportSchemaHelper : IDisposable
     /// <summary>
     ///
     /// </summary>
-    public List<object> Errors
-    {
-        get
-        {
-            List<object> _errors = new List<object>();
+    //public List<object> Errors
+    //{
+    //    get
+    //    {
+    //        List<object> _errors = new List<object>();
 
-            foreach (ErrorInfo errinfo in engine.ErrorManager.Errors)
-            {
-                _errors.Add(new { ErrorMessage = errinfo.ExceptionInfo.Message, LineNo = errinfo.LineNumber, errinfo.RecordString });
-            }
+    //        foreach (ErrorInfo errinfo in engine.ErrorManager.Errors)
+    //        {
+    //            _errors.Add(new { ErrorMessage = errinfo.ExceptionInfo.Message, LineNo = errinfo.LineNumber, errinfo.RecordString });
+    //        }
 
-            return _errors;
-        }
-    }
+    //        return _errors;
+    //    }
+    //}
 
     /// <summary>
     ///

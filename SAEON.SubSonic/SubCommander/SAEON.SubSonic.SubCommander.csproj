@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -37,7 +37,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -51,6 +51,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>
     </DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,6 +60,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>SAEON.ico</ApplicationIcon>
@@ -96,16 +98,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SubSonic.Migrations\SubSonic.Migrations.csproj">
-      <Project>{0E82F4EB-BA66-474C-A5F9-3D10D1EE2206}</Project>
-      <Name>SubSonic.Migrations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SubSonic\SAEON.SubSonic.csproj">
-      <Project>{EE4A10E7-92C3-4EAC-B6DF-5DA1C26F4D1D}</Project>
-      <Name>SubSonic</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="Properties\App.config" />
   </ItemGroup>
@@ -124,6 +116,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="SAEON.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SubSonic.Migrations\SAEON.SubSonic.Migrations.csproj">
+      <Project>{0e82f4eb-ba66-474c-a5f9-3d10d1ee2206}</Project>
+      <Name>SAEON.SubSonic.Migrations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SubSonic\SAEON.SubSonic.csproj">
+      <Project>{ee4a10e7-92c3-4eac-b6df-5da1c26f4d1d}</Project>
+      <Name>SAEON.SubSonic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
