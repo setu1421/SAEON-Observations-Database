@@ -1,5 +1,5 @@
 ﻿//#define IsTest
-
+#define UseParallel
 using Ext.Net;
 using SAEON.Azure.CosmosDB;
 using SAEON.Core;
@@ -15,6 +15,9 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+#if UseParallel
+using System.Threading.Tasks;
+#endif
 using System.Transactions;
 
 public partial class Admin_ImportBatches : System.Web.UI.Page
@@ -435,7 +438,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopwatch.Start();
                 var stageStopwatch = new Stopwatch();
                 stageStopwatch.Start();
-                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.55, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.56, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 stageStopwatch.Stop();
                 Logging.Information("Imported {count:N0} observations in {elapsed}", values.Count, stageStopwatch.Elapsed.TimeStr());
@@ -454,6 +457,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     var badValues = values.Where(i => !i.IsValid).OrderBy(i => i.RowNum).ToList();
                     var dtGoodValues = new DataTable("Observation");
                     var dtBadValues = new DataTable("DataLog");
+                    var userId = AuthHelper.GetLoggedInUserId;
                     if (BulkInsert)
                     {
                         if (badValues.Any())
@@ -490,6 +494,24 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             dtBadValues.Columns.Add("UserId", typeof(Guid));
                             nMax = badValues.Count;
                             n = 1;
+#if UseParallel
+                            try
+                            {
+                                Parallel.For(1, nMax, i =>
+                                {
+                                    lock (dtBadValues)
+                                    {
+                                        AddBadValue(dtBadValues, badValues[i - 1], batch, userId);
+                                    }
+                                });
+                                n = nMax;
+                            }
+                            catch (Exception ex)
+                            {
+                                Logging.Exception(ex, "Unable to create dtBadValues");
+                                throw;
+                            }
+#else
                             foreach (var value in badValues)
                             {
                                 var progress = (double)n / nMax;
@@ -504,54 +526,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                                 try
                                 {
-                                    if (LogBadValues)
-                                    {
-                                        Logging.Error("Bad Value: {@value}", value);
-                                    }
-                                    var dataRow = dtBadValues.NewRow();
-                                    dataRow.SetValue<Guid>("ImportBatchID", batch.Id);
-                                    dataRow.SetValue<Guid?>("SensorID", value.SensorID);
-                                    if (value.DateValueInvalid)
-                                        dataRow.SetValue<string>("InvalidDateValue", value.InvalidDateValue);
-                                    else if (value.DateValue > DateTime.MinValue)
-                                        dataRow.SetValue<DateTime>("ValueDate", value.DateValue);
-                                    if (value.TimeValueInvalid)
-                                        dataRow.SetValue<string>("InvalidTimeValue", value.InvalidTimeValue);
-                                    else if (value.TimeValue.HasValue && value.TimeValue.Value > DateTime.MinValue)
-                                        dataRow.SetValue<DateTime>("ValueTime", value.TimeValue.Value);
-                                    if (value.RawValueInvalid)
-                                        dataRow.SetValue<string>("ValueText", value.InvalidRawValue);
-                                    else
-                                    {
-                                        dataRow.SetValue<string>("ValueText", value.FieldRawValue);
-                                        dataRow.SetValue<double?>("RawValue", value.RawValue);
-                                    }
-                                    if (value.DataValueInvalid)
-                                        dataRow.SetValue<string>("TransformValueText", value.InvalidRawValue);
-                                    else
-                                        dataRow.SetValue<double?>("DataValue", value.DataValue);
-                                    if (value.InvalidOffering)
-                                        dataRow.SetValue<string>("InvalidOffering", value.PhenomenonOfferingID.Value.ToString());
-                                    else
-                                        dataRow.SetValue<Guid>("PhenomenonOfferingID", value.PhenomenonOfferingID.Value);
-                                    if (value.InvalidUOM)
-                                        dataRow.SetValue<string>("InvalidUOM", value.PhenomenonUOMID.Value.ToString());
-                                    else
-                                        dataRow.SetValue<Guid>("PhenomenonUOMID", value.PhenomenonUOMID.Value);
-                                    dataRow.SetValue<double?>("Latitude", value.Latitude);
-                                    dataRow.SetValue<double?>("Longitude", value.Longitude);
-                                    dataRow.SetValue<double?>("Elevation", value.Elevation);
-                                    dataRow.SetValue<Guid>("CorrelationID", value.CorrelationID);
-                                    dataRow.SetValue<string>("Comment", value.Comment);
-                                    dataRow.SetValue<Guid>("UserId", AuthHelper.GetLoggedInUserId);
-                                    dataRow.SetValue<DateTime>("ImportDate", DateTime.Now);
-                                    dataRow.SetValue<string>("RawFieldValue", String.IsNullOrWhiteSpace(value.FieldRawValue) ? "" : value.FieldRawValue);
-                                    if (value.DataSourceTransformationID.HasValue)
-                                        dataRow.SetValue<Guid>("DataSourceTransformationID", value.DataSourceTransformationID.Value);
-                                    dataRow.SetValue<string>("ImportStatus", String.Join(",", value.InvalidStatuses.Select(s => new Status(s).Name)));
-                                    dataRow.SetValue<Guid>("StatusID", new Guid(value.InvalidStatuses.First()));
-                                    //dataRow.SetValue<>("", value.);
-                                    dtBadValues.Rows.Add(dataRow);
+                                    var dataRow = AddBadValue(dtBadValues, value, batch, userId);
                                     if (reportPorgress)
                                     {
                                         Logging.Verbose("DataRow: {row}", dataRow.AsString());
@@ -564,7 +539,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                                 n++;
                             }
-
+#endif
                             stageStopwatch.Stop();
                             Logging.Information("Created DataTable {count:n0} bad observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                         }
@@ -592,6 +567,24 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             dtGoodValues.Columns.Add("UserId", typeof(Guid));
                             nMax = goodValues.Count;
                             n = 1;
+#if UseParallel
+                            try
+                            {
+                                Parallel.For(1, nMax, i =>
+                                {
+                                    lock (dtGoodValues)
+                                    {
+                                        AddGoodValue(dtGoodValues, goodValues[i - 1], batch, userId);
+                                    }
+                                });
+                                n = nMax;
+                            }
+                            catch (Exception ex)
+                            {
+                                Logging.Exception(ex, "Unable to create dtGoodValues");
+                                throw;
+                            }
+#else
                             foreach (var value in goodValues)
                             {
                                 var progress = (double)n / nMax;
@@ -606,29 +599,11 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                                 try
                                 {
-                                    var dataRow = dtGoodValues.NewRow();
-                                    dataRow.SetValue<Guid>("ImportBatchID", batch.Id);
-                                    dataRow.SetValue<Guid>("SensorID", value.SensorID.Value);
-                                    dataRow.SetValue<DateTime>("ValueDate", value.DateValue);
-                                    dataRow.SetValue<string>("TextValue", value.TextValue);
-                                    dataRow.SetValue<double?>("RawValue", value.RawValue);
-                                    dataRow.SetValue<double?>("DataValue", value.DataValue);
-                                    dataRow.SetValue<Guid>("PhenomenonOfferingID", value.PhenomenonOfferingID.Value);
-                                    dataRow.SetValue<Guid>("PhenomenonUOMID", value.PhenomenonUOMID.Value);
-                                    dataRow.SetValue<double?>("Latitude", value.Latitude);
-                                    dataRow.SetValue<double?>("Longitude", value.Longitude);
-                                    dataRow.SetValue<double?>("Elevation", value.Elevation);
-                                    dataRow.SetValue<Guid>("CorrelationID", value.CorrelationID);
-                                    dataRow.SetValue<string>("Comment", value.Comment);
-                                    dataRow.SetValue<Guid>("UserId", AuthHelper.GetLoggedInUserId);
-                                    dataRow.SetValue<DateTime>("AddedDate", DateTime.Now);
-                                    //dataRow.SetValue<>("", value.);
-                                    dtGoodValues.Rows.Add(dataRow);
+                                    var dataRow = AddGoodValue(dtGoodValues, value, batch, userId);
                                     if (reportPorgress)
                                     {
                                         Logging.Verbose("DataRow: {row}", dataRow.AsString());
                                     }
-
                                 }
                                 catch (Exception ex)
                                 {
@@ -637,6 +612,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                 }
                                 n++;
                             }
+#endif
                             stageStopwatch.Stop();
                             Logging.Information("Created DataTable {count:n0} good observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                         }
@@ -955,6 +931,82 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
             {
                 X.Mask.Hide();
             }
+        }
+
+        DataRow AddBadValue(DataTable dtBadValues, SchemaValue value, ImportBatch batch, Guid userId)
+        {
+            if (LogBadValues)
+            {
+                Logging.Error("Bad Value: {@value}", value);
+            }
+            var dataRow = dtBadValues.NewRow();
+            dataRow.SetValue<Guid>("ImportBatchID", batch.Id);
+            dataRow.SetValue<Guid?>("SensorID", value.SensorID);
+            if (value.DateValueInvalid)
+                dataRow.SetValue<string>("InvalidDateValue", value.InvalidDateValue);
+            else if (value.DateValue > DateTime.MinValue)
+                dataRow.SetValue<DateTime>("ValueDate", value.DateValue);
+            if (value.TimeValueInvalid)
+                dataRow.SetValue<string>("InvalidTimeValue", value.InvalidTimeValue);
+            else if (value.TimeValue.HasValue && value.TimeValue.Value > DateTime.MinValue)
+                dataRow.SetValue<DateTime>("ValueTime", value.TimeValue.Value);
+            if (value.RawValueInvalid)
+                dataRow.SetValue<string>("ValueText", value.InvalidRawValue);
+            else
+            {
+                dataRow.SetValue<string>("ValueText", value.FieldRawValue);
+                dataRow.SetValue<double?>("RawValue", value.RawValue);
+            }
+            if (value.DataValueInvalid)
+                dataRow.SetValue<string>("TransformValueText", value.InvalidRawValue);
+            else
+                dataRow.SetValue<double?>("DataValue", value.DataValue);
+            if (value.InvalidOffering)
+                dataRow.SetValue<string>("InvalidOffering", value.PhenomenonOfferingID.Value.ToString());
+            else
+                dataRow.SetValue<Guid>("PhenomenonOfferingID", value.PhenomenonOfferingID.Value);
+            if (value.InvalidUOM)
+                dataRow.SetValue<string>("InvalidUOM", value.PhenomenonUOMID.Value.ToString());
+            else
+                dataRow.SetValue<Guid>("PhenomenonUOMID", value.PhenomenonUOMID.Value);
+            dataRow.SetValue<double?>("Latitude", value.Latitude);
+            dataRow.SetValue<double?>("Longitude", value.Longitude);
+            dataRow.SetValue<double?>("Elevation", value.Elevation);
+            dataRow.SetValue<Guid>("CorrelationID", value.CorrelationID);
+            dataRow.SetValue<string>("Comment", value.Comment);
+            dataRow.SetValue<Guid>("UserId", userId);
+            dataRow.SetValue<DateTime>("ImportDate", DateTime.Now);
+            dataRow.SetValue<string>("RawFieldValue", String.IsNullOrWhiteSpace(value.FieldRawValue) ? "" : value.FieldRawValue);
+            if (value.DataSourceTransformationID.HasValue)
+                dataRow.SetValue<Guid>("DataSourceTransformationID", value.DataSourceTransformationID.Value);
+            dataRow.SetValue<string>("ImportStatus", String.Join(",", value.InvalidStatuses.Select(s => new Status(s).Name)));
+            dataRow.SetValue<Guid>("StatusID", new Guid(value.InvalidStatuses.First()));
+            //dataRow.SetValue<>("", value.);
+            dtBadValues.Rows.Add(dataRow);
+            return dataRow;
+        }
+
+        DataRow AddGoodValue(DataTable dtGoodValues, SchemaValue value, ImportBatch batch, Guid userId)
+        {
+            var dataRow = dtGoodValues.NewRow();
+            dataRow.SetValue<Guid>("ImportBatchID", batch.Id);
+            dataRow.SetValue<Guid>("SensorID", value.SensorID.Value);
+            dataRow.SetValue<DateTime>("ValueDate", value.DateValue);
+            dataRow.SetValue<string>("TextValue", value.TextValue);
+            dataRow.SetValue<double?>("RawValue", value.RawValue);
+            dataRow.SetValue<double?>("DataValue", value.DataValue);
+            dataRow.SetValue<Guid>("PhenomenonOfferingID", value.PhenomenonOfferingID.Value);
+            dataRow.SetValue<Guid>("PhenomenonUOMID", value.PhenomenonUOMID.Value);
+            dataRow.SetValue<double?>("Latitude", value.Latitude);
+            dataRow.SetValue<double?>("Longitude", value.Longitude);
+            dataRow.SetValue<double?>("Elevation", value.Elevation);
+            dataRow.SetValue<Guid>("CorrelationID", value.CorrelationID);
+            dataRow.SetValue<string>("Comment", value.Comment);
+            dataRow.SetValue<Guid>("UserId", userId);
+            dataRow.SetValue<DateTime>("AddedDate", DateTime.Now);
+            //dataRow.SetValue<>("", value.);
+            dtGoodValues.Rows.Add(dataRow);
+            return dataRow;
         }
     }
 

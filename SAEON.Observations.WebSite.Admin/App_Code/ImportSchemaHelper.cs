@@ -1,5 +1,6 @@
 ﻿//#define DetailedLogging
 //#define VeryDetailedLogging
+#define UseParallel
 using FileHelpers;
 using FileHelpers.Dynamic;
 using NCalc;
@@ -10,6 +11,9 @@ using SAEON.Observations.Data;
 using Serilog.Events;
 using SubSonic;
 using System;
+#if UseParallel
+using System.Collections.Concurrent;
+#endif
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -18,6 +22,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+#if UseParallel
+using System.Threading.Tasks;
+#endif
 using System.Web.Hosting;
 
 public class SchemaDefinition
@@ -121,7 +128,11 @@ public class ImportSchemaHelper : IDisposable
     private readonly DataSchema dataSchema;
     //private readonly List<DataSourceTransformation> transformations;
     private readonly List<SchemaDefinition> schemaDefs;
+#if UseParallel
+    public BlockingCollection<SchemaValue> SchemaValues;
+#else
     public List<SchemaValue> SchemaValues;
+#endif
     private readonly Sensor Sensor = null;
 
     /// <summary>
@@ -368,7 +379,11 @@ public class ImportSchemaHelper : IDisposable
             Logging.Information("Read DataTable in {time}", stopwatch.Elapsed.TimeStr());
             dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
             schemaDefs = new List<SchemaDefinition>();
+#if UseParallel
+            SchemaValues = new BlockingCollection<SchemaValue>();
+#else
             SchemaValues = new List<SchemaValue>();
+#endif
         }
     }
 
@@ -559,11 +574,25 @@ public class ImportSchemaHelper : IDisposable
                 Logging.Information("Building schema definition");
                 BuildSchemaDefinition();
                 Logging.Information("Built schema definition in {time}", stageStopwatch.Elapsed.TimeStr());
+#if !UseParallel
                 var lastProgress100 = -1;
+#endif
                 var nMax = dtResults.Rows.Count;
                 var n = 1;
                 Logging.Information("Processing {count:n0} rows", nMax);
                 stageStopwatch.Restart();
+#if UseParallel
+                try
+                {
+                    Parallel.For(1, nMax, i => ProcessRow(dtResults.Rows[i - 1], i));
+                    n = nMax;
+                }
+                catch (Exception ex)
+                {
+                    Logging.Exception(ex);
+                    throw;
+                }
+#else
                 foreach (DataRow row in dtResults.Rows)
                 {
                     var progress = (double)n / nMax;
@@ -579,6 +608,7 @@ public class ImportSchemaHelper : IDisposable
                     ProcessRow(row, n);
                     n++;
                 }
+#endif
                 stageStopwatch.Stop();
                 Logging.Information("Processed {count:n0} rows in {elapsed}, {rowTime}/row, {numRowsInSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                 Logging.Information("Checking for duplicates in batch");
@@ -1332,20 +1362,20 @@ public class ImportSchemaHelper : IDisposable
     /// <summary>
     ///
     /// </summary>
-    //public List<object> Errors
-    //{
-    //    get
-    //    {
-    //        List<object> _errors = new List<object>();
+    public List<object> Errors
+    {
+        get
+        {
+            List<object> _errors = new List<object>();
 
-    //        foreach (ErrorInfo errinfo in engine.ErrorManager.Errors)
-    //        {
-    //            _errors.Add(new { ErrorMessage = errinfo.ExceptionInfo.Message, LineNo = errinfo.LineNumber, errinfo.RecordString });
-    //        }
+            foreach (ErrorInfo errinfo in engine.ErrorManager.Errors)
+            {
+                _errors.Add(new { ErrorMessage = errinfo.ExceptionInfo.Message, LineNo = errinfo.LineNumber, errinfo.RecordString });
+            }
 
-    //        return _errors;
-    //    }
-    //}
+            return _errors;
+        }
+    }
 
     /// <summary>
     ///
