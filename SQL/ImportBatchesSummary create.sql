@@ -1,3 +1,4 @@
+use Observations
 Delete ImportBatchSummary
 Insert Into ImportBatchSummary
   (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance, 

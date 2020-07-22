@@ -1,3 +1,4 @@
+use Observations
 Select distinct
   SiteCode, SiteName, StationCode, StationName, InstrumentCode, InstrumentName, SensorCode, SensorName, PhenomenonCode, PhenomenonName, OfferingCode, OfferingName, UnitOfMeasureCode, UnitOfMeasureUnit, Count(*) Count
 from
