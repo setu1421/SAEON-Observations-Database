@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Ext.Net;
-using SubSonic;
+﻿using Ext.Net;
 using SAEON.Observations.Data;
+using SubSonic;
+using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// Summary description for ImportBatchRepository
@@ -21,7 +21,6 @@ public class ImportBatchRepository : BaseRepository
 
         SqlQuery q = new Select().From(VImportBatch.Schema)
             .Where(VImportBatch.Columns.UserId).IsNotNull();
-            //.OrderDesc(VImportBatch.Columns.Code);
 
         GetPagedQuery(ref q, e, paramPrefix);
 

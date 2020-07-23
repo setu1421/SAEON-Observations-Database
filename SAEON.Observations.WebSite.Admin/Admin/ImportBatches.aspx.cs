@@ -1,5 +1,4 @@
 ﻿//#define IsTest
-#define UseParallel
 using Ext.Net;
 using SAEON.Azure.CosmosDB;
 using SAEON.Core;
@@ -15,16 +14,16 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-#if UseParallel
 using System.Threading.Tasks;
-#endif
 using System.Transactions;
 
 public partial class Admin_ImportBatches : System.Web.UI.Page
 {
-    private bool DeleteIndivdualObservations = false;
     private bool BulkInsert = false;
+    private int BulkInsertBatchSize = 25000;
+    private bool DeleteIndivdualObservations = false;
     private bool LogBadValues = false;
+    private bool UseParallel = true;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -35,7 +34,9 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 Logging.Verbose("PageLoad Start");
                 DeleteIndivdualObservations = ConfigurationManager.AppSettings["DeleteIndivdualObservations"].IsTrue();
                 BulkInsert = ConfigurationManager.AppSettings["BulkInsert"].IsTrue();
+                BulkInsertBatchSize = int.Parse(ConfigurationManager.AppSettings["BulkInsertBatchSize"] ?? "25000");
                 LogBadValues = ConfigurationManager.AppSettings["LogBadValues"].IsTrue();
+                UseParallel = ConfigurationManager.AppSettings["UseParallel"].IsTrue();
                 Logging.Verbose("IsPostBack: {IsPostBack} IsAjaxRequest: {IsAjax}", IsPostBack, X.IsAjaxRequest);
                 if (!X.IsAjaxRequest)
                 {
@@ -388,7 +389,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 Logging.Information("HasFile: {HasFile} FileName: {FileName} FileSize: {FileSize:n0} Time: {Time}", DataFileUpload.HasFile, DataFileUpload?.PostedFile.FileName, DataFileUpload?.PostedFile.ContentLength, (DateTime.Now - (DateTime)Session["TestStart"]).TimeStr());
 #endif
 
-                //Logging.Information("BulkInsert: {BulkInsert}", BulkInsert);
+                Logging.Information("BulkInsert: {BulkInsert} BulkInsertBatchSize: {BulkInsertBatchSize}", BulkInsert, BulkInsertBatchSize);
 
                 Guid DataSourceId = new Guid(cbDataSource.SelectedItem.Value);
                 //add check to see that either datasource or linked sensor has a dataschema
@@ -438,7 +439,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                 durationStopwatch.Start();
                 var stageStopwatch = new Stopwatch();
                 stageStopwatch.Start();
-                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.56, batch.DataSource.Name, batch.FileName);
+                Logging.Information("Import Version: {version:F2} DataSource: {dataSource} FileName: {fileName}", 1.57, batch.DataSource.Name, batch.FileName);
                 List<SchemaValue> values = Import(DataSourceId, batch);
                 stageStopwatch.Stop();
                 Logging.Information("Imported {count:N0} observations in {elapsed}", values.Count, stageStopwatch.Elapsed.TimeStr());
@@ -494,52 +495,51 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             dtBadValues.Columns.Add("UserId", typeof(Guid));
                             nMax = badValues.Count;
                             n = 1;
-#if UseParallel
-                            try
-                            {
-                                Parallel.For(1, nMax, i =>
-                                {
-                                    lock (dtBadValues)
-                                    {
-                                        AddBadValue(dtBadValues, badValues[i - 1], batch, userId);
-                                    }
-                                });
-                                n = nMax;
-                            }
-                            catch (Exception ex)
-                            {
-                                Logging.Exception(ex, "Unable to create dtBadValues");
-                                throw;
-                            }
-#else
-                            foreach (var value in badValues)
-                            {
-                                var progress = (double)n / nMax;
-                                var progress100 = (int)(progress * 100);
-                                var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
-                                var elapsed = stageStopwatch.Elapsed;
-                                var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
-                                if (reportPorgress)
-                                {
-                                    Logging.Information("{progress:p0} {value:n0} of {values:n0} bad observations in {min} of {mins}, {rowTime}/row, {rowsPerSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
-                                    lastProgress100 = progress100;
-                                }
+                            if (UseParallel)
                                 try
                                 {
-                                    var dataRow = AddBadValue(dtBadValues, value, batch, userId);
-                                    if (reportPorgress)
+                                    Parallel.For(1, nMax, i =>
                                     {
-                                        Logging.Verbose("DataRow: {row}", dataRow.AsString());
-                                    }
+                                        lock (dtBadValues)
+                                        {
+                                            AddBadValue(dtBadValues, badValues[i - 1], batch, userId);
+                                        }
+                                    });
+                                    n = nMax;
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Exception(ex, "Unable to add DataRow: {row}", value.RowNum);
+                                    Logging.Exception(ex, "Unable to create dtBadValues");
                                     throw;
                                 }
-                                n++;
-                            }
-#endif
+                            else
+                                foreach (var value in badValues)
+                                {
+                                    var progress = (double)n / nMax;
+                                    var progress100 = (int)(progress * 100);
+                                    var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
+                                    var elapsed = stageStopwatch.Elapsed;
+                                    var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
+                                    if (reportPorgress)
+                                    {
+                                        Logging.Information("{progress:p0} {value:n0} of {values:n0} bad observations in {min} of {mins}, {rowTime}/row, {rowsPerSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
+                                        lastProgress100 = progress100;
+                                    }
+                                    try
+                                    {
+                                        var dataRow = AddBadValue(dtBadValues, value, batch, userId);
+                                        if (reportPorgress)
+                                        {
+                                            Logging.Verbose("DataRow: {row}", dataRow.AsString());
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Logging.Exception(ex, "Unable to add DataRow: {row}", value.RowNum);
+                                        throw;
+                                    }
+                                    n++;
+                                }
                             stageStopwatch.Stop();
                             Logging.Information("Created DataTable {count:n0} bad observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                         }
@@ -567,52 +567,51 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                             dtGoodValues.Columns.Add("UserId", typeof(Guid));
                             nMax = goodValues.Count;
                             n = 1;
-#if UseParallel
-                            try
-                            {
-                                Parallel.For(1, nMax, i =>
-                                {
-                                    lock (dtGoodValues)
-                                    {
-                                        AddGoodValue(dtGoodValues, goodValues[i - 1], batch, userId);
-                                    }
-                                });
-                                n = nMax;
-                            }
-                            catch (Exception ex)
-                            {
-                                Logging.Exception(ex, "Unable to create dtGoodValues");
-                                throw;
-                            }
-#else
-                            foreach (var value in goodValues)
-                            {
-                                var progress = (double)n / nMax;
-                                var progress100 = (int)(progress * 100);
-                                var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
-                                var elapsed = stageStopwatch.Elapsed;
-                                var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
-                                if (reportPorgress)
-                                {
-                                    Logging.Information("{progress:p0} {value:n0} of {values:n0} good observations in {min} of {mins}, {rowTime}/row, {rowsPerSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
-                                    lastProgress100 = progress100;
-                                }
+                            if (UseParallel)
                                 try
                                 {
-                                    var dataRow = AddGoodValue(dtGoodValues, value, batch, userId);
-                                    if (reportPorgress)
+                                    Parallel.For(1, nMax, i =>
                                     {
-                                        Logging.Verbose("DataRow: {row}", dataRow.AsString());
-                                    }
+                                        lock (dtGoodValues)
+                                        {
+                                            AddGoodValue(dtGoodValues, goodValues[i - 1], batch, userId);
+                                        }
+                                    });
+                                    n = nMax;
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Exception(ex, "Unable to add DataRow: {row}", value.RowNum);
+                                    Logging.Exception(ex, "Unable to create dtGoodValues");
                                     throw;
                                 }
-                                n++;
-                            }
-#endif
+                            else
+                                foreach (var value in goodValues)
+                                {
+                                    var progress = (double)n / nMax;
+                                    var progress100 = (int)(progress * 100);
+                                    var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
+                                    var elapsed = stageStopwatch.Elapsed;
+                                    var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
+                                    if (reportPorgress)
+                                    {
+                                        Logging.Information("{progress:p0} {value:n0} of {values:n0} good observations in {min} of {mins}, {rowTime}/row, {rowsPerSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
+                                        lastProgress100 = progress100;
+                                    }
+                                    try
+                                    {
+                                        var dataRow = AddGoodValue(dtGoodValues, value, batch, userId);
+                                        if (reportPorgress)
+                                        {
+                                            Logging.Verbose("DataRow: {row}", dataRow.AsString());
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Logging.Exception(ex, "Unable to add DataRow: {row}", value.RowNum);
+                                        throw;
+                                    }
+                                    n++;
+                                }
                             stageStopwatch.Stop();
                             Logging.Information("Created DataTable {count:n0} good observations in {elapsed}, {rowTime}/row, {rowsPerSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                         }
@@ -653,7 +652,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         nMax = badValues.Count;
                                         using (var bulkInsert = new SqlBulkCopy((SqlConnection)connScope.CurrentConnection, SqlBulkCopyOptions.CheckConstraints | SqlBulkCopyOptions.FireTriggers, null))
                                         {
-                                            bulkInsert.BatchSize = 25000;
+                                            bulkInsert.BatchSize = BulkInsertBatchSize;
                                             bulkInsert.BulkCopyTimeout = 15 * 60 * 60;
                                             bulkInsert.NotifyAfter = bulkInsert.BatchSize;
                                             bulkInsert.SqlRowsCopied += BulkInsert_SqlRowsCopied;
@@ -797,7 +796,7 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                                         nMax = goodValues.Count;
                                         using (var bulkInsert = new SqlBulkCopy((SqlConnection)connScope.CurrentConnection, SqlBulkCopyOptions.CheckConstraints | SqlBulkCopyOptions.FireTriggers, null))
                                         {
-                                            bulkInsert.BatchSize = 25000;
+                                            bulkInsert.BatchSize = BulkInsertBatchSize;
                                             bulkInsert.BulkCopyTimeout = 15 * 60 * 60;
                                             bulkInsert.NotifyAfter = bulkInsert.BatchSize;
                                             bulkInsert.SqlRowsCopied += BulkInsert_SqlRowsCopied;
@@ -1167,8 +1166,8 @@ public partial class Admin_ImportBatches : System.Web.UI.Page
                     }
 
                     obs.ValueDate = datevalue;
-                    obs.RawValue = double.Parse(RawValue.Value.ToString());
-                    obs.DataValue = double.Parse(DataValue.Value.ToString());
+                    obs.RawValue = Utilities.ParseDouble(RawValue.Value.ToString());
+                    obs.DataValue = Utilities.ParseDouble(DataValue.Value.ToString());
 
                     obs.PhenomenonOfferingID = new Guid(cbOffering.SelectedItem.Value);
                     obs.PhenomenonUOMID = new Guid(cbUnitofMeasure.SelectedItem.Value);

@@ -1,6 +1,5 @@
 ﻿//#define DetailedLogging
 //#define VeryDetailedLogging
-#define UseParallel
 using FileHelpers;
 using FileHelpers.Dynamic;
 using NCalc;
@@ -11,9 +10,7 @@ using SAEON.Observations.Data;
 using Serilog.Events;
 using SubSonic;
 using System;
-#if UseParallel
 using System.Collections.Concurrent;
-#endif
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -22,9 +19,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-#if UseParallel
 using System.Threading.Tasks;
-#endif
 using System.Web.Hosting;
 
 public class SchemaDefinition
@@ -127,12 +122,8 @@ public class ImportSchemaHelper : IDisposable
     private readonly DataSource dataSource;
     private readonly DataSchema dataSchema;
     //private readonly List<DataSourceTransformation> transformations;
-    private readonly List<SchemaDefinition> schemaDefs;
-#if UseParallel
-    public BlockingCollection<SchemaValue> SchemaValues;
-#else
-    public List<SchemaValue> SchemaValues;
-#endif
+    private List<SchemaDefinition> SchemaDefs { get; } = new List<SchemaDefinition>();
+    public BlockingCollection<SchemaValue> SchemaValues { get; } = new BlockingCollection<SchemaValue>();
     private readonly Sensor Sensor = null;
 
     /// <summary>
@@ -140,13 +131,12 @@ public class ImportSchemaHelper : IDisposable
     /// </summary>
     //ImportLogHelper LogHelper = null;
 
-    //public SchemaValues
-
     private bool concatedatetime = false;
 
     private readonly ObservationsAzure Azure = new ObservationsAzure();
 
     private readonly bool LogBadValues = false;
+    private readonly bool UseParallel = true;
 
     private List<string> LoadColumnNamesDelimited(DataSchema schema, string data)
     {
@@ -213,6 +203,7 @@ public class ImportSchemaHelper : IDisposable
             dataSchema = schema;
             Sensor = sensor;
             LogBadValues = ConfigurationManager.AppSettings["LogBadValues"].IsTrue();
+            UseParallel = ConfigurationManager.AppSettings["UseParallel"].IsTrue();
             Logging.Information("Checking Schema");
             if (schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Time") && !schema.SchemaColumnRecords().Any(i => i.SchemaColumnType.Name == "Date"))
             {
@@ -378,12 +369,6 @@ public class ImportSchemaHelper : IDisposable
             stopwatch.Stop();
             Logging.Information("Read DataTable in {time}", stopwatch.Elapsed.TimeStr());
             dtResults.TableName = ds.Name + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-            schemaDefs = new List<SchemaDefinition>();
-#if UseParallel
-            SchemaValues = new BlockingCollection<SchemaValue>();
-#else
-            SchemaValues = new List<SchemaValue>();
-#endif
         }
     }
 
@@ -524,15 +509,15 @@ public class ImportSchemaHelper : IDisposable
                     }
                 }
 
-                schemaDefs.Add(def);
+                SchemaDefs.Add(def);
             }
 
-            if (schemaDefs.FirstOrDefault(t => t.IsDate) != null && (schemaDefs.FirstOrDefault(t => t.IsTime) != null) || (schemaDefs.FirstOrDefault(t => t.IsFixedTime) != null))
+            if (SchemaDefs.FirstOrDefault(t => t.IsDate) != null && (SchemaDefs.FirstOrDefault(t => t.IsTime) != null) || (SchemaDefs.FirstOrDefault(t => t.IsFixedTime) != null))
             {
                 concatedatetime = true;
             }
 
-            Logging.Verbose("Schema: {Count:n0} Columns: {Columns:n0}", schemaDefs.Count, schemaDefs.Select(i => i.FieldName).ToList());
+            Logging.Verbose("Schema: {Count:n0} Columns: {Columns:n0}", SchemaDefs.Count, SchemaDefs.Select(i => i.FieldName).ToList());
         }
     }
 
@@ -574,45 +559,53 @@ public class ImportSchemaHelper : IDisposable
                 Logging.Information("Building schema definition");
                 BuildSchemaDefinition();
                 Logging.Information("Built schema definition in {time}", stageStopwatch.Elapsed.TimeStr());
-#if !UseParallel
-                var lastProgress100 = -1;
-#endif
                 var nMax = dtResults.Rows.Count;
                 var n = 1;
                 Logging.Information("Processing {count:n0} rows", nMax);
                 stageStopwatch.Restart();
-#if UseParallel
-                try
+                if (UseParallel)
                 {
-                    Parallel.For(1, nMax, i => ProcessRow(dtResults.Rows[i - 1], i));
-                    n = nMax;
-                }
-                catch (Exception ex)
-                {
-                    Logging.Exception(ex);
-                    throw;
-                }
-#else
-                foreach (DataRow row in dtResults.Rows)
-                {
-                    var progress = (double)n / nMax;
-                    var progress100 = (int)(progress * 100);
-                    var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
-                    var elapsed = stageStopwatch.Elapsed;
-                    var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
-                    if (reportPorgress)
+                    try
                     {
-                        Logging.Information("{progress:p0} {row:n0} of {rows:n0} rows in {min} of {mins}, {rowTime}/row, {numRowsInSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
-                        lastProgress100 = progress100;
+                        Parallel.For(1, nMax, i =>
+                        {
+                            //lock (dtResults)
+                            {
+                                ProcessRow(dtResults.Rows[i - 1], i);
+                            }
+                        });
+                        n = nMax;
                     }
-                    ProcessRow(row, n);
-                    n++;
+                    catch (Exception ex)
+                    {
+                        Logging.Exception(ex);
+                        throw;
+                    }
                 }
-#endif
+                else
+                {
+                    var lastProgress100 = -1;
+                    foreach (DataRow row in dtResults.Rows)
+                    {
+                        var progress = (double)n / nMax;
+                        var progress100 = (int)(progress * 100);
+                        var reportPorgress = (progress100 % 5 == 0) && (progress100 > 0) && (lastProgress100 != progress100);
+                        var elapsed = stageStopwatch.Elapsed;
+                        var total = TimeSpan.FromSeconds(elapsed.TotalSeconds / progress);
+                        if (reportPorgress)
+                        {
+                            Logging.Information("{progress:p0} {row:n0} of {rows:n0} rows in {min} of {mins}, {rowTime}/row, {numRowsInSec:n3} rows/sec", progress, n, nMax, elapsed.TimeStr(), total.TimeStr(), TimeSpan.FromSeconds(elapsed.TotalSeconds / n).TimeStr(), n / elapsed.TotalSeconds);
+                            lastProgress100 = progress100;
+                        }
+                        ProcessRow(row, n);
+                        n++;
+                    }
+                }
                 stageStopwatch.Stop();
                 Logging.Information("Processed {count:n0} rows in {elapsed}, {rowTime}/row, {numRowsInSec:n3} rows/sec", nMax, stageStopwatch.Elapsed.TimeStr(), TimeSpan.FromSeconds(stageStopwatch.Elapsed.TotalSeconds / nMax).TimeStr(), nMax / stageStopwatch.Elapsed.TotalSeconds);
                 Logging.Information("Checking for duplicates in batch");
                 stageStopwatch.Restart();
+                SchemaValues.CompleteAdding();
                 var dupGroups = SchemaValues.GroupBy(i => new { i.SensorID, i.DateValue, i.DataValue, i.PhenomenonOfferingID, i.PhenomenonUOMID, i.Elevation }).Where(g => g.Count() > 1).ToList();
                 var dupValues = dupGroups.SelectMany(i => i).ToList();
                 if (dupGroups.Any())
@@ -633,7 +626,7 @@ public class ImportSchemaHelper : IDisposable
                 stageStopwatch.Stop();
                 Logging.Information("Checked for duplicates in batch in {elapsed}", stageStopwatch.Elapsed.TimeStr());
                 stopwatch.Stop();
-                Logging.Information("Processed Schema in {time}", stopwatch.Elapsed.TimeStr());
+                Logging.Information("Processed {values} schema values in {time}", SchemaValues.Count, stopwatch.Elapsed.TimeStr());
             }
             catch (Exception ex)
             {
@@ -670,8 +663,8 @@ public class ImportSchemaHelper : IDisposable
                        InvalidTimeValue = String.Empty,
                        RowComment = String.Empty;
 
-                SchemaDefinition dtdef = schemaDefs.FirstOrDefault(t => t.IsDate);
-                SchemaDefinition tmdef = schemaDefs.FirstOrDefault(t => t.IsTime) ?? schemaDefs.FirstOrDefault(t => t.IsFixedTime);
+                SchemaDefinition dtdef = SchemaDefs.FirstOrDefault(t => t.IsDate);
+                SchemaDefinition tmdef = SchemaDefs.FirstOrDefault(t => t.IsTime) ?? SchemaDefs.FirstOrDefault(t => t.IsFixedTime);
 
                 Guid correlationID = Guid.NewGuid();
 
@@ -732,7 +725,7 @@ public class ImportSchemaHelper : IDisposable
                 }
 
                 //Add Row Comment
-                foreach (var df in schemaDefs.Where(t => t.IsComment))
+                foreach (var df in SchemaDefs.Where(t => t.IsComment))
                 {
                     var comment = dr[df.Index].ToString().Trim();
                     if (!string.IsNullOrWhiteSpace(comment))
@@ -749,9 +742,9 @@ public class ImportSchemaHelper : IDisposable
                 }
 
 
-                for (int i = 0; i < schemaDefs.Count; i++)
+                for (int i = 0; i < SchemaDefs.Count; i++)
                 {
-                    SchemaDefinition def = schemaDefs[i];
+                    SchemaDefinition def = SchemaDefs[i];
 
                     if (def.IsOffering)
                     {
@@ -884,12 +877,6 @@ public class ImportSchemaHelper : IDisposable
                         Logging.Information("Sensor lookup {elapsed} {stage}", stopwatch.Elapsed.TimeStr(), (stopwatch.Elapsed - stageStart).TimeStr());
                         stageStart = stopwatch.Elapsed;
 #endif
-                        //if (!ErrorInDate && LogHelper != null && LogHelper.CheckRecordGap(rec.DateValue))
-                        //{
-                        //    rec.RawValue = null;
-                        //    rec.DataValue = null;
-                        //}
-                        //else if (String.IsNullOrEmpty(RawValue) || def.IsEmptyValue && RawValue.Trim() == def.EmptyValue)
                         if (String.IsNullOrEmpty(RawValue) || def.IsEmptyValue && RawValue.Trim() == def.EmptyValue)
                         {
                             rec.FieldRawValue = RawValue;
@@ -906,11 +893,15 @@ public class ImportSchemaHelper : IDisposable
                             rec.FieldRawValue = RawValue;
                             rec.RawValue = null;
                             double dvalue = -1;
-
-                            // Possibly do lookups here
-                            if (!double.TryParse(RawValue, out dvalue))
+                            var numberIsOk = false;
+                            if (Utilities.TryParseDouble(RawValue, out dvalue))
+                            {
+                                numberIsOk = true;
+                            }
+                            else
                             {
                                 rec.TextValue = RawValue;
+                                // Do lookups
                                 foreach (var transform in def.DataSourceTransformations.Where(t => t.TransformationType.Name == "Lookup"))
                                 {
                                     TransformValue(transform, ref rec, rowNum);
@@ -919,25 +910,25 @@ public class ImportSchemaHelper : IDisposable
                                         RawValue = rec.RawValue.Value.ToString();
                                     }
                                 }
-                            }
-                            if (!double.TryParse(RawValue, out dvalue))
-                            {
-                                rec.RawValueInvalid = true;
-                                rec.InvalidRawValue = RawValue;
-                                rec.InvalidStatuses.Add(Status.ValueInvalid);
+                                // try again after lookups
                                 try
                                 {
-                                    double d = double.Parse(RawValue);
+                                    dvalue = Utilities.ParseDouble(RawValue);
+                                    numberIsOk = true;
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logging.Exception(ex, "Row#: {row} RawValue: {RawValue} DataRow: {Dump}", rowNum, RawValue, dr.Dump());
+                                    rec.RawValueInvalid = true;
+                                    rec.InvalidRawValue = RawValue;
+                                    rec.InvalidStatuses.Add(Status.ValueInvalid);
+                                    Logging.Exception(ex, "Row#: {row} Col: {ColName} RawValue: {RawValue} DataRow: {Dump}", rowNum, def.FieldName, RawValue, dr.Dump());
                                 }
                             }
-                            else
+                            if (numberIsOk)
                             {
                                 rec.RawValue = dvalue;
                                 rec.DataValue = rec.RawValue;
+                                // Do non lookups
                                 foreach (var transform in def.DataSourceTransformations.Where(t => t.TransformationType.Name != "Lookup"))
                                 {
                                     TransformValue(transform, ref rec, rowNum);
@@ -949,9 +940,9 @@ public class ImportSchemaHelper : IDisposable
                         stageStart = stopwatch.Elapsed;
 #endif
                         // Location
-                        var defLatitude = schemaDefs.FirstOrDefault(d => d.IsLatitude);
-                        var defLongitude = schemaDefs.FirstOrDefault(d => d.IsLongitude);
-                        var defElevation = schemaDefs.FirstOrDefault(d => d.IsElevation);
+                        var defLatitude = SchemaDefs.FirstOrDefault(d => d.IsLatitude);
+                        var defLongitude = SchemaDefs.FirstOrDefault(d => d.IsLongitude);
+                        var defElevation = SchemaDefs.FirstOrDefault(d => d.IsElevation);
                         if ((defLatitude != null) && (defLongitude != null))
                         {
                             string rawLatitude = dr[defLatitude.Index].ToString();
@@ -960,7 +951,7 @@ public class ImportSchemaHelper : IDisposable
                             {
                                 try
                                 {
-                                    rec.Latitude = double.Parse(rawLatitude);
+                                    rec.Latitude = Utilities.ParseDouble(rawLatitude);
                                 }
                                 catch (Exception ex)
                                 {
@@ -968,7 +959,7 @@ public class ImportSchemaHelper : IDisposable
                                 }
                                 try
                                 {
-                                    rec.Longitude = double.Parse(rawLongitude);
+                                    rec.Longitude = Utilities.ParseDouble(rawLongitude);
                                 }
                                 catch (Exception ex)
                                 {
@@ -983,7 +974,7 @@ public class ImportSchemaHelper : IDisposable
                             {
                                 try
                                 {
-                                    rec.Elevation = double.Parse(rawElevation);
+                                    rec.Elevation = Utilities.ParseDouble(rawElevation);
                                 }
                                 catch (Exception ex)
                                 {
@@ -1151,7 +1142,7 @@ public class ImportSchemaHelper : IDisposable
                             Expression exp = new Expression(corrvals["eq"]);
                             exp.Parameters["value"] = rec.RawValue;
                             object val = exp.Evaluate();
-                            rec.DataValue = double.Parse(val.ToString());
+                            rec.DataValue = Utilities.ParseDouble(val.ToString());
                             Logging.Verbose("Row#: {row} Correction Raw: {RawValue} Data: {DataValue}", rowNum, rec.RawValue, rec.DataValue);
                         }
                     }
@@ -1323,7 +1314,7 @@ public class ImportSchemaHelper : IDisposable
                             }
                             var valueStr = expr.Evaluate();
                             //Logging.Verbose("ValueStr: {value}", valueStr);
-                            var value = double.Parse(valueStr.ToString());
+                            var value = Utilities.ParseDouble(valueStr.ToString());
                             //Logging.Verbose("Value: {value}", value);
                             rec.DataValue = value;
                             Logging.Verbose("Row#: {row} Valid: {Valid} ValueStr: {ValueStr} Value: {Value} Raw: {RawValue} Data: {DataValue}", rowNum, true, valueStr, value, rec.RawValue, rec.DataValue);
