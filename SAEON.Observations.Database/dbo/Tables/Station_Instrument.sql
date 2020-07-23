@@ -27,6 +27,8 @@ CREATE INDEX [IX_Station_Instrument_StartDate] ON [dbo].[Station_Instrument] ([S
 GO
 CREATE INDEX [IX_Station_Instrument_EndDate] ON [dbo].[Station_Instrument] ([EndDate])
 GO
+CREATE INDEX [IX_Station_Instrument_StartDateEndDate] ON [dbo].[Station_Instrument] ([StartDate],[EndDate])
+GO
 CREATE INDEX [IX_Station_Instrument_UserId] ON [dbo].[Station_Instrument] ([UserId])
 GO
 CREATE INDEX [IX_Station_Instrument_Latitude] ON [dbo].[Station_Instrument] ([Latitude])

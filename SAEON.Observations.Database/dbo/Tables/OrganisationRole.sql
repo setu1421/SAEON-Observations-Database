@@ -14,6 +14,8 @@
     CONSTRAINT [FK_OrganisationRole_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
+CREATE INDEX [IX_OrganisationRole_CodeName] ON [dbo].[OrganisationRole] ([Code],[Name])
+GO
 CREATE INDEX [IX_OrganisationRole_UserId] ON [dbo].[OrganisationRole] ([UserId])
 GO
 CREATE TRIGGER [dbo].[TR_OrganisationRole] ON [dbo].[OrganisationRole]

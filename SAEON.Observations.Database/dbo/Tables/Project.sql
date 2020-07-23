@@ -21,11 +21,15 @@
 GO
 CREATE INDEX [IX_Project_ProgrammeID] ON [dbo].[Project] ([ProgrammeID])
 GO
+CREATE INDEX [IX_Project_CodeName] ON [dbo].[Project] ([Code],[Name])
+GO
 CREATE INDEX [IX_Project_UserId] ON [dbo].[Project] ([UserId])
 GO
 CREATE INDEX [IX_Project_StartDate] ON [dbo].[Project] ([StartDate])
 GO
 CREATE INDEX [IX_Project_EndDate] ON [dbo].[Project] ([EndDate])
+GO
+CREATE INDEX [IX_Project_StartDateEndDate] ON [dbo].[Project] ([StartDate],[EndDate])
 GO
 CREATE TRIGGER [dbo].[TR_Project_Insert] ON [dbo].[Project]
 FOR INSERT

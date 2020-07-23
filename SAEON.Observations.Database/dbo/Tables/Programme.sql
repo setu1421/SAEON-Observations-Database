@@ -17,11 +17,15 @@
     CONSTRAINT [FK_Programme_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
+CREATE INDEX [IX_Programme_CodeName] ON [dbo].[Programme] ([Code],[Name])
+GO
 CREATE INDEX [IX_Programme_UserId] ON [dbo].[Programme] ([UserId])
 GO
 CREATE INDEX [IX_Programme_StartDate] ON [dbo].[Programme] ([StartDate])
 GO
 CREATE INDEX [IX_Programme_EndDate] ON [dbo].[Programme] ([EndDate])
+GO
+CREATE INDEX [IX_Programme_StartDateEndDate] ON [dbo].[Programme] ([StartDate],[EndDate])
 GO
 CREATE TRIGGER [dbo].[TR_Programme_Insert] ON [dbo].[Programme]
 FOR INSERT

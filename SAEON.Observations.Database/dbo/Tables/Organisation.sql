@@ -14,6 +14,8 @@
     CONSTRAINT [UX_Organisation_Name] UNIQUE ([Name])
 );
 GO
+CREATE INDEX [IX_Organisation_CodeName] ON [dbo].[Organisation] ([Code],[Name])
+GO
 CREATE INDEX [IX_Organisation_UserId] ON [dbo].[Organisation] ([UserId])
 GO
 CREATE TRIGGER [dbo].[TR_Organisation_Insert] ON [dbo].[Organisation]

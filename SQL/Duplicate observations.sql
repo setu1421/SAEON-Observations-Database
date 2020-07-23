@@ -29,8 +29,5 @@ from
 	   (o.SensorID = vImportBatchSummary.SensorID) and
 	   (o.PhenomenonOfferingID = vImportBatchSummary.PhenomenonOfferingID) and
 	   (o.PhenomenonUOMID = vImportBatchSummary.PhenomenonUOMID)
---where
---  (Code = 4825)
 order by 
-  --Code, ValueDate, SensorID, PhenomenonOfferingID, PhenomenonUOMID, Elevation
-  Code, SiteName, StationName, InstrumentName, ValueDate, SensorName, DataValue, OfferingName, UnitOfMeasureUnit, Elevation
+  Code, SiteName, StationName, InstrumentName, SensorName, ValueDate, DataValue, OfferingName, UnitOfMeasureUnit, Elevation

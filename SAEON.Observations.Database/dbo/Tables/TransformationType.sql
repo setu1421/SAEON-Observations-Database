@@ -14,6 +14,8 @@
     CONSTRAINT [FK_TransformationType_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 );
 GO
+CREATE INDEX [IX_TransformationType_CodeName] ON [dbo].[TransformationType] ([Code],[Name])
+GO
 CREATE INDEX [IX_TransformationType_UserId] ON [dbo].[TransformationType] ([UserId])
 GO
 CREATE TRIGGER [dbo].[TR_TransformationType_Insert] ON [dbo].[TransformationType]

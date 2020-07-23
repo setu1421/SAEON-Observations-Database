@@ -5,19 +5,12 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{39023EE1-BD0D-43AE-AFBE-8E1AFCA89433}"
 	ProjectSection(SolutionItems) = preProject
-		1 Generate Drop Foreign Keys.sql = 1 Generate Drop Foreign Keys.sql
-		2 Drop Foreign Keys.sql = 2 Drop Foreign Keys.sql
-		3 Drop constraints.sql = 3 Drop constraints.sql
-		4 Drop Indexes.sql = 4 Drop Indexes.sql
-		5 Remove FileGroup.sql = 5 Remove FileGroup.sql
-		FileGroups LOB_Data.sql = FileGroups LOB_Data.sql
-		..\Index file groups.sql = ..\Index file groups.sql
-		Observations.2.0.61.publish.sql = Observations.2.0.61.publish.sql
-		Observations.2.0.61.publish.txt = Observations.2.0.61.publish.txt
-		ObservationsFynbos.2.0.61.publish.sql = ObservationsFynbos.2.0.61.publish.sql
-		ObservationsFynbos.2.0.61.publish.txt = ObservationsFynbos.2.0.61.publish.txt
-		ObservationsSACTN.2.0.61.publish.sql = ObservationsSACTN.2.0.61.publish.sql
-		ObservationsSACTN.2.0.61.publish.txt = ObservationsSACTN.2.0.61.publish.txt
+		Observations.2.0.62.publish.sql = Observations.2.0.62.publish.sql
+		Observations.2.0.62.publish.txt = Observations.2.0.62.publish.txt
+		ObservationsFynbos.2.0.62.publish.sql = ObservationsFynbos.2.0.62.publish.sql
+		ObservationsFynbos.2.0.62.publish.txt = ObservationsFynbos.2.0.62.publish.txt
+		ObservationsSACTN.2.0.62.publish.sql = ObservationsSACTN.2.0.62.publish.sql
+		ObservationsSACTN.2.0.62.publish.txt = ObservationsSACTN.2.0.62.publish.txt
 		ObservationsTest.2.0.61.publish.sql = ObservationsTest.2.0.61.publish.sql
 		ObservationsTest.2.0.61.publish.txt = ObservationsTest.2.0.61.publish.txt
 	EndProjectSection
@@ -27,7 +20,7 @@ Global
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{52CF73B3-4107-4463-82B1-B0E97BC488A7}.Default|Default.ActiveCfg = Default
+		{ABCF75F4-9BC0-4BB2-A638-9296435867EA}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

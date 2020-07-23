@@ -26,6 +26,8 @@ CREATE INDEX [IX_Project_Station_StartDate] ON [dbo].[Project_Station] ([StartDa
 GO
 CREATE INDEX [IX_Project_Station_EndDate] ON [dbo].[Project_Station] ([EndDate])
 GO
+CREATE INDEX [IX_Project_Station_StartDateEndDate] ON [dbo].[Project_Station] ([StartDate],[EndDate])
+GO
 CREATE TRIGGER [dbo].[TR_Project_Station_Insert] ON [dbo].[Project_Station]
 FOR INSERT
 AS

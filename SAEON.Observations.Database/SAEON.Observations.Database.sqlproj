@@ -501,7 +501,6 @@
     <Build Include="dbo\Tables\SchemaColumn.sql" />
     <Build Include="dbo\Tables\SchemaColumnType.sql" />
     <Build Include="dbo\Views\vSchemaColumn.sql" />
-    <Build Include="Scripts\AuthenticationFileGroup.sql" />
     <Build Include="Scripts\ObservationsFileGroup.sql" />
     <Build Include="Scripts\PrimaryFileGroup.sql" />
     <Build Include="dbo\Tables\UserQueries.sql" />

@@ -21,6 +21,8 @@
     CONSTRAINT [UX_Station_SiteID_Name] UNIQUE ([SiteID],[Name])
 );
 GO
+CREATE INDEX [IX_Station_CodeName] ON [dbo].[Station] ([Code],[Name])
+GO
 CREATE INDEX [IX_Station_UserId] ON [dbo].[Station] ([UserId])
 GO
 CREATE INDEX [IX_Station_SiteID] ON [dbo].[Station] ([SiteID])
@@ -34,6 +36,8 @@ GO
 CREATE INDEX [IX_Station_StartDate] ON [dbo].[Station] ([StartDate])
 GO
 CREATE INDEX [IX_Station_EndDate] ON [dbo].[Station] ([EndDate])
+GO
+CREATE INDEX [IX_Station_StartDateEndDate] ON [dbo].[Station] ([StartDate],[EndDate])
 GO
 CREATE TRIGGER [dbo].[TR_Station_Insert] ON [dbo].[Station]
 FOR INSERT

@@ -56,6 +56,8 @@
     CONSTRAINT [UX_DataSourceTransformation] UNIQUE ([DataSourceID], [SensorID], [Rank], [TransformationTypeID], [PhenomenonID], [PhenomenonOfferingID], [PhenomenonUOMID], [NewPhenomenonOfferingID], [NewPhenomenonUOMID], [StartDate], [EndDate])
 );
 GO
+CREATE INDEX [IX_DataSourceTransformation_StartDateEndDate] ON [dbo].[DataSourceTransformation] ([StartDate],[EndDate])
+GO
 CREATE INDEX [IX_DataSourceTransformation_DataSourceID] ON [dbo].[DataSourceTransformation] ([DataSourceID])
 GO
 CREATE INDEX [IX_DataSourceTransformation_TransformationTypeID] ON [dbo].[DataSourceTransformation] ([TransformationTypeID])

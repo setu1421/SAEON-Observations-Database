@@ -22,6 +22,8 @@
     CONSTRAINT [UX_Sensor_Code] UNIQUE ([Code]),
 );
 GO
+CREATE INDEX [IX_Sensor_CodeName] ON [dbo].[Sensor] ([Code],[Name])
+GO
 CREATE INDEX [IX_Sensor_PhenomenonID] ON [dbo].[Sensor] ([PhenomenonID])
 GO
 CREATE INDEX [IX_Sensor_DataSourceID] ON [dbo].[Sensor] ([DataSourceID])

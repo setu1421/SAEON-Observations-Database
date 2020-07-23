@@ -17,11 +17,15 @@
     CONSTRAINT [FK_Site_aspnet_Users] FOREIGN KEY ([UserId]) REFERENCES [dbo].[aspnet_Users] ([UserId]),
 )
 GO
+CREATE INDEX [IX_Site_CodeName] ON [dbo].[Site] ([Code],[Name])
+GO
 CREATE INDEX [IX_Site_UserId] ON [dbo].[Site] ([UserId])
 GO
 CREATE INDEX [IX_Site_StartDate] ON [dbo].[Site] ([StartDate])
 GO
 CREATE INDEX [IX_Site_EndDate] ON [dbo].[Site] ([EndDate])
+GO
+CREATE INDEX [IX_Site_StartDateEndDate] ON [dbo].[Site] ([StartDate],[EndDate])
 GO
 CREATE TRIGGER [dbo].[TR_Site_Insert] ON [dbo].[Site]
 FOR INSERT
