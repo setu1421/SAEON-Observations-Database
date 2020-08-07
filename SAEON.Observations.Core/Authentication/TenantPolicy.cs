@@ -8,9 +8,17 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace SAEON.Observations.Core
 {
+    public static class TenantPolicyDefaults
+    {
+        public const string AuthorizationPolicy = "TenantAuthorizationPolicy";
+        public const string HeaderKeyTenant = "Tenant";
+        public const string ConfigKeyTenants = "Tenants";
+        public const string ConfigKeyTenant = "Tenant";
+        public const string ConfigKeyDefaultTenant = "DefaultTenant";
+    }
+
     public class TenantAuthorizationRequirement : IAuthorizationRequirement
     {
         public string Tenants { get; private set; } = null;
@@ -25,20 +33,18 @@ namespace SAEON.Observations.Core
 
     public class TenantAuthorizationHandler : AuthorizationHandler<TenantAuthorizationRequirement>
     {
-        private readonly ILogger<TenantAuthorizationHandler> _logger;
         private readonly IConfiguration _config;
         private readonly HttpContext _httpContext;
 
-        public TenantAuthorizationHandler(ILogger<TenantAuthorizationHandler> logger, IConfiguration config, HttpContext httpContext)
+        public TenantAuthorizationHandler(IConfiguration config, HttpContext httpContext)
         {
-            _logger = logger;
             _config = config;
             _httpContext = httpContext;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, TenantAuthorizationRequirement requirement)
         {
-            using (_logger.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -47,30 +53,36 @@ namespace SAEON.Observations.Core
                     var tenants = requirement.Tenants?.Split(";", StringSplitOptions.RemoveEmptyEntries);
                     var defaultTenant = requirement.DefaultTenant;
                     string tenant = GetTenantFromHeaders(_httpContext.Request, _config);
-                    _logger.LogDebug("Tenants: {Tenants} DefaultTenant: {DefaultTenant} Tenant: {Tenant}", tenants, defaultTenant, tenant);
+                    SAEONLogs.Debug("Tenants: {Tenants} DefaultTenant: {DefaultTenant} Tenant: {Tenant}", tenants, defaultTenant, tenant);
                     if (string.IsNullOrWhiteSpace(tenant))
                     {
+                        if (string.IsNullOrWhiteSpace(defaultTenant))
+                        {
+                            SAEONLogs.Error("Tenant Authorization Failed (No default tenant)");
+                            context.Fail();
+                            return Task.CompletedTask;
+                        }
                         tenant = defaultTenant;
                     }
                     if (!tenants?.Any() ?? true)
                     {
-                        _logger.LogError("Tenant Authorization Failed (No tenants)");
+                        SAEONLogs.Error("Tenant Authorization Failed (No tenants)");
                         context.Fail();
                         return Task.CompletedTask;
                     }
                     if (!tenants?.Contains(tenant) ?? true)
                     {
-                        _logger.LogError("Tenant Authorization Failed (Unknown tenant)");
+                        SAEONLogs.Error("Tenant Authorization Failed (Unknown tenant)");
                         context.Fail();
                         return Task.CompletedTask;
                     }
-                    _logger.LogDebug("Tenant authorization succeeded");
+                    SAEONLogs.Debug("Tenant authorization succeeded");
                     context.Succeed(requirement);
                     return Task.CompletedTask;
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogException(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -78,11 +90,11 @@ namespace SAEON.Observations.Core
 
         public static string GetTenantFromHeaders(HttpRequest request, IConfiguration config)
         {
-            using (Logging.MethodCall(typeof(TenantAuthorizationHandler)))
+            using (SAEONLogs.MethodCall(typeof(TenantAuthorizationHandler)))
             {
-                var tenant = request?.Headers[Constants.TenantHeader].FirstOrDefault();
-                Logging.Debug("Request: {Request} Config: {Config}", tenant, config?[Constants.TenantDefault]);
-                if (string.IsNullOrWhiteSpace(tenant)) tenant = config[Constants.TenantDefault];
+                var tenant = request?.Headers[TenantPolicyDefaults.HeaderKeyTenant].FirstOrDefault();
+                SAEONLogs.Debug("Request: {Request} Config: {Config}", tenant, config?[TenantPolicyDefaults.ConfigKeyDefaultTenant]);
+                if (string.IsNullOrWhiteSpace(tenant)) tenant = config[TenantPolicyDefaults.ConfigKeyDefaultTenant];
                 return tenant;
             }
         }

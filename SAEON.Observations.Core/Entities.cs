@@ -5,11 +5,12 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Configuration;
 using System.Web.Mvc;
 #else
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using SAEON.Observations.Core.Authentication;
 using System.Text.Json.Serialization;
 #endif
 using SAEON.Logs;
@@ -930,10 +931,10 @@ namespace SAEON.Observations.Core.Entities
         public Site Site { get; set; }
 
         /// <summary>
-        /// DataStreams linked to this Station
+        /// Datasets linked to this Station
         /// </summary>
         [JsonIgnore]
-        public List<DataStream> DataStreams { get; set; }
+        public List<Dataset> Datasets { get; set; }
 
         /// <summary>
         /// Instruments linked to this Station
@@ -1286,8 +1287,8 @@ namespace SAEON.Observations.Core.Entities
         public DateTime? EndDate { get; set; }
     }
 
-    [Table("vInventoryDataStreams")]
-    public class InventoryDataStream : BaseEntity
+    [Table("vInventoryDatasets")]
+    public class InventoryDataset : BaseEntity
     {
         [Key]
         public long Id { get; set; }
@@ -1525,8 +1526,8 @@ namespace SAEON.Observations.Core.Entities
     //    public Sensor Sensor { get; set; }
     //}
 
-    [Table("vStationDataStreams")]
-    public class DataStream : LongIdEntity
+    [Table("vStationDatasets")]
+    public class Dataset : LongIdEntity
     {
         public Guid StationId { get; set; }
         public string StationCode { get; set; }
@@ -2016,19 +2017,6 @@ namespace SAEON.Observations.Core.Entities
         public string Status { get; set; }
     }
 
-    [Table("vSensorThingsDatastreams")]
-    public class vSensorThingsDatastream
-    {
-        [Key]
-        public Guid Id { get; set; }
-        public Guid SensorId { get; set; }
-        public string Sensor { get; set; }
-        public string Phenomenon { get; set; }
-        public string Offering { get; set; }
-        public string Unit { get; set; }
-        public string Symbol { get; set; }
-        public string Url { get; set; }
-    }
     */
 
     public class ObservationsDbContext : DbContext
@@ -2038,23 +2026,23 @@ namespace SAEON.Observations.Core.Entities
         {
             //Configuration.ProxyCreationEnabled = false;
             //Configuration.LazyLoadingEnabled = false;
-            var logLevel = ConfigurationManager.AppSettings["EntityFrameworkLogging"] ?? "Information";
+            var logLevel = ConfigurationManager.AppSettings["EntityFrameworkSAEONLogs"] ?? "Information";
             if (logLevel.Equals("Verbose", StringComparison.CurrentCultureIgnoreCase))
-                Database.Log = s => Logging.Verbose(s);
+                Database.Log = s => SAEONLogs.Verbose(s);
             //else
-            //    Database.Log = s => Logging.Information(s);
+            //    Database.Log = s => SAEONLogs.Information(s);
             Database.CommandTimeout = 30 * 60;
         }
 #else
         private readonly IConfiguration _config;
-        private readonly ILogger<ObservationsDbContext> _logger;
         private readonly IHttpContextAccessor _httpContectAccessor;
+        //private readonly TenantAuthenticationHandler _tenantAuthenticationHandler;
 
-        public ObservationsDbContext(DbContextOptions<ObservationsDbContext> options, IConfiguration config, ILogger<ObservationsDbContext> logger, IHttpContextAccessor httpContextAccessor) : base(options)
+        public ObservationsDbContext(DbContextOptions<ObservationsDbContext> options, IConfiguration config, /*TenantAuthenticationHandler tenantAuthenticationHandler,*/ IHttpContextAccessor httpContextAccessor) : base(options)
         {
             _config = config;
-            _logger = logger;
             _httpContectAccessor = httpContextAccessor;
+            //_tenantAuthenticationHandler = tenantAuthenticationHandler;
             Database.SetCommandTimeout(30 * 60);
         }
 #endif
@@ -2065,7 +2053,7 @@ namespace SAEON.Observations.Core.Entities
         public DbSet<DigitalObjectIdentifier> DigitalObjectIdentifiers { get; set; }
 
         public DbSet<ImportBatchSummary> ImportBatchSummary { get; set; }
-        public DbSet<InventoryDataStream> InventoryDataStreams { get; set; }
+        public DbSet<InventoryDataset> InventoryDatasets { get; set; }
         public DbSet<InventorySensor> InventorySensors { get; set; }
         public DbSet<Instrument> Instruments { get; set; }
         public DbSet<Offering> Offerings { get; set; }
@@ -2081,7 +2069,7 @@ namespace SAEON.Observations.Core.Entities
         //public DbSet<SensorObservation> SensorObservations { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Station> Stations { get; set; }
-        public DbSet<DataStream> DataStreams { get; set; }
+        public DbSet<Dataset> Datasets { get; set; }
         public DbSet<Observation> Observations { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<UserDownload> UserDownloads { get; set; }
@@ -2183,12 +2171,13 @@ namespace SAEON.Observations.Core.Entities
 #else
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            using (_logger.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
+                //var tenant = TenantAuthenticationHandler.GetTenantFromHeaders(_httpContectAccessor.HttpContext.Request, _tenantAuthenticationHandler.Options);
                 var tenant = TenantAuthorizationHandler.GetTenantFromHeaders(_httpContectAccessor.HttpContext.Request, _config);
                 var connectionString = _config.GetConnectionString(tenant);
-                _logger.LogDebug("Tenant: {Tenant} ConnectionString: {ConnectionString}", tenant, connectionString);
                 optionsBuilder.UseSqlServer(connectionString);
+                //SAEONLogs.Debug("Tenant: {Tenant} ConnectionString: {ConnectionString}", tenant, connectionString);
                 base.OnConfiguring(optionsBuilder);
             }
         }
