@@ -76,6 +76,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.SubSonic.Migrations",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.SubSonic.SubCommander", "SAEON.SubSonic\SubCommander\SAEON.SubSonic.SubCommander.csproj", "{39AED956-4929-4A20-9641-6612B9998B31}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAEON.Observations.QuerySite.v2", "SAEON.Observations.QuerySite.v2\SAEON.Observations.QuerySite.v2.csproj", "{81945246-B4FB-41AC-A52E-1C483F03E054}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (SQL Server Only)|Any CPU = Debug (SQL Server Only)|Any CPU
@@ -208,6 +210,14 @@ Global
 		{39AED956-4929-4A20-9641-6612B9998B31}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
 		{39AED956-4929-4A20-9641-6612B9998B31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39AED956-4929-4A20-9641-6612B9998B31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81945246-B4FB-41AC-A52E-1C483F03E054}.Debug (SQL Server Only)|Any CPU.ActiveCfg = Debug|Any CPU
+		{81945246-B4FB-41AC-A52E-1C483F03E054}.Debug (SQL Server Only)|Any CPU.Build.0 = Debug|Any CPU
+		{81945246-B4FB-41AC-A52E-1C483F03E054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81945246-B4FB-41AC-A52E-1C483F03E054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81945246-B4FB-41AC-A52E-1C483F03E054}.Release (SQL Server Only)|Any CPU.ActiveCfg = Release|Any CPU
+		{81945246-B4FB-41AC-A52E-1C483F03E054}.Release (SQL Server Only)|Any CPU.Build.0 = Release|Any CPU
+		{81945246-B4FB-41AC-A52E-1C483F03E054}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81945246-B4FB-41AC-A52E-1C483F03E054}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
