@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{ac68eb6a-31bd-407e-9b65-558e900aef61}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql140DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -530,7 +530,7 @@
     <Build Include="dbo\Views\vSensorThingsAPIObservations.sql" />
     <Build Include="dbo\Views\vStationDataStreams.sql" />
     <Build Include="dbo\Views\vStationObservations.sql" />
-    <Build Include="dbo\Views\vInventoryDataStreams.sql" />
+    <Build Include="dbo\Views\vInventoryDatasets.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ObservationDB_Test.publish.xml" />
