@@ -22,14 +22,14 @@ namespace SAEON.Observations.Azure
         public static bool StorageEnabled { get; private set; } = false;
         public static bool CosmosDBEnabled { get; private set; } = false;
         public static bool CosmosDBBulkEnabled { get; private set; } = false;
-        public int BatchSize { get { return int.Parse(ConfigurationManager.AppSettings["AzureCosmosDBBatchSize"] ?? AzureCosmosDB<ObservationItem>.DefaultBatchSize.ToString()); } }
+        public int BatchSize => int.Parse(ConfigurationManager.AppSettings["AzureCosmosDBBatchSize"] ?? AzureCosmosDB<ObservationItem>.DefaultBatchSize.ToString());
 
         private AzureStorage Storage = null;
         private AzureCosmosDB<ObservationItem> CosmosDB = null;
 
         static ObservationsAzure()
         {
-            using (Logging.MethodCall(typeof(ObservationsAzure)))
+            using (SAEONLogs.MethodCall(typeof(ObservationsAzure)))
             {
                 try
                 {
@@ -40,11 +40,11 @@ namespace SAEON.Observations.Azure
                         CosmosDBEnabled = bool.Parse(ConfigurationManager.AppSettings["AzureCosmosDBEnabled"] ?? "false");
                         CosmosDBBulkEnabled = bool.Parse(ConfigurationManager.AppSettings["AzureCosmosDBBulkEnabled"] ?? "false");
                     }
-                    Logging.Information("Azure: {Enabled} Storage: {StorageEnabled} CosmosDB: {CosmosDBEnabled} CosmosDBBulk: {CosmosDBBulkEnabled}", Enabled, StorageEnabled, CosmosDBEnabled, CosmosDBBulkEnabled);
+                    SAEONLogs.Information("Azure: {Enabled} Storage: {StorageEnabled} CosmosDB: {CosmosDBEnabled} CosmosDBBulk: {CosmosDBBulkEnabled}", Enabled, StorageEnabled, CosmosDBEnabled, CosmosDBBulkEnabled);
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -52,7 +52,7 @@ namespace SAEON.Observations.Azure
 
         public ObservationsAzure()
         {
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -76,7 +76,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -91,24 +91,24 @@ namespace SAEON.Observations.Azure
         public async Task InitializeAsync()
         {
             if (!ObservationsAzure.Enabled) return;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
                     if (StorageEnabled)
                     {
-                        Logging.Verbose("Ensuring Storage Container exists");
+                        SAEONLogs.Verbose("Ensuring Storage Container exists");
                         await Storage.EnsureContainerAsync(ObservationsAzure.BlobStorageContainer);
                     }
                     if (CosmosDBEnabled)
                     {
-                        Logging.Verbose("Ensuring CosmosDB Container exists");
+                        SAEONLogs.Verbose("Ensuring CosmosDB Container exists");
                         await CosmosDB.EnsureContainerAsync();
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -118,7 +118,7 @@ namespace SAEON.Observations.Azure
         public void Initialize()
         {
             if (!ObservationsAzure.Enabled) return;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -126,7 +126,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -136,7 +136,7 @@ namespace SAEON.Observations.Azure
         public async Task UploadAsync(string folder, string fileName, string fileContents)
         {
             if (!Enabled || !StorageEnabled) return;
-            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Folder", folder }, { "FileName", fileName } }))
+            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Folder", folder }, { "FileName", fileName } }))
             {
                 try
                 {
@@ -146,7 +146,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -155,7 +155,7 @@ namespace SAEON.Observations.Azure
         public void Upload(string folder, string fileName, string fileContents)
         {
             if (!Enabled || !StorageEnabled) return;
-            using (Logging.MethodCall(GetType(), new MethodCallParameters { { "Folder", folder }, { "FileName", fileName } }))
+            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Folder", folder }, { "FileName", fileName } }))
             {
                 try
                 {
@@ -163,7 +163,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -174,7 +174,7 @@ namespace SAEON.Observations.Azure
         public async Task<ObservationItem> GetObservationAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -182,7 +182,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -196,7 +196,7 @@ namespace SAEON.Observations.Azure
         public async Task<(ObservationItem item, CosmosDBCost<ObservationItem> cost)> GetObservationWithCostAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -204,7 +204,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -219,7 +219,7 @@ namespace SAEON.Observations.Azure
         public async Task<IEnumerable<ObservationItem>> GetObservationsAsync(Expression<Func<ObservationItem, bool>> predicate)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -227,7 +227,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -241,7 +241,7 @@ namespace SAEON.Observations.Azure
         public async Task<(IEnumerable<ObservationItem> items, CosmosDBCost<ObservationItem> cost)> GetObservationsWithCostAsync(Expression<Func<ObservationItem, bool>> predicate)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -249,7 +249,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -263,7 +263,7 @@ namespace SAEON.Observations.Azure
         public async Task<CosmosDBCost<ObservationItem>> AddObservationAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -271,7 +271,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -285,7 +285,7 @@ namespace SAEON.Observations.Azure
         public async Task<CosmosDBCost<ObservationItem>> ReplaceObservationAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -293,7 +293,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -307,7 +307,7 @@ namespace SAEON.Observations.Azure
         public async Task<CosmosDBCost<ObservationItem>> UpsertObservationAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -315,7 +315,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -329,7 +329,7 @@ namespace SAEON.Observations.Azure
         public async Task<CosmosDBCost<ObservationItem>> UpsertObservationsAsync(List<ObservationItem> items)
         {
             if (!Enabled || !CosmosDBEnabled) return new CosmosDBCost<ObservationItem>();
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -337,7 +337,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -351,7 +351,7 @@ namespace SAEON.Observations.Azure
         public async Task<CosmosDBCost<ObservationItem>> DeleteObservationAsync(ObservationItem item)
         {
             if (!Enabled || !CosmosDBEnabled) return new CosmosDBCost<ObservationItem>();
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -359,7 +359,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
@@ -373,7 +373,7 @@ namespace SAEON.Observations.Azure
         public async Task<(CosmosDBCost<ObservationItem> totalCost, CosmosDBCost<ObservationItem> readCost, CosmosDBCost<ObservationItem> deleteCost)> DeleteImportBatchAsync(Guid importBatchId)
         {
             if (!Enabled || !CosmosDBEnabled) return default;
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -381,7 +381,7 @@ namespace SAEON.Observations.Azure
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex);
+                    SAEONLogs.Exception(ex);
                     throw;
                 }
             }
