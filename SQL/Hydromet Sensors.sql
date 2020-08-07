@@ -9,3 +9,4 @@ group by
   SiteCode, SiteName, StationCode, StationName, InstrumentCode, InstrumentName, SensorCode, SensorName, PhenomenonCode, PhenomenonName, OfferingCode, OfferingName, UnitOfMeasureCode, UnitOfMeasureUnit
 order by
   SiteCode, SiteName, StationCode, StationName, InstrumentCode, InstrumentName, SensorCode, SensorName, PhenomenonCode, PhenomenonName, OfferingCode, OfferingName, UnitOfMeasureCode, UnitOfMeasureUnit
+OPTION(RECOMPILE)

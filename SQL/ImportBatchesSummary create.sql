@@ -1,4 +1,5 @@
 use Observations
+begin transaction
 Delete ImportBatchSummary
 Insert Into ImportBatchSummary
   (ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID, Count, Minimum, Maximum, Average, StandardDeviation, Variance, 
@@ -12,3 +13,5 @@ from
   vObservationExpansion
 group by
   ImportBatchID, SensorID, InstrumentID, StationID, SiteID, PhenomenonOfferingID, PhenomenonUOMID
+OPTION(RECOMPILE)
+commit transaction

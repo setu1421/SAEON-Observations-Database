@@ -40,14 +40,14 @@ USE [$(DatabaseName)];
 
 
 GO
-IF EXISTS (SELECT 1
-           FROM   [master].[dbo].[sysdatabases]
-           WHERE  [name] = N'$(DatabaseName)')
-    BEGIN
-        ALTER DATABASE [$(DatabaseName)]
-            SET QUERY_STORE (QUERY_CAPTURE_MODE = ALL) 
-            WITH ROLLBACK IMMEDIATE;
-    END
+--IF EXISTS (SELECT 1
+--           FROM   [master].[dbo].[sysdatabases]
+--           WHERE  [name] = N'$(DatabaseName)')
+--    BEGIN
+--        ALTER DATABASE [$(DatabaseName)]
+--            SET QUERY_STORE (QUERY_CAPTURE_MODE = ALL) 
+--            WITH ROLLBACK IMMEDIATE;
+--    END
 
 
 --GO
