@@ -9,25 +9,26 @@ namespace SAEON.Observations.WebAPI
     {
         public static void Main(string[] args)
         {
+            SAEONLogs.CreateConfiguration().Initialize();
             try
             {
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex);
+                SAEONLogs.Exception(ex);
                 throw;
             }
             finally
             {
-                Logging.ShutDown();
+                SAEONLogs.ShutDown();
             }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                  .UseSAEONLogs((hostingContext, loggerConfiguration) => loggerConfiguration.InitializeSAEONLogs(hostingContext.Configuration))
-              .ConfigureWebHostDefaults(webBuilder =>
+                .UseSAEONLogs()
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });

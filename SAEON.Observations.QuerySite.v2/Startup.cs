@@ -1,10 +1,12 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using SAEON.Core;
 using SAEON.Logs;
 using System;
@@ -19,8 +21,7 @@ namespace SAEON.Observations.QuerySite
             try
             {
                 SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, SAEONLogs.Level);
-                //SAEONLogs.Debug("AuthenticationServerUrl: {AuthenticationServerUrl} AuthenticationServerIntrospectionUrl: {AuthenticationServerIntrospectionUrl}",
-                //    Configuration[Constants.AuthenticationServerUrl], Configuration[Constants.AuthenticationServerIntrospectionUrl]);
+                SAEONLogs.Debug("AuthenticationServerUrl: {AuthenticationServerUrl}", Configuration["AuthenticationServerUrl"]);
             }
             catch (Exception ex)
             {
@@ -38,17 +39,52 @@ namespace SAEON.Observations.QuerySite
             {
                 try
                 {
+                    services.AddCors();
                     services.Configure<CookiePolicyOptions>(options =>
                     {
-                        options.Secure = CookieSecurePolicy.Always;
-                        options.HttpOnly = HttpOnlyPolicy.Always;
+                        options.CheckConsentNeeded = context => true; // consent required
                         options.MinimumSameSitePolicy = SameSiteMode.None;
-                        //options.OnAppendCookie = cookieContext =>
-                        //    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
-                        //options.OnDeleteCookie = cookieContext =>
-                        //    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
                     });
-
+                    //services.Configure<CookiePolicyOptions>(options =>
+                    //{
+                    //    options.Secure = CookieSecurePolicy.Always;
+                    //    options.HttpOnly = HttpOnlyPolicy.Always;
+                    //    options.MinimumSameSitePolicy = SameSiteMode.None;
+                    //    //options.OnAppendCookie = cookieContext =>
+                    //    //    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+                    //    //options.OnDeleteCookie = cookieContext =>
+                    //    //    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+                    //});
+                    services.AddDistributedMemoryCache();
+                    services.AddSession(options =>
+                    {
+                        //options.IdleTimeout = TimeSpan.FromSeconds(10);
+                        options.Cookie.HttpOnly = true;
+                        options.Cookie.IsEssential = true;
+                        options.Cookie.Name = ".SAEON.Observations.QuerySite";
+                    });
+                    services.AddAuthentication(options =>
+                    {
+                        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                    })
+                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+                    {
+                        options.Authority = Configuration["AuthenticationServerUrl"];
+                        options.ClientId = Configuration["QuerySiteClientID"];
+                        options.ClientSecret = Configuration["QuerySiteClientSecret"];
+                        options.Scope.Clear();
+                        options.Scope.Add(OpenIdConnectScope.OpenId);
+                        //options.Scope.Add(OpenIdConnectScope.OfflineAccess);
+                        options.Scope.Add("SAEON.Observations.WebAPI");
+                        options.ResponseType = OpenIdConnectResponseType.Code;
+                        options.SaveTokens = true;
+                        options.GetClaimsFromUserInfoEndpoint = true;
+                        SAEONLogs.Information("Options: {@Options}", options);
+                        //options.Validate();
+                    });
+                    services.AddHttpContextAccessor();
                     services.AddControllersWithViews();
                 }
                 catch (Exception ex)
@@ -77,16 +113,15 @@ namespace SAEON.Observations.QuerySite
                     app.UseStaticFiles();
 
                     app.UseRouting();
-
+                    app.UseCors();
                     app.UseCookiePolicy();
                     app.UseAuthentication();
                     app.UseAuthorization();
+                    app.UseSession();
 
                     app.UseEndpoints(endpoints =>
                     {
-                        endpoints.MapControllerRoute(
-                            name: "default",
-                            pattern: "{controller=Home}/{action=Index}/{id?}");
+                        endpoints.MapDefaultControllerRoute();
                     });
                 }
                 catch (Exception ex)

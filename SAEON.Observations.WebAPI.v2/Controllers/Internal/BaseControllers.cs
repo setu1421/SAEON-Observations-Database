@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using IdentityModel.AspNetCore.OAuth2Introspection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using SAEON.Logs;
 using SAEON.Observations.Core;
 using SAEON.Observations.Core.Entities;
@@ -13,13 +13,12 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
 {
     [Route("internal/[controller]")]
     [ApiController]
-    [Authorize(Policy = Constants.TenantAuthorizationPolicy)]
+    [Authorize(Policy = TenantPolicyDefaults.AuthorizationPolicy)]
+    [Authorize(AuthenticationSchemes = OAuth2IntrospectionDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = ODPAuthenticationDefaults.AuthenticationScheme)]
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class BaseController<TController> : ControllerBase where TController : BaseController<TController>
     {
-        private ILogger<TController> _logger;
-        protected ILogger<TController> Logger => _logger ??= HttpContext.RequestServices.GetService<ILogger<TController>>();
-        //private IConfiguration _config;
         //protected IConfiguration Config => _config ?? (_config = HttpContext.RequestServices.GetService<IConfiguration>());
         private ObservationsDbContext _dbContext;
         protected ObservationsDbContext DbContext => _dbContext ??= HttpContext.RequestServices.GetService<ObservationsDbContext>();
@@ -44,7 +43,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
         [HttpGet]
         public virtual List<TEntity> GetAll()
         {
-            using (Logger.MethodCall<TEntity>(GetType()))
+            using (SAEONLogs.MethodCall<TEntity>(GetType()))
             {
                 try
                 {
@@ -52,7 +51,7 @@ namespace SAEON.Observations.WebAPI.Controllers.Internal
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogException(ex, "Unable to get all");
+                    SAEONLogs.Exception(ex, "Unable to get all");
                     throw;
                 }
             }

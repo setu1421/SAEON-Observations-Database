@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using SAEON.Observations.QuerySite.v2.Models;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using SAEON.Logs;
+using SAEON.Observations.Core;
+using SAEON.Observations.QuerySite.Controllers;
 using System.Diagnostics;
 
-namespace SAEON.Observations.QuerySite.v2.Controllers
+namespace SAEON.Observations.QuerySite.Models
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        public HomeController(IHttpContextAccessor httpContextAccessor, IConfiguration config) : base(httpContextAccessor, config) { }
 
         public IActionResult Index()
         {
@@ -31,17 +30,27 @@ namespace SAEON.Observations.QuerySite.v2.Controllers
             return View();
         }
 
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
         [Route("HowToCite")]
         public IActionResult HowToCite()
         {
             return View();
         }
 
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Route("SetTenant/{Name}")]
+        public IActionResult SetTenant(string Name)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            using (SAEONLogs.MethodCall(GetType(), new MethodCallParameters { { "Name", Name } }))
+            {
+                SAEONLogs.Information("Tenant: {Tenant}", Name);
+                HttpContext.Session.SetString(TenantPolicyDefaults.HeaderKeyTenant, Name);
+                SAEONLogs.Information("Session: {Tenant}", HttpContext.Session.GetString(TenantPolicyDefaults.HeaderKeyTenant));
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }

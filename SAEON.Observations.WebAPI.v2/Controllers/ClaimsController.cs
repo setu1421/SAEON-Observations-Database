@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using SAEON.Observations.Core;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace SAEON.Observations.WebAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize(Policy = Constants.ODPAuthorizationPolicy)]
+    //[Authorize(Policy = Constants.ODPAuthorizationPolicy)]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class ClaimsController : ControllerBase
     {

@@ -64,13 +64,27 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("OpenAPI", "", "swagger", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("OData", "$metadata", "odata", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("SensorThings", "Index", "SensorThings", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("GraphQL", "GraphQL", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li class="nav-item">@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="swagger" asp-action="">OpenAPI</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="odata" asp-action="$metadata">OData</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="SensorThings" asp-action="Index">SensorThings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="GraphQL">GraphQL</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -90,9 +104,16 @@
             </h1>
         </header>
 
+        @*<div id="Body" class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>*@
+
         <div id="Body">
             @RenderBody()
         </div>
+
         <footer id="Footer">
             <div class="row">
                 <div class="col-6">

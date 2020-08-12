@@ -1,5 +1,6 @@
 using AutoMapper;
 using HealthChecks.UI.Client;
+using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -25,12 +26,13 @@ namespace SAEON.Observations.WebAPI
             Configuration = configuration;
             try
             {
-                Logging.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, Logging.Level);
-                Logging.Debug("AuthServerUrl: {AuthServerUrl} AuthIntrospectionUrl: {AuthIntrospectionUrl}", Configuration[Constants.AuthServerUrl], Configuration[Constants.AuthIntrospectionUrl]);
+                SAEONLogs.Information("Starting {Application} LogLevel: {LogLevel}", ApplicationHelper.ApplicationName, SAEONLogs.Level);
+                SAEONLogs.Debug("AuthenticationServerUrl: {AuthenticationServerUrl} AuthenticationServerIntrospectionUrl: {AuthenticationServerIntrospectionUrl}",
+                    Configuration["AuthenticationServerUrl"], Configuration["AuthenticationServerIntrospectionUrl"]);
             }
             catch (Exception ex)
             {
-                Logging.Exception(ex, "Unable to configure application");
+                SAEONLogs.Exception(ex, "Unable to configure application");
                 throw;
             }
         }
@@ -40,32 +42,45 @@ namespace SAEON.Observations.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
                     services.AddCors();
                     services.AddAutoMapper(typeof(Startup));
-                    services.AddMvc().AddJsonOptions(options =>
-                    {
-                        options.JsonSerializerOptions.IgnoreNullValues = true;
-                    });
                     services.AddControllersWithViews();
                     services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
                     services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                         .AddCookie();
                     services.AddAuthorization(options =>
                     {
-                        options.AddPolicy(Constants.TenantAuthorizationPolicy, policy => policy.AddRequirements(new TenantAuthorizationRequirement(Configuration[Constants.TenantTenants], Configuration[Constants.TenantDefault])));
-                        options.AddPolicy(Constants.ODPAuthorizationPolicy, policy => policy.AddRequirements(new ODPAuthorizationRequirement()));
+                        options.AddPolicy(TenantPolicyDefaults.AuthorizationPolicy, policy => policy.AddRequirements(new TenantAuthorizationRequirement(Configuration[TenantPolicyDefaults.ConfigKeyTenants], Configuration[TenantPolicyDefaults.ConfigKeyDefaultTenant])));
                     });
                     services.AddScoped<IAuthorizationHandler, TenantAuthorizationHandler>();
-                    //services.AddScoped<IAuthorizationHandler, ODPAuthorizationHandler>();
+                    services.AddAuthentication(OAuth2IntrospectionDefaults.AuthenticationScheme)
+                        .AddOAuth2Introspection(options =>
+                        {
+                            options.IntrospectionEndpoint = Configuration["AuthenticationServerIntrospectionUrl"];
+                            //options.ClientId = "client_id_for_introspection_endpoint";
+                            //options.ClientSecret = "client_secret_for_introspection_endpoint";
+                        });
+                    //services.AddAuthentication(ODPAuthenticationDefaults.AuthenticationScheme)
+                    //   .AddODP(options =>
+                    //   {
+                    //       //options.IntrospectionUrl = Configuration[ODPAuthenticationDefaults.ConfigKeyIntrospectionUrl];
+                    //       options.IntrospectionUrl = Configuration[Constants.AuthenticationServerIntrospectionUrl];
+                    //   });
+                    //services.AddSingleton<IPostConfigureOptions<ODPAuthenticationOptions>, ODPAuthenticationPostConfigureOptions>();
+                    //services.AddScoped<ODPAuthenticationHandler>();
+                    services.AddMvc().AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.IgnoreNullValues = true;
+                    });
                     services.AddHttpContextAccessor();
                     services.AddScoped<HttpContext>(p => p.GetService<IHttpContextAccessor>()?.HttpContext);
                     services.AddHealthChecks()
-                        .AddUrlGroup(new Uri(Configuration[Constants.AuthServerHealthCheckUrl]), Constants.AuthServerUrl)
-                        .AddUrlGroup(new Uri(Configuration[Constants.AuthIntrospectionHealthCheckUrl]), Constants.AuthIntrospectionUrl)
+                        .AddUrlGroup(new Uri(Configuration["AuthenticationServerHealthCheckUrl"]), "AuthenticationServerUrl")
+                        .AddUrlGroup(new Uri(Configuration["AuthenticationServerIntrospectionHealthCheckUrl"]), "AuthenticationServerIntrospectionUrl")
                         .AddDbContextCheck<ObservationsDbContext>("ObservationsDatabase");
                     services.AddDbContext<ObservationsDbContext>();
                     services.AddSwaggerGen(c =>
@@ -85,7 +100,7 @@ namespace SAEON.Observations.WebAPI
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Unable to configure services");
+                    SAEONLogs.Exception(ex, "Unable to configure services");
                     throw;
                 }
             }
@@ -94,7 +109,7 @@ namespace SAEON.Observations.WebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            using (Logging.MethodCall(GetType()))
+            using (SAEONLogs.MethodCall(GetType()))
             {
                 try
                 {
@@ -113,10 +128,8 @@ namespace SAEON.Observations.WebAPI
 
                     app.UseRouting();
                     app.UseCors();
-
                     app.UseAuthentication();
                     app.UseAuthorization();
-
                     app.UseSwagger();
                     app.UseSwaggerUI(c =>
                     {
@@ -137,7 +150,7 @@ namespace SAEON.Observations.WebAPI
                 }
                 catch (Exception ex)
                 {
-                    Logging.Exception(ex, "Unable to configure application");
+                    SAEONLogs.Exception(ex, "Unable to configure application");
                     throw;
                 }
             }

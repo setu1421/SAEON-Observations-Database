@@ -63,8 +63,8 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
@@ -85,10 +85,10 @@
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                         </li>
                     </ul>
-                    @*<ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto">
                         <partial name="_DataSourcesPartial" />
                         <partial name="_LoginPartial" />
-                    </ul>*@
+                    </ul>
                 </div>
             </nav>
             <h1>
