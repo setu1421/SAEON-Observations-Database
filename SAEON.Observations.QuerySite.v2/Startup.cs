@@ -1,6 +1,8 @@
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -85,6 +87,9 @@ namespace SAEON.Observations.QuerySite
                         //options.Validate();
                     });
                     services.AddHttpContextAccessor();
+                    services.AddHealthChecks()
+                       .AddUrlGroup(new Uri(Configuration["AuthenticationServerHealthCheckUrl"]), "AuthenticationServerUrl")
+                       .AddUrlGroup(new Uri(Configuration["WebAPIHealthCheckUrl"]), "WebAPIUrl");
                     services.AddControllersWithViews();
                 }
                 catch (Exception ex)
@@ -121,6 +126,11 @@ namespace SAEON.Observations.QuerySite
 
                     app.UseEndpoints(endpoints =>
                     {
+                        endpoints.MapHealthChecks("/health", new HealthCheckOptions()
+                        {
+                            Predicate = _ => true,
+                            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                        });
                         endpoints.MapDefaultControllerRoute();
                     });
                 }

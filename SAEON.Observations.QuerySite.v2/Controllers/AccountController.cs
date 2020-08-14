@@ -32,7 +32,7 @@ namespace SAEON.Observations.QuerySite.Controllers
         }
 
         //[Authorize]
-        public IActionResult Claims()
+        public IActionResult ClaimsQuerySite()
         {
             using (SAEONLogs.MethodCall(GetType()))
             {
@@ -40,12 +40,68 @@ namespace SAEON.Observations.QuerySite.Controllers
                 {
                     var result = new
                     {
-                        User = User,
-                        IsAuthenticated = User.Identity.IsAuthenticated,
+                        User,
+                        User.Identity.IsAuthenticated,
                         Claims = User.Claims.Select(c => new { c.Type, c.Value })
                     };
                     SAEONLogs.Information("Claims: {claims}", result);
                     return new JsonResult(result);
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+        }
+        public async Task<IActionResult> ClaimsWeBAPIAsync()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    using (var client = await GetWebAPIClient())
+                    {
+                        var response = await client.GetAsync("ClaimsWebAPI");
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                            SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                        }
+                        response.EnsureSuccessStatusCode();
+                        var claims = await response.Content.ReadAsStringAsync();
+                        SAEONLogs.Information("Claims: {Claims}", claims);
+                        return Content(claims);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SAEONLogs.Exception(ex);
+                    throw;
+                }
+            }
+
+        }
+
+        public async Task<IActionResult> ClaimsWeBAPITokenAsync()
+        {
+            using (SAEONLogs.MethodCall(GetType()))
+            {
+                try
+                {
+                    using (var client = await GetWebAPIClient())
+                    {
+                        var response = await client.GetAsync("ClaimsWebAPIToken");
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            SAEONLogs.Error("HttpError: {StatusCode} {Reason}", response.StatusCode, response.ReasonPhrase);
+                            SAEONLogs.Error("Response: {Response}", await response.Content.ReadAsStringAsync());
+                        }
+                        response.EnsureSuccessStatusCode();
+                        var claims = await response.Content.ReadAsStringAsync();
+                        SAEONLogs.Information("Claims: {Claims}", claims);
+                        return Content(claims);
+                    }
                 }
                 catch (Exception ex)
                 {

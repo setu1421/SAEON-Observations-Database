@@ -2,13 +2,14 @@
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownLogin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
     @if (!User.Identity.IsAuthenticated)
     {
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownLogin">
-            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Claims">Claims</a>
-            <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ClaimsApiToken">Claims API Token</a>
-        </div>
+<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownLogin">
+    <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+    <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ClaimsQuerySite">ClaimsQuerySite</a>
+    <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ClaimsWebAPI">ClaimsWebAPI</a>
+    <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ClaimsQWebAPIToken">ClaimsQWebAPIToken</a>
+</div>
     }
     else
     {

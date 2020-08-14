@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using SAEON.Observations.WebAPI.Models;
 using System.Diagnostics;
 
@@ -8,13 +7,6 @@ namespace SAEON.Observations.WebAPI.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         [Route("About")]
         public IActionResult About()
         {
